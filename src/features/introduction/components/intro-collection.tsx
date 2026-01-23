@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 const COLLECTION_ITEMS = [
     {
         id: 1,
-        image: "intro-collection-dish1.png",
+        image: "/images/introduction-page/intro-collection/intro-collection-dish1.png",
         hoverCategory: "Heritage Selection",
         hoverTitle: "Lotus Root Salad",
         hoverDesc: "Artfully plated with edible gold leaf and a reduction of aged Vietnamese vinegar.",
@@ -12,7 +12,7 @@ const COLLECTION_ITEMS = [
     },
     {
         id: 2,
-        image: "intro-collection-dish2.png",
+        image: "/images/introduction-page/intro-collection/intro-collection-dish2.png",
         hoverCategory: "Slow-Cooked",
         hoverTitle: "Claypot Fish",
         hoverDesc: "Red Snapper simmered for 6 hours in a traditional ceramic vessel with black pepper and palm sugar.",
@@ -21,7 +21,7 @@ const COLLECTION_ITEMS = [
     },
     {
         id: 3,
-        image: "intro-collection-dish3.png",
+        image: "/images/introduction-page/intro-collection/intro-collection-dish3.png",
         hoverCategory: "Signature",
         hoverTitle: "Heritage Pho",
         hoverDesc: "A symphony of 24-hour bone broth infused with star anise and rare wagyu cuts.",

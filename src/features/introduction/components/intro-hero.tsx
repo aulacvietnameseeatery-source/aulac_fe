@@ -8,7 +8,7 @@ export function IntroHero() {
             <div className="absolute inset-0 w-full h-full">
 
                 <img
-                    src="public/images/intro-hero.png"
+                    src="/images/introduction-page/intro-hero/intro-hero-image.png"
                     alt="Au Lac Introduction"
                     className="w-full h-full object-cover"
                 />

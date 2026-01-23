@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { Play } from "lucide-react"; // Dùng icon Play cho nút bấm
+import { Play } from "lucide-react";
 
 export function IntroVirtualTour() {
     return (
@@ -34,7 +34,7 @@ export function IntroVirtualTour() {
 
                         {/* Background Image */}
                         <img
-                            src="https://placehold.co/1430x804"
+                            src="/images/introduction-page/intro-virtual-tour/intro-virtual-tour.png"
                             alt="Au Lac Virtual Tour"
                             className="w-full h-full object-cover opacity-90 transition-transform duration-700 group-hover:scale-105"
                         />

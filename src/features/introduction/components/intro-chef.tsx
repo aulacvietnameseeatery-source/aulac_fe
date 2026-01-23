@@ -20,11 +20,10 @@ export function IntroChef() {
             {/* --- LEFT: IMAGE SECTION (50%) --- */}
             <div className="relative w-full lg:w-1/2 min-h-[500px] lg:min-h-screen">
                 <img
-                    src="https://placehold.co/960x800"
+                    src="/images/introduction-page/intro-chef/intro-chef.png"
                     alt="Au Lac Craftsmen"
                     className="w-full h-full object-cover absolute inset-0"
                 />
-                {/* Lớp phủ màu xanh đen mờ 20% như thiết kế */}
                 <div className="absolute inset-0 bg-[#193752]/20" />
             </div>
 
