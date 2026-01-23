@@ -1,18 +1,16 @@
 import Link from "next/link";
-import { Facebook, Instagram, ArrowRight, MapPin } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { Facebook, Instagram, ArrowRight } from "lucide-react";
 
 export function Footer() {
     return (
-        <footer className="w-full bg-[#193752] border-t border-white/5 pt-[94px] pb-[48px]">
-            <div className="container mx-auto px-4 md:px-0 max-w-[1440px]">
+        <footer className="w-full bg-[#193752] border-t border-white/5 pt-[94px] pb-[48px] px-4 md:px-[40px] xl:px-[240px]"> {/* Thêm padding 240px chuẩn thiết kế */}
+            <div className="container mx-auto max-w-[1440px]">
 
-                {/* === MAIN CONTENT*/}
-                <div className="flex flex-col md:flex-row justify-between items-start gap-12 md:gap-[96px] md:px-[240px]">
+                {/* === MAIN CONTENT === */}
+                <div className="flex flex-col xl:flex-row justify-center items-start gap-12 xl:gap-[96px]">
 
-                    {/* CỘT 1: BRAND & GIỚI THIỆU */}
-                    <div className="flex flex-col gap-[28px] max-w-[320px]">
+                    {/* CỘT 1: BRAND */}
+                    <div className="flex flex-col gap-[28px] flex-1 max-w-[320px]">
                         {/* Logo */}
                         <div className="flex items-center gap-3">
                             <div className="relative w-9 h-11">
@@ -33,7 +31,7 @@ export function Footer() {
                     </div>
 
                     {/* CỘT 2: RESERVATIONS */}
-                    <div className="flex flex-col gap-6 min-w-[200px]">
+                    <div className="flex flex-col gap-6 flex-1 min-w-[200px]">
                         <h4 className="font-display font-bold text-[12px] leading-4 tracking-[1.2px] text-[#C9A961] uppercase">
                             Reservations
                         </h4>
@@ -57,7 +55,7 @@ export function Footer() {
                     </div>
 
                     {/* CỘT 3: LOCATION */}
-                    <div className="flex flex-col gap-6 min-w-[200px]">
+                    <div className="flex flex-col gap-6 flex-1 min-w-[200px]">
                         <h4 className="font-display font-bold text-[12px] leading-4 tracking-[1.2px] text-[#C9A961] uppercase">
                             Location
                         </h4>
@@ -76,7 +74,7 @@ export function Footer() {
                     </div>
 
                     {/* CỘT 4: NEWSLETTER */}
-                    <div className="flex flex-col gap-6 max-w-[288px]">
+                    <div className="flex flex-col gap-6 flex-1 max-w-[288px]">
                         <div className="flex flex-col gap-8">
                             <h4 className="font-display font-bold text-[12px] leading-4 tracking-[1.2px] text-[#C9A961] uppercase">
                                 Newsletter
@@ -92,7 +90,7 @@ export function Footer() {
                             <input
                                 type="email"
                                 placeholder="Email Address"
-                                className="bg-transparent border-none outline-none text-white/90 placeholder:text-white/30 text-sm w-full font-display"
+                                className="bg-transparent border-none outline-none text-white/90 placeholder:text-white/30 text-sm w-full font-display focus:ring-0"
                             />
                             <button className="text-[#C9A961] hover:text-white transition-colors">
                                 <ArrowRight size={20} />
@@ -102,7 +100,8 @@ export function Footer() {
                 </div>
 
                 {/* === BOTTOM BAR (COPYRIGHT) === */}
-                <div className="mt-[80px] border-t border-white/5 pt-[48px] md:px-[240px] flex flex-col md:flex-row justify-between items-center gap-6 md:gap-0">
+                {/* Padding trên đã xử lý ở thẻ footer, ở đây chỉ cần border-t và margin-top */}
+                <div className="mt-[80px] border-t border-white/5 pt-[48px] flex flex-col md:flex-row justify-between items-center gap-6 md:gap-0">
 
                     <p className="font-display font-bold text-[10px] leading-[15px] tracking-[2px] text-white/30 uppercase">
                         © 2024 Au Lac Vietnamese Eatery. All Rights Reserved.
