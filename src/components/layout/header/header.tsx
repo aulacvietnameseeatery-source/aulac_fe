@@ -36,24 +36,24 @@ export function Header() {
                     : "relative bg-[#1A3A52] pt-10 pb-6"
             )}
         >
-            <div className="container mx-auto px-4 md:px-8 max-w-[1280px]"> {/* Max width 1280 */}
+            <div className="mx-auto max-w-[1280px] px-4 md:px-8 2xl:px-0">
 
                 {/* === TẦNG 1: LOGO & NAV CHÍNH === */}
                 <div className="flex flex-col md:flex-row justify-between items-center md:items-start gap-8 md:gap-0">
 
                     {/* LEFT: BRANDING BLOCK */}
                     <Link href="/" className="flex flex-col items-center md:items-start group">
-                        {/* 1. Tên thương hiệu (Size 60px - Playfair Display) */}
+                        {/* 1. Tên thương hiệu  */}
                         <h1 className="font-display font-medium text-[40px] md:text-[60px] leading-none md:leading-[60px] text-white transition-colors group-hover:text-[#D5A673]">
                             Au Lac
                         </h1>
 
-                        {/* 2. Subtitle (Size 14px - Gold - Tracking 2.8) */}
+                        {/* 2. Subtitle  */}
                         <span className="mt-1 font-body font-semibold text-[12px] md:text-[14px] text-[#D5A673] uppercase tracking-[0.2em] md:tracking-[2.8px]">
               Vietnamese Eatery
             </span>
 
-                        {/* 3. Slogan (Size 14px - Italic - Opacity 70%) */}
+                        {/* 3. Slogan */}
                         <span className="mt-3 font-body font-light italic text-[14px] text-white/70">
               Saveurs du Vietnam, esprit convivial
             </span>
@@ -73,7 +73,7 @@ export function Header() {
                             ))}
                         </nav>
 
-                        {/* Reserve Button (Màu Cam #FFAB2D - Text Navy #1A3A52) */}
+                        {/* Reserve Button */}
                         <Link href="/reservation" className="hidden md:block">
                             <button className="bg-[#FFAB2D] text-[#1A3A52] px-10 py-3 rounded-[4px] shadow-sm hover:bg-[#FFAB2D]/90 transition-all">
                 <span className="font-body font-bold text-[14px] uppercase tracking-[1.4px]">
