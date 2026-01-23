@@ -12,15 +12,29 @@ export function Header() {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     useEffect(() => {
+        let ticking = false;
+
         const handleScroll = () => {
-            const scrollCondition = window.scrollY > 20;
-            if (scrollCondition !== isScrolled) {
-                setIsScrolled(scrollCondition);
+            if (!ticking) {
+                window.requestAnimationFrame(() => {
+                    const scrollCondition = window.scrollY > 20;
+
+                    setIsScrolled((prev) => {
+                        if (prev !== scrollCondition) {
+                            return scrollCondition;
+                        }
+                        return prev;
+                    });
+
+                    ticking = false;
+                });
+                ticking = true;
             }
         };
-        window.addEventListener("scroll", handleScroll);
+
+        window.addEventListener("scroll", handleScroll, { passive: true });
         return () => window.removeEventListener("scroll", handleScroll);
-    }, [isScrolled]);
+    }, []);
 
     const navItems = [
         { label: "MENU", href: "/menu" },
@@ -29,10 +43,10 @@ export function Header() {
         { label: "QR SCAN", href: "/qr" },
     ];
 
-    //chỉnh thời gian chuyển đổi (ms)
+    // chỉnh tốc độ chuyển đổi
     const SPEED = "duration-100";
 
-    const transitionClass = `transition-all ${SPEED} ease-in-out`;
+    const transitionClass = `transition-all ${SPEED} ease-in-out will-change-[transform,opacity,max-height]`;
 
     // =========================================================================
 
@@ -50,8 +64,9 @@ export function Header() {
 
     return (
         <header
+            // Thêm transform-gpu để kích hoạt tăng tốc phần cứngx
             className={cn(
-                "w-full z-50 text-white",
+                "w-full z-50 text-white transform-gpu",
                 transitionClass,
                 isScrolled
                     ? "fixed top-0 left-0 bg-[#1A3A52]/95 backdrop-blur-xl shadow-lg py-2"
@@ -63,19 +78,19 @@ export function Header() {
                 {/* === TẦNG 1 === */}
                 <div className="flex items-center justify-between">
                     <Link href="/" className="flex flex-col group relative z-10">
-                        {/* LOGO */}
+                        {/* LOGO - Có transform-gpu */}
                         <h1 className={cn(
                             "font-display font-medium text-white leading-none group-hover:text-[#D5A673]",
                             transitionClass,
-                            "origin-left transform",
+                            "origin-left transform-gpu",
                             isScrolled ? "text-[28px]" : "text-[40px] md:text-[60px]"
                         )}>
                             Bamee Gasstro
                         </h1>
 
-                        {/* SLOGAN (Ẩn hiện) */}
+                        {/* SLOGAN */}
                         <div className={cn(
-                            "flex flex-col items-start overflow-hidden",
+                            "flex flex-col items-start overflow-hidden transform-gpu",
                             transitionClass,
                             isScrolled
                                 ? "max-h-0 opacity-0 -translate-y-2 mt-0"
@@ -107,9 +122,9 @@ export function Header() {
                             ))}
                         </nav>
 
-                        {/* Language Switcher (Khi cuộn) */}
+                        {/* Language Switcher */}
                         <div className={cn(
-                            "hidden md:block overflow-hidden",
+                            "hidden md:block overflow-hidden transform-gpu",
                             transitionClass,
                             isScrolled
                                 ? "w-auto opacity-100 translate-x-0"
@@ -143,7 +158,7 @@ export function Header() {
 
                 {/* === TẦNG 2 (INFO BAR) === */}
                 <div className={cn(
-                    "overflow-hidden",
+                    "overflow-hidden transform-gpu",
                     transitionClass,
                     isScrolled
                         ? "max-h-0 opacity-0 -translate-y-4 mt-0"
@@ -174,7 +189,7 @@ export function Header() {
                 </div>
             </div>
 
-            {/* MOBILE MENU (Giữ nguyên) */}
+            {/* MOBILE MENU */}
             {isMobileMenuOpen && (
                 <div className="fixed inset-0 top-[60px] w-full h-[calc(100vh-60px)] bg-[#1A3A52]/98 backdrop-blur-xl border-t border-white/10 p-6 md:hidden animate-fade-in shadow-xl z-40 overflow-y-auto pb-20">
                     <nav className="flex flex-col gap-6 animate-in slide-in-from-bottom-5 duration-300">
@@ -183,6 +198,7 @@ export function Header() {
                                 key={item.href}
                                 href={item.href}
                                 onClick={() => setIsMobileMenuOpen(false)}
+                                style={{ animationDelay: `${index * 50}ms` }} // Giữ animation delay cho mobile vì nó không ảnh hưởng scroll
                                 className="text-lg font-medium uppercase tracking-widest text-white border-b border-white/5 pb-2 hover:text-[#D5A673] transition-colors"
                             >
                                 {item.label}
