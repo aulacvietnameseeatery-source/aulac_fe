@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 
 export default function HomePage() {
     return (
-        <div className="flex flex-col items-center justify-center pt-32 pb-20 space-y-20">
+        <div className="flex flex-col items-center justify-center pt-80 pb-20 space-y-20">
 
             {/* 1. Khu vực giả lập Banner (Hero Section) */}
             <section className="text-center space-y-6 max-w-3xl px-4">

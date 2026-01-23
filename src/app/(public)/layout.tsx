@@ -9,7 +9,7 @@ export default function PublicLayout({
     return (
         <div className="flex min-h-screen flex-col bg-[#1A3A52]"> {/* Màu Navy nền */}
             <Header />
-            <main className="flex-1">
+            <main className="pt-[130px]">
                 {children}
             </main>
             <Footer />

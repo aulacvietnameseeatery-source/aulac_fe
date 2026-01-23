@@ -43,9 +43,11 @@ export function Header() {
         { label: "QR SCAN", href: "/qr" },
     ];
 
-    // chỉnh tốc độ chuyển đổi
-    const SPEED = "duration-100";
 
+    // Tốc độ chuyển đổi
+    const SPEED = "duration-500";
+
+    // Class tối ưu hóa cho GPU và Transition
     const transitionClass = `transition-all ${SPEED} ease-in-out will-change-[transform,opacity,max-height]`;
 
     // =========================================================================
@@ -64,21 +66,18 @@ export function Header() {
 
     return (
         <header
-            // Thêm transform-gpu để kích hoạt tăng tốc phần cứngx
             className={cn(
-                "w-full z-50 text-white transform-gpu",
+                "fixed top-0 left-0 w-full z-50 text-white transform-gpu shadow-md bg-[#1A3A52]",
                 transitionClass,
-                isScrolled
-                    ? "fixed top-0 left-0 bg-[#1A3A52]/95 backdrop-blur-xl shadow-lg py-2"
-                    : "relative bg-[#1A3A52] pt-8 pb-6"
+                isScrolled ? "py-2" : "pt-8 pb-6"
             )}
         >
             <div className="mx-auto max-w-[1280px] px-4 md:px-8 2xl:px-0">
 
-                {/* === TẦNG 1 === */}
+                {/* === TẦNG 1: LOGO & NAV === */}
                 <div className="flex items-center justify-between">
                     <Link href="/" className="flex flex-col group relative z-10">
-                        {/* LOGO - Có transform-gpu */}
+                        {/* LOGO */}
                         <h1 className={cn(
                             "font-display font-medium text-white leading-none group-hover:text-[#D5A673]",
                             transitionClass,
@@ -88,7 +87,7 @@ export function Header() {
                             Bamee Gasstro
                         </h1>
 
-                        {/* SLOGAN */}
+                        {/* SLOGAN (Ẩn khi cuộn) */}
                         <div className={cn(
                             "flex flex-col items-start overflow-hidden transform-gpu",
                             transitionClass,
@@ -122,7 +121,7 @@ export function Header() {
                             ))}
                         </nav>
 
-                        {/* Language Switcher */}
+                        {/* Language Switcher (Hiện khi cuộn) */}
                         <div className={cn(
                             "hidden md:block overflow-hidden transform-gpu",
                             transitionClass,
@@ -156,7 +155,7 @@ export function Header() {
                     </div>
                 </div>
 
-                {/* === TẦNG 2 (INFO BAR) === */}
+                {/* === TẦNG 2 (INFO BAR - Ẩn khi cuộn) === */}
                 <div className={cn(
                     "overflow-hidden transform-gpu",
                     transitionClass,
@@ -198,7 +197,7 @@ export function Header() {
                                 key={item.href}
                                 href={item.href}
                                 onClick={() => setIsMobileMenuOpen(false)}
-                                style={{ animationDelay: `${index * 50}ms` }} // Giữ animation delay cho mobile vì nó không ảnh hưởng scroll
+                                style={{ animationDelay: `${index * 50}ms` }}
                                 className="text-lg font-medium uppercase tracking-widest text-white border-b border-white/5 pb-2 hover:text-[#D5A673] transition-colors"
                             >
                                 {item.label}
