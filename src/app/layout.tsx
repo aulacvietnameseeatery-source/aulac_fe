@@ -26,6 +26,14 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
+        <head>
+        {/* Material Icons */}
+        <link
+          href="https://fonts.googleapis.com/icon?family=Material+Icons"
+          rel="stylesheet"
+        />
+        </head>
+
         <body className={`${inter.variable} ${playfair.variable} antialiased font-body`}>
         {children}
         </body>
