@@ -1,8 +1,5 @@
 'use client';
 
-import { useState } from 'react';
-import { ZONES_DATA } from './data/zones.data';
-
 import ZoneTabs from './components/ZoneTabs';
 import TableGrid from './components/TableGrid';
 import ReservationSidebar from './components/ReservationSidebar';
@@ -11,16 +8,21 @@ import Legend from '@/features/reservation/components/Legend';
 
 import { useReservation } from './hooks/useReservation';
 import { useTableSelection } from './hooks/useTableSelection';
+import { useTableZones } from './hooks/useTableZones';
 
 export default function ReservationPage() {
-  const zones = Object.keys(ZONES_DATA);
-  const [activeZone, setActiveZone] = useState(zones[0]);
-
-  const tables = ZONES_DATA[activeZone];
+  const reservation = useReservation();
+  const {
+    zones,
+    activeZone,
+    setActiveZone,
+    tables,
+    loading,
+    error,
+  } = useTableZones();
 
   const tableSelection = useTableSelection(tables);
-  const reservation = useReservation();
-
+  
   return (
     <div className="min-h-screen bg-[#FDFBF7] text-slate-800 flex flex-col">
         <main className="grow max-w-7xl mx-auto w-full px-4 md:px-6 py-8 md:py-12 mb-24">
@@ -30,7 +32,7 @@ export default function ReservationPage() {
             Select Your Table
             </h2>
 
-            {/* Row chứa Subtitle và Legend nằm ngang nhau */}
+            {/* Subtitle and Legend */}
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                <p className="text-stone-500 font-light text-sm md:text-base">Experience fine dining at its best. Choose your preferred zone and table below.</p>
               
@@ -55,6 +57,7 @@ export default function ReservationPage() {
                 tables={tables}
                 selectedTableId={tableSelection.selectedTableId}
                 onSelect={tableSelection.toggleTable}
+                isLoading={loading}
             />
             </div>
 

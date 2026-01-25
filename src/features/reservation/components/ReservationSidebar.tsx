@@ -21,7 +21,7 @@ const formatTimeDisplay = (time24: string) => {
 // Helper: Convert it back to input
 const convertTo24Hour = (timeStr: string) => {
   const [time, modifier] = timeStr.split(' ');
-  if (!modifier) return timeStr; // Đã là 24h
+  if (!modifier) return timeStr;
   let [hours, minutes] = time.split(':');
   if (hours === '12') {
     hours = '00';
@@ -159,7 +159,7 @@ const ReservationSidebar: React.FC<ReservationSidebarProps> = ({
                         <input 
                           type="time" 
                           value={tempTime}
-                          min="11:00" // Limited opening hours
+                          min="11:00" // Opening time limits
                           max="22:00" // Closing time limits
                           onChange={(e) => setTempTime(e.target.value)}
                           className="w-full text-sm font-bold text-[#1A3A52] bg-white border border-stone-300 rounded-lg px-3 py-2 pl-9 focus:outline-none focus:border-[#1A3A52] focus:ring-1 focus:ring-[#1A3A52] transition-all"
