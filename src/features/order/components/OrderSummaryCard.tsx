@@ -1,11 +1,16 @@
 import { Clock } from "lucide-react";
-import { OrderSuccessData } from "../types/order.types";
+
+interface OrderSummaryProps {
+  orderNumber: string;
+  totalAmount: string;
+  diningOption: 'DINE_IN' | 'TAKE_AWAY';
+}
 
 export function OrderSummaryCard({
   orderNumber,
   totalAmount,
   diningOption,
-}: OrderSuccessData) {
+}: OrderSummaryProps) {
   return (
     <div className="w-full bg-white shadow-[0px_20px_60px_-15px_rgba(26,57,81,0.06)] border rounded-sm px-6 md:px-12 py-10 flex flex-col gap-8 text-left">
       
