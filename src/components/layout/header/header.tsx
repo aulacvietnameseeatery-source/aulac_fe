@@ -14,8 +14,8 @@ export function Header({ isScrolled }: HeaderProps) {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     const navItems = [
-        { label: "MENU", href: "/menu" },
-        { label: "ABOUT US", href: "/about" },
+        { label: "MENU", href: "/menu-listing" },
+        { label: "ABOUT US", href: "/about-us" },
         { label: "CONTACT", href: "/contact" },
         { label: "QR SCAN", href: "/qr" },
     ];
