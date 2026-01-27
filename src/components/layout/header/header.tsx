@@ -1,40 +1,17 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Menu as MenuIcon, X, MapPin, Phone, Clock, Globe } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { NavLink } from "./nav-link";
+import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { NavLink } from "./nav-link";
 
-export function Header() {
-    const [isScrolled, setIsScrolled] = useState(false);
+interface HeaderProps {
+    isScrolled: boolean;
+}
+
+export function Header({ isScrolled }: HeaderProps) {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-    useEffect(() => {
-        let ticking = false;
-
-        const handleScroll = () => {
-            if (!ticking) {
-                window.requestAnimationFrame(() => {
-                    const scrollCondition = window.scrollY > 20;
-
-                    setIsScrolled((prev) => {
-                        if (prev !== scrollCondition) {
-                            return scrollCondition;
-                        }
-                        return prev;
-                    });
-
-                    ticking = false;
-                });
-                ticking = true;
-            }
-        };
-
-        window.addEventListener("scroll", handleScroll, { passive: true });
-        return () => window.removeEventListener("scroll", handleScroll);
-    }, []);
 
     const navItems = [
         { label: "MENU", href: "/menu" },
@@ -43,23 +20,13 @@ export function Header() {
         { label: "QR SCAN", href: "/qr" },
     ];
 
-
-    // Tốc độ chuyển đổi
-    const SPEED = "duration-500";
-
-    // Class tối ưu hóa cho GPU và Transition
-    const transitionClass = `transition-all ${SPEED} ease-in-out will-change-[transform,opacity,max-height]`;
-
-    // =========================================================================
-
-    // Component Language Switcher
     const LanguageSwitcher = ({ className }: { className?: string }) => (
-        <div className={cn("flex items-center gap-2", className)}>
-            <Globe size={16} className={cn("text-[#D5A673] transition-colors", transitionClass, isScrolled && "text-white")} />
-            <div className="flex items-center gap-2 tracking-[0.65px] text-[13px]">
-                <span className="font-bold text-white cursor-pointer hover:text-[#D5A673] transition-colors">EN</span>
-                <span className="opacity-40 text-white">|</span>
-                <span className="cursor-pointer text-white hover:text-[#D5A673] transition-colors">FR</span>
+        <div className={cn("flex items-center gap-2 whitespace-nowrap", className)}>
+            <Globe size={16} className="text-[#D5A673]" />
+            <div className="flex items-center gap-2 text-[13px] tracking-wide">
+                <span className="font-bold cursor-pointer hover:text-[#D5A673]">EN</span>
+                <span className="opacity-40">|</span>
+                <span className="cursor-pointer hover:text-[#D5A673]">FR</span>
             </div>
         </div>
     );
@@ -67,79 +34,86 @@ export function Header() {
     return (
         <header
             className={cn(
-                "fixed top-0 left-0 w-full z-50 text-white transform-gpu shadow-md bg-[#1A3A52]",
-                transitionClass,
-                isScrolled ? "py-2" : "pt-8 pb-6"
+                "fixed top-0 left-0 w-full z-50 bg-[#1A3A52] text-white shadow-md",
+                "transition-[height] duration-300 ease-in-out overflow-hidden",
+                isScrolled ? "h-[80px]" : "h-[270px]"
             )}
         >
-            <div className="mx-auto max-w-[1280px] px-4 md:px-8 2xl:px-0">
+            <div className="mx-auto max-w-[1280px] px-4 md:px-8 h-full flex flex-col justify-center">
 
-                {/* === TẦNG 1: LOGO & NAV === */}
-                <div className="flex items-center justify-between">
+                {/* ===== TOP BAR (LOGO + NAV) ===== */}
+                <div
+                    className={cn(
+                        "flex items-center justify-between transition-all duration-300 ease-in-out",
+                        // Đẩy nhẹ lên khi cuộn để cân đối
+                        isScrolled ? "translate-y-0" : "translate-y-[10px]"
+                    )}
+                >
+                    {/* LOGO */}
                     <Link href="/" className="flex flex-col group relative z-10">
-                        {/* LOGO */}
-                        <h1 className={cn(
-                            "font-display font-medium text-white leading-none group-hover:text-[#D5A673]",
-                            transitionClass,
-                            "origin-left transform-gpu",
-                            isScrolled ? "text-[28px]" : "text-[40px] md:text-[60px]"
-                        )}>
+                        <h1
+                            className={cn(
+                                "font-display font-medium leading-none transition-all duration-300 origin-left",
+                                isScrolled ? "text-[26px]" : "text-[48px] md:text-[60px]"
+                            )}
+                        >
                             Bamee Gasstro
                         </h1>
 
                         {/* SLOGAN (Ẩn khi cuộn) */}
-                        <div className={cn(
-                            "flex flex-col items-start overflow-hidden transform-gpu",
-                            transitionClass,
-                            isScrolled
-                                ? "max-h-0 opacity-0 -translate-y-2 mt-0"
-                                : "max-h-[60px] opacity-100 translate-y-0 mt-1"
-                        )}>
-                            <span className="font-body font-semibold text-[12px] md:text-[14px] text-[#D5A673] uppercase tracking-[0.2em] md:tracking-[2.8px] whitespace-nowrap">
+                        <div
+                            className={cn(
+                                "overflow-hidden transition-all duration-300",
+                                isScrolled
+                                    ? "max-h-0 opacity-0 mt-0"
+                                    : "max-h-[60px] opacity-100 mt-1"
+                            )}
+                        >
+                            <span className="block text-[#D5A673] text-[12px] md:text-[14px] tracking-[0.25em] uppercase font-semibold">
                                 Vietnamese Eatery
                             </span>
-                            <span className="mt-2 font-body font-light italic text-[14px] text-white/70 whitespace-nowrap">
+                            <span className="block mt-2 text-[14px] italic text-white/70">
                                 Saveurs du Vietnam, esprit convivial
                             </span>
                         </div>
                     </Link>
 
-                    {/* MENU & ACTIONS */}
+                    {/* NAV + ACTIONS */}
                     <div className="flex items-center gap-6 md:gap-10">
                         <nav className="hidden md:flex items-center gap-8">
                             {navItems.map((item) => (
                                 <NavLink
                                     key={item.href}
                                     href={item.href}
-                                    className={cn(
-                                        "font-body font-medium text-[14px] text-white uppercase tracking-[1.4px] hover:text-[#D5A673]",
-                                        transitionClass
-                                    )}
+                                    className="text-[14px] uppercase tracking-[1.4px] hover:text-[#D5A673]"
                                 >
                                     {item.label}
                                 </NavLink>
                             ))}
                         </nav>
 
-                        {/* Language Switcher (Hiện khi cuộn) */}
+                        {/* 👇 NÚT NGÔN NGỮ Ở TOP BAR
+                            Logic: Khi Header TO (chưa cuộn) -> Ẩn đi (w-0).
+                                   Khi Header NHỎ (đã cuộn) -> Hiện ra (w-auto).
+                        */}
                         <div className={cn(
-                            "hidden md:block overflow-hidden transform-gpu",
-                            transitionClass,
+                            "hidden md:block overflow-hidden transition-all duration-300 ease-in-out",
                             isScrolled
-                                ? "w-auto opacity-100 translate-x-0"
-                                : "w-0 opacity-0 translate-x-4"
+                                ? "max-w-[100px] opacity-100 ml-4" // Hiện ra, đẩy lùi nút Reserve
+                                : "max-w-0 opacity-0 ml-0"         // Thu lại bằng 0
                         )}>
                             <LanguageSwitcher />
                         </div>
 
-                        {/* Reserve Button */}
+                        {/* RESERVE BUTTON */}
                         <div className="hidden md:block">
                             <Link href="/reservation">
                                 <button className={cn(
-                                    "bg-[#FFAB2D] text-[#1A3A52] px-8 py-3 rounded-[4px] shadow-sm hover:bg-[#FFAB2D]/90 whitespace-nowrap hover:shadow-md active:scale-95",
-                                    transitionClass
+                                    "bg-[#FFAB2D] text-[#1A3A52] rounded shadow-sm hover:bg-[#FFAB2D]/90 transition-all duration-300",
+                                    // Co nhỏ nút bấm một chút cho tinh tế khi header nhỏ
+                                    isScrolled ? "px-6 py-2" : "px-8 py-3"
                                 )}>
-                                    <span className="font-body font-bold text-[14px] uppercase tracking-[1.4px]">
+                                    <span className="font-bold text-[14px] uppercase tracking-wide">
                                         Reserve
                                     </span>
                                 </button>
@@ -147,7 +121,7 @@ export function Header() {
                         </div>
 
                         <button
-                            className="md:hidden text-white hover:text-[#D5A673] transition-colors"
+                            className="md:hidden"
                             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                         >
                             {isMobileMenuOpen ? <X size={28} /> : <MenuIcon size={28} />}
@@ -155,32 +129,31 @@ export function Header() {
                     </div>
                 </div>
 
-                {/* === TẦNG 2 (INFO BAR - Ẩn khi cuộn) === */}
-                <div className={cn(
-                    "overflow-hidden transform-gpu",
-                    transitionClass,
-                    isScrolled
-                        ? "max-h-0 opacity-0 -translate-y-4 mt-0"
-                        : "max-h-[100px] opacity-100 translate-y-0 mt-6"
-                )}>
-                    <div className="hidden md:block w-full h-[1px] bg-white/10 mb-6" />
-
-                    <div className="hidden md:flex justify-between items-center text-white/80 font-body font-light text-[13px]">
+                {/* ===== INFO BAR (ADDRESS + HOURS + LANG) ===== */}
+                <div
+                    className={cn(
+                        "overflow-hidden border-t border-white/10 transition-all duration-300 ease-in-out",
+                        // Khi cuộn: Thanh này biến mất -> Nút Lang ở trên hiện ra thay thế
+                        isScrolled
+                            ? "max-h-0 opacity-0 mt-0 pt-0 border-none"
+                            : "max-h-[80px] opacity-100 mt-6 pt-4"
+                    )}
+                >
+                    <div className="hidden md:flex justify-between items-center text-[13px] text-white/80">
                         <div className="flex items-center gap-8">
-                            <div className="flex items-center gap-2 group cursor-default">
+                            <div className="flex items-center gap-2">
                                 <MapPin size={16} className="text-[#D5A673]" />
-                                <span className="group-hover:text-white transition-colors">123 Elegance Street, City Center</span>
+                                <span>123 Elegance Street, City Center</span>
                             </div>
-                            <div className="flex items-center gap-2 group cursor-default">
+                            <div className="flex items-center gap-2">
                                 <Phone size={16} className="text-[#D5A673]" />
-                                <span className="group-hover:text-white transition-colors">+1 (555) 888-0123</span>
+                                <span>+1 (555) 888-0123</span>
                             </div>
                         </div>
-
                         <div className="flex items-center gap-8">
-                            <div className="flex items-center gap-2 group cursor-default">
+                            <div className="flex items-center gap-2">
                                 <Clock size={16} className="text-[#D5A673]" />
-                                <span className="group-hover:text-white transition-colors">11:00 AM - 11:00 PM (Mon - Sun)</span>
+                                <span>11:00 AM – 11:00 PM</span>
                             </div>
                             <LanguageSwitcher />
                         </div>
@@ -188,34 +161,20 @@ export function Header() {
                 </div>
             </div>
 
-            {/* MOBILE MENU */}
+            {/* ===== MOBILE MENU ===== */}
             {isMobileMenuOpen && (
-                <div className="fixed inset-0 top-[60px] w-full h-[calc(100vh-60px)] bg-[#1A3A52]/98 backdrop-blur-xl border-t border-white/10 p-6 md:hidden animate-fade-in shadow-xl z-40 overflow-y-auto pb-20">
-                    <nav className="flex flex-col gap-6 animate-in slide-in-from-bottom-5 duration-300">
-                        {navItems.map((item, index) => (
+                <div className="fixed inset-0 top-[80px] bg-[#1A3A52]/95 backdrop-blur-xl p-6 md:hidden z-40">
+                    <nav className="flex flex-col gap-6">
+                        {navItems.map((item) => (
                             <Link
                                 key={item.href}
                                 href={item.href}
                                 onClick={() => setIsMobileMenuOpen(false)}
-                                style={{ animationDelay: `${index * 50}ms` }}
-                                className="text-lg font-medium uppercase tracking-widest text-white border-b border-white/5 pb-2 hover:text-[#D5A673] transition-colors"
+                                className="text-lg uppercase tracking-widest border-b border-white/10 pb-2"
                             >
                                 {item.label}
                             </Link>
                         ))}
-                        <div className="py-2 border-b border-white/5">
-                            <LanguageSwitcher className="justify-start" />
-                        </div>
-                        <Link href="/reservation" onClick={() => setIsMobileMenuOpen(false)}>
-                            <Button className="w-full bg-[#FFAB2D] text-[#1A3A52] font-bold uppercase mt-2 h-12 hover:bg-[#FFAB2D]/90 active:scale-95 transition-all">
-                                RESERVE NOW
-                            </Button>
-                        </Link>
-                        <div className="mt-8 space-y-4 text-white/60 text-sm">
-                            <p className="flex gap-3 items-center"><MapPin size={18} className="text-[#D5A673]"/> 123 Elegance Str</p>
-                            <p className="flex gap-3 items-center"><Phone size={18} className="text-[#D5A673]"/> +1 (555) 888-0123</p>
-                            <p className="flex gap-3 items-center"><Clock size={18} className="text-[#D5A673]"/> 11:00 AM - 11:00 PM</p>
-                        </div>
                     </nav>
                 </div>
             )}
