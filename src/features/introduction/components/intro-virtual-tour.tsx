@@ -1,7 +1,12 @@
+"use client";
+
 import { cn } from "@/lib/utils";
 import { Play } from "lucide-react";
+import { useTranslations } from "next-intl"; // Import hook
 
 export function IntroVirtualTour() {
+    const t = useTranslations("Introduction.VirtualTour"); // Khởi tạo hook
+
     return (
         <section className="w-full bg-[#F6F4EF] py-24 px-4 md:px-8 lg:px-20 flex justify-center">
             <div className="w-full max-w-[1440px] flex flex-col gap-12">
@@ -11,11 +16,11 @@ export function IntroVirtualTour() {
 
                     {/* Title Group */}
                     <div className="flex flex-col gap-4">
-            <span className="font-display text-[#C9A961] text-xs font-bold uppercase tracking-[0.5em]">
-              Experience
-            </span>
+                        <span className="font-display text-[#C9A961] text-xs font-bold uppercase tracking-[0.5em]">
+                            {t("label")}
+                        </span>
                         <h2 className="font-display text-[#0A0A0A] text-4xl md:text-[36px] font-bold leading-tight">
-                            The Immersive View
+                            {t("title")}
                         </h2>
                     </div>
 
@@ -23,7 +28,7 @@ export function IntroVirtualTour() {
                     <div className="max-w-md">
                         {/* Đã sửa màu text từ trắng -> đen mờ để đọc được trên nền kem */}
                         <p className="font-display text-[#0A0A0A]/60 text-sm md:text-[13.6px] leading-relaxed">
-                            Explore our space from every angle before you arrive.
+                            {t("desc")}
                         </p>
                     </div>
                 </div>
@@ -51,11 +56,11 @@ export function IntroVirtualTour() {
 
                         {/* --- BOTTOM LEFT INFO --- */}
                         <div className="absolute bottom-10 left-10 flex flex-col gap-2">
-              <span className="font-display text-white text-xs font-bold uppercase tracking-[0.1em]">
-                Virtual Tour
-              </span>
+                            <span className="font-display text-white text-xs font-bold uppercase tracking-[0.1em]">
+                                {t("tour_label")}
+                            </span>
                             <h3 className="font-display text-white text-2xl font-normal">
-                                A 360° Walkthrough
+                                {t("tour_title")}
                             </h3>
                         </div>
 

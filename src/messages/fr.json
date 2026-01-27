@@ -1,0 +1,66 @@
+{
+  "Header": {
+    "menu": "MENU",
+    "about": "À PROPOS",
+    "contact": "CONTACT",
+    "qr_scan": "SCAN QR",
+    "reserve": "RÉSERVER",
+    "slogan_1": "Table Vietnamienne",
+    "slogan_2": "Saveurs du Vietnam, esprit convivial"
+  },
+  "Footer": {
+    "description": "Défini par l’excellence, porté par l’héritage.<br> </br>L’apogée de l’art culinaire vietnamien au<br> </br>cœur de la ville.",
+    "reservations": "Réservations",
+    "location": "Adresse",
+    "open_maps": "Ouvrir dans Maps",
+    "newsletter": "Newsletter",
+    "newsletter_desc": "Rejoignez notre cercle pour des événements exclusifs et<br> </br>des avant-premières de créations saisonnières.",
+    "email_placeholder": "Adresse e-mail",
+    "copyright": "© 2026 Au Lac Table Vietnamienne. Tous droits réservés.",
+    "privacy": "Confidentialité",
+    "terms": "Conditions",
+    "sitemap": "Plan du site"
+  },
+  "Introduction": {
+    "Hero": {
+      "est": "Fondé en 1994",
+      "title": "Une symphonie de l’art <br> </br> Vietnamien",
+      "quote": "\"Là où l’héritage du fleuve Rouge rencontre le raffinement de la haute gastronomie contemporaine.\""
+    },
+    "Chef": {
+      "label": "Les Artisans",
+      "title": "Maîtriser <br> </br>l’âme du goût",
+      "chef_1_name": "Chef Exécutif Minh",
+      "chef_1_quote": "\"La cuisine est un pont entre l’histoire et les sens. Chez Au Lac, nous ne cuisinons pas seulement ; nous façonnons des souvenirs à travers des épices ancestrales et des textures modernes.\"",
+      "chef_2_name": "Sous-cheffe Linh",
+      "chef_2_quote": "\"L’équilibre est notre boussole. Le contraste entre chaud et froid, croquant et fondant, sucré et salé définit l’identité vietnamienne.\"",
+      "cta": "Découvrir leur histoire"
+    },
+    "Collection": {
+      "label": "Collection",
+      "title": "Chefs-d’œuvre Signature",
+      "dish_1_category": "Sélection Patrimoniale",
+      "dish_1_title": "Salade de Racine de Lotus",
+      "dish_1_desc": "Présentée avec élégance, sublimée par une feuille d’or comestible et une réduction de vinaigre vietnamien vieilli.",
+      "dish_1_main": "Le Lotus Impérial",
+      "dish_1_sub": "Fraîcheur Sculptée",
+      "dish_2_category": "Cuisson Lente",
+      "dish_2_title": "Poisson en Marmite de Terre",
+      "dish_2_desc": "Vivaneau rouge mijoté pendant 6 heures dans un récipient en céramique traditionnelle, au poivre noir et sucre de palme.",
+      "dish_2_main": "Umami de l’Océan",
+      "dish_2_sub": "Infusion 24 Heures",
+      "dish_3_category": "Signature",
+      "dish_3_title": "Pho Patrimonial",
+      "dish_3_desc": "Une symphonie de bouillon d’os infusé pendant 24 heures, relevé d’anis étoilé et de pièces rares de wagyu.",
+      "dish_3_main": "Le Bouillon Doré",
+      "dish_3_sub": "L’Âme de Hanoï"
+    },
+    "VirtualTour": {
+      "label": "Expérience",
+      "title": "La Vue Immersive",
+      "desc": "Explorez notre espace sous tous les angles avant votre arrivée.",
+      "tour_label": "Visite Virtuelle",
+      "tour_title": "Parcours à 360°"
+    }
+  }
+}

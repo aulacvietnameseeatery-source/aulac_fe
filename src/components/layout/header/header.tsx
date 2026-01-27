@@ -2,31 +2,74 @@
 
 import Link from "next/link";
 import { Menu as MenuIcon, X, MapPin, Phone, Clock, Globe } from "lucide-react";
-import { useState } from "react";
+import { useState, useTransition } from "react"; // Thêm useTransition để mượt mà hơn
 import { cn } from "@/lib/utils";
-import { NavLink } from "./nav-link";
+import { usePathname, useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 interface HeaderProps {
     isScrolled: boolean;
+    locale: string;
 }
 
-export function Header({ isScrolled }: HeaderProps) {
+export function Header({ isScrolled, locale }: HeaderProps) {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const [isPending, startTransition] = useTransition(); // Dùng để quản lý trạng thái pending khi đổi ngôn ngữ
+    const t = useTranslations('Header');
+    const router = useRouter();
+    const pathname = usePathname();
+
+    // Logic đổi ngôn ngữ
+    const switchLocale = (newLocale: string) => {
+        if (newLocale === locale) return; // Nếu chọn trùng ngôn ngữ hiện tại thì không làm gì
+
+        const newPath = pathname.replace(`/${locale}`, `/${newLocale}`);
+
+        startTransition(() => {
+            // 1. Điều hướng sang URL mới
+            router.replace(newPath);
+            // 2. QUAN TRỌNG: Buộc Next.js tải lại dữ liệu từ server (giống F5) để cập nhật bản dịch
+            router.refresh();
+        });
+    };
+
+    // Hàm tạo link giữ nguyên ngôn ngữ hiện tại
+    const getLink = (path: string) => `/${locale}${path}`;
 
     const navItems = [
-        { label: "MENU", href: "/menu-listing" },
-        { label: "ABOUT US", href: "/about-us" },
-        { label: "CONTACT", href: "/contact" },
-        { label: "QR SCAN", href: "/qr" },
+        { label: t('menu'), href: "/menu-listing" },
+        { label: t('about'), href: "/about-us" },
+        { label: t('contact'), href: "/contact" },
+        { label: t('qr_scan'), href: "/qr-scan" },
     ];
 
     const LanguageSwitcher = ({ className }: { className?: string }) => (
         <div className={cn("flex items-center gap-2 whitespace-nowrap", className)}>
             <Globe size={16} className="text-[#D5A673]" />
-            <div className="flex items-center gap-2 text-[13px] tracking-wide">
-                <span className="font-bold cursor-pointer hover:text-[#D5A673]">EN</span>
-                <span className="opacity-40">|</span>
-                <span className="cursor-pointer hover:text-[#D5A673]">FR</span>
+            <div className="flex items-center gap-2 text-[13px] tracking-wide font-bold">
+                <button
+                    onClick={() => switchLocale('en')}
+                    disabled={isPending} // Disable khi đang load
+                    className={cn(
+                        "cursor-pointer hover:text-[#D5A673] transition-colors",
+                        locale === 'en' ? "text-[#D5A673]" : "text-white/70",
+                        isPending && "opacity-50 cursor-wait" // Hiệu ứng mờ khi đang chuyển
+                    )}
+                >
+                    EN
+                </button>
+                <span className="opacity-40 text-white">|</span>
+                <button
+                    onClick={() => switchLocale('fr')}
+                    disabled={isPending} // Disable khi đang load
+                    className={cn(
+                        "cursor-pointer hover:text-[#D5A673] transition-colors",
+                        locale === 'fr' ? "text-[#D5A673]" : "text-white/70",
+                        isPending && "opacity-50 cursor-wait"
+                    )}
+                >
+                    FR
+                </button>
             </div>
         </div>
     );
@@ -45,12 +88,11 @@ export function Header({ isScrolled }: HeaderProps) {
                 <div
                     className={cn(
                         "flex items-center justify-between transition-all duration-300 ease-in-out",
-                        // Đẩy nhẹ lên khi cuộn để cân đối
                         isScrolled ? "translate-y-0" : "translate-y-[10px]"
                     )}
                 >
                     {/* LOGO */}
-                    <Link href="/" className="flex flex-col group relative z-10">
+                    <Link href={getLink("/")} className="flex flex-col group relative z-10">
                         <h1
                             className={cn(
                                 "font-display font-medium leading-none transition-all duration-300 origin-left",
@@ -60,7 +102,6 @@ export function Header({ isScrolled }: HeaderProps) {
                             Bamee Gasstro
                         </h1>
 
-                        {/* SLOGAN (Ẩn khi cuộn) */}
                         <div
                             className={cn(
                                 "overflow-hidden transition-all duration-300",
@@ -69,11 +110,12 @@ export function Header({ isScrolled }: HeaderProps) {
                                     : "max-h-[60px] opacity-100 mt-1"
                             )}
                         >
+                            {/* Chỗ này dùng t.rich nếu trong json có <br> </br> */}
                             <span className="block text-[#D5A673] text-[12px] md:text-[14px] tracking-[0.25em] uppercase font-semibold">
-                                Vietnamese Eatery
+                                {t('slogan_1')}
                             </span>
                             <span className="block mt-2 text-[14px] italic text-white/70">
-                                Saveurs du Vietnam, esprit convivial
+                                {t('slogan_2')}
                             </span>
                         </div>
                     </Link>
@@ -82,39 +124,34 @@ export function Header({ isScrolled }: HeaderProps) {
                     <div className="flex items-center gap-6 md:gap-10">
                         <nav className="hidden md:flex items-center gap-8">
                             {navItems.map((item) => (
-                                <NavLink
+                                <Link
                                     key={item.href}
-                                    href={item.href}
-                                    className="text-[14px] uppercase tracking-[1.4px] hover:text-[#D5A673]"
+                                    href={getLink(item.href)}
+                                    className="text-[14px] uppercase tracking-[1.4px] hover:text-[#D5A673] transition-colors font-medium"
                                 >
                                     {item.label}
-                                </NavLink>
+                                </Link>
                             ))}
                         </nav>
 
-                        {/* 👇 NÚT NGÔN NGỮ Ở TOP BAR
-                            Logic: Khi Header TO (chưa cuộn) -> Ẩn đi (w-0).
-                                   Khi Header NHỎ (đã cuộn) -> Hiện ra (w-auto).
-                        */}
                         <div className={cn(
                             "hidden md:block overflow-hidden transition-all duration-300 ease-in-out",
                             isScrolled
-                                ? "max-w-[100px] opacity-100 ml-4" // Hiện ra, đẩy lùi nút Reserve
-                                : "max-w-0 opacity-0 ml-0"         // Thu lại bằng 0
+                                ? "max-w-[100px] opacity-100 ml-4"
+                                : "max-w-0 opacity-0 ml-0"
                         )}>
                             <LanguageSwitcher />
                         </div>
 
                         {/* RESERVE BUTTON */}
                         <div className="hidden md:block">
-                            <Link href="/reservation">
+                            <Link href={getLink("/reservation")}>
                                 <button className={cn(
                                     "bg-[#FFAB2D] text-[#1A3A52] rounded shadow-sm hover:bg-[#FFAB2D]/90 transition-all duration-300",
-                                    // Co nhỏ nút bấm một chút cho tinh tế khi header nhỏ
                                     isScrolled ? "px-6 py-2" : "px-8 py-3"
                                 )}>
                                     <span className="font-bold text-[14px] uppercase tracking-wide">
-                                        Reserve
+                                        {t('reserve')}
                                     </span>
                                 </button>
                             </Link>
@@ -129,11 +166,10 @@ export function Header({ isScrolled }: HeaderProps) {
                     </div>
                 </div>
 
-                {/* ===== INFO BAR (ADDRESS + HOURS + LANG) ===== */}
+                {/* ===== INFO BAR ===== */}
                 <div
                     className={cn(
                         "overflow-hidden border-t border-white/10 transition-all duration-300 ease-in-out",
-                        // Khi cuộn: Thanh này biến mất -> Nút Lang ở trên hiện ra thay thế
                         isScrolled
                             ? "max-h-0 opacity-0 mt-0 pt-0 border-none"
                             : "max-h-[80px] opacity-100 mt-6 pt-4"
@@ -168,9 +204,9 @@ export function Header({ isScrolled }: HeaderProps) {
                         {navItems.map((item) => (
                             <Link
                                 key={item.href}
-                                href={item.href}
+                                href={getLink(item.href)}
                                 onClick={() => setIsMobileMenuOpen(false)}
-                                className="text-lg uppercase tracking-widest border-b border-white/10 pb-2"
+                                className="text-lg uppercase tracking-widest border-b border-white/10 pb-2 text-white"
                             >
                                 {item.label}
                             </Link>

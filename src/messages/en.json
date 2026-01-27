@@ -1,0 +1,66 @@
+{
+  "Header": {
+    "menu": "MENU",
+    "about": "ABOUT US",
+    "contact": "CONTACT",
+    "qr_scan": "QR SCAN",
+    "reserve": "RESERVE",
+    "slogan_1": "Vietnamese Eatery",
+    "slogan_2": "Saveurs du Vietnam, esprit convivial"
+  },
+  "Footer": {
+    "description": "Defined by excellence, driven by heritage.<br> </br>The pinnacle of Vietnamese culinary art in<br> </br>the heart of the city.",
+    "reservations": "Reservations",
+    "location": "Location",
+    "open_maps": "Open in Maps",
+    "newsletter": "Newsletter",
+    "newsletter_desc": "Join our circle for exclusive events and<br> </br>seasonal masterpiece previews.",
+    "email_placeholder": "Email Address",
+    "copyright": "© 2026 Au Lac Vietnamese Eatery. All Rights Reserved.",
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "sitemap": "Sitemap"
+  },
+  "Introduction": {
+    "Hero": {
+      "est": "Est. 1994",
+      "title": "A Symphony of <br> </br> Vietnamese <br> </br> Artistry",
+      "quote": "\"Where the heritage of the Red River meets the sophistication of modern fine dining.\""
+    },
+    "Chef": {
+      "label": "The Craftsmen",
+      "title": "Mastering the <br> </br>Soul of Taste",
+      "chef_1_name": "Executive Chef Minh",
+      "chef_1_quote": "\"Cuisine is the bridge between history and the senses. At Au Lac, we don't just cook; we curate memories through traditional spices and modern textures.\"",
+      "chef_2_name": "Sous Chef Linh",
+      "chef_2_quote": "\"Balance is our north star. The contrast of hot and cold, crisp and soft, sweet and savory defines the Vietnamese identity.\"",
+      "cta": "Read Their Story"
+    },
+    "Collection": {
+      "label": "Collection",
+      "title": "Signature Masterpieces",
+      "dish_1_category": "Heritage Selection",
+      "dish_1_title": "Lotus Root Salad",
+      "dish_1_desc": "Artfully plated with edible gold leaf and a reduction of aged Vietnamese vinegar.",
+      "dish_1_main": "The Imperial Lotus",
+      "dish_1_sub": "Sculpted Freshness",
+      "dish_2_category": "Slow-Cooked",
+      "dish_2_title": "Claypot Fish",
+      "dish_2_desc": "Red Snapper simmered for 6 hours in a traditional ceramic vessel with black pepper and palm sugar.",
+      "dish_2_main": "Ocean Umami",
+      "dish_2_sub": "24-Hour Infusion",
+      "dish_3_category": "Signature",
+      "dish_3_title": "Heritage Pho",
+      "dish_3_desc": "A symphony of 24-hour bone broth infused with star anise and rare wagyu cuts.",
+      "dish_3_main": "The Golden Broth",
+      "dish_3_sub": "The Heart of Hanoi"
+    },
+    "VirtualTour": {
+      "label": "Experience",
+      "title": "The Immersive View",
+      "desc": "Explore our space from every angle before you arrive.",
+      "tour_label": "Virtual Tour",
+      "tour_title": "A 360° Walkthrough"
+    }
+  }
+}

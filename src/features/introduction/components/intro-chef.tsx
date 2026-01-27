@@ -1,19 +1,24 @@
+"use client";
+
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react"; // Import icon mũi tên nếu muốn đẹp hơn
-
-const CHEFS = [
-    {
-        name: "Executive Chef Minh",
-        quote: "\"Cuisine is the bridge between history and the senses. At Au Lac, we don't just cook; we curate memories through traditional spices and modern textures.\"",
-    },
-    {
-        name: "Sous Chef Linh",
-        quote: "\"Balance is our north star. The contrast of hot and cold, crisp and soft, sweet and savory defines the Vietnamese identity.\"",
-    },
-];
+import { useTranslations } from "next-intl"; // Import hook
 
 export function IntroChef() {
+    const t = useTranslations("Introduction.Chef"); // Khởi tạo hook
+
+    // Đưa mảng CHEFS vào trong component để dùng được 't'
+    const CHEFS = [
+        {
+            name: t("chef_1_name"),
+            quote: t("chef_1_quote"),
+        },
+        {
+            name: t("chef_2_name"),
+            quote: t("chef_2_quote"),
+        },
+    ];
+
     return (
         <section className="w-full flex flex-col lg:flex-row">
 
@@ -32,12 +37,12 @@ export function IntroChef() {
 
                 {/* Header */}
                 <div className="mb-10 space-y-4">
-          <span className="font-display text-[#C9A961] text-xs font-bold uppercase tracking-[0.5em] block">
-            The Craftsmen
-          </span>
+                    <span className="font-display text-[#C9A961] text-xs font-bold uppercase tracking-[0.5em] block">
+                        {t("label")}
+                    </span>
                     <h2 className="font-display text-[#193752] text-4xl md:text-5xl lg:text-[60px] font-black leading-tight">
-                        Mastering the <br />
-                        Soul of Taste
+                        {/* Dùng t.rich để render thẻ <br /> */}
+                        {t.rich("title", { br: () => <br /> })}
                     </h2>
                 </div>
 
@@ -62,9 +67,9 @@ export function IntroChef() {
                 {/* CTA Button */}
                 <div className="mt-16">
                     <Link href="/about/team" className="inline-flex flex-col items-center group">
-            <span className="font-display text-[#193752] text-base font-bold uppercase tracking-[0.1em] pb-2 border-b-2 border-[#C9A961] transition-all group-hover:text-[#C9A961] group-hover:border-[#193752]">
-              Read Their Story
-            </span>
+                        <span className="font-display text-[#193752] text-base font-bold uppercase tracking-[0.1em] pb-2 border-b-2 border-[#C9A961] transition-all group-hover:text-[#C9A961] group-hover:border-[#193752]">
+                            {t("cta")}
+                        </span>
                     </Link>
                 </div>
 

@@ -10,16 +10,16 @@ export default function IntroductionPage() {
         <div className="w-full flex flex-col">
 
             {/* 1. HERO SECTION */}
-            <IntroHero />
+            <IntroHero/>
 
             {/* 2. COLLECTION SECTION */}
-            <IntroCollection />
+            <IntroCollection/>
 
             {/* 3. CHEF SECTION */}
-            <IntroChef />
+            <IntroChef/>
 
             {/* 4. VIRTUAL TOUR */}
-            <IntroVirtualTour />
+            <IntroVirtualTour/>
 
         </div>
     );
