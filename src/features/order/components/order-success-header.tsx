@@ -1,6 +1,6 @@
 import { Check } from "lucide-react";
 
-export function OrderSuccessHeader() {
+export default function OrderSuccessHeader() {
   return (
     <div className="w-full flex flex-col items-center gap-4">
       <div className="w-20 h-20 rounded-xl bg-[#FBFAF7] border border-[#E6DFC8] flex items-center justify-center">

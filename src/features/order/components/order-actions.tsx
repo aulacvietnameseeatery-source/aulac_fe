@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-export function OrderActions() {
+export default function OrderActions() {
   return (
     <div className="w-full flex flex-col md:flex-row gap-4 justify-center">
       <button

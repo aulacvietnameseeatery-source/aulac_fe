@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { getOrderSuccess } from '../services/order.service';
-import { OrderSuccessData } from '../types/order.types';
+import { OrderSuccessData } from '../types/order-success.types';
 
 export function useOrderSuccess() {
   const searchParams = useSearchParams();

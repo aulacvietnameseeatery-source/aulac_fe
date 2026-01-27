@@ -1,4 +1,4 @@
-import { OrderSuccessData } from '../types/order.types';
+import { OrderSuccessData } from '../types/order-success.types';
 
 export async function getOrderSuccess(
   orderId: string

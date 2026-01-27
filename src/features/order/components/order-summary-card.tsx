@@ -6,7 +6,7 @@ interface OrderSummaryProps {
   diningOption: 'DINE_IN' | 'TAKE_AWAY';
 }
 
-export function OrderSummaryCard({
+export default function OrderSummaryCard({
   orderNumber,
   totalAmount,
   diningOption,

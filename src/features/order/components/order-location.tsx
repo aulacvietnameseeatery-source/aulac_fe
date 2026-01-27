@@ -1,6 +1,6 @@
 import { MapPin } from "lucide-react";
 
-export function OrderLocation() {
+export default function OrderLocation() {
   return (
     <div className="w-full flex flex-col items-center gap-1.5">
       <div className="flex items-center gap-2 text-slate-400">
