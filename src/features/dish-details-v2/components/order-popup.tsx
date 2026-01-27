@@ -7,7 +7,7 @@ type Props = {
   onClose: () => void;
 };
 
-export default function OrderSuccessPopup({ open, onClose }: Props) {
+export function OrderPopup({ open, onClose }: Props) {
   const [qty, setQty] = useState(1);
 
   // reset quantity mỗi lần mở popup (tuỳ bạn)
