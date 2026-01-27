@@ -1,5 +1,5 @@
-import TableCard from './TableCard';
-import TableCardSkeleton from './TableCardSkeleton';
+import TableCard from './table-card';
+import TableCardSkeleton from './table-card-skeleton';
 import { Table } from '../types/reservation.types';
 
 interface TableGridProps {
@@ -9,12 +9,12 @@ interface TableGridProps {
   isLoading?: boolean;
 }
 
-const TableGrid: React.FC<TableGridProps> = ({
+export default function TableGrid ({
   tables = [],
   selectedTableId,
   onSelect,
   isLoading = false,
-}) => {
+} : TableGridProps) {
   if (isLoading) {
     return (
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -55,5 +55,3 @@ const TableGrid: React.FC<TableGridProps> = ({
     </div>
   );
 };
-
-export default TableGrid;

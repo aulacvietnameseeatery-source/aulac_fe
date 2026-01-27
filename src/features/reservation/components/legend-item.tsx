@@ -7,7 +7,7 @@ interface LegendItemProps {
   bordered?: boolean;
 }
 
-const LegendItem: React.FC<LegendItemProps> = ({ color, label, bordered }) => {
+export default function LegendItem({ color, label, bordered } : LegendItemProps) {
   return (
     <div
       className={cn(
@@ -29,5 +29,3 @@ const LegendItem: React.FC<LegendItemProps> = ({ color, label, bordered }) => {
     </div>
   );
 };
-
-export default LegendItem;

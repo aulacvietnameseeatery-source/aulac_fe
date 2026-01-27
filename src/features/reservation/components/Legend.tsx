@@ -1,7 +1,7 @@
 import React from 'react';
-import LegendItem from './LegendItem';
+import LegendItem from './legend-item';
 
-const Legend = () => {
+export default function Legend() {
   return (
     <div className="flex gap-3 overflow-x-auto pb-2">
       <LegendItem color="bg-emerald-500" label="AVAILABLE" />
@@ -10,5 +10,3 @@ const Legend = () => {
     </div>
   );
 };
-
-export default Legend;

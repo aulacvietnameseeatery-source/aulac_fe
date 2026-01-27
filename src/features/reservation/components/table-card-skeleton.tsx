@@ -1,4 +1,4 @@
-const TableCardSkeleton = () => {
+export default function TableCardSkeleton() {
   return (
     <div className="p-3 rounded-2xl border border-slate-200 bg-white animate-pulse">
       <div className="w-full aspect-4/3 rounded-xl bg-stone-200 mb-4" />
@@ -13,5 +13,3 @@ const TableCardSkeleton = () => {
     </div>
   );
 };
-
-export default TableCardSkeleton;

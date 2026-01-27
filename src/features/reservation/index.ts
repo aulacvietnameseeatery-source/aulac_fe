@@ -1,9 +1,9 @@
 // Components
-export { default as ZoneTabs } from './components/ZoneTabs';
-export { default as TableGrid } from './components/TableGrid';
-export { default as ReservationSidebar } from './components/ReservationSidebar';
-export { default as BookingModal } from './components/BookingModal';
-export { default as Legend } from './components/Legend';
+export { default as ZoneTabs } from './components/zone-tabs';
+export { default as TableGrid } from './components/table-grid';
+export { default as ReservationSidebar } from './components/reservation-sidebar';
+export { default as BookingModal } from './components/booking-modal';
+export { default as Legend} from './components/legend';
 
 // Hooks
 export { useReservation } from './hooks/useReservation';

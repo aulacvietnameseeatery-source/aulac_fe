@@ -21,7 +21,7 @@ interface BookingModalProps {
   };
 }
 
-const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose, onConfirm, tableData, guestInfo }) => {
+export default function BookingModal({ isOpen, onClose, onConfirm, tableData, guestInfo } : BookingModalProps) {
   if (!isOpen || !tableData) return null;
 
   return (
@@ -120,5 +120,3 @@ const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose, onConfirm,
     </div>
   );
 };
-
-export default BookingModal;

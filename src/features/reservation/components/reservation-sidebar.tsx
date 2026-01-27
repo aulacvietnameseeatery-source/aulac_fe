@@ -32,13 +32,13 @@ const convertTo24Hour = (timeStr: string) => {
   return `${hours}:${minutes}`;
 };
 
-const ReservationSidebar: React.FC<ReservationSidebarProps> = ({ 
+export default function ReservationSidebar({ 
   selectedTable, 
   date, 
   time, 
   onDateTimeChange, 
   onBook 
-}) => {
+} : ReservationSidebarProps) {
   const [isEditing, setIsEditing] = useState(false);
   
   // Temp State
@@ -262,5 +262,3 @@ const ReservationSidebar: React.FC<ReservationSidebarProps> = ({
     </div>
   );
 };
-
-export default ReservationSidebar;
