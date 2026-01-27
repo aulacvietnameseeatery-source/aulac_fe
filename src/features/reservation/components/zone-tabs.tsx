@@ -7,7 +7,7 @@ interface ZoneTabsProps {
   onChange: (zone: string) => void;
 }
 
-const ZoneTabs: React.FC<ZoneTabsProps> = ({ zones, activeZone, onChange }) => {
+export default function ZoneTabs({ zones, activeZone, onChange } : ZoneTabsProps) {
   return (
     <div className="w-full border-b border-stone-200 mb-8">
       <div className="flex gap-6 md:gap-8 text-sm font-bold uppercase text-stone-400">
@@ -29,5 +29,3 @@ const ZoneTabs: React.FC<ZoneTabsProps> = ({ zones, activeZone, onChange }) => {
     </div>
   );
 };
-
-export default ZoneTabs;

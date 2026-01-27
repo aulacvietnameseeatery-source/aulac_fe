@@ -13,7 +13,7 @@ interface TableCardProps {
   onClick?: () => void;
 }
 
-const TableCard: React.FC<TableCardProps> = ({ id, name, guests, image, status, onClick }) => {
+export default function TableCard({ id, name, guests, image, status, onClick } : TableCardProps) {
   const isDisabled = status === 'reserved';
 
   return (
@@ -64,5 +64,3 @@ const TableCard: React.FC<TableCardProps> = ({ id, name, guests, image, status, 
     </div>
   );
 };
-
-export default TableCard;
