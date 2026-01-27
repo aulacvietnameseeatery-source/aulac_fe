@@ -11,7 +11,7 @@ export default function LoginUI() {
       {/* Background layer */}
       <div className="absolute inset-0">
         <img
-          src="https://placehold.co/1920x1080"
+          src="/images/authen/auth-login-background/login-background.png"
           alt="Cozy background"
           className="absolute inset-0 h-full w-full object-cover opacity-30 blur-[2px]"
         />
