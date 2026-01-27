@@ -1,6 +1,6 @@
 import { ScrollText } from "lucide-react";
 
-export function ReceiptHeader() {
+export default function ReceiptHeader() {
   return (
     <div className="p-12 pb-10 flex flex-col items-center text-center">
       <div className="flex items-center gap-2 text-[#DEA048] mb-6">

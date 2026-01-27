@@ -1,6 +1,6 @@
 import { OrderReceipt } from "../types/receipt.types";
 
-export function ReceiptInfoStrip({ order }: { order: OrderReceipt }) {
+export default function ReceiptInfoStrip({ order }: { order: OrderReceipt }) {
   return (
     <div className="border-y border-[#475569]/30 px-12 py-6 grid grid-cols-2 gap-y-6">
       <Info label="Order Date" value={order.date} />

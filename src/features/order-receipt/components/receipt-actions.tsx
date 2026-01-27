@@ -8,10 +8,10 @@ interface ReceiptActionsProps {
   onPrint?: () => void;
 }
 
-const ReceiptActions: React.FC<ReceiptActionsProps> = ({
+export default function ReceiptActions({
   onDownload,
   onPrint,
-}) => {
+} : ReceiptActionsProps) {
   return (
     <div className="w-full flex justify-center gap-4">
       
@@ -59,5 +59,3 @@ const ReceiptActions: React.FC<ReceiptActionsProps> = ({
     </div>
   );
 };
-
-export default ReceiptActions;

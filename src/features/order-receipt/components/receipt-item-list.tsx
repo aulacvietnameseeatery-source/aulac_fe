@@ -1,6 +1,6 @@
 import { ReceiptItem } from "../types/receipt.types";
 
-export function ReceiptItemList({ items }: { items: ReceiptItem[] }) {
+export default function ReceiptItemList({ items }: { items: ReceiptItem[] }) {
   return (
     <div className="px-12 py-10 space-y-6">
       {items.map((item, index) => (

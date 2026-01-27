@@ -1,4 +1,4 @@
-export function ReceiptSummary({
+export default function ReceiptSummary({
   subtotal,
   tips,
   total,

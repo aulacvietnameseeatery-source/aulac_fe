@@ -9,10 +9,10 @@ interface ReceiptBackLinkProps {
   label?: string;
 }
 
-const ReceiptBackLink: React.FC<ReceiptBackLinkProps> = ({
+export default function ReceiptBackLink({
   href = "/dashboard",
   label = "Return to Dashboard",
-}) => {
+} : ReceiptBackLinkProps) {
   return (
     <Link
       href={href}
@@ -34,5 +34,3 @@ const ReceiptBackLink: React.FC<ReceiptBackLinkProps> = ({
     </Link>
   );
 };
-
-export default ReceiptBackLink;
