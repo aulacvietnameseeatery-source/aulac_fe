@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 
 type Props = {
   open: boolean;
@@ -8,12 +9,14 @@ type Props = {
 };
 
 export function OrderPopup({ open, onClose }: Props) {
+  const t = useTranslations("OrderPopup");
   const [qty, setQty] = useState(1);
 
   // reset quantity mỗi lần mở popup (tuỳ bạn)
   useEffect(() => {
     if (open) setQty(1);
   }, [open]);
+
 
   if (!open) return null;
 
@@ -39,11 +42,11 @@ export function OrderPopup({ open, onClose }: Props) {
               <div className="absolute left-0 top-0 flex flex-col gap-1">
                 <div className="pb-1">
                   <div className="text-blue-950 text-[10px] font-bold uppercase leading-4 tracking-widest">
-                    Success
+                    {t("success_label")}
                   </div>
                 </div>
                 <div className="text-slate-500 text-sm font-normal leading-4">
-                  Item added to your selection
+                  {t("success_message")}
                 </div>
               </div>
 
@@ -62,16 +65,14 @@ export function OrderPopup({ open, onClose }: Props) {
           {/* Title */}
           <div className="w-full pb-2">
             <div className="text-neutral-900 text-3xl font-normal leading-9">
-              Imperial Hue Beef
-              <br />
-              Noodle Soup
+              {t.rich("dish_name", { br: () => <br /> })}
             </div>
           </div>
 
           {/* Price */}
           <div className="w-full pb-8">
             <div className="text-blue-950/80 text-lg font-medium leading-7">
-              $18.50
+              {t("price")}
             </div>
           </div>
 
@@ -79,7 +80,7 @@ export function OrderPopup({ open, onClose }: Props) {
           <div className="w-full pb-8">
             <div className="w-full px-4 py-3 bg-neutral-50 rounded-2xl flex items-center justify-between">
               <div className="text-slate-500 text-sm font-medium leading-5">
-                Quantity
+                {t("quantity_label")}
               </div>
 
               <div className="flex items-center gap-4">
@@ -115,7 +116,7 @@ export function OrderPopup({ open, onClose }: Props) {
               className="h-12 rounded-2xl bg-blue-950 shadow-[0px_4px_6px_-4px_rgba(26,57,81,0.20)] shadow-[0px_10px_15px_-3px_rgba(26,57,81,0.20)] flex items-center justify-center"
             >
               <span className="text-white text-sm font-bold uppercase tracking-wider">
-                View Selection &amp; Order
+                {t("view_selection")}
               </span>
             </button>
 
@@ -125,7 +126,7 @@ export function OrderPopup({ open, onClose }: Props) {
               className="h-12 rounded-2xl outline outline-1 outline-offset-[-1px] outline-slate-200 flex items-center justify-center"
             >
               <span className="text-slate-500 text-sm font-bold uppercase tracking-wider">
-                Continue Browsing
+                {t("continue_browsing")}
               </span>
             </button>
           </div>
@@ -133,7 +134,7 @@ export function OrderPopup({ open, onClose }: Props) {
           {/* Footer text */}
           <div className="w-full pt-6 flex justify-center">
             <div className="text-slate-500/40 text-[10px] font-normal uppercase tracking-wide">
-              Handcrafted Vietnamese Cuisine
+              {t("footer_text")}
             </div>
           </div>
         </div>

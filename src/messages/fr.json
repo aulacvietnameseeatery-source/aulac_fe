@@ -62,5 +62,148 @@
       "tour_label": "Visite Virtuelle",
       "tour_title": "Parcours à 360°"
     }
+  },
+  "Breadcrumb": {
+    "home": "Accueil",
+    "menu": "Menu",
+    "about": "À Propos",
+    "dish_details": "Détails_du_Plat"
+  },
+  "OrderPopup": {
+    "success_label": "Succès",
+    "success_message": "Article ajouté à votre sélection",
+    "dish_name": "Soupe Impériale de Hue<br />aux Nouilles de Boeuf",
+    "price": "18,50 $",
+    "quantity_label": "Quantité",
+    "view_selection": "Voir la Sélection & Commander",
+    "continue_browsing": "Continuer à Parcourir",
+    "footer_text": "Cuisine Vietnamienne Artisanale"
+  },
+  "DishDetails": {
+    "Hero": {
+      "tag": "Chef-d'œuvre du Chef",
+      "title_line_1": "Soupe Impériale de Hue",
+      "title_line_2": "aux Nouilles de Boeuf",
+      "subtitle": "Un voyage culinaire vers la Cité Impériale de Hue, équilibrant audace et raffinement dans un seul bol.",
+      "reserve": "Réserver l'Expérience",
+      "share": "Partager",
+      "order_now": "Commander",
+      "photo": "Photo",
+      "view_360": "Vue 360°",
+      "video": "Vidéo"
+    },
+    "Narrative": {
+      "label": "Le Récit",
+      "title": "Où la tradition impériale rencontre le raffinement moderne.",
+      "paragraph_1": "Dérivée de la cuisine de la cour royale de la dynastie Nguyen, ce plat—connu sous le nom de Bun Bo Hue—est un mélange harmonieux d'épicé, aigre, salé et sucré. Il témoigne de la complexité culinaire du Centre Vietnam, offrant un profil bien plus robuste que son homologue du nord, le Pho.",
+      "paragraph_2": "L'âme du plat réside dans son bouillon. Nous faisons mijoter des jarrets de bœuf premium et des jarrets de porc pendant douze heures avec des tiges de citronnelle écrasées et une touche de pâte de crevettes fermentée. Ce processus méticuleux extrait de profondes notes umami tout en maintenant une clarté caractéristique de la gastronomie vietnamienne haut de gamme.",
+      "paragraph_3": "Servi avec des vermicelles de riz épais et cylindriques et fini avec notre saté au piment fait maison, chaque bol est un hommage aux matins brumeux de la Rivière des Parfums. Ce n'est pas seulement une soupe ; c'est l'histoire versée dans la porcelaine.",
+      "pairing_label": "Accord du Sommelier",
+      "pairing_title": "Riesling Grand Cru 2018",
+      "pairing_desc": "\"L'acidité vive et les notes minérales de ce Riesling alsacien traversent le bouillon riche et épicé, nettoyant le palais tout en complétant les arômes de citronnelle.\"",
+      "add_to_order": "Ajouter à la commande"
+    },
+    "Composition": {
+      "label": "La Composition",
+      "item_1_title": "Vermicelles de Riz",
+      "item_1_sub": "Style Hue",
+      "item_1_desc": "Nouilles de riz épaisses et cylindriques avec une mastication satisfaisante, traditionnelles du Centre Vietnam.",
+      "item_2_title": "Citronnelle Impériale",
+      "item_2_sub": "Delta du Mékong",
+      "item_2_desc": "Tiges fraîchement récoltées qui confèrent l'arôme signature citrus-floral au bouillon.",
+      "item_3_title": "Mam Ruoc",
+      "item_3_sub": "Pâte de Crevettes Fermentée",
+      "item_3_desc": "Un condiment traditionnel qui fournit la fondation umami essentielle du plat.",
+      "stat_prep": "Préparation",
+      "stat_prep_val": "12 Heures",
+      "stat_cal": "Calories",
+      "stat_cal_val": "580 kcal",
+      "stat_allergen": "Allergènes",
+      "stat_allergen_val": "Crustacés",
+      "stat_spice": "Niveau d'Épice",
+      "stat_spice_val": "Moyen-Élevé"
+    }
+  },
+  "DishDetailsV2": {
+    "Hero": {
+      "label": "Expérience Interactive 01",
+      "title": "Gastronomie Dimensionnelle",
+      "hold_rotate": "Maintenir et Faire Pivoter la Vue",
+      "order_now": "Commander"
+    },
+    "Narrative": {
+      "tag": "Sélection Signature du Chef",
+      "title": "Soupe Impériale de Hue aux Nouilles de Boeuf",
+      "est": "Fondé en 1802 Dynastie Nguyen",
+      "paragraph_1": "Dérivée de la cuisine de la cour royale de la dynastie Nguyen, ce plat—connu sous le nom de Bun Bo Hue—est un mélange harmonieux d'épicé, aigre, salé et sucré. Il témoigne de la complexité culinaire du Centre Vietnam, offrant un profil bien plus robuste que son homologue du nord, le Pho.",
+      "paragraph_2": "L'âme du plat réside dans son bouillon. Nous faisons mijoter des jarrets de bœuf premium et des jarrets de porc pendant douze heures avec des tiges de citronnelle écrasées et une touche de pâte de crevettes fermentée. Ce processus méticuleux extrait de profondes notes umami tout en maintenant une clarté caractéristique de la gastronomie vietnamienne haut de gamme.",
+      "paragraph_3": "Servi avec des vermicelles de riz épais et cylindriques et fini avec notre saté au piment fait maison, chaque bol est un hommage aux matins brumeux de la Rivière des Parfums. Ce n'est pas seulement une soupe ; c'est l'histoire versée dans la porcelaine."
+    },
+    "Composition": {
+      "label": "Fondation",
+      "title": "La Composition",
+      "item_1_title": "Vermicelles de Riz",
+      "item_1_tag": "Tradition de Hue",
+      "item_1_desc": "Nouilles de riz épaisses et cylindriques avec une mastication satisfaisante, fabriquées sur mesure pour porter le poids robuste de notre bouillon impérial.",
+      "item_2_title": "Citronnelle du Mékong",
+      "item_2_tag": "Base Aromatique",
+      "item_2_desc": "Tiges fraîchement récoltées qui confèrent l'arôme signature citrus-floral, meurtries à la main pour libérer les huiles essentielles dans la mijotée.",
+      "item_3_title": "Mam Ruoc",
+      "item_3_tag": "Umami Profond",
+      "item_3_desc": "Une pâte de crevettes fermentée rare provenant de la côte de Hue, fournissant la fondation essentielle et profondément stratifiée du plat.",
+      "stat_curing": "Temps de Maturation",
+      "stat_curing_val": "12 Heures",
+      "stat_cal": "Valeur Calorique",
+      "stat_cal_val": "580 kcal",
+      "stat_spice": "Quotient d'Épice",
+      "stat_spice_val": "Haute Intensité",
+      "stat_allergen": "Allergènes",
+      "stat_allergen_val": "Crustacés"
+    },
+    "CTA": {
+      "reserve": "Réservez Votre Expérience"
+    },
+    "Cinematic": {
+      "label": "Perspective 02",
+      "title": "L'Art du Bouillon",
+      "description": "Une étude visuelle de l'essence de citronnelle mijotée pendant douze heures, capturée au moment de l'extraction maximale de saveur."
+    },
+    "Video": {
+      "title": "La Préparation Culinaire",
+      "subtitle": "Un Film par Au Lac",
+      "duration_label": "Durée",
+      "duration_value": "02:45 MIN",
+      "resolution_label": "Résolution",
+      "resolution_value": "CINÉMATIQUE 4K"
+    }
+  },
+  "AboutUs": {
+    "Legacy": {
+      "est": "Fondé en 1994",
+      "title": "Notre Héritage"
+    },
+    "Journey": {
+      "title": "Le Voyage des Saveurs",
+      "paragraph_1": "Fondé au cœur de la capitale en 1994, <strong>Au Lac</strong> a débuté comme un humble hommage aux racines ancestrales de la cuisine vietnamienne. Nommé d'après le royaume historique du peuple Lac Viet, notre restaurant a été imaginé comme un pont entre les traditions anciennes de l'Est et les techniques raffinées de la gastronomie contemporaine.",
+      "paragraph_2": "Depuis trois décennies, nous sommes restés fidèles à la philosophie « trầm ấm »—créer une atmosphère chaleureuse et émouvante où chaque plat raconte une histoire de patrimoine. Ce qui a commencé avec une seule recette familiale de Pho a évolué en une expérience culinaire éditoriale qui honore le rythme saisonnier de notre terre.",
+      "quote": "\"Nous ne servons pas seulement de la nourriture ; nous préservons les échos de mille ans d'évolution culinaire.\"",
+      "paragraph_3": "Aujourd'hui, Au Lac se dresse comme un phare de la haute gastronomie vietnamienne, où le crépitement d'un pot en argile et l'arôme de l'anis étoilé servent de retour aux sources pour les sens."
+    },
+    "Philosophy": {
+      "label": "Nos Valeurs Fondamentales",
+      "title": "Philosophie Culinaire",
+      "value_1_title": "Artisanat Traditionnel",
+      "value_1_desc": "Honorer les techniques lentes de nos ancêtres. Des bouillons d'os de 24 heures aux épices moulues à la main avec le mortier et le pilon.",
+      "value_2_title": "Esprit Moderne",
+      "value_2_desc": "Élever les saveurs patrimoniales par la précision, le dressage artistique et une perspective mondiale sophistiquée sur la haute gastronomie."
+    },
+    "Founders": {
+      "label": "Les Visionnaires",
+      "title": "Rencontrez les Fondateurs",
+      "paragraph_1": "Le Chef Nguyen et le Maître Sommelier Linh ont fondé Au Lac avec un rêve partagé : redéfinir la façon dont le monde perçoit l'hospitalité vietnamienne.",
+      "paragraph_2": "Avec des parcours allant des stands de rue de Saigon aux cuisines étoilées Michelin à Paris, ils apportent une harmonie équilibrée de chaleur et d'excellence professionnelle à la table de chaque client.",
+      "quote": "\"La table est l'endroit où vit la culture. Nous vous invitons à vous asseoir avec nous.\"",
+      "quote_author": "— Nguyen & Linh"
+    }
   }
 }

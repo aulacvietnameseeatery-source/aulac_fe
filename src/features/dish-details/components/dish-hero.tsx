@@ -1,10 +1,14 @@
 "use client";
 
+import { useTranslations } from "next-intl";
+
 type DishHeroProps = {
   onOrderNow: () => void;
 };
 
 export function DishHero({ onOrderNow }: DishHeroProps) {
+  const t = useTranslations("DishDetails.Hero");
+
   return (
     <section className="mx-auto w-full max-w-[1200px] px-4 pt-10">
       <div className="relative h-[360px] overflow-hidden rounded-2xl shadow-[0px_8px_10px_-6px_rgba(0,0,0,0.10)] shadow-xl md:h-[561px]">
@@ -19,20 +23,18 @@ export function DishHero({ onOrderNow }: DishHeroProps) {
 
         {/* Tag */}
         <div className="absolute left-6 top-10 rounded-full bg-blue-800/80 px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-white backdrop-blur-[2px] md:left-16 md:top-[200px]">
-          Chef&apos;s Masterpiece
+          {t("tag")}
         </div>
 
         {/* Title */}
         <h1 className="absolute left-6 top-20 max-w-[620px] text-4xl font-medium leading-[44px] text-white md:left-16 md:top-[240px] md:text-7xl md:leading-[76px]">
-          <span className="block">Imperial Hue</span>
-          <span className="block">Beef Noodle Soup</span>
+          <span className="block">{t("title_line_1")}</span>
+          <span className="block">{t("title_line_2")}</span>
         </h1>
 
         {/* Subtitle */}
         <p className="absolute left-6 top-[190px] max-w-[520px] text-base font-light leading-6 text-white/90 md:left-16 md:top-[400px] md:text-xl md:leading-7">
-          A culinary voyage to the Imperial City of Hue, balancing
-          <br />
-          boldness and refinement in a single bowl.
+          {t.rich("subtitle", { br: () => <br /> })}
         </p>
 
         {/* Buttons */}
@@ -42,7 +44,7 @@ export function DishHero({ onOrderNow }: DishHeroProps) {
             className="h-12 w-60 rounded-lg bg-white shadow-[0px_4px_6px_-4px_rgba(0,0,0,0.10)] shadow-lg"
           >
             <span className="text-base font-bold text-blue-800">
-              Reserve Experience
+              {t("reserve")}
             </span>
           </button>
 
@@ -50,7 +52,7 @@ export function DishHero({ onOrderNow }: DishHeroProps) {
             type="button"
             className="h-12 w-32 rounded-lg bg-black/40 outline outline-1 outline-offset-[-1px] outline-white/20 backdrop-blur-[6px]"
           >
-            <span className="text-base font-medium text-white">Share</span>
+            <span className="text-base font-medium text-white">{t("share")}</span>
           </button>
         </div>
 
@@ -60,7 +62,7 @@ export function DishHero({ onOrderNow }: DishHeroProps) {
           className="absolute bottom-6 right-6 h-11 w-28 rounded-lg bg-amber-400 md:right-[150px] md:top-[492px] md:bottom-auto"
           onClick={onOrderNow}
         >
-          <span className="text-sm font-medium text-blue-950">Order Now</span>
+          <span className="text-sm font-medium text-blue-950">{t("order_now")}</span>
         </button>
 
         {/* Photo / 360 / Video pill (UI only) */}
@@ -69,19 +71,19 @@ export function DishHero({ onOrderNow }: DishHeroProps) {
             type="button"
             className="rounded-full bg-white/20 px-6 py-2.5 text-xs font-bold uppercase tracking-wider text-white outline outline-1 outline-offset-[-1px] outline-white/20 shadow-lg"
           >
-            Photo
+            {t("photo")}
           </button>
           <button
             type="button"
             className="rounded-full px-6 py-2.5 text-xs font-bold uppercase tracking-wider text-white/70"
           >
-            360° View
+            {t("view_360")}
           </button>
           <button
             type="button"
             className="rounded-full px-6 py-2.5 text-xs font-bold uppercase tracking-wider text-white/70"
           >
-            Video
+            {t("video")}
           </button>
         </div>
       </div>
