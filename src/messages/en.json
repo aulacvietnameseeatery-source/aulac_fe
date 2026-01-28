@@ -62,5 +62,182 @@
       "tour_label": "Virtual Tour",
       "tour_title": "A 360° Walkthrough"
     }
+  },
+  "Reservation": {
+    "Header": {
+      "title": "Select Your Table",
+      "subtitle": "Experience fine dining at its best. Choose your preferred zone and table below."
+    },
+    "Legend": {
+      "available": "AVAILABLE",
+      "reserved": "RESERVED",
+      "selected": "SELECTED"
+    },
+    "TableGrid": {
+      "empty": "No tables available in this zone."
+    },
+    "TableCard": {
+      "available": "Available",
+      "reserved": "Reserved",
+      "selected": "Selected",
+      "guests": "{count} Guests"
+    },
+    "Sidebar": {
+      "header": {
+        "title": "Reservation Summary",
+        "subtitle": "Please review your selection"
+      },
+      "datetime": {
+        "label": "Date & Time",
+        "edit": "Edit",
+        "save": "Save",
+        "cancel": "Cancel",
+        "selectDate": "Select Date",
+        "selectTime": "Select Time",
+        "openingHours": "(11:00 AM – 10:00 PM)"
+      },
+      "table": {
+        "label": "Selected Table",
+        "zone": "Standard Zone",
+        "guests": "{count} Guests",
+        "empty": "Please select a table"
+      },
+      "guest": {
+        "label": "Your Details",
+        "name": "Full Name",
+        "phone": "Phone Number *",
+        "email": "Email Address (Optional)"
+      },
+      "action": {
+        "book": "Book Selected Table",
+        "saveFirst": "Save Changes First"
+      },
+      "validation": {
+        "missingInfo": "* Please enter Name & Phone to book"
+      },
+      "legal": "By booking, you agree to our Terms & Conditions and Cancellation Policy."
+    },
+    "BookingModal": {
+      "selectedTable": "Selected Table",
+      "title": "Confirm Reservation",
+      "restaurantName": "Au Lac Vietnamese Eatery",
+      "date": "Date",
+      "time": "Time",
+      "guests": "Guests",
+      "guestsCount": "{count} Persons",
+      "guestInfo": "Guest Information",
+      "policy": "Tables are held for 15 minutes past reservation time. Please notify us of any delays.",
+      "confirm": "Confirm Reservation",
+      "changeSelection": "Change Selection"
+    }
+  },
+  "OrderSuccess": {
+    "Loading": {
+      "title": "Processing...",
+      "subtitle": "Retrieving your order details"
+    },
+    "NotFound": {
+      "title": "Order Not Found",
+      "description": "We couldn't locate the order details you are looking for. It may have been removed or the ID is incorrect.",
+      "cta": "Return Home"
+    },
+    "Header": {
+      "title": "Thank You",
+      "subtitle": "Your order has been successfully confirmed"
+    },
+    "Summary": {
+      "orderNumber": "Order Number",
+      "totalAmount": "Total Amount",
+      "diningOption": "Dining Option",
+      "quote": "Your culinary journey begins...",
+      "readyIn": "Ready in {minutes} minutes"
+    },
+    "DiningOption": {
+      "DINE_IN": "Dine In",
+      "TAKE_AWAY": "Take Away"
+    },
+    "Location": {
+      "label": "Collection Point",
+      "address": "Quai du Mont-Blanc 13, Geneva"
+    },
+    "Actions": {
+      "viewReceipt": "View Receipt",
+      "backHome": "Back to Home"
+    }
+  },
+  "OrderReceipt": {
+    "Header": {
+      "title": "Receipt",
+      "subtitle": "Thank you for your order"
+    },
+    "InfoStrip": {
+      "orderNumber": "Order ID",
+      "date": "Order Date",
+      "time": "Time",
+      "status": "Status"
+    },
+    "Items": {
+      "title": "Order Details",
+      "quantity": "Qty"
+    },
+    "Summary": {
+      "subtotal": "Subtotal",
+      "tips": "Tips / Gratuity",
+      "total": "Total Amount"
+    },
+    "Payment": {
+      "label": "Paid via"
+    },
+    "Actions": {
+      "download": "Download PDF",
+      "print": "Print"
+    },
+    "BackLink": {
+      "label": "Return to Dashboard"
+    }
+  },
+  "Contact": {
+    "Hero": {
+      "title": "Connect With Us",
+      "description": "Experience the essence of Vietnamese luxury on the shores of Lake Geneva.\nWe are here to assist with your inquiries, private event bookings, and special requests."
+    },
+    "Info": {
+      "addressLabel": "Our Home",
+      "address": "Quai du Mont-Blanc 13\n1201 Geneva, Switzerland",
+      "phoneLabel": "Speak With Us",
+      "phone": "+41 22 123 45 67",
+      "emailLabel": "Inquiries",
+      "email": "geneva@aulac.ch",
+      "hoursLabel": "Hours",
+      "hours": "Mon - Sun: 11:30 AM - 11:00 PM"
+    },
+    "Map": {
+      "title": "Find Us",
+      "hint": "Click to interact"
+    },
+    "Socials": {
+      "title": "Follow the Journey",
+      "instagram": "Instagram",
+      "facebook": "Facebook",
+      "linkedin": "LinkedIn"
+    },
+    "Form": {
+      "title": "Send an Inquiry",
+      "fullName": "Full Name",
+      "fullNamePlaceholder": "Your name",
+      "email": "Email Address",
+      "subject": "Subject",
+      "message": "Your Message",
+      "messagePlaceholder": "How can we help you?",
+      "submit": "Send Message",
+      "subjects": {
+        "general": "General Inquiry",
+        "events": "Private Events",
+        "reservation": "Reservations"
+      }
+    },
+    "Footer": {
+      "copyright": "© 2024 Au Lac Vietnamese Eatery - Geneva. All Rights Reserved."
+    }
   }
 }

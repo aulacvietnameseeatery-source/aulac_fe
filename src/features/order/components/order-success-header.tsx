@@ -1,6 +1,9 @@
 import { Check } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export default function OrderSuccessHeader() {
+  const t = useTranslations("OrderSuccess.Header");
+
   return (
     <div className="w-full flex flex-col items-center gap-4">
       <div className="w-20 h-20 rounded-xl bg-[#FBFAF7] border border-[#E6DFC8] flex items-center justify-center">
@@ -8,11 +11,11 @@ export default function OrderSuccessHeader() {
       </div>
 
       <h1 className="font-serif text-[48px] text-[#1A3951]">
-        Thank You
+        {t("title")}
       </h1>
 
       <div className="tracking-[2px] uppercase font-semibold text-sm text-slate-500">
-        Your order has been successfully confirmed
+        {t("subtitle")}
       </div>
     </div>
   );

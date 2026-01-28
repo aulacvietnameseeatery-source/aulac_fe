@@ -1,12 +1,15 @@
 import { OrderReceipt } from "../types/receipt.types";
+import { useTranslations } from "next-intl";
 
 export default function ReceiptInfoStrip({ order }: { order: OrderReceipt }) {
+  const t = useTranslations("OrderReceipt.InfoStrip");
+
   return (
     <div className="border-y border-[#475569]/30 px-12 py-6 grid grid-cols-2 gap-y-6">
-      <Info label="Order Date" value={order.date} />
-      <Info label="Order ID" value={order.id} align="right" />
-      <Info label="Time" value={order.time} />
-      <Info label="Status" value={order.status} align="right" highlight />
+      <Info label={t("date")} value={order.date} />
+      <Info label={t("orderNumber")} value={order.id} align="right" />
+      <Info label={t("time")} value={order.time} />
+      <Info label={t("status")} value={order.status} align="right" highlight />
     </div>
   );
 }

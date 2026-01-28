@@ -1,8 +1,12 @@
+import { useTranslations } from "next-intl";
+
 export function ContactMap() {
+  const t = useTranslations("Contact.Map");
+
   return (
     <div className="flex flex-col gap-6">
         <div className="flex items-center gap-4 text-[#1A3951]">
-            <b className="tracking-[1.2px] uppercase text-xs">Find Us</b>
+            <b className="tracking-[1.2px] uppercase text-xs">{t("title")}</b>
             <div className="h-px flex-1 bg-slate-200" />
         </div>
 
@@ -18,7 +22,7 @@ export function ContactMap() {
             ></iframe>
             
             <div className="absolute bottom-2 right-2 bg-white/80 backdrop-blur-sm px-2 py-1 text-[10px] text-slate-500 rounded pointer-events-none opacity-0 group-hover:opacity-100 transition">
-                Click to interact
+                {t("hint")}
             </div>
         </div>
     </div>

@@ -1,11 +1,14 @@
 import { ScrollText } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export default function ReceiptHeader() {
+  const t = useTranslations("OrderReceipt.Header");
+
   return (
     <div className="p-12 pb-10 flex flex-col items-center text-center">
       <div className="flex items-center gap-2 text-[#DEA048] mb-6">
         <ScrollText size={20} />
-        <b className="tracking-[4.2px] uppercase text-[14px]">Receipt</b>
+        <b className="tracking-[4.2px] uppercase text-[14px]">{t("title")}</b>
       </div>
 
       <h1 className="font-serif text-[30px] text-[#1A3951]">

@@ -1,28 +1,40 @@
 import { MapPin, Phone, Mail, Clock } from "lucide-react";
 import { ContactItem } from "./contact-item";
+import { useTranslations } from "next-intl";
 
 export function ContactInfoList() {
+  const t = useTranslations("Contact.Info");
+
   return (
     <div className="flex flex-col gap-10">
       <ContactItem
         icon={<MapPin />}
         label="Our Home"
-        content={<>Quai du Mont-Blanc 13<br />1201 Geneva, Switzerland</>}
+        content={
+          <>
+            {t("address").split("\n").map((line, i) => (
+              <span key={i}>
+                {line}
+                <br />
+              </span>
+            ))}
+          </>
+        }
       />
       <ContactItem
         icon={<Phone />}
-        label="Speak With Us"
-        content="+41 22 123 45 67"
+        label={t("phoneLabel")}
+        content={t("phone")}
       />
       <ContactItem
         icon={<Mail />}
-        label="Inquiries"
-        content="geneva@aulac.ch"
+        label={t("emailLabel")}
+        content={t("email")}
       />
       <ContactItem
         icon={<Clock />}
-        label="Hours"
-        content="Mon - Sun: 11:30 AM - 11:00 PM"
+        label={t("hoursLabel")}
+        content={t("hours")}
       />
     </div>
   );
