@@ -62,5 +62,97 @@
       "tour_label": "Visite Virtuelle",
       "tour_title": "Parcours à 360°"
     }
+  },
+  "MenuListing": {
+    "FilterBar": {
+      "all": "Tous",
+      "premium": "Premium",
+      "seafood": "Fruits de mer",
+      "signature": "Signature",
+      "italian": "Italien",
+      "desserts": "Desserts",
+      "beverages": "Boissons",
+      "appetizers": "Entrées",
+      "main course": "Plats Principaux",
+      "search_placeholder": "Rechercher des plats exquis..."
+    },
+    "MenuGrid": {
+      "title": "Menu Gastronomique",
+      "subtitle": "Découvrez une cuisine exquise préparée par des chefs de renommée mondiale, mêlant saveurs vietnamiennes traditionnelles et techniques culinaires modernes.",
+      "book_link": "Indécis ? Réservez d'abord votre table",
+      "items": {
+        "1_name": "Bœuf Wagyu Grillé Premium",
+        "1_desc": "Bœuf Wagyu A5 japonais grillé au charbon de bois, servi avec légumes de saison et sauce aux truffes.",
+        "2_name": "Homard Thermidor",
+        "2_desc": "Homard frais préparé à la française classique, nappé d'une sauce dorée crémeuse et d'herbes fines.",
+        "3_name": "Canard Laqué",
+        "3_desc": "Canard doré croustillant servi avec crêpes chaudes, oignons verts et notre sauce maison signature.",
+        "4_name": "Risotto aux Champignons et Truffe",
+        "4_desc": "Riz Arborio crémeux mijoté avec du Gruyère, du vin blanc et des copeaux de truffe noire.",
+        "5_name": "Saumon Fumé",
+        "5_desc": "Saumon fumé maison servi avec crème fraîche, micro-pousses fraîches et seigle grillé.",
+        "6_name": "Tiramisu",
+        "6_desc": "Dessert italien classique au mascarpone, biscuits à la cuillère imbibés d'espresso et cacao.",
+        "7_name": "Bœuf Grillé Coréen",
+        "7_desc": "Fines tranches de bœuf grillées à table sur charbon de bois, servies avec légumes frais et sauce gochujang.",
+        "8_name": "Krug Clos d'Ambonnay",
+        "8_desc": "Champagne de luxe aux arômes complexes et notes de dégustation raffinées, parfait pour célébrer."
+      },
+      "order_btn": "Commander"
+    },
+    "CartSummary": {
+      "title": "Résumé",
+      "items_count": "{count} Articles Distincts",
+      "confirm_btn": "Confirmer"
+    }
+  },
+  "QrScan": {
+    "HeroSection": {
+      "label": "Atmosphère",
+      "quote": "\"Un voyage culinaire commence par une simple étincelle numérique.\""
+    },
+    "ScanContent": {
+      "title": "Découvrez Notre <br> </br> Sélection",
+      "subtitle": "Scannez pour explorer toute notre histoire culinaire sur votre appareil",
+      "step_scan": "Scanner",
+      "step_explore": "Explorer",
+      "step_order": "Commander"
+    }
+  },
+  "ConfirmOrder": {
+    "OrderItem": {
+      "add_note": "Ajouter une note",
+      "edit_note": "Modifier",
+      "note_placeholder": "ex : Pas épicé, sauce supplémentaire...",
+      "note_saved": "Note enregistrée"
+    },
+    "DiningOption": {
+      "eyebrow": "Comment souhaitez-vous déguster ?",
+      "title": "Option de Repas",
+      "dine_in_label": "L'Expérience",
+      "dine_in_title": "Sur Place",
+      "dine_in_desc": "Plongez dans notre atmosphère tranquille avec un service complet.",
+      "take_away_label": "Rapide & Frais",
+      "take_away_title": "À Emporter",
+      "take_away_desc": "Savourez nos saveurs exquises dans le confort de votre maison.",
+      "helper_dine_in": "Procédez à la sélection de votre table préférée.",
+      "helper_take_away": "Procédez à la planification de l'heure de retrait.",
+      "btn_select_table": "Choisir une Table",
+      "btn_checkout": "Passer à la Caisse"
+    },
+    "OrderSummary": {
+      "title": "Vérifiez Votre Commande",
+      "section_title": "Plats Sélectionnés",
+      "quantity_label": "Quantité",
+      "subtotal": "Sous-total",
+      "tax": "Service & Taxes",
+      "total": "Montant Total",
+      "items": {
+        "1_name": "Salade Impériale de Racine de Lotus",
+        "1_category": "Sélection Patrimoniale",
+        "2_name": "Pho Wagyu Héritage",
+        "2_category": "Signature"
+      }
+    }
   }
 }

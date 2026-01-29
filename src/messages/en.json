@@ -62,5 +62,97 @@
       "tour_label": "Virtual Tour",
       "tour_title": "A 360° Walkthrough"
     }
+  },
+  "MenuListing": {
+    "FilterBar": {
+      "all": "All",
+      "premium": "Premium",
+      "seafood": "Seafood",
+      "signature": "Signature",
+      "italian": "Italian",
+      "desserts": "Desserts",
+      "beverages": "Beverages",
+      "appetizers": "Appetizers",
+      "main course": "Main Course",
+      "search_placeholder": "Search for exquisite dishes..."
+    },
+    "MenuGrid": {
+      "title": "Fine Dining Menu",
+      "subtitle": "Experience exquisite cuisine from world-class chefs, blending traditional Vietnamese flavors with modern culinary techniques.",
+      "book_link": "Not sure what to eat? Book your table first",
+      "items": {
+        "1_name": "Grilled Premium Wagyu Beef",
+        "1_desc": "Japanese A5 Wagyu beef grilled over charcoal, served with seasonal vegetables and truffle sauce.",
+        "2_name": "Lobster Thermidor",
+        "2_desc": "Fresh lobster prepared in classic French style, topped with creamy golden sauce and herbs.",
+        "3_name": "Peking Duck",
+        "3_desc": "Crispy golden duck served with warm crepes, scallions, and our signature house sauce.",
+        "4_name": "Truffle Mushroom Risotto",
+        "4_desc": "Creamy Arborio rice cooked slowly with Gruyère, white wine, and black truffle shavings.",
+        "5_name": "Smoked Salmon",
+        "5_desc": "House-smoked salmon served with crème fraîche, fresh microgreens, and toasted rye.",
+        "6_name": "Tiramisu",
+        "6_desc": "Classic Italian dessert made with mascarpone, ladyfingers soaked in espresso and cocoa.",
+        "7_name": "Korean Grilled Beef",
+        "7_desc": "Thin-sliced beef grilled tableside over charcoal, served with fresh vegetables and gochujang sauce.",
+        "8_name": "Krug Clos d'Ambonnay",
+        "8_desc": "Luxury champagne with complex aromas and refined tasting notes, perfect for celebration."
+      },
+      "order_btn": "Order Now"
+    },
+    "CartSummary": {
+      "title": "Summary",
+      "items_count": "{count} Distinct Items",
+      "confirm_btn": "Confirm Order"
+    }
+  },
+  "QrScan": {
+    "HeroSection": {
+      "label": "Atmosphere",
+      "quote": "\"A culinary journey begins with a single digital spark.\""
+    },
+    "ScanContent": {
+      "title": "Discover Our <br> </br> Selection",
+      "subtitle": "Scan to explore our full culinary narrative on your device",
+      "step_scan": "Scan",
+      "step_explore": "Explore",
+      "step_order": "Order"
+    }
+  },
+  "ConfirmOrder": {
+    "OrderItem": {
+      "add_note": "Add Note",
+      "edit_note": "Edit Note",
+      "note_placeholder": "e.g., No spicy, extra sauce...",
+      "note_saved": "Note saved"
+    },
+    "DiningOption": {
+      "eyebrow": "How would you like to enjoy?",
+      "title": "Dining Option",
+      "dine_in_label": "The Experience",
+      "dine_in_title": "Dine-In",
+      "dine_in_desc": "Immerse yourself in our tranquil atmosphere with full service.",
+      "take_away_label": "Quick & Fresh",
+      "take_away_title": "Take Away",
+      "take_away_desc": "Enjoy our exquisite flavors in the comfort of your own home.",
+      "helper_dine_in": "Proceed to select your preferred table.",
+      "helper_take_away": "Proceed to schedule pickup time.",
+      "btn_select_table": "Select Table",
+      "btn_checkout": "Go to Checkout"
+    },
+    "OrderSummary": {
+      "title": "Review Your Order",
+      "section_title": "Selected Dishes",
+      "quantity_label": "Quantity",
+      "subtotal": "Subtotal",
+      "tax": "Service & Tax",
+      "total": "Total Amount",
+      "items": {
+        "1_name": "Imperial Lotus Root Salad",
+        "1_category": "Heritage Selection",
+        "2_name": "Heritage Wagyu Pho",
+        "2_category": "Signature"
+      }
+    }
   }
 }
