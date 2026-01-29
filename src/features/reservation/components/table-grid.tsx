@@ -1,6 +1,7 @@
 import TableCard from './table-card';
 import TableCardSkeleton from './table-card-skeleton';
 import { Table } from '../types/reservation.types';
+import { useTranslations } from 'next-intl';
 
 interface TableGridProps {
   tables?: Table[];
@@ -15,6 +16,8 @@ export default function TableGrid ({
   onSelect,
   isLoading = false,
 } : TableGridProps) {
+  const t = useTranslations('Reservation.TableGrid');
+
   if (isLoading) {
     return (
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -28,7 +31,7 @@ export default function TableGrid ({
   if (tables.length === 0) {
     return (
       <div className="py-20 text-center text-stone-400 italic">
-        No tables available in this zone.
+        {t('empty')}
       </div>
     );
   }

@@ -63,6 +63,183 @@
       "tour_title": "Parcours à 360°"
     }
   },
+  "Reservation": {
+    "Header": {
+      "title": "Choisissez votre table",
+      "subtitle": "Vivez l’excellence de la gastronomie. Sélectionnez votre zone et votre table préférée ci-dessous."
+    },
+    "Legend": {
+      "available": "DISPONIBLE",
+      "reserved": "RÉSERVÉE",
+      "selected": "SÉLECTIONNÉE"
+    },
+    "TableGrid": {
+      "empty": "Aucune table disponible dans cette zone."
+    },
+    "TableCard": {
+      "available": "Disponible",
+      "reserved": "Réservée",
+      "selected": "Sélectionnée",
+      "guests": "{count} Convives"
+    },
+    "Sidebar": {
+      "header": {
+        "title": "Récapitulatif de réservation",
+        "subtitle": "Veuillez vérifier votre sélection"
+      },
+      "datetime": {
+        "label": "Date et heure",
+        "edit": "Modifier",
+        "save": "Enregistrer",
+        "cancel": "Annuler",
+        "selectDate": "Choisir la date",
+        "selectTime": "Choisir l’heure",
+        "openingHours": "(11h00 – 22h00)"
+      },
+      "table": {
+        "label": "Table sélectionnée",
+        "zone": "Zone standard",
+        "guests": "{count} convives",
+        "empty": "Veuillez sélectionner une table"
+      },
+      "guest": {
+        "label": "Vos informations",
+        "name": "Nom complet",
+        "phone": "Numéro de téléphone *",
+        "email": "Adresse e-mail (facultatif)"
+      },
+      "action": {
+        "book": "Réserver la table",
+        "saveFirst": "Enregistrez d’abord les modifications"
+      },
+      "validation": {
+        "missingInfo": "* Veuillez renseigner le nom et le téléphone"
+      },
+      "legal": "En réservant, vous acceptez nos conditions générales et notre politique d’annulation."
+    },
+    "BookingModal": {
+      "selectedTable": "Table sélectionnée",
+      "title": "Confirmer la réservation",
+      "restaurantName": "Au Lac – Cuisine Vietnamienne",
+      "date": "Date",
+      "time": "Heure",
+      "guests": "Convives",
+      "guestsCount": "{count} personnes",
+      "guestInfo": "Informations du client",
+      "policy": "Les tables sont conservées pendant 15 minutes après l’heure de réservation. Merci de nous prévenir en cas de retard.",
+      "confirm": "Confirmer la réservation",
+      "changeSelection": "Modifier la sélection"
+    }
+  },
+  "OrderSuccess": {
+    "Loading": {
+      "title": "Traitement en cours...",
+      "subtitle": "Récupération des détails de votre commande"
+    },
+    "NotFound": {
+      "title": "Commande introuvable",
+      "description": "Nous n’avons pas pu retrouver les détails de la commande demandée. Elle a peut-être été supprimée ou l’identifiant est incorrect.",
+      "cta": "Retour à l’accueil"
+    },
+    "Header": {
+      "title": "Merci",
+      "subtitle": "Votre commande a été confirmée avec succès"
+    },
+    "Summary": {
+      "orderNumber": "Numéro de commande",
+      "totalAmount": "Montant total",
+      "diningOption": "Option de restauration",
+      "quote": "Votre voyage culinaire commence...",
+      "readyIn": "Prêt dans {minutes} minutes"
+    },
+    "DiningOption": {
+      "DINE_IN": "Sur place",
+      "TAKE_AWAY": "À emporter"
+    },
+    "Location": {
+      "label": "Point de retrait",
+      "address": "Quai du Mont-Blanc 13, Genève"
+    },
+    "Actions": {
+      "viewReceipt": "Voir le reçu",
+      "backHome": "Retour à l’accueil"
+    }
+  },
+  "OrderReceipt": {
+    "Header": {
+      "title": "Reçu",
+      "subtitle": "Merci pour votre commande"
+    },
+    "InfoStrip": {
+      "orderNumber": "Commande",
+      "date": "Date",
+      "time": "Heure",
+      "status": "Statut"
+    },
+    "Items": {
+      "title": "Détails de la commande",
+      "quantity": "Qté"
+    },
+    "Summary": {
+      "subtotal": "Sous-total",
+      "tips": "Pourboire",
+      "total": "Montant total"
+    },
+    "Payment": {
+      "label": "Payé via"
+    },
+    "Actions": {
+      "download": "Télécharger le PDF",
+      "print": "Imprimer"
+    },
+    "BackLink": {
+      "label": "Retour au tableau de bord"
+    }
+  },
+  "Contact": {
+    "Hero": {
+      "title": "Contactez-nous",
+      "description": "Découvrez l’essence du luxe vietnamien sur les rives du lac Léman.\nNous sommes à votre disposition pour toute demande, événement privé ou requête spéciale."
+    },
+    "Info": {
+      "addressLabel": "Notre adresse",
+      "address": "Quai du Mont-Blanc 13\n1201 Genève, Suisse",
+      "phoneLabel": "Nous appeler",
+      "phone": "+41 22 123 45 67",
+      "emailLabel": "Demandes",
+      "email": "geneva@aulac.ch",
+      "hoursLabel": "Horaires",
+      "hours": "Lun - Dim : 11h30 - 23h00"
+    },
+    "Map": {
+      "title": "Nous trouver",
+      "hint": "Cliquer pour interagir"
+    },
+    "Socials": {
+      "title": "Suivez l’aventure",
+      "instagram": "Instagram",
+      "facebook": "Facebook",
+      "linkedin": "LinkedIn"
+    },
+    "Form": {
+      "title": "Envoyer une demande",
+      "fullName": "Nom complet",
+      "fullNamePlaceholder": "Votre nom",
+      "email": "Adresse e-mail",
+      "subject": "Sujet",
+      "message": "Votre message",
+      "messagePlaceholder": "Comment pouvons-nous vous aider ?",
+      "submit": "Envoyer le message",
+      "subjects": {
+        "general": "Demande générale",
+        "events": "Événements privés",
+        "reservation": "Réservations"
+      }
+    },
+    "Footer": {
+      "copyright": "© 2024 Au Lac Vietnamese Eatery - Genève. Tous droits réservés."
+    }
+  },
   "MenuListing": {
     "FilterBar": {
       "all": "Tous",

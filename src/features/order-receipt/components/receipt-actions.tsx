@@ -2,6 +2,7 @@
 
 import React from "react";
 import { Download, Printer } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface ReceiptActionsProps {
   onDownload?: () => void;
@@ -12,6 +13,8 @@ export default function ReceiptActions({
   onDownload,
   onPrint,
 } : ReceiptActionsProps) {
+  const t = useTranslations("OrderReceipt.Actions");
+
   return (
     <div className="w-full flex justify-center gap-4">
       
@@ -31,7 +34,7 @@ export default function ReceiptActions({
       >
         <Download size={18} />
         <b className="text-[11px] uppercase tracking-[3px]">
-          Download PDF
+          {t("download")}
         </b>
       </button>
 
@@ -53,7 +56,7 @@ export default function ReceiptActions({
       >
         <Printer size={18} />
         <b className="text-[11px] uppercase tracking-[3px]">
-          Print
+          {t("print")}
         </b>
       </button>
     </div>
