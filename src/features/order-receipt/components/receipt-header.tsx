@@ -11,7 +11,7 @@ export default function ReceiptHeader() {
         <b className="tracking-[4.2px] uppercase text-[14px]">{t("title")}</b>
       </div>
 
-      <h1 className="font-serif text-[30px] text-[#1A3951]">
+      <h1 className="font-display text-[30px] text-[#1A3951]">
         Au Lac Geneva
       </h1>
 

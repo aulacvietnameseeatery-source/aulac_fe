@@ -33,7 +33,7 @@ export default function ReservationPage() {
 
         {/* Header */}
         <div className="mb-8">
-          <h2 className="text-3xl md:text-4xl font-serif font-bold text-[#1A3A52] mb-3">
+          <h2 className="text-3xl md:text-4xl font-display font-bold text-[#1A3A52] mb-3">
             {t('title')}
           </h2>
 

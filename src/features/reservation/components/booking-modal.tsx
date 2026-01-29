@@ -46,7 +46,7 @@ export default function BookingModal({ isOpen, onClose, onConfirm, tableData, gu
           />
           <div className="absolute inset-0 bg-linear-to-t from-black/70 to-transparent flex flex-col justify-start p-8 text-white">
             <span className="text-[10px] uppercase tracking-[0.2em] font-bold mb-2 opacity-90">{t('selectedTable')}</span>
-            <h2 className="text-5xl font-serif font-bold">{tableData.name}</h2>
+            <h2 className="text-5xl font-display font-bold">{tableData.name}</h2>
           </div>
         </div>
 
@@ -57,8 +57,8 @@ export default function BookingModal({ isOpen, onClose, onConfirm, tableData, gu
             <X size={24} strokeWidth={1.5} />
           </button>
 
-          <h3 className="text-3xl font-serif font-semibold text-[#1A3A52] mb-1">{t('title')}</h3>
-          <p className="text-stone-400 font-serif italic text-sm mb-8">{t('restaurantName')}</p>
+          <h3 className="text-3xl font-display font-bold text-[#1A3A52] mb-1">{t('title')}</h3>
+          <p className="text-stone-400 font-display italic text-sm mb-8">{t('restaurantName')}</p>
 
           <div className="grid grid-cols-2 gap-8 mb-8 border-b border-stone-100 pb-8">
             <div>

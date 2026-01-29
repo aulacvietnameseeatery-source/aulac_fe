@@ -29,7 +29,7 @@ export default function OrderSummaryCard({
       <div className="h-px bg-slate-200" />
 
       <div className="flex flex-col items-center gap-3 text-center">
-        <div className="font-serif italic text-slate-600">
+        <div className="font-display italic text-slate-600">
            “{t("quote")}”
         </div>
 
@@ -48,7 +48,7 @@ function InfoBlock({ label, value }: { label: string; value: string }) {
       <b className="tracking-[1px] uppercase text-xs text-slate-400">
         {label}
       </b>
-      <div className="font-serif text-[20px] text-[#1A3951]">
+      <div className="font-display font-normal text-[20px] text-[#1A3951]">
         {value}
       </div>
     </div>

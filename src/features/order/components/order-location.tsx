@@ -13,7 +13,7 @@ export default function OrderLocation() {
         </b>
       </div>
 
-      <div className="font-serif text-[16px] text-[#1A3951]">
+      <div className="font-display text-[16px] text-[#1A3951]">
         {t("address")}
       </div>
     </div>
