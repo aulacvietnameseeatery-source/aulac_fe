@@ -1,5 +1,7 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
+
 import {
   ZoneTabs,
   TableGrid,
@@ -23,6 +25,8 @@ export default function ReservationPage() {
 
   const tableSelection = useTableSelection(tables);
 
+  const t = useTranslations('Reservation.Header');
+
   return (
     <div className="min-h-screen bg-[#FDFBF7] text-slate-800 flex flex-col">
       <main className="grow max-w-7xl mx-auto w-full px-4 md:px-6 py-8 md:py-12 mb-24">
@@ -30,12 +34,12 @@ export default function ReservationPage() {
         {/* Header */}
         <div className="mb-8">
           <h2 className="text-3xl md:text-4xl font-serif font-bold text-[#1A3A52] mb-3">
-            Select Your Table
+            {t('title')}
           </h2>
 
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <p className="text-stone-500 font-light text-sm md:text-base">
-              Experience fine dining at its best. Choose your preferred zone and table below.
+              {t('subtitle')}
             </p>
             <Legend />
           </div>

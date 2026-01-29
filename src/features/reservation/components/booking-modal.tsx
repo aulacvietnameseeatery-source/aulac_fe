@@ -1,6 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
 import { X, Info, User, Phone, Mail } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 interface BookingModalProps {
   isOpen: boolean;
@@ -22,6 +23,8 @@ interface BookingModalProps {
 }
 
 export default function BookingModal({ isOpen, onClose, onConfirm, tableData, guestInfo } : BookingModalProps) {
+  const t = useTranslations('Reservation.BookingModal');
+
   if (!isOpen || !tableData) return null;
 
   return (
@@ -42,7 +45,7 @@ export default function BookingModal({ isOpen, onClose, onConfirm, tableData, gu
             className="object-cover"
           />
           <div className="absolute inset-0 bg-linear-to-t from-black/70 to-transparent flex flex-col justify-start p-8 text-white">
-            <span className="text-[10px] uppercase tracking-[0.2em] font-bold mb-2 opacity-90">Selected Table</span>
+            <span className="text-[10px] uppercase tracking-[0.2em] font-bold mb-2 opacity-90">{t('selectedTable')}</span>
             <h2 className="text-5xl font-serif font-bold">{tableData.name}</h2>
           </div>
         </div>
@@ -54,28 +57,28 @@ export default function BookingModal({ isOpen, onClose, onConfirm, tableData, gu
             <X size={24} strokeWidth={1.5} />
           </button>
 
-          <h3 className="text-3xl font-serif font-semibold text-[#1A3A52] mb-1">Confirm Reservation</h3>
-          <p className="text-stone-400 font-serif italic text-sm mb-8">Au Lac Vietnamese Eatery</p>
+          <h3 className="text-3xl font-serif font-semibold text-[#1A3A52] mb-1">{t('title')}</h3>
+          <p className="text-stone-400 font-serif italic text-sm mb-8">{t('restaurantName')}</p>
 
           <div className="grid grid-cols-2 gap-8 mb-8 border-b border-stone-100 pb-8">
             <div>
-              <span className="block text-[10px] font-bold text-stone-400 uppercase tracking-widest mb-1">Date</span>
+              <span className="block text-[10px] font-bold text-stone-400 uppercase tracking-widest mb-1">{t('date')}</span>
               <p className="text-[#1A3A52] font-bold text-lg">{tableData.date}</p>
             </div>
             <div>
-              <span className="block text-[10px] font-bold text-stone-400 uppercase tracking-widest mb-1">Time</span>
+              <span className="block text-[10px] font-bold text-stone-400 uppercase tracking-widest mb-1">{t('time')}</span>
               <p className="text-[#1A3A52] font-bold text-lg">{tableData.time}</p>
             </div>
             <div className="col-span-2">
-              <span className="block text-[10px] font-bold text-stone-400 uppercase tracking-widest mb-1">Guests</span>
-              <p className="text-[#1A3A52] font-bold text-lg">{tableData.guests} Persons</p>
+              <span className="block text-[10px] font-bold text-stone-400 uppercase tracking-widest mb-1">{t('guests')}</span>
+              <p className="text-[#1A3A52] font-bold text-lg">{t('guestsCount', { count: tableData.guests })}</p>
             </div>
           </div>
 
           {/* === GUEST INFO DISPLAY === */}
           {guestInfo && (
             <div className="bg-stone-50 p-5 rounded-xl border border-stone-100 mb-8 space-y-3">
-               <h4 className="text-xs font-bold text-[#132538] uppercase tracking-wider mb-2">Guest Information</h4>
+               <h4 className="text-xs font-bold text-[#132538] uppercase tracking-wider mb-2">{t('guestInfo')}</h4>
                
                {guestInfo.name && (
                  <div className="flex items-center gap-3 text-sm text-stone-600">
@@ -98,7 +101,7 @@ export default function BookingModal({ isOpen, onClose, onConfirm, tableData, gu
 
           <div className="flex gap-3 text-stone-500 text-xs mb-8 bg-stone-50 p-3 rounded-lg border border-stone-100">
             <Info size={16} className="shrink-0 mt-0.5" />
-            <p className="leading-relaxed">Tables are held for 15 minutes past reservation time. Please notify us of any delays.</p>
+            <p className="leading-relaxed">{t('policy')}</p>
           </div>
 
           <div className="flex flex-col gap-4">
@@ -106,13 +109,13 @@ export default function BookingModal({ isOpen, onClose, onConfirm, tableData, gu
               onClick={onConfirm}
               className="w-full bg-[#1A3A52] text-white py-4 rounded font-bold text-sm tracking-widest hover:bg-[#1a2c42] transition-colors shadow-lg cursor-pointer"
             >
-              CONFIRM RESERVATION
+              {t('confirm')}
             </button>
             <button 
               onClick={onClose}
               className="text-[10px] font-bold text-stone-400 uppercase tracking-widest hover:text-[#132538] transition-colors cursor-pointer"
             >
-              Change Selection
+              {t('changeSelection')}
             </button>
           </div>
         </div>

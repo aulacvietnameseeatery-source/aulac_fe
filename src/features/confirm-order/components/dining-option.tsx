@@ -4,22 +4,24 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { Check } from "lucide-react"; // Import icon Check
+import { Check } from "lucide-react";
+import { useTranslations } from "next-intl"; // Import hook
 
 type DiningType = "dine-in" | "take-away";
 
 export function DiningOption() {
     const [selected, setSelected] = useState<DiningType>("dine-in");
+    const t = useTranslations("ConfirmOrder.DiningOption"); // Hook dịch
 
     return (
         <div className="flex w-full flex-col items-start gap-8">
             {/* Header */}
             <div className="flex w-full flex-col items-center gap-2 border-b-4 border-transparent">
          <span className="font-body text-[12px] font-bold uppercase tracking-[3.6px] text-[#C9A961]">
-            How would you like to enjoy?
+            {t("eyebrow")}
          </span>
                 <h2 className="font-display text-[24px] font-bold leading-[32px] text-[#1A3A52]">
-                    Dining Option
+                    {t("title")}
                 </h2>
             </div>
 
@@ -31,21 +33,19 @@ export function DiningOption() {
                     onClick={() => setSelected("dine-in")}
                     className={cn(
                         "group relative h-[400px] w-full cursor-pointer overflow-hidden rounded-[24px] transition-all duration-300",
-                        // Logic Style khi chọn: Viền vàng + Shadow đậm
                         selected === "dine-in"
                             ? "ring-2 ring-[#C5A059] ring-offset-2 shadow-xl scale-[1.02]"
                             : "opacity-80 hover:opacity-100 hover:scale-[1.01]"
                     )}
                 >
                     <Image
-                        src="/images/confirm-order/dining-option/dining option.png" // Ảnh không gian nhà hàng
+                        src="/images/confirm-order/dining-option/dining option.png"
                         alt="Dine In"
                         fill
                         className="object-cover transition-transform duration-700 group-hover:scale-105"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-[#121721]/90 via-[#121721]/20 to-transparent" />
 
-                    {/* Checkbox Indicator */}
                     <div className={cn(
                         "absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full border transition-all duration-300",
                         selected === "dine-in"
@@ -57,13 +57,13 @@ export function DiningOption() {
 
                     <div className="absolute bottom-0 left-0 flex w-full flex-col p-8">
                 <span className="font-serif text-[10px] font-bold uppercase tracking-[2px] text-[#C5A059]">
-                    The Experience
+                    {t("dine_in_label")}
                 </span>
                         <h3 className="mt-2 font-serif text-[28px] font-light leading-none text-white">
-                            Dine-In
+                            {t("dine_in_title")}
                         </h3>
                         <p className="mt-3 font-serif text-[13px] leading-[20px] text-white/70">
-                            Immerse yourself in our tranquil atmosphere with full service.
+                            {t("dine_in_desc")}
                         </p>
                     </div>
                 </div>
@@ -86,7 +86,6 @@ export function DiningOption() {
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-[#121721]/90 via-[#121721]/20 to-transparent" />
 
-                    {/* Checkbox Indicator */}
                     <div className={cn(
                         "absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full border transition-all duration-300",
                         selected === "take-away"
@@ -98,20 +97,20 @@ export function DiningOption() {
 
                     <div className="absolute bottom-0 left-0 flex w-full flex-col p-8">
                 <span className="font-serif text-[10px] font-bold uppercase tracking-[2px] text-[#C5A059]">
-                    Quick & Fresh
+                    {t("take_away_label")}
                 </span>
                         <h3 className="mt-2 font-serif text-[28px] font-light leading-none text-white">
-                            Take Away
+                            {t("take_away_title")}
                         </h3>
                         <p className="mt-3 font-serif text-[13px] leading-[20px] text-white/70">
-                            Enjoy our exquisite flavors in the comfort of your own home.
+                            {t("take_away_desc")}
                         </p>
                     </div>
                 </div>
 
             </div>
 
-            {/* Action Line - Thay đổi dựa theo lựa chọn */}
+            {/* Action Line */}
             <div className="flex w-full flex-col items-center gap-6 pt-4">
 
                 {/* Helper Text */}
@@ -121,8 +120,8 @@ export function DiningOption() {
                     </div>
                     <span className="font-body text-[14px] font-medium text-[#1A3A52]/70">
                 {selected === "dine-in"
-                    ? "Proceed to select your preferred table."
-                    : "Proceed to schedule pickup time."}
+                    ? t("helper_dine_in")
+                    : t("helper_take_away")}
              </span>
                 </div>
 
@@ -132,7 +131,7 @@ export function DiningOption() {
                     className="group flex h-[56px] w-full items-center justify-center gap-2 rounded-full bg-[#1A3A52] text-white shadow-lg transition-all hover:bg-[#234b6b] hover:shadow-xl active:scale-95"
                 >
             <span className="font-display text-[16px] font-bold tracking-widest uppercase">
-                {selected === "dine-in" ? "Select Table" : "Go to Checkout"}
+                {selected === "dine-in" ? t("btn_select_table") : t("btn_checkout")}
             </span>
                     <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
                 </Link>

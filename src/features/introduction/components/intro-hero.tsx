@@ -1,6 +1,11 @@
+"use client";
+
 import { cn } from "@/lib/utils";
+import { useTranslations } from "next-intl"; // Import hook
 
 export function IntroHero() {
+    const t = useTranslations("Introduction.Hero"); // Khởi tạo hook
+
     return (
         <section className="relative w-full h-screen flex flex-col items-center justify-center overflow-hidden">
 
@@ -20,24 +25,25 @@ export function IntroHero() {
 
                 {/* Est. 1994 */}
                 <div className="animate-fade-in-up delay-100">
-          <span className="font-display text-[#C9A961] text-sm md:text-[14px] font-normal uppercase tracking-[0.4em] md:tracking-[5.6px] leading-5">
-            Est. 1994
-          </span>
+                    <span className="font-display text-[#C9A961] text-sm md:text-[14px] font-normal uppercase tracking-[0.4em] md:tracking-[5.6px] leading-5">
+                        {t("est")}
+                    </span>
                 </div>
 
                 {/* Main Title */}
                 <div className="animate-fade-in-up delay-200">
                     <h1 className="font-display text-white text-[50px] md:text-[96px] font-black leading-[1.1] md:leading-[96px]">
-                        A Symphony of <br />
-                        Vietnamese <br />
-                        Artistry
+                        {/* Dùng t.rich để render các thẻ <br /> */}
+                        {t.rich("title", {
+                            br: () => <br/>
+                        })}
                     </h1>
                 </div>
 
                 {/* Quote / Description */}
                 <div className="pt-2 animate-fade-in-up delay-300 max-w-[672px]">
                     <p className="font-display text-white/90 text-[16px] md:text-[19px] font-light leading-7 md:leading-7 italic">
-                        &quot;Where the heritage of the Red River meets the sophistication of modern fine dining.&quot;
+                        {t("quote")}
                     </p>
                 </div>
             </div>

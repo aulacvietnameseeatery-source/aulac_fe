@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { Users, Lock, ArrowRight, Check } from 'lucide-react';
 import { cn } from '@/lib/utils'; 
 export type TableStatus = 'available' | 'reserved' | 'selected';
+import { useTranslations } from 'next-intl';
 
 interface TableCardProps {
   id: string;
@@ -14,6 +15,7 @@ interface TableCardProps {
 }
 
 export default function TableCard({ id, name, guests, image, status, onClick } : TableCardProps) {
+  const t = useTranslations('Reservation.TableCard');
   const isDisabled = status === 'reserved';
 
   return (
@@ -43,7 +45,7 @@ export default function TableCard({ id, name, guests, image, status, onClick } :
 
         {status === 'available' && (
           <div className="absolute top-3 right-3 z-10">
-            <span className="bg-[#10B981] text-white text-[10px] font-bold px-3 py-1.5 rounded-full uppercase shadow-sm">Available</span>
+            <span className="bg-[#10B981] text-white text-[10px] font-bold px-3 py-1.5 rounded-full uppercase shadow-sm">{t('available')}</span>
           </div>
         )}
       </div>
@@ -52,13 +54,13 @@ export default function TableCard({ id, name, guests, image, status, onClick } :
         <div className="flex flex-col gap-1">
           <h3 className={cn("text-lg font-bold", status === 'selected' ? "text-[#1A3A52]" : "text-slate-800")}>{name}</h3>
           <div className="flex items-center gap-1.5 text-sm font-medium text-slate-500">
-            <Users size={16} /> <span>{guests} Guests</span>
+            <Users size={16} /> <span>{t('guests', { count: guests })}</span>
           </div>
         </div>
         <div>
           {status === 'available' && <div className="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center text-slate-400 group-hover:bg-[#1A3A52] group-hover:text-white transition-colors"><ArrowRight size={16} /></div>}
-          {status === 'reserved' && <span className="text-xs font-bold text-slate-300 uppercase">Reserved</span>}
-          {status === 'selected' && <span className="text-xs font-bold text-[#1A3A52] uppercase">Selected</span>}
+          {status === 'reserved' && <span className="text-xs font-bold text-slate-300 uppercase">{t('reserved')}</span>}
+          {status === 'selected' && <span className="text-xs font-bold text-[#1A3A52] uppercase">{t('selected')}</span>}
         </div>
       </div>
     </div>

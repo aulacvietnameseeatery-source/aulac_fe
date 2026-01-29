@@ -1,7 +1,10 @@
 import Link from "next/link";
 import { SearchX } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export default function OrderNotFound() {
+  const t = useTranslations("OrderSuccess.NotFound");
+
   return (
     <div className="w-full min-h-100 flex flex-col items-center justify-center gap-6 text-center animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div className="w-20 h-20 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-center">
@@ -10,10 +13,10 @@ export default function OrderNotFound() {
 
       <div className="flex flex-col gap-2">
         <h1 className="font-serif text-3xl text-[#1A3951]">
-          Order Not Found
+          {t("title")}
         </h1>
         <p className="text-slate-500 text-sm max-w-xs mx-auto">
-          We couldn't locate the order details you are looking for. It may have been removed or the ID is incorrect.
+          {t("description")}
         </p>
       </div>
 
@@ -21,7 +24,7 @@ export default function OrderNotFound() {
         href="/"
         className="px-8 h-12 bg-[#1A3951] text-white rounded-sm shadow-md hover:bg-[#1a2c42] transition flex items-center justify-center"
       >
-        <b className="tracking-[2px] uppercase text-xs">Return Home</b>
+        <b className="tracking-[2px] uppercase text-xs">{t("cta")}</b>
       </Link>
     </div>
   );

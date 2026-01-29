@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
+import { useRouter } from "next/navigation"; // 1. Import Router
+import { useLocale } from "next-intl";       // 2. Import Locale để giữ đúng ngôn ngữ
 import {
     FilterBar,
     MenuGrid,
@@ -14,6 +16,11 @@ const CATEGORIES = ["All", "Appetizers", "Main Course", "Seafood", "Desserts", "
 
 export default function MenuPage() {
     const [activeCategory, setActiveCategory] = useState("All");
+    const [searchQuery, setSearchQuery] = useState("");
+
+    // --- SETUP ĐIỀU HƯỚNG ---
+    const router = useRouter();
+    const locale = useLocale(); // Lấy ngôn ngữ hiện tại (en hoặc fr)
 
     // --- 1. STATE SCROLL (Logic cũ) ---
     const [isScrolled, setIsScrolled] = useState(false);
@@ -84,6 +91,12 @@ export default function MenuPage() {
         setFlyingItems((prev) => prev.filter((i) => i.id !== id));
     };
 
+    // --- 4. HÀM CHUYỂN TRANG CONFIRM ORDER ---
+    const handleConfirmOrder = () => {
+        // Điều hướng tới /{locale}/confirm-order (VD: /en/confirm-order)
+        router.push(`/${locale}/confirm-order`);
+    };
+
     return (
         <div className="min-h-screen bg-[#FAF9F6] relative pb-20">
 
@@ -92,18 +105,21 @@ export default function MenuPage() {
                 activeCategory={activeCategory}
                 onSelect={setActiveCategory}
                 isScrolled={isScrolled}
+                searchQuery={searchQuery}
+                onSearchChange={setSearchQuery}
             />
 
-            <MenuGrid onOrder={handleOrder} />
+            <MenuGrid
+                onOrder={handleOrder}
+                activeCategory={activeCategory}
+                searchQuery={searchQuery}
+            />
 
             {/* --- GIỎ HÀNG ĐỘNG --- */}
             <div
                 id="cart-destination"
                 className={cn(
-                    // - Mobile: bottom-[40px] -> bottom-[80px] (Cao hơn)
-                    // - Desktop: md:bottom-[40px] -> md:bottom-[100px]
                     "fixed bottom-[40px] right-[20px] md:bottom-[250px] md:right-[40px] z-50 transition-all duration-500 ease-out transform",
-                    // Logic ẩn/hiện:
                     isCartVisible
                         ? "translate-y-0 opacity-100 pointer-events-auto"
                         : "translate-y-[120%] opacity-0 pointer-events-none"
@@ -114,7 +130,7 @@ export default function MenuPage() {
                     <CartSummary
                         totalPrice={cartTotal}
                         totalItems={cartCount}
-                        onConfirm={() => console.log("Checkout clicked")}
+                        onConfirm={handleConfirmOrder}
                     />
                 </div>
             </div>

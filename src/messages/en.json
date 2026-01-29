@@ -1,0 +1,335 @@
+{
+  "Header": {
+    "menu": "MENU",
+    "about": "ABOUT US",
+    "contact": "CONTACT",
+    "qr_scan": "QR SCAN",
+    "reserve": "RESERVE",
+    "slogan_1": "Vietnamese Eatery",
+    "slogan_2": "Saveurs du Vietnam, esprit convivial"
+  },
+  "Footer": {
+    "description": "Defined by excellence, driven by heritage.<br> </br>The pinnacle of Vietnamese culinary art in<br> </br>the heart of the city.",
+    "reservations": "Reservations",
+    "location": "Location",
+    "open_maps": "Open in Maps",
+    "newsletter": "Newsletter",
+    "newsletter_desc": "Join our circle for exclusive events and<br> </br>seasonal masterpiece previews.",
+    "email_placeholder": "Email Address",
+    "copyright": "© 2026 Au Lac Vietnamese Eatery. All Rights Reserved.",
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "sitemap": "Sitemap"
+  },
+  "Introduction": {
+    "Hero": {
+      "est": "Est. 1994",
+      "title": "A Symphony of <br> </br> Vietnamese <br> </br> Artistry",
+      "quote": "\"Where the heritage of the Red River meets the sophistication of modern fine dining.\""
+    },
+    "Chef": {
+      "label": "The Craftsmen",
+      "title": "Mastering the <br> </br>Soul of Taste",
+      "chef_1_name": "Executive Chef Minh",
+      "chef_1_quote": "\"Cuisine is the bridge between history and the senses. At Au Lac, we don't just cook; we curate memories through traditional spices and modern textures.\"",
+      "chef_2_name": "Sous Chef Linh",
+      "chef_2_quote": "\"Balance is our north star. The contrast of hot and cold, crisp and soft, sweet and savory defines the Vietnamese identity.\"",
+      "cta": "Read Their Story"
+    },
+    "Collection": {
+      "label": "Collection",
+      "title": "Signature Masterpieces",
+      "dish_1_category": "Heritage Selection",
+      "dish_1_title": "Lotus Root Salad",
+      "dish_1_desc": "Artfully plated with edible gold leaf and a reduction of aged Vietnamese vinegar.",
+      "dish_1_main": "The Imperial Lotus",
+      "dish_1_sub": "Sculpted Freshness",
+      "dish_2_category": "Slow-Cooked",
+      "dish_2_title": "Claypot Fish",
+      "dish_2_desc": "Red Snapper simmered for 6 hours in a traditional ceramic vessel with black pepper and palm sugar.",
+      "dish_2_main": "Ocean Umami",
+      "dish_2_sub": "24-Hour Infusion",
+      "dish_3_category": "Signature",
+      "dish_3_title": "Heritage Pho",
+      "dish_3_desc": "A symphony of 24-hour bone broth infused with star anise and rare wagyu cuts.",
+      "dish_3_main": "The Golden Broth",
+      "dish_3_sub": "The Heart of Hanoi"
+    },
+    "VirtualTour": {
+      "label": "Experience",
+      "title": "The Immersive View",
+      "desc": "Explore our space from every angle before you arrive.",
+      "tour_label": "Virtual Tour",
+      "tour_title": "A 360° Walkthrough"
+    }
+  },
+  "Reservation": {
+    "Header": {
+      "title": "Select Your Table",
+      "subtitle": "Experience fine dining at its best. Choose your preferred zone and table below."
+    },
+    "Legend": {
+      "available": "AVAILABLE",
+      "reserved": "RESERVED",
+      "selected": "SELECTED"
+    },
+    "TableGrid": {
+      "empty": "No tables available in this zone."
+    },
+    "TableCard": {
+      "available": "Available",
+      "reserved": "Reserved",
+      "selected": "Selected",
+      "guests": "{count} Guests"
+    },
+    "Sidebar": {
+      "header": {
+        "title": "Reservation Summary",
+        "subtitle": "Please review your selection"
+      },
+      "datetime": {
+        "label": "Date & Time",
+        "edit": "Edit",
+        "save": "Save",
+        "cancel": "Cancel",
+        "selectDate": "Select Date",
+        "selectTime": "Select Time",
+        "openingHours": "(11:00 AM – 10:00 PM)"
+      },
+      "table": {
+        "label": "Selected Table",
+        "zone": "Standard Zone",
+        "guests": "{count} Guests",
+        "empty": "Please select a table"
+      },
+      "guest": {
+        "label": "Your Details",
+        "name": "Full Name",
+        "phone": "Phone Number *",
+        "email": "Email Address (Optional)"
+      },
+      "action": {
+        "book": "Book Selected Table",
+        "saveFirst": "Save Changes First"
+      },
+      "validation": {
+        "missingInfo": "* Please enter Name & Phone to book"
+      },
+      "legal": "By booking, you agree to our Terms & Conditions and Cancellation Policy."
+    },
+    "BookingModal": {
+      "selectedTable": "Selected Table",
+      "title": "Confirm Reservation",
+      "restaurantName": "Au Lac Vietnamese Eatery",
+      "date": "Date",
+      "time": "Time",
+      "guests": "Guests",
+      "guestsCount": "{count} Persons",
+      "guestInfo": "Guest Information",
+      "policy": "Tables are held for 15 minutes past reservation time. Please notify us of any delays.",
+      "confirm": "Confirm Reservation",
+      "changeSelection": "Change Selection"
+    }
+  },
+  "OrderSuccess": {
+    "Loading": {
+      "title": "Processing...",
+      "subtitle": "Retrieving your order details"
+    },
+    "NotFound": {
+      "title": "Order Not Found",
+      "description": "We couldn't locate the order details you are looking for. It may have been removed or the ID is incorrect.",
+      "cta": "Return Home"
+    },
+    "Header": {
+      "title": "Thank You",
+      "subtitle": "Your order has been successfully confirmed"
+    },
+    "Summary": {
+      "orderNumber": "Order Number",
+      "totalAmount": "Total Amount",
+      "diningOption": "Dining Option",
+      "quote": "Your culinary journey begins...",
+      "readyIn": "Ready in {minutes} minutes"
+    },
+    "DiningOption": {
+      "DINE_IN": "Dine In",
+      "TAKE_AWAY": "Take Away"
+    },
+    "Location": {
+      "label": "Collection Point",
+      "address": "Quai du Mont-Blanc 13, Geneva"
+    },
+    "Actions": {
+      "viewReceipt": "View Receipt",
+      "backHome": "Back to Home"
+    }
+  },
+  "OrderReceipt": {
+    "Header": {
+      "title": "Receipt",
+      "subtitle": "Thank you for your order"
+    },
+    "InfoStrip": {
+      "orderNumber": "Order ID",
+      "date": "Order Date",
+      "time": "Time",
+      "status": "Status"
+    },
+    "Items": {
+      "title": "Order Details",
+      "quantity": "Qty"
+    },
+    "Summary": {
+      "subtotal": "Subtotal",
+      "tips": "Tips / Gratuity",
+      "total": "Total Amount"
+    },
+    "Payment": {
+      "label": "Paid via"
+    },
+    "Actions": {
+      "download": "Download PDF",
+      "print": "Print"
+    },
+    "BackLink": {
+      "label": "Return to Dashboard"
+    }
+  },
+  "Contact": {
+    "Hero": {
+      "title": "Connect With Us",
+      "description": "Experience the essence of Vietnamese luxury on the shores of Lake Geneva.\nWe are here to assist with your inquiries, private event bookings, and special requests."
+    },
+    "Info": {
+      "addressLabel": "Our Home",
+      "address": "Quai du Mont-Blanc 13\n1201 Geneva, Switzerland",
+      "phoneLabel": "Speak With Us",
+      "phone": "+41 22 123 45 67",
+      "emailLabel": "Inquiries",
+      "email": "geneva@aulac.ch",
+      "hoursLabel": "Hours",
+      "hours": "Mon - Sun: 11:30 AM - 11:00 PM"
+    },
+    "Map": {
+      "title": "Find Us",
+      "hint": "Click to interact"
+    },
+    "Socials": {
+      "title": "Follow the Journey",
+      "instagram": "Instagram",
+      "facebook": "Facebook",
+      "linkedin": "LinkedIn"
+    },
+    "Form": {
+      "title": "Send an Inquiry",
+      "fullName": "Full Name",
+      "fullNamePlaceholder": "Your name",
+      "email": "Email Address",
+      "subject": "Subject",
+      "message": "Your Message",
+      "messagePlaceholder": "How can we help you?",
+      "submit": "Send Message",
+      "subjects": {
+        "general": "General Inquiry",
+        "events": "Private Events",
+        "reservation": "Reservations"
+      }
+    },
+    "Footer": {
+      "copyright": "© 2024 Au Lac Vietnamese Eatery - Geneva. All Rights Reserved."
+    }
+  },
+  "MenuListing": {
+    "FilterBar": {
+      "all": "All",
+      "premium": "Premium",
+      "seafood": "Seafood",
+      "signature": "Signature",
+      "italian": "Italian",
+      "desserts": "Desserts",
+      "beverages": "Beverages",
+      "appetizers": "Appetizers",
+      "main course": "Main Course",
+      "search_placeholder": "Search for exquisite dishes..."
+    },
+    "MenuGrid": {
+      "title": "Fine Dining Menu",
+      "subtitle": "Experience exquisite cuisine from world-class chefs, blending traditional Vietnamese flavors with modern culinary techniques.",
+      "book_link": "Not sure what to eat? Book your table first",
+      "items": {
+        "1_name": "Grilled Premium Wagyu Beef",
+        "1_desc": "Japanese A5 Wagyu beef grilled over charcoal, served with seasonal vegetables and truffle sauce.",
+        "2_name": "Lobster Thermidor",
+        "2_desc": "Fresh lobster prepared in classic French style, topped with creamy golden sauce and herbs.",
+        "3_name": "Peking Duck",
+        "3_desc": "Crispy golden duck served with warm crepes, scallions, and our signature house sauce.",
+        "4_name": "Truffle Mushroom Risotto",
+        "4_desc": "Creamy Arborio rice cooked slowly with Gruyère, white wine, and black truffle shavings.",
+        "5_name": "Smoked Salmon",
+        "5_desc": "House-smoked salmon served with crème fraîche, fresh microgreens, and toasted rye.",
+        "6_name": "Tiramisu",
+        "6_desc": "Classic Italian dessert made with mascarpone, ladyfingers soaked in espresso and cocoa.",
+        "7_name": "Korean Grilled Beef",
+        "7_desc": "Thin-sliced beef grilled tableside over charcoal, served with fresh vegetables and gochujang sauce.",
+        "8_name": "Krug Clos d'Ambonnay",
+        "8_desc": "Luxury champagne with complex aromas and refined tasting notes, perfect for celebration."
+      },
+      "order_btn": "Order Now"
+    },
+    "CartSummary": {
+      "title": "Summary",
+      "items_count": "{count} Distinct Items",
+      "confirm_btn": "Confirm Order"
+    }
+  },
+  "QrScan": {
+    "HeroSection": {
+      "label": "Atmosphere",
+      "quote": "\"A culinary journey begins with a single digital spark.\""
+    },
+    "ScanContent": {
+      "title": "Discover Our <br> </br> Selection",
+      "subtitle": "Scan to explore our full culinary narrative on your device",
+      "step_scan": "Scan",
+      "step_explore": "Explore",
+      "step_order": "Order"
+    }
+  },
+  "ConfirmOrder": {
+    "OrderItem": {
+      "add_note": "Add Note",
+      "edit_note": "Edit Note",
+      "note_placeholder": "e.g., No spicy, extra sauce...",
+      "note_saved": "Note saved"
+    },
+    "DiningOption": {
+      "eyebrow": "How would you like to enjoy?",
+      "title": "Dining Option",
+      "dine_in_label": "The Experience",
+      "dine_in_title": "Dine-In",
+      "dine_in_desc": "Immerse yourself in our tranquil atmosphere with full service.",
+      "take_away_label": "Quick & Fresh",
+      "take_away_title": "Take Away",
+      "take_away_desc": "Enjoy our exquisite flavors in the comfort of your own home.",
+      "helper_dine_in": "Proceed to select your preferred table.",
+      "helper_take_away": "Proceed to schedule pickup time.",
+      "btn_select_table": "Select Table",
+      "btn_checkout": "Go to Checkout"
+    },
+    "OrderSummary": {
+      "title": "Review Your Order",
+      "section_title": "Selected Dishes",
+      "quantity_label": "Quantity",
+      "subtotal": "Subtotal",
+      "tax": "Service & Tax",
+      "total": "Total Amount",
+      "items": {
+        "1_name": "Imperial Lotus Root Salad",
+        "1_category": "Heritage Selection",
+        "2_name": "Heritage Wagyu Pho",
+        "2_category": "Signature"
+      }
+    }
+  }
+}

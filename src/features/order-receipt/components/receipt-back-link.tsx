@@ -3,6 +3,8 @@
 import React from "react";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
+import { useTranslations } from "next-intl";
+
 
 interface ReceiptBackLinkProps {
   href?: string;
@@ -11,8 +13,9 @@ interface ReceiptBackLinkProps {
 
 export default function ReceiptBackLink({
   href = "/dashboard",
-  label = "Return to Dashboard",
 } : ReceiptBackLinkProps) {
+  const t = useTranslations("OrderReceipt.BackLink");
+
   return (
     <Link
       href={href}
@@ -29,7 +32,7 @@ export default function ReceiptBackLink({
         className="transition-transform group-hover:-translate-x-1"
       />
       <b className="text-[11px] uppercase tracking-[1px]">
-        {label}
+        {t("label")}
       </b>
     </Link>
   );

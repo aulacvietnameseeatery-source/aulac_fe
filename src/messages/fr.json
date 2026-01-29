@@ -1,0 +1,335 @@
+{
+  "Header": {
+    "menu": "MENU",
+    "about": "À PROPOS",
+    "contact": "CONTACT",
+    "qr_scan": "SCAN QR",
+    "reserve": "RÉSERVER",
+    "slogan_1": "Table Vietnamienne",
+    "slogan_2": "Saveurs du Vietnam, esprit convivial"
+  },
+  "Footer": {
+    "description": "Défini par l’excellence, porté par l’héritage.<br> </br>L’apogée de l’art culinaire vietnamien au<br> </br>cœur de la ville.",
+    "reservations": "Réservations",
+    "location": "Adresse",
+    "open_maps": "Ouvrir dans Maps",
+    "newsletter": "Newsletter",
+    "newsletter_desc": "Rejoignez notre cercle pour des événements exclusifs et<br> </br>des avant-premières de créations saisonnières.",
+    "email_placeholder": "Adresse e-mail",
+    "copyright": "© 2026 Au Lac Table Vietnamienne. Tous droits réservés.",
+    "privacy": "Confidentialité",
+    "terms": "Conditions",
+    "sitemap": "Plan du site"
+  },
+  "Introduction": {
+    "Hero": {
+      "est": "Fondé en 1994",
+      "title": "Une symphonie de l’art <br> </br> Vietnamien",
+      "quote": "\"Là où l’héritage du fleuve Rouge rencontre le raffinement de la haute gastronomie contemporaine.\""
+    },
+    "Chef": {
+      "label": "Les Artisans",
+      "title": "Maîtriser <br> </br>l’âme du goût",
+      "chef_1_name": "Chef Exécutif Minh",
+      "chef_1_quote": "\"La cuisine est un pont entre l’histoire et les sens. Chez Au Lac, nous ne cuisinons pas seulement ; nous façonnons des souvenirs à travers des épices ancestrales et des textures modernes.\"",
+      "chef_2_name": "Sous-cheffe Linh",
+      "chef_2_quote": "\"L’équilibre est notre boussole. Le contraste entre chaud et froid, croquant et fondant, sucré et salé définit l’identité vietnamienne.\"",
+      "cta": "Découvrir leur histoire"
+    },
+    "Collection": {
+      "label": "Collection",
+      "title": "Chefs-d’œuvre Signature",
+      "dish_1_category": "Sélection Patrimoniale",
+      "dish_1_title": "Salade de Racine de Lotus",
+      "dish_1_desc": "Présentée avec élégance, sublimée par une feuille d’or comestible et une réduction de vinaigre vietnamien vieilli.",
+      "dish_1_main": "Le Lotus Impérial",
+      "dish_1_sub": "Fraîcheur Sculptée",
+      "dish_2_category": "Cuisson Lente",
+      "dish_2_title": "Poisson en Marmite de Terre",
+      "dish_2_desc": "Vivaneau rouge mijoté pendant 6 heures dans un récipient en céramique traditionnelle, au poivre noir et sucre de palme.",
+      "dish_2_main": "Umami de l’Océan",
+      "dish_2_sub": "Infusion 24 Heures",
+      "dish_3_category": "Signature",
+      "dish_3_title": "Pho Patrimonial",
+      "dish_3_desc": "Une symphonie de bouillon d’os infusé pendant 24 heures, relevé d’anis étoilé et de pièces rares de wagyu.",
+      "dish_3_main": "Le Bouillon Doré",
+      "dish_3_sub": "L’Âme de Hanoï"
+    },
+    "VirtualTour": {
+      "label": "Expérience",
+      "title": "La Vue Immersive",
+      "desc": "Explorez notre espace sous tous les angles avant votre arrivée.",
+      "tour_label": "Visite Virtuelle",
+      "tour_title": "Parcours à 360°"
+    }
+  },
+  "Reservation": {
+    "Header": {
+      "title": "Choisissez votre table",
+      "subtitle": "Vivez l’excellence de la gastronomie. Sélectionnez votre zone et votre table préférée ci-dessous."
+    },
+    "Legend": {
+      "available": "DISPONIBLE",
+      "reserved": "RÉSERVÉE",
+      "selected": "SÉLECTIONNÉE"
+    },
+    "TableGrid": {
+      "empty": "Aucune table disponible dans cette zone."
+    },
+    "TableCard": {
+      "available": "Disponible",
+      "reserved": "Réservée",
+      "selected": "Sélectionnée",
+      "guests": "{count} Convives"
+    },
+    "Sidebar": {
+      "header": {
+        "title": "Récapitulatif de réservation",
+        "subtitle": "Veuillez vérifier votre sélection"
+      },
+      "datetime": {
+        "label": "Date et heure",
+        "edit": "Modifier",
+        "save": "Enregistrer",
+        "cancel": "Annuler",
+        "selectDate": "Choisir la date",
+        "selectTime": "Choisir l’heure",
+        "openingHours": "(11h00 – 22h00)"
+      },
+      "table": {
+        "label": "Table sélectionnée",
+        "zone": "Zone standard",
+        "guests": "{count} convives",
+        "empty": "Veuillez sélectionner une table"
+      },
+      "guest": {
+        "label": "Vos informations",
+        "name": "Nom complet",
+        "phone": "Numéro de téléphone *",
+        "email": "Adresse e-mail (facultatif)"
+      },
+      "action": {
+        "book": "Réserver la table",
+        "saveFirst": "Enregistrez d’abord les modifications"
+      },
+      "validation": {
+        "missingInfo": "* Veuillez renseigner le nom et le téléphone"
+      },
+      "legal": "En réservant, vous acceptez nos conditions générales et notre politique d’annulation."
+    },
+    "BookingModal": {
+      "selectedTable": "Table sélectionnée",
+      "title": "Confirmer la réservation",
+      "restaurantName": "Au Lac – Cuisine Vietnamienne",
+      "date": "Date",
+      "time": "Heure",
+      "guests": "Convives",
+      "guestsCount": "{count} personnes",
+      "guestInfo": "Informations du client",
+      "policy": "Les tables sont conservées pendant 15 minutes après l’heure de réservation. Merci de nous prévenir en cas de retard.",
+      "confirm": "Confirmer la réservation",
+      "changeSelection": "Modifier la sélection"
+    }
+  },
+  "OrderSuccess": {
+    "Loading": {
+      "title": "Traitement en cours...",
+      "subtitle": "Récupération des détails de votre commande"
+    },
+    "NotFound": {
+      "title": "Commande introuvable",
+      "description": "Nous n’avons pas pu retrouver les détails de la commande demandée. Elle a peut-être été supprimée ou l’identifiant est incorrect.",
+      "cta": "Retour à l’accueil"
+    },
+    "Header": {
+      "title": "Merci",
+      "subtitle": "Votre commande a été confirmée avec succès"
+    },
+    "Summary": {
+      "orderNumber": "Numéro de commande",
+      "totalAmount": "Montant total",
+      "diningOption": "Option de restauration",
+      "quote": "Votre voyage culinaire commence...",
+      "readyIn": "Prêt dans {minutes} minutes"
+    },
+    "DiningOption": {
+      "DINE_IN": "Sur place",
+      "TAKE_AWAY": "À emporter"
+    },
+    "Location": {
+      "label": "Point de retrait",
+      "address": "Quai du Mont-Blanc 13, Genève"
+    },
+    "Actions": {
+      "viewReceipt": "Voir le reçu",
+      "backHome": "Retour à l’accueil"
+    }
+  },
+  "OrderReceipt": {
+    "Header": {
+      "title": "Reçu",
+      "subtitle": "Merci pour votre commande"
+    },
+    "InfoStrip": {
+      "orderNumber": "Commande",
+      "date": "Date",
+      "time": "Heure",
+      "status": "Statut"
+    },
+    "Items": {
+      "title": "Détails de la commande",
+      "quantity": "Qté"
+    },
+    "Summary": {
+      "subtotal": "Sous-total",
+      "tips": "Pourboire",
+      "total": "Montant total"
+    },
+    "Payment": {
+      "label": "Payé via"
+    },
+    "Actions": {
+      "download": "Télécharger le PDF",
+      "print": "Imprimer"
+    },
+    "BackLink": {
+      "label": "Retour au tableau de bord"
+    }
+  },
+  "Contact": {
+    "Hero": {
+      "title": "Contactez-nous",
+      "description": "Découvrez l’essence du luxe vietnamien sur les rives du lac Léman.\nNous sommes à votre disposition pour toute demande, événement privé ou requête spéciale."
+    },
+    "Info": {
+      "addressLabel": "Notre adresse",
+      "address": "Quai du Mont-Blanc 13\n1201 Genève, Suisse",
+      "phoneLabel": "Nous appeler",
+      "phone": "+41 22 123 45 67",
+      "emailLabel": "Demandes",
+      "email": "geneva@aulac.ch",
+      "hoursLabel": "Horaires",
+      "hours": "Lun - Dim : 11h30 - 23h00"
+    },
+    "Map": {
+      "title": "Nous trouver",
+      "hint": "Cliquer pour interagir"
+    },
+    "Socials": {
+      "title": "Suivez l’aventure",
+      "instagram": "Instagram",
+      "facebook": "Facebook",
+      "linkedin": "LinkedIn"
+    },
+    "Form": {
+      "title": "Envoyer une demande",
+      "fullName": "Nom complet",
+      "fullNamePlaceholder": "Votre nom",
+      "email": "Adresse e-mail",
+      "subject": "Sujet",
+      "message": "Votre message",
+      "messagePlaceholder": "Comment pouvons-nous vous aider ?",
+      "submit": "Envoyer le message",
+      "subjects": {
+        "general": "Demande générale",
+        "events": "Événements privés",
+        "reservation": "Réservations"
+      }
+    },
+    "Footer": {
+      "copyright": "© 2024 Au Lac Vietnamese Eatery - Genève. Tous droits réservés."
+    }
+  },
+  "MenuListing": {
+    "FilterBar": {
+      "all": "Tous",
+      "premium": "Premium",
+      "seafood": "Fruits de mer",
+      "signature": "Signature",
+      "italian": "Italien",
+      "desserts": "Desserts",
+      "beverages": "Boissons",
+      "appetizers": "Entrées",
+      "main course": "Plats Principaux",
+      "search_placeholder": "Rechercher des plats exquis..."
+    },
+    "MenuGrid": {
+      "title": "Menu Gastronomique",
+      "subtitle": "Découvrez une cuisine exquise préparée par des chefs de renommée mondiale, mêlant saveurs vietnamiennes traditionnelles et techniques culinaires modernes.",
+      "book_link": "Indécis ? Réservez d'abord votre table",
+      "items": {
+        "1_name": "Bœuf Wagyu Grillé Premium",
+        "1_desc": "Bœuf Wagyu A5 japonais grillé au charbon de bois, servi avec légumes de saison et sauce aux truffes.",
+        "2_name": "Homard Thermidor",
+        "2_desc": "Homard frais préparé à la française classique, nappé d'une sauce dorée crémeuse et d'herbes fines.",
+        "3_name": "Canard Laqué",
+        "3_desc": "Canard doré croustillant servi avec crêpes chaudes, oignons verts et notre sauce maison signature.",
+        "4_name": "Risotto aux Champignons et Truffe",
+        "4_desc": "Riz Arborio crémeux mijoté avec du Gruyère, du vin blanc et des copeaux de truffe noire.",
+        "5_name": "Saumon Fumé",
+        "5_desc": "Saumon fumé maison servi avec crème fraîche, micro-pousses fraîches et seigle grillé.",
+        "6_name": "Tiramisu",
+        "6_desc": "Dessert italien classique au mascarpone, biscuits à la cuillère imbibés d'espresso et cacao.",
+        "7_name": "Bœuf Grillé Coréen",
+        "7_desc": "Fines tranches de bœuf grillées à table sur charbon de bois, servies avec légumes frais et sauce gochujang.",
+        "8_name": "Krug Clos d'Ambonnay",
+        "8_desc": "Champagne de luxe aux arômes complexes et notes de dégustation raffinées, parfait pour célébrer."
+      },
+      "order_btn": "Commander"
+    },
+    "CartSummary": {
+      "title": "Résumé",
+      "items_count": "{count} Articles Distincts",
+      "confirm_btn": "Confirmer"
+    }
+  },
+  "QrScan": {
+    "HeroSection": {
+      "label": "Atmosphère",
+      "quote": "\"Un voyage culinaire commence par une simple étincelle numérique.\""
+    },
+    "ScanContent": {
+      "title": "Découvrez Notre <br> </br> Sélection",
+      "subtitle": "Scannez pour explorer toute notre histoire culinaire sur votre appareil",
+      "step_scan": "Scanner",
+      "step_explore": "Explorer",
+      "step_order": "Commander"
+    }
+  },
+  "ConfirmOrder": {
+    "OrderItem": {
+      "add_note": "Ajouter une note",
+      "edit_note": "Modifier",
+      "note_placeholder": "ex : Pas épicé, sauce supplémentaire...",
+      "note_saved": "Note enregistrée"
+    },
+    "DiningOption": {
+      "eyebrow": "Comment souhaitez-vous déguster ?",
+      "title": "Option de Repas",
+      "dine_in_label": "L'Expérience",
+      "dine_in_title": "Sur Place",
+      "dine_in_desc": "Plongez dans notre atmosphère tranquille avec un service complet.",
+      "take_away_label": "Rapide & Frais",
+      "take_away_title": "À Emporter",
+      "take_away_desc": "Savourez nos saveurs exquises dans le confort de votre maison.",
+      "helper_dine_in": "Procédez à la sélection de votre table préférée.",
+      "helper_take_away": "Procédez à la planification de l'heure de retrait.",
+      "btn_select_table": "Choisir une Table",
+      "btn_checkout": "Passer à la Caisse"
+    },
+    "OrderSummary": {
+      "title": "Vérifiez Votre Commande",
+      "section_title": "Plats Sélectionnés",
+      "quantity_label": "Quantité",
+      "subtotal": "Sous-total",
+      "tax": "Service & Taxes",
+      "total": "Montant Total",
+      "items": {
+        "1_name": "Salade Impériale de Racine de Lotus",
+        "1_category": "Sélection Patrimoniale",
+        "2_name": "Pho Wagyu Héritage",
+        "2_category": "Signature"
+      }
+    }
+  }
+}
