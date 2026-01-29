@@ -1,5 +1,7 @@
 "use client";
 
+import { useTranslations } from "next-intl";
+
 type CompositionItem = {
   title: string;
   sub: string;
@@ -7,32 +9,34 @@ type CompositionItem = {
   img: string;
 };
 
-const COMPOSITION: CompositionItem[] = [
-  {
-    title: "Rice Vermicelli",
-    sub: "Hue Style",
-    desc: "Thick, cylindrical rice noodles with a satisfying chew, traditional to Central Vietnam.",
-    img: "/images/dish-detail/dish-composition-rice/dish-compostion-rice.png",
-  },
-  {
-    title: "Imperial Lemongrass",
-    sub: "Mekong Delta",
-    desc: "Freshly harvested stalks that impart the signature citrus-floral aroma to the broth.",
-    img: "/images/dish-detail/dish-composition-imperial/dish-compostion-imperial.png",
-  },
-  {
-    title: "Mam Ruoc",
-    sub: "Fermented Shrimp Paste",
-    desc: "A traditional condiment that provides the essential umami foundation of the dish.",
-    img: "/images/dish-detail/dish-composition-mam-ruoc/dish-composition-mam-ruoc.png",
-  },
-];
-
 export function DishComposition() {
+  const t = useTranslations("DishDetails.Composition");
+
+  const COMPOSITION: CompositionItem[] = [
+    {
+      title: t("item_1_title"),
+      sub: t("item_1_sub"),
+      desc: t("item_1_desc"),
+      img: "/images/dish-detail/dish-composition-rice/dish-compostion-rice.png",
+    },
+    {
+      title: t("item_2_title"),
+      sub: t("item_2_sub"),
+      desc: t("item_2_desc"),
+      img: "/images/dish-detail/dish-composition-imperial/dish-compostion-imperial.png",
+    },
+    {
+      title: t("item_3_title"),
+      sub: t("item_3_sub"),
+      desc: t("item_3_desc"),
+      img: "/images/dish-detail/dish-composition-mam-ruoc/dish-composition-mam-ruoc.png",
+    },
+  ];
+
   return (
     <aside className="border-l border-slate-200 pl-0 lg:pl-8">
       <div className="text-sm font-bold uppercase tracking-[2.80px] text-blue-800">
-        The Composition
+        {t("label")}
       </div>
 
       {COMPOSITION.map((it) => (
@@ -60,37 +64,37 @@ export function DishComposition() {
         <div className="grid grid-cols-2 gap-x-10 gap-y-6">
           <div>
             <div className="text-xs uppercase tracking-wide text-gray-500">
-              Preparation
+              {t("stat_prep")}
             </div>
             <div className="mt-1 text-base font-medium text-neutral-900">
-              12 Hours
+              {t("stat_prep_val")}
             </div>
           </div>
 
           <div>
             <div className="text-xs uppercase tracking-wide text-gray-500">
-              Calories
+              {t("stat_cal")}
             </div>
             <div className="mt-1 text-base font-medium text-neutral-900">
-              580 kcal
+              {t("stat_cal_val")}
             </div>
           </div>
 
           <div>
             <div className="text-xs uppercase tracking-wide text-gray-500">
-              Allergens
+              {t("stat_allergen")}
             </div>
             <div className="mt-1 text-base font-medium text-neutral-900">
-              Shellfish
+              {t("stat_allergen_val")}
             </div>
           </div>
 
           <div>
             <div className="text-xs uppercase tracking-wide text-gray-500">
-              Spice Level
+              {t("stat_spice")}
             </div>
             <div className="mt-1 text-base font-medium text-orange-600">
-              Medium-High
+              {t("stat_spice_val")}
             </div>
           </div>
         </div>
