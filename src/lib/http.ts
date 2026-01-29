@@ -36,12 +36,24 @@ export const api = {
     get: <T>(path: string, options?: FetchOptions) =>
         http<T>(path, { ...options, method: "GET" }),
 
-    post: <T>(path: string, body: never, options?: FetchOptions) =>
-        http<T>(path, { ...options, method: "POST", body: JSON.stringify(body) }),
+    // post: <T>(path: string, body: never, options?: FetchOptions) =>
+    //     http<T>(path, { ...options, method: "POST", body: JSON.stringify(body) }),
 
     put: <T>(path: string, body: never, options?: FetchOptions) =>
         http<T>(path, { ...options, method: "PUT", body: JSON.stringify(body) }),
 
     delete: <T>(path: string, options?: FetchOptions) =>
         http<T>(path, { ...options, method: "DELETE" }),
+
+    post: <T, B = unknown>(
+    path: string,
+    body: B,
+    options?: FetchOptions
+  ) =>
+    http<T>(path, {
+      ...options,
+      method: "POST",
+      body: JSON.stringify(body),
+    }),
+
 };
