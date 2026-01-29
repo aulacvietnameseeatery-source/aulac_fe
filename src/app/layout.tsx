@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
+import QueryProvider from "@/components/providers/query-provider";
 import "@/app/globals.css";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
@@ -32,9 +33,11 @@ export default async function RootLayout({
             <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
         </head>
         <body className={`${inter.variable} ${playfair.variable} antialiased font-body`}>
-        <NextIntlClientProvider messages={messages} locale={locale}>
-            {children}
-        </NextIntlClientProvider>
+        <QueryProvider>
+            <NextIntlClientProvider messages={messages} locale={locale}>
+                {children}
+            </NextIntlClientProvider>
+        </QueryProvider>
         </body>
         </html>
     );
