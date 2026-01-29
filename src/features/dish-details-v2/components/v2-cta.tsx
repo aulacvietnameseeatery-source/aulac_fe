@@ -1,10 +1,14 @@
 "use client";
 
+import { useTranslations } from "next-intl";
+
 type Props = {
   onReserve: () => void;
 };
 
 export function V2CTA({ onReserve }: Props) {
+  const t = useTranslations("DishDetailsV2.CTA");
+
   return (
     <section className="w-full bg-blue-950 py-32">
       <div className="mx-auto max-w-[1400px] px-6 text-center space-y-12">
@@ -17,7 +21,7 @@ export function V2CTA({ onReserve }: Props) {
           onClick={onReserve}
         >
           <span className="text-blue-950 text-xs font-bold uppercase tracking-[3.6px]">
-            Reserve Your Experience
+            {t("reserve")}
           </span>
         </button>
       </div>
