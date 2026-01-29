@@ -2,12 +2,11 @@
 
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-import { useTranslations } from "next-intl"; // Import hook
+import { useTranslations } from "next-intl";
 
 export function IntroChef() {
-    const t = useTranslations("Introduction.Chef"); // Khởi tạo hook
+    const t = useTranslations("Introduction.Chef");
 
-    // Đưa mảng CHEFS vào trong component để dùng được 't'
     const CHEFS = [
         {
             name: t("chef_1_name"),
@@ -22,7 +21,7 @@ export function IntroChef() {
     return (
         <section className="w-full flex flex-col lg:flex-row">
 
-            {/* --- LEFT: IMAGE SECTION (50%) --- */}
+            {/* --- LEFT: IMAGE SECTION --- */}
             <div className="relative w-full lg:w-1/2 min-h-[500px] lg:min-h-screen">
                 <img
                     src="/images/introduction-page/intro-chef/intro-chef.png"
@@ -32,7 +31,7 @@ export function IntroChef() {
                 <div className="absolute inset-0 bg-[#193752]/20" />
             </div>
 
-            {/* --- RIGHT: CONTENT SECTION (50%) --- */}
+            {/* --- RIGHT: CONTENT SECTION --- */}
             <div className="w-full lg:w-1/2 bg-[#F6F4EF] flex flex-col justify-center px-6 py-16 md:px-16 lg:px-24 xl:px-32">
 
                 {/* Header */}
@@ -40,9 +39,8 @@ export function IntroChef() {
                     <span className="font-display text-[#C9A961] text-xs font-bold uppercase tracking-[0.5em] block">
                         {t("label")}
                     </span>
-                    <h2 className="font-display text-[#193752] text-4xl md:text-5xl lg:text-[60px] font-black leading-tight">
-                        {/* Dùng t.rich để render thẻ <br /> */}
-                        {t.rich("title", { br: () => <br /> })}
+                    <h2 className="font-display text-[#193752] text-4xl md:text-5xl lg:text-[60px] font-black leading-tight whitespace-pre-line">
+                        {t("title")}
                     </h2>
                 </div>
 

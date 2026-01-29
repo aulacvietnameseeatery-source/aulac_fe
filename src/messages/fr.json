@@ -9,12 +9,12 @@
     "slogan_2": "Saveurs du Vietnam, esprit convivial"
   },
   "Footer": {
-    "description": "Défini par l’excellence, porté par l’héritage.<br> </br>L’apogée de l’art culinaire vietnamien au<br> </br>cœur de la ville.",
+    "description": "Défini par l’excellence, porté par l’héritage.\nL’apogée de l’art culinaire vietnamien au\ncœur de la ville.",
     "reservations": "Réservations",
     "location": "Adresse",
     "open_maps": "Ouvrir dans Maps",
     "newsletter": "Newsletter",
-    "newsletter_desc": "Rejoignez notre cercle pour des événements exclusifs et<br> </br>des avant-premières de créations saisonnières.",
+    "newsletter_desc": "Rejoignez notre cercle pour des événements exclusifs et\ndes avant-premières de créations saisonnières.",
     "email_placeholder": "Adresse e-mail",
     "copyright": "© 2026 Au Lac Table Vietnamienne. Tous droits réservés.",
     "privacy": "Confidentialité",
@@ -24,12 +24,12 @@
   "Introduction": {
     "Hero": {
       "est": "Fondé en 1994",
-      "title": "Une symphonie de l’art <br> </br> Vietnamien",
+      "title": "Une symphonie de l’art\nVietnamien",
       "quote": "\"Là où l’héritage du fleuve Rouge rencontre le raffinement de la haute gastronomie contemporaine.\""
     },
     "Chef": {
       "label": "Les Artisans",
-      "title": "Maîtriser <br> </br>l’âme du goût",
+      "title": "Maîtriser\nl’âme du goût",
       "chef_1_name": "Chef Exécutif Minh",
       "chef_1_quote": "\"La cuisine est un pont entre l’histoire et les sens. Chez Au Lac, nous ne cuisinons pas seulement ; nous façonnons des souvenirs à travers des épices ancestrales et des textures modernes.\"",
       "chef_2_name": "Sous-cheffe Linh",
@@ -72,7 +72,7 @@
   "OrderPopup": {
     "success_label": "Succès",
     "success_message": "Article ajouté à votre sélection",
-    "dish_name": "Soupe Impériale de Hue<br />aux Nouilles de Boeuf",
+    "dish_name": "Soupe Impériale de Hue\naux Nouilles de Boeuf",
     "price": "18,50 $",
     "quantity_label": "Quantité",
     "view_selection": "Voir la Sélection & Commander",
@@ -432,7 +432,7 @@
       "quote": "\"Un voyage culinaire commence par une simple étincelle numérique.\""
     },
     "ScanContent": {
-      "title": "Découvrez Notre <br> </br> Sélection",
+      "title": "Découvrez Notre\nSélection",
       "subtitle": "Scannez pour explorer toute notre histoire culinaire sur votre appareil",
       "step_scan": "Scanner",
       "step_explore": "Explorer",

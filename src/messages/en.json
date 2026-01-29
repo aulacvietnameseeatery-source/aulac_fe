@@ -9,12 +9,12 @@
     "slogan_2": "Saveurs du Vietnam, esprit convivial"
   },
   "Footer": {
-    "description": "Defined by excellence, driven by heritage.<br> </br>The pinnacle of Vietnamese culinary art in<br> </br>the heart of the city.",
+    "description": "Defined by excellence, driven by heritage.\nThe pinnacle of Vietnamese culinary art in\nthe heart of the city.",
     "reservations": "Reservations",
     "location": "Location",
     "open_maps": "Open in Maps",
     "newsletter": "Newsletter",
-    "newsletter_desc": "Join our circle for exclusive events and<br> </br>seasonal masterpiece previews.",
+    "newsletter_desc": "Join our circle for exclusive events and\nseasonal masterpiece previews.",
     "email_placeholder": "Email Address",
     "copyright": "© 2026 Au Lac Vietnamese Eatery. All Rights Reserved.",
     "privacy": "Privacy",
@@ -24,16 +24,16 @@
   "Introduction": {
     "Hero": {
       "est": "Est. 1994",
-      "title": "A Symphony of {br} Vietnamese {br} Artistry",
+      "title": "A Symphony of\nVietnamese\nArtistry",
       "quote": "\"Where the heritage of the Red River meets the sophistication of modern fine dining.\""
     },
     "Chef": {
       "label": "The Craftsmen",
-      "title": "Mastering the {br}Soul of Taste",
+      "title": "Mastering the\nSoul of Taste",
       "chef_1_name": "Executive Chef Minh",
-      "chef_1_quote": "\"Cuisine is the bridge between history and the senses. At Au Lac, we don't just cook; we curate memories through traditional spices and modern textures.\"",
+      "chef_1_quote": "...",
       "chef_2_name": "Sous Chef Linh",
-      "chef_2_quote": "\"Balance is our north star. The contrast of hot and cold, crisp and soft, sweet and savory defines the Vietnamese identity.\"",
+      "chef_2_quote": "...",
       "cta": "Read Their Story"
     },
     "Collection": {
@@ -72,7 +72,7 @@
   "OrderPopup": {
     "success_label": "Success",
     "success_message": "Item added to your selection",
-    "dish_name": "Imperial Hue Beef{br}Noodle Soup",
+    "dish_name": "Imperial Hue Beef\nNoodle Soup",
     "price": "$18.50",
     "quantity_label": "Quantity",
     "view_selection": "View Selection & Order",
@@ -84,7 +84,7 @@
       "tag": "Chef's Masterpiece",
       "title_line_1": "Imperial Hue",
       "title_line_2": "Beef Noodle Soup",
-      "subtitle": "A culinary voyage to the Imperial City of Hue, balancing{br}boldness and refinement in a single bowl.",
+      "subtitle": "A culinary voyage to the Imperial City of Hue, balancing\nboldness and refinement in a single bowl.",
       "reserve": "Reserve Experience",
       "share": "Share",
       "order_now": "Order Now",
@@ -94,7 +94,7 @@
     },
     "Narrative": {
       "label": "The Narrative",
-      "title": "Where imperial tradition meets modern{br}refinement.",
+      "title": "Where imperial tradition meets modern\nrefinement.",
       "paragraph_1": "Derived from the royal court cuisine of the Nguyen Dynasty, this dish—known as Bun Bo Hue—is a harmonious blend of spicy, sour, salty, and sweet. It stands as a testament to the culinary complexity of Central Vietnam, offering a profile far more robust than its northern counterpart, Pho.",
       "paragraph_2": "The soul of the dish lies in its broth. We simmer premium beef shanks and pork knuckles for twelve hours with crushed lemongrass stalks and a hint of fermented shrimp paste. This meticulous process extracts deep umami notes while maintaining a clarity that is characteristic of high-end Vietnamese gastronomy.",
       "paragraph_3": "Served with thick, cylindrical rice vermicelli and finished with our house-made chili saté, each bowl is a tribute to the Perfume River's misty mornings. It is not just soup; it is history poured into porcelain.",
@@ -432,7 +432,7 @@
       "quote": "\"A culinary journey begins with a single digital spark.\""
     },
     "ScanContent": {
-      "title": "Discover Our <br> </br> Selection",
+      "title": "Discover Our\nSelection",
       "subtitle": "Scan to explore our full culinary narrative on your device",
       "step_scan": "Scan",
       "step_explore": "Explore",

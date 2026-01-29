@@ -1,17 +1,16 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { useTranslations } from "next-intl"; // Import hook
+import { useTranslations } from "next-intl";
 
 export function IntroHero() {
-    const t = useTranslations("Introduction.Hero"); // Khởi tạo hook
+    const t = useTranslations("Introduction.Hero");
 
     return (
         <section className="relative w-full h-screen flex flex-col items-center justify-center overflow-hidden">
 
             {/* 1. BACKGROUND IMAGE */}
             <div className="absolute inset-0 w-full h-full">
-
                 <img
                     src="/images/introduction-page/intro-hero/intro-hero-image.png"
                     alt="Au Lac Introduction"
@@ -32,11 +31,8 @@ export function IntroHero() {
 
                 {/* Main Title */}
                 <div className="animate-fade-in-up delay-200">
-                    <h1 className="font-display text-white text-[50px] md:text-[96px] font-black leading-[1.1] md:leading-[96px]">
-                        {/* Dùng t.rich để render các thẻ <br /> */}
-                        {t.rich("title", {
-                            br: () => <br/>
-                        })}
+                    <h1 className="font-display text-white text-[50px] md:text-[96px] font-black leading-[1.1] md:leading-[96px] whitespace-pre-line">
+                        {t("title")}
                     </h1>
                 </div>
 
@@ -48,7 +44,7 @@ export function IntroHero() {
                 </div>
             </div>
 
-            {/* 3. SCROLL INDICATOR (Cái gạch dọc ở dưới) */}
+            {/* 3. SCROLL INDICATOR */}
             <div className="absolute bottom-0 flex flex-col items-center animate-fade-in delay-500">
                 <div className="w-[1px] h-[96px] bg-gradient-to-b from-white/0 via-white/50 to-white" />
             </div>
