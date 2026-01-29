@@ -77,12 +77,9 @@ export function MenuGrid({
 
     // LOGIC LỌC MÓN ĂN
     const filteredItems = MENU_ITEMS.filter((item) => {
-        // 1. Lọc theo Category
         const matchCategory = activeCategory === "All" || item.category === activeCategory;
 
-        // 2. Lọc theo Search (Lấy tên từ file dịch ra để so sánh)
-        // Lưu ý: t(...) trả về tên món ăn theo ngôn ngữ hiện tại
-        const itemName = t(`items.${item.translationKey}_name` as any).toLowerCase();
+        const itemName = t(`items.${item.translationKey}_name` as never).toLowerCase();
         const matchSearch = itemName.includes(searchQuery.toLowerCase());
 
         return matchCategory && matchSearch;
