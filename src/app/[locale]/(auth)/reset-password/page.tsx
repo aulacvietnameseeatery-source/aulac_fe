@@ -10,6 +10,8 @@ import {
   useResetPassword,
 } from "@/features/auth/reset-password";
 
+import { LoginBackground } from "@/features/auth/login/components/login-background";
+
 function Content() {
   const params = useSearchParams();
   const router = useRouter();
@@ -51,8 +53,9 @@ function Content() {
 
 export default function ResetPasswordPage() {
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      <div className="max-w-md w-full flex flex-col items-center">
+    <div className="min-h-screen bg-neutral-700 flex items-center justify-center">
+      <LoginBackground />
+      <div className="w-full relative max-w-md flex flex-col items-center">
         <ResetPasswordHeader />
         <Suspense fallback={<div>Loading...</div>}>
           <Content />

@@ -11,7 +11,7 @@ export function ForgotPasswordHeader() {
           spa
         </span>
       </div>
-      <h1 className="font-serif text-[36px] text-[#132538] font-bold tracking-[-0.9px] leading-10">
+      <h1 className="font-display text-[36px] text-[#132538] font-bold tracking-[-0.9px] leading-10">
         Au Lac
       </h1>
       <p className="font-sans text-[12px] text-[#4B5563] tracking-[2.4px] uppercase font-semibold mt-2">

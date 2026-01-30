@@ -6,7 +6,7 @@ export function ResetPasswordSuccess() {
       <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-600">
         <Lock size={32} />
       </div>
-      <h2 className="font-serif text-2xl text-[#132538] font-semibold">
+      <h2 className="font-display text-2xl text-[#132538] font-bold">
         All set!
       </h2>
       <p className="font-sans text-sm text-gray-500">
