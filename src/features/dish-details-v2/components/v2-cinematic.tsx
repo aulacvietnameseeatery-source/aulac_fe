@@ -1,8 +1,11 @@
 "use client";
 
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 export function V2Cinematic() {
+  const t = useTranslations("DishDetailsV2.Cinematic");
+
   return (
     <section className="relative w-full bg-slate-900">
       <div className="relative h-[823px] w-full overflow-hidden">
@@ -16,14 +19,13 @@ export function V2Cinematic() {
 
         <div className="absolute left-16 bottom-16 max-w-[512px] space-y-4">
           <div className="text-orange-300 text-[10px] font-bold uppercase tracking-[4px]">
-            Perspective 02
+            {t("label")}
           </div>
           <div className="text-white text-4xl font-[var(--font-playfair)] leading-10">
-            The Art of the Broth
+            {t("title")}
           </div>
           <p className="text-white/60 text-sm leading-6 tracking-tight">
-            A visual study of the twelve-hour simmered lemongrass essence,
-            captured at the moment of peak flavor extraction.
+            {t("description")}
           </p>
         </div>
       </div>

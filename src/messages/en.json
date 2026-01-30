@@ -24,12 +24,12 @@
   "Introduction": {
     "Hero": {
       "est": "Est. 1994",
-      "title": "A Symphony of <br> </br> Vietnamese <br> </br> Artistry",
+      "title": "A Symphony of {br} Vietnamese {br} Artistry",
       "quote": "\"Where the heritage of the Red River meets the sophistication of modern fine dining.\""
     },
     "Chef": {
       "label": "The Craftsmen",
-      "title": "Mastering the <br> </br>Soul of Taste",
+      "title": "Mastering the {br}Soul of Taste",
       "chef_1_name": "Executive Chef Minh",
       "chef_1_quote": "\"Cuisine is the bridge between history and the senses. At Au Lac, we don't just cook; we curate memories through traditional spices and modern textures.\"",
       "chef_2_name": "Sous Chef Linh",
@@ -61,6 +61,149 @@
       "desc": "Explore our space from every angle before you arrive.",
       "tour_label": "Virtual Tour",
       "tour_title": "A 360° Walkthrough"
+    }
+  },
+  "Breadcrumb": {
+    "home": "Home",
+    "menu": "Menu",
+    "about": "About Us",
+    "dish_details": "Name_Dish_Details"
+  },
+  "OrderPopup": {
+    "success_label": "Success",
+    "success_message": "Item added to your selection",
+    "dish_name": "Imperial Hue Beef{br}Noodle Soup",
+    "price": "$18.50",
+    "quantity_label": "Quantity",
+    "view_selection": "View Selection & Order",
+    "continue_browsing": "Continue Browsing",
+    "footer_text": "Handcrafted Vietnamese Cuisine"
+  },
+  "DishDetails": {
+    "Hero": {
+      "tag": "Chef's Masterpiece",
+      "title_line_1": "Imperial Hue",
+      "title_line_2": "Beef Noodle Soup",
+      "subtitle": "A culinary voyage to the Imperial City of Hue, balancing{br}boldness and refinement in a single bowl.",
+      "reserve": "Reserve Experience",
+      "share": "Share",
+      "order_now": "Order Now",
+      "photo": "Photo",
+      "view_360": "360° View",
+      "video": "Video"
+    },
+    "Narrative": {
+      "label": "The Narrative",
+      "title": "Where imperial tradition meets modern{br}refinement.",
+      "paragraph_1": "Derived from the royal court cuisine of the Nguyen Dynasty, this dish—known as Bun Bo Hue—is a harmonious blend of spicy, sour, salty, and sweet. It stands as a testament to the culinary complexity of Central Vietnam, offering a profile far more robust than its northern counterpart, Pho.",
+      "paragraph_2": "The soul of the dish lies in its broth. We simmer premium beef shanks and pork knuckles for twelve hours with crushed lemongrass stalks and a hint of fermented shrimp paste. This meticulous process extracts deep umami notes while maintaining a clarity that is characteristic of high-end Vietnamese gastronomy.",
+      "paragraph_3": "Served with thick, cylindrical rice vermicelli and finished with our house-made chili saté, each bowl is a tribute to the Perfume River's misty mornings. It is not just soup; it is history poured into porcelain.",
+      "pairing_label": "Sommelier's Pairing",
+      "pairing_title": "2018 Grand Cru Riesling",
+      "pairing_desc": "\"The crisp acidity and mineral notes of this Alsatian Riesling cut through the rich, spicy broth, cleansing the palate while complementing the lemongrass aromatics.\"",
+      "add_to_order": "Add to Order"
+    },
+    "Composition": {
+      "label": "The Composition",
+      "item_1_title": "Rice Vermicelli",
+      "item_1_sub": "Hue Style",
+      "item_1_desc": "Thick, cylindrical rice noodles with a satisfying chew, traditional to Central Vietnam.",
+      "item_2_title": "Imperial Lemongrass",
+      "item_2_sub": "Mekong Delta",
+      "item_2_desc": "Freshly harvested stalks that impart the signature citrus-floral aroma to the broth.",
+      "item_3_title": "Mam Ruoc",
+      "item_3_sub": "Fermented Shrimp Paste",
+      "item_3_desc": "A traditional condiment that provides the essential umami foundation of the dish.",
+      "stat_prep": "Preparation",
+      "stat_prep_val": "12 Hours",
+      "stat_cal": "Calories",
+      "stat_cal_val": "580 kcal",
+      "stat_allergen": "Allergens",
+      "stat_allergen_val": "Shellfish",
+      "stat_spice": "Spice Level",
+      "stat_spice_val": "Medium-High"
+    }
+  },
+  "DishDetailsV2": {
+    "Hero": {
+      "label": "Interactive Experience 01",
+      "title": "Dimensional Gastronomy",
+      "hold_rotate": "Hold & Rotate View",
+      "order_now": "Order Now"
+    },
+    "Narrative": {
+      "tag": "Chef's Signature Selection",
+      "title": "Imperial Hue Beef Noodle Soup",
+      "est": "Est. 1802 Nguyen Dynasty",
+      "paragraph_1": "Derived from the royal court cuisine of the Nguyen Dynasty, this dish—known as Bun Bo Hue—is a harmonious blend of spicy, sour, salty, and sweet. It stands as a testament to the culinary complexity of Central Vietnam, offering a profile far more robust than its northern counterpart, Pho.",
+      "paragraph_2": "The soul of the dish lies in its broth. We simmer premium beef shanks and pork knuckles for twelve hours with crushed lemongrass stalks and a hint of fermented shrimp paste. This meticulous process extracts deep umami notes while maintaining a clarity that is characteristic of high-end Vietnamese gastronomy.",
+      "paragraph_3": "Served with thick, cylindrical rice vermicelli and finished with our house-made chili saté, each bowl is a tribute to the Perfume River's misty mornings. It is not just soup; it is history poured into porcelain."
+    },
+    "Composition": {
+      "label": "Foundation",
+      "title": "The Composition",
+      "item_1_title": "Rice Vermicelli",
+      "item_1_tag": "Hue Tradition",
+      "item_1_desc": "Thick, cylindrical rice noodles with a satisfying chew, custom-crafted to carry the robust weight of our imperial broth.",
+      "item_2_title": "Mekong Lemongrass",
+      "item_2_tag": "Aromatic Base",
+      "item_2_desc": "Freshly harvested stalks that impart the signature citrus-floral aroma, bruised by hand to release essential oils into the simmer.",
+      "item_3_title": "Mam Ruoc",
+      "item_3_tag": "Deep Umami",
+      "item_3_desc": "A rare, fermented shrimp paste sourced from coastal Hue, providing the essential, deeply layered foundation of the dish.",
+      "stat_curing": "Curing Time",
+      "stat_curing_val": "12 Hours",
+      "stat_cal": "Caloric Value",
+      "stat_cal_val": "580 kcal",
+      "stat_spice": "Spice Quotient",
+      "stat_spice_val": "High Intensity",
+      "stat_allergen": "Allergens",
+      "stat_allergen_val": "Shellfish"
+    },
+    "CTA": {
+      "reserve": "Reserve Your Experience"
+    },
+    "Cinematic": {
+      "label": "Perspective 02",
+      "title": "The Art of the Broth",
+      "description": "A visual study of the twelve-hour simmered lemongrass essence, captured at the moment of peak flavor extraction."
+    },
+    "Video": {
+      "title": "The Culinary Preparation",
+      "subtitle": "A Film by Au Lac",
+      "duration_label": "Duration",
+      "duration_value": "02:45 MIN",
+      "resolution_label": "Resolution",
+      "resolution_value": "4K CINEMATIC"
+    }
+  },
+  "AboutUs": {
+    "Legacy": {
+      "est": "Est. 1994",
+      "title": "Our Legacy"
+    },
+    "Journey": {
+      "title": "The Journey of Flavor",
+      "paragraph_1": "Founded in the heart of the capital in 1994, <strong>Au Lac</strong> began as a humble tribute to the ancestral roots of Vietnamese cuisine. Named after the historic kingdom of the Lac Viet people, our eatery was envisioned as a bridge between the ancient traditions of the East and the refined techniques of contemporary gastronomy.",
+      "paragraph_2": "For three decades, we have remained committed to the \"trầm ấm\" philosophy—creating a warm, soul-stirring atmosphere where every dish tells a story of heritage. What started with a single family recipe for Pho has evolved into an editorial dining experience that honors the seasonal rhythm of our land.",
+      "quote": "\"We do not just serve food; we preserve the echoes of a thousand years of culinary evolution.\"",
+      "paragraph_3": "Today, Au Lac stands as a beacon of Vietnamese fine dining, where the crackle of a clay pot and the aroma of star anise serve as a homecoming for the senses."
+    },
+    "Philosophy": {
+      "label": "Our Core Values",
+      "title": "Culinary Philosophy",
+      "value_1_title": "Traditional Craft",
+      "value_1_desc": "Honoring the slow techniques of our ancestors. From 24-hour bone broths to hand-ground spices using the mortar and pestle.",
+      "value_2_title": "Modern Spirit",
+      "value_2_desc": "Elevating heritage flavors through precision, artistic plating, and a sophisticated global perspective on fine dining."
+    },
+    "Founders": {
+      "label": "The Visionaries",
+      "title": "Meet the Founders",
+      "paragraph_1": "Chef Nguyen and Master Sommelier Linh founded Au Lac with a shared dream: to redefine how the world perceives Vietnamese hospitality.",
+      "paragraph_2": "With backgrounds spanning from the street stalls of Saigon to Michelin-starred kitchens in Paris, they bring a balanced harmony of warmth and professional excellence to every guest's table.",
+      "quote": "\"The table is where culture lives. We invite you to sit with us.\"",
+      "quote_author": "— Nguyen & Linh"
     }
   },
   "Reservation": {
@@ -238,6 +381,98 @@
     },
     "Footer": {
       "copyright": "© 2024 Au Lac Vietnamese Eatery - Geneva. All Rights Reserved."
+    }
+  },
+  "MenuListing": {
+    "FilterBar": {
+      "all": "All",
+      "premium": "Premium",
+      "seafood": "Seafood",
+      "signature": "Signature",
+      "italian": "Italian",
+      "desserts": "Desserts",
+      "beverages": "Beverages",
+      "appetizers": "Appetizers",
+      "main course": "Main Course",
+      "search_placeholder": "Search for exquisite dishes..."
+    },
+    "MenuGrid": {
+      "title": "Fine Dining Menu",
+      "subtitle": "Experience exquisite cuisine from world-class chefs, blending traditional Vietnamese flavors with modern culinary techniques.",
+      "book_link": "Not sure what to eat? Book your table first",
+      "items": {
+        "1_name": "Grilled Premium Wagyu Beef",
+        "1_desc": "Japanese A5 Wagyu beef grilled over charcoal, served with seasonal vegetables and truffle sauce.",
+        "2_name": "Lobster Thermidor",
+        "2_desc": "Fresh lobster prepared in classic French style, topped with creamy golden sauce and herbs.",
+        "3_name": "Peking Duck",
+        "3_desc": "Crispy golden duck served with warm crepes, scallions, and our signature house sauce.",
+        "4_name": "Truffle Mushroom Risotto",
+        "4_desc": "Creamy Arborio rice cooked slowly with Gruyère, white wine, and black truffle shavings.",
+        "5_name": "Smoked Salmon",
+        "5_desc": "House-smoked salmon served with crème fraîche, fresh microgreens, and toasted rye.",
+        "6_name": "Tiramisu",
+        "6_desc": "Classic Italian dessert made with mascarpone, ladyfingers soaked in espresso and cocoa.",
+        "7_name": "Korean Grilled Beef",
+        "7_desc": "Thin-sliced beef grilled tableside over charcoal, served with fresh vegetables and gochujang sauce.",
+        "8_name": "Krug Clos d'Ambonnay",
+        "8_desc": "Luxury champagne with complex aromas and refined tasting notes, perfect for celebration."
+      },
+      "order_btn": "Order Now"
+    },
+    "CartSummary": {
+      "title": "Summary",
+      "items_count": "{count} Distinct Items",
+      "confirm_btn": "Confirm Order"
+    }
+  },
+  "QrScan": {
+    "HeroSection": {
+      "label": "Atmosphere",
+      "quote": "\"A culinary journey begins with a single digital spark.\""
+    },
+    "ScanContent": {
+      "title": "Discover Our <br> </br> Selection",
+      "subtitle": "Scan to explore our full culinary narrative on your device",
+      "step_scan": "Scan",
+      "step_explore": "Explore",
+      "step_order": "Order"
+    }
+  },
+  "ConfirmOrder": {
+    "OrderItem": {
+      "add_note": "Add Note",
+      "edit_note": "Edit Note",
+      "note_placeholder": "e.g., No spicy, extra sauce...",
+      "note_saved": "Note saved"
+    },
+    "DiningOption": {
+      "eyebrow": "How would you like to enjoy?",
+      "title": "Dining Option",
+      "dine_in_label": "The Experience",
+      "dine_in_title": "Dine-In",
+      "dine_in_desc": "Immerse yourself in our tranquil atmosphere with full service.",
+      "take_away_label": "Quick & Fresh",
+      "take_away_title": "Take Away",
+      "take_away_desc": "Enjoy our exquisite flavors in the comfort of your own home.",
+      "helper_dine_in": "Proceed to select your preferred table.",
+      "helper_take_away": "Proceed to schedule pickup time.",
+      "btn_select_table": "Select Table",
+      "btn_checkout": "Go to Checkout"
+    },
+    "OrderSummary": {
+      "title": "Review Your Order",
+      "section_title": "Selected Dishes",
+      "quantity_label": "Quantity",
+      "subtotal": "Subtotal",
+      "tax": "Service & Tax",
+      "total": "Total Amount",
+      "items": {
+        "1_name": "Imperial Lotus Root Salad",
+        "1_category": "Heritage Selection",
+        "2_name": "Heritage Wagyu Pho",
+        "2_category": "Signature"
+      }
     }
   }
 }

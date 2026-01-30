@@ -23,7 +23,6 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
 
     return (
         <div className="flex min-h-screen flex-col bg-[#1A3A52]">
-            {/* Truyền locale vào Header để handle link chuyển trang */}
             <Header isScrolled={isScrolled} locale={locale} />
 
             <div className={cn(

@@ -1,14 +1,18 @@
 "use client";
 
+import { useTranslations } from "next-intl";
+
 export default function AboutPhilosophy() {
+  const t = useTranslations("AboutUs.Philosophy");
+
   return (
     <section className="w-full max-w-[1152px] px-6 pt-8">
       <div className="flex flex-col items-center">
         <div className="text-center text-orange-300 text-xs font-bold uppercase tracking-[3.30px]">
-          Our Core Values
+          {t("label")}
         </div>
         <div className="mt-3 text-center text-blue-950 text-4xl font-bold leading-10">
-          Culinary Philosophy
+          {t("title")}
         </div>
       </div>
 
@@ -18,11 +22,10 @@ export default function AboutPhilosophy() {
             <div className="h-10 w-10 rounded bg-blue-950/80" />
           </div>
           <div className="mt-10 text-center text-blue-950 text-2xl font-bold leading-8">
-            Traditional Craft
+            {t("value_1_title")}
           </div>
           <p className="mt-4 text-center text-blue-950/60 text-base leading-6">
-            Honoring the slow techniques of our ancestors. From 24-hour bone
-            broths to hand-ground spices using the mortar and pestle.
+            {t("value_1_desc")}
           </p>
         </div>
 
@@ -31,11 +34,10 @@ export default function AboutPhilosophy() {
             <div className="h-10 w-10 rounded bg-blue-950/80" />
           </div>
           <div className="mt-10 text-center text-blue-950 text-2xl font-bold leading-8">
-            Modern Spirit
+            {t("value_2_title")}
           </div>
           <p className="mt-4 text-center text-blue-950/60 text-base leading-6">
-            Elevating heritage flavors through precision, artistic plating, and a
-            sophisticated global perspective on fine dining.
+            {t("value_2_desc")}
           </p>
         </div>
       </div>
