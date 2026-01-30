@@ -8,6 +8,8 @@ import {
   useForgotPassword
 } from "@/features/auth/forgot-password";
 
+import { LoginBackground } from "@/features/auth/login/components/login-background";
+
 export default function ForgotPasswordPage() {
   const {
     email,
@@ -19,7 +21,8 @@ export default function ForgotPasswordPage() {
   } = useForgotPassword();
 
   return (
-    <div className="min-h-screen bg-white flex items-center justify-center">
+    <div className="min-h-screen bg-neutral-700 flex items-center justify-center">
+      <LoginBackground />
       <div className="w-full relative max-w-md flex flex-col items-center">
         <ForgotPasswordHeader />
 
