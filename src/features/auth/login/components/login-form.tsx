@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { useLogin } from "../hooks";
 
 export function LoginForm() {
@@ -88,12 +89,12 @@ export function LoginForm() {
 
       {/* Divider + link */}
       <div className="mt-7 border-t border-blue-950/5 pt-7 text-center">
-        <button
-          type="button"
+        <Link
+          href="/forgot-password"
           className="text-sm font-medium leading-5 text-blue-950/60 hover:text-blue-950"
         >
           Forgot your password?
-        </button>
+        </Link>
       </div>
     </div>
   );
