@@ -15,7 +15,7 @@ export function ContactItem({ icon, label, content }: ContactItemProps) {
         <b className="tracking-[1px] uppercase text-xs text-[#C9A961]">
           {label}
         </b>
-        <div className="font-serif text-xl text-[#1A3951]">
+        <div className="font-display text-xl text-[#1A3951]">
           {content}
         </div>
       </div>
