@@ -12,7 +12,7 @@ export default function OrderNotFound() {
       </div>
 
       <div className="flex flex-col gap-2">
-        <h1 className="font-serif text-3xl text-[#1A3951]">
+        <h1 className="font-display font-semibold text-3xl text-[#1A3951]">
           {t("title")}
         </h1>
         <p className="text-slate-500 text-sm max-w-xs mx-auto">

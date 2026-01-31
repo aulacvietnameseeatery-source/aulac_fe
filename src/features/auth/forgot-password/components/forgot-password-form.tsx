@@ -26,7 +26,7 @@ export function ForgotPasswordForm({
       className="z-10 flex flex-col gap-6"
     >
       <div className="text-center">
-        <h2 className="font-serif text-2xl text-[#132538] font-semibold mb-2">
+        <h2 className="font-display font-bold text-2xl text-[#132538] mb-2">
           Forgot Password
         </h2>
         <p className="font-sans text-sm text-gray-500">
@@ -35,7 +35,7 @@ export function ForgotPasswordForm({
       </div>
 
       <div className="flex flex-col gap-2">
-        <label className="font-serif text-[#132538] tracking-[0.35px] font-semibold text-sm">
+        <label className="font-display text-[#132538] tracking-[0.35px] font-semibold text-sm">
           Email Address
         </label>
         <div className="shadow-[0px_1px_2px_rgba(0,0,0,0.05)] rounded-2xl bg-white border border-[#D1D5DB] flex items-center py-3.5 px-4 focus-within:border-[#132538] transition-colors">

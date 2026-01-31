@@ -8,7 +8,7 @@ export function ContactForm() {
     <div className="relative">
         <div className="sticky top-20 bg-white p-8 md:p-12 border rounded-sm shadow-lg flex flex-col gap-8">
             <div className="flex flex-col gap-2 shrink-0">
-                 <h3 className="font-serif text-2xl text-[#1A3951] sticky top-0 bg-white z-20">{t("title")}</h3>
+                 <h3 className="font-display font-semibold text-2xl text-[#1A3951] sticky top-0 bg-white z-20">{t("title")}</h3>
             </div>
 
             <form className="flex flex-col gap-6">

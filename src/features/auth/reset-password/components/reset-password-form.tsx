@@ -30,7 +30,7 @@ export function ResetPasswordForm({
       className="z-10 flex flex-col gap-6"
     >
       <div className="text-center">
-        <h2 className="font-serif text-2xl text-[#132538] font-semibold mb-2">
+        <h2 className="font-display text-2xl text-[#132538] font-bold mb-2">
           Set New Password
         </h2>
         <p className="font-sans text-sm text-gray-500">
@@ -40,7 +40,7 @@ export function ResetPasswordForm({
 
       {/* Password */}
       <div className="flex flex-col gap-2">
-        <label className="font-serif text-sm font-semibold text-[#132538]">
+        <label className="font-display text-sm font-semibold text-[#132538]">
           New Password
         </label>
         <div className="rounded-2xl border border-[#D1D5DB] flex items-center py-3.5 px-4 focus-within:border-[#132538]">
@@ -60,7 +60,7 @@ export function ResetPasswordForm({
 
       {/* Confirm */}
       <div className="flex flex-col gap-2">
-        <label className="font-serif text-sm font-semibold text-[#132538]">
+        <label className="font-display text-sm font-semibold text-[#132538]">
           Confirm Password
         </label>
         <div className="rounded-2xl border border-[#D1D5DB] flex items-center py-3.5 px-4 focus-within:border-[#132538]">
