@@ -34,25 +34,25 @@ export function DishComposition() {
   ];
 
   return (
-    <aside className="border-l border-slate-200 pl-0 lg:pl-8">
-      <div className="text-sm font-bold uppercase tracking-[2.80px] text-blue-800">
+    <aside className="mt-8 border-t border-slate-200 pt-8 lg:mt-0 lg:border-l lg:border-t-0 lg:pl-8 lg:pt-0">
+      <div className="text-xs font-bold uppercase tracking-[2.40px] text-blue-800 md:text-sm md:tracking-[2.80px]">
         {t("label")}
       </div>
 
       {COMPOSITION.map((it) => (
-        <div key={it.title} className="mt-10 flex gap-6">
-          <div className="h-24 w-24 shrink-0 overflow-hidden rounded-2xl bg-gray-100 md:h-28 md:w-28">
+        <div key={it.title} className="mt-6 flex gap-4 md:mt-10 md:gap-6">
+          <div className="h-20 w-20 shrink-0 overflow-hidden rounded-xl bg-gray-100 md:h-24 md:w-24 lg:rounded-2xl lg:h-28 lg:w-28">
             <img src={it.img} alt={it.title} className="h-full w-full object-cover" />
           </div>
 
           <div className="pt-1">
-            <div className="text-[22px] font-bold leading-7 text-neutral-900">
+            <div className="text-lg font-bold leading-6 text-neutral-900 md:text-[22px] md:leading-7">
               {it.title}
             </div>
-            <div className="mt-2 text-xs font-bold uppercase tracking-[2px] text-blue-800">
+            <div className="mt-1.5 text-[10px] font-bold uppercase tracking-[1.8px] text-blue-800 md:mt-2 md:text-xs md:tracking-[2px]">
               {it.sub}
             </div>
-            <p className="mt-3 text-[15px] leading-6 text-gray-500">
+            <p className="mt-2 text-sm leading-5 text-gray-500 md:mt-3 md:text-[15px] md:leading-6">
               {it.desc}
             </p>
           </div>
@@ -60,8 +60,8 @@ export function DishComposition() {
       ))}
 
       {/* Stats */}
-      <div className="mt-12 border-t border-slate-200 pt-8">
-        <div className="grid grid-cols-2 gap-x-10 gap-y-6">
+      <div className="mt-8 border-t border-slate-200 pt-6 md:mt-12 md:pt-8">
+        <div className="grid grid-cols-2 gap-x-6 gap-y-4 md:gap-x-10 md:gap-y-6">
           <div>
             <div className="text-xs uppercase tracking-wide text-gray-500">
               {t("stat_prep")}
