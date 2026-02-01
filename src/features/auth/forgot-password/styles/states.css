@@ -1,0 +1,23 @@
+/* Forgot Password - States & Success Styles */
+@reference "tailwindcss";
+
+.success-wrapper {
+  @apply z-10 flex flex-col items-center text-center gap-4 py-4;
+}
+
+.success-icon-box {
+  @apply w-16 h-16 bg-green-100 rounded-full;
+  @apply flex items-center justify-center text-green-600 mb-2;
+}
+
+.loading-state {
+  @apply opacity-70 cursor-not-allowed;
+}
+
+.error-state {
+  @apply border-red-500;
+}
+
+.focus-state {
+  @apply border-slate-900 outline-none;
+}
