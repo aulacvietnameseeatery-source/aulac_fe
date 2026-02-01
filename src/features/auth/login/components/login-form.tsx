@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useLogin } from "../hooks";
+import { useLogin } from "../hooks/use-login";
 
 export function LoginForm() {
   const [username, setUsername] = useState("");

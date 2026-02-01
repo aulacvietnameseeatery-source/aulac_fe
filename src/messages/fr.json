@@ -29,7 +29,7 @@
     },
     "Chef": {
       "label": "Les Artisans",
-      "title": "Maîtriser <br> </br>l’âme du goût",
+      "title": "Maîtriser l’âme du goût",
       "chef_1_name": "Chef Exécutif Minh",
       "chef_1_quote": "\"La cuisine est un pont entre l’histoire et les sens. Chez Au Lac, nous ne cuisinons pas seulement ; nous façonnons des souvenirs à travers des épices ancestrales et des textures modernes.\"",
       "chef_2_name": "Sous-cheffe Linh",
@@ -72,7 +72,7 @@
   "OrderPopup": {
     "success_label": "Succès",
     "success_message": "Article ajouté à votre sélection",
-    "dish_name": "Soupe Impériale de Hue<br />aux Nouilles de Boeuf",
+    "dish_name": "Soupe Impériale de Hue aux Nouilles de Boeuf",
     "price": "18,50 $",
     "quantity_label": "Quantité",
     "view_selection": "Voir la Sélection & Commander",

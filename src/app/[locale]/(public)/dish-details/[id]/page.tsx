@@ -29,8 +29,8 @@ export default function DishDetailUI1() {
       <DishHero onOrderNow={() => setOpenPopup(true)} />
 
       {/* Section 2 */}
-      <section className="mx-auto w-full max-w-[1200px] px-4 pb-20 pt-10">
-        <div className="grid grid-cols-1 gap-10 lg:grid-cols-[1fr_360px]">
+      <section className="mx-auto w-full max-w-[1200px] px-3 pb-12 pt-6 md:px-4 md:pb-16 md:pt-8 lg:pb-20 lg:pt-10">
+        <div className="grid grid-cols-1 gap-8 md:gap-10 lg:grid-cols-[1fr_360px]">
           <DishNarrative />
           <DishComposition />
         </div>
