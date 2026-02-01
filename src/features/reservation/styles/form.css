@@ -1,0 +1,95 @@
+@reference "tailwindcss";
+
+  .sidebar-input-field {
+    @apply w-full bg-stone-50 border border-stone-200 rounded-lg py-2.5 pl-10 pr-3 text-sm text-slate-900 focus:outline-none focus:bg-white focus:border-slate-900 focus:ring-1 focus:ring-slate-900 transition-all;
+  }
+
+  .sidebar-input-icon-wrapper {
+    @apply absolute left-3 top-1/2 -translate-y-1/2 text-stone-400 group-focus-within:text-slate-900 transition-colors;
+  }
+
+  .sidebar-input-group {
+    @apply relative;
+  }
+
+  /* Date Input */
+  .sidebar-date-input {
+    @apply w-full text-sm font-bold text-slate-900 bg-white border border-stone-300 rounded-lg px-3 py-2 focus:outline-none focus:border-slate-900 focus:ring-1 focus:ring-slate-900 transition-all;
+  }
+
+  .sidebar-date-label {
+    @apply text-xs font-bold text-stone-400 uppercase;
+  }
+
+  /* Time Input */
+  .sidebar-time-input {
+    @apply w-full text-sm font-bold text-slate-900 bg-white border border-stone-300 rounded-lg px-3 py-2 pl-9 focus:outline-none focus:border-slate-900 focus:ring-1 focus:ring-slate-900 transition-all;
+  }
+
+  .sidebar-time-label {
+    @apply text-xs font-bold text-stone-400 uppercase flex justify-between;
+  }
+
+  .sidebar-time-label-wrapper {
+    @apply space-y-1;
+  }
+
+  /* Select Date / Time Container */
+  .sidebar-date-time-input-container {
+    @apply grid grid-cols-1 gap-3 duration-200;
+  }
+
+  .sidebar-input-time-icon {
+    @apply absolute left-3 top-1/2 -translate-y-1/2 text-stone-400 pointer-events-none;
+  }
+
+  .sidebar-input-time-wrapper {
+    @apply relative;
+  }
+
+  /* Form Divider */
+  .sidebar-form-divider {
+    @apply border-dashed border-stone-200;
+  }
+
+  /* Guest Form Section */
+  .sidebar-guest-form {
+    @apply space-y-3;
+  }
+
+  .sidebar-guest-form-group {
+    @apply space-y-1;
+  }
+
+  .sidebar-time-dropdown {
+  @apply relative space-y-1;
+}
+
+.sidebar-time-label {
+  @apply text-[10px] font-bold uppercase text-stone-400 flex justify-between;
+}
+
+.sidebar-time-hint {
+  @apply text-[9px] normal-case text-stone-400;
+}
+
+.sidebar-time-trigger {
+  @apply w-full flex items-center justify-between
+    text-sm font-bold text-[#1A3A52]
+    bg-white border border-stone-300
+    rounded-lg px-3 py-2 pl-9
+    cursor-pointer transition-all;
+}
+
+.sidebar-time-trigger:hover {
+  @apply border-[#1A3A52];
+}
+
+.sidebar-time-trigger.is-open {
+  @apply border-[#1A3A52] ring-1 ring-[#1A3A52];
+}
+
+.sidebar-time-icon {
+  @apply absolute left-3 top-[2.4rem] -translate-y-1/2
+    text-stone-400 pointer-events-none;
+}

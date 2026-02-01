@@ -1,0 +1,71 @@
+@reference "tailwindcss";
+
+  @media (max-width: 640px) {
+    .table-card-wrapper {
+      @apply p-2 rounded-lg;
+    }
+
+    .table-image-wrapper {
+      @apply aspect-video mb-3;
+    }
+
+    .table-footer-wrapper {
+      @apply px-0.5;
+    }
+
+    .table-name {
+      @apply text-base;
+    }
+
+    .table-guest-info {
+      @apply text-xs;
+    }
+
+    .table-arrow-button {
+      @apply w-7 h-7;
+    }
+  }
+
+  @media (min-width: 640px) and (max-width: 1024px) {
+    .table-card-wrapper {
+      @apply p-3 rounded-2xl;
+    }
+
+    .table-image-wrapper {
+      @apply aspect-4/3 mb-4;
+    }
+
+    .table-footer-wrapper {
+      @apply px-1;
+    }
+
+    .table-name {
+      @apply text-lg;
+    }
+
+    .table-guest-info {
+      @apply text-sm;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .table-card-wrapper {
+      @apply p-3 rounded-2xl;
+    }
+
+    .table-image-wrapper {
+      @apply aspect-4/3 mb-4;
+    }
+
+    .table-footer-wrapper {
+      @apply px-1;
+    }
+
+    .table-name {
+      @apply text-lg;
+    }
+
+    .table-guest-info {
+      @apply text-sm;
+    }
+  }

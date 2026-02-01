@@ -1,0 +1,23 @@
+/* Reset Password - States & Success Styles */
+@reference "tailwindcss";
+
+.success-wrapper {
+  @apply z-10 flex flex-col items-center text-center gap-4 py-4;
+}
+
+.success-icon-box {
+  @apply w-16 h-16 bg-emerald-100 rounded-full;
+  @apply flex items-center justify-center text-emerald-600;
+}
+
+.loading-state {
+  @apply opacity-70 cursor-not-allowed;
+}
+
+.error-state {
+  @apply border-red-500;
+}
+
+.focus-state {
+  @apply border-slate-900 outline-none;
+}

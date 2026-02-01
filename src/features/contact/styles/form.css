@@ -1,0 +1,23 @@
+@reference "tailwindcss";
+
+
+  .contact-form {
+    @apply flex flex-col gap-6;
+  }
+
+  .submit-button {
+    @apply w-full h-14 bg-[#1A3951] text-white rounded-sm mt-4 hover:bg-[#152e42] transition shadow-lg flex items-center justify-center gap-2 shrink-0 cursor-pointer;
+  }
+
+  .submit-button-text {
+    @apply tracking-[3px] uppercase text-xs font-bold;
+  }
+
+  .form-input-with-icon {
+    @apply shadow-[0px_1px_2px_rgba(0,0,0,0.05)] rounded-2xl bg-white border border-[#D1D5DB] flex items-center py-3.5 px-4 focus-within:border-[#132538] transition-colors;
+  }
+
+  .form-input-icon {
+    @apply text-gray-400;
+  }
+

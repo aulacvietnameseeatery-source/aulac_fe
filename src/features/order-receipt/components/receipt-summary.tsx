@@ -1,4 +1,5 @@
 import { useTranslations } from "next-intl";
+import "../styles/index.css";
 
 export default function ReceiptSummary({
   subtotal,
@@ -12,15 +13,15 @@ export default function ReceiptSummary({
   const t = useTranslations("OrderReceipt.Summary");
 
   return (
-    <div className="bg-[#F8F9FA] px-6 py-6 mx-12 mb-8 border border-[#E2E8F0] rounded-sm space-y-3">
+    <div className="receipt-summary-container">
       <Row label={t("subtotal")} value={`${subtotal.toFixed(2)} CHF`} />
       <Row label={t("tips")} value={`${tips.toFixed(2)} CHF`} />
 
-      <div className="h-px bg-[#475569]/30 my-2" />
+      <div className="receipt-divider" />
 
-      <div className="flex justify-between items-center">
-        <b className="text-[10px] uppercase tracking-[2px]">{t("total")}</b>
-        <b className="font-display text-[24px]">{total.toFixed(2)} CHF</b>
+      <div className="receipt-total-row">
+        <b className="receipt-total-label">{t("total")}</b>
+        <b className="receipt-total-value">{total.toFixed(2)} CHF</b>
       </div>
     </div>
   );
@@ -28,9 +29,9 @@ export default function ReceiptSummary({
 
 function Row({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex justify-between text-[12px]">
-      <span className="font-medium">{label}</span>
-      <span className="font-medium">{value}</span>
+    <div className="receipt-row">
+      <span className="receipt-row-label">{label}</span>
+      <span className="receipt-row-value">{value}</span>
     </div>
   );
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { ArrowRight, Lock } from "lucide-react";
+import "../styles/index.css";
 
 interface Props {
   password: string;

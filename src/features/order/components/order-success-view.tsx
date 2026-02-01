@@ -4,6 +4,7 @@ import OrderSuccessHeader from "./order-success-header";
 import OrderSummaryCard from "./order-summary-card";
 import OrderLocation from "./order-location";
 import OrderActions from "./order-actions";
+import "../styles/index.css";
 
 import { OrderSuccessData } from "../types/order-success.types";
 
@@ -14,12 +15,12 @@ interface Props {
 export default function OrderSuccessView({ data }: Props) {
 
   return (
-    <div className="w-full max-w-2xl mx-auto flex flex-col items-center gap-10 text-center animate-in fade-in slide-in-from-bottom-8 duration-700">
+    <div className="order-success-view-wrapper fade-in slide-in-from-bottom-8 animate-in">
       <OrderSuccessHeader />
-      <OrderSummaryCard 
+      <OrderSummaryCard
         orderNumber={data.orderNumber}
         totalAmount={`${data.totalAmount} ${data.currency}`}
-        diningOption={data.diningOption} 
+        diningOption={data.diningOption}
       />
       <OrderLocation />
       <OrderActions />

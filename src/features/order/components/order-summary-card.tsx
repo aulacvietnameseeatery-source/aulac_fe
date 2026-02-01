@@ -1,5 +1,6 @@
 import { Clock } from "lucide-react";
 import { useTranslations } from "next-intl";
+import "../styles/index.css";
 
 interface OrderSummaryProps {
   orderNumber: string;
@@ -23,13 +24,13 @@ export default function OrderSummaryCard({
       <div className="flex flex-col md:flex-row gap-8">
         <InfoBlock label={t("orderNumber")} value={orderNumber} />
         <InfoBlock label={t("totalAmount")} value={totalAmount} />
-        <InfoBlock label={t("diningOption")} value={diningOption} />
+        <InfoBlock label={t("diningOption")} value={tDining(diningOption)} />
       </div>
 
       <div className="h-px bg-slate-200" />
 
       <div className="flex flex-col items-center gap-3 text-center">
-        <div className="font-display italic text-slate-600">
+        <div className="font-serif italic text-slate-600">
            “{t("quote")}”
         </div>
 
@@ -48,7 +49,7 @@ function InfoBlock({ label, value }: { label: string; value: string }) {
       <b className="tracking-[1px] uppercase text-xs text-slate-400">
         {label}
       </b>
-      <div className="font-display font-normal text-[20px] text-[#1A3951]">
+      <div className="font-serif text-[20px] text-[#1A3951]">
         {value}
       </div>
     </div>
