@@ -10,7 +10,7 @@ export default function OrderSuccessHeader() {
         <Check size={40} strokeWidth={2} className="text-[#C9A961]" />
       </div>
 
-      <h1 className="font-serif text-[48px] text-[#1A3951]">
+      <h1 className="font-display font-semibold text-[48px] text-[#1A3951]">
         {t("title")}
       </h1>
 

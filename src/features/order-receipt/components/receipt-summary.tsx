@@ -20,7 +20,7 @@ export default function ReceiptSummary({
 
       <div className="flex justify-between items-center">
         <b className="text-[10px] uppercase tracking-[2px]">{t("total")}</b>
-        <b className="font-serif text-[24px]">{total.toFixed(2)} CHF</b>
+        <b className="font-display text-[24px]">{total.toFixed(2)} CHF</b>
       </div>
     </div>
   );
