@@ -1,14 +1,14 @@
 /* src/styles/components/footer.css */
 
-/* --- CONTAINER --- */
 .footer-wrapper {
-    /* Style mặc định (Mobile first) */
-    @apply w-full bg-[#193752] border-t border-white/5 pt-[80px] pb-[40px] px-4;
+    @apply w-full bg-[#193752] border-t border-white/5 px-4 pt-10;
+    /* Né thanh Home Indicator + khoảng trống cho nút BackToTop */
+    padding-bottom: calc(40px + var(--safe-bottom));
 }
 
 @media (min-width: 768px) {
     .footer-wrapper {
-        @apply px-[40px];
+        @apply px-[40px] pb-[40px] pt-[80px];
     }
 }
 
@@ -22,64 +22,88 @@
     @apply container mx-auto max-w-[1280px];
 }
 
+/* --- GRID LAYOUT THÔNG MINH --- */
 .footer-main-grid {
-    @apply flex flex-col justify-between items-start gap-12;
+    /* Mobile: Grid 2 cột (để xếp Reservation và Location cạnh nhau) */
+    @apply grid grid-cols-2 gap-x-4 gap-y-10;
 }
 
-@media (min-width: 1280px) {
+@media (min-width: 1024px) { /* Desktop */
     .footer-main-grid {
-        @apply flex-row gap-[60px];
+        /* Về lại dạng Flex 1 hàng ngang */
+        @apply flex flex-row justify-between items-start gap-[60px];
     }
 }
 
-/* --- TYPOGRAPHY --- */
+/* --- ĐỊNH NGHĨA CÁC CỘT TRONG GRID --- */
+
+/* Brand & Newsletter: Chiếm trọn 2 cột (Full width) trên mobile */
+.footer-brand-col,
+.footer-newsletter-col {
+    @apply col-span-2;
+}
+
+@media (min-width: 1024px) {
+    /* Desktop: Về lại kích thước tự nhiên */
+    .footer-brand-col { @apply w-full max-w-[320px]; }
+    .footer-newsletter-col { @apply w-full max-w-[288px]; }
+}
+
+/* Reservations & Location: Mỗi cái 1 cột trên mobile */
+.footer-res-col,
+.footer-loc-col {
+    @apply col-span-1 min-w-0; /* min-w-0 giúp text tự xuống dòng nếu quá dài */
+}
+
+@media (min-width: 1024px) {
+    .footer-res-col, .footer-loc-col { @apply min-w-[200px]; }
+}
+
+/* --- CÁC STYLE KHÁC (GIỮ NGUYÊN) --- */
+.footer-brand-title {
+    @apply font-display font-bold text-[24px] tracking-[3px] text-white uppercase;
+}
+
 .footer-heading {
-    @apply font-display font-bold text-[12px] leading-4 tracking-[1.2px] text-[#C9A961] uppercase mb-6;
+    /* Giảm size chữ heading trên mobile một chút cho gọn */
+    @apply font-display font-bold text-[11px] md:text-[13px] leading-5 tracking-[1.5px] text-[#C9A961] uppercase mb-3 block;
 }
 
 .footer-text {
-    @apply font-display text-[14px] leading-relaxed text-white/60;
+    @apply font-display text-[14px] leading-relaxed text-white/70;
 }
 
 .footer-link {
-    @apply font-display text-[16px] leading-7 text-white/90 hover:text-[#C9A961] transition-colors;
+    /* Font nhỏ hơn xíu để vừa layout 2 cột */
+    @apply font-display text-[13px] md:text-[16px] leading-6 md:leading-8 text-white/90 hover:text-[#C9A961] transition-colors block py-0.5;
 }
 
-/* --- BRAND COLUMN --- */
-.footer-brand-title {
-    @apply font-display font-bold text-[28px] leading-8 tracking-[4.8px] text-white uppercase;
-}
-
-/* --- SOCIAL BUTTONS --- */
-/* 👇 ĐÃ SỬA: Xóa chữ 'group' ở cuối dòng này */
 .social-btn {
-    @apply w-10 h-10 rounded-lg border border-white/10 flex items-center justify-center hover:border-[#C9A961] transition-colors cursor-pointer;
+    @apply w-10 h-10 rounded-xl border border-white/10 flex items-center justify-center hover:border-[#C9A961] transition-colors cursor-pointer active:bg-white/5;
 }
 
 .social-icon {
     @apply text-white/60 group-hover:text-[#C9A961] transition-colors;
 }
 
-/* --- NEWSLETTER INPUT --- */
 .newsletter-input-wrapper {
     @apply flex items-center border-b border-white/20 pb-2 mt-2;
 }
 
 .newsletter-input {
-    @apply bg-transparent border-none outline-none text-white/90 placeholder:text-white/30 text-sm w-full font-display focus:ring-0;
+    @apply bg-transparent border-none outline-none text-white/90 placeholder:text-white/30 text-[16px] w-full font-display focus:ring-0;
 }
 
-/* --- BOTTOM BAR --- */
 .footer-bottom {
-    @apply mt-[80px] border-t border-white/5 pt-[32px] flex flex-col justify-between items-center gap-4;
+    @apply mt-10 border-t border-white/5 pt-6 flex flex-col items-center gap-4 text-center;
 }
 
 @media (min-width: 768px) {
     .footer-bottom {
-        @apply flex-row;
+        @apply mt-[80px] flex-row justify-between text-left;
     }
 }
 
 .footer-legal-link {
-    @apply font-display font-bold text-[10px] tracking-[2px] text-white/30 uppercase hover:text-[#C9A961] transition-colors;
+    @apply font-display font-bold text-[10px] tracking-[2px] text-white/40 uppercase hover:text-[#C9A961] transition-colors px-2;
 }

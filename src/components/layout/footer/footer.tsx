@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { Facebook, Instagram, ArrowRight } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { BackToTop } from "@/components/ui/back-to-top"; // Import component mới
 
 interface FooterProps {
     locale?: string;
@@ -12,14 +13,14 @@ export function Footer({ locale = "en" }: FooterProps) {
     const t = useTranslations('Footer');
 
     return (
-        <footer className="footer-wrapper">
+        <footer className="footer-wrapper relative">
             <div className="footer-inner">
 
-                {/* === MAIN CONTENT === */}
+                {/* === MAIN CONTENT (GRID LAYOUT) === */}
                 <div className="footer-main-grid">
 
-                    {/* CỘT 1: BRAND */}
-                    <div className="flex flex-col gap-[28px] flex-1 max-w-[320px]">
+                    {/* CỘT 1: BRAND (Full width mobile) */}
+                    <div className="footer-brand-col flex flex-col gap-[20px] md:gap-[28px]">
                         <div className="flex items-center gap-3">
                             <div className="relative w-9 h-11">
                                 <div className="absolute left-[1.5px] top-[5.5px] w-[33px] h-[31.5px] bg-[#C9A961]" />
@@ -28,48 +29,49 @@ export function Footer({ locale = "en" }: FooterProps) {
                                 An Lac
                             </span>
                         </div>
-                        <p className="footer-text">
+                        <p className="footer-text max-w-[300px]">
                             {t.rich('description', { br: () => <br /> })}
                         </p>
                     </div>
 
-                    {/* CỘT 2: RESERVATIONS */}
-                    <div className="flex flex-col gap-4 flex-1 min-w-[200px]">
+                    {/* CỘT 2: RESERVATIONS (Cột trái trên mobile) */}
+                    <div className="footer-res-col flex flex-col gap-4">
                         <h4 className="footer-heading">{t('reservations')}</h4>
-                        <div className="flex flex-col gap-1">
+                        <div className="flex flex-col gap-0.5">
                             <p className="footer-link">+1 (555) 892 0122</p>
-                            <p className="footer-link">concierge@anlac.art</p>
+                            <p className="footer-link break-words">concierge@anlac.art</p>
                         </div>
-                        <div className="flex gap-4 mt-2">
+                        <div className="flex gap-3 mt-1">
+                            {/* group ở đây để hover icon đổi màu */}
                             <div className="social-btn group">
-                                <Facebook size={20} className="social-icon" />
+                                <Facebook size={18} className="social-icon" />
                             </div>
                             <div className="social-btn group">
-                                <Instagram size={20} className="social-icon" />
+                                <Instagram size={18} className="social-icon" />
                             </div>
                         </div>
                     </div>
 
-                    {/* CỘT 3: LOCATION */}
-                    <div className="flex flex-col gap-4 flex-1 min-w-[200px]">
+                    {/* CỘT 3: LOCATION (Cột phải trên mobile) */}
+                    <div className="footer-loc-col flex flex-col gap-4">
                         <h4 className="footer-heading">{t('location')}</h4>
                         <p className="footer-link">
                             128 Heritage Street,
                             <br />
-                            District 1, Ho Chi Minh City
+                            District 1, HCM City
                         </p>
                         <Link
                             href="https://maps.google.com"
                             target="_blank"
-                            className="footer-heading border-b border-gray-700 pb-1 hover:text-white transition-colors w-fit mt-2"
+                            className="footer-heading border-b border-gray-700 pb-1 hover:text-white transition-colors w-fit mt-1 text-[10px] md:text-[12px]"
                         >
                             {t('open_maps')}
                         </Link>
                     </div>
 
-                    {/* CỘT 4: NEWSLETTER */}
-                    <div className="flex flex-col gap-6 flex-1 max-w-[288px]">
-                        <div className="flex flex-col gap-4">
+                    {/* CỘT 4: NEWSLETTER (Full width mobile) */}
+                    <div className="footer-newsletter-col flex flex-col gap-4 md:gap-6">
+                        <div className="flex flex-col gap-2 md:gap-4">
                             <h4 className="footer-heading">{t('newsletter')}</h4>
                             <p className="text-[13px] leading-5 text-white/50">
                                 {t.rich('newsletter_desc', { br: () => <br /> })}
@@ -81,7 +83,7 @@ export function Footer({ locale = "en" }: FooterProps) {
                                 placeholder={t('email_placeholder')}
                                 className="newsletter-input"
                             />
-                            <button className="text-[#C9A961] hover:text-white transition-colors">
+                            <button className="text-[#C9A961] hover:text-white transition-colors p-1">
                                 <ArrowRight size={20} />
                             </button>
                         </div>
@@ -94,13 +96,16 @@ export function Footer({ locale = "en" }: FooterProps) {
                         {t('copyright', { year: new Date().getFullYear() })}
                     </p>
 
-                    <div className="flex gap-6 md:gap-8">
+                    <div className="flex gap-4 md:gap-8">
                         <Link href="#" className="footer-legal-link">{t('privacy')}</Link>
                         <Link href="#" className="footer-legal-link">{t('terms')}</Link>
                         <Link href="#" className="footer-legal-link">{t('sitemap')}</Link>
                     </div>
                 </div>
             </div>
+
+            {/* Nút Back To Top (Chỉ hiện trên Mobile) */}
+            <BackToTop />
         </footer>
     );
 }

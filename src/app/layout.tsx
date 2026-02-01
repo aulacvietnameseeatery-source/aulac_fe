@@ -8,6 +8,16 @@ import "@/styles/globals.css";
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
 const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-playfair", display: "swap" });
 
+import type { Viewport } from 'next';
+
+export const viewport: Viewport = {
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 1,
+    userScalable: false, 
+    viewportFit: 'cover',
+};
+
 export const metadata: Metadata = {
     title: "Bamee Gasstro - Vietnamese Eatery",
     description: "The pinnacle of Vietnamese culinary art.",
