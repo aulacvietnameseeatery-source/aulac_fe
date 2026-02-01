@@ -120,12 +120,13 @@
   }
 
   .zone-tab-active {
-    @apply text-slate-900 border-b-2 border-slate-900;
+    @apply text-[#1A3A52] border-b-2 border-slate-900;
   }
 
   /* Table Grid */
   .table-grid-wrapper {
-    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6;
+    @apply grid gap-6 w-full;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   }
 
   .table-grid-loading {
@@ -166,7 +167,7 @@
   }
 
   .booking-modal-title {
-    @apply text-2xl font-serif font-bold text-slate-900;
+    @apply text-2xl font-bold text-[#1A3A52];
   }
 
   .booking-modal-form {
@@ -190,7 +191,7 @@
   }
 
   .booking-modal-button-confirm {
-    @apply flex-1 bg-slate-900 text-white py-3 rounded-lg font-semibold hover:bg-slate-800 transition;
+    @apply flex-1 bg-[#1A3A52] text-white py-3 rounded-lg font-semibold hover:bg-slate-800 transition cursor-pointer;
   }
 
   .booking-modal-button-cancel {

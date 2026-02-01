@@ -10,7 +10,7 @@ export default function Legend() {
     <div className="legend-wrapper">
       <LegendItem color="bg-emerald-500" label={t("available")} />
       <LegendItem color="bg-stone-400" label={t("reserved")} />
-      <LegendItem color="bg-slate-900" label={t("selected")} bordered />
+      <LegendItem color="bg-[#1A3A52]" label={t("selected")} bordered />
     </div>
   );
 };

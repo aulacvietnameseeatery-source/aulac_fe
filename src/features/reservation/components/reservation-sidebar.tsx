@@ -128,7 +128,7 @@ export default function ReservationSidebar({
   return (
     <div className="bg-white rounded-xl shadow-xl overflow-hidden border border-slate-100 sticky top-6 transition-all duration-300 hover:shadow-2xl">
       {/* Header */}
-      <div className="bg-slate-900 p-5 text-white relative overflow-hidden">
+      <div className="bg-[#1A3A52] p-5 text-white relative overflow-hidden">
         <div className="relative z-10">
           <h3 className="sidebar-header-title">{t("header.title")}</h3>
           <p className="sidebar-header-subtitle">{t("header.subtitle")}</p>

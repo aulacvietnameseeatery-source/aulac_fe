@@ -56,8 +56,8 @@ export default function ReservationPage() {
         />
 
         {/* Content */}
-        <div className="flex flex-col lg:flex-row gap-8 items-start">
-          <div className="flex-1">
+        <div className="flex flex-col lg:flex-row gap-8 lg:items-start items-stretch">
+          <div className="w-full lg:flex-1">
             <TableGrid
               tables={tables}
               selectedTableId={tableSelection.selectedTableId}

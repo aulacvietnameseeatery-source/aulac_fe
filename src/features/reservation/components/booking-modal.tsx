@@ -49,7 +49,7 @@ export default function BookingModal({ isOpen, onClose, onConfirm, tableData, gu
             <span className="booking-modal-image-label">
               {t("selectedTable")}
             </span>
-            <h2 className="text-5xl font-serif font-bold">{tableData.name}</h2>
+            <h2 className="text-5xl font-bold">{tableData.name}</h2>
           </div>
         </div>
 
@@ -63,7 +63,7 @@ export default function BookingModal({ isOpen, onClose, onConfirm, tableData, gu
 
           <div>
             <h3 className="booking-modal-title">{t("title")}</h3>
-            <p className="text-stone-400 font-serif italic text-sm mb-8">
+            <p className="text-stone-400 italic text-sm mb-8">
               {t("restaurantName")}
             </p>
 
@@ -72,7 +72,7 @@ export default function BookingModal({ isOpen, onClose, onConfirm, tableData, gu
                 <span className="block text-xs font-bold text-stone-400 uppercase tracking-widest mb-1">
                   {t("date")}
                 </span>
-                <p className="text-slate-900 font-bold text-lg">
+                <p className="text-[#1A3A52] font-bold text-lg">
                   {tableData.date}
                 </p>
               </div>
@@ -80,7 +80,7 @@ export default function BookingModal({ isOpen, onClose, onConfirm, tableData, gu
                 <span className="block text-xs font-bold text-stone-400 uppercase tracking-widest mb-1">
                   {t("time")}
                 </span>
-                <p className="text-slate-900 font-bold text-lg">
+                <p className="text-[#1A3A52] font-bold text-lg">
                   {tableData.time}
                 </p>
               </div>
@@ -88,7 +88,7 @@ export default function BookingModal({ isOpen, onClose, onConfirm, tableData, gu
                 <span className="block text-xs font-bold text-stone-400 uppercase tracking-widest mb-1">
                   {t("guests")}
                 </span>
-                <p className="text-slate-900 font-bold text-lg">
+                <p className="text-[#1A3A52] font-bold text-lg">
                   {t("guestsCount", { count: tableData.guests })}
                 </p>
               </div>
@@ -96,14 +96,14 @@ export default function BookingModal({ isOpen, onClose, onConfirm, tableData, gu
 
             {guestInfo && (
               <div className="bg-stone-50 p-5 rounded-xl border border-stone-100 mb-8 space-y-3">
-                <h4 className="text-xs font-bold text-slate-900 uppercase tracking-widest mb-2">
+                <h4 className="text-xs font-bold text-[#1A3A52] uppercase tracking-widest mb-2">
                   {t("guestInfo")}
                 </h4>
 
                 {guestInfo.name && (
                   <div className="flex items-center gap-3 text-sm text-stone-600">
                     <User size={16} className="text-amber-600" />
-                    <span className="font-bold text-slate-900">
+                    <span className="font-bold text-[#1A3A52]">
                       {guestInfo.name}
                     </span>
                   </div>
