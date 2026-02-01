@@ -1,0 +1,49 @@
+/* Forgot Password - Layout Styles */
+@reference "tailwindcss";
+
+.page-wrapper {
+    @apply w-full px-4;
+}
+
+.card-container {
+    @apply w-full;
+    @apply sm:px-6;
+    @apply md:px-8;
+    @apply lg:max-w-md lg:mx-auto;
+    box-shadow: 0px 20px 40px -12px rgba(213, 186, 152, 0.4);
+    @apply backdrop-blur-sm rounded-3xl bg-slate-50 border border-gray-200;
+    @apply overflow-hidden p-8 md:p-10;
+    @apply relative isolate flex flex-col gap-6;
+}
+
+.card-gradient-accent {
+    @apply w-[calc(100%-2px)] h-1 absolute top-px left-px;
+    background: linear-gradient(
+        to right,
+        transparent,
+        #d5ba98,
+        transparent
+    );
+    @apply opacity-50 z-0;
+}
+
+.card-footer {
+    @apply border-t border-gray-200 pt-6 flex justify-center z-10;
+}
+
+.form-wrapper {
+    @apply z-10 flex flex-col gap-6;
+}
+
+.header-wrapper {
+    @apply flex flex-col items-center mb-6 md:mb-8;
+}
+
+.icon-box {
+    @apply shadow-sm backdrop-blur-sm rounded-full bg-gray-200 border border-amber-100;
+    @apply p-4 mb-2;
+}
+
+.icon {
+    @apply text-4xl leading-10 text-gray-800;
+}

@@ -1,5 +1,6 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
+import "../styles/index.css";
 
 interface ZoneTabsProps {
   zones: string[];
@@ -9,17 +10,15 @@ interface ZoneTabsProps {
 
 export default function ZoneTabs({ zones, activeZone, onChange } : ZoneTabsProps) {
   return (
-    <div className="w-full border-b border-stone-200 mb-8">
-      <div className="flex gap-6 md:gap-8 text-sm font-bold uppercase text-stone-400">
-        {zones.map(zone => (
+    <div className="zone-tabs-wrapper">
+      <div className="zone-tabs-container">
+        {zones.map((zone) => (
           <button
             key={zone}
             onClick={() => onChange(zone)}
             className={cn(
-              'pb-4 whitespace-nowrap transition-all duration-300 relative translate-y-px cursor-pointer',
-              activeZone === zone
-                ? 'text-[#132538] border-b-2 border-[#1A3A52]'
-                : 'hover:text-[#132538]'
+              "zone-tab-button",
+              activeZone === zone && "zone-tab-active"
             )}
           >
             {zone}

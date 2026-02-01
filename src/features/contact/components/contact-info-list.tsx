@@ -1,12 +1,13 @@
 import { MapPin, Phone, Mail, Clock } from "lucide-react";
 import { ContactItem } from "./contact-item";
 import { useTranslations } from "next-intl";
+import "../styles/index.css";
 
 export function ContactInfoList() {
   const t = useTranslations("Contact.Info");
 
   return (
-    <div className="flex flex-col gap-10">
+    <div className="contact-info-list-wrapper">
       <ContactItem
         icon={<MapPin />}
         label="Our Home"

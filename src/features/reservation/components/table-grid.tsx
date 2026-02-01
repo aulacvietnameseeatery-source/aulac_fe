@@ -2,6 +2,7 @@ import TableCard from './table-card';
 import TableCardSkeleton from './table-card-skeleton';
 import { Table } from '../types/reservation.types';
 import { useTranslations } from 'next-intl';
+import "../styles/index.css";
 
 interface TableGridProps {
   tables?: Table[];
@@ -20,7 +21,7 @@ export default function TableGrid ({
 
   if (isLoading) {
     return (
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="table-grid-loading">
         {Array.from({ length: 6 }).map((_, i) => (
           <TableCardSkeleton key={i} />
         ))}
@@ -30,21 +31,21 @@ export default function TableGrid ({
 
   if (tables.length === 0) {
     return (
-      <div className="py-20 text-center text-stone-400 italic">
-        {t('empty')}
+      <div className="table-grid-empty">
+        {t("empty")}
       </div>
     );
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      {tables.map(table => {
+    <div className="table-grid-wrapper">
+      {tables.map((table) => {
         const status =
-          table.status === 'reserved'
-            ? 'reserved'
+          table.status === "reserved"
+            ? "reserved"
             : selectedTableId === table.id
-            ? 'selected'
-            : 'available';
+              ? "selected"
+              : "available";
 
         return (
           <TableCard

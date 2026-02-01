@@ -3,6 +3,7 @@
 import React from "react";
 import { Download, Printer } from "lucide-react";
 import { useTranslations } from "next-intl";
+import "../styles/index.css";
 
 interface ReceiptActionsProps {
   onDownload?: () => void;
@@ -16,46 +17,23 @@ export default function ReceiptActions({
   const t = useTranslations("OrderReceipt.Actions");
 
   return (
-    <div className="w-full flex justify-center gap-4">
-      
-      {/* DOWNLOAD */}
+    <div className="receipt-actions-wrapper">
       <button
         onClick={onDownload}
-        className="
-          flex-1 max-w-70
-          bg-[#1A3951] text-white
-          rounded-sm shadow-lg
-          flex items-center justify-center gap-3
-          py-4
-          hover:bg-[#1a2c42]
-          transition-all
-          cursor-pointer
-        "
+        className="receipt-download-button"
       >
         <Download size={18} />
-        <b className="text-[11px] uppercase tracking-[3px]">
+        <b className="text-xs uppercase tracking-widest">
           {t("download")}
         </b>
       </button>
 
-      {/* PRINT */}
       <button
         onClick={onPrint}
-        className="
-          flex-1 max-w-70
-          bg-white
-          border border-[#CBD5E1]
-          text-[#1A3951]
-          rounded-sm
-          flex items-center justify-center gap-3
-          py-4
-          hover:bg-gray-50
-          transition-all
-          cursor-pointer
-        "
+        className="receipt-print-button"
       >
         <Printer size={18} />
-        <b className="text-[11px] uppercase tracking-[3px]">
+        <b className="text-xs uppercase tracking-widest">
           {t("print")}
         </b>
       </button>

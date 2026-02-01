@@ -1,14 +1,15 @@
 import { CreditCard } from "lucide-react";
 import { useTranslations } from "next-intl";
+import "../styles/index.css";
 
 export default function ReceiptPaymentFooter({ paymentMethod }: { paymentMethod: string }) {
   const t = useTranslations("OrderReceipt.Payment");
 
   return (
-    <div className="border-t border-dashed border-[#475569] py-6 flex justify-center">
-      <div className="flex items-center gap-2 px-4 py-1.5 bg-[#1e293b] rounded-full text-white text-[10px]">
+    <div className="receipt-payment-footer">
+      <div className="receipt-payment-badge">
         <CreditCard size={14} />
-        <b className="uppercase tracking-[1px]">
+        <b className="receipt-payment-text">
           {t("label")}: {paymentMethod}
         </b>
       </div>
