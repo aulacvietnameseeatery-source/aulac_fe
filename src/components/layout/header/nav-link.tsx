@@ -9,31 +9,30 @@ interface NavLinkProps {
     children: React.ReactNode;
     className?: string;
     onClick?: () => void;
+    title?: string;
 }
 
-export function NavLink({ href, children, className, onClick }: NavLinkProps) {
+export function NavLink({ href, children, className, onClick, title }: NavLinkProps) {
     const pathname = usePathname();
-    // kiểm tra xem có đang ở trang hiện tại không
     const isActive = pathname === href;
 
     return (
         <Link
             href={href}
             onClick={onClick}
+            title={title}
             className={cn(
-                "relative text-sm font-medium transition-colors hover:text-gold-classic",
-                isActive ? "text-gold-classic" : "text-cream/80", // Active thì hiện lên màu vàng, default là màu kem
+                "nav-link-base group",
+                isActive ? "nav-link-active" : "nav-link-inactive",
                 className
             )}
         >
             {children}
-            {/* Gạch chân màu vàng khi Active */}
-            <span
-                className={cn(
-                    "absolute -bottom-1 left-0 h-0.5 w-0 bg-gold-classic transition-all duration-300",
-                    isActive ? "w-full" : "group-hover:w-full"
-                )}
-            />
+
+            <span className={cn(
+                "nav-underline",
+                isActive ? "w-full" : "nav-underline-hidden group-hover:w-full"
+            )} />
         </Link>
     );
 }
