@@ -36,7 +36,7 @@ export function DishNarrative() {
           <div className="flex flex-col items-start gap-4 md:flex-row md:gap-5">
             <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-full bg-gray-100 outline outline-2 outline-offset-[-2px] outline-blue-800/20 md:h-24 md:w-24">
               <img
-                src= "/images/dish-detail/dish-narrative/dish-narrative.png"
+                src="/images/dish-detail/dish-narrative/dish-narrative.png"
                 alt="Pairing"
                 className="h-full w-full object-cover opacity-90"
               />
@@ -56,10 +56,14 @@ export function DishNarrative() {
 
             <button
               type="button"
-              className="h-8 w-full rounded-lg outline outline-1 outline-offset-[-1px] outline-blue-800 md:h-9 md:w-32"
+              className="h-8 w-full whitespace-nowrap rounded-lg px-4 outline outline-1 outline-offset-[-1px] outline-blue-800
+             md:h-9 md:w-auto md:self-start"
             >
-              <span className="text-xs font-bold text-blue-800 md:text-sm">{t("add_to_order")}</span>
+              <span className="text-xs font-bold text-blue-800 md:text-sm">
+                {t("add_to_order")}
+              </span>
             </button>
+
           </div>
         </div>
       </div>
