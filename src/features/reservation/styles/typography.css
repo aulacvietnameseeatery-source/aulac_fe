@@ -1,0 +1,82 @@
+@reference "tailwindcss";
+  /* Sidebar Typography */
+  .sidebar-header-title {
+    @apply text-xl font-medium tracking-wide text-white;
+  }
+
+  .sidebar-header-subtitle {
+    @apply text-white/60 text-xs mt-1;
+  }
+
+  .sidebar-section-label {
+    @apply text-xs text-stone-400 font-bold uppercase tracking-widest;
+  }
+
+  .sidebar-value {
+    @apply text-sm font-bold text-slate-900;
+  }
+
+  .sidebar-secondary-value {
+    @apply text-xs text-stone-500;
+  }
+
+  /* DateTime Section Typography */
+  .sidebar-datetime-label {
+    @apply text-xs text-stone-400 font-bold uppercase tracking-wider;
+  }
+
+  .sidebar-datetime-value {
+    @apply text-base font-bold text-slate-900;
+  }
+
+  .sidebar-datetime-secondary {
+    @apply text-sm text-stone-500 font-medium;
+  }
+
+  /* Table Section Typography */
+  .sidebar-table-name {
+    @apply text-sm font-bold text-slate-900 mt-0.5;
+  }
+
+  .sidebar-table-info {
+    @apply text-xs text-stone-500;
+  }
+
+  /* Guest Form Typography */
+  .sidebar-input-label {
+    @apply text-xs font-bold text-stone-400 uppercase tracking-wider;
+  }
+
+  .sidebar-input-placeholder {
+    @apply placeholder:text-stone-400;
+  }
+
+  .sidebar-input-text {
+    @apply text-sm text-slate-900;
+  }
+
+  /* Button Typography */
+  .sidebar-button-text {
+    @apply text-xs font-bold uppercase tracking-widest;
+  }
+
+  .sidebar-edit-button-text {
+    @apply text-xs font-bold uppercase tracking-wider;
+  }
+
+  .sidebar-save-button-text {
+    @apply text-xs font-bold uppercase tracking-wider;
+  }
+
+  .sidebar-validation-text {
+    @apply text-xs text-center text-red-500 font-medium;
+  }
+
+  .sidebar-legal-text {
+    @apply text-xs text-center text-stone-400 leading-relaxed;
+  }
+
+  /* Select Time Text */
+  .sidebar-opening-hours-text {
+    @apply text-xs normal-case text-stone-400;
+  }

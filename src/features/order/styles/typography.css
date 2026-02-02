@@ -1,0 +1,46 @@
+@reference "tailwindcss";
+
+  .order-success-title {
+    @apply text-[48px] text-[#1A3951];
+  }
+
+  .order-success-subtitle {
+    @apply tracking-[2px] uppercase font-semibold text-sm text-slate-500;
+  }
+
+  .order-info-label {
+    @apply tracking-[1px] uppercase text-xs text-slate-400;
+  }
+
+  .order-info-value {
+    @apply text-[20px] text-[#1A3951];
+  }
+
+  .order-quote {
+    @apply italic text-slate-600;
+  }
+
+  .order-ready-info {
+    @apply flex items-center gap-2 text-[12px] text-[#DEA048];
+  }
+
+  .order-ready-info-text {
+    @apply tracking-[1.2px] uppercase font-bold;
+  }
+
+  .order-location-label {
+    @apply tracking-[1px] uppercase text-xs;
+  }
+
+  .order-location-address {
+    @apply text-[16px] text-[#1A3951];
+  }
+
+  .order-print-button-text {
+    @apply tracking-[3px] uppercase text-xs font-bold;
+  }
+
+  .order-home-link-text {
+    @apply tracking-[3px] uppercase text-xs font-bold text-[#1A3951];
+  }
+

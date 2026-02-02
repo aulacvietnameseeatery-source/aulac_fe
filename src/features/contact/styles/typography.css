@@ -1,0 +1,47 @@
+@reference "tailwindcss";
+
+
+  .contact-form-title {
+    @apply text-2xl text-[#1A3951];
+  }
+
+  .form-label {
+    @apply tracking-[1px] uppercase text-[10px] font-bold text-slate-400;
+  }
+
+  .form-input {
+    @apply outline-none text-[#1A3951] placeholder:text-gray-400 font-sans text-sm;
+  }
+
+  .form-input-text {
+    @apply w-full h-12 border border-slate-300 rounded-sm px-4 text-[#1A3951];
+  }
+
+  .form-select {
+    @apply w-full h-12 border border-slate-300 rounded-sm px-4 bg-white text-[#1A3951] focus:outline-none focus:border-[#1A3951] transition;
+  }
+
+  .form-textarea {
+    @apply w-full h-32 border border-slate-300 rounded-sm p-4 text-[#1A3951] focus:outline-none focus:border-[#1A3951] transition resize-none;
+  }
+
+  .contact-item-label {
+    @apply tracking-[1px] uppercase text-xs text-[#C9A961];
+  }
+
+  .contact-item-value {
+    @apply text-xl text-[#1A3951];
+  }
+
+  .contact-socials-title {
+    @apply tracking-[1px] uppercase text-xs text-[#C9A961];
+  }
+
+  .contact-social-link {
+    @apply font-serif text-lg text-[#1A3951] hover:text-[#C9A961] transition cursor-pointer;
+  }
+
+  .contact-map-title {
+    @apply tracking-[1.2px] uppercase text-xs font-bold text-[#1A3951];
+  }
+

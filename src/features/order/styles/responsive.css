@@ -1,0 +1,40 @@
+@reference "tailwindcss";
+
+  @media (max-width: 768px) {
+    .order-summary-container {
+      @apply px-6 py-8;
+    }
+
+    .order-info-blocks {
+      @apply flex-col gap-4;
+    }
+
+    .order-actions-wrapper {
+      @apply gap-3;
+    }
+
+    .order-print-button,
+    .order-home-link {
+      @apply w-full;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .order-summary-container {
+      @apply px-12 py-10;
+    }
+
+    .order-info-blocks {
+      @apply flex-row gap-8;
+    }
+
+    .order-actions-wrapper {
+      @apply gap-4;
+    }
+
+    .order-print-button,
+    .order-home-link {
+      @apply md:w-80;
+    }
+  }
+

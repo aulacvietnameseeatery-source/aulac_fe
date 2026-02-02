@@ -25,16 +25,16 @@
   "Introduction": {
     "Hero": {
       "est": "Est. 1994",
-      "title": "A Symphony of\nVietnamese\nArtistry",
+      "title": "A Symphony of \n Vietnamese \n Artistry",
       "quote": "\"Where the heritage of the Red River meets the sophistication of modern fine dining.\""
     },
     "Chef": {
       "label": "The Craftsmen",
       "title": "Mastering the\nSoul of Taste",
       "chef_1_name": "Executive Chef Minh",
-      "chef_1_quote": "...",
+      "chef_1_quote": "\"Cuisine is the bridge between history and the senses. At Au Lac, we don't just cook; we curate memories through traditional spices and modern textures.\"",
       "chef_2_name": "Sous Chef Linh",
-      "chef_2_quote": "...",
+      "chef_2_quote": "\"Balance is our north star. The contrast of hot and cold, crisp and soft, sweet and savory defines the Vietnamese identity.\"",
       "cta": "Read Their Story"
     },
     "Collection": {

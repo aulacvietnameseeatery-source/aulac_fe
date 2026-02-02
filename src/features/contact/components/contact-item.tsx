@@ -1,3 +1,5 @@
+import "../styles/index.css";
+
 interface ContactItemProps {
   icon: React.ReactNode;
   label: string;
@@ -6,18 +8,12 @@ interface ContactItemProps {
 
 export function ContactItem({ icon, label, content }: ContactItemProps) {
   return (
-    <div className="flex items-start gap-5">
-      <div className="w-6 mt-1 flex justify-center text-[#C9A961]">
-        {icon}
-      </div>
+    <div className="contact-item-container">
+      <div className="contact-item-icon">{icon}</div>
 
-      <div className="flex flex-col gap-1">
-        <b className="tracking-[1px] uppercase text-xs text-[#C9A961]">
-          {label}
-        </b>
-        <div className="font-display text-xl text-[#1A3951]">
-          {content}
-        </div>
+      <div className="contact-item-content">
+        <b className="contact-item-label">{label}</b>
+        <div className="contact-item-value">{content}</div>
       </div>
     </div>
   );

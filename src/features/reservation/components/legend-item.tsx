@@ -1,5 +1,6 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
+import "../styles/index.css";
 
 interface LegendItemProps {
   color: string;
@@ -11,17 +12,17 @@ export default function LegendItem({ color, label, bordered } : LegendItemProps)
   return (
     <div
       className={cn(
-        'flex items-center gap-2 px-3 py-1.5 rounded-full shrink-0',
+        "legend-item-wrapper px-3 py-1.5 rounded-full shrink-0",
         bordered
-          ? 'border border-[#1A3A52]/20 bg-[#1A3A52]/5'
-          : 'bg-white border border-stone-100'
+          ? "border border-slate-300 bg-slate-50"
+          : "bg-white border border-stone-100"
       )}
     >
-      <div className={cn('w-2 h-2 rounded-full', color)} />
+      <div className={cn("legend-item-color", color)} />
       <span
         className={cn(
-          'text-[10px] font-bold uppercase tracking-wider',
-          bordered ? 'text-[#132538]' : 'text-stone-500'
+          "text-xs font-bold uppercase tracking-widest",
+          bordered ? "text-slate-900" : "text-stone-500"
         )}
       >
         {label}

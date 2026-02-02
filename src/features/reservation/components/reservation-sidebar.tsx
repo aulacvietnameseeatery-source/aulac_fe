@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { Calendar, Armchair, Check, Edit3, X, Clock, User, Phone, Mail, ChevronDown, ChevronUp } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import "../styles/index.css";
 
 interface ReservationSidebarProps {
   selectedTable: { id: string; name: string; guests: number } | null;
@@ -129,70 +130,76 @@ export default function ReservationSidebar({
       {/* Header */}
       <div className="bg-[#1A3A52] p-5 text-white relative overflow-hidden">
         <div className="relative z-10">
-           <h3 className="font-display text-xl font-medium tracking-wide">{t('header.title')}</h3>
-           <p className="text-white/60 text-xs mt-1">{t('header.subtitle')}</p>
+          <h3 className="sidebar-header-title">{t("header.title")}</h3>
+          <p className="sidebar-header-subtitle">{t("header.subtitle")}</p>
         </div>
         {/* Decor */}
-        <div className="absolute -right-4 -top-4 w-24 h-24 bg-white/5 rounded-full blur-2xl"></div>
+        <div className="absolute -right-4 -top-4 w-24 h-24 bg-white/5 rounded-full blur-2xl" />
       </div>
-      
+
       <div className="p-5 space-y-5">
-        
         {/* === DATE & TIME SECTION === */}
-        <div className={`relative flex flex-col bg-stone-50 p-4 rounded-xl border border-stone-100 hover:border-stone-200 transition-colors duration-300 ${isEditing ? 'border-[#DEA048] shadow-md scale-[1.02]' : 'border-stone-100'}`}>
-           
-           {/* Row: Icon + Title */}
-           <div className="flex items-center gap-3 mb-1">
-             <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center text-[#1A3A52] border border-stone-200 shadow-sm shrink-0">
-               <Calendar size={14} />
-             </div>
-             <span className="text-[10px] text-stone-400 font-bold uppercase tracking-wider flex-1">{t('datetime.label')}</span>
-             
-             {/* === BUTTONS ACTION (EDIT / SAVE) === */}
-             <div className="flex gap-2">
-                {isEditing ? (
-                  <>
-                    <button 
-                      onClick={handleCancel}
-                      className="p-1.5 rounded-md text-stone-400 hover:bg-stone-200 transition-colors cursor-pointer"
-                      title="Cancel"
-                    >
-                      <X size={16} />
-                    </button>
-                    <button 
-                      onClick={handleSave}
-                      className="flex items-center gap-1.5 bg-[#1A3A52] text-white px-4 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider shadow-sm hover:bg-[#DEA048] hover:text-[#1A3A52] hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer"
-                    >
-                      <span>{t('datetime.save')}</span>
-                    </button>
-                  </>
-                ) : (
-                  <button 
-                    onClick={() => setIsEditing(true)}
-                    className="flex items-center gap-1.5 bg-white border border-stone-200 text-[#1A3A52] px-4 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider shadow-sm hover:border-[#1A3A52] hover:bg-[#1A3A52] hover:text-white hover:-translate-y-0.5 transition-all duration-200 group cursor-pointer"
-                  >
-                    <span>{t('datetime.edit')}</span>
-                  </button>
-                )}
-             </div>
-           </div>
+        <div
+          className={`sidebar-datetime-section ${
+            isEditing ? "sidebar-datetime-section-editing" : ""
+          }`}
+        >
+          {/* Row: Icon + Title */}
+          <div className="sidebar-datetime-header">
+            <div className="sidebar-datetime-icon-box">
+              <Calendar size={14} />
+            </div>
+            <span className="sidebar-datetime-label-wrapper">
+              {t("datetime.label")}
+            </span>
 
-           {/* Content Area */}
-           <div className="pl-11">
+            {/* === BUTTONS ACTION (EDIT / SAVE) === */}
+            <div className="sidebar-datetime-actions">
               {isEditing ? (
-                <div className="grid grid-cols-1 gap-3 animate-in fade-in zoom-in duration-200">
-                  {/* Input Date */}
-                  <div className="space-y-1">
-                    <label className="text-[10px] font-bold text-stone-400 uppercase">{t('datetime.selectDate')}</label>
-                    <input 
-                      type="date" 
-                      value={tempDate}
-                      onChange={(e) => setTempDate(e.target.value)}
-                      className="w-full text-sm font-bold text-[#132538] bg-white border border-stone-300 rounded-lg px-3 py-2 focus:outline-none focus:border-[#1A3A52] focus:ring-1 focus:ring-[#1A3A52] transition-all"
-                    />
-                  </div>
+                <>
+                  <button
+                    onClick={handleCancel}
+                    className="sidebar-datetime-cancel-button"
+                    title="Cancel"
+                  >
+                    <X size={16} />
+                  </button>
+                  <button
+                    onClick={handleSave}
+                    className="sidebar-datetime-save-button"
+                  >
+                    <span>{t("datetime.save")}</span>
+                  </button>
+                </>
+              ) : (
+                <button
+                  onClick={() => setIsEditing(true)}
+                  className="sidebar-datetime-edit-button"
+                >
+                  <span>{t("datetime.edit")}</span>
+                </button>
+              )}
+            </div>
+          </div>
 
-                  {/* === CUSTOM TIME DROPDOWN === */}
+          {/* Content Area */}
+          <div className="sidebar-datetime-content">
+            {isEditing ? (
+              <div className="sidebar-date-time-input-container fade-in zoom-in animate-in">
+                {/* Input Date */}
+                <div className="sidebar-date-label-wrapper">
+                  <label className="sidebar-date-label">
+                    {t("datetime.selectDate")}
+                  </label>
+                  <input
+                    type="date"
+                    value={tempDate}
+                    onChange={(e) => setTempDate(e.target.value)}
+                    className="sidebar-date-input"
+                  />
+                </div>
+
+                {/* === CUSTOM TIME DROPDOWN === */}
                   <div className="space-y-1 relative" ref={dropdownRef}>
                       <label className="text-[10px] font-bold text-stone-400 uppercase flex justify-between">
                          {t('datetime.selectTime')}
@@ -230,97 +237,97 @@ export default function ReservationSidebar({
                       )}
                   </div>
                   {/* End Custom Dropdown */}
-                </div>
-              ) : (
-                <div className="animate-in fade-in slide-in-from-left-2 duration-300">
-                  <p className="text-base font-bold text-[#1A3A52]">{displayDate === 'Invalid Date' ? date : displayDate}</p>
-                  <p className="text-sm text-stone-500 font-medium flex items-center gap-1.5 mt-0.5">
-                    {time}
-                  </p>
-                </div>
-              )}
-           </div>
+              </div>
+            ) : (
+              <div className="sidebar-datetime-content-display fade-in animate-in slide-in-from-left-2">
+                <p className="sidebar-datetime-date">
+                  {displayDate === "Invalid Date" ? date : displayDate}
+                </p>
+                <p className="sidebar-datetime-time">{time}</p>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* === SELECTED TABLE === */}
-        <div className="flex gap-4 bg-stone-50 p-4 rounded-xl border border-stone-100 hover:border-stone-200 transition-colors">
-           <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center text-[#1A3A52] border border-stone-200 shadow-sm shrink-0">
-             <Armchair size={18} />
-           </div>
-           <div className="flex-1">
-             <span className="text-[10px] text-stone-400 font-bold uppercase tracking-wider">{t('table.label')}</span>
-             {selectedTable ? (
-               <div className="animate-in fade-in slide-in-from-bottom-1 duration-300">
-                 <p className="text-sm font-bold text-[#1A3A52] mt-0.5">{selectedTable.name}</p>
-                 <p className="text-xs text-stone-500">{t('table.zone')} • {t('table.guests', { count: selectedTable.guests })}</p>
-               </div>
-             ) : (
-               <p className="text-sm text-stone-400 italic mt-1">{t('table.empty')}</p>
-             )}
-           </div>
+        <div className="sidebar-table-section">
+          <div className="sidebar-table-icon-box">
+            <Armchair size={18} />
+          </div>
+          <div className="sidebar-table-content">
+            <span className="sidebar-table-label">{t("table.label")}</span>
+            {selectedTable ? (
+              <div className="sidebar-table-selected-display fade-in animate-in slide-in-from-bottom-1">
+                <p className="sidebar-table-name">{selectedTable.name}</p>
+                <p className="sidebar-table-info">
+                  {t("table.zone")} • {t("table.guests", { count: selectedTable.guests })}
+                </p>
+              </div>
+            ) : (
+              <p className="sidebar-table-empty">{t("table.empty")}</p>
+            )}
+          </div>
         </div>
 
-        <hr className="border-dashed border-stone-200" />
-        
+        <hr className="sidebar-form-divider" />
+
         {/* === GUEST INFORMATION FORM === */}
-        <div className="space-y-3">
-            <span className="text-[10px] text-stone-400 font-bold uppercase tracking-wider">{t('guest.label')}</span>
-            
-            {/* Name Input */}
-            <div className="relative group">
-                <User size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-400 group-focus-within:text-[#132538] transition-colors"/>
-                <input 
-                    type="text" 
-                    placeholder={t('guest.name')}
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    className="w-full bg-stone-50 border border-stone-200 rounded-lg py-2.5 pl-10 pr-3 text-sm text-[#132538] placeholder:text-stone-400 focus:outline-none focus:bg-white focus:border-[#132538] focus:ring-1 focus:ring-[#132538] transition-all"
-                />
-            </div>
+        <div className="sidebar-guest-form">
+          <span className="sidebar-section-label">{t("guest.label")}</span>
 
-            {/* Phone Input */}
-            <div className="relative group">
-                <Phone size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-400 group-focus-within:text-[#132538] transition-colors"/>
-                <input 
-                    type="tel" 
-                    placeholder={t('guest.phone')}
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    className="w-full bg-stone-50 border border-stone-200 rounded-lg py-2.5 pl-10 pr-3 text-sm text-[#132538] placeholder:text-stone-400 focus:outline-none focus:bg-white focus:border-[#132538] focus:ring-1 focus:ring-[#132538] transition-all"
-                />
-            </div>
+          {/* Name Input */}
+          <div className="sidebar-input-group group">
+            <User size={16} className="sidebar-input-icon-wrapper" />
+            <input
+              type="text"
+              placeholder={t("guest.name")}
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="sidebar-input-field"
+            />
+          </div>
 
-            {/* Email Input */}
-            <div className="relative group">
-                <Mail size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-400 group-focus-within:text-[#132538] transition-colors"/>
-                <input 
-                    type="email" 
-                    placeholder={t('guest.email')} 
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="w-full bg-stone-50 border border-stone-200 rounded-lg py-2.5 pl-10 pr-3 text-sm text-[#132538] placeholder:text-stone-400 focus:outline-none focus:bg-white focus:border-[#132538] focus:ring-1 focus:ring-[#132538] transition-all"
-                />
-            </div>
+          {/* Phone Input */}
+          <div className="sidebar-input-group group">
+            <Phone size={16} className="sidebar-input-icon-wrapper" />
+            <input
+              type="tel"
+              placeholder={t("guest.phone")}
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              className="sidebar-input-field"
+            />
+          </div>
+
+          {/* Email Input */}
+          <div className="sidebar-input-group group">
+            <Mail size={16} className="sidebar-input-icon-wrapper" />
+            <input
+              type="email"
+              placeholder={t("guest.email")}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="sidebar-input-field"
+            />
+          </div>
         </div>
 
         {/* Main Action Button */}
-        <button 
+        <button
           onClick={handleBookClick}
-          disabled={!selectedTable || isEditing || !isFormValid} 
-          className="w-full bg-[#1A3A52] text-white py-4 rounded-xl font-bold text-xs uppercase tracking-[0.15em] hover:bg-[#1a2c42] hover:shadow-lg hover:-translate-y-1 shadow-md shadow-[#132538]/20 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none transition-all duration-300 cursor-pointer"
+          disabled={!selectedTable || isEditing || !isFormValid}
+          className="sidebar-book-button"
         >
-          {isEditing ? t('action.saveFirst') : t('action.book')}
+          {isEditing ? t("action.saveFirst") : t("action.book")}
         </button>
 
         {!isFormValid && selectedTable && !isEditing && (
-            <p className="text-[10px] text-center text-red-500 font-medium animate-pulse">
-                {t('validation.missingInfo')}
-            </p>
+          <p className="sidebar-validation-message">
+            {t("validation.missingInfo")}
+          </p>
         )}
 
-        <p className="text-[10px] text-center text-stone-400 leading-relaxed px-4">
-          {t('legal')}
-        </p>
+        <p className="sidebar-legal-text px-4">{t("legal")}</p>
       </div>
     </div>
   );

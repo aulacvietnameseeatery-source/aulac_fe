@@ -1,7 +1,7 @@
 
 import { tokenStorage } from "./auth-storage";
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5275";
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://localhost:7083";
 
 type FetchOptions = RequestInit & {
     headers?: Record<string, string>;

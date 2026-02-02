@@ -64,9 +64,10 @@ export function OrderPopup({ open, onClose }: Props) {
 
           {/* Title */}
           <div className="w-full pb-2">
-            <div className="text-neutral-900 text-3xl font-normal leading-9">
-              {t.rich("dish_name", { br: () => <br /> })}
-            </div>
+            <div className="text-neutral-900 text-3xl font-normal leading-9 whitespace-pre-line">
+  {t("dish_name")}
+</div>
+
           </div>
 
           {/* Price */}

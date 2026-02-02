@@ -1,20 +1,21 @@
 import { ReceiptItem } from "../types/receipt.types";
 import { useTranslations } from "next-intl";
+import "../styles/index.css";
 
 export default function ReceiptItemList({ items }: { items: ReceiptItem[] }) {
   const t = useTranslations("OrderReceipt.Items");
 
   return (
-    <div className="px-12 py-10 space-y-6">
+    <div className="receipt-item-list">
       {items.map((item, index) => (
-        <div key={index} className="flex justify-between gap-5 text-[14px] text-[#1A3951]">
-          <div>
-            <div className="font-medium">{item.name}</div>
-            <div className="text-[10px] uppercase tracking-[1px] text-[#94A3B8]">
+        <div key={index} className="receipt-item">
+          <div className="receipt-item-left">
+            <div className="receipt-item-name">{item.name}</div>
+            <div className="receipt-item-details">
               {t("quantity")}: {item.qty} × {item.price.toFixed(2)}
             </div>
           </div>
-          <b>{item.total.toFixed(2)} CHF</b>
+          <div className="receipt-item-total">{item.total.toFixed(2)} CHF</div>
         </div>
       ))}
     </div>

@@ -1,11 +1,12 @@
 import { OrderReceipt } from "../types/receipt.types";
 import { useTranslations } from "next-intl";
+import "../styles/index.css";
 
 export default function ReceiptInfoStrip({ order }: { order: OrderReceipt }) {
   const t = useTranslations("OrderReceipt.InfoStrip");
 
   return (
-    <div className="border-y border-[#475569]/30 px-12 py-6 grid grid-cols-2 gap-y-6">
+    <div className="receipt-info-strip">
       <Info label={t("date")} value={order.date} />
       <Info label={t("orderNumber")} value={order.id} align="right" />
       <Info label={t("time")} value={order.time} />
@@ -26,9 +27,13 @@ function Info({
   highlight?: boolean;
 }) {
   return (
-    <div className={`flex flex-col gap-1 ${align === "right" && "items-end text-right"}`}>
-      <b className="text-[9px] uppercase tracking-[0.9px] text-[#64748B]">{label}</b>
-      <div className={`text-[14px] font-medium ${highlight ? "text-[#DEA048]" : "text-[#1A3951]"}`}>
+    <div
+      className={`receipt-info-item ${align === "right" ? "receipt-info-item-right" : ""}`}
+    >
+      <b className="receipt-info-label">{label}</b>
+      <div
+        className={`receipt-info-value ${highlight ? "receipt-info-value-highlight" : ""}`}
+      >
         {value}
       </div>
     </div>
