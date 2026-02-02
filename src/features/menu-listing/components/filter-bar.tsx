@@ -29,7 +29,7 @@ export function FilterBar({
     return (
         <div
             className={cn(
-                "sticky z-40 w-full border-b border-[#E8E4DF] bg-[#FAF9F6]",
+                "sticky z-40 w-full bg-[#FAF9F6]",
                 "transition-all duration-300 ease-in-out will-change-[top]",
                 // Khi scroll thì padding nhỏ lại một chút cho gọn
                 isScrolled ? "top-[80px] py-2" : "top-[270px] py-4"

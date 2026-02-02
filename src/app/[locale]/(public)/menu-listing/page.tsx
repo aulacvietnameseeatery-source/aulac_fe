@@ -4,7 +4,9 @@ import { useState, useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { useLocale } from "next-intl";
-import { AnimatePresence } from "framer-motion";
+// 👇 IMPORT QUAN TRỌNG
+import { AnimatePresence, motion } from "framer-motion";
+
 import {
     FilterBar,
     CartSummary,
@@ -17,7 +19,6 @@ import { OrderEvent } from "@/features/menu-listing/components/menu-card";
 const ELEMENTS = ["All", "Metal", "Wood", "Water", "Fire", "Earth"];
 
 export default function MenuPage() {
-    // --- STATE ---
     const [activeCourse, setActiveCourse] = useState(COURSES[0].id);
     const [activeElement, setActiveElement] = useState("All");
     const [searchQuery, setSearchQuery] = useState("");
@@ -26,22 +27,18 @@ export default function MenuPage() {
     const locale = useLocale();
 
     const [isScrolled, setIsScrolled] = useState(false);
-
-    // Cart State
     const [cartTotal, setCartTotal] = useState(0);
     const [cartCount, setCartCount] = useState(0);
     const [isCartVisible, setIsCartVisible] = useState(false);
 
     const isClickingRef = useRef(false);
 
-    // Scroll Header Detect
     useEffect(() => {
         const onScroll = () => { setIsScrolled(window.scrollY > 40); };
         window.addEventListener("scroll", onScroll, { passive: true });
         return () => window.removeEventListener("scroll", onScroll);
     }, []);
 
-    // Scroll Spy Logic
     useEffect(() => {
         const handleScrollSpy = () => {
             if (isClickingRef.current) return;
@@ -75,25 +72,17 @@ export default function MenuPage() {
         }
     };
 
-    // --- SỬA LỖI NaN TẠI ĐÂY ---
-    // Trước đây: const handleOrder = (item: MenuItem) => ... (SAI vì nhận vào là event object)
-    // Bây giờ: Nhận OrderEvent và destructure lấy item
     const handleOrder = (event: OrderEvent) => {
-        const { item } = event; // 👈 Lấy item từ sự kiện
-
-        // 1. Hiện giỏ hàng ngay lập tức
+        const { item } = event;
         if (!isCartVisible) setIsCartVisible(true);
-
-        // 2. Cập nhật số liệu
         setCartCount((prev) => prev + 1);
-        // item.price bây giờ đã có giá trị chính xác, không còn là undefined -> NaN nữa
         setCartTotal((prev) => prev + item.price);
     };
 
     const handleConfirmOrder = () => { router.push(`/${locale}/confirm-order`); };
 
     return (
-        <div className="min-h-screen bg-[#FAF9F6] relative pb-20 pt-[80px]">
+        <div className="min-h-screen bg-[#FAF9F6] relative pb-20 pt-[40px]">
 
             <FilterBar
                 categories={ELEMENTS}
@@ -108,16 +97,25 @@ export default function MenuPage() {
                 onOrder={handleOrder}
                 activeElement={activeElement}
                 searchQuery={searchQuery}
+                // 👇 SỬA ĐOẠN NÀY: Bọc Sidebar trong motion.div
                 sidebarSlot={
-                    <MenuSidebar
-                        courses={COURSES}
-                        activeCourse={activeCourse}
-                        onSelectCourse={handleCourseSelect}
-                    />
+                    <motion.div
+                        // Ban đầu: Mờ và dịch sang trái 50px
+                        initial={{ opacity: 0, x: -50 }}
+                        // Kết thúc: Hiện rõ và về vị trí 0
+                        animate={{ opacity: 1, x: 0 }}
+                        // Cấu hình: Chờ 0.2s rồi chạy trong 0.6s
+                        transition={{ delay: 0.2, duration: 0.6, ease: "easeOut" }}
+                    >
+                        <MenuSidebar
+                            courses={COURSES}
+                            activeCourse={activeCourse}
+                            onSelectCourse={handleCourseSelect}
+                        />
+                    </motion.div>
                 }
             />
 
-            {/* CART CONTAINER */}
             <div
                 id="cart-destination"
                 className="fixed bottom-[40px] right-[20px] md:bottom-[100px] md:right-[40px] z-50 pointer-events-none"
@@ -134,7 +132,6 @@ export default function MenuPage() {
                     )}
                 </AnimatePresence>
             </div>
-
         </div>
     );
 }
