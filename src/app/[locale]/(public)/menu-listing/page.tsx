@@ -1,109 +1,93 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
-import { useRouter } from "next/navigation"; // 1. Import Router
-import { useLocale } from "next-intl";       // 2. Import Locale để giữ đúng ngôn ngữ
+import { useRouter } from "next/navigation";
+import { useLocale } from "next-intl";
+// 👇 IMPORT QUAN TRỌNG
+import { AnimatePresence, motion } from "framer-motion";
+
 import {
     FilterBar,
-    MenuGrid,
     CartSummary,
-    FlyItems, FlyingItem
+    MenuSidebar
 } from "@/features/menu-listing";
+import { MenuGrid, COURSES } from "@/features/menu-listing/components/menu-grid";
 import { OrderEvent } from "@/features/menu-listing/components/menu-card";
 
-const CATEGORIES = ["All", "Appetizers", "Main Course", "Seafood", "Desserts", "Beverages", "Italian"];
+// Data cho Filter Bar
+const ELEMENTS = ["All", "Metal", "Wood", "Water", "Fire", "Earth"];
 
 export default function MenuPage() {
-    const [activeCategory, setActiveCategory] = useState("All");
+    const [activeCourse, setActiveCourse] = useState(COURSES[0].id);
+    const [activeElement, setActiveElement] = useState("All");
     const [searchQuery, setSearchQuery] = useState("");
 
-    // --- SETUP ĐIỀU HƯỚNG ---
     const router = useRouter();
-    const locale = useLocale(); // Lấy ngôn ngữ hiện tại (en hoặc fr)
+    const locale = useLocale();
 
-    // --- 1. STATE SCROLL (Logic cũ) ---
     const [isScrolled, setIsScrolled] = useState(false);
-    useEffect(() => {
-        let compact = false;
-        const onScroll = () => {
-            const y = window.scrollY;
-            if (!compact && y > 40) {
-                compact = true;
-                setIsScrolled(true);
-            } else if (compact && y < 10) {
-                compact = false;
-                setIsScrolled(false);
-            }
-        };
-        window.addEventListener("scroll", onScroll, { passive: true });
-        return () => window.removeEventListener("scroll", onScroll);
-    }, []);
-
-    // --- 2. STATE GIỎ HÀNG (Logic mới) ---
     const [cartTotal, setCartTotal] = useState(0);
     const [cartCount, setCartCount] = useState(0);
     const [isCartVisible, setIsCartVisible] = useState(false);
 
-    // State danh sách các món đang bay
-    const [flyingItems, setFlyingItems] = useState<FlyingItem[]>([]);
+    const isClickingRef = useRef(false);
 
-    // --- 3. HÀM XỬ LÝ ORDER ---
-    const handleOrder = (event: OrderEvent) => {
-        const { item, startPos } = event;
+    useEffect(() => {
+        const onScroll = () => { setIsScrolled(window.scrollY > 40); };
+        window.addEventListener("scroll", onScroll, { passive: true });
+        return () => window.removeEventListener("scroll", onScroll);
+    }, []);
 
-        // Hiện giỏ hàng nếu đang ẩn
-        if (!isCartVisible) {
-            setIsCartVisible(true);
-        }
-
-        // Tính toán đích đến (Vị trí cái lá CartSummary)
-        const cartElement = document.getElementById("cart-destination");
-        let targetX = window.innerWidth - 50; // Fallback
-        let targetY = window.innerHeight - 50; // Fallback
-
-        if (cartElement) {
-            const rect = cartElement.getBoundingClientRect();
-            targetX = rect.left + rect.width / 2;
-            targetY = rect.top + rect.height / 2;
-        }
-
-        // Tạo item bay
-        const newItem = {
-            id: Date.now(),
-            img: startPos.img,
-            startX: startPos.x,
-            startY: startPos.y,
-            targetX,
-            targetY,
+    useEffect(() => {
+        const handleScrollSpy = () => {
+            if (isClickingRef.current) return;
+            const scrollPosition = window.scrollY + 300;
+            for (const course of COURSES) {
+                const element = document.getElementById(course.id);
+                if (element) {
+                    const { offsetTop, offsetHeight } = element;
+                    if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
+                        setActiveCourse(course.id);
+                        break;
+                    }
+                }
+            }
         };
-        setFlyingItems((prev) => [...prev, newItem]);
+        window.addEventListener("scroll", handleScrollSpy);
+        return () => window.removeEventListener("scroll", handleScrollSpy);
+    }, []);
 
-        // Cập nhật tiền sau khi bay xong (0.7s)
-        setTimeout(() => {
-            setCartCount((prev) => prev + 1);
-            setCartTotal((prev) => prev + item.price);
-        }, 700);
+    const handleCourseSelect = (id: string) => {
+        isClickingRef.current = true;
+        setActiveCourse(id);
+        const element = document.getElementById(id);
+        if (element) {
+            const offset = 200;
+            const bodyRect = document.body.getBoundingClientRect().top;
+            const elementRect = element.getBoundingClientRect().top;
+            const offsetPosition = elementRect - bodyRect - offset;
+            window.scrollTo({ top: offsetPosition, behavior: "smooth" });
+            setTimeout(() => { isClickingRef.current = false; }, 1000);
+        }
     };
 
-    // Xóa item bay khi xong
-    const removeFlyingItem = (id: number) => {
-        setFlyingItems((prev) => prev.filter((i) => i.id !== id));
+    const handleOrder = (event: OrderEvent) => {
+        const { item } = event;
+        if (!isCartVisible) setIsCartVisible(true);
+        setCartCount((prev) => prev + 1);
+        setCartTotal((prev) => prev + item.price);
     };
 
-    // --- 4. HÀM CHUYỂN TRANG CONFIRM ORDER ---
-    const handleConfirmOrder = () => {
-        // Điều hướng tới /{locale}/confirm-order (VD: /en/confirm-order)
-        router.push(`/${locale}/confirm-order`);
-    };
+    const handleConfirmOrder = () => { router.push(`/${locale}/confirm-order`); };
 
     return (
-        <div className="min-h-screen bg-[#FAF9F6] relative pb-20">
+        <div className="min-h-screen bg-[#FAF9F6] relative pb-20 pt-[40px]">
 
             <FilterBar
-                categories={CATEGORIES}
-                activeCategory={activeCategory}
-                onSelect={setActiveCategory}
+                categories={ELEMENTS}
+                activeCategory={activeElement}
+                onSelect={setActiveElement}
                 isScrolled={isScrolled}
                 searchQuery={searchQuery}
                 onSearchChange={setSearchQuery}
@@ -111,33 +95,43 @@ export default function MenuPage() {
 
             <MenuGrid
                 onOrder={handleOrder}
-                activeCategory={activeCategory}
+                activeElement={activeElement}
                 searchQuery={searchQuery}
+                // 👇 SỬA ĐOẠN NÀY: Bọc Sidebar trong motion.div
+                sidebarSlot={
+                    <motion.div
+                        // Ban đầu: Mờ và dịch sang trái 50px
+                        initial={{ opacity: 0, x: -50 }}
+                        // Kết thúc: Hiện rõ và về vị trí 0
+                        animate={{ opacity: 1, x: 0 }}
+                        // Cấu hình: Chờ 0.2s rồi chạy trong 0.6s
+                        transition={{ delay: 0.2, duration: 0.6, ease: "easeOut" }}
+                    >
+                        <MenuSidebar
+                            courses={COURSES}
+                            activeCourse={activeCourse}
+                            onSelectCourse={handleCourseSelect}
+                        />
+                    </motion.div>
+                }
             />
 
-            {/* --- GIỎ HÀNG ĐỘNG --- */}
             <div
                 id="cart-destination"
-                className={cn(
-                    "fixed bottom-[40px] right-[20px] md:bottom-[250px] md:right-[40px] z-50 transition-all duration-500 ease-out transform",
-                    isCartVisible
-                        ? "translate-y-0 opacity-100 pointer-events-auto"
-                        : "translate-y-[120%] opacity-0 pointer-events-none"
-                )}
+                className="fixed bottom-[40px] right-[20px] md:bottom-[100px] md:right-[40px] z-50 pointer-events-none"
             >
-                {/* Wrapper để xử lý hover riêng */}
-                <div className="hover:translate-y-[-10px] transition-transform duration-300">
-                    <CartSummary
-                        totalPrice={cartTotal}
-                        totalItems={cartCount}
-                        onConfirm={handleConfirmOrder}
-                    />
-                </div>
+                <AnimatePresence>
+                    {isCartVisible && (
+                        <div className="pointer-events-auto hover:translate-y-[-10px] transition-transform duration-300">
+                            <CartSummary
+                                totalPrice={cartTotal}
+                                totalItems={cartCount}
+                                onConfirm={handleConfirmOrder}
+                            />
+                        </div>
+                    )}
+                </AnimatePresence>
             </div>
-
-            {/* Component hiệu ứng bay */}
-            <FlyItems items={flyingItems} onComplete={removeFlyingItem} />
-
         </div>
     );
 }

@@ -1,5 +1,6 @@
 {
   "Header": {
+    "home": "Home",
     "menu": "MENU",
     "about": "ABOUT US",
     "contact": "CONTACT",
@@ -9,12 +10,12 @@
     "slogan_2": "Saveurs du Vietnam, esprit convivial"
   },
   "Footer": {
-    "description": "Defined by excellence, driven by heritage.<br> </br>The pinnacle of Vietnamese culinary art in<br> </br>the heart of the city.",
+    "description": "Defined by excellence, driven by heritage.\nThe pinnacle of Vietnamese culinary art in\nthe heart of the city.",
     "reservations": "Reservations",
     "location": "Location",
     "open_maps": "Open in Maps",
     "newsletter": "Newsletter",
-    "newsletter_desc": "Join our circle for exclusive events and<br> </br>seasonal masterpiece previews.",
+    "newsletter_desc": "Join our circle for exclusive events and\nseasonal masterpiece previews.",
     "email_placeholder": "Email Address",
     "copyright": "© 2026 Au Lac Vietnamese Eatery. All Rights Reserved.",
     "privacy": "Privacy",
@@ -29,7 +30,7 @@
     },
     "Chef": {
       "label": "The Craftsmen",
-      "title": "Mastering the \nSoul of Taste",
+      "title": "Mastering the\nSoul of Taste",
       "chef_1_name": "Executive Chef Minh",
       "chef_1_quote": "\"Cuisine is the bridge between history and the senses. At Au Lac, we don't just cook; we curate memories through traditional spices and modern textures.\"",
       "chef_2_name": "Sous Chef Linh",
@@ -84,8 +85,7 @@
       "tag": "Chef's Masterpiece",
       "title_line_1": "Imperial Hue",
       "title_line_2": "Beef Noodle Soup",
-      "subtitle": "A culinary voyage to the Imperial City of Hue, balancing\nboldness and refinement in a single bowl."
-,
+      "subtitle": "A culinary voyage to the Imperial City of Hue, balancing\nboldness and refinement in a single bowl.",
       "reserve": "Reserve Experience",
       "share": "Share",
       "order_now": "Order Now",
@@ -395,7 +395,13 @@
       "beverages": "Beverages",
       "appetizers": "Appetizers",
       "main course": "Main Course",
-      "search_placeholder": "Search for exquisite dishes..."
+      "search_placeholder": "Search for exquisite dishes...",
+      "metal": "Metal",
+      "wood": "Wood",
+      "water": "Water",
+      "fire": "Fire",
+      "earth": "Earth",
+      "vegetarian": "Vegetarian"
     },
     "MenuGrid": {
       "title": "Fine Dining Menu",
@@ -433,7 +439,7 @@
       "quote": "\"A culinary journey begins with a single digital spark.\""
     },
     "ScanContent": {
-      "title": "Discover Our <br> </br> Selection",
+      "title": "Discover Our\nSelection",
       "subtitle": "Scan to explore our full culinary narrative on your device",
       "step_scan": "Scan",
       "step_explore": "Explore",
