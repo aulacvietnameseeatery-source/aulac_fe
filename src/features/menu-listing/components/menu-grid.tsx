@@ -96,19 +96,19 @@ export function MenuGrid({
                     <p className="mx-auto max-w-[600px] font-body text-[18px] text-[#7A7A7A] leading-[29px]">
                         {t("subtitle")}
                     </p>
-                    <div className="mt-8 flex justify-center">
-                        <Link
-                            href="/reservation"
-                            className="group flex items-center gap-2 text-[16px] font-medium text-[#1A3A52] transition-colors hover:text-[#D4A574]"
-                        >
-                            <span className="border-b border-transparent group-hover:border-[#D4A574] transition-all">
-                                {t("book_link")}
-                            </span>
-                            <span className="transition-transform duration-300 group-hover:translate-x-1">
-                                →
-                            </span>
-                        </Link>
-                    </div>
+                    {/*<div className="mt-8 flex justify-center">*/}
+                    {/*    <Link*/}
+                    {/*        href="/reservation"*/}
+                    {/*        className="group flex items-center gap-2 text-[16px] font-medium text-[#1A3A52] transition-colors hover:text-[#D4A574]"*/}
+                    {/*    >*/}
+                    {/*        <span className="border-b border-transparent group-hover:border-[#D4A574] transition-all">*/}
+                    {/*            {t("book_link")}*/}
+                    {/*        </span>*/}
+                    {/*        <span className="transition-transform duration-300 group-hover:translate-x-1">*/}
+                    {/*            →*/}
+                    {/*        </span>*/}
+                    {/*    </Link>*/}
+                    {/*</div>*/}
                 </div>
 
                 <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
