@@ -1,126 +1,111 @@
+"use client";
+
 import Link from "next/link";
 import { Facebook, Instagram, ArrowRight } from "lucide-react";
+import { useTranslations } from "next-intl";
+import { BackToTop } from "@/components/ui/back-to-top"; // Import component mới
 
-export function Footer() {
+interface FooterProps {
+    locale?: string;
+}
+
+export function Footer({ locale = "en" }: FooterProps) {
+    const t = useTranslations('Footer');
+
     return (
-        <footer className="w-full bg-[#193752] border-t border-white/5 pt-[94px] pb-[48px] px-4 md:px-[40px] xl:px-[240px]"> {/* Thêm padding 240px chuẩn thiết kế */}
-            <div className="container mx-auto max-w-[1440px]">
+        <footer className="footer-wrapper relative">
+            <div className="footer-inner">
 
-                {/* === MAIN CONTENT === */}
-                <div className="flex flex-col xl:flex-row justify-center items-start gap-12 xl:gap-[96px]">
+                {/* === MAIN CONTENT (GRID LAYOUT) === */}
+                <div className="footer-main-grid">
 
-                    {/* CỘT 1: BRAND */}
-                    <div className="flex flex-col gap-[28px] flex-1 max-w-[320px]">
-                        {/* Logo */}
+                    {/* CỘT 1: BRAND (Full width mobile) */}
+                    <div className="footer-brand-col flex flex-col gap-[20px] md:gap-[28px]">
                         <div className="flex items-center gap-3">
                             <div className="relative w-9 h-11">
                                 <div className="absolute left-[1.5px] top-[5.5px] w-[33px] h-[31.5px] bg-[#C9A961]" />
                             </div>
-                            <span className="font-display font-bold text-[24px] leading-8 tracking-[4.8px] text-white uppercase">
-                Au Lac
-              </span>
+                            <span className="footer-brand-title">
+                                An Lac
+                            </span>
                         </div>
-                        {/* Description */}
-                        <p className="font-display text-[14px] leading-[22.75px] text-white/60">
-                            Defined by excellence, driven by heritage.
-                            <br />
-                            The pinnacle of Vietnamese culinary art in
-                            <br />
-                            the heart of the city.
+                        <p className="footer-text max-w-[300px]">
+                            {t.rich('description', { br: () => <br /> })}
                         </p>
                     </div>
 
-                    {/* CỘT 2: RESERVATIONS */}
-                    <div className="flex flex-col gap-6 flex-1 min-w-[200px]">
-                        <h4 className="font-display font-bold text-[12px] leading-4 tracking-[1.2px] text-[#C9A961] uppercase">
-                            Reservations
-                        </h4>
-                        <div className="flex flex-col gap-2">
-                            <p className="font-display text-[18px] leading-7 text-white/90">
-                                +1 (555) 892 0122
-                            </p>
-                            <p className="font-display text-[18px] leading-7 text-white/90">
-                                concierge@aulac.art
-                            </p>
+                    {/* CỘT 2: RESERVATIONS (Cột trái trên mobile) */}
+                    <div className="footer-res-col flex flex-col gap-4">
+                        <h4 className="footer-heading">{t('reservations')}</h4>
+                        <div className="flex flex-col gap-0.5">
+                            <p className="footer-link">+1 (555) 892 0122</p>
+                            <p className="footer-link break-words">concierge@anlac.art</p>
                         </div>
-                        {/* Social Icons */}
-                        <div className="flex gap-4 mt-2">
-                            <div className="w-10 h-10 rounded-xl border border-white/10 flex items-center justify-center hover:border-[#C9A961] transition-colors cursor-pointer group">
-                                <Facebook size={20} className="text-white/60 group-hover:text-[#C9A961]" />
+                        <div className="flex gap-3 mt-1">
+                            {/* group ở đây để hover icon đổi màu */}
+                            <div className="social-btn group">
+                                <Facebook size={18} className="social-icon" />
                             </div>
-                            <div className="w-10 h-10 rounded-xl border border-white/10 flex items-center justify-center hover:border-[#C9A961] transition-colors cursor-pointer group">
-                                <Instagram size={20} className="text-white/60 group-hover:text-[#C9A961]" />
+                            <div className="social-btn group">
+                                <Instagram size={18} className="social-icon" />
                             </div>
                         </div>
                     </div>
 
-                    {/* CỘT 3: LOCATION */}
-                    <div className="flex flex-col gap-6 flex-1 min-w-[200px]">
-                        <h4 className="font-display font-bold text-[12px] leading-4 tracking-[1.2px] text-[#C9A961] uppercase">
-                            Location
-                        </h4>
-                        <p className="font-display text-[18px] leading-[29.25px] text-white/90">
+                    {/* CỘT 3: LOCATION (Cột phải trên mobile) */}
+                    <div className="footer-loc-col flex flex-col gap-4">
+                        <h4 className="footer-heading">{t('location')}</h4>
+                        <p className="footer-link">
                             128 Heritage Street,
                             <br />
-                            District 1, Ho Chi Minh City
+                            District 1, HCM City
                         </p>
                         <Link
                             href="https://maps.google.com"
                             target="_blank"
-                            className="font-display font-bold text-[14px] leading-5 tracking-[1.4px] text-[#C9A961] uppercase border-b border-gray-700 pb-1 hover:text-white transition-colors w-fit"
+                            className="footer-heading border-b border-gray-700 pb-1 hover:text-white transition-colors w-fit mt-1 text-[10px] md:text-[12px]"
                         >
-                            Open in Maps
+                            {t('open_maps')}
                         </Link>
                     </div>
 
-                    {/* CỘT 4: NEWSLETTER */}
-                    <div className="flex flex-col gap-6 flex-1 max-w-[288px]">
-                        <div className="flex flex-col gap-8">
-                            <h4 className="font-display font-bold text-[12px] leading-4 tracking-[1.2px] text-[#C9A961] uppercase">
-                                Newsletter
-                            </h4>
-                            <p className="font-display text-[14px] leading-5 text-white/60">
-                                Join our circle for exclusive events and
-                                <br />
-                                seasonal masterpiece previews.
+                    {/* CỘT 4: NEWSLETTER (Full width mobile) */}
+                    <div className="footer-newsletter-col flex flex-col gap-4 md:gap-6">
+                        <div className="flex flex-col gap-2 md:gap-4">
+                            <h4 className="footer-heading">{t('newsletter')}</h4>
+                            <p className="text-[13px] leading-5 text-white/50">
+                                {t.rich('newsletter_desc', { br: () => <br /> })}
                             </p>
                         </div>
-                        {/* Input Field */}
-                        <div className="flex items-center border-b border-white/20 pb-2">
+                        <div className="newsletter-input-wrapper">
                             <input
                                 type="email"
-                                placeholder="Email Address"
-                                className="bg-transparent border-none outline-none text-white/90 placeholder:text-white/30 text-sm w-full font-display focus:ring-0"
+                                placeholder={t('email_placeholder')}
+                                className="newsletter-input"
                             />
-                            <button className="text-[#C9A961] hover:text-white transition-colors">
+                            <button className="text-[#C9A961] hover:text-white transition-colors p-1">
                                 <ArrowRight size={20} />
                             </button>
                         </div>
                     </div>
                 </div>
 
-                {/* === BOTTOM BAR (COPYRIGHT) === */}
-                {/* Padding trên đã xử lý ở thẻ footer, ở đây chỉ cần border-t và margin-top */}
-                <div className="mt-[80px] border-t border-white/5 pt-[48px] flex flex-col md:flex-row justify-between items-center gap-6 md:gap-0">
-
-                    <p className="font-display font-bold text-[10px] leading-[15px] tracking-[2px] text-white/30 uppercase">
-                        © 2024 Au Lac Vietnamese Eatery. All Rights Reserved.
+                {/* === BOTTOM BAR === */}
+                <div className="footer-bottom">
+                    <p className="font-display font-bold text-[10px] tracking-[2px] text-white/30 uppercase">
+                        {t('copyright', { year: new Date().getFullYear() })}
                     </p>
 
-                    <div className="flex gap-8">
-                        <Link href="#" className="font-display font-bold text-[10px] leading-[15px] tracking-[2px] text-white/30 uppercase hover:text-[#C9A961] transition-colors">
-                            Privacy
-                        </Link>
-                        <Link href="#" className="font-display font-bold text-[10px] leading-[15px] tracking-[2px] text-white/30 uppercase hover:text-[#C9A961] transition-colors">
-                            Terms
-                        </Link>
-                        <Link href="#" className="font-display font-bold text-[10px] leading-[15px] tracking-[2px] text-white/30 uppercase hover:text-[#C9A961] transition-colors">
-                            Sitemap
-                        </Link>
+                    <div className="flex gap-4 md:gap-8">
+                        <Link href="#" className="footer-legal-link">{t('privacy')}</Link>
+                        <Link href="#" className="footer-legal-link">{t('terms')}</Link>
+                        <Link href="#" className="footer-legal-link">{t('sitemap')}</Link>
                     </div>
-
                 </div>
             </div>
+
+            {/* Nút Back To Top (Chỉ hiện trên Mobile) */}
+            <BackToTop />
         </footer>
     );
 }

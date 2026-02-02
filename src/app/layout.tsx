@@ -1,35 +1,53 @@
 import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
-import "./globals.css";
+import { NextIntlClientProvider } from "next-intl";
+import { getMessages } from "next-intl/server";
+import QueryProvider from "@/components/providers/query-provider";
+import "@/styles/globals.css";
 
-// 1. font inter cho nội dung chung
-const inter = Inter({
-    subsets: ["latin"],
-    variable: "--font-inter",
-    display: "swap",
-});
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
+const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-playfair", display: "swap" });
 
-// 2. font playfair cho tiêu đề
-const playfair = Playfair_Display({
-    subsets: ["latin"],
-    variable: "--font-playfair",
-    display: "swap",
-});
+import type { Viewport } from 'next';
+
+export const viewport: Viewport = {
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 1,
+    userScalable: false, 
+    viewportFit: 'cover',
+};
 
 export const metadata: Metadata = {
-    title: "Au Lac - Vietnamese Eatery",
+    title: "Bamee Gasstro - Vietnamese Eatery",
     description: "The pinnacle of Vietnamese culinary art.",
 };
 
-export default function RootLayout({
-                                       children,
-                                   }: Readonly<{
+export default async function RootLayout({
+                                             children,
+                                             params: { locale }
+                                         }: {
     children: React.ReactNode;
-}>) {
+    params: { locale: string };
+}) {
+    // Đảm bảo locale hợp lệ
+    //const locales = ['en', 'fr'];
+    //if (!locales.includes(locale)) notFound();
+
+    // Nhận messages để dùng cho Client Components
+    const messages = await getMessages();
+
     return (
-        <html lang="en">
+        <html lang={locale}>
+        <head>
+            <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+        </head>
         <body className={`${inter.variable} ${playfair.variable} antialiased font-body`}>
-        {children}
+        <QueryProvider>
+            <NextIntlClientProvider messages={messages} locale={locale}>
+                {children}
+            </NextIntlClientProvider>
+        </QueryProvider>
         </body>
         </html>
     );

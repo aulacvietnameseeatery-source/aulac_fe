@@ -1,0 +1,89 @@
+@reference "tailwindcss";
+
+  .receipt-container {
+    @apply p-12 pb-10 flex flex-col items-center text-center;
+  }
+
+  .receipt-title-wrapper {
+    @apply flex items-center gap-2 text-[#DEA048] mb-6;
+  }
+
+  .receipt-item-list {
+    @apply px-12 py-10 space-y-6;
+  }
+
+  .receipt-item {
+    @apply flex justify-between gap-5 text-[14px] text-[#1A3951];
+  }
+
+  .receipt-item-left {
+    @apply flex flex-col gap-1;
+  }
+
+  .receipt-info-strip {
+    @apply border-y border-[#475569]/30 px-12 py-6 grid grid-cols-2 gap-y-6;
+  }
+
+  .receipt-info-item {
+    @apply flex flex-col gap-1;
+  }
+
+  .receipt-info-item-right {
+    @apply items-end text-right;
+  }
+
+  .receipt-summary-container {
+    @apply bg-[#F8F9FA] px-6 py-6 mx-12 mb-8 border border-[#E2E8F0] rounded-sm space-y-3;
+  }
+
+  .receipt-row {
+    @apply flex justify-between text-[12px];
+  }
+
+  .receipt-total-row {
+    @apply flex justify-between items-center;
+  }
+
+  .receipt-divider {
+    @apply h-px bg-[#475569]/30 my-2;
+  }
+
+  /* Receipt Actions */
+  .receipt-actions-wrapper {
+    @apply w-full flex justify-center gap-4;
+  }
+
+  .receipt-download-button {
+    @apply flex-1 max-w-70 bg-slate-900 text-white rounded-sm shadow-lg flex items-center justify-center gap-3 py-4 hover:bg-slate-800 transition;
+  }
+
+  .receipt-print-button {
+    @apply flex-1 max-w-70 bg-white border border-slate-300 text-slate-900 rounded-sm flex items-center justify-center gap-3 py-4 hover:bg-gray-50 transition;
+  }
+
+  /* Receipt Back Link */
+  .receipt-back-link {
+    @apply flex items-center gap-2 text-slate-500 hover:text-slate-900 transition;
+  }
+
+  .receipt-back-link-icon {
+    @apply transition-transform group-hover:-translate-x-1;
+  }
+
+  .receipt-back-link-text {
+    @apply text-xs uppercase tracking-widest;
+  }
+
+  /* Receipt Payment Footer */
+  .receipt-payment-footer {
+    @apply border-t border-dashed border-slate-700 py-6 flex justify-center;
+  }
+
+  .receipt-payment-badge {
+    @apply flex items-center gap-2 px-4 py-1.5 bg-slate-800 rounded-full text-white text-xs;
+  }
+
+  .receipt-payment-text {
+    @apply uppercase tracking-widest;
+  }
+

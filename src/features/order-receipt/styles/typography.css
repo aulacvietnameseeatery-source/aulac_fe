@@ -1,0 +1,54 @@
+@reference "tailwindcss";
+
+  .receipt-title-text {
+    @apply tracking-[4.2px] uppercase text-[14px] font-bold;
+  }
+
+  .receipt-restaurant-name {
+    @apply font-serif text-[30px] text-[#1A3951];
+  }
+
+  .receipt-info-text {
+    @apply text-[11px] uppercase tracking-[1.1px] text-[#475569];
+  }
+
+  .receipt-item-name {
+    @apply font-medium;
+  }
+
+  .receipt-item-details {
+    @apply text-[10px] uppercase tracking-[1px] text-[#94A3B8];
+  }
+
+  .receipt-item-total {
+    @apply font-bold;
+  }
+
+  .receipt-info-label {
+    @apply text-[9px] uppercase tracking-[0.9px] text-[#64748B];
+  }
+
+  .receipt-info-value {
+    @apply text-[14px] font-medium text-[#1A3951];
+  }
+
+  .receipt-info-value-highlight {
+    @apply text-[#DEA048];
+  }
+
+  .receipt-row-label {
+    @apply font-medium;
+  }
+
+  .receipt-row-value {
+    @apply font-medium;
+  }
+
+  .receipt-total-label {
+    @apply text-[10px] uppercase tracking-[2px] font-bold text-[#1A3951];
+  }
+
+  .receipt-total-value {
+    @apply text-[24px] text-[#1A3951];
+  }
+

@@ -1,0 +1,57 @@
+/* Reset Password - Typography Styles */
+@reference "tailwindcss";
+
+.page-title {
+  font-family: var(--font-playfair, serif);
+  @apply text-3xl md:text-4xl font-bold text-slate-900;
+  @apply tracking-tight leading-tight;
+}
+
+.page-subtext {
+  font-family: var(--font-inter, sans-serif);
+  @apply text-xs md:text-sm text-slate-600;
+  @apply tracking-widest uppercase font-semibold mt-2;
+}
+
+.form-title {
+  font-family: var(--font-playfair, serif);
+  @apply text-2xl text-slate-900 font-bold;
+  @apply mb-2 tracking-tight;
+}
+
+.form-description {
+  font-family: var(--font-inter, sans-serif);
+  @apply text-sm text-gray-500;
+  @apply leading-normal;
+}
+
+.form-label {
+  font-family: var(--font-playfair, serif);
+  @apply text-slate-900;
+  @apply tracking-wider font-semibold text-sm;
+}
+
+.form-input-text {
+  font-family: var(--font-inter, sans-serif);
+  @apply text-sm text-slate-900;
+  @apply placeholder:text-gray-400;
+}
+
+.form-error-text {
+  @apply text-red-500 text-xs mt-1;
+}
+
+.back-link-text {
+  @apply text-slate-600 text-sm font-medium;
+  @apply hover:text-slate-900 transition-colors;
+}
+
+.success-title {
+  font-family: var(--font-display, serif);
+  @apply text-2xl text-slate-900 font-bold;
+}
+
+.success-description {
+  font-family: var(--font-inter, sans-serif);
+  @apply text-sm text-gray-500;
+}
