@@ -395,7 +395,13 @@
       "beverages": "Beverages",
       "appetizers": "Appetizers",
       "main course": "Main Course",
-      "search_placeholder": "Search for exquisite dishes..."
+      "search_placeholder": "Search for exquisite dishes...",
+      "metal": "Metal",
+      "wood": "Wood",
+      "water": "Water",
+      "fire": "Fire",
+      "earth": "Earth",
+      "vegetarian": "Vegetarian"
     },
     "MenuGrid": {
       "title": "Fine Dining Menu",

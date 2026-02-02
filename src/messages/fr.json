@@ -395,7 +395,13 @@
       "beverages": "Boissons",
       "appetizers": "Entrées",
       "main course": "Plats Principaux",
-      "search_placeholder": "Rechercher des plats exquis..."
+      "search_placeholder": "Rechercher des plats exquis...",
+      "metal": "Métal",
+      "wood": "Bois",
+      "water": "Eau",
+      "fire": "Feu",
+      "earth": "Terre",
+      "vegetarian": "Végétarien"
     },
     "MenuGrid": {
       "title": "Menu Gastronomique",
