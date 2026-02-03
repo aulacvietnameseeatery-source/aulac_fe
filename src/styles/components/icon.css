@@ -1,0 +1,344 @@
+/* Icon Palette 1 */
+.mi-qtsx {
+    mask-image: url('../../../public/icons/icon-palette-1.svg');
+    mask-repeat: no-repeat;
+    background-color: #4b5563;
+}
+.icon-danger {
+    mask-position: -249px -168px;
+    background-color: #dc2626;
+}
+.icon-warning {
+    mask-position: -188px -169px;
+    background-color: #ea580c;
+}
+
+.icon-confirm,
+.icon-info {
+    mask-position: -218px -167px;
+    background-color: #2563eb;
+}
+
+.dots-circle-horizontal {
+    mask-position: -8px -428px;
+}
+
+.icon-dashboard {
+    mask-position: -6px -7px;
+}
+
+.icon-order {
+    mask-position: -344px -86px;
+}
+
+.icon-plan {
+    mask-position: -32px -7px;
+}
+
+.icon-coordinate {
+    mask-position: -57px -7px;
+}
+
+.icon-quality-control {
+    mask-position: -110px -6px;
+}
+
+.icon-material-factory {
+    mask-position: -84px -6px;
+}
+
+.icon-work-order {
+    mask-position: -318px -6px;
+}
+
+.file-search {
+    mask-position: -136px -86px;
+}
+
+.icon-production-report {
+    mask-position: -214px -7px;
+}
+
+.icon-product-material {
+    mask-position: -136px -6px;
+}
+
+.icon-process {
+    mask-position: -162px -6px;
+}
+
+.icon-production-capacity {
+    mask-position: -189px -6px;
+}
+
+.icon-production-category {
+    mask-position: -240px -6px;
+}
+
+.icon-production-system {
+    mask-position: -266px -6px;
+}
+
+/* Icon Palette 2 */
+.mi {
+    mask-image: url('../../../public/icons/icon-palette-2.svg');
+    mask-repeat: no-repeat;
+    background-color: #4b5563;
+}
+
+.menu-wrapper-item.checked .mi {
+    background-color: #009b71;
+}
+
+.duplicate {
+    mask-position: -224px 0px;
+}
+
+.duplicate:hover {
+    background-color: #009b71;
+}
+
+.ic-help {
+    mask-position: -279px -16px;
+}
+
+.icon16.close {
+    mask-position: -96px 0px;
+}
+
+.icon20.close {
+    mask-position: -299px -16px;
+}
+
+.empty {
+    mask-position: -176px 0px;
+}
+
+.arrow-up {
+    mask-position: -512px 0px;
+}
+
+.arrow-down {
+    mask-position: -528px 0px;
+}
+
+.pin {
+    mask-position: -432px 0px;
+}
+
+.pinned {
+    mask-position: -416px 0px;
+}
+
+.icon16.unpin {
+    mask-position: -592px 0px;
+}
+
+.step-forward {
+    mask-position: -160px 0px;
+}
+
+.step-backward {
+    mask-position: -143px 0px;
+}
+
+.angle-left {
+    mask-position: -48px 0px;
+}
+
+.angle-right {
+    mask-position: -64px 0px;
+}
+
+.angle-down {
+    mask-position: -202px -18px;
+}
+
+.filter--default {
+    mask-position: -544px 0px;
+}
+
+.filter--active {
+    mask-position: -720px 0px;
+}
+
+.pencil {
+    mask-position: -271px 0px;
+
+}
+
+.pencil:hover {
+    background-color: #009b71;
+}
+
+.feature-more-blue:hover {
+    background-color: #009b71;
+}
+
+.feature-more-blue {
+    mask-position: -288px 0px;
+}
+
+.reload {
+    mask-position: -112px 0px;
+}
+
+.trash {
+    mask-position: -208px 0px;
+}
+
+.icon16.active {
+    mask-position: -192px 0px;
+}
+
+.inactive {
+    mask-position: -176px 0px;
+}
+
+.add-white {
+    mask-position: -80px 0px;
+    background-color: white;
+}
+
+.search {
+    mask-position: 0px 0px;
+}
+
+.icon-collapse-left {
+    mask-position: -140px -16px;
+}
+
+.icon-collapse-right {
+    mask-position: -160px -16px;
+}
+
+.dropdown-icon {
+    transition: transform 0.3s ease;
+    background-color: #9ca3af;
+    mask-position: -200px -16px;
+}
+
+.icon-arrow-right {
+    mask-position: -220px -16px;
+    background-color: #9ca3af;
+}
+
+.logo-menu {
+    mask-position: 0px -35px;
+    cursor: pointer;
+}
+
+.ic-chevron-down {
+    mask-position: -32px 0px;
+}
+
+.ic-bell {
+    mask-position: -24px -36px;
+}
+
+.ic-question-circle {
+    mask-position: -48px -36px;
+}
+
+/* Icon Palette 3 */
+.mi-awh {
+    mask-image: url('../../../public/icons/icon-palette-3.svg');
+    mask-repeat: no-repeat;
+    -webkit-mask-repeat: no-repeat;
+    background-color: #4b5563;
+}
+
+.download-status {
+    mask-position: -744px -36px;
+}
+
+/* Other Icons */
+.ic-package-2 {
+    background: url(/public/icons/ic-package.svg) no-repeat;
+}
+
+.icon16.ic-time {
+    mask-image: url(/public/icons/ic-time.svg);
+}
+
+.select-checked {
+    width: 10px;
+    height: 5.67px;
+    border-width: 0 0 1px 1px;
+    border-style: solid;
+    border-color: #009b71;
+    transform: translateY(-2px) rotate(-45deg);
+    display: none;
+    margin-left: auto;
+}
+
+.menu-wrapper-item.checked .select-checked {
+    display: block;
+}
+
+.ic-add-friend {
+    position: relative;
+    background-image: url(/public/icons/ic-add-friend.svg);
+    width: 32px;
+    height: 32px;
+    border-radius: 16px;
+    background-position: center;
+    background-size: 24px;
+    background-repeat: no-repeat;
+}
+
+.ic-acknowledge {
+    width: 32px;
+    height: 32px;
+    margin: 0px 3px 0px 0px;
+    position: relative;
+    border-radius: 16px;
+    background-position: center;
+    background-size: 24px;
+    background-repeat: no-repeat;
+    overflow: unset;
+    cursor: pointer;
+    background-image: url(../../../public/icons/ic-knowleged.svg);
+}
+
+
+/* Icon Sizes */
+.icon16 {
+    height: 16px;
+    width: 16px;
+    min-height: 16px;
+    min-width: 16px;
+    position: relative;
+}
+
+.icon20 {
+    height: 20px;
+    width: 20px;
+    min-height: 20px;
+    min-width: 20px;
+    position: relative;
+}
+
+.icon24 {
+    height: 24px;
+    width: 24px;
+    min-height: 24px;
+    min-width: 24px;
+    position: relative;
+}
+
+.icon.left {
+    margin: 0 4px 0 0;
+}
+
+.icon16.red {
+    background-color: #dc2626 !important;
+}
+
+.icon16.green {
+    background-color: #16a34a !important;
+}
+
+.disabled-icon {
+    background-color: #9ca3af;
+}
