@@ -30,20 +30,20 @@ async function http<T>(path: string, options?: FetchOptions): Promise<T> {
             // Try to parse error response from backend
             const errorBody = await response.json().catch(() => ({}));
             const errorMessage = errorBody.userMessage || errorBody.message || `HTTP Error: ${response.status}`;
-            
+
             // Handle 401 Unauthorized - only redirect if user had a token (session expired)
             // Don't redirect on login failures (when there's no token)
             if (response.status === 401) {
                 const hadToken = !!token; // Check if there was a token before this request
                 tokenStorage.clearAuth();
-                
+
                 // Only redirect if user was previously authenticated (had token)
                 // and NOT on the login page
                 if (hadToken && typeof window !== "undefined" && !window.location.pathname.includes('/login')) {
                     window.location.href = "/login";
                 }
             }
-            
+
             throw new Error(errorMessage);
         }
 
@@ -67,14 +67,14 @@ export const api = {
         http<T>(path, { ...options, method: "DELETE" }),
 
     post: <T, B = unknown>(
-    path: string,
-    body: B,
-    options?: FetchOptions
-  ) =>
-    http<T>(path, {
-      ...options,
-      method: "POST",
-      body: JSON.stringify(body),
-    }),
+        path: string,
+        body: B,
+        options?: FetchOptions
+    ) =>
+        http<T>(path, {
+            ...options,
+            method: "POST",
+            body: JSON.stringify(body),
+        }),
 
 };
