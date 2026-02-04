@@ -49,7 +49,7 @@ export function AdminSidebar() {
   };
 
   return (
-    <div className="w-60 h-screen bg-[#18312E] flex flex-col fixed left-0 top-0">
+    <div className="w-60 h-full bg-[#18312E] flex flex-col relative">
       {/* Logo Section */}
       <div className="px-8 py-4 flex flex-col items-center">
         <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center mb-1">
