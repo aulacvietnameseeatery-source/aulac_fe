@@ -1,6 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import { Dish } from "../types";
 
 type CompositionItem = {
   title: string;
@@ -9,7 +10,11 @@ type CompositionItem = {
   img: string;
 };
 
-export function DishComposition() {
+type DishCompositionProps = {
+  dish: Dish;
+};
+
+export function DishComposition({ dish }: DishCompositionProps) {
   const t = useTranslations("DishDetails.Composition");
 
   const COMPOSITION: CompositionItem[] = [
@@ -62,23 +67,27 @@ export function DishComposition() {
       {/* Stats */}
       <div className="mt-8 border-t border-slate-200 pt-6 md:mt-12 md:pt-8">
         <div className="grid grid-cols-2 gap-x-6 gap-y-4 md:gap-x-10 md:gap-y-6">
-          <div>
-            <div className="text-xs uppercase tracking-wide text-gray-500">
-              {t("stat_prep")}
+          {dish.prepTimeMinutes && (
+            <div>
+              <div className="text-xs uppercase tracking-wide text-gray-500">
+                {t("stat_prep")}
+              </div>
+              <div className="mt-1 text-base font-medium text-neutral-900">
+                {dish.prepTimeMinutes} min
+              </div>
             </div>
-            <div className="mt-1 text-base font-medium text-neutral-900">
-              {t("stat_prep_val")}
-            </div>
-          </div>
+          )}
 
-          <div>
-            <div className="text-xs uppercase tracking-wide text-gray-500">
-              {t("stat_cal")}
+          {dish.calories && (
+            <div>
+              <div className="text-xs uppercase tracking-wide text-gray-500">
+                {t("stat_cal")}
+              </div>
+              <div className="mt-1 text-base font-medium text-neutral-900">
+                {dish.calories} kcal
+              </div>
             </div>
-            <div className="mt-1 text-base font-medium text-neutral-900">
-              {t("stat_cal_val")}
-            </div>
-          </div>
+          )}
 
           <div>
             <div className="text-xs uppercase tracking-wide text-gray-500">
@@ -98,6 +107,18 @@ export function DishComposition() {
             </div>
           </div>
         </div>
+
+        {/* Price */}
+        {dish.price && (
+          <div className="mt-6 border-t border-slate-200 pt-6">
+            <div className="flex items-center justify-between">
+              <div className="text-xs uppercase tracking-wide text-gray-500">Price</div>
+              <div className="text-2xl font-bold text-blue-800">
+                ${dish.price.toFixed(2)}
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </aside>
   );

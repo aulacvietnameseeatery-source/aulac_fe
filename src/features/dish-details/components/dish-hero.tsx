@@ -1,20 +1,25 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import { Dish } from "../types";
 
 type DishHeroProps = {
+  dish: Dish;
   onOrderNow: () => void;
 };
 
-export function DishHero({ onOrderNow }: DishHeroProps) {
+export function DishHero({ dish, onOrderNow }: DishHeroProps) {
   const t = useTranslations("DishDetails.Hero");
+  
+  // Temporarily use fixed image (imageUrls from API available but not used yet)
+  const heroImage = "/images/dish-detail/dish-hero/dish-hero.png";
 
   return (
     <section className="mx-auto w-full max-w-[1200px] overflow-hidden px-0 pt-6 md:px-4 md:pt-10">
       <div className="relative h-[580px] overflow-hidden rounded-none shadow-[0px_8px_10px_-6px_rgba(0,0,0,0.10)] shadow-xl md:h-[561px] md:rounded-2xl">
         <img
-          src="/images/dish-detail/dish-hero/dish-hero.png"
-          alt="Dish hero"
+          src={heroImage}
+          alt={dish.dishName}
           className="absolute left-0 top-[-80px] h-full w-full object-cover md:top-[-460px] md:h-[1045px]"
         />
 
@@ -23,25 +28,20 @@ export function DishHero({ onOrderNow }: DishHeroProps) {
 
         {/* Tag */}
         <div className="absolute left-4 top-16 rounded-full bg-blue-800/80 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-white backdrop-blur-[2px] md:left-16 md:top-[200px] md:px-4 md:py-1.5 md:text-xs">
-          {t("tag")}
+          {dish.categoryName || t("tag")}
         </div>
 
         {/* Title */}
         <h1 className="absolute left-4 right-4 top-[270px] max-w-[520px] text-3xl font-medium leading-[36px] text-white
                md:left-16 md:top-[240px] md:max-w-[820px] md:text-6xl md:leading-[68px]
                lg:max-w-[920px] lg:text-7xl lg:leading-[76px]">
-          <span className="block">{t("title_line_1")}</span>
-          <span className="block">{t("title_line_2")}</span>
+          {dish.dishName}
         </h1>
-
 
         {/* Subtitle */}
         <p className="absolute left-4 right-4 top-[370px] max-w-[380px] text-sm font-light leading-5 text-white/90 md:left-16 md:top-[400px] md:max-w-[520px] md:text-xl md:leading-7">
-          {t.rich("subtitle", {
-            br: () => <br />
-          })}
+          {dish.slogan || dish.shortDescription || t.rich("subtitle", { br: () => <br /> })}
         </p>
-
 
         {/* Buttons */}
         <div className="absolute left-4 right-4 top-[450px] flex flex-row gap-2 md:left-16 md:right-auto md:top-[488px] md:gap-3">

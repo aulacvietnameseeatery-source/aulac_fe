@@ -1,9 +1,19 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import { Dish } from "../types";
 
-export function DishNarrative() {
+type DishNarrativeProps = {
+  dish: Dish;
+};
+
+export function DishNarrative({ dish }: DishNarrativeProps) {
   const t = useTranslations("DishDetails.Narrative");
+
+  // Use real description or fallback to translation
+  const description = dish.description || t("paragraph_1");
+  const firstChar = description.charAt(0);
+  const restText = description.substring(1);
 
   return (
     <div>
@@ -14,23 +24,39 @@ export function DishNarrative() {
       </div>
 
       <h2 className="mt-4 text-2xl leading-8 text-neutral-900 md:mt-6 md:text-3xl md:leading-9 lg:text-4xl lg:leading-10">
-        {t.rich("title", { br: () => <br /> })}
+        {dish.slogan || t.rich("title", { br: () => <br /> })}
       </h2>
 
       <div className="mt-4 text-base leading-6 text-gray-600 md:mt-6 md:text-lg md:leading-7">
-        <span className="mr-2 inline-block align-top text-xl md:text-2xl">D</span>
-        {t("paragraph_1").substring(1)}
+        <span className="mr-2 inline-block align-top text-xl md:text-2xl">{firstChar}</span>
+        {restText}
       </div>
 
-      <p className="mt-4 text-base leading-6 text-gray-600 md:mt-6 md:text-lg md:leading-7">
-        {t("paragraph_2")}
-      </p>
+      {dish.calories && (
+        <div className="mt-4 flex items-center gap-2 text-sm text-gray-600">
+          <span className="font-semibold">Calories:</span>
+          <span>{dish.calories} kcal</span>
+        </div>
+      )}
 
-      <p className="mt-4 text-base leading-6 text-gray-600 md:mt-6 md:text-lg md:leading-7">
-        {t("paragraph_3")}
-      </p>
+      {(dish.prepTimeMinutes || dish.cookTimeMinutes) && (
+        <div className="mt-2 flex items-center gap-4 text-sm text-gray-600">
+          {dish.prepTimeMinutes && (
+            <div className="flex items-center gap-2">
+              <span className="font-semibold">Prep Time:</span>
+              <span>{dish.prepTimeMinutes} min</span>
+            </div>
+          )}
+          {dish.cookTimeMinutes && (
+            <div className="flex items-center gap-2">
+              <span className="font-semibold">Cook Time:</span>
+              <span>{dish.cookTimeMinutes} min</span>
+            </div>
+          )}
+        </div>
+      )}
 
-      {/* Pairing card */}
+      {/* Pairing card - keep as UI only for now */}
       <div className="relative mt-8 overflow-hidden rounded-xl bg-white shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] outline outline-1 outline-offset-[-1px] outline-slate-200 md:mt-10">
         <div className="p-4 md:p-6 lg:p-8">
           <div className="flex flex-col items-start gap-4 md:flex-row md:gap-5">

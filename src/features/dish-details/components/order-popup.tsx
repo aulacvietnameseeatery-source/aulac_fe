@@ -2,13 +2,15 @@
 
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
+import { Dish } from "../types";
 
 type Props = {
   open: boolean;
   onClose: () => void;
+  dish: Dish;
 };
 
-export function OrderPopup({ open, onClose }: Props) {
+export function OrderPopup({ open, onClose, dish }: Props) {
   const t = useTranslations("OrderPopup");
   const [qty, setQty] = useState(1);
 
