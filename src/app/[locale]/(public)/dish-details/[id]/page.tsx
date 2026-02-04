@@ -26,7 +26,11 @@ export default function DishDetailUI1() {
             <DishBreadcrumb />
 
             {/* Section 1 */}
-            <DishHero onOrderNow={() => setOpenPopup(true)} />
+            <DishHero
+                onOrderNow={() => setOpenPopup(true)}
+                cloudName="dkstc8tkg"        // Lấy từ Asset Home của bạn
+                productTag="tiramisu_test"   // Cái Tag bạn vừa gắn cho 72 ảnh
+            />
 
             {/* Section 2 */}
             <section className="mx-auto w-full max-w-[1200px] px-3 pb-12 pt-6 md:px-4 md:pb-16 md:pt-8 lg:pb-20 lg:pt-10">
