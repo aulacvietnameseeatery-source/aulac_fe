@@ -10,9 +10,9 @@ import {
     FilterBar,
     CartSummary,
     MenuSidebar
-} from "@/features/menu-listing";
-import { MenuGrid, COURSES } from "@/features/menu-listing/components/menu-grid";
-import { OrderEvent } from "@/features/menu-listing/components/menu-card";
+} from "@/features/customer/menu-listing";
+import { MenuGrid, COURSES } from "@/features/customer/menu-listing/components/menu-grid";
+import { OrderEvent } from "@/features/customer/menu-listing/components/menu-card";
 
 // Data cho Filter Bar
 const ELEMENTS = ["All", "Metal", "Wood", "Water", "Fire", "Earth"];
