@@ -4,7 +4,6 @@ import { useState, useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { useLocale } from "next-intl";
-// 👇 IMPORT QUAN TRỌNG
 import { AnimatePresence, motion } from "framer-motion";
 
 import {
