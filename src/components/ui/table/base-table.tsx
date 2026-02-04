@@ -11,7 +11,7 @@ import type { FilterState } from '@/hooks/table/useTableFiltering';
 import { cn } from '@/lib/utils';
 import { NoDataState } from '@/components/ui/table/no-data-state';
 import { TablePagination } from '@/components/ui/table/table-pagination';
-import { Dropdown } from '@/components/ui/dropdown';
+import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover';
 import { FilterPopup } from '@/components/ui/table/filter-popup';
 import '@/styles/components/icon.css';
 import '@/styles/components/table.css';
@@ -160,8 +160,17 @@ export function BaseTable<T>({
     const [currentPage, setCurrentPage] = useState(1);
     const [sortState, setSortState] = useState<SortStateItem[]>([]);
     const [pinnedColumns, setPinnedColumns] = useState<string[]>([]);
-    const [openFilterField, setOpenFilterField] = useState<string | null>(null);
-    const [openSortField, setOpenSortField] = useState<string | null>(null);
+    
+    /**
+     * Single popover state - tracks which column and type (filter/sort) is open
+     * This ensures only one popover is open at a time across all columns
+     * @property {string} field - The column field that has an active popover
+     * @property {'filter' | 'sort'} type - The type of popover (filter or sort menu)
+     */
+    const [activePopover, setActivePopover] = useState<{
+        field: string;
+        type: 'filter' | 'sort';
+    } | null>(null);
 
     const searchDebounceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -298,18 +307,48 @@ export function BaseTable<T>({
                 return next;
             });
         }
+        setActivePopover(null); // Close popover after sorting
         emitDataChange();
     }, [emitDataChange]);
+
+    // ========== POPOVER CONTROL HANDLERS ==========
+    /**
+     * Opens the filter popover for a specific column
+     * Automatically closes any other open popovers
+     */
+    const openFilterPopover = useCallback((field: string) => {
+        setActivePopover({ field, type: 'filter' });
+    }, []);
+
+    /**
+     * Opens the sort popover for a specific column
+     * Automatically closes any other open popovers
+     */
+    const openSortPopover = useCallback((field: string) => {
+        setActivePopover({ field, type: 'sort' });
+    }, []);
+
+    /**
+     * Checks if a specific popover is currently open
+     * @param field - The column field to check
+     * @param type - The type of popover to check ('filter' or 'sort')
+     * @returns true if the specified popover is open
+     */
+    const isPopoverOpen = useCallback((field: string, type: 'filter' | 'sort') => {
+        return activePopover?.field === field && activePopover?.type === type;
+    }, [activePopover]);
 
     const handleApplyFilter = useCallback((field: string, state: FilterState) => {
         applyFilter(field, state);
         setCurrentPage(1);
+        setActivePopover(null); // Close popover after applying
         emitDataChange();
     }, [applyFilter, emitDataChange]);
 
     const handleClearFilter = useCallback((field: string) => {
         clearFilter(field);
         setCurrentPage(1);
+        setActivePopover(null); // Close popover after clearing
         emitDataChange();
     }, [clearFilter, emitDataChange]);
 
@@ -518,51 +557,143 @@ export function BaseTable<T>({
                                                         style={columnStyles[column.field]}
                                                     >
                                                         <div className="ms-th-content flex-row">
-                                                            <div className="th-trigger" role="button" tabIndex={0}>
-                                                                <div className="menu-wrapper">
-                                                                    <div className="menu-button-container">
-                                                                        <div className="ms-th-title flex flex-between">
-                                                                            <div className="w-full">
-                                                                                <div
-                                                                                    className={cn(
-                                                                                        "caption_arrow_wrap",
-                                                                                        column.align === 'center' ? 'justify-center' :
-                                                                                            column.align === 'right' ? 'justify-end' :
-                                                                                                'justify-start'
-                                                                                    )}
-                                                                                    style={{ textAlign: column.align || 'left' }}
-                                                                                >
-                                                                                    {isPinned(column) && (
-                                                                                        <div className="mi icon16 pinned"></div>
-                                                                                    )}
-                                                                                    <span className="caption-btn flex">
-                                                                                        {renderHeader ? renderHeader(column.field, column) : column.header}
-                                                                                    </span>
-                                                                                    {getSortDirection(column.field) === 'asc' && (
-                                                                                        <div className="ms-th-title-icon justify-center">
-                                                                                            <div className="mi icon16 arrow-up"></div>
+                                                            {/* Sort Menu with Popover - Wraps entire header for clickable area */}
+                                                            <Popover
+                                                                open={isPopoverOpen(column.field, 'sort')}
+                                                                onOpenChange={(open: boolean) => {
+                                                                    if (open) {
+                                                                        openSortPopover(column.field);
+                                                                    } else {
+                                                                        setActivePopover(null);
+                                                                    }
+                                                                }}
+                                                            >
+                                                                <PopoverTrigger asChild>
+                                                                    <div className="th-trigger" role="button" tabIndex={0}>
+                                                                        <div className="menu-wrapper">
+                                                                            <div className="menu-button-container">
+                                                                                <div className="ms-th-title flex flex-between">
+                                                                                    <div className="w-full">
+                                                                                        <div
+                                                                                            className={cn(
+                                                                                                "caption_arrow_wrap",
+                                                                                                column.align === 'center' ? 'justify-center' :
+                                                                                                    column.align === 'right' ? 'justify-end' :
+                                                                                                        'justify-start'
+                                                                                            )}
+                                                                                            style={{ textAlign: column.align || 'left' }}
+                                                                                        >
+                                                                                            {isPinned(column) && (
+                                                                                                <div className="mi icon16 pinned"></div>
+                                                                                            )}
+                                                                                            <span className="caption-btn flex">
+                                                                                                {renderHeader ? renderHeader(column.field, column) : column.header}
+                                                                                            </span>
+                                                                                            {getSortDirection(column.field) === 'asc' && (
+                                                                                                <div className="ms-th-title-icon justify-center">
+                                                                                                    <div className="mi icon16 arrow-up"></div>
+                                                                                                </div>
+                                                                                            )}
+                                                                                            {getSortDirection(column.field) === 'desc' && (
+                                                                                                <div className="ms-th-title-icon justify-center">
+                                                                                                    <div className="mi icon16 arrow-down"></div>
+                                                                                                </div>
+                                                                                            )}
                                                                                         </div>
-                                                                                    )}
-                                                                                    {getSortDirection(column.field) === 'desc' && (
-                                                                                        <div className="ms-th-title-icon justify-center">
-                                                                                            <div className="mi icon16 arrow-down"></div>
-                                                                                        </div>
-                                                                                    )}
+                                                                                    </div>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
                                                                     </div>
-                                                                </div>
-                                                            </div>
+                                                                </PopoverTrigger>
+                                                                <PopoverContent align="start" className="p-0 w-auto">
+                                                                    <ul className="menu-wrapper-menu" role="menu">
+                                                                        {column.sortable !== false && (
+                                                                            <>
+                                                                                <li
+                                                                                    className="menu-wrapper-item flex menu-wrapper-item-icon"
+                                                                                    role="menuitem"
+                                                                                    tabIndex={-1}
+                                                                                    onClick={() => handleSort(column.field, null)}
+                                                                                >
+                                                                                    <div className="mi icon16 menu-item-ic empty"></div>
+                                                                                    <div className="menu-item-content">Không sắp xếp</div>
+                                                                                </li>
+                                                                                <li
+                                                                                    className={cn(
+                                                                                        "menu-wrapper-item flex menu-wrapper-item-icon",
+                                                                                        getSortDirection(column.field) === 'asc' && 'checked'
+                                                                                    )}
+                                                                                    role="menuitem"
+                                                                                    tabIndex={-1}
+                                                                                    onClick={() => handleSort(column.field, 'asc')}
+                                                                                >
+                                                                                    <div className="mi icon16 menu-item-ic arrow-up"></div>
+                                                                                    <div className="menu-item-content">Tăng dần</div>
+                                                                                </li>
+                                                                                <li
+                                                                                    className={cn(
+                                                                                        "menu-wrapper-item flex menu-wrapper-item-icon",
+                                                                                        getSortDirection(column.field) === 'desc' && 'checked'
+                                                                                    )}
+                                                                                    role="menuitem"
+                                                                                    tabIndex={-1}
+                                                                                    onClick={() => handleSort(column.field, 'desc')}
+                                                                                >
+                                                                                    <div className="mi icon16 menu-item-ic arrow-down"></div>
+                                                                                    <div className="menu-item-content">Giảm dần</div>
+                                                                                </li>
+                                                                                <div className="menu-border"></div>
+                                                                            </>
+                                                                        )}
+                                                                        {column.pinnable !== false && (
+                                                                            <>
+                                                                                <li
+                                                                                    className={cn(
+                                                                                        "menu-wrapper-item flex menu-wrapper-item-icon",
+                                                                                        pinnedColumns.includes(column.field) && 'checked'
+                                                                                    )}
+                                                                                    role="menuitem"
+                                                                                    tabIndex={-1}
+                                                                                    onClick={() => togglePin(column.field)}
+                                                                                >
+                                                                                    <div className="mi icon16 menu-item-ic pin"></div>
+                                                                                    <div className="menu-item-content">Ghim cột</div>
+                                                                                </li>
+                                                                                <li
+                                                                                    className="menu-wrapper-item flex menu-wrapper-item-icon"
+                                                                                    role="menuitem"
+                                                                                    tabIndex={-1}
+                                                                                    onClick={() => togglePin(column.field)}
+                                                                                >
+                                                                                    <div className="mi icon16 menu-item-ic unpin"></div>
+                                                                                    <div className="menu-item-content">Bỏ ghim cột</div>
+                                                                                </li>
+                                                                            </>
+                                                                        )}
+                                                                    </ul>
+                                                                </PopoverContent>
+                                                            </Popover>
 
+                                                            {/* Filter Button with Popover */}
                                                             <div className="ms-th-title-icon justify-center">
                                                                 {column.filterType && (
-                                                                    <Dropdown
-                                                                        open={openFilterField === column.field}
-                                                                        onOpenChange={(open) => setOpenFilterField(open ? column.field : null)}
-                                                                        align="end"
-                                                                        trigger={
-                                                                            <button className="filter-btn" type="button">
+                                                                    <Popover
+                                                                        open={isPopoverOpen(column.field, 'filter')}
+                                                                        onOpenChange={(open: boolean) => {
+                                                                            if (open) {
+                                                                                openFilterPopover(column.field);
+                                                                            } else {
+                                                                                setActivePopover(null);
+                                                                            }
+                                                                        }}
+                                                                    >
+                                                                        <PopoverTrigger asChild>
+                                                                            <button 
+                                                                                className="filter-btn" 
+                                                                                type="button"
+                                                                                onClick={(e) => e.stopPropagation()}
+                                                                            >
                                                                                 <div
                                                                                     className={cn(
                                                                                         "mi icon16",
@@ -570,102 +701,19 @@ export function BaseTable<T>({
                                                                                     )}
                                                                                 ></div>
                                                                             </button>
-                                                                        }
-                                                                    >
-                                                                        <FilterPopup
-                                                                            column={column}
-                                                                            filterState={getFilterState(column)}
-                                                                            onApply={(state) => handleApplyFilter(column.field, state)}
-                                                                            onClear={() => handleClearFilter(column.field)}
-                                                                            onClose={() => setOpenFilterField(null)}
-                                                                        />
-                                                                    </Dropdown>
+                                                                        </PopoverTrigger>
+                                                                        <PopoverContent align="end" className="p-0">
+                                                                            <FilterPopup
+                                                                                column={column}
+                                                                                filterState={getFilterState(column)}
+                                                                                onApply={(state) => handleApplyFilter(column.field, state)}
+                                                                                onClear={() => handleClearFilter(column.field)}
+                                                                                onClose={() => setActivePopover(null)}
+                                                                            />
+                                                                        </PopoverContent>
+                                                                    </Popover>
                                                                 )}
                                                             </div>
-
-                                                            <Dropdown
-                                                                open={openSortField === column.field}
-                                                                onOpenChange={(open) => setOpenSortField(open ? column.field : null)}
-                                                                align="start"
-                                                                trigger={
-                                                                    <div className="th-trigger" role="button" tabIndex={0} />
-                                                                }
-                                                            >
-                                                                <ul className="menu-wrapper-menu" role="menu">
-                                                                    {column.sortable !== false && (
-                                                                        <>
-                                                                            <li
-                                                                                className="menu-wrapper-item flex menu-wrapper-item-icon"
-                                                                                role="menuitem"
-                                                                                tabIndex={-1}
-                                                                                onClick={() => {
-                                                                                    handleSort(column.field, null);
-                                                                                    setOpenSortField(null);
-                                                                                }}
-                                                                            >
-                                                                                <div className="mi icon16 menu-item-ic empty"></div>
-                                                                                <div className="menu-item-content">Không sắp xếp</div>
-                                                                            </li>
-                                                                            <li
-                                                                                className={cn(
-                                                                                    "menu-wrapper-item flex menu-wrapper-item-icon",
-                                                                                    getSortDirection(column.field) === 'asc' && 'checked'
-                                                                                )}
-                                                                                role="menuitem"
-                                                                                tabIndex={-1}
-                                                                                onClick={() => {
-                                                                                    handleSort(column.field, 'asc');
-                                                                                    setOpenSortField(null);
-                                                                                }}
-                                                                            >
-                                                                                <div className="mi icon16 menu-item-ic arrow-up"></div>
-                                                                                <div className="menu-item-content">Tăng dần</div>
-                                                                            </li>
-                                                                            <li
-                                                                                className={cn(
-                                                                                    "menu-wrapper-item flex menu-wrapper-item-icon",
-                                                                                    getSortDirection(column.field) === 'desc' && 'checked'
-                                                                                )}
-                                                                                role="menuitem"
-                                                                                tabIndex={-1}
-                                                                                onClick={() => {
-                                                                                    handleSort(column.field, 'desc');
-                                                                                    setOpenSortField(null);
-                                                                                }}
-                                                                            >
-                                                                                <div className="mi icon16 menu-item-ic arrow-down"></div>
-                                                                                <div className="menu-item-content">Giảm dần</div>
-                                                                            </li>
-                                                                            <div className="menu-border"></div>
-                                                                        </>
-                                                                    )}
-                                                                    {column.pinnable !== false && (
-                                                                        <>
-                                                                            <li
-                                                                                className={cn(
-                                                                                    "menu-wrapper-item flex menu-wrapper-item-icon",
-                                                                                    pinnedColumns.includes(column.field) && 'checked'
-                                                                                )}
-                                                                                role="menuitem"
-                                                                                tabIndex={-1}
-                                                                                onClick={() => togglePin(column.field)}
-                                                                            >
-                                                                                <div className="mi icon16 menu-item-ic pin"></div>
-                                                                                <div className="menu-item-content">Ghim cột</div>
-                                                                            </li>
-                                                                            <li
-                                                                                className="menu-wrapper-item flex menu-wrapper-item-icon"
-                                                                                role="menuitem"
-                                                                                tabIndex={-1}
-                                                                                onClick={() => togglePin(column.field)}
-                                                                            >
-                                                                                <div className="mi icon16 menu-item-ic unpin"></div>
-                                                                                <div className="menu-item-content">Bỏ ghim cột</div>
-                                                                            </li>
-                                                                        </>
-                                                                    )}
-                                                                </ul>
-                                                            </Dropdown>
 
                                                             <div
                                                                 className="ms-resize"
@@ -754,7 +802,7 @@ export function BaseTable<T>({
                                                                     key={column.field}
                                                                     className={cn(
                                                                         "ms-td ms-col-td",
-                                                                        isPinned(column) && "lock"
+                                                                        isPinned(column) && "lock sticky"
                                                                     )}
                                                                     style={columnStyles[column.field]}
                                                                     onDoubleClick={(e) => {
