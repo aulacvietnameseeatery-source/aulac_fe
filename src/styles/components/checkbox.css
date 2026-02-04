@@ -1,0 +1,118 @@
+.ms-checkbox {
+    position: relative;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px
+}
+
+.ms-checkbox-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative
+}
+
+.ms-checkbox-container {
+    top: 0;
+    left: 0;
+    transition: all .2s ease;
+    transition-timing-function: cubic-bezier(.4, 0, .2, 1);
+    cursor: pointer;
+    position: relative;
+    display: block;
+    width: 16px;
+    height: 16px;
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    background-color: #fff;
+    border: 1.5px solid #D1D5DB
+}
+
+.ms-checkbox-container:hover {
+    border: 1.5px solid #009b71;
+    border-radius: 2px
+}
+
+.ms-checkbox-inner {
+    transition: all .2s ease;
+    transition-timing-function: cubic-bezier(.4, 0, .2, 1);
+    width: 100%;
+    height: 100%
+}
+
+.ms-checkbox--text {
+    padding-left: 1px;
+    cursor: pointer
+}
+
+input:checked[type=checkbox]~.ms-checkbox-wrapper .ms-checkbox-container {
+    border: none
+}
+
+input:checked[type=checkbox]~.ms-checkbox-wrapper .ms-checkbox-container .ms-checkbox-inner {
+    background-color: #009b71;
+    border-radius: 2px;
+    transform: rotate(0)
+}
+
+input:checked[type=checkbox]:disabled~.ms-checkbox-wrapper .ms-checkbox-container .ms-checkbox-inner {
+    background-color: #6aebbd
+}
+
+.ms-checkbox-control {
+    position: absolute;
+    width: 0;
+    height: 0;
+    opacity: 0;
+    cursor: pointer
+}
+
+.ms-checkbox-control:indeterminate+.ms-checkbox-wrapper .ms-checkbox-container {
+    background-color: #009b71
+}
+
+.ms-checkbox-control:disabled {
+    cursor: default;
+    pointer-events: none
+}
+
+.ms-checkbox-control:disabled+.ms-checkbox-wrapper .ms-checkbox-container {
+    background-color: #e9ebf1;
+    pointer-events: none
+}
+
+.ms-checkbox-control:active+.ms-checkbox-wrapper .ms-checkbox-container {
+    border: 1.5px solid #007B5D
+}
+
+.ms-checkbox-control:focus-visible+.ms-checkbox-wrapper .ms-checkbox-container:after {
+    content: "";
+    height: 16px;
+    width: 16px;
+    position: absolute;
+    border: 1.5px solid #009b71;
+    border-radius: 2px
+}
+
+.mi-checkbox-active,
+.mi-checkbox-disabled {
+    width: 9px;
+    height: 5.33px;
+    border-width: 0 0 1.5px 1.5px;
+    border-style: solid;
+    border-color: #fff;
+    transform: rotate(-45deg) translateY(5px)
+}
+
+.mi-checkbox-indeterminate {
+    width: 4px;
+    height: 1px;
+    background-color: #fff;
+    border-radius: 4px;
+    transform: rotate(90deg) translate(4.5px, -3px)
+}
