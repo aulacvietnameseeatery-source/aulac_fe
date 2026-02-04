@@ -95,7 +95,7 @@ export function MenuGrid({
                             if (items.length === 0) return null;
 
                             return (
-                                <section key={course.id} id={course.id} className="scroll-mt-[200px]">
+                                <section key={course.id} id={course.id} className="scroll-mt-[200px] pt-[45px]">
                                     {/* Tiêu đề nhóm cũng có hiệu ứng hiện ra */}
                                     <motion.div variants={itemVariants} className="flex items-center gap-4 mb-6">
                                         <h3 className="font-display text-3xl font-bold text-[#1A3A52]">

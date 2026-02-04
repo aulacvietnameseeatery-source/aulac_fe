@@ -8,3 +8,11 @@ export interface ApiResponse<T = unknown> {
   data: T;
   serverTime?: string;
 }
+
+export interface PagedResult<T> {
+  pageData: T[];
+  pageIndex: number;
+  pageSize: number;
+  totalCount: number;
+  totalPage: number;
+}
