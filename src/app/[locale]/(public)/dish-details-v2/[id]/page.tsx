@@ -9,7 +9,7 @@ import {
   V2Composition,
   V2CTA,
   OrderPopup,
-} from "@/features/dish-details-v2";
+} from "@/features/customer/dish-details-v2";
 
 export default function DishDetailV2Page() {
   const [openPopup, setOpenPopup] = useState(false);

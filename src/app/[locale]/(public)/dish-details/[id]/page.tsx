@@ -7,7 +7,7 @@ import {
     DishNarrative,
     DishComposition,
     OrderPopup,
-} from "@/features/dish-details";
+} from "@/features/customer/dish-details";
 
 
 export default function DishDetailUI1() {
