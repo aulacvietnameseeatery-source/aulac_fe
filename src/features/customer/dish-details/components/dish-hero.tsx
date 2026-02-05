@@ -15,12 +15,12 @@ export function DishHero({ dish, onOrderNow }: DishHeroProps) {
   const heroImage = "/images/dish-detail/dish-hero/dish-hero.png";
 
   return (
-    <section className="mx-auto w-full max-w-[1200px] overflow-hidden px-0 pt-6 md:px-4 md:pt-10">
-      <div className="relative h-[580px] overflow-hidden rounded-none shadow-[0px_8px_10px_-6px_rgba(0,0,0,0.10)] shadow-xl md:h-[561px] md:rounded-2xl">
+    <section className="mx-auto w-full max-w-[1200px] overflow-hidden px-4 pt-6 md:pt-10">
+      <div className="relative h-[580px] overflow-hidden rounded-2xl shadow-[0px_8px_10px_-6px_rgba(0,0,0,0.10)] shadow-xl md:h-[561px]">
         <img
           src={heroImage}
           alt={dish.dishName}
-          className="absolute left-0 top-[-80px] h-full w-full object-cover md:top-[-460px] md:h-[1045px]"
+          className="absolute left-0 top-0 h-full w-full object-contain md:top-[-460px] md:h-[1045px] md:object-cover"
         />
 
         {/* Gradient overlay */}
