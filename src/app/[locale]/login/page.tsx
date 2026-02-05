@@ -1,10 +1,6 @@
 "use client";
-import {
-  LoginBackground,
-  LoginHeader,
-  LoginForm,
-  LoginFooter,
-} from "@/features/auth/login";
+
+import { LoginBackground, LoginFooter, LoginForm, LoginHeader } from "@/features/customer/auth/login";
 
 export default function LoginUI() {
   return (

@@ -2,15 +2,9 @@
 
 import { Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import {
-  ResetPasswordHeader,
-  ResetPasswordCard,
-  ResetPasswordForm,
-  ResetPasswordSuccess,
-  useResetPassword,
-} from "@/features/auth/reset-password";
+import { ResetPasswordCard, ResetPasswordForm, ResetPasswordHeader, ResetPasswordSuccess, useResetPassword } from "@/features/customer/auth/reset-password";
+import { LoginBackground } from "@/features/customer/auth/login";
 
-import { LoginBackground } from "@/features/auth/login/components/login-background";
 
 function Content() {
   const params = useSearchParams();
