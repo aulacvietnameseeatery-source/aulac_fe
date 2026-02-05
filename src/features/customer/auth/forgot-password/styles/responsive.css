@@ -1,0 +1,82 @@
+/* Forgot Password - Responsive & Apple HIG Compliance */
+@reference "tailwindcss";
+/* Mobile-first base (≤375px) */
+
+.page-wrapper {
+  @apply px-4 py-6;
+  /* Safe area for notch devices */
+  padding-top: max(1.5rem, env(safe-area-inset-top));
+  padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
+}
+
+.card-container {
+  @apply p-8 gap-6;
+}
+
+.form-input-wrapper {
+  @apply min-h-11 py-3 px-3;
+  /* Apple HIG: Minimum 44px touch target */
+  min-height: 44px;
+}
+
+.submit-button {
+  min-height: 44px;
+  @apply py-3 px-4;
+}
+
+/* Small devices and up (sm: 640px) */
+@media (min-width: 640px) {
+  .page-wrapper {
+    @apply px-6;
+  }
+
+  .card-container {
+    @apply p-8;
+  }
+}
+
+/* Tablet (md: 768px) */
+@media (min-width: 768px) {
+  .page-wrapper {
+    @apply px-8;
+  }
+
+  .card-container {
+    @apply max-w-md mx-auto p-10;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .page-title {
+    @apply text-4xl;
+  }
+
+  .form-title {
+    @apply text-2xl;
+  }
+}
+
+/* Desktop (lg: 1024px) */
+@media (min-width: 1024px) {
+  .page-wrapper {
+    @apply px-12;
+  }
+
+  .card-container {
+    @apply max-w-md mx-auto;
+  }
+}
+
+/* Extra Large (xl: 1280px) */
+@media (min-width: 1280px) {
+  .page-wrapper {
+    @apply max-w-6xl mx-auto;
+  }
+}
+
+/* Landscape orientation - prevent cut-off */
+@media (max-height: 500px) {
+  .card-container {
+    @apply py-6;
+  }
+}

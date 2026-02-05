@@ -6,7 +6,7 @@ import {
   AboutJourney,
   AboutPhilosophy,
   AboutFounders,
-} from "@/features/about-us";
+} from "@/features/customer/about-us";
 
 export default function AboutUsUI() {
   return (

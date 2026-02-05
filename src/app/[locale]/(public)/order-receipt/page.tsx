@@ -10,7 +10,7 @@ import {
   ReceiptPaymentFooter,
   ReceiptActions,
   ReceiptBackLink,
-} from '@/features/order-receipt';
+} from '@/features/customer/order-receipt';
 
 export default function OrderReceiptPage() {
   const { order, subtotal, totalAmount } = useOrderReceipt();

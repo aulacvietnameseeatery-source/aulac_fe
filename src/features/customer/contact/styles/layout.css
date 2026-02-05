@@ -1,0 +1,101 @@
+@reference "tailwindcss";
+
+
+.contact-wrapper {
+    @apply relative;
+  }
+
+  .contact-form-wrapper {
+    @apply sticky top-20 bg-white p-8 md:p-12 border rounded-sm shadow-lg flex flex-col gap-8;
+  }
+
+  .contact-form-header {
+    @apply flex flex-col gap-2 shrink-0;
+  }
+
+  .contact-form-grid {
+    @apply grid md:grid-cols-2 gap-6;
+  }
+
+  .form-field-wrapper {
+    @apply flex flex-col gap-2;
+  }
+
+  .form-select-wrapper {
+    @apply flex flex-col gap-2;
+  }
+
+  .form-textarea-wrapper {
+    @apply flex flex-col gap-2;
+  }
+
+  .input-group-field {
+    @apply flex flex-col gap-2 w-full;
+  }
+
+  .contact-item-container {
+    @apply flex items-start gap-5;
+  }
+
+  .contact-item-icon {
+    @apply w-6 mt-1 flex justify-center text-[#C9A961];
+  }
+
+  .contact-item-content {
+    @apply flex flex-col gap-1;
+  }
+
+  .contact-socials-container {
+    @apply flex flex-col gap-4;
+  }
+
+  .contact-socials-links {
+    @apply flex gap-8;
+  }
+
+  .contact-map-wrapper {
+    @apply flex flex-col gap-6;
+  }
+
+  .contact-map-header {
+    @apply flex items-center gap-4;
+  }
+
+  .contact-map-divider {
+    @apply h-px flex-1 bg-slate-200;
+  }
+
+  .contact-map-container {
+    @apply w-full h-75 md:h-87.5 bg-slate-200 relative rounded-sm overflow-hidden border border-slate-300 shadow-sm;
+  }
+
+  .contact-map-iframe {
+    @apply border-0;
+  }
+
+  .contact-map-hint {
+    @apply absolute bottom-2 right-2 bg-white/80 backdrop-blur-sm px-2 py-1 text-[10px] text-slate-500 rounded pointer-events-none opacity-0 group-hover:opacity-100 transition;
+  }
+
+  /* Contact Hero */
+  .contact-hero-wrapper {
+    @apply w-full max-w-2xl flex flex-col items-center text-center gap-6;
+  }
+
+  .contact-hero-title {
+    @apply font-serif text-4xl md:text-5xl lg:text-6xl text-slate-900 leading-tight;
+  }
+
+  .contact-hero-divider {
+    @apply w-12 h-px bg-[#C9A961] mx-auto;
+  }
+
+  .contact-hero-description {
+    @apply text-slate-600 text-sm md:text-base leading-relaxed max-w-xl;
+  }
+
+  /* Contact Info List */
+  .contact-info-list-wrapper {
+    @apply flex flex-col gap-10;
+  }
+

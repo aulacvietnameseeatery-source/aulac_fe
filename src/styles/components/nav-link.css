@@ -1,0 +1,24 @@
+/* src/styles/components/nav-link.css */
+
+.nav-link-base {
+    /* Dùng font-weight số cụ thể để tránh lỗi 'unknown utility font-medium' trên một số máy */
+    @apply relative text-[14px] font-[500] transition-colors duration-300;
+}
+
+.nav-link-inactive {
+    @apply text-white/80 hover:text-[#D5A673];
+}
+
+.nav-link-active {
+    @apply text-[#D5A673];
+}
+
+/* Base style cho thanh gạch chân */
+.nav-underline {
+    @apply absolute -bottom-1 left-0 h-0.5 bg-[#D5A673] transition-all duration-300 ease-out;
+}
+
+/* Helper class: Mặc định độ rộng bằng 0 */
+.nav-underline-hidden {
+    @apply w-0;
+}

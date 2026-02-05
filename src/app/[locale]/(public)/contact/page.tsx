@@ -4,7 +4,7 @@ import {
   ContactMap,
   ContactSocials,
   ContactForm,
-} from "@/features/contact";
+} from "@/features/customer/contact";
 import { useTranslations } from "next-intl";
 
 export default function ContactPage() {

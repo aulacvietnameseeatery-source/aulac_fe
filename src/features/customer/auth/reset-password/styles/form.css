@@ -1,0 +1,49 @@
+/* Reset Password - Form Styles */
+@reference "tailwindcss";
+
+.form-container {
+  @apply flex flex-col gap-6;
+}
+
+.form-header {
+  @apply text-center;
+}
+
+.form-field-group {
+  @apply flex flex-col gap-2;
+}
+
+.form-input-wrapper {
+  @apply shadow-sm rounded-2xl bg-white border border-gray-300;
+  @apply flex items-center py-3.5 px-4;
+  @apply focus-within:border-slate-900 transition-colors;
+  /* Apple HIG: Minimum 44px touch target */
+  min-height: 44px;
+}
+
+.form-input {
+  @apply w-full outline-none text-sm text-slate-900;
+  @apply bg-transparent;
+}
+
+.form-input-icon {
+  @apply text-gray-400;
+}
+
+.submit-button {
+  @apply w-full shadow-md rounded-2xl bg-slate-900 py-3.5 px-4;
+  @apply text-white flex items-center justify-center gap-2;
+  @apply hover:bg-slate-800 transition-colors;
+  @apply disabled:opacity-70 disabled:cursor-not-allowed;
+  @apply font-sans font-bold tracking-widest text-base;
+  /* Apple HIG: Minimum 44px touch target */
+  min-height: 44px;
+}
+
+.submit-button-icon {
+  @apply text-amber-100;
+}
+
+.back-link {
+  @apply flex items-center gap-2;
+}

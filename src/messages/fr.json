@@ -1,5 +1,6 @@
 {
   "Header": {
+    "home": "Accueil",
     "menu": "MENU",
     "about": "À PROPOS",
     "contact": "CONTACT",
@@ -9,12 +10,12 @@
     "slogan_2": "Saveurs du Vietnam, esprit convivial"
   },
   "Footer": {
-    "description": "Défini par l’excellence, porté par l’héritage.<br> </br>L’apogée de l’art culinaire vietnamien au<br> </br>cœur de la ville.",
+    "description": "Défini par l’excellence, porté par l’héritage.\nL’apogée de l’art culinaire vietnamien au\ncœur de la ville.",
     "reservations": "Réservations",
     "location": "Adresse",
     "open_maps": "Ouvrir dans Maps",
     "newsletter": "Newsletter",
-    "newsletter_desc": "Rejoignez notre cercle pour des événements exclusifs et<br> </br>des avant-premières de créations saisonnières.",
+    "newsletter_desc": "Rejoignez notre cercle pour des événements exclusifs et\ndes avant-premières de créations saisonnières.",
     "email_placeholder": "Adresse e-mail",
     "copyright": "© 2026 Au Lac Table Vietnamienne. Tous droits réservés.",
     "privacy": "Confidentialité",
@@ -24,7 +25,7 @@
   "Introduction": {
     "Hero": {
       "est": "Fondé en 1994",
-      "title": "Une symphonie de l’art <br> </br> Vietnamien",
+      "title": "Une symphonie de l’art\nVietnamien",
       "quote": "\"Là où l’héritage du fleuve Rouge rencontre le raffinement de la haute gastronomie contemporaine.\""
     },
     "Chef": {
@@ -394,7 +395,13 @@
       "beverages": "Boissons",
       "appetizers": "Entrées",
       "main course": "Plats Principaux",
-      "search_placeholder": "Rechercher des plats exquis..."
+      "search_placeholder": "Rechercher des plats exquis...",
+      "metal": "Métal",
+      "wood": "Bois",
+      "water": "Eau",
+      "fire": "Feu",
+      "earth": "Terre",
+      "vegetarian": "Végétarien"
     },
     "MenuGrid": {
       "title": "Menu Gastronomique",
@@ -432,7 +439,7 @@
       "quote": "\"Un voyage culinaire commence par une simple étincelle numérique.\""
     },
     "ScanContent": {
-      "title": "Découvrez Notre <br> </br> Sélection",
+      "title": "Découvrez Notre\nSélection",
       "subtitle": "Scannez pour explorer toute notre histoire culinaire sur votre appareil",
       "step_scan": "Scanner",
       "step_explore": "Explorer",
