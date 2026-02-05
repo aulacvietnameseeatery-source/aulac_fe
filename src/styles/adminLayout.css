@@ -1,0 +1,34 @@
+.main-container {
+  height: 100%;
+}
+
+.header-container {
+  width: 100%;
+  height: 48px;
+  background-color: #fff;
+  display: flex;
+  align-items: center;
+  font-family: Inter;
+  border-bottom: 1px solid #D1D5DB;
+  position: relative;
+}
+
+.main {
+  height: calc(100% - 48px);
+  max-height: calc(100vh - 48px);
+}
+
+.main-left {
+  background: #393a3d;
+}
+.main-right {
+  transition: padding .2s;
+  background-color: #fff;
+  width: calc(100% - 234px);
+}
+
+.main-view {
+  height: 100%;
+  background: #E5E7EB;
+  padding: 16px 20px 20px;
+}

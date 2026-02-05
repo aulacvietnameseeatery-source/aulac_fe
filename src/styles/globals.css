@@ -175,3 +175,19 @@
     width: 100%;
   }
 }
+
+
+body {
+  margin: 0;
+  line-height: normal;
+  padding: 0;
+  background: #f4f5f8;
+  overflow: hidden;
+  font-family: Inter;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  color: #111827;
+  font-size: 13px;
+  font-weight: 400;
+}

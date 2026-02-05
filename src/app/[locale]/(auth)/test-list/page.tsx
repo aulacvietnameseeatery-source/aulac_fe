@@ -153,7 +153,7 @@ export default function TableExample() {
     };
 
     return (
-        <div className="p-8 h-screen">
+        <div className="h-full">
             <BaseTable<Employee>
                 data={data}
                 columns={columns}
