@@ -26,42 +26,6 @@ export function DishHero({ dish, onOrderNow }: DishHeroProps) {
         {/* Gradient overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent md:bg-gradient-to-l md:from-black/80 md:via-black/20 md:to-black/0" />
 
-        {/* Tag */}
-        <div className="absolute left-4 top-16 rounded-full bg-blue-800/80 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-white backdrop-blur-[2px] md:left-16 md:top-[200px] md:px-4 md:py-1.5 md:text-xs">
-          {dish.categoryName || t("tag")}
-        </div>
-
-        {/* Title */}
-        <h1 className="absolute left-4 right-4 top-[270px] max-w-[520px] text-3xl font-medium leading-[36px] text-white
-               md:left-16 md:top-[240px] md:max-w-[820px] md:text-6xl md:leading-[68px]
-               lg:max-w-[920px] lg:text-7xl lg:leading-[76px]">
-          {dish.dishName}
-        </h1>
-
-        {/* Subtitle */}
-        <p className="absolute left-4 right-4 top-[370px] max-w-[380px] text-sm font-light leading-5 text-white/90 md:left-16 md:top-[400px] md:max-w-[520px] md:text-xl md:leading-7">
-          {dish.slogan || dish.shortDescription || t.rich("subtitle", { br: () => <br /> })}
-        </p>
-
-        {/* Buttons */}
-        <div className="absolute left-4 right-4 top-[450px] flex flex-row gap-2 md:left-16 md:right-auto md:top-[488px] md:gap-3">
-          <button
-            type="button"
-            className="h-11 flex-1 whitespace-nowrap rounded-lg bg-white px-3 shadow-[0px_4px_6px_-4px_rgba(0,0,0,0.10)] shadow-lg md:h-12 md:flex-none md:w-auto md:min-w-[240px] md:px-4"
-          >
-            <span className="text-sm font-bold text-blue-800 md:text-base">
-              {t("reserve")}
-            </span>
-          </button>
-
-          <button
-            type="button"
-            className="h-11 flex-1 whitespace-nowrap rounded-lg bg-black/40 px-3 outline outline-1 outline-offset-[-1px] outline-white/20 backdrop-blur-[6px] md:h-12 md:flex-none md:w-auto md:min-w-[128px] md:px-4"
-          >
-            <span className="text-sm font-medium text-white md:text-base">{t("share")}</span>
-          </button>
-        </div>
-
         {/* Order Now */}
         <button
           type="button"
@@ -93,6 +57,31 @@ export function DishHero({ dish, onOrderNow }: DishHeroProps) {
           </button>
         </div>
       </div>
+
+
+      
+
+      {/* Dish Information - Moved below image */}
+      {/* <div className="px-4 py-6 md:px-0 md:py-8">
+        <h1 className="mb-2 text-3xl font-semibold text-gray-900 md:text-4xl">
+          {dish.dishName}
+        </h1>
+
+        <p className="mb-4 text-xl font-semibold text-gray-900 md:text-2xl">
+          {dish.price?.toLocaleString('vi-VN')}₫
+        </p>
+
+        <div className="space-y-2 text-sm text-gray-700 md:text-base">
+          {(dish.description || dish.slogan || dish.shortDescription) && (
+            <div>{dish.description || dish.slogan || dish.shortDescription}</div>
+          )}
+        </div>
+      </div> */}
+      
+      
+      
     </section>
+
+    
   );
 }
