@@ -34,11 +34,13 @@
 .top-bar {
     @apply flex items-center justify-between transition-all duration-300 ease-in-out w-full;
 }
+
 .top-bar.is-scrolled {
     @apply translate-y-0;
 }
+
 .top-bar.is-default {
-    @apply translate-y-[10px];
+    @apply translate-y-0 md:translate-y-[10px];
 }
 
 /* --- LOGO --- */
@@ -50,9 +52,11 @@
 .logo-title {
     @apply font-display font-medium leading-none transition-all duration-300 origin-left;
 }
+
 .logo-title.is-default {
-    @apply text-[40px] md:text-[64px];
+    @apply text-[32px] md:text-[64px];
 }
+
 .logo-title.is-scrolled {
     @apply text-[32px] md:text-[28px];
 }
@@ -60,9 +64,11 @@
 .logo-slogan-wrapper {
     @apply overflow-hidden transition-all duration-300;
 }
+
 .logo-slogan-wrapper.is-default {
-    @apply max-h-[60px] opacity-100 mt-1;
+    @apply max-h-0 opacity-0 mt-0 md:max-h-[60px] md:opacity-100 md:mt-1;
 }
+
 .logo-slogan-wrapper.is-scrolled {
     @apply max-h-0 opacity-0 mt-0;
 }
@@ -70,6 +76,7 @@
 .slogan-main {
     @apply block text-[#D5A673] tracking-[0.2em] uppercase font-semibold text-[10px];
 }
+
 @media (min-width: 768px) {
     .slogan-main {
         @apply text-[14px];
@@ -93,9 +100,11 @@
 .lang-switcher-wrapper {
     @apply hidden md:block overflow-hidden transition-all duration-300 ease-in-out;
 }
+
 .lang-switcher-wrapper.is-scrolled {
     @apply max-w-[100px] opacity-100 ml-4;
 }
+
 .lang-switcher-wrapper.is-default {
     @apply max-w-0 opacity-0 ml-0;
 }
@@ -104,9 +113,11 @@
 .reserve-btn {
     @apply bg-[#FFAB2D] text-[#1A3A52] rounded shadow-sm hover:bg-[#FFAB2D]/90 transition-all duration-300 font-bold uppercase tracking-wide;
 }
+
 .reserve-btn.is-scrolled {
     @apply px-6 py-2 text-[13px];
 }
+
 .reserve-btn.is-default {
     @apply px-8 py-3 text-[14px];
 }
@@ -120,9 +131,11 @@
 .info-bar {
     @apply hidden md:block overflow-hidden border-t border-white/10 transition-all duration-300 ease-in-out;
 }
+
 .info-bar.is-scrolled {
     @apply max-h-0 opacity-0 mt-0 pt-0 border-none;
 }
+
 .info-bar.is-default {
     @apply max-h-[80px] opacity-100 mt-8 pt-4;
 }
@@ -130,17 +143,19 @@
 .info-content {
     @apply flex justify-between items-center text-[13px] text-white/80;
 }
+
 .info-item {
     @apply flex items-center gap-2;
 }
+
 .info-icon {
     @apply text-[#D5A673];
 }
 
 /* --- MOBILE MENU OVERLAY --- */
 .mobile-menu-overlay {
-    @apply fixed inset-0 bg-[#1A3A52]/98 backdrop-blur-xl z-40 px-6 animate-in slide-in-from-right duration-300;
-    top: calc(80px + var(--safe-top, 0px));
+    @apply fixed inset-0 bg-[#1A3A52] z-[100] px-6 animate-in slide-in-from-right duration-300;
+    padding-top: calc(20px + var(--safe-top, 0px));
     padding-bottom: calc(20px + var(--safe-bottom, 0px));
 }
 
@@ -155,7 +170,7 @@
 }
 
 .mobile-nav-link {
-    @apply flex items-center gap-4 text-[22px] font-display uppercase tracking-widest border-b border-white/10 py-5 text-white hover:text-[#FFAB2D] active:text-[#D5A673] transition-colors;
+    @apply flex items-center justify-between text-[16px] font-medium uppercase tracking-[2px] py-4 text-white/90 border-b border-white/5 hover:text-[#D5A673] transition-colors;
 }
 
 .mobile-reserve-btn {
@@ -168,4 +183,10 @@
 
 .mobile-lang-section {
     @apply mt-8 flex justify-center border-t border-white/10 pt-6;
+}
+
+@media (max-width: 767px) {
+    .header-container.is-default {
+        height: calc(80px + var(--safe-top, 0px));
+    }
 }
