@@ -3,8 +3,13 @@
 import { useTranslations } from "next-intl";
 import { ChevronRight, Home, UtensilsCrossed } from "lucide-react";
 import Link from "next/link";
+import { Dish } from "../types";
 
-export function DishBreadcrumb() {
+type DishBreadcrumbProps = {
+  dish: Dish;
+};
+
+export function DishBreadcrumb({ dish }: DishBreadcrumbProps) {
   const t = useTranslations("Breadcrumb");
 
   return (
@@ -51,7 +56,7 @@ export function DishBreadcrumb() {
             {/* Current Page */}
             <li className="flex items-center">
               <span className="flex items-center gap-1.5 rounded-md bg-stone-200 px-2 py-1.5 font-bold text-stone-900">
-                {t("dish_details")}
+                {dish.dishName}
               </span>
             </li>
           </ol>

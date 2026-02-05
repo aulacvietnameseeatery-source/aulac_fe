@@ -2,13 +2,15 @@
 
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
+import { Dish } from "../types";
 
 type Props = {
   open: boolean;
   onClose: () => void;
+  dish: Dish;
 };
 
-export function OrderPopup({ open, onClose }: Props) {
+export function OrderPopup({ open, onClose, dish }: Props) {
   const t = useTranslations("OrderPopup");
   const [qty, setQty] = useState(1);
 
@@ -36,44 +38,36 @@ export function OrderPopup({ open, onClose }: Props) {
       {/* popup card */}
       <div className="relative w-full max-w-[360px] rounded-2xl bg-white shadow-2xl">
         <div className="w-full self-stretch p-10 flex flex-col justify-start items-start">
-          {/* Header line */}
-          <div className="w-full pb-4 flex flex-col justify-start items-start">
-            <div className="w-full h-10 relative">
-              <div className="absolute left-0 top-0 flex flex-col gap-1">
-                <div className="pb-1">
-                  <div className="text-blue-950 text-[10px] font-bold uppercase leading-4 tracking-widest">
-                    {t("success_label")}
-                  </div>
-                </div>
-                <div className="text-slate-500 text-sm font-normal leading-4">
-                  {t("success_message")}
-                </div>
-              </div>
+          {/* Close button */}
+          <div className="w-full pb-4 flex justify-end">
+            <button
+              type="button"
+              onClick={onClose}
+              className="inline-flex h-8 w-8 items-center justify-center rounded-full hover:bg-slate-100"
+              aria-label="Close"
+            >
+              <span className="text-slate-500 text-xl leading-none">×</span>
+            </button>
+          </div>
 
-              {/* Close button */}
-              <button
-                type="button"
-                onClick={onClose}
-                className="absolute right-0 top-0 inline-flex h-8 w-8 items-center justify-center rounded-full hover:bg-slate-100"
-                aria-label="Close"
-              >
-                <span className="text-slate-500 text-xl leading-none">×</span>
-              </button>
+          {/* Category Name */}
+          {dish.categoryName && (
+            <div className="w-full pb-2">
+              <div className="inline-block rounded-full bg-blue-800/10 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-blue-800">
+                {dish.categoryName}
+              </div>
+            </div>
+          )}
+
+          <div className="w-full pb-2">
+            <div className="text-neutral-900 text-3xl font-normal leading-9">
+              {dish.dishName}
             </div>
           </div>
 
-          {/* Title */}
-          <div className="w-full pb-2">
-            <div className="text-neutral-900 text-3xl font-normal leading-9 whitespace-pre-line">
-  {t("dish_name")}
-</div>
-
-          </div>
-
-          {/* Price */}
           <div className="w-full pb-8">
             <div className="text-blue-950/80 text-lg font-medium leading-7">
-              {t("price")}
+              {dish.price}
             </div>
           </div>
 
