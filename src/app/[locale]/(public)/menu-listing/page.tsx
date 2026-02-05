@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { useLocale } from "next-intl";
 import { AnimatePresence, motion } from "framer-motion";
@@ -9,10 +8,12 @@ import { AnimatePresence, motion } from "framer-motion";
 import {
     FilterBar,
     CartSummary,
-    MenuSidebar
+    MenuSidebar,
+    CartItem,
+    TableSelectionModal
 } from "@/features/customer/menu-listing";
 import { MenuGrid, COURSES } from "@/features/customer/menu-listing/components/menu-grid";
-import { OrderEvent } from "@/features/customer/menu-listing/components/menu-card";
+import { OrderEvent, MenuItem } from "@/features/customer/menu-listing/components/menu-card";
 
 // Data cho Filter Bar
 const ELEMENTS = ["All", "Metal", "Wood", "Water", "Fire", "Earth"];
@@ -26,10 +27,18 @@ export default function MenuPage() {
     const locale = useLocale();
 
     const [isScrolled, setIsScrolled] = useState(false);
-    const [cartTotal, setCartTotal] = useState(0);
-    const [cartCount, setCartCount] = useState(0);
-    const [isCartVisible, setIsCartVisible] = useState(false);
 
+    // --- STATE QUẢN LÝ ITEM VÀ SỐ BÀN ---
+    const [cartItems, setCartItems] = useState<CartItem[]>([]);
+
+    // 1. Trạng thái bàn & Modal
+    const [tableNumber, setTableNumber] = useState("");
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    // 2. [QUAN TRỌNG] Pending Queue: Hàng đợi lưu nhiều món khi chưa có bàn
+    const [pendingQueue, setPendingQueue] = useState<MenuItem[]>([]);
+
+    const isCartVisible = cartItems.length > 0;
     const isClickingRef = useRef(false);
 
     useEffect(() => {
@@ -38,6 +47,7 @@ export default function MenuPage() {
         return () => window.removeEventListener("scroll", onScroll);
     }, []);
 
+    // ScrollSpy Logic (Giữ nguyên)
     useEffect(() => {
         const handleScrollSpy = () => {
             if (isClickingRef.current) return;
@@ -71,17 +81,93 @@ export default function MenuPage() {
         }
     };
 
-    const handleOrder = (event: OrderEvent) => {
-        const { item } = event;
-        if (!isCartVisible) setIsCartVisible(true);
-        setCartCount((prev) => prev + 1);
-        setCartTotal((prev) => prev + item.price);
+    // --- HELPER: XỬ LÝ THÊM VÀO GIỎ CHÍNH THỨC ---
+    const processAddToCart = (itemsToAdd: MenuItem[]) => {
+        setCartItems((prev) => {
+            let newCart = [...prev];
+            itemsToAdd.forEach(newItem => {
+                const existingIndex = newCart.findIndex(i => i.id === newItem.id);
+                if (existingIndex > -1) {
+                    // Món đã có -> Tăng số lượng
+                    newCart[existingIndex] = {
+                        ...newCart[existingIndex],
+                        quantity: newCart[existingIndex].quantity + 1
+                    };
+                } else {
+                    // Món mới -> Thêm vào
+                    newCart.push({
+                        id: newItem.id,
+                        name: (newItem as any).name || `Item ${newItem.id}`,
+                        price: newItem.price,
+                        quantity: 1,
+                    });
+                }
+            });
+            return newCart;
+        });
     };
 
-    const handleConfirmOrder = () => { router.push(`/${locale}/confirm-order`); };
+    // --- LOGIC ORDER CHÍNH ---
+    const handleOrder = (event: OrderEvent) => {
+        const { item } = event;
+
+        // Nếu chưa có số bàn -> Lưu vào hàng đợi & Mở modal
+        if (!tableNumber) {
+            setPendingQueue(prev => [...prev, item]); // Cộng dồn món vào hàng đợi
+            setIsModalOpen(true);
+            return;
+        }
+
+        // Đã có bàn -> Thêm thẳng vào giỏ
+        processAddToCart([item]);
+    };
+
+    const handleUpdateQuantity = (id: string, delta: number) => {
+        setCartItems((prev) => prev.map((item) => {
+            if (item.id === id) {
+                const newQuantity = Math.max(1, item.quantity + delta);
+                return { ...item, quantity: newQuantity };
+            }
+            return item;
+        }));
+    };
+
+    const handleRemoveItem = (id: string) => {
+        setCartItems((prev) => prev.filter((item) => item.id !== id));
+    };
+
+    const handleConfirmOrder = () => {
+        console.log("Processing Order:", { tableNumber, items: cartItems });
+        router.push(`/${locale}/confirm-order`);
+    };
+
+    // --- XỬ LÝ KHI NHẬP XONG SỐ BÀN ---
+    const handleTableConfirm = (val: string) => {
+        setTableNumber(val);
+        setIsModalOpen(false);
+
+        // Đổ toàn bộ hàng đợi vào giỏ hàng chính thức
+        if (pendingQueue.length > 0) {
+            processAddToCart(pendingQueue);
+            setPendingQueue([]); // Xóa hàng đợi
+        }
+    };
+
+    // --- XỬ LÝ KHI ĐÓNG MODAL MÀ KHÔNG NHẬP ---
+    const handleModalClose = () => {
+        setIsModalOpen(false);
+        // Lưu ý: KHÔNG xóa pendingQueue ở đây.
+        // Để lần sau khách mở lại hoặc order tiếp, list chờ vẫn còn đó.
+    };
 
     return (
         <div className="min-h-screen bg-[#FAF9F6] relative pb-20 pt-[40px]">
+
+            <TableSelectionModal
+                isOpen={isModalOpen}
+                onConfirm={handleTableConfirm}
+                onClose={handleModalClose} // Cho phép đóng modal thoải mái
+            />
 
             <FilterBar
                 categories={ELEMENTS}
@@ -96,14 +182,10 @@ export default function MenuPage() {
                 onOrder={handleOrder}
                 activeElement={activeElement}
                 searchQuery={searchQuery}
-                // 👇 SỬA ĐOẠN NÀY: Bọc Sidebar trong motion.div
                 sidebarSlot={
                     <motion.div
-                        // Ban đầu: Mờ và dịch sang trái 50px
                         initial={{ opacity: 0, x: -50 }}
-                        // Kết thúc: Hiện rõ và về vị trí 0
                         animate={{ opacity: 1, x: 0 }}
-                        // Cấu hình: Chờ 0.2s rồi chạy trong 0.6s
                         transition={{ delay: 0.2, duration: 0.6, ease: "easeOut" }}
                     >
                         <MenuSidebar
@@ -115,16 +197,20 @@ export default function MenuPage() {
                 }
             />
 
+            {/* --- CONTAINER GIỎ HÀNG --- */}
             <div
                 id="cart-destination"
-                className="fixed bottom-[40px] right-[20px] md:bottom-[100px] md:right-[40px] z-50 pointer-events-none"
+                className="fixed bottom-[40px] right-[20px] md:bottom-[40px] md:right-[40px] z-50 pointer-events-none flex flex-col items-end justify-end max-w-[calc(100vw-40px)]"
             >
                 <AnimatePresence>
                     {isCartVisible && (
-                        <div className="pointer-events-auto hover:translate-y-[-10px] transition-transform duration-300">
+                        <div className="pointer-events-auto">
                             <CartSummary
-                                totalPrice={cartTotal}
-                                totalItems={cartCount}
+                                cartItems={cartItems}
+                                tableNumber={tableNumber}
+                                onUpdateTable={setTableNumber}
+                                onUpdateQuantity={handleUpdateQuantity}
+                                onRemoveItem={handleRemoveItem}
                                 onConfirm={handleConfirmOrder}
                             />
                         </div>
