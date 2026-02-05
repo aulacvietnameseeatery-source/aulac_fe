@@ -9,7 +9,7 @@ import {
   DishComposition,
   OrderPopup,
   useDishDetail,
-} from "@/features/dish-details";
+} from "@/features/customer/dish-details";
 
 
 export default function DishDetailUI1() {
@@ -19,9 +19,9 @@ export default function DishDetailUI1() {
   const [openPopup, setOpenPopup] = useState(false);
 
   useEffect(() => {
-    document.body.style.overflow = openPopup ? "hidden" : "";
+    document.body.style.overflow = openPopup ? "hidden" : "auto";
     return () => {
-      document.body.style.overflow = "";
+      document.body.style.overflow = "auto";
     };
   }, [openPopup]);
 
