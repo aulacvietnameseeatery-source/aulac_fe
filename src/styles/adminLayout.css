@@ -14,13 +14,13 @@
 }
 
 .main {
-  height: calc(100% - 48px);
-  max-height: calc(100vh - 48px);
+  height: 100%;
 }
 
 .main-left {
   background: #393a3d;
 }
+
 .main-right {
   transition: padding .2s;
   background-color: #fff;

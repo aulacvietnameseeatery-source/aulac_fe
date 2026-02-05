@@ -4,7 +4,6 @@ import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import QueryProvider from "@/components/providers/query-provider";
 // 👇 Import Component Guard vừa tạo
-import TableGuard from "@/components/providers/table-guard";
 import "@/styles/globals.css";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
@@ -38,9 +37,9 @@ export const metadata: Metadata = {
 };
 
 export default async function RootLayout({
-                                             children,
-                                             params: { locale }
-                                         }: {
+    children,
+    params: { locale }
+}: {
     children: React.ReactNode;
     params: { locale: string };
 }) {
@@ -49,20 +48,20 @@ export default async function RootLayout({
 
     return (
         <html lang={locale}>
-        <head>
-            {/* Material Icons nếu cần */}
-            <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
-        </head>
-        <body className={`${inter.variable} ${playfair.variable} antialiased font-body bg-[#FAF9F6]`}>
-        <QueryProvider>
-            <NextIntlClientProvider messages={messages} locale={locale}>
-                {/* 👇 Bọc TableGuard ở đây để chặn flow nếu chưa chọn bàn */}
-                {/*<TableGuard>*/}
-                {children}
-                {/*</TableGuard>*/}
-            </NextIntlClientProvider>
-        </QueryProvider>
-        </body>
+            <head>
+                {/* Material Icons nếu cần */}
+                <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+            </head>
+            <body className={`${inter.variable} ${playfair.variable} antialiased font-body bg-[#FAF9F6]`}>
+                <QueryProvider>
+                    <NextIntlClientProvider messages={messages} locale={locale}>
+                        {/* 👇 Bọc TableGuard ở đây để chặn flow nếu chưa chọn bàn */}
+                        {/*<TableGuard>*/}
+                        {children}
+                        {/*</TableGuard>*/}
+                    </NextIntlClientProvider>
+                </QueryProvider>
+            </body>
         </html>
     );
 }
