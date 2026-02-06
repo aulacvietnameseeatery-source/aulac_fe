@@ -169,94 +169,94 @@
 //   );
 // }
 
-
-
-"use client";
-
-import { useTranslations } from "next-intl";
-import { Dish } from "../types";
-import { useState } from "react";
-import Script from "next/script";
-
-// Khai báo custom element cho TypeScript khỏi báo lỗi
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      'model-viewer': any;
-    }
-  }
-}
-
-export function DishHero({ dish, onOrderNow }: { dish: Dish; onOrderNow: () => void }) {
-  const t = useTranslations("DishDetails.Hero");
-  const [viewMode, setViewMode] = useState<'photo' | '360' | 'video'>('photo');
-
-  // Đường dẫn đến file 3D của bạn
-  const MODEL_URL = "/images/dish-detail/dish-hero/Astronaut.glb";
-
-  return (
-      <section className="mx-auto w-full max-w-[1200px] overflow-hidden px-4 pt-6 md:pt-10">
-        {/* Load Script Model Viewer của Google */}
-        <Script
-            type="module"
-            src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"
-        />
-
-        <div className="relative h-[580px] overflow-hidden rounded-2xl shadow-xl md:h-[561px] bg-neutral-100">
-
-          {/* --- 1. PHOTO MODE --- */}
-          {viewMode === 'photo' && (
-              <img
-                  src="/images/dish-detail/dish-hero/dish-hero.png"
-                  className="absolute inset-0 h-full w-full object-cover animate-in fade-in duration-500"
-                  alt={dish.dishName}
-              />
-          )}
-
-          {/* --- 2. 3D MODEL MODE (CÁCH 2) --- */}
-          {viewMode === '360' && (
-              <div className="absolute inset-0 z-10 h-full w-full bg-stone-50">
-                <model-viewer
-                    src={MODEL_URL}
-                    poster="/images/loading-3d.png" // Ảnh hiện lúc đang load model
-                    alt="A 3D model of Tiramisu"
-                    shadow-intensity="1"
-                    camera-controls
-                    auto-rotate
-                    ar // Bật tính năng thực tế ảo cho mobile
-                    touch-action="pan-y"
-                    style={{ width: '100%', height: '100%', backgroundColor: '#f5f5f4' }}
-                >
-                  {/* Nút hỗ trợ AR trên điện thoại */}
-                  <button slot="ar-button" className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-white px-4 py-2 rounded-full shadow-md text-xs font-bold">
-                    👋 XEM TRONG KHÔNG GIAN THẬT
-                  </button>
-                </model-viewer>
-              </div>
-          )}
-
-          {/* --- 3. VIDEO MODE --- */}
-          {viewMode === 'video' && (
-              <div className="absolute inset-0 z-10 flex items-center justify-center bg-black">
-                <p className="text-white">Video Coming Soon</p>
-              </div>
-          )}
-
-          {/* CONTROLS & PILL (Giữ nguyên logic cũ của bạn) */}
-          <div className="absolute left-1/2 top-4 z-30 inline-flex -translate-x-1/2 items-center gap-1 rounded-full bg-black/30 p-1 backdrop-blur-md">
-            {['photo', '360', 'video'].map((mode) => (
-                <button
-                    key={mode}
-                    onClick={() => setViewMode(mode as any)}
-                    className={`rounded-full px-4 py-2 text-[10px] font-bold uppercase ${
-                        viewMode === mode ? "bg-white/20 text-white" : "text-white/70"
-                    }`}
-                >
-                  {mode === '360' ? '3D View' : mode}
-                </button>
-            ))}
-          </div>
-        </div>
-      </section>
-  );
-}
+//
+//
+// "use client";
+//
+// import { useTranslations } from "next-intl";
+// import { Dish } from "../types";
+// import { useState } from "react";
+// import Script from "next/script";
+//
+// // Khai báo custom element cho TypeScript khỏi báo lỗi
+// declare global {
+//   namespace JSX {
+//     interface IntrinsicElements {
+//       'model-viewer': any;
+//     }
+//   }
+// }
+//
+// export function DishHero({ dish, onOrderNow }: { dish: Dish; onOrderNow: () => void }) {
+//   const t = useTranslations("DishDetails.Hero");
+//   const [viewMode, setViewMode] = useState<'photo' | '360' | 'video'>('photo');
+//
+//   // Đường dẫn đến file 3D của bạn
+//   const MODEL_URL = "/images/dish-detail/dish-hero/tiramisu.glb";
+//
+//   return (
+//       <section className="mx-auto w-full max-w-[1200px] overflow-hidden px-4 pt-6 md:pt-10">
+//         {/* Load Script Model Viewer của Google */}
+//         <Script
+//             type="module"
+//             src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"
+//         />
+//
+//         <div className="relative h-[580px] overflow-hidden rounded-2xl shadow-xl md:h-[561px] bg-neutral-100">
+//
+//           {/* --- 1. PHOTO MODE --- */}
+//           {viewMode === 'photo' && (
+//               <img
+//                   src="/images/dish-detail/dish-hero/dish-hero.png"
+//                   className="absolute inset-0 h-full w-full object-cover animate-in fade-in duration-500"
+//                   alt={dish.dishName}
+//               />
+//           )}
+//
+//           {/* --- 2. 3D MODEL MODE (CÁCH 2) --- */}
+//           {viewMode === '360' && (
+//               <div className="absolute inset-0 z-10 h-full w-full bg-stone-50">
+//                 <model-viewer
+//                     src={MODEL_URL}
+//                     poster="/images/loading-3d.png" // Ảnh hiện lúc đang load model
+//                     alt="A 3D model of Tiramisu"
+//                     shadow-intensity="1"
+//                     camera-controls
+//                     auto-rotate
+//                     ar // Bật tính năng thực tế ảo cho mobile
+//                     touch-action="pan-y"
+//                     style={{ width: '100%', height: '100%', backgroundColor: '#f5f5f4' }}
+//                 >
+//                   {/* Nút hỗ trợ AR trên điện thoại */}
+//                   <button slot="ar-button" className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-white px-4 py-2 rounded-full shadow-md text-xs font-bold">
+//                     👋 XEM TRONG KHÔNG GIAN THẬT
+//                   </button>
+//                 </model-viewer>
+//               </div>
+//           )}
+//
+//           {/* --- 3. VIDEO MODE --- */}
+//           {viewMode === 'video' && (
+//               <div className="absolute inset-0 z-10 flex items-center justify-center bg-black">
+//                 <p className="text-white">Video Coming Soon</p>
+//               </div>
+//           )}
+//
+//           {/* CONTROLS & PILL (Giữ nguyên logic cũ của bạn) */}
+//           <div className="absolute left-1/2 top-4 z-30 inline-flex -translate-x-1/2 items-center gap-1 rounded-full bg-black/30 p-1 backdrop-blur-md">
+//             {['photo', '360', 'video'].map((mode) => (
+//                 <button
+//                     key={mode}
+//                     onClick={() => setViewMode(mode as any)}
+//                     className={`rounded-full px-4 py-2 text-[10px] font-bold uppercase ${
+//                         viewMode === mode ? "bg-white/20 text-white" : "text-white/70"
+//                     }`}
+//                 >
+//                   {mode === '360' ? '3D View' : mode}
+//                 </button>
+//             ))}
+//           </div>
+//         </div>
+//       </section>
+//   );
+// }
