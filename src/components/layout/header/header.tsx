@@ -87,6 +87,18 @@ export function Header({ isScrolled, locale }: HeaderProps) {
                 >
                     FR
                 </button>
+                <span className="opacity-40 text-white">|</span>
+                <button
+                    onClick={() => switchLocale('vi')}
+                    disabled={isPending}
+                    className={cn(
+                        "cursor-pointer hover:text-[#D5A673] transition-colors p-2",
+                        locale === 'vi' ? "text-[#D5A673]" : "text-white/70",
+                        isPending && "opacity-50 cursor-wait"
+                    )}
+                >
+                    VI
+                </button>
             </div>
         </div>
     );
