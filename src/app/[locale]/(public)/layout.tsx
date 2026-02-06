@@ -27,7 +27,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
 
             <div className={cn(
                 "w-full flex-shrink-0 transition-[height] duration-300 ease-in-out",
-                isScrolled ? "h-[80px]" : "h-[270px]"
+                isScrolled ? "h-[80px]" : "h-[80px] md:h-[270px]"
             )} />
 
             <main className="flex-1">{children}</main>

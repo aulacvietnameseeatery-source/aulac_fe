@@ -4,5 +4,5 @@ import { ApiResponse } from "@/types/api-response.types";
 
 export const forgotPasswordApi = {
   sendResetEmail: (body: ForgotPasswordRequest) =>
-    api.post<ApiResponse<void>>("/auth/forgot-password", body),
+    api.post<ApiResponse<void>>("/api/auth/forgot-password", body),
 };

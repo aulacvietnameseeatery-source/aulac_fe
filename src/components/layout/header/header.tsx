@@ -3,13 +3,14 @@
 import Link from "next/link";
 import {
     Menu as MenuIcon, X, MapPin, Phone, Clock, Globe,
-    QrCode, Home
+    QrCode, Home, User
 } from "lucide-react";
 import { useState, useTransition, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { usePathname, useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { NavLink } from "@/components/layout/header/nav-link";
+import { useIsMobile } from "@/hooks/header/useIsMobile";
 
 // Lưu ý: Đảm bảo file header.css đã được import (thông qua globals.css hoặc import trực tiếp tại đây nếu cấu hình cho phép)
 
@@ -19,6 +20,10 @@ interface HeaderProps {
 }
 
 export function Header({ isScrolled, locale }: HeaderProps) {
+    const isMobile = useIsMobile();
+
+    const effectiveScrolled = isMobile ? true : isScrolled;
+
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isPending, startTransition] = useTransition();
     const t = useTranslations('Header');
@@ -100,20 +105,20 @@ export function Header({ isScrolled, locale }: HeaderProps) {
 
     return (
         <header className={cn("header-container",
-            isMobileMenuOpen ? "is-mobile-open" : (isScrolled ? "is-scrolled" : "is-default")
+            isMobileMenuOpen ? "is-mobile-open" : (effectiveScrolled ? "is-scrolled" : "is-default")
         )}>
             <div className="header-inner">
 
                 {/* ===== TOP BAR ===== */}
-                <div className={cn("top-bar", isScrolled ? "is-scrolled" : "is-default")}>
+                <div className={cn("top-bar", effectiveScrolled ? "is-scrolled" : "is-default")}>
 
                     {/* LOGO */}
                     {/* 👇 ĐÃ SỬA: Xóa class 'group' ở đây */}
                     <Link href={getLink("/")} className="logo-wrapper" onClick={() => setIsMobileMenuOpen(false)}>
-                        <h1 className={cn("logo-title", isScrolled ? "is-scrolled" : "is-default")}>
+                        <h1 className={cn("logo-title", effectiveScrolled ? "is-scrolled" : "is-default")}>
                             An Lac
                         </h1>
-                        <div className={cn("logo-slogan-wrapper", isScrolled ? "is-scrolled" : "is-default")}>
+                        <div className={cn("logo-slogan-wrapper", effectiveScrolled ? "is-scrolled" : "is-default")}>
                             <span className="slogan-main">{t('slogan_1')}</span>
                             <span className="slogan-sub">{t('slogan_2')}</span>
                         </div>
@@ -137,16 +142,25 @@ export function Header({ isScrolled, locale }: HeaderProps) {
                         </nav>
 
                         {/* Lang Switcher */}
-                        <div className={cn("lang-switcher-wrapper", isScrolled ? "is-scrolled" : "is-default")}>
+                        <div className={cn("lang-switcher-wrapper", effectiveScrolled ? "is-scrolled" : "is-default")}>
                             <LanguageSwitcher />
                         </div>
+
+
 
                         {/* Reserve Button */}
                         <div className="hidden md:block">
                             <Link href={getLink("/reservation")}>
-                                <button className={cn("reserve-btn", isScrolled ? "is-scrolled" : "is-default")}>
+                                <button className={cn("reserve-btn", effectiveScrolled ? "is-scrolled" : "is-default")}>
                                     {t('reserve')}
                                 </button>
+                            </Link>
+                        </div>
+
+                        {/* Staff Login (Desktop) */}
+                        <div className="hidden md:block">
+                            <Link href={getLink("/login")} className="text-white/80 hover:text-[#D5A673] transition-colors" title="Login as Staff">
+                                <User size={24} />
                             </Link>
                         </div>
 
@@ -161,7 +175,7 @@ export function Header({ isScrolled, locale }: HeaderProps) {
                 </div>
 
                 {/* ===== INFO BAR ===== */}
-                <div className={cn("info-bar", isScrolled ? "is-scrolled" : "is-default")}>
+                <div className={cn("info-bar", effectiveScrolled ? "is-scrolled" : "is-default")}>
                     <div className="info-content">
                         <div className="flex items-center gap-8">
                             <div className="info-item">
@@ -188,18 +202,33 @@ export function Header({ isScrolled, locale }: HeaderProps) {
             {isMobileMenuOpen && (
                 <div className="mobile-menu-overlay">
                     <div className="mobile-menu-inner">
+                        {/* Mobile Menu Header */}
+                        <div className="flex items-center justify-between pb-6 border-b border-white/10">
+                            <span className="text-[20px] font-display font-medium text-white">An Lac</span>
+                            <button
+                                onClick={() => setIsMobileMenuOpen(false)}
+                                className="p-2 -mr-2 text-white/80 hover:text-[#D5A673] transition-colors"
+                            >
+                                <X size={28} />
+                            </button>
+                        </div>
 
                         {/* Menu Items */}
                         <nav className="flex flex-col gap-2 mt-8">
-                            {navItems.map((item) => (
+                            {navItems.map((item, index) => (
                                 <Link
                                     key={item.href}
                                     href={getLink(item.href)}
                                     onClick={() => setIsMobileMenuOpen(false)}
-                                    className="mobile-nav-link"
+                                    className="mobile-nav-link animate-in slide-in-from-bottom-2 fade-in duration-500"
+                                    style={{ animationDelay: `${100 + index * 50}ms`, animationFillMode: 'both' }}
                                 >
-                                    {item.icon && <span className="text-[#D5A673]">{item.icon}</span>}
                                     <span>{item.isIconOnly ? t('qr_scan') : item.label}</span>
+                                    {item.icon ? (
+                                        <span className="text-[#D5A673]">{item.icon}</span>
+                                    ) : (
+                                        <span className="w-1.5 h-1.5 rounded-full bg-white/20" />
+                                    )}
                                 </Link>
                             ))}
                         </nav>
@@ -210,6 +239,18 @@ export function Header({ isScrolled, locale }: HeaderProps) {
                                 <button className="mobile-reserve-btn">
                                     {t('reserve')}
                                 </button>
+                            </Link>
+                        </div>
+
+                        {/* Staff Login */}
+                        <div className="mt-4 px-2">
+                            <Link
+                                href={getLink("/login")}
+                                onClick={() => setIsMobileMenuOpen(false)}
+                                className="flex items-center justify-center gap-2 text-white/60 hover:text-[#D5A673] transition-colors py-3 text-sm uppercase tracking-widest font-medium"
+                            >
+                                <User size={18} />
+                                <span>Login as Staff</span>
                             </Link>
                         </div>
 

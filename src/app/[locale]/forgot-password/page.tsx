@@ -6,9 +6,9 @@ import {
   ForgotPasswordSuccess,
   ForgotPasswordCard,
   useForgotPassword
-} from "@/features/auth/forgot-password";
+} from "@/features/customer/auth/forgot-password";
 
-import { LoginBackground } from "@/features/auth/login/components/login-background";
+import { LoginBackground } from "@/features/customer/auth/login/components/login-background";
 
 export default function ForgotPasswordPage() {
   const {
