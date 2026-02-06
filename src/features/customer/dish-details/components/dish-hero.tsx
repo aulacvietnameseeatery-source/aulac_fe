@@ -2,6 +2,15 @@
 
 import { useTranslations } from "next-intl";
 import { Dish } from "../types";
+import { useState, useEffect, useRef } from "react";
+import Script from "next/script";
+
+// Khai báo types cho window.cloudinary để TypeScript không báo lỗi
+declare global {
+  interface Window {
+    cloudinary: any;
+  }
+}
 
 type DishHeroProps = {
   dish: Dish;
@@ -10,78 +19,152 @@ type DishHeroProps = {
 
 export function DishHero({ dish, onOrderNow }: DishHeroProps) {
   const t = useTranslations("DishDetails.Hero");
-  
-  // Temporarily use fixed image (imageUrls from API available but not used yet)
   const heroImage = "/images/dish-detail/dish-hero/dish-hero.png";
 
+  // State quản lý chế độ xem: 'photo' | '360' | 'video'
+  const [viewMode, setViewMode] = useState<'photo' | '360' | 'video'>('photo');
+
+  // Ref để kiểm tra xem widget đã được render chưa
+  const galleryRef = useRef<any>(null);
+
+  // --- CẤU HÌNH CLOUDINARY ---
+  // Lưu ý: Thay đúng Cloud Name và Tag của bạn
+  const CLOUD_NAME = "dkstc8tkg";
+  const SPIN_TAG = "tiramisu-360"; // Đảm bảo ảnh trên Cloudinary đã gắn tag này
+
+  // Effect khởi tạo 360 Viewer
+  useEffect(() => {
+    // Chỉ chạy khi ở chế độ 360 và script đã load xong
+    if (viewMode === '360' && typeof window !== 'undefined' && window.cloudinary) {
+
+      // Hủy instance cũ nếu có để tránh lỗi render chồng (memory leak)
+      if (galleryRef.current) {
+        galleryRef.current.destroy();
+      }
+
+      // Khởi tạo Widget
+      galleryRef.current = window.cloudinary.galleryWidget({
+        container: "#cloudinary-360-target",
+        cloudName: CLOUD_NAME,
+        mediaAssets: [
+          { tag: SPIN_TAG, mediaType: "spin" }
+        ],
+        carouselStyle: "none", // Quan trọng: Ẩn thanh thumbnail bên dưới
+        navigation: "always",  // Luôn hiện nút xoay trái/phải
+        zoom: true,            // Cho phép user zoom in/out
+        spinProps: {
+          direction: "clockwise",
+          speed: 5
+        }
+        // Lưu ý: Không set aspectRatio để widget tự fill theo container cha
+      });
+
+      galleryRef.current.render();
+    }
+  }, [viewMode]);
+
   return (
-    <section className="mx-auto w-full max-w-[1200px] overflow-hidden px-4 pt-6 md:pt-10">
-      <div className="relative h-[580px] overflow-hidden rounded-2xl shadow-[0px_8px_10px_-6px_rgba(0,0,0,0.10)] shadow-xl md:h-[561px]">
-        <img
-          src={heroImage}
-          alt={dish.dishName}
-          className="absolute left-0 top-0 h-full w-full object-contain md:top-[-460px] md:h-[1045px] md:object-cover"
+      <section className="mx-auto w-full max-w-[1200px] overflow-hidden px-4 pt-6 md:pt-10">
+
+        {/* Load Script Cloudinary (Lazy load để tối ưu performance) */}
+        <Script
+            src="https://product-gallery.cloudinary.com/all.js"
+            strategy="lazyOnload"
+            onLoad={() => console.log("Cloudinary Script Loaded")}
         />
 
-        {/* Gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent md:bg-gradient-to-l md:from-black/80 md:via-black/20 md:to-black/0" />
+        {/* CONTAINER CHÍNH */}
+        {/* overflow-hidden: Cắt bỏ phần thừa khi ta đẩy ảnh 360 lên trên */}
+        <div className="relative h-[580px] overflow-hidden rounded-2xl shadow-[0px_8px_10px_-6px_rgba(0,0,0,0.10)] shadow-xl md:h-[561px] bg-neutral-100">
 
-        {/* Order Now */}
-        <button
-          type="button"
-          className="absolute bottom-6 left-4 right-4 h-12 w-auto whitespace-nowrap rounded-lg bg-amber-400 px-6 shadow-lg md:left-auto md:right-[150px] md:top-[492px] md:bottom-auto md:h-11 md:w-auto md:min-w-[112px]"
-          onClick={onOrderNow}
-        >
-          <span className="text-base font-bold text-blue-950 md:text-sm md:font-medium">{t("order_now")}</span>
-        </button>
-
-        {/* Photo / 360 / Video pill (UI only) */}
-        <div className="absolute left-1/2 top-4 inline-flex -translate-x-1/2 items-center gap-1 rounded-full bg-black/30 p-1 outline outline-1 outline-offset-[-1px] outline-white/10 backdrop-blur-md md:gap-2 md:p-1.5">
-          <button
-            type="button"
-            className="rounded-full bg-white/20 px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-white outline outline-1 outline-offset-[-1px] outline-white/20 shadow-lg md:px-6 md:py-2.5 md:text-xs"
-          >
-            {t("photo")}
-          </button>
-          <button
-            type="button"
-            className="rounded-full px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-white/70 md:px-6 md:py-2.5 md:text-xs"
-          >
-            {t("view_360")}
-          </button>
-          <button
-            type="button"
-            className="rounded-full px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-white/70 md:px-6 md:py-2.5 md:text-xs"
-          >
-            {t("video")}
-          </button>
-        </div>
-      </div>
-
-
-      
-
-      {/* Dish Information - Moved below image */}
-      {/* <div className="px-4 py-6 md:px-0 md:py-8">
-        <h1 className="mb-2 text-3xl font-semibold text-gray-900 md:text-4xl">
-          {dish.dishName}
-        </h1>
-
-        <p className="mb-4 text-xl font-semibold text-gray-900 md:text-2xl">
-          {dish.price?.toLocaleString('vi-VN')}₫
-        </p>
-
-        <div className="space-y-2 text-sm text-gray-700 md:text-base">
-          {(dish.description || dish.slogan || dish.shortDescription) && (
-            <div>{dish.description || dish.slogan || dish.shortDescription}</div>
+          {/* --- 1. VIEW MODE: PHOTO (Mặc định) --- */}
+          {viewMode === 'photo' && (
+              <>
+                <img
+                    src={heroImage}
+                    alt={dish.dishName}
+                    className="absolute left-0 top-0 h-full w-full object-contain md:top-[-460px] md:h-[1045px] md:object-cover animate-in fade-in duration-500"
+                />
+                {/* Gradient overlay giúp text dễ đọc hơn trên nền ảnh */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent md:bg-gradient-to-l md:from-black/80 md:via-black/20 md:to-black/0 pointer-events-none" />
+              </>
           )}
-        </div>
-      </div> */}
-      
-      
-      
-    </section>
 
-    
+          {/* --- 2. VIEW MODE: 360 SPIN --- */}
+          {/* KỸ THUẬT CĂN CHỈNH:
+              - absolute left-0 w-full: Căn full chiều ngang
+              - -top-12 (tương đương -48px): Kéo khung lên trên để giấu bớt phần trời/khoảng trắng thừa
+              - h-[120%]: Tăng chiều cao lên 120% để bù lại phần bị kéo lên, đảm bảo đáy không bị hở trắng
+              - bg-white: Nền trắng cho sạch sẽ
+          */}
+          <div
+              id="cloudinary-360-target"
+              className={`absolute left-0 w-full -top-80 h-[120%] z-10 bg-white ${viewMode === '360' ? 'block' : 'hidden'}`}
+          >
+            {/* Cloudinary Widget sẽ được render vào đây */}
+          </div>
+
+          {/* --- 3. VIEW MODE: VIDEO (Placeholder) --- */}
+          {viewMode === 'video' && (
+              <div className="absolute inset-0 z-10 flex items-center justify-center bg-black animate-in fade-in">
+                <p className="text-white font-medium">Video Player Coming Soon</p>
+              </div>
+          )}
+
+          {/* --- NÚT ORDER NOW --- */}
+          {viewMode !== '360' && (
+              <button
+                  type="button"
+                  className="absolute bottom-6 left-4 right-4 z-20 h-12 w-auto whitespace-nowrap rounded-lg bg-amber-400 px-6 shadow-lg md:left-auto md:right-[150px] md:top-[492px] md:bottom-auto md:h-11 md:w-auto md:min-w-[112px] hover:bg-amber-500 transition-colors"
+                  onClick={onOrderNow}
+              >
+                <span className="text-base font-bold text-blue-950 md:text-sm md:font-medium">{t("order_now")}</span>
+              </button>
+          )}
+
+          {/* --- THANH ĐIỀU HƯỚNG (SWITCH MODES) --- */}
+          <div className="absolute left-1/2 top-4 z-30 inline-flex -translate-x-1/2 items-center gap-1 rounded-full bg-black/30 p-1 outline outline-1 outline-offset-[-1px] outline-white/10 backdrop-blur-md md:gap-2 md:p-1.5">
+            {/* PHOTO BTN */}
+            <button
+                type="button"
+                onClick={() => setViewMode('photo')}
+                className={`rounded-full px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider transition-all duration-300 md:px-6 md:py-2.5 md:text-xs ${
+                    viewMode === 'photo'
+                        ? "bg-white/20 text-white outline outline-1 outline-offset-[-1px] outline-white/20 shadow-lg"
+                        : "text-white/70 hover:bg-white/10"
+                }`}
+            >
+              {t("photo")}
+            </button>
+
+            {/* 360 BTN */}
+            <button
+                type="button"
+                onClick={() => setViewMode('360')}
+                className={`rounded-full px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider transition-all duration-300 md:px-6 md:py-2.5 md:text-xs ${
+                    viewMode === '360'
+                        ? "bg-white/20 text-white outline outline-1 outline-offset-[-1px] outline-white/20 shadow-lg"
+                        : "text-white/70 hover:bg-white/10"
+                }`}
+            >
+              {t("view_360")}
+            </button>
+
+            {/* VIDEO BTN */}
+            <button
+                type="button"
+                onClick={() => setViewMode('video')}
+                className={`rounded-full px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider transition-all duration-300 md:px-6 md:py-2.5 md:text-xs ${
+                    viewMode === 'video'
+                        ? "bg-white/20 text-white outline outline-1 outline-offset-[-1px] outline-white/20 shadow-lg"
+                        : "text-white/70 hover:bg-white/10"
+                }`}
+            >
+              {t("video")}
+            </button>
+          </div>
+
+        </div>
+      </section>
   );
 }
