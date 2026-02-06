@@ -1,0 +1,486 @@
+{
+  "Header": {
+    "home": "Trang chủ",
+    "menu": "THỰC ĐƠN",
+    "about": "VỀ CHÚNG TÔI",
+    "contact": "LIÊN HỆ",
+    "qr_scan": "QUÉT MÃ QR",
+    "reserve": "ĐẶT BÀN",
+    "slogan_1": "Nhà Hàng Việt Nam",
+    "slogan_2": "Hương vị Việt Nam, tinh thần thân thiện"
+  },
+  "Footer": {
+    "description": "Định nghĩa bởi sự xuất sắc, dẫn dắt bởi di sản.\nĐỉnh cao của nghệ thuật ẩm thực Việt Nam\nngay tại trung tâm thành phố.",
+    "reservations": "Đặt bàn",
+    "location": "Vị trí",
+    "open_maps": "Mở bản đồ",
+    "newsletter": "Bản tin",
+    "newsletter_desc": "Tham gia cộng đồng của chúng tôi để nhận thông tin về\nsự kiện độc quyền và món ăn mùa mới.",
+    "email_placeholder": "Địa chỉ email",
+    "copyright": "© 2026 Au Lac Nhà Hàng Việt Nam. Bản quyền đã được bảo hộ.",
+    "privacy": "Quyền riêng tư",
+    "terms": "Điều khoản",
+    "sitemap": "Sơ đồ trang web"
+  },
+  "Introduction": {
+    "Hero": {
+      "est": "Thành lập 1994",
+      "title": "Bản Giao Hưởng\nNghệ Thuật\nẨm Thực Việt",
+      "quote": "\"Nơi di sản sông Hồng gặp gỡ sự tinh tế của ẩm thực hiện đại.\""
+    },
+    "Chef": {
+      "label": "Nghệ Nhân",
+      "title": "Làm Chủ\nLinh Hồn Hương Vị",
+      "chef_1_name": "Bếp Trưởng Minh",
+      "chef_1_quote": "\"Ẩm thực là cầu nối giữa lịch sử và giác quan. Tại Au Lac, chúng tôi không chỉ nấu; chúng tôi tạo nên ký ức qua gia vị truyền thống và kết cấu hiện đại.\"",
+      "chef_2_name": "Phó Bếp Trưởng Linh",
+      "chef_2_quote": "\"Sự cân bằng là kim chỉ nam của chúng tôi. Sự tương phản giữa nóng và lạnh, giòn và mềm, ngọt và mặn định hình bản sắc Việt Nam.\"",
+      "cta": "Đọc câu chuyện"
+    },
+    "Collection": {
+      "label": "Bộ Sưu Tập",
+      "title": "Kiệt Tác Đặc Trưng",
+      "dish_1_category": "Lựa Chọn Di Sản",
+      "dish_1_title": "Salad Củ Sen",
+      "dish_1_desc": "Trình bày nghệ thuật với lá vàng ăn được và nước sốt giấm Việt Nam lâu năm.",
+      "dish_1_main": "Sen Hoàng Gia",
+      "dish_1_sub": "Sự Tươi Mới Được Điêu Khắc",
+      "dish_2_category": "Nấu Chậm",
+      "dish_2_title": "Cá Kho Tộ",
+      "dish_2_desc": "Cá hồng om trong 6 giờ trong nồi gốm truyền thống với tiêu đen và đường thốt nốt.",
+      "dish_2_main": "Umami Đại Dương",
+      "dish_2_sub": "Ngấm 24 Giờ",
+      "dish_3_category": "Đặc Trưng",
+      "dish_3_title": "Phở Truyền Thống",
+      "dish_3_desc": "Bản giao hưởng của nước hầm xương 24 giờ với hoa hồi và thịt bò wagyu hiếm.",
+      "dish_3_main": "Nước Dùng Vàng",
+      "dish_3_sub": "Trái Tim Hà Nội"
+    },
+    "VirtualTour": {
+      "label": "Trải Nghiệm",
+      "title": "Tầm Nhìn Đắm Chìm",
+      "desc": "Khám phá không gian của chúng tôi từ mọi góc độ trước khi đến.",
+      "tour_label": "Thăm Quan Ảo",
+      "tour_title": "Xem 360°"
+    }
+  },
+  "Breadcrumb": {
+    "home": "Trang chủ",
+    "menu": "Thực đơn",
+    "about": "Về chúng tôi",
+    "dish_details": "Chi_Tiết_Món_Ăn"
+  },
+  "OrderPopup": {
+    "success_label": "Thành công",
+    "success_message": "Đã thêm món vào giỏ hàng",
+    "dish_name": "Bún Bò Huế\nHoàng Gia",
+    "price": "$18.50",
+    "quantity_label": "Số lượng",
+    "view_selection": "Xem giỏ hàng & Đặt món",
+    "continue_browsing": "Tiếp tục chọn món",
+    "footer_text": "Ẩm Thực Việt Nam Thủ Công"
+  },
+  "DishDetails": {
+    "Hero": {
+      "tag": "Kiệt Tác Của Bếp Trưởng",
+      "title_line_1": "Bún Bò Huế",
+      "title_line_2": "Hoàng Gia",
+      "subtitle": "Hành trình ẩm thực đến Cố đô Huế, cân bằng\nsự táo bạo và tinh tế trong một bát.",
+      "reserve": "Đặt Trải Nghiệm",
+      "share": "Chia sẻ",
+      "order_now": "Đặt Ngay",
+      "photo": "Hình ảnh",
+      "view_360": "Xem 360°",
+      "video": "Video"
+    },
+    "Narrative": {
+      "label": "Câu Chuyện",
+      "title": "Nơi truyền thống hoàng gia gặp gỡ\nsự tinh tế hiện đại.",
+      "paragraph_1": "Xuất phát từ ẩm thực cung đình triều Nguyễn, món này—được biết đến là Bún Bò Huế—là sự hòa quyện hài hòa giữa cay, chua, mặn và ngọt. Nó là minh chứng cho sự phức tạp ẩm thực của miền Trung Việt Nam, mang hương vị mạnh mẽ hơn nhiều so với Phở miền Bắc.",
+      "paragraph_2": "Linh hồn của món ăn nằm ở nước dùng. Chúng tôi ninh móng giò heo và xương bò cao cấp trong mười hai giờ với sả đập dập và một chút mắm ruốc. Quy trình tỉ mỉ này chiết xuất những nốt umami sâu sắc trong khi vẫn duy trì độ trong đặc trưng của ẩm thực Việt Nam cao cấp.",
+      "paragraph_3": "Phục vụ với bún to, hình trụ và hoàn thiện với sa tế ớt tự làm, mỗi bát là lời tri ân cho những buổi sáng sương mù bên sông Hương. Đây không chỉ là món súp; đó là lịch sử được đổ vào bát sứ.",
+      "pairing_label": "Gợi Ý Rượu",
+      "pairing_title": "Grand Cru Riesling 2018",
+      "pairing_desc": "\"Độ chua giòn và hương khoáng chất của loại Riesling Alsace này cắt ngang nước dùng đậm đà, cay nồng, làm sạch vòm miệng trong khi bổ sung cho hương thơm sả.\"",
+      "add_to_order": "Thêm vào đơn"
+    },
+    "Composition": {
+      "label": "Thành Phần",
+      "no_composition": "Chưa có thông tin thành phần",
+      "item_1_title": "Bún",
+      "item_1_sub": "Phong Cách Huế",
+      "item_1_desc": "Sợi bún to, hình trụ với độ dai hấp dẫn, truyền thống của miền Trung Việt Nam.",
+      "item_2_title": "Sả Hoàng Gia",
+      "item_2_sub": "Đồng Bằng Sông Cửu Long",
+      "item_2_desc": "Cây sả tươi thu hoạch mang lại hương thơm cam chanh đặc trưng cho nước dùng.",
+      "item_3_title": "Mắm Ruốc",
+      "item_3_sub": "Mắm Tôm Lên Men",
+      "item_3_desc": "Gia vị truyền thống cung cấp nền tảng umami thiết yếu cho món ăn.",
+      "stat_prep": "Chuẩn bị",
+      "stat_prep_val": "12 Giờ",
+      "stat_cal": "Calories",
+      "stat_cal_val": "580 kcal",
+      "stat_allergen": "Dị ứng",
+      "stat_allergen_val": "Hải sản",
+      "stat_spice": "Độ cay",
+      "stat_spice_val": "Trung bình - Cao"
+    }
+  },
+  "DishDetailsV2": {
+    "Hero": {
+      "label": "Trải Nghiệm Tương Tác 01",
+      "title": "Ẩm Thực Chiều Không",
+      "hold_rotate": "Giữ & Xoay để xem",
+      "order_now": "Đặt Ngay"
+    },
+    "Narrative": {
+      "tag": "Lựa Chọn Đặc Trưng Của Bếp Trưởng",
+      "title": "Bún Bò Huế Hoàng Gia",
+      "est": "Thành lập 1802 Triều Nguyễn",
+      "paragraph_1": "Xuất phát từ ẩm thực cung đình triều Nguyễn, món này—được biết đến là Bún Bò Huế—là sự hòa quyện hài hòa giữa cay, chua, mặn và ngọt. Nó là minh chứng cho sự phức tạp ẩm thực của miền Trung Việt Nam, mang hương vị mạnh mẽ hơn nhiều so với Phở miền Bắc.",
+      "paragraph_2": "Linh hồn của món ăn nằm ở nước dùng. Chúng tôi ninh móng giò heo và xương bò cao cấp trong mười hai giờ với sả đập dập và một chút mắm ruốc. Quy trình tỉ mỉ này chiết xuất những nốt umami sâu sắc trong khi vẫn duy trì độ trong đặc trưng của ẩm thực Việt Nam cao cấp.",
+      "paragraph_3": "Phục vụ với bún to, hình trụ và hoàn thiện với sa tế ớt tự làm, mỗi bát là lời tri ân cho những buổi sáng sương mù bên sông Hương. Đây không chỉ là món súp; đó là lịch sử được đổ vào bát sứ."
+    },
+    "Composition": {
+      "label": "Nền Tảng",
+      "title": "Thành Phần",
+      "item_1_title": "Bún",
+      "item_1_tag": "Truyền Thống Huế",
+      "item_1_desc": "Sợi bún to, hình trụ với độ dai hấp dẫn, được làm thủ công để mang trọng lượng đậm đà của nước dùng hoàng gia.",
+      "item_2_title": "Sả Mekong",
+      "item_2_tag": "Nền Thơm",
+      "item_2_desc": "Cây sả tươi thu hoạch mang lại hương thơm cam chanh đặc trưng, đập tay để giải phóng tinh dầu vào nước ninh.",
+      "item_3_title": "Mắm Ruốc",
+      "item_3_tag": "Umami Sâu",
+      "item_3_desc": "Mắm tôm lên men hiếm có từ vùng biển Huế, cung cấp nền tảng nhiều tầng lớp thiết yếu của món ăn.",
+      "stat_curing": "Thời gian ninh",
+      "stat_curing_val": "12 Giờ",
+      "stat_cal": "Giá trị năng lượng",
+      "stat_cal_val": "580 kcal",
+      "stat_spice": "Độ cay",
+      "stat_spice_val": "Cường độ cao",
+      "stat_allergen": "Dị ứng",
+      "stat_allergen_val": "Hải sản"
+    },
+    "CTA": {
+      "reserve": "Đặt Trải Nghiệm Của Bạn"
+    },
+    "Cinematic": {
+      "label": "Góc nhìn 02",
+      "title": "Nghệ Thuật Nước Dùng",
+      "description": "Nghiên cứu hình ảnh về tinh chất sả ninh mười hai giờ, được chụp vào thời điểm chiết xuất hương vị đỉnh cao."
+    },
+    "Video": {
+      "title": "Quy Trình Chế Biến",
+      "subtitle": "Một phim của Au Lac",
+      "duration_label": "Thời lượng",
+      "duration_value": "02:45 PHÚT",
+      "resolution_label": "Độ phân giải",
+      "resolution_value": "4K ĐIỆN ẢNH"
+    }
+  },
+  "AboutUs": {
+    "Legacy": {
+      "est": "Thành lập 1994",
+      "title": "Di Sản Của Chúng Tôi"
+    },
+    "Journey": {
+      "title": "Hành Trình Hương Vị",
+      "paragraph_1": "Được thành lập tại trung tâm thủ đô vào năm 1994, <strong>Au Lac</strong> bắt đầu như một lời tri ân khiêm tốn đến nguồn gốc tổ tiên của ẩm thực Việt Nam. Được đặt tên theo vương quốc lịch sử của người Lạc Việt, nhà hàng của chúng tôi được hình dung như một cây cầu giữa truyền thống cổ xưa của phương Đông và kỹ thuật tinh tế của ẩm thực đương đại.",
+      "paragraph_2": "Trong ba thập kỷ, chúng tôi vẫn cam kết với triết lý \"trầm ấm\"—tạo ra một bầu không khí ấm áp, xúc động tâm hồn nơi mỗi món ăn kể một câu chuyện về di sản. Những gì bắt đầu với một công thức gia đình đơn giản cho Phở đã phát triển thành một trải nghiệm ẩm thực biên tập tôn vinh nhịp điệu theo mùa của vùng đất chúng tôi.",
+      "quote": "\"Chúng tôi không chỉ phục vụ thức ăn; chúng tôi bảo tồn tiếng vang của hàng ngàn năm tiến hóa ẩm thực.\"",
+      "paragraph_3": "Ngày nay, Au Lac đứng như một ngọn hải đăng của ẩm thực cao cấp Việt Nam, nơi tiếng kêu của nồi đất và mùi hương hoa hồi phục vụ như một sự trở về nhà cho các giác quan."
+    },
+    "Philosophy": {
+      "label": "Giá Trị Cốt Lõi",
+      "title": "Triết Lý Ẩm Thực",
+      "value_1_title": "Nghề Truyền Thống",
+      "value_1_desc": "Tôn vinh các kỹ thuật chậm rãi của tổ tiên. Từ nước dùng hầm 24 giờ đến gia vị xay tay bằng cối giã.",
+      "value_2_title": "Tinh Thần Hiện Đại",
+      "value_2_desc": "Nâng cao hương vị di sản thông qua độ chính xác, trình bày nghệ thuật và quan điểm toàn cầu tinh tế về ẩm thực cao cấp."
+    },
+    "Founders": {
+      "label": "Người Sáng Lập",
+      "title": "Gặp Gỡ Người Sáng Lập",
+      "paragraph_1": "Bếp trưởng Nguyễn và Chuyên gia rượu vang Linh thành lập Au Lac với một giấc mơ chung: định nghĩa lại cách thế giới nhìn nhận lòng hiếu khách Việt Nam.",
+      "paragraph_2": "Với nền tảng trải dài từ các quán ăn đường phố Sài Gòn đến nhà bếp được xếp hạng Michelin ở Paris, họ mang đến sự hài hòa cân bằng giữa sự ấm áp và xuất sắc chuyên nghiệp cho bàn ăn của mọi khách hàng.",
+      "quote": "\"Bàn ăn là nơi văn hóa sống. Chúng tôi mời bạn ngồi cùng chúng tôi.\"",
+      "quote_author": "— Nguyễn & Linh"
+    }
+  },
+  "Reservation": {
+    "Header": {
+      "title": "Chọn Bàn Của Bạn",
+      "subtitle": "Trải nghiệm ẩm thực cao cấp tốt nhất. Chọn khu vực và bàn ưa thích của bạn bên dưới."
+    },
+    "Legend": {
+      "available": "CÒN TRỐNG",
+      "reserved": "ĐÃ ĐẶT",
+      "selected": "ĐÃ CHỌN"
+    },
+    "TableGrid": {
+      "empty": "Không có bàn nào trong khu vực này."
+    },
+    "TableCard": {
+      "available": "Còn trống",
+      "reserved": "Đã đặt",
+      "selected": "Đã chọn",
+      "guests": "{count} Khách"
+    },
+    "Sidebar": {
+      "header": {
+        "title": "Tóm Tắt Đặt Bàn",
+        "subtitle": "Vui lòng xem lại lựa chọn của bạn"
+      },
+      "datetime": {
+        "label": "Ngày & Giờ",
+        "edit": "Sửa",
+        "save": "Lưu",
+        "cancel": "Hủy",
+        "selectDate": "Chọn ngày",
+        "selectTime": "Chọn giờ",
+        "openingHours": "(11:00 Sáng – 10:00 Tối)"
+      },
+      "table": {
+        "label": "Bàn Đã Chọn",
+        "zone": "Khu Vực Tiêu Chuẩn",
+        "guests": "{count} Khách",
+        "empty": "Vui lòng chọn bàn"
+      },
+      "guest": {
+        "label": "Thông Tin Của Bạn",
+        "name": "Họ và tên",
+        "phone": "Số điện thoại *",
+        "email": "Email (Tùy chọn)"
+      },
+      "action": {
+        "book": "Đặt Bàn Đã Chọn",
+        "saveFirst": "Lưu thay đổi trước"
+      },
+      "validation": {
+        "missingInfo": "* Vui lòng nhập Tên & Số điện thoại để đặt bàn"
+      },
+      "legal": "Bằng cách đặt bàn, bạn đồng ý với Điều khoản & Điều kiện và Chính sách Hủy của chúng tôi."
+    },
+    "BookingModal": {
+      "selectedTable": "Bàn Đã Chọn",
+      "title": "Xác Nhận Đặt Bàn",
+      "restaurantName": "Au Lac Nhà Hàng Việt Nam",
+      "date": "Ngày",
+      "time": "Giờ",
+      "guests": "Khách",
+      "guestsCount": "{count} Người",
+      "guestInfo": "Thông Tin Khách",
+      "policy": "Bàn được giữ trong 15 phút sau thời gian đặt. Vui lòng thông báo cho chúng tôi nếu có sự chậm trễ.",
+      "confirm": "Xác Nhận Đặt Bàn",
+      "changeSelection": "Thay Đổi Lựa Chọn"
+    }
+  },
+  "OrderSuccess": {
+    "Loading": {
+      "title": "Đang xử lý...",
+      "subtitle": "Đang lấy chi tiết đơn hàng của bạn"
+    },
+    "NotFound": {
+      "title": "Không Tìm Thấy Đơn Hàng",
+      "description": "Chúng tôi không thể tìm thấy chi tiết đơn hàng bạn đang tìm. Nó có thể đã bị xóa hoặc ID không chính xác.",
+      "cta": "Quay về trang chủ"
+    },
+    "Header": {
+      "title": "Cảm Ơn Bạn",
+      "subtitle": "Đơn hàng của bạn đã được xác nhận thành công"
+    },
+    "Summary": {
+      "orderNumber": "Mã Đơn Hàng",
+      "totalAmount": "Tổng Tiền",
+      "diningOption": "Tùy Chọn Dùng Bữa",
+      "quote": "Hành trình ẩm thực của bạn bắt đầu...",
+      "readyIn": "Sẵn sàng trong {minutes} phút"
+    },
+    "DiningOption": {
+      "DINE_IN": "Dùng tại chỗ",
+      "TAKE_AWAY": "Mang đi"
+    },
+    "Location": {
+      "label": "Điểm Lấy Hàng",
+      "address": "Quai du Mont-Blanc 13, Geneva"
+    },
+    "Actions": {
+      "viewReceipt": "Xem Hóa Đơn",
+      "backHome": "Quay về Trang Chủ"
+    }
+  },
+  "OrderReceipt": {
+    "Header": {
+      "title": "Hóa Đơn",
+      "subtitle": "Cảm ơn đơn hàng của bạn"
+    },
+    "InfoStrip": {
+      "orderNumber": "Mã Đơn",
+      "date": "Ngày Đặt",
+      "time": "Giờ",
+      "status": "Trạng Thái"
+    },
+    "Items": {
+      "title": "Chi Tiết Đơn Hàng",
+      "quantity": "SL"
+    },
+    "Summary": {
+      "subtotal": "Tạm tính",
+      "tips": "Tiền tip / Phí dịch vụ",
+      "total": "Tổng Tiền"
+    },
+    "Payment": {
+      "label": "Đã thanh toán qua"
+    },
+    "Actions": {
+      "download": "Tải PDF",
+      "print": "In"
+    },
+    "BackLink": {
+      "label": "Quay lại Bảng điều khiển"
+    }
+  },
+  "Contact": {
+    "Hero": {
+      "title": "Kết Nối Với Chúng Tôi",
+      "description": "Trải nghiệm tinh túy của sang trọng Việt Nam trên bờ Hồ Geneva.\nChúng tôi ở đây để hỗ trợ các câu hỏi của bạn, đặt sự kiện riêng tư và yêu cầu đặc biệt."
+    },
+    "Info": {
+      "addressLabel": "Địa Chỉ",
+      "address": "Quai du Mont-Blanc 13\n1201 Geneva, Switzerland",
+      "phoneLabel": "Điện Thoại",
+      "phone": "+41 22 123 45 67",
+      "emailLabel": "Email",
+      "email": "geneva@aulac.ch",
+      "hoursLabel": "Giờ Mở Cửa",
+      "hours": "Thứ Hai - Chủ Nhật: 11:30 Sáng - 11:00 Tối"
+    },
+    "Map": {
+      "title": "Tìm Chúng Tôi",
+      "hint": "Nhấp để tương tác"
+    },
+    "Socials": {
+      "title": "Theo Dõi Hành Trình",
+      "instagram": "Instagram",
+      "facebook": "Facebook",
+      "linkedin": "LinkedIn"
+    },
+    "Form": {
+      "title": "Gửi Câu Hỏi",
+      "fullName": "Họ và Tên",
+      "fullNamePlaceholder": "Tên của bạn",
+      "email": "Địa Chỉ Email",
+      "subject": "Chủ Đề",
+      "message": "Tin Nhắn",
+      "messagePlaceholder": "Chúng tôi có thể giúp gì cho bạn?",
+      "submit": "Gửi Tin Nhắn",
+      "subjects": {
+        "general": "Câu Hỏi Chung",
+        "events": "Sự Kiện Riêng Tư",
+        "reservation": "Đặt Bàn"
+      }
+    },
+    "Footer": {
+      "copyright": "© 2024 Au Lac Nhà Hàng Việt Nam - Geneva. Bản quyền đã được bảo hộ."
+    }
+  },
+  "MenuListing": {
+    "FilterBar": {
+      "all": "Tất cả",
+      "premium": "Cao cấp",
+      "seafood": "Hải sản",
+      "signature": "Đặc trưng",
+      "italian": "Ý",
+      "desserts": "Tráng miệng",
+      "beverages": "Đồ uống",
+      "appetizers": "Khai vị",
+      "main course": "Món chính",
+      "search_placeholder": "Tìm kiếm món ăn tinh tế...",
+      "metal": "Kim",
+      "wood": "Mộc",
+      "water": "Thủy",
+      "fire": "Hỏa",
+      "earth": "Thổ",
+      "vegetarian": "Chay"
+    },
+    "MenuGrid": {
+      "title": "Thực Đơn Cao Cấp",
+      "subtitle": "Trải nghiệm ẩm thực tinh tế từ các đầu bếp đẳng cấp thế giới, pha trộn hương vị Việt Nam truyền thống với kỹ thuật ẩm thực hiện đại.",
+      "book_link": "Không biết ăn gì? Đặt bàn trước",
+      "items": {
+        "1_name": "Bò Wagyu Nướng Cao Cấp",
+        "1_desc": "Thịt bò Wagyu A5 Nhật Bản nướng than, phục vụ với rau củ theo mùa và sốt nấm truffle.",
+        "2_name": "Tôm Hùm Thermidor",
+        "2_desc": "Tôm hùm tươi chế biến theo phong cách Pháp cổ điển, phủ sốt kem vàng và thảo mộc.",
+        "3_name": "Vịt Quay Bắc Kinh",
+        "3_desc": "Vịt vàng giòn phục vụ với bánh crepe ấm, hành lá và sốt đặc biệt của nhà hàng.",
+        "4_name": "Risotto Nấm Truffle",
+        "4_desc": "Gạo Arborio béo ngậy nấu chậm với phô mai Gruyère, rượu vang trắng và nấm truffle đen.",
+        "5_name": "Cá Hồi Hun Khói",
+        "5_desc": "Cá hồi hun khói tự làm phục vụ với crème fraîche, rau mầm tươi và bánh mì lúa mạch đen nướng.",
+        "6_name": "Tiramisu",
+        "6_desc": "Món tráng miệng Ý cổ điển làm từ mascarpone, bánh ladyfinger ngâm espresso và bột ca cao.",
+        "7_name": "Thịt Bò Nướng Hàn Quốc",
+        "7_desc": "Thịt bò thái mỏng nướng trên bàn bằng than, phục vụ với rau tươi và sốt gochujang.",
+        "8_name": "Krug Clos d'Ambonnay",
+        "8_desc": "Rượu champagne sang trọng với hương thơm phức tạp và ghi chú nếm tinh tế, hoàn hảo cho lễ kỷ niệm."
+      },
+      "order_btn": "Đặt Ngay"
+    },
+    "CartSummary": {
+      "title": "Tóm Tắt",
+      "items_count": "{count} Món",
+      "confirm_btn": "Xác Nhận Đơn"
+    }
+  },
+  "QrScan": {
+    "HeroSection": {
+      "label": "Không khí",
+      "quote": "\"Một hành trình ẩm thực bắt đầu bằng một tia lửa kỹ thuật số.\""
+    },
+    "ScanContent": {
+      "title": "Khám Phá\nLựa Chọn Của Chúng Tôi",
+      "subtitle": "Quét để khám phá câu chuyện ẩm thực đầy đủ của chúng tôi trên thiết bị của bạn",
+      "step_scan": "Quét",
+      "step_explore": "Khám phá",
+      "step_order": "Đặt món"
+    }
+  },
+  "ConfirmOrder": {
+    "OrderItem": {
+      "add_note": "Thêm ghi chú",
+      "edit_note": "Sửa ghi chú",
+      "note_placeholder": "ví dụ: Không cay, thêm sốt...",
+      "note_saved": "Đã lưu ghi chú"
+    },
+    "DiningOption": {
+      "eyebrow": "Bạn muốn thưởng thức như thế nào?",
+      "title": "Tùy Chọn Dùng Bữa",
+      "dine_in_label": "Trải Nghiệm",
+      "dine_in_title": "Dùng tại chỗ",
+      "dine_in_desc": "Đắm chìm trong bầu không khí yên tĩnh với dịch vụ đầy đủ.",
+      "take_away_label": "Nhanh & Tươi",
+      "take_away_title": "Mang đi",
+      "take_away_desc": "Thưởng thức hương vị tinh tế của chúng tôi trong sự thoải mái của ngôi nhà của bạn.",
+      "helper_dine_in": "Tiếp tục chọn bàn ưa thích của bạn.",
+      "helper_take_away": "Tiếp tục lên lịch thời gian nhận hàng.",
+      "btn_select_table": "Chọn Bàn",
+      "btn_checkout": "Đến Thanh Toán"
+    },
+    "OrderSummary": {
+      "title": "Xem Lại Đơn Hàng",
+      "section_title": "Món Đã Chọn",
+      "quantity_label": "Số lượng",
+      "subtotal": "Tạm tính",
+      "tax": "Dịch vụ & Thuế",
+      "total": "Tổng Tiền",
+      "items": {
+        "1_name": "Salad Củ Sen Hoàng Gia",
+        "1_category": "Lựa Chọn Di Sản",
+        "2_name": "Phở Bò Wagyu Truyền Thống",
+        "2_category": "Đặc Trưng"
+      }
+    }
+  }
+}

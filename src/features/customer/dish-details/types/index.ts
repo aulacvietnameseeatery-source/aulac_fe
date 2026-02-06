@@ -1,3 +1,11 @@
+export interface RecipeItem {
+  ingredientId: number;
+  ingredientName: string;
+  quantity: number;
+  unit: string;
+  note?: string;
+}
+
 export interface Dish {
   dishId: number;
   dishName: string;
@@ -10,6 +18,7 @@ export interface Dish {
   prepTimeMinutes?: number;
   cookTimeMinutes?: number;
   imageUrls: string[];
+  composition: RecipeItem[];
 }
 
 export interface DishDetailResponse {
