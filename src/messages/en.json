@@ -273,6 +273,12 @@
       "policy": "Tables are held for 15 minutes past reservation time. Please notify us of any delays.",
       "confirm": "Confirm Reservation",
       "changeSelection": "Change Selection"
+    },
+    "Toast": {
+      "success": "Reservation confirmed successfully!",
+      "error": "Failed to confirm reservation. Please try again.",
+      "lockSuccess": "Table locked successfully. Please complete your reservation.",
+      "lockError": "Failed to lock table. It might be occupied."
     }
   },
   "OrderSuccess": {

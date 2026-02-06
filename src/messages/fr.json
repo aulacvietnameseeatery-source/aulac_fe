@@ -273,6 +273,12 @@
       "policy": "Les tables sont conservées pendant 15 minutes après l’heure de réservation. Merci de nous prévenir en cas de retard.",
       "confirm": "Confirmer la réservation",
       "changeSelection": "Modifier la sélection"
+    },
+    "Toast": {
+      "success": "Réservation confirmée avec succès !",
+      "error": "Échec de la confirmation de la réservation. Veuillez réessayer.",
+      "lockSuccess": "Table verrouillée avec succès. Veuillez compléter votre réservation.",
+      "lockError": "Échec du verrouillage de la table. Elle peut être occupée."
     }
   },
   "OrderSuccess": {

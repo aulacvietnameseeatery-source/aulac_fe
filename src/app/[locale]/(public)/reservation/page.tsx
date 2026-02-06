@@ -13,10 +13,12 @@ import {
   TableAvailabilityDto,
   CreateReservationLockRequest,
 } from '@/features/reservation-2';
+import { toast } from "sonner"
 
 
 export default function ReservationPage() {
   const t = useTranslations('Reservation.Header');
+  const tToast = useTranslations('Reservation.Toast');
 
   // State
   const [date, setDate] = useState<string>(new Date().toISOString().split('T')[0]); // YYYY-MM-DD
@@ -93,12 +95,13 @@ export default function ReservationPage() {
         });
         setGuestInfo(info);
         setIsBookingModalOpen(true);
+        toast.success(tToast('lockSuccess'));
       } else {
-        alert("Failed to lock table: " + (res.userMessage || "Unknown error"));
+        toast.error(res.userMessage || tToast('lockError'));
         setCurrentLock(null); // Clear invalid lock state if any
       }
     } catch (error: any) {
-      alert("Error locking table: " + (error.message || "Unknown error"));
+      toast.error(tToast('lockError'));
       setCurrentLock(null);
     }
   };
@@ -120,7 +123,7 @@ export default function ReservationPage() {
       });
 
       if (res.success) {
-        alert("Reservation confirmed! ID: " + res.data?.reservationId);
+        toast.success(tToast('success'));
         setIsBookingModalOpen(false);
         setSelectedTableId(null);
         setCurrentLock(null); // Clear lock after success
@@ -131,12 +134,12 @@ export default function ReservationPage() {
           setTables(availabilityRes.data);
         }
       } else {
-        alert("Failed to confirm: " + res.userMessage);
+        toast.error(res.userMessage || tToast('error'));
         // If confirmation fails (e.g. lock expired), clear lock so user can try again (re-lock)
         setCurrentLock(null);
       }
     } catch (error: any) {
-      alert("Error confirming: " + (error.message || "Unknown error"));
+      toast.error(tToast('error'));
       setCurrentLock(null);
     }
   };

@@ -5,6 +5,7 @@ import { getMessages } from "next-intl/server";
 import QueryProvider from "@/components/providers/query-provider";
 // 👇 Import Component Guard vừa tạo
 import "@/styles/globals.css";
+import { Toaster } from "@/components/ui/sonner";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
 const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-playfair", display: "swap" });
@@ -59,9 +60,10 @@ export default async function RootLayout({
                         {/*<TableGuard>*/}
                         {children}
                         {/*</TableGuard>*/}
+                        <Toaster />
                     </NextIntlClientProvider>
                 </QueryProvider>
             </body>
-        </html>
+        </html >
     );
 }

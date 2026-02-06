@@ -274,6 +274,12 @@
       "policy": "Bàn được giữ trong 15 phút sau thời gian đặt. Vui lòng thông báo cho chúng tôi nếu có sự chậm trễ.",
       "confirm": "Xác Nhận Đặt Bàn",
       "changeSelection": "Thay Đổi Lựa Chọn"
+    },
+    "Toast": {
+      "success": "Xác nhận đặt bàn thành công!",
+      "error": "Không thể xác nhận đặt bàn. Vui lòng thử lại.",
+      "lockSuccess": "Đã giữ bàn thành công. Vui lòng hoàn tất đặt bàn.",
+      "lockError": "Không thể giữ bàn. Bàn có thể đã được đặt."
     }
   },
   "OrderSuccess": {
