@@ -1,7 +1,7 @@
 import {getRequestConfig} from 'next-intl/server';
 import {notFound} from 'next/navigation';
 
-const locales = ['en', 'fr'];
+const locales = ['en', 'fr', 'vi'];
 
 export default getRequestConfig(async ({requestLocale}) => {
     // 1. Lấy locale từ requestLocale (Đây là một Promise trong bản mới)
