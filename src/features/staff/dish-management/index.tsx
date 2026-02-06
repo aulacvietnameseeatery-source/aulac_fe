@@ -1,4 +1,4 @@
-// src/features/staff/dish-management/index.tsx
+// src/features/staff/dish-management/admin-sidebar.tsx
 'use client';
 
 import { useState, useEffect } from 'react';
