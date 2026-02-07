@@ -4,6 +4,7 @@ export interface TableAvailabilityDto {
     capacity: number;
     tableType: string;
     isAvailable: boolean;
+    lockedUntil?: string; // ISO string
 }
 
 export interface CreateReservationLockRequest {

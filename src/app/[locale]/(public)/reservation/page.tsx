@@ -1,7 +1,7 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import {
   TableGrid,
   ReservationSidebar,
@@ -12,11 +12,12 @@ import {
   reservationApi,
   TableAvailabilityDto,
   CreateReservationLockRequest,
+  SignalRProvider,
+  useSignalR
 } from '@/features/reservation-2';
 import { toast } from "sonner"
 
-
-export default function ReservationPage() {
+function ReservationContent() {
   const t = useTranslations('Reservation.Header');
   const tToast = useTranslations('Reservation.Toast');
 
@@ -32,27 +33,88 @@ export default function ReservationPage() {
   const [currentLock, setCurrentLock] = useState<{ lockToken: string; tableCode: string; tableId: number } | null>(null);
   const [guestInfo, setGuestInfo] = useState<{ name: string; phone: string; email: string; partySize: number } | null>(null);
 
+  // SignalR
+  const { connection } = useSignalR();
+
   // Fetch Availability
-  useEffect(() => {
-    const fetchAvailability = async () => {
-      setLoading(true);
-      try {
-        // Construct ISO DateTime for BE
-        // date = "2023-10-27", time = "19:00" -> "2023-10-27T19:00:00"
-        const reservedTime = `${date}T${time}:00`;
-        const res = await reservationApi.getAvailability({ reservedTime });
-        if (res.success && res.data) {
-          setTables(res.data);
-        }
-      } catch (error) {
-        console.error("Failed to fetch tables", error);
-      } finally {
-        setLoading(false);
+  const fetchAvailability = useCallback(async () => {
+    setLoading(true);
+    try {
+      // Construct ISO DateTime for BE
+      // date = "2023-10-27", time = "19:00" -> "2023-10-27T19:00:00"
+      const reservedTime = `${date}T${time}:00`;
+      const res = await reservationApi.getAvailability({ reservedTime });
+      if (res.success && res.data) {
+        setTables(res.data);
       }
+    } catch (error) {
+      console.error("Failed to fetch tables", error);
+    } finally {
+      setLoading(false);
+    }
+  }, [date, time]);
+
+  useEffect(() => {
+    fetchAvailability();
+  }, [fetchAvailability]);
+
+  // Handle SignalR Updates
+  useEffect(() => {
+    if (!connection) return;
+
+    const handleUpdate = (data: any) => {
+      // If it's a lock event, we might want to set a specific timeout for THIS lock
+      // But simpler: just refresh.
+      // If data contains lockedUntil, we could set a timeout.
+      // However, "TableLocked" event sends { tableId, lockedUntil }.
+      if (data && data.lockedUntil) {
+        const until = new Date(data.lockedUntil).getTime();
+        const now = new Date().getTime();
+        const delay = until - now;
+        if (delay > 0) {
+          setTimeout(() => {
+            fetchAvailability();
+          }, delay + 1000); // Add 1s buffer
+        }
+      }
+      fetchAvailability();
     };
 
-    fetchAvailability();
-  }, [date, time]);
+    connection.on("TableLocked", handleUpdate);
+    connection.on("TableUnlocked", handleUpdate);
+    connection.on("ReservationCreated", handleUpdate);
+    connection.on("ReservationStatusChanged", handleUpdate);
+
+    return () => {
+      connection.off("TableLocked", handleUpdate);
+      connection.off("TableUnlocked", handleUpdate);
+      connection.off("ReservationCreated", handleUpdate);
+      connection.off("ReservationStatusChanged", handleUpdate);
+    };
+  }, [connection, fetchAvailability]);
+
+  // Set timeouts for existing locks in `tables`
+  useEffect(() => {
+    const timers: NodeJS.Timeout[] = [];
+    tables.forEach(t => {
+      if (!t.isAvailable && t.lockedUntil) {
+        const until = new Date(t.lockedUntil).getTime();
+        const now = new Date().getTime();
+        const delay = until - now;
+        if (delay > 0) {
+          const timer = setTimeout(() => {
+            fetchAvailability();
+          }, delay + 1000);
+          timers.push(timer);
+        }
+      }
+    });
+
+    return () => {
+      timers.forEach(clearTimeout);
+    };
+  }, [tables, fetchAvailability]);
+
 
   // Handle Selection
   const handleSelectTable = (id: number) => {
@@ -128,11 +190,7 @@ export default function ReservationPage() {
         setSelectedTableId(null);
         setCurrentLock(null); // Clear lock after success
         // Refresh tables to show new status
-        // Trigger re-fetch logic
-        const availabilityRes = await reservationApi.getAvailability({ reservedTime });
-        if (availabilityRes.success && availabilityRes.data) {
-          setTables(availabilityRes.data);
-        }
+        fetchAvailability();
       } else {
         toast.error(res.userMessage || tToast('error'));
         // If confirmation fails (e.g. lock expired), clear lock so user can try again (re-lock)
@@ -219,5 +277,13 @@ export default function ReservationPage() {
         />
       </main>
     </div>
+  );
+}
+
+export default function ReservationPage() {
+  return (
+    <SignalRProvider>
+      <ReservationContent />
+    </SignalRProvider>
   );
 }
