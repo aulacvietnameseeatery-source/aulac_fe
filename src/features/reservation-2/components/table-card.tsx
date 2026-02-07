@@ -58,8 +58,8 @@ export default function TableCard({
                 <div className="table-info-wrapper">
                     <h3
                         className={`table-name ${status === "selected"
-                                ? "table-name-selected"
-                                : "table-name-default"
+                            ? "table-name-selected"
+                            : "table-name-default"
                             }`}
                     >
                         {tableCode}
