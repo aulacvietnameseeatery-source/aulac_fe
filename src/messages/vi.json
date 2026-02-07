@@ -180,33 +180,13 @@
     }
   },
   "AboutUs": {
-    "Legacy": {
-      "est": "Thành lập 1994",
-      "title": "Di Sản Của Chúng Tôi"
-    },
-    "Journey": {
-      "title": "Hành Trình Hương Vị",
-      "paragraph_1": "Được thành lập tại trung tâm thủ đô vào năm 1994, <strong>Au Lac</strong> bắt đầu như một lời tri ân khiêm tốn đến nguồn gốc tổ tiên của ẩm thực Việt Nam. Được đặt tên theo vương quốc lịch sử của người Lạc Việt, nhà hàng của chúng tôi được hình dung như một cây cầu giữa truyền thống cổ xưa của phương Đông và kỹ thuật tinh tế của ẩm thực đương đại.",
-      "paragraph_2": "Trong ba thập kỷ, chúng tôi vẫn cam kết với triết lý \"trầm ấm\"—tạo ra một bầu không khí ấm áp, xúc động tâm hồn nơi mỗi món ăn kể một câu chuyện về di sản. Những gì bắt đầu với một công thức gia đình đơn giản cho Phở đã phát triển thành một trải nghiệm ẩm thực biên tập tôn vinh nhịp điệu theo mùa của vùng đất chúng tôi.",
-      "quote": "\"Chúng tôi không chỉ phục vụ thức ăn; chúng tôi bảo tồn tiếng vang của hàng ngàn năm tiến hóa ẩm thực.\"",
-      "paragraph_3": "Ngày nay, Au Lac đứng như một ngọn hải đăng của ẩm thực cao cấp Việt Nam, nơi tiếng kêu của nồi đất và mùi hương hoa hồi phục vụ như một sự trở về nhà cho các giác quan."
-    },
-    "Philosophy": {
-      "label": "Giá Trị Cốt Lõi",
-      "title": "Triết Lý Ẩm Thực",
-      "value_1_title": "Nghề Truyền Thống",
-      "value_1_desc": "Tôn vinh các kỹ thuật chậm rãi của tổ tiên. Từ nước dùng hầm 24 giờ đến gia vị xay tay bằng cối giã.",
-      "value_2_title": "Tinh Thần Hiện Đại",
-      "value_2_desc": "Nâng cao hương vị di sản thông qua độ chính xác, trình bày nghệ thuật và quan điểm toàn cầu tinh tế về ẩm thực cao cấp."
-    },
-    "Founders": {
-      "label": "Người Sáng Lập",
-      "title": "Gặp Gỡ Người Sáng Lập",
-      "paragraph_1": "Bếp trưởng Nguyễn và Chuyên gia rượu vang Linh thành lập Au Lac với một giấc mơ chung: định nghĩa lại cách thế giới nhìn nhận lòng hiếu khách Việt Nam.",
-      "paragraph_2": "Với nền tảng trải dài từ các quán ăn đường phố Sài Gòn đến nhà bếp được xếp hạng Michelin ở Paris, họ mang đến sự hài hòa cân bằng giữa sự ấm áp và xuất sắc chuyên nghiệp cho bàn ăn của mọi khách hàng.",
-      "quote": "\"Bàn ăn là nơi văn hóa sống. Chúng tôi mời bạn ngồi cùng chúng tôi.\"",
-      "quote_author": "— Nguyễn & Linh"
-    }
+    "title": "An Lạc – Vietnamese Eatery",
+    "subtitle": "Một không gian ẩm thực Việt bình yên",
+    "description_1": "An Lạc không phải là nơi phô trương.\nĐó là nơi của sự bình yên.",
+    "description_2": "An Lạc được dẫn dắt bởi cân bằng, ký ức và tĩnh lặng. Tên gọi mang ý nghĩa hạnh phúc bình yên, lấy cảm hứng từ hành trình của người sáng lập — một người mẹ của ba đứa con — tạo nên một không gian phản chiếu sự chăm sóc, ổn định và triết lý An cư Lạc nghiệp.",
+    "description_3": "Tại An Lạc, chúng tôi không tìm cách thay đổi ẩm thực Việt, mà tôn vinh nó. Kiên nhẫn, hài hòa và tinh tế tạo nên từng món ăn: ninh nhừ từ từ một nồi nước dùng, cân bằng tinh tế của thảo mộc, chiều sâu kín đáo của lên men và sự khiêm nhường của hạt gạo.",
+    "description_4": "Các kỹ thuật quen thuộc như kho, hấp và nướng được thể hiện với sự chính xác và tinh giản. Hương vị cân bằng, đo lường và tinh tế.",
+    "description_5": "An Lạc là lời mời — hãy chậm lại, thưởng thức cẩn trọng và kết nối lại với điều cốt lõi."
   },
   "Reservation": {
     "Header": {
