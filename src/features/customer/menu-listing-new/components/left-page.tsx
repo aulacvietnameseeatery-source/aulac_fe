@@ -55,7 +55,7 @@ export const LeftPage = () => {
                         {/* Giá & Nút */}
                         <div className="flex flex-col items-end gap-1">
                             <span className="text-white font-display text-[11px] font-bold">12 CHF</span>
-                            <button className="text-[8px] text-[#C5A059] border border-[#C5A059] px-2 py-0.5 hover:bg-[#C5A059] hover:text-black uppercase">Add</button>
+                            <button className="text-[8px] text-[#C5A059] border border-[#C5A059] px-2 py-0.5 hover:bg-[#C5A059] hover:text-black uppercase">Order</button>
                         </div>
                     </div>
 
@@ -70,7 +70,7 @@ export const LeftPage = () => {
                         </div>
                         <div className="flex flex-col items-end gap-1">
                             <span className="text-white font-display text-[11px] font-bold">9 CHF</span>
-                            <button className="text-[8px] text-[#C5A059] border border-[#C5A059] px-2 py-0.5 hover:bg-[#C5A059] hover:text-black uppercase">Add</button>
+                            <button className="text-[8px] text-[#C5A059] border border-[#C5A059] px-2 py-0.5 hover:bg-[#C5A059] hover:text-black uppercase">Order</button>
                         </div>
                     </div>
                 </div>
