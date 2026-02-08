@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     title: "Bamee Gasstro - Vietnamese Eatery",
     description: "The pinnacle of Vietnamese culinary art.",
 
-    // 👇 Cấu hình quan trọng cho Apple Devices
+    //  Cấu hình quan trọng cho Apple Devices
     appleWebApp: {
         capable: true, // Biến web thành Web App (ẩn thanh địa chỉ safari)
         title: "Bamee Menu",
