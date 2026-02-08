@@ -1,7 +1,7 @@
 
 import { tokenStorage } from "./auth-storage";
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://localhost:7083";
+export const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://localhost:7083";
 
 type FetchOptions = RequestInit & {
     headers?: Record<string, string>;
@@ -14,13 +14,31 @@ async function http<T>(path: string, options?: FetchOptions): Promise<T> {
     const token = tokenStorage.getAccessToken();
     const authHeaders = token ? { Authorization: `Bearer ${token}` } : {};
 
+    const isFormData = options?.body instanceof FormData;
+
+    const headers: Record<string, string> = {};
+
+    if (!isFormData) {
+        headers["Content-Type"] = "application/json";
+    }
+
+    //CHỈ set Content-Type khi KHÔNG phải FormData
+    if (!isFormData) {
+        headers["Content-Type"] = "application/json";
+    }
+
+    // merge headers từ options (nếu có)
+  if (options?.headers) {
+    Object.entries(options.headers).forEach(([key, value]) => {
+      if (value !== undefined) {
+        headers[key] = value;
+      }
+    });
+  }
+
     const config: RequestInit = {
         ...options,
-        headers: {
-            "Content-Type": "application/json",
-            ...authHeaders,
-            ...options?.headers,
-        } as HeadersInit,
+        headers,
     };
 
     try {
@@ -60,21 +78,33 @@ export const api = {
     // post: <T>(path: string, body: never, options?: FetchOptions) =>
     //     http<T>(path, { ...options, method: "POST", body: JSON.stringify(body) }),
 
-    put: <T>(path: string, body: never, options?: FetchOptions) =>
-        http<T>(path, { ...options, method: "PUT", body: JSON.stringify(body) }),
+    // put: <T>(path: string, body: never, options?: FetchOptions) =>
+    //     http<T>(path, { ...options, method: "PUT", body: JSON.stringify(body) }),
 
     delete: <T>(path: string, options?: FetchOptions) =>
         http<T>(path, { ...options, method: "DELETE" }),
 
     post: <T, B = unknown>(
-        path: string,
-        body: B,
-        options?: FetchOptions
+    path: string,
+    body: B,
+    options?: FetchOptions
     ) =>
         http<T>(path, {
-            ...options,
-            method: "POST",
-            body: JSON.stringify(body),
+        ...options,
+        method: "POST",
+        body: body instanceof FormData
+            ? body
+            : JSON.stringify(body),
         }),
 
+    put: <T, B = unknown>(
+        path: string, 
+        body: B, 
+        options?: FetchOptions) =>
+            http<T>(path, { 
+                ...options, 
+                method: "PUT", 
+                body: body instanceof FormData 
+                ? body 
+                : JSON.stringify(body) }),
 };

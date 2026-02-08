@@ -30,5 +30,6 @@
 .main-view {
   height: 100%;
   background: #E5E7EB;
-  padding: 16px 20px 20px;
+
+  overflow-y: auto;
 }
