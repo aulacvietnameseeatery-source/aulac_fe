@@ -1,4 +1,8 @@
 {
+  "Metadata": {
+    "title": "Au Lac - Nhà Hàng Việt Nam",
+    "description": "Đỉnh cao của nghệ thuật ẩm thực Việt Nam ngay tại trung tâm thành phố."
+  },
   "Header": {
     "home": "Trang chủ",
     "menu": "THỰC ĐƠN",
@@ -278,7 +282,15 @@
       "copyNumber": "Sao Chép Số",
       "copied": "Đã Sao Chép!",
       "hours": "11:00 Sáng – 10:00 Tối",
-      "buttonText": "Gọi Đặt Bàn"
+      "buttonText": "Gọi Đặt Bàn",
+      "dialing": "Đang mở ứng dụng điện thoại..."
+    },
+    "Zone": {
+      "label": "Khu vực",
+      "All": "Tất cả",
+      "Indoor": "Trong nhà",
+      "Outdoor": "Ngoài trời",
+      "Rooftop": "Sân thượng"
     },
     "Toast": {
       "success": "Xác nhận đặt bàn thành công!",

@@ -1,4 +1,8 @@
 {
+  "Metadata": {
+    "title": "Au Lac - Table Vietnamienne",
+    "description": "L’apogée de l’art culinaire vietnamien au cœur de la ville."
+  },
   "Header": {
     "home": "Accueil",
     "menu": "MENU",
@@ -278,7 +282,15 @@
       "copyNumber": "Copier le numéro",
       "copied": "Copié !",
       "hours": "11h00 – 22h00",
-      "buttonText": "Appeler pour réserver"
+      "buttonText": "Appeler pour réserver",
+      "dialing": "Ouverture de l'application téléphonique..."
+    },
+    "Zone": {
+      "label": "Zone",
+      "All": "Tous",
+      "Indoor": "Intérieur",
+      "Outdoor": "Terrasse",
+      "Rooftop": "Toit-terrasse"
     },
     "Toast": {
       "success": "Réservation confirmée avec succès !",

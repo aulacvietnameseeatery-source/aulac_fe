@@ -1,4 +1,8 @@
 {
+  "Metadata": {
+    "title": "Au Lac - Vietnamese Eatery",
+    "description": "The pinnacle of Vietnamese culinary art in the heart of the city."
+  },
   "Header": {
     "home": "Home",
     "menu": "MENU",
@@ -277,7 +281,15 @@
       "copyNumber": "Copy Number",
       "copied": "Copied!",
       "hours": "11:00 AM – 10:00 PM",
-      "buttonText": "Call to Reserve"
+      "buttonText": "Call to Reserve",
+      "dialing": "Opening phone app..."
+    },
+    "Zone": {
+      "label": "Zone",
+      "All": "All",
+      "Indoor": "Indoor",
+      "Outdoor": "Outdoor",
+      "Rooftop": "Rooftop"
     },
     "Toast": {
       "success": "Reservation confirmed successfully!",

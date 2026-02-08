@@ -20,6 +20,7 @@ function ReservationContent() {
   const t = useTranslations('Reservation.Header');
   const tToast = useTranslations('Reservation.Toast');
   const tCall = useTranslations('Reservation.CallButton');
+  const tZone = useTranslations('Reservation.Zone');
 
   // State
   const [date, setDate] = useState<string>(new Date().toISOString().split('T')[0]); // YYYY-MM-DD
@@ -154,7 +155,7 @@ function ReservationContent() {
         tableId: selectedTableId,
         customerName: guestData.name,
         phone: guestData.phone,
-        email: guestData.email,
+        email: guestData.email || undefined, // Send undefined if empty
         partySize: guestData.partySize,
         reservedTime: reservedTime
       });
@@ -164,12 +165,18 @@ function ReservationContent() {
         fetchAvailability();
         return true;
       } else {
+        // Show actual error message from API
         toast.error(createRes.userMessage || tToast('error'));
         return false;
       }
 
     } catch (error: any) {
-      toast.error(tToast('error'));
+      // Try to extract error message from response
+      const errorMessage = error?.response?.data?.userMessage
+        || error?.response?.data?.message
+        || error?.message
+        || tToast('error');
+      toast.error(errorMessage);
       return false;
     }
   };
@@ -204,12 +211,18 @@ function ReservationContent() {
 
         {/* Call Restaurant Button - Show when no tables available */}
         {!loading && tables.length > 0 && tables.filter(t => t.isAvailable).length === 0 && (
-          <div className="mt-6 mb-6 flex justify-center">
+          <div className="mt-8 mb-8 p-6 bg-orange-50/50 border border-orange-100 rounded-2xl flex flex-col items-center text-center animate-in fade-in slide-in-from-bottom-4">
+            <h3 className="text-orange-900 font-semibold text-lg mb-2">
+              {tCall('subtitle')}
+            </h3>
+            <p className="text-orange-800/80 text-sm mb-6 max-w-md">
+              {tCall('description')}
+            </p>
             <button
               onClick={() => setShowCallPopup(true)}
-              className="group flex items-center gap-3 px-8 py-4 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-xl transition-all shadow-lg shadow-emerald-600/30 hover:shadow-xl hover:shadow-emerald-600/40 hover:scale-105"
+              className="group flex items-center gap-3 px-8 py-4 bg-orange-600 hover:bg-orange-700 text-white font-semibold rounded-xl transition-all shadow-lg shadow-orange-600/20 hover:shadow-xl hover:shadow-orange-600/30 hover:scale-[1.02]"
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5 group-hover:animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
               </svg>
               <span>{tCall('buttonText')}</span>
@@ -220,7 +233,7 @@ function ReservationContent() {
         {/* Filters */}
         <div className="flex flex-row gap-4 mb-6 overflow-x-auto">
           <FilterTabs
-            label="Zone"
+            label={tZone('label')}
             options={ZONES}
             value={activeZone}
             onChange={setActiveZone}

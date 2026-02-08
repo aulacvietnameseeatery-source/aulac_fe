@@ -1,7 +1,6 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
-// We assume access to standard UI components or Tailwind classes.
-// Using a horizontal scroll container for responsiveness.
+import { useTranslations } from 'next-intl';
 
 interface FilterTabsProps {
     label?: string;
@@ -9,6 +8,7 @@ interface FilterTabsProps {
     value: string;
     onChange: (value: string) => void;
     className?: string;
+    translationPrefix?: string; // e.g. "Reservation.Zone"
 }
 
 export default function FilterTabs({
@@ -16,8 +16,19 @@ export default function FilterTabs({
     options,
     value,
     onChange,
-    className
+    className,
+    translationPrefix
 }: FilterTabsProps) {
+    const t = useTranslations(translationPrefix || 'Reservation.Zone');
+
+    const getLabel = (option: string) => {
+        try {
+            return t(option);
+        } catch {
+            return option;
+        }
+    };
+
     return (
         <div className={cn("flex flex-col gap-2", className)}>
             {label && (
@@ -37,7 +48,7 @@ export default function FilterTabs({
                                 : "bg-white text-slate-600 border-slate-200 hover:border-slate-300 hover:bg-slate-50"
                         )}
                     >
-                        {option}
+                        {getLabel(option)}
                     </button>
                 ))}
             </div>

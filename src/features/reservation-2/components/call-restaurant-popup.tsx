@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { X, Phone, Copy, Clock } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import { toast } from 'sonner';
 
 interface CallRestaurantPopupProps {
     isOpen: boolean;
@@ -20,6 +21,7 @@ export default function CallRestaurantPopup({ isOpen, onClose }: CallRestaurantP
         try {
             await navigator.clipboard.writeText(phoneNumber);
             setCopied(true);
+            toast.success(t('copied'));
             setTimeout(() => setCopied(false), 2000);
         } catch (err) {
             console.error('Failed to copy:', err);
@@ -91,6 +93,7 @@ export default function CallRestaurantPopup({ isOpen, onClose }: CallRestaurantP
                 {/* Call Now Button */}
                 <a
                     href={`tel:${phoneNumber}`}
+                    onClick={() => toast.info(t('dialing'))}
                     className="block w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-4 rounded-xl text-center transition-colors shadow-lg shadow-emerald-600/30"
                 >
                     {t('callNow')}
