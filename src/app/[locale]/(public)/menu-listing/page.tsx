@@ -90,7 +90,6 @@ export default function MenuListingPage() {
                 {/* BookFrame now manages its own pages and logic */}
                 <BookFrame
                     onAddToCart={handleAddToCartFromBook}
-                    isReservation={false} // Toggle this to true to test Reservation Mode background (layer2B)
                 />
             </div>
 
