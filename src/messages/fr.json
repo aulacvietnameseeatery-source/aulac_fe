@@ -1,4 +1,8 @@
 {
+  "Metadata": {
+    "title": "Au Lac - Table Vietnamienne",
+    "description": "L’apogée de l’art culinaire vietnamien au cœur de la ville."
+  },
   "Header": {
     "home": "Accueil",
     "menu": "MENU",
@@ -179,33 +183,13 @@
     }
   },
   "AboutUs": {
-    "Legacy": {
-      "est": "Fondé en 1994",
-      "title": "Notre Héritage"
-    },
-    "Journey": {
-      "title": "Le Voyage des Saveurs",
-      "paragraph_1": "Fondé au cœur de la capitale en 1994, <strong>Au Lac</strong> a débuté comme un humble hommage aux racines ancestrales de la cuisine vietnamienne. Nommé d'après le royaume historique du peuple Lac Viet, notre restaurant a été imaginé comme un pont entre les traditions anciennes de l'Est et les techniques raffinées de la gastronomie contemporaine.",
-      "paragraph_2": "Depuis trois décennies, nous sommes restés fidèles à la philosophie « trầm ấm »—créer une atmosphère chaleureuse et émouvante où chaque plat raconte une histoire de patrimoine. Ce qui a commencé avec une seule recette familiale de Pho a évolué en une expérience culinaire éditoriale qui honore le rythme saisonnier de notre terre.",
-      "quote": "\"Nous ne servons pas seulement de la nourriture ; nous préservons les échos de mille ans d'évolution culinaire.\"",
-      "paragraph_3": "Aujourd'hui, Au Lac se dresse comme un phare de la haute gastronomie vietnamienne, où le crépitement d'un pot en argile et l'arôme de l'anis étoilé servent de retour aux sources pour les sens."
-    },
-    "Philosophy": {
-      "label": "Nos Valeurs Fondamentales",
-      "title": "Philosophie Culinaire",
-      "value_1_title": "Artisanat Traditionnel",
-      "value_1_desc": "Honorer les techniques lentes de nos ancêtres. Des bouillons d'os de 24 heures aux épices moulues à la main avec le mortier et le pilon.",
-      "value_2_title": "Esprit Moderne",
-      "value_2_desc": "Élever les saveurs patrimoniales par la précision, le dressage artistique et une perspective mondiale sophistiquée sur la haute gastronomie."
-    },
-    "Founders": {
-      "label": "Les Visionnaires",
-      "title": "Rencontrez les Fondateurs",
-      "paragraph_1": "Le Chef Nguyen et le Maître Sommelier Linh ont fondé Au Lac avec un rêve partagé : redéfinir la façon dont le monde perçoit l'hospitalité vietnamienne.",
-      "paragraph_2": "Avec des parcours allant des stands de rue de Saigon aux cuisines étoilées Michelin à Paris, ils apportent une harmonie équilibrée de chaleur et d'excellence professionnelle à la table de chaque client.",
-      "quote": "\"La table est l'endroit où vit la culture. Nous vous invitons à vous asseoir avec nous.\"",
-      "quote_author": "— Nguyen & Linh"
-    }
+    "title": "An Lạc – Vietnamese Eatery",
+    "subtitle": "Un espace culinaire vietnamien paisible",
+    "description_1": "An Lạc n’est pas un lieu de spectacle.\nC’est un lieu de calme.",
+    "description_2": "An Lạc est guidé par l’équilibre, la mémoire et la sérénité. Son nom signifie bonheur paisible, inspiré par le parcours de la fondatrice — une mère de trois enfants — créant un espace reflétant le soin, la stabilité et la philosophie de An cư Lạc nghiệp.",
+    "description_3": "Chez An Lạc, nous ne cherchons pas à transformer la cuisine vietnamienne, mais à l’honorer. Patience, harmonie et finesse façonnent chaque plat : mijotage lent d’un bouillon, équilibre précis des herbes, profondeur discrète de la fermentation et humilité du riz.",
+    "description_4": "Des techniques familières comme kho, hấp et nướng sont exprimées avec précision et minimalisme. Les saveurs sont mesurées, équilibrées et subtiles.",
+    "description_5": "An Lạc est une invitation — à ralentir, goûter attentivement et se reconnecter à l’essentiel."
   },
   "Reservation": {
     "Header": {
@@ -272,7 +256,47 @@
       "guestInfo": "Informations du client",
       "policy": "Les tables sont conservées pendant 15 minutes après l’heure de réservation. Merci de nous prévenir en cas de retard.",
       "confirm": "Confirmer la réservation",
-      "changeSelection": "Modifier la sélection"
+      "changeSelection": "Modifier la sélection",
+      "fullName": "Nom complet *",
+      "phoneNumber": "Numéro de téléphone *",
+      "emailAddress": "E-mail (facultatif)",
+      "partySize": "Nombre de convives *",
+      "cancel": "Annuler",
+      "confirmBooking": "Confirmer la réservation",
+      "confirmed": "Confirmé !",
+      "tableReserved": "Votre table est réservée",
+      "restaurant": "Restaurant",
+      "guestName": "Nom du client",
+      "zone": "Zone",
+      "seeYouSoon": "À bientôt !",
+      "downloadTicket": "Télécharger le billet",
+      "close": "Fermer"
+    },
+    "CallButton": {
+      "title": "Appeler le restaurant",
+      "subtitle": "Aucune table disponible en ligne",
+      "description": "Veuillez appeler directement pour réserver ou vous renseigner",
+      "restaurant": "Restaurant",
+      "phoneLabel": "Numéro de téléphone",
+      "callNow": "Appeler maintenant",
+      "copyNumber": "Copier le numéro",
+      "copied": "Copié !",
+      "hours": "11h00 – 22h00",
+      "buttonText": "Appeler pour réserver",
+      "dialing": "Ouverture de l'application téléphonique..."
+    },
+    "Zone": {
+      "label": "Zone",
+      "All": "Tous",
+      "Indoor": "Intérieur",
+      "Outdoor": "Terrasse",
+      "Rooftop": "Toit-terrasse"
+    },
+    "Toast": {
+      "success": "Réservation confirmée avec succès !",
+      "error": "Échec de la confirmation de la réservation. Veuillez réessayer.",
+      "lockSuccess": "Table verrouillée avec succès. Veuillez compléter votre réservation.",
+      "lockError": "Échec du verrouillage de la table. Elle peut être occupée."
     }
   },
   "OrderSuccess": {

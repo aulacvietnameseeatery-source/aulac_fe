@@ -4,5 +4,5 @@ import { ApiResponse } from "@/types/api-response.types";
 
 export const resetPasswordApi = {
   reset: (body: ResetPasswordRequest) =>
-    api.post<ApiResponse<void>>("/auth/reset-password", body),
+    api.post<ApiResponse<void>>("/api/auth/reset-password", body),
 };

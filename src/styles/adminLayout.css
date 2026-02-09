@@ -1,34 +1,18 @@
-.main-container {
-  height: 100%;
+/* Cleared to allow Tailwind Flexbox to control layout */
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
 }
 
-.header-container {
-  width: 100%;
-  height: 48px;
-  background-color: #fff;
-  display: flex;
-  align-items: center;
-  font-family: Inter;
-  border-bottom: 1px solid #D1D5DB;
-  position: relative;
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
 }
 
-.main {
-  height: 100%;
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
 }
 
-.main-left {
-  background: #393a3d;
-}
-
-.main-right {
-  transition: padding .2s;
-  background-color: #fff;
-  width: calc(100% - 234px);
-}
-
-.main-view {
-  height: 100%;
-  background: #E5E7EB;
-  padding: 16px 20px 20px;
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
 }

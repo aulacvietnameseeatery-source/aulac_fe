@@ -5,6 +5,7 @@ import { getMessages } from "next-intl/server";
 import QueryProvider from "@/components/providers/query-provider";
 // 👇 Import Component Guard vừa tạo
 import "@/styles/globals.css";
+import { Toaster } from "@/components/ui/sonner";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
 const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-playfair", display: "swap" });
@@ -20,21 +21,31 @@ export const viewport: Viewport = {
 };
 
 // 2. Cấu hình Metadata (Apple Specific)
-export const metadata: Metadata = {
-    title: "Bamee Gasstro - Vietnamese Eatery",
-    description: "The pinnacle of Vietnamese culinary art.",
+// 2. Cấu hình Metadata Dynamic (SEO 3 ngôn ngữ)
+export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
+    const messages = await getMessages({ locale });
+    const title = (messages as any).Metadata?.title || "Au Lac";
+    const description = (messages as any).Metadata?.description || "Vietnamese Eatery";
 
-    // 👇 Cấu hình quan trọng cho Apple Devices
-    appleWebApp: {
-        capable: true, // Biến web thành Web App (ẩn thanh địa chỉ safari)
-        title: "Bamee Menu",
-        statusBarStyle: "black-translucent", // Thanh status bar trong suốt đè lên nền
-        // startupImage: [], // Có thể thêm ảnh splash screen sau
-    },
-    formatDetection: {
-        telephone: false, // Tắt tự động nhận diện số điện thoại (đôi khi gây lỗi style)
-    },
-};
+    return {
+        title: title,
+        description: description,
+        // 👇 Cấu hình quan trọng cho Apple Devices
+        appleWebApp: {
+            capable: true, // Biến web thành Web App (ẩn thanh địa chỉ safari)
+            title: title,
+            statusBarStyle: "black-translucent", // Thanh status bar trong suốt đè lên nền
+            // startupImage: [], // Có thể thêm ảnh splash screen sau
+        },
+        formatDetection: {
+            telephone: false, // Tắt tự động nhận diện số điện thoại (đôi khi gây lỗi style)
+        },
+        icons: {
+            icon: "/icons/logo.svg",
+            apple: "/icons/logo.svg",
+        },
+    };
+}
 
 export default async function RootLayout({
     children,
@@ -59,9 +70,10 @@ export default async function RootLayout({
                         {/*<TableGuard>*/}
                         {children}
                         {/*</TableGuard>*/}
+                        <Toaster />
                     </NextIntlClientProvider>
                 </QueryProvider>
             </body>
-        </html>
+        </html >
     );
 }
