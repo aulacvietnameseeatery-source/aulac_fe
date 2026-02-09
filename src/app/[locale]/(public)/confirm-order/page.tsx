@@ -1,6 +1,6 @@
 "use client";
 
-import { OrderSummary, DiningOption } from "@/features/confirm-order";
+import { OrderSummary, DiningOption } from "@/features/customer/confirm-order";
 
 export default function ConfirmOrderPage() {
     return (

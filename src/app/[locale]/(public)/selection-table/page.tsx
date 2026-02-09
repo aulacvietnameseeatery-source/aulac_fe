@@ -11,7 +11,7 @@ import {
   useReservation,
   useTableSelection,
   useTableZones,
-} from '@/features/reservation';
+} from '@/features/customer/reservation';
 
 export default function ReservationPage() {
   const reservation = useReservation();

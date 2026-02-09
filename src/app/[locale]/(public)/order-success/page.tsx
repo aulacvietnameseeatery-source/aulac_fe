@@ -5,7 +5,7 @@ import {
   OrderSuccessView,
   OrderLoading,
   OrderNotFound,
-} from '@/features/order';
+} from '@/features/customer/order';
 
 export default function Page() {
   const { data, loading, error } = useOrderSuccess();

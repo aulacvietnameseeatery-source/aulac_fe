@@ -3,7 +3,7 @@ import {
     IntroCollection,
     IntroChef,
     IntroVirtualTour
-} from "@/features/introduction";
+} from "@/features/customer/introduction";
 
 export default function IntroductionPage() {
     return (

@@ -1,136 +1,127 @@
-"use client";
+// app/menu-listing/page.tsx
+'use client';
 
-import { useState, useEffect, useRef } from "react";
-import { cn } from "@/lib/utils";
-import { useRouter } from "next/navigation";
-import { useLocale } from "next-intl";
-import { AnimatePresence, motion } from "framer-motion";
+import { useState } from "react";
+import { AnimatePresence } from "framer-motion";
 
-import {
-    FilterBar,
-    CartSummary,
-    MenuSidebar
-} from "@/features/menu-listing";
-import { MenuGrid, COURSES } from "@/features/menu-listing/components/menu-grid";
-import { OrderEvent } from "@/features/menu-listing/components/menu-card";
+// IMPORT COMPONENTS
+import { CartSummary, CartItem, TableSelectionModal } from "@/features/customer/menu-listing";
+import { Atmosphere } from "@/features/customer/menu-listing-new/components/atmosphere";
+import { BookFrame } from "@/features/customer/menu-listing-new/components/book-frame";
+import { LeftPage } from "@/features/customer/menu-listing-new/components/left-page";
+import { RightPage } from "@/features/customer/menu-listing-new/components/right-page";
+import { MenuItem } from "@/features/customer/menu-listing-new/components/menu-card";
 
-// Data cho Filter Bar
-const ELEMENTS = ["All", "Metal", "Wood", "Water", "Fire", "Earth"];
+export default function MenuListingPage() {
+    // ================= STATE =================
+    const [cartItems, setCartItems] = useState<CartItem[]>([]);
+    const [tableNumber, setTableNumber] = useState("");
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [pendingQueue, setPendingQueue] = useState<MenuItem[]>([]);
 
-export default function MenuPage() {
-    const [activeCourse, setActiveCourse] = useState(COURSES[0].id);
-    const [activeElement, setActiveElement] = useState("All");
-    const [searchQuery, setSearchQuery] = useState("");
+    // ================= LOGIC =================
 
-    const router = useRouter();
-    const locale = useLocale();
+    // Thêm vào giỏ hàng chính thức
+    const addToCart = (itemsToAdd: MenuItem[]) => {
+        setCartItems((prev) => {
+            const newCart = [...prev];
+            itemsToAdd.forEach(newItem => {
+                const existingIndex = newCart.findIndex(i => i.id === newItem.id);
+                // Parse giá
+                const priceNumber = typeof newItem.price === 'string'
+                    ? parseFloat((newItem.price as string).replace(/[^0-9.]/g, ''))
+                    : newItem.price;
 
-    const [isScrolled, setIsScrolled] = useState(false);
-    const [cartTotal, setCartTotal] = useState(0);
-    const [cartCount, setCartCount] = useState(0);
-    const [isCartVisible, setIsCartVisible] = useState(false);
-
-    const isClickingRef = useRef(false);
-
-    useEffect(() => {
-        const onScroll = () => { setIsScrolled(window.scrollY > 40); };
-        window.addEventListener("scroll", onScroll, { passive: true });
-        return () => window.removeEventListener("scroll", onScroll);
-    }, []);
-
-    useEffect(() => {
-        const handleScrollSpy = () => {
-            if (isClickingRef.current) return;
-            const scrollPosition = window.scrollY + 300;
-            for (const course of COURSES) {
-                const element = document.getElementById(course.id);
-                if (element) {
-                    const { offsetTop, offsetHeight } = element;
-                    if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
-                        setActiveCourse(course.id);
-                        break;
-                    }
+                if (existingIndex > -1) {
+                    newCart[existingIndex] = {
+                        ...newCart[existingIndex],
+                        quantity: newCart[existingIndex].quantity + 1
+                    };
+                } else {
+                    newCart.push({
+                        id: newItem.id,
+                        name: newItem.name,
+                        price: priceNumber,
+                        quantity: 1,
+                    });
                 }
-            }
-        };
-        window.addEventListener("scroll", handleScrollSpy);
-        return () => window.removeEventListener("scroll", handleScrollSpy);
-    }, []);
+            });
+            return newCart;
+        });
+    };
 
-    const handleCourseSelect = (id: string) => {
-        isClickingRef.current = true;
-        setActiveCourse(id);
-        const element = document.getElementById(id);
-        if (element) {
-            const offset = 200;
-            const bodyRect = document.body.getBoundingClientRect().top;
-            const elementRect = element.getBoundingClientRect().top;
-            const offsetPosition = elementRect - bodyRect - offset;
-            window.scrollTo({ top: offsetPosition, behavior: "smooth" });
-            setTimeout(() => { isClickingRef.current = false; }, 1000);
+    // XỬ LÝ KHI BẤM NÚT ORDER
+    const handleOrder = (item: MenuItem, _startPos: { x: number; y: number }) => {
+        if (!tableNumber) {
+            // Chưa có bàn: Lưu vào hàng đợi -> Mở Modal (CHƯA THÊM VÀO GIỎ CHÍNH)
+            setPendingQueue(prev => [...prev, item]);
+            setIsModalOpen(true);
+        } else {
+            // Đã có bàn: Thêm thẳng vào giỏ
+            addToCart([item]);
         }
     };
 
-    const handleOrder = (event: OrderEvent) => {
-        const { item } = event;
-        if (!isCartVisible) setIsCartVisible(true);
-        setCartCount((prev) => prev + 1);
-        setCartTotal((prev) => prev + item.price);
+    // XÁC NHẬN SỐ BÀN
+    const handleTableConfirm = (val: string) => {
+        setTableNumber(val);
+        setIsModalOpen(false);
+
+        // Lúc này mới đổ hàng đợi vào giỏ chính thức -> Cái lá mới hiện
+        if (pendingQueue.length > 0) {
+            addToCart(pendingQueue);
+            setPendingQueue([]);
+        }
     };
 
-    const handleConfirmOrder = () => { router.push(`/${locale}/confirm-order`); };
+    // Helper functions
+    const handleUpdateQuantity = (id: string, delta: number) => {
+        setCartItems(prev => prev.map(item => item.id === id ? { ...item, quantity: Math.max(1, item.quantity + delta) } : item));
+    };
+    const handleRemoveItem = (id: string) => setCartItems(prev => prev.filter(item => item.id !== id));
 
     return (
-        <div className="min-h-screen bg-[#FAF9F6] relative pb-20 pt-[40px]">
+        <main className="relative flex-1 min-h-screen w-full flex items-center justify-center p-4 py-20 pt-[140px] overflow-hidden bg-[#0f172a]">
 
-            <FilterBar
-                categories={ELEMENTS}
-                activeCategory={activeElement}
-                onSelect={setActiveElement}
-                isScrolled={isScrolled}
-                searchQuery={searchQuery}
-                onSearchChange={setSearchQuery}
+            <TableSelectionModal
+                isOpen={isModalOpen}
+                onConfirm={handleTableConfirm}
+                onClose={() => setIsModalOpen(false)}
             />
 
-            <MenuGrid
-                onOrder={handleOrder}
-                activeElement={activeElement}
-                searchQuery={searchQuery}
-                // 👇 SỬA ĐOẠN NÀY: Bọc Sidebar trong motion.div
-                sidebarSlot={
-                    <motion.div
-                        // Ban đầu: Mờ và dịch sang trái 50px
-                        initial={{ opacity: 0, x: -50 }}
-                        // Kết thúc: Hiện rõ và về vị trí 0
-                        animate={{ opacity: 1, x: 0 }}
-                        // Cấu hình: Chờ 0.2s rồi chạy trong 0.6s
-                        transition={{ delay: 0.2, duration: 0.6, ease: "easeOut" }}
-                    >
-                        <MenuSidebar
-                            courses={COURSES}
-                            activeCourse={activeCourse}
-                            onSelectCourse={handleCourseSelect}
-                        />
-                    </motion.div>
-                }
-            />
+            <Atmosphere />
 
+            <div className="relative z-10 w-full max-w-[1400px]">
+                <BookFrame>
+                    <LeftPage onOrder={handleOrder} />
+                    <div className="w-[1px] h-full bg-white/10 z-20 shadow-[0_0_15px_rgba(0,0,0,0.2)]"></div>
+                    <RightPage onOrder={handleOrder} />
+                </BookFrame>
+            </div>
+
+            {/* GIỎ HÀNG CÁI LÁ */}
             <div
                 id="cart-destination"
-                className="fixed bottom-[40px] right-[20px] md:bottom-[100px] md:right-[40px] z-50 pointer-events-none"
+                className="fixed bottom-[83px] right-[20px] z-50 pointer-events-none flex flex-col items-end justify-end"
             >
                 <AnimatePresence>
-                    {isCartVisible && (
-                        <div className="pointer-events-auto hover:translate-y-[-10px] transition-transform duration-300">
+                    {/* QUAN TRỌNG: Chỉ hiện khi cartItems > 0.
+                        pendingQueue > 0 cũng KHÔNG hiện (để ẩn khi đang nhập bàn) */}
+                    {cartItems.length > 0 && (
+                        <div className="pointer-events-auto transform scale-90 md:scale-100 origin-bottom-right">
                             <CartSummary
-                                totalPrice={cartTotal}
-                                totalItems={cartCount}
-                                onConfirm={handleConfirmOrder}
+                                cartItems={cartItems}
+                                tableNumber={tableNumber}
+                                onUpdateTable={setTableNumber}
+                                onUpdateQuantity={handleUpdateQuantity}
+                                onRemoveItem={handleRemoveItem}
+                                onConfirm={() => console.log("Checkout", cartItems)}
                             />
                         </div>
                     )}
                 </AnimatePresence>
             </div>
-        </div>
+
+        </main>
     );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { HeroSection, ScanContent } from "@/features/qr-scan";
+import { HeroSection, ScanContent } from "@/features/customer/qr-scan";
 
 export default function QrScanPage() {
     return (
