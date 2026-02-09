@@ -76,7 +76,7 @@ export default function MenuListingPage() {
     const handleRemoveItem = (id: string) => setCartItems(prev => prev.filter(item => item.id !== id));
 
     return (
-        <main className="relative flex-1 min-h-screen w-full flex items-center justify-center p-4 py-20 pt-[140px] overflow-hidden bg-[#0f172a]">
+        <main className="relative flex-1 min-h-screen w-full flex items-center justify-center p-4 overflow-hidden bg-[#0f172a]">
 
             <TableSelectionModal
                 isOpen={isModalOpen}
@@ -97,7 +97,7 @@ export default function MenuListingPage() {
             {/* GIỎ HÀNG CÁI LÁ */}
             <div
                 id="cart-destination"
-                className="fixed bottom-[83px] right-[20px] z-50 pointer-events-none flex flex-col items-end justify-end"
+                className="fixed bottom-20.75 right-5 z-50 pointer-events-none flex flex-col items-end justify-end"
             >
                 <AnimatePresence>
                     {cartItems.length > 0 && (
