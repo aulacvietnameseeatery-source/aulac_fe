@@ -48,11 +48,14 @@ export const BookFrame = ({ onAddToCart }: { onAddToCart?: (item: MenuItemData) 
 
     // Resize Logic
     useEffect(() => {
+        let resizeTimeout: NodeJS.Timeout;
+        
         const updateSize = () => {
             if (paperWrapperRef.current) {
                 const width = paperWrapperRef.current.offsetWidth;
                 const height = paperWrapperRef.current.offsetHeight;
                 const mobile = window.innerWidth < 1024; // Mobile/Tablet Breakpoint
+                
                 setIsMobile(mobile);
 
                 // If mobile, page width = container width. If desktop, page width = container width / 2.
@@ -62,10 +65,36 @@ export const BookFrame = ({ onAddToCart }: { onAddToCart?: (item: MenuItemData) 
                 });
             }
         };
+        
+        const debouncedUpdate = () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(updateSize, 100);
+        };
+        
+        // Initial size
         updateSize();
-        const observer = new ResizeObserver(updateSize);
-        if (paperWrapperRef.current) observer.observe(paperWrapperRef.current);
-        return () => observer.disconnect();
+        
+        // ResizeObserver for container changes
+        const observer = new ResizeObserver(() => {
+            debouncedUpdate();
+        });
+        
+        // Window resize listener for responsive breakpoint changes
+        const handleWindowResize = () => {
+            debouncedUpdate();
+        };
+        
+        window.addEventListener('resize', handleWindowResize);
+        
+        if (paperWrapperRef.current) {
+            observer.observe(paperWrapperRef.current);
+        }
+        
+        return () => {
+            clearTimeout(resizeTimeout);
+            observer.disconnect();
+            window.removeEventListener('resize', handleWindowResize);
+        };
     }, []);
 
     const { spreads, categoryStartIndices, pageToCategoryMap } = useMemo(() => {
@@ -128,19 +157,23 @@ export const BookFrame = ({ onAddToCart }: { onAddToCart?: (item: MenuItemData) 
 
     const isReady = bookDimensions.width > 0 && bookDimensions.height > 0;
 
-    // Force open to page 1 (Content) if it starts at 0
+    // Force open to page 1 (Content) if it starts at 0 and handle mobile/desktop switch
     useEffect(() => {
         if (isReady && bookRef.current) {
             const timer = setTimeout(() => {
                 try {
                     const flip = bookRef.current.pageFlip();
-                    if (flip && flip.getCurrentPageIndex() === 0) {
-                        flip.turnToPage(1);
+                    if (flip) {
+                        const currentIndex = flip.getCurrentPageIndex();
+                        // Reset to page 1 when switching layouts or if at page 0
+                        if (currentIndex === 0) {
+                            flip.turnToPage(1);
+                        }
                     }
                 } catch (e) {
                     console.error("Flip error", e);
                 }
-            }, 100);
+            }, 150);
             return () => clearTimeout(timer);
         }
     }, [isReady, isMobile]);
@@ -149,7 +182,8 @@ export const BookFrame = ({ onAddToCart }: { onAddToCart?: (item: MenuItemData) 
         <div
             className={`relative w-full mx-auto z-10 shadow-2xl transition-all duration-500 font-serif perspective-[2000px] ${isMobile ? 'pl-0 mt-12 mb-4' : 'pl-[100px]'}`}
             style={{
-                maxWidth: isMobile ? '100%' : 'min(1400px, calc((100vh - 140px) * (3 / 2)))'
+                maxWidth: isMobile ? '100%' : 'min(1400px, calc((100vh - 140px) * (3 / 2)))',
+                width: '100%'
             }}
         >
 
@@ -286,7 +320,7 @@ export const BookFrame = ({ onAddToCart }: { onAddToCart?: (item: MenuItemData) 
                     >
                         {isReady && (
                             <HTMLFlipBook
-                                key={isMobile ? 'mobile-book' : 'desktop-book'}
+                                key={`${isMobile ? 'mobile' : 'desktop'}-${bookDimensions.width}-${bookDimensions.height}`}
                                 width={bookDimensions.width}
                                 height={bookDimensions.height}
                                 size="fixed"
