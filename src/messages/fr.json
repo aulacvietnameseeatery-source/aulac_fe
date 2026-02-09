@@ -467,5 +467,32 @@
         "2_category": "Signature"
       }
     }
+  },
+  "Role": {
+    "List": {
+      "title": "Liste des rôles",
+      "description": "Gérer les rôles, les permissions et la répartition du personnel.",
+      "searchPlaceholder": "Rechercher par nom ou code...",
+      "addNew": "Ajouter un rôle",
+      "table": {
+        "no": "N°",
+        "name": "Nom",
+        "code": "Code",
+        "staffCount": "Nombre d’employés",
+        "action": "Action",
+        "empty": "Aucun rôle trouvé."
+      },
+      "pagination": {
+        "pageSize": "Taille de page :",
+        "previous": "Précédent",
+        "next": "Suivant"
+      },
+      "actions": {
+        "view": "Voir les détails",
+        "edit": "Modifier le rôle",
+        "delete": "Supprimer le rôle"
+      },
+      "loading": "Chargement des données..."
+    }
   }
 }
