@@ -3,7 +3,6 @@ import { Inter, Playfair_Display } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import QueryProvider from "@/components/providers/query-provider";
-// 👇 Import Component Guard vừa tạo
 import "@/styles/globals.css";
 import { Toaster } from "@/components/ui/sonner";
 
@@ -25,15 +24,15 @@ export const metadata: Metadata = {
     title: "Bamee Gasstro - Vietnamese Eatery",
     description: "The pinnacle of Vietnamese culinary art.",
 
-    // 👇 Cấu hình quan trọng cho Apple Devices
+    //  Cấu hình quan trọng cho Apple Devices
     appleWebApp: {
-        capable: true, // Biến web thành Web App (ẩn thanh địa chỉ safari)
+        capable: true, // Biến web thành Web App
         title: "Bamee Menu",
         statusBarStyle: "black-translucent", // Thanh status bar trong suốt đè lên nền
         // startupImage: [], // Có thể thêm ảnh splash screen sau
     },
     formatDetection: {
-        telephone: false, // Tắt tự động nhận diện số điện thoại (đôi khi gây lỗi style)
+        telephone: false, // Tắt tự động nhận diện số điện thoại
     },
 };
 
