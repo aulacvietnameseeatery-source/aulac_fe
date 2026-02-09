@@ -13,32 +13,21 @@ export const RightPage = ({ title, items, onItemClick, onAddToCart }: PageProps)
 
     return (
         <div className="w-full h-full relative flex flex-col font-serif overflow-hidden">
-            {/* CSS-Only Paper Background - Dark Theme */}
-            <div className="absolute inset-0 bg-[#0B252E] z-0">
-                {/* Texture Noise */}
-                <div className="absolute inset-0 opacity-[0.1]"
-                    style={{ backgroundImage: 'radial-gradient(#C5A059 1px, transparent 1px)', backgroundSize: '4px 4px' }}
-                />
+            {/* Ornate Frame Background */}
+            <div 
+                className="absolute inset-0 bg-contain bg-center bg-no-repeat z-0"
+                style={{ backgroundImage: 'url(/images/menu-listing/ornate-frame.png)' }}
+            />
 
-                {/* Spine Shadow Gradient (Right Side) - Darker near the spine */}
-                <div className="absolute left-0 top-0 bottom-0 w-[40px] bg-gradient-to-r from-black/10 to-transparent pointer-events-none" />
-
-                {/* Page Edge Highlight (Right) */}
-                <div className="absolute right-0 top-0 bottom-0 w-[2px] bg-white/20 pointer-events-none" />
-            </div>
-
-            {/* Gradient Overlay */}
-            <div className="absolute inset-y-0 left-0 w-[15%] bg-gradient-to-r from-black/40 to-transparent z-0 pointer-events-none"></div>
-
-            <div className="absolute inset-0 px-[8%] md:px-[10%] lg:px-[12%] py-[10%] pb-[12%] flex flex-col z-10">
+            <div className="absolute inset-0 px-[6%] sm:px-[7%] md:px-[8%] py-[5%] md:py-[6%] pb-[6%] md:pb-[7%] flex flex-col z-10">
                 {/* HEADER */}
-                <div className="text-center mb-2 md:mb-4 shrink-0">
-                    <h1 className="text-base md:text-lg lg:text-xl text-[#C5A059] font-display uppercase tracking-[0.2em]">{title}</h1>
-                    <div className="w-8 md:w-12 h-[1px] bg-[#C5A059]/50 mx-auto mt-1"></div>
+                <div className="text-center mb-2 md:mb-3 lg:mb-4 shrink-0">
+                    <h1 className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl text-[#C5A059] font-display uppercase tracking-[0.2em]">{title}</h1>
+                    <div className="w-6 sm:w-8 md:w-10 lg:w-12 h-[1px] bg-[#C5A059]/50 mx-auto mt-1"></div>
                 </div>
 
-                {/* GRID - Max 8 items */}
-                <div className="grid grid-cols-2 max-[350px]:grid-cols-1 gap-x-2 md:gap-x-4 gap-y-3 md:gap-y-4 grow content-start">
+                {/* GRID - Max 6 items */}
+                <div className="grid grid-cols-2 gap-x-2 sm:gap-x-3 md:gap-x-4 lg:gap-x-5 gap-y-2 sm:gap-y-3 md:gap-y-4 lg:gap-y-5 grow content-start">
                     {items.map((item, idx) => (
                         <div
                             key={idx}

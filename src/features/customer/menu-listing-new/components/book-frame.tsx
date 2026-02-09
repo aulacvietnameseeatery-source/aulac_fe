@@ -149,7 +149,7 @@ export const BookFrame = ({ onAddToCart }: { onAddToCart?: (item: MenuItemData) 
         <div
             className={`relative w-full mx-auto z-10 shadow-2xl transition-all duration-500 font-serif perspective-[2000px] ${isMobile ? 'pl-0 mt-12 mb-4' : 'pl-[100px]'}`}
             style={{
-                maxWidth: isMobile ? '100%' : 'min(1100px, calc((100vh - 140px) * (2646 / 1618)))'
+                maxWidth: isMobile ? '100%' : 'min(1400px, calc((100vh - 140px) * (3 / 2)))'
             }}
         >
 
@@ -267,7 +267,7 @@ export const BookFrame = ({ onAddToCart }: { onAddToCart?: (item: MenuItemData) 
             </button>
 
 
-            <div className="relative w-full" style={{ aspectRatio: isMobile ? '1323 / 1618' : '2646 / 1618' }}>
+            <div className="relative w-full" style={{ aspectRatio: isMobile ? '3 / 4' : '3 / 2' }}>
                 <div className="relative w-full h-full">
                     {/* CSS BOOK COVER */}
                     <div className="absolute inset-0 w-full h-full bg-[#06181F] rounded-[1%] shadow-[0_20px_50px_rgba(0,0,0,0.5)] border-[8px] border-[#1e293b] overflow-hidden">
@@ -285,7 +285,6 @@ export const BookFrame = ({ onAddToCart }: { onAddToCart?: (item: MenuItemData) 
                         className={`absolute inset-0 top-[3%] bottom-[3%] ${isMobile ? 'left-[4%] right-[2%]' : 'left-[2%] right-[2%]'}`}
                     >
                         {isReady && (
-                            // @ts-ignore
                             <HTMLFlipBook
                                 key={isMobile ? 'mobile-book' : 'desktop-book'}
                                 width={bookDimensions.width}
@@ -299,6 +298,7 @@ export const BookFrame = ({ onAddToCart }: { onAddToCart?: (item: MenuItemData) 
                                 showCover={!isMobile}
                                 mobileScrollSupport={true}
                                 className="shadow-md"
+                                style={{}}
                                 flippingTime={isMobile ? 600 : 1000}
                                 startPage={1}
                                 drawShadow={!isMobile} // Disable shadows on mobile to avoid "ugly" dark streaks
@@ -307,7 +307,11 @@ export const BookFrame = ({ onAddToCart }: { onAddToCart?: (item: MenuItemData) 
                                 clickEventForward={true}
                                 useMouseEvents={false}
                                 onFlip={(e) => setCurrentPage(e.data)}
-                                usePortrait={isMobile}
+                                usePortrait={isMobile} 
+                                startZIndex={0} 
+                                swipeDistance={0} 
+                                showPageCorners={false} 
+                                disableFlipByClick={false}
                             >
                                 {/* DUMMY PAGE 0 (Spacer for alignment) */}
                                 <Page number={0} className="w-full h-full bg-transparent" key="spacer">
@@ -351,7 +355,6 @@ export const BookFrame = ({ onAddToCart }: { onAddToCart?: (item: MenuItemData) 
                                         ];
                                     }
                                 })}
-
                             </HTMLFlipBook>
                         )}
                     </div>
