@@ -1,7 +1,8 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { dishFormSchema, DishFormValues } from "../types/schema";
 
-import { dishFormSchema, DishFormValues } from "@/features/create-dish/types/schema";
+
 
 export function useDishForm() {
   const form = useForm<DishFormValues>({
