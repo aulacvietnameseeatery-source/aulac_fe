@@ -542,5 +542,49 @@
         "deleteError": "Có lỗi xảy ra khi xóa vai trò"
       }
     }
+  },
+  "common": {
+    "table": {
+      "searchPlaceholder": "Tìm kiếm",
+      "selected": "Đã chọn",
+      "unselect": "Bỏ chọn",
+      "clearFilter": "Bỏ lọc",
+      "refresh": "Lấy lại dữ liệu",
+
+      "pin": "Ghim cột",
+      "unpin": "Bỏ ghim cột",
+
+      "sort": {
+        "none": "Không sắp xếp",
+        "asc": "Tăng dần",
+        "desc": "Giảm dần"
+      },
+
+      "operator": {
+        "contains": "Chứa",
+        "notContains": "Không chứa",
+        "equals": "Bằng",
+        "notequal": "Khác",
+        "different": "Khác",
+        "startsWith": "Bắt đầu bằng",
+        "endsWith": "Kết thúc bằng",
+        "greater": "Lớn hơn",
+        "less": "Nhỏ hơn",
+        "greaterOrEqual": "Lớn hơn hoặc bằng",
+        "lessOrEqual": "Nhỏ hơn hoặc bằng",
+        "isNull": "Trống",
+        "notNull": "Không trống",
+        "selected": "Đã chọn"
+      },
+      "noData": "Không có dữ liệu",
+      "pagination": {
+        "total": "Tổng số",
+        "pageSize": "Số dòng/trang",
+        "first": "Trang đầu",
+        "prev": "Trang trước",
+        "next": "Trang sau",
+        "last": "Trang cuối"
+      }
+    }
   }
 }

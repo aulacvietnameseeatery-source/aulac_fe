@@ -1,85 +1,160 @@
-// src/features/auth/role-list/RoleListPage.tsx
 "use client";
 
-import { RoleHeader, RolePagination, RoleTable, RoleToolbar, useRoleList } from "@/features/auth/role-list";
+import React, { Suspense, useCallback, useMemo, useState } from "react";
 import { Loader2 } from "lucide-react";
-import React, { Suspense, useState } from "react";
-import { ConfirmModal } from "@/components/layout/admin-sidebar/confirm-modal";
-import { deleteRole } from "@/features/auth/role-list/services/role.service";
+import { BaseTable } from "@/components/ui/table/base-table"; 
+import { TableColumn } from "@/types/table.types"; 
+import { RoleDto, RoleHeader, RoleActions, useRoleList } from "@/features/staff/role-list";
+import { deleteRole } from "@/features/staff/role-list/services/role.service";
 import { toast } from "sonner";
 import { useTranslations } from "next-intl";
+import { ConfirmModal } from "@/components/layout/admin-sidebar/confirm-modal";
 
-// Separate the main logic into child components.
 const RoleListContent = () => {
   const t = useTranslations("Role.List");
+  // Logic Hook
   const { roles, isLoading, pagination, searchTerm, actions } = useRoleList();
-
   // Delete modal state
-  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-  const [roleToDelete, setRoleToDelete] = useState<number | null>(null);
-  const [isDeleting, setIsDeleting] = useState(false);
+    const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+    const [roleToDelete, setRoleToDelete] = useState<number | null>(null);
+    const [isDeleting, setIsDeleting] = useState(false);
 
-  const handleView = (id: number) => console.log("View detail", id);
-  const handleEdit = (id: number) => console.log("Edit", id);
-  const handleAdd = () => console.log("Navigate to Create Role");
+  // Action Handlers
+  const handleView = (role: RoleDto) => console.log("View:", role.roleId);
+  const handleEdit = (role: RoleDto) => console.log("Edit:", role.roleId);
+  const handleCreate = () => console.log("Navigate to Create");
 
   // Open delete confirmation modal
-  const handleDeleteClick = (id: number) => {
-    setRoleToDelete(id);
+  const handleDeleteClick = (role: RoleDto) => {
+    setRoleToDelete(role.roleId);
     setDeleteModalOpen(true);
   };
 
   // Perform delete action
-  const handleConfirmDelete = async () => {
-    if (!roleToDelete) return;
-
-    setIsDeleting(true);
-    try {
-      await deleteRole(roleToDelete);
-      toast.success(t("notifications.deleteSuccess"));
-      actions.refresh();
+    const handleConfirmDelete = async () => {
+      if (!roleToDelete) return;
+  
+      setIsDeleting(true);
+      try {
+        await deleteRole(roleToDelete);
+        toast.success(t("notifications.deleteSuccess"));
+        actions.refresh();
+        setDeleteModalOpen(false);
+      } catch (error: any) {
+        console.error("Delete role failed:", error);
+        // Backend might return specific error message for foreign key constraint
+        const errorMessage = error.response?.data?.userMessage || t("notifications.deleteError");
+        toast.error(errorMessage);
+      } finally {
+        setIsDeleting(false);
+        setRoleToDelete(null);
+      }
+    };
+  
+    const handleCloseDeleteModal = () => {
       setDeleteModalOpen(false);
-    } catch (error: any) {
-      console.error("Delete role failed:", error);
-      // Backend might return specific error message for foreign key constraint
-      const errorMessage = error.response?.data?.userMessage || t("notifications.deleteError");
-      toast.error(errorMessage);
-    } finally {
-      setIsDeleting(false);
       setRoleToDelete(null);
-    }
-  };
+    };
 
-  const handleCloseDeleteModal = () => {
-    setDeleteModalOpen(false);
-    setRoleToDelete(null);
-  };
+  // Data Change Handler (Pagination)
+  const handleDataChange = useCallback((params: { page?: number; pageSize?: number }) => {
+    if (params.page !== undefined && params.page !== pagination.pageIndex) {
+      actions.onPageChange(params.page);
+    }
+    if (params.pageSize && params.pageSize !== pagination.pageSize) {
+      actions.onPageSizeChange(params.pageSize);
+    }
+  }, [pagination.pageIndex, pagination.pageSize, actions]);
+
+  // Table Columns Config
+  const columns: TableColumn[] = useMemo(() => [
+    {
+      field: 'id',
+      header: t('table.no'),
+      width: '80px',
+      align: 'center',
+      sortable: false,
+      cellRender: ({ rowIndex }) =>
+      (pagination.pageIndex - 1) * pagination.pageSize + rowIndex + 1,
+    },
+    {
+      field: 'roleName',
+      header: t('table.name'),
+      sortable: false,
+      width: '250px',
+    },
+    {
+      field: 'roleCode',
+      header: t('table.code'),
+      width: '150px',
+      sortable: false,
+      cellRender: ({value}) => (
+        <span className="bg-blue-50 text-blue-700 px-2 py-1 rounded text-xs font-bold border border-blue-100">
+          {value}
+        </span>
+      ),
+    },
+    {
+      field: 'staffCount',
+      header: t('table.staffCount'),
+      align: 'center',
+      width: '120px',
+      sortable: false,
+      cellRender: ({value}) => <span className="font-medium text-gray-600">{value}</span>
+    },
+  ], [pagination.pageIndex, pagination.pageSize]);
+
+  const handleGlobalRenderCell = useCallback((field: string, value: any, item: RoleDto, column: TableColumn, rowIndex: number) => {
+    const content = column.cellRender 
+      ? column.cellRender({ value, item, column, rowIndex }) 
+      : value;
+
+      if (column.align) {
+      return (
+        <div style={{ textAlign: column.align }}>
+          {content}
+        </div>
+      );
+    }
+    return content;
+  }, []);
 
   return (
-    <>
-      <RoleHeader />
+    <div className="h-full bg-gray-50/50 p-6 md:p-8 font-sans">
+      <BaseTable<RoleDto>
+        // Data & Loading
+        data={roles}
+        loading={isLoading}
+        columns={columns}
+        rowKey="roleId"
+        
+        // Pagination Props
+        total={pagination.totalCount}
 
-      <RoleToolbar
-        initialSearchTerm={searchTerm}
-        onSearchChange={actions.onSearchChange}
-        onAddClick={handleAdd}
-      />
+        // Handlers
+        onDataChange={handleDataChange}
+        onRefresh={actions.refresh}
 
-      <RoleTable
-        roles={roles}
-        isLoading={isLoading}
-        startIndex={(pagination.pageIndex - 1) * pagination.pageSize}
-        onView={handleView}
-        onEdit={handleEdit}
-        onDelete={handleDeleteClick}
-      />
+        renderCell={handleGlobalRenderCell}
+        // Render Header Component
+        renderTitle={() => (
+          <RoleHeader 
+            searchTerm={searchTerm}
+            isLoading={isLoading}
+            onSearchChange={actions.onSearchChange}
+            onCreateClick={handleCreate}
+          />
+        )}
 
-      <RolePagination
-        pageIndex={pagination.pageIndex}
-        totalPage={pagination.totalPage}
-        pageSize={pagination.pageSize}
-        onPageChange={actions.onPageChange}
-        onPageSizeChange={actions.onPageSizeChange}
+        // Render Action Component
+        renderActionColumn={(item) => (
+          <RoleActions 
+            role={item}
+            onView={handleView}
+            onEdit={handleEdit}
+            onDelete={handleDeleteClick}
+          />
+        )}
       />
 
       <ConfirmModal
@@ -93,17 +168,14 @@ const RoleListContent = () => {
         variant="danger"
         isLoading={isDeleting}
       />
-    </>
+    </div>
   );
 };
 
-// Component Default wraps Suspense
 export default function RoleListPage() {
   return (
-    <div className="min-h-screen bg-gray-50/50 p-8 font-sans text-gray-900">
-      <Suspense fallback={<div className="flex justify-center p-10"><Loader2 className="animate-spin" /></div>}>
-        <RoleListContent />
-      </Suspense>
-    </div>
+    <Suspense fallback={<div className="flex h-screen items-center justify-center"><Loader2 className="animate-spin text-gray-400" /></div>}>
+      <RoleListContent />
+    </Suspense>
   );
 }
