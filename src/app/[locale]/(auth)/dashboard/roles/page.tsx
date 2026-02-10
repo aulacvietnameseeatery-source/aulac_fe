@@ -3,16 +3,57 @@
 
 import { RoleHeader, RolePagination, RoleTable, RoleToolbar, useRoleList } from "@/features/auth/role-list";
 import { Loader2 } from "lucide-react";
-import React, { Suspense } from "react";
+import React, { Suspense, useState } from "react";
+import { ConfirmModal } from "@/components/layout/admin-sidebar/confirm-modal";
+import { deleteRole } from "@/features/auth/role-list/services/role.service";
+import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 
 // Separate the main logic into child components.
 const RoleListContent = () => {
+  const t = useTranslations("Role.List");
   const { roles, isLoading, pagination, searchTerm, actions } = useRoleList();
+
+  // Delete modal state
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [roleToDelete, setRoleToDelete] = useState<number | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const handleView = (id: number) => console.log("View detail", id);
   const handleEdit = (id: number) => console.log("Edit", id);
-  const handleDelete = (id: number) => console.log("Delete", id);
   const handleAdd = () => console.log("Navigate to Create Role");
+
+  // Open delete confirmation modal
+  const handleDeleteClick = (id: number) => {
+    setRoleToDelete(id);
+    setDeleteModalOpen(true);
+  };
+
+  // Perform delete action
+  const handleConfirmDelete = async () => {
+    if (!roleToDelete) return;
+
+    setIsDeleting(true);
+    try {
+      await deleteRole(roleToDelete);
+      toast.success(t("notifications.deleteSuccess"));
+      actions.refresh();
+      setDeleteModalOpen(false);
+    } catch (error: any) {
+      console.error("Delete role failed:", error);
+      // Backend might return specific error message for foreign key constraint
+      const errorMessage = error.response?.data?.userMessage || t("notifications.deleteError");
+      toast.error(errorMessage);
+    } finally {
+      setIsDeleting(false);
+      setRoleToDelete(null);
+    }
+  };
+
+  const handleCloseDeleteModal = () => {
+    setDeleteModalOpen(false);
+    setRoleToDelete(null);
+  };
 
   return (
     <>
@@ -30,7 +71,7 @@ const RoleListContent = () => {
         startIndex={(pagination.pageIndex - 1) * pagination.pageSize}
         onView={handleView}
         onEdit={handleEdit}
-        onDelete={handleDelete}
+        onDelete={handleDeleteClick}
       />
 
       <RolePagination
@@ -40,6 +81,18 @@ const RoleListContent = () => {
         onPageChange={actions.onPageChange}
         onPageSizeChange={actions.onPageSizeChange}
       />
+
+      <ConfirmModal
+        isOpen={deleteModalOpen}
+        onClose={handleCloseDeleteModal}
+        onConfirm={handleConfirmDelete}
+        title={t("deleteModal.title")}
+        message={t("deleteModal.message")}
+        confirmText={t("deleteModal.confirm")}
+        cancelText={t("deleteModal.cancel")}
+        variant="danger"
+        isLoading={isDeleting}
+      />
     </>
   );
 };
@@ -48,7 +101,7 @@ const RoleListContent = () => {
 export default function RoleListPage() {
   return (
     <div className="min-h-screen bg-gray-50/50 p-8 font-sans text-gray-900">
-      <Suspense fallback={<div className="flex justify-center p-10"><Loader2 className="animate-spin"/></div>}>
+      <Suspense fallback={<div className="flex justify-center p-10"><Loader2 className="animate-spin" /></div>}>
         <RoleListContent />
       </Suspense>
     </div>

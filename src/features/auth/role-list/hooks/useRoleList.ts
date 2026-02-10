@@ -20,6 +20,9 @@ export const useRoleList = () => {
   const [totalPage, setTotalPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
 
+  // State for manual refresh
+  const [refreshKey, setRefreshKey] = useState(0);
+
   // 2. Utility function to generate a new URL
   const createQueryString = useCallback(
     (name: string, value: string | number) => {
@@ -30,7 +33,7 @@ export const useRoleList = () => {
     [searchParams]
   );
 
-  // 3. Fetch data whenever the URL changes (pageIndex, pageSize, searchParam).
+  // 3. Fetch data whenever the URL changes (pageIndex, pageSize, searchParam) or refreshKey changes.
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
@@ -54,10 +57,10 @@ export const useRoleList = () => {
     };
 
     fetchData();
-  }, [pageIndex, pageSize, searchParam]); 
+  }, [pageIndex, pageSize, searchParam, refreshKey]);
 
   // 4. URL update actions
-  
+
   // Search: Reset to page 1 when search results change.
   const handleSearchChange = (value: string) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -82,7 +85,8 @@ export const useRoleList = () => {
   };
 
   const refresh = () => {
-    router.refresh(); // Reload the current route.
+    setRefreshKey((prev) => prev + 1);
+    router.refresh(); // Keep router.refresh for server components if needed
   };
 
   return {

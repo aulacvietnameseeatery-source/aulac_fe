@@ -529,7 +529,17 @@
         "edit": "Edit role",
         "delete": "Delete role"
       },
-      "loading": "Loading data..."
+      "loading": "Loading data...",
+      "deleteModal": {
+        "title": "Delete Role",
+        "message": "Are you sure you want to delete this role? This action cannot be undone.",
+        "confirm": "Delete",
+        "cancel": "Cancel"
+      },
+      "notifications": {
+        "deleteSuccess": "Role deleted successfully",
+        "deleteError": "An error occurred while deleting the role"
+      }
     }
   }
 }

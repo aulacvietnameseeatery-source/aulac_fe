@@ -10,12 +10,17 @@ type GetRolesParams = {
 };
 
 export const getRoles = async (params: GetRolesParams) => {
-    const query = new URLSearchParams({
+  const query = new URLSearchParams({
     PageIndex: params.pageIndex.toString(),
     PageSize: params.pageSize.toString(),
     ...(params.search ? { search: params.search } : {}),
   });
 
   const response = await api.get<ApiResponse<PagedResult<RoleDto>>>(`/api/roles?${query.toString()}`);
+  return response.data;
+};
+
+export const deleteRole = async (id: number) => {
+  const response = await api.delete<ApiResponse<object>>(`/api/roles/${id}`);
   return response.data;
 };
