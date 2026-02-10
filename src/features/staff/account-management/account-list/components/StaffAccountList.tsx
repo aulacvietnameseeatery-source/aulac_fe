@@ -28,7 +28,7 @@ export default function StaffAccountList() {
 
   return (
     <div className="w-full h-full relative overflow-y-auto px-4 pb-10">
-      <div className="max-w-[1200px] mx-auto">
+      <div className="mx-auto">
         {/* Header */}
         <StaffAccountHeader onAddAccount={handleAddAccount} />
 
