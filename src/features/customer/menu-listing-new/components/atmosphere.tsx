@@ -1,19 +1,19 @@
-// components/Atmosphere.tsx
-import Image from 'next/image';
+import React from 'react';
 
-// components/Atmosphere.tsx
 export const Atmosphere = () => {
     return (
-        <div className="fixed inset-0 z-0 overflow-hidden">
-            <Image
-                src="/images/menu-listing/layer1.png"
-                alt="Ambiance"
-                fill
-                className="object-cover blur-[4px] brightness-[1.0] scale-105" // Tăng từ 0.4 lên 0.7 để sáng hơn
-                priority
-            />
-            {/* Giảm độ mờ của lớp phủ gradient */}
-            <div className="absolute inset-0 bg-black/20"></div>
+        <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+            {/* Blurred Background Layer 1 */}
+            {/* We assume layer1.jpg is the blurred room background provided by user */}
+            <div
+                className="absolute inset-0 bg-cover bg-center opacity-80"
+                style={{ backgroundImage: 'url(/images/menu-listing/menu-grid/layer1.png)' }}
+            ></div>
+
+            {/* Dark Overlay for better contrast */}
+            <div className="absolute inset-0 bg-[#0f172a]/70"></div>
+
+            {/* Floating Particles (Optional, can add later) */}
         </div>
     );
 };

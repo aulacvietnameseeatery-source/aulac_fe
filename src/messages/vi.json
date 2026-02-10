@@ -1,4 +1,8 @@
 {
+  "Metadata": {
+    "title": "Au Lac - Nhà Hàng Việt Nam",
+    "description": "Đỉnh cao của nghệ thuật ẩm thực Việt Nam ngay tại trung tâm thành phố."
+  },
   "Header": {
     "home": "Trang chủ",
     "menu": "THỰC ĐƠN",
@@ -251,9 +255,42 @@
       "guests": "Khách",
       "guestsCount": "{count} Người",
       "guestInfo": "Thông Tin Khách",
-      "policy": "Bàn được giữ trong 15 phút sau thời gian đặt. Vui lòng thông báo cho chúng tôi nếu có sự chậm trễ.",
       "confirm": "Xác Nhận Đặt Bàn",
-      "changeSelection": "Thay Đổi Lựa Chọn"
+      "changeSelection": "Thay Đổi Lựa Chọn",
+      "fullName": "Họ và Tên *",
+      "phoneNumber": "Số Điện Thoại *",
+      "emailAddress": "Email (Tùy chọn)",
+      "partySize": "Số Lượng Khách *",
+      "cancel": "Hủy",
+      "confirmBooking": "Xác Nhận Đặt Bàn",
+      "confirmed": "Đã Xác Nhận!",
+      "tableReserved": "Bàn của bạn đã được đặt",
+      "restaurant": "Nhà Hàng",
+      "guestName": "Tên Khách",
+      "zone": "Khu Vực",
+      "seeYouSoon": "Hẹn gặp lại!",
+      "downloadTicket": "Tải Vé",
+      "close": "Đóng"
+    },
+    "CallButton": {
+      "title": "Gọi Cho Nhà Hàng",
+      "subtitle": "Không có bàn trống trực tuyến",
+      "description": "Vui lòng gọi trực tiếp để đặt bàn hoặc hỏi thêm thông tin",
+      "restaurant": "Nhà hàng",
+      "phoneLabel": "Số điện thoại",
+      "callNow": "Gọi Ngay",
+      "copyNumber": "Sao Chép Số",
+      "copied": "Đã Sao Chép!",
+      "hours": "11:00 Sáng – 10:00 Tối",
+      "buttonText": "Gọi Đặt Bàn",
+      "dialing": "Đang mở ứng dụng điện thoại..."
+    },
+    "Zone": {
+      "label": "Khu vực",
+      "All": "Tất cả",
+      "Indoor": "Trong nhà",
+      "Outdoor": "Ngoài trời",
+      "Rooftop": "Sân thượng"
     },
     "Toast": {
       "success": "Xác nhận đặt bàn thành công!",
@@ -466,6 +503,43 @@
         "1_category": "Lựa Chọn Di Sản",
         "2_name": "Phở Bò Wagyu Truyền Thống",
         "2_category": "Đặc Trưng"
+      }
+    }
+  },
+  "Role": {
+    "List": {
+      "title": "Danh sách Vai trò",
+      "description": "Quản lý vai trò, quyền hạn và phân bổ nhân viên.",
+      "searchPlaceholder": "Tìm kiếm theo tên hoặc mã...",
+      "addNew": "Thêm Vai trò Mới",
+      "table": {
+        "no": "STT",
+        "name": "Tên",
+        "code": "Mã",
+        "staffCount": "Số lượng nhân viên",
+        "action": "Hành động",
+        "empty": "Không tìm thấy vai trò nào."
+      },
+      "pagination": {
+        "pageSize": "Kích thước trang:",
+        "previous": "Trước",
+        "next": "Tiếp"
+      },
+      "actions": {
+        "view": "Xem chi tiết",
+        "edit": "Sửa vai trò",
+        "delete": "Xóa vai trò"
+      },
+      "loading": "Đang tải dữ liệu...",
+      "deleteModal": {
+        "title": "Xóa Vai trò",
+        "message": "Bạn có chắc chắn muốn xóa vai trò này không? Hành động này không thể hoàn tác.",
+        "confirm": "Xóa",
+        "cancel": "Hủy"
+      },
+      "notifications": {
+        "deleteSuccess": "Xóa vai trò thành công",
+        "deleteError": "Có lỗi xảy ra khi xóa vai trò"
       }
     }
   }

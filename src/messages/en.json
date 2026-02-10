@@ -1,4 +1,8 @@
 {
+  "Metadata": {
+    "title": "Au Lac - Vietnamese Eatery",
+    "description": "The pinnacle of Vietnamese culinary art in the heart of the city."
+  },
   "Header": {
     "home": "Home",
     "menu": "MENU",
@@ -250,9 +254,42 @@
       "guests": "Guests",
       "guestsCount": "{count} Persons",
       "guestInfo": "Guest Information",
-      "policy": "Tables are held for 15 minutes past reservation time. Please notify us of any delays.",
       "confirm": "Confirm Reservation",
-      "changeSelection": "Change Selection"
+      "changeSelection": "Change Selection",
+      "fullName": "Full Name *",
+      "phoneNumber": "Phone Number *",
+      "emailAddress": "Email (Optional)",
+      "partySize": "Party Size *",
+      "cancel": "Cancel",
+      "confirmBooking": "Confirm Booking",
+      "confirmed": "Confirmed!",
+      "tableReserved": "Your table is reserved",
+      "restaurant": "Restaurant",
+      "guestName": "Guest Name",
+      "zone": "Zone",
+      "seeYouSoon": "See you soon!",
+      "downloadTicket": "Download Ticket",
+      "close": "Close"
+    },
+    "CallButton": {
+      "title": "Call Restaurant",
+      "subtitle": "No tables available online",
+      "description": "Please call directly to make a reservation or inquire",
+      "restaurant": "Restaurant",
+      "phoneLabel": "Phone Number",
+      "callNow": "Call Now",
+      "copyNumber": "Copy Number",
+      "copied": "Copied!",
+      "hours": "11:00 AM – 10:00 PM",
+      "buttonText": "Call to Reserve",
+      "dialing": "Opening phone app..."
+    },
+    "Zone": {
+      "label": "Zone",
+      "All": "All",
+      "Indoor": "Indoor",
+      "Outdoor": "Outdoor",
+      "Rooftop": "Rooftop"
     },
     "Toast": {
       "success": "Reservation confirmed successfully!",
@@ -465,6 +502,43 @@
         "1_category": "Heritage Selection",
         "2_name": "Heritage Wagyu Pho",
         "2_category": "Signature"
+      }
+    }
+  },
+  "Role": {
+    "List": {
+      "title": "Role List",
+      "description": "Manage roles, permissions, and staff distribution.",
+      "searchPlaceholder": "Search by name or code...",
+      "addNew": "Add New Role",
+      "table": {
+        "no": "No",
+        "name": "Name",
+        "code": "Code",
+        "staffCount": "Staff Count",
+        "action": "Action",
+        "empty": "No roles found."
+      },
+      "pagination": {
+        "pageSize": "Page size:",
+        "previous": "Previous",
+        "next": "Next"
+      },
+      "actions": {
+        "view": "View details",
+        "edit": "Edit role",
+        "delete": "Delete role"
+      },
+      "loading": "Loading data...",
+      "deleteModal": {
+        "title": "Delete Role",
+        "message": "Are you sure you want to delete this role? This action cannot be undone.",
+        "confirm": "Delete",
+        "cancel": "Cancel"
+      },
+      "notifications": {
+        "deleteSuccess": "Role deleted successfully",
+        "deleteError": "An error occurred while deleting the role"
       }
     }
   }

@@ -3,7 +3,10 @@ export interface TableAvailabilityDto {
     tableCode: string;
     capacity: number;
     tableType: string;
+    zone: string;
     isAvailable: boolean;
+    lockedUntil?: string; // ISO string
+    imageUrl?: string;
 }
 
 export interface CreateReservationLockRequest {
@@ -22,7 +25,7 @@ export interface ReservationLockResponseDto {
 }
 
 export interface CreateReservationRequest {
-    lockToken: string;
+    lockToken?: string;
     tableId: number;
     customerName: string;
     phone: string;
@@ -39,6 +42,7 @@ export interface ReservationResponseDto {
     partySize: number;
     reservedTime: string; // ISO string
     tableCode: string;
+    zone: string;
     status: string;
     createdAt: string; // ISO string
 }
