@@ -504,5 +504,32 @@
         "2_category": "Signature"
       }
     }
+  },
+  "Role": {
+    "List": {
+      "title": "Role List",
+      "description": "Manage roles, permissions, and staff distribution.",
+      "searchPlaceholder": "Search by name or code...",
+      "addNew": "Add New Role",
+      "table": {
+        "no": "No",
+        "name": "Name",
+        "code": "Code",
+        "staffCount": "Staff Count",
+        "action": "Action",
+        "empty": "No roles found."
+      },
+      "pagination": {
+        "pageSize": "Page size:",
+        "previous": "Previous",
+        "next": "Next"
+      },
+      "actions": {
+        "view": "View details",
+        "edit": "Edit role",
+        "delete": "Delete role"
+      },
+      "loading": "Loading data..."
+    }
   }
 }
