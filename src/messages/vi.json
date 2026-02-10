@@ -1,4 +1,8 @@
 {
+  "Metadata": {
+    "title": "Au Lac - Nhà Hàng Việt Nam",
+    "description": "Đỉnh cao của nghệ thuật ẩm thực Việt Nam ngay tại trung tâm thành phố."
+  },
   "Header": {
     "home": "Trang chủ",
     "menu": "THỰC ĐƠN",
@@ -251,9 +255,42 @@
       "guests": "Khách",
       "guestsCount": "{count} Người",
       "guestInfo": "Thông Tin Khách",
-      "policy": "Bàn được giữ trong 15 phút sau thời gian đặt. Vui lòng thông báo cho chúng tôi nếu có sự chậm trễ.",
       "confirm": "Xác Nhận Đặt Bàn",
-      "changeSelection": "Thay Đổi Lựa Chọn"
+      "changeSelection": "Thay Đổi Lựa Chọn",
+      "fullName": "Họ và Tên *",
+      "phoneNumber": "Số Điện Thoại *",
+      "emailAddress": "Email (Tùy chọn)",
+      "partySize": "Số Lượng Khách *",
+      "cancel": "Hủy",
+      "confirmBooking": "Xác Nhận Đặt Bàn",
+      "confirmed": "Đã Xác Nhận!",
+      "tableReserved": "Bàn của bạn đã được đặt",
+      "restaurant": "Nhà Hàng",
+      "guestName": "Tên Khách",
+      "zone": "Khu Vực",
+      "seeYouSoon": "Hẹn gặp lại!",
+      "downloadTicket": "Tải Vé",
+      "close": "Đóng"
+    },
+    "CallButton": {
+      "title": "Gọi Cho Nhà Hàng",
+      "subtitle": "Không có bàn trống trực tuyến",
+      "description": "Vui lòng gọi trực tiếp để đặt bàn hoặc hỏi thêm thông tin",
+      "restaurant": "Nhà hàng",
+      "phoneLabel": "Số điện thoại",
+      "callNow": "Gọi Ngay",
+      "copyNumber": "Sao Chép Số",
+      "copied": "Đã Sao Chép!",
+      "hours": "11:00 Sáng – 10:00 Tối",
+      "buttonText": "Gọi Đặt Bàn",
+      "dialing": "Đang mở ứng dụng điện thoại..."
+    },
+    "Zone": {
+      "label": "Khu vực",
+      "All": "Tất cả",
+      "Indoor": "Trong nhà",
+      "Outdoor": "Ngoài trời",
+      "Rooftop": "Sân thượng"
     },
     "Toast": {
       "success": "Xác nhận đặt bàn thành công!",

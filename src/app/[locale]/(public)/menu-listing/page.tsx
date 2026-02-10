@@ -1,4 +1,3 @@
-// app/menu-listing/page.tsx
 'use client';
 
 import { useState } from "react";
@@ -8,21 +7,19 @@ import { AnimatePresence } from "framer-motion";
 import { CartSummary, CartItem, TableSelectionModal } from "@/features/customer/menu-listing";
 import { Atmosphere } from "@/features/customer/menu-listing-new/components/atmosphere";
 import { BookFrame } from "@/features/customer/menu-listing-new/components/book-frame";
-import { LeftPage } from "@/features/customer/menu-listing-new/components/left-page";
-import { RightPage } from "@/features/customer/menu-listing-new/components/right-page";
-import { MenuItem } from "@/features/customer/menu-listing-new/components/menu-card";
+import { MenuItemData } from "@/features/customer/menu-listing-new/data/mock-menu";
 
 export default function MenuListingPage() {
     // ================= STATE =================
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
     const [tableNumber, setTableNumber] = useState("");
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [pendingQueue, setPendingQueue] = useState<MenuItem[]>([]);
+    const [pendingQueue, setPendingQueue] = useState<MenuItemData[]>([]);
 
     // ================= LOGIC =================
 
     // Thêm vào giỏ hàng chính thức
-    const addToCart = (itemsToAdd: MenuItem[]) => {
+    const addToCart = (itemsToAdd: MenuItemData[]) => {
         setCartItems((prev) => {
             const newCart = [...prev];
             itemsToAdd.forEach(newItem => {
@@ -30,7 +27,7 @@ export default function MenuListingPage() {
                 // Parse giá
                 const priceNumber = typeof newItem.price === 'string'
                     ? parseFloat((newItem.price as string).replace(/[^0-9.]/g, ''))
-                    : newItem.price;
+                    : typeof newItem.price === 'number' ? newItem.price : 0;
 
                 if (existingIndex > -1) {
                     newCart[existingIndex] = {
@@ -43,6 +40,7 @@ export default function MenuListingPage() {
                         name: newItem.name,
                         price: priceNumber,
                         quantity: 1,
+                        image: newItem.image
                     });
                 }
             });
@@ -50,14 +48,12 @@ export default function MenuListingPage() {
         });
     };
 
-    // XỬ LÝ KHI BẤM NÚT ORDER
-    const handleOrder = (item: MenuItem, _startPos: { x: number; y: number }) => {
+    // Callback từ BookFrame (Click nút Add trong Detail Popup)
+    const handleAddToCartFromBook = (item: MenuItemData) => {
         if (!tableNumber) {
-            // Chưa có bàn: Lưu vào hàng đợi -> Mở Modal (CHƯA THÊM VÀO GIỎ CHÍNH)
             setPendingQueue(prev => [...prev, item]);
             setIsModalOpen(true);
         } else {
-            // Đã có bàn: Thêm thẳng vào giỏ
             addToCart([item]);
         }
     };
@@ -67,7 +63,6 @@ export default function MenuListingPage() {
         setTableNumber(val);
         setIsModalOpen(false);
 
-        // Lúc này mới đổ hàng đợi vào giỏ chính thức -> Cái lá mới hiện
         if (pendingQueue.length > 0) {
             addToCart(pendingQueue);
             setPendingQueue([]);
@@ -81,7 +76,7 @@ export default function MenuListingPage() {
     const handleRemoveItem = (id: string) => setCartItems(prev => prev.filter(item => item.id !== id));
 
     return (
-        <main className="relative flex-1 min-h-screen w-full flex items-center justify-center p-4 py-20 pt-[140px] overflow-hidden bg-[#0f172a]">
+        <main className="relative flex-1 min-h-screen w-full flex items-center justify-center p-4 overflow-hidden bg-[#0f172a]">
 
             <TableSelectionModal
                 isOpen={isModalOpen}
@@ -92,21 +87,18 @@ export default function MenuListingPage() {
             <Atmosphere />
 
             <div className="relative z-10 w-full max-w-[1400px]">
-                <BookFrame>
-                    <LeftPage onOrder={handleOrder} />
-                    <div className="w-[1px] h-full bg-white/10 z-20 shadow-[0_0_15px_rgba(0,0,0,0.2)]"></div>
-                    <RightPage onOrder={handleOrder} />
-                </BookFrame>
+                {/* BookFrame now manages its own pages and logic */}
+                <BookFrame
+                    onAddToCart={handleAddToCartFromBook}
+                />
             </div>
 
             {/* GIỎ HÀNG CÁI LÁ */}
             <div
                 id="cart-destination"
-                className="fixed bottom-[83px] right-[20px] z-50 pointer-events-none flex flex-col items-end justify-end"
+                className="fixed bottom-20.75 right-5 z-50 pointer-events-none flex flex-col items-end justify-end"
             >
                 <AnimatePresence>
-                    {/* QUAN TRỌNG: Chỉ hiện khi cartItems > 0.
-                        pendingQueue > 0 cũng KHÔNG hiện (để ẩn khi đang nhập bàn) */}
                     {cartItems.length > 0 && (
                         <div className="pointer-events-auto transform scale-90 md:scale-100 origin-bottom-right">
                             <CartSummary
