@@ -530,7 +530,17 @@
         "edit": "Modifier le rôle",
         "delete": "Supprimer le rôle"
       },
-      "loading": "Chargement des données..."
+      "loading": "Chargement des données...",
+      "deleteModal": {
+        "title": "Supprimer le Rôle",
+        "message": "Êtes-vous sûr de vouloir supprimer ce rôle ? Cette action est irréversible.",
+        "confirm": "Supprimer",
+        "cancel": "Annuler"
+      },
+      "notifications": {
+        "deleteSuccess": "Rôle supprimé avec succès",
+        "deleteError": "Une erreur est survenue lors de la suppression du rôle"
+      }
     }
   }
 }

@@ -505,5 +505,42 @@
         "2_category": "Đặc Trưng"
       }
     }
+  },
+  "Role": {
+    "List": {
+      "title": "Danh sách Vai trò",
+      "description": "Quản lý vai trò, quyền hạn và phân bổ nhân viên.",
+      "searchPlaceholder": "Tìm kiếm theo tên hoặc mã...",
+      "addNew": "Thêm Vai trò Mới",
+      "table": {
+        "no": "STT",
+        "name": "Tên",
+        "code": "Mã",
+        "staffCount": "Số lượng nhân viên",
+        "action": "Hành động",
+        "empty": "Không tìm thấy vai trò nào."
+      },
+      "pagination": {
+        "pageSize": "Kích thước trang:",
+        "previous": "Trước",
+        "next": "Tiếp"
+      },
+      "actions": {
+        "view": "Xem chi tiết",
+        "edit": "Sửa vai trò",
+        "delete": "Xóa vai trò"
+      },
+      "loading": "Đang tải dữ liệu...",
+      "deleteModal": {
+        "title": "Xóa Vai trò",
+        "message": "Bạn có chắc chắn muốn xóa vai trò này không? Hành động này không thể hoàn tác.",
+        "confirm": "Xóa",
+        "cancel": "Hủy"
+      },
+      "notifications": {
+        "deleteSuccess": "Xóa vai trò thành công",
+        "deleteError": "Có lỗi xảy ra khi xóa vai trò"
+      }
+    }
   }
 }
