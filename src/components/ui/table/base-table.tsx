@@ -387,10 +387,13 @@ export function BaseTable<T>({
                 setCurrentPage(totalPages);
                 break;
         }
-        emitDataChange();
-    }, [totalCount, pageSize, emitDataChange]);
+    }, [totalCount, pageSize]);
 
     // ========== EFFECTS ==========
+    useEffect(() => {
+        emitDataChange();
+    }, [currentPage, emitDataChange])
+    
     useEffect(() => {
         if (searchDebounceTimeoutRef.current) {
             clearTimeout(searchDebounceTimeoutRef.current);
