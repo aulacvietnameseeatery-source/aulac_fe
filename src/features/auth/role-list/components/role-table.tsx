@@ -14,7 +14,7 @@ type Props = {
 
 export const RoleTable = ({ roles, isLoading, startIndex, onView, onEdit, onDelete }: Props) => {
   const t = useTranslations("Role.List");
-  
+
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
       <div className="overflow-x-auto">
