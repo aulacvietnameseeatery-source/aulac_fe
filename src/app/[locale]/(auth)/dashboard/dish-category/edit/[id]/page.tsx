@@ -1,4 +1,4 @@
-import EditDishCategory from '@/features/staff/dish-category-management/components/EditDishCategory';
+import { EditDishCategory } from '@/features/staff/dish-category-management/dish-category-edit';
 
 interface EditDishCategoryPageProps {
   params: {
