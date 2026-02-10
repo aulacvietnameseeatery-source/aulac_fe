@@ -17,9 +17,9 @@ export function LoginForm() {
   };
 
   return (
-    <div className="relative mt-6 overflow-hidden rounded-[32px] bg-stone-50 p-10 shadow-[0px_20px_40px_-12px_rgba(213,186,152,0.40)] outline outline-1 outline-offset-[-1px] outline-white/60 backdrop-blur-[2px]">
+    <div className="relative mt-6 overflow-hidden rounded-4xl bg-stone-50 p-10 shadow-[0px_20px_40px_-12px_rgba(213,186,152,0.40)] outline outline-1 outline-offset-[-1px] outline-white/60 backdrop-blur-[2px]">
       {/* Top gradient line */}
-      <div className="absolute left-[1px] top-[1px] h-1 w-[calc(100%-2px)] opacity-50 bg-gradient-to-r from-red-300/0 via-red-300 to-red-300/0" />
+      <div className="absolute left-px top-px h-1 w-[calc(100%-2px)] opacity-50 bg-gradient-to-r from-red-300/0 via-red-300 to-red-300/0" />
 
       {/* Error message */}
       {isError && (
@@ -74,7 +74,7 @@ export function LoginForm() {
         <button
           type="submit"
           disabled={isPending}
-          className="inline-flex w-full items-center justify-center rounded-2xl bg-gray-800 px-4 py-3.5 shadow-[0px_2px_4px_-2px_rgba(0,0,0,0.10)] shadow-md outline outline-1 outline-offset-[-1px] outline-black/0 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="inline-flex w-full items-center justify-center rounded-2xl bg-gray-800 px-4 py-3.5 shadow-[0px_2px_4px_-2px_rgba(0,0,0,0.10)] outline outline-1 outline-offset-[-1px] outline-black/0 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <span className="text-base font-bold leading-6 tracking-wide text-white">
             {isPending ? "Signing In..." : "Sign In"}
