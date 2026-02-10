@@ -1,4 +1,8 @@
 {
+  "Metadata": {
+    "title": "Au Lac - Vietnamese Eatery",
+    "description": "The pinnacle of Vietnamese culinary art in the heart of the city."
+  },
   "Header": {
     "home": "Home",
     "menu": "MENU",
@@ -179,33 +183,13 @@
     }
   },
   "AboutUs": {
-    "Legacy": {
-      "est": "Est. 1994",
-      "title": "Our Legacy"
-    },
-    "Journey": {
-      "title": "The Journey of Flavor",
-      "paragraph_1": "Founded in the heart of the capital in 1994, <strong>Au Lac</strong> began as a humble tribute to the ancestral roots of Vietnamese cuisine. Named after the historic kingdom of the Lac Viet people, our eatery was envisioned as a bridge between the ancient traditions of the East and the refined techniques of contemporary gastronomy.",
-      "paragraph_2": "For three decades, we have remained committed to the \"trầm ấm\" philosophy—creating a warm, soul-stirring atmosphere where every dish tells a story of heritage. What started with a single family recipe for Pho has evolved into an editorial dining experience that honors the seasonal rhythm of our land.",
-      "quote": "\"We do not just serve food; we preserve the echoes of a thousand years of culinary evolution.\"",
-      "paragraph_3": "Today, Au Lac stands as a beacon of Vietnamese fine dining, where the crackle of a clay pot and the aroma of star anise serve as a homecoming for the senses."
-    },
-    "Philosophy": {
-      "label": "Our Core Values",
-      "title": "Culinary Philosophy",
-      "value_1_title": "Traditional Craft",
-      "value_1_desc": "Honoring the slow techniques of our ancestors. From 24-hour bone broths to hand-ground spices using the mortar and pestle.",
-      "value_2_title": "Modern Spirit",
-      "value_2_desc": "Elevating heritage flavors through precision, artistic plating, and a sophisticated global perspective on fine dining."
-    },
-    "Founders": {
-      "label": "The Visionaries",
-      "title": "Meet the Founders",
-      "paragraph_1": "Chef Nguyen and Master Sommelier Linh founded Au Lac with a shared dream: to redefine how the world perceives Vietnamese hospitality.",
-      "paragraph_2": "With backgrounds spanning from the street stalls of Saigon to Michelin-starred kitchens in Paris, they bring a balanced harmony of warmth and professional excellence to every guest's table.",
-      "quote": "\"The table is where culture lives. We invite you to sit with us.\"",
-      "quote_author": "— Nguyen & Linh"
-    }
+    "title": "An Lạc – Vietnamese Eatery",
+    "subtitle": "A Quiet Expression of Vietnamese Cuisine",
+    "description_1": "An Lạc is not a place of spectacle.\nIt is a place of calm.",
+    "description_2": "An Lạc is guided by balance, memory, and serenity. Its name means peaceful happiness, inspired by the founder’s journey — a mother of three children — creating a space reflecting care, stability, and the essence of An cư Lạc nghiệp.",
+    "description_3": "At An Lạc, we do not seek to change Vietnamese cuisine, but to honor it. Patience, harmony, and precision shape every dish: the slow simmer of a broth, the careful balance of herbs, the quiet depth of fermentation, and the humility of rice.",
+    "description_4": "Familiar techniques such as kho, hấp, and nướng are expressed with precision and minimalism. Flavors are measured, balanced, and subtle.",
+    "description_5": "An Lạc is an invitation — to slow down, taste attentively, and reconnect with the essential."
   },
   "Reservation": {
     "Header": {
@@ -270,9 +254,42 @@
       "guests": "Guests",
       "guestsCount": "{count} Persons",
       "guestInfo": "Guest Information",
-      "policy": "Tables are held for 15 minutes past reservation time. Please notify us of any delays.",
       "confirm": "Confirm Reservation",
-      "changeSelection": "Change Selection"
+      "changeSelection": "Change Selection",
+      "fullName": "Full Name *",
+      "phoneNumber": "Phone Number *",
+      "emailAddress": "Email (Optional)",
+      "partySize": "Party Size *",
+      "cancel": "Cancel",
+      "confirmBooking": "Confirm Booking",
+      "confirmed": "Confirmed!",
+      "tableReserved": "Your table is reserved",
+      "restaurant": "Restaurant",
+      "guestName": "Guest Name",
+      "zone": "Zone",
+      "seeYouSoon": "See you soon!",
+      "downloadTicket": "Download Ticket",
+      "close": "Close"
+    },
+    "CallButton": {
+      "title": "Call Restaurant",
+      "subtitle": "No tables available online",
+      "description": "Please call directly to make a reservation or inquire",
+      "restaurant": "Restaurant",
+      "phoneLabel": "Phone Number",
+      "callNow": "Call Now",
+      "copyNumber": "Copy Number",
+      "copied": "Copied!",
+      "hours": "11:00 AM – 10:00 PM",
+      "buttonText": "Call to Reserve",
+      "dialing": "Opening phone app..."
+    },
+    "Zone": {
+      "label": "Zone",
+      "All": "All",
+      "Indoor": "Indoor",
+      "Outdoor": "Outdoor",
+      "Rooftop": "Rooftop"
     },
     "Toast": {
       "success": "Reservation confirmed successfully!",
@@ -485,6 +502,43 @@
         "1_category": "Heritage Selection",
         "2_name": "Heritage Wagyu Pho",
         "2_category": "Signature"
+      }
+    }
+  },
+  "Role": {
+    "List": {
+      "title": "Role List",
+      "description": "Manage roles, permissions, and staff distribution.",
+      "searchPlaceholder": "Search by name or code...",
+      "addNew": "Add New Role",
+      "table": {
+        "no": "No",
+        "name": "Name",
+        "code": "Code",
+        "staffCount": "Staff Count",
+        "action": "Action",
+        "empty": "No roles found."
+      },
+      "pagination": {
+        "pageSize": "Page size:",
+        "previous": "Previous",
+        "next": "Next"
+      },
+      "actions": {
+        "view": "View details",
+        "edit": "Edit role",
+        "delete": "Delete role"
+      },
+      "loading": "Loading data...",
+      "deleteModal": {
+        "title": "Delete Role",
+        "message": "Are you sure you want to delete this role? This action cannot be undone.",
+        "confirm": "Delete",
+        "cancel": "Cancel"
+      },
+      "notifications": {
+        "deleteSuccess": "Role deleted successfully",
+        "deleteError": "An error occurred while deleting the role"
       }
     }
   }
