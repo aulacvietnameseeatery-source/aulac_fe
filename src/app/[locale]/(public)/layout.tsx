@@ -5,6 +5,7 @@ import { Header } from "@/components/layout/header/header";
 import { Footer } from "@/components/layout/footer/footer";
 import { cn } from "@/lib/utils";
 import { useParams } from "next/navigation";
+import { Tooltip } from "react-tooltip";
 
 export default function PublicLayout({ children }: { children: React.ReactNode }) {
     const [isScrolled, setIsScrolled] = useState(false);
@@ -26,12 +27,14 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
             <Header isScrolled={isScrolled} locale={locale} />
 
             <div className={cn(
-                "w-full flex-shrink-0 transition-[height] duration-300 ease-in-out",
-                isScrolled ? "h-[80px]" : "h-[80px] md:h-[270px]"
+                "w-full shrink-0 transition-[height] duration-300 ease-in-out",
+                isScrolled ? "h-16" : "h-16 md:h-44"
             )} />
 
             <main className="flex-1">{children}</main>
             <Footer locale={locale} />
+            <Tooltip id="my-tooltip" />
+
         </div>
     );
 }

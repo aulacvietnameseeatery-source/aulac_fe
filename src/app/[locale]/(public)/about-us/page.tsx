@@ -3,7 +3,6 @@
 import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
 import { Wind, Waves, Leaf, Sun } from "lucide-react";
-import Image from "next/image";
 
 // Premium Animation Variants
 const containerVariant = {
@@ -30,9 +29,9 @@ export default function AboutUsUI() {
     <div className="w-full min-h-screen bg-[#FDFBF7] text-[#1A1A1A]">
       <main className="w-full">
         {/* === HERO SECTION === */}
-        <div className="relative w-full h-[60vh] md:h-[70vh] flex items-center justify-center overflow-hidden bg-[#1A1A1A]">
+        <div className="relative w-full h-[60vh] md:h-[85vh] flex items-center justify-center overflow-hidden bg-[#1A1A1A]">
           {/* Background Gradient/Pattern */}
-          <div className="absolute inset-0 bg-gradient-to-br from-[#1A3A51]/40 to-black/80 z-10" />
+          <div className="absolute inset-0 bg-linear-to-br from-[#1A3A51]/40 to-black/80 z-10" />
           <div className="absolute inset-0 opacity-20 bg-[url('/pattern/noise.png')]" /> {/* Noise texture fallback */}
 
           <motion.div
@@ -52,7 +51,7 @@ export default function AboutUsUI() {
 
         {/* === INTRODUCTION SECTION === */}
         <motion.div
-          className="max-w-[1000px] mx-auto px-6 py-24 md:py-32"
+          className="max-w-250 mx-auto px-6 py-24 md:py-32"
           variants={containerVariant}
           initial="hidden"
           whileInView="visible"
@@ -88,7 +87,7 @@ export default function AboutUsUI() {
 
         {/* === FEATURED CARDS (Balance, Memory, Serenity) === */}
         <div className="w-full bg-[#EBE9E4] py-24 md:py-32">
-          <div className="max-w-[1200px] mx-auto px-6">
+          <div className="max-w-300 mx-auto px-6">
             <motion.div
               className="grid grid-cols-1 md:grid-cols-3 gap-8"
               initial="hidden"

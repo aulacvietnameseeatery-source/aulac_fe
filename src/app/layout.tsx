@@ -3,9 +3,11 @@ import { Inter, Playfair_Display } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import QueryProvider from "@/components/providers/query-provider";
-// 👇 Import Component Guard vừa tạo
 import "@/styles/globals.css";
 import { Toaster } from "@/components/ui/sonner";
+import { AuthProvider } from "@/components/providers/auth-provider";
+
+
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
 const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-playfair", display: "swap" });
@@ -30,7 +32,6 @@ export async function generateMetadata({ params: { locale } }: { params: { local
     return {
         title: title,
         description: description,
-        // 👇 Cấu hình quan trọng cho Apple Devices
         appleWebApp: {
             capable: true, // Biến web thành Web App (ẩn thanh địa chỉ safari)
             title: title,
@@ -65,6 +66,7 @@ export default async function RootLayout({
             </head>
             <body className={`${inter.variable} ${playfair.variable} antialiased font-body bg-[#FAF9F6]`}>
                 <QueryProvider>
+                    <AuthProvider>
                     <NextIntlClientProvider messages={messages} locale={locale}>
                         {/* 👇 Bọc TableGuard ở đây để chặn flow nếu chưa chọn bàn */}
                         {/*<TableGuard>*/}
@@ -72,6 +74,7 @@ export default async function RootLayout({
                         {/*</TableGuard>*/}
                         <Toaster />
                     </NextIntlClientProvider>
+                    </AuthProvider>
                 </QueryProvider>
             </body>
         </html >
