@@ -10,6 +10,8 @@ import { AccountActions } from "@/features/staff/account-management/account-list
 import { useAccountList } from "@/features/staff/account-management/account-list/hooks/useAccountList";
 import { useFilterOptions } from "@/features/staff/account-management/account-list/hooks/useFilterOptions";
 import { staffAccountService } from "@/features/staff/account-management/account-list/services/staff-account.service";
+import { AccountDialog } from "@/features/staff/account-management/account-detail/components/AccountDialog";
+import type { AccountDialogMode, AccountDialogState } from "@/features/staff/account-management/account-detail/types/account-detail.types";
 import { toast } from "sonner";
 import { useTranslations } from "next-intl";
 import { ConfirmModal } from "@/components/layout/admin-sidebar/confirm-modal";
@@ -26,15 +28,30 @@ const AccountListContent = () => {
   // Filter Options Hook
   const { roles, statuses, isLoadingFilters } = useFilterOptions();
   
+  // ---- Account Dialog state ----
+  const [dialogState, setDialogState] = useState<AccountDialogState>({
+    open: false,
+    mode: "view",
+    accountId: null,
+  });
+
+  const openDialog = (mode: AccountDialogMode, accountId: number | null = null) => {
+    setDialogState({ open: true, mode, accountId });
+  };
+
+  const closeDialog = () => {
+    setDialogState({ open: false, mode: "view", accountId: null });
+  };
+
   // Reset password modal state
   const [resetModalOpen, setResetModalOpen] = useState(false);
   const [accountToReset, setAccountToReset] = useState<number | null>(null);
   const [isResetting, setIsResetting] = useState(false);
 
-  // Action Handlers
-  const handleView = (account: StaffAccount) => console.log("View:", account.accountId);
-  const handleEdit = (account: StaffAccount) => console.log("Edit:", account.accountId);
-  const handleCreate = () => console.log("Navigate to Create");
+  // Action Handlers — open dialog with the correct mode
+  const handleView = (account: StaffAccount) => openDialog("view", account.accountId);
+  const handleEdit = (account: StaffAccount) => openDialog("edit", account.accountId);
+  const handleCreate = () => openDialog("create");
 
   // Open reset password confirmation modal
   const handleResetPasswordClick = (account: StaffAccount) => {
@@ -173,8 +190,8 @@ const AccountListContent = () => {
   }, []);
 
   return (
-    <div className="flex flex-col min-h-full -m-4 md:-m-8">
-      <div className="flex-shrink-0 p-6 pb-2 md:p-8 md:pb-4 bg-gray-50/50">
+    <div className="w-full h-full flex flex-col  overflow-hidden">
+      <div className="shrink-0 p-6 pb-2 md:pb-4 bg-white shadow-sm rounded-lg bg-gray-50/50">
         <AccountHeader 
           searchTerm={filters.searchTerm}
           isLoading={isLoading}
@@ -190,7 +207,7 @@ const AccountListContent = () => {
         />
       </div>
       
-      <div className="flex-1 bg-gray-50/50 px-6 md:px-8">
+      <div className="flex-1">
         <BaseTable<StaffAccount>
           // Data & Loading
           data={accounts}
@@ -223,6 +240,15 @@ const AccountListContent = () => {
           pageSizeOptions={[10, 20, 50, 100]}
         />
       </div>
+
+      {/* Account Detail / Create / Edit Dialog */}
+      <AccountDialog
+        open={dialogState.open}
+        mode={dialogState.mode}
+        accountId={dialogState.accountId}
+        onClose={closeDialog}
+        onSuccess={actions.refresh}
+      />
 
       <ConfirmModal
         isOpen={resetModalOpen}
