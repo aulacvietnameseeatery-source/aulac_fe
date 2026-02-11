@@ -66,7 +66,7 @@ export default function DashboardLayout({
           </div>
         </div>
       </div>
-      <Tooltip id="my-tooltip" />
+      <Tooltip id="my-tooltip" style={{zIndex: 10000}} />
     </div>
 
 

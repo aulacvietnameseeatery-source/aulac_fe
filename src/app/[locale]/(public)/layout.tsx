@@ -33,7 +33,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
 
             <main className="flex-1">{children}</main>
             <Footer locale={locale} />
-            <Tooltip id="my-tooltip" />
+            <Tooltip id="my-tooltip" style={{zIndex: 10000}}/>
 
         </div>
     );

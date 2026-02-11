@@ -548,6 +548,138 @@
         "resetPasswordSuccess": "Password reset successfully",
         "resetPasswordError": "An error occurred while resetting the password"
       }
+    },
+    "Detail": {
+      "title": "Account Details",
+      "loadingAccount": "Loading account details...",
+      "accountNotFound": "Account not found.",
+      "tabs": {
+        "general": "General",
+        "roleStatus": "Role & Status",
+        "security": "Security",
+        "orders": "Orders",
+        "inventory": "Inventory",
+        "serviceErrors": "Service Errors",
+        "auditLogs": "Audit Logs",
+        "systemSettings": "Settings"
+      },
+      "general": {
+        "title": "General Information",
+        "fullName": "Full Name",
+        "username": "Username",
+        "email": "Email",
+        "phone": "Phone"
+      },
+      "roleStatus": {
+        "title": "Role & Status",
+        "role": "Role",
+        "status": "Status",
+        "lockState": "Lock State",
+        "locked": "Locked",
+        "unlocked": "Unlocked",
+        "permissions": "Permissions"
+      },
+      "security": {
+        "title": "Security Information",
+        "lastLogin": "Last Login",
+        "createdAt": "Created At",
+        "updatedAt": "Updated At",
+        "never": "Never",
+        "authSessionsPlaceholder": "Auth sessions data will be available when the sessions API is integrated."
+      },
+      "placeholders": {
+        "orders": "This tab will display orders assigned to this staff member once the Orders API is integrated.",
+        "inventory": "This tab will display inventory transactions handled by this staff member once the Inventory API is integrated.",
+        "serviceErrors": "This tab will display service errors assigned to or resolved by this staff member once the Service Errors API is integrated.",
+        "auditLogs": "This tab will display audit logs related to this staff account once the Audit API is integrated.",
+        "systemSettings": "This tab will display system settings managed by this staff member once the Settings API is integrated.",
+        "noDataTitle": {
+          "orders": "No orders data available",
+          "inventory": "No inventory data available",
+          "serviceErrors": "No service errors data available",
+          "auditLogs": "No audit log data available",
+          "systemSettings": "No settings data available"
+        }
+      }
+    },
+    "Create": {
+      "title": "Create New Account",
+      "form": {
+        "fullName": {
+          "label": "Full Name",
+          "placeholder": "e.g. Nguyen Van A"
+        },
+        "email": {
+          "label": "Email",
+          "placeholder": "e.g. name@company.com"
+        },
+        "phone": {
+          "label": "Phone",
+          "placeholder": "e.g. 0901234567"
+        },
+        "role": {
+          "label": "Role",
+          "placeholder": "Select a role..."
+        },
+        "note": "Username will be auto-generated from the full name. A temporary password will be sent to the provided email. The account will start in LOCKED state until the user changes their password after first login.",
+        "submit": "Create Account",
+        "cancel": "Cancel"
+      },
+      "notifications": {
+        "success": "Account created successfully",
+        "successDescription": "Username \"{username}\" has been created. Temporary password sent to email.",
+        "error": "Failed to create account",
+        "errorDescription": "{message}"
+      }
+    },
+    "Edit": {
+      "title": "Edit Account",
+      "form": {
+        "fullName": {
+          "label": "Full Name",
+          "placeholder": "e.g. Nguyen Van A"
+        },
+        "email": {
+          "label": "Email",
+          "placeholder": "e.g. name@company.com"
+        },
+        "phone": {
+          "label": "Phone",
+          "placeholder": "e.g. 0901234567"
+        },
+        "role": {
+          "label": "Role",
+          "placeholder": "Select a role..."
+        },
+        "submit": "Save Changes",
+        "cancel": "Cancel"
+      },
+      "notifications": {
+        "success": "Account updated successfully",
+        "successDescription": "\"{fullName}\" has been updated.",
+        "error": "Failed to update account",
+        "errorDescription": "{message}"
+      }
+    },
+    "Validation": {
+      "email": {
+        "required": "Email is required",
+        "invalid": "Invalid email format",
+        "maxLength": "Email cannot exceed 150 characters"
+      },
+      "fullName": {
+        "required": "Full name is required",
+        "minLength": "Full name must be at least 2 characters",
+        "maxLength": "Full name cannot exceed 150 characters"
+      },
+      "phone": {
+        "invalid": "Invalid Vietnamese phone number format",
+        "maxLength": "Phone cannot exceed 30 characters"
+      },
+      "role": {
+        "required": "Role is required",
+        "invalid": "Please select a valid role"
+      }
     }
   },
   "Role": {

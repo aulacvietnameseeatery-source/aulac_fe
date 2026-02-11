@@ -5,6 +5,7 @@
 @import "./components/header.css";
 @import "./components/footer.css";
 @import "./components/nav-link.css";
+@import './components/icon.css';
 
 @import "./variable.css";
 
