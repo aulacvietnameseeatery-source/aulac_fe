@@ -1,0 +1,106 @@
+.admin-pagination-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 24px;
+    background-color: rgba(248, 250, 252, 0.3); /* Nền xám cực nhẹ */
+    border-top: 1px solid #F1F5F9;
+    font-family: 'Lexend', sans-serif;
+    width: 100%;
+}
+
+.admin-pagination-left, .admin-pagination-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* Label "Page size" */
+.pg-label {
+    font-size: 14px;
+    color: #64748B;
+}
+
+/* Custom Select */
+.pg-select {
+    padding: 4px 28px 4px 8px;
+    font-size: 12px;
+    font-weight: 400;
+    color: #0F172A;
+    background-color: white;
+    border: 1px solid #E2E8F0;
+    border-radius: 4px;
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%2364748B' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+}
+
+/* Info text: Showing X-Y of Z */
+.pg-info {
+    font-size: 12px;
+    color: #94A3B8;
+    margin-left: 8px;
+}
+
+/* Navigation Buttons (Previous/Next) */
+.pg-nav-btn {
+    padding: 6px 12px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #475569;
+    background: white;
+    border: 1px solid #E2E8F0;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.pg-nav-btn:hover:not(:disabled) {
+    background-color: #F1F5F9;
+}
+
+.pg-nav-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Page Numbers Area */
+.pg-numbers {
+    display: flex;
+    gap: 4px;
+}
+
+.pg-num-btn {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #475569;
+    background: transparent;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.pg-num-btn:hover:not(.active):not(.dots) {
+    background-color: #F1F5F9;
+}
+
+/* Active Page Style */
+.pg-num-btn.active {
+    background-color: #1B3A50; /* Màu Navy từ Figma */
+    color: white;
+    font-weight: 700;
+    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.pg-num-btn.dots {
+    cursor: default;
+    color: #94A3B8;
+}

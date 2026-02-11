@@ -542,5 +542,49 @@
         "deleteError": "Une erreur est survenue lors de la suppression du rôle"
       }
     }
+  },
+  "common": {
+    "table": {
+      "searchPlaceholder": "Rechercher",
+      "selected": "Sélectionné",
+      "unselect": "Désélectionner",
+      "clearFilter": "Supprimer le filtre",
+      "refresh": "Rafraîchir",
+
+      "pin": "Épingler la colonne",
+      "unpin": "Désépingler la colonne",
+
+      "sort": {
+        "none": "Aucun tri",
+        "asc": "Croissant",
+        "desc": "Décroissant"
+      },
+
+      "operator": {
+        "contains": "Contient",
+        "notContains": "Ne contient pas",
+        "equals": "Égal",
+        "notequal": "Différent",
+        "different": "Différent",
+        "startsWith": "Commence par",
+        "endsWith": "Se termine par",
+        "greater": "Supérieur à",
+        "less": "Inférieur à",
+        "greaterOrEqual": "Supérieur ou égal",
+        "lessOrEqual": "Inférieur ou égal",
+        "isNull": "Vide",
+        "notNull": "Non vide",
+        "selected": "Sélectionné"
+      },
+      "noData": "Aucune donnée",
+      "pagination": {
+        "total": "Total",
+        "pageSize": "Lignes par page",
+        "first": "Première page",
+        "prev": "Page précédente",
+        "next": "Page suivante",
+        "last": "Dernière page"
+      }
+    }
   }
 }

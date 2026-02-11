@@ -541,5 +541,49 @@
         "deleteError": "An error occurred while deleting the role"
       }
     }
+  },
+  "common": {
+    "table": {
+      "searchPlaceholder": "Search",
+      "selected": "Selected",
+      "unselect": "Unselect",
+      "clearFilter": "Clear filter",
+      "refresh": "Refresh",
+
+      "pin": "Pin column",
+      "unpin": "Unpin column",
+
+      "sort": {
+        "none": "No sorting",
+        "asc": "Ascending",
+        "desc": "Descending"
+      },
+
+      "operator": {
+        "contains": "Contains",
+        "notContains": "Does not contain",
+        "equals": "Equals",
+        "notequal": "Not equal",
+        "different": "Different",
+        "startsWith": "Starts with",
+        "endsWith": "Ends with",
+        "greater": "Greater than",
+        "less": "Less than",
+        "greaterOrEqual": "Greater or equal",
+        "lessOrEqual": "Less or equal",
+        "isNull": "Is empty",
+        "notNull": "Is not empty",
+        "selected": "Selected"
+      },
+      "noData": "No data available",
+      "pagination": {
+        "total": "Total",
+        "pageSize": "Rows per page",
+        "first": "First page",
+        "prev": "Previous page",
+        "next": "Next page",
+        "last": "Last page"
+      }
+    }
   }
 }
