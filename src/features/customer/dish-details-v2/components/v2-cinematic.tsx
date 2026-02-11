@@ -10,6 +10,8 @@ export function V2Cinematic() {
     <section className="relative w-full bg-slate-900">
       <div className="relative h-[400px] w-full overflow-hidden md:h-[600px] lg:h-[823px]">
         <Image
+          width={1920}
+          height={1080}
           src="/images/dish-detail-v2/v2-cinematic/v2-cinematic.png"
           alt="Cinematic dish detail"
           fill

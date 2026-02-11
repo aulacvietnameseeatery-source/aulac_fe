@@ -1,11 +1,9 @@
 import React, { useRef, useState, useEffect, useMemo } from 'react';
-import { useIsMobile } from '@/hooks/header/useIsMobile';
 import HTMLFlipBook from 'react-pageflip';
 import { MENU_DATA, MenuCategory, MenuItemData } from '../data/mock-menu';
 import { LeftPage } from './left-page';
 import { RightPage } from './right-page';
 import { ItemDetailModal } from './item-detail-modal';
-import { MenuItem } from './menu-card'; // For type compatibility
 
 // Page Component Wrapper
 const Page = React.forwardRef<HTMLDivElement, { children: React.ReactNode, number?: number, className?: string }>((props, ref) => {
@@ -238,7 +236,7 @@ export const BookFrame = ({ onAddToCart }: { onAddToCart?: (item: MenuItemData) 
                 </div>
             ) : (
                 // DESKTOP: LEFT VERTICAL TABS
-                <div className="absolute top-[5%] bottom-[5%] -left-[20px] w-[120px] z-50 flex flex-col justify-center gap-1 py-10">
+                <div className="absolute top-[5%] bottom-[5%] -left-5 w-30 z-50 flex flex-col justify-center gap-1 py-10">
                     {MENU_DATA.map((cat, index) => {
                         const isActive = activeCategoryId === cat.id;
                         const styleClass = BOOKMARK_STYLES[index % BOOKMARK_STYLES.length];
@@ -304,13 +302,13 @@ export const BookFrame = ({ onAddToCart }: { onAddToCart?: (item: MenuItemData) 
             <div className="relative w-full" style={{ aspectRatio: isMobile ? '3 / 4' : '3 / 2' }}>
                 <div className="relative w-full h-full">
                     {/* CSS BOOK COVER */}
-                    <div className="absolute inset-0 w-full h-full bg-[#06181F] rounded-[1%] shadow-[0_20px_50px_rgba(0,0,0,0.5)] border-[8px] border-[#1e293b] overflow-hidden">
+                    <div className="absolute inset-0 w-full h-full bg-[#06181F] rounded-[1%] shadow-[0_20px_50px_rgba(0,0,0,0.5)] border-8 border-[#1e293b] overflow-hidden">
                         {/* Texture/Gradient Overlay */}
-                        <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-black/20 pointer-events-none" />
+                        <div className="absolute inset-0 bg-linear-to-b from-white/5 to-black/20 pointer-events-none" />
 
                         {/* Central Spine */}
-                        <div className={`absolute top-0 bottom-0 ${isMobile ? 'left-0 w-[8px]' : 'left-1/2 -translate-x-1/2 w-[4%]'} bg-[#06181F] shadow-[inset_0_0_20px_rgba(0,0,0,0.8)] z-0`}>
-                            <div className="w-full h-full bg-gradient-to-r from-black/40 via-transparent to-black/40" />
+                        <div className={`absolute top-0 bottom-0 ${isMobile ? 'left-0 w-2' : 'left-1/2 -translate-x-1/2 w-[4%]'} bg-[#06181F] shadow-[inset_0_0_20px_rgba(0,0,0,0.8)] z-0`}>
+                            <div className="w-full h-full bg-linear-to-r from-black/40 via-transparent to-black/40" />
                         </div>
                     </div>
 

@@ -58,7 +58,7 @@ export function MenuCard({ item, onOrder }: MenuCardProps) {
     const description = tGrid(`items.${item.translationKey}_desc` as never);
 
     let categoryLabel = item.category;
-    try { categoryLabel = tFilter(item.category.toLowerCase() as never); } catch {}
+    try { categoryLabel = tFilter(item.category.toLowerCase() as never); } catch { }
 
     const detailHref = `/dish-details/${item.id}`;
 
@@ -76,9 +76,10 @@ export function MenuCard({ item, onOrder }: MenuCardProps) {
         >
             <Link href={detailHref} className="relative h-[224px] w-full bg-[#F5F3F0] overflow-hidden block cursor-pointer">
                 <Image
+                    width={1920}
+                    height={1080}
                     src={item.image}
                     alt={name}
-                    fill
                     className="object-cover transition-transform duration-700 group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />

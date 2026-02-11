@@ -63,7 +63,7 @@ export function V2Composition() {
             {ITEMS.map((x) => (
               <div key={x.num} className="bg-stone-100 p-6 md:p-8 lg:p-12">
                 <div className="relative h-64 w-full overflow-hidden rounded-xl bg-white md:h-80 lg:h-96">
-                  <Image src={x.img} alt={x.title} fill className="object-cover" />
+                  <Image src={x.img} alt={x.title} fill className="object-cover" width={1920} height={1080}/>
                 </div>
 
                 <div className="mt-6 flex items-start justify-between md:mt-8 lg:mt-10">
