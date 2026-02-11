@@ -70,7 +70,7 @@ export function KeywordSearch({
   };
 
   return (
-    <div className={cn("relative w-full md:w-80", className)}>
+    <div className={cn("relative w-full", className)}>
       {/* Icon Search (Left) */}
       <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
         <Search size={18} className="text-gray-400" />

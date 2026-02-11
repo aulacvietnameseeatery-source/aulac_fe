@@ -505,6 +505,51 @@
       }
     }
   },
+  "Account": {
+    "List": {
+      "title": "Staff Account List",
+      "description": "Manage staff accounts, roles, and permissions.",
+      "searchPlaceholder": "Search by name, email or phone...",
+      "addNew": "Add New Account",
+      "table": {
+        "no": "No",
+        "fullName": "Full Name",
+        "email": "Email",
+        "phone": "Phone",
+        "role": "Role",
+        "status": "Status",
+        "action": "Action",
+        "empty": "No staff accounts found."
+      },
+      "pagination": {
+        "pageSize": "Page size:",
+        "previous": "Previous",
+        "next": "Next"
+      },
+      "actions": {
+        "view": "View details",
+        "edit": "Edit account",
+        "resetPassword": "Reset password"
+      },
+      "loading": "Loading data...",
+      "filters": {
+        "role": "Role",
+        "status": "Status",
+        "allRoles": "All Roles",
+        "allStatuses": "All Statuses"
+      },
+      "resetPasswordModal": {
+        "title": "Reset Password",
+        "message": "Are you sure you want to reset the password for this account? A new password will be sent to the user's email.",
+        "confirm": "Reset",
+        "cancel": "Cancel"
+      },
+      "notifications": {
+        "resetPasswordSuccess": "Password reset successfully",
+        "resetPasswordError": "An error occurred while resetting the password"
+      }
+    }
+  },
   "Role": {
     "List": {
       "title": "Role List",
