@@ -2,6 +2,9 @@ import { useTranslations } from "next-intl";
 import React from "react";
 import { Plus } from "lucide-react";
 import { KeywordSearch } from "@/components/ui/keyword-search/keyword-search";
+import { PermissionGuard } from '@/components/permission-guard';
+import { Permissions } from '@/types/const';
+import { Button } from "@/components/ui/button";
 
 interface RoleHeaderProps {
   searchTerm: string;
@@ -42,13 +45,16 @@ export const RoleHeader = ({
         />
 
         {/* Add Button */}
-        <button 
-          onClick={onCreateClick}
-          className="flex items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white px-4 py-2 rounded-lg text-sm font-semibold shadow-md transition-all active:scale-95 whitespace-nowrap"
-        >
-          <Plus size={18} />
-          {t("addNew")}
-        </button>
+        <PermissionGuard permission={Permissions.CreateRole}>
+          <Button 
+            onClick={onCreateClick}
+            variant="outline" 
+            className="w-full md:w-auto shadow-md"
+          >
+            <Plus className="mr-2 h-4 w-4" />
+            {t("addNew")}
+          </Button>
+        </PermissionGuard>
       </div>
     </div>
   );

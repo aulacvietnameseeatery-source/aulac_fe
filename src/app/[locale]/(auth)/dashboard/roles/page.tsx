@@ -9,6 +9,9 @@ import { deleteRole } from "@/features/staff/role-list/services/role.service";
 import { toast } from "sonner";
 import { useTranslations } from "next-intl";
 import { ConfirmModal } from "@/components/layout/admin-sidebar/confirm-modal";
+import { ProtectedRoute } from '@/components/protected-route';
+import { Permissions } from '@/types/const';
+import { Pagination } from "@/components/ui/pagination";
 
 const RoleListContent = () => {
   const t = useTranslations("Role.List");
@@ -66,6 +69,17 @@ const RoleListContent = () => {
     }
   }, [pagination.pageIndex, pagination.pageSize, actions]);
 
+  // --- CHANGED: Handler for the new Pagination Component ---
+  const handlePaginationChange = useCallback((page: number, pageSize: number) => {
+    // Only update if values actually changed to avoid loops
+    if (page !== pagination.pageIndex) {
+      actions.onPageChange(page);
+    }
+    if (pageSize !== pagination.pageSize) {
+      actions.onPageSizeChange(pageSize);
+    }
+  }, [pagination.pageIndex, pagination.pageSize, actions]);
+
   // Table Columns Config
   const columns: TableColumn[] = useMemo(() => [
     {
@@ -118,43 +132,44 @@ const RoleListContent = () => {
     }
     return content;
   }, []);
-
   return (
-    <div className="h-full bg-gray-50/50 p-6 md:p-8 font-sans">
-      <BaseTable<RoleDto>
-        // Data & Loading
-        data={roles}
-        loading={isLoading}
-        columns={columns}
-        rowKey="roleId"
-        
-        // Pagination Props
-        total={pagination.totalCount}
-
-        // Handlers
-        onDataChange={handleDataChange}
-        onRefresh={actions.refresh}
-
-        renderCell={handleGlobalRenderCell}
-        // Render Header Component
-        renderTitle={() => (
+    <div className="flex flex-col h-full bg-gray-50/50">
+      <div className="p-6 pb-2 md:p-8 md:pb-4">
           <RoleHeader 
             searchTerm={searchTerm}
             isLoading={isLoading}
             onSearchChange={actions.onSearchChange}
             onCreateClick={handleCreate}
           />
-        )}
+      </div>
+        <BaseTable<RoleDto>
+          // Data & Loading
+          data={roles}
+          loading={isLoading}
+          columns={columns}
+          rowKey="roleId"
+          total={roles.length}
+          onRefresh={actions.refresh}
 
-        // Render Action Component
-        renderActionColumn={(item) => (
-          <RoleActions 
-            role={item}
-            onView={handleView}
-            onEdit={handleEdit}
-            onDelete={handleDeleteClick}
-          />
-        )}
+          renderCell={handleGlobalRenderCell}
+
+          // Render Action Component
+          renderActionColumn={(item) => (
+            <RoleActions 
+              role={item}
+              onView={handleView}
+              onEdit={handleEdit}
+              onDelete={handleDeleteClick}
+            />
+          )}
+        />
+
+      <Pagination 
+          current={pagination.pageIndex}
+          pageSize={pagination.pageSize}
+          total={pagination.totalCount}
+          onChange={handlePaginationChange}
+          pageSizeOptions={[10, 20, 50, 100]}
       />
 
       <ConfirmModal
@@ -174,8 +189,10 @@ const RoleListContent = () => {
 
 export default function RoleListPage() {
   return (
-    <Suspense fallback={<div className="flex h-screen items-center justify-center"><Loader2 className="animate-spin text-gray-400" /></div>}>
-      <RoleListContent />
-    </Suspense>
+    <ProtectedRoute permission={Permissions.ViewRole}>
+      <Suspense fallback={<div className="flex h-screen items-center justify-center"><Loader2 className="animate-spin text-gray-400" /></div>}>
+        <RoleListContent />
+      </Suspense>
+    </ProtectedRoute>
   );
 }

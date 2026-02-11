@@ -881,7 +881,7 @@ export function BaseTable<T>({
                             )}
 
                             {/* Pagination */}
-                            <TablePagination
+                            {/* <TablePagination
                                 totalCount={totalCount}
                                 pageSize={pageSize}
                                 pageSizes={rowsPerPageOptions}
@@ -892,7 +892,7 @@ export function BaseTable<T>({
                                 onPageChange={handlePageChange}
                             >
                                 {renderPaginationAppend?.()}
-                            </TablePagination>
+                            </TablePagination> */}
                         </div>
                     </div>
                 </div>
