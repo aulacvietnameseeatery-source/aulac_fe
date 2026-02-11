@@ -1,7 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
 import { Users, Lock, ArrowRight, Check } from 'lucide-react';
-import { cn } from '@/lib/utils'; 
+import { cn } from '@/lib/utils';
 export type TableStatus = 'available' | 'reserved' | 'selected';
 import { useTranslations } from 'next-intl';
 import "../styles/index.css";
@@ -15,16 +15,15 @@ interface TableCardProps {
   onClick?: () => void;
 }
 
-export default function TableCard({ id, name, guests, image, status, onClick } : TableCardProps) {
+export default function TableCard({ id, name, guests, image, status, onClick }: TableCardProps) {
   const t = useTranslations('Reservation.TableCard');
   const isDisabled = status === 'reserved';
 
   return (
     <div
       onClick={!isDisabled ? onClick : undefined}
-      className={`table-card-wrapper group ${
-        status === "selected" ? "table-card-selected" : ""
-      } ${isDisabled ? "table-card-reserved" : "table-card-available"}`}
+      className={`table-card-wrapper group ${status === "selected" ? "table-card-selected" : ""
+        } ${isDisabled ? "table-card-reserved" : "table-card-available"}`}
     >
       {status === "selected" && (
         <div className="table-selected-badge">
@@ -34,6 +33,8 @@ export default function TableCard({ id, name, guests, image, status, onClick } :
 
       <div className="table-image-wrapper">
         <Image
+          width={1920}
+          height={1080}
           src={image || "/placeholder.svg"}
           alt={name}
           fill
@@ -56,11 +57,10 @@ export default function TableCard({ id, name, guests, image, status, onClick } :
       <div className="table-footer-wrapper">
         <div className="table-info-wrapper">
           <h3
-            className={`table-name ${
-              status === "selected"
+            className={`table-name ${status === "selected"
                 ? "table-name-selected"
                 : "table-name-default"
-            }`}
+              }`}
           >
             {name}
           </h3>
