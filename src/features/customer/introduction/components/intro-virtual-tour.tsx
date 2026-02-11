@@ -2,6 +2,7 @@
 
 import { Play } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { motion } from "framer-motion";
 
 export function IntroVirtualTour() {
     const t = useTranslations("Introduction.VirtualTour");
@@ -11,7 +12,13 @@ export function IntroVirtualTour() {
             <div className="w-full max-w-[1440px] flex flex-col gap-8 md:gap-12">
 
                 {/* --- 1. HEADER SECTION --- */}
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.8 }}
+                    className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6"
+                >
 
                     {/* Title Group */}
                     <div className="flex flex-col gap-2 md:gap-4">
@@ -29,10 +36,16 @@ export function IntroVirtualTour() {
                             {t("desc")}
                         </p>
                     </div>
-                </div>
+                </motion.div>
 
                 {/* --- 2. VIDEO / IMAGE CONTAINER --- */}
-                <div className="relative w-full p-1 border border-[#C9A961] rounded-[2px]">
+                <motion.div
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 1, delay: 0.2 }}
+                    className="relative w-full p-1 border border-[#C9A961] rounded-[2px]"
+                >
                     {/* Aspect Ratio: Mobile dùng 4/5 hoặc square để hiển thị nhiều hơn, Desktop 16/9 */}
                     <div className="relative w-full aspect-[4/5] md:aspect-video lg:h-[804px] overflow-hidden bg-black group cursor-pointer">
 
@@ -48,23 +61,33 @@ export function IntroVirtualTour() {
 
                         {/* --- CENTER PLAY BUTTON --- */}
                         <div className="absolute inset-0 flex items-center justify-center">
-                            <div className="w-16 h-16 md:w-20 md:h-20 bg-[#193752]/40 backdrop-blur-sm border border-white/20 rounded-xl flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:bg-[#C9A961]/80">
+                            <motion.div
+                                whileHover={{ scale: 1.1 }}
+                                whileTap={{ scale: 0.95 }}
+                                className="w-16 h-16 md:w-20 md:h-20 bg-[#193752]/40 backdrop-blur-sm border border-white/20 rounded-xl flex items-center justify-center transition-colors duration-300 group-hover:bg-[#C9A961]/80"
+                            >
                                 <Play className="text-white fill-current w-6 h-6 md:w-8 md:h-8 ml-1" />
-                            </div>
+                            </motion.div>
                         </div>
 
                         {/* --- BOTTOM LEFT INFO --- */}
-                        <div className="absolute bottom-6 left-6 md:bottom-10 md:left-10 flex flex-col gap-1 md:gap-2">
+                        <motion.div
+                            initial={{ opacity: 0, x: -20 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.8, delay: 0.5 }}
+                            className="absolute bottom-6 left-6 md:bottom-10 md:left-10 flex flex-col gap-1 md:gap-2"
+                        >
                             <span className="font-display text-white text-[10px] md:text-xs font-bold uppercase tracking-[0.1em]">
                                 {t("tour_label")}
                             </span>
                             <h3 className="font-display text-white text-xl md:text-2xl font-normal">
                                 {t("tour_title")}
                             </h3>
-                        </div>
+                        </motion.div>
 
                     </div>
-                </div>
+                </motion.div>
 
             </div>
         </section>

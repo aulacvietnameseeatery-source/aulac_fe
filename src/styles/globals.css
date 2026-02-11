@@ -6,6 +6,8 @@
 @import "./components/footer.css";
 @import "./components/nav-link.css";
 
+@import "./variable.css";
+
 @plugin "tailwindcss-animate";
 
 @theme {

@@ -17,7 +17,8 @@
 }
 
 .header-container.is-default {
-    height: calc(270px + var(--safe-top, 0px));
+    padding-top: var(--padding-sm);
+    padding-bottom: var(--padding-sm)
 }
 
 .header-inner {

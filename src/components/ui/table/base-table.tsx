@@ -414,8 +414,8 @@ export function BaseTable<T>({
     // ========== EFFECTS ==========
     useEffect(() => {
         emitDataChange();
-    }, [currentPage, emitDataChange]);
-
+    }, [currentPage, emitDataChange])
+    
     useEffect(() => {
         if (searchDebounceTimeoutRef.current) {
             clearTimeout(searchDebounceTimeoutRef.current);
