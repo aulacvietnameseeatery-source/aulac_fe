@@ -8,10 +8,12 @@ import { ConfirmModal } from "@/components/layout/admin-sidebar/confirm-modal";
 import { deleteRole } from "@/features/auth/role-list/services/role.service";
 import { toast } from "sonner";
 import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
 
 // Separate the main logic into child components.
 const RoleListContent = () => {
   const t = useTranslations("Role.List");
+  const router = useRouter();
   const { roles, isLoading, pagination, searchTerm, actions } = useRoleList();
 
   // Delete modal state
@@ -19,9 +21,17 @@ const RoleListContent = () => {
   const [roleToDelete, setRoleToDelete] = useState<number | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
-  const handleView = (id: number) => console.log("View detail", id);
-  const handleEdit = (id: number) => console.log("Edit", id);
-  const handleAdd = () => console.log("Navigate to Create Role");
+  const handleView = (id: number) => {
+    router.push(`/dashboard/roles/${id}`);
+  };
+  
+  const handleEdit = (id: number) => {
+    router.push(`/dashboard/roles/${id}/edit`);
+  };
+  
+  const handleAdd = () => {
+    router.push("/dashboard/roles/create");
+  };
 
   // Open delete confirmation modal
   const handleDeleteClick = (id: number) => {

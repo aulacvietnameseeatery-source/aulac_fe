@@ -541,6 +541,74 @@
         "deleteSuccess": "Rôle supprimé avec succès",
         "deleteError": "Une erreur est survenue lors de la suppression du rôle"
       }
+    },
+    "Detail": {
+      "title": "Détail du Rôle",
+      "roleName": "Nom du Rôle",
+      "status": "Statut",
+      "active": "Actif",
+      "inactive": "Inactif",
+      "permissions": "Permissions",
+      "all": "Tout",
+      "back": "Retour",
+      "edit": "Modifier",
+      "loading": "Chargement des détails du rôle...",
+      "errorTitle": "Échec du chargement du rôle",
+      "errorMessage": "Une erreur s'est produite lors du chargement des détails du rôle. Veuillez réessayer.",
+      "backToList": "Retour à la liste des rôles",
+      "breadcrumb": {
+        "roles": "Liste des rôles",
+        "detail": "Détail du Rôle"
+      }
+    },
+    "Create": {
+      "title": "Créer un Nouveau Rôle",
+      "roleCode": "Code du Rôle",
+      "roleCodePlaceholder": "Entrez le code du rôle (ex: MANAGER, STAFF)",
+      "roleName": "Nom du Rôle",
+      "roleNamePlaceholder": "Entrez le nom du rôle",
+      "status": "Statut",
+      "active": "Actif",
+      "inactive": "Inactif",
+      "permissions": "Permissions",
+      "all": "Tout",
+      "cancel": "Annuler",
+      "create": "Créer le Rôle",
+      "loadingPermissions": "Chargement des permissions...",
+      "breadcrumb": {
+        "roles": "Liste des rôles",
+        "create": "Créer un Rôle"
+      }
+    },
+    "Edit": {
+      "title": "Modifier le Rôle",
+      "roleCode": "Code du Rôle",
+      "roleCodePlaceholder": "Entrez le code du rôle (ex: MANAGER, STAFF)",
+      "roleName": "Nom du Rôle",
+      "roleNamePlaceholder": "Entrez le nom du rôle",
+      "status": "Statut",
+      "active": "Actif",
+      "inactive": "Inactif",
+      "permissions": "Permissions",
+      "all": "Tout",
+      "cancel": "Annuler",
+      "save": "Enregistrer les Modifications",
+      "loading": "Chargement des données du rôle...",
+      "loadError": "Échec du chargement des données du rôle. Veuillez réessayer.",
+      "success": "Rôle mis à jour avec succès",
+      "error": "Échec de la mise à jour du rôle. Veuillez réessayer.",
+      "validation": {
+        "roleCodeRequired": "Le code du rôle est requis",
+        "roleCodeMaxLength": "Le code du rôle ne doit pas dépasser 50 caractères",
+        "roleNameRequired": "Le nom du rôle est requis",
+        "roleNameMaxLength": "Le nom du rôle ne doit pas dépasser 100 caractères",
+        "failed": "Veuillez vérifier les erreurs dans le formulaire"
+      },
+      "breadcrumb": {
+        "roles": "Liste des rôles",
+        "detail": "Détail du Rôle",
+        "edit": "Modifier le Rôle"
+      }
     }
   }
 }
