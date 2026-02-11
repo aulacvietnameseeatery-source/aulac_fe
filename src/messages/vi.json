@@ -506,6 +506,51 @@
       }
     }
   },
+  "Account": {
+    "List": {
+      "title": "Danh sách Tài khoản Nhân viên",
+      "description": "Quản lý tài khoản nhân viên, vai trò và quyền hạn.",
+      "searchPlaceholder": "Tìm kiếm theo tên, email hoặc số điện thoại...",
+      "addNew": "Thêm Tài khoản Mới",
+      "table": {
+        "no": "STT",
+        "fullName": "Họ và Tên",
+        "email": "Email",
+        "phone": "Số điện thoại",
+        "role": "Vai trò",
+        "status": "Trạng thái",
+        "action": "Hành động",
+        "empty": "Không tìm thấy tài khoản nhân viên nào."
+      },
+      "pagination": {
+        "pageSize": "Kích thước trang:",
+        "previous": "Trước",
+        "next": "Tiếp"
+      },
+      "actions": {
+        "view": "Xem chi tiết",
+        "edit": "Sửa tài khoản",
+        "resetPassword": "Đặt lại mật khẩu"
+      },
+      "loading": "Đang tải dữ liệu...",
+      "filters": {
+        "role": "Vai trò",
+        "status": "Trạng thái",
+        "allRoles": "Tất cả Vai trò",
+        "allStatuses": "Tất cả Trạng thái"
+      },
+      "resetPasswordModal": {
+        "title": "Đặt lại Mật khẩu",
+        "message": "Bạn có chắc chắn muốn đặt lại mật khẩu cho tài khoản này không? Mật khẩu mới sẽ được gửi đến email của người dùng.",
+        "confirm": "Đặt lại",
+        "cancel": "Hủy"
+      },
+      "notifications": {
+        "resetPasswordSuccess": "Đặt lại mật khẩu thành công",
+        "resetPasswordError": "Có lỗi xảy ra khi đặt lại mật khẩu"
+      }
+    }
+  },
   "Role": {
     "List": {
       "title": "Danh sách Vai trò",

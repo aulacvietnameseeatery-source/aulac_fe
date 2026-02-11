@@ -506,6 +506,51 @@
       }
     }
   },
+  "Account": {
+    "List": {
+      "title": "Liste des comptes du personnel",
+      "description": "Gérer les comptes du personnel, les rôles et les permissions.",
+      "searchPlaceholder": "Rechercher par nom, email ou téléphone...",
+      "addNew": "Ajouter un compte",
+      "table": {
+        "no": "N°",
+        "fullName": "Nom complet",
+        "email": "Email",
+        "phone": "Téléphone",
+        "role": "Rôle",
+        "status": "Statut",
+        "action": "Action",
+        "empty": "Aucun compte du personnel trouvé."
+      },
+      "pagination": {
+        "pageSize": "Taille de page :",
+        "previous": "Précédent",
+        "next": "Suivant"
+      },
+      "actions": {
+        "view": "Voir les détails",
+        "edit": "Modifier le compte",
+        "resetPassword": "Réinitialiser le mot de passe"
+      },
+      "loading": "Chargement des données...",
+      "filters": {
+        "role": "Rôle",
+        "status": "Statut",
+        "allRoles": "Tous les rôles",
+        "allStatuses": "Tous les statuts"
+      },
+      "resetPasswordModal": {
+        "title": "Réinitialiser le mot de passe",
+        "message": "Êtes-vous sûr de vouloir réinitialiser le mot de passe de ce compte ? Un nouveau mot de passe sera envoyé à l'email de l'utilisateur.",
+        "confirm": "Réinitialiser",
+        "cancel": "Annuler"
+      },
+      "notifications": {
+        "resetPasswordSuccess": "Mot de passe réinitialisé avec succès",
+        "resetPasswordError": "Une erreur est survenue lors de la réinitialisation du mot de passe"
+      }
+    }
+  },
   "Role": {
     "List": {
       "title": "Liste des rôles",
