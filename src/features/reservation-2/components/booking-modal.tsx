@@ -132,6 +132,8 @@ export default function BookingModal({ isOpen, onClose, onConfirm, tableData, da
                         {/* Header with Table Image */}
                         <div className="relative h-44 sm:h-52 shrink-0 overflow-hidden bg-gradient-to-br from-[#1A3A52] to-[#2d5a7b]">
                             <Image
+                                width={1920}
+                                height={1080}
                                 src={tableData.imageUrl || "/images/table-selection/ground-floor/t-01.png"}
                                 alt={tableData.tableCode}
                                 fill

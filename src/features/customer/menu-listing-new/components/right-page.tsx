@@ -1,5 +1,5 @@
 import React from 'react';
-import { MenuCard, MenuItem } from "./menu-card";
+import { MenuCard } from "./menu-card";
 import { MenuItemData } from '../data/mock-menu';
 
 interface PageProps {
@@ -23,7 +23,7 @@ export const RightPage = ({ title, items, onItemClick, onAddToCart }: PageProps)
                 {/* HEADER */}
                 <div className="text-center mb-2 md:mb-3 lg:mb-4 shrink-0">
                     <h1 className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl text-[#C5A059] font-display uppercase tracking-[0.2em]">{title}</h1>
-                    <div className="w-6 sm:w-8 md:w-10 lg:w-12 h-[1px] bg-[#C5A059]/50 mx-auto mt-1"></div>
+                    <div className="w-6 sm:w-8 md:w-10 lg:w-12 h-px bg-[#C5A059]/50 mx-auto mt-1"></div>
                 </div>
 
                 {/* GRID - Max 6 items */}

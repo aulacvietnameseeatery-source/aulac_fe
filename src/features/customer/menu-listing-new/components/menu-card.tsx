@@ -1,5 +1,5 @@
 import React from 'react';
-import { ShoppingBag } from 'lucide-react';
+import Image from 'next/image';
 
 export interface MenuItem {
     id: string;
@@ -30,13 +30,15 @@ export const MenuCard = ({ id, name, price, desc, image, onOrder, onDetail }: Me
     };
 
     return (
-        <div className="relative w-full aspect-[4/3] bg-[#0B252E] border border-[#C5A059]/30 shadow-lg overflow-hidden rounded-sm hover:border-[#C5A059] transition-all duration-500 group">
+        <div className="relative w-full aspect-4/3 bg-[#0B252E] border border-[#C5A059]/30 shadow-lg overflow-hidden rounded-sm hover:border-[#C5A059] transition-all duration-500 group">
             {/* Image - Click triggers Detail */}
             <div
                 className="absolute inset-0 overflow-hidden cursor-pointer"
                 onClick={handleDetailClick}
             >
-                <img
+                <Image
+                    width={1920}
+                    height={1080}
                     src={image || '/images/logo.png'}
                     onError={(e) => {
                         e.currentTarget.src = '/images/logo.png';
@@ -48,7 +50,7 @@ export const MenuCard = ({ id, name, price, desc, image, onOrder, onDetail }: Me
 
             {/* Gradient Overlay - Click triggers Detail */}
             <div
-                className="absolute inset-0 bg-gradient-to-t from-[#0f172a] via-[#0f172a]/40 to-transparent opacity-90 group-hover:opacity-80 transition-opacity duration-500 pointer-events-none"
+                className="absolute inset-0 bg-linear-to-t from-[#0f172a] via-[#0f172a]/40 to-transparent opacity-90 group-hover:opacity-80 transition-opacity duration-500 pointer-events-none"
             />
 
             {/* Content */}
@@ -57,7 +59,7 @@ export const MenuCard = ({ id, name, price, desc, image, onOrder, onDetail }: Me
                     {name}
                 </h3>
 
-                <div className="w-4 sm:w-5 md:w-6 h-[1px] bg-[#C5A059] mb-0.5 sm:mb-1 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
+                <div className="w-4 sm:w-5 md:w-6 h-px bg-[#C5A059] mb-0.5 sm:mb-1 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
 
                 <div className="flex justify-between items-end gap-1 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-75 pointer-events-auto">
                     <span className="text-[#C5A059] font-display font-bold text-[7px] sm:text-[8px] md:text-[9px] lg:text-[10px]">
