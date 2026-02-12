@@ -1,4 +1,8 @@
 {
+  "Metadata": {
+    "title": "Au Lac - Nhà Hàng Việt Nam",
+    "description": "Đỉnh cao của nghệ thuật ẩm thực Việt Nam ngay tại trung tâm thành phố."
+  },
   "Header": {
     "home": "Trang chủ",
     "menu": "THỰC ĐƠN",
@@ -180,33 +184,13 @@
     }
   },
   "AboutUs": {
-    "Legacy": {
-      "est": "Thành lập 1994",
-      "title": "Di Sản Của Chúng Tôi"
-    },
-    "Journey": {
-      "title": "Hành Trình Hương Vị",
-      "paragraph_1": "Được thành lập tại trung tâm thủ đô vào năm 1994, <strong>Au Lac</strong> bắt đầu như một lời tri ân khiêm tốn đến nguồn gốc tổ tiên của ẩm thực Việt Nam. Được đặt tên theo vương quốc lịch sử của người Lạc Việt, nhà hàng của chúng tôi được hình dung như một cây cầu giữa truyền thống cổ xưa của phương Đông và kỹ thuật tinh tế của ẩm thực đương đại.",
-      "paragraph_2": "Trong ba thập kỷ, chúng tôi vẫn cam kết với triết lý \"trầm ấm\"—tạo ra một bầu không khí ấm áp, xúc động tâm hồn nơi mỗi món ăn kể một câu chuyện về di sản. Những gì bắt đầu với một công thức gia đình đơn giản cho Phở đã phát triển thành một trải nghiệm ẩm thực biên tập tôn vinh nhịp điệu theo mùa của vùng đất chúng tôi.",
-      "quote": "\"Chúng tôi không chỉ phục vụ thức ăn; chúng tôi bảo tồn tiếng vang của hàng ngàn năm tiến hóa ẩm thực.\"",
-      "paragraph_3": "Ngày nay, Au Lac đứng như một ngọn hải đăng của ẩm thực cao cấp Việt Nam, nơi tiếng kêu của nồi đất và mùi hương hoa hồi phục vụ như một sự trở về nhà cho các giác quan."
-    },
-    "Philosophy": {
-      "label": "Giá Trị Cốt Lõi",
-      "title": "Triết Lý Ẩm Thực",
-      "value_1_title": "Nghề Truyền Thống",
-      "value_1_desc": "Tôn vinh các kỹ thuật chậm rãi của tổ tiên. Từ nước dùng hầm 24 giờ đến gia vị xay tay bằng cối giã.",
-      "value_2_title": "Tinh Thần Hiện Đại",
-      "value_2_desc": "Nâng cao hương vị di sản thông qua độ chính xác, trình bày nghệ thuật và quan điểm toàn cầu tinh tế về ẩm thực cao cấp."
-    },
-    "Founders": {
-      "label": "Người Sáng Lập",
-      "title": "Gặp Gỡ Người Sáng Lập",
-      "paragraph_1": "Bếp trưởng Nguyễn và Chuyên gia rượu vang Linh thành lập Au Lac với một giấc mơ chung: định nghĩa lại cách thế giới nhìn nhận lòng hiếu khách Việt Nam.",
-      "paragraph_2": "Với nền tảng trải dài từ các quán ăn đường phố Sài Gòn đến nhà bếp được xếp hạng Michelin ở Paris, họ mang đến sự hài hòa cân bằng giữa sự ấm áp và xuất sắc chuyên nghiệp cho bàn ăn của mọi khách hàng.",
-      "quote": "\"Bàn ăn là nơi văn hóa sống. Chúng tôi mời bạn ngồi cùng chúng tôi.\"",
-      "quote_author": "— Nguyễn & Linh"
-    }
+    "title": "An Lạc – Vietnamese Eatery",
+    "subtitle": "Một không gian ẩm thực Việt bình yên",
+    "description_1": "An Lạc không phải là nơi phô trương.\nĐó là nơi của sự bình yên.",
+    "description_2": "An Lạc được dẫn dắt bởi cân bằng, ký ức và tĩnh lặng. Tên gọi mang ý nghĩa hạnh phúc bình yên, lấy cảm hứng từ hành trình của người sáng lập — một người mẹ của ba đứa con — tạo nên một không gian phản chiếu sự chăm sóc, ổn định và triết lý An cư Lạc nghiệp.",
+    "description_3": "Tại An Lạc, chúng tôi không tìm cách thay đổi ẩm thực Việt, mà tôn vinh nó. Kiên nhẫn, hài hòa và tinh tế tạo nên từng món ăn: ninh nhừ từ từ một nồi nước dùng, cân bằng tinh tế của thảo mộc, chiều sâu kín đáo của lên men và sự khiêm nhường của hạt gạo.",
+    "description_4": "Các kỹ thuật quen thuộc như kho, hấp và nướng được thể hiện với sự chính xác và tinh giản. Hương vị cân bằng, đo lường và tinh tế.",
+    "description_5": "An Lạc là lời mời — hãy chậm lại, thưởng thức cẩn trọng và kết nối lại với điều cốt lõi."
   },
   "Reservation": {
     "Header": {
@@ -271,9 +255,42 @@
       "guests": "Khách",
       "guestsCount": "{count} Người",
       "guestInfo": "Thông Tin Khách",
-      "policy": "Bàn được giữ trong 15 phút sau thời gian đặt. Vui lòng thông báo cho chúng tôi nếu có sự chậm trễ.",
       "confirm": "Xác Nhận Đặt Bàn",
-      "changeSelection": "Thay Đổi Lựa Chọn"
+      "changeSelection": "Thay Đổi Lựa Chọn",
+      "fullName": "Họ và Tên *",
+      "phoneNumber": "Số Điện Thoại *",
+      "emailAddress": "Email (Tùy chọn)",
+      "partySize": "Số Lượng Khách *",
+      "cancel": "Hủy",
+      "confirmBooking": "Xác Nhận Đặt Bàn",
+      "confirmed": "Đã Xác Nhận!",
+      "tableReserved": "Bàn của bạn đã được đặt",
+      "restaurant": "Nhà Hàng",
+      "guestName": "Tên Khách",
+      "zone": "Khu Vực",
+      "seeYouSoon": "Hẹn gặp lại!",
+      "downloadTicket": "Tải Vé",
+      "close": "Đóng"
+    },
+    "CallButton": {
+      "title": "Gọi Cho Nhà Hàng",
+      "subtitle": "Không có bàn trống trực tuyến",
+      "description": "Vui lòng gọi trực tiếp để đặt bàn hoặc hỏi thêm thông tin",
+      "restaurant": "Nhà hàng",
+      "phoneLabel": "Số điện thoại",
+      "callNow": "Gọi Ngay",
+      "copyNumber": "Sao Chép Số",
+      "copied": "Đã Sao Chép!",
+      "hours": "11:00 Sáng – 10:00 Tối",
+      "buttonText": "Gọi Đặt Bàn",
+      "dialing": "Đang mở ứng dụng điện thoại..."
+    },
+    "Zone": {
+      "label": "Khu vực",
+      "All": "Tất cả",
+      "Indoor": "Trong nhà",
+      "Outdoor": "Ngoài trời",
+      "Rooftop": "Sân thượng"
     },
     "Toast": {
       "success": "Xác nhận đặt bàn thành công!",
@@ -486,6 +503,333 @@
         "1_category": "Lựa Chọn Di Sản",
         "2_name": "Phở Bò Wagyu Truyền Thống",
         "2_category": "Đặc Trưng"
+      }
+    }
+  },
+  "Account": {
+    "List": {
+      "title": "Danh sách Tài khoản Nhân viên",
+      "description": "Quản lý tài khoản nhân viên, vai trò và quyền hạn.",
+      "searchPlaceholder": "Tìm kiếm theo tên, email hoặc số điện thoại...",
+      "addNew": "Thêm Tài khoản Mới",
+      "table": {
+        "no": "STT",
+        "fullName": "Họ và Tên",
+        "email": "Email",
+        "phone": "Số điện thoại",
+        "role": "Vai trò",
+        "status": "Trạng thái",
+        "action": "Hành động",
+        "empty": "Không tìm thấy tài khoản nhân viên nào."
+      },
+      "pagination": {
+        "pageSize": "Kích thước trang:",
+        "previous": "Trước",
+        "next": "Tiếp"
+      },
+      "actions": {
+        "view": "Xem chi tiết",
+        "edit": "Sửa tài khoản",
+        "resetPassword": "Đặt lại mật khẩu"
+      },
+      "loading": "Đang tải dữ liệu...",
+      "filters": {
+        "role": "Vai trò",
+        "status": "Trạng thái",
+        "allRoles": "Tất cả Vai trò",
+        "allStatuses": "Tất cả Trạng thái"
+      },
+      "resetPasswordModal": {
+        "title": "Đặt lại Mật khẩu",
+        "message": "Bạn có chắc chắn muốn đặt lại mật khẩu cho tài khoản này không? Mật khẩu mới sẽ được gửi đến email của người dùng.",
+        "confirm": "Đặt lại",
+        "cancel": "Hủy"
+      },
+      "notifications": {
+        "resetPasswordSuccess": "Đặt lại mật khẩu thành công",
+        "resetPasswordError": "Có lỗi xảy ra khi đặt lại mật khẩu"
+      }
+    },
+    "Detail": {
+      "title": "Chi tiết Tài khoản",
+      "loadingAccount": "Đang tải chi tiết tài khoản...",
+      "accountNotFound": "Không tìm thấy tài khoản.",
+      "tabs": {
+        "general": "Thông tin chung",
+        "roleStatus": "Vai trò & Trạng thái",
+        "security": "Bảo mật",
+        "orders": "Đơn hàng",
+        "inventory": "Kho hàng",
+        "serviceErrors": "Lỗi dịch vụ",
+        "auditLogs": "Nhật ký kiểm tra",
+        "systemSettings": "Cài đặt"
+      },
+      "general": {
+        "title": "Thông tin chung",
+        "fullName": "Họ và Tên",
+        "username": "Tên đăng nhập",
+        "email": "Email",
+        "phone": "Số điện thoại"
+      },
+      "roleStatus": {
+        "title": "Vai trò & Trạng thái",
+        "role": "Vai trò",
+        "status": "Trạng thái",
+        "lockState": "Trạng thái khóa",
+        "locked": "Đã khóa",
+        "unlocked": "Đã mở khóa",
+        "permissions": "Quyền hạn"
+      },
+      "security": {
+        "title": "Thông tin bảo mật",
+        "lastLogin": "Đăng nhập lần cuối",
+        "createdAt": "Ngày tạo",
+        "updatedAt": "Ngày cập nhật",
+        "never": "Chưa từng",
+        "authSessionsPlaceholder": "Dữ liệu phiên xác thực sẽ có sẵn khi API phiên được tích hợp."
+      },
+      "placeholders": {
+        "orders": "Tab này sẽ hiển thị các đơn hàng được giao cho nhân viên này khi API Đơn hàng được tích hợp.",
+        "inventory": "Tab này sẽ hiển thị các giao dịch kho hàng do nhân viên này xử lý khi API Kho hàng được tích hợp.",
+        "serviceErrors": "Tab này sẽ hiển thị các lỗi dịch vụ được giao hoặc giải quyết bởi nhân viên này khi API Lỗi dịch vụ được tích hợp.",
+        "auditLogs": "Tab này sẽ hiển thị nhật ký kiểm tra liên quan đến tài khoản nhân viên này khi API Kiểm tra được tích hợp.",
+        "systemSettings": "Tab này sẽ hiển thị cài đặt hệ thống do nhân viên này quản lý khi API Cài đặt được tích hợp.",
+        "noDataTitle": {
+          "orders": "Không có dữ liệu đơn hàng",
+          "inventory": "Không có dữ liệu kho hàng",
+          "serviceErrors": "Không có dữ liệu lỗi dịch vụ",
+          "auditLogs": "Không có nhật ký kiểm tra",
+          "systemSettings": "Không có dữ liệu cài đặt"
+        }
+      }
+    },
+    "Create": {
+      "title": "Tạo Tài khoản Mới",
+      "form": {
+        "fullName": {
+          "label": "Họ và Tên",
+          "placeholder": "VD: Nguyễn Văn A"
+        },
+        "email": {
+          "label": "Email",
+          "placeholder": "VD: ten@congty.com"
+        },
+        "phone": {
+          "label": "Số điện thoại",
+          "placeholder": "VD: 0901234567"
+        },
+        "role": {
+          "label": "Vai trò",
+          "placeholder": "Chọn vai trò..."
+        },
+        "note": "Tên đăng nhập sẽ được tự động tạo từ họ tên. Mật khẩu tạm thời sẽ được gửi đến email được cung cấp. Tài khoản sẽ bắt đầu ở trạng thái KHÓA cho đến khi người dùng thay đổi mật khẩu sau lần đăng nhập đầu tiên.",
+        "submit": "Tạo Tài khoản",
+        "cancel": "Hủy"
+      },
+      "notifications": {
+        "success": "Tạo tài khoản thành công",
+        "successDescription": "Tên đăng nhập \"{username}\" đã được tạo. Mật khẩu tạm thời đã gửi đến email.",
+        "error": "Tạo tài khoản thất bại",
+        "errorDescription": "{message}"
+      }
+    },
+    "Edit": {
+      "title": "Chỉnh sửa Tài khoản",
+      "form": {
+        "fullName": {
+          "label": "Họ và Tên",
+          "placeholder": "VD: Nguyễn Văn A"
+        },
+        "email": {
+          "label": "Email",
+          "placeholder": "VD: ten@congty.com"
+        },
+        "phone": {
+          "label": "Số điện thoại",
+          "placeholder": "VD: 0901234567"
+        },
+        "role": {
+          "label": "Vai trò",
+          "placeholder": "Chọn vai trò..."
+        },
+        "submit": "Lưu Thay đổi",
+        "cancel": "Hủy"
+      },
+      "notifications": {
+        "success": "Cập nhật tài khoản thành công",
+        "successDescription": "\"{fullName}\" đã được cập nhật.",
+        "error": "Cập nhật tài khoản thất bại",
+        "errorDescription": "{message}"
+      }
+    },
+    "Validation": {
+      "email": {
+        "required": "Email là bắt buộc",
+        "invalid": "Định dạng email không hợp lệ",
+        "maxLength": "Email không được vượt quá 150 ký tự"
+      },
+      "fullName": {
+        "required": "Họ và tên là bắt buộc",
+        "minLength": "Họ và tên phải có ít nhất 2 ký tự",
+        "maxLength": "Họ và tên không được vượt quá 150 ký tự"
+      },
+      "phone": {
+        "invalid": "Định dạng số điện thoại Việt Nam không hợp lệ",
+        "maxLength": "Số điện thoại không được vượt quá 30 ký tự"
+      },
+      "role": {
+        "required": "Vai trò là bắt buộc",
+        "invalid": "Vui lòng chọn vai trò hợp lệ"
+      }
+    }
+  },
+  "Role": {
+    "List": {
+      "title": "Danh sách Vai trò",
+      "description": "Quản lý vai trò, quyền hạn và phân bổ nhân viên.",
+      "searchPlaceholder": "Tìm kiếm theo tên hoặc mã...",
+      "addNew": "Thêm Vai trò Mới",
+      "table": {
+        "no": "STT",
+        "name": "Tên",
+        "code": "Mã",
+        "staffCount": "Số lượng nhân viên",
+        "action": "Hành động",
+        "empty": "Không tìm thấy vai trò nào."
+      },
+      "pagination": {
+        "pageSize": "Kích thước trang:",
+        "previous": "Trước",
+        "next": "Tiếp"
+      },
+      "actions": {
+        "view": "Xem chi tiết",
+        "edit": "Sửa vai trò",
+        "delete": "Xóa vai trò"
+      },
+      "loading": "Đang tải dữ liệu...",
+      "deleteModal": {
+        "title": "Xóa Vai trò",
+        "message": "Bạn có chắc chắn muốn xóa vai trò này không? Hành động này không thể hoàn tác.",
+        "confirm": "Xóa",
+        "cancel": "Hủy"
+      },
+      "notifications": {
+        "deleteSuccess": "Xóa vai trò thành công",
+        "deleteError": "Có lỗi xảy ra khi xóa vai trò"
+      }
+    },
+    "Detail": {
+      "title": "Chi tiết Vai trò",
+      "roleCode": "Mã Vai trò",
+      "roleName": "Tên Vai trò",
+      "status": "Trạng thái",
+      "active": "Hoạt động",
+      "inactive": "Không hoạt động",
+      "permissions": "Quyền hạn",
+      "all": "Tất cả",
+      "back": "Quay lại",
+      "edit": "Chỉnh sửa",
+      "loading": "Đang tải chi tiết vai trò...",
+      "errorTitle": "Không thể tải Vai trò",
+      "errorMessage": "Có lỗi xảy ra khi tải chi tiết vai trò. Vui lòng thử lại.",
+      "backToList": "Quay lại Danh sách Vai trò",
+      "breadcrumb": {
+        "roles": "Danh sách Vai trò",
+        "detail": "Chi tiết Vai trò"
+      }
+    },
+    "Create": {
+      "title": "Thêm Vai trò Mới",
+      "roleCode": "Mã Vai trò",
+      "roleCodePlaceholder": "Nhập mã vai trò (VD: MANAGER, STAFF)",
+      "roleName": "Tên Vai trò",
+      "roleNamePlaceholder": "Nhập tên vai trò",
+      "status": "Trạng thái",
+      "active": "Hoạt động",
+      "inactive": "Không hoạt động",
+      "permissions": "Quyền hạn",
+      "all": "Tất cả",
+      "cancel": "Hủy",
+      "create": "Thêm",
+      "loadingPermissions": "Đang tải quyền hạn...",
+      "breadcrumb": {
+        "roles": "Danh sách Vai trò",
+        "create": "Thêm Vai trò"
+      }
+    },
+    "Edit": {
+      "title": "Chỉnh sửa Vai trò",
+      "roleCode": "Mã Vai trò",
+      "roleCodePlaceholder": "Nhập mã vai trò (VD: MANAGER, STAFF)",
+      "roleName": "Tên Vai trò",
+      "roleNamePlaceholder": "Nhập tên vai trò",
+      "status": "Trạng thái",
+      "active": "Hoạt động",
+      "inactive": "Không hoạt động",
+      "permissions": "Quyền hạn",
+      "all": "Tất cả",
+      "cancel": "Hủy",
+      "save": "Lưu Thay Đổi",
+      "loading": "Đang tải dữ liệu vai trò...",
+      "loadError": "Không thể tải dữ liệu vai trò. Vui lòng thử lại.",
+      "success": "Cập nhật vai trò thành công",
+      "error": "Không thể cập nhật vai trò. Vui lòng thử lại.",
+      "validation": {
+        "roleCodeRequired": "Mã vai trò là bắt buộc",
+        "roleCodeMaxLength": "Mã vai trò không được vượt quá 50 ký tự",
+        "roleNameRequired": "Tên vai trò là bắt buộc",
+        "roleNameMaxLength": "Tên vai trò không được vượt quá 100 ký tự",
+        "failed": "Vui lòng kiểm tra lại biểu mẫu"
+      },
+      "breadcrumb": {
+        "roles": "Danh sách Vai trò",
+        "detail": "Chi tiết Vai trò",
+        "edit": "Chỉnh sửa Vai trò"
+      }
+    }
+  },
+  "common": {
+    "table": {
+      "searchPlaceholder": "Tìm kiếm",
+      "selected": "Đã chọn",
+      "unselect": "Bỏ chọn",
+      "clearFilter": "Bỏ lọc",
+      "refresh": "Lấy lại dữ liệu",
+
+      "pin": "Ghim cột",
+      "unpin": "Bỏ ghim cột",
+
+      "sort": {
+        "none": "Không sắp xếp",
+        "asc": "Tăng dần",
+        "desc": "Giảm dần"
+      },
+
+      "operator": {
+        "contains": "Chứa",
+        "notContains": "Không chứa",
+        "equals": "Bằng",
+        "notequal": "Khác",
+        "different": "Khác",
+        "startsWith": "Bắt đầu bằng",
+        "endsWith": "Kết thúc bằng",
+        "greater": "Lớn hơn",
+        "less": "Nhỏ hơn",
+        "greaterOrEqual": "Lớn hơn hoặc bằng",
+        "lessOrEqual": "Nhỏ hơn hoặc bằng",
+        "isNull": "Trống",
+        "notNull": "Không trống",
+        "selected": "Đã chọn"
+      },
+      "noData": "Không có dữ liệu",
+      "pagination": {
+        "total": "Tổng số",
+        "pageSize": "Số dòng/trang",
+        "first": "Trang đầu",
+        "prev": "Trang trước",
+        "next": "Trang sau",
+        "last": "Trang cuối"
       }
     }
   }

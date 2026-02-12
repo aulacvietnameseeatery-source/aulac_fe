@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import {
   ChevronLeft,
   ChevronRight,
@@ -21,8 +21,10 @@ import {
   X,
   FolderOpen
 } from "lucide-react";
-import { tokenStorage } from "@/lib/auth-storage";
+import { useAuth } from "@/components/providers/auth-provider";
+import { useLogout } from "@/features/customer/auth/login/hooks";
 import { ConfirmModal } from "@/components/layout/admin-sidebar/confirm-modal";
+import Image from "next/image";
 
 const navItems = [
   { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
@@ -46,16 +48,10 @@ interface AdminSidebarProps {
 
 export function AdminSidebar({ onClose }: AdminSidebarProps) {
   const pathname = usePathname();
-  const router = useRouter();
-  const [user, setUser] = useState<any>(null);
+  const { userInfo } = useAuth();
+  const { mutate: logout, isPending: isLoggingOut } = useLogout();
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
-
-  useEffect(() => {
-    // Get user from local storage
-    const userData = tokenStorage.getUser();
-    setUser(userData);
-  }, []);
 
   const isActive = (href: string) => {
     // Remove locale prefix from pathname for comparison
@@ -73,8 +69,7 @@ export function AdminSidebar({ onClose }: AdminSidebarProps) {
   };
 
   const handleConfirmLogout = () => {
-    tokenStorage.clearAuth();
-    router.push("/login");
+    logout();
     setIsLogoutModalOpen(false);
   };
 
@@ -111,7 +106,10 @@ export function AdminSidebar({ onClose }: AdminSidebarProps) {
         <div className="px-8 md:px-2 lg:px-2 pt-5 pb-1 flex flex-col items-center relative z-10 border-b border-white/5 transition-all duration-300 min-h-[80px] justify-center">
           {/* Full Logo (Mobile & Desktop Expanded) */}
           {!isCollapsed && (
-            <img
+            <Image
+              width={1000}
+              height={1000}
+              style={{ height: "100px", width: "auto" }}
               src="/images/logo.png"
               alt="Au Lac Logo"
               className="block md:hidden lg:block w-full h-full object-contain drop-shadow-md"
@@ -125,7 +123,9 @@ export function AdminSidebar({ onClose }: AdminSidebarProps) {
               ${isCollapsed ? 'lg:flex hidden' : 'hidden md:flex lg:hidden'}
             `}
           >
-            <img
+            <Image
+              width={100}
+              height={100}
               src="/images/logo.png"
               alt="Au Lac Logo"
               className="w-full h-full object-contain drop-shadow-md"
@@ -190,32 +190,33 @@ export function AdminSidebar({ onClose }: AdminSidebarProps) {
               <div className="relative">
                 <div className="w-10 h-10 bg-gradient-to-br from-[#FFAB2D] to-[#E68A00] rounded-full flex items-center justify-center text-[#1A3A51] font-bold shadow-lg ring-2 ring-[#1A3A51] overflow-hidden">
                   {/* Use first letter of username or AD as fallback */}
-                  {user?.username ? user.username.charAt(0).toUpperCase() : "AD"}
+                  {userInfo?.username ? userInfo.username.charAt(0).toUpperCase() : "AD"}
                 </div>
                 <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-[#1A3A51]" />
               </div>
               <div className="flex-1 min-w-0">
                 <div className="text-white text-sm font-semibold truncate">
-                  {user?.username || "Admin User"}
+                  {userInfo?.username || "Admin User"}
                 </div>
-                {/* Hide email or show "Online" since we might not have email */}
+                {/* Show roles if available */}
                 <div className="text-white/40 text-[10px] truncate">
-                  Online
+                  {userInfo?.roles && userInfo.roles.length > 0 ? userInfo.roles.join(", ") : "Online"}
                 </div>
               </div>
             </div>
             <button
               onClick={handleLogoutClick}
+              disabled={isLoggingOut}
               className={`
-                transition-all duration-300
+                transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed
                 ${isCollapsed || 'md:hidden' /* Logic for collapsed state styling */
                   ? 'md:flex lg:flex p-3 rounded-xl bg-white/10 text-[#FFAB2D] hover:bg-[#FF2D2D] hover:text-white mx-auto'
                   : 'p-2 rounded-lg text-white/40 hover:text-[#FF2D2D] hover:bg-[#FF2D2D]/10'
                 }
               `}
-              title="Logout"
+              title={isLoggingOut ? "Logging out..." : "Logout"}
             >
-              <LogOut className={`${isCollapsed ? 'w-5 h-5' : 'w-4 h-4 md:w-5 md:h-5'}`} />
+              <LogOut className={`${isCollapsed ? 'w-5 h-5' : 'w-4 h-4 md:w-5 md:h-5'} ${isLoggingOut ? 'animate-pulse' : ''}`} />
             </button>
           </div>
         </div>

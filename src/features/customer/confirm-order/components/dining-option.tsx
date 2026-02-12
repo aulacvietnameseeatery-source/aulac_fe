@@ -41,7 +41,8 @@ export function DiningOption() {
                     <Image
                         src="/images/confirm-order/dining-option/dining option.png"
                         alt="Dine In"
-                        fill
+                        width={1920}
+                        height={1080}
                         className="object-cover transition-transform duration-700 group-hover:scale-105"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-[#121721]/90 via-[#121721]/20 to-transparent" />
@@ -81,7 +82,7 @@ export function DiningOption() {
                     <Image
                         src="/images/confirm-order/dining-option/take away option.png"
                         alt="Take Away"
-                        fill
+                        width={1920}
                         className="object-cover transition-transform duration-700 group-hover:scale-105"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-[#121721]/90 via-[#121721]/20 to-transparent" />

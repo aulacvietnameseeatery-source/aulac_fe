@@ -15,6 +15,7 @@ interface TableCardProps extends TableAvailabilityDto {
 export default function TableCard({
     tableCode,
     capacity,
+    imageUrl,
     status,
     onClick,
 }: TableCardProps) {
@@ -35,7 +36,9 @@ export default function TableCard({
 
             <div className="table-image-wrapper">
                 <Image
-                    src={"/placeholder.svg"} // BE DTO doesn't have image yet, using placeholder
+                    width={1920}
+                    height={1080}
+                    src={imageUrl || "/images/table-selection/ground-floor/t-01.png"}
                     alt={tableCode}
                     fill
                     className={`table-image ${isDisabled ? "table-image-disabled" : ""}`}
@@ -58,8 +61,8 @@ export default function TableCard({
                 <div className="table-info-wrapper">
                     <h3
                         className={`table-name ${status === "selected"
-                                ? "table-name-selected"
-                                : "table-name-default"
+                            ? "table-name-selected"
+                            : "table-name-default"
                             }`}
                     >
                         {tableCode}

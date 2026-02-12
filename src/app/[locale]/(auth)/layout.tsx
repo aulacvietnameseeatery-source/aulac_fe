@@ -3,8 +3,9 @@
 import { AdminSidebar } from "@/components/layout/admin-sidebar/admin-sidebar";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { tokenStorage } from "@/lib/auth-storage";
+import { useAuth } from "@/components/providers/auth-provider";
 import "../../../styles/adminLayout.css"
+import { Tooltip } from "react-tooltip";
 
 export default function DashboardLayout({
   children,
@@ -12,14 +13,15 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const router = useRouter();
+  const { isAuthenticated } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
-    // Check authentication
-    if (!tokenStorage.isAuthenticated()) {
+    // Check authentication and redirect if not logged in
+    if (!isAuthenticated) {
       router.push("/login");
     }
-  }, [router]);
+  }, [isAuthenticated, router]);
 
   return (
     <div className="main-container relative min-h-screen bg-[#F8F9FA]">
@@ -34,7 +36,7 @@ export default function DashboardLayout({
         </button>
       </div>
 
-      <div className="main flex h-screen overflow-hidden pt-[60px] md:pt-0">
+      <div className="main flex h-screen overflow-hidden pt-15 md:pt-0">
         {/* Desktop Sidebar */}
         <div className="main-left hidden md:block h-full">
           <div className="left-container h-full">
@@ -64,7 +66,9 @@ export default function DashboardLayout({
           </div>
         </div>
       </div>
+      <Tooltip id="my-tooltip" style={{zIndex: 10000}} />
     </div>
+
 
   );
 }

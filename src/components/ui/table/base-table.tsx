@@ -13,8 +13,10 @@ import { NoDataState } from '@/components/ui/table/no-data-state';
 import { TablePagination } from '@/components/ui/table/table-pagination';
 import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover';
 import { FilterPopup } from '@/components/ui/table/filter-popup';
-import '@/styles/components/icon.css';
 import '@/styles/components/table.css';
+import { useTranslations } from 'next-intl';
+
+
 
 // ========== CONSTANTS ==========
 const CHECKBOX_COLUMN_WIDTH = 40;
@@ -105,6 +107,25 @@ export function BaseTable<T>({
     renderNoData,
     renderPaginationAppend,
 }: BaseTableProps<T>) {
+    const t = useTranslations('common.table');
+
+    const operatorLabels = useMemo<Record<string, string>>(() => ({
+        contains: t('operator.contains'),
+        notContains: t('operator.notContains'),
+        equals: t('operator.equals'),
+        notequal: t('operator.notequal'),
+        different: t('operator.different'),
+        startsWith: t('operator.startsWith'),
+        endsWith: t('operator.endsWith'),
+        greater: t('operator.greater'),
+        less: t('operator.less'),
+        greaterOrEqual: t('operator.greaterOrEqual'),
+        lessOrEqual: t('operator.lessOrEqual'),
+        isNull: t('operator.isNull'),
+        notNull: t('operator.notNull'),
+        selected: t('operator.selected'),
+    }), [t]);
+
     // ========== COMPOSABLES ==========
     const {
         filters,
@@ -245,7 +266,7 @@ export function BaseTable<T>({
 
         return {
             header: column.header,
-            operatorLabel: OPERATOR_LABELS[filter.operator] || filter.operator,
+            operatorLabel: operatorLabels[filter.operator] || filter.operator,
             valueLabel
         };
     }, [columns]);
@@ -387,10 +408,13 @@ export function BaseTable<T>({
                 setCurrentPage(totalPages);
                 break;
         }
-        emitDataChange();
-    }, [totalCount, pageSize, emitDataChange]);
+    }, [totalCount, pageSize]);
 
     // ========== EFFECTS ==========
+    useEffect(() => {
+        emitDataChange();
+    }, [currentPage, emitDataChange])
+    
     useEffect(() => {
         if (searchDebounceTimeoutRef.current) {
             clearTimeout(searchDebounceTimeoutRef.current);
@@ -437,7 +461,7 @@ export function BaseTable<T>({
                             {/* Toolbar */}
                             <div className="condition-box flex flex-row items-center w-full">
                                 <div className="flex gap-2 items-center">
-                                    {/* <div className="ms-input ms-editor w-full flex items-center gap-4 search-input-list max-h-4" style={{ height: 'auto' }}>
+                                    <div className="ms-input ms-editor w-full flex items-center gap-4 search-input-list max-h-4" style={{ height: 'auto' }}>
                                         <div className="flex-1 flex items-center input-container border pointer">
                                             <div className="mi icon16 icon left search"></div>
                                             <input
@@ -449,7 +473,7 @@ export function BaseTable<T>({
                                                 autoComplete="on"
                                             />
                                         </div>
-                                    </div> */}
+                                    </div>
 
                                     {hasActiveFilters && selectedItems.length === 0 && (
                                         <div>
@@ -478,7 +502,7 @@ export function BaseTable<T>({
 
                                             </div>
                                             <div className="delete-all-filter" onClick={handleClearAllFilters}>
-                                                Bỏ lọc
+                                                {t('clearFilter')}
                                             </div>
                                         </div>
 
@@ -487,9 +511,9 @@ export function BaseTable<T>({
                                     {selectedItems.length > 0 && (
                                         <div className="feature-batch flex">
                                             <div className="selected-count">
-                                                Đã chọn <span className="font-bold">{selectedItems.length}</span>
+                                                {t('selected')} <span className="font-bold">{selectedItems.length}</span>
                                             </div>
-                                            <div className="unselected" onClick={unselectAll}>Bỏ chọn</div>
+                                            <div className="unselected" onClick={unselectAll}>{t('unselect')}</div>
 
                                             {batchActions.map((action) => (
                                                 <button
@@ -522,7 +546,7 @@ export function BaseTable<T>({
                                         <button
                                             className="ms-button btn-outline-neutral only-icon"
                                             onClick={onRefresh}
-                                            title="Lấy lại dữ liệu"
+                                            title={t('refresh')}
                                         >
                                             <div className="icon reload mi icon16">&nbsp;</div>
                                         </button>
@@ -617,7 +641,7 @@ export function BaseTable<T>({
                                                                                     onClick={() => handleSort(column.field, null)}
                                                                                 >
                                                                                     <div className="mi icon16 menu-item-ic empty"></div>
-                                                                                    <div className="menu-item-content">Không sắp xếp</div>
+                                                                                    <div className="menu-item-content">{t('sort.none')}</div>
                                                                                 </li>
                                                                                 <li
                                                                                     className={cn(
@@ -629,7 +653,7 @@ export function BaseTable<T>({
                                                                                     onClick={() => handleSort(column.field, 'asc')}
                                                                                 >
                                                                                     <div className="mi icon16 menu-item-ic arrow-up"></div>
-                                                                                    <div className="menu-item-content">Tăng dần</div>
+                                                                                    <div className="menu-item-content">{t('sort.asc')}</div>
                                                                                 </li>
                                                                                 <li
                                                                                     className={cn(
@@ -641,7 +665,7 @@ export function BaseTable<T>({
                                                                                     onClick={() => handleSort(column.field, 'desc')}
                                                                                 >
                                                                                     <div className="mi icon16 menu-item-ic arrow-down"></div>
-                                                                                    <div className="menu-item-content">Giảm dần</div>
+                                                                                    <div className="menu-item-content">{t('sort.desc')}</div>
                                                                                 </li>
                                                                                 <div className="menu-border"></div>
                                                                             </>
@@ -658,7 +682,7 @@ export function BaseTable<T>({
                                                                                     onClick={() => togglePin(column.field)}
                                                                                 >
                                                                                     <div className="mi icon16 menu-item-ic pin"></div>
-                                                                                    <div className="menu-item-content">Ghim cột</div>
+                                                                                    <div className="menu-item-content">{t('pin')}</div>
                                                                                 </li>
                                                                                 <li
                                                                                     className="menu-wrapper-item flex menu-wrapper-item-icon"
@@ -667,7 +691,7 @@ export function BaseTable<T>({
                                                                                     onClick={() => togglePin(column.field)}
                                                                                 >
                                                                                     <div className="mi icon16 menu-item-ic unpin"></div>
-                                                                                    <div className="menu-item-content">Bỏ ghim cột</div>
+                                                                                    <div className="menu-item-content">{t('unpin')}</div>
                                                                                 </li>
                                                                             </>
                                                                         )}

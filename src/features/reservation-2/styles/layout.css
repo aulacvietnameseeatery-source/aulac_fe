@@ -1,216 +1,216 @@
 @reference "tailwindcss";
 
-  .table-card-wrapper {
-    @apply relative flex flex-col p-3 rounded-2xl border transition-all duration-300 bg-white;
-  }
+.table-card-wrapper {
+  @apply relative flex flex-col p-3 rounded-2xl border transition-all duration-300 bg-white;
+}
 
-  .table-card-selected {
-    @apply border-[2.5px] border-[#1A3A52] bg-[#F4F4F0];
-  }
+.table-card-selected {
+  @apply border-[2.5px] border-[#1A3A52] bg-[#F4F4F0];
+}
 
-  .table-card-available {
-    @apply border-slate-200 hover:shadow-lg cursor-pointer;
-  }
+.table-card-available {
+  @apply border-slate-200 hover:shadow-lg cursor-pointer;
+}
 
-  .table-card-reserved {
-    @apply cursor-not-allowed opacity-80 border-slate-200;
-  }
+.table-card-reserved {
+  @apply cursor-not-allowed opacity-80 border-slate-200;
+}
 
-  .table-selected-badge {
-    @apply absolute -top-3 -right-3 z-20 bg-[#1A3A52] text-white rounded-full p-1.5 shadow-md;
-  }
+.table-selected-badge {
+  @apply absolute -top-3 -right-3 z-20 bg-[#1A3A52] text-white rounded-full p-1.5 shadow-md;
+}
 
-  .table-image-wrapper {
-    @apply relative w-full aspect-4/3 rounded-xl overflow-hidden mb-4;
-  }
+.table-image-wrapper {
+  @apply relative w-full aspect-4/3 rounded-xl overflow-hidden mb-4;
+}
 
-  .table-image {
-    @apply object-cover transition-all duration-500;
-  }
+.table-image {
+  @apply object-cover transition-all duration-500;
+}
 
-  .table-image-disabled {
-    @apply blur-[2px] scale-105;
-  }
+.table-image-disabled {
+  @apply blur-[2px] scale-105;
+}
 
-  .table-reserved-overlay {
-    @apply absolute inset-0 bg-stone-500/40 flex items-center justify-center z-10;
-  }
+.table-reserved-overlay {
+  @apply absolute inset-0 bg-stone-500/40 flex items-center justify-center z-10;
+}
 
-  .table-available-badge {
-    @apply absolute top-3 right-3 z-10;
-  }
+.table-available-badge {
+  @apply absolute top-3 right-3 z-10;
+}
 
-  .table-available-badge-text {
-    @apply bg-[#10B981] text-white text-[10px] font-bold px-3 py-1.5 rounded-full uppercase shadow-sm;
-  }
+.table-available-badge-text {
+  @apply bg-[#10B981] text-white text-[10px] font-bold px-3 py-1.5 rounded-full uppercase shadow-sm;
+}
 
-  .table-footer-wrapper {
-    @apply flex justify-between items-end px-1 pb-1;
-  }
+.table-footer-wrapper {
+  @apply flex justify-between items-end px-1 pb-1;
+}
 
-  .table-info-wrapper {
-    @apply flex flex-col gap-1;
-  }
+.table-info-wrapper {
+  @apply flex flex-col gap-1;
+}
 
-  .table-name {
-    @apply text-lg font-bold;
-  }
+.table-name {
+  @apply text-lg font-bold;
+}
 
-  .table-name-default {
-    @apply text-slate-800;
-  }
+.table-name-default {
+  @apply text-slate-800;
+}
 
-  .table-name-selected {
-    @apply text-[#1A3A52];
-  }
+.table-name-selected {
+  @apply text-[#1A3A52];
+}
 
-  .table-guest-info {
-    @apply flex items-center gap-1.5 text-sm font-medium text-slate-500;
-  }
+.table-guest-info {
+  @apply flex items-center gap-1.5 text-sm font-medium text-slate-500;
+}
 
-  .table-action-wrapper {
-    @apply flex items-center;
-  }
+.table-action-wrapper {
+  @apply flex items-center;
+}
 
-  .table-arrow-button {
-    @apply w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center text-slate-400;
-  }
+.table-arrow-button {
+  @apply w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center text-slate-400;
+}
 
-  .table-arrow-button-hover {
-    @apply group-hover:bg-[#1A3A52] group-hover:text-white transition-colors;
-  }
+.table-arrow-button-hover {
+  @apply group-hover:bg-[#1A3A52] group-hover:text-white transition-colors;
+}
 
-  .table-reserved-text {
-    @apply text-xs font-bold text-slate-300 uppercase;
-  }
+.table-reserved-text {
+  @apply text-xs font-bold text-slate-300 uppercase;
+}
 
-  .table-selected-text {
-    @apply text-xs font-bold text-[#1A3A52] uppercase;
-  }
+.table-selected-text {
+  @apply text-xs font-bold text-[#1A3A52] uppercase;
+}
 
-  /* Legend */
-  .legend-wrapper {
-    @apply flex gap-3 overflow-x-auto pb-2;
-  }
+/* Legend */
+.legend-wrapper {
+  @apply flex gap-3 overflow-x-auto pb-2;
+}
 
-  /* Legend Item */
-  .legend-item-wrapper {
-    @apply flex items-center gap-2 whitespace-nowrap text-sm text-slate-600;
-  }
+/* Legend Item */
+.legend-item-wrapper {
+  @apply flex items-center gap-2 whitespace-nowrap text-sm text-slate-600;
+}
 
-  .legend-item-color {
-    @apply w-3 h-3 rounded-full;
-  }
+.legend-item-color {
+  @apply w-3 h-3 rounded-full;
+}
 
-  .legend-item-bordered {
-    @apply border-2;
-  }
+.legend-item-bordered {
+  @apply border-2;
+}
 
-  /* Zone Tabs */
-  .zone-tabs-wrapper {
-    @apply w-full border-b border-stone-200 mb-8;
-  }
+/* Zone Tabs */
+.zone-tabs-wrapper {
+  @apply w-full border-b border-stone-200 mb-8;
+}
 
-  .zone-tabs-container {
-    @apply flex gap-6 md:gap-8 text-sm font-bold uppercase text-stone-400;
-  }
+.zone-tabs-container {
+  @apply flex gap-6 md:gap-8 text-sm font-bold uppercase text-stone-400;
+}
 
-  .zone-tab-button {
-    @apply pb-4 whitespace-nowrap transition-all duration-300 relative translate-y-px cursor-pointer hover:text-slate-900;
-  }
+.zone-tab-button {
+  @apply pb-4 whitespace-nowrap transition-all duration-300 relative translate-y-px cursor-pointer hover:text-slate-900;
+}
 
-  .zone-tab-active {
-    @apply text-[#1A3A52] border-b-2 border-slate-900;
-  }
+.zone-tab-active {
+  @apply text-[#1A3A52] border-b-2 border-slate-900;
+}
 
-  /* Table Grid */
-  .table-grid-wrapper {
-    @apply grid gap-4 sm:gap-6 w-full;
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  }
+/* Table Grid */
+.table-grid-wrapper {
+  @apply grid gap-4 sm:gap-6 w-full;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+}
 
-  .table-grid-loading {
-    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6;
-  }
+.table-grid-loading {
+  @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6;
+}
 
-  .table-grid-empty {
-    @apply py-20 text-center text-stone-400 italic;
-  }
+.table-grid-empty {
+  @apply py-20 text-center text-stone-400 italic;
+}
 
-  /* Booking Modal */
-  .booking-modal-overlay {
-    @apply fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/80 backdrop-blur-sm transition-all;
-  }
+/* Booking Modal */
+.booking-modal-overlay {
+  @apply fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/80 backdrop-blur-sm transition-all;
+}
 
-  .booking-modal-container {
-    @apply bg-white w-full max-w-4xl rounded-xl overflow-hidden shadow-2xl flex flex-col md:flex-row relative duration-300;
-  }
+.booking-modal-container {
+  @apply bg-white w-full max-w-4xl rounded-xl overflow-hidden shadow-2xl flex flex-col md:flex-row relative duration-300;
+}
 
-  .booking-modal-close-button {
-    @apply absolute top-4 right-4 z-20 md:hidden bg-white/20 p-1 rounded-full text-white;
-  }
+.booking-modal-close-button {
+  @apply absolute top-4 right-4 z-20 md:hidden bg-white/20 p-1 rounded-full text-white;
+}
 
-  .booking-modal-image-section {
-    @apply relative w-full md:w-1/2 h-64 md:h-auto;
-  }
+.booking-modal-image-section {
+  @apply relative w-full md:w-1/2 h-64 md:h-auto;
+}
 
-  .booking-modal-image-overlay {
-    @apply absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex flex-col justify-start p-8 text-white;
-  }
+.booking-modal-image-overlay {
+  @apply absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex flex-col justify-start p-8 text-white;
+}
 
-  .booking-modal-image-label {
-    @apply text-xs uppercase tracking-widest font-bold mb-2 opacity-90;
-  }
+.booking-modal-image-label {
+  @apply text-xs uppercase tracking-widest font-bold mb-2 opacity-90;
+}
 
-  .booking-modal-right-section {
-    @apply w-full md:w-1/2 bg-gradient-to-b from-white to-slate-50 p-8 md:p-12 flex flex-col gap-6 justify-between;
-  }
+.booking-modal-right-section {
+  @apply w-full md:w-1/2 bg-gradient-to-b from-white to-slate-50 p-8 md:p-12 flex flex-col gap-6 justify-between;
+}
 
-  .booking-modal-title {
-    @apply text-2xl font-bold text-[#1A3A52];
-  }
+.booking-modal-title {
+  @apply text-2xl font-bold text-[#1A3A52];
+}
 
-  .booking-modal-form {
-    @apply space-y-5;
-  }
+.booking-modal-form {
+  @apply space-y-5;
+}
 
-  .booking-modal-input-group {
-    @apply flex flex-col gap-2;
-  }
+.booking-modal-input-group {
+  @apply flex flex-col gap-2;
+}
 
-  .booking-modal-input-label {
-    @apply text-sm font-semibold text-slate-700;
-  }
+.booking-modal-input-label {
+  @apply text-sm font-semibold text-slate-700;
+}
 
-  .booking-modal-input {
-    @apply w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:outline-none focus:border-slate-900 focus:ring-1 focus:ring-slate-900;
-  }
+.booking-modal-input {
+  @apply w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:outline-none focus:border-slate-900 focus:ring-1 focus:ring-slate-900;
+}
 
-  .booking-modal-buttons {
-    @apply flex gap-3 pt-4;
-  }
+.booking-modal-buttons {
+  @apply flex gap-3 pt-4;
+}
 
-  .booking-modal-button-confirm {
-    @apply flex-1 bg-[#1A3A52] text-white py-3 rounded-lg font-semibold hover:bg-slate-800 transition cursor-pointer;
-  }
+.booking-modal-button-confirm {
+  @apply flex-1 bg-[#1A3A52] text-white py-3 rounded-lg font-semibold hover:bg-slate-800 transition cursor-pointer;
+}
 
-  .booking-modal-button-cancel {
-    @apply flex-1 bg-slate-200 text-slate-900 py-3 rounded-lg font-semibold hover:bg-slate-300 transition md:hidden;
-  }
+.booking-modal-button-cancel {
+  @apply flex-1 bg-slate-200 text-slate-900 py-3 rounded-lg font-semibold hover:bg-slate-300 transition md:hidden;
+}
 
-  /* Table Card Skeleton */
-  .table-card-skeleton {
-    @apply animate-pulse p-3 rounded-2xl border border-slate-200 bg-slate-50 space-y-3;
-  }
+/* Table Card Skeleton */
+.table-card-skeleton {
+  @apply animate-pulse p-3 rounded-2xl border border-slate-200 bg-slate-50 space-y-3;
+}
 
-  .table-card-skeleton-image {
-    @apply w-full aspect-4/3 rounded-xl bg-slate-200;
-  }
+.table-card-skeleton-image {
+  @apply w-full aspect-4/3 rounded-xl bg-slate-200;
+}
 
-  .table-card-skeleton-text {
-    @apply h-4 bg-slate-200 rounded w-2/3;
-  }
+.table-card-skeleton-text {
+  @apply h-4 bg-slate-200 rounded w-2/3;
+}
 
-  .table-card-skeleton-info {
-    @apply h-3 bg-slate-200 rounded w-1/2;
-  }
+.table-card-skeleton-info {
+  @apply h-3 bg-slate-200 rounded w-1/2;
+}
