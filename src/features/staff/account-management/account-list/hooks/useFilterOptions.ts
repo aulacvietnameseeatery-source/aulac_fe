@@ -13,7 +13,7 @@ interface UseFilterOptionsReturn {
 export function useFilterOptions(): UseFilterOptionsReturn {
   const [roles, setRoles] = useState<Role[]>([]);
   const [statuses, setStatuses] = useState<AccountStatus[]>([]);
-  const [isLoadingFilters, setIsLoadingFilters] = useState(true);
+  const [isLoadingFilters, setIsLoadingFilters] = useState(false);
 
   useEffect(() => {
     const fetchFilterOptions = async () => {
@@ -25,8 +25,8 @@ export function useFilterOptions(): UseFilterOptionsReturn {
         ]);
         setRoles(rolesData);
         setStatuses(statusesData);
-      } catch (err) {
-        console.error('Error fetching filter options:', err);
+      } catch (error) {
+        console.error('Error fetching filter options:', error);
       } finally {
         setIsLoadingFilters(false);
       }

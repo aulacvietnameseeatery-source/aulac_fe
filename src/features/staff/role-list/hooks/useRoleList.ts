@@ -11,7 +11,7 @@ export const useRoleList = () => {
 
   // 1. Get the state from the URL (if not available, use the default value).
   const pageIndex = Number(searchParams.get("pageIndex")) || 1;
-  const pageSize = Number(searchParams.get("pageSize")) || 5;
+  const pageSize = Number(searchParams.get("pageSize")) || 10;
   const searchParam = searchParams.get("search") || "";
 
   // State cục bộ cho dữ liệu API

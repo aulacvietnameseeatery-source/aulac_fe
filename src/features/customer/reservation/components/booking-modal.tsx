@@ -23,7 +23,7 @@ interface BookingModalProps {
   };
 }
 
-export default function BookingModal({ isOpen, onClose, onConfirm, tableData, guestInfo } : BookingModalProps) {
+export default function BookingModal({ isOpen, onClose, onConfirm, tableData, guestInfo }: BookingModalProps) {
   const t = useTranslations('Reservation.BookingModal');
 
   if (!isOpen || !tableData) return null;
@@ -40,6 +40,8 @@ export default function BookingModal({ isOpen, onClose, onConfirm, tableData, gu
 
         <div className="booking-modal-image-section">
           <Image
+            width={1920}
+            height={1080}
             src={tableData.image || "/placeholder.svg"}
             alt={tableData.name}
             fill
