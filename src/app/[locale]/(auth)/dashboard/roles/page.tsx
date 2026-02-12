@@ -7,14 +7,18 @@ import { TableColumn } from "@/types/table.types";
 import { RoleDto, RoleHeader, RoleActions, useRoleList } from "@/features/staff/role-list";
 import { deleteRole } from "@/features/staff/role-list/services/role.service";
 import { toast } from "sonner";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { ConfirmModal } from "@/components/layout/admin-sidebar/confirm-modal";
 import { ProtectedRoute } from '@/components/protected-route';
 import { Permissions } from '@/types/const';
 import { Pagination } from "@/components/ui/pagination";
+import { useRouter } from "next/navigation";
 
 const RoleListContent = () => {
   const t = useTranslations("Role.List");
+  const router = useRouter();
+  const locale = useLocale();
+  
   // Logic Hook
   const { roles, isLoading, pagination, searchTerm, actions } = useRoleList();
   // Delete modal state
@@ -23,9 +27,17 @@ const RoleListContent = () => {
     const [isDeleting, setIsDeleting] = useState(false);
 
   // Action Handlers
-  const handleView = (role: RoleDto) => console.log("View:", role.roleId);
-  const handleEdit = (role: RoleDto) => console.log("Edit:", role.roleId);
-  const handleCreate = () => console.log("Navigate to Create");
+  const handleView = (role: RoleDto) => {
+    router.push(`/${locale}/dashboard/roles/${role.roleId}`);
+  };
+  
+  const handleEdit = (role: RoleDto) => {
+    router.push(`/${locale}/dashboard/roles/${role.roleId}/edit`);
+  };
+  
+  const handleCreate = () => {
+    router.push(`/${locale}/dashboard/roles/create`);
+  };
 
   // Open delete confirmation modal
   const handleDeleteClick = (role: RoleDto) => {
