@@ -726,7 +726,12 @@
       },
       "notifications": {
         "deleteSuccess": "Xóa vai trò thành công",
-        "deleteError": "Có lỗi xảy ra khi xóa vai trò"
+        "deleteError": "Có lỗi xảy ra khi xóa vai trò",
+        "batchDeleteSuccess": "Đã xóa {count} vai trò thành công",
+        "batchDeleteError": "Có lỗi xảy ra khi xóa vai trò"
+      },
+      "batchActions": {
+        "delete": "Xóa"
       }
     },
     "Detail": {

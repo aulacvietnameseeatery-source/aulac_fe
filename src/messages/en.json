@@ -725,7 +725,12 @@
       },
       "notifications": {
         "deleteSuccess": "Role deleted successfully",
-        "deleteError": "An error occurred while deleting the role"
+        "deleteError": "An error occurred while deleting the role",
+        "batchDeleteSuccess": "Successfully deleted {count} roles",
+        "batchDeleteError": "An error occurred while deleting roles"
+      },
+      "batchActions": {
+        "delete": "Delete"
       }
     },
     "Detail": {
