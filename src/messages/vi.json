@@ -544,6 +544,7 @@
     },
     "Detail": {
       "title": "Chi tiết Vai trò",
+      "roleCode": "Mã Vai trò",
       "roleName": "Tên Vai trò",
       "status": "Trạng thái",
       "active": "Hoạt động",
@@ -562,7 +563,7 @@
       }
     },
     "Create": {
-      "title": "Tạo Vai trò Mới",
+      "title": "Thêm Vai trò Mới",
       "roleCode": "Mã Vai trò",
       "roleCodePlaceholder": "Nhập mã vai trò (VD: MANAGER, STAFF)",
       "roleName": "Tên Vai trò",
@@ -573,11 +574,11 @@
       "permissions": "Quyền hạn",
       "all": "Tất cả",
       "cancel": "Hủy",
-      "create": "Tạo Vai trò",
+      "create": "Thêm",
       "loadingPermissions": "Đang tải quyền hạn...",
       "breadcrumb": {
         "roles": "Danh sách Vai trò",
-        "create": "Tạo Vai trò"
+        "create": "Thêm Vai trò"
       }
     },
     "Edit": {

@@ -34,7 +34,8 @@ export const useRoleEdit = (roleId: number) => {
         setPermissionGroups(data.permissionGroups);
       } catch (error: any) {
         console.error("Failed to load role data:", error);
-        toast.error(t("loadError"));
+        const errorMessage = error.message || t("loadError");
+        toast.error(errorMessage);
       } finally {
         setIsLoadingData(false);
       }
@@ -152,7 +153,7 @@ export const useRoleEdit = (roleId: number) => {
     } catch (error: any) {
       console.error("Failed to update role:", error);
       
-      const errorMessage = error?.response?.data?.userMessage || t("error");
+      const errorMessage = error.message || t("error");
       toast.error(errorMessage);
     } finally {
       setIsSubmitting(false);
@@ -161,8 +162,8 @@ export const useRoleEdit = (roleId: number) => {
 
   // Cancel
   const handleCancel = useCallback(() => {
-    router.push(`/dashboard/roles/${roleId}`);
-  }, [router, roleId]);
+    router.push("/dashboard/roles");
+  }, [router]);
 
   return {
     roleCode,

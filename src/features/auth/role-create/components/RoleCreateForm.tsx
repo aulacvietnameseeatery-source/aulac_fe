@@ -53,14 +53,35 @@ export const RoleCreateForm = ({
   const t = useTranslations("Role.Create");
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-8">
+    <div className="bg-white">
       {/* Header */}
-      <div className="flex items-center justify-between mb-8 pb-6 border-b border-gray-100">
+      <div className="flex items-center justify-between mb-8 pb-6 border-b border-gray-100 px-8 pt-4">
         <h2 className="text-2xl font-bold text-gray-900">{t("title")}</h2>
+        
+        {/* Action Buttons */}
+        <div className="flex gap-4">
+          <button
+            onClick={onCancel}
+            type="button"
+            disabled={isSubmitting}
+            className="px-6 py-3 border border-gray-300 rounded-lg text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {t("cancel")}
+          </button>
+          <button
+            onClick={onSubmit}
+            type="button"
+            disabled={isSubmitting || isLoadingPermissions}
+            className="px-6 py-3 bg-[#1e3a2f] text-white rounded-lg text-sm font-semibold hover:bg-[#2d5547] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+          >
+            {isSubmitting && <Loader2 className="w-4 h-4 animate-spin" />}
+            {t("create")}
+          </button>
+        </div>
       </div>
 
       {/* Role Code & Name */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 px-8">
         {/* Role Code */}
         <div>
           <label className="block text-sm font-semibold text-gray-900 mb-2">
@@ -109,7 +130,7 @@ export const RoleCreateForm = ({
       </div>
 
       {/* Status */}
-      <div className="mb-8">
+      <div className="mb-8 px-8">
         <label className="block text-sm font-semibold text-gray-900 mb-2">
           {t("status")}
         </label>
@@ -143,7 +164,7 @@ export const RoleCreateForm = ({
       </div>
 
       {/* Permissions Section */}
-      <div className="mb-8">
+      <div className="mb-8 px-8 pb-8">
         <div className="flex items-center justify-between mb-4">
           <label className="text-sm font-semibold text-gray-900">
             {t("permissions")}
@@ -209,27 +230,6 @@ export const RoleCreateForm = ({
             </div>
           )}
         </div>
-      </div>
-
-      {/* Action Buttons */}
-      <div className="flex justify-end gap-4">
-        <button
-          onClick={onCancel}
-          type="button"
-          disabled={isSubmitting}
-          className="px-6 py-3 border border-gray-300 rounded-lg text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          {t("cancel")}
-        </button>
-        <button
-          onClick={onSubmit}
-          type="button"
-          disabled={isSubmitting || isLoadingPermissions}
-          className="px-6 py-3 bg-[#1e3a2f] text-white rounded-lg text-sm font-semibold hover:bg-[#2d5547] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
-        >
-          {isSubmitting && <Loader2 className="w-4 h-4 animate-spin" />}
-          {t("create")}
-        </button>
       </div>
     </div>
   );

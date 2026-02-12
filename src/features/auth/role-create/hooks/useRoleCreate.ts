@@ -124,6 +124,15 @@ export const useRoleCreate = () => {
     return Object.keys(newErrors).length === 0;
   };
 
+  // Reset form
+  const resetForm = () => {
+    setRoleCode("");
+    setRoleName("");
+    setIsActive(true);
+    setSelectedPermissions(new Set());
+    setErrors({});
+  };
+
   // Submit form
   const handleSubmit = async () => {
     if (!validate()) {
@@ -139,12 +148,12 @@ export const useRoleCreate = () => {
 
     setIsSubmitting(true);
     try {
-      const createdRole = await createRole(request);
+      const newRole = await createRole(request);
       toast.success("Role created successfully");
-      router.push(`/dashboard/roles/${createdRole.roleId}`);
+      router.push(`/dashboard/roles/${newRole.roleId}`);
     } catch (error: any) {
       console.error("Failed to create role:", error);
-      const errorMessage = error.response?.data?.userMessage || "Failed to create role";
+      const errorMessage = error.message || "Failed to create role";
       toast.error(errorMessage);
     } finally {
       setIsSubmitting(false);

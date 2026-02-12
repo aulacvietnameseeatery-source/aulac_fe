@@ -35,14 +35,45 @@ export const RoleDetailForm = ({ roleDetail, onBack, onEdit }: Props) => {
   }, [roleDetail.permissionGroups]);
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-8">
+    <div className="bg-white">
       {/* Header */}
-      <div className="flex items-center justify-between mb-8 pb-6 border-b border-gray-100">
+      <div className="flex items-center justify-between mb-8 pb-6 border-b border-gray-100 px-8 pt-4">
         <h2 className="text-2xl font-bold text-gray-900">{t("title")}</h2>
+        
+        {/* Action Buttons */}
+        <div className="flex gap-4">
+          <button
+            onClick={onBack}
+            type="button"
+            className="px-6 py-3 border border-gray-300 rounded-lg text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-colors"
+          >
+            {t("back")}
+          </button>
+          <button
+            onClick={onEdit}
+            type="button"
+            className="px-6 py-3 bg-[#1e3a2f] text-white rounded-lg text-sm font-semibold hover:bg-[#2d5547] transition-colors"
+          >
+            {t("edit")}
+          </button>
+        </div>
       </div>
 
-      {/* Role Name & Status */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+      {/* Role Code & Name */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 px-8">
+        {/* Role Code */}
+        <div>
+          <label className="block text-sm font-semibold text-gray-900 mb-2">
+            {t("roleCode")}
+          </label>
+          <input
+            type="text"
+            value={roleDetail.roleCode}
+            readOnly
+            className="w-full px-4 py-3 border border-gray-200 rounded-lg bg-gray-50 text-gray-900 font-medium focus:outline-none cursor-not-allowed"
+          />
+        </div>
+
         {/* Role Name */}
         <div>
           <label className="block text-sm font-semibold text-gray-900 mb-2">
@@ -55,40 +86,40 @@ export const RoleDetailForm = ({ roleDetail, onBack, onEdit }: Props) => {
             className="w-full px-4 py-3 border border-gray-200 rounded-lg bg-gray-50 text-gray-900 font-medium focus:outline-none cursor-not-allowed"
           />
         </div>
+      </div>
 
-        {/* Status */}
-        <div>
-          <label className="block text-sm font-semibold text-gray-900 mb-2">
-            {t("status")}
-          </label>
-          <div className="flex items-center h-[50px]">
-            <div className="relative inline-block">
-              <input
-                type="checkbox"
-                checked={roleDetail.isActive}
-                readOnly
-                disabled
-                className="sr-only peer"
-              />
-              <div className={`w-14 h-7 rounded-full transition-colors cursor-not-allowed ${
-                roleDetail.isActive ? 'bg-green-500' : 'bg-gray-300'
-              }`}>
-                <div className={`absolute top-0.5 left-0.5 w-6 h-6 bg-white rounded-full transition-transform ${
-                  roleDetail.isActive ? 'translate-x-7' : 'translate-x-0'
-                }`} />
-              </div>
-            </div>
-            <span className={`ml-3 text-sm font-medium ${
-              roleDetail.isActive ? 'text-green-600' : 'text-gray-500'
+      {/* Status */}
+      <div className="mb-8 px-8">
+        <label className="block text-sm font-semibold text-gray-900 mb-2">
+          {t("status")}
+        </label>
+        <div className="flex items-center h-[50px]">
+          <div className="relative inline-block">
+            <input
+              type="checkbox"
+              checked={roleDetail.isActive}
+              readOnly
+              disabled
+              className="sr-only peer"
+            />
+            <div className={`w-14 h-7 rounded-full transition-colors cursor-not-allowed ${
+              roleDetail.isActive ? 'bg-green-500' : 'bg-gray-300'
             }`}>
-              {roleDetail.isActive ? t("active") : t("inactive")}
-            </span>
+              <div className={`absolute top-0.5 left-0.5 w-6 h-6 bg-white rounded-full transition-transform ${
+                roleDetail.isActive ? 'translate-x-7' : 'translate-x-0'
+              }`} />
+            </div>
           </div>
+          <span className={`ml-3 text-sm font-medium ${
+            roleDetail.isActive ? 'text-green-600' : 'text-gray-500'
+          }`}>
+            {roleDetail.isActive ? t("active") : t("inactive")}
+          </span>
         </div>
       </div>
 
       {/* Permissions Section */}
-      <div className="mb-8">
+      <div className="mb-8 px-8 pb-8">
         <div className="flex items-center justify-between mb-4">
           <label className="text-sm font-semibold text-gray-900">
             {t("permissions")}
@@ -140,24 +171,6 @@ export const RoleDetailForm = ({ roleDetail, onBack, onEdit }: Props) => {
             ))}
           </div>
         </div>
-      </div>
-
-      {/* Action Buttons */}
-      <div className="flex justify-end gap-4">
-        <button
-          onClick={onBack}
-          type="button"
-          className="px-6 py-3 border border-gray-300 rounded-lg text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-colors"
-        >
-          {t("back")}
-        </button>
-        <button
-          onClick={onEdit}
-          type="button"
-          className="px-6 py-3 bg-[#1e3a2f] text-white rounded-lg text-sm font-semibold hover:bg-[#2d5547] transition-colors"
-        >
-          {t("edit")}
-        </button>
       </div>
     </div>
   );

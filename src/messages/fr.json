@@ -544,6 +544,7 @@
     },
     "Detail": {
       "title": "Détail du Rôle",
+      "roleCode": "Code du Rôle",
       "roleName": "Nom du Rôle",
       "status": "Statut",
       "active": "Actif",
@@ -562,7 +563,7 @@
       }
     },
     "Create": {
-      "title": "Créer un Nouveau Rôle",
+      "title": "Ajouter un Nouveau Rôle",
       "roleCode": "Code du Rôle",
       "roleCodePlaceholder": "Entrez le code du rôle (ex: MANAGER, STAFF)",
       "roleName": "Nom du Rôle",
@@ -573,11 +574,11 @@
       "permissions": "Permissions",
       "all": "Tout",
       "cancel": "Annuler",
-      "create": "Créer le Rôle",
+      "create": "Ajouter",
       "loadingPermissions": "Chargement des permissions...",
       "breadcrumb": {
         "roles": "Liste des rôles",
-        "create": "Créer un Rôle"
+        "create": "Ajouter un Rôle"
       }
     },
     "Edit": {

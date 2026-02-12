@@ -49,27 +49,6 @@ const RoleEditContent = () => {
 
   return (
     <div>
-      {/* Breadcrumb */}
-      <div className="mb-6">
-        <nav className="flex items-center gap-2 text-sm text-gray-600">
-          <button
-            onClick={() => router.push("/dashboard/roles")}
-            className="hover:text-gray-900 transition-colors"
-          >
-            {t("breadcrumb.roles")}
-          </button>
-          <span>/</span>
-          <button
-            onClick={() => router.push(`/dashboard/roles/${roleId}`)}
-            className="hover:text-gray-900 transition-colors"
-          >
-            {t("breadcrumb.detail")}
-          </button>
-          <span>/</span>
-          <span className="text-gray-900 font-medium">{t("breadcrumb.edit")}</span>
-        </nav>
-      </div>
-
       {/* Role Edit Form */}
       <RoleEditForm
         roleCode={roleCode}
@@ -96,7 +75,7 @@ const RoleEditContent = () => {
 
 export default function RoleEditPage() {
   return (
-    <div className="min-h-screen bg-gray-50/50 p-8 font-sans text-gray-900">
+    <div className="min-h-screen bg-gray-50/50 font-sans text-gray-900">
       <Suspense fallback={
         <div className="flex justify-center p-10">
           <Loader2 className="animate-spin" size={32} />

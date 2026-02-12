@@ -543,6 +543,7 @@
     },
     "Detail": {
       "title": "Role Detail",
+      "roleCode": "Role Code",
       "roleName": "Role Name",
       "status": "Status",
       "active": "Active",
@@ -561,7 +562,7 @@
       }
     },
     "Create": {
-      "title": "Create New Role",
+      "title": "Add New Role",
       "roleCode": "Role Code",
       "roleCodePlaceholder": "Enter role code (e.g., MANAGER, STAFF)",
       "roleName": "Role Name",
@@ -572,11 +573,11 @@
       "permissions": "Permissions",
       "all": "All",
       "cancel": "Cancel",
-      "create": "Create Role",
+      "create": "Add",
       "loadingPermissions": "Loading permissions...",
       "breadcrumb": {
         "roles": "Role List",
-        "create": "Create Role"
+        "create": "Add Role"
       }
     },
     "Edit": {
