@@ -843,5 +843,25 @@
         "last": "Last page"
       }
     }
+  },
+  "AdminSidebar": {
+    "dashboard": "Dashboard",
+    "tables": "Tables",
+    "staff": "Staff",
+    "roles": "Roles",
+    "dish": "Dish",
+    "dishCategory": "Dish Category",
+    "ingredient": "Ingredient",
+    "orders": "Orders",
+    "reports": "Reports",
+    "emails": "Emails",
+    "customers": "Customers",
+    "promotions": "Promotions",
+    "settings": "Settings",
+    "logout": "Logout",
+    "loggingOut": "Logging out...",
+    "managerPortal": "Manager Portal",
+    "logoutMessage": "Are you sure you want to logout? You will be redirected to the login page.",
+    "cancel": "Cancel"
   }
 }

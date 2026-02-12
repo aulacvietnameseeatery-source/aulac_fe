@@ -839,5 +839,25 @@
         "last": "Dernière page"
       }
     }
+  },
+  "AdminSidebar": {
+    "dashboard": "Tableau de bord",
+    "tables": "Tables",
+    "staff": "Personnel",
+    "roles": "Rôles",
+    "dish": "Plats",
+    "dishCategory": "Catégorie de plat",
+    "ingredient": "Ingrédients",
+    "orders": "Commandes",
+    "reports": "Rapports",
+    "emails": "E-mails",
+    "customers": "Clients",
+    "promotions": "Promotions",
+    "settings": "Paramètres",
+    "logout": "Déconnexion",
+    "loggingOut": "Déconnexion...",
+    "managerPortal": "Portail Gestionnaire",
+    "logoutMessage": "Êtes-vous sûr de vouloir vous déconnecter ? Vous serez redirigé vers la page de connexion.",
+    "cancel": "Annuler"
   }
 }
