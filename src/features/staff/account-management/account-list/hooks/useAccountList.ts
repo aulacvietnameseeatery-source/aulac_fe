@@ -130,6 +130,11 @@ export const useAccountList = () => {
       onPageChange: handlePageChange,
       onPageSizeChange: handlePageSizeChange,
       refresh,
+      updateAccountLocally: (updatedAccount: StaffAccount) => {
+        setAccounts((prev) =>
+          prev.map((acc) => (acc.accountId === updatedAccount.accountId ? updatedAccount : acc))
+        );
+      },
     },
   };
 };

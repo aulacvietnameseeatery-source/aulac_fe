@@ -546,7 +546,17 @@
       },
       "notifications": {
         "resetPasswordSuccess": "Password reset successfully",
-        "resetPasswordError": "An error occurred while resetting the password"
+        "resetPasswordError": "An error occurred while resetting the password",
+        "accountActivated": "Account has been activated",
+        "accountDeactivated": "Account has been deactivated",
+        "updateStatusError": "Failed to update status",
+        "batchActivateSuccess": "Successfully activated {count} accounts",
+        "batchDeactivateSuccess": "Successfully deactivated {count} accounts",
+        "batchUpdateError": "An error occurred while updating batch status"
+      },
+      "batchActions": {
+        "activate": "Activate",
+        "deactivate": "Deactivate"
       }
     },
     "Detail": {
@@ -726,16 +736,13 @@
       "unselect": "Unselect",
       "clearFilter": "Clear filter",
       "refresh": "Refresh",
-
       "pin": "Pin column",
       "unpin": "Unpin column",
-
       "sort": {
         "none": "No sorting",
         "asc": "Ascending",
         "desc": "Descending"
       },
-
       "operator": {
         "contains": "Contains",
         "notContains": "Does not contain",

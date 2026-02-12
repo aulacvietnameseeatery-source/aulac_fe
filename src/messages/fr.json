@@ -547,7 +547,17 @@
       },
       "notifications": {
         "resetPasswordSuccess": "Mot de passe réinitialisé avec succès",
-        "resetPasswordError": "Une erreur est survenue lors de la réinitialisation du mot de passe"
+        "resetPasswordError": "Une erreur est survenue lors de la réinitialisation du mot de passe",
+        "accountActivated": "Le compte a été activé",
+        "accountDeactivated": "Le compte a été désactivé",
+        "updateStatusError": "Échec de la mise à jour du statut",
+        "batchActivateSuccess": "{count} comptes activés avec succès",
+        "batchDeactivateSuccess": "{count} comptes désactivés avec succès",
+        "batchUpdateError": "Une erreur s'est produite lors de la mise à jour du statut par lot"
+      },
+      "batchActions": {
+        "activate": "Activer",
+        "deactivate": "Désactiver"
       }
     },
     "Detail": {
@@ -727,16 +737,13 @@
       "unselect": "Désélectionner",
       "clearFilter": "Supprimer le filtre",
       "refresh": "Rafraîchir",
-
       "pin": "Épingler la colonne",
       "unpin": "Désépingler la colonne",
-
       "sort": {
         "none": "Aucun tri",
         "asc": "Croissant",
         "desc": "Décroissant"
       },
-
       "operator": {
         "contains": "Contient",
         "notContains": "Ne contient pas",

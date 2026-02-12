@@ -14,6 +14,8 @@ const buttonVariants = cva(
                 ghost: "hover:bg-slate-100 hover:text-slate-900", // Nút trong suốt
                 link: "text-navy-DEFAULT underline-offset-4 hover:underline", // Nút link
                 gold: "bg-gold-classic text-white hover:bg-gold-classic/90", // Nút vàng
+                success: "bg-green-600 text-white hover:bg-green-700 shadow-sm", // Nút thành công (Active)
+                danger: "bg-red-600 text-white hover:bg-red-700 shadow-sm", // Nút nguy hiểm (Deactive)
             },
             size: {
                 default: "h-10 px-4 py-2",
@@ -31,7 +33,7 @@ const buttonVariants = cva(
 
 export interface ButtonProps
     extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-        VariantProps<typeof buttonVariants> {
+    VariantProps<typeof buttonVariants> {
     isLoading?: boolean;
 }
 

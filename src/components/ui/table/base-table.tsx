@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
+import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useTableSelection } from '@/hooks/table/useTableSelection';
 import { useTableColumnSizing } from '@/hooks/table/useTableColumnSizing';
@@ -15,6 +16,7 @@ import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover
 import { FilterPopup } from '@/components/ui/table/filter-popup';
 import '@/styles/components/table.css';
 import { useTranslations } from 'next-intl';
+import { Check, X } from 'lucide-react';
 
 
 
@@ -181,7 +183,7 @@ export function BaseTable<T>({
     const [currentPage, setCurrentPage] = useState(1);
     const [sortState, setSortState] = useState<SortStateItem[]>([]);
     const [pinnedColumns, setPinnedColumns] = useState<string[]>([]);
-    
+
     /**
      * Single popover state - tracks which column and type (filter/sort) is open
      * This ensures only one popover is open at a time across all columns
@@ -414,7 +416,7 @@ export function BaseTable<T>({
     useEffect(() => {
         emitDataChange();
     }, [currentPage, emitDataChange])
-    
+
     useEffect(() => {
         if (searchDebounceTimeoutRef.current) {
             clearTimeout(searchDebounceTimeoutRef.current);
@@ -508,37 +510,54 @@ export function BaseTable<T>({
 
                                     )}
 
-                                    {selectedItems.length > 0 && (
-                                        <div className="feature-batch flex">
-                                            <div className="selected-count">
-                                                {t('selected')} <span className="font-bold">{selectedItems.length}</span>
-                                            </div>
-                                            <div className="unselected" onClick={unselectAll}>{t('unselect')}</div>
+                                    {renderToolbarAppend?.({ unselectAll, selectedItems, batchActions })}
 
-                                            {batchActions.map((action) => (
-                                                <button
-                                                    key={action.label}
-                                                    className={cn(
-                                                        "ms-button",
-                                                        `btn-outline-${action.variant || 'neutral'}`
-                                                    )}
-                                                    onClick={() => handleBatchAction(action)}
-                                                >
-                                                    <div
-                                                        className={cn(
-                                                            "icon left mi icon16",
-                                                            action.icon,
-                                                            action.variant === 'success' && 'green',
-                                                            action.variant === 'danger' && 'red'
-                                                        )}
-                                                    ></div>
-                                                    <div className="text text-nowrap pl-1">{action.label}</div>
-                                                </button>
-                                            ))}
+                                    {/* Batch Actions Group */}
+                                    {selectedItems.length > 0 && (
+                                        <div className="flex items-center gap-2 ml-4 border-l pl-4 border-gray-200">
+                                            <div className="text-sm text-gray-500 mr-2">
+                                                {t('selected')} <span className="font-bold text-gray-900">{selectedItems.length}</span>
+                                            </div>
+
+                                            <Button
+                                                variant="ghost"
+                                                size="sm"
+                                                onClick={unselectAll}
+                                                className="text-gray-500 hover:text-gray-700 h-8 mr-2"
+                                            >
+                                                {t('unselect')}
+                                            </Button>
+
+                                            <div className="flex items-center gap-2">
+                                                {batchActions.map((action) => {
+                                                    // Mapping icon string to Lucide React Node
+                                                    // Note: You should ideally import these icons at the top of the file
+                                                    // import { Check, X, Trash2 } from 'lucide-react';
+
+                                                    let IconComponent = null;
+                                                    if (action.icon === 'check') IconComponent = <div className="mi icon16 icon-check-white" />; // Fallback or use lucide Check
+                                                    if (action.icon === 'close') IconComponent = <div className="mi icon16 icon-close-white" />; // Fallback or use lucide X
+
+                                                    // Better approach: mapping based on action props if you migrate icons fully
+                                                    // For now, let's render standard buttons with the new variants
+
+                                                    return (
+                                                        <Button
+                                                            key={action.label}
+                                                            variant={action.variant as any} // Cast because 'neutral' might not be in ButtonProps yet, but success/danger are
+                                                            size="sm"
+                                                            onClick={() => handleBatchAction(action)}
+                                                            className="h-8 shadow-sm"
+                                                        >
+                                                            {action.icon === 'check' && <div className="mi icon16 icon-check-white mr-1.5" />}
+                                                            {action.icon === 'close' && <div className="mi icon16 icon-close-white mr-1.5" />}
+                                                            {action.label}
+                                                        </Button>
+                                                    );
+                                                })}
+                                            </div>
                                         </div>
                                     )}
-
-                                    {renderToolbarAppend?.({ unselectAll, selectedItems, batchActions })}
                                 </div>
 
                                 {selectedItems.length === 0 && (
@@ -713,8 +732,8 @@ export function BaseTable<T>({
                                                                         }}
                                                                     >
                                                                         <PopoverTrigger asChild>
-                                                                            <button 
-                                                                                className="filter-btn" 
+                                                                            <button
+                                                                                className="filter-btn"
                                                                                 type="button"
                                                                                 onClick={(e) => e.stopPropagation()}
                                                                             >

@@ -2,8 +2,8 @@
 
 import React, { Suspense, useCallback, useMemo, useState } from "react";
 import { Loader2 } from "lucide-react";
-import { BaseTable } from "@/components/ui/table/base-table"; 
-import { TableColumn } from "@/types/table.types"; 
+import { BaseTable } from "@/components/ui/table/base-table";
+import { TableColumn } from "@/types/table.types";
 import { StaffAccount } from "@/features/staff/account-management/account-list/types/staff-account.types";
 import { AccountHeader } from "@/features/staff/account-management/account-list/components/AccountHeader";
 import { AccountActions } from "@/features/staff/account-management/account-list/components/AccountActions";
@@ -18,16 +18,17 @@ import { ConfirmModal } from "@/components/layout/admin-sidebar/confirm-modal";
 import { ProtectedRoute } from '@/components/protected-route';
 import { Permissions } from '@/types/const';
 import { Pagination } from "@/components/ui/pagination";
+import { Switch } from "@/components/ui/switch";
 
 const AccountListContent = () => {
   const t = useTranslations("Account.List");
-  
+
   // Logic Hook
   const { accounts, isLoading, pagination, filters, actions } = useAccountList();
-  
+
   // Filter Options Hook
   const { roles, statuses, isLoadingFilters } = useFilterOptions();
-  
+
   // ---- Account Dialog state ----
   const [dialogState, setDialogState] = useState<AccountDialogState>({
     open: false,
@@ -47,6 +48,9 @@ const AccountListContent = () => {
   const [resetModalOpen, setResetModalOpen] = useState(false);
   const [accountToReset, setAccountToReset] = useState<number | null>(null);
   const [isResetting, setIsResetting] = useState(false);
+
+  // Status Toggle State
+  const [togglingId, setTogglingId] = useState<number | null>(null);
 
   // Action Handlers — open dialog with the correct mode
   const handleView = (account: StaffAccount) => openDialog("view", account.accountId);
@@ -84,6 +88,69 @@ const AccountListContent = () => {
     setAccountToReset(null);
   };
 
+  // Handle Status Toggle
+  const handleStatusToggle = async (account: StaffAccount, checked: boolean) => {
+    setTogglingId(account.accountId);
+    try {
+      const newStatus = checked ? "ACTIVE" : "INACTIVE";
+      const newStatusId = checked ? 1 : 2;
+
+      // Optimistic Update
+      const updatedAccount: StaffAccount = {
+        ...account,
+        accountStatus: newStatusId,
+        accountStatusName: newStatus
+      };
+
+      actions.updateAccountLocally(updatedAccount);
+
+      // API Call
+      await staffAccountService.updateAccountStatus(account.accountId, newStatus);
+      toast.success(t(checked ? "notifications.accountActivated" : "notifications.accountDeactivated"));
+    } catch (error: any) {
+      console.error("Update status failed:", error);
+      const errorMessage = error.response?.data?.userMessage || t("notifications.updateStatusError");
+      toast.error(errorMessage);
+
+      // Revert on failure
+      actions.refresh();
+    } finally {
+      setTogglingId(null);
+    }
+  };
+
+  // Handle Batch Status Update
+  const handleBatchStatusUpdate = async (selectedAccounts: StaffAccount[], newStatus: "ACTIVE" | "INACTIVE") => {
+    try {
+      const newStatusId = newStatus === "ACTIVE" ? 1 : 2;
+
+      // Optimistic Update for all selected items
+      selectedAccounts.forEach(account => {
+        actions.updateAccountLocally({
+          ...account,
+          accountStatus: newStatusId,
+          accountStatusName: newStatus
+        });
+      });
+
+      // API Calls
+      const promises = selectedAccounts.map(account =>
+        staffAccountService.updateAccountStatus(account.accountId, newStatus)
+      );
+
+      await Promise.all(promises);
+
+      const count = selectedAccounts.length;
+      const messageKey = newStatus === "ACTIVE" ? "notifications.batchActivateSuccess" : "notifications.batchDeactivateSuccess";
+      toast.success(t(messageKey, { count }));
+
+    } catch (error: any) {
+      console.error("Batch update failed:", error);
+      toast.error(t("notifications.batchUpdateError"));
+      actions.refresh(); // Revert on error
+    }
+  };
+
   // Data Change Handler (Pagination)
   const handleDataChange = useCallback((params: { page?: number; pageSize?: number }) => {
     if (params.page !== undefined && params.page !== pagination.pageIndex) {
@@ -105,16 +172,16 @@ const AccountListContent = () => {
     }
   }, [pagination.pageIndex, pagination.pageSize, actions]);
 
-  // Status Badge Render
+  // Status Badge Render (Legacy/Locked)
   const renderStatusBadge = (status: number, statusName: string) => {
     const statusConfig: Record<number, { bg: string; text: string; border: string }> = {
       1: { bg: 'bg-green-50', text: 'text-green-700', border: 'border-green-200' }, // ACTIVE
       2: { bg: 'bg-gray-50', text: 'text-gray-700', border: 'border-gray-200' },    // INACTIVE
       3: { bg: 'bg-red-50', text: 'text-red-700', border: 'border-red-200' },       // LOCKED
     };
-    
+
     const config = statusConfig[status] || statusConfig[2];
-    
+
     return (
       <span className={`${config.bg} ${config.text} px-2 py-1 rounded text-xs font-medium border ${config.border}`}>
         {statusName}
@@ -168,15 +235,31 @@ const AccountListContent = () => {
       field: 'accountStatusName',
       header: t('table.status'),
       align: 'center',
-      width: '110px',
+      width: '140px',
       sortable: false,
-      cellRender: ({ value, item }) => renderStatusBadge(item.accountStatus, value),
+      cellRender: ({ value, item }) => {
+        // 1 = ACTIVE, 2 = INACTIVE, 3 = LOCKED
+        if (item.accountStatus === 3) {
+          return renderStatusBadge(item.accountStatus, value);
+        }
+
+        return (
+          <div className="flex justify-center">
+            <Switch
+              checked={item.accountStatus === 1}
+              onChange={(checked) => handleStatusToggle(item, checked)}
+              disabled={togglingId === item.accountId}
+              showLabel={false}
+            />
+          </div>
+        );
+      },
     },
-  ], [pagination.pageIndex, pagination.pageSize, t]);
+  ], [pagination.pageIndex, pagination.pageSize, t, togglingId]);
 
   const handleGlobalRenderCell = useCallback((field: string, value: any, item: StaffAccount, column: TableColumn, rowIndex: number) => {
-    const content = column.cellRender 
-      ? column.cellRender({ value, item, column, rowIndex }) 
+    const content = column.cellRender
+      ? column.cellRender({ value, item, column, rowIndex })
       : value;
 
     if (column.align) {
@@ -192,7 +275,7 @@ const AccountListContent = () => {
   return (
     <div className="w-full h-full flex flex-col  overflow-hidden">
       <div className="shrink-0 p-6 pb-2 md:pb-4 bg-white shadow-sm rounded-lg bg-gray-50/50">
-        <AccountHeader 
+        <AccountHeader
           searchTerm={filters.searchTerm}
           isLoading={isLoading}
           onSearchChange={actions.onSearchChange}
@@ -206,7 +289,7 @@ const AccountListContent = () => {
           onStatusChange={actions.onStatusChange}
         />
       </div>
-      
+
       <div className="flex-1">
         <BaseTable<StaffAccount>
           // Data & Loading
@@ -221,18 +304,32 @@ const AccountListContent = () => {
 
           // Render Action Component
           renderActionColumn={(item) => (
-            <AccountActions 
+            <AccountActions
               account={item}
               onView={handleView}
               onEdit={handleEdit}
               onResetPassword={handleResetPasswordClick}
             />
           )}
+          batchActions={[
+            {
+              label: t('batchActions.activate'),
+              icon: 'check',
+              variant: 'success',
+              action: (items) => handleBatchStatusUpdate(items, "ACTIVE"),
+            },
+            {
+              label: t('batchActions.deactivate'),
+              icon: 'close',
+              variant: 'danger',
+              action: (items) => handleBatchStatusUpdate(items, "INACTIVE"),
+            },
+          ]}
         />
       </div>
 
       <div className="flex-shrink-0 px-6 py-4 md:px-8 border-t bg-white">
-        <Pagination 
+        <Pagination
           current={pagination.pageIndex}
           pageSize={pagination.pageSize}
           total={pagination.totalCount}

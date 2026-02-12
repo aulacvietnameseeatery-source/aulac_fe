@@ -547,7 +547,17 @@
       },
       "notifications": {
         "resetPasswordSuccess": "Đặt lại mật khẩu thành công",
-        "resetPasswordError": "Có lỗi xảy ra khi đặt lại mật khẩu"
+        "resetPasswordError": "Có lỗi xảy ra khi đặt lại mật khẩu",
+        "accountActivated": "Tài khoản đã được kích hoạt",
+        "accountDeactivated": "Tài khoản đã bị vô hiệu hóa",
+        "updateStatusError": "Cập nhật trạng thái thất bại",
+        "batchActivateSuccess": "Đã kích hoạt {count} tài khoản thành công",
+        "batchDeactivateSuccess": "Đã vô hiệu hóa {count} tài khoản thành công",
+        "batchUpdateError": "Có lỗi xảy ra khi cập nhật trạng thái hàng loạt"
+      },
+      "batchActions": {
+        "activate": "Kích hoạt",
+        "deactivate": "Vô hiệu hóa"
       }
     },
     "Detail": {
@@ -727,16 +737,13 @@
       "unselect": "Bỏ chọn",
       "clearFilter": "Bỏ lọc",
       "refresh": "Lấy lại dữ liệu",
-
       "pin": "Ghim cột",
       "unpin": "Bỏ ghim cột",
-
       "sort": {
         "none": "Không sắp xếp",
         "asc": "Tăng dần",
         "desc": "Giảm dần"
       },
-
       "operator": {
         "contains": "Chứa",
         "notContains": "Không chứa",
