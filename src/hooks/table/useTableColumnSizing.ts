@@ -31,10 +31,11 @@ export const useTableColumnSizing = ({ getInitialWidth }: UseTableColumnSizingPa
      * Create by: DatND (15/1/2026)
      */
     const handleMouseMove = useCallback((event: MouseEvent) => {
-        if (!resizingStateRef.current) return;
-        const delta = event.clientX - resizingStateRef.current.startX;
-        const nextWidth = Math.max(10, resizingStateRef.current.startWidth + delta);
-        setColumnWidths(prev => ({ ...prev, [resizingStateRef.current!.field]: nextWidth }));
+        const resizingState = resizingStateRef.current;
+        if (!resizingState) return;
+        const delta = event.clientX - resizingState.startX;
+        const nextWidth = Math.max(10, resizingState.startWidth + delta);
+        setColumnWidths(prev => ({ ...prev, [resizingState.field]: nextWidth }));
     }, []);
 
     const stopResize = useCallback(() => {

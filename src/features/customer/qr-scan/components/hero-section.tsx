@@ -9,6 +9,8 @@ export function HeroSection() {
     return (
         <div className="relative h-[400px] w-full lg:h-full lg:min-h-[600px] overflow-hidden">
             <Image
+                width={1920}
+                height={1080}
                 src="/images/qr-scan/hero-section/Diner.png"
                 alt="Atmosphere"
                 fill
@@ -19,7 +21,7 @@ export function HeroSection() {
 
             <div className="absolute bottom-16 left-12 right-12 flex flex-col gap-4">
                 <span className="inline-block font-sans text-[11px] font-bold uppercase tracking-[4px] text-[#C5A059]">
-                  {t("label")}
+                    {t("label")}
                 </span>
                 <blockquote className="font-display text-[28px] font-normal italic leading-[40px] text-white/90 lg:text-[32px]">
                     {t("quote")}

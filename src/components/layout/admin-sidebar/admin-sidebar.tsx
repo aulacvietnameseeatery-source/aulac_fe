@@ -18,7 +18,8 @@ import {
   Tags,
   Package,
   LogOut,
-  X
+  X,
+  FolderOpen
 } from "lucide-react";
 import { useAuth } from "@/components/providers/auth-provider";
 import { useLogout } from "@/features/customer/auth/login/hooks";
@@ -31,6 +32,7 @@ const navItems = [
   { name: "Staff", href: "/dashboard/staff", icon: Users },
   { name: "Roles", href: "/dashboard/roles", icon: UserCog },
   { name: "Dish", href: "/dashboard/dish", icon: UtensilsCrossed },
+  { name: "Dish Category", href: "/dashboard/dish-category", icon: FolderOpen },
   { name: "Ingredient", href: "/dashboard/ingredient", icon: Package },
   { name: "Orders", href: "/dashboard/orders", icon: ShoppingBag },
   { name: "Reports", href: "/dashboard/reports", icon: FileText },
@@ -53,10 +55,14 @@ export function AdminSidebar({ onClose }: AdminSidebarProps) {
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
   const isActive = (href: string) => {
+    // Remove locale prefix from pathname for comparison
+    const pathWithoutLocale = pathname?.replace(/^\/(en|fr)/, '') || pathname;
+    
     if (href === "/dashboard") {
-      return pathname === "/dashboard" || pathname === "/en/dashboard" || pathname === "/fr/dashboard";
+      return pathWithoutLocale === "/dashboard";
     }
-    return pathname?.includes(href);
+    // Exact match for the path or match with trailing slash or query params
+    return pathWithoutLocale === href || pathWithoutLocale?.startsWith(href + "/") || pathWithoutLocale?.startsWith(href + "?");
   };
 
   const handleLogoutClick = () => {

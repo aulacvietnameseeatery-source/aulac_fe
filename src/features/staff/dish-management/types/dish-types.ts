@@ -1,0 +1,37 @@
+// features/admin/dish-management/dish-list/types/dish.types.ts
+
+export enum DishStatusCode {
+    AVAILABLE = 42,
+    OUT_OF_STOCK = 43,
+    HIDDEN = 44
+}
+
+export interface GetDishesParams {
+    pageIndex: number;
+    pageSize: number;
+    search?: string;
+    category?: string;
+    status?: DishStatusCode | string; // Chấp nhận cả Enum hoặc "All"
+    sortBy?: string;
+    isDescending?: boolean;
+}
+
+export interface DishManagementDto {
+    dishId: number;
+    dishName: string;
+    categoryName: string;
+    price: number;
+    status: string; // "AVAILABLE", "OUT_OF_STOCK", v.v.
+    isOnline: boolean;
+    createdAt: string;
+}
+
+export interface GetDishesRequest {
+    pageIndex: number;
+    pageSize: number;
+    sortBy?: string;
+    isDescending?: boolean;
+    category?: string;
+    status?: DishStatusCode;
+    isCustomerView?: boolean;
+}

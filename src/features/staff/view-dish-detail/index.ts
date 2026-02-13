@@ -1,0 +1,1 @@
+export { DishDetailPage } from "./components/dish-detail-page";

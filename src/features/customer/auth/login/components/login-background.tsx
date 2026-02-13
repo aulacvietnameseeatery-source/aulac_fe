@@ -1,17 +1,21 @@
 "use client";
 
+import Image from "next/image";
+
 export function LoginBackground() {
   return (
     <>
       {/* Background layer */}
       <div className="absolute inset-0">
-        <img
+        <Image
           src="/images/authen/auth-login-background/login-background.png"
           alt="Cozy background"
+          width={1920}
+          height={1080}
           className="absolute inset-0 h-full w-full object-cover opacity-30 blur-[2px]"
         />
         <div className="absolute inset-0 mix-blend-multiply bg-orange-50/90" />
-        <div className="absolute inset-0 bg-gradient-to-b from-white/20 to-red-300/10" />
+        <div className="absolute inset-0 bg-linear-to-b from-white/20 to-red-300/10" />
       </div>
 
       {/* Decorative blur blobs */}
