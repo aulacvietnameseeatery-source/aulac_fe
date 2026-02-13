@@ -586,5 +586,60 @@
         "last": "Trang cuối"
       }
     }
+  },
+  "StaffReservation": {
+    "title": "Tạo đặt bàn thủ công",
+    "subtitle": "Nhập thông tin cho khách walk-in hoặc đặt qua điện thoại",
+    "cancel": "Hủy",
+    "save": "Lưu đặt bàn",
+    "errors": {
+      "missingTitle": "Thiếu thông tin",
+      "missingDescription": "Vui lòng điền SĐT, Tên, Ngày, Giờ và chọn Bàn.",
+      "timeErrorTitle": "Lỗi thời gian",
+      "timePast": "Không thể chọn thời gian trong quá khứ.",
+      "failTitle": "Đặt bàn thất bại",
+      "systemError": "Lỗi hệ thống, vui lòng thử lại."
+    },
+    "success": {
+      "title": "Đặt bàn thành công!",
+      "description": "Khách: {name} - Mã đặt bàn #{id}"
+    },
+
+    "customer": {
+      "sectionTitle": "Thông tin khách hàng",
+      "phone": "Số điện thoại",
+      "fullName": "Họ và tên",
+      "email": "Email",
+      "enterPhone": "Nhập số điện thoại...",
+      "enterName": "Tên khách hàng",
+      "newCustomer": "Khách mới",
+      "member": "Thành viên ({points} điểm)"
+    },
+
+    "booking": {
+      "sectionTitle": "Chi tiết đặt bàn",
+      "date": "Ngày",
+      "time": "Giờ",
+      "partySize": "Số khách",
+      "enterSize": "VD: 4"
+    },
+
+    "table": {
+      "availability": "Bàn khả dụng",
+      "scanning": "Đang kiểm tra...",
+      "found": "Tìm thấy {count} bàn",
+      "emptyHint": "Nhập ngày, giờ và số khách để tìm bàn.",
+      "noTable": "Không có bàn phù hợp."
+    },
+
+    "status": {
+      "source": "Nguồn đặt bàn",
+      "phone": "Qua điện thoại",
+      "walkIn": "Khách trực tiếp",
+      "status": "Trạng thái",
+      "confirmed": "Đã xác nhận",
+      "checkedIn": "Đã nhận bàn",
+      "phoneHint": "*Đặt qua điện thoại mặc định là 'Đã xác nhận'."
+    }
   }
 }

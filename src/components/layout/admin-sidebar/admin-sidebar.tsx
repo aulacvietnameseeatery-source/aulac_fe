@@ -36,6 +36,7 @@ const navItems = [
   { name: "Reports", href: "/dashboard/reports", icon: FileText },
   { name: "Emails", href: "/dashboard/emails", icon: Mail },
   { name: "Customers", href: "/dashboard/customers", icon: Users },
+  { name: "Reservations", href: "/dashboard/reservations", icon: Users },
   { name: "Promotions", href: "/dashboard/promotions", icon: Tags },
   { name: "Settings", href: "/dashboard/settings", icon: Settings },
 ];
