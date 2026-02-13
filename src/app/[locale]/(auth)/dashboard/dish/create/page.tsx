@@ -1,6 +1,6 @@
 "use client";
 
-import { DishForm } from "@/features/auth/create-edit-dish";
+import { DishForm } from "@/features/staff/create-edit-dish";
 import { useRouter } from "next/navigation";
 
 

@@ -1,6 +1,6 @@
 "use client";
 
-import {DishDetailPage} from "@/features/auth/view-dish-detail";
+import {DishDetailPage} from "@/features/staff/view-dish-detail";
 import { useParams, useRouter } from "next/navigation";
 
 

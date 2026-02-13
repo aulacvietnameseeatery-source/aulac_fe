@@ -17,6 +17,10 @@ export async function createDish(
     JSON.stringify({
     ...data,
     price: Number(data.price),
+    dietId:
+      data.dietId === "" || data.dietId == null
+        ? null
+        : Number(data.dietId),
     calories:
       data.calories === "" || data.calories == null
         ? null
@@ -95,6 +99,10 @@ export async function editDish(
     ...data,
     dishId: dishId,
     price: Number(data.price),
+    dietId:
+      data.dietId === "" || data.dietId == null
+        ? null
+        : Number(data.dietId),
     calories:
       data.calories === "" || data.calories == null
         ? null

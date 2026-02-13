@@ -64,7 +64,7 @@ export const CoreInfoSection: React.FC<{
             Special Diet <span className="text-gray-400 font-normal text-xs">(Optional)</span>
           </label>
           <select 
-            {...register("dietId", { valueAsNumber: true })}
+            {...register("dietId")}
             className="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm focus:border-blue-500 outline-non"
           >
             <option value="">None</option>

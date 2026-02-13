@@ -113,7 +113,7 @@ export function DishForm({ mode, dishId, onSuccess }: DishFormProps) {
 
   /* ---------------------- Submit ---------------------- */
   const onSubmit = async () => {
-    console.log(removedMediaIds)
+    console.log(form.getValues())
     const valid = await form.trigger();
     if (!valid) return;
     const imagesState: DishImagesState = {
@@ -195,7 +195,7 @@ export function DishForm({ mode, dishId, onSuccess }: DishFormProps) {
 
       {/* Sticky Footer */}
 
-      <div className="sticky bottom-0 z-20 -mx-8 px-12 bg-white border-t border-gray-200 py-4 shadow-[0_-4px_10px_rgba(0,0,0,0.05)]">
+      <div className="sticky bottom-0 z-20 px-6 bg-white border-t border-gray-200 py-4 shadow-[0_-4px_10px_rgba(0,0,0,0.05)]">
         <div className="flex items-center justify-between w-full px-6">
             <div className="text-sm text-gray-500 hidden sm:block"></div>
             <div className="flex items-center gap-3 ml-auto">

@@ -15,10 +15,9 @@ export function useCreateDish() {
     try {
       setLoading(true);
       await createDish(data, images);
-      toast.success("Dish created successfully");
 
     } catch {
-      toast.error("Create dish failed");
+
     } finally {
       setLoading(false);
     }

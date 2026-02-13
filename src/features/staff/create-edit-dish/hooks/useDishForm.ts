@@ -12,6 +12,7 @@ export function useDishForm() {
       i18n: { en: {}, vi: {}, fr: {} },
       dishStatusLvId: 1,
       price: 0,
+      dietId: "",
       isOnline: false,
       chefRecommended: false,
       displayOrder: 0,
