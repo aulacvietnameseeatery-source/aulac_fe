@@ -28,10 +28,21 @@ export const useLogin = () => {
   return useMutation({
     mutationFn: (credentials: LoginRequest) => authService.login(credentials),
     onSuccess: (response) => {
+      // Check for password change requirement
+      if (response.subCode === 1 && response.systemMessage === 'PASSWORD_CHANGE_REQUIRED') {
+        // Store temporary token for password change
+        if (typeof window !== 'undefined') {
+          sessionStorage.setItem('tempToken', response.data.accessToken);
+        }
+        // Redirect to password change page
+        router.push('/change-password');
+        return;
+      }
+
       // Check if login was successful
       if (response.success && response.data) {
-        // Save tokens using AuthProvider (automatically handles localStorage)
-        setAuthTokens(response.data.accessToken, response.data.refreshToken);
+        // Save access token (refresh token in HttpOnly cookie)
+        setAuthTokens(response.data.accessToken);
 
         // Redirect to dashboard
         router.push("/dashboard");
