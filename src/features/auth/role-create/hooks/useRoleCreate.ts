@@ -12,14 +12,11 @@ export const useRoleCreate = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   
   // Form state
-  const [roleCode, setRoleCode] = useState("");
   const [roleName, setRoleName] = useState("");
-  const [isActive, setIsActive] = useState(true);
   const [selectedPermissions, setSelectedPermissions] = useState<Set<number>>(new Set());
 
   // Validation errors
   const [errors, setErrors] = useState<{
-    roleCode?: string;
     roleName?: string;
   }>({});
 
@@ -108,12 +105,6 @@ export const useRoleCreate = () => {
   const validate = (): boolean => {
     const newErrors: typeof errors = {};
     
-    if (!roleCode.trim()) {
-      newErrors.roleCode = "Role code is required";
-    } else if (roleCode.length > 50) {
-      newErrors.roleCode = "Role code must not exceed 50 characters";
-    }
-    
     if (!roleName.trim()) {
       newErrors.roleName = "Role name is required";
     } else if (roleName.length > 100) {
@@ -126,9 +117,7 @@ export const useRoleCreate = () => {
 
   // Reset form
   const resetForm = () => {
-    setRoleCode("");
     setRoleName("");
-    setIsActive(true);
     setSelectedPermissions(new Set());
     setErrors({});
   };
@@ -140,9 +129,7 @@ export const useRoleCreate = () => {
     }
 
     const request: CreateRoleRequest = {
-      roleCode: roleCode.trim(),
       roleName: roleName.trim(),
-      isActive,
       permissionIds: Array.from(selectedPermissions)
     };
 
@@ -166,12 +153,8 @@ export const useRoleCreate = () => {
 
   return {
     // Form fields
-    roleCode,
-    setRoleCode,
     roleName,
     setRoleName,
-    isActive,
-    setIsActive,
     
     // Permissions
     permissionGroups: updatedPermissionGroups,

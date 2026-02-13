@@ -53,7 +53,7 @@ export const EditablePermissionsSection = ({
       </div>
 
       {/* Permission Groups Grid */}
-      <div className="border border-gray-200 rounded-lg p-6">
+      <div className="border border-gray-200 rounded-lg p-6 max-h-[calc(100vh-350px)] overflow-auto">
         {isLoadingPermissions ? (
           <div className="flex items-center justify-center py-12">
             <Loader2 className="w-8 h-8 text-gray-400 animate-spin" />
