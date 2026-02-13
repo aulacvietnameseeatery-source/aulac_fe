@@ -3,7 +3,7 @@
 
 import React from 'react';
 import { useTranslations } from 'next-intl';
-import { Loader2 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 type Props = {
   isSubmitting: boolean;
@@ -20,23 +20,26 @@ export const RoleEditHeader = ({ isSubmitting, onCancel, onSubmit }: Props) => {
       
       {/* Action Buttons */}
       <div className="flex gap-4">
-        <button
+        <Button
           onClick={onCancel}
           type="button"
+          variant="outline"
+          size="lg"
           disabled={isSubmitting}
-          className="px-6 py-3 border border-gray-300 rounded-lg text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="border-gray-300 text-gray-700 hover:bg-gray-50"
         >
           {t('cancel')}
-        </button>
-        <button
+        </Button>
+        <Button
           onClick={onSubmit}
           type="button"
+          size="lg"
+          isLoading={isSubmitting}
           disabled={isSubmitting}
-          className="px-6 py-3 bg-[#1e3a2f] text-white rounded-lg text-sm font-semibold hover:bg-[#2d5547] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+          className="bg-blue-600 text-white hover:bg-blue-700"
         >
-          {isSubmitting && <Loader2 className="w-4 h-4 animate-spin" />}
           {t('save')}
-        </button>
+        </Button>
       </div>
     </div>
   );

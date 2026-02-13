@@ -17,7 +17,6 @@ const RoleEditContent = () => {
   
   const {
     roleCode,
-    setRoleCode,
     roleName,
     setRoleName,
     isActive,
@@ -60,7 +59,6 @@ const RoleEditContent = () => {
         errors={errors}
         totalSelected={totalSelected}
         totalPermissions={totalPermissions}
-        onRoleCodeChange={setRoleCode}
         onRoleNameChange={setRoleName}
         onIsActiveChange={setIsActive}
         onTogglePermission={handleTogglePermission}

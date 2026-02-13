@@ -16,12 +16,10 @@ type Props = {
   allPermissionsSelected: boolean;
   isSubmitting: boolean;
   errors: {
-    roleCode?: string;
     roleName?: string;
   };
   totalSelected: number;
   totalPermissions: number;
-  onRoleCodeChange: (value: string) => void;
   onRoleNameChange: (value: string) => void;
   onIsActiveChange: (value: boolean) => void;
   onTogglePermission: (permissionId: number) => void;
@@ -41,7 +39,6 @@ export const RoleEditForm = ({
   errors,
   totalSelected,
   totalPermissions,
-  onRoleCodeChange,
   onRoleNameChange,
   onIsActiveChange,
   onTogglePermission,
@@ -59,11 +56,9 @@ export const RoleEditForm = ({
       />
       
       <RoleFormInputs
-        roleCode={roleCode}
         roleName={roleName}
         errors={errors}
         isSubmitting={isSubmitting}
-        onRoleCodeChange={onRoleCodeChange}
         onRoleNameChange={onRoleNameChange}
       />
       
