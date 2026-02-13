@@ -762,5 +762,69 @@
         "last": "Last page"
       }
     }
+  },
+  "Dish": {
+    "List": {
+      "title": "Dish Management",
+      "description": "Manage your menu items, pricing, categories and availability status.",
+      "searchPlaceholder": "Search by dish name, category...",
+      "addNew": "Add New Dish",
+      "table": {
+        "no": "No.",
+        "dishName": "Dish Name",
+        "category": "Category",
+        "price": "Price",
+        "status": "Status",
+        "online": "Online",
+        "action": "Action",
+        "empty": "No dishes found."
+      },
+      "pagination": {
+        "pageSize": "Page size:",
+        "previous": "Previous",
+        "next": "Next"
+      },
+      "actions": {
+        "view": "View Details",
+        "edit": "Edit Dish",
+        "delete": "Delete Dish"
+      },
+      "status": {
+        "available": "Available",
+        "outOfStock": "Out of Stock",
+        "hidden": "Hidden"
+      },
+      "loading": "Loading dish data...",
+      "filters": {
+        "category": "Category",
+        "status": "Status",
+        "allCategories": "All Categories",
+        "allStatuses": "All Statuses"
+      },
+      "deleteModal": {
+        "title": "Delete Dish",
+        "message": "Are you sure you want to delete \"{name}\"? This action cannot be undone.",
+        "confirm": "Delete",
+        "cancel": "Cancel"
+      },
+      "notifications": {
+        "deleteSuccess": "Dish deleted successfully",
+        "deleteError": "An error occurred while deleting the dish"
+      }
+    },
+    "Validation": {
+      "dishName": {
+        "required": "Dish name is required",
+        "minLength": "Dish name must be at least 2 characters",
+        "maxLength": "Dish name cannot exceed 150 characters"
+      },
+      "price": {
+        "required": "Price is required",
+        "min": "Price must be greater than or equal to 0"
+      },
+      "category": {
+        "required": "Category is required"
+      }
+    }
   }
 }

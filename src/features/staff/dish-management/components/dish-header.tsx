@@ -1,4 +1,3 @@
-// features/admin/dish-management/dish-list/components/DishHeader.tsx
 "use client";
 
 import React from "react";
@@ -8,20 +7,27 @@ import { KeywordSearch } from "@/components/ui/keyword-search/keyword-search";
 import { PermissionGuard } from '@/components/permission-guard';
 import { Permissions } from '@/types/const';
 import { Button } from "@/components/ui/button";
-import { DishStatusCode } from "../types/dish-types";
+// import { DishStatusCode } from "../types/dish-types"; // Không cần import Enum nữa
+import { DishStatusOption } from "../services/dish-service";
 
 interface DishHeaderProps {
     searchTerm: string;
     isLoading: boolean;
     onSearchChange: (value: string) => void;
     onCreateClick: () => void;
-    // Filters
+
+    // Filter Values
     category?: string;
-    status?: DishStatusCode | "All";
-    categories: string[]; // Danh sách tên category từ API hoặc config
+    status?: number | "All"; // Dùng number vì ID backend trả về là 42, 43...
+
+    // Filter Options Sources
+    categories: string[];
+    statuses: DishStatusOption[]; // Thêm prop này
     isLoadingFilters: boolean;
+
+    // Handlers
     onCategoryChange: (category: string) => void;
-    onStatusChange: (status: DishStatusCode | "All") => void;
+    onStatusChange: (status: number | "All") => void;
 }
 
 export const DishHeader = ({
@@ -32,6 +38,7 @@ export const DishHeader = ({
                                category,
                                status,
                                categories,
+                               statuses, // Nhận prop mới
                                isLoadingFilters,
                                onCategoryChange,
                                onStatusChange,
@@ -40,7 +47,6 @@ export const DishHeader = ({
 
     return (
         <div className="flex flex-col gap-6 mb-2 w-full">
-            {/* 1. Phần tiêu đề */}
             <div>
                 <h1 className="text-3xl font-bold text-gray-900 tracking-tight">
                     {t("title")}
@@ -50,10 +56,9 @@ export const DishHeader = ({
                 </p>
             </div>
 
-            {/* 2. Thanh công cụ (Search + Filters + Add Button) */}
             <div className="flex flex-col lg:flex-row items-stretch lg:items-center gap-3 w-full">
                 <div className="flex flex-col lg:flex-row items-stretch lg:items-center gap-3 flex-1">
-                    {/* Ô tìm kiếm */}
+                    {/* Search */}
                     <div className="w-full lg:w-[420px]">
                         <KeywordSearch
                             value={searchTerm}
@@ -63,7 +68,7 @@ export const DishHeader = ({
                         />
                     </div>
 
-                    {/* Bộ lọc Danh mục */}
+                    {/* Category Filter */}
                     <div className="w-full lg:w-48">
                         <div className="relative">
                             <select
@@ -81,7 +86,7 @@ export const DishHeader = ({
                         </div>
                     </div>
 
-                    {/* Bộ lọc Trạng thái (Dùng DishStatusCode 42, 43, 44) */}
+                    {/* Status Filter (Dynamic) */}
                     <div className="w-full lg:w-48">
                         <div className="relative">
                             <select
@@ -91,16 +96,18 @@ export const DishHeader = ({
                                 className="w-full px-3 py-2 border border-gray-200 rounded-lg appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white shadow-sm disabled:opacity-50 text-sm"
                             >
                                 <option value="All">{t("filters.allStatuses")}</option>
-                                <option value={DishStatusCode.AVAILABLE}>{t("status.available")}</option>
-                                <option value={DishStatusCode.OUT_OF_STOCK}>{t("status.outOfStock")}</option>
-                                <option value={DishStatusCode.HIDDEN}>{t("status.hidden")}</option>
+                                {statuses.map((s) => (
+                                    <option key={s.statusId} value={s.statusId}>
+                                        {/* Hiển thị tên từ Backend, hoặc có thể dùng t() nếu muốn map key */}
+                                        {s.statusName}
+                                    </option>
+                                ))}
                             </select>
                             <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
                         </div>
                     </div>
                 </div>
 
-                {/* Nút thêm món mới */}
                 <PermissionGuard permission={Permissions.CreateDish}>
                     <Button
                         onClick={onCreateClick}

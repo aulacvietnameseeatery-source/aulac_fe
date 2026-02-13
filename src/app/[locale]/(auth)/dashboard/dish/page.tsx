@@ -4,109 +4,128 @@ import React, { Suspense, useCallback, useMemo, useState } from "react";
 import { Loader2 } from "lucide-react";
 import { BaseTable } from "@/components/ui/table/base-table";
 import { TableColumn } from "@/types/table.types";
+import { toast } from "sonner";
 import { useTranslations } from "next-intl";
-import { Pagination } from "@/components/ui/pagination";
+import { ConfirmModal } from "@/components/layout/admin-sidebar/confirm-modal";
 import { ProtectedRoute } from '@/components/protected-route';
 import { Permissions } from '@/types/const';
-import { toast } from "sonner";
+import { Pagination } from "@/components/ui/pagination";
 
-// --- Dish Feature Imports ---
-import { DishManagementDto, DishStatusCode } from "@/features/staff/dish-management/types/dish-types";
+// Dish Feature Imports
+import { Badge } from "@/components/ui/badge";
 import { useDishList } from "@/features/staff/dish-management/hooks/use-dish-list";
-import { ConfirmModal } from "@/components/layout/admin-sidebar/confirm-modal";
-import {DishHeader} from "@/features/staff/dish-management/components/dish-header";
-import {DishActions} from "@/features/staff/dish-management/components/dish-actions";
-
-// (Giả sử bạn sẽ tạo các file này sau để xử lý Detail/Create)
-// import { DishDialog } from "@/features/staff/dish-management/components/DishDialog";
+import { DishManagementDto, DishStatusCode } from "@/features/staff/dish-management/types/dish-types";
+import { DishHeader } from "@/features/staff/dish-management/components/dish-header";
+import { DishActions } from "@/features/staff/dish-management/components/dish-actions";
 
 const DishListContent = () => {
     const t = useTranslations("Dish.List");
 
-    // 1. Logic Hook - Lấy toàn bộ data và hành động từ useDishList
-    const { dishes, isLoading, pagination, filters, actions } = useDishList();
+    // Logic Hook cho Dish - Lấy cả filterOptions từ hook
+    const { dishes, isLoading, pagination, filters, filterOptions, actions } = useDishList();
 
-    // 2. State cho Dialog (Create/Edit/View)
-    const [dialogState, setDialogState] = useState<{
-        open: boolean;
-        mode: "view" | "edit" | "create";
-        dishId: number | null;
-    }>({
+    // ---- Dish Dialog state ----
+    const [dialogState, setDialogState] = useState({
         open: false,
-        mode: "view",
-        dishId: null,
+        mode: "view" as "view" | "edit" | "create",
+        dishId: null as number | null,
     });
 
-    // 3. State cho Modal Xóa
+    const openDialog = (mode: "view" | "edit" | "create", dishId: number | null = null) => {
+        setDialogState({ open: true, mode, dishId });
+    };
+
+    const closeDialog = () => {
+        setDialogState({ open: false, mode: "view", dishId: null });
+    };
+
+    // State cho Modal Xóa
     const [deleteModal, setDeleteModal] = useState({
         open: false,
         dish: null as DishManagementDto | null,
-        loading: false
+        isLoading: false,
     });
 
-    // --- Action Handlers ---
-    const handleView = (dish: DishManagementDto) =>
-        setDialogState({ open: true, mode: "view", dishId: dish.dishId });
+    // Action Handlers
+    const handleView = (dish: DishManagementDto) => openDialog("view", dish.dishId);
+    const handleEdit = (dish: DishManagementDto) => openDialog("edit", dish.dishId);
+    const handleCreate = () => openDialog("create");
 
-    const handleEdit = (dish: DishManagementDto) =>
-        setDialogState({ open: true, mode: "edit", dishId: dish.dishId });
-
-    const handleCreate = () =>
-        setDialogState({ open: true, mode: "create", dishId: null });
-
-    const handleDeleteClick = (dish: DishManagementDto) =>
-        setDeleteModal({ open: true, dish, loading: false });
+    const handleDeleteClick = (dish: DishManagementDto) => {
+        setDeleteModal({ open: true, dish, isLoading: false });
+    };
 
     const handleConfirmDelete = async () => {
         if (!deleteModal.dish) return;
-        setDeleteModal(prev => ({ ...prev, loading: true }));
+        setDeleteModal(prev => ({ ...prev, isLoading: true }));
         try {
             // await dishService.deleteDish(deleteModal.dish.dishId);
             toast.success(t("notifications.deleteSuccess"));
             actions.refresh();
-            setDeleteModal({ open: false, dish: null, loading: false });
+            setDeleteModal({ open: false, dish: null, isLoading: false });
         } catch (error: any) {
             toast.error(error.message || t("notifications.deleteError"));
-            setDeleteModal(prev => ({ ...prev, loading: false }));
+            setDeleteModal(prev => ({ ...prev, isLoading: false }));
         }
     };
 
-    // --- Status Badge Render (Dựa trên ID 42, 43, 44) ---
+    const handlePaginationChange = useCallback((page: number, pageSize: number) => {
+        if (page !== pagination.pageIndex) actions.onPageChange(page);
+        if (pageSize !== pagination.pageSize) actions.onPageSizeChange(pageSize);
+    }, [pagination.pageIndex, pagination.pageSize, actions]);
+
+    // Status Badge Render sử dụng component UI Badge mới cập nhật
     const renderStatusBadge = (statusId: number, statusName: string) => {
-        const statusConfig: Record<number, { bg: string; text: string; border: string }> = {
-            [DishStatusCode.AVAILABLE]: { bg: 'bg-green-50', text: 'text-green-700', border: 'border-green-200' },
-            [DishStatusCode.OUT_OF_STOCK]: { bg: 'bg-orange-50', text: 'text-orange-700', border: 'border-orange-200' },
-            [DishStatusCode.HIDDEN]: { bg: 'bg-gray-50', text: 'text-gray-700', border: 'border-gray-200' },
-        };
+        // Map ID sang Variant của Badge
+        let variant: "default" | "secondary" | "destructive" | "outline" | "success" | "warning" | "info" = "outline";
 
-        const config = statusConfig[statusId] || statusConfig[DishStatusCode.HIDDEN];
+        switch (statusId) {
+            case 42: // AVAILABLE (Map cứng ID từ DB hoặc dùng Enum nếu có)
+                variant = "success";
+                break;
+            case 43: // OUT_OF_STOCK
+                variant = "warning";
+                break;
+            case 44: // HIDDEN
+                variant = "secondary";
+                break;
+            default:
+                variant = "outline";
+        }
 
-        return (
-            <span className={`${config.bg} ${config.text} px-2 py-1 rounded text-xs font-medium border ${config.border}`}>
-                {statusName || "N/A"}
-            </span>
-        );
+        return <Badge variant={variant} className="font-bold">{statusName}</Badge>;
     };
 
-    // --- Cấu hình cột hiển thị ---
+    // Table Columns Config
     const columns: TableColumn[] = useMemo(() => [
         {
-            field: 'id',
+            field: 'no',
             header: t('table.no'),
             width: '70px',
             align: 'center',
-            cellRender: ({ rowIndex }) => (pagination.pageIndex - 1) * pagination.pageSize + rowIndex + 1,
+            cellRender: ({ rowIndex }) =>
+                (pagination.pageIndex - 1) * pagination.pageSize + rowIndex + 1,
         },
         {
             field: 'dishName',
             header: t('table.dishName'),
             width: '250px',
-            sortable: true,
+            cellRender: ({ value, item }) => (
+                <div className="flex flex-col">
+                    <span className="font-medium text-gray-900">{value}</span>
+                    {item.isOnline && (
+                        <span className="text-xs text-green-600 flex items-center gap-1">
+                            <span className="w-1.5 h-1.5 rounded-full bg-green-500"></span> Online
+                        </span>
+                    )}
+                </div>
+            )
         },
         {
             field: 'categoryName',
             header: t('table.category'),
             width: '150px',
+            cellRender: ({ value }) => <span className="text-gray-600">{value}</span>
         },
         {
             field: 'price',
@@ -115,58 +134,69 @@ const DishListContent = () => {
             align: 'right',
             cellRender: ({ value }) => (
                 <span className="font-bold text-blue-600">
-                    ${value?.toFixed(2)}
+                    ${typeof value === 'number' ? value.toFixed(2) : value}
                 </span>
             ),
         },
         {
-            field: 'status',
+            field: 'status', // Trường này map với 'status' (text) trong DTO
             header: t('table.status'),
             align: 'center',
             width: '130px',
+            // Sử dụng item.statusId (ID) để quyết định màu, và value (Text) để hiển thị
             cellRender: ({ value, item }) => renderStatusBadge(item.statusId, value),
-        },
-        {
-            field: 'isOnline',
-            header: t('table.online'),
-            align: 'center',
-            width: '100px',
-            cellRender: ({ value }) => (
-                <div className={`w-10 h-5 rounded-full relative transition-colors ${value ? 'bg-green-500' : 'bg-gray-300'}`}>
-                    <div className={`absolute top-1 w-3 h-3 bg-white rounded-full transition-all ${value ? 'right-1' : 'left-1'}`} />
-                </div>
-            ),
         },
     ], [pagination.pageIndex, pagination.pageSize, t]);
 
+    const handleGlobalRenderCell = useCallback((field: string, value: any, item: DishManagementDto, column: TableColumn, rowIndex: number) => {
+        const content = column.cellRender
+            ? column.cellRender({ value, item, column, rowIndex })
+            : value;
+
+        return column.align ? <div style={{ textAlign: column.align }}>{content}</div> : content;
+    }, []);
+
     return (
         <div className="w-full h-full flex flex-col overflow-hidden">
-            {/* Header Section: Search, Filters, Add Button */}
+            {/* Header: Filter & Search */}
             <div className="shrink-0 p-6 pb-4 bg-white shadow-sm rounded-lg bg-gray-50/50">
                 <DishHeader
                     searchTerm={filters.search}
                     isLoading={isLoading}
                     onSearchChange={actions.onSearchChange}
                     onCreateClick={handleCreate}
+
+                    // Filter Values
                     category={filters.category}
                     status={filters.status}
-                    // Giả sử lấy categories từ API hoặc hardcode tạm
-                    categories={["Traditional Pho", "Appetizer", "Drinks"]}
-                    isLoadingFilters={false}
+
+                    // Filter Options (Dynamic from API via Hook)
+                    categories={filterOptions.categories}
+                    statuses={filterOptions.statuses}
+                    isLoadingFilters={filterOptions.isLoading}
+
+                    // Handlers
                     onCategoryChange={actions.onCategoryChange}
                     onStatusChange={actions.onStatusChange}
                 />
             </div>
 
-            {/* Table Section */}
-            <div className="flex-1 mt-4">
+            {/* Main Table */}
+            <div className="flex-1 mt-4 overflow-hidden">
                 <BaseTable<DishManagementDto>
                     data={dishes}
                     loading={isLoading}
                     columns={columns}
                     rowKey="dishId"
-                    total={pagination.totalCount}
+                    // Truyền props pagination vào BaseTable nếu nó hỗ trợ hiển thị footer
+                    // total={pagination.totalCount}
+                    // pageIndex={pagination.pageIndex}
+                    // pageSize={pagination.pageSize}
+                    // onPageChange={actions.onPageChange}
+                    // onPageSizeChange={actions.onPageSizeChange}
+
                     onRefresh={actions.refresh}
+                    renderCell={handleGlobalRenderCell}
                     renderActionColumn={(item) => (
                         <DishActions
                             dish={item}
@@ -178,36 +208,31 @@ const DishListContent = () => {
                 />
             </div>
 
-            {/* Pagination Section */}
-            <div className="flex-shrink-0 px-6 py-4 border-t bg-white">
+            {/* Pagination Footer */}
+            <div className="flex-shrink-0 px-6 py-4 md:px-8 border-t bg-white">
                 <Pagination
                     current={pagination.pageIndex}
                     pageSize={pagination.pageSize}
                     total={pagination.totalCount}
-                    onChange={actions.onPageChange}
+                    onChange={handlePaginationChange}
                     pageSizeOptions={[10, 20, 50]}
                 />
             </div>
 
-            {/* Modal xác nhận xóa */}
+            {/* Dialogs & Modals */}
+            {/* <DishDialog ... /> */}
+
             <ConfirmModal
                 isOpen={deleteModal.open}
-                onClose={() => setDeleteModal({ open: false, dish: null, loading: false })}
+                onClose={() => setDeleteModal({ open: false, dish: null, isLoading: false })}
                 onConfirm={handleConfirmDelete}
                 title={t("deleteModal.title")}
                 message={t("deleteModal.message", { name: deleteModal.dish?.dishName ?? "" })}
+                confirmText={t("deleteModal.confirm")}
+                cancelText={t("deleteModal.cancel")}
                 variant="danger"
-                isLoading={deleteModal.loading}
+                isLoading={deleteModal.isLoading}
             />
-
-            {/* Dish Dialog (Thêm/Sửa/Xem) - Bạn sẽ tích hợp component này sau */}
-            {/* <DishDialog
-                open={dialogState.open}
-                mode={dialogState.mode}
-                dishId={dialogState.dishId}
-                onClose={() => setDialogState(prev => ({ ...prev, open: false }))}
-                onSuccess={actions.refresh}
-            /> */}
         </div>
     );
 };
@@ -215,11 +240,7 @@ const DishListContent = () => {
 export default function DishListPage() {
     return (
         <ProtectedRoute permission={Permissions.ViewDish}>
-            <Suspense fallback={
-                <div className="flex h-screen items-center justify-center">
-                    <Loader2 className="animate-spin text-gray-400" />
-                </div>
-            }>
+            <Suspense fallback={<div className="flex h-screen items-center justify-center"><Loader2 className="animate-spin text-gray-400" /></div>}>
                 <DishListContent />
             </Suspense>
         </ProtectedRoute>

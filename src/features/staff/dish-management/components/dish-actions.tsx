@@ -37,7 +37,7 @@ export const DishActions = ({
             <PermissionGuard permission={Permissions.ViewDish}>
                 <button
                     className="text-gray-400 hover:text-blue-600 transition-colors cursor-pointer p-1"
-                    title={t("actions.view")}
+                    title={t("actions.view").toString()}
                     onClick={(e) => handleAction(e, onView)}
                 >
                     <Eye size={18} />
@@ -48,7 +48,7 @@ export const DishActions = ({
             <PermissionGuard permission={Permissions.EditDish}>
                 <button
                     className="text-gray-400 hover:text-blue-600 transition-colors cursor-pointer p-1"
-                    title={t("actions.edit")}
+                    title={t("actions.view").toString()}
                     onClick={(e) => handleAction(e, onEdit)}
                 >
                     <Edit size={18} />
@@ -59,7 +59,7 @@ export const DishActions = ({
             <PermissionGuard permission={Permissions.DeleteDish}>
                 <button
                     className="text-gray-400 hover:text-red-500 transition-colors cursor-pointer p-1"
-                    title={t("actions.delete")}
+                    title={t("actions.view").toString()}
                     onClick={(e) => handleAction(e, onDelete)}
                 >
                     <Trash2 size={18} />
