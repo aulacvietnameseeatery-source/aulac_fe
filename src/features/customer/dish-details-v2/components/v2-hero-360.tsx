@@ -14,6 +14,8 @@ export function V2Hero360({ onOrderNow }: Props) {
     <section className="relative w-full bg-black overflow-hidden">
       <div className="relative h-[600px] w-full md:h-[900px] lg:h-[1153px]">
         <Image
+          width={1920}
+          height={1080}
           src="/images/dish-detail-v2/v2-hero/v2-hero.png"
           alt="Dish hero"
           fill

@@ -17,7 +17,8 @@
 }
 
 .header-container.is-default {
-    height: calc(270px + var(--safe-top, 0px));
+    padding-top: var(--padding-sm);
+    padding-bottom: var(--padding-sm)
 }
 
 .header-inner {
@@ -102,7 +103,7 @@
 }
 
 .lang-switcher-wrapper.is-scrolled {
-    @apply max-w-[100px] opacity-100 ml-4;
+    @apply max-w-[160px] opacity-100 ml-4;
 }
 
 .lang-switcher-wrapper.is-default {
