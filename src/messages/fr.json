@@ -834,5 +834,69 @@
         "last": "Dernière page"
       }
     }
+  },
+  "Dish": {
+    "List": {
+      "title": "Gestion des plats",
+      "description": "Gérez vos éléments de menu, les prix, các danh mục và trạng thái có sẵn.",
+      "searchPlaceholder": "Rechercher par nom de plat, catégorie...",
+      "addNew": "Ajouter un plat",
+      "table": {
+        "no": "N°",
+        "dishName": "Nom du plat",
+        "category": "Catégorie",
+        "price": "Prix",
+        "status": "Statut",
+        "online": "En ligne",
+        "action": "Action",
+        "empty": "Aucun plat trouvé."
+      },
+      "pagination": {
+        "pageSize": "Taille de page :",
+        "previous": "Précédent",
+        "next": "Suivant"
+      },
+      "actions": {
+        "view": "Voir les détails",
+        "edit": "Modifier le plat",
+        "delete": "Supprimer le plat"
+      },
+      "status": {
+        "available": "Disponible",
+        "outOfStock": "Rupture de stock",
+        "hidden": "Masqué"
+      },
+      "loading": "Chargement des plats...",
+      "filters": {
+        "category": "Catégorie",
+        "status": "Statut",
+        "allCategories": "Toutes les catégories",
+        "allStatuses": "Tous các statuts"
+      },
+      "deleteModal": {
+        "title": "Supprimer le plat",
+        "message": "Êtes-vous sûr de vouloir supprimer \"{name}\" ? Cette action est irréversible.",
+        "confirm": "Supprimer",
+        "cancel": "Annuler"
+      },
+      "notifications": {
+        "deleteSuccess": "Plat supprimé avec succès",
+        "deleteError": "Une erreur est survenue lors de la suppression du plat"
+      }
+    },
+    "Validation": {
+      "dishName": {
+        "required": "Le nom du plat est requis",
+        "minLength": "Le nom doit contenir ít nhất 2 caractères",
+        "maxLength": "Le nom ne peut pas dépasser 150 caractères"
+      },
+      "price": {
+        "required": "Le prix est requis",
+        "min": "Le prix doit être supérieur hoặc égal à 0"
+      },
+      "category": {
+        "required": "La catégorie est requise"
+      }
+    }
   }
 }
