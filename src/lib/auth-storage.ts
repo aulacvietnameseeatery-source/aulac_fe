@@ -1,22 +1,23 @@
 /**
  * Authentication storage utilities
- * Centralized storage for JWT tokens with localStorage persistence
+ * Centralized storage for JWT access tokens with localStorage persistence
  * 
  * Storage Keys:
  * - auth_token: Access token (JWT)
- * - auth_refresh_token: Refresh token
  * 
- * Note: User data is decoded from JWT token, not stored separately
+ * Note: 
+ * - Refresh tokens are stored in HttpOnly cookies by the backend (XSS protection)
+ * - User data is decoded from JWT token, not stored separately
  */
 
 export interface AuthTokens {
   accessToken: string;
-  refreshToken: string;
+  // refreshToken removed - managed by browser via HttpOnly cookie
 }
 
 // Storage keys - consistent with AuthProvider
 const TOKEN_KEY = 'auth_token';
-const REFRESH_TOKEN_KEY = 'auth_refresh_token';
+// REFRESH_TOKEN_KEY removed - refresh token is in HttpOnly cookie
 
 /**
  * Safe localStorage wrapper with SSR support
@@ -27,28 +28,23 @@ class AuthStorage {
   }
 
   /**
-   * Save authentication tokens to localStorage
+   * Save access token to localStorage
+   * Note: Refresh token is managed by backend in HttpOnly cookie
    * 
-   * @param tokens - Access and refresh tokens
+   * @param accessToken - JWT access token
    * 
    * @example
    * ```ts
-   * authStorage.setTokens({
-   *   accessToken: 'jwt_token_here',
-   *   refreshToken: 'refresh_token_here'
-   * });
+   * authStorage.setAccessToken('jwt_token_here');
    * ```
    */
-  setTokens(tokens: AuthTokens): void {
+  setAccessToken(accessToken: string): void {
     if (!this.isBrowser()) return;
 
     try {
-      localStorage.setItem(TOKEN_KEY, tokens.accessToken);
-      if (tokens.refreshToken) {
-        localStorage.setItem(REFRESH_TOKEN_KEY, tokens.refreshToken);
-      }
+      localStorage.setItem(TOKEN_KEY, accessToken);
     } catch (error) {
-      console.error('[AuthStorage] Failed to save tokens:', error);
+      console.error('[AuthStorage] Failed to save access token:', error);
     }
   }
 
@@ -69,55 +65,17 @@ class AuthStorage {
   }
 
   /**
-   * Get refresh token from localStorage
+   * Check if access token exists
    * 
-   * @returns Refresh token or null
+   * @returns true if token exists
    */
-  getRefreshToken(): string | null {
-    if (!this.isBrowser()) return null;
-
-    try {
-      return localStorage.getItem(REFRESH_TOKEN_KEY);
-    } catch (error) {
-      console.error('[AuthStorage] Failed to get refresh token:', error);
-      return null;
-    }
-  }
-
-  /**
-   * Get both tokens
-   * 
-   * @returns Token pair or null
-   */
-  getTokens(): AuthTokens | null {
-    const accessToken = this.getAccessToken();
-    const refreshToken = this.getRefreshToken();
-
-    if (!accessToken) return null;
-
-    return {
-      accessToken,
-      refreshToken: refreshToken || '',
-    };
-  }
-
-  /**
-   * Update only the access token (useful after refresh)
-   * 
-   * @param accessToken - New access token
-   */
-  updateAccessToken(accessToken: string): void {
-    if (!this.isBrowser()) return;
-
-    try {
-      localStorage.setItem(TOKEN_KEY, accessToken);
-    } catch (error) {
-      console.error('[AuthStorage] Failed to update access token:', error);
-    }
+  hasToken(): boolean {
+    return !!this.getAccessToken();
   }
 
   /**
    * Clear all authentication data
+   * Note: HttpOnly cookie is cleared by backend on logout
    * 
    * @example
    * ```ts
@@ -130,20 +88,11 @@ class AuthStorage {
 
     try {
       localStorage.removeItem(TOKEN_KEY);
-      localStorage.removeItem(REFRESH_TOKEN_KEY);
+      // HttpOnly cookie cannot be cleared by JavaScript
+      // Backend must clear it via /api/auth/logout endpoint
     } catch (error) {
       console.error('[AuthStorage] Failed to clear auth data:', error);
     }
-  }
-
-  /**
-   * Check if user has valid tokens stored
-   * Note: This doesn't validate token expiration, use isTokenExpired() for that
-   * 
-   * @returns true if access token exists
-   */
-  hasTokens(): boolean {
-    return !!this.getAccessToken();
   }
 }
 
@@ -153,9 +102,8 @@ export const authStorage = new AuthStorage();
 // Backward compatibility - deprecated, use authStorage instead
 /** @deprecated Use authStorage instead */
 export const tokenStorage = {
-  setTokens: (tokens: AuthTokens) => authStorage.setTokens(tokens),
+  setAccessToken: (token: string) => authStorage.setAccessToken(token),
   getAccessToken: () => authStorage.getAccessToken(),
-  getRefreshToken: () => authStorage.getRefreshToken(),
   clearAuth: () => authStorage.clearAuth(),
-  isAuthenticated: () => authStorage.hasTokens(),
+  isAuthenticated: () => authStorage.hasToken(),
 };
