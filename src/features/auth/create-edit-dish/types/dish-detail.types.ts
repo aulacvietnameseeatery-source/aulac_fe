@@ -6,6 +6,7 @@ export type DishDetailResponse = {
   price: number;
   dishStatusLvId: number;
   tagId: number;
+  dietId: number | null;
   isOnline: boolean;
   chefRecommended: boolean;
   displayOrder: number | null;
@@ -29,17 +30,40 @@ export type DishDetailResponse = {
 
 export type CategoryDto = {
   categoryId: number;
-  categoryName: string;
+  nameVi: string;
+  nameEn: string;
+  nameFr: string;
 };
 
-export type DishStatusDto = {
-  dishStatusLvId: number;
-  valueName: string;
+export type LookupValueDto = {
+  valueId: number;
   valueCode: string;
+  sortOrder: number;
+  i18n: {
+    vi: string;
+    en: string;
+    fr: string;
+  };
 };
 
-export type DishTagDto = {
-  tagId: number;
-  code: string;
-  name: string;
-}
+export type DishTagDto = LookupValueDto;
+export type DishStatusDto = LookupValueDto;
+export type DishDietDto = LookupValueDto;
+
+export type DishI18nDto = {
+  dishName: string;
+  description?: string | null;
+  slogan?: string | null;
+  note?: string | null;
+  shortDescription?: string | null;
+};
+
+
+export type TranslateDishRequest = {
+  sourceLang: Language; 
+  data: DishI18nDto;    
+};
+
+export type TranslateDishResponse = {
+  translations: Record<string, DishI18nDto>;
+};

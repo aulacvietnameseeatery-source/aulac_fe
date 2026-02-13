@@ -1,7 +1,7 @@
 import { ApiResponse } from "@/types/api-response.types";
 import { DishFormValues } from "../types/schema";
 import { api } from "@/lib/http";
-import { DishDetailResponse, CategoryDto, DishStatusDto, DishTagDto } from "../types/dish-detail.types";
+import { DishDetailResponse, CategoryDto, DishStatusDto, DishTagDto, DishDietDto, TranslateDishRequest, TranslateDishResponse } from "../types/dish-detail.types";
 
 export async function createDish(
   data: DishFormValues,
@@ -54,7 +54,7 @@ export async function createDish(
 }
 
 export async function getDishById(dishId : number) {
-  const res =  api.get<ApiResponse<DishDetailResponse>>(`/api/dishes/${dishId}`);
+  const res =  api.get<ApiResponse<DishDetailResponse>>(`/api/dishes/detail/${dishId}`);
   return (await res).data;
 }
 
@@ -64,12 +64,17 @@ export async function getAllActiveStatus() {
 }
 
 export async function getAllCategories() {
-  const res =  api.get<ApiResponse<CategoryDto[]>>(`/api/dishes/categories`);
+  const res =  api.get<ApiResponse<CategoryDto[]>>(`/api/dishes/all-categories`);
   return (await res).data;
 }
 
 export async function getAllTag() {
   const res =  api.get<ApiResponse<DishTagDto[]>>(`/api/dishes/tags`);
+  return (await res).data;
+}
+
+export async function getAllDiets() {
+  const res = api.get<ApiResponse<DishDietDto[]>>(`/api/dishes/diets`);
   return (await res).data;
 }
 
@@ -126,4 +131,9 @@ export async function editDish(
   const res =  api.put<ApiResponse<void>>(`/api/dishes/${dishId}/edit`, formData);
 
   if (!(await res).success) throw new Error("Edit dish failed");
+}
+
+export async function translateDishContent(payload: TranslateDishRequest) {
+  const res = await api.post<TranslateDishResponse>("/api/translate/dish", payload);
+  return res;
 }

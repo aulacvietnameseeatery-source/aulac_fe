@@ -18,7 +18,7 @@ import { useRouter } from "next/navigation";
 import { DishImagesState, useDishImages } from "../hooks/useDishImages";
 import { useCreateDish } from "../hooks/useCreateDish";
 import { useEditDish } from "../hooks/useEditDish";
-import { getAllActiveStatus, getAllCategories, getAllTag, getDishById } from "../services/dish.service";
+import { getAllActiveStatus, getAllCategories, getAllDiets, getAllTag, getDishById } from "../services/dish.service";
 import { useDishEditMedia } from "../hooks/useDishEditMedia";
 
 type DishMutationVariables  = {
@@ -65,6 +65,8 @@ export function DishForm({ mode, dishId, onSuccess }: DishFormProps) {
     queryKey: ["tags"],
     queryFn: () => getAllTag(),
   })
+
+  const { data: diets } = useQuery({ queryKey: ["diets"], queryFn: () => getAllDiets() });
 
   /* ---------------------- Form ---------------------- */
   const form = useDishForm();
@@ -131,8 +133,8 @@ export function DishForm({ mode, dishId, onSuccess }: DishFormProps) {
       <Toaster position="top-center" richColors />
       
       {/* Header */}
-      <header className="px-12 pt-6 pb-2">
-          <div className="flex items-start gap-4">
+      <header className="flex-1 w-full max-w-7xl mx-auto px-8 space-y-6 mt-6">
+          <div className="flex items-center justify-between">
             {/* <button onClick={() => router.back()} className="mt-1 p-2 hover:bg-gray-200 rounded-full text-gray-600"><ArrowLeft size={24} /></button> */}
             <div>
               <h1 className="text-3xl font-bold text-gray-900 tracking-tight">{isEdit ? "Edit Dish" : "Create New Dish"}</h1>
@@ -142,80 +144,69 @@ export function DishForm({ mode, dishId, onSuccess }: DishFormProps) {
       </header>
 
       {/* Main Content */}
-      <main className="flex-1 w-full px-12 py-6 pb-24">
+      <main className="flex-1 w-full max-w-7xl mx-auto px-8 pb-16 space-y-6 mt-6">
         
-        {/* GRID LAYOUT: Left (66%) - Right (33%) */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-            
-            {/* === LEFT COLUMN (Main Content) === */}
-            <div className="lg:col-span-8 space-y-6">
-                
-                {/* 1. Multilingual Content */}
-                <div className="bg-white border border-gray-200 rounded-xl shadow-sm flex flex-col">
-                    <div className="px-6 py-4 border-b border-gray-100 items-center gap-2">
-                        <h3 className="text-lg font-bold text-gray-900">Multilingual Content</h3>
-                        <p className="text-sm text-gray-500 mt-0.5">Manage names and descriptions across languages</p>
-                    </div>
-                    <LanguageTabs form={form} activeTab={activeTab} setActiveTab={setActiveTab} />
-                </div>
+        {/* ROW 1: CORE INFORMATION */}
+        <SectionWrapper title="Core Information" subtitle="Classification & Pricing">
+          <CoreInfoSection
+            form={form}
+            statuses={statuses}
+            categories={categories}
+            tags={tags} 
+            diets={diets}
+          />
+        </SectionWrapper>
 
-                {/* 2. 360 View Section */}
-                <SectionWrapper 
-                    title="360° View Interaction" 
-                    subtitle="Upload sequence for interactive product spinner"
-                >
-                    <ThreeSixtySection 
-                      frames={images360}
-                      onChange={setImages360}
-                    />
-                </SectionWrapper>
-
+        {/* ROW 2: MULTILINGUAL CONTENT */}
+        <div className="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
+            <div className="px-6 py-4 border-b border-gray-100 bg-gray-50/50">
+                <h3 className="text-base font-bold text-gray-900">Multilingual Content</h3>
+                <p className="text-xs text-gray-500 mt-0.5">Manage names and descriptions for menu display.</p>
             </div>
+            <div className="p-2">
+                <LanguageTabs form={form} activeTab={activeTab} setActiveTab={setActiveTab} />
+            </div>
+        </div>
 
-            {/* === RIGHT COLUMN (Meta & Assets) === */}
-            <div className="lg:col-span-4 space-y-6">
-                
-                {/* 1. Core Information */}
-                <SectionWrapper title="Core Information" subtitle="Basic pricing and categorization">
-                    <CoreInfoSection 
-                      form={form}
-                      statuses={statuses}
-                      categories={categories} 
-                      tags={tags}
-                    />
-                </SectionWrapper>
+        {/* ROW 3: MEDIA (360 + Static) */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+             {/* 3.1: 360 View */}
+            <SectionWrapper title="360° Interaction" subtitle="Spinner sequence">
+                <ThreeSixtySection frames={images360} onChange={setImages360} />
+            </SectionWrapper>
 
-                {/* 2. Static Images */}
-                <SectionWrapper title="Static Images" subtitle="Gallery thumbnails">
-                    <StaticImageSection 
+            {/* 3.2: Static Images */}
+            <SectionWrapper title="Gallery Images" subtitle="Standard photos">
+                <StaticImageSection
                     images={staticImages}
                     existingImages={existingImages}
                     onChange={setStaticImages}
                     onRemoveExisting={removeExistingImage}
-                    />
-                </SectionWrapper>
-
-                {/* 3. Additional Info */}
-                <AdditionalSection form={form} />
-
-            </div>
+                />
+            </SectionWrapper>
         </div>
+
+        {/* ROW 4: ADDITIONAL INFO */}
+        <div>
+            <AdditionalSection form={form} />
+        </div>
+
       </main>
 
       {/* Sticky Footer */}
-      <div className="sticky bottom-0 z-20 bg-white border-t border-gray-200 px-6 py-4 shadow-[0_-4px_10px_rgba(0,0,0,0.05)]">
+
+      <div className="sticky bottom-0 z-20 -mx-8 px-12 bg-white border-t border-gray-200 py-4 shadow-[0_-4px_10px_rgba(0,0,0,0.05)]">
         <div className="flex items-center justify-between w-full px-6">
             <div className="text-sm text-gray-500 hidden sm:block"></div>
             <div className="flex items-center gap-3 ml-auto">
                 <button type="button" onClick={() => router.back()} className="px-5 py-2.5 text-sm font-semibold text-red-600 hover:bg-red-50 rounded-lg flex items-center gap-2"><Trash2 size={18} /> Discard</button>
                 <div className="h-6 w-px bg-gray-300 mx-1 hidden sm:block"></div>
                 {/* <button type="button" onClick={handleSaveDraft} className="px-6 py-2.5 text-sm font-semibold text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 flex items-center gap-2"><FileEdit size={18} /> Save Draft</button> */}
-                {isEdit ? 
+                {isEdit ?
                     <button type="button" onClick={onSubmit} className="px-8 py-2.5 text-sm font-semibold text-white bg-gray-900 rounded-lg hover:bg-black flex items-center gap-2"><Save size={18} /> {mutation.isPending ? "Saving..." : "Save Changes"}</button>
-                 : 
+                 :
                     <button type="button" onClick={onSubmit} className="px-8 py-2.5 text-sm font-semibold text-white bg-gray-900 rounded-lg hover:bg-black flex items-center gap-2"><Save size={18} /> {mutation.isPending ? "Creating..." : "Create Dish"}</button>
                 }
-                
             </div>
         </div>
       </div>

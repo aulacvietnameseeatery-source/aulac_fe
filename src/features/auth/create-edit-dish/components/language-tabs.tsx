@@ -2,7 +2,10 @@ import React from "react";
 import { UseFormReturn } from "react-hook-form";
 import { DishFormValues, LANGUAGES, Language } from "../types/schema";
 import { cn } from "@/lib/utils";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, Loader2, Sparkles } from "lucide-react";
+import { useMutation } from "@tanstack/react-query";
+import { translateDishContent } from "../services/dish.service";
+import { DishI18nDto } from "../types/dish-detail.types";
 
 interface LanguageTabsProps {
   form: UseFormReturn<DishFormValues>;
@@ -23,11 +26,78 @@ export const LanguageTabs: React.FC<LanguageTabsProps> = ({
 }) => {
   const {
     register,
+    getValues,
+    setValue,
     formState: { errors },
   } = form;
 
+  // --- API Mutation ---
+  const translateMutation = useMutation({
+    mutationFn: translateDishContent,
+    onSuccess: (data) => {
+      // Data trả về: { translations: { "fr": { dishName: "..." }, "vi": { ... } } }
+      let count = 0;
+
+      Object.entries(data.translations).forEach(([langKey, content]) => {
+        const targetLang = langKey as Language;
+        
+        // Bỏ qua nếu response trả về ngôn ngữ trùng với tab hiện tại (đề phòng)
+        if (targetLang === activeTab) return;
+
+        // Helper để set value nhanh
+        const setField = (field: keyof DishI18nDto, value?: string | null) => {
+          if (value) {
+            // Cấu trúc form: i18n.vi.dishName
+            setValue(`i18n.${targetLang}.${field}` as any, value, {
+              shouldDirty: true,
+              shouldValidate: true,
+            });
+          }
+        };
+
+        setField("dishName", content.dishName);
+        setField("description", content.description);
+        setField("shortDescription", content.shortDescription);
+        setField("slogan", content.slogan);
+        setField("note", content.note);
+        
+        count++;
+      });
+
+      //toast.success(`Translated content to ${count} other languages!`);
+    },
+    onError: (err: any) => {
+      //toast.error(err?.message || "Translation failed. Please try again.");
+    },
+  });
+
+  // --- Handler ---
+  const handleAutoTranslate = () => {
+    // 1. Lấy dữ liệu từ tab hiện tại
+    const currentData = getValues(`i18n.${activeTab}`);
+
+    // 2. Validate cơ bản
+    if (!currentData?.dishName) {
+      //toast.warning(`Please enter a Dish Name for ${LANGUAGE_LABELS[activeTab]} first.`);
+      return;
+    }
+
+    // 3. Gọi API
+    translateMutation.mutate({
+      sourceLang: activeTab,
+      data: {
+        dishName: currentData.dishName,
+        description: currentData.description,
+        shortDescription: currentData.shortDescription,
+        slogan: currentData.slogan,
+        note: currentData.note,
+      },
+    });
+  };
+
   return (
     <div className="flex flex-col min-h-[400px]">
+      <div className="flex items-center justify-between border-b border-gray-100 pr-4 bg-gray-50/30">
       {/* --- Minimal Tab Header --- */}
       <div className="flex items-center border-b border-gray-100">
         {LANGUAGES.map((lang) => {
@@ -51,6 +121,22 @@ export const LanguageTabs: React.FC<LanguageTabsProps> = ({
             </button>
           );
         })}
+      </div>
+        {/* Right: Translate Button */}
+        <button
+          type="button"
+          onClick={handleAutoTranslate}
+          disabled={translateMutation.isPending}
+          className="flex items-center gap-2 px-3 py-1.5 text-xs font-semibold text-purple-700 bg-purple-50 hover:bg-purple-100 border border-purple-200 rounded-md transition-all shadow-sm active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed group"
+          title={`Translate content from ${activeTab.toUpperCase()} to other languages`}
+        >
+          {translateMutation.isPending ? (
+            <Loader2 size={14} className="animate-spin text-purple-600" />
+          ) : (
+            <Sparkles size={14} className="text-purple-600 group-hover:text-purple-800 transition-colors" />
+          )}
+          <span className="hidden sm:inline">Auto Translate</span>
+        </button>
       </div>
 
       {/* --- Tab Content --- */}
