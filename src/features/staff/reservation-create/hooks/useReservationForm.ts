@@ -145,7 +145,7 @@ export const useReservationForm = (t: (key: string, values?: any) => string) => 
       });
 
       setTimeout(() => {
-          router.push('/dashboard/reservations'); 
+          router.push('/dashboard/reservation'); 
         }, 1500);
     } catch (error: any) {
       toast.error(t("errors.failTitle"), {
