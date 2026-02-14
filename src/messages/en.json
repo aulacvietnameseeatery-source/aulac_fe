@@ -1008,7 +1008,14 @@
         "deleteSuccess": "Dish deleted successfully",
         "deleteError": "An error occurred while deleting the dish",
         "statusUpdated": "Dish status updated successfully",
-        "statusUpdateError": "Failed to update dish status"
+        "statusUpdateError": "Failed to update dish status",
+        "batchMakeAvailableSuccess": "Made {count} dish(es) available",
+        "batchMakeHiddenSuccess": "Hidden {count} dish(es)",
+        "batchUpdateError": "An error occurred during batch status update"
+      },
+      "batchActions": {
+        "makeAvailable": "Make Available",
+        "makeHidden": "Make Hidden"
       }
     },
     "Validation": {

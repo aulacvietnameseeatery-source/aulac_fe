@@ -1009,7 +1009,14 @@
         "deleteSuccess": "Xóa món ăn thành công",
         "deleteError": "Đã xảy ra lỗi khi xóa món ăn",
         "statusUpdated": "Đã cập nhật trạng thái món ăn",
-        "statusUpdateError": "Không thể cập nhật trạng thái món ăn"
+        "statusUpdateError": "Không thể cập nhật trạng thái món ăn",
+        "batchMakeAvailableSuccess": "Đã hiển thị {count} món ăn",
+        "batchMakeHiddenSuccess": "Đã ẩn {count} món ăn",
+        "batchUpdateError": "Có lỗi xảy ra khi cập nhật trạng thái hàng loạt"
+      },
+      "batchActions": {
+        "makeAvailable": "Hiển thị",
+        "makeHidden": "Ẩn"
       }
     },
     "Validation": {

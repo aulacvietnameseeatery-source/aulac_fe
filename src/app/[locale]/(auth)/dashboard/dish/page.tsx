@@ -17,6 +17,7 @@ import { useDishList } from "@/features/staff/dish-management/hooks/use-dish-lis
 import { DishManagementDto, DishStatusCode } from "@/features/staff/dish-management/types/dish-types";
 import { DishActions } from "@/features/staff/dish-management/components/dish-actions";
 import { staffDishService } from "@/features/staff/dish-management/services/dish-service";
+import { useStatusBatchActions } from "@/features/staff/dish-management/hooks/useStatusBatchActions";
 
 const DishListContent = () => {
   const t = useTranslations("Dish.List");
@@ -52,12 +53,10 @@ const DishListContent = () => {
     setTogglingId(dish.dishId);
     try {
       const newStatusCode = checked ? "AVAILABLE" : "HIDDEN";
-      const newStatusId = checked ? DishStatusCode.AVAILABLE : DishStatusCode.HIDDEN;
 
       // Optimistic Update
       const updatedDish: DishManagementDto = {
         ...dish,
-        statusId: newStatusId,
         status: newStatusCode
       };
       updateDishLocally(updatedDish);
@@ -76,6 +75,41 @@ const DishListContent = () => {
       setTogglingId(null);
     }
   };
+
+  // Handle Batch Status Update
+  const handleBatchStatusUpdate = async (selectedDishes: DishManagementDto[], newStatus: "AVAILABLE" | "HIDDEN") => {
+    try {
+      // Optimistic Update for all selected items
+      selectedDishes.forEach(dish => {
+        updateDishLocally({
+          ...dish,
+          status: newStatus
+        });
+      });
+
+      // API Calls
+      const promises = selectedDishes.map(dish =>
+        staffDishService.updateDishStatus(dish.dishId, newStatus)
+      );
+
+      await Promise.all(promises);
+
+      const count = selectedDishes.length;
+      const messageKey = newStatus === "AVAILABLE" ? "notifications.batchMakeAvailableSuccess" : "notifications.batchMakeHiddenSuccess";
+      toast.success(t(messageKey, { count }));
+
+    } catch (error: any) {
+      console.error("Batch update failed:", error);
+      toast.error(t("notifications.batchUpdateError"));
+      refresh(); // Revert on error
+    }
+  };
+
+  // Batch Actions Configuration
+  const batchActions = useStatusBatchActions({
+    t,
+    onUpdate: handleBatchStatusUpdate
+  });
 
   // ---- Column filter options (derived from API data) ----
   const categoryFilterOptions = useMemo(
@@ -175,7 +209,7 @@ const DishListContent = () => {
         cellRender: ({ value, item }: { value: any; item: any }) => (
           <div className="flex justify-center">
             <Switch
-              checked={item.statusId === DishStatusCode.AVAILABLE}
+              checked={item.status === "AVAILABLE"}
               onChange={(checked) => handleStatusToggle(item, checked)}
               disabled={togglingId === item.dishId}
               showLabel={false}
@@ -239,6 +273,7 @@ const DishListContent = () => {
             onEdit={handleEdit}
           />
         )}
+        batchActions={batchActions}
       />
 
       {/* Dialogs & Modals */}
