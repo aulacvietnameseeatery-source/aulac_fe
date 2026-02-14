@@ -50,28 +50,27 @@ async function http<T>(path: string, options?: FetchOptions): Promise<T> {
 
     const isFormData = options?.body instanceof FormData;
 
-    const headers: Record<string, string> = {};
+    const headers: Record<string, string> = token
+        ? { Authorization: `Bearer ${token}` }
+        : {};
 
+    // Set Content-Type when NOT FormData
     if (!isFormData) {
         headers["Content-Type"] = "application/json";
     }
 
-    //CHỈ set Content-Type khi KHÔNG phải FormData
-    if (!isFormData) {
-        headers["Content-Type"] = "application/json";
+    // Merge headers from options (if any)
+    if (options?.headers) {
+        Object.entries(options.headers).forEach(([key, value]) => {
+            if (value !== undefined) {
+                headers[key] = value;
+            }
+        });
     }
-
-    // merge headers từ options (nếu có)
-  if (options?.headers) {
-    Object.entries(options.headers).forEach(([key, value]) => {
-      if (value !== undefined) {
-        headers[key] = value;
-      }
-    });
-  }
 
     const config: RequestInit = {
         ...options,
+        credentials: 'include',
         headers,
     };
 
