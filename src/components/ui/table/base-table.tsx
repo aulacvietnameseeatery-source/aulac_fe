@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
+import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useTableSelection } from '@/hooks/table/useTableSelection';
 import { useTableColumnSizing } from '@/hooks/table/useTableColumnSizing';
@@ -15,6 +16,7 @@ import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover
 import { FilterPopup } from '@/components/ui/table/filter-popup';
 import '@/styles/components/table.css';
 import { useTranslations } from 'next-intl';
+import { Check, X } from 'lucide-react';
 
 
 
@@ -508,37 +510,49 @@ export function BaseTable<T>({
 
                                     )}
 
-                                    {selectedItems.length > 0 && (
-                                        <div className="feature-batch flex">
-                                            <div className="selected-count">
-                                                {t('selected')} <span className="font-bold">{selectedItems.length}</span>
-                                            </div>
-                                            <div className="unselected" onClick={unselectAll}>{t('unselect')}</div>
+                                    {renderToolbarAppend?.({ unselectAll, selectedItems, batchActions })}
 
-                                            {batchActions.map((action) => (
-                                                <button
-                                                    key={action.label}
-                                                    className={cn(
-                                                        "ms-button",
-                                                        `btn-outline-${action.variant || 'neutral'}`
-                                                    )}
-                                                    onClick={() => handleBatchAction(action)}
-                                                >
-                                                    <div
+                                    {/* Batch Actions Group */}
+                                    {selectedItems.length > 0 && (
+                                        <div className="flex items-center gap-2 ml-4 border-l pl-4 border-gray-200">
+                                            <div className="text-sm text-gray-500 mr-2">
+                                                {t('selected')} <span className="font-bold text-gray-900">{selectedItems.length}</span>
+                                            </div>
+
+                                            <Button
+                                                variant="ghost"
+                                                size="sm"
+                                                onClick={unselectAll}
+                                                className="text-gray-500 hover:text-gray-700 h-8 mr-2"
+                                            >
+                                                {t('unselect')}
+                                            </Button>
+
+                                            <div className="flex items-center gap-2">
+                                                {batchActions.map((action) => (
+                                                    <Button
+                                                        key={action.label}
+                                                        // Use standard variants, but apply custom classes if provided
+                                                        variant={action.variant as any}
+                                                        size="sm"
+                                                        onClick={() => handleBatchAction(action)}
                                                         className={cn(
-                                                            "icon left mi icon16",
-                                                            action.icon,
-                                                            action.variant === 'success' && 'green',
-                                                            action.variant === 'danger' && 'red'
+                                                            "h-8 shadow-sm transition-all",
+                                                            action.className,
+                                                            // If buttonType is solid, we might want to override standard variant styles if needed
+                                                            // For now, rely on variant + className
                                                         )}
-                                                    ></div>
-                                                    <div className="text text-nowrap pl-1">{action.label}</div>
-                                                </button>
-                                            ))}
+                                                    >
+                                                        {/* Icon handling: prioritize mapped icons or use CSS classes */}
+                                                        {action.icon === 'check' && <div className="mi icon16 icon-check-white mr-1.5" />}
+                                                        {action.icon === 'close' && <div className="mi icon16 icon-close-white mr-1.5" />}
+                                                        {/* Render label */}
+                                                        {action.label}
+                                                    </Button>
+                                                ))}
+                                            </div>
                                         </div>
                                     )}
-
-                                    {renderToolbarAppend?.({ unselectAll, selectedItems, batchActions })}
                                 </div>
 
                                 {selectedItems.length === 0 && (

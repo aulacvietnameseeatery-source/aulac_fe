@@ -2,7 +2,7 @@
 
 import { ApiResponse, PagedResult } from "@/types/api-response.types";
 import { DishManagementDto, GetDishesParams } from "../types/dish-types";
-import {api} from "@/lib/http";
+import { api } from "@/lib/http";
 
 export interface DishStatusOption {
     statusId: number;
@@ -38,5 +38,10 @@ export const staffDishService = {
     getDishStatuses: async (): Promise<DishStatusOption[]> => {
         const response = await api.get<ApiResponse<DishStatusOption[]>>(`/api/dishes/statuses`);
         return response.data;
+    },
+
+    // 4. Cập nhật trạng thái món ăn (nhận string: "AVAILABLE" hoặc "HIDDEN")
+    updateDishStatus: async (dishId: number, status: string): Promise<void> => {
+        await api.patch(`/api/dishes/${dishId}/status`, { status });
     }
 };

@@ -110,6 +110,9 @@ export const useDishList = () => {
         paginationInfo,
         onDataChange: handleDataChange,
         refresh,
+        updateDishLocally: (updatedDish: DishManagementDto) => {
+            setDishes(prev => prev.map(dish => dish.dishId === updatedDish.dishId ? updatedDish : dish));
+        },
         filterOptions: {
             categories: categoryOptions,
             statuses: statusOptions,

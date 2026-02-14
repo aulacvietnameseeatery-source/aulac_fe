@@ -25,22 +25,23 @@ import { useAuth } from "@/components/providers/auth-provider";
 import { useLogout } from "@/features/customer/auth/login/hooks";
 import { ConfirmModal } from "@/components/layout/admin-sidebar/confirm-modal";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 const navItems = [
-  { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-  { name: "Tables", href: "/dashboard/tables", icon: Table },
-  { name: "Staff", href: "/dashboard/staff", icon: Users },
-  { name: "Roles", href: "/dashboard/roles", icon: UserCog },
-  { name: "Dish", href: "/dashboard/dish", icon: UtensilsCrossed },
-  { name: "Dish Category", href: "/dashboard/dish-category", icon: FolderOpen },
-  { name: "Ingredient", href: "/dashboard/ingredient", icon: Package },
-  { name: "Orders", href: "/dashboard/orders", icon: ShoppingBag },
-  { name: "Reports", href: "/dashboard/reports", icon: FileText },
-  { name: "Emails", href: "/dashboard/emails", icon: Mail },
-  { name: "Customers", href: "/dashboard/customers", icon: Users },
-  { name: "Reservations", href: "/dashboard/reservations", icon: Users },
-  { name: "Promotions", href: "/dashboard/promotions", icon: Tags },
-  { name: "Settings", href: "/dashboard/settings", icon: Settings },
+  { key: "dashboard", href: "/dashboard", icon: LayoutDashboard },
+  { key: "tables", href: "/dashboard/tables", icon: Table },
+  { key: "staff", href: "/dashboard/staff", icon: Users },
+  { key: "roles", href: "/dashboard/roles", icon: UserCog },
+  { key: "dish", href: "/dashboard/dish", icon: UtensilsCrossed },
+  { key: "dishCategory", href: "/dashboard/dish-category", icon: FolderOpen },
+  { key: "ingredient", href: "/dashboard/ingredient", icon: Package },
+  { key: "orders", href: "/dashboard/orders", icon: ShoppingBag },
+  { key: "reports", href: "/dashboard/reports", icon: FileText },
+  { key: "emails", href: "/dashboard/emails", icon: Mail },
+  { key: "customers", href: "/dashboard/customers", icon: Users },
+    { name: "reservations", href: "/dashboard/reservations", icon: Users },
+    { key: "promotions", href: "/dashboard/promotions", icon: Tags },
+    { key: "settings", href: "/dashboard/settings", icon: Settings },
 ];
 
 interface AdminSidebarProps {
@@ -53,11 +54,12 @@ export function AdminSidebar({ onClose }: AdminSidebarProps) {
   const { mutate: logout, isPending: isLoggingOut } = useLogout();
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+  const t = useTranslations("AdminSidebar");
 
   const isActive = (href: string) => {
     // Remove locale prefix from pathname for comparison
-    const pathWithoutLocale = pathname?.replace(/^\/(en|fr)/, '') || pathname;
-    
+    const pathWithoutLocale = pathname?.replace(/^\/(en|fr|vi)/, '') || pathname;
+
     if (href === "/dashboard") {
       return pathWithoutLocale === "/dashboard";
     }
@@ -135,7 +137,7 @@ export function AdminSidebar({ onClose }: AdminSidebarProps) {
 
           <div className={`text-center mt-0 md:hidden ${isCollapsed ? 'lg:hidden' : 'lg:block'}`}>
             <h2 className="text-white text-xl font-bold font-display tracking-tight">Au Lac</h2>
-            <p className="text-[#FFAB2D]/80 text-[10px] font-medium uppercase tracking-[0.2em] mt-1">Manager Portal</p>
+            <p className="text-[#FFAB2D]/80 text-[10px] font-medium uppercase tracking-[0.2em] mt-1">{t('managerPortal')}</p>
           </div>
         </div>
 
@@ -145,10 +147,11 @@ export function AdminSidebar({ onClose }: AdminSidebarProps) {
             {navItems.map((item) => {
               const Icon = item.icon;
               const active = isActive(item.href);
+              const label = t(item.key);
 
               return (
                 <Link
-                  key={item.name}
+                  key={item.key}
                   href={item.href}
                   onClick={onClose} // Auto close on mobile
                   className={`
@@ -159,7 +162,7 @@ export function AdminSidebar({ onClose }: AdminSidebarProps) {
                       : "text-white/60 hover:text-white hover:bg-white/5 hover:shadow-md"
                     }
                   `}
-                  title={isCollapsed ? item.name : undefined} // Tooltip for collapsed state
+                  title={isCollapsed ? label : undefined} // Tooltip for collapsed state
                 >
                   {/* Active Indicator Line */}
                   {active && (
@@ -173,7 +176,7 @@ export function AdminSidebar({ onClose }: AdminSidebarProps) {
                       md:hidden ${isCollapsed ? 'lg:hidden' : 'lg:block'}
                     `}
                   >
-                    {item.name}
+                    {label}
                   </span>
 
                   {/* Hover Glow */}
@@ -215,7 +218,7 @@ export function AdminSidebar({ onClose }: AdminSidebarProps) {
                   : 'p-2 rounded-lg text-white/40 hover:text-[#FF2D2D] hover:bg-[#FF2D2D]/10'
                 }
               `}
-              title={isLoggingOut ? "Logging out..." : "Logout"}
+              title={isLoggingOut ? t('loggingOut') : t('logout')}
             >
               <LogOut className={`${isCollapsed ? 'w-5 h-5' : 'w-4 h-4 md:w-5 md:h-5'} ${isLoggingOut ? 'animate-pulse' : ''}`} />
             </button>
@@ -227,10 +230,10 @@ export function AdminSidebar({ onClose }: AdminSidebarProps) {
         isOpen={isLogoutModalOpen}
         onClose={() => setIsLogoutModalOpen(false)}
         onConfirm={handleConfirmLogout}
-        title="Logout"
-        message="Are you sure you want to logout? You will be redirected to the login page."
-        confirmText="Logout"
-        cancelText="Cancel"
+        title={t('logout')}
+        message={t('logoutMessage')}
+        confirmText={t('logout')}
+        cancelText={t('cancel')}
         variant="danger"
       />
     </>

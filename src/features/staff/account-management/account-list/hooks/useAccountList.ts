@@ -85,5 +85,8 @@ export const useAccountList = () => {
     paginationInfo,
     onDataChange: handleDataChange,
     refresh,
+    updateAccountLocally: (updatedAccount: StaffAccount) => {
+      setAccounts(prev => prev.map(acc => acc.accountId === updatedAccount.accountId ? updatedAccount : acc));
+    }
   };
 };
