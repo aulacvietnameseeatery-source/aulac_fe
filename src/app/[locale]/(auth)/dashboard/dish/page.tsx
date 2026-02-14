@@ -6,76 +6,108 @@ import { BaseTable } from "@/components/ui/table/base-table";
 import { TableColumn } from "@/types/table.types";
 import { toast } from "sonner";
 import { useTranslations } from "next-intl";
-import { ConfirmModal } from "@/components/layout/admin-sidebar/confirm-modal";
 import { ProtectedRoute } from "@/components/protected-route";
 import { PermissionGuard } from "@/components/permission-guard";
 import { Permissions } from "@/types/const";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Switch } from "@/components/ui/switch";
 import { useDishList } from "@/features/staff/dish-management/hooks/use-dish-list";
 import { DishManagementDto } from "@/features/staff/dish-management/types/dish-types";
 import { DishActions } from "@/features/staff/dish-management/components/dish-actions";
-
-// 1. IMPORT useRouter TỪ NEXT/NAVIGATION
+import { staffDishService } from "@/features/staff/dish-management/services/dish-service";
+import { useStatusBatchActions } from "@/features/staff/dish-management/hooks/useStatusBatchActions";
 import { useRouter } from "next/navigation";
-// (Tùy chọn) Import API deleteDish của bạn vào đây nếu cần dùng ở handleConfirmDelete
-// import { deleteDish } from "@/features/staff/dish-management/services/dish.service";
 
 const DishListContent = () => {
     const t = useTranslations("Dish.List");
-
-    // 2. KHỞI TẠO ROUTER ĐỂ CHUYỂN TRANG
     const router = useRouter();
 
     // Data-fetching hook (driven by BaseTable onDataChange)
-    const { dishes, isLoading, totalCount, paginationInfo, onDataChange, refresh, filterOptions } =
+    const { dishes, isLoading, totalCount, paginationInfo, onDataChange, refresh, filterOptions, updateDishLocally } =
         useDishList();
 
-    // Delete modal state (Giữ nguyên vì Xóa thì nên dùng Popup Confirm thay vì chuyển trang)
-    const [deleteModal, setDeleteModal] = useState({
-        open: false,
-        dish: null as DishManagementDto | null,
-        isLoading: false,
-    });
+    // Status toggle state
+    const [togglingId, setTogglingId] = useState<number | null>(null);
 
     // ==========================================
     // ACTION HANDLERS
     // ==========================================
 
     const handleView = (dish: DishManagementDto) => {
-        // Chuyển vào folder: dashboard -> dish -> [id] -> detail
         router.push(`/dashboard/dish/${dish.dishId}/detail`);
     };
 
     const handleEdit = (dish: DishManagementDto) => {
-        // Chuyển vào folder: dashboard -> dish -> [id] -> edit
         router.push(`/dashboard/dish/${dish.dishId}/edit`);
     };
 
     const handleCreate = () => {
-        // Chuyển vào folder: dashboard -> dish -> create
         router.push(`/dashboard/dish/create`);
     };
 
-    const handleDeleteClick = (dish: DishManagementDto) => {
-        setDeleteModal({ open: true, dish, isLoading: false });
-    };
-
-    const handleConfirmDelete = async () => {
-        if (!deleteModal.dish) return;
-        setDeleteModal((prev) => ({ ...prev, isLoading: true }));
+    // Handle Status Toggle (Available <-> Hidden)
+    const handleStatusToggle = async (dish: DishManagementDto, checked: boolean) => {
+        setTogglingId(dish.dishId);
         try {
-            // 4. GỌI API XÓA Ở ĐÂY
-            // await deleteDish(deleteModal.dish.dishId);
+            const newStatusCode = checked ? "AVAILABLE" : "HIDDEN";
 
-            toast.success(t("notifications.deleteSuccess"));
-            refresh(); // Reload lại bảng sau khi xóa
-            setDeleteModal({ open: false, dish: null, isLoading: false });
+            // Optimistic Update
+            const updatedDish: DishManagementDto = {
+                ...dish,
+                status: newStatusCode
+            };
+            updateDishLocally(updatedDish);
+
+            // API Call
+            await staffDishService.updateDishStatus(dish.dishId, newStatusCode);
+            toast.success(t("notifications.statusUpdated"));
         } catch (error: any) {
-            toast.error(error.message || t("notifications.deleteError"));
-            setDeleteModal((prev) => ({ ...prev, isLoading: false }));
+            console.error("Update status failed:", error);
+            const errorMessage = error.response?.data?.userMessage || t("notifications.statusUpdateError");
+            toast.error(errorMessage);
+
+            // Revert on failure
+            refresh();
+        } finally {
+            setTogglingId(null);
         }
     };
+
+    // Handle Batch Status Update
+    const handleBatchStatusUpdate = async (selectedDishes: DishManagementDto[], newStatus: "AVAILABLE" | "HIDDEN") => {
+        try {
+            // Optimistic Update for all selected items
+            selectedDishes.forEach(dish => {
+                updateDishLocally({
+                    ...dish,
+                    status: newStatus
+                });
+            });
+
+            // API Calls
+            const promises = selectedDishes.map(dish =>
+                staffDishService.updateDishStatus(dish.dishId, newStatus)
+            );
+
+            await Promise.all(promises);
+
+            const count = selectedDishes.length;
+            const messageKey = newStatus === "AVAILABLE" ? "notifications.batchMakeAvailableSuccess" : "notifications.batchMakeHiddenSuccess";
+            toast.success(t(messageKey, { count }));
+
+        } catch (error: any) {
+            console.error("Batch update failed:", error);
+            toast.error(t("notifications.batchUpdateError"));
+            refresh(); // Revert on error
+        }
+    };
+
+    // Batch Actions Configuration
+    const batchActions = useStatusBatchActions({
+        t,
+        onUpdate: handleBatchStatusUpdate
+    });
 
     // ---- Column filter options (derived from API data) ----
     const categoryFilterOptions = useMemo(
@@ -92,7 +124,7 @@ const DishListContent = () => {
         [filterOptions.statuses]
     );
 
-    // Status Badge Render
+    // Status Badge Render (for identification)
     const renderStatusBadge = (statusId: number, statusName: string) => {
         let variant: "default" | "secondary" | "destructive" | "outline" | "success" | "warning" | "info" = "outline";
         switch (statusId) {
@@ -137,8 +169,8 @@ const DishListContent = () => {
                         <span className="font-medium text-gray-900">{value}</span>
                         {item.isOnline && (
                             <span className="text-xs text-green-600 flex items-center gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-green-500"></span> Online
-              </span>
+                                <span className="w-1.5 h-1.5 rounded-full bg-green-500"></span> Online
+                            </span>
                         )}
                     </div>
                 ),
@@ -161,8 +193,8 @@ const DishListContent = () => {
                 filterType: "number" as const,
                 cellRender: ({ value }: { value: any }) => (
                     <span className="font-bold text-blue-600">
-            ${typeof value === "number" ? value.toFixed(2) : value}
-          </span>
+                        ${typeof value === "number" ? value.toFixed(2) : value}
+                    </span>
                 ),
             },
             {
@@ -172,11 +204,19 @@ const DishListContent = () => {
                 width: "130px",
                 filterType: "select" as const,
                 filterOptions: statusFilterOptions,
-                cellRender: ({ value, item }: { value: any; item: any }) =>
-                    renderStatusBadge(item.statusId, value),
+                cellRender: ({ value, item }: { value: any; item: any }) => (
+                    <div className="flex justify-center">
+                        <Switch
+                            checked={item.status === "AVAILABLE"}
+                            onChange={(checked) => handleStatusToggle(item, checked)}
+                            disabled={togglingId === item.dishId}
+                            showLabel={false}
+                        />
+                    </div>
+                ),
             },
         ],
-        [paginationInfo.page, paginationInfo.pageSize, t, categoryFilterOptions, statusFilterOptions]
+        [paginationInfo.page, paginationInfo.pageSize, t, categoryFilterOptions, statusFilterOptions, togglingId]
     );
 
     // Global cell renderer (applies column alignment)
@@ -229,22 +269,9 @@ const DishListContent = () => {
                         dish={item}
                         onView={handleView}
                         onEdit={handleEdit}
-                        onDelete={handleDeleteClick}
                     />
                 )}
-            />
-
-            {/* Confirm Modal (Xóa) */}
-            <ConfirmModal
-                isOpen={deleteModal.open}
-                onClose={() => setDeleteModal({ open: false, dish: null, isLoading: false })}
-                onConfirm={handleConfirmDelete}
-                title={t("deleteModal.title")}
-                message={t("deleteModal.message", { name: deleteModal.dish?.dishName ?? "" })}
-                confirmText={t("deleteModal.confirm")}
-                cancelText={t("deleteModal.cancel")}
-                variant="danger"
-                isLoading={deleteModal.isLoading}
+                batchActions={batchActions}
             />
         </div>
     );
