@@ -8,4 +8,19 @@
 
   --navi-blue: #1a3a52;
   --navi-light-blue: #4f9dd8;
+
+  --orange: #ffab2d;
+
+  --beige: #D5BA98;
+
+  /* ── ALCombobox palette tokens ─────────────────────────── */
+  --al-cb-navy: var(--navi-blue);
+  --al-cb-navy-rgb: 26, 58, 82;
+  --al-cb-orange: var(--orange);
+  --al-cb-orange-rgb: 255, 171, 45;
+  --al-cb-beige: var(--beige);
+  --al-cb-beige-rgb: 213, 186, 152;
+  --al-cb-white: #ffffff;
+  --al-cb-error: #ef4444;
+  --al-cb-success: #22c55e;
 }

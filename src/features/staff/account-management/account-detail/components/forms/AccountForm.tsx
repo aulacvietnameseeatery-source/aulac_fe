@@ -3,11 +3,10 @@
 import React, { useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2 } from "lucide-react";
+import { Loader2, User, Mail, Phone, Shield } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { Input } from "@/components/ui/input";
-import { Select, type SelectOption } from "@/components/ui/select";
-import { cn } from "@/lib/utils";
+import { ALInput } from "@/components/ui/al-input";
+import { ALCombobox, type ALComboboxOption } from "@/components/ui/al-combobox";
 import {
   createAccountSchema,
   updateAccountSchema,
@@ -16,6 +15,7 @@ import {
 } from "../../schemas/account.schema";
 import type { AccountDetail, AccountDialogMode } from "../../types/account-detail.types";
 import type { Role } from "../../../account-list/types/staff-account.types";
+import { Button } from "@/components/ui/button";
 
 // ============================================================
 // Types
@@ -30,33 +30,6 @@ interface AccountFormProps {
   isSubmitting: boolean;
   onSubmit: (data: FormValues) => void;
   onCancel: () => void;
-}
-
-// ============================================================
-// Field wrapper (label + error)
-// ============================================================
-
-function FieldGroup({
-  label,
-  required,
-  error,
-  children,
-}: {
-  label: string;
-  required?: boolean;
-  error?: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <div className="space-y-1.5">
-      <label className="block text-sm font-medium text-gray-700">
-        {label}
-        {required && <span className="text-red-500 ml-0.5">*</span>}
-      </label>
-      {children}
-      {error && <p className="text-xs text-red-500 mt-1">{error}</p>}
-    </div>
-  );
 }
 
 // ============================================================
@@ -106,8 +79,8 @@ export const AccountForm = ({
     }
   }, [account, isCreate, reset]);
 
-  // Map roles to SelectOption
-  const roleOptions: SelectOption[] = roles.map((r) => ({
+  // Map roles to ALComboboxOption
+  const roleOptions: ALComboboxOption[] = roles.map((r) => ({
     label: r.roleName,
     value: r.roleId,
   }));
@@ -117,67 +90,54 @@ export const AccountForm = ({
     <div className="p-4">
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
         {/* Full Name */}
-        <FieldGroup
-          label={tForm("fullName.label")}
+        <ALInput
+          title={tForm("fullName.label")}
           required={isCreate}
           error={errors.fullName?.message as string | undefined}
-        >
-          <Input
-            placeholder={tForm("fullName.placeholder")}
-            {...register("fullName")}
-            className={cn(errors.fullName && "border-red-400 focus-visible:border-red-500 focus-visible:ring-red-200")}
-          />
-        </FieldGroup>
+          placeholder={tForm("fullName.placeholder")}
+          iconStart={<User className="h-4 w-4" />}
+          {...register("fullName")}
+        />
 
         {/* Email */}
-        <FieldGroup
-          label={tForm("email.label")}
+        <ALInput
+          title={tForm("email.label")}
           required={isCreate}
           error={errors.email?.message as string | undefined}
-        >
-          <Input
-            type="email"
-            placeholder={tForm("email.placeholder")}
-            {...register("email")}
-            className={cn(errors.email && "border-red-400 focus-visible:border-red-500 focus-visible:ring-red-200")}
-          />
-        </FieldGroup>
+          type="email"
+          placeholder={tForm("email.placeholder")}
+          iconStart={<Mail className="h-4 w-4" />}
+          {...register("email")}
+        />
 
         {/* Phone */}
-        <FieldGroup
-          label={tForm("phone.label")}
+        <ALInput
+          title={tForm("phone.label")}
           error={errors.phone?.message as string | undefined}
-        >
-          <Input
-            placeholder={tForm("phone.placeholder")}
-            {...register("phone")}
-            className={cn(errors.phone && "border-red-400 focus-visible:border-red-500 focus-visible:ring-red-200")}
-          />
-        </FieldGroup>
+          placeholder={tForm("phone.placeholder")}
+          iconStart={<Phone className="h-4 w-4" />}
+          {...register("phone")}
+        />
 
         {/* Role */}
-        <FieldGroup
-          label={tForm("role.label")}
-          required={isCreate}
-          error={(errors as Record<string, { message?: string }>).roleId?.message}
-        >
-          <Controller
-            name="roleId"
-            control={control}
-            render={({ field }) => (
-              <Select
-                value={field.value ?? ""}
-                options={roleOptions}
-                placeholder={tForm("role.placeholder")}
-                onChange={(val) => field.onChange(Number(val))}
-                className={cn(
-                  (errors as Record<string, { message?: string }>).roleId &&
-                  "border-red-400 focus-visible:border-red-500 focus-visible:ring-red-200"
-                )}
-              />
-            )}
-          />
-        </FieldGroup>
+        <Controller
+          name="roleId"
+          control={control}
+          render={({ field }) => (
+            <ALCombobox
+              title={tForm("role.label")}
+              required={isCreate}
+              error={(errors as Record<string, { message?: string }>).roleId?.message}
+              options={roleOptions}
+              value={field.value ?? ""}
+              onChange={(val) => field.onChange(Number(val))}
+              placeholder={tForm("role.placeholder")}
+              iconStart={<Shield className="h-4 w-4" />}
+              searchable
+              clearable={!isCreate}
+            />
+          )}
+        />
 
         {/* Info banner for create */}
         {isCreate && (
@@ -188,22 +148,22 @@ export const AccountForm = ({
 
         {/* Actions */}
         <div className="flex items-center justify-end gap-3 pt-3 border-gray-100">
-          <button
+          <Button
             type="button"
             onClick={onCancel}
             disabled={isSubmitting}
-            className="px-5 py-2.5 text-sm font-medium text-gray-600 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50"
+            variant="ghost"
           >
             {tForm("cancel")}
-          </button>
-          <button
+          </Button>
+          <Button
             type="submit"
             disabled={isSubmitting}
-            className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
+            variant="primary"
           >
             {isSubmitting && <Loader2 size={14} className="animate-spin" />}
             {tForm("submit")}
-          </button>
+          </Button>
         </div>
       </form>
     </div>

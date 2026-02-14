@@ -66,7 +66,7 @@ export const FilterPopup: React.FC<FilterPopupProps> = ({
     };
 
     return (
-        <div className="p-4 min-w-[300px] max-w-[350px]">
+        <div className="p-4 min-w-75 max-w-87.5">
             <div className="flex justify-between items-center mb-4">
                 <h3 className="font-semibold text-base">Lọc {column.header}</h3>
                 <button

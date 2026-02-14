@@ -1,109 +1,74 @@
-// src/features/auth/role-list/hooks/useRoleList.ts
-import { useState, useEffect, useCallback } from "react";
-import { useRouter, usePathname, useSearchParams } from "next/navigation";
+// src/features/staff/role-list/hooks/useRoleList.ts
+import { useState, useCallback, useRef } from "react";
 import { RoleDto } from "../types/role.types";
 import { getRoles } from "../services/role.service";
+import type { TableDataChangeParams } from "@/types/table-data-change.types";
 
+/**
+ * Data-fetching hook for roles.
+ * Driven by BaseTable's onDataChange - BaseTable owns search/pagination state.
+ */
 export const useRoleList = () => {
-  const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-
-  // 1. Get the state from the URL (if not available, use the default value).
-  const pageIndex = Number(searchParams.get("pageIndex")) || 1;
-  const pageSize = Number(searchParams.get("pageSize")) || 10;
-  const searchParam = searchParams.get("search") || "";
-
-  // State cục bộ cho dữ liệu API
   const [roles, setRoles] = useState<RoleDto[]>([]);
-  const [isLoading, setIsLoading] = useState(false); // Default is false to avoid flash loading if using SSR, or true if using pure CSR.
-  const [totalPage, setTotalPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
   const [totalCount, setTotalCount] = useState(0);
 
-  // State for manual refresh
-  const [refreshKey, setRefreshKey] = useState(0);
+  // Track current page/pageSize for global row numbering in columns
+  const [paginationInfo, setPaginationInfo] = useState({ page: 1, pageSize: 10 });
 
-  // 2. Utility function to generate a new URL
-  const createQueryString = useCallback(
-    (name: string, value: string | number) => {
-      const params = new URLSearchParams(searchParams.toString());
-      params.set(name, String(value));
-      return params.toString();
-    },
-    [searchParams]
-  );
+  // Dedup + latest-request tracking
+  const latestParamsRef = useRef<TableDataChangeParams>({});
+  const lastFetchHashRef = useRef("");
+  const fetchIdRef = useRef(0);
 
-  // 3. Fetch data whenever the URL changes (pageIndex, pageSize, searchParam) or refreshKey changes.
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      try {
-        const res = await getRoles({
-          pageIndex,
-          pageSize,
-          search: searchParam,
-        });
+  /** Called by BaseTable's onDataChange */
+  const handleDataChange = useCallback(async (params: TableDataChangeParams) => {
+    const hash = JSON.stringify(params);
+    if (hash === lastFetchHashRef.current) return;
+    lastFetchHashRef.current = hash;
+    latestParamsRef.current = params;
 
-        if (res) {
-          setRoles(res.pageData);
-          setTotalPage(res.totalPage);
-          setTotalCount(res.totalCount);
-        }
-      } catch (error) {
+    const currentFetchId = ++fetchIdRef.current;
+    const page = params.page || 1;
+    const pageSize = params.pageSize || 10;
+
+    setPaginationInfo({ page, pageSize });
+    setIsLoading(true);
+
+    try {
+      const res = await getRoles({
+        pageIndex: page,
+        pageSize,
+        search: params.search || "",
+      });
+
+      if (currentFetchId === fetchIdRef.current && res) {
+        setRoles(res.pageData);
+        setTotalCount(res.totalCount);
+      }
+    } catch (error) {
+      if (currentFetchId === fetchIdRef.current) {
         console.error("Failed to fetch roles:", error);
-      } finally {
+      }
+    } finally {
+      if (currentFetchId === fetchIdRef.current) {
         setIsLoading(false);
       }
-    };
-
-    fetchData();
-  }, [pageIndex, pageSize, searchParam, refreshKey]);
-
-  // 4. URL update actions
-
-  // Search: Reset to page 1 when search results change.
-  const handleSearchChange = (value: string) => {
-    const params = new URLSearchParams(searchParams.toString());
-    if (value) {
-      params.set("search", value);
-    } else {
-      params.delete("search");
     }
-    params.set("pageIndex", "1"); // Always reset to page 1 when filtering.
-    router.push(`${pathname}?${params.toString()}`);
-  };
+  }, []);
 
-  const handlePageChange = (newPage: number) => {
-    router.push(`${pathname}?${createQueryString("pageIndex", newPage)}`);
-  };
-
-  const handlePageSizeChange = (newSize: number) => {
-    const params = new URLSearchParams(searchParams.toString());
-    params.set("pageSize", String(newSize));
-    params.set("pageIndex", "1"); // Reset to page 1 when changing sizes for safety.
-    router.push(`${pathname}?${params.toString()}`);
-  };
-
-  const refresh = () => {
-    setRefreshKey((prev) => prev + 1);
-    router.refresh(); // Keep router.refresh for server components if needed
-  };
+  /** Re-fetch with the last known params */
+  const refresh = useCallback(() => {
+    lastFetchHashRef.current = "";
+    handleDataChange(latestParamsRef.current);
+  }, [handleDataChange]);
 
   return {
     roles,
     isLoading,
-    pagination: {
-      pageIndex,
-      pageSize,
-      totalPage,
-      totalCount,
-    },
-    searchTerm: searchParam, // Returns the current search value from the URL.
-    actions: {
-      onSearchChange: handleSearchChange,
-      onPageChange: handlePageChange,
-      onPageSizeChange: handlePageSizeChange,
-      refresh,
-    },
+    totalCount,
+    paginationInfo,
+    onDataChange: handleDataChange,
+    refresh,
   };
 };
