@@ -7,5 +7,9 @@ interface EditDishCategoryPageProps {
 }
 
 export default function EditDishCategoryPage({ params }: EditDishCategoryPageProps) {
-  return <EditDishCategory categoryId={params.id} />;
+  return (
+    <div className="min-h-screen bg-gray-50/50">
+      <EditDishCategory categoryId={params.id} />
+    </div>
+  );
 }
