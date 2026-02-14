@@ -2,19 +2,18 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 import { useCreateDishCategory } from '../hooks/useCreateDishCategory';
 import FormHeader from './FormHeader';
 import FormCard from './FormCard';
 import CategoryNameInput from './CategoryNameInput';
 import DescriptionTextarea from './DescriptionTextarea';
-import StatusToggle from './StatusToggle';
 import { FormErrors } from '../types';
 
 export default function AddDishCategory() {
   const router = useRouter();
   const [categoryName, setCategoryName] = useState('');
   const [description, setDescription] = useState('');
-  const [isActive, setIsActive] = useState(true);
   const [errors, setErrors] = useState<FormErrors>({});
 
   const { createCategory, isLoading, error } = useCreateDishCategory();
@@ -38,6 +37,7 @@ export default function AddDishCategory() {
 
   const handleSave = async () => {
     if (!validateForm()) {
+      toast.error('Please fix the validation errors');
       return;
     }
 
@@ -45,13 +45,13 @@ export default function AddDishCategory() {
       await createCategory({
         categoryName: categoryName.trim(),
         description: description.trim() || undefined,
-        isDisabled: !isActive,
+        isDisabled: false,
       });
       
       router.push('/dashboard/dish-category');
     } catch (error) {
       console.error('Failed to create category:', error);
-      // Error message is already handled by the hook
+      // Error message is already handled by the hook with toast
     }
   };
 
@@ -60,15 +60,15 @@ export default function AddDishCategory() {
   };
 
   return (
-    <div className="w-full bg-[#F8F9FA]">
-      <div className="max-w-[1400px] mx-auto px-8 py-6">
+    <div className="bg-white">
+      <div className="px-8">
         <FormHeader
           title="Add New Dish Category"
           subtitle="Create a new category to organize your menu items"
           onCancel={handleCancel}
           onSave={handleSave}
           isLoading={isLoading}
-          saveButtonText="Save Category"
+          saveButtonText="Create Category"
         />
 
         <FormCard error={error}>
@@ -82,11 +82,6 @@ export default function AddDishCategory() {
             value={description}
             onChange={setDescription}
             error={errors.description}
-          />
-
-          <StatusToggle
-            isActive={isActive}
-            onToggle={() => setIsActive(!isActive)}
           />
         </FormCard>
       </div>

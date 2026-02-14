@@ -1,8 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { toast } from "sonner";
 import { editCategoryService } from "../services/editCategoryService";
-import { DishCategory, UpdateDishCategoryRequest } from "../../types";
+import { DishCategory, UpdateDishCategoryRequest } from "../types";
 
 /**
  * Hook to fetch a single category by ID
@@ -19,7 +20,9 @@ export const useDishCategory = (id: number) => {
       const data = await editCategoryService.getCategoryById(id);
       setCategory(data);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to load category");
+      const errorMessage = err instanceof Error ? err.message : "Failed to load category";
+      setError(errorMessage);
+      toast.error(errorMessage);
       console.error("Error fetching category:", err);
     } finally {
       setIsLoading(false);
@@ -47,10 +50,12 @@ export const useUpdateDishCategory = () => {
       setIsLoading(true);
       setError(null);
       const data = await editCategoryService.updateCategory(id, request);
+      toast.success("Category updated successfully");
       return data;
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "Failed to update category";
       setError(errorMessage);
+      toast.error(errorMessage);
       console.error("Error updating category:", err);
       throw err;
     } finally {

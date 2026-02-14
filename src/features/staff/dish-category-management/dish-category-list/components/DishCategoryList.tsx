@@ -1,157 +1,155 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useDishCategories, useToggleCategoryStatus } from '../hooks/useListDishCategories';
-import ListHeader from './ListHeader';
-import FilterBar from './FilterBar';
-import CategoryTable from './CategoryTable';
-import { StatusFilter, CategoryFilters } from '../types';
+import { BaseTable } from "@/components/ui/table/base-table";
+import { TableColumn } from "@/types/table.types";
+import { Pagination } from "@/components/ui/pagination";
+import { toast } from "sonner";
+import { CategoryHeader } from './CategoryHeader';
+import { CategoryActions } from './CategoryActions';
+import { useCategoryList } from '../hooks/useCategoryList';
+import { useToggleCategoryStatus } from '../hooks/useListDishCategories';
+import { DishCategory } from '../types';
 
 export default function DishCategoryList() {
   const router = useRouter();
-  const [filters, setFilters] = useState<CategoryFilters>({
-    pageIndex: 1,
-    pageSize: 10,
-  });
-  const [searchQuery, setSearchQuery] = useState('');
-  const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
-
-  // Build filters for API call
-  const apiFilters: CategoryFilters = {
-    search: searchQuery || undefined,
-    isDisabled: statusFilter === 'all' ? undefined : statusFilter === 'inactive',
-    pageIndex: filters.pageIndex,
-    pageSize: filters.pageSize,
-  };
-
-  // Fetch categories from API
-  const { categories, totalItems, totalPages, isLoading, error, refetch } = useDishCategories(apiFilters);
+  
+  // Logic Hook
+  const { categories, isLoading, pagination, filters, actions } = useCategoryList();
   const { toggleStatus } = useToggleCategoryStatus();
 
-  const handleEdit = (id: number) => {
-    router.push(`/dashboard/dish-category/edit/${id}`);
+  // Action Handlers
+  const handleEdit = (category: DishCategory) => {
+    router.push(`/dashboard/dish-category/edit/${category.categoryId}`);
   };
 
-  const handleAddCategory = () => {
+  const handleCreate = () => {
     router.push('/dashboard/dish-category/add');
   };
 
-  const handleToggleStatus = async (id: number, currentDisabled: boolean) => {
+  const handleToggleStatus = async (category: DishCategory) => {
     try {
-      await toggleStatus(id, !currentDisabled);
-      refetch(); // Refresh the list
+      await toggleStatus(category.categoryId, !category.isDisabled);
+      toast.success(`Category ${!category.isDisabled ? 'disabled' : 'enabled'} successfully`);
+      actions.refresh();
     } catch (error) {
       console.error('Failed to toggle status:', error);
-      alert('Failed to update category status');
+      toast.error('Failed to update category status');
     }
   };
 
-  const handleSearchChange = (search: string) => {
-    setSearchQuery(search);
-    setFilters({ ...filters, pageIndex: 1 });
-  };
+  // Handler for the Pagination Component
+  const handlePaginationChange = useCallback((page: number, pageSize: number) => {
+    if (page !== pagination.pageIndex) {
+      actions.onPageChange(page);
+    }
+    if (pageSize !== pagination.pageSize) {
+      actions.onPageSizeChange(pageSize);
+    }
+  }, [pagination.pageIndex, pagination.pageSize, actions]);
 
-  const handleStatusFilterChange = (status: StatusFilter) => {
-    setStatusFilter(status);
-    setFilters({ ...filters, pageIndex: 1 });
-  };
-
-  const handlePageSizeChange = (pageSize: number) => {
-    setFilters({ ...filters, pageSize, pageIndex: 1 });
-  };
-
-  const handlePageChange = (pageIndex: number) => {
-    setFilters({ ...filters, pageIndex });
-  };
-
-  if (error) {
+  // Status Badge Render
+  const renderStatusBadge = (isDisabled: boolean) => {
+    if (!isDisabled) {
+      return (
+        <span className="bg-green-50 text-green-700 px-2 py-1 rounded text-xs font-medium border border-green-200">
+          Active
+        </span>
+      );
+    }
     return (
-      <div className="w-full bg-[#F8F9FA] p-6 flex items-center justify-center">
-        <div className="text-red-600 text-lg">Error: {error}</div>
-      </div>
+      <span className="bg-gray-50 text-gray-700 px-2 py-1 rounded text-xs font-medium border border-gray-200">
+        Inactive
+      </span>
     );
-  }
+  };
+
+  // Table Columns Config
+  const columns: TableColumn[] = useMemo(() => [
+    {
+      field: 'id',
+      header: 'No.',
+      width: '80px',
+      align: 'center',
+      sortable: false,
+      cellRender: ({ rowIndex }) =>
+        (pagination.pageIndex - 1) * pagination.pageSize + rowIndex + 1,
+    },
+    {
+      field: 'categoryName',
+      header: 'Name',
+      sortable: false,
+      width: '250px',
+    },
+    {
+      field: 'description',
+      header: 'Description',
+      sortable: false,
+      cellRender: ({ value }) => value || <span className="text-gray-400 italic">-</span>,
+    },
+    {
+      field: 'isDisabled',
+      header: 'Status',
+      align: 'center',
+      width: '120px',
+      sortable: false,
+      cellRender: ({ value }) => renderStatusBadge(value),
+    },
+  ], [pagination.pageIndex, pagination.pageSize]);
+
+  const handleGlobalRenderCell = useCallback((field: string, value: any, item: DishCategory, column: TableColumn, rowIndex: number) => {
+    const content = column.cellRender 
+      ? column.cellRender({ value, item, column, rowIndex }) 
+      : value;
+
+    if (column.align) {
+      return (
+        <div style={{ textAlign: column.align }}>
+          {content}
+        </div>
+      );
+    }
+    return content;
+  }, []);
 
   return (
-    <div className="w-full bg-[#F8F9FA] p-6">
-      <div className="max-w-[1400px] mx-auto">
-        <ListHeader onAddCategory={handleAddCategory} />
-        <FilterBar
-          searchQuery={searchQuery}
-          onSearchChange={handleSearchChange}
-          statusFilter={statusFilter}
-          onStatusFilterChange={handleStatusFilterChange}
+    <div className="flex flex-col h-full bg-gray-50/50">
+      <div className="p-6 pb-2 md:p-8 md:pb-4">
+        <CategoryHeader 
+          searchTerm={filters.searchTerm}
+          isLoading={isLoading}
+          onSearchChange={actions.onSearchChange}
+          onCreateClick={handleCreate}
+          statusFilter={filters.statusFilter}
+          onStatusFilterChange={actions.onStatusFilterChange}
         />
-        <div className="mt-6">
-          <CategoryTable
-            categories={categories}
-            isLoading={isLoading}
+      </div>
+      
+      <BaseTable<DishCategory>
+        data={categories}
+        loading={isLoading}
+        columns={columns}
+        rowKey="categoryId"
+        total={categories.length}
+        onRefresh={actions.refresh}
+        renderCell={handleGlobalRenderCell}
+        renderActionColumn={(item) => (
+          <CategoryActions 
+            category={item}
             onEdit={handleEdit}
             onToggleStatus={handleToggleStatus}
-            pageIndex={filters.pageIndex}
-            pageSize={filters.pageSize}
           />
-          
-          {/* Pagination */}
-          <div className="bg-white rounded-b-xl border-t border-zinc-200 px-6 py-4 flex justify-between items-center">
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2">
-                <span className="text-black text-base font-normal font-['Lexend']">
-                  Page size:
-                </span>
-                <select
-                  value={filters.pageSize}
-                  onChange={(e) => handlePageSizeChange(Number(e.target.value))}
-                  className="px-3 py-1 border border-stone-200 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 font-['Lexend']"
-                >
-                  <option value={10}>10</option>
-                  <option value={20}>20</option>
-                  <option value={50}>50</option>
-                </select>
-              </div>
-              <span className="text-slate-600 text-sm font-bold font-['Lexend']">
-                Total: {totalItems} items
-              </span>
-            </div>
+        )}
+      />
 
-            <div className="flex items-center gap-2">
-              <button
-                disabled={filters.pageIndex === 1}
-                onClick={() => handlePageChange(filters.pageIndex - 1)}
-                className="px-3 py-1.5 border border-stone-200 rounded text-base font-medium disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors font-['Lexend']"
-              >
-                Previous
-              </button>
-              
-              {/* Page Numbers */}
-              <div className="flex items-center gap-1">
-                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                  <button
-                    key={page}
-                    onClick={() => handlePageChange(page)}
-                    className={`px-3 py-1.5 rounded text-base font-medium transition-colors font-['Lexend'] ${
-                      page === filters.pageIndex
-                        ? 'bg-blue-950 text-white'
-                        : 'border border-stone-200 hover:bg-gray-50'
-                    }`}
-                  >
-                    {page}
-                  </button>
-                ))}
-              </div>
-
-              <button
-                disabled={filters.pageIndex >= totalPages}
-                onClick={() => handlePageChange(filters.pageIndex + 1)}
-                className="px-3 py-1.5 border border-stone-200 rounded text-base font-medium disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors font-['Lexend']"
-              >
-                Next
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
+      <Pagination 
+        current={pagination.pageIndex}
+        pageSize={pagination.pageSize}
+        total={pagination.totalCount}
+        onChange={handlePaginationChange}
+        pageSizeOptions={[10, 20, 50, 100]}
+      />
     </div>
   );
 }

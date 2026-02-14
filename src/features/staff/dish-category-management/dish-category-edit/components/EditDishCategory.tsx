@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 import { useDishCategory, useUpdateDishCategory } from '../hooks/useEditDishCategory';
 import FormHeader from './FormHeader';
 import FormCard from './FormCard';
@@ -54,6 +55,7 @@ export default function EditDishCategory({ categoryId }: EditDishCategoryProps) 
 
   const handleUpdate = async () => {
     if (!validateForm()) {
+      toast.error('Please fix the validation errors');
       return;
     }
 
@@ -67,7 +69,7 @@ export default function EditDishCategory({ categoryId }: EditDishCategoryProps) 
       router.push('/dashboard/dish-category');
     } catch (error) {
       console.error('Failed to update category:', error);
-      // Error message is already handled by the hook
+      // Error message is already handled by the hook with toast
     }
   };
 
@@ -89,8 +91,8 @@ export default function EditDishCategory({ categoryId }: EditDishCategoryProps) 
   }
 
   return (
-    <div className="w-full bg-[#F8F9FA]">
-      <div className="max-w-[1400px] mx-auto px-8 py-6">
+    <div className="bg-white">
+      <div className="px-8">
         <FormHeader
           title="Edit Dish Category"
           subtitle="Update category information and settings"

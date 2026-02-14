@@ -190,8 +190,8 @@ const AccountListContent = () => {
   }, []);
 
   return (
-    <div className="w-full h-full flex flex-col  overflow-hidden">
-      <div className="shrink-0 p-6 pb-2 md:pb-4 bg-white shadow-sm rounded-lg bg-gray-50/50">
+    <div className="flex flex-col h-full bg-gray-50/50">
+      <div className="p-6 pb-2 md:p-8 md:pb-4">
         <AccountHeader 
           searchTerm={filters.searchTerm}
           isLoading={isLoading}
@@ -207,39 +207,35 @@ const AccountListContent = () => {
         />
       </div>
       
-      <div className="flex-1">
-        <BaseTable<StaffAccount>
-          // Data & Loading
-          data={accounts}
-          loading={isLoading}
-          columns={columns}
-          rowKey="accountId"
-          total={accounts.length}
-          onRefresh={actions.refresh}
+      <BaseTable<StaffAccount>
+        // Data & Loading
+        data={accounts}
+        loading={isLoading}
+        columns={columns}
+        rowKey="accountId"
+        total={accounts.length}
+        onRefresh={actions.refresh}
 
-          renderCell={handleGlobalRenderCell}
+        renderCell={handleGlobalRenderCell}
 
-          // Render Action Component
-          renderActionColumn={(item) => (
-            <AccountActions 
-              account={item}
-              onView={handleView}
-              onEdit={handleEdit}
-              onResetPassword={handleResetPasswordClick}
-            />
-          )}
-        />
-      </div>
+        // Render Action Component
+        renderActionColumn={(item) => (
+          <AccountActions 
+            account={item}
+            onView={handleView}
+            onEdit={handleEdit}
+            onResetPassword={handleResetPasswordClick}
+          />
+        )}
+      />
 
-      <div className="flex-shrink-0 px-6 py-4 md:px-8 border-t bg-white">
-        <Pagination 
-          current={pagination.pageIndex}
-          pageSize={pagination.pageSize}
-          total={pagination.totalCount}
-          onChange={handlePaginationChange}
-          pageSizeOptions={[10, 20, 50, 100]}
-        />
-      </div>
+      <Pagination 
+        current={pagination.pageIndex}
+        pageSize={pagination.pageSize}
+        total={pagination.totalCount}
+        onChange={handlePaginationChange}
+        pageSizeOptions={[10, 20, 50, 100]}
+      />
 
       {/* Account Detail / Create / Edit Dialog */}
       <AccountDialog
