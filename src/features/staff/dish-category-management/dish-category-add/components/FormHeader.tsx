@@ -1,4 +1,5 @@
 import React from 'react';
+import { Button } from '@/components/ui/button';
 
 interface FormHeaderProps {
   title: string;
@@ -18,33 +19,34 @@ export default function FormHeader({
   saveButtonText,
 }: FormHeaderProps) {
   return (
-    <div className="mb-5">
-      <div className="flex justify-between items-start mb-6">
-        <div>
-          <h1 className="text-slate-900 text-[32px] font-bold font-['Inter'] leading-tight mb-1.5">
-            {title}
-          </h1>
-          <p className="text-slate-600 text-[15px] font-['Inter']">
-            {subtitle}
-          </p>
-        </div>
-        
-        <div className="flex gap-3">
-          <button
-            onClick={onCancel}
-            disabled={isLoading}
-            className="px-7 py-3 rounded-lg border border-slate-300 bg-white text-slate-700 text-[15px] font-semibold font-['Inter'] hover:bg-slate-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            Back To List
-          </button>
-          <button
-            onClick={onSave}
-            disabled={isLoading}
-            className="px-7 py-3 bg-[#1e293b] rounded-lg text-white text-[15px] font-semibold font-['Inter'] hover:bg-[#334155] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {isLoading ? 'Saving...' : saveButtonText}
-          </button>
-        </div>
+    <div className="flex items-center justify-between mb-8 pb-6 border-b border-gray-100">
+      <div>
+        <h2 className="text-2xl font-bold text-gray-900">{title}</h2>
+        <p className="text-sm text-gray-500 mt-1">{subtitle}</p>
+      </div>
+      
+      {/* Action Buttons */}
+      <div className="flex gap-4">
+        <Button
+          onClick={onCancel}
+          type="button"
+          variant="outline"
+          size="lg"
+          disabled={isLoading}
+          className="border-gray-300 text-gray-700 hover:bg-gray-50"
+        >
+          Cancel
+        </Button>
+        <Button
+          onClick={onSave}
+          type="button"
+          size="lg"
+          isLoading={isLoading}
+          disabled={isLoading}
+          className="bg-blue-600 text-white hover:bg-blue-700"
+        >
+          {saveButtonText}
+        </Button>
       </div>
     </div>
   );
