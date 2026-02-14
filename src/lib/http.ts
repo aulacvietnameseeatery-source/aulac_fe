@@ -48,31 +48,21 @@ async function http<T>(path: string, options?: FetchOptions): Promise<T> {
     const token = authStorage.getAccessToken();
     const authHeaders = token ? { Authorization: `Bearer ${token}` } : {};
 
-    const isFormData = options?.body instanceof FormData;
-
-    const headers: Record<string, string> = {};
-
-    if (!isFormData) {
-        headers["Content-Type"] = "application/json";
-    }
-
-    //CHỈ set Content-Type khi KHÔNG phải FormData
-    if (!isFormData) {
-        headers["Content-Type"] = "application/json";
-    }
-
-    // merge headers từ options (nếu có)
-  if (options?.headers) {
-    Object.entries(options.headers).forEach(([key, value]) => {
-      if (value !== undefined) {
-        headers[key] = value;
-      }
-    });
-  }
+    // Add CSRF token for state-changing requests
+    const method = options?.method || 'GET';
+    const csrfHeaders = CSRFProtection.requiresCSRF(method)
+        ? { [CSRFProtection.getHeaderName()]: CSRFProtection.getToken() }
+        : {};
 
     const config: RequestInit = {
         ...options,
-        headers,
+        credentials: 'include', // CRITICAL: Send HttpOnly cookies (refresh_token)
+        headers: {
+            "Content-Type": "application/json",
+            ...authHeaders,
+            ...csrfHeaders,
+            ...options?.headers,
+        } as HeadersInit,
     };
 
     try {
@@ -218,26 +208,20 @@ export const api = {
      */
     post: <T, B = unknown>(path: string, body: B, options?: FetchOptions) =>
         http<T>(path, {
-        ...options,
-        method: "POST",
-        body: body instanceof FormData
-            ? body
-            : JSON.stringify(body),
+            ...options,
+            method: "POST",
+            body: JSON.stringify(body),
         }),
 
     /**
      * PUT request
      */
-    put: <T, B = unknown>(
-        path: string, 
-        body: B, 
-        options?: FetchOptions) =>
-            http<T>(path, { 
-                ...options, 
-                method: "PUT", 
-                body: body instanceof FormData 
-                ? body 
-                : JSON.stringify(body) }),
+    put: <T, B = unknown>(path: string, body: B, options?: FetchOptions) =>
+        http<T>(path, {
+            ...options,
+            method: "PUT",
+            body: JSON.stringify(body),
+        }),
 
     /**
      * DELETE request
