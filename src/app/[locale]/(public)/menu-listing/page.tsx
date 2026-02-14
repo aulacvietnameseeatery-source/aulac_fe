@@ -5,13 +5,15 @@ import { AnimatePresence } from "framer-motion";
 import { Loader2 } from "lucide-react"; // Icon loading khi chờ API
 
 // IMPORT COMPONENTS
-import { CartSummary, CartItem, TableSelectionModal } from "@/features/customer/menu-listing";
 import { Atmosphere } from "@/features/customer/menu-listing-new/components/atmosphere";
 import { BookFrame } from "@/features/customer/menu-listing-new/components/book-frame";
-import { MenuItemData } from "@/features/customer/menu-listing-new/data/mock-menu"; // Chỉ import type
 
 // IMPORT HOOK LẤY DATA THẬT
 import { useMenuData } from "@/features/customer/menu-listing-new/hooks/use-menu-data";
+import {CartItem} from "@/features/customer/menu-listing-new/types/cart";
+import {MenuItemData} from "@/features/customer/menu-listing-new/data/mock-menu";
+import {TableSelectionModal} from "@/features/customer/menu-listing-new/components/table-selection-modal";
+import {CartSummary} from "@/features/customer/menu-listing-new/components/cart-summary";
 
 export default function MenuListingPage() {
     // ================= STATE =================
