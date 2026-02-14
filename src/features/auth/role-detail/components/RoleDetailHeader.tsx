@@ -3,6 +3,7 @@
 
 import React from 'react';
 import { useTranslations } from 'next-intl';
+import { Button } from '@/components/ui/button';
 
 type Props = {
   onBack: () => void;
@@ -18,20 +19,23 @@ export const RoleDetailHeader = ({ onBack, onEdit }: Props) => {
       
       {/* Action Buttons */}
       <div className="flex gap-4">
-        <button
+        <Button
           onClick={onBack}
           type="button"
-          className="px-6 py-3 border border-gray-300 rounded-lg text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-colors"
+          variant="outline"
+          size="lg"
+          className="border-gray-300 text-gray-700 hover:bg-gray-50"
         >
           {t('back')}
-        </button>
-        <button
+        </Button>
+        <Button
           onClick={onEdit}
           type="button"
-          className="px-6 py-3 bg-[#1e3a2f] text-white rounded-lg text-sm font-semibold hover:bg-[#2d5547] transition-colors"
+          size="lg"
+          className="bg-blue-600 text-white hover:bg-blue-700"
         >
           {t('edit')}
-        </button>
+        </Button>
       </div>
     </div>
   );

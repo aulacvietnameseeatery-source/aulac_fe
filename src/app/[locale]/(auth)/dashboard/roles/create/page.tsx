@@ -9,12 +9,8 @@ import { useTranslations } from "next-intl";
 const RoleCreatePage = () => {
   const t = useTranslations("Role.Create");
   const {
-    roleCode,
-    setRoleCode,
     roleName,
     setRoleName,
-    isActive,
-    setIsActive,
     permissionGroups,
     selectedPermissions,
     allPermissionsSelected,
@@ -33,9 +29,7 @@ const RoleCreatePage = () => {
   return (
     <div className="min-h-screen bg-gray-50/50">
       <RoleCreateForm
-        roleCode={roleCode}
         roleName={roleName}
-        isActive={isActive}
         permissionGroups={permissionGroups}
         allPermissionsSelected={allPermissionsSelected}
         isLoadingPermissions={isLoadingPermissions}
@@ -43,9 +37,7 @@ const RoleCreatePage = () => {
         errors={errors}
         totalSelected={selectedPermissions.size}
         totalPermissions={totalPermissions}
-        onRoleCodeChange={setRoleCode}
         onRoleNameChange={setRoleName}
-        onIsActiveChange={setIsActive}
         onTogglePermission={togglePermission}
         onToggleGroup={toggleGroupPermissions}
         onToggleAll={toggleAllPermissions}

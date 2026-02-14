@@ -19,7 +19,7 @@ export const useRoleEdit = (roleId: number) => {
   
   const [isLoadingData, setIsLoadingData] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [errors, setErrors] = useState<{ roleCode?: string; roleName?: string }>({});
+  const [errors, setErrors] = useState<{ roleName?: string }>({});
 
   // Load role data
   useEffect(() => {
@@ -73,13 +73,7 @@ export const useRoleEdit = (roleId: number) => {
 
   // Validation
   const validate = useCallback((): boolean => {
-    const newErrors: { roleCode?: string; roleName?: string } = {};
-
-    if (!roleCode.trim()) {
-      newErrors.roleCode = t("validation.roleCodeRequired");
-    } else if (roleCode.length > 50) {
-      newErrors.roleCode = t("validation.roleCodeMaxLength");
-    }
+    const newErrors: { roleName?: string } = {};
 
     if (!roleName.trim()) {
       newErrors.roleName = t("validation.roleNameRequired");
@@ -89,7 +83,7 @@ export const useRoleEdit = (roleId: number) => {
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  }, [roleCode, roleName, t]);
+  }, [roleName, t]);
 
   // Toggle single permission
   const handleTogglePermission = useCallback((permissionId: number) => {
@@ -140,7 +134,6 @@ export const useRoleEdit = (roleId: number) => {
       setIsSubmitting(true);
 
       const request: UpdateRoleRequest = {
-        roleCode: roleCode.trim(),
         roleName: roleName.trim(),
         isActive,
         permissionIds: selectedPermissionIds,
@@ -158,7 +151,7 @@ export const useRoleEdit = (roleId: number) => {
     } finally {
       setIsSubmitting(false);
     }
-  }, [validate, roleCode, roleName, isActive, selectedPermissionIds, roleId, router, t]);
+  }, [validate, roleName, isActive, selectedPermissionIds, roleId, router, t]);
 
   // Cancel
   const handleCancel = useCallback(() => {
@@ -167,7 +160,6 @@ export const useRoleEdit = (roleId: number) => {
 
   return {
     roleCode,
-    setRoleCode,
     roleName,
     setRoleName,
     isActive,

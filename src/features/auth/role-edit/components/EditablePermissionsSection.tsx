@@ -50,7 +50,7 @@ export const EditablePermissionsSection = ({
       </div>
 
       {/* Permission Groups Grid */}
-      <div className="border border-gray-200 rounded-lg p-6">
+      <div className="border border-gray-200 rounded-lg p-6 max-h-[calc(100vh-350px)] overflow-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {permissionGroups.map((group) => (
             <EditablePermissionGroup

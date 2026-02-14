@@ -1,9 +1,7 @@
 // src/features/auth/role-create/types/role-create.types.ts
 
 export type CreateRoleRequest = {
-  roleCode: string;
   roleName: string;
-  isActive: boolean;
   permissionIds: number[];
 };
 

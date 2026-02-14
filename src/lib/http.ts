@@ -8,7 +8,7 @@
 import { authStorage } from "./auth-storage";
 import { CSRFProtection } from "./csrf";
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://localhost:7083";
+export const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://localhost:7083";
 
 interface FetchOptions extends RequestInit {
     headers?: Record<string, string>;
@@ -48,21 +48,30 @@ async function http<T>(path: string, options?: FetchOptions): Promise<T> {
     const token = authStorage.getAccessToken();
     const authHeaders = token ? { Authorization: `Bearer ${token}` } : {};
 
-    // Add CSRF token for state-changing requests
-    const method = options?.method || 'GET';
-    const csrfHeaders = CSRFProtection.requiresCSRF(method)
-        ? { [CSRFProtection.getHeaderName()]: CSRFProtection.getToken() }
+    const isFormData = options?.body instanceof FormData;
+
+    const headers: Record<string, string> = token
+        ? { Authorization: `Bearer ${token}` }
         : {};
+
+    // Set Content-Type when NOT FormData
+    if (!isFormData) {
+        headers["Content-Type"] = "application/json";
+    }
+
+    // Merge headers from options (if any)
+    if (options?.headers) {
+        Object.entries(options.headers).forEach(([key, value]) => {
+            if (value !== undefined) {
+                headers[key] = value;
+            }
+        });
+    }
 
     const config: RequestInit = {
         ...options,
-        credentials: 'include', // CRITICAL: Send HttpOnly cookies (refresh_token)
-        headers: {
-            "Content-Type": "application/json",
-            ...authHeaders,
-            ...csrfHeaders,
-            ...options?.headers,
-        } as HeadersInit,
+        credentials: 'include',
+        headers,
     };
 
     try {
@@ -215,7 +224,9 @@ export const api = {
         http<T>(path, {
             ...options,
             method: "POST",
-            body: JSON.stringify(body),
+            body: body instanceof FormData
+            ? body
+            : JSON.stringify(body),
         }),
 
     /**
@@ -225,7 +236,9 @@ export const api = {
         http<T>(path, {
             ...options,
             method: "PUT",
-            body: JSON.stringify(body),
+            body: body instanceof FormData 
+                ? body 
+                : JSON.stringify(body),
         }),
 
     /**

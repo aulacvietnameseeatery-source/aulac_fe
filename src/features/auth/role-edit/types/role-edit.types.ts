@@ -1,7 +1,6 @@
 // src/features/auth/role-edit/types/role-edit.types.ts
 
 export type UpdateRoleRequest = {
-  roleCode: string;
   roleName: string;
   isActive: boolean;
   permissionIds: number[];

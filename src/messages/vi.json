@@ -770,6 +770,7 @@
       "roleCodePlaceholder": "Nhập mã vai trò (VD: MANAGER, STAFF)",
       "roleName": "Tên Vai trò",
       "roleNamePlaceholder": "Nhập tên vai trò",
+      "roleCodeAutoGenNote": "Mã vai trò sẽ được tự động tạo từ tên vai trò (viết hoa)",
       "status": "Trạng thái",
       "active": "Hoạt động",
       "inactive": "Không hoạt động",
@@ -787,6 +788,7 @@
       "title": "Chỉnh sửa Vai trò",
       "roleCode": "Mã Vai trò",
       "roleCodePlaceholder": "Nhập mã vai trò (VD: MANAGER, STAFF)",
+      "roleCodeReadOnly": "Mã vai trò không thể chỉnh sửa",
       "roleName": "Tên Vai trò",
       "roleNamePlaceholder": "Nhập tên vai trò",
       "status": "Trạng thái",
@@ -852,6 +854,70 @@
         "prev": "Trang trước",
         "next": "Trang sau",
         "last": "Trang cuối"
+      }
+    }
+  },
+  "Dish": {
+    "List": {
+      "title": "Quản lý món ăn",
+      "description": "Quản lý thực đơn, giá cả, danh mục và trạng thái hiển thị của món ăn.",
+      "searchPlaceholder": "Tìm theo tên món, danh mục...",
+      "addNew": "Thêm món mới",
+      "table": {
+        "no": "STT",
+        "dishName": "Tên món ăn",
+        "category": "Danh mục",
+        "price": "Giá",
+        "status": "Trạng thái",
+        "online": "Hiển thị",
+        "action": "Thao tác",
+        "empty": "Không tìm thấy món ăn nào."
+      },
+      "pagination": {
+        "pageSize": "Số bản ghi:",
+        "previous": "Trước",
+        "next": "Sau"
+      },
+      "actions": {
+        "view": "Xem chi tiết",
+        "edit": "Chỉnh sửa",
+        "delete": "Xóa món"
+      },
+      "status": {
+        "available": "Sẵn sàng",
+        "outOfStock": "Hết hàng",
+        "hidden": "Tạm ẩn"
+      },
+      "loading": "Đang tải dữ liệu món ăn...",
+      "filters": {
+        "category": "Danh mục",
+        "status": "Trạng thái",
+        "allCategories": "Tất cả danh mục",
+        "allStatuses": "Tất cả trạng thái"
+      },
+      "deleteModal": {
+        "title": "Xóa món ăn",
+        "message": "Bạn có chắc chắn muốn xóa món \"{name}\"? Hành động này không thể hoàn tác.",
+        "confirm": "Xóa",
+        "cancel": "Hủy"
+      },
+      "notifications": {
+        "deleteSuccess": "Xóa món ăn thành công",
+        "deleteError": "Đã xảy ra lỗi khi xóa món ăn"
+      }
+    },
+    "Validation": {
+      "dishName": {
+        "required": "Tên món ăn không được để trống",
+        "minLength": "Tên món phải có ít nhất 2 ký tự",
+        "maxLength": "Tên món không quá 150 ký tự"
+      },
+      "price": {
+        "required": "Giá không được để trống",
+        "min": "Giá phải lớn hơn hoặc bằng 0"
+      },
+      "category": {
+        "required": "Vui lòng chọn danh mục"
       }
     }
   },
