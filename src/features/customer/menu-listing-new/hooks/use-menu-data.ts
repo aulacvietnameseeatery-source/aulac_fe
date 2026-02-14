@@ -41,7 +41,8 @@ export const useMenuData = () => {
                         name: dish.dishName,
                         price: dish.price,
                         desc: dish.tagline || "", // Dùng tagline làm mô tả
-                        image: dish.imageUrl || "/images/logo.png" // Fallback ảnh nếu thiếu
+                        //image: dish.imageUrl || "/images/logo.png"
+                         image: "images/menu-grid/Tiramisu.png" //Fallback ảnh nếu thiếu
                     });
                 });
 
