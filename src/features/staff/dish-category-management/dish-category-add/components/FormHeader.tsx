@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 
 interface FormHeaderProps {
@@ -18,6 +19,8 @@ export default function FormHeader({
   isLoading,
   saveButtonText,
 }: FormHeaderProps) {
+  const t = useTranslations('DishCategory.Add');
+  
   return (
     <div className="flex items-center justify-between mb-8 pb-6 border-b border-gray-100">
       <div>
@@ -31,19 +34,18 @@ export default function FormHeader({
           onClick={onCancel}
           type="button"
           variant="outline"
-          size="lg"
           disabled={isLoading}
-          className="border-gray-300 text-gray-700 hover:bg-gray-50"
+          className="shadow-md"
         >
-          Cancel
+          {t('cancel')}
         </Button>
         <Button
           onClick={onSave}
           type="button"
-          size="lg"
+          variant="outline"
           isLoading={isLoading}
           disabled={isLoading}
-          className="bg-blue-600 text-white hover:bg-blue-700"
+          className="shadow-md bg-blue-600 text-white hover:bg-blue-700 border-none"
         >
           {saveButtonText}
         </Button>

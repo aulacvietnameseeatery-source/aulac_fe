@@ -24,19 +24,18 @@ export const RoleEditHeader = ({ isSubmitting, onCancel, onSubmit }: Props) => {
           onClick={onCancel}
           type="button"
           variant="outline"
-          size="lg"
           disabled={isSubmitting}
-          className="border-gray-300 text-gray-700 hover:bg-gray-50"
+          className="shadow-md"
         >
           {t('cancel')}
         </Button>
         <Button
           onClick={onSubmit}
           type="button"
-          size="lg"
+          variant="outline"
           isLoading={isSubmitting}
           disabled={isSubmitting}
-          className="bg-blue-600 text-white hover:bg-blue-700"
+          className="shadow-md bg-blue-600 text-white hover:bg-blue-700 border-none"
         >
           {t('save')}
         </Button>

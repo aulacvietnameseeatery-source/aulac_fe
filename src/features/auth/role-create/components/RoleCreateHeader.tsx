@@ -25,19 +25,18 @@ export const RoleCreateHeader = ({ isSubmitting, isLoadingPermissions, onCancel,
           onClick={onCancel}
           type="button"
           variant="outline"
-          size="lg"
           disabled={isSubmitting}
-          className="border-gray-300 text-gray-700 hover:bg-gray-50"
+          className="shadow-md"
         >
           {t('cancel')}
         </Button>
         <Button
           onClick={onSubmit}
           type="button"
-          size="lg"
+          variant="outline"
           isLoading={isSubmitting}
           disabled={isSubmitting || isLoadingPermissions}
-          className="bg-blue-600 text-white hover:bg-blue-700"
+          className="shadow-md bg-blue-600 text-white hover:bg-blue-700 border-none"
         >
           {t('create')}
         </Button>
