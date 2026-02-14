@@ -2,12 +2,18 @@
 
 import { useState } from "react";
 import { AnimatePresence } from "framer-motion";
+import { Loader2 } from "lucide-react"; // Icon loading khi chờ API
 
 // IMPORT COMPONENTS
-import { CartSummary, CartItem, TableSelectionModal } from "@/features/customer/menu-listing";
 import { Atmosphere } from "@/features/customer/menu-listing-new/components/atmosphere";
 import { BookFrame } from "@/features/customer/menu-listing-new/components/book-frame";
-import { MenuItemData } from "@/features/customer/menu-listing-new/data/mock-menu";
+
+// IMPORT HOOK LẤY DATA THẬT
+import { useMenuData } from "@/features/customer/menu-listing-new/hooks/use-menu-data";
+import {CartItem} from "@/features/customer/menu-listing-new/types/cart";
+import {MenuItemData} from "@/features/customer/menu-listing-new/data/mock-menu";
+import {TableSelectionModal} from "@/features/customer/menu-listing-new/components/table-selection-modal";
+import {CartSummary} from "@/features/customer/menu-listing-new/components/cart-summary";
 
 export default function MenuListingPage() {
     // ================= STATE =================
@@ -15,6 +21,9 @@ export default function MenuListingPage() {
     const [tableNumber, setTableNumber] = useState("");
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [pendingQueue, setPendingQueue] = useState<MenuItemData[]>([]);
+
+    // Hook lấy dữ liệu menu thật từ Backend
+    const { menuData, isLoading } = useMenuData();
 
     // ================= LOGIC =================
 
@@ -24,7 +33,7 @@ export default function MenuListingPage() {
             const newCart = [...prev];
             itemsToAdd.forEach(newItem => {
                 const existingIndex = newCart.findIndex(i => i.id === newItem.id);
-                // Parse giá
+                // Parse giá để tránh lỗi
                 const priceNumber = typeof newItem.price === 'string'
                     ? parseFloat((newItem.price as string).replace(/[^0-9.]/g, ''))
                     : typeof newItem.price === 'number' ? newItem.price : 0;
@@ -48,7 +57,7 @@ export default function MenuListingPage() {
         });
     };
 
-    // Callback từ BookFrame (Click nút Add trong Detail Popup)
+    // Callback từ BookFrame (Click nút Add trong Detail Popup hoặc MenuCard)
     const handleAddToCartFromBook = (item: MenuItemData) => {
         if (!tableNumber) {
             setPendingQueue(prev => [...prev, item]);
@@ -69,11 +78,14 @@ export default function MenuListingPage() {
         }
     };
 
-    // Helper functions
+    // Helper functions cho giỏ hàng
     const handleUpdateQuantity = (id: string, delta: number) => {
         setCartItems(prev => prev.map(item => item.id === id ? { ...item, quantity: Math.max(1, item.quantity + delta) } : item));
     };
-    const handleRemoveItem = (id: string) => setCartItems(prev => prev.filter(item => item.id !== id));
+
+    const handleRemoveItem = (id: string) => {
+        setCartItems(prev => prev.filter(item => item.id !== id));
+    };
 
     return (
         <main className="relative flex-1 min-h-screen w-full flex items-center justify-center p-4 overflow-hidden bg-[#0f172a]">
@@ -87,13 +99,21 @@ export default function MenuListingPage() {
             <Atmosphere />
 
             <div className="relative z-10 w-full max-w-[1400px]">
-                {/* BookFrame now manages its own pages and logic */}
-                <BookFrame
-                    onAddToCart={handleAddToCartFromBook}
-                />
+                {/* HIỂN THỊ LOADING KHI ĐANG FETCH API HOẶC HIỂN THỊ BOOK FRAME KHI ĐÃ CÓ DATA */}
+                {isLoading ? (
+                    <div className="flex flex-col items-center justify-center h-[60vh]">
+                        <Loader2 className="w-12 h-12 text-[#C5A059] animate-spin mb-4" />
+                        <p className="text-[#C5A059] font-display tracking-widest uppercase">Opening Menu...</p>
+                    </div>
+                ) : (
+                    <BookFrame
+                        menuData={menuData} // Truyền dữ liệu thật đã gom nhóm
+                        onAddToCart={handleAddToCartFromBook}
+                    />
+                )}
             </div>
 
-            {/* GIỎ HÀNG CÁI LÁ */}
+            {/* GIỎ HÀNG */}
             <div
                 id="cart-destination"
                 className="fixed bottom-20.75 right-5 z-50 pointer-events-none flex flex-col items-end justify-end"
@@ -107,7 +127,7 @@ export default function MenuListingPage() {
                                 onUpdateTable={setTableNumber}
                                 onUpdateQuantity={handleUpdateQuantity}
                                 onRemoveItem={handleRemoveItem}
-                                onConfirm={() => console.log("Checkout", cartItems)}
+                                onConfirm={() => console.log("Checkout requested:", cartItems)}
                             />
                         </div>
                     )}
