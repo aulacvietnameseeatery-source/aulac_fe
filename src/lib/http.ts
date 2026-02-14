@@ -217,26 +217,20 @@ export const api = {
      */
     post: <T, B = unknown>(path: string, body: B, options?: FetchOptions) =>
         http<T>(path, {
-        ...options,
-        method: "POST",
-        body: body instanceof FormData
-            ? body
-            : JSON.stringify(body),
+            ...options,
+            method: "POST",
+            body: JSON.stringify(body),
         }),
 
     /**
      * PUT request
      */
-    put: <T, B = unknown>(
-        path: string, 
-        body: B, 
-        options?: FetchOptions) =>
-            http<T>(path, { 
-                ...options, 
-                method: "PUT", 
-                body: body instanceof FormData 
-                ? body 
-                : JSON.stringify(body) }),
+    put: <T, B = unknown>(path: string, body: B, options?: FetchOptions) =>
+        http<T>(path, {
+            ...options,
+            method: "PUT",
+            body: JSON.stringify(body),
+        }),
 
     /**
      * DELETE request
