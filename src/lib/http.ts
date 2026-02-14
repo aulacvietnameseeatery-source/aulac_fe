@@ -219,7 +219,9 @@ export const api = {
         http<T>(path, {
             ...options,
             method: "POST",
-            body: JSON.stringify(body),
+            body: body instanceof FormData
+            ? body
+            : JSON.stringify(body),
         }),
 
     /**
@@ -229,7 +231,9 @@ export const api = {
         http<T>(path, {
             ...options,
             method: "PUT",
-            body: JSON.stringify(body),
+            body: body instanceof FormData 
+                ? body 
+                : JSON.stringify(body),
         }),
 
     /**

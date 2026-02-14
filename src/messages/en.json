@@ -834,6 +834,61 @@
       }
     }
   },
+  "StaffReservation": {
+    "title": "Create Reservation Manually",
+    "subtitle": "Enter details for walk-in or phone bookings",
+    "cancel": "Cancel",
+    "save": "Save Reservation",
+    "errors": {
+      "missingTitle": "Missing information",
+      "missingDescription": "Please fill in phone, name, date, time and select a table.",
+      "timeErrorTitle": "Invalid time",
+      "timePast": "Cannot select a time in the past.",
+      "failTitle": "Reservation failed",
+      "systemError": "System error. Please try again."
+    },
+    "success": {
+      "title": "Reservation successful!",
+      "description": "Customer: {name} - Reservation #{id}"
+    },
+
+    "customer": {
+      "sectionTitle": "Customer Identification",
+      "phone": "Phone Number",
+      "fullName": "Full Name",
+      "email": "Email Address",
+      "enterPhone": "Enter phone...",
+      "enterName": "Customer Name",
+      "newCustomer": "New Customer",
+      "member": "Member ({points} pts)"
+    },
+
+    "booking": {
+      "sectionTitle": "Booking Details",
+      "date": "Date",
+      "time": "Time",
+      "partySize": "Party Size",
+      "enterSize": "Ex: 4"
+    },
+
+    "table": {
+      "availability": "Table Availability",
+      "scanning": "Scanning...",
+      "found": "{count} tables found",
+      "emptyHint": "Enter Date, Time, and Size to find tables.",
+      "noTable": "No tables available."
+    },
+
+    "status": {
+      "source": "Reservation Source",
+      "phone": "Phone Booking",
+      "walkIn": "Walk-in",
+      "status": "Reservation Status",
+      "confirmed": "Confirmed",
+      "checkedIn": "Checked In",
+      "phoneHint": "*Phone bookings are set to 'Confirmed' by default."
+    }
+  },
   "Dish": {
     "List": {
       "title": "Dish Management",
