@@ -133,7 +133,7 @@ export function DishForm({ mode, dishId, onSuccess }: DishFormProps) {
       <Toaster position="top-center" richColors />
       
       {/* Header */}
-      <header className="flex-1 w-full max-w-7xl mx-auto px-8 space-y-6 mt-6">
+      <header className="flex-1 w-full max-w-7xl mx-auto space-y-6 mt-6">
           <div className="flex items-center justify-between">
             {/* <button onClick={() => router.back()} className="mt-1 p-2 hover:bg-gray-200 rounded-full text-gray-600"><ArrowLeft size={24} /></button> */}
             <div>
@@ -144,7 +144,7 @@ export function DishForm({ mode, dishId, onSuccess }: DishFormProps) {
       </header>
 
       {/* Main Content */}
-      <main className="flex-1 w-full max-w-7xl mx-auto px-8 pb-16 space-y-6 mt-6">
+      <main className="flex-1 w-full max-w-7xl mx-auto pb-16 space-y-6 mt-6">
         
         {/* ROW 1: CORE INFORMATION */}
         <SectionWrapper title="Core Information" subtitle="Classification & Pricing">

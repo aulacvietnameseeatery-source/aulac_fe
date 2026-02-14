@@ -912,6 +912,56 @@
       "phoneHint": "*Đặt qua điện thoại mặc định là 'Đã xác nhận'."
     }
   },
+  "DishCategory": {
+    "List": {
+      "title": "Quản lý Danh mục Món ăn",
+      "description": "Quản lý và tổ chức các danh mục thực đơn nhà hàng một cách hiệu quả.",
+      "searchPlaceholder": "Tìm theo tên danh mục...",
+      "addNew": "Thêm Danh mục Mới",
+      "filters": {
+        "allStatuses": "Tất cả Trạng thái",
+        "active": "Hoạt động",
+        "inactive": "Không hoạt động"
+      }
+    },
+    "Add": {
+      "title": "Thêm Danh mục Món ăn Mới",
+      "subtitle": "Tạo danh mục mới để tổ chức các món ăn trong thực đơn",
+      "saveButton": "Tạo Danh mục",
+      "cancel": "Hủy",
+      "categoryName": "Tên Danh mục",
+      "categoryNamePlaceholder": "VD: Khai vị, Món chính, Tráng miệng",
+      "description": "Mô tả",
+      "descriptionPlaceholder": "Cung cấp mô tả ngắn về danh mục này và các loại món ăn trong danh mục...",
+      "validation": {
+        "nameRequired": "Tên danh mục không được để trống",
+        "nameMaxLength": "Tên danh mục không được vượt quá 100 ký tự",
+        "descriptionMaxLength": "Mô tả không được vượt quá 100 ký tự",
+        "fixErrors": "Vui lòng sửa các lỗi xác thực"
+      }
+    },
+    "Edit": {
+      "title": "Chỉnh sửa Danh mục Món ăn",
+      "subtitle": "Cập nhật thông tin và cài đặt danh mục",
+      "saveButton": "Lưu Thay đổi",
+      "cancel": "Hủy",
+      "categoryName": "Tên Danh mục",
+      "categoryNamePlaceholder": "VD: Khai vị, Món chính, Tráng miệng",
+      "description": "Mô tả",
+      "descriptionPlaceholder": "Cung cấp mô tả ngắn về danh mục này và các loại món ăn trong danh mục...",
+      "status": "Trạng thái Danh mục",
+      "statusActive": "Danh mục đang hoạt động và hiển thị trong thực đơn",
+      "statusInactive": "Danh mục không hoạt động và ẩn khỏi khách hàng",
+      "validation": {
+        "nameRequired": "Tên danh mục không được để trống",
+        "nameMaxLength": "Tên danh mục không được vượt quá 100 ký tự",
+        "descriptionMaxLength": "Mô tả không được vượt quá 100 ký tự",
+        "fixErrors": "Vui lòng sửa các lỗi xác thực"
+      },
+      "loading": "Đang tải...",
+      "backToList": "Quay lại danh sách"
+    }
+  },
   "Dish": {
     "List": {
       "title": "Quản lý món ăn",

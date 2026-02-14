@@ -23,16 +23,15 @@ export const RoleDetailHeader = ({ onBack, onEdit }: Props) => {
           onClick={onBack}
           type="button"
           variant="outline"
-          size="lg"
-          className="border-gray-300 text-gray-700 hover:bg-gray-50"
+          className="shadow-md"
         >
           {t('back')}
         </Button>
         <Button
           onClick={onEdit}
           type="button"
-          size="lg"
-          className="bg-blue-600 text-white hover:bg-blue-700"
+          variant="outline"
+          className="shadow-md bg-blue-600 text-white hover:bg-blue-700 border-none"
         >
           {t('edit')}
         </Button>

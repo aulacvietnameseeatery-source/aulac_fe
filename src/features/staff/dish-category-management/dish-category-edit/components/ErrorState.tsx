@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslations } from 'next-intl';
 
 interface ErrorStateProps {
   error: string;
@@ -6,6 +7,8 @@ interface ErrorStateProps {
 }
 
 export default function ErrorState({ error, onBackToList }: ErrorStateProps) {
+  const t = useTranslations('DishCategory.Edit');
+  
   return (
     <div className="w-full bg-[#F8F9FA] flex items-center justify-center py-20">
       <div className="text-center">
@@ -14,7 +17,7 @@ export default function ErrorState({ error, onBackToList }: ErrorStateProps) {
           onClick={onBackToList}
           className="px-5 py-2.5 bg-slate-800 hover:bg-slate-700 rounded-lg text-white text-sm font-medium"
         >
-          Back to List
+          {t('backToList')}
         </button>
       </div>
     </div>

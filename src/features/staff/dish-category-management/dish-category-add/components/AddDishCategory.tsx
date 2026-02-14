@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 import { useCreateDishCategory } from '../hooks/useCreateDishCategory';
 import FormHeader from './FormHeader';
@@ -12,6 +13,7 @@ import { FormErrors } from '../types';
 
 export default function AddDishCategory() {
   const router = useRouter();
+  const t = useTranslations('DishCategory.Add');
   const [categoryName, setCategoryName] = useState('');
   const [description, setDescription] = useState('');
   const [errors, setErrors] = useState<FormErrors>({});
@@ -22,13 +24,13 @@ export default function AddDishCategory() {
     const newErrors: { [key: string]: string } = {};
 
     if (!categoryName.trim()) {
-      newErrors.categoryName = 'Category name is required';
+      newErrors.categoryName = t('validation.nameRequired');
     } else if (categoryName.length > 100) {
-      newErrors.categoryName = 'Category name cannot exceed 100 characters';
+      newErrors.categoryName = t('validation.nameMaxLength');
     }
 
     if (description && description.length > 100) {
-      newErrors.description = 'Description cannot exceed 100 characters';
+      newErrors.description = t('validation.descriptionMaxLength');
     }
 
     setErrors(newErrors);
@@ -37,7 +39,7 @@ export default function AddDishCategory() {
 
   const handleSave = async () => {
     if (!validateForm()) {
-      toast.error('Please fix the validation errors');
+      toast.error(t('validation.fixErrors'));
       return;
     }
 
@@ -63,12 +65,12 @@ export default function AddDishCategory() {
     <div className="bg-white">
       <div className="px-8">
         <FormHeader
-          title="Add New Dish Category"
-          subtitle="Create a new category to organize your menu items"
+          title={t('title')}
+          subtitle={t('subtitle')}
           onCancel={handleCancel}
           onSave={handleSave}
           isLoading={isLoading}
-          saveButtonText="Create Category"
+          saveButtonText={t('saveButton')}
         />
 
         <FormCard error={error}>

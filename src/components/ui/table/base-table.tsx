@@ -501,11 +501,11 @@ export function BaseTable<T>({
                                                         </div>
                                                     )
                                                 ))}
+                                                <div className="delete-all-filter" onClick={handleClearAllFilters}>
+                                                    {t('clearFilter')}
+                                                </div>
+                                            </div>
 
-                                            </div>
-                                            <div className="delete-all-filter" onClick={handleClearAllFilters}>
-                                                {t('clearFilter')}
-                                            </div>
                                         </div>
 
                                     )}
@@ -730,6 +730,7 @@ export function BaseTable<T>({
                                                                                 setActivePopover(null);
                                                                             }
                                                                         }}
+
                                                                     >
                                                                         <PopoverTrigger asChild>
                                                                             <button

@@ -1,76 +1,48 @@
-import { useState, useEffect, useCallback } from "react";
-import { DishManagementDto, DishStatusCode, GetDishesParams } from "../types/dish-types";
+import { useState, useEffect, useCallback, useRef } from "react";
+import { DishManagementDto } from "../types/dish-types";
 import { staffDishService, DishStatusOption } from "../services/dish-service";
 import { toast } from "sonner";
+import type { TableDataChangeParams } from "@/types/table-data-change.types";
 
+/**
+ * Data-fetching hook for dishes.
+ * Driven by BaseTable's onDataChange - BaseTable owns search/pagination/filter state.
+ *
+ * Column filter mapping:
+ *   - filters['categoryName'] -> category (API param)
+ *   - filters['status']       -> status   (API param, mapped to statusId)
+ */
 export const useDishList = () => {
     const [dishes, setDishes] = useState<DishManagementDto[]>([]);
     const [isLoading, setIsLoading] = useState(false);
+    const [totalCount, setTotalCount] = useState(0);
 
-    // State cho Filter Options (Dữ liệu từ Backend)
+    // Track current page/pageSize for global row numbering in columns
+    const [paginationInfo, setPaginationInfo] = useState({ page: 1, pageSize: 10 });
+
+    // Filter options loaded once on mount (for column filterOptions)
     const [categoryOptions, setCategoryOptions] = useState<string[]>([]);
     const [statusOptions, setStatusOptions] = useState<DishStatusOption[]>([]);
     const [isLoadingFilters, setIsLoadingFilters] = useState(true);
 
-    const [pagination, setPagination] = useState({
-        pageIndex: 1,
-        pageSize: 10,
-        totalCount: 0,
-        totalPage: 0,
-    });
+    // Dedup + latest-request tracking
+    const latestParamsRef = useRef<TableDataChangeParams>({});
+    const lastFetchHashRef = useRef("");
+    const fetchIdRef = useRef(0);
 
-    const [filters, setFilters] = useState({
-        search: "",
-        category: "All",
-        status: "All" as number | "All", // Sửa lại type để linh hoạt hơn (number vì ID từ DB là 42,43...)
-        sortBy: "CreatedAt",
-        isDescending: true,
-    });
-
-    // 1. Fetch Dishes (Gọi mỗi khi filter/page thay đổi)
-    const fetchDishes = useCallback(async () => {
-        setIsLoading(true);
-        try {
-            const params: GetDishesParams = {
-                pageIndex: pagination.pageIndex,
-                pageSize: pagination.pageSize,
-                search: filters.search,
-                category: filters.category,
-                status: filters.status,
-                sortBy: filters.sortBy,
-                isDescending: filters.isDescending,
-            };
-
-            const data = await staffDishService.getDishes(params);
-
-            setDishes(data.pageData);
-            setPagination(prev => ({
-                ...prev,
-                totalCount: data.totalCount,
-                totalPage: data.totalPage,
-            }));
-        } catch (error: any) {
-            console.error("Failed to fetch dishes:", error);
-            toast.error(error.message || "Lỗi tải danh sách món");
-        } finally {
-            setIsLoading(false);
-        }
-    }, [pagination.pageIndex, pagination.pageSize, filters]);
-
-    // 2. Fetch Filter Options (Chỉ gọi 1 lần khi Mount)
+    // Fetch filter options once on mount
     useEffect(() => {
         const initFilters = async () => {
             setIsLoadingFilters(true);
             try {
                 const [cats, stats] = await Promise.all([
                     staffDishService.getAllCategories(),
-                    staffDishService.getDishStatuses()
+                    staffDishService.getDishStatuses(),
                 ]);
                 setCategoryOptions(cats);
                 setStatusOptions(stats);
             } catch (error) {
                 console.error("Failed to fetch filters", error);
-                // Không toast lỗi ở đây để tránh spam, chỉ log
             } finally {
                 setIsLoadingFilters(false);
             }
@@ -78,48 +50,70 @@ export const useDishList = () => {
         initFilters();
     }, []);
 
-    // Trigger fetch dishes
-    useEffect(() => {
-        fetchDishes();
-    }, [fetchDishes]);
+    /** Called by BaseTable's onDataChange */
+    const handleDataChange = useCallback(async (params: TableDataChangeParams) => {
+        const hash = JSON.stringify(params);
+        if (hash === lastFetchHashRef.current) return;
+        lastFetchHashRef.current = hash;
+        latestParamsRef.current = params;
 
-    // Action Handlers
-    const onPageChange = (page: number) => setPagination(prev => ({ ...prev, pageIndex: page }));
-    const onPageSizeChange = (size: number) => setPagination(prev => ({ ...prev, pageSize: size, pageIndex: 1 }));
+        const currentFetchId = ++fetchIdRef.current;
+        const page = params.page || 1;
+        const pageSize = params.pageSize || 10;
 
-    const onSearchChange = (value: string) => {
-        setFilters(prev => ({ ...prev, search: value }));
-        setPagination(prev => ({ ...prev, pageIndex: 1 }));
-    };
+        setPaginationInfo({ page, pageSize });
+        setIsLoading(true);
 
-    const onCategoryChange = (value: string) => {
-        setFilters(prev => ({ ...prev, category: value }));
-        setPagination(prev => ({ ...prev, pageIndex: 1 }));
-    };
+        try {
+            // Extract column-filter values
+            const category = params.filters?.["categoryName"]?.value || undefined;
+            const status = params.filters?.["status"]?.value
+                ? Number(params.filters["status"].value)
+                : undefined;
 
-    const onStatusChange = (value: number | "All") => {
-        setFilters(prev => ({ ...prev, status: value }));
-        setPagination(prev => ({ ...prev, pageIndex: 1 }));
-    };
+            const data = await staffDishService.getDishes({
+                pageIndex: page,
+                pageSize,
+                search: params.search || "",
+                category: category || "All",
+                status: status || "All",
+                sortBy: "CreatedAt",
+                isDescending: true,
+            });
+
+            if (currentFetchId === fetchIdRef.current) {
+                setDishes(data.pageData);
+                setTotalCount(data.totalCount);
+            }
+        } catch (error: any) {
+            if (currentFetchId === fetchIdRef.current) {
+                console.error("Failed to fetch dishes:", error);
+                toast.error(error.message || "Error loading dishes");
+            }
+        } finally {
+            if (currentFetchId === fetchIdRef.current) {
+                setIsLoading(false);
+            }
+        }
+    }, []);
+
+    /** Re-fetch with the last known params */
+    const refresh = useCallback(() => {
+        lastFetchHashRef.current = "";
+        handleDataChange(latestParamsRef.current);
+    }, [handleDataChange]);
 
     return {
         dishes,
         isLoading,
-        pagination,
-        filters,
-        // Expose thêm options ra ngoài
+        totalCount,
+        paginationInfo,
+        onDataChange: handleDataChange,
+        refresh,
         filterOptions: {
             categories: categoryOptions,
             statuses: statusOptions,
-            isLoading: isLoadingFilters
-        },
-        actions: {
-            refresh: fetchDishes,
-            onPageChange,
-            onPageSizeChange,
-            onSearchChange,
-            onCategoryChange,
-            onStatusChange
+            isLoading: isLoadingFilters,
         },
     };
 };
