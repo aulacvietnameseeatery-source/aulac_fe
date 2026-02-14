@@ -889,6 +889,56 @@
       "phoneHint": "*Phone bookings are set to 'Confirmed' by default."
     }
   },
+  "DishCategory": {
+    "List": {
+      "title": "Dish Category Management",
+      "description": "Manage and organize your restaurant menu categories efficiently.",
+      "searchPlaceholder": "Search by category name...",
+      "addNew": "Add New Category",
+      "filters": {
+        "allStatuses": "All Statuses",
+        "active": "Active",
+        "inactive": "Inactive"
+      }
+    },
+    "Add": {
+      "title": "Add New Dish Category",
+      "subtitle": "Create a new category to organize your menu items",
+      "saveButton": "Create Category",
+      "cancel": "Cancel",
+      "categoryName": "Category Name",
+      "categoryNamePlaceholder": "e.g., Appetizers, Main Course, Desserts",
+      "description": "Description",
+      "descriptionPlaceholder": "Provide a brief description of this category and what types of dishes it includes...",
+      "validation": {
+        "nameRequired": "Category name is required",
+        "nameMaxLength": "Category name cannot exceed 100 characters",
+        "descriptionMaxLength": "Description cannot exceed 100 characters",
+        "fixErrors": "Please fix the validation errors"
+      }
+    },
+    "Edit": {
+      "title": "Edit Dish Category",
+      "subtitle": "Update category information and settings",
+      "saveButton": "Save Changes",
+      "cancel": "Cancel",
+      "categoryName": "Category Name",
+      "categoryNamePlaceholder": "e.g., Appetizers, Main Course, Desserts",
+      "description": "Description",
+      "descriptionPlaceholder": "Provide a brief description of this category and what types of dishes it includes...",
+      "status": "Category Status",
+      "statusActive": "This category is active and visible in the menu",
+      "statusInactive": "This category is inactive and hidden from customers",
+      "validation": {
+        "nameRequired": "Category name is required",
+        "nameMaxLength": "Category name cannot exceed 100 characters",
+        "descriptionMaxLength": "Description cannot exceed 100 characters",
+        "fixErrors": "Please fix the validation errors"
+      },
+      "loading": "Loading...",
+      "backToList": "Back to List"
+    }
+  },
   "Dish": {
     "List": {
       "title": "Dish Management",

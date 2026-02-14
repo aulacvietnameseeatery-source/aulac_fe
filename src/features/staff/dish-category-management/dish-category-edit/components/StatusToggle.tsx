@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslations } from 'next-intl';
 
 interface StatusToggleProps {
   isActive: boolean;
@@ -6,17 +7,17 @@ interface StatusToggleProps {
 }
 
 export default function StatusToggle({ isActive, onToggle }: StatusToggleProps) {
+  const t = useTranslations('DishCategory.Edit');
+  
   return (
     <div className="pt-8 border-t border-slate-200">
       <div className="flex items-center justify-between">
         <div className="flex-1">
           <label className="block text-[#1e293b] text-[13px] font-extrabold font-['Inter'] uppercase tracking-[0.5px] mb-3">
-            Category Status
+            {t('status')}
           </label>
           <p className="text-slate-600 text-[15px] font-['Inter']">
-            {isActive 
-              ? 'This category is active and visible in the menu'
-              : 'This category is inactive and hidden from customers'}
+            {isActive ? t('statusActive') : t('statusInactive')}
           </p>
         </div>
         <button
