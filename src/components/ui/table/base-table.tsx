@@ -181,7 +181,7 @@ export function BaseTable<T>({
     const [currentPage, setCurrentPage] = useState(1);
     const [sortState, setSortState] = useState<SortStateItem[]>([]);
     const [pinnedColumns, setPinnedColumns] = useState<string[]>([]);
-    
+
     /**
      * Single popover state - tracks which column and type (filter/sort) is open
      * This ensures only one popover is open at a time across all columns
@@ -414,7 +414,7 @@ export function BaseTable<T>({
     useEffect(() => {
         emitDataChange();
     }, [currentPage, emitDataChange])
-    
+
     useEffect(() => {
         if (searchDebounceTimeoutRef.current) {
             clearTimeout(searchDebounceTimeoutRef.current);
@@ -499,11 +499,11 @@ export function BaseTable<T>({
                                                         </div>
                                                     )
                                                 ))}
+                                                <div className="delete-all-filter" onClick={handleClearAllFilters}>
+                                                    {t('clearFilter')}
+                                                </div>
+                                            </div>
 
-                                            </div>
-                                            <div className="delete-all-filter" onClick={handleClearAllFilters}>
-                                                {t('clearFilter')}
-                                            </div>
                                         </div>
 
                                     )}
@@ -711,10 +711,11 @@ export function BaseTable<T>({
                                                                                 setActivePopover(null);
                                                                             }
                                                                         }}
+
                                                                     >
                                                                         <PopoverTrigger asChild>
-                                                                            <button 
-                                                                                className="filter-btn" 
+                                                                            <button
+                                                                                className="filter-btn"
                                                                                 type="button"
                                                                                 onClick={(e) => e.stopPropagation()}
                                                                             >

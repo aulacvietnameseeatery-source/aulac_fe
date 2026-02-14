@@ -1,0 +1,10 @@
+.bg-navy-DEFAULT {
+    background-color: var(--navi-blue);
+}
+.bg-orange-DEFAULT{
+    background-color: var(--orange);
+}
+
+.border-navy-DEFAULT{
+    border-color: var(--navi-blue);
+}

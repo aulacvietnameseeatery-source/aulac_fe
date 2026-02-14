@@ -6,7 +6,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 9999; /* Đảm bảo luôn nằm trên cùng */
+    z-index: 49; /* Đảm bảo luôn nằm trên cùng */
     animation: fadeIn 0.2s ease-out;
     padding: 16px; /* Để modal không dính sát lề trên mobile */
 }
