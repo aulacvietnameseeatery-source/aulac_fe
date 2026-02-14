@@ -300,7 +300,7 @@ const AccountListContent = () => {
           total={accounts.length}
           onRefresh={actions.refresh}
 
-          renderCell={handleGlobalRenderCell}
+        renderCell={handleGlobalRenderCell}
 
           // Render Action Component
           renderActionColumn={(item) => (

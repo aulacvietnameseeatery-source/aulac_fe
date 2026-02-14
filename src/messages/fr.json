@@ -852,6 +852,61 @@
       }
     }
   },
+  "StaffReservation": {
+    "title": "Créer une réservation manuellement",
+    "subtitle": "Saisissez les informations pour les clients walk-in ou par téléphone",
+    "cancel": "Annuler",
+    "save": "Enregistrer",
+    "errors": {
+      "missingTitle": "Informations manquantes",
+      "missingDescription": "Veuillez remplir téléphone, nom, date, heure et choisir une table.",
+      "timeErrorTitle": "Heure invalide",
+      "timePast": "Impossible de sélectionner une heure passée.",
+      "failTitle": "Échec de la réservation",
+      "systemError": "Erreur système. Veuillez réessayer."
+    },
+    "success": {
+      "title": "Réservation réussie !",
+      "description": "Client : {name} - Réservation #{id}"
+    },
+
+    "customer": {
+      "sectionTitle": "Identification du client",
+      "phone": "Numéro de téléphone",
+      "fullName": "Nom complet",
+      "email": "Adresse e-mail",
+      "enterPhone": "Entrez le téléphone...",
+      "enterName": "Nom du client",
+      "newCustomer": "Nouveau client",
+      "member": "Membre ({points} pts)"
+    },
+
+    "booking": {
+      "sectionTitle": "Détails de la réservation",
+      "date": "Date",
+      "time": "Heure",
+      "partySize": "Nombre de personnes",
+      "enterSize": "Ex : 4"
+    },
+
+    "table": {
+      "availability": "Tables disponibles",
+      "scanning": "Recherche...",
+      "found": "{count} tables trouvées",
+      "emptyHint": "Entrez la date, l'heure et le nombre de personnes.",
+      "noTable": "Aucune table disponible."
+    },
+
+    "status": {
+      "source": "Source de réservation",
+      "phone": "Téléphone",
+      "walkIn": "Sur place",
+      "status": "Statut",
+      "confirmed": "Confirmée",
+      "checkedIn": "Installé",
+      "phoneHint": "*Les réservations téléphoniques sont confirmées par défaut."
+    }
+  },
   "Dish": {
     "List": {
       "title": "Gestion des plats",
