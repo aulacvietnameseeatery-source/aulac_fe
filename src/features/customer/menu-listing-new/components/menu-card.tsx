@@ -1,5 +1,5 @@
 import React from 'react';
-import { ShoppingBag } from 'lucide-react';
+import Image from 'next/image';
 
 export interface MenuItem {
     id: string;
@@ -30,13 +30,15 @@ export const MenuCard = ({ id, name, price, desc, image, onOrder, onDetail }: Me
     };
 
     return (
-        <div className="group relative w-full aspect-[4/3] bg-[#0B252E] border border-[#C5A059]/30 shadow-lg overflow-hidden rounded-sm hover:border-[#C5A059] transition-all duration-500">
+        <div className="relative w-full aspect-4/3 bg-[#0B252E] border border-[#C5A059]/30 shadow-lg overflow-hidden rounded-sm hover:border-[#C5A059] transition-all duration-500 group">
             {/* Image - Click triggers Detail */}
             <div
                 className="absolute inset-0 overflow-hidden cursor-pointer"
                 onClick={handleDetailClick}
             >
-                <img
+                <Image
+                    width={1920}
+                    height={1080}
                     src={image || '/images/logo.png'}
                     onError={(e) => {
                         e.currentTarget.src = '/images/logo.png';
@@ -48,28 +50,25 @@ export const MenuCard = ({ id, name, price, desc, image, onOrder, onDetail }: Me
 
             {/* Gradient Overlay - Click triggers Detail */}
             <div
-                className="absolute inset-0 bg-gradient-to-t from-[#0f172a] via-[#0f172a]/40 to-transparent opacity-90 group-hover:opacity-80 transition-opacity duration-500 pointer-events-none"
+                className="absolute inset-0 bg-linear-to-t from-[#0f172a] via-[#0f172a]/40 to-transparent opacity-90 group-hover:opacity-80 transition-opacity duration-500 pointer-events-none"
             />
 
             {/* Content */}
-            <div className="absolute inset-0 p-2 md:p-3 flex flex-col justify-end pointer-events-none">
-                {/* Top Right Price (Optional placement, user design looks different but flexible) */}
-                {/* Following user design from screenshot: Price is below name */}
-
-                <h3 className="text-[#E5D9B6] font-display text-[9px] md:text-[10px] lg:text-xs uppercase tracking-wider font-bold mb-1 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-500 line-clamp-2">
+            <div className="absolute inset-0 p-1.5 sm:p-2 md:p-2.5 lg:p-3 flex flex-col justify-end pointer-events-none">
+                <h3 className="text-[#E5D9B6] font-display text-[7px] sm:text-[8px] md:text-[9px] lg:text-[10px] xl:text-xs uppercase tracking-wider font-bold mb-0.5 sm:mb-1 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-500 line-clamp-2">
                     {name}
                 </h3>
 
-                <div className="w-6 h-[1px] bg-[#C5A059] mb-1 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
+                <div className="w-4 sm:w-5 md:w-6 h-px bg-[#C5A059] mb-0.5 sm:mb-1 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
 
-                <div className="flex justify-between items-end transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-75 pointer-events-auto">
-                    <span className="text-[#C5A059] font-display font-bold text-[9px] md:text-[10px]">
+                <div className="flex justify-between items-end gap-1 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-75 pointer-events-auto">
+                    <span className="text-[#C5A059] font-display font-bold text-[7px] sm:text-[8px] md:text-[9px] lg:text-[10px]">
                         {typeof price === 'number' ? `${price} CHF` : price}
                     </span>
 
                     <button
                         onClick={handleOrderClick}
-                        className="opacity-0 group-hover:opacity-100 bg-[#C5A059] text-[#0f172a] px-2 py-0.5 text-[7px] md:text-[8px] font-bold uppercase tracking-widest hover:bg-white transition-all duration-300 border border-[#C5A059] cursor-pointer"
+                        className="opacity-0 group-hover:opacity-100 bg-[#C5A059] text-[#0f172a] px-1 sm:px-1.5 md:px-2 py-0.5 text-[6px] sm:text-[7px] md:text-[8px] font-bold uppercase tracking-widest hover:bg-white transition-all duration-300 border border-[#C5A059] cursor-pointer whitespace-nowrap"
                     >
                         Order
                     </button>

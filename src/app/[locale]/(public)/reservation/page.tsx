@@ -21,6 +21,7 @@ function ReservationContent() {
   const tToast = useTranslations('Reservation.Toast');
   const tCall = useTranslations('Reservation.CallButton');
   const tZone = useTranslations('Reservation.Zone');
+  const tControls = useTranslations('Reservation.Controls');
 
   // State
   const [date, setDate] = useState<string>(new Date().toISOString().split('T')[0]); // YYYY-MM-DD
@@ -45,16 +46,14 @@ function ReservationContent() {
   const [loading, setLoading] = useState(false);
   const [showCallPopup, setShowCallPopup] = useState(false);
 
+  // Multi-Select State
+  const [isMultiSelect, setIsMultiSelect] = useState(false);
+  const [selectedTableIds, setSelectedTableIds] = useState<number[]>([]);
+
   // Filters
   const [activeZone, setActiveZone] = useState("All");
 
   const ZONES = ["All", "Indoor", "Outdoor", "Rooftop"];
-
-
-
-  // Booking State
-  // We use selectedTableId to control Modal visibility
-  // If selectedTableId is set, Modal is open.
 
   // SignalR
   const { connection } = useSignalR();
@@ -136,23 +135,54 @@ function ReservationContent() {
   // Handle Selection
   const handleSelectTable = (id: number) => {
     const table = tables.find(t => t.tableId === id);
-    if (table && table.isAvailable) {
+    if (!table || !table.isAvailable) return;
+
+    if (isMultiSelect) {
+      // Toggle selection
+      setSelectedTableIds(prev => {
+        if (prev.includes(id)) {
+          return prev.filter(tid => tid !== id);
+        } else {
+          return [...prev, id];
+        }
+      });
+    } else {
+      // Single select behavior
       setSelectedTableId(id);
     }
   };
 
+  // Clear selection when toggling mode
+  useEffect(() => {
+    setSelectedTableIds([]);
+    setSelectedTableId(null);
+  }, [isMultiSelect]);
+
+  // Derived selected tables for Modal
+  const selectedTablesForModal = isMultiSelect
+    ? tables.filter(t => selectedTableIds.includes(t.tableId))
+    : (selectedTableId ? tables.filter(t => t.tableId === selectedTableId) : []);
+
+  // Modal open condition
+  const isModalOpen = isMultiSelect ? false : !!selectedTableId;
+  const [isMultiBookModalOpen, setIsMultiBookModalOpen] = useState(false);
+
+  // Constants for selected state display
   const selectedTable = tables.find(t => t.tableId === selectedTableId) || null;
 
   // Handle Booking - Direct Reservation (No Lock)
   const handleBooking = async (guestData: { name: string; phone: string; email: string; partySize: number }): Promise<boolean> => {
-    if (!selectedTableId) return false;
+    const tablesToBook = isMultiSelect ? selectedTableIds : (selectedTableId ? [selectedTableId] : []);
+
+    if (tablesToBook.length === 0) return false;
 
     const reservedTime = `${date}T${time}:00`;
 
     try {
       // Create Reservation Directly
       const createRes = await reservationApi.createReservation({
-        tableId: selectedTableId,
+        tableId: tablesToBook[0], // Primary table for fallback
+        tableIds: tablesToBook,   // List of tables
         customerName: guestData.name,
         phone: guestData.phone,
         email: guestData.email || undefined, // Send undefined if empty
@@ -163,6 +193,8 @@ function ReservationContent() {
       if (createRes.success) {
         toast.success(tToast('success'));
         fetchAvailability();
+        // Do NOT reset state here, let the modal show success view
+        // State will be reset when user closes the modal
         return true;
       } else {
         // Show actual error message from API
@@ -183,7 +215,7 @@ function ReservationContent() {
 
   return (
     <div className="min-h-screen bg-[#FDFBF7] text-slate-800 flex flex-col">
-      <main className="grow max-w-7xl mx-auto w-full px-4 md:px-6 py-8 md:py-12 mb-24">
+      <main className="grow max-w-7xl mx-auto w-full px-4 md:px-6 py-8 md:py-12 mb-24 relative">
 
         {/* Header */}
         <div className="mb-8">
@@ -195,7 +227,6 @@ function ReservationContent() {
             <p className="text-stone-500 font-light text-sm md:text-base">
               {t('subtitle')}
             </p>
-            {/*<Legend />*/}
           </div>
         </div>
 
@@ -207,6 +238,8 @@ function ReservationContent() {
             setDate(d);
             setTime(t);
           }}
+          isMultiSelect={isMultiSelect}
+          onMultiSelectChange={setIsMultiSelect}
         />
 
         {/* Call Restaurant Button - Show when no tables available */}
@@ -243,17 +276,39 @@ function ReservationContent() {
         <div className="w-full">
           <TableGrid
             tables={tables}
-            selectedTableId={selectedTableId} // Although we open modal, we can show selection state if needed, or null if modal covers it.
+            selectedTableId={isMultiSelect ? null : selectedTableId}
+            selectedTableIds={isMultiSelect ? selectedTableIds : undefined}
             onSelect={handleSelectTable}
             isLoading={loading}
           />
         </div>
 
+        {/* Multi-Select Floating Action Button */}
+        {isMultiSelect && selectedTableIds.length > 0 && (
+          <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-40 animate-in fade-in slide-in-from-bottom-4">
+            <button
+              onClick={() => setIsMultiBookModalOpen(true)}
+              className="bg-[#1A3A52] text-white px-8 py-3.5 rounded-full shadow-lg hover:bg-[#2d5a7b] transition-all font-bold flex items-center gap-3"
+            >
+              <span>{tControls('bookSelected', { count: selectedTableIds.length })}</span>
+              <div className="bg-white/20 rounded-full p-1">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                </svg>
+              </div>
+            </button>
+          </div>
+        )}
+
+        {/* Main Booking Modal (Single or Multi) */}
         <BookingModal
-          isOpen={!!selectedTable}
-          onClose={() => setSelectedTableId(null)}
+          isOpen={!isMultiSelect ? !!selectedTableId : isMultiBookModalOpen}
+          onClose={() => {
+            setSelectedTableId(null);
+            setIsMultiBookModalOpen(false);
+          }}
           onConfirm={handleBooking}
-          tableData={selectedTable}
+          tables={selectedTablesForModal}
           date={date}
           time={time}
         />

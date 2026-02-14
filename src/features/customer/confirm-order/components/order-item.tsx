@@ -52,7 +52,7 @@ export function OrderItem({
                 {/* Left: Image & Info */}
                 <div className="flex items-start gap-4 md:gap-6">
                     <div className="relative h-16 w-16 md:h-20 md:w-20 flex-shrink-0 overflow-hidden rounded-[4px] bg-[#F6F4EF] shadow-sm">
-                        <Image src={image} alt={name} fill className="object-cover" />
+                        <Image src={image} alt={name} fill className="object-cover" width={1920} height={1080}/>
                     </div>
 
                     <div className="flex flex-col gap-1">

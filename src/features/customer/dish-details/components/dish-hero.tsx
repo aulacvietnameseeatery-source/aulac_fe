@@ -5,6 +5,7 @@ import { Dish } from "../types";
 import { useState, useEffect, useRef } from "react";
 import Script from "next/script";
 
+// Khai báo types cho window.cloudinary để TypeScript không báo lỗi
 declare global {
   interface Window {
     cloudinary: any;
@@ -167,7 +168,7 @@ export function DishHero({ dish, onOrderNow }: DishHeroProps) {
       </section>
   );
 }
-
+//
 //
 //
 // "use client";
@@ -191,7 +192,7 @@ export function DishHero({ dish, onOrderNow }: DishHeroProps) {
 //   const [viewMode, setViewMode] = useState<'photo' | '360' | 'video'>('photo');
 //
 //   // Đường dẫn đến file 3D của bạn
-//   const MODEL_URL = "/images/dish-detail/dish-hero/tiramisu.glb";
+//   const MODEL_URL = "/images/dish-detail/dish-hero/Astronaut.glb";
 //
 //   return (
 //       <section className="mx-auto w-full max-w-[1200px] overflow-hidden px-4 pt-6 md:pt-10">

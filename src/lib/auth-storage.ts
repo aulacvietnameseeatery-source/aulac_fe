@@ -1,101 +1,109 @@
-import { AuthTokens, User } from "@/features/auth/login/types/login.types";
+/**
+ * Authentication storage utilities
+ * Centralized storage for JWT access tokens with localStorage persistence
+ * 
+ * Storage Keys:
+ * - auth_token: Access token (JWT)
+ * 
+ * Note: 
+ * - Refresh tokens are stored in HttpOnly cookies by the backend (XSS protection)
+ * - User data is decoded from JWT token, not stored separately
+ */
 
-const TOKEN_KEY = "auth_token";
-const REFRESH_TOKEN_KEY = "refresh_token";
-const USER_KEY = "user_data";
+export interface AuthTokens {
+  accessToken: string;
+  // refreshToken removed - managed by browser via HttpOnly cookie
+}
 
-export const tokenStorage = {
+// Storage keys - consistent with AuthProvider
+const TOKEN_KEY = 'auth_token';
+// REFRESH_TOKEN_KEY removed - refresh token is in HttpOnly cookie
+
+/**
+ * Safe localStorage wrapper with SSR support
+ */
+class AuthStorage {
+  private isBrowser(): boolean {
+    return typeof window !== 'undefined';
+  }
+
   /**
-   * Save authentication tokens to localStorage
+   * Save access token to localStorage
+   * Note: Refresh token is managed by backend in HttpOnly cookie
+   * 
+   * @param accessToken - JWT access token
+   * 
+   * @example
+   * ```ts
+   * authStorage.setAccessToken('jwt_token_here');
+   * ```
    */
-  setTokens: (tokens: AuthTokens): void => {
-    if (typeof window === "undefined") return;
-    
+  setAccessToken(accessToken: string): void {
+    if (!this.isBrowser()) return;
+
     try {
-      localStorage.setItem(TOKEN_KEY, tokens.accessToken);
-      if (tokens.refreshToken) {
-        localStorage.setItem(REFRESH_TOKEN_KEY, tokens.refreshToken);
-      }
+      localStorage.setItem(TOKEN_KEY, accessToken);
     } catch (error) {
-      console.error("Failed to save tokens:", error);
+      console.error('[AuthStorage] Failed to save access token:', error);
     }
-  },
+  }
 
   /**
    * Get access token from localStorage
+   * 
+   * @returns Access token or null
    */
-  getAccessToken: (): string | null => {
-    if (typeof window === "undefined") return null;
-    
+  getAccessToken(): string | null {
+    if (!this.isBrowser()) return null;
+
     try {
       return localStorage.getItem(TOKEN_KEY);
     } catch (error) {
-      console.error("Failed to get access token:", error);
+      console.error('[AuthStorage] Failed to get access token:', error);
       return null;
     }
-  },
+  }
 
   /**
-   * Get refresh token from localStorage
+   * Check if access token exists
+   * 
+   * @returns true if token exists
    */
-  getRefreshToken: (): string | null => {
-    if (typeof window === "undefined") return null;
-    
-    try {
-      return localStorage.getItem(REFRESH_TOKEN_KEY);
-    } catch (error) {
-      console.error("Failed to get refresh token:", error);
-      return null;
-    }
-  },
-
-  /**
-   * Save user data to localStorage
-   */
-  setUser: (user: User): void => {
-    if (typeof window === "undefined") return;
-    
-    try {
-      localStorage.setItem(USER_KEY, JSON.stringify(user));
-    } catch (error) {
-      console.error("Failed to save user data:", error);
-    }
-  },
-
-  /**
-   * Get user data from localStorage
-   */
-  getUser: (): User | null => {
-    if (typeof window === "undefined") return null;
-    
-    try {
-      const userData = localStorage.getItem(USER_KEY);
-      return userData ? JSON.parse(userData) : null;
-    } catch (error) {
-      console.error("Failed to get user data:", error);
-      return null;
-    }
-  },
+  hasToken(): boolean {
+    return !!this.getAccessToken();
+  }
 
   /**
    * Clear all authentication data
+   * Note: HttpOnly cookie is cleared by backend on logout
+   * 
+   * @example
+   * ```ts
+   * // On logout
+   * authStorage.clearAuth();
+   * ```
    */
-  clearAuth: (): void => {
-    if (typeof window === "undefined") return;
-    
+  clearAuth(): void {
+    if (!this.isBrowser()) return;
+
     try {
       localStorage.removeItem(TOKEN_KEY);
-      localStorage.removeItem(REFRESH_TOKEN_KEY);
-      localStorage.removeItem(USER_KEY);
+      // HttpOnly cookie cannot be cleared by JavaScript
+      // Backend must clear it via /api/auth/logout endpoint
     } catch (error) {
-      console.error("Failed to clear auth data:", error);
+      console.error('[AuthStorage] Failed to clear auth data:', error);
     }
-  },
+  }
+}
 
-  /**
-   * Check if user is authenticated
-   */
-  isAuthenticated: (): boolean => {
-    return !!tokenStorage.getAccessToken();
-  },
+// Export singleton instance
+export const authStorage = new AuthStorage();
+
+// Backward compatibility - deprecated, use authStorage instead
+/** @deprecated Use authStorage instead */
+export const tokenStorage = {
+  setAccessToken: (token: string) => authStorage.setAccessToken(token),
+  getAccessToken: () => authStorage.getAccessToken(),
+  clearAuth: () => authStorage.clearAuth(),
+  isAuthenticated: () => authStorage.hasToken(),
 };

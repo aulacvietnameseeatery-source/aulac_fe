@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslations } from 'next-intl';
 import { Select, SelectOption } from '../select';
 import { Button } from '../button';
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react';
@@ -26,6 +27,8 @@ export const TablePagination: React.FC<TablePaginationProps> = ({
     onPageChange,
     children
 }) => {
+    const t = useTranslations('common.table.pagination');
+
     const pageSizeOptions: SelectOption[] = pageSizes.map(size => ({
         label: size.toString(),
         value: size
@@ -34,12 +37,12 @@ export const TablePagination: React.FC<TablePaginationProps> = ({
     return (
         <div className="flex flex-row justify-between items-center px-4 py-2 bg-gray-100 rounded-b min-h-[44px]">
             <div className="flex items-center sticky left-4">
-                <span className="text-navy-DEFAULT text-sm">Tổng số: </span>
+                <span className="text-navy-DEFAULT text-sm">{t('total')}</span>
                 <span className="ml-1 font-bold text-gray-900 text-sm">{totalCount}</span>
             </div>
 
             <div className="flex items-center justify-end gap-4 sticky right-4 min-w-[350px]">
-                <span className="text-sm text-navy-DEFAULT">Số dòng/trang</span>
+                <span className="text-sm text-navy-DEFAULT">{t('pageSize')}</span>
                 <div className="w-20">
                     <Select
                         value={pageSize}

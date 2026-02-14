@@ -1,0 +1,96 @@
+/* Lớp phủ mờ toàn màn hình */
+.admin-dialog-overlay {
+    position: fixed;
+    inset: 0; /* top:0, right:0, bottom:0, left:0 */
+    background-color: rgba(0, 0, 0, 0.5); /* Màu nền đen mờ */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 49; /* Đảm bảo luôn nằm trên cùng */
+    animation: fadeIn 0.2s ease-out;
+    padding: 16px; /* Để modal không dính sát lề trên mobile */
+}
+
+/* Hộp nội dung chính */
+.admin-dialog-content {
+    background: white;
+    width: 100%;
+    border-radius: 12px;
+    box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.1), 0px 4px 6px -2px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    max-height: 90vh; /* Giới hạn chiều cao tối đa */
+    animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1); /* Hiệu ứng nảy nhẹ */
+}
+
+/* Header: Tiêu đề và nút đóng */
+.admin-dialog-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px;
+    border-bottom: 1px solid #E2E8F0;
+}
+
+.admin-dialog-title {
+    margin: 0;
+    font-family: 'Lexend', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: #1E293B;
+    line-height: 24px;
+}
+
+.admin-dialog-close-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+}
+
+.admin-dialog-close-btn:hover {
+    background-color: #F1F5F9;
+}
+
+/* Body: Nội dung form (có thể cuộn nếu dài) */
+.admin-dialog-body {
+    overflow-y: auto;
+    font-family: 'Lexend', sans-serif;
+    color: #475569;
+    font-size: 14px;
+}
+
+/* Footer: Nút hành động (Lưu/Hủy) */
+.admin-dialog-footer {
+    padding: 16px 24px;
+    border-top: 1px solid #E2E8F0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
+    background-color: #F8FAFC; /* Màu nền footer hơi xám nhẹ */
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}

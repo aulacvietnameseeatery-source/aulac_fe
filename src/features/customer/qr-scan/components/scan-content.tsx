@@ -33,6 +33,8 @@ export function ScanContent() {
 
                     <div className="relative h-[170px] w-[170px]">
                         <Image
+                            width={1920}
+                            height={1080}
                             src="/images/qr-scan/scan-content/siu.jpg"
                             alt="QR Code"
                             fill

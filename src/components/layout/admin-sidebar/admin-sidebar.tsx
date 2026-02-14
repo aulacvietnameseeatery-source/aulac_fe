@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import {
   ChevronLeft,
   ChevronRight,
@@ -18,24 +18,30 @@ import {
   Tags,
   Package,
   LogOut,
-  X
+  X,
+  FolderOpen
 } from "lucide-react";
-import { tokenStorage } from "@/lib/auth-storage";
+import { useAuth } from "@/components/providers/auth-provider";
+import { useLogout } from "@/features/customer/auth/login/hooks";
 import { ConfirmModal } from "@/components/layout/admin-sidebar/confirm-modal";
+import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 const navItems = [
-  { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-  { name: "Tables", href: "/dashboard/tables", icon: Table },
-  { name: "Staff", href: "/dashboard/staff", icon: Users },
-  { name: "Roles", href: "/dashboard/roles", icon: UserCog },
-  { name: "Dish", href: "/dashboard/dish", icon: UtensilsCrossed },
-  { name: "Ingredient", href: "/dashboard/ingredient", icon: Package },
-  { name: "Orders", href: "/dashboard/orders", icon: ShoppingBag },
-  { name: "Reports", href: "/dashboard/reports", icon: FileText },
-  { name: "Emails", href: "/dashboard/emails", icon: Mail },
-  { name: "Customers", href: "/dashboard/customers", icon: Users },
-  { name: "Promotions", href: "/dashboard/promotions", icon: Tags },
-  { name: "Settings", href: "/dashboard/settings", icon: Settings },
+  { key: "dashboard", href: "/dashboard", icon: LayoutDashboard },
+  { key: "tables", href: "/dashboard/tables", icon: Table },
+  { key: "staff", href: "/dashboard/staff", icon: Users },
+  { key: "roles", href: "/dashboard/roles", icon: UserCog },
+  { key: "dish", href: "/dashboard/dish", icon: UtensilsCrossed },
+  { key: "dishCategory", href: "/dashboard/dish-category", icon: FolderOpen },
+  { key: "ingredient", href: "/dashboard/ingredient", icon: Package },
+  { key: "orders", href: "/dashboard/orders", icon: ShoppingBag },
+  { key: "reports", href: "/dashboard/reports", icon: FileText },
+  { key: "emails", href: "/dashboard/emails", icon: Mail },
+  { key: "customers", href: "/dashboard/customers", icon: Users },
+    { name: "reservations", href: "/dashboard/reservations", icon: Users },
+    { key: "promotions", href: "/dashboard/promotions", icon: Tags },
+    { key: "settings", href: "/dashboard/settings", icon: Settings },
 ];
 
 interface AdminSidebarProps {
@@ -44,22 +50,21 @@ interface AdminSidebarProps {
 
 export function AdminSidebar({ onClose }: AdminSidebarProps) {
   const pathname = usePathname();
-  const router = useRouter();
-  const [user, setUser] = useState<any>(null);
+  const { userInfo } = useAuth();
+  const { mutate: logout, isPending: isLoggingOut } = useLogout();
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
-
-  useEffect(() => {
-    // Get user from local storage
-    const userData = tokenStorage.getUser();
-    setUser(userData);
-  }, []);
+  const t = useTranslations("AdminSidebar");
 
   const isActive = (href: string) => {
+    // Remove locale prefix from pathname for comparison
+    const pathWithoutLocale = pathname?.replace(/^\/(en|fr|vi)/, '') || pathname;
+
     if (href === "/dashboard") {
-      return pathname === "/dashboard" || pathname === "/en/dashboard" || pathname === "/fr/dashboard";
+      return pathWithoutLocale === "/dashboard";
     }
-    return pathname?.includes(href);
+    // Exact match for the path or match with trailing slash or query params
+    return pathWithoutLocale === href || pathWithoutLocale?.startsWith(href + "/") || pathWithoutLocale?.startsWith(href + "?");
   };
 
   const handleLogoutClick = () => {
@@ -67,8 +72,7 @@ export function AdminSidebar({ onClose }: AdminSidebarProps) {
   };
 
   const handleConfirmLogout = () => {
-    tokenStorage.clearAuth();
-    router.push("/login");
+    logout();
     setIsLogoutModalOpen(false);
   };
 
@@ -105,7 +109,10 @@ export function AdminSidebar({ onClose }: AdminSidebarProps) {
         <div className="px-8 md:px-2 lg:px-2 pt-5 pb-1 flex flex-col items-center relative z-10 border-b border-white/5 transition-all duration-300 min-h-[80px] justify-center">
           {/* Full Logo (Mobile & Desktop Expanded) */}
           {!isCollapsed && (
-            <img
+            <Image
+              width={1000}
+              height={1000}
+              style={{ height: "100px", width: "auto" }}
               src="/images/logo.png"
               alt="Au Lac Logo"
               className="block md:hidden lg:block w-full h-full object-contain drop-shadow-md"
@@ -119,7 +126,9 @@ export function AdminSidebar({ onClose }: AdminSidebarProps) {
               ${isCollapsed ? 'lg:flex hidden' : 'hidden md:flex lg:hidden'}
             `}
           >
-            <img
+            <Image
+              width={100}
+              height={100}
               src="/images/logo.png"
               alt="Au Lac Logo"
               className="w-full h-full object-contain drop-shadow-md"
@@ -128,7 +137,7 @@ export function AdminSidebar({ onClose }: AdminSidebarProps) {
 
           <div className={`text-center mt-0 md:hidden ${isCollapsed ? 'lg:hidden' : 'lg:block'}`}>
             <h2 className="text-white text-xl font-bold font-display tracking-tight">Au Lac</h2>
-            <p className="text-[#FFAB2D]/80 text-[10px] font-medium uppercase tracking-[0.2em] mt-1">Manager Portal</p>
+            <p className="text-[#FFAB2D]/80 text-[10px] font-medium uppercase tracking-[0.2em] mt-1">{t('managerPortal')}</p>
           </div>
         </div>
 
@@ -138,10 +147,11 @@ export function AdminSidebar({ onClose }: AdminSidebarProps) {
             {navItems.map((item) => {
               const Icon = item.icon;
               const active = isActive(item.href);
+              const label = t(item.key);
 
               return (
                 <Link
-                  key={item.name}
+                  key={item.key}
                   href={item.href}
                   onClick={onClose} // Auto close on mobile
                   className={`
@@ -152,7 +162,7 @@ export function AdminSidebar({ onClose }: AdminSidebarProps) {
                       : "text-white/60 hover:text-white hover:bg-white/5 hover:shadow-md"
                     }
                   `}
-                  title={isCollapsed ? item.name : undefined} // Tooltip for collapsed state
+                  title={isCollapsed ? label : undefined} // Tooltip for collapsed state
                 >
                   {/* Active Indicator Line */}
                   {active && (
@@ -166,7 +176,7 @@ export function AdminSidebar({ onClose }: AdminSidebarProps) {
                       md:hidden ${isCollapsed ? 'lg:hidden' : 'lg:block'}
                     `}
                   >
-                    {item.name}
+                    {label}
                   </span>
 
                   {/* Hover Glow */}
@@ -184,32 +194,33 @@ export function AdminSidebar({ onClose }: AdminSidebarProps) {
               <div className="relative">
                 <div className="w-10 h-10 bg-gradient-to-br from-[#FFAB2D] to-[#E68A00] rounded-full flex items-center justify-center text-[#1A3A51] font-bold shadow-lg ring-2 ring-[#1A3A51] overflow-hidden">
                   {/* Use first letter of username or AD as fallback */}
-                  {user?.username ? user.username.charAt(0).toUpperCase() : "AD"}
+                  {userInfo?.username ? userInfo.username.charAt(0).toUpperCase() : "AD"}
                 </div>
                 <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-[#1A3A51]" />
               </div>
               <div className="flex-1 min-w-0">
                 <div className="text-white text-sm font-semibold truncate">
-                  {user?.username || "Admin User"}
+                  {userInfo?.username || "Admin User"}
                 </div>
-                {/* Hide email or show "Online" since we might not have email */}
+                {/* Show roles if available */}
                 <div className="text-white/40 text-[10px] truncate">
-                  Online
+                  {userInfo?.roles && userInfo.roles.length > 0 ? userInfo.roles.join(", ") : "Online"}
                 </div>
               </div>
             </div>
             <button
               onClick={handleLogoutClick}
+              disabled={isLoggingOut}
               className={`
-                transition-all duration-300
+                transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed
                 ${isCollapsed || 'md:hidden' /* Logic for collapsed state styling */
                   ? 'md:flex lg:flex p-3 rounded-xl bg-white/10 text-[#FFAB2D] hover:bg-[#FF2D2D] hover:text-white mx-auto'
                   : 'p-2 rounded-lg text-white/40 hover:text-[#FF2D2D] hover:bg-[#FF2D2D]/10'
                 }
               `}
-              title="Logout"
+              title={isLoggingOut ? t('loggingOut') : t('logout')}
             >
-              <LogOut className={`${isCollapsed ? 'w-5 h-5' : 'w-4 h-4 md:w-5 md:h-5'}`} />
+              <LogOut className={`${isCollapsed ? 'w-5 h-5' : 'w-4 h-4 md:w-5 md:h-5'} ${isLoggingOut ? 'animate-pulse' : ''}`} />
             </button>
           </div>
         </div>
@@ -219,10 +230,10 @@ export function AdminSidebar({ onClose }: AdminSidebarProps) {
         isOpen={isLogoutModalOpen}
         onClose={() => setIsLogoutModalOpen(false)}
         onConfirm={handleConfirmLogout}
-        title="Logout"
-        message="Are you sure you want to logout? You will be redirected to the login page."
-        confirmText="Logout"
-        cancelText="Cancel"
+        title={t('logout')}
+        message={t('logoutMessage')}
+        confirmText={t('logout')}
+        cancelText={t('cancel')}
         variant="danger"
       />
     </>

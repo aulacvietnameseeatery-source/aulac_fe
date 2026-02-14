@@ -10,6 +10,8 @@ export function V2Video() {
     <section className="relative w-full bg-black">
       <div className="relative h-[600px] w-full overflow-hidden md:h-[900px] lg:h-[1200px]">
         <Image
+          width={1920}
+          height={1080}
           src="/images/dish-detail-v2/v2-video/v2-video.png"
           alt="Video placeholder"
           fill

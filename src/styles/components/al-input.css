@@ -1,0 +1,229 @@
+/* ═══════════════════════════════════════════════════════════
+   ALInput — Custom CSS
+   Styling for the composable input-group component.
+   Uses project theme tokens: --navi-blue, --orange, --gold-classic
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── Group wrapper ─────────────────────────────────────────
+   Shared border, radius, and focus-within ring for the
+   entire input row (addons + field).
+   ────────────────────────────────────────────────────────── */
+.al-input-group {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  border-radius: 0.375rem; /* rounded-md */
+  border: 1px solid rgba(26, 58, 82, 0.2); /* navy-DEFAULT/20 */
+  background-color: transparent;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  overflow: hidden;
+}
+
+.al-input-group:focus-within {
+  border-color: #c9a961; /* gold-classic */
+  box-shadow: 0 0 0 1px #c9a961;
+}
+
+/* Error state */
+.al-input-group--error {
+  border-color: #ef4444;
+}
+.al-input-group--error:focus-within {
+  border-color: #ef4444;
+  box-shadow: 0 0 0 1px #ef4444;
+}
+
+/* Success state */
+.al-input-group--success {
+  border-color: #22c55e;
+}
+.al-input-group--success:focus-within {
+  border-color: #22c55e;
+  box-shadow: 0 0 0 1px #22c55e;
+}
+
+/* Disabled state */
+.al-input-group--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* ── Size variants ─────────────────────────────────────────── */
+.al-input-group--sm {
+  height: 2.25rem; /* h-9 / 36px */
+}
+.al-input-group--default {
+  height: 2.75rem; /* h-11 / 44px */
+}
+.al-input-group--lg {
+  height: 3rem; /* h-12 / 48px */
+}
+
+/* ── Input field inside group ──────────────────────────────
+   Strips its own border so the group wrapper handles it.
+   ────────────────────────────────────────────────────────── */
+.al-input-field {
+  flex: 1 1 0%;
+  min-width: 0;
+  height: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  padding: 0 0.75rem;
+  font-size: inherit;
+  color: var(--navi-blue, #1a3a52);
+}
+
+.al-input-field::placeholder {
+  color: rgba(26, 58, 82, 0.4); /* navy/40 */
+}
+
+.al-input-field:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+/* ── Addon shared ─────────────────────────────────────────── */
+.al-input-addon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0.625rem;
+  color: rgba(26, 58, 82, 0.6);
+  background-color: rgba(26, 58, 82, 0.04);
+  white-space: nowrap;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+.al-input-addon--start {
+  border-right: 1px solid rgba(26, 58, 82, 0.12);
+}
+
+.al-input-addon--end {
+  border-left: 1px solid rgba(26, 58, 82, 0.12);
+}
+
+/* Icon-only addons (no bg — transparent) */
+.al-input-addon--icon {
+  background-color: transparent;
+  padding: 0 0.5rem;
+  border: none;
+}
+
+.al-input-addon--icon.al-input-addon--clickable {
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+.al-input-addon--icon.al-input-addon--clickable:hover {
+  color: var(--navi-blue, #1a3a52);
+}
+
+/* ── Dropdown addon ────────────────────────────────────────── */
+.al-input-dropdown {
+  appearance: none;
+  border: none;
+  outline: none;
+  background: transparent;
+  height: 100%;
+  padding: 0 0.5rem;
+  padding-right: 1.5rem;
+  font-size: inherit;
+  color: var(--navi-blue, #1a3a52);
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%231a3a52' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.35rem center;
+}
+
+.al-input-dropdown:focus {
+  outline: none;
+}
+
+/* ── Button addon ──────────────────────────────────────────── */
+.al-input-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  height: 100%;
+  padding: 0 0.75rem;
+  border: none;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.al-input-btn--default {
+  background-color: var(--navi-blue, #1a3a52);
+  color: #fff;
+}
+.al-input-btn--default:hover {
+  opacity: 0.9;
+}
+
+.al-input-btn--primary {
+  background-color: var(--orange, #ffab2d);
+  color: var(--navi-blue, #1a3a52);
+  font-weight: 700;
+}
+.al-input-btn--primary:hover {
+  opacity: 0.9;
+}
+
+.al-input-btn--outline {
+  background-color: transparent;
+  color: var(--navi-blue, #1a3a52);
+  border-left: 1px solid rgba(26, 58, 82, 0.2);
+}
+.al-input-btn--outline:hover {
+  background-color: rgba(26, 58, 82, 0.06);
+}
+
+.al-input-btn--ghost {
+  background-color: transparent;
+  color: var(--navi-blue, #1a3a52);
+}
+.al-input-btn--ghost:hover {
+  background-color: rgba(26, 58, 82, 0.06);
+}
+
+.al-input-btn--gold {
+  background-color: #c9a961;
+  color: #fff;
+}
+.al-input-btn--gold:hover {
+  opacity: 0.9;
+}
+
+/* ── Title / Label ─────────────────────────────────────────── */
+.al-input-title {
+  display: block;
+  margin-bottom: 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--navi-blue, #1a3a52);
+}
+
+.al-input-required {
+  color: #ef4444;
+  margin-left: 0.125rem;
+}
+
+/* ── Description / Error ───────────────────────────────────── */
+.al-input-description {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  color: rgba(26, 58, 82, 0.55);
+}
+
+.al-input-error {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  color: #ef4444;
+}

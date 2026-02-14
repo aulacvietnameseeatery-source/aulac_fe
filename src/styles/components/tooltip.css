@@ -1,0 +1,97 @@
+.admin-tooltip-wrapper {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Hộp chứa nội dung Tooltip */
+.admin-tooltip-box {
+    position: absolute;
+    background-color: #1E293B; /* Navy đậm từ Figma */
+    color: #FFFFFF;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-family: 'Lexend', sans-serif;
+    font-size: 11px;
+    font-weight: 400;
+    white-space: nowrap;
+    z-index: 1000;
+    box-shadow: 0px 4px 6px -1px rgba(0, 0, 0, 0.1);
+    pointer-events: none; /* Không cản trở chuột */
+    animation: tooltipFadeIn 0.2s ease-out;
+}
+
+/* Mũi tên nhỏ */
+.admin-tooltip-arrow {
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-style: solid;
+}
+
+/* --- Vị trí và Mũi tên tương ứng --- */
+
+/* TOP */
+.admin-tooltip-top {
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-8px);
+}
+.admin-tooltip-top .admin-tooltip-arrow {
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 5px 5px 0 5px;
+    border-color: #1E293B transparent transparent transparent;
+}
+
+/* BOTTOM */
+.admin-tooltip-bottom {
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(8px);
+}
+.admin-tooltip-bottom .admin-tooltip-arrow {
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 0 5px 5px 5px;
+    border-color: transparent transparent #1E293B transparent;
+}
+
+/* LEFT */
+.admin-tooltip-left {
+    right: 100%;
+    top: 50%;
+    transform: translateY(-50%) translateX(-8px);
+}
+.admin-tooltip-left .admin-tooltip-arrow {
+    left: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    border-width: 5px 0 5px 5px;
+    border-color: transparent transparent transparent #1E293B;
+}
+
+/* RIGHT */
+.admin-tooltip-right {
+    left: 100%;
+    top: 50%;
+    transform: translateY(-50%) translateX(8px);
+}
+.admin-tooltip-right .admin-tooltip-arrow {
+    right: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    border-width: 5px 5px 5px 0;
+    border-color: transparent #1E293B transparent transparent;
+}
+
+/* Animation mượt mà */
+@keyframes tooltipFadeIn {
+    from { opacity: 0;
+    }
+    to { opacity: 1;
+    }
+}

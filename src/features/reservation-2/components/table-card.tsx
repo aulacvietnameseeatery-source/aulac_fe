@@ -36,9 +36,11 @@ export default function TableCard({
 
             <div className="table-image-wrapper">
                 <Image
+                    width={1920}
+                    height={1080}
                     src={imageUrl || "/images/table-selection/ground-floor/t-01.png"}
                     alt={tableCode}
-                    fill
+                   // fill
                     className={`table-image ${isDisabled ? "table-image-disabled" : ""}`}
                 />
 

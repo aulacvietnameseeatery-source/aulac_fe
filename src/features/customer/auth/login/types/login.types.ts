@@ -1,23 +1,28 @@
+import { ApiResponse } from '@/types/api-response.types';
+
 export interface LoginRequest {
   username: string;
   password: string;
 }
 
-export interface LoginResponse {
-  success: boolean;
-  code: number;
-  userMessage: string;
-  data: {
-    accessToken: string;
-    refreshToken: string;
-    expiresIn: number;
-    tokenType: string;
-    userId: number;
-    username: string;
-    roles: string[];
-  };
-  serverTime: string;
+/**
+ * Login response data payload
+ * Note: Refresh token is stored in HttpOnly cookie by backend
+ */
+export interface LoginData {
+  accessToken: string;
+  expiresIn: number;
+  tokenType: string;
+  userId: number;
+  username: string;
+  roles: string[];
 }
+
+/**
+ * Login response wrapped in standard API response
+ * Use subCode === 1 and systemMessage === 'PASSWORD_CHANGE_REQUIRED' to detect password change requirement
+ */
+export type LoginResponse = ApiResponse<LoginData>;
 
 export interface User {
   userId: number;
@@ -27,5 +32,5 @@ export interface User {
 
 export interface AuthTokens {
   accessToken: string;
-  refreshToken: string;
+  // refreshToken removed - managed by HttpOnly cookie
 }

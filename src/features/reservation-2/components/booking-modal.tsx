@@ -10,12 +10,12 @@ interface BookingModalProps {
     isOpen: boolean;
     onClose: () => void;
     onConfirm: (data: { name: string; phone: string; email: string; partySize: number }) => Promise<boolean>;
-    tableData: TableAvailabilityDto | null;
+    tables: TableAvailabilityDto[]; // Changed from single tableData
     date?: string;
     time?: string;
 }
 
-export default function BookingModal({ isOpen, onClose, onConfirm, tableData, date, time }: BookingModalProps) {
+export default function BookingModal({ isOpen, onClose, onConfirm, tables, date, time }: BookingModalProps) {
     const t = useTranslations('Reservation.BookingModal');
 
     // View State: 'form' | 'success'
@@ -31,18 +31,23 @@ export default function BookingModal({ isOpen, onClose, onConfirm, tableData, da
     const ticketRef = useRef<HTMLDivElement>(null);
     const prevIsOpenRef = useRef(isOpen);
 
+    // Calculate total capacity
+    const totalCapacity = tables.reduce((sum, t) => sum + t.capacity, 0);
+    const tableCodes = tables.map(t => t.tableCode).join(", ");
+    const mainTable = tables[0]; // For image/zone
+
     useEffect(() => {
-        if (isOpen && !prevIsOpenRef.current && tableData) {
-            setPartySize(tableData.capacity);
+        if (isOpen && !prevIsOpenRef.current && tables.length > 0) {
+            setPartySize(totalCapacity);
             setName("");
             setPhone("");
             setEmail("");
             setView('form');
         }
         prevIsOpenRef.current = isOpen;
-    }, [isOpen, tableData]);
+    }, [isOpen, tables, totalCapacity]);
 
-    if (!isOpen || !tableData) return null;
+    if (!isOpen || tables.length === 0) return null;
 
     // Calculate end time (+2 hours)
     const getEndTime = (startTime: string | undefined): string => {
@@ -74,7 +79,7 @@ export default function BookingModal({ isOpen, onClose, onConfirm, tableData, da
 
     const handleDownloadTicket = async () => {
         if (!ticketRef.current) {
-            alert("Không tìm thấy vé. Vui lòng thử lại.");
+            alert(t('alerts.ticketNotFound'));
             return;
         }
 
@@ -82,6 +87,7 @@ export default function BookingModal({ isOpen, onClose, onConfirm, tableData, da
             const scale = 3;
             const dataUrl = await domtoimage.toPng(ticketRef.current, {
                 quality: 1.0,
+                bgcolor: '#FAF9F6', // Off-white background
                 width: ticketRef.current.offsetWidth * scale,
                 height: ticketRef.current.offsetHeight * scale,
                 style: {
@@ -90,16 +96,15 @@ export default function BookingModal({ isOpen, onClose, onConfirm, tableData, da
                     width: `${ticketRef.current.offsetWidth}px`,
                     height: `${ticketRef.current.offsetHeight}px`
                 },
-                pixelRatio: scale
             });
 
             const link = document.createElement('a');
-            link.download = `AuLac-Reservation-${tableData?.tableCode || Date.now()}.png`;
+            link.download = `AuLac-Reservation-${tableCodes || Date.now()}.png`;
             link.href = dataUrl;
             link.click();
         } catch (err: any) {
             console.error("Download error:", err);
-            alert("Không thể tải xuống. Vui lòng chụp màn hình.");
+            alert(t('alerts.downloadError'));
         }
     };
 
@@ -132,9 +137,11 @@ export default function BookingModal({ isOpen, onClose, onConfirm, tableData, da
                         {/* Header with Table Image */}
                         <div className="relative h-44 sm:h-52 shrink-0 overflow-hidden bg-gradient-to-br from-[#1A3A52] to-[#2d5a7b]">
                             <Image
-                                src={tableData.imageUrl || "/images/table-selection/ground-floor/t-01.png"}
-                                alt={tableData.tableCode}
-                                fill
+                                width={1920}
+                                height={1080}
+                                src={mainTable?.imageUrl || "/images/table-selection/ground-floor/t-01.png"}
+                                alt={tableCodes}
+                                // fill
                                 className="object-cover"
                             />
                             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
@@ -142,17 +149,17 @@ export default function BookingModal({ isOpen, onClose, onConfirm, tableData, da
                             <div className="absolute inset-0 p-4 sm:p-6 flex flex-col justify-end">
                                 {/* Zone Badge */}
                                 <span className="bg-white/20 backdrop-blur-sm text-white text-[10px] sm:text-xs font-bold px-2.5 py-1 rounded-full uppercase tracking-wide w-fit mb-2">
-                                    {tableData.zone}
+                                    {mainTable?.zone}
                                 </span>
 
                                 <div className="flex items-end justify-between">
                                     <div>
                                         <h2 className="text-2xl sm:text-3xl font-bold text-white mb-1">
-                                            {tableData.tableCode}
+                                            {tableCodes}
                                         </h2>
                                         <div className="flex items-center gap-1.5 text-white/80 text-sm">
                                             <Users size={14} />
-                                            <span>{tableData.capacity} khách</span>
+                                            <span>{totalCapacity} khách</span>
                                         </div>
                                     </div>
 
@@ -260,7 +267,7 @@ export default function BookingModal({ isOpen, onClose, onConfirm, tableData, da
                                     <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                                 ) : (
                                     <>
-                                        <Sparkles size={18} />
+                                        {/*<Sparkles size={18} />*/}
                                         <span>{t("confirmBooking")}</span>
                                     </>
                                 )}
@@ -308,7 +315,7 @@ export default function BookingModal({ isOpen, onClose, onConfirm, tableData, da
                                     </div>
                                     <div className="flex justify-between">
                                         <span className="text-stone-500">Table</span>
-                                        <span className="text-[#1A3A52] font-bold">{tableData.tableCode}</span>
+                                        <span className="text-[#1A3A52] font-bold">{tableCodes}</span>
                                     </div>
                                     <div className="flex justify-between">
                                         <span className="text-stone-500">{t("guests")}</span>

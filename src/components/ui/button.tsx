@@ -2,9 +2,10 @@ import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { Loader2 } from "lucide-react"; // Icon loading xoay xoay
 import { cn } from "@/lib/utils";
+import "@/styles/components/button.css"; // Import styles for button variants
 
 const buttonVariants = cva(
-    "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+    "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm cursor-pointer font-medium ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
     {
         variants: {
             variant: {
@@ -14,6 +15,8 @@ const buttonVariants = cva(
                 ghost: "hover:bg-slate-100 hover:text-slate-900", // Nút trong suốt
                 link: "text-navy-DEFAULT underline-offset-4 hover:underline", // Nút link
                 gold: "bg-gold-classic text-white hover:bg-gold-classic/90", // Nút vàng
+                success: "bg-green-600 text-white hover:bg-green-700 shadow-sm", // Nút thành công (Active)
+                danger: "bg-red-600 text-white hover:bg-red-700 shadow-sm", // Nút nguy hiểm (Deactive)
             },
             size: {
                 default: "h-10 px-4 py-2",
@@ -31,7 +34,7 @@ const buttonVariants = cva(
 
 export interface ButtonProps
     extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-        VariantProps<typeof buttonVariants> {
+    VariantProps<typeof buttonVariants> {
     isLoading?: boolean;
 }
 
