@@ -13,6 +13,7 @@ export interface CreateReservationLockRequest {
     tableId: number;
     customerName: string;
     phone: string;
+    tableIds?: number[];
     partySize: number;
     reservedTime: string; // ISO string
 }
@@ -30,6 +31,7 @@ export interface CreateReservationRequest {
     customerName: string;
     phone: string;
     email?: string;
+    tableIds?: number[];
     partySize: number;
     reservedTime: string; // ISO string
 }

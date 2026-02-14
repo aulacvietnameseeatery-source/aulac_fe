@@ -197,6 +197,12 @@
       "title": "Chọn Bàn Của Bạn",
       "subtitle": "Trải nghiệm ẩm thực cao cấp tốt nhất. Chọn khu vực và bàn ưa thích của bạn bên dưới."
     },
+    "Controls": {
+      "single": "Chọn Đơn",
+      "multiple": "Chọn Nhiều",
+      "bookSelected": "Đặt Bàn Đã Chọn ({count})",
+      "selectMode": "Chế độ chọn"
+    },
     "Legend": {
       "available": "CÒN TRỐNG",
       "reserved": "ĐÃ ĐẶT",
@@ -270,7 +276,11 @@
       "zone": "Khu Vực",
       "seeYouSoon": "Hẹn gặp lại!",
       "downloadTicket": "Tải Vé",
-      "close": "Đóng"
+      "close": "Đóng",
+      "alerts": {
+        "ticketNotFound": "Không tìm thấy vé. Vui lòng thử lại.",
+        "downloadError": "Không thể tải xuống. Vui lòng chụp màn hình."
+      }
     },
     "CallButton": {
       "title": "Gọi Cho Nhà Hàng",

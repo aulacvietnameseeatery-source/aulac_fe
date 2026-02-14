@@ -196,6 +196,12 @@
       "title": "Select Your Table",
       "subtitle": "Experience fine dining at its best. Choose your preferred zone and table below."
     },
+    "Controls": {
+      "single": "Single",
+      "multiple": "Show Multiple",
+      "bookSelected": "Book Selected ({count})",
+      "selectMode": "Select Mode"
+    },
     "Legend": {
       "available": "AVAILABLE",
       "reserved": "RESERVED",
@@ -269,7 +275,11 @@
       "zone": "Zone",
       "seeYouSoon": "See you soon!",
       "downloadTicket": "Download Ticket",
-      "close": "Close"
+      "close": "Close",
+      "alerts": {
+        "ticketNotFound": "Ticket not found. Please try again.",
+        "downloadError": "Could not download ticket. Please take a screenshot."
+      }
     },
     "CallButton": {
       "title": "Call Restaurant",

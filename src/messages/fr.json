@@ -196,6 +196,12 @@
       "title": "Choisissez votre table",
       "subtitle": "Vivez l’excellence de la gastronomie. Sélectionnez votre zone et votre table préférée ci-dessous."
     },
+    "Controls": {
+      "single": "Simple",
+      "multiple": "Sélection Multiple",
+      "bookSelected": "Réserver la Sélection ({count})",
+      "selectMode": "Mode de sélection"
+    },
     "Legend": {
       "available": "DISPONIBLE",
       "reserved": "RÉSERVÉE",
@@ -270,7 +276,11 @@
       "zone": "Zone",
       "seeYouSoon": "À bientôt !",
       "downloadTicket": "Télécharger le billet",
-      "close": "Fermer"
+      "close": "Fermer",
+      "alerts": {
+        "ticketNotFound": "Billet introuvable. Veuillez réessayer.",
+        "downloadError": "Impossible de télécharger. Veuillez faire une capture d'écran."
+      }
     },
     "CallButton": {
       "title": "Appeler le restaurant",
