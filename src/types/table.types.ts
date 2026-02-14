@@ -23,6 +23,8 @@ export interface BatchAction {
     variant: 'success' | 'danger' | 'neutral';
     action: (selectedItems: any[]) => void;
     shortkey?: string;
+    className?: string;
+    buttonType?: 'solid' | 'outline';
 }
 
 export type SortDirection = 'asc' | 'desc';

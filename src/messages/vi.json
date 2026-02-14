@@ -563,7 +563,10 @@
         "updateStatusError": "Cập nhật trạng thái thất bại",
         "batchActivateSuccess": "Đã kích hoạt {count} tài khoản thành công",
         "batchDeactivateSuccess": "Đã vô hiệu hóa {count} tài khoản thành công",
-        "batchUpdateError": "Có lỗi xảy ra khi cập nhật trạng thái hàng loạt"
+        "batchUpdateError": "Có lỗi xảy ra khi cập nhật trạng thái hàng loạt",
+        "noUpdatableAccounts": "Không có tài khoản nào có thể cập nhật (tất cả đều bị khóa)",
+        "lockedAccountsSkipped": "Đã bỏ qua {count} tài khoản bị khóa",
+        "cannotToggleLocked": "Không thể thay đổi trạng thái của tài khoản bị khóa"
       },
       "batchActions": {
         "activate": "Kích hoạt",
@@ -874,7 +877,6 @@
       "title": "Đặt bàn thành công!",
       "description": "Khách: {name} - Mã đặt bàn #{id}"
     },
-
     "customer": {
       "sectionTitle": "Thông tin khách hàng",
       "phone": "Số điện thoại",
@@ -885,7 +887,6 @@
       "newCustomer": "Khách mới",
       "member": "Thành viên ({points} điểm)"
     },
-
     "booking": {
       "sectionTitle": "Chi tiết đặt bàn",
       "date": "Ngày",
@@ -893,7 +894,6 @@
       "partySize": "Số khách",
       "enterSize": "VD: 4"
     },
-
     "table": {
       "availability": "Bàn khả dụng",
       "scanning": "Đang kiểm tra...",
@@ -901,7 +901,6 @@
       "emptyHint": "Nhập ngày, giờ và số khách để tìm bàn.",
       "noTable": "Không có bàn phù hợp."
     },
-
     "status": {
       "source": "Nguồn đặt bàn",
       "phone": "Qua điện thoại",
@@ -1008,7 +1007,9 @@
       },
       "notifications": {
         "deleteSuccess": "Xóa món ăn thành công",
-        "deleteError": "Đã xảy ra lỗi khi xóa món ăn"
+        "deleteError": "Đã xảy ra lỗi khi xóa món ăn",
+        "statusUpdated": "Đã cập nhật trạng thái món ăn",
+        "statusUpdateError": "Không thể cập nhật trạng thái món ăn"
       }
     },
     "Validation": {

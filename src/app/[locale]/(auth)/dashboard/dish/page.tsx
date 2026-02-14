@@ -12,15 +12,17 @@ import { PermissionGuard } from "@/components/permission-guard";
 import { Permissions } from "@/types/const";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Switch } from "@/components/ui/switch";
 import { useDishList } from "@/features/staff/dish-management/hooks/use-dish-list";
-import { DishManagementDto } from "@/features/staff/dish-management/types/dish-types";
+import { DishManagementDto, DishStatusCode } from "@/features/staff/dish-management/types/dish-types";
 import { DishActions } from "@/features/staff/dish-management/components/dish-actions";
+import { staffDishService } from "@/features/staff/dish-management/services/dish-service";
 
 const DishListContent = () => {
   const t = useTranslations("Dish.List");
 
   // Data-fetching hook (driven by BaseTable onDataChange)
-  const { dishes, isLoading, totalCount, paginationInfo, onDataChange, refresh, filterOptions } =
+  const { dishes, isLoading, totalCount, paginationInfo, onDataChange, refresh, filterOptions, updateDishLocally } =
     useDishList();
 
   // ---- Dialog state ----
@@ -37,33 +39,41 @@ const DishListContent = () => {
     setDialogState({ open: false, mode: "view", dishId: null });
   };
 
-  // Delete modal state
-  const [deleteModal, setDeleteModal] = useState({
-    open: false,
-    dish: null as DishManagementDto | null,
-    isLoading: false,
-  });
+  // Status toggle state
+  const [togglingId, setTogglingId] = useState<number | null>(null);
 
   // Action Handlers
   const handleView = (dish: DishManagementDto) => openDialog("view", dish.dishId);
   const handleEdit = (dish: DishManagementDto) => openDialog("edit", dish.dishId);
   const handleCreate = () => openDialog("create");
 
-  const handleDeleteClick = (dish: DishManagementDto) => {
-    setDeleteModal({ open: true, dish, isLoading: false });
-  };
-
-  const handleConfirmDelete = async () => {
-    if (!deleteModal.dish) return;
-    setDeleteModal((prev) => ({ ...prev, isLoading: true }));
+  // Handle Status Toggle (Available <-> Hidden)
+  const handleStatusToggle = async (dish: DishManagementDto, checked: boolean) => {
+    setTogglingId(dish.dishId);
     try {
-      // await dishService.deleteDish(deleteModal.dish.dishId);
-      toast.success(t("notifications.deleteSuccess"));
-      refresh();
-      setDeleteModal({ open: false, dish: null, isLoading: false });
+      const newStatusCode = checked ? "AVAILABLE" : "HIDDEN";
+      const newStatusId = checked ? DishStatusCode.AVAILABLE : DishStatusCode.HIDDEN;
+
+      // Optimistic Update
+      const updatedDish: DishManagementDto = {
+        ...dish,
+        statusId: newStatusId,
+        status: newStatusCode
+      };
+      updateDishLocally(updatedDish);
+
+      // API Call
+      await staffDishService.updateDishStatus(dish.dishId, newStatusCode);
+      toast.success(t("notifications.statusUpdated"));
     } catch (error: any) {
-      toast.error(error.message || t("notifications.deleteError"));
-      setDeleteModal((prev) => ({ ...prev, isLoading: false }));
+      console.error("Update status failed:", error);
+      const errorMessage = error.response?.data?.userMessage || t("notifications.statusUpdateError");
+      toast.error(errorMessage);
+
+      // Revert on failure
+      refresh();
+    } finally {
+      setTogglingId(null);
     }
   };
 
@@ -162,8 +172,16 @@ const DishListContent = () => {
         width: "130px",
         filterType: "select" as const,
         filterOptions: statusFilterOptions,
-        cellRender: ({ value, item }: { value: any; item: any }) =>
-          renderStatusBadge(item.statusId, value),
+        cellRender: ({ value, item }: { value: any; item: any }) => (
+          <div className="flex justify-center">
+            <Switch
+              checked={item.statusId === DishStatusCode.AVAILABLE}
+              onChange={(checked) => handleStatusToggle(item, checked)}
+              disabled={togglingId === item.dishId}
+              showLabel={false}
+            />
+          </div>
+        ),
       },
     ],
     [paginationInfo.page, paginationInfo.pageSize, t, categoryFilterOptions, statusFilterOptions]
@@ -219,25 +237,12 @@ const DishListContent = () => {
             dish={item}
             onView={handleView}
             onEdit={handleEdit}
-            onDelete={handleDeleteClick}
           />
         )}
       />
 
       {/* Dialogs & Modals */}
       {/* <DishDialog ... /> */}
-
-      <ConfirmModal
-        isOpen={deleteModal.open}
-        onClose={() => setDeleteModal({ open: false, dish: null, isLoading: false })}
-        onConfirm={handleConfirmDelete}
-        title={t("deleteModal.title")}
-        message={t("deleteModal.message", { name: deleteModal.dish?.dishName ?? "" })}
-        confirmText={t("deleteModal.confirm")}
-        cancelText={t("deleteModal.cancel")}
-        variant="danger"
-        isLoading={deleteModal.isLoading}
-      />
     </div>
   );
 };

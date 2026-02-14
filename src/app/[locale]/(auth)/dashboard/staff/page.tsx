@@ -18,12 +18,14 @@ import { ProtectedRoute } from "@/components/protected-route";
 import { PermissionGuard } from "@/components/permission-guard";
 import { Permissions } from "@/types/const";
 import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
+import { useStatusBatchActions } from "@/features/staff/account-management/account-list/hooks/useStatusBatchActions";
 
 const AccountListContent = () => {
     const t = useTranslations("Account.List");
 
     // Data-fetching hook (driven by BaseTable onDataChange)
-    const { accounts, isLoading, totalCount, paginationInfo, onDataChange, refresh } =
+    const { accounts, isLoading, totalCount, paginationInfo, onDataChange, refresh, updateAccountLocally } =
         useAccountList();
 
     // Filter options for column filters (roles & statuses from API)
@@ -82,6 +84,98 @@ const AccountListContent = () => {
         setAccountToReset(null);
     };
 
+    // Status Toggle State
+    const [togglingId, setTogglingId] = useState<number | null>(null);
+
+    // Handle Status Toggle
+    const handleStatusToggle = async (account: StaffAccount, checked: boolean) => {
+        // Prevent toggling LOCKED accounts
+        if (account.accountStatus === 3) {
+            toast.error(t("notifications.cannotToggleLocked"));
+            return;
+        }
+
+        setTogglingId(account.accountId);
+        try {
+            const newStatus = checked ? "ACTIVE" : "INACTIVE";
+            const newStatusId = checked ? 1 : 2;
+
+            // Optimistic Update
+            const updatedAccount: StaffAccount = {
+                ...account,
+                accountStatus: newStatusId,
+                accountStatusName: newStatus
+            };
+
+            updateAccountLocally(updatedAccount);
+
+            // API Call
+            await staffAccountService.updateAccountStatus(account.accountId, newStatus);
+            toast.success(t(checked ? "notifications.accountActivated" : "notifications.accountDeactivated"));
+        } catch (error: any) {
+            console.error("Update status failed:", error);
+            const errorMessage = error.response?.data?.userMessage || t("notifications.updateStatusError");
+            toast.error(errorMessage);
+
+            // Revert on failure
+            refresh();
+        } finally {
+            setTogglingId(null);
+        }
+    };
+
+    // Handle Batch Status Update
+    const handleBatchStatusUpdate = async (selectedAccounts: StaffAccount[], newStatus: "ACTIVE" | "INACTIVE") => {
+        try {
+            // Filter out LOCKED accounts (status = 3)
+            const updatableAccounts = selectedAccounts.filter(account => account.accountStatus !== 3);
+
+            if (updatableAccounts.length === 0) {
+                toast.warning(t("notifications.noUpdatableAccounts"));
+                return;
+            }
+
+            const lockedCount = selectedAccounts.length - updatableAccounts.length;
+            if (lockedCount > 0) {
+                toast.info(t("notifications.lockedAccountsSkipped", { count: lockedCount }));
+            }
+
+            const newStatusId = newStatus === "ACTIVE" ? 1 : 2;
+
+            // Optimistic Update for updatable items only
+            updatableAccounts.forEach(account => {
+                updateAccountLocally({
+                    ...account,
+                    accountStatus: newStatusId,
+                    accountStatusName: newStatus
+                });
+            });
+
+            // API Calls
+            const promises = updatableAccounts.map(account =>
+                staffAccountService.updateAccountStatus(account.accountId, newStatus)
+            );
+
+            await Promise.all(promises);
+
+            const count = updatableAccounts.length;
+            const messageKey = newStatus === "ACTIVE" ? "notifications.batchActivateSuccess" : "notifications.batchDeactivateSuccess";
+            toast.success(t(messageKey, { count }));
+
+        } catch (error: any) {
+            console.error("Batch update failed:", error);
+            toast.error(t("notifications.batchUpdateError"));
+            refresh(); // Revert on error
+        }
+    };
+
+    // Batch Actions Configuration
+    const batchActions = useStatusBatchActions({
+        t,
+        onUpdate: handleBatchStatusUpdate
+    });
+
+
     // ---- Column filter options (derived from API data) ----
     const roleFilterOptions = useMemo(
         () => roles.map((r) => ({ label: r.roleName, value: String(r.roleId) })),
@@ -105,8 +199,8 @@ const AccountListContent = () => {
             <span
                 className={`${config.bg} ${config.text} px-2 py-1 rounded text-xs font-medium border ${config.border}`}
             >
-        {statusName}
-      </span>
+                {statusName}
+            </span>
         );
     };
 
@@ -155,8 +249,8 @@ const AccountListContent = () => {
                 filterOptions: roleFilterOptions,
                 cellRender: ({ value }: { value: any }) => (
                     <span className="bg-blue-50 text-blue-700 px-2 py-1 rounded text-xs font-bold border border-blue-100">
-            {value}
-          </span>
+                        {value}
+                    </span>
                 ),
             },
             {
@@ -167,8 +261,23 @@ const AccountListContent = () => {
                 sortable: false,
                 filterType: "select" as const,
                 filterOptions: statusFilterOptions,
-                cellRender: ({ value, item }: { value: any; item: any }) =>
-                    renderStatusBadge(item.accountStatus, value),
+                cellRender: ({ value, item }: { value: any; item: any }) => {
+                    // 1 = ACTIVE, 2 = INACTIVE, 3 = LOCKED
+                    if (item.accountStatus === 3) {
+                        return renderStatusBadge(item.accountStatus, value);
+                    }
+
+                    return (
+                        <div className="flex justify-center">
+                            <Switch
+                                checked={item.accountStatus === 1}
+                                onChange={(checked) => handleStatusToggle(item, checked)}
+                                disabled={togglingId === item.accountId}
+                                showLabel={false}
+                            />
+                        </div>
+                    );
+                },
             },
         ],
         [paginationInfo.page, paginationInfo.pageSize, t, roleFilterOptions, statusFilterOptions]
@@ -226,6 +335,7 @@ const AccountListContent = () => {
                         onResetPassword={handleResetPasswordClick}
                     />
                 )}
+                batchActions={batchActions}
             />
 
             {/* Account Detail / Create / Edit Dialog */}

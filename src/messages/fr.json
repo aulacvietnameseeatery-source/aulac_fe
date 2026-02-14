@@ -563,7 +563,10 @@
         "updateStatusError": "Échec de la mise à jour du statut",
         "batchActivateSuccess": "{count} comptes activés avec succès",
         "batchDeactivateSuccess": "{count} comptes désactivés avec succès",
-        "batchUpdateError": "Une erreur s'est produite lors de la mise à jour du statut par lot"
+        "batchUpdateError": "Une erreur s'est produite lors de la mise à jour du statut par lot",
+        "noUpdatableAccounts": "Aucun compte ne peut être mis à jour (tous sont verrouillés)",
+        "lockedAccountsSkipped": "{count} compte(s) verrouillé(s) ignoré(s)",
+        "cannotToggleLocked": "Impossible de modifier le statut d'un compte verrouillé"
       },
       "batchActions": {
         "activate": "Activer",
@@ -869,7 +872,6 @@
       "title": "Réservation réussie !",
       "description": "Client : {name} - Réservation #{id}"
     },
-
     "customer": {
       "sectionTitle": "Identification du client",
       "phone": "Numéro de téléphone",
@@ -880,7 +882,6 @@
       "newCustomer": "Nouveau client",
       "member": "Membre ({points} pts)"
     },
-
     "booking": {
       "sectionTitle": "Détails de la réservation",
       "date": "Date",
@@ -888,7 +889,6 @@
       "partySize": "Nombre de personnes",
       "enterSize": "Ex : 4"
     },
-
     "table": {
       "availability": "Tables disponibles",
       "scanning": "Recherche...",
@@ -896,7 +896,6 @@
       "emptyHint": "Entrez la date, l'heure et le nombre de personnes.",
       "noTable": "Aucune table disponible."
     },
-
     "status": {
       "source": "Source de réservation",
       "phone": "Téléphone",
@@ -953,7 +952,9 @@
       },
       "notifications": {
         "deleteSuccess": "Plat supprimé avec succès",
-        "deleteError": "Une erreur est survenue lors de la suppression du plat"
+        "deleteError": "Une erreur est survenue lors de la suppression du plat",
+        "statusUpdated": "Statut du plat mis à jour",
+        "statusUpdateError": "Impossible de mettre à jour le statut du plat"
       }
     },
     "Validation": {

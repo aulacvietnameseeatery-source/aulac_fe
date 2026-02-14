@@ -562,7 +562,10 @@
         "updateStatusError": "Failed to update status",
         "batchActivateSuccess": "Successfully activated {count} accounts",
         "batchDeactivateSuccess": "Successfully deactivated {count} accounts",
-        "batchUpdateError": "An error occurred while updating batch status"
+        "batchUpdateError": "An error occurred while updating batch status",
+        "noUpdatableAccounts": "No accounts can be updated (all are locked)",
+        "lockedAccountsSkipped": "Skipped {count} locked account(s)",
+        "cannotToggleLocked": "Cannot change status of a locked account"
       },
       "batchActions": {
         "activate": "Activate",
@@ -873,7 +876,6 @@
       "title": "Reservation successful!",
       "description": "Customer: {name} - Reservation #{id}"
     },
-
     "customer": {
       "sectionTitle": "Customer Identification",
       "phone": "Phone Number",
@@ -884,7 +886,6 @@
       "newCustomer": "New Customer",
       "member": "Member ({points} pts)"
     },
-
     "booking": {
       "sectionTitle": "Booking Details",
       "date": "Date",
@@ -892,7 +893,6 @@
       "partySize": "Party Size",
       "enterSize": "Ex: 4"
     },
-
     "table": {
       "availability": "Table Availability",
       "scanning": "Scanning...",
@@ -900,7 +900,6 @@
       "emptyHint": "Enter Date, Time, and Size to find tables.",
       "noTable": "No tables available."
     },
-
     "status": {
       "source": "Reservation Source",
       "phone": "Phone Booking",
@@ -1007,7 +1006,9 @@
       },
       "notifications": {
         "deleteSuccess": "Dish deleted successfully",
-        "deleteError": "An error occurred while deleting the dish"
+        "deleteError": "An error occurred while deleting the dish",
+        "statusUpdated": "Dish status updated successfully",
+        "statusUpdateError": "Failed to update dish status"
       }
     },
     "Validation": {

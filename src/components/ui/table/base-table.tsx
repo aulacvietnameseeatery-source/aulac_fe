@@ -529,32 +529,27 @@ export function BaseTable<T>({
                                             </Button>
 
                                             <div className="flex items-center gap-2">
-                                                {batchActions.map((action) => {
-                                                    // Mapping icon string to Lucide React Node
-                                                    // Note: You should ideally import these icons at the top of the file
-                                                    // import { Check, X, Trash2 } from 'lucide-react';
-
-                                                    let IconComponent = null;
-                                                    if (action.icon === 'check') IconComponent = <div className="mi icon16 icon-check-white" />; // Fallback or use lucide Check
-                                                    if (action.icon === 'close') IconComponent = <div className="mi icon16 icon-close-white" />; // Fallback or use lucide X
-
-                                                    // Better approach: mapping based on action props if you migrate icons fully
-                                                    // For now, let's render standard buttons with the new variants
-
-                                                    return (
-                                                        <Button
-                                                            key={action.label}
-                                                            variant={action.variant as any} // Cast because 'neutral' might not be in ButtonProps yet, but success/danger are
-                                                            size="sm"
-                                                            onClick={() => handleBatchAction(action)}
-                                                            className="h-8 shadow-sm"
-                                                        >
-                                                            {action.icon === 'check' && <div className="mi icon16 icon-check-white mr-1.5" />}
-                                                            {action.icon === 'close' && <div className="mi icon16 icon-close-white mr-1.5" />}
-                                                            {action.label}
-                                                        </Button>
-                                                    );
-                                                })}
+                                                {batchActions.map((action) => (
+                                                    <Button
+                                                        key={action.label}
+                                                        // Use standard variants, but apply custom classes if provided
+                                                        variant={action.variant as any}
+                                                        size="sm"
+                                                        onClick={() => handleBatchAction(action)}
+                                                        className={cn(
+                                                            "h-8 shadow-sm transition-all",
+                                                            action.className,
+                                                            // If buttonType is solid, we might want to override standard variant styles if needed
+                                                            // For now, rely on variant + className
+                                                        )}
+                                                    >
+                                                        {/* Icon handling: prioritize mapped icons or use CSS classes */}
+                                                        {action.icon === 'check' && <div className="mi icon16 icon-check-white mr-1.5" />}
+                                                        {action.icon === 'close' && <div className="mi icon16 icon-close-white mr-1.5" />}
+                                                        {/* Render label */}
+                                                        {action.label}
+                                                    </Button>
+                                                ))}
                                             </div>
                                         </div>
                                     )}
