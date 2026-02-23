@@ -24,7 +24,8 @@ const formatTimeDisplay = (time24: string) => {
 const convertTo24Hour = (timeStr: string) => {
   const [time, modifier] = timeStr.split(' ');
   if (!modifier) return timeStr;
-  let [hours, minutes] = time.split(':');
+  const [hoursOriginal, minutes] = time.split(':');
+  let hours = hoursOriginal;
   if (hours === '12') {
     hours = '00';
   }

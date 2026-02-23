@@ -3,7 +3,7 @@ import { api } from "@/lib/http";
 import { ApiResponse, PagedResult } from "@/types/api-response.types";
 import { CreateRoleRequest } from "../types/role-create.types";
 import { RoleDetailDto } from "../../role-detail/types/role-detail.types";
-import { RoleDto } from "../../role-list/types/role.types";
+import { RoleDto } from "@/features/staff/role-list";
 
 export const createRole = async (request: CreateRoleRequest): Promise<RoleDetailDto> => {
   const response = await api.post<ApiResponse<RoleDetailDto>>("/api/roles", request);

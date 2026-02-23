@@ -35,7 +35,7 @@ export const StatusBadge = ({ status, isOnline, chefRecommended, tagName }: Prop
             )}
             {chefRecommended && (
                 <span className="bg-amber-100 text-amber-700 px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 border border-amber-200">
-                <Star size={14} fill="currentColor" /> Chef's Choice
+                <Star size={14} fill="currentColor" /> Chef&apos;s Choice
                 </span>
             )}
         </div>

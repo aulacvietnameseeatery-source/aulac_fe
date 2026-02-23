@@ -39,7 +39,7 @@ export const DishInfoSection = ({ dish, activeTab }: Props) => {
             "border-l-4 border-blue-500 pl-4 italic text-xl text-gray-700 leading-relaxed" ,
             playfair.className
           )}>
-            "{content.slogan}"
+            &quot;{content.slogan}&quot;
           </blockquote>
         )}
 

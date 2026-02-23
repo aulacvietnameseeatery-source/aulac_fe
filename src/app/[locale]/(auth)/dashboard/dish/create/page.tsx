@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 
 
 export default function CreateDishPage() {
-  const router = useRouter();
 
   return (
     <div className="">
