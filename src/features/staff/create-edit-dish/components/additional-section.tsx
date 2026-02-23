@@ -54,7 +54,7 @@ export const AdditionalSection: React.FC<{ form: UseFormReturn<DishFormValues> }
                 <label className="flex items-center gap-3 cursor-pointer group p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
                 <input type="checkbox" {...register("chefRecommended")} className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500" />
                 <div className="flex flex-col">
-                    <span className="text-sm font-medium text-gray-900">Chef's Recommended</span>
+                    <span className="text-sm font-medium text-gray-900">Chef&apos;s Recommended</span>
                 </div>
                 </label>
             </div>

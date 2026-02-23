@@ -1,7 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { motion } from "framer-motion";
+import { motion, easeOut } from "framer-motion";
 import { Wind, Waves, Leaf, Sun } from "lucide-react";
 
 // Premium Animation Variants
@@ -18,7 +18,7 @@ const itemVariant = {
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.8, ease: "easeOut" },
+    transition: { duration: 0.8, ease: easeOut },
   },
 };
 
@@ -126,7 +126,7 @@ export default function AboutUsUI() {
           <div className="max-w-2xl mx-auto space-y-8">
             <div className="w-16 h-px bg-[#FFAB2D]/50 mx-auto" />
             <p className="text-3xl md:text-5xl font-display font-light italic leading-tight">
-              "{t("description_5")}"
+              &quot;{t("description_5")}&quot;
             </p>
             <div className="w-16 h-px bg-[#FFAB2D]/50 mx-auto" />
           </div>

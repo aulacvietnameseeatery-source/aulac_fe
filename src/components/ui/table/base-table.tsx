@@ -505,7 +505,6 @@ export function BaseTable<T>({
                                                     {t('clearFilter')}
                                                 </div>
                                             </div>
-
                                         </div>
 
                                     )}
@@ -571,8 +570,11 @@ export function BaseTable<T>({
                     </div>
 
                     <div className="voucher-body-grid">
-                        <div className="ms-grid-viewer flex flex-col has-scroll-x has-scroll-y has-paging flex-box">
-                            <div className="ms-content-table sticky-1 scroller">
+                        <div className="ms-grid-viewer flex flex-col has-paging flex-box">
+                            <div 
+                                className={cn("ms-content-table sticky-1", !loading && "scroller")}
+                                style={loading ? { overflow: 'hidden' } : undefined}
+                            >
                                 <div className="grid-scroll">
                                     <table className="ms-table table-resizable">
                                         {/* Table Header */}
@@ -777,7 +779,7 @@ export function BaseTable<T>({
                                         </thead>
 
                                         {/* Table Body */}
-                                        <tbody className="ms-tbody data">
+                                        <tbody className={`ms-tbody data ${loading ? 'loading' : ''}`}>
                                             {loading ? (
                                                 // Loading Skeleton
                                                 Array.from({ length: pageSize }).map((_, n) => (
@@ -805,7 +807,9 @@ export function BaseTable<T>({
                                                                     maxWidth: '100px',
                                                                     borderRight: '1px dotted rgb(193, 196, 204)'
                                                                 }}
-                                                            />
+                                                            >
+                                                                <div className="shimmer"></div>
+                                                            </td>
                                                         )}
                                                     </tr>
                                                 ))

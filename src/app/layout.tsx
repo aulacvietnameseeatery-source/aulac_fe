@@ -1,82 +1,24 @@
-import type { Metadata, Viewport } from "next";
-import { Inter, Playfair_Display } from "next/font/google";
-import { NextIntlClientProvider } from "next-intl";
-import { getMessages } from "next-intl/server";
-import QueryProvider from "@/components/providers/query-provider";
+import type { Viewport } from "next";
+import type { ReactNode } from "react";
 import "@/styles/globals.css";
-import { Toaster } from "@/components/ui/sonner";
-import { AuthProvider } from "@/components/providers/auth-provider";
 
-
-
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
-const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-playfair", display: "swap" });
-
-// 1. Cấu hình Viewport (Mobile & PWA)
 export const viewport: Viewport = {
-    width: 'device-width',
-    initialScale: 1,
-    maximumScale: 1,
-    userScalable: false, // Chặn zoom để giống App
-    viewportFit: 'cover',
-    themeColor: '#FAF9F6', // Màu thanh status bar trùng màu nền web
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  viewportFit: "cover",
+  themeColor: "#FAF9F6",
 };
 
-// 2. Cấu hình Metadata (Apple Specific)
-// 2. Cấu hình Metadata Dynamic (SEO 3 ngôn ngữ)
-export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
-    const messages = await getMessages({ locale });
-    const title = (messages as any).Metadata?.title || "Au Lac";
-    const description = (messages as any).Metadata?.description || "Vietnamese Eatery";
-
-    return {
-        title: title,
-        description: description,
-        appleWebApp: {
-            capable: true, // Biến web thành Web App (ẩn thanh địa chỉ safari)
-            title: title,
-            statusBarStyle: "black-translucent", // Thanh status bar trong suốt đè lên nền
-            // startupImage: [], // Có thể thêm ảnh splash screen sau
-        },
-        formatDetection: {
-            telephone: false, // Tắt tự động nhận diện số điện thoại (đôi khi gây lỗi style)
-        },
-        icons: {
-            icon: "/icons/logo.svg",
-            apple: "/icons/logo.svg",
-        },
-    };
-}
-
-export default async function RootLayout({
-    children,
-    params: { locale }
+export default function RootLayout({
+  children,
 }: {
-    children: React.ReactNode;
-    params: { locale: string };
+  children: ReactNode;
 }) {
-    // Nhận messages để dùng cho Client Components
-    const messages = await getMessages();
-
-    return (
-        <html lang={locale}>
-            <head>
-                {/* Material Icons nếu cần */}
-                <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
-            </head>
-            <body className={`${inter.variable} ${playfair.variable} antialiased font-body bg-[#FAF9F6]`}>
-                <QueryProvider>
-                    <AuthProvider>
-                    <NextIntlClientProvider messages={messages} locale={locale}>
-                        {/* 👇 Bọc TableGuard ở đây để chặn flow nếu chưa chọn bàn */}
-                        {/*<TableGuard>*/}
-                        {children}
-                        {/*</TableGuard>*/}
-                        <Toaster />
-                    </NextIntlClientProvider>
-                    </AuthProvider>
-                </QueryProvider>
-            </body>
-        </html >
-    );
+  return (
+    <html>
+      <body>{children}</body>
+    </html>
+  );
 }
