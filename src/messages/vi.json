@@ -197,6 +197,12 @@
       "title": "Chọn Bàn Của Bạn",
       "subtitle": "Trải nghiệm ẩm thực cao cấp tốt nhất. Chọn khu vực và bàn ưa thích của bạn bên dưới."
     },
+    "Controls": {
+      "single": "Chọn Đơn",
+      "multiple": "Chọn Nhiều",
+      "bookSelected": "Đặt Bàn Đã Chọn ({count})",
+      "selectMode": "Chế độ chọn"
+    },
     "Legend": {
       "available": "CÒN TRỐNG",
       "reserved": "ĐÃ ĐẶT",
@@ -270,7 +276,11 @@
       "zone": "Khu Vực",
       "seeYouSoon": "Hẹn gặp lại!",
       "downloadTicket": "Tải Vé",
-      "close": "Đóng"
+      "close": "Đóng",
+      "alerts": {
+        "ticketNotFound": "Không tìm thấy vé. Vui lòng thử lại.",
+        "downloadError": "Không thể tải xuống. Vui lòng chụp màn hình."
+      }
     },
     "CallButton": {
       "title": "Gọi Cho Nhà Hàng",
@@ -547,7 +557,20 @@
       },
       "notifications": {
         "resetPasswordSuccess": "Đặt lại mật khẩu thành công",
-        "resetPasswordError": "Có lỗi xảy ra khi đặt lại mật khẩu"
+        "resetPasswordError": "Có lỗi xảy ra khi đặt lại mật khẩu",
+        "accountActivated": "Tài khoản đã được kích hoạt",
+        "accountDeactivated": "Tài khoản đã bị vô hiệu hóa",
+        "updateStatusError": "Cập nhật trạng thái thất bại",
+        "batchActivateSuccess": "Đã kích hoạt {count} tài khoản thành công",
+        "batchDeactivateSuccess": "Đã vô hiệu hóa {count} tài khoản thành công",
+        "batchUpdateError": "Có lỗi xảy ra khi cập nhật trạng thái hàng loạt",
+        "noUpdatableAccounts": "Không có tài khoản nào có thể cập nhật (tất cả đều bị khóa)",
+        "lockedAccountsSkipped": "Đã bỏ qua {count} tài khoản bị khóa",
+        "cannotToggleLocked": "Không thể thay đổi trạng thái của tài khoản bị khóa"
+      },
+      "batchActions": {
+        "activate": "Kích hoạt",
+        "deactivate": "Vô hiệu hóa"
       }
     },
     "Detail": {
@@ -716,7 +739,12 @@
       },
       "notifications": {
         "deleteSuccess": "Xóa vai trò thành công",
-        "deleteError": "Có lỗi xảy ra khi xóa vai trò"
+        "deleteError": "Có lỗi xảy ra khi xóa vai trò",
+        "batchDeleteSuccess": "Đã xóa {count} vai trò thành công",
+        "batchDeleteError": "Có lỗi xảy ra khi xóa vai trò"
+      },
+      "batchActions": {
+        "delete": "Xóa"
       }
     },
     "Detail": {
@@ -798,16 +826,13 @@
       "unselect": "Bỏ chọn",
       "clearFilter": "Bỏ lọc",
       "refresh": "Lấy lại dữ liệu",
-
       "pin": "Ghim cột",
       "unpin": "Bỏ ghim cột",
-
       "sort": {
         "none": "Không sắp xếp",
         "asc": "Tăng dần",
         "desc": "Giảm dần"
       },
-
       "operator": {
         "contains": "Chứa",
         "notContains": "Không chứa",
@@ -852,7 +877,6 @@
       "title": "Đặt bàn thành công!",
       "description": "Khách: {name} - Mã đặt bàn #{id}"
     },
-
     "customer": {
       "sectionTitle": "Thông tin khách hàng",
       "phone": "Số điện thoại",
@@ -863,7 +887,6 @@
       "newCustomer": "Khách mới",
       "member": "Thành viên ({points} điểm)"
     },
-
     "booking": {
       "sectionTitle": "Chi tiết đặt bàn",
       "date": "Ngày",
@@ -871,7 +894,6 @@
       "partySize": "Số khách",
       "enterSize": "VD: 4"
     },
-
     "table": {
       "availability": "Bàn khả dụng",
       "scanning": "Đang kiểm tra...",
@@ -879,7 +901,6 @@
       "emptyHint": "Nhập ngày, giờ và số khách để tìm bàn.",
       "noTable": "Không có bàn phù hợp."
     },
-
     "status": {
       "source": "Nguồn đặt bàn",
       "phone": "Qua điện thoại",
@@ -888,6 +909,56 @@
       "confirmed": "Đã xác nhận",
       "checkedIn": "Đã nhận bàn",
       "phoneHint": "*Đặt qua điện thoại mặc định là 'Đã xác nhận'."
+    }
+  },
+  "DishCategory": {
+    "List": {
+      "title": "Quản lý Danh mục Món ăn",
+      "description": "Quản lý và tổ chức các danh mục thực đơn nhà hàng một cách hiệu quả.",
+      "searchPlaceholder": "Tìm theo tên danh mục...",
+      "addNew": "Thêm Danh mục Mới",
+      "filters": {
+        "allStatuses": "Tất cả Trạng thái",
+        "active": "Hoạt động",
+        "inactive": "Không hoạt động"
+      }
+    },
+    "Add": {
+      "title": "Thêm Danh mục Món ăn Mới",
+      "subtitle": "Tạo danh mục mới để tổ chức các món ăn trong thực đơn",
+      "saveButton": "Tạo Danh mục",
+      "cancel": "Hủy",
+      "categoryName": "Tên Danh mục",
+      "categoryNamePlaceholder": "VD: Khai vị, Món chính, Tráng miệng",
+      "description": "Mô tả",
+      "descriptionPlaceholder": "Cung cấp mô tả ngắn về danh mục này và các loại món ăn trong danh mục...",
+      "validation": {
+        "nameRequired": "Tên danh mục không được để trống",
+        "nameMaxLength": "Tên danh mục không được vượt quá 100 ký tự",
+        "descriptionMaxLength": "Mô tả không được vượt quá 100 ký tự",
+        "fixErrors": "Vui lòng sửa các lỗi xác thực"
+      }
+    },
+    "Edit": {
+      "title": "Chỉnh sửa Danh mục Món ăn",
+      "subtitle": "Cập nhật thông tin và cài đặt danh mục",
+      "saveButton": "Lưu Thay đổi",
+      "cancel": "Hủy",
+      "categoryName": "Tên Danh mục",
+      "categoryNamePlaceholder": "VD: Khai vị, Món chính, Tráng miệng",
+      "description": "Mô tả",
+      "descriptionPlaceholder": "Cung cấp mô tả ngắn về danh mục này và các loại món ăn trong danh mục...",
+      "status": "Trạng thái Danh mục",
+      "statusActive": "Danh mục đang hoạt động và hiển thị trong thực đơn",
+      "statusInactive": "Danh mục không hoạt động và ẩn khỏi khách hàng",
+      "validation": {
+        "nameRequired": "Tên danh mục không được để trống",
+        "nameMaxLength": "Tên danh mục không được vượt quá 100 ký tự",
+        "descriptionMaxLength": "Mô tả không được vượt quá 100 ký tự",
+        "fixErrors": "Vui lòng sửa các lỗi xác thực"
+      },
+      "loading": "Đang tải...",
+      "backToList": "Quay lại danh sách"
     }
   },
   "Dish": {
@@ -936,7 +1007,16 @@
       },
       "notifications": {
         "deleteSuccess": "Xóa món ăn thành công",
-        "deleteError": "Đã xảy ra lỗi khi xóa món ăn"
+        "deleteError": "Đã xảy ra lỗi khi xóa món ăn",
+        "statusUpdated": "Đã cập nhật trạng thái món ăn",
+        "statusUpdateError": "Không thể cập nhật trạng thái món ăn",
+        "batchMakeAvailableSuccess": "Đã hiển thị {count} món ăn",
+        "batchMakeHiddenSuccess": "Đã ẩn {count} món ăn",
+        "batchUpdateError": "Có lỗi xảy ra khi cập nhật trạng thái hàng loạt"
+      },
+      "batchActions": {
+        "makeAvailable": "Hiển thị",
+        "makeHidden": "Ẩn"
       }
     },
     "Validation": {
@@ -953,5 +1033,25 @@
         "required": "Vui lòng chọn danh mục"
       }
     }
+  },
+  "AdminSidebar": {
+    "dashboard": "Bảng điều khiển",
+    "tables": "Bàn",
+    "staff": "Nhân viên",
+    "roles": "Vai trò",
+    "dish": "Món ăn",
+    "dishCategory": "Danh mục món",
+    "ingredient": "Nguyên liệu",
+    "orders": "Đơn hàng",
+    "reports": "Báo cáo",
+    "emails": "Email",
+    "customers": "Khách hàng",
+    "promotions": "Khuyến mãi",
+    "settings": "Cài đặt",
+    "logout": "Đăng xuất",
+    "loggingOut": "Đang đăng xuất...",
+    "managerPortal": "Cổng Quản Lý",
+    "logoutMessage": "Bạn có chắc chắn muốn đăng xuất? Bạn sẽ được chuyển hướng đến trang đăng nhập.",
+    "cancel": "Hủy"
   }
 }

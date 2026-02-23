@@ -6,254 +6,289 @@ import { BaseTable } from "@/components/ui/table/base-table";
 import { TableColumn } from "@/types/table.types";
 import { toast } from "sonner";
 import { useTranslations } from "next-intl";
-import { ConfirmModal } from "@/components/layout/admin-sidebar/confirm-modal";
 import { ProtectedRoute } from "@/components/protected-route";
 import { PermissionGuard } from "@/components/permission-guard";
 import { Permissions } from "@/types/const";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Switch } from "@/components/ui/switch";
 import { useDishList } from "@/features/staff/dish-management/hooks/use-dish-list";
 import { DishManagementDto } from "@/features/staff/dish-management/types/dish-types";
 import { DishActions } from "@/features/staff/dish-management/components/dish-actions";
+import { staffDishService } from "@/features/staff/dish-management/services/dish-service";
+import { useStatusBatchActions } from "@/features/staff/dish-management/hooks/useStatusBatchActions";
+import { useRouter } from "next/navigation";
 
 const DishListContent = () => {
-  const t = useTranslations("Dish.List");
+    const t = useTranslations("Dish.List");
+    const router = useRouter();
 
-  // Data-fetching hook (driven by BaseTable onDataChange)
-  const { dishes, isLoading, totalCount, paginationInfo, onDataChange, refresh, filterOptions } =
-    useDishList();
+    // Data-fetching hook (driven by BaseTable onDataChange)
+    const { dishes, isLoading, totalCount, paginationInfo, onDataChange, refresh, filterOptions, updateDishLocally } =
+        useDishList();
 
-  // ---- Dialog state ----
-  const [dialogState, setDialogState] = useState({
-    open: false,
-    mode: "view" as "view" | "edit" | "create",
-    dishId: null as number | null,
-  });
+    // Status toggle state
+    const [togglingId, setTogglingId] = useState<number | null>(null);
 
-  const openDialog = (mode: "view" | "edit" | "create", dishId: number | null = null) => {
-    setDialogState({ open: true, mode, dishId });
-  };
-  const closeDialog = () => {
-    setDialogState({ open: false, mode: "view", dishId: null });
-  };
+    // ==========================================
+    // ACTION HANDLERS
+    // ==========================================
 
-  // Delete modal state
-  const [deleteModal, setDeleteModal] = useState({
-    open: false,
-    dish: null as DishManagementDto | null,
-    isLoading: false,
-  });
+    const handleView = (dish: DishManagementDto) => {
+        router.push(`/dashboard/dish/${dish.dishId}/detail`);
+    };
 
-  // Action Handlers
-  const handleView = (dish: DishManagementDto) => openDialog("view", dish.dishId);
-  const handleEdit = (dish: DishManagementDto) => openDialog("edit", dish.dishId);
-  const handleCreate = () => openDialog("create");
+    const handleEdit = (dish: DishManagementDto) => {
+        router.push(`/dashboard/dish/${dish.dishId}/edit`);
+    };
 
-  const handleDeleteClick = (dish: DishManagementDto) => {
-    setDeleteModal({ open: true, dish, isLoading: false });
-  };
+    const handleCreate = () => {
+        router.push(`/dashboard/dish/create`);
+    };
 
-  const handleConfirmDelete = async () => {
-    if (!deleteModal.dish) return;
-    setDeleteModal((prev) => ({ ...prev, isLoading: true }));
-    try {
-      // await dishService.deleteDish(deleteModal.dish.dishId);
-      toast.success(t("notifications.deleteSuccess"));
-      refresh();
-      setDeleteModal({ open: false, dish: null, isLoading: false });
-    } catch (error: any) {
-      toast.error(error.message || t("notifications.deleteError"));
-      setDeleteModal((prev) => ({ ...prev, isLoading: false }));
-    }
-  };
+    // Handle Status Toggle (Available <-> Hidden)
+    const handleStatusToggle = async (dish: DishManagementDto, checked: boolean) => {
+        setTogglingId(dish.dishId);
+        try {
+            const newStatusCode = checked ? "AVAILABLE" : "HIDDEN";
 
-  // ---- Column filter options (derived from API data) ----
-  const categoryFilterOptions = useMemo(
-    () => filterOptions.categories.map((cat) => ({ label: cat, value: cat })),
-    [filterOptions.categories]
-  );
+            // Optimistic Update
+            const updatedDish: DishManagementDto = {
+                ...dish,
+                status: newStatusCode
+            };
+            updateDishLocally(updatedDish);
 
-  const statusFilterOptions = useMemo(
-    () =>
-      filterOptions.statuses.map((s) => ({
-        label: s.statusName,
-        value: String(s.statusId),
-      })),
-    [filterOptions.statuses]
-  );
+            // API Call
+            await staffDishService.updateDishStatus(dish.dishId, newStatusCode);
+            toast.success(t("notifications.statusUpdated"));
+        } catch (error: any) {
+            console.error("Update status failed:", error);
+            const errorMessage = error.response?.data?.userMessage || t("notifications.statusUpdateError");
+            toast.error(errorMessage);
 
-  // Status Badge Render
-  const renderStatusBadge = (statusId: number, statusName: string) => {
-    let variant: "default" | "secondary" | "destructive" | "outline" | "success" | "warning" | "info" = "outline";
-    switch (statusId) {
-      case 42:
-        variant = "success";
-        break;
-      case 43:
-        variant = "warning";
-        break;
-      case 44:
-        variant = "secondary";
-        break;
-      default:
-        variant = "outline";
-    }
-    return (
-      <Badge variant={variant} className="font-bold">
-        {statusName}
-      </Badge>
+            // Revert on failure
+            refresh();
+        } finally {
+            setTogglingId(null);
+        }
+    };
+
+    // Handle Batch Status Update
+    const handleBatchStatusUpdate = async (selectedDishes: DishManagementDto[], newStatus: "AVAILABLE" | "HIDDEN") => {
+        try {
+            // Optimistic Update for all selected items
+            selectedDishes.forEach(dish => {
+                updateDishLocally({
+                    ...dish,
+                    status: newStatus
+                });
+            });
+
+            // API Calls
+            const promises = selectedDishes.map(dish =>
+                staffDishService.updateDishStatus(dish.dishId, newStatus)
+            );
+
+            await Promise.all(promises);
+
+            const count = selectedDishes.length;
+            const messageKey = newStatus === "AVAILABLE" ? "notifications.batchMakeAvailableSuccess" : "notifications.batchMakeHiddenSuccess";
+            toast.success(t(messageKey, { count }));
+
+        } catch (error: any) {
+            console.error("Batch update failed:", error);
+            toast.error(t("notifications.batchUpdateError"));
+            refresh(); // Revert on error
+        }
+    };
+
+    // Batch Actions Configuration
+    const batchActions = useStatusBatchActions({
+        t,
+        onUpdate: handleBatchStatusUpdate
+    });
+
+    // ---- Column filter options (derived from API data) ----
+    const categoryFilterOptions = useMemo(
+        () => filterOptions.categories.map((cat) => ({ label: cat, value: cat })),
+        [filterOptions.categories]
     );
-  };
 
-  // ---- Table Columns with built-in filterType + filterOptions ----
-  const columns: TableColumn[] = useMemo(
-    () => [
-      {
-        field: "no",
-        header: t("table.no"),
-        width: "70px",
-        align: "center" as const,
-        sortable: false,
-        cellRender: ({ rowIndex }: { rowIndex: number }) =>
-          (paginationInfo.page - 1) * paginationInfo.pageSize + rowIndex + 1,
-      },
-      {
-        field: "dishName",
-        header: t("table.dishName"),
-        width: "250px",
-        filterType: "text" as const,
-        cellRender: ({ value, item }: { value: any; item: any }) => (
-          <div className="flex flex-col">
-            <span className="font-medium text-gray-900">{value}</span>
-            {item.isOnline && (
-              <span className="text-xs text-green-600 flex items-center gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-green-500"></span> Online
-              </span>
-            )}
-          </div>
-        ),
-      },
-      {
-        field: "categoryName",
-        header: t("table.category"),
-        width: "150px",
-        filterType: "select" as const,
-        filterOptions: categoryFilterOptions,
-        cellRender: ({ value }: { value: any }) => (
-          <span className="text-gray-600">{value}</span>
-        ),
-      },
-      {
-        field: "price",
-        header: t("table.price"),
-        width: "120px",
-        align: "right" as const,
-        filterType: "number" as const,
-        cellRender: ({ value }: { value: any }) => (
-          <span className="font-bold text-blue-600">
-            ${typeof value === "number" ? value.toFixed(2) : value}
-          </span>
-        ),
-      },
-      {
-        field: "status",
-        header: t("table.status"),
-        align: "center" as const,
-        width: "130px",
-        filterType: "select" as const,
-        filterOptions: statusFilterOptions,
-        cellRender: ({ value, item }: { value: any; item: any }) =>
-          renderStatusBadge(item.statusId, value),
-      },
-    ],
-    [paginationInfo.page, paginationInfo.pageSize, t, categoryFilterOptions, statusFilterOptions]
-  );
+    const statusFilterOptions = useMemo(
+        () =>
+            filterOptions.statuses.map((s) => ({
+                label: s.statusName,
+                value: String(s.statusId),
+            })),
+        [filterOptions.statuses]
+    );
 
-  // Global cell renderer (applies column alignment)
-  const handleGlobalRenderCell = useCallback(
-    (field: string, value: any, item: DishManagementDto, column: TableColumn, rowIndex: number) => {
-      const content = column.cellRender
-        ? column.cellRender({ value, item, column, rowIndex })
-        : value;
-      return column.align ? <div style={{ textAlign: column.align }}>{content}</div> : content;
-    },
-    []
-  );
+    // Status Badge Render (for identification)
+    const renderStatusBadge = (statusId: number, statusName: string) => {
+        let variant: "default" | "secondary" | "destructive" | "outline" | "success" | "warning" | "info" = "outline";
+        switch (statusId) {
+            case 42:
+                variant = "success";
+                break;
+            case 43:
+                variant = "warning";
+                break;
+            case 44:
+                variant = "secondary";
+                break;
+            default:
+                variant = "outline";
+        }
+        return (
+            <Badge variant={variant} className="font-bold">
+                {statusName}
+            </Badge>
+        );
+    };
 
-  return (
-    <div className="w-full h-full flex flex-col overflow-hidden">
-      <BaseTable<DishManagementDto>
-        data={dishes}
-        loading={isLoading}
-        columns={columns}
-        rowKey="dishId"
-        total={totalCount}
-        onDataChange={onDataChange}
-        onRefresh={refresh}
-        searchPlaceholder={t("searchPlaceholder")}
-        defaultRowsPerPage={10}
-        rowsPerPageOptions={[10, 20, 50]}
-        renderTitle={() => (
-          <div className="flex justify-between items-center w-full">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900 tracking-tight">
-                {t("title")}
-              </h1>
-              <p className="text-sm text-gray-500 mt-1">{t("description")}</p>
-            </div>
-            <PermissionGuard permission={Permissions.CreateDish}>
-              <Button
-                onClick={handleCreate}
-                variant="outline"
-                className="shadow-md whitespace-nowrap bg-blue-600 text-white hover:bg-blue-700 border-none"
-              >
-                <Plus className="mr-2 h-4 w-4" />
-                {t("addNew")}
-              </Button>
-            </PermissionGuard>
-          </div>
-        )}
-        renderCell={handleGlobalRenderCell}
-        renderActionColumn={(item) => (
-          <DishActions
-            dish={item}
-            onView={handleView}
-            onEdit={handleEdit}
-            onDelete={handleDeleteClick}
-          />
-        )}
-      />
+    // ---- Table Columns with built-in filterType + filterOptions ----
+    const columns: TableColumn[] = useMemo(
+        () => [
+            {
+                field: "no",
+                header: t("table.no"),
+                width: "70px",
+                align: "center" as const,
+                sortable: false,
+                cellRender: ({ rowIndex }: { rowIndex: number }) =>
+                    (paginationInfo.page - 1) * paginationInfo.pageSize + rowIndex + 1,
+            },
+            {
+                field: "dishName",
+                header: t("table.dishName"),
+                width: "250px",
+                filterType: "text" as const,
+                cellRender: ({ value, item }: { value: any; item: any }) => (
+                    <div className="flex flex-col">
+                        <span className="font-medium text-gray-900">{value}</span>
+                        {item.isOnline && (
+                            <span className="text-xs text-green-600 flex items-center gap-1">
+                                <span className="w-1.5 h-1.5 rounded-full bg-green-500"></span> Online
+                            </span>
+                        )}
+                    </div>
+                ),
+            },
+            {
+                field: "categoryName",
+                header: t("table.category"),
+                width: "150px",
+                filterType: "select" as const,
+                filterOptions: categoryFilterOptions,
+                cellRender: ({ value }: { value: any }) => (
+                    <span className="text-gray-600">{value}</span>
+                ),
+            },
+            {
+                field: "price",
+                header: t("table.price"),
+                width: "120px",
+                align: "right" as const,
+                filterType: "number" as const,
+                cellRender: ({ value }: { value: any }) => (
+                    <span className="font-bold text-blue-600">
+                        ${typeof value === "number" ? value.toFixed(2) : value}
+                    </span>
+                ),
+            },
+            {
+                field: "status",
+                header: t("table.status"),
+                align: "center" as const,
+                width: "130px",
+                filterType: "select" as const,
+                filterOptions: statusFilterOptions,
+                cellRender: ({ value, item }: { value: any; item: any }) => (
+                    <div className="flex justify-center">
+                        <Switch
+                            checked={item.status === "AVAILABLE"}
+                            onChange={(checked) => handleStatusToggle(item, checked)}
+                            disabled={togglingId === item.dishId}
+                            showLabel={false}
+                        />
+                    </div>
+                ),
+            },
+        ],
+        [paginationInfo.page, paginationInfo.pageSize, t, categoryFilterOptions, statusFilterOptions, togglingId]
+    );
 
-      {/* Dialogs & Modals */}
-      {/* <DishDialog ... /> */}
+    // Global cell renderer (applies column alignment)
+    const handleGlobalRenderCell = useCallback(
+        (field: string, value: any, item: DishManagementDto, column: TableColumn, rowIndex: number) => {
+            const content = column.cellRender
+                ? column.cellRender({ value, item, column, rowIndex })
+                : value;
+            return column.align ? <div style={{ textAlign: column.align }}>{content}</div> : content;
+        },
+        []
+    );
 
-      <ConfirmModal
-        isOpen={deleteModal.open}
-        onClose={() => setDeleteModal({ open: false, dish: null, isLoading: false })}
-        onConfirm={handleConfirmDelete}
-        title={t("deleteModal.title")}
-        message={t("deleteModal.message", { name: deleteModal.dish?.dishName ?? "" })}
-        confirmText={t("deleteModal.confirm")}
-        cancelText={t("deleteModal.cancel")}
-        variant="danger"
-        isLoading={deleteModal.isLoading}
-      />
-    </div>
-  );
+    return (
+        <div className="w-full h-full flex flex-col overflow-hidden">
+            <BaseTable<DishManagementDto>
+                data={dishes}
+                loading={isLoading}
+                columns={columns}
+                rowKey="dishId"
+                total={totalCount}
+                onDataChange={onDataChange}
+                onRefresh={refresh}
+                searchPlaceholder={t("searchPlaceholder")}
+                defaultRowsPerPage={10}
+                rowsPerPageOptions={[10, 20, 50]}
+                renderTitle={() => (
+                    <div className="flex justify-between items-center w-full">
+                        <div>
+                            <h1 className="text-3xl font-bold text-gray-900 tracking-tight">
+                                {t("title")}
+                            </h1>
+                            <p className="text-sm text-gray-500 mt-1">{t("description")}</p>
+                        </div>
+                        <PermissionGuard permission={Permissions.CreateDish}>
+                            <Button
+                                onClick={handleCreate}
+                                variant="outline"
+                                className="shadow-md whitespace-nowrap bg-blue-600 text-white hover:bg-blue-700 border-none"
+                            >
+                                <Plus className="mr-2 h-4 w-4" />
+                                {t("addNew")}
+                            </Button>
+                        </PermissionGuard>
+                    </div>
+                )}
+                renderCell={handleGlobalRenderCell}
+                renderActionColumn={(item) => (
+                    <DishActions
+                        dish={item}
+                        onView={handleView}
+                        onEdit={handleEdit}
+                    />
+                )}
+                batchActions={batchActions}
+            />
+        </div>
+    );
 };
 
 export default function DishListPage() {
-  return (
-    <ProtectedRoute permission={Permissions.ViewDish}>
-      <Suspense
-        fallback={
-          <div className="flex h-screen items-center justify-center">
-            <Loader2 className="animate-spin text-gray-400" />
-          </div>
-        }
-      >
-        <DishListContent />
-      </Suspense>
-    </ProtectedRoute>
-  );
+    return (
+        <ProtectedRoute permission={Permissions.ViewDish}>
+            <Suspense
+                fallback={
+                    <div className="flex h-screen items-center justify-center">
+                        <Loader2 className="animate-spin text-gray-400" />
+                    </div>
+                }
+            >
+                <DishListContent />
+            </Suspense>
+        </ProtectedRoute>
+    );
 }

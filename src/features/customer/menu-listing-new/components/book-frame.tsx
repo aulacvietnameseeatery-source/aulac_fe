@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect, useMemo } from 'react';
 import HTMLFlipBook from 'react-pageflip';
-import { MENU_DATA, MenuCategory, MenuItemData } from '../data/mock-menu';
+import { MenuCategory, MenuItemData } from '../data/mock-menu'; // Chỉ import Type từ mock-menu
 import { LeftPage } from './left-page';
 import { RightPage } from './right-page';
 import { ItemDetailModal } from './item-detail-modal';
@@ -25,7 +25,13 @@ const BOOKMARK_STYLES = [
     'bg-[#1a1510] border-[#C5A059]/40 text-[#C5A059]',
 ];
 
-export const BookFrame = ({ onAddToCart }: { onAddToCart?: (item: MenuItemData) => void }) => {
+// Định nghĩa Props mới để nhận dữ liệu từ trang cha
+interface BookFrameProps {
+    menuData: MenuCategory[];
+    onAddToCart?: (item: MenuItemData) => void;
+}
+
+export const BookFrame = ({ menuData, onAddToCart }: BookFrameProps) => {
     // 1. STATE
     const bookRef = useRef<any>(null);
     const [bookDimensions, setBookDimensions] = useState({ width: 0, height: 0 });
@@ -47,13 +53,13 @@ export const BookFrame = ({ onAddToCart }: { onAddToCart?: (item: MenuItemData) 
     // Resize Logic
     useEffect(() => {
         let resizeTimeout: NodeJS.Timeout;
-        
+
         const updateSize = () => {
             if (paperWrapperRef.current) {
                 const width = paperWrapperRef.current.offsetWidth;
                 const height = paperWrapperRef.current.offsetHeight;
                 const mobile = window.innerWidth < 1024; // Mobile/Tablet Breakpoint
-                
+
                 setIsMobile(mobile);
 
                 // If mobile, page width = container width. If desktop, page width = container width / 2.
@@ -63,31 +69,31 @@ export const BookFrame = ({ onAddToCart }: { onAddToCart?: (item: MenuItemData) 
                 });
             }
         };
-        
+
         const debouncedUpdate = () => {
             clearTimeout(resizeTimeout);
             resizeTimeout = setTimeout(updateSize, 100);
         };
-        
+
         // Initial size
         updateSize();
-        
+
         // ResizeObserver for container changes
         const observer = new ResizeObserver(() => {
             debouncedUpdate();
         });
-        
+
         // Window resize listener for responsive breakpoint changes
         const handleWindowResize = () => {
             debouncedUpdate();
         };
-        
+
         window.addEventListener('resize', handleWindowResize);
-        
+
         if (paperWrapperRef.current) {
             observer.observe(paperWrapperRef.current);
         }
-        
+
         return () => {
             clearTimeout(resizeTimeout);
             observer.disconnect();
@@ -95,6 +101,7 @@ export const BookFrame = ({ onAddToCart }: { onAddToCart?: (item: MenuItemData) 
         };
     }, []);
 
+    // Nhóm các trang dựa trên menuData truyền từ Props
     const { spreads, categoryStartIndices, pageToCategoryMap } = useMemo(() => {
         const spreadList: PageConfig[] = [];
         const catIndices: Record<string, number> = {};
@@ -102,38 +109,40 @@ export const BookFrame = ({ onAddToCart }: { onAddToCart?: (item: MenuItemData) 
 
         let currentPageIndex = 1;
 
-        MENU_DATA.forEach(cat => {
-            const chunks = [];
-            for (let i = 0; i < cat.items.length; i += ITEMS_PER_PAGE) {
-                chunks.push(cat.items.slice(i, i + ITEMS_PER_PAGE));
-            }
-            if (chunks.length === 0) chunks.push([]);
-
-            catIndices[cat.id] = currentPageIndex;
-
-            chunks.forEach(chunk => {
-                spreadList.push({
-                    type: 'content',
-                    category: cat,
-                    items: chunk,
-                    pageIndex: currentPageIndex
-                });
-
-                if (isMobile) {
-                    // Mobile: Single Page (Items only)
-                    pageToCat[currentPageIndex] = cat.id;
-                    currentPageIndex += 1;
-                } else {
-                    // Desktop: Double Page (Info Left + Items Right)
-                    pageToCat[currentPageIndex] = cat.id;
-                    pageToCat[currentPageIndex + 1] = cat.id;
-                    currentPageIndex += 2;
+        if (menuData && menuData.length > 0) {
+            menuData.forEach(cat => {
+                const chunks = [];
+                for (let i = 0; i < cat.items.length; i += ITEMS_PER_PAGE) {
+                    chunks.push(cat.items.slice(i, i + ITEMS_PER_PAGE));
                 }
+                if (chunks.length === 0) chunks.push([]);
+
+                catIndices[cat.id] = currentPageIndex;
+
+                chunks.forEach(chunk => {
+                    spreadList.push({
+                        type: 'content',
+                        category: cat,
+                        items: chunk,
+                        pageIndex: currentPageIndex
+                    });
+
+                    if (isMobile) {
+                        // Mobile: Single Page (Items only)
+                        pageToCat[currentPageIndex] = cat.id;
+                        currentPageIndex += 1;
+                    } else {
+                        // Desktop: Double Page (Info Left + Items Right)
+                        pageToCat[currentPageIndex] = cat.id;
+                        pageToCat[currentPageIndex + 1] = cat.id;
+                        currentPageIndex += 2;
+                    }
+                });
             });
-        });
+        }
 
         return { spreads: spreadList, categoryStartIndices: catIndices, pageToCategoryMap: pageToCat };
-    }, [isMobile]);
+    }, [isMobile, menuData]);
 
     // 3. ACTIONS
     const handleCategoryClick = (catId: string) => {
@@ -153,7 +162,7 @@ export const BookFrame = ({ onAddToCart }: { onAddToCart?: (item: MenuItemData) 
     // Derived Active Category
     const activeCategoryId = pageToCategoryMap[currentPage] || (currentPage > 0 ? Object.values(pageToCategoryMap).pop() : null);
 
-    const isReady = bookDimensions.width > 0 && bookDimensions.height > 0;
+    const isReady = bookDimensions.width > 0 && bookDimensions.height > 0 && menuData && menuData.length > 0;
 
     // Force open to page 1 (Content) if it starts at 0 and handle mobile/desktop switch
     useEffect(() => {
@@ -163,7 +172,6 @@ export const BookFrame = ({ onAddToCart }: { onAddToCart?: (item: MenuItemData) 
                     const flip = bookRef.current.pageFlip();
                     if (flip) {
                         const currentIndex = flip.getCurrentPageIndex();
-                        // Reset to page 1 when switching layouts or if at page 0
                         if (currentIndex === 0) {
                             flip.turnToPage(1);
                         }
@@ -175,6 +183,9 @@ export const BookFrame = ({ onAddToCart }: { onAddToCart?: (item: MenuItemData) 
             return () => clearTimeout(timer);
         }
     }, [isReady, isMobile]);
+
+    // Tránh render nếu data chưa load
+    if (!menuData || menuData.length === 0) return null;
 
     return (
         <div
@@ -191,7 +202,7 @@ export const BookFrame = ({ onAddToCart }: { onAddToCart?: (item: MenuItemData) 
                     item={selectedItem}
                     onClose={() => setSelectedItem(null)}
                     onAddToCart={(item) => {
-                        onAddToCart?.(item);
+                        if (onAddToCart) onAddToCart(item);
                     }}
                 />
             )}
@@ -203,19 +214,18 @@ export const BookFrame = ({ onAddToCart }: { onAddToCart?: (item: MenuItemData) 
                     <div className="relative w-full max-w-[200px]">
                         <button
                             onClick={() => {
-                                // Toggle dropdown (simple implementation using state approach in parent would be better, but self-contained here for now)
                                 const menu = document.getElementById('mobile-cat-menu');
                                 if (menu) menu.classList.toggle('hidden');
                             }}
                             className="w-full bg-[#0f172a] text-[#C5A059] border border-[#C5A059] px-4 py-2 rounded-sm shadow-lg flex items-center justify-between gap-2 uppercase font-display tracking-widest text-[10px] font-bold"
                         >
-                            <span className="truncate">{MENU_DATA.find(c => c.id === activeCategoryId)?.name || 'Select Category'}</span>
+                            <span className="truncate">{menuData.find(c => c.id === activeCategoryId)?.name || 'Select Category'}</span>
                             <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6" /></svg>
                         </button>
 
                         {/* Dropdown Menu */}
                         <div id="mobile-cat-menu" className="hidden absolute top-full left-0 right-0 mt-1 bg-[#1e293b] border border-[#C5A059]/50 shadow-xl rounded-sm overflow-hidden z-[60]">
-                            {MENU_DATA.map((cat) => (
+                            {menuData.map((cat) => (
                                 <div
                                     key={cat.id}
                                     onClick={() => {
@@ -237,7 +247,7 @@ export const BookFrame = ({ onAddToCart }: { onAddToCart?: (item: MenuItemData) 
             ) : (
                 // DESKTOP: LEFT VERTICAL TABS
                 <div className="absolute top-[5%] bottom-[5%] -left-5 w-30 z-50 flex flex-col justify-center gap-1 py-10">
-                    {MENU_DATA.map((cat, index) => {
+                    {menuData.map((cat, index) => {
                         const isActive = activeCategoryId === cat.id;
                         const styleClass = BOOKMARK_STYLES[index % BOOKMARK_STYLES.length];
                         return (
@@ -269,8 +279,8 @@ export const BookFrame = ({ onAddToCart }: { onAddToCart?: (item: MenuItemData) 
                     })}
                 </div>
             )}
+
             {/* NAVIGATION BUTTONS (Mobile & Desktop) */}
-            {/* PREV BUTTON */}
             <button
                 onClick={handlePrev}
                 disabled={currentPage <= 1}
@@ -285,7 +295,6 @@ export const BookFrame = ({ onAddToCart }: { onAddToCart?: (item: MenuItemData) 
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6" /></svg>
             </button>
 
-            {/* NEXT BUTTON */}
             <button
                 onClick={handleNext}
                 className={`
@@ -297,7 +306,6 @@ export const BookFrame = ({ onAddToCart }: { onAddToCart?: (item: MenuItemData) 
             >
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6" /></svg>
             </button>
-
 
             <div className="relative w-full" style={{ aspectRatio: isMobile ? '3 / 4' : '3 / 2' }}>
                 <div className="relative w-full h-full">
@@ -333,16 +341,16 @@ export const BookFrame = ({ onAddToCart }: { onAddToCart?: (item: MenuItemData) 
                                 style={{}}
                                 flippingTime={isMobile ? 600 : 1000}
                                 startPage={1}
-                                drawShadow={!isMobile} // Disable shadows on mobile to avoid "ugly" dark streaks
+                                drawShadow={!isMobile}
                                 autoSize={true}
                                 ref={bookRef}
                                 clickEventForward={true}
                                 useMouseEvents={false}
                                 onFlip={(e) => setCurrentPage(e.data)}
-                                usePortrait={isMobile} 
-                                startZIndex={0} 
-                                swipeDistance={0} 
-                                showPageCorners={false} 
+                                usePortrait={isMobile}
+                                startZIndex={0}
+                                swipeDistance={0}
+                                showPageCorners={false}
                                 disableFlipByClick={false}
                             >
                                 {/* DUMMY PAGE 0 (Spacer for alignment) */}
@@ -370,7 +378,7 @@ export const BookFrame = ({ onAddToCart }: { onAddToCart?: (item: MenuItemData) 
                                             /* LEFT PAGE: Categories */
                                             <Page number={spread.pageIndex} key={`spread-${idx}-left`}>
                                                 <LeftPage
-                                                    categories={MENU_DATA}
+                                                    categories={menuData} // Chuyển menuData thực tế vào
                                                     activeCategoryId={spread.category.id}
                                                     onCategoryClick={handleCategoryClick}
                                                 />

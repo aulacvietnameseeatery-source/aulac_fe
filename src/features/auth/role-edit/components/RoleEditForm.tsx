@@ -5,13 +5,11 @@ import React from 'react';
 import { PermissionGroupDto } from '../types/role-edit.types';
 import { RoleEditHeader } from './RoleEditHeader';
 import { RoleFormInputs } from './RoleFormInputs';
-import { RoleFormStatusToggle } from './RoleFormStatusToggle';
 import { EditablePermissionsSection } from './EditablePermissionsSection';
 
 type Props = {
   roleCode: string;
   roleName: string;
-  isActive: boolean;
   permissionGroups: PermissionGroupDto[];
   allPermissionsSelected: boolean;
   isSubmitting: boolean;
@@ -21,7 +19,6 @@ type Props = {
   totalSelected: number;
   totalPermissions: number;
   onRoleNameChange: (value: string) => void;
-  onIsActiveChange: (value: boolean) => void;
   onTogglePermission: (permissionId: number) => void;
   onToggleGroup: (group: PermissionGroupDto) => void;
   onToggleAll: () => void;
@@ -32,7 +29,6 @@ type Props = {
 export const RoleEditForm = ({
   roleCode,
   roleName,
-  isActive,
   permissionGroups,
   allPermissionsSelected,
   isSubmitting,
@@ -40,7 +36,6 @@ export const RoleEditForm = ({
   totalSelected,
   totalPermissions,
   onRoleNameChange,
-  onIsActiveChange,
   onTogglePermission,
   onToggleGroup,
   onToggleAll,
@@ -54,20 +49,14 @@ export const RoleEditForm = ({
         onCancel={onCancel}
         onSubmit={onSubmit}
       />
-      
+
       <RoleFormInputs
         roleName={roleName}
         errors={errors}
         isSubmitting={isSubmitting}
         onRoleNameChange={onRoleNameChange}
       />
-      
-      <RoleFormStatusToggle
-        isActive={isActive}
-        isSubmitting={isSubmitting}
-        onIsActiveChange={onIsActiveChange}
-      />
-      
+
       <EditablePermissionsSection
         permissionGroups={permissionGroups}
         allPermissionsSelected={allPermissionsSelected}

@@ -196,6 +196,12 @@
       "title": "Select Your Table",
       "subtitle": "Experience fine dining at its best. Choose your preferred zone and table below."
     },
+    "Controls": {
+      "single": "Single",
+      "multiple": "Show Multiple",
+      "bookSelected": "Book Selected ({count})",
+      "selectMode": "Select Mode"
+    },
     "Legend": {
       "available": "AVAILABLE",
       "reserved": "RESERVED",
@@ -269,7 +275,11 @@
       "zone": "Zone",
       "seeYouSoon": "See you soon!",
       "downloadTicket": "Download Ticket",
-      "close": "Close"
+      "close": "Close",
+      "alerts": {
+        "ticketNotFound": "Ticket not found. Please try again.",
+        "downloadError": "Could not download ticket. Please take a screenshot."
+      }
     },
     "CallButton": {
       "title": "Call Restaurant",
@@ -546,7 +556,20 @@
       },
       "notifications": {
         "resetPasswordSuccess": "Password reset successfully",
-        "resetPasswordError": "An error occurred while resetting the password"
+        "resetPasswordError": "An error occurred while resetting the password",
+        "accountActivated": "Account has been activated",
+        "accountDeactivated": "Account has been deactivated",
+        "updateStatusError": "Failed to update status",
+        "batchActivateSuccess": "Successfully activated {count} accounts",
+        "batchDeactivateSuccess": "Successfully deactivated {count} accounts",
+        "batchUpdateError": "An error occurred while updating batch status",
+        "noUpdatableAccounts": "No accounts can be updated (all are locked)",
+        "lockedAccountsSkipped": "Skipped {count} locked account(s)",
+        "cannotToggleLocked": "Cannot change status of a locked account"
+      },
+      "batchActions": {
+        "activate": "Activate",
+        "deactivate": "Deactivate"
       }
     },
     "Detail": {
@@ -715,7 +738,12 @@
       },
       "notifications": {
         "deleteSuccess": "Role deleted successfully",
-        "deleteError": "An error occurred while deleting the role"
+        "deleteError": "An error occurred while deleting the role",
+        "batchDeleteSuccess": "Successfully deleted {count} roles",
+        "batchDeleteError": "An error occurred while deleting roles"
+      },
+      "batchActions": {
+        "delete": "Delete"
       }
     },
     "Detail": {
@@ -797,16 +825,13 @@
       "unselect": "Unselect",
       "clearFilter": "Clear filter",
       "refresh": "Refresh",
-
       "pin": "Pin column",
       "unpin": "Unpin column",
-
       "sort": {
         "none": "No sorting",
         "asc": "Ascending",
         "desc": "Descending"
       },
-
       "operator": {
         "contains": "Contains",
         "notContains": "Does not contain",
@@ -851,7 +876,6 @@
       "title": "Reservation successful!",
       "description": "Customer: {name} - Reservation #{id}"
     },
-
     "customer": {
       "sectionTitle": "Customer Identification",
       "phone": "Phone Number",
@@ -862,7 +886,6 @@
       "newCustomer": "New Customer",
       "member": "Member ({points} pts)"
     },
-
     "booking": {
       "sectionTitle": "Booking Details",
       "date": "Date",
@@ -870,7 +893,6 @@
       "partySize": "Party Size",
       "enterSize": "Ex: 4"
     },
-
     "table": {
       "availability": "Table Availability",
       "scanning": "Scanning...",
@@ -878,7 +900,6 @@
       "emptyHint": "Enter Date, Time, and Size to find tables.",
       "noTable": "No tables available."
     },
-
     "status": {
       "source": "Reservation Source",
       "phone": "Phone Booking",
@@ -887,6 +908,56 @@
       "confirmed": "Confirmed",
       "checkedIn": "Checked In",
       "phoneHint": "*Phone bookings are set to 'Confirmed' by default."
+    }
+  },
+  "DishCategory": {
+    "List": {
+      "title": "Dish Category Management",
+      "description": "Manage and organize your restaurant menu categories efficiently.",
+      "searchPlaceholder": "Search by category name...",
+      "addNew": "Add New Category",
+      "filters": {
+        "allStatuses": "All Statuses",
+        "active": "Active",
+        "inactive": "Inactive"
+      }
+    },
+    "Add": {
+      "title": "Add New Dish Category",
+      "subtitle": "Create a new category to organize your menu items",
+      "saveButton": "Create Category",
+      "cancel": "Cancel",
+      "categoryName": "Category Name",
+      "categoryNamePlaceholder": "e.g., Appetizers, Main Course, Desserts",
+      "description": "Description",
+      "descriptionPlaceholder": "Provide a brief description of this category and what types of dishes it includes...",
+      "validation": {
+        "nameRequired": "Category name is required",
+        "nameMaxLength": "Category name cannot exceed 100 characters",
+        "descriptionMaxLength": "Description cannot exceed 100 characters",
+        "fixErrors": "Please fix the validation errors"
+      }
+    },
+    "Edit": {
+      "title": "Edit Dish Category",
+      "subtitle": "Update category information and settings",
+      "saveButton": "Save Changes",
+      "cancel": "Cancel",
+      "categoryName": "Category Name",
+      "categoryNamePlaceholder": "e.g., Appetizers, Main Course, Desserts",
+      "description": "Description",
+      "descriptionPlaceholder": "Provide a brief description of this category and what types of dishes it includes...",
+      "status": "Category Status",
+      "statusActive": "This category is active and visible in the menu",
+      "statusInactive": "This category is inactive and hidden from customers",
+      "validation": {
+        "nameRequired": "Category name is required",
+        "nameMaxLength": "Category name cannot exceed 100 characters",
+        "descriptionMaxLength": "Description cannot exceed 100 characters",
+        "fixErrors": "Please fix the validation errors"
+      },
+      "loading": "Loading...",
+      "backToList": "Back to List"
     }
   },
   "Dish": {
@@ -935,7 +1006,16 @@
       },
       "notifications": {
         "deleteSuccess": "Dish deleted successfully",
-        "deleteError": "An error occurred while deleting the dish"
+        "deleteError": "An error occurred while deleting the dish",
+        "statusUpdated": "Dish status updated successfully",
+        "statusUpdateError": "Failed to update dish status",
+        "batchMakeAvailableSuccess": "Made {count} dish(es) available",
+        "batchMakeHiddenSuccess": "Hidden {count} dish(es)",
+        "batchUpdateError": "An error occurred during batch status update"
+      },
+      "batchActions": {
+        "makeAvailable": "Make Available",
+        "makeHidden": "Make Hidden"
       }
     },
     "Validation": {
@@ -952,5 +1032,25 @@
         "required": "Category is required"
       }
     }
+  },
+  "AdminSidebar": {
+    "dashboard": "Dashboard",
+    "tables": "Tables",
+    "staff": "Staff",
+    "roles": "Roles",
+    "dish": "Dish",
+    "dishCategory": "Dish Category",
+    "ingredient": "Ingredient",
+    "orders": "Orders",
+    "reports": "Reports",
+    "emails": "Emails",
+    "customers": "Customers",
+    "promotions": "Promotions",
+    "settings": "Settings",
+    "logout": "Logout",
+    "loggingOut": "Logging out...",
+    "managerPortal": "Manager Portal",
+    "logoutMessage": "Are you sure you want to logout? You will be redirected to the login page.",
+    "cancel": "Cancel"
   }
 }

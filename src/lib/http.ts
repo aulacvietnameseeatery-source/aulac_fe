@@ -177,7 +177,12 @@ async function http<T>(path: string, options?: FetchOptions): Promise<T> {
                 // window.location.href = "/unauthorized";
             }
 
-            throw new Error(errorMessage);
+            const error = new Error(errorMessage) as any;
+            error.response = {
+                data: errorBody,
+                status: response.status
+            };
+            throw error;
         }
 
         return (await response.json()) as T;

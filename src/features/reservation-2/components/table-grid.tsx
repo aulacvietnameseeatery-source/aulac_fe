@@ -6,14 +6,16 @@ import "../styles/index.css";
 
 interface TableGridProps {
     tables?: TableAvailabilityDto[];
-    selectedTableId: number | null; // Changed to number
-    onSelect: (id: number) => void; // Changed to number
+    selectedTableId: number | null;
+    selectedTableIds?: number[]; // Added support for multi-select
+    onSelect: (id: number) => void;
     isLoading?: boolean;
 }
 
 export default function TableGrid({
     tables = [],
     selectedTableId,
+    selectedTableIds,
     onSelect,
     isLoading = false,
 }: TableGridProps) {
@@ -38,9 +40,13 @@ export default function TableGrid({
         <div className="table-grid-wrapper">
             {tables.map((table) => {
                 // Derive status
+                const isSelected = selectedTableIds
+                    ? selectedTableIds.includes(table.tableId)
+                    : selectedTableId === table.tableId;
+
                 const status = !table.isAvailable
                     ? "reserved"
-                    : selectedTableId === table.tableId
+                    : isSelected
                         ? "selected"
                         : "available";
 

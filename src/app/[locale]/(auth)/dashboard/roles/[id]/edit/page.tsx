@@ -12,15 +12,13 @@ const RoleEditContent = () => {
   const params = useParams();
   const router = useRouter();
   const t = useTranslations("Role.Edit");
-  
+
   const roleId = Number(params.id);
-  
+
   const {
     roleCode,
     roleName,
     setRoleName,
-    isActive,
-    setIsActive,
     permissionGroups,
     allPermissionsSelected,
     totalSelected,
@@ -52,7 +50,6 @@ const RoleEditContent = () => {
       <RoleEditForm
         roleCode={roleCode}
         roleName={roleName}
-        isActive={isActive}
         permissionGroups={permissionGroups}
         allPermissionsSelected={allPermissionsSelected}
         isSubmitting={isSubmitting}
@@ -60,7 +57,6 @@ const RoleEditContent = () => {
         totalSelected={totalSelected}
         totalPermissions={totalPermissions}
         onRoleNameChange={setRoleName}
-        onIsActiveChange={setIsActive}
         onTogglePermission={handleTogglePermission}
         onToggleGroup={handleToggleGroup}
         onToggleAll={handleToggleAll}

@@ -196,6 +196,12 @@
       "title": "Choisissez votre table",
       "subtitle": "Vivez l’excellence de la gastronomie. Sélectionnez votre zone et votre table préférée ci-dessous."
     },
+    "Controls": {
+      "single": "Simple",
+      "multiple": "Sélection Multiple",
+      "bookSelected": "Réserver la Sélection ({count})",
+      "selectMode": "Mode de sélection"
+    },
     "Legend": {
       "available": "DISPONIBLE",
       "reserved": "RÉSERVÉE",
@@ -270,7 +276,11 @@
       "zone": "Zone",
       "seeYouSoon": "À bientôt !",
       "downloadTicket": "Télécharger le billet",
-      "close": "Fermer"
+      "close": "Fermer",
+      "alerts": {
+        "ticketNotFound": "Billet introuvable. Veuillez réessayer.",
+        "downloadError": "Impossible de télécharger. Veuillez faire une capture d'écran."
+      }
     },
     "CallButton": {
       "title": "Appeler le restaurant",
@@ -547,7 +557,20 @@
       },
       "notifications": {
         "resetPasswordSuccess": "Mot de passe réinitialisé avec succès",
-        "resetPasswordError": "Une erreur est survenue lors de la réinitialisation du mot de passe"
+        "resetPasswordError": "Une erreur est survenue lors de la réinitialisation du mot de passe",
+        "accountActivated": "Le compte a été activé",
+        "accountDeactivated": "Le compte a été désactivé",
+        "updateStatusError": "Échec de la mise à jour du statut",
+        "batchActivateSuccess": "{count} comptes activés avec succès",
+        "batchDeactivateSuccess": "{count} comptes désactivés avec succès",
+        "batchUpdateError": "Une erreur s'est produite lors de la mise à jour du statut par lot",
+        "noUpdatableAccounts": "Aucun compte ne peut être mis à jour (tous sont verrouillés)",
+        "lockedAccountsSkipped": "{count} compte(s) verrouillé(s) ignoré(s)",
+        "cannotToggleLocked": "Impossible de modifier le statut d'un compte verrouillé"
+      },
+      "batchActions": {
+        "activate": "Activer",
+        "deactivate": "Désactiver"
       }
     },
     "Detail": {
@@ -798,16 +821,13 @@
       "unselect": "Désélectionner",
       "clearFilter": "Supprimer le filtre",
       "refresh": "Rafraîchir",
-
       "pin": "Épingler la colonne",
       "unpin": "Désépingler la colonne",
-
       "sort": {
         "none": "Aucun tri",
         "asc": "Croissant",
         "desc": "Décroissant"
       },
-
       "operator": {
         "contains": "Contient",
         "notContains": "Ne contient pas",
@@ -852,7 +872,6 @@
       "title": "Réservation réussie !",
       "description": "Client : {name} - Réservation #{id}"
     },
-
     "customer": {
       "sectionTitle": "Identification du client",
       "phone": "Numéro de téléphone",
@@ -863,7 +882,6 @@
       "newCustomer": "Nouveau client",
       "member": "Membre ({points} pts)"
     },
-
     "booking": {
       "sectionTitle": "Détails de la réservation",
       "date": "Date",
@@ -871,7 +889,6 @@
       "partySize": "Nombre de personnes",
       "enterSize": "Ex : 4"
     },
-
     "table": {
       "availability": "Tables disponibles",
       "scanning": "Recherche...",
@@ -879,7 +896,6 @@
       "emptyHint": "Entrez la date, l'heure et le nombre de personnes.",
       "noTable": "Aucune table disponible."
     },
-
     "status": {
       "source": "Source de réservation",
       "phone": "Téléphone",
@@ -936,7 +952,16 @@
       },
       "notifications": {
         "deleteSuccess": "Plat supprimé avec succès",
-        "deleteError": "Une erreur est survenue lors de la suppression du plat"
+        "deleteError": "Une erreur est survenue lors de la suppression du plat",
+        "statusUpdated": "Statut du plat mis à jour",
+        "statusUpdateError": "Impossible de mettre à jour le statut du plat",
+        "batchMakeAvailableSuccess": "{count} plat(s) rendu(s) disponible(s)",
+        "batchMakeHiddenSuccess": "{count} plat(s) masqué(s)",
+        "batchUpdateError": "Une erreur s'est produite lors de la mise à jour par lot"
+      },
+      "batchActions": {
+        "makeAvailable": "Rendre disponible",
+        "makeHidden": "Masquer"
       }
     },
     "Validation": {
@@ -953,5 +978,25 @@
         "required": "La catégorie est requise"
       }
     }
+  },
+  "AdminSidebar": {
+    "dashboard": "Tableau de bord",
+    "tables": "Tables",
+    "staff": "Personnel",
+    "roles": "Rôles",
+    "dish": "Plats",
+    "dishCategory": "Catégorie de plat",
+    "ingredient": "Ingrédients",
+    "orders": "Commandes",
+    "reports": "Rapports",
+    "emails": "E-mails",
+    "customers": "Clients",
+    "promotions": "Promotions",
+    "settings": "Paramètres",
+    "logout": "Déconnexion",
+    "loggingOut": "Déconnexion...",
+    "managerPortal": "Portail Gestionnaire",
+    "logoutMessage": "Êtes-vous sûr de vouloir vous déconnecter ? Vous serez redirigé vers la page de connexion.",
+    "cancel": "Annuler"
   }
 }
