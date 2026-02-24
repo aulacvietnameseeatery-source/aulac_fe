@@ -37,7 +37,6 @@ export function ScanContent() {
                             height={1080}
                             src="/images/qr-scan/scan-content/siu.jpg"
                             alt="QR Code"
-                            fill
                             className="object-contain"
                         />
                     </div>
