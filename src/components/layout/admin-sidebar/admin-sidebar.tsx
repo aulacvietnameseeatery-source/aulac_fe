@@ -100,7 +100,7 @@ export function AdminSidebar({ onClose }: AdminSidebarProps) {
         {/* Desktop Collapse Toggle */}
         <button
           onClick={() => setIsCollapsed(!isCollapsed)}
-          className="hidden lg:flex absolute -right-3 top-20 w-6 h-6 bg-[#1A3A51] border border-white/10 rounded-full items-center justify-center text-[#FFAB2D] hover:bg-[#FFAB2D] hover:text-[#1A3A51] transition-all duration-300 z-50 shadow-lg"
+          className="hidden lg:flex absolute -right-3 top-20 w-6 h-6 bg-[#1A3A51] border border-white/10 rounded-full items-center justify-center text-[#FFAB2D] hover:bg-[#FFAB2D] hover:text-[#1A3A51] transition-all duration-300 z-30 shadow-lg"
         >
           {isCollapsed ? <ChevronRight size={14} /> : <ChevronLeft size={14} />}
         </button>

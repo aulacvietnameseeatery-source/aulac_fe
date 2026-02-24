@@ -115,52 +115,56 @@ export function Header({ isScrolled, locale }: HeaderProps) {
 
                     {/* LOGO */}
                     {/* 👇 ĐÃ SỬA: Xóa class 'group' ở đây */}
-                    <Link href={getLink("/")} className="logo-wrapper" onClick={() => setIsMobileMenuOpen(false)}>
-                        <div className="flex items-center gap-2">
+                    <Link href={getLink("/")} className={cn("logo-wrapper", effectiveScrolled ? "is-scrolled" : "is-default")} onClick={() => setIsMobileMenuOpen(false)}>
+                        <div className="flex items-center">
                             <Image
                                 src="/images/logo.png"
                                 alt="An Lac Logo"
-                                width={64}
-                                height={64}
+                                width={1080}
+                                height={1080}
                                 className={cn(
                                     "object-contain transition-all duration-300",
-                                    effectiveScrolled ? "h-[32px] w-[32px] md:h-[28px] md:w-[28px]" : "h-[32px] w-[32px] md:h-[64px] md:w-[64px]"
+                                    effectiveScrolled ? "w-12 md:w-12 lg:w-14 xl:w-15" : "w-15 md:w-16 lg:w-18 xl:w-21"
                                 )}
                             />
-                            <h1 className={cn("logo-title", effectiveScrolled ? "is-scrolled" : "is-default")}>
-                                An Lac
-                            </h1>
-                        </div>
-                        <div className={cn("logo-slogan-wrapper", effectiveScrolled ? "is-scrolled" : "is-default")}>
-                            <span className="slogan-main">{t('slogan_1')}</span>
-                            <span className="slogan-sub">{t('slogan_2')}</span>
+                            <div className="flex flex-col justify-center">
+                                <div className="flex items-center gap-2">
+                                    <h1 className={cn("logo-title", effectiveScrolled ? "is-scrolled" : "is-default")}>
+                                        An Lac
+                                    </h1>
+
+                                </div>
+                                <div className={cn("logo-slogan-wrapper", effectiveScrolled ? "is-scrolled" : "is-default")}>
+                                    <span className="slogan-main">{t('slogan_1')}</span>
+                                    <span className="slogan-sub">{t('slogan_2')}</span>
+                                </div>
+                            </div>
+
                         </div>
                     </Link>
+                    {/* Desktop Nav */}
 
+                    <nav className="nav-desktop">
+                        {navItems.map((item) => (
+                            <NavLink
+                                key={item.href}
+                                href={getLink(item.href)}
+                                title={item.isIconOnly ? t('qr_scan') : item.label}
+                                className={cn("nav-link-desktop", item.isIconOnly && "text-[#D5A673]")}
+                            >
+                                {item.icon && <span>{item.icon}</span>}
+                                {!item.isIconOnly && <span>{item.label}</span>}
+                            </NavLink>
+                        ))}
+                    </nav>
                     {/* ACTIONS */}
-                    <div className="flex items-center gap-4 md:gap-10">
-                        {/* Desktop Nav */}
-                        <nav className="nav-desktop">
-                            {navItems.map((item) => (
-                                <NavLink
-                                    key={item.href}
-                                    href={getLink(item.href)}
-                                    title={item.isIconOnly ? t('qr_scan') : item.label}
-                                    className={cn("nav-link-desktop", item.isIconOnly && "text-[#D5A673]")}
-                                >
-                                    {item.icon && <span>{item.icon}</span>}
-                                    {!item.isIconOnly && <span>{item.label}</span>}
-                                </NavLink>
-                            ))}
-                        </nav>
+                    <div className="flex items-center gap-1 md:gap-2 lg:gap-4 xl:gap-6">
+
 
                         {/* Lang Switcher */}
                         <div className={cn("lang-switcher-wrapper", effectiveScrolled ? "is-scrolled" : "is-default")}>
                             <LanguageSwitcher />
                         </div>
-
-
-
                         {/* Reserve Button */}
                         <div className="hidden md:block">
                             <Link href={getLink("/reservation")}>
@@ -171,9 +175,9 @@ export function Header({ isScrolled, locale }: HeaderProps) {
                         </div>
 
                         {/* Staff Login (Desktop) */}
-                        <div className="hidden md:block">
+                        <div className="hidden lg:block">
                             <Link href={getLink("/login")} className="text-white/80 hover:text-[#D5A673] transition-colors" title="Login as Staff">
-                                <User size={24} />
+                                <User className="w-5 h-5 xl:w-6 xl:h-6" />
                             </Link>
                         </div>
 
