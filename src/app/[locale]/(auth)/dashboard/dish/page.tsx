@@ -123,6 +123,17 @@ const DishListContent = () => {
         [filterOptions.statuses]
     );
 
+    const formatCurrency = (value: any): string => {
+        const num = typeof value === "string" ? parseFloat(value) : value;
+        if (isNaN(num) || num === null || num === undefined) return "-";
+
+        // Cách 1: Format chuẩn quốc tế (thường hiển thị: CHF 12.00)
+         return new Intl.NumberFormat('fr-CH', { style: 'currency', currency: 'CHF' }).format(num);
+
+        // Cách 2: Format chính xác theo string "12.00 CHF" mà bạn muốn
+        //return `${num.toFixed(2)} CHF`;
+    };
+
     // ---- Table Columns with built-in filterType + filterOptions ----
     const columns: TableColumn[] = useMemo(
         () => [
@@ -169,7 +180,7 @@ const DishListContent = () => {
                 filterType: "number" as const,
                 cellRender: ({ value }: { value: any }) => (
                     <span className="font-bold text-blue-600">
-                        ${typeof value === "number" ? value.toFixed(2) : value}
+                       {formatCurrency(value)}
                     </span>
                 ),
             },
