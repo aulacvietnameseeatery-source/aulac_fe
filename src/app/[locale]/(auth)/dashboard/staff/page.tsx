@@ -285,7 +285,7 @@ const AccountListContent = () => {
 
     // Global cell renderer (applies column alignment)
     const handleGlobalRenderCell = useCallback(
-        (field: string, value: any, item: StaffAccount, column: TableColumn, rowIndex: number) => {
+        (value: any, item: StaffAccount, column: TableColumn, rowIndex: number) => {
             const content = column.cellRender
                 ? column.cellRender({ value, item, column, rowIndex })
                 : value;

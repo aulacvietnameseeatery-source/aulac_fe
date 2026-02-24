@@ -29,7 +29,7 @@ export function ForgotPasswordForm({
       <div className="form-header">
         <h2 className="form-title">Forgot Password</h2>
         <p className="form-description">
-          Enter your email address and we'll send you a link to reset your
+          Enter your email address and we&apos;ll send you a link to reset your
           password.
         </p>
       </div>

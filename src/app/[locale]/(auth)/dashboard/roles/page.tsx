@@ -116,7 +116,7 @@ const RoleListContent = () => {
 
   // Global cell renderer (applies column alignment)
   const handleGlobalRenderCell = useCallback(
-    (field: string, value: any, item: RoleDto, column: TableColumn, rowIndex: number) => {
+    (value: any, item: RoleDto, column: TableColumn, rowIndex: number) => {
       const content = column.cellRender
         ? column.cellRender({ value, item, column, rowIndex })
         : value;

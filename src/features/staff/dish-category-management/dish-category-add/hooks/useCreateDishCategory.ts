@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { toast } from "sonner";
 import { createCategoryService } from "../services/createCategoryService";
-import { CreateDishCategoryRequest } from "../../types";
+import { CreateDishCategoryRequest } from "../types";
 
 /**
  * Hook to create a new category

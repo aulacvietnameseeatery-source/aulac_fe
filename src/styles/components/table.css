@@ -650,7 +650,6 @@ th.ms-th:hover .filter--default {
     border-radius: 4px;
 }
 
-
 /* Shimmer effect styles */
 .shimmer {
     height: 16px;
@@ -677,4 +676,105 @@ th.ms-th:hover .filter--default {
     to {
         transform: translate(calc(50% + 100px))
     }
+}
+
+/* Base Input Styles */
+.ms-input {
+    position: relative;
+    margin-bottom: 0;
+}
+
+.ms-input.ms-editor {
+    height: auto;
+}
+
+.ms-input-item {
+    background: #fff;
+    border: none;
+    outline: none;
+    font-size: 13px;
+    line-height: 20px;
+    color: #111827;
+    padding: 0;
+    height: 100%;
+}
+
+.ms-input-item:disabled {
+    background-color: #f3f4f6;
+    color: #9ca3af;
+    cursor: not-allowed;
+}
+
+.ms-input-item::placeholder {
+    color: #9ca3af;
+}
+
+.ms-input-item:focus {
+    outline: none;
+}
+
+/* Base Input Styles */
+.ms-input {
+    position: relative;
+    margin-bottom: 0;
+}
+
+.ms-input.ms-editor {
+    height: auto;
+}
+
+.ms-input-item {
+    background: #fff;
+    border: none;
+    outline: none;
+    font-size: 13px;
+    line-height: 20px;
+    color: #111827;
+    padding: 0;
+    height: 100%;
+}
+
+.ms-input-item:disabled {
+    background-color: #f3f4f6;
+    color: #9ca3af;
+    cursor: not-allowed;
+}
+
+.ms-input-item::placeholder {
+    color: #9ca3af;
+}
+
+.ms-input-item:focus {
+    outline: none;
+}
+
+/* Input Container */
+.input-container {
+    border-radius: 4px;
+    padding: 6px 10px;
+    min-height: 28px;
+    background: #fff;
+    transition: all 0.2s ease;
+}
+
+.input-container.border {
+    border: 1px solid #d1d5db;
+}
+
+.input-container:hover:not(.disabled) {
+    border-color: #9ca3af;
+}
+
+.input-container:focus-within:not(.disabled) {
+    border-color: var(--navi-blue);
+}
+
+.input-container.error {
+    border-color: #e54848 !important;
+}
+
+.input-container.disabled {
+    background-color: #f3f4f6;
+    cursor: not-allowed;
+    border-color: #d1d5db;
 }
