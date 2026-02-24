@@ -377,7 +377,7 @@
 .al-cb-title {
   display: block;
   margin-bottom: 0.375rem;
-  font-size: 0.875rem;
+  font-size: 1rem;
   font-weight: 500;
   color: var(--al-cb-navy);
 }

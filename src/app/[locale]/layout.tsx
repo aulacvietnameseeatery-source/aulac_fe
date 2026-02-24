@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
-import { Inter, Playfair_Display } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import QueryProvider from "@/components/providers/query-provider";
@@ -45,17 +44,17 @@ export default async function LocaleLayout(
   const messages = await getMessages({ locale });
 
   return (
-      <html lang={locale} suppressHydrationWarning>
-      <body className={`${inter.variable} ${playfair.variable} antialiased`} suppressHydrationWarning>
-      <QueryProvider>
-        <AuthProvider>
-          <NextIntlClientProvider locale={locale} messages={messages}>
-            {children}
-            <Toaster />
-          </NextIntlClientProvider>
-        </AuthProvider>
-      </QueryProvider>
+    <html lang={locale}>
+      <body className="antialiased">
+        <QueryProvider>
+          <AuthProvider>
+            <NextIntlClientProvider locale={locale} messages={messages}>
+              {children}
+              <Toaster />
+            </NextIntlClientProvider>
+          </AuthProvider>
+        </QueryProvider>
       </body>
-      </html>
+    </html>
   );
 }
