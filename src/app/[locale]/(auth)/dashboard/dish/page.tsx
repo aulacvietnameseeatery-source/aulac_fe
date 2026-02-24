@@ -10,7 +10,6 @@ import { ProtectedRoute } from "@/components/protected-route";
 import { PermissionGuard } from "@/components/permission-guard";
 import { Permissions } from "@/types/const";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { useDishList } from "@/features/staff/dish-management/hooks/use-dish-list";
 import { DishManagementDto } from "@/features/staff/dish-management/types/dish-types";
@@ -124,29 +123,6 @@ const DishListContent = () => {
         [filterOptions.statuses]
     );
 
-    // Status Badge Render (for identification)
-    const renderStatusBadge = (statusId: number, statusName: string) => {
-        let variant: "default" | "secondary" | "destructive" | "outline" | "success" | "warning" | "info" = "outline";
-        switch (statusId) {
-            case 42:
-                variant = "success";
-                break;
-            case 43:
-                variant = "warning";
-                break;
-            case 44:
-                variant = "secondary";
-                break;
-            default:
-                variant = "outline";
-        }
-        return (
-            <Badge variant={variant} className="font-bold">
-                {statusName}
-            </Badge>
-        );
-    };
-
     // ---- Table Columns with built-in filterType + filterOptions ----
     const columns: TableColumn[] = useMemo(
         () => [
@@ -204,7 +180,7 @@ const DishListContent = () => {
                 width: "130px",
                 filterType: "select" as const,
                 filterOptions: statusFilterOptions,
-                cellRender: ({ value, item }: { value: any; item: any }) => (
+                cellRender: ({ item }: { value: any; item: any }) => (
                     <div className="flex justify-center">
                         <Switch
                             checked={item.status === "AVAILABLE"}
@@ -221,7 +197,7 @@ const DishListContent = () => {
 
     // Global cell renderer (applies column alignment)
     const handleGlobalRenderCell = useCallback(
-        (field: string, value: any, item: DishManagementDto, column: TableColumn, rowIndex: number) => {
+        ( value: any, item: DishManagementDto, column: TableColumn, rowIndex: number) => {
             const content = column.cellRender
                 ? column.cellRender({ value, item, column, rowIndex })
                 : value;

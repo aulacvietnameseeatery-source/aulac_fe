@@ -98,7 +98,7 @@ export default function DishCategoryList() {
     },
   ], [pagination.pageIndex, pagination.pageSize]);
 
-  const handleGlobalRenderCell = useCallback((field: string, value: any, item: DishCategory, column: TableColumn, rowIndex: number) => {
+  const handleGlobalRenderCell = useCallback(( value: any, item: DishCategory, column: TableColumn, rowIndex: number) => {
     const content = column.cellRender 
       ? column.cellRender({ value, item, column, rowIndex }) 
       : value;

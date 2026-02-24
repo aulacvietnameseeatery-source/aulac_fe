@@ -39,7 +39,7 @@ const navItems = [
   { key: "reports", href: "/dashboard/reports", icon: FileText },
   { key: "emails", href: "/dashboard/emails", icon: Mail },
   { key: "customers", href: "/dashboard/customers", icon: Users },
-    { name: "reservations", href: "/dashboard/reservations", icon: Users },
+    { key: "reservations", href: "/dashboard/reservations", icon: Users },
     { key: "promotions", href: "/dashboard/promotions", icon: Tags },
     { key: "settings", href: "/dashboard/settings", icon: Settings },
 ];

@@ -1,6 +1,7 @@
 import { api } from "@/lib/http";
 import { ApiResponse } from "@/types/api-response.types";
-import { DishCategory, CreateDishCategoryRequest } from "../../types";
+import { CreateDishCategoryRequest } from "../types";
+import {DishCategory} from "@/features/staff/dish-category-management/dish-category-edit";
 
 export const createCategoryService = {
   /**

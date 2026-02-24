@@ -1,6 +1,6 @@
 import { api } from "@/lib/http";
 import { ApiResponse } from "@/types/api-response.types";
-import { DishCategory, UpdateDishCategoryRequest } from "../../types";
+import { DishCategory, UpdateDishCategoryRequest } from "../types";
 
 export const editCategoryService = {
   /**

@@ -75,7 +75,7 @@ interface BaseTableProps<T> {
     // Render props for customization
     renderTitle?: () => React.ReactNode;
     renderToolbarAppend?: (props: { unselectAll: () => void; selectedItems: T[]; batchActions?: BatchAction[] }) => React.ReactNode;
-    renderCell?: (field: string, value: any, item: T, column: TableColumn, rowIndex: number) => React.ReactNode;
+    renderCell?: (value: any, item: T, column: TableColumn, rowIndex: number) => React.ReactNode;
     renderHeader?: (field: string, column: TableColumn) => React.ReactNode;
     renderActionColumn?: (item: T, rowIndex: number) => React.ReactNode;
     renderNoData?: () => React.ReactNode;
@@ -855,7 +855,7 @@ export function BaseTable<T>({
                                                                 >
                                                                     <div>
                                                                         {renderCell ? (
-                                                                            renderCell(column.field, (item as any)[column.field], item, column, rowIndex)
+                                                                            renderCell( (item as any)[column.field], item, column, rowIndex)
                                                                         ) : (
                                                                             <div
                                                                                 className="text-overflow"
