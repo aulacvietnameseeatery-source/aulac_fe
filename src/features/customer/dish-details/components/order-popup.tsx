@@ -53,20 +53,20 @@ export function OrderPopup({ open, onClose, dish }: Props) {
           {/* Category Name */}
           {dish.categoryName && (
             <div className="w-full pb-2">
-              <div className="inline-block rounded-full bg-blue-800/10 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-blue-800">
+              <div className="font-body inline-block rounded-full bg-blue-800/10 px-3 py-1 text-xs font-medium text-blue-800">
                 {dish.categoryName}
               </div>
             </div>
           )}
 
           <div className="w-full pb-2">
-            <div className="text-neutral-900 text-3xl font-normal leading-9">
+            <div className="font-display text-neutral-900 text-2xl font-semibold leading-9">
               {dish.dishName}
             </div>
           </div>
 
           <div className="w-full pb-8">
-            <div className="text-blue-950/80 text-lg font-medium leading-7">
+            <div className="font-body text-blue-950/80 text-lg font-medium leading-7">
               {dish.price}
             </div>
           </div>
@@ -110,7 +110,7 @@ export function OrderPopup({ open, onClose, dish }: Props) {
               type="button"
               className="h-12 rounded-2xl bg-blue-950 shadow-[0px_4px_6px_-4px_rgba(26,57,81,0.20)] shadow-[0px_10px_15px_-3px_rgba(26,57,81,0.20)] flex items-center justify-center"
             >
-              <span className="text-white text-sm font-bold uppercase tracking-wider">
+              <span className="font-body text-white text-sm font-semibold">
                 {t("view_selection")}
               </span>
             </button>
@@ -120,7 +120,7 @@ export function OrderPopup({ open, onClose, dish }: Props) {
               onClick={onClose}
               className="h-12 rounded-2xl outline outline-1 outline-offset-[-1px] outline-slate-200 flex items-center justify-center"
             >
-              <span className="text-slate-500 text-sm font-bold uppercase tracking-wider">
+              <span className="font-body text-slate-500 text-sm font-semibold">
                 {t("continue_browsing")}
               </span>
             </button>
@@ -128,7 +128,7 @@ export function OrderPopup({ open, onClose, dish }: Props) {
 
           {/* Footer text */}
           <div className="w-full pt-6 flex justify-center">
-            <div className="text-slate-500/40 text-[10px] font-normal uppercase tracking-wide">
+            <div className="font-body text-slate-500/40 text-xs font-normal">
               {t("footer_text")}
             </div>
           </div>
