@@ -1,71 +1,44 @@
-import { useState, useEffect } from "react";
-import { ApiResponse, PagedResult } from "@/types/api-response.types";
-import { MenuCategory, MenuItemData } from "../data/mock-menu";
-import {api} from "@/lib/http";
+import { I18nText, MenuCategory, MenuItemData } from "../data/mock-menu";
 
-// Định nghĩa kiểu dữ liệu trả về từ API Customer Menu (đã viết ở Backend)
+// Cập nhật DTO khớp với backend mới
 export interface DishDisplayDto {
     dishId: number;
-    dishName: string;
+    dishName: I18nText;
     price: number;
-    categoryName: string | null;
-    tagline: string | null;
+    categoryName: I18nText;
+    description: I18nText;
     isChefRecommended: boolean;
     imageUrl: string | null;
 }
 
-export const useMenuData = () => {
-    const [menuData, setMenuData] = useState<MenuCategory[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
+// Hàm format dữ liệu dùng chung (Không dùng Hook nữa)
+export const formatMenuData = (dishes: DishDisplayDto[]): MenuCategory[] => {
+    const groupedData: Record<string, { catI18n: I18nText, items: MenuItemData[] }> = {};
 
-    useEffect(() => {
-        const fetchMenu = async () => {
-            setIsLoading(true);
-            try {
-                // Gọi API lấy menu với pageSize lớn để lấy trọn bộ thực đơn
-                const response = await api.get<ApiResponse<PagedResult<DishDisplayDto>>>("/api/dishes/menu?pageIndex=1&pageSize=500");
-                const dishes = response.data.pageData;
+    dishes.forEach(dish => {
+        const catKey = dish.categoryName?.en || "Uncategorized";
 
-                // Thuật toán: Nhóm danh sách phẳng thành cấu trúc [ { category, items: [] } ]
-                const groupedData: Record<string, MenuItemData[]> = {};
+        if (!groupedData[catKey]) {
+            groupedData[catKey] = {
+                catI18n: dish.categoryName || { vi: "Khác", en: "Uncategorized", fr: "Autres" },
+                items: []
+            };
+        }
 
-                dishes.forEach(dish => {
-                    const catName = dish.categoryName || "Uncategorized"; // Fallback nếu không có category
+        groupedData[catKey].items.push({
+            id: dish.dishId.toString(),
+            name: dish.dishName,
+            price: dish.price,
+            desc: dish.description || { vi: "", en: "", fr: "" },
+            image: dish.imageUrl || "/images/logo.png"
+        });
+    });
 
-                    if (!groupedData[catName]) {
-                        groupedData[catName] = [];
-                    }
+    const formattedMenu: MenuCategory[] = Object.keys(groupedData).map(key => ({
+        id: key.toLowerCase().replace(/\s+/g, '-'),
+        name: groupedData[key].catI18n,
+        items: groupedData[key].items
+    }));
 
-                    groupedData[catName].push({
-                        id: dish.dishId.toString(),
-                        name: dish.dishName,
-                        price: dish.price,
-                        desc: dish.tagline || "", // Dùng tagline làm mô tả
-                        //image: dish.imageUrl || "/images/logo.png"
-                        image: "/images/logo.png" //Fallback ảnh nếu thiếu
-                    });
-                });
-
-                // Chuyển đổi Object thành Array khớp với cấu trúc MenuCategory[]
-                const formattedMenu: MenuCategory[] = Object.keys(groupedData).map(catName => ({
-                    id: catName.toLowerCase().replace(/\s+/g, '-'), // Tạo ID từ tên
-                    name: catName,
-                    items: groupedData[catName]
-                }));
-
-                // Ưu tiên đưa Chef's Selection hoặc món nổi bật lên đầu (Tùy chọn)
-                const sortedMenu = formattedMenu.sort((a, b) => a.name.localeCompare(b.name));
-
-                setMenuData(sortedMenu);
-            } catch (error) {
-                console.error("Failed to fetch menu data", error);
-            } finally {
-                setIsLoading(false);
-            }
-        };
-
-        fetchMenu();
-    }, []);
-
-    return { menuData, isLoading };
+    return formattedMenu.sort((a, b) => (a.name.en || "").localeCompare(b.name.en || ""));
 };
