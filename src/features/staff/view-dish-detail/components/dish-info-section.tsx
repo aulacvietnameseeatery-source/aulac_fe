@@ -3,7 +3,6 @@ import { Eye, Clock, Flame, DollarSign, GripVertical } from "lucide-react";
 import { DishDetailResponse, Language } from "../types/dish-detail.types";
 import { StatusBadge } from "./status-badge";
 import { MetaRow } from "./meta-row";
-import { playfair } from "@/lib/fonts";
 import { cn } from "@/lib/utils";
 
 type Props = {
@@ -30,8 +29,7 @@ export const DishInfoSection = ({ dish, activeTab }: Props) => {
 
         {content?.slogan && (
           <blockquote className={cn(
-            "border-l-4 border-blue-500 pl-4 italic text-xl text-gray-700 leading-relaxed",
-            playfair.className
+            "border-l-4 border-blue-500 pl-4 italic text-xl text-gray-700 leading-relaxed font-display",
           )}>
             &quot;{content.slogan}&quot;
           </blockquote>

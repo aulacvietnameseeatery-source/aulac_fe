@@ -1,19 +1,18 @@
-import localFont from "next/font/local";
+// Font CSS variable class names
+// Actual @font-face declarations with unicode-range are in src/styles/local-fonts.css
+// This file provides the variable/className exports for use in layout.tsx
 
-export const inter = localFont({
-    src: "../../public/fonts/inter-latin-var.woff2",
+export const inter = {
     variable: "--font-inter",
-    display: "swap",
-});
+    className: "font-inter",
+};
 
-export const playfair = localFont({
-    src: "../../public/fonts/playfair-display-latin-var.woff2",
+export const playfair = {
     variable: "--font-playfair",
-    display: "swap",
-});
+    className: "font-playfair",
+};
 
-export const lexend = localFont({
-    src: "../../public/fonts/lexend-latin-var.woff2",
+export const lexend = {
     variable: "--font-lexend",
-    display: "swap",
-});
+    className: "font-lexend",
+};

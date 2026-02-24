@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
-import { inter, playfair, lexend } from "@/lib/fonts";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import QueryProvider from "@/components/providers/query-provider";
@@ -14,7 +13,7 @@ export async function generateMetadata(
   const messages = await getMessages({ locale });
 
   return {
-    title: (messages as any).Metadata?.title ?? "Au Lac",
+    title: (messages as any).Metadata?.title ?? "An Lac",
     description: (messages as any).Metadata?.description ?? "Vietnamese Eatery",
   };
 }
@@ -32,7 +31,7 @@ export default async function LocaleLayout(
 
   return (
     <html lang={locale}>
-      <body className={`${inter.variable} ${playfair.variable} ${lexend.variable} antialiased`}>
+      <body className="antialiased">
         <QueryProvider>
           <AuthProvider>
             <NextIntlClientProvider locale={locale} messages={messages}>

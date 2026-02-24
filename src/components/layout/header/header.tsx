@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import {
     Menu as MenuIcon, X, MapPin, Phone, Clock, Globe,
     QrCode, Home, User
@@ -115,9 +116,21 @@ export function Header({ isScrolled, locale }: HeaderProps) {
                     {/* LOGO */}
                     {/* 👇 ĐÃ SỬA: Xóa class 'group' ở đây */}
                     <Link href={getLink("/")} className="logo-wrapper" onClick={() => setIsMobileMenuOpen(false)}>
-                        <h1 className={cn("logo-title", effectiveScrolled ? "is-scrolled" : "is-default")}>
-                            An Lac
-                        </h1>
+                        <div className="flex items-center gap-2">
+                            <Image
+                                src="/images/logo.png"
+                                alt="An Lac Logo"
+                                width={64}
+                                height={64}
+                                className={cn(
+                                    "object-contain transition-all duration-300",
+                                    effectiveScrolled ? "h-[32px] w-[32px] md:h-[28px] md:w-[28px]" : "h-[32px] w-[32px] md:h-[64px] md:w-[64px]"
+                                )}
+                            />
+                            <h1 className={cn("logo-title", effectiveScrolled ? "is-scrolled" : "is-default")}>
+                                An Lac
+                            </h1>
+                        </div>
                         <div className={cn("logo-slogan-wrapper", effectiveScrolled ? "is-scrolled" : "is-default")}>
                             <span className="slogan-main">{t('slogan_1')}</span>
                             <span className="slogan-sub">{t('slogan_2')}</span>
