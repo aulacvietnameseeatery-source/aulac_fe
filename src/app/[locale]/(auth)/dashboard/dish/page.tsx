@@ -243,7 +243,7 @@ const DishListContent = () => {
                             <Button
                                 onClick={handleCreate}
                                 variant="outline"
-                                className="shadow-md whitespace-nowrap bg-blue-600 text-white hover:bg-blue-700 border-none"
+                                className="shadow-md"
                             >
                                 <Plus className="mr-2 h-4 w-4" />
                                 {t("addNew")}

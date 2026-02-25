@@ -4,16 +4,18 @@ export interface I18nText {
     fr: string;
 }
 
+// UI chỉ nhận string
 export interface MenuItemData {
     id: string;
-    name: I18nText;
+    name: string;
     price: number | string;
-    desc: I18nText;
+    desc: string;
     image: string;
 }
 
+// UI chỉ nhận string
 export interface MenuCategory {
     id: string;
-    name: I18nText;
+    name: string;
     items: MenuItemData[];
 }

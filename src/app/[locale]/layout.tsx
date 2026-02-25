@@ -6,10 +6,10 @@ import QueryProvider from "@/components/providers/query-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { AuthProvider } from "@/components/providers/auth-provider";
 
+import { inter, playfair, lexend } from "@/lib/fonts";
+
 import "@/styles/globals.css";
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
-const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-playfair", display: "swap" });
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -45,7 +45,7 @@ export default async function LocaleLayout(
 
   return (
     <html lang={locale}>
-      <body className="antialiased">
+    <body className={`${inter.variable} ${playfair.variable} ${lexend.variable} antialiased`}>
         <QueryProvider>
           <AuthProvider>
             <NextIntlClientProvider locale={locale} messages={messages}>

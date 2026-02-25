@@ -1,6 +1,10 @@
 import { api } from "@/lib/http";
 import { ApiResponse, PagedResult } from "@/types/api-response.types";
-import { DishDisplayDto, formatMenuData } from "@/features/customer/menu-listing-new/hooks/use-menu-data";
+import {
+    DishDisplayDto,
+    formatMenuData,
+    RawMenuCategory
+} from "@/features/customer/menu-listing-new/hooks/use-menu-data";
 import MenuListingClient from "./MenuListingClient";
 import { MenuCategory } from "@/features/customer/menu-listing-new/data/mock-menu";
 
@@ -10,7 +14,7 @@ export default async function MenuListingPage({params}: { params: Promise<{ loca
     // 2. Thêm chữ "await" để giải quyết Promise trước khi lấy locale
     const {locale} = await params;
 
-    let menuData: MenuCategory[] = [];
+    let menuData: RawMenuCategory[] = [];
 
     try {
         const response = await api.get<ApiResponse<PagedResult<DishDisplayDto>>>("/api/dishes/menu?pageIndex=1&pageSize=500");
