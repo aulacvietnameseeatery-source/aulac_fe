@@ -37,7 +37,6 @@ export const MenuCard = ({ id, name, price, desc, image, onOrder, onDetail }: Me
             className="w-full flex flex-col items-center text-center group cursor-pointer bg-transparent justify-start"
             onClick={handleDetailClick}
         >
-            {/* GIẢM ẢNH XUỐNG CÒN 45% (Thay vì 55%). Đây là key để cứu chiều cao của thẻ! */}
             <div className="relative w-[45%] aspect-square mb-[2%] rounded-full overflow-hidden border border-[#C5A059]/40 group-hover:border-[#C5A059] shadow-sm group-hover:shadow-md transition-all duration-500">
                 <Image
                     width={300}
@@ -52,7 +51,6 @@ export const MenuCard = ({ id, name, price, desc, image, onOrder, onDetail }: Me
                 />
             </div>
 
-            {/* Các margin-bottom (mb) bên dưới cũng ép sát lại còn 1% */}
             <h3 className="text-[#0f172a] font-display text-[7.5px] md:text-[8px] lg:text-[10px] xl:text-[11px] uppercase tracking-widest font-bold mb-[1%] px-[2%] line-clamp-2 transition-colors duration-300 group-hover:text-[#C5A059] leading-tight sm:leading-snug">
                 {name}
             </h3>
@@ -63,9 +61,10 @@ export const MenuCard = ({ id, name, price, desc, image, onOrder, onDetail }: Me
                 {typeof price === 'number' ? `${price.toFixed(2)} CHF` : price}
             </div>
 
+            {/* ĐÃ SỬA: opacity-100 ở mobile, lg:opacity-0 ở desktop */}
             <button
                 onClick={handleOrderClick}
-                className="opacity-0 translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 text-[#9A7B4F] text-[6px] md:text-[7px] lg:text-[8px] xl:text-[9.5px] font-bold uppercase tracking-widest hover:text-[#0f172a] transition-all duration-300 border-b border-transparent hover:border-[#0f172a]"
+                className="opacity-100 translate-y-0 lg:opacity-0 lg:translate-y-1 lg:group-hover:opacity-100 lg:group-hover:translate-y-0 text-[#9A7B4F] text-[6px] md:text-[7px] lg:text-[8px] xl:text-[9.5px] font-bold uppercase tracking-widest hover:text-[#0f172a] transition-all duration-300 border-b border-transparent hover:border-[#0f172a]"
             >
                 Order Now
             </button>

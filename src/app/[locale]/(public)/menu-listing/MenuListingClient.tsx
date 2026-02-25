@@ -103,26 +103,28 @@ export default function MenuListingClient({ initialMenuData, locale }: Props) {
             />
             <Atmosphere />
             <div className="relative z-10 w-full max-w-[1400px]">
-                {/* Ép kiểu any để bỏ qua TypeScript strict type cho component BookFrame */}
                 <BookFrame
                     menuData={localizedMenu}
                     onAddToCart={handleAddToCartFromBook}
                 />
             </div>
-            <div id="cart-destination" className="fixed bottom-20.75 right-5 z-50 pointer-events-none flex flex-col items-end justify-end">
+
+
+            {/* ĐÃ SỬA: Canh phải cho cả Mobile (right-4) và Desktop (md:right-5) */}
+            <div id="cart-destination" className="fixed bottom-6 right-4 md:bottom-8 md:right-5 z-50 pointer-events-none flex flex-col items-end justify-end">
                 <AnimatePresence>
                     {cartItems.length > 0 && (
-                        <div className="pointer-events-auto transform scale-90 md:scale-100 origin-bottom-right">
-                            <CartSummary
-                                cartItems={cartItems}
-                                tableNumber={tableNumber}
-                                onUpdateTable={setTableNumber}
-                                onUpdateQuantity={handleUpdateQuantity}
-                                onRemoveItem={handleRemoveItem}
-                                onConfirm={() => console.log("Checkout requested:", cartItems)}
-                            />
-                        </div>
-                    )}
+                        <div className="pointer-events-auto">
+                        <CartSummary
+                        cartItems={cartItems}
+                    tableNumber={tableNumber}
+                    onUpdateTable={setTableNumber}
+                    onUpdateQuantity={handleUpdateQuantity}
+                    onRemoveItem={handleRemoveItem}
+                    onConfirm={() => console.log("Checkout requested:", cartItems)}
+                />
+            </div>
+            )}
                 </AnimatePresence>
             </div>
         </main>

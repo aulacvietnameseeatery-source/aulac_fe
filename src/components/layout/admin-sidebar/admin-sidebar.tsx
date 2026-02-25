@@ -43,7 +43,7 @@ const navigation = [
     items: [
       { key: "dashboard", href: "/dashboard", icon: LayoutDashboard },
       { key: "orders", href: "/dashboard/orders", icon: LayoutList },
-      { key: "reservations", href: "/dashboard/reservations", icon: CalendarClock },
+      { key: "reservations", href: "/dashboard/reservation", icon: CalendarClock },
     ]
   },
   {

@@ -23,15 +23,15 @@ export const mockTables: RestaurantTable[] = [
   { tableId: 15, tableCode: "R-03", capacity: 4,  status: "CLEANING",       type: "REGULAR",  zone: "ROOFTOP",  isOnline: true,  image: "/images/table-selection/level1/l1-03.png",      activeOrders: 0, hasErrors: false },
 
   // Patio tables
-  { tableId: 16, tableCode: "P-01", capacity: 4,  status: "AVAILABLE",      type: "REGULAR",  zone: "PATIO",    isOnline: true,  image: "/images/table-selection/ground-floor/t-05.png", activeOrders: 0, hasErrors: false },
-  { tableId: 17, tableCode: "P-02", capacity: 6,  status: "OCCUPIED",       type: "REGULAR",  zone: "PATIO",    isOnline: true,  image: "/images/table-selection/ground-floor/t-06.png", activeOrders: 1, hasErrors: false },
-  { tableId: 18, tableCode: "P-03", capacity: 2,  status: "AVAILABLE",      type: "BAR",      zone: "PATIO",    isOnline: false, image: "/images/table-selection/ground-floor/t-07.png", activeOrders: 0, hasErrors: false },
+  { tableId: 16, tableCode: "P-01", capacity: 4,  status: "AVAILABLE",      type: "REGULAR",  zone: "INDOOR",    isOnline: true,  image: "/images/table-selection/ground-floor/t-05.png", activeOrders: 0, hasErrors: false },
+  { tableId: 17, tableCode: "P-02", capacity: 6,  status: "OCCUPIED",       type: "REGULAR",  zone: "INDOOR",    isOnline: true,  image: "/images/table-selection/ground-floor/t-06.png", activeOrders: 1, hasErrors: false },
+  { tableId: 18, tableCode: "P-03", capacity: 2,  status: "AVAILABLE",      type: "BAR",      zone: "INDOOR",    isOnline: false, image: "/images/table-selection/ground-floor/t-07.png", activeOrders: 0, hasErrors: false },
 
   // VIP Room tables
-  { tableId: 19, tableCode: "V-01", capacity: 8,  status: "RESERVED",       type: "VIP",      zone: "VIP_ROOM", isOnline: true,  image: "/images/table-selection/vip-garden/v-01.png",   activeOrders: 0, hasErrors: false },
-  { tableId: 20, tableCode: "V-02", capacity: 10, status: "AVAILABLE",      type: "VIP",      zone: "VIP_ROOM", isOnline: true,  image: "/images/table-selection/vip-garden/v-02.png",   activeOrders: 0, hasErrors: false },
-  { tableId: 21, tableCode: "V-03", capacity: 6,  status: "OCCUPIED",       type: "VIP",      zone: "VIP_ROOM", isOnline: true,  image: "/images/table-selection/vip-garden/v-01.png",   activeOrders: 2, hasErrors: false },
-  { tableId: 22, tableCode: "V-04", capacity: 12, status: "AVAILABLE",      type: "VIP",      zone: "VIP_ROOM", isOnline: true,  image: "/images/table-selection/vip-garden/v-02.png",   activeOrders: 0, hasErrors: false },
+  { tableId: 19, tableCode: "V-01", capacity: 8,  status: "RESERVED",       type: "VIP",      zone: "INDOOR", isOnline: true,  image: "/images/table-selection/vip-garden/v-01.png",   activeOrders: 0, hasErrors: false },
+  { tableId: 20, tableCode: "V-02", capacity: 10, status: "AVAILABLE",      type: "VIP",      zone: "INDOOR", isOnline: true,  image: "/images/table-selection/vip-garden/v-02.png",   activeOrders: 0, hasErrors: false },
+  { tableId: 21, tableCode: "V-03", capacity: 6,  status: "OCCUPIED",       type: "VIP",      zone: "INDOOR", isOnline: true,  image: "/images/table-selection/vip-garden/v-01.png",   activeOrders: 2, hasErrors: false },
+  { tableId: 22, tableCode: "V-04", capacity: 12, status: "AVAILABLE",      type: "VIP",      zone: "INDOOR", isOnline: true,  image: "/images/table-selection/vip-garden/v-02.png",   activeOrders: 0, hasErrors: false },
 ];
 
 export const ALL_STATUSES: TableStatus[] = [
@@ -43,6 +43,6 @@ export const ALL_TYPES: TableType[] = [
 ];
 
 export const ALL_ZONES: TableZone[] = [
-  "INDOOR", "OUTDOOR", "ROOFTOP", "PATIO", "VIP_ROOM",
+  "INDOOR", "OUTDOOR", "ROOFTOP",
 ];
 
