@@ -118,7 +118,7 @@ export function DishHero({ dish, onOrderNow }: DishHeroProps) {
                   className="absolute bottom-6 left-4 right-4 z-20 h-12 w-auto whitespace-nowrap rounded-lg bg-amber-400 px-6 shadow-lg md:left-auto md:right-[150px] md:top-[492px] md:bottom-auto md:h-11 md:w-auto md:min-w-[112px] hover:bg-amber-500 transition-colors"
                   onClick={onOrderNow}
               >
-                <span className="text-base font-bold text-blue-950 md:text-sm md:font-medium">{t("order_now")}</span>
+                <span className="font-body text-base font-semibold text-blue-950 md:text-sm">{t("order_now")}</span>
               </button>
           )}
 
@@ -128,7 +128,7 @@ export function DishHero({ dish, onOrderNow }: DishHeroProps) {
             <button
                 type="button"
                 onClick={() => setViewMode('photo')}
-                className={`rounded-full px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider transition-all duration-300 md:px-6 md:py-2.5 md:text-xs ${
+                className={`font-body rounded-full px-3 py-1.5 text-[10px] font-medium transition-all duration-300 md:px-6 md:py-2.5 md:text-xs ${
                     viewMode === 'photo'
                         ? "bg-white/20 text-white outline outline-1 outline-offset-[-1px] outline-white/20 shadow-lg"
                         : "text-white/70 hover:bg-white/10"
@@ -141,7 +141,7 @@ export function DishHero({ dish, onOrderNow }: DishHeroProps) {
             <button
                 type="button"
                 onClick={() => setViewMode('360')}
-                className={`rounded-full px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider transition-all duration-300 md:px-6 md:py-2.5 md:text-xs ${
+                className={`font-body rounded-full px-3 py-1.5 text-[10px] font-medium transition-all duration-300 md:px-6 md:py-2.5 md:text-xs ${
                     viewMode === '360'
                         ? "bg-white/20 text-white outline outline-1 outline-offset-[-1px] outline-white/20 shadow-lg"
                         : "text-white/70 hover:bg-white/10"
@@ -154,7 +154,7 @@ export function DishHero({ dish, onOrderNow }: DishHeroProps) {
             <button
                 type="button"
                 onClick={() => setViewMode('video')}
-                className={`rounded-full px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider transition-all duration-300 md:px-6 md:py-2.5 md:text-xs ${
+                className={`font-body rounded-full px-3 py-1.5 text-[10px] font-medium transition-all duration-300 md:px-6 md:py-2.5 md:text-xs ${
                     viewMode === 'video'
                         ? "bg-white/20 text-white outline outline-1 outline-offset-[-1px] outline-white/20 shadow-lg"
                         : "text-white/70 hover:bg-white/10"

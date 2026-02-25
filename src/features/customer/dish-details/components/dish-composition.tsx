@@ -19,7 +19,7 @@ export function DishComposition({ dish }: DishCompositionProps) {
 
   return (
     <aside className="mt-8 border-t border-slate-200 pt-8 lg:mt-0 lg:border-l lg:border-t-0 lg:pl-8 lg:pt-0">
-      <div className="text-xs font-bold uppercase tracking-[2.40px] text-blue-800 md:text-sm md:tracking-[2.80px]">
+      <div className="font-body text-sm font-semibold text-blue-800 md:text-base">
         {t("label")}
       </div>
 
@@ -35,10 +35,10 @@ export function DishComposition({ dish }: DishCompositionProps) {
             </div>
 
             <div className="pt-1">
-              <div className="text-lg font-bold leading-6 text-neutral-900 md:text-[22px] md:leading-7">
+              <div className="font-display text-lg font-semibold leading-6 text-neutral-900 md:text-xl md:leading-7">
                 {item.ingredientName}
               </div>
-              <div className="mt-1.5 text-[10px] font-bold uppercase tracking-[1.8px] text-blue-800 md:mt-2 md:text-xs md:tracking-[2px]">
+              <div className="font-body mt-1.5 text-xs font-medium text-blue-800 md:mt-2 md:text-sm">
                 {item.quantity} {item.unit}
               </div>
               {item.note && (

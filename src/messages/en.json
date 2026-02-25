@@ -110,6 +110,7 @@
     },
     "Composition": {
       "label": "The Composition",
+      "no_composition": "No composition information available",
       "item_1_title": "Rice Vermicelli",
       "item_1_sub": "Hue Style",
       "item_1_desc": "Thick, cylindrical rice noodles with a satisfying chew, traditional to Central Vietnam.",
