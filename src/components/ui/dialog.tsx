@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import '@/styles/components/dialog.css';
 
 interface DialogProps {
@@ -35,12 +36,19 @@ export const Dialog = ({
 
     if (!open) return null;
 
-    return (
-        <div className="admin-dialog-overlay" onClick={onClose}>
+    return createPortal(
+        <div
+            className="admin-dialog-overlay"
+            onClick={onClose}
+            onPointerDown={(e) => e.stopPropagation()}
+            onMouseDown={(e) => e.stopPropagation()}
+        >
             <div
                 className="admin-dialog-content"
                 style={{ maxWidth: width }}
-                onClick={(e) => e.stopPropagation()} // Ngăn click bên trong đóng modal
+                onClick={(e) => e.stopPropagation()}
+                onPointerDown={(e) => e.stopPropagation()}
+                onMouseDown={(e) => e.stopPropagation()}
             >
                 {/* Header */}
                 <div className="admin-dialog-header">
@@ -69,6 +77,7 @@ export const Dialog = ({
                     </div>
                 )}
             </div>
-        </div>
+        </div>,
+        document.body
     );
 };

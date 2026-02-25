@@ -17,13 +17,13 @@ const Page = React.forwardRef<HTMLDivElement, { children: React.ReactNode, numbe
 });
 Page.displayName = 'Page';
 
-// STYLES FOR TABS
-const BOOKMARK_STYLES = [
-    'bg-[#1e293b] border-[#C5A059]/40 text-[#C5A059]',
-    'bg-[#0f172a] border-[#C5A059]/40 text-[#C5A059]',
-    'bg-[#3f2e18] border-[#E5D9B6]/40 text-[#E5D9B6]',
-    'bg-[#1a1510] border-[#C5A059]/40 text-[#C5A059]',
-];
+// // STYLES FOR TABS
+// const BOOKMARK_STYLES = [
+//     'bg-[#1e293b] border-[#C5A059]/40 text-[#C5A059]',
+//     'bg-[#0f172a] border-[#C5A059]/40 text-[#C5A059]',
+//     'bg-[#3f2e18] border-[#E5D9B6]/40 text-[#E5D9B6]',
+//     'bg-[#1a1510] border-[#C5A059]/40 text-[#C5A059]',
+// ];
 
 // Định nghĩa Props mới để nhận dữ liệu từ trang cha
 interface BookFrameProps {
@@ -241,35 +241,22 @@ export const BookFrame = ({ menuData, onAddToCart }: BookFrameProps) => {
                     </div>
                 </div>
             ) : (
-                // DESKTOP: LEFT VERTICAL TABS
-                <div className="absolute top-[5%] bottom-[5%] -left-5 w-30 z-50 flex flex-col justify-center gap-1 py-10">
-                    {menuData.map((cat, index) => {
+                // DESKTOP: LEFT VERTICAL TABS - CONCEPT 1 (TAB LIỀN TRANG)
+                // DESKTOP: LEFT VERTICAL TABS - CONCEPT 2 (THẺ KẸP MẠ VÀNG)
+                // DESKTOP: LEFT VERTICAL TABS - CONCEPT 4 (THẺ KÍNH MỜ)
+                // DESKTOP: LEFT VERTICAL TABS - CONCEPT 5 (ĐUÔI RUY BĂNG)
+                // CONCEPT: CỔNG VÒM ĐÔNG DƯƠNG
+                <div className="absolute top-[5%] bottom-[5%] -left-8 lg:-left-12 w-32 lg:w-36 z-50 flex flex-col justify-center gap-3 py-10">
+                    {menuData.map((cat) => {
                         const isActive = activeCategoryId === cat.id;
-                        const styleClass = BOOKMARK_STYLES[index % BOOKMARK_STYLES.length];
                         return (
-                            <div
-                                key={cat.id}
-                                onClick={() => handleCategoryClick(cat.id)}
-                                className={`
-                                    relative h-12 lg:h-14 cursor-pointer transition-all duration-300 ease-out flex items-center
-                                    ${isActive ? 'translate-x-6' : 'translate-x-2 hover:translate-x-4 opacity-100'}
-                                `}
-                            >
-                                <div className={`
-                                    w-full h-full 
-                                    ${styleClass} 
-                                    border-t border-b border-l border-[#C5A059]/40
-                                    rounded-l-md
-                                    shadow-[2px_2px_5px_rgba(0,0,0,0.5)]
-                                    flex items-center justify-end pr-4 pl-2
-                                `}>
-                                    <span className={`
-                                        font-display text-[10px] lg:text-xs font-bold uppercase tracking-widest text-right leading-tight
-                                        ${isActive ? 'text-[#C5A059]' : 'text-[#E5D9B6]/60'}
-                                    `}>
-                                        {cat.name}
-                                    </span>
-                                </div>
+                            <div key={cat.id} onClick={() => handleCategoryClick(cat.id)} className={`relative h-10 lg:h-12 cursor-pointer transition-all duration-500 flex items-center justify-end pr-4 pl-4 ${isActive ? 'translate-x-6' : 'translate-x-2 hover:translate-x-4'}`}>
+                                {/* Khối nền bo tròn nửa bên trái */}
+                                <div className={`absolute inset-0 transition-all duration-500 ${isActive ? 'bg-[#9A7B4F] rounded-l-full shadow-[-4px_4px_10px_rgba(0,0,0,0.3)]' : 'bg-transparent'}`}></div>
+
+                                <span className={`relative z-10 font-display text-[9px] lg:text-[11px] font-bold uppercase tracking-widest text-right leading-tight transition-colors duration-300 ${isActive ? 'text-[#0f172a]' : 'text-[#9A7B4F]/50 hover:text-[#9A7B4F]'}`}>
+                                {cat.name}
+                            </span>
                             </div>
                         );
                     })}

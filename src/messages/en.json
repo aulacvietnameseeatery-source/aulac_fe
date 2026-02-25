@@ -1,6 +1,6 @@
 {
   "Metadata": {
-    "title": "Au Lac - Vietnamese Eatery",
+    "title": "An Lac - Vietnamese Eatery",
     "description": "The pinnacle of Vietnamese culinary art in the heart of the city."
   },
   "Header": {
@@ -1046,6 +1046,7 @@
     "reports": "Reports",
     "emails": "Emails",
     "customers": "Customers",
+    "reservations": "Reservations",
     "promotions": "Promotions",
     "settings": "Settings",
     "logout": "Logout",

@@ -6,9 +6,14 @@
  */
 
 import { authStorage } from "./auth-storage";
-import { CSRFProtection } from "./csrf";
+// import { CSRFProtection } from "./csrf"; // Đảm bảo bạn đã import đúng nếu cần
 
-export const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://localhost:7083";
+// 1. check server hay client để dùng URL phù hợp
+const isServer = typeof window === 'undefined';
+
+// 2. Server dùng IP, Client dùng localhost
+export const BASE_URL = process.env.NEXT_PUBLIC_API_URL ||
+    (isServer ? "https://127.0.0.1:7083" : "https://localhost:7083");
 
 interface FetchOptions extends RequestInit {
     headers?: Record<string, string>;
@@ -17,36 +22,31 @@ interface FetchOptions extends RequestInit {
 // Token refresh queue to prevent concurrent refresh calls
 let isRefreshing = false;
 let failedQueue: Array<{
-  resolve: (token: string) => void;
-  reject: (error: Error) => void;
+    resolve: (token: string) => void;
+    reject: (error: Error) => void;
 }> = [];
 
 const processQueue = (error: Error | null, token: string | null = null) => {
-  failedQueue.forEach((prom) => {
-    if (error) {
-      prom.reject(error);
-    } else {
-      prom.resolve(token!);
-    }
-  });
-  failedQueue = [];
+    failedQueue.forEach((prom) => {
+        if (error) {
+            prom.reject(error);
+        } else {
+            prom.resolve(token!);
+        }
+    });
+    failedQueue = [];
 };
 
 /**
  * Base HTTP client with auth token injection and automatic token refresh
- * 
- * @param path - API endpoint path
- * @param options - Fetch options
- * @returns Parsed JSON response
- * 
- * @throws Error on failed requests
  */
 async function http<T>(path: string, options?: FetchOptions): Promise<T> {
     const url = `${BASE_URL}${path}`;
 
     // Get auth token and include in headers
     const token = authStorage.getAccessToken();
-    const authHeaders = token ? { Authorization: `Bearer ${token}` } : {};
+
+    // Đã xóa biến authHeaders thừa ở đây
 
     const isFormData = options?.body instanceof FormData;
 
@@ -81,7 +81,8 @@ async function http<T>(path: string, options?: FetchOptions): Promise<T> {
         if (response.status === 401 && !path.includes('/auth/refresh') && !path.includes('/auth/login')) {
             // If already refreshing, queue this request
             if (isRefreshing) {
-                return new Promise((resolve, reject) => {
+                // SỬA LỖI 1: Thêm <string> vào Promise
+                return new Promise<string>((resolve, reject) => {
                     failedQueue.push({ resolve, reject });
                 }).then((newToken) => {
                     // Retry with new token
@@ -94,14 +95,13 @@ async function http<T>(path: string, options?: FetchOptions): Promise<T> {
             }
 
             isRefreshing = true;
-            const currentAccessToken = token; // Current/expired access token
+            const currentAccessToken = token;
 
             if (!currentAccessToken) {
-                // No access token to refresh
                 processQueue(new Error("No access token"), null);
                 isRefreshing = false;
                 authStorage.clearAuth();
-                
+
                 if (typeof window !== "undefined" && !window.location.pathname.includes('/login')) {
                     console.warn('[HTTP] No access token, redirecting to login');
                     window.location.href = "/login";
@@ -110,11 +110,9 @@ async function http<T>(path: string, options?: FetchOptions): Promise<T> {
             }
 
             try {
-                // Call refresh endpoint with current access token
-                // Backend reads refresh token from HttpOnly cookie
                 const refreshResponse = await fetch(`${BASE_URL}/api/auth/refresh`, {
                     method: 'POST',
-                    credentials: 'include', // CRITICAL: Send refresh_token cookie
+                    credentials: 'include',
                     headers: {
                         'Content-Type': 'application/json',
                     },
@@ -126,25 +124,22 @@ async function http<T>(path: string, options?: FetchOptions): Promise<T> {
                 }
 
                 const refreshData = await refreshResponse.json();
-                
-                // Update access token (refresh token rotated automatically in cookie)
+
                 authStorage.setAccessToken(refreshData.data.accessToken);
 
-                // Notify waiting requests
                 processQueue(null, refreshData.data.accessToken);
                 isRefreshing = false;
 
-                // Retry original request with new token
                 const newHeaders = {
                     ...config.headers,
                     Authorization: `Bearer ${refreshData.data.accessToken}`,
                 };
-                const retryResponse = await fetch(url, { 
-                    ...config, 
-                    credentials: 'include', // Don't forget credentials!
-                    headers: newHeaders 
+                const retryResponse = await fetch(url, {
+                    ...config,
+                    credentials: 'include',
+                    headers: newHeaders
                 });
-                
+
                 if (!retryResponse.ok) {
                     const errorBody = await retryResponse.json().catch(() => ({}));
                     throw new Error(errorBody.userMessage || errorBody.message || `HTTP Error: ${retryResponse.status}`);
@@ -152,11 +147,10 @@ async function http<T>(path: string, options?: FetchOptions): Promise<T> {
 
                 return (await retryResponse.json()) as T;
             } catch (refreshError) {
-                // Refresh failed, logout user
                 processQueue(new Error("Token refresh failed"), null);
                 isRefreshing = false;
                 authStorage.clearAuth();
-                
+
                 if (typeof window !== "undefined" && !window.location.pathname.includes('/login')) {
                     console.warn('[HTTP] Token refresh failed, redirecting to login');
                     window.location.href = "/login";
@@ -166,15 +160,11 @@ async function http<T>(path: string, options?: FetchOptions): Promise<T> {
         }
 
         if (!response.ok) {
-            // Try to parse error response from backend
             const errorBody = await response.json().catch(() => ({}));
             const errorMessage = errorBody.userMessage || errorBody.message || `HTTP Error: ${response.status}`;
 
-            // Handle 403 Forbidden - insufficient permissions
             if (response.status === 403 && typeof window !== "undefined") {
                 console.warn('[HTTP] Access forbidden, insufficient permissions');
-                // Optionally redirect to unauthorized page
-                // window.location.href = "/unauthorized";
             }
 
             const error = new Error(errorMessage) as any;
@@ -187,73 +177,44 @@ async function http<T>(path: string, options?: FetchOptions): Promise<T> {
 
         return (await response.json()) as T;
     } catch (error) {
-        // Re-throw to be handled by caller
         throw error;
     }
 }
 
-/**
- * API client with typed methods
- * 
- * @example
- * ```tsx
- * // GET request
- * const users = await api.get<User[]>('/api/users');
- * 
- * // POST request
- * const newUser = await api.post<User>('/api/users', { name: 'John' });
- * 
- * // PUT request
- * await api.put('/api/users/1', { name: 'Jane' });
- * 
- * // DELETE request
- * await api.delete('/api/users/1');
- * ```
- */
 export const api = {
-    /**
-     * GET request
-     */
     get: <T>(path: string, options?: FetchOptions) =>
         http<T>(path, { ...options, method: "GET" }),
 
-    /**
-     * POST request
-     */
     post: <T, B = unknown>(path: string, body: B, options?: FetchOptions) =>
         http<T>(path, {
             ...options,
             method: "POST",
-            body: body instanceof FormData
-            ? body
-            : JSON.stringify(body),
+            // SỬA LỖI 2: Ép kiểu body as any
+            body: (body as any) instanceof FormData
+                ? (body as any)
+                : JSON.stringify(body),
         }),
 
-    /**
-     * PUT request
-     */
     put: <T, B = unknown>(path: string, body: B, options?: FetchOptions) =>
         http<T>(path, {
             ...options,
             method: "PUT",
-            body: body instanceof FormData 
-                ? body 
+            // SỬA LỖI 2: Ép kiểu body as any
+            body: (body as any) instanceof FormData
+                ? (body as any)
                 : JSON.stringify(body),
         }),
 
-    /**
-     * DELETE request
-     */
     delete: <T>(path: string, options?: FetchOptions) =>
         http<T>(path, { ...options, method: "DELETE" }),
 
-    /**
-     * PATCH request
-     */
     patch: <T, B = unknown>(path: string, body: B, options?: FetchOptions) =>
         http<T>(path, {
             ...options,
             method: "PATCH",
-            body: JSON.stringify(body),
+            // SỬA LỖI 3: Thêm check FormData cho PATCH
+            body: (body as any) instanceof FormData
+                ? (body as any)
+                : JSON.stringify(body),
         }),
 };

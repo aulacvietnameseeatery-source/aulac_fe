@@ -1,9 +1,10 @@
 import { BatchAction } from "@/types/table.types";
 import { DishManagementDto } from "../types/dish-types";
+import { DishStatusCode } from "@/types/status-codes";
 
 interface UseStatusBatchActionsProps {
     t: (key: string) => string;
-    onUpdate: (selectedDishes: DishManagementDto[], newStatus: "AVAILABLE" | "HIDDEN") => void;
+    onUpdate: (selectedDishes: DishManagementDto[], newStatus: DishStatusCode) => void;
 }
 
 export const useStatusBatchActions = ({ t, onUpdate }: UseStatusBatchActionsProps): BatchAction[] => {
@@ -14,7 +15,7 @@ export const useStatusBatchActions = ({ t, onUpdate }: UseStatusBatchActionsProp
             variant: "success",
             buttonType: "solid",
             className: "text-white",
-            action: (items) => onUpdate(items as DishManagementDto[], "AVAILABLE"),
+            action: (items) => onUpdate(items as DishManagementDto[], DishStatusCode.AVAILABLE),
         },
         {
             label: t("batchActions.makeHidden"),
@@ -22,7 +23,7 @@ export const useStatusBatchActions = ({ t, onUpdate }: UseStatusBatchActionsProp
             variant: "danger",
             buttonType: "solid",
             className: "text-white",
-            action: (items) => onUpdate(items as DishManagementDto[], "HIDDEN"),
+            action: (items) => onUpdate(items as DishManagementDto[], DishStatusCode.HIDDEN),
         },
     ];
 };

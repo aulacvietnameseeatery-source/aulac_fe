@@ -13,26 +13,26 @@ export const RightPage = ({ title, items, onItemClick, onAddToCart }: PageProps)
 
     return (
         <div className="w-full h-full relative flex flex-col font-serif overflow-hidden">
-            {/* Ornate Frame Background */}
-            <div 
-                className="absolute inset-0 bg-contain bg-center bg-no-repeat z-0"
-                style={{ backgroundImage: 'url(/images/menu-listing/ornate-frame.png)' }}
+            <div
+                className="absolute inset-0 bg-contain bg-center bg-no-repeat z-0 drop-shadow-2xl"
+                style={{ backgroundImage: 'url(/images/menu-listing/layer2B.2.1.png)' }}
             />
 
-            <div className="absolute inset-0 px-[6%] sm:px-[7%] md:px-[8%] py-[5%] md:py-[6%] pb-[6%] md:pb-[7%] flex flex-col z-10">
-                {/* HEADER */}
-                <div className="text-center mb-2 md:mb-3 lg:mb-4 shrink-0">
-                    <h1 className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl text-[#C5A059] font-display uppercase tracking-[0.2em]">{title}</h1>
-                    <div className="w-6 sm:w-8 md:w-10 lg:w-12 h-px bg-[#C5A059]/50 mx-auto mt-1"></div>
+            {/* Đã giảm pt (padding-top) và pb (padding-bottom) xuống để tăng không gian chứa món ăn */}
+            <div className="absolute inset-0 px-[8%] pt-[5%] pb-[4%] flex flex-col z-10">
+
+                {/* Giảm margin-bottom của header xuống còn 2% */}
+                <div className="text-center mb-[2%] shrink-0">
+                    <h1 className="text-[10px] md:text-xs lg:text-sm xl:text-base 2xl:text-lg text-[#9A7B4F] font-display uppercase tracking-[0.2em] font-bold drop-shadow-sm">
+                        {title}
+                    </h1>
+                    <div className="w-[15%] h-[1px] bg-[#9A7B4F]/40 mx-auto mt-[2%]"></div>
                 </div>
 
-                {/* GRID - Max 6 items */}
-                <div className="grid grid-cols-2 gap-x-2 sm:gap-x-3 md:gap-x-4 lg:gap-x-5 gap-y-2 sm:gap-y-3 md:gap-y-4 lg:gap-y-5 grow content-start">
+                {/* Giảm gap-y xuống còn 1% để 3 hàng xích lại gần nhau hơn */}
+                <div className="grid grid-cols-2 gap-x-[10%] gap-y-[1%] grow content-start">
                     {items.map((item, idx) => (
-                        <div
-                            key={idx}
-                            className="" // Removed global cursor-pointer
-                        >
+                        <div key={idx}>
                             <MenuCard
                                 id={item.id}
                                 name={item.name}
@@ -40,13 +40,11 @@ export const RightPage = ({ title, items, onItemClick, onAddToCart }: PageProps)
                                 desc={item.desc}
                                 image={item.image}
                                 onDetail={() => onItemClick(item)}
-                                onOrder={() => {
+                                onOrder={(itemData, pos) => {
                                     if (onAddToCart) {
-                                        onAddToCart(item);
+                                        onAddToCart(itemData);
                                     } else {
-                                        // Fallback if no add to cart handler (e.g. just show detail? user said order -> table logic)
-                                        // But BookFrame usually has onAddToCart.
-                                        console.log("Add to cart:", item.name);
+                                        console.log("Add to cart:", itemData.name);
                                     }
                                 }}
                             />
@@ -55,7 +53,7 @@ export const RightPage = ({ title, items, onItemClick, onAddToCart }: PageProps)
                 </div>
 
                 {items.length === 0 && (
-                    <div className="flex-1 flex items-center justify-center text-[#C5A059]/40 italic">
+                    <div className="flex-1 flex items-center justify-center text-[#9A7B4F]/60 italic tracking-wider text-xs lg:text-sm">
                         Select a category on the left...
                     </div>
                 )}

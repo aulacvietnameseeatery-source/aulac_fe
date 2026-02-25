@@ -3,14 +3,7 @@ import { Eye, Clock, Flame, DollarSign, GripVertical } from "lucide-react";
 import { DishDetailResponse, Language } from "../types/dish-detail.types";
 import { StatusBadge } from "./status-badge";
 import { MetaRow } from "./meta-row";
-import { Playfair_Display } from "next/font/google";
 import { cn } from "@/lib/utils";
-
-export const playfair = Playfair_Display({
-  subsets: ["latin", "vietnamese"],
-  weight: ["400", "500", "600", "700"],
-  style: ["normal", "italic"],
-});
 
 type Props = {
   dish: DishDetailResponse;
@@ -26,18 +19,17 @@ export const DishInfoSection = ({ dish, activeTab }: Props) => {
       {/* DESCRIPTION SECTION */}
       <section className="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-gray-100 space-y-6">
         <div className="space-y-4">
-          <StatusBadge status={dish.dishStatus} isOnline={dish.isOnline} chefRecommended={dish.chefRecommended} tagName={dish.tagName}/>
+          <StatusBadge status={dish.dishStatus} isOnline={dish.isOnline} chefRecommended={dish.chefRecommended} tagName={dish.tagName} />
           <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 tracking-tight leading-tight">
             {content?.dishName}
           </h2>
 
-          
+
         </div>
 
         {content?.slogan && (
           <blockquote className={cn(
-            "border-l-4 border-blue-500 pl-4 italic text-xl text-gray-700 leading-relaxed" ,
-            playfair.className
+            "border-l-4 border-blue-500 pl-4 italic text-xl text-gray-700 leading-relaxed font-display",
           )}>
             &quot;{content.slogan}&quot;
           </blockquote>
