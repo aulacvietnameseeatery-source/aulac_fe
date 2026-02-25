@@ -1034,7 +1034,83 @@
       }
     }
   },
+  "Order": {
+    "List": {
+      "title": "Đơn hàng",
+      "description": "Quản lý và theo dõi tất cả đơn hàng",
+      "searchPlaceholder": "Tìm theo mã đơn, khách hàng, nhân viên...",
+      "refresh": "Làm mới",
+      "addNewOrder": "Thêm đơn hàng",
+      "kanbanLabel": "Kanban — Tất cả trạng thái",
+      "tabs": {
+        "all": "Tất cả",
+        "pending": "Chờ xử lý",
+        "inProgress": "Đang làm",
+        "completed": "Hoàn thành",
+        "cancelled": "Đã huỷ"
+      },
+      "statusCards": {
+        "all": "Tất cả",
+        "pending": "Chờ xử lý",
+        "inProgress": "Đang làm",
+        "cancelled": "Đã huỷ"
+      },
+      "kanban": {
+        "pending": "Chờ xử lý",
+        "inProgress": "Đang làm",
+        "completed": "Hoàn thành",
+        "cancelled": "Đã huỷ",
+        "empty": "Không có đơn hàng",
+        "start": "Bắt đầu",
+        "finish": "Hoàn thành",
+        "complete": "Hoàn tất",
+        "printInvoice": "In hoá đơn",
+        "reset": "Đặt lại",
+        "delete": "Xoá",
+        "cancel": "Huỷ"
+      },
+      "empty": {
+        "title": "Không có đơn hàng nào",
+        "hint": "Thử thay đổi bộ lọc hoặc tìm kiếm khác"
+      },
+      "card": {
+        "table": "Bàn",
+        "tip": "Tip",
+        "items": "món",
+        "moreItems": "món nữa",
+        "collapse": "Thu gọn",
+        "actions": "Hành động",
+        "source": {
+          "DINE_IN": "Tại bàn",
+          "TAKE_AWAY": "Mang về",
+          "DELIVERY": "Giao hàng"
+        },
+        "status": {
+          "Pending": "Chờ xử lý",
+          "In progress": "Đang làm",
+          "Completed": "Hoàn thành",
+          "Cancelled": "Đã huỷ"
+        },
+        "action": {
+          "view": "Xem chi tiết",
+          "edit": "Sửa đơn",
+          "start": "Bắt đầu",
+          "complete": "Hoàn thành",
+          "cancel": "Huỷ đơn",
+          "reset": "Khôi phục",
+          "print": "In hoá đơn"
+        }
+      }
+    }
+  },
   "AdminSidebar": {
+    "categories": {
+      "main": "CHÍNH",
+      "management": "QUẢN LÝ",
+      "operations": "VẬN HÀNH",
+      "administration": "QUẢN TRỊ",
+      "settings": "CÀI ĐẶT"
+    },
     "dashboard": "Bảng điều khiển",
     "tables": "Bàn",
     "staff": "Nhân viên",
@@ -1042,17 +1118,36 @@
     "dish": "Món ăn",
     "dishCategory": "Danh mục món",
     "ingredient": "Nguyên liệu",
+    "coupons": "Mã giảm giá",
     "orders": "Đơn hàng",
     "reports": "Báo cáo",
     "emails": "Email",
     "customers": "Khách hàng",
     "reservations": "Đặt bàn",
     "promotions": "Khuyến mãi",
-    "settings": "Cài đặt",
+    "storeSettings": "Cài đặt cửa hàng",
+    "notifications": "Thông báo",
     "logout": "Đăng xuất",
     "loggingOut": "Đang đăng xuất...",
     "managerPortal": "Cổng Quản Lý",
     "logoutMessage": "Bạn có chắc chắn muốn đăng xuất? Bạn sẽ được chuyển hướng đến trang đăng nhập.",
-    "cancel": "Hủy"
+    "cancel": "Hủy",
+    "expand": "Mở rộng",
+    "collapse": "Thu gọn"
+  },
+  "Notifications": {
+    "title": "Thông báo",
+    "markAllRead": "Đánh dấu tất cả là đã đọc",
+    "tabs": {
+      "all": "Tất cả",
+      "unread": "Chưa đọc",
+      "inbox": "Hộp thư",
+      "kitchen": "Bếp",
+      "orders": "Đơn hàng"
+    },
+    "empty": "Không có thông báo nào",
+    "time": {
+      "ago": "{time} trước"
+    }
   }
 }

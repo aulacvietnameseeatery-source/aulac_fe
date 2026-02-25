@@ -980,7 +980,83 @@
       }
     }
   },
+  "Order": {
+    "List": {
+      "title": "Commandes",
+      "description": "Gérer et suivre toutes les commandes",
+      "searchPlaceholder": "Rechercher par numéro, client, personnel...",
+      "refresh": "Actualiser",
+      "addNewOrder": "Nouvelle commande",
+      "kanbanLabel": "Kanban — Tous les statuts",
+      "tabs": {
+        "all": "Tout",
+        "pending": "En attente",
+        "inProgress": "En cours",
+        "completed": "Terminée",
+        "cancelled": "Annulée"
+      },
+      "statusCards": {
+        "all": "Tout",
+        "pending": "En attente",
+        "inProgress": "En cours",
+        "cancelled": "Annulée"
+      },
+      "kanban": {
+        "pending": "En attente",
+        "inProgress": "En cours",
+        "completed": "Terminée",
+        "cancelled": "Annulée",
+        "empty": "Aucune commande",
+        "start": "Démarrer",
+        "finish": "Terminer",
+        "complete": "Finaliser",
+        "printInvoice": "Imprimer la facture",
+        "reset": "Réinitialiser",
+        "delete": "Supprimer",
+        "cancel": "Annuler"
+      },
+      "empty": {
+        "title": "Aucune commande trouvée",
+        "hint": "Essayez de modifier vos filtres ou votre recherche"
+      },
+      "card": {
+        "table": "Table",
+        "tip": "Pourboire",
+        "items": "articles",
+        "moreItems": "de plus",
+        "collapse": "Réduire",
+        "actions": "Actions",
+        "source": {
+          "DINE_IN": "Sur place",
+          "TAKE_AWAY": "À emporter",
+          "DELIVERY": "Livraison"
+        },
+        "status": {
+          "Pending": "En attente",
+          "In progress": "En cours",
+          "Completed": "Terminée",
+          "Cancelled": "Annulée"
+        },
+        "action": {
+          "view": "Détails",
+          "edit": "Modifier",
+          "start": "Démarrer",
+          "complete": "Terminer",
+          "cancel": "Annuler",
+          "reset": "Réinitialiser",
+          "print": "Imprimer"
+        }
+      }
+    }
+  },
   "AdminSidebar": {
+    "categories": {
+      "main": "PRINCIPAL",
+      "management": "GESTION",
+      "operations": "OPÉRATIONS",
+      "administration": "ADMINISTRATION",
+      "settings": "RÉGLAGES"
+    },
     "dashboard": "Tableau de bord",
     "tables": "Tables",
     "staff": "Personnel",
@@ -988,17 +1064,36 @@
     "dish": "Plats",
     "dishCategory": "Catégorie de plat",
     "ingredient": "Ingrédients",
+    "coupons": "Coupons",
     "orders": "Commandes",
     "reports": "Rapports",
     "emails": "E-mails",
     "customers": "Clients",
     "reservations": "Réservations",
     "promotions": "Promotions",
-    "settings": "Paramètres",
+    "storeSettings": "Paramètres du magasin",
+    "notifications": "Notifications",
     "logout": "Déconnexion",
     "loggingOut": "Déconnexion...",
     "managerPortal": "Portail Gestionnaire",
     "logoutMessage": "Êtes-vous sûr de vouloir vous déconnecter ? Vous serez redirigé vers la page de connexion.",
-    "cancel": "Annuler"
+    "cancel": "Annuler",
+    "expand": "Agrandir",
+    "collapse": "Réduire"
+  },
+  "Notifications": {
+    "title": "Notifications",
+    "markAllRead": "Tout marquer comme lu",
+    "tabs": {
+      "all": "Tout",
+      "unread": "Non lu",
+      "inbox": "Boîte de réception",
+      "kitchen": "Cuisine",
+      "orders": "Commandes"
+    },
+    "empty": "Aucune notification",
+    "time": {
+      "ago": "Il y a {time}"
+    }
   }
 }

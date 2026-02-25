@@ -1034,7 +1034,83 @@
       }
     }
   },
+  "Order": {
+    "List": {
+      "title": "Orders",
+      "description": "Manage and track all orders",
+      "searchPlaceholder": "Search by order ID, customer, staff...",
+      "refresh": "Refresh",
+      "addNewOrder": "Add New Order",
+      "kanbanLabel": "Kanban — All statuses",
+      "tabs": {
+        "all": "All",
+        "pending": "Pending",
+        "inProgress": "In Progress",
+        "completed": "Completed",
+        "cancelled": "Cancelled"
+      },
+      "statusCards": {
+        "all": "All",
+        "pending": "Pending",
+        "inProgress": "In Progress",
+        "cancelled": "Cancelled"
+      },
+      "kanban": {
+        "pending": "Pending",
+        "inProgress": "In Progress",
+        "completed": "Completed",
+        "cancelled": "Cancelled",
+        "empty": "No orders",
+        "start": "Start",
+        "finish": "Complete",
+        "complete": "Done",
+        "printInvoice": "Print Invoice",
+        "reset": "Reset",
+        "delete": "Delete",
+        "cancel": "Cancel"
+      },
+      "empty": {
+        "title": "No orders found",
+        "hint": "Try adjusting your filters or search query"
+      },
+      "card": {
+        "table": "Table",
+        "tip": "Tip",
+        "items": "items",
+        "moreItems": "more items",
+        "collapse": "Collapse",
+        "actions": "Actions",
+        "source": {
+          "DINE_IN": "Dine In",
+          "TAKE_AWAY": "Take Away",
+          "DELIVERY": "Delivery"
+        },
+        "status": {
+          "Pending": "Pending",
+          "In progress": "In Progress",
+          "Completed": "Completed",
+          "Cancelled": "Cancelled"
+        },
+        "action": {
+          "view": "View Details",
+          "edit": "Edit Order",
+          "start": "Start",
+          "complete": "Complete",
+          "cancel": "Cancel",
+          "reset": "Reset",
+          "print": "Print Invoice"
+        }
+      }
+    }
+  },
   "AdminSidebar": {
+    "categories": {
+      "main": "MAIN",
+      "management": "MANAGEMENT",
+      "operations": "OPERATIONS",
+      "administration": "ADMINISTRATION",
+      "settings": "SETTINGS"
+    },
     "dashboard": "Dashboard",
     "tables": "Tables",
     "staff": "Staff",
@@ -1042,17 +1118,36 @@
     "dish": "Dish",
     "dishCategory": "Dish Category",
     "ingredient": "Ingredient",
+    "coupons": "Coupons",
     "orders": "Orders",
     "reports": "Reports",
     "emails": "Emails",
     "customers": "Customers",
     "reservations": "Reservations",
     "promotions": "Promotions",
-    "settings": "Settings",
+    "storeSettings": "Store Settings",
+    "notifications": "Notifications",
     "logout": "Logout",
     "loggingOut": "Logging out...",
     "managerPortal": "Manager Portal",
     "logoutMessage": "Are you sure you want to logout? You will be redirected to the login page.",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "expand": "Expand",
+    "collapse": "Collapse"
+  },
+  "Notifications": {
+    "title": "Notifications",
+    "markAllRead": "Mark all as read",
+    "tabs": {
+      "all": "All",
+      "unread": "Unread",
+      "inbox": "Inbox",
+      "kitchen": "Kitchen",
+      "orders": "Orders"
+    },
+    "empty": "No notifications",
+    "time": {
+      "ago": "{time} ago"
+    }
   }
 }
