@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import { useTranslations } from "next-intl";
 import { motion, useAnimation, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
-import { X, Minus, Plus, Trash2, Edit3 } from "lucide-react";
+import { X, Minus, Plus, Trash2, Edit3, ShoppingBag } from "lucide-react";
 import { CartItem } from "@/features/customer/menu-listing-new/types/cart";
 
 interface CartSummaryProps {
@@ -29,215 +29,160 @@ export function CartSummary({
     const t = useTranslations("MenuListing.CartSummary");
     const controls = useAnimation();
 
-    // State: false = Lá, true = Hình chữ nhật
     const [isExpanded, setIsExpanded] = useState(false);
-
-    // State kích hoạt hiệu ứng "nảy lên" khi giỏ hàng thay đổi
     const [isBumping, setIsBumping] = useState(false);
+
+    // Theo dõi thiết bị có phải Mobile không
+    const [isMobile, setIsMobile] = useState(false);
+    useEffect(() => {
+        const checkMobile = () => setIsMobile(window.innerWidth < 768);
+        checkMobile();
+        window.addEventListener("resize", checkMobile);
+        return () => window.removeEventListener("resize", checkMobile);
+    }, []);
 
     const totalItems = cartItems.reduce((acc, item) => acc + item.quantity, 0);
     const totalPrice = cartItems.reduce((acc, item) => acc + (item.price * item.quantity), 0);
 
-    // --- 1. LOGIC ANIMATION KHI THÊM MÓN (NẢY LÊN & QUÉT MÀU) ---
+    // --- 1. LOGIC ANIMATION KHI THÊM MÓN ---
     useEffect(() => {
         if (totalItems > 0 && !isExpanded) {
-            // Kích hoạt hiệu ứng nảy (Bump)
             setIsBumping(true);
-            const bumpTimer = setTimeout(() => setIsBumping(false), 300); // Tắt hiệu ứng sau 0.3s
+            const bumpTimer = setTimeout(() => setIsBumping(false), 300);
 
-            // Chạy hiệu ứng quét màu vàng
-            controls.start({
-                clipPath: [
-                    "inset(100% 0 0 0)",
-                    "inset(0% 0 0 0)",
-                    "inset(0 0 100% 0)"
-                ],
-                transition: {
-                    duration: 0.8,
-                    ease: [0.16, 1, 0.3, 1],
-                    times: [0, 0.8, 1]
-                }
-            }).then(() => {
-                controls.set({ clipPath: "inset(100% 0 0 0)" });
-            });
+            if (!isMobile) {
+                controls.start({
+                    clipPath: ["inset(100% 0 0 0)", "inset(0% 0 0 0)", "inset(0 0 100% 0)"],
+                    transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1], times: [0, 0.8, 1] }
+                }).then(() => controls.set({ clipPath: "inset(100% 0 0 0)" }));
+            }
 
             return () => clearTimeout(bumpTimer);
         }
-    }, [totalItems, controls, isExpanded]);
+    }, [totalItems, controls, isExpanded, isMobile]);
 
-    // --- 2. COMPONENT CON: NỘI DUNG (DẠNG LÁ) ---
+    // --- 2. COMPONENT CON: NỘI DUNG LÁ TO (DESKTOP) ---
     const CartContentOld = ({ isOverlay = false }: { isOverlay?: boolean }) => (
         <div className="flex flex-col items-center justify-center w-full h-full rotate-[15deg] px-8 antialiased -translate-y-4">
             <div className="flex flex-col items-center gap-3 mb-6">
-                <span
-                    className={cn(
-                        "text-[13px] font-display font-bold uppercase tracking-[4px] drop-shadow-sm",
-                        isOverlay ? "text-[#1A3A52]" : "text-[#C5A059]"
-                    )}
-                >
+                <span className={cn("text-[13px] font-display font-bold uppercase tracking-[4px] drop-shadow-sm", isOverlay ? "text-[#1A3A52]" : "text-[#C5A059]")}>
                     {tableNumber ? `Table ${tableNumber}` : "Your Table"}
                 </span>
-                <div
-                    className={cn(
-                        "w-8 h-[1px]",
-                        isOverlay ? "bg-[#1A3A52]" : "bg-[#C5A059]"
-                    )}
-                />
+                <div className={cn("w-8 h-[1px]", isOverlay ? "bg-[#1A3A52]" : "bg-[#C5A059]")} />
             </div>
 
             <div className="flex flex-col items-center gap-1 mb-8">
-                <span className={cn(
-                    "text-[42px] font-display font-light leading-none tracking-tight",
-                    isOverlay ? "text-[#1A3A52]" : "text-white"
-                )}>
+                <span className={cn("text-[42px] font-display font-light leading-none tracking-tight", isOverlay ? "text-[#1A3A52]" : "text-white")}>
                     ${totalPrice.toFixed(2)}
                 </span>
-                <span className={cn(
-                    "text-[10px] font-display font-medium uppercase tracking-[1.5px] mt-2",
-                    isOverlay ? "text-[#1A3A52]/80" : "text-white/70"
-                )}>
+                <span className={cn("text-[10px] font-display font-medium uppercase tracking-[1.5px] mt-2", isOverlay ? "text-[#1A3A52]/80" : "text-white/70")}>
                     {t("items_count", { count: totalItems })}
                 </span>
             </div>
 
-            <button
-                onClick={(e) => { e.stopPropagation(); onConfirm(); }}
-                className={cn(
-                    "group relative w-full max-w-[170px] py-3 rounded-full flex items-center justify-center mr-2 shadow-lg transition-all duration-300",
-                    isOverlay
-                        ? "bg-[#1A3A52] text-white"
-                        : "bg-[#C5A059] text-[#192339] hover:bg-[#D4AF6A] hover:-translate-y-0.5"
-                )}
-            >
-                <span className="text-[11px] font-display font-bold uppercase tracking-[1.5px] whitespace-nowrap">
-                   {t("confirm_btn")}
-                </span>
+            <button onClick={(e) => { e.stopPropagation(); onConfirm(); }} className={cn("group relative w-full max-w-[170px] py-3 rounded-full flex items-center justify-center mr-2 shadow-lg transition-all duration-300", isOverlay ? "bg-[#1A3A52] text-white" : "bg-[#C5A059] text-[#192339] hover:bg-[#D4AF6A] hover:-translate-y-0.5")}>
+                <span className="text-[11px] font-display font-bold uppercase tracking-[1.5px] whitespace-nowrap">{t("confirm_btn")}</span>
             </button>
         </div>
     );
 
-    // --- 3. COMPONENT CON: NỘI DUNG MỚI (DẠNG LIST) ---
+    // --- 3. COMPONENT CON: NỘI DUNG MỞ RỘNG MỚI (DẠNG LIST) ---
     const ExpandedContent = () => (
-        <motion.div
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            className="w-full h-full flex flex-col p-6 text-white"
-        >
-            {/* Header & Close Button */}
-            <div className="flex justify-between items-start mb-6 border-b border-[#C5A059]/20 pb-4">
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="w-full h-full flex flex-col p-5 md:p-6 text-white">
+            <div className="flex justify-between items-start mb-4 md:mb-6 border-b border-[#C5A059]/20 pb-4">
                 <div className="flex flex-col gap-1">
-                    <label className="text-[10px] uppercase tracking-widest text-[#C5A059] flex items-center gap-2">
-                        Table <Edit3 size={10}/>
-                    </label>
-                    <input
-                        value={tableNumber} onChange={(e) => onUpdateTable(e.target.value)}
-                        className="bg-transparent border-none outline-none text-2xl font-display font-bold text-white w-24 placeholder:text-white/20 focus:text-[#C5A059]"
-                        placeholder="A-01" autoFocus
-                    />
+                    <label className="text-[10px] uppercase tracking-widest text-[#C5A059] flex items-center gap-2">Table <Edit3 size={10}/></label>
+                    <input value={tableNumber} onChange={(e) => onUpdateTable(e.target.value)} className="bg-transparent border-none outline-none text-xl md:text-2xl font-display font-bold text-white w-24 placeholder:text-white/20 focus:text-[#C5A059]" placeholder="A-01" autoFocus={!isMobile} />
                 </div>
-                <button onClick={(e) => { e.stopPropagation(); setIsExpanded(false); }} className="p-2 -mr-2 -mt-2 text-white/50 hover:text-white rounded-full">
-                    <X size={24} />
-                </button>
+                <button onClick={(e) => { e.stopPropagation(); setIsExpanded(false); }} className="p-2 -mr-2 -mt-2 text-white/50 hover:text-white rounded-full bg-white/5 hover:bg-white/10 transition-colors"><X size={20} /></button>
             </div>
 
-            {/* List Items */}
-            <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar flex flex-col gap-3">
+            <div className="flex-1 overflow-y-auto pr-2 flex flex-col gap-3 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-[#C5A059]/30 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-[#C5A059]/60 [scrollbar-width:thin] [scrollbar-color:#c5a0594d_transparent]">
                 {cartItems.map((item) => (
-                    <div key={item.id} className="flex justify-between items-center bg-[#152e42]/60 p-3 rounded-xl border border-[#C5A059]/10">
-                        <div className="flex flex-col">
-                            <span className="font-medium text-sm text-white/90 line-clamp-1">{item.name}</span>
-                            <span className="text-xs text-[#C5A059] font-display mt-0.5">${(item.price * item.quantity).toFixed(2)}</span>
-                        </div>
-                        <div className="flex items-center gap-3 ml-2">
-                            <div className="flex items-center bg-[#204560] rounded-lg border border-[#C5A059]/20 h-8">
-                                <button onClick={() => onUpdateQuantity(item.id, -1)} className="px-2 h-full hover:bg-[#C5A059] hover:text-[#204560] rounded-l-lg text-white"><Minus size={12} /></button>
-                                <span className="min-w-[24px] text-center text-xs font-bold text-white">{item.quantity}</span>
-                                <button onClick={() => onUpdateQuantity(item.id, 1)} className="px-2 h-full hover:bg-[#C5A059] hover:text-[#204560] rounded-r-lg text-white"><Plus size={12} /></button>
-                            </div>
-                            <button onClick={() => onRemoveItem(item.id)} className="text-white/30 hover:text-red-400 p-1"><Trash2 size={16} /></button>
-                        </div>
-                    </div>
-                ))}
-            </div>
-
-            {/* Footer */}
-            <div className="mt-4 pt-4 border-t border-[#C5A059]/20">
-                <div className="flex justify-between items-center mb-4">
-                    <span className="text-sm uppercase tracking-wider text-white/60">Total</span>
-                    <span className="text-2xl font-display font-bold text-[#C5A059]">${totalPrice.toFixed(2)}</span>
+                    <div key={item.id} className="flex justify-between items-center bg-[#152e42]/60 p-3 rounded-xl border border-[#C5A059]/10 shrink-0">
+                <div className="flex flex-col">
+                    <span className="font-medium text-sm text-white/90 line-clamp-1">{item.name}</span>
+                    <span className="text-xs text-[#C5A059] font-display mt-0.5">${(item.price * item.quantity).toFixed(2)}</span>
                 </div>
-                <button onClick={(e) => { e.stopPropagation(); onConfirm(); }} className="w-full py-3.5 bg-[#C5A059] text-[#192339] rounded-xl font-bold text-sm uppercase tracking-[2px] hover:bg-[#D4AF6A]">
-                    {t("confirm_btn")}
-                </button>
+                <div className="flex items-center gap-2 md:gap-3 ml-2">
+                    <div className="flex items-center bg-[#204560] rounded-lg border border-[#C5A059]/20 h-8">
+                        <button onClick={() => onUpdateQuantity(item.id, -1)} className="px-2 h-full hover:bg-[#C5A059] hover:text-[#204560] rounded-l-lg text-white"><Minus size={12} /></button>
+                        <span className="min-w-[24px] text-center text-xs font-bold text-white">{item.quantity}</span>
+                        <button onClick={() => onUpdateQuantity(item.id, 1)} className="px-2 h-full hover:bg-[#C5A059] hover:text-[#204560] rounded-r-lg text-white"><Plus size={12} /></button>
+                    </div>
+                    <button onClick={() => onRemoveItem(item.id)} className="text-white/30 hover:text-red-400 p-1"><Trash2 size={16} /></button>
+                </div>
             </div>
+            ))}
+        </div>
+
+        <div className="mt-4 pt-4 border-t border-[#C5A059]/20">
+            <div className="flex justify-between items-center mb-4">
+                <span className="text-sm uppercase tracking-wider text-white/60">Total</span>
+                <span className="text-2xl font-display font-bold text-[#C5A059]">${totalPrice.toFixed(2)}</span>
+            </div>
+            <button onClick={(e) => { e.stopPropagation(); onConfirm(); }} className="w-full py-3.5 bg-[#C5A059] text-[#192339] rounded-xl font-bold text-sm uppercase tracking-[2px] hover:bg-[#D4AF6A] shadow-lg">{t("confirm_btn")}</button>
+        </div>
         </motion.div>
     );
 
     return (
         <motion.div
             id="cart-destination"
-            layout // <--- Giúp biến hình mượt mà
-
-            initial={{ x: "120%", opacity: 0 }}
-            animate={{
-                x: 0,
-                opacity: 1,
-                // Khi isBumping = true -> Phình to 1 chút (1.08), bình thường = 1
-                scale: isBumping && !isExpanded ? 1.08 : 1
-            }}
-            exit={{ x: "120%", opacity: 0 }}
-
-            // LƯỚT VÀO VÀ NHẤN: Chỉ áp dụng khi đang ở dạng cái lá (!isExpanded)
-            whileHover={!isExpanded ? { scale: 0.98 } : {}}
-            whileTap={!isExpanded ? { scale: 0.95 } : {}}
-
-            transition={{
-                x: { type: "spring", stiffness: 60, damping: 15 },
-                opacity: { duration: 0.2 },
-                layout: { type: "spring", stiffness: 80, damping: 20 },
-                scale: { type: "spring", stiffness: 300, damping: 15 } // Làm cho độ nảy scale tự nhiên
-            }}
-
+            layout
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: isBumping && !isExpanded ? 1.1 : 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
+            transition={{ type: "spring", stiffness: 300, damping: 25 }}
             onClick={() => !isExpanded && setIsExpanded(true)}
             className={cn(
-                "relative bg-[#204560] shadow-[0px_25px_60px_-15px_rgba(0,0,0,0.6)] overflow-hidden transition-shadow duration-500",
+                "bg-[#204560] overflow-hidden transition-all duration-300 shadow-[0px_10px_40px_-10px_rgba(0,0,0,0.5)]",
+                // XỬ LÝ CSS RESPONSIVE CHO 3 TRẠNG THÁI:
                 isExpanded
-                    ? "w-[280px] h-[550px] rounded-[24px] rotate-0 border border-[#C5A059]/30 cursor-default" // Hình chữ nhật
-                    : "w-[286px] h-[357px] rounded-tl-[256px] rounded-br-[256px] rotate-[-15deg] border border-[#C5A059]/50 cursor-pointer", // Hình lá cũ
+                    ? "w-[92vw] md:w-[320px] h-[70vh] md:h-[550px] rounded-[28px] md:rounded-[24px] border border-[#C5A059]/30 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 md:static md:translate-x-0 md:translate-y-0 cursor-default shadow-2xl z-[100]"
+                    : isMobile
+                        ? "relative w-[72px] h-[90px] rounded-tl-[60px] rounded-br-[60px] rotate-[-15deg] border-[1.5px] border-[#C5A059] bg-[#204560] cursor-pointer z-50 flex items-center justify-center shadow-[0_10px_25px_rgba(0,0,0,0.6)]"
+                        : "relative w-[286px] h-[357px] rounded-tl-[256px] rounded-br-[256px] rotate-[-15deg] border border-[#C5A059]/50 cursor-pointer shadow-[0px_25px_60px_-15px_rgba(0,0,0,0.6)]",
                 className
             )}
         >
             <AnimatePresence mode="wait">
                 {!isExpanded ? (
-                    /* === NỘI DUNG LÁ CŨ === */
-                    <motion.div
-                        key="leaf-content"
-                        initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0, transition: { duration: 0.1 } }}
-                        className="w-full h-full relative"
-                    >
-                        <div className="absolute inset-6 border border-[#C5A059]/30 rounded-[100px] pointer-events-none" />
-                        <div className="absolute inset-14 border border-[#C5A059]/10 rounded-[80px] pointer-events-none" />
+                    <motion.div key="collapsed-content" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="w-full h-full relative">
 
-                        <CartContentOld isOverlay={false} />
+                        {/* 1. GIAO DIỆN LÁ MINI (CHỈ HIỆN Ở MOBILE) */}
+                        {isMobile && (
+                            <div className="w-full h-full flex items-center justify-center text-[#C5A059]">
+                                {/* Mẹo: Vỏ lá xoay -15 độ, nên ta xoay ruột +15 độ để icon đứng thẳng */}
+                                <div className="relative rotate-[15deg]">
+                                    <ShoppingBag size={28} strokeWidth={2} />
+                                    {/* Dấu chấm báo số lượng */}
+                                    <span className="absolute -top-2 -right-2 bg-[#0f172a] text-[#C5A059] text-[11px] font-bold w-6 h-6 rounded-full flex items-center justify-center border border-[#C5A059]">
+                                        {totalItems}
+                                    </span>
+                                </div>
+                            </div>
+                        )}
 
-                        {/* Overlay Quét Màu Vàng */}
-                        <motion.div
-                            animate={controls}
-                            initial={{ clipPath: "inset(100% 0 0 0)" }}
-                            className="absolute inset-0 bg-[#C5A059] z-20 flex flex-col justify-center items-center pointer-events-none"
-                        >
-                            <div className="absolute inset-6 border border-[#1A3A52]/20 rounded-[100px] pointer-events-none" />
-                            <div className="absolute inset-14 border border-[#1A3A52]/10 rounded-[80px] pointer-events-none" />
-                            <CartContentOld isOverlay={true} />
-                        </motion.div>
+                        {/* 2. GIAO DIỆN LÁ TO (CHỈ HIỆN Ở DESKTOP) */}
+                        {!isMobile && (
+                            <>
+                                <div className="absolute inset-6 border border-[#C5A059]/30 rounded-[100px] pointer-events-none" />
+                                <div className="absolute inset-14 border border-[#C5A059]/10 rounded-[80px] pointer-events-none" />
+                                <CartContentOld isOverlay={false} />
+                                <motion.div animate={controls} initial={{ clipPath: "inset(100% 0 0 0)" }} className="absolute inset-0 bg-[#C5A059] z-20 flex flex-col justify-center items-center pointer-events-none">
+                                    <div className="absolute inset-6 border border-[#1A3A52]/20 rounded-[100px] pointer-events-none" />
+                                    <div className="absolute inset-14 border border-[#1A3A52]/10 rounded-[80px] pointer-events-none" />
+                                    <CartContentOld isOverlay={true} />
+                                </motion.div>
+                            </>
+                        )}
                     </motion.div>
                 ) : (
-                    /* === NỘI DUNG MỞ RỘNG MỚI === */
                     <ExpandedContent key="expanded-content" />
                 )}
             </AnimatePresence>
-
-            {/* Glow Effect */}
-            <div className="absolute inset-4 bg-[#C5A059]/10 blur-[40px] rounded-full -z-10 pointer-events-none" />
+            {!isMobile && <div className="absolute inset-4 bg-[#C5A059]/10 blur-[40px] rounded-full -z-10 pointer-events-none" />}
         </motion.div>
     );
 }

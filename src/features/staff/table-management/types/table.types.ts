@@ -5,7 +5,7 @@ export type TableStatus = "AVAILABLE" | "OCCUPIED" | "RESERVED" | "CLEANING" | "
 export type TableType = "REGULAR" | "VIP" | "BOOTH" | "BAR" | "HIGH_TOP";
 
 // Zone / floor area
-export type TableZone = "INDOOR" | "OUTDOOR" | "ROOFTOP" | "PATIO" | "VIP_ROOM";
+export type TableZone = "INDOOR" | "OUTDOOR" | "ROOFTOP";
 
 // Main restaurant table entity
 export interface RestaurantTable {
@@ -115,15 +115,11 @@ export const TABLE_TYPE_LABELS: Record<TableType, string> = {
 export const TABLE_ZONE_LABELS: Record<TableZone, string> = {
   INDOOR: "Indoor",
   OUTDOOR: "Outdoor",
-  ROOFTOP: "Rooftop",
-  PATIO: "Patio",
-  VIP_ROOM: "VIP Room",
+  ROOFTOP: "Rooftop"
 };
 
 export const TABLE_ZONE_ICONS: Record<TableZone, string> = {
   INDOOR: "🏠",
   OUTDOOR: "🌿",
-  ROOFTOP: "🌤️",
-  PATIO: "☂️",
-  VIP_ROOM: "👑",
+  ROOFTOP: "🌤️"
 };

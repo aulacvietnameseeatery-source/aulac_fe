@@ -47,7 +47,7 @@ const DEFAULT_FILTERS: TableFilters = {
     search: "",
 };
 
-const ZONE_ORDER: TableZone[] = ["INDOOR", "OUTDOOR", "ROOFTOP", "PATIO", "VIP_ROOM"];
+const ZONE_ORDER: TableZone[] = ["INDOOR", "OUTDOOR", "ROOFTOP"];
 
 const TableManagement: React.FC = () => {
     const [tables, setTables] = useState<RestaurantTable[]>([]);
@@ -122,8 +122,7 @@ const TableManagement: React.FC = () => {
             INDOOR: [],
             OUTDOOR: [],
             ROOFTOP: [],
-            PATIO: [],
-            VIP_ROOM: [],
+
         };
         filteredTables.forEach((t) => {
             if (groups[t.zone]) {
