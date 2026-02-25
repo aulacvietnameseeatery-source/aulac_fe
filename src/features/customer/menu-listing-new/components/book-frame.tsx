@@ -250,13 +250,30 @@ export const BookFrame = ({ menuData, onAddToCart }: BookFrameProps) => {
                     {menuData.map((cat) => {
                         const isActive = activeCategoryId === cat.id;
                         return (
-                            <div key={cat.id} onClick={() => handleCategoryClick(cat.id)} className={`relative h-10 lg:h-12 cursor-pointer transition-all duration-500 flex items-center justify-end pr-4 pl-4 ${isActive ? 'translate-x-6' : 'translate-x-2 hover:translate-x-4'}`}>
-                                {/* Khối nền bo tròn nửa bên trái */}
-                                <div className={`absolute inset-0 transition-all duration-500 ${isActive ? 'bg-[#9A7B4F] rounded-l-full shadow-[-4px_4px_10px_rgba(0,0,0,0.3)]' : 'bg-transparent'}`}></div>
+                            <div
+                                key={cat.id}
+                                onClick={() => handleCategoryClick(cat.id)}
+                                className={`relative h-10 lg:h-12 cursor-pointer transition-all duration-500 flex items-center justify-end pr-4 pl-4 ${isActive ? 'translate-x-6' : 'translate-x-2 hover:translate-x-4'}`}
+                            >
+                                {/* KHỐI NỀN */}
+                                <div
+                                    className={`absolute inset-0 transition-all duration-500 rounded-l-full ${
+                                        isActive
+                                            ? 'bg-[#9A7B4F] shadow-[-4px_4px_10px_rgba(0,0,0,0.3)]'
+                                            : 'bg-transparent border-y border-l border-[#C5A059]/30 shadow-[-2px_0px_10px_rgba(197,160,89,0.15)]'
+                                    }`}
+                                ></div>
 
-                                <span className={`relative z-10 font-display text-[9px] lg:text-[11px] font-bold uppercase tracking-widest text-right leading-tight transition-colors duration-300 ${isActive ? 'text-[#0f172a]' : 'text-[#9A7B4F]/50 hover:text-[#9A7B4F]'}`}>
-                                {cat.name}
-                            </span>
+                                {/* TEXT */}
+                                <span
+                                    className={`relative z-10 font-display text-[9px] lg:text-[11px] font-bold uppercase tracking-widest text-right leading-tight transition-all duration-300 ${
+                                        isActive
+                                            ? 'text-[#0f172a]'
+                                            : 'text-[#C5A059]/80 drop-shadow-[0_0_4px_rgba(197,160,89,0.4)] hover:text-[#FDE08B] hover:drop-shadow-[0_0_8px_rgba(253,224,139,0.8)]'
+                                    }`}
+                                >
+                    {cat.name}
+                </span>
                             </div>
                         );
                     })}
