@@ -15,8 +15,13 @@ import {
     CheckCircle,
     RotateCcw,
     Printer,
+    CreditCard,
 } from 'lucide-react';
 import { OrderHistory } from '../types/order-history.types';
+import { PaymentModal } from './PaymentModal';
+import { PrintOrderModal } from './PrintOrderModal';
+import { orderHistoryService } from '../services/order-history.service';
+import { toast } from 'sonner';
 
 // ─── Constants ──────────────────────────────────────────────────────────────
 
@@ -33,14 +38,19 @@ const STATUS_STYLES: Record<string, string> = {
     Cancelled: 'bg-red-50    text-red-700    border border-red-200',
 };
 
+const PAYMENT_STYLES = {
+    paid: 'bg-emerald-50 text-emerald-600 border-emerald-100',
+    unpaid: 'bg-rose-50 text-rose-600 border-rose-100',
+};
+
 const ALL_STATUSES = Object.keys(STATUS_STYLES);
 
 // Context actions per status
-type ActionKey = 'view' | 'edit' | 'start' | 'complete' | 'cancel' | 'reset' | 'print';
+type ActionKey = 'view' | 'edit' | 'start' | 'complete' | 'cancel' | 'reset' | 'print' | 'pay' | 'printReceipt';
 const STATUS_ACTIONS: Record<string, ActionKey[]> = {
-    Pending: ['view', 'edit', 'start', 'cancel'],
-    'In progress': ['view', 'complete', 'cancel'],
-    Completed: ['view', 'print'],
+    Pending: ['view', 'cancel'],
+    'In progress': ['view', 'cancel'],
+    Completed: ['view', 'print', 'pay', 'printReceipt'],
     Cancelled: ['view', 'reset'],
 };
 
@@ -52,6 +62,8 @@ const ACTION_ICONS: Record<ActionKey, { icon: React.ReactNode; danger?: boolean 
     cancel: { icon: <X className="w-3.5 h-3.5" />, danger: true },
     reset: { icon: <RotateCcw className="w-3.5 h-3.5" /> },
     print: { icon: <Printer className="w-3.5 h-3.5" /> },
+    pay: { icon: <CreditCard className="w-3.5 h-3.5" /> },
+    printReceipt: { icon: <Printer className="w-3.5 h-3.5" /> },
 };
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
@@ -78,6 +90,10 @@ export const OrderCard: React.FC<OrderCardProps> = ({ order, onStatusChange, onA
     const [expanded, setExpanded] = useState(false);
     const [statusOpen, setStatusOpen] = useState(false);
     const [actionsOpen, setActionsOpen] = useState(false);
+    const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+    const [isProcessingPayment, setIsProcessingPayment] = useState(false);
+    const [isPrintModalOpen, setIsPrintModalOpen] = useState(false);
+    const [printType, setPrintType] = useState<'invoice' | 'receipt'>('receipt');
 
     const statusRef = useRef<HTMLDivElement>(null);
     const actionsRef = useRef<HTMLDivElement>(null);
@@ -94,10 +110,59 @@ export const OrderCard: React.FC<OrderCardProps> = ({ order, onStatusChange, onA
 
     const sourceIcon = SOURCE_ICONS[order.source] ?? <ShoppingBag className="w-3 h-3" />;
     const statusStyle = STATUS_STYLES[order.orderStatus] ?? 'bg-gray-50 text-gray-700 border border-gray-200';
-    const contextActions: ActionKey[] = STATUS_ACTIONS[order.orderStatus] ?? ['view'];
+
+    // Filter context actions
+    const contextActions: ActionKey[] = (STATUS_ACTIONS[order.orderStatus] ?? ['view']).filter(action => {
+        if (action === 'print') {
+            return order.orderStatus === 'Completed' && order.isPaid;
+        }
+        if (action === 'pay') {
+            return order.orderStatus === 'Completed' && !order.isPaid;
+        }
+        if (action === 'printReceipt') {
+            return order.orderStatus === 'Completed' && !order.isPaid;
+        }
+        return true;
+    });
 
     const visibleItems = expanded ? order.orderItems : order.orderItems.slice(0, VISIBLE_ITEMS_COUNT);
     const hiddenCount = order.orderItems.length - VISIBLE_ITEMS_COUNT;
+    const showPaymentBadge = order.orderStatus === 'Completed';
+
+    const handleActionClick = (key: ActionKey) => {
+        if (key === 'pay') {
+            setIsPaymentModalOpen(true);
+        } else if (key === 'print') {
+            setPrintType('invoice');
+            setIsPrintModalOpen(true);
+        } else if (key === 'printReceipt') {
+            setPrintType('receipt');
+            setIsPrintModalOpen(true);
+        } else {
+            onAction?.(order.orderId, key);
+        }
+        setActionsOpen(false);
+    };
+
+    const handlePaymentComplete = async (orderId: number, data: any) => {
+        setIsProcessingPayment(true);
+        try {
+            await orderHistoryService.processPayment(data);
+            toast.success(t('paymentSuccess') || 'Payment processed successfully');
+            setIsPaymentModalOpen(false);
+            // Re-trigger a refresh of the parent list
+            if (onStatusChange) {
+                // We use a dummy status change or a dedicated refresh callback if available
+                // For now, let's just trigger a re-fetch by notifying parent of its current status
+                onStatusChange(orderId, order.orderStatus);
+            }
+        } catch (error) {
+            console.error('Payment failed:', error);
+            toast.error(t('paymentError') || 'Failed to process payment');
+        } finally {
+            setIsProcessingPayment(false);
+        }
+    };
 
     return (
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 flex flex-col hover:shadow-md transition-shadow duration-200">
@@ -162,6 +227,17 @@ export const OrderCard: React.FC<OrderCardProps> = ({ order, onStatusChange, onA
                             )}
                         </div>
 
+                        {/* Payment badge */}
+                        {showPaymentBadge && (
+                            <div
+                                className={`flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded border ${order.isPaid ? PAYMENT_STYLES.paid : PAYMENT_STYLES.unpaid}`}
+                                title={order.isPaid ? t('paymentStatus.paid') : t('paymentStatus.unpaid')}
+                            >
+                                <CreditCard className="w-2.5 h-2.5" />
+                                {order.isPaid ? t('paymentStatus.paid') : t('paymentStatus.unpaid')}
+                            </div>
+                        )}
+
                         {/* 3-dot actions menu */}
                         <div className="relative" ref={actionsRef}>
                             <button
@@ -179,7 +255,7 @@ export const OrderCard: React.FC<OrderCardProps> = ({ order, onStatusChange, onA
                                         return (
                                             <button
                                                 key={key}
-                                                onClick={() => { onAction?.(order.orderId, key); setActionsOpen(false); }}
+                                                onClick={() => handleActionClick(key)}
                                                 className={`w-full text-left flex items-center gap-2 px-3 py-2 hover:bg-gray-50 transition-colors ${iconWrap.danger ? 'text-red-600 hover:bg-red-50' : 'text-gray-700'}`}
                                             >
                                                 {iconWrap.icon}
@@ -198,8 +274,8 @@ export const OrderCard: React.FC<OrderCardProps> = ({ order, onStatusChange, onA
                     <span className="text-xs font-medium text-gray-700">
                         {order.customerName ?? order.staffName}
                     </span>
-                    <div className="flex items-center gap-1 text-xs text-gray-500">
-                        <Clock className="w-3 h-3" />
+                    <div className="flex items-center gap-1.5 text-sm font-semibold text-gray-700">
+                        <Clock className="w-4 h-4" />
                         {order.createdAt ? format.dateTime(new Date(order.createdAt), { hour: '2-digit', minute: '2-digit' }) : '—'}
                     </div>
                 </div>
@@ -208,15 +284,37 @@ export const OrderCard: React.FC<OrderCardProps> = ({ order, onStatusChange, onA
                 <div className="border-t border-gray-100 pt-3 mb-3 flex-1">
                     <ul className="space-y-2">
                         {visibleItems.map((item) => (
-                            <li key={item.orderItemId} className="flex items-center justify-between text-xs">
-                                <div className="flex items-center gap-2 min-w-0">
-                                    <span className="w-1.5 h-1.5 rounded-full bg-blue-400 flex-shrink-0" />
-                                    <span className="text-gray-700 truncate">{item.dishName}</span>
+                            <li key={item.orderItemId} className="flex flex-col gap-0.5">
+                                <div className="flex items-center justify-between text-xs">
+                                    <div className="flex items-center gap-2 min-w-0">
+                                        <span className="w-1.5 h-1.5 rounded-full bg-blue-400 flex-shrink-0" />
+                                        <span className="text-gray-700 truncate">{item.dishName}</span>
+                                    </div>
+                                    <div className="flex items-center gap-2 flex-shrink-0 ml-2">
+                                        <span className="text-gray-500">×{item.quantity}</span>
+                                        <span className="text-gray-400 font-mono">{formatCurrency(item.price)}</span>
+                                    </div>
                                 </div>
-                                <div className="flex items-center gap-2 flex-shrink-0 ml-2">
-                                    <span className="text-gray-500">×{item.quantity}</span>
-                                    <span className="text-gray-400 font-mono">{formatCurrency(item.price)}</span>
-                                </div>
+                                {item.note && (
+                                    <div className="flex items-start gap-1 p-1 bg-gray-50/50 rounded-md border border-gray-100">
+                                        <p className="text-[10px] font-bold text-gray-600 line-clamp-2">
+                                            <span className="font-bold text-[9px] mr-1 text-gray-400 uppercase">
+                                                {t('note')}:
+                                            </span>
+                                            {item.note}
+                                        </p>
+                                    </div>
+                                )}
+                                {item.rejectReason && (
+                                    <div className="flex items-start gap-1 p-1 bg-red-50/50 rounded-md border border-red-100">
+                                        <p className="text-[10px] text-red-600 line-clamp-2 font-medium">
+                                            <span className="font-bold text-[9px] mr-1 text-red-400 uppercase">
+                                                {t('rejectReason')}:
+                                            </span>
+                                            {item.rejectReason}
+                                        </p>
+                                    </div>
+                                )}
                             </li>
                         ))}
                     </ul>
@@ -248,6 +346,21 @@ export const OrderCard: React.FC<OrderCardProps> = ({ order, onStatusChange, onA
                     <span className="text-xs text-gray-500">{order.itemCount} {t('items')}</span>
                 </div>
             </div>
+
+            <PaymentModal
+                order={order}
+                isOpen={isPaymentModalOpen}
+                onClose={() => setIsPaymentModalOpen(false)}
+                onPaymentComplete={handlePaymentComplete}
+                isLoading={isProcessingPayment}
+            />
+
+            <PrintOrderModal
+                order={order}
+                isOpen={isPrintModalOpen}
+                onClose={() => setIsPrintModalOpen(false)}
+                type={printType}
+            />
         </div>
     );
 };

@@ -25,4 +25,5 @@ export const Permissions = {
 
   // Order
   ViewOrder: 'ORDER:READ',
+  UpdateOrderItemStatus: 'ORDER:UPDATE_ITEM_STATUS',
 } as const;

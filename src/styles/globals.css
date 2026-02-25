@@ -1,6 +1,7 @@
 /* 0. Import local font @font-face declarations */
 @import "./local-fonts.css";
 
+
 /* 1. Import lõi Tailwind v4 */
 @import "tailwindcss";
 

@@ -7,6 +7,7 @@ export interface OrderItem {
     price: number;
     itemStatus: string;
     rejectReason?: string;
+    note?: string;
 }
 
 // Map từ OrderHistoryDTO (backend)
@@ -24,6 +25,7 @@ export interface OrderHistory {
     source: string; // 'DINE_IN' | 'TAKE_AWAY' | 'DELIVERY'
     createdAt?: string;
     updatedAt?: string;
+    isPaid: boolean;
     orderItems: OrderItem[];
     itemCount: number;
 }

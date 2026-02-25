@@ -7,16 +7,22 @@ import {
     Utensils,
     Package,
     Bike,
-    MoreVertical,
     ChevronDown,
     ChevronUp,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { OrderHistory } from "../types/order-history.types";
+import { PrintOrderModal } from "./PrintOrderModal";
 
 const SOURCE_LABEL: Record<string, { label: string; icon: React.ReactNode }> = {
     DINE_IN: { label: "Dine In", icon: <Utensils className="w-3 h-3" /> },
     TAKE_AWAY: { label: "Take Away", icon: <Package className="w-3 h-3" /> },
     DELIVERY: { label: "Delivery", icon: <Bike className="w-3 h-3" /> },
+};
+
+const PAYMENT_STYLES = {
+    paid: 'bg-emerald-50 text-emerald-600 border-emerald-100',
+    unpaid: 'bg-rose-50 text-rose-600 border-rose-100',
 };
 
 function formatTime(dateStr?: string) {
@@ -39,15 +45,19 @@ interface KanbanOrderCardProps {
     primaryAction?: { label: string; onClick: () => void };
     /** Secondary action button label & handler */
     secondaryAction?: { label: string; onClick: () => void };
+    onAction?: (orderId: number, action: string) => void;
 }
 
 export const KanbanOrderCard: React.FC<KanbanOrderCardProps> = ({
     order,
     primaryAction,
     secondaryAction,
+    onAction,
 }) => {
+    const t = useTranslations("Order.List.card");
     const [expanded, setExpanded] = useState(false);
-    const [menuOpen, setMenuOpen] = useState(false);
+    const [isPrintModalOpen, setIsPrintModalOpen] = useState(false);
+    const [printType, setPrintType] = useState<'invoice' | 'receipt'>('receipt');
 
     const sourceInfo = SOURCE_LABEL[order.source] ?? {
         label: order.source,
@@ -91,30 +101,15 @@ export const KanbanOrderCard: React.FC<KanbanOrderCardProps> = ({
                         </div>
                     </div>
 
-                    {/* Actions menu */}
-                    <div className="relative flex-shrink-0">
-                        <button
-                            onClick={() => setMenuOpen((v) => !v)}
-                            className="w-8 h-8 flex items-center justify-center rounded-full border border-gray-200 bg-white hover:bg-gray-50 transition-colors"
-                        >
-                            <MoreVertical className="w-4 h-4 text-gray-500" />
-                        </button>
-                        {menuOpen && (
-                            <>
-                                {/* Backdrop */}
-                                <div
-                                    className="fixed inset-0 z-10"
-                                    onClick={() => setMenuOpen(false)}
-                                />
-                                <div className="absolute right-0 top-9 z-20 min-w-[160px] bg-white border border-gray-100 rounded-xl shadow-lg py-1">
-                                    <button
-                                        onClick={() => setMenuOpen(false)}
-                                        className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                                    >
-                                        Xem chi tiết
-                                    </button>
-                                </div>
-                            </>
+                    {/* Actions menu removed as per user request, but keeping payment status */}
+                    <div className="relative flex-shrink-0 flex items-center">
+                        {order.orderStatus === 'Completed' && (
+                            <div
+                                className={`flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded border ${order.isPaid ? PAYMENT_STYLES.paid : PAYMENT_STYLES.unpaid}`}
+                                title={order.isPaid ? t('paymentStatus.paid') : t('paymentStatus.unpaid')}
+                            >
+                                {order.isPaid ? t('paymentStatus.paid') : t('paymentStatus.unpaid')}
+                            </div>
                         )}
                     </div>
                 </div>
@@ -138,22 +133,44 @@ export const KanbanOrderCard: React.FC<KanbanOrderCardProps> = ({
                         {visibleItems.map((item) => (
                             <li
                                 key={item.orderItemId}
-                                className="flex items-center justify-between text-xs"
+                                className="flex flex-col gap-0.5"
                             >
-                                <div className="flex items-center gap-2 min-w-0">
-                                    <span
-                                        className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${item.itemStatus?.toUpperCase() === "DONE"
-                                            ? "bg-green-400"
-                                            : "bg-gray-300"
-                                            }`}
-                                    />
-                                    <span className="text-gray-700 truncate">
-                                        {item.dishName}
+                                <div className="flex items-center justify-between text-xs">
+                                    <div className="flex items-center gap-2 min-w-0">
+                                        <span
+                                            className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${item.itemStatus?.toUpperCase() === "DONE"
+                                                ? "bg-green-400"
+                                                : "bg-gray-300"
+                                                }`}
+                                        />
+                                        <span className="text-gray-700 truncate">
+                                            {item.dishName}
+                                        </span>
+                                    </div>
+                                    <span className="text-gray-500 flex-shrink-0 ml-2">
+                                        ×{item.quantity}
                                     </span>
                                 </div>
-                                <span className="text-gray-500 flex-shrink-0 ml-2">
-                                    ×{item.quantity}
-                                </span>
+                                {item.note && (
+                                    <div className="flex items-start gap-1 p-1 bg-gray-50/50 rounded-md border border-gray-100 mt-1">
+                                        <p className="text-[10px] font-bold text-gray-600 line-clamp-2">
+                                            <span className="font-bold text-[9px] mr-1 text-gray-400 uppercase">
+                                                {t('note')}:
+                                            </span>
+                                            {item.note}
+                                        </p>
+                                    </div>
+                                )}
+                                {item.rejectReason && (
+                                    <div className="flex items-start gap-1 p-1 bg-red-50/50 rounded-md border border-red-100 mt-1">
+                                        <p className="text-[10px] text-red-600 line-clamp-2 font-medium">
+                                            <span className="font-bold text-[9px] mr-1 text-red-400 uppercase">
+                                                {t('rejectReason')}:
+                                            </span>
+                                            {item.rejectReason}
+                                        </p>
+                                    </div>
+                                )}
                             </li>
                         ))}
                     </ul>
@@ -185,27 +202,58 @@ export const KanbanOrderCard: React.FC<KanbanOrderCardProps> = ({
                 </div>
 
                 {/* Action buttons */}
-                {(primaryAction || secondaryAction) && (
-                    <div className="flex gap-2">
-                        {secondaryAction && (
+                <div className="flex gap-2">
+                    {/* View details always present */}
+                    <button
+                        onClick={() => onAction?.(order.orderId, 'view')}
+                        className="flex-1 py-1.5 rounded-lg border border-gray-200 text-xs font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors"
+                    >
+                        {t('action.view')}
+                    </button>
+
+                    {/* Secondary action based on status and payment */}
+                    {(order.orderStatus === 'Pending' || order.orderStatus === 'In progress') ? (
+                        <button
+                            onClick={() => onAction?.(order.orderId, 'cancel')}
+                            className="flex-1 py-1.5 rounded-lg border border-red-200 text-xs font-medium text-red-600 bg-white hover:bg-red-50 transition-colors"
+                        >
+                            {t('action.cancel')}
+                        </button>
+                    ) : order.orderStatus === 'Completed' ? (
+                        order.isPaid ? (
                             <button
-                                onClick={secondaryAction.onClick}
+                                onClick={() => { setPrintType('invoice'); setIsPrintModalOpen(true); }}
                                 className="flex-1 py-1.5 rounded-lg border border-gray-200 text-xs font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors"
                             >
-                                {secondaryAction.label}
+                                {t('action.print')}
                             </button>
-                        )}
-                        {primaryAction && (
+                        ) : (
+                            <button
+                                onClick={() => { setPrintType('receipt'); setIsPrintModalOpen(true); }}
+                                className="flex-1 py-1.5 rounded-lg border border-gray-200 text-xs font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors"
+                            >
+                                {t('action.printReceipt')}
+                            </button>
+                        )
+                    ) : (
+                        primaryAction && (
                             <button
                                 onClick={primaryAction.onClick}
                                 className="flex-1 py-1.5 rounded-lg border border-gray-200 text-xs font-medium text-gray-700 bg-gray-50 hover:bg-gray-100 transition-colors"
                             >
                                 {primaryAction.label}
                             </button>
-                        )}
-                    </div>
-                )}
+                        )
+                    )}
+                </div>
             </div>
+
+            <PrintOrderModal
+                order={order}
+                isOpen={isPrintModalOpen}
+                onClose={() => setIsPrintModalOpen(false)}
+                type={printType}
+            />
         </div>
     );
 };

@@ -257,9 +257,9 @@ function OrdersContent() {
             {/* ── BaseTable-style toolbar ──────────────────────────────────── */}
             <div className="body-layout-list flex-1 flex flex-col min-h-0">
                 <div className="body-list flex flex-col flex-1 min-h-0">
-                    <div className="form-list flex flex-col flex-1 min-h-0">
-                        {/* Condition / search bar */}
-                        <div className="condition-box flex flex-row items-center w-full">
+                    {/* Condition / search bar - Exactly matches BaseTable structure */}
+                    <div className="form-list">
+                        <div className="condition-box flex flex-row items-center w-full h-full">
                             <div className="flex gap-2 items-center flex-1 flex-wrap">
                                 {/* Search — giống BaseTable */}
                                 <div className="ms-input ms-editor flex items-center search-input-list max-h-4" style={{ height: "auto" }}>
@@ -306,7 +306,7 @@ function OrdersContent() {
                                     </div>
                                 ) : (
                                     <span className="text-sm font-semibold text-gray-700">
-                                        {t("kanbanLabel")}
+                                        {/*{t("kanbanLabel")}*/}
                                     </span>
                                 )}
                                 {/* Date range filter */}
@@ -371,7 +371,7 @@ function OrdersContent() {
                             </div>
 
                             {/* Right: refresh + view toggle */}
-                            <div className="action flex items-center gap-2">
+                            <div className="action flex items-center gap-2 pr-2">
                                 <button
                                     className="ms-button btn-outline-neutral only-icon"
                                     onClick={handleRefresh}
@@ -399,53 +399,62 @@ function OrdersContent() {
                                 </div>
                             </div>
                         </div>
+                    </div>
 
-                        {/* ── Content area ────────────────────────────────────── */}
-                        <div className="voucher-body-grid flex-1 min-h-0">
-                            <div className="ms-grid-viewer flex flex-col has-paging flex-box">
-                                <div className="flex-1 overflow-auto p-4">
-                                    {isLoading ? (
-                                        <div className="flex items-center justify-center py-24">
-                                            <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
-                                        </div>
-                                    ) : viewMode === "kanban" ? (
-                                        /* ── KANBAN VIEW ───────────────────────────────── */
-                                        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
-                                            {KANBAN_COLUMNS.map((col) => {
-                                                const colOrders = getColumnOrders(col);
-                                                return (
-                                                    <div key={col.key} className="bg-gray-50 rounded-2xl border border-gray-200">
-                                                        <div className={`flex items-center justify-between ${col.headerColor} rounded-t-2xl px-4 py-3`}>
-                                                            <span className="text-white font-semibold text-sm">{t(`kanban.${col.key}`)}</span>
-                                                            <span className="text-white text-sm font-medium bg-white/20 rounded-full px-2 py-0.5">
-                                                                {col.key === "pending" ? counts.pending
-                                                                    : col.key === "inProgress" ? counts.inProgress
-                                                                        : col.key === "completed" ? counts.completed
-                                                                            : counts.cancelled}
-                                                            </span>
+                    {/* ── Content area ────────────────────────────────────── */}
+                    <div className="voucher-body-grid flex-1 min-h-0">
+                        {isLoading ? (
+                            <div className="flex items-center justify-center py-24 h-full">
+                                <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
+                            </div>
+                        ) : viewMode === "kanban" ? (
+                            /* ── KANBAN VIEW — full-height scrollable, no pagination ── */
+                            <div className="h-full overflow-auto p-4 custom-scrollbar">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+                                    {KANBAN_COLUMNS.map((col) => {
+                                        const colOrders = getColumnOrders(col);
+                                        return (
+                                            <div key={col.key} className="bg-gray-50 rounded-2xl border border-gray-200">
+                                                <div className={`flex items-center justify-between ${col.headerColor} rounded-t-2xl px-4 py-3`}>
+                                                    <span className="text-white font-semibold text-sm">{t(`kanban.${col.key}`)}</span>
+                                                    <span className="text-white text-sm font-medium bg-white/20 rounded-full px-2 py-0.5">
+                                                        {col.key === "pending" ? counts.pending
+                                                            : col.key === "inProgress" ? counts.inProgress
+                                                                : col.key === "completed" ? counts.completed
+                                                                    : counts.cancelled}
+                                                    </span>
+                                                </div>
+                                                <div className="p-3 flex flex-col gap-3">
+                                                    {colOrders.length === 0 ? (
+                                                        <div className="text-center py-10 text-gray-400 text-xs">
+                                                            {t("kanban.empty")}
                                                         </div>
-                                                        <div className="p-3 flex flex-col gap-3">
-                                                            {colOrders.length === 0 ? (
-                                                                <div className="text-center py-10 text-gray-400 text-xs">
-                                                                    {t("kanban.empty")}
-                                                                </div>
-                                                            ) : (
-                                                                colOrders.map((order) => (
-                                                                    <KanbanOrderCard
-                                                                        key={order.orderId}
-                                                                        order={order}
-                                                                        primaryAction={{ label: t(`kanban.${col.primaryKey}`), onClick: () => { } }}
-                                                                        secondaryAction={{ label: t(`kanban.${col.secondaryKey}`), onClick: () => { } }}
-                                                                    />
-                                                                ))
-                                                            )}
-                                                        </div>
-                                                    </div>
-                                                );
-                                            })}
-                                        </div>
-                                    ) : orders.length === 0 ? (
-                                        /* ── GRID empty state ───────────────────────────── */
+                                                    ) : (
+                                                        colOrders.map((order) => (
+                                                            <KanbanOrderCard
+                                                                key={order.orderId}
+                                                                order={order}
+                                                                primaryAction={{ label: t(`kanban.${col.primaryKey}`), onClick: () => { } }}
+                                                                secondaryAction={{ label: t(`kanban.${col.secondaryKey}`), onClick: () => { } }}
+                                                                onAction={(id, action) => {
+                                                                    console.log("Kanban Action:", action, "on order:", id);
+                                                                    // For now just refresh, similar to grid view
+                                                                    handleRefresh();
+                                                                }}
+                                                            />
+                                                        ))
+                                                    )}
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                        ) : (
+                            /* ── GRID VIEW — scrollable cards + fixed pagination ── */
+                            <div className="flex flex-col h-full">
+                                <div className="flex-1 overflow-auto p-4 custom-scrollbar min-h-0">
+                                    {orders.length === 0 ? (
                                         <div className="flex flex-col items-center justify-center py-24 text-gray-400">
                                             <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mb-4">
                                                 <Search className="w-7 h-7" />
@@ -454,30 +463,34 @@ function OrdersContent() {
                                             <p className="text-sm mt-1">{t("empty.hint")}</p>
                                         </div>
                                     ) : (
-                                        /* ── GRID VIEW ─────────────────────────────────── */
                                         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
                                             {orders.map((order) => (
-                                                <OrderCard key={order.orderId} order={order} />
+                                                <OrderCard
+                                                    key={order.orderId}
+                                                    order={order}
+                                                    onStatusChange={handleRefresh}
+                                                    onAction={(id, action) => {
+                                                        console.log("Action:", action, "on order:", id);
+                                                        // Handle other actions if needed
+                                                        if (action !== 'pay') handleRefresh();
+                                                    }}
+                                                />
                                             ))}
                                         </div>
                                     )}
                                 </div>
-
-                                {/* Pagination — chỉ ở grid mode */}
-                                {viewMode === "grid" && (
-                                    <TablePagination
-                                        totalCount={totalCount}
-                                        pageSize={pageSize}
-                                        pageSizes={[10, 20, 30, 50]}
-                                        pageInfo={pageInfo}
-                                        hasPrev={currentPage > 1}
-                                        hasNext={currentPage * pageSize < totalCount}
-                                        onPageChange={handlePageChange}
-                                        onPageSizeChange={handlePageSizeChange}
-                                    />
-                                )}
+                                <TablePagination
+                                    totalCount={totalCount}
+                                    pageSize={pageSize}
+                                    pageSizes={[10, 20, 30, 50]}
+                                    pageInfo={pageInfo}
+                                    hasPrev={currentPage > 1}
+                                    hasNext={currentPage * pageSize < totalCount}
+                                    onPageChange={handlePageChange}
+                                    onPageSizeChange={handlePageSizeChange}
+                                />
                             </div>
-                        </div>
+                        )}
                     </div>
                 </div>
             </div>

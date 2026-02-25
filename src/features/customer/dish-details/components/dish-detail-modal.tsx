@@ -156,11 +156,10 @@ export function DishDetailModal({ dishId, isOpen, onClose }: DishDetailModalProp
                         key={mode}
                         type="button"
                         onClick={() => setViewMode(mode)}
-                        className={`font-body rounded-full px-3 py-1 text-[10px] font-medium transition-all duration-300 ${
-                          viewMode === mode
+                        className={`font-body rounded-full px-3 py-1 text-[10px] font-medium transition-all duration-300 ${viewMode === mode
                             ? "bg-white/20 text-white outline outline-1 outline-offset-[-1px] outline-white/20 shadow-md"
                             : "text-white/70 hover:bg-white/10"
-                        }`}
+                          }`}
                       >
                         {mode === "photo" ? tHero("photo") : mode === "360" ? tHero("view_360") : tHero("video")}
                       </button>

@@ -33,4 +33,8 @@ export const orderHistoryService = {
         const response = await api.get<ApiResponse<OrderStatusCount>>('/api/orders/count');
         return response.data;
     },
+
+    processPayment: async (data: { orderId: number; receivedAmount: number; paymentMethod: string; note?: string; tipAmount?: number }): Promise<void> => {
+        await api.post('/api/payments', data);
+    },
 };

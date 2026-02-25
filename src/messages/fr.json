@@ -1026,16 +1026,26 @@
         "moreItems": "de plus",
         "collapse": "Réduire",
         "actions": "Actions",
+        "note": "Note",
+        "rejectReason": "Raison du rejet",
         "source": {
           "DINE_IN": "Sur place",
           "TAKE_AWAY": "À emporter",
-          "DELIVERY": "Livraison"
+          "TAKEAWAY": "À emporter",
+          "DELIVERY": "Livraison",
+          "Takeaway": "À emporter",
+          "Dine-in": "Sur place",
+          "Delivery": "Livraison"
         },
         "status": {
           "Pending": "En attente",
           "In progress": "En cours",
           "Completed": "Terminée",
           "Cancelled": "Annulée"
+        },
+        "paymentStatus": {
+          "paid": "Payé",
+          "unpaid": "Non payé"
         },
         "action": {
           "view": "Détails",
@@ -1044,9 +1054,41 @@
           "complete": "Terminer",
           "cancel": "Annuler",
           "reset": "Réinitialiser",
-          "print": "Imprimer"
-        }
+          "print": "Imprimer la facture",
+          "pay": "Payer & Terminer",
+          "printReceipt": "Imprimer le reçu"
+        },
+        "paymentSuccess": "Paiement effectué avec succès",
+        "paymentError": "Échec du traitement du paiement"
       }
+    },
+    "PaymentModal": {
+      "title": "Payer & Terminer la commande",
+      "finalTotal": "Total final",
+      "orderInfo": "Infos commande",
+      "orderNo": "N° de commande",
+      "noOfItems": "Nombre d'articles",
+      "orderType": "Type de commande",
+      "orderedMenus": "Menus commandés",
+      "subTotal": "Sous-total",
+      "tax": "Taxe",
+      "serviceCharge": "Frais de service",
+      "tip": "Pourboire",
+      "paymentType": "Type de paiement",
+      "cash": "Espèces",
+      "card": "Carte",
+      "scan": "Scanner",
+      "discount": "Remise",
+      "tips": "Pourboires",
+      "coupon": "Coupon",
+      "add": "Ajouter",
+      "givenAmount": "Montant donné",
+      "balance": "Reliquat",
+      "note": "Note",
+      "notePlaceholder": "Saisir une note de paiement...",
+      "close": "Fermer",
+      "payAndComplete": "Payer & Terminer la commande",
+      "paying": "Traitement..."
     }
   },
   "AdminSidebar": {
@@ -1066,6 +1108,7 @@
     "ingredient": "Ingrédients",
     "coupons": "Coupons",
     "orders": "Commandes",
+    "kitchen": "Cuisine (KDS)",
     "reports": "Rapports",
     "emails": "E-mails",
     "customers": "Clients",
@@ -1094,6 +1137,33 @@
     "empty": "Aucune notification",
     "time": {
       "ago": "Il y a {time}"
+    }
+  },
+  "Kitchen": {
+    "title": "Affichage Cuisine",
+    "description": "Suivre les commandes entrantes et mettre à jour les statuts en temps réel",
+    "refresh": "Actualiser",
+    "liveUpdates": "Mises à jour en direct",
+    "note": "Note",
+    "tabs": {
+      "all": "Toutes",
+      "new": "Nouveaux",
+      "inProgress": "En cours"
+    },
+    "empty": {
+      "title": "Aucune commande active",
+      "hint": "Les nouvelles commandes apparaîtront automatiquement ici"
+    },
+    "status": {
+      "start": "Commencer",
+      "serve": "Servir",
+      "reject": "Rejeter"
+    },
+    "rejectReason": {
+      "label": "Raison",
+      "placeholder": "Entrez la raison...",
+      "confirm": "Confirmer",
+      "cancel": "Annuler"
     }
   }
 }

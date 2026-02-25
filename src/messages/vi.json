@@ -1080,16 +1080,26 @@
         "moreItems": "món nữa",
         "collapse": "Thu gọn",
         "actions": "Hành động",
+        "note": "Ghi chú",
+        "rejectReason": "Lý do",
         "source": {
           "DINE_IN": "Tại bàn",
           "TAKE_AWAY": "Mang về",
-          "DELIVERY": "Giao hàng"
+          "TAKEAWAY": "Mang về",
+          "DELIVERY": "Giao hàng",
+          "Takeaway": "Mang về",
+          "Dine-in": "Tại bàn",
+          "Delivery": "Giao hàng"
         },
         "status": {
           "Pending": "Chờ xử lý",
           "In progress": "Đang làm",
           "Completed": "Hoàn thành",
           "Cancelled": "Đã huỷ"
+        },
+        "paymentStatus": {
+          "paid": "Đã thanh toán",
+          "unpaid": "Chưa thanh toán"
         },
         "action": {
           "view": "Xem chi tiết",
@@ -1098,9 +1108,41 @@
           "complete": "Hoàn thành",
           "cancel": "Huỷ đơn",
           "reset": "Khôi phục",
-          "print": "In hoá đơn"
-        }
+          "print": "In hoá đơn",
+          "pay": "Thanh toán",
+          "printReceipt": "In biên lai"
+        },
+        "paymentSuccess": "Thanh toán thành công",
+        "paymentError": "Thanh toán thất bại"
       }
+    },
+    "PaymentModal": {
+      "title": "Thanh toán & Hoàn tất đơn hàng",
+      "finalTotal": "Tổng cộng cuối cùng",
+      "orderInfo": "Thông tin đơn hàng",
+      "orderNo": "Mã đơn hàng",
+      "noOfItems": "Số lượng món",
+      "orderType": "Loại đơn hàng",
+      "orderedMenus": "Món đã gọi",
+      "subTotal": "Tạm tính",
+      "tax": "Thuế",
+      "serviceCharge": "Phí phục vụ",
+      "tip": "Tiền tip",
+      "paymentType": "Phương thức thanh toán",
+      "cash": "Tiền mặt",
+      "card": "Thẻ",
+      "scan": "Chuyển khoản / Quét mã",
+      "discount": "Giảm giá",
+      "tips": "Tiền tip",
+      "coupon": "Mã giảm giá",
+      "add": "Thêm",
+      "givenAmount": "Số tiền khách đưa",
+      "balance": "Tiền thừa",
+      "note": "Ghi chú",
+      "notePlaceholder": "Nhập ghi chú thanh toán...",
+      "close": "Đóng",
+      "payAndComplete": "Thanh toán & Hoàn tất",
+      "paying": "Đang thanh toán..."
     }
   },
   "AdminSidebar": {
@@ -1120,6 +1162,7 @@
     "ingredient": "Nguyên liệu",
     "coupons": "Mã giảm giá",
     "orders": "Đơn hàng",
+    "kitchen": "Bếp (KDS)",
     "reports": "Báo cáo",
     "emails": "Email",
     "customers": "Khách hàng",
@@ -1148,6 +1191,33 @@
     "empty": "Không có thông báo nào",
     "time": {
       "ago": "{time} trước"
+    }
+  },
+  "Kitchen": {
+    "title": "Màn Hình Bếp",
+    "description": "Theo dõi đơn hàng và cập nhật trạng thái món ăn theo thời gian thực",
+    "refresh": "Làm mới",
+    "liveUpdates": "Cập nhật trực tiếp",
+    "note": "Ghi chú",
+    "tabs": {
+      "all": "Tất cả",
+      "new": "Mới",
+      "inProgress": "Đang làm"
+    },
+    "empty": {
+      "title": "Không có đơn hàng nào",
+      "hint": "Đơn hàng mới sẽ tự động xuất hiện tại đây"
+    },
+    "status": {
+      "start": "Bắt đầu",
+      "serve": "Phục vụ",
+      "reject": "Từ chối"
+    },
+    "rejectReason": {
+      "label": "Lý do",
+      "placeholder": "Nhập lý do...",
+      "confirm": "Xác nhận",
+      "cancel": "Hủy"
     }
   }
 }

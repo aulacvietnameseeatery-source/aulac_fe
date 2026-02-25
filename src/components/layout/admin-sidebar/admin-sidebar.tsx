@@ -27,7 +27,8 @@ import {
   LayoutList,
   Bell,
   Warehouse,
-  TicketPercent
+  TicketPercent,
+  ChefHat
 } from "lucide-react";
 import { useAuth } from "@/components/providers/auth-provider";
 import { useLogout } from "@/features/customer/auth/login/hooks";
@@ -43,6 +44,7 @@ const navigation = [
     items: [
       { key: "dashboard", href: "/dashboard", icon: LayoutDashboard },
       { key: "orders", href: "/dashboard/orders", icon: LayoutList },
+      { key: "kitchen", href: "/dashboard/kitchen", icon: ChefHat },
       { key: "reservations", href: "/dashboard/reservations", icon: CalendarClock },
     ]
   },
