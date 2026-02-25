@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
+import { createPortal } from "react-dom";
 import { X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { OrderPopup, useDishDetail } from "@/features/customer/dish-details";
@@ -66,7 +67,8 @@ export function DishDetailModal({ dishId, isOpen, onClose }: DishDetailModalProp
 
   if (!isOpen || !dishId) return null;
 
-  return (
+  // Render modal bằng Portal để tránh bị ảnh hưởng bởi overflow-hidden của parent
+  const modalContent = (
     <AnimatePresence>
       {isOpen && (
         <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
@@ -76,7 +78,7 @@ export function DishDetailModal({ dishId, isOpen, onClose }: DishDetailModalProp
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            className="absolute inset-0 bg-black/40 backdrop-blur-sm"
             onClick={onClose}
           />
 
@@ -108,18 +110,17 @@ export function DishDetailModal({ dishId, isOpen, onClose }: DishDetailModalProp
             ) : (
               <div className="flex flex-col md:flex-row">
                 {/* ── LEFT: Image panel ── */}
-                <div className="relative w-full md:w-[400px] md:shrink-0 h-[240px] md:h-[420px] bg-neutral-100 overflow-hidden">
+                <div className="relative w-full md:w-[400px] md:shrink-0 h-[400px] md:h-[500px] bg-white overflow-hidden shrink-0">
                   <Script src="https://product-gallery.cloudinary.com/all.js" strategy="lazyOnload" />
 
                   {/* Photo */}
                   {viewMode === "photo" && (
                     <div className="absolute inset-0 flex items-center justify-center">
                       <img
-                        src={dishData.data.imageUrl || HERO_IMAGE}
+                        src={dishData.data.imageUrls?.[0] || HERO_IMAGE}
                         alt={dishData.data.dishName}
                         className="max-h-full max-w-full object-contain animate-in fade-in duration-400"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent pointer-events-none" />
                     </div>
                   )}
 
@@ -167,7 +168,7 @@ export function DishDetailModal({ dishId, isOpen, onClose }: DishDetailModalProp
                 </div>
 
                 {/* ── RIGHT: Info panel ── */}
-                <div className="flex-1 overflow-y-auto md:max-h-[420px] p-4">
+                <div className="flex-1 p-4 overflow-y-auto no-scrollbar max-h-[400px] md:max-h-[500px]">
                   {/* Category */}
                   {dishData.data.categoryName && (
                     <span className="font-body inline-block rounded-full bg-blue-800/10 px-3 py-0.5 text-xs font-medium text-blue-800">
@@ -271,4 +272,7 @@ export function DishDetailModal({ dishId, isOpen, onClose }: DishDetailModalProp
       )}
     </AnimatePresence>
   );
+
+  // Render modal bằng Portal vào body để tránh bị ảnh hưởng bởi overflow-hidden
+  return typeof document !== 'undefined' ? createPortal(modalContent, document.body) : null;
 }
