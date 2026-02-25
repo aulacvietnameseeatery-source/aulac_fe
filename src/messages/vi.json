@@ -1040,6 +1040,7 @@
       "description": "Quản lý và theo dõi tất cả đơn hàng",
       "searchPlaceholder": "Tìm theo mã đơn, khách hàng, nhân viên...",
       "refresh": "Làm mới",
+      "addNewOrder": "Thêm đơn hàng",
       "kanbanLabel": "Kanban — Tất cả trạng thái",
       "tabs": {
         "all": "Tất cả",
@@ -1071,6 +1072,34 @@
       "empty": {
         "title": "Không có đơn hàng nào",
         "hint": "Thử thay đổi bộ lọc hoặc tìm kiếm khác"
+      },
+      "card": {
+        "table": "Bàn",
+        "tip": "Tip",
+        "items": "món",
+        "moreItems": "món nữa",
+        "collapse": "Thu gọn",
+        "actions": "Hành động",
+        "source": {
+          "DINE_IN": "Tại bàn",
+          "TAKE_AWAY": "Mang về",
+          "DELIVERY": "Giao hàng"
+        },
+        "status": {
+          "Pending": "Chờ xử lý",
+          "In progress": "Đang làm",
+          "Completed": "Hoàn thành",
+          "Cancelled": "Đã huỷ"
+        },
+        "action": {
+          "view": "Xem chi tiết",
+          "edit": "Sửa đơn",
+          "start": "Bắt đầu",
+          "complete": "Hoàn thành",
+          "cancel": "Huỷ đơn",
+          "reset": "Khôi phục",
+          "print": "In hoá đơn"
+        }
       }
     }
   },

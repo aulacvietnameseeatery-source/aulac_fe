@@ -1039,6 +1039,7 @@
       "description": "Manage and track all orders",
       "searchPlaceholder": "Search by order ID, customer, staff...",
       "refresh": "Refresh",
+      "addNewOrder": "Add New Order",
       "kanbanLabel": "Kanban — All statuses",
       "tabs": {
         "all": "All",
@@ -1070,6 +1071,34 @@
       "empty": {
         "title": "No orders found",
         "hint": "Try adjusting your filters or search query"
+      },
+      "card": {
+        "table": "Table",
+        "tip": "Tip",
+        "items": "items",
+        "moreItems": "more items",
+        "collapse": "Collapse",
+        "actions": "Actions",
+        "source": {
+          "DINE_IN": "Dine In",
+          "TAKE_AWAY": "Take Away",
+          "DELIVERY": "Delivery"
+        },
+        "status": {
+          "Pending": "Pending",
+          "In progress": "In Progress",
+          "Completed": "Completed",
+          "Cancelled": "Cancelled"
+        },
+        "action": {
+          "view": "View Details",
+          "edit": "Edit Order",
+          "start": "Start",
+          "complete": "Complete",
+          "cancel": "Cancel",
+          "reset": "Reset",
+          "print": "Print Invoice"
+        }
       }
     }
   },

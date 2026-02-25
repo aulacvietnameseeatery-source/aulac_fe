@@ -15,13 +15,13 @@ export const useOrderHistory = () => {
     const [paginationInfo, setPaginationInfo] = useState({ page: 1, pageSize: 10 });
 
     // Dedup + latest-request tracking
-    const latestParamsRef = useRef<TableDataChangeParams & { orderStatusLvId?: number }>({});
+    const latestParamsRef = useRef<TableDataChangeParams & { orderStatusLvId?: number; fromDate?: Date; toDate?: Date }>({});
     const lastFetchHashRef = useRef('');
     const fetchIdRef = useRef(0);
 
     /** Called by BaseTable onDataChange or manual trigger */
     const onDataChange = useCallback(async (
-        params: TableDataChangeParams & { orderStatusLvId?: number }
+        params: TableDataChangeParams & { orderStatusLvId?: number; fromDate?: Date; toDate?: Date }
     ) => {
         const hash = JSON.stringify(params);
         if (hash === lastFetchHashRef.current) return;
@@ -41,6 +41,8 @@ export const useOrderHistory = () => {
                 pageSize,
                 search: params.search || undefined,
                 orderStatusLvId: params.orderStatusLvId,
+                fromDate: params.fromDate?.toISOString(),
+                toDate: params.toDate?.toISOString(),
             });
 
             if (currentFetchId === fetchIdRef.current && res) {
@@ -57,6 +59,7 @@ export const useOrderHistory = () => {
             }
         }
     }, []);
+
 
     /** Re-fetch with the last known params */
     const refresh = useCallback(() => {

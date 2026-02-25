@@ -32,7 +32,7 @@ export function DishNarrative({ dish }: DishNarrativeProps) {
 
       {/* Price */}
       <div className="mt-3 text-xl font-semibold text-blue-800 md:text-2xl">
-        {dish.price?.toLocaleString('vi-VN')} 
+        {dish.price != null ? `CHF ${dish.price.toLocaleString()}` : '—'}
       </div>
 
       {/* Slogan */}
@@ -93,7 +93,7 @@ export function DishNarrative({ dish }: DishNarrativeProps) {
             </div>
           )}
 
-  
+
 
           <div className="rounded-lg bg-slate-50 p-4 md:bg-transparent md:p-0">
             <div className="text-sm font-bold uppercase tracking-wider text-gray-600 md:text-xs">

@@ -28,10 +28,7 @@ function formatTime(dateStr?: string) {
 }
 
 function formatCurrency(amount: number) {
-    return new Intl.NumberFormat("vi-VN", {
-        style: "currency",
-        currency: "VND",
-    }).format(amount);
+    return `CHF ${amount.toLocaleString()}`;
 }
 
 const VISIBLE_ITEMS = 3;
@@ -146,8 +143,8 @@ export const KanbanOrderCard: React.FC<KanbanOrderCardProps> = ({
                                 <div className="flex items-center gap-2 min-w-0">
                                     <span
                                         className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${item.itemStatus?.toUpperCase() === "DONE"
-                                                ? "bg-green-400"
-                                                : "bg-gray-300"
+                                            ? "bg-green-400"
+                                            : "bg-gray-300"
                                             }`}
                                     />
                                     <span className="text-gray-700 truncate">

@@ -985,6 +985,7 @@
       "description": "Gérer et suivre toutes les commandes",
       "searchPlaceholder": "Rechercher par numéro, client, personnel...",
       "refresh": "Actualiser",
+      "addNewOrder": "Nouvelle commande",
       "kanbanLabel": "Kanban — Tous les statuts",
       "tabs": {
         "all": "Tout",
@@ -1016,6 +1017,34 @@
       "empty": {
         "title": "Aucune commande trouvée",
         "hint": "Essayez de modifier vos filtres ou votre recherche"
+      },
+      "card": {
+        "table": "Table",
+        "tip": "Pourboire",
+        "items": "articles",
+        "moreItems": "de plus",
+        "collapse": "Réduire",
+        "actions": "Actions",
+        "source": {
+          "DINE_IN": "Sur place",
+          "TAKE_AWAY": "À emporter",
+          "DELIVERY": "Livraison"
+        },
+        "status": {
+          "Pending": "En attente",
+          "In progress": "En cours",
+          "Completed": "Terminée",
+          "Cancelled": "Annulée"
+        },
+        "action": {
+          "view": "Détails",
+          "edit": "Modifier",
+          "start": "Démarrer",
+          "complete": "Terminer",
+          "cancel": "Annuler",
+          "reset": "Réinitialiser",
+          "print": "Imprimer"
+        }
       }
     }
   },
