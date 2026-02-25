@@ -14,6 +14,7 @@ import {
 import { useTranslations } from "next-intl";
 import { TablePagination } from "@/components/ui/table/table-pagination";
 import { useOrderHistory } from "@/features/staff/order-management/hooks/useOrderHistory";
+import { useOrderStatusCounts } from "@/features/staff/order-management/hooks/useOrderStatusCounts";
 import { OrderCard } from "@/features/staff/order-management/components/OrderCard";
 import { KanbanOrderCard } from "@/features/staff/order-management/components/KanbanOrderCard";
 import { OrderStatusCard } from "@/features/staff/order-management/components/OrderStatusCard";
@@ -32,9 +33,9 @@ const STATUS_LV_IDS = {
 interface KanbanColumnConfig {
     key: "pending" | "inProgress" | "completed" | "cancelled";
     headerColor: string;
-    statuses: string[]; // matching orderStatus strings from API
+    statuses: string[];
     primaryKey: "start" | "finish" | "complete" | "reset";
-    secondaryKey: "cancel" | "cancel" | "printInvoice" | "delete";
+    secondaryKey: "cancel" | "printInvoice" | "delete";
 }
 
 const KANBAN_COLUMNS: KanbanColumnConfig[] = [
@@ -51,7 +52,8 @@ const KANBAN_PAGE_SIZE = 50;
 function OrdersContent() {
     const t = useTranslations("Order.List");
 
-    const { orders, isLoading, totalCount, onDataChange, refresh } = useOrderHistory();
+    const { orders, isLoading, totalCount, onDataChange, refresh: refreshList } = useOrderHistory();
+    const { counts, fetchCounts } = useOrderStatusCounts();
 
     const [activeTab, setActiveTab] = useState(0);
     const [searchInput, setSearchInput] = useState("");
@@ -59,25 +61,29 @@ function OrdersContent() {
     const [currentPage, setCurrentPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const [viewMode, setViewMode] = useState<"grid" | "kanban">("grid");
+    const [isRefreshing, setIsRefreshing] = useState(false);
 
     const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-    // Tabs config — label từ i18n
-    const TABS = useMemo(() => [
-        { label: t("tabs.all"), statusLvId: undefined },
-        { label: t("tabs.pending"), statusLvId: STATUS_LV_IDS.pending },
-        { label: t("tabs.inProgress"), statusLvId: STATUS_LV_IDS.inProgress },
-        { label: t("tabs.completed"), statusLvId: STATUS_LV_IDS.completed },
-        { label: t("tabs.cancelled"), statusLvId: STATUS_LV_IDS.cancelled },
-    ], [t]);
+    // Fetch counts once on mount (and after each manual refresh)
+    useEffect(() => { fetchCounts(); }, [fetchCounts]);
 
-    // Status summary cards
+    // Tabs config — label + badge count từ API
+    const TABS = useMemo(() => [
+        { label: t("tabs.all"), statusLvId: undefined, count: counts.all },
+        { label: t("tabs.pending"), statusLvId: STATUS_LV_IDS.pending, count: counts.pending },
+        { label: t("tabs.inProgress"), statusLvId: STATUS_LV_IDS.inProgress, count: counts.inProgress },
+        { label: t("tabs.completed"), statusLvId: STATUS_LV_IDS.completed, count: counts.completed },
+        { label: t("tabs.cancelled"), statusLvId: STATUS_LV_IDS.cancelled, count: counts.cancelled },
+    ], [t, counts]);
+
+    // Status summary cards — counts từ API, không đổi khi filter
     const STATUS_CARDS = useMemo(() => [
-        { label: t("statusCards.all"), colorClass: "bg-gray-100 text-gray-600", icon: <BookmarkCheck className="w-5 h-5" />, statusLvId: undefined },
-        { label: t("statusCards.pending"), colorClass: "bg-blue-100 text-blue-600", icon: <CircleArrowOutDownRight className="w-5 h-5" />, statusLvId: STATUS_LV_IDS.pending },
-        { label: t("statusCards.inProgress"), colorClass: "bg-orange-100 text-orange-600", icon: <Loader className="w-5 h-5" />, statusLvId: STATUS_LV_IDS.inProgress },
-        { label: t("statusCards.cancelled"), colorClass: "bg-red-100 text-red-600", icon: <UserX className="w-5 h-5" />, statusLvId: STATUS_LV_IDS.cancelled },
-    ], [t]);
+        { label: t("statusCards.all"), colorClass: "bg-gray-100 text-gray-600", icon: <BookmarkCheck className="w-5 h-5" />, count: counts.all },
+        { label: t("statusCards.pending"), colorClass: "bg-blue-100 text-blue-600", icon: <CircleArrowOutDownRight className="w-5 h-5" />, count: counts.pending },
+        { label: t("statusCards.inProgress"), colorClass: "bg-orange-100 text-orange-600", icon: <Loader className="w-5 h-5" />, count: counts.inProgress },
+        { label: t("statusCards.cancelled"), colorClass: "bg-red-100 text-red-600", icon: <UserX className="w-5 h-5" />, count: counts.cancelled },
+    ], [t, counts]);
 
     // Debounce search — giống BaseTable
     useEffect(() => {
@@ -103,6 +109,12 @@ function OrdersContent() {
 
     const handleTabChange = (idx: number) => { setActiveTab(idx); setCurrentPage(1); };
     const handleViewMode = (mode: "grid" | "kanban") => { setViewMode(mode); setCurrentPage(1); setActiveTab(0); };
+
+    const handleRefresh = useCallback(async () => {
+        setIsRefreshing(true);
+        await Promise.all([refreshList(), fetchCounts()]);
+        setIsRefreshing(false);
+    }, [refreshList, fetchCounts]);
 
     // Pagination helpers
     const pageInfo = useMemo(() => {
@@ -130,15 +142,6 @@ function OrdersContent() {
         return orders.filter((o) => lower.includes(o.orderStatus.toLowerCase()));
     };
 
-    const getStatusCount = (statusLvId?: number) => {
-        if (statusLvId === undefined) return totalCount;
-        const s = statusLvId === STATUS_LV_IDS.pending ? "pending"
-            : statusLvId === STATUS_LV_IDS.inProgress ? "in progress"
-                : statusLvId === STATUS_LV_IDS.completed ? "completed"
-                    : "cancelled";
-        return orders.filter((o) => o.orderStatus.toLowerCase() === s).length;
-    };
-
     return (
         <div className="w-full flex flex-col h-full">
             {/* ── Title row ───────────────────────────────────────────────── */}
@@ -155,7 +158,7 @@ function OrdersContent() {
                     <OrderStatusCard
                         key={card.label}
                         label={card.label}
-                        count={getStatusCount(card.statusLvId)}
+                        count={card.count}
                         icon={card.icon}
                         colorClass={card.colorClass}
                     />
@@ -168,7 +171,7 @@ function OrdersContent() {
                     <div className="form-list flex flex-col flex-1 min-h-0">
                         {/* Condition / search bar */}
                         <div className="condition-box flex flex-row items-center w-full">
-                            <div className="flex gap-2 items-center flex-1">
+                            <div className="flex gap-2 items-center flex-1 flex-wrap">
                                 {/* Search — giống BaseTable */}
                                 <div className="ms-input ms-editor flex items-center search-input-list max-h-4" style={{ height: "auto" }}>
                                     <div className="flex-1 flex items-center input-container border pointer">
@@ -197,12 +200,18 @@ function OrdersContent() {
                                             <button
                                                 key={tab.label}
                                                 onClick={() => handleTabChange(idx)}
-                                                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${activeTab === idx
+                                                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${activeTab === idx
                                                         ? "bg-blue-600 text-white shadow-sm"
                                                         : "text-gray-600 hover:bg-gray-100"
                                                     }`}
                                             >
                                                 {tab.label}
+                                                <span className={`text-xs rounded-full px-1.5 py-0.5 font-semibold ${activeTab === idx
+                                                        ? "bg-white/20 text-white"
+                                                        : "bg-gray-200 text-gray-600"
+                                                    }`}>
+                                                    {tab.count}
+                                                </span>
                                             </button>
                                         ))}
                                     </div>
@@ -217,11 +226,11 @@ function OrdersContent() {
                             <div className="action flex items-center gap-2">
                                 <button
                                     className="ms-button btn-outline-neutral only-icon"
-                                    onClick={refresh}
+                                    onClick={handleRefresh}
                                     title={t("refresh")}
-                                    disabled={isLoading}
+                                    disabled={isLoading || isRefreshing}
                                 >
-                                    <div className={`icon reload mi icon16${isLoading ? " animate-spin" : ""}`}>&nbsp;</div>
+                                    <div className={`icon reload mi icon16${(isLoading || isRefreshing) ? " animate-spin" : ""}`}>&nbsp;</div>
                                 </button>
 
                                 <div className="flex items-center border border-gray-200 rounded-lg bg-white p-0.5 gap-0.5">
@@ -261,7 +270,10 @@ function OrdersContent() {
                                                         <div className={`flex items-center justify-between ${col.headerColor} rounded-t-2xl px-4 py-3`}>
                                                             <span className="text-white font-semibold text-sm">{t(`kanban.${col.key}`)}</span>
                                                             <span className="text-white text-sm font-medium bg-white/20 rounded-full px-2 py-0.5">
-                                                                {colOrders.length}
+                                                                {col.key === "pending" ? counts.pending
+                                                                    : col.key === "inProgress" ? counts.inProgress
+                                                                        : col.key === "completed" ? counts.completed
+                                                                            : counts.cancelled}
                                                             </span>
                                                         </div>
                                                         <div className="p-3 flex flex-col gap-3">

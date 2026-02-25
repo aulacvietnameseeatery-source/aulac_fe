@@ -1,6 +1,6 @@
 import { api } from '@/lib/http';
 import { ApiResponse, PagedResult } from '@/types/api-response.types';
-import { OrderHistory, OrderHistoryFilters } from '../types/order-history.types';
+import { OrderHistory, OrderHistoryFilters, OrderStatusCount } from '../types/order-history.types';
 
 export const orderHistoryService = {
     getOrderHistory: async (filters: OrderHistoryFilters): Promise<PagedResult<OrderHistory>> => {
@@ -26,6 +26,11 @@ export const orderHistoryService = {
         const path = `/api/orders/history${queryString ? `?${queryString}` : ''}`;
 
         const response = await api.get<ApiResponse<PagedResult<OrderHistory>>>(path);
+        return response.data;
+    },
+
+    getOrderStatusCount: async (): Promise<OrderStatusCount> => {
+        const response = await api.get<ApiResponse<OrderStatusCount>>('/api/orders/count');
         return response.data;
     },
 };

@@ -46,3 +46,12 @@ export interface OrderStatusSummary {
     colorClass: string;
     statusLvId?: number;
 }
+
+// Map từ OrderStatusCountDTO (backend) — dùng cho badge counts ổn định trên tabs
+export interface OrderStatusCount {
+    all: number;
+    pending: number;
+    inProgress: number;
+    completed: number;
+    cancelled: number;
+}
