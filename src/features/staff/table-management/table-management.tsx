@@ -19,7 +19,6 @@ import {
   TableModal,
   DeleteModal,
   TableDetailPanel,
-  TableLegend,
 } from "./components";
 
 const DEFAULT_FILTERS: TableFilters = {
@@ -45,6 +44,9 @@ const TableManagement: React.FC = () => {
   // Detail panel state
   const [detailTable, setDetailTable] = useState<RestaurantTable | null>(null);
   const [isDetailOpen, setIsDetailOpen] = useState(false);
+
+  // Zone collapse state
+  const [collapsedZones, setCollapsedZones] = useState<Set<TableZone>>(new Set());
 
   // Apply filters
   const filteredTables = useMemo(() => {
@@ -180,9 +182,28 @@ const TableManagement: React.FC = () => {
     setIsDetailOpen(true);
   }, []);
 
+  const handleToggleZoneCollapse = useCallback((zone: TableZone) => {
+    setCollapsedZones((prev) => {
+      const next = new Set(prev);
+      if (next.has(zone)) next.delete(zone);
+      else next.add(zone);
+      return next;
+    });
+  }, []);
+
+  const handleToggleZoneOnline = useCallback(
+    (zone: TableZone, online: boolean) => {
+      setTables((prev) =>
+        prev.map((t) => (t.zone === zone ? { ...t, isOnline: online } : t))
+      );
+    },
+    []
+  );
+
   const handleRefresh = useCallback(() => {
     setTables(mockTables);
     setFilters(DEFAULT_FILTERS);
+    setCollapsedZones(new Set());
   }, []);
 
   return (
@@ -218,9 +239,6 @@ const TableManagement: React.FC = () => {
       {/* Dashboard KPI Summary */}
       <DashboardSummary tables={tables} />
 
-      {/* Legend */}
-      <TableLegend />
-
       {/* Filter bar */}
       <FilterBar filters={filters} onFiltersChange={setFilters} />
 
@@ -232,6 +250,9 @@ const TableManagement: React.FC = () => {
               key={zone}
               zone={zone}
               tables={groupedByZone[zone]}
+              collapsed={collapsedZones.has(zone)}
+              onToggleCollapse={handleToggleZoneCollapse}
+              onToggleZoneOnline={handleToggleZoneOnline}
               onEdit={(t) => {
                 setSelectedTable(t);
                 setIsEditModalOpen(true);
