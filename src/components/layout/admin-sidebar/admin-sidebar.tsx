@@ -1,11 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
-  ChevronLeft,
-  ChevronRight,
   LayoutDashboard,
   Table,
   Users,
@@ -19,29 +17,72 @@ import {
   Package,
   LogOut,
   X,
-  FolderOpen
+  FolderOpen,
+  ChevronRight,
+  ChevronLeft,
+  Layers,
+  Merge,
+  CalendarClock,
+  UserRound,
+  LayoutList,
+  Bell,
+  Warehouse,
+  TicketPercent
 } from "lucide-react";
 import { useAuth } from "@/components/providers/auth-provider";
 import { useLogout } from "@/features/customer/auth/login/hooks";
 import { ConfirmModal } from "@/components/layout/admin-sidebar/confirm-modal";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
+import { NotificationPanel } from "./notification-panel";
 
-const navItems = [
-  { key: "dashboard", href: "/dashboard", icon: LayoutDashboard },
-  { key: "tables", href: "/dashboard/tables", icon: Table },
-  { key: "staff", href: "/dashboard/staff", icon: Users },
-  { key: "roles", href: "/dashboard/roles", icon: UserCog },
-  { key: "dish", href: "/dashboard/dish", icon: UtensilsCrossed },
-  { key: "dishCategory", href: "/dashboard/dish-category", icon: FolderOpen },
-  { key: "ingredient", href: "/dashboard/ingredient", icon: Package },
-  { key: "orders", href: "/dashboard/orders", icon: ShoppingBag },
-  { key: "reports", href: "/dashboard/reports", icon: FileText },
-  { key: "emails", href: "/dashboard/emails", icon: Mail },
-  { key: "customers", href: "/dashboard/customers", icon: Users },
-  { key: "reservations", href: "/dashboard/reservations", icon: Users },
-  { key: "promotions", href: "/dashboard/promotions", icon: Tags },
-  { key: "settings", href: "/dashboard/settings", icon: Settings },
+const navigation = [
+  {
+    status: "main",
+    icon: LayoutDashboard,
+    items: [
+      { key: "dashboard", href: "/dashboard", icon: LayoutDashboard },
+      { key: "orders", href: "/dashboard/orders", icon: LayoutList },
+      { key: "reservations", href: "/dashboard/reservations", icon: CalendarClock },
+    ]
+  },
+  {
+    status: "management",
+    icon: Layers,
+    items: [
+      { key: "dish", href: "/dashboard/dish", icon: UtensilsCrossed },
+      { key: "dishCategory", href: "/dashboard/dish-category", icon: FolderOpen },
+      { key: "ingredient", href: "/dashboard/ingredient", icon: Package },
+      { key: "coupons", href: "/dashboard/coupons", icon: TicketPercent },
+    ]
+  },
+  {
+    status: "operations",
+    icon: Merge,
+    items: [
+      { key: "tables", href: "/dashboard/tables", icon: Table },
+      { key: "customers", href: "/dashboard/customers", icon: UserRound },
+    ]
+  },
+  {
+    status: "administration",
+    icon: UserCog,
+    items: [
+      { key: "staff", href: "/dashboard/staff", icon: Users },
+      { key: "roles", href: "/dashboard/roles", icon: UserCog },
+      { key: "reports", href: "/dashboard/reports", icon: FileText },
+    ]
+  },
+  {
+    status: "settings",
+    icon: Settings,
+    items: [
+      { key: "storeSettings", href: "/dashboard/store-settings", icon: Warehouse },
+      { key: "notifications", href: "/dashboard/notifications", icon: Bell },
+      { key: "promotions", href: "/dashboard/promotions", icon: Tags },
+      { key: "emails", href: "/dashboard/emails", icon: Mail },
+    ]
+  }
 ];
 
 interface AdminSidebarProps {
@@ -52,20 +93,52 @@ export function AdminSidebar({ onClose }: AdminSidebarProps) {
   const pathname = usePathname();
   const { userInfo } = useAuth();
   const { mutate: logout, isPending: isLoggingOut } = useLogout();
-  const [isCollapsed, setIsCollapsed] = useState(false);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const t = useTranslations("AdminSidebar");
 
-  const isActive = (href: string) => {
-    // Remove locale prefix from pathname for comparison
-    const pathWithoutLocale = pathname?.replace(/^\/(en|fr|vi)/, '') || pathname;
+  const pathWithoutLocale = useMemo(() => pathname?.replace(/^\/(en|fr|vi)/, '') || pathname, [pathname]);
 
+  const isActive = (href: string) => {
     if (href === "/dashboard") {
       return pathWithoutLocale === "/dashboard";
     }
-    // Exact match for the path or match with trailing slash or query params
     return pathWithoutLocale === href || pathWithoutLocale?.startsWith(href + "/") || pathWithoutLocale?.startsWith(href + "?");
   };
+
+  // Determine which category the current route belongs to
+  const routeCategory = useMemo(() => {
+    return navigation.find(cat =>
+      cat.items.some(item => isActive(item.href))
+    )?.status || "main";
+  }, [pathWithoutLocale]);
+
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [hoverCategory, setHoverCategory] = useState<string | null>(null);
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+
+  // Close notifications when clicking outside the sidebar
+  useEffect(() => {
+    if (!isNotificationsOpen) return;
+
+    const handleClickOutside = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      // We check if it's NOT inside a notification panel or toggle button
+      if (!target.closest('.admin-sidebar-container') && !target.closest('.notification-toggle')) {
+        setIsNotificationsOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isNotificationsOpen]);
+
+  // The category we actually show in column 2
+  const displayedCategory = hoverCategory || selectedCategory || routeCategory;
+
+  const currentCategoryItems = useMemo(() => {
+    return navigation.find(cat => cat.status === displayedCategory)?.items || [];
+  }, [displayedCategory]);
 
   const handleLogoutClick = () => {
     setIsLogoutModalOpen(true);
@@ -78,152 +151,159 @@ export function AdminSidebar({ onClose }: AdminSidebarProps) {
 
   return (
     <>
-      <div
-        className={`
-          h-full bg-gradient-to-b from-[#1A3A51] to-[#0D1D29] flex flex-col relative shadow-2xl border-r border-white/5 transition-all duration-300
-          w-72 md:w-20 ${isCollapsed ? 'lg:w-20' : 'lg:w-72'}
-        `}
-      >
-        {/* Decorative Glow */}
-        <div className="absolute top-0 left-0 w-full h-[200px] bg-[#FFAB2D]/5 blur-[60px] pointer-events-none" />
+      <div className="h-full flex relative shadow-2xl transition-all duration-300 w-[max-content] admin-sidebar-container">
 
-        {/* Close Button (Mobile Only) */}
-        {onClose && (
-          <button
-            onClick={onClose}
-            className="md:hidden absolute top-4 right-4 p-2 text-white/50 hover:text-white transition-colors z-20"
-          >
-            <X className="w-6 h-6" />
-          </button>
-        )}
+        {/* Column 1: Mini Sidebar */}
+        <div className="w-[70px] bg-[#1A3A51] border-r border-white/5 flex flex-col items-center py-6 z-30">
+          <Link href="/dashboard" className="mb-8 px-2 transition-transform hover:scale-105 active:scale-95">
+            <Image
+              width={40}
+              height={40}
+              src="/images/logo.png"
+              alt="An Lac"
+              className="w-10 h-10 object-contain drop-shadow-lg"
+            />
+          </Link>
 
-        {/* Desktop Collapse Toggle */}
+          <div className="flex-1 flex flex-col gap-4 w-full px-2">
+            {navigation.map((cat) => {
+              const Icon = cat.icon;
+              const isRouteActive = routeCategory === cat.status;
+              const isSelected = selectedCategory === cat.status;
+              const isHovered = hoverCategory === cat.status;
+              const isActuallySelected = isSelected || (selectedCategory === null && isRouteActive);
+
+              return (
+                <button
+                  key={cat.status}
+                  onMouseEnter={() => setHoverCategory(cat.status)}
+                  onMouseLeave={() => setHoverCategory(null)}
+                  onClick={() => {
+                    setSelectedCategory(cat.status);
+                    if (isCollapsed) setIsCollapsed(false);
+                  }}
+                  className={`
+                    relative w-full aspect-square flex items-center justify-center rounded-xl transition-all duration-300
+                    ${isActuallySelected
+                      ? "bg-[#FFAB2D] text-[#1A3A51] shadow-[0_0_15px_rgba(255,171,45,0.3)]"
+                      : (isHovered ? "bg-white/10 text-white" : "text-white/40 hover:text-white hover:bg-white/5")
+                    }
+                  `}
+                  title={t(`categories.${cat.status}`)}
+                >
+                  <Icon size={22} className={`${isActuallySelected ? "scale-110" : ""}`} />
+
+                  {isActuallySelected && !isHovered && (
+                    <div className="absolute -left-2 top-1/2 -translate-y-1/2 w-1.5 h-6 bg-[#FFAB2D] rounded-r-full shadow-lg" />
+                  )}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Column 1 Bottom: Notifications + Profile */}
+          <div className="mt-auto px-2 w-full flex flex-col gap-4 items-center">
+            {/* Notification Bell */}
+            <button
+              onClick={() => setIsNotificationsOpen(!isNotificationsOpen)}
+              className={`
+                relative p-3 rounded-xl transition-all group notification-toggle
+                ${isNotificationsOpen ? 'bg-white/10 text-[#FFAB2D]' : 'text-white/40 hover:text-[#FFAB2D] hover:bg-white/5'}
+              `}
+            >
+              <Bell size={20} />
+              <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-red-500 rounded-full border-2 border-[#1A3A51]" />
+            </button>
+
+            {isNotificationsOpen && (
+              <NotificationPanel onClose={() => setIsNotificationsOpen(false)} />
+            )}
+
+            <button
+              onClick={handleLogoutClick}
+              disabled={isLoggingOut}
+              className="p-3 rounded-xl text-white/40 hover:text-[#FF2D2D] hover:bg-red-500/10 transition-colors"
+              title={t('logout')}
+            >
+              <LogOut size={20} className={isLoggingOut ? "animate-spin" : ""} />
+            </button>
+            <div className="relative group cursor-pointer">
+              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#FFAB2D] to-[#E68A00] flex items-center justify-center text-[#1A3A51] font-bold text-sm shadow-md ring-2 ring-white/10 group-hover:ring-[#FFAB2D] transition-all">
+                {userInfo?.username ? userInfo.username.charAt(0).toUpperCase() : "A"}
+              </div>
+              <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-[#1A3A51] rounded-full" />
+
+              {/* Tooltip profile */}
+              <div className="absolute left-full ml-4 bottom-0 w-48 bg-[#1A3A51] border border-white/10 rounded-xl shadow-2xl p-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+                <p className="text-white text-sm font-semibold truncate">{userInfo?.username || "Admin"}</p>
+                <p className="text-white/50 text-[10px] uppercase tracking-wider mt-1">{userInfo?.roles?.[0] || t('managerPortal')}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Column 2: Specific Menu */}
+        <div
+          className={`
+            bg-[#0D1D29] flex flex-col h-full border-r border-white/5 z-20 transition-all duration-300 overflow-hidden
+            ${isCollapsed ? 'w-0 border-r-0 shadow-none' : 'w-[240px] shadow-2xl'}
+          `}
+        >
+          <div className="p-6 border-b border-white/5 flex items-center justify-between whitespace-nowrap">
+            <h3 className="text-[#FFAB2D] text-[11px] font-bold tracking-[0.2em] uppercase">
+              {t(`categories.${displayedCategory}`)}
+            </h3>
+            {onClose && (
+              <button onClick={onClose} className="text-white/40 hover:text-white md:hidden">
+                <X size={18} />
+              </button>
+            )}
+          </div>
+
+          <nav className="flex-1 p-4 overflow-y-auto custom-scrollbar">
+            <ul className="space-y-1.5">
+              {currentCategoryItems.map((item) => {
+                const Icon = item.icon;
+                const active = isActive(item.href);
+                const label = t(item.key);
+
+                return (
+                  <li key={item.key}>
+                    <Link
+                      href={item.href}
+                      onClick={onClose}
+                      className={`
+                        group flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300
+                        ${active
+                          ? "bg-white/5 text-[#FFAB2D] shadow-inner"
+                          : "text-white/60 hover:text-white hover:bg-white/5"
+                        }
+                      `}
+                    >
+                      <Icon size={18} className={`transition-transform duration-300 ${active ? "scale-110" : "group-hover:translate-x-1"}`} />
+                      <span className="text-[13px] font-medium">{label}</span>
+                      {active && (
+                        <div className="ml-auto">
+                          <ChevronRight size={14} className="opacity-50" />
+                        </div>
+                      )}
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </nav>
+        </div>
+
+        {/* Global Collapse Toggle - Sticky on the edge */}
         <button
           onClick={() => setIsCollapsed(!isCollapsed)}
-          className="hidden lg:flex absolute -right-3 top-20 w-6 h-6 bg-[#1A3A51] border border-white/10 rounded-full items-center justify-center text-[#FFAB2D] hover:bg-[#FFAB2D] hover:text-[#1A3A51] transition-all duration-300 z-50 shadow-lg"
+          className="absolute -right-3 top-20 w-6 h-6 bg-[#1A3A51] border border-white/10 rounded-full flex items-center justify-center text-[#FFAB2D] hover:bg-[#FFAB2D] hover:text-[#1A3A51] transition-all duration-300 z-50 shadow-lg"
+          title={isCollapsed ? t('expand') : t('collapse')}
         >
           {isCollapsed ? <ChevronRight size={14} /> : <ChevronLeft size={14} />}
         </button>
 
-        {/* Logo Section */}
-        <div className="px-8 md:px-2 lg:px-2 pt-5 pb-1 flex flex-col items-center relative z-10 border-b border-white/5 transition-all duration-300 min-h-[80px] justify-center">
-          {/* Full Logo (Mobile & Desktop Expanded) */}
-          {!isCollapsed && (
-            <Image
-              width={1000}
-              height={1000}
-              style={{ height: "100px", width: "auto" }}
-              src="/images/logo.png"
-              alt="An Lac Logo"
-              className="block md:hidden lg:block w-full h-full object-contain drop-shadow-md"
-            />
-          )}
-
-          {/* Icon Only (Tablet & Desktop Collapsed) */}
-          <div
-            className={`
-              w-16 h-16 bg-white/5 rounded-xl items-center justify-center p-2
-              ${isCollapsed ? 'lg:flex hidden' : 'hidden md:flex lg:hidden'}
-            `}
-          >
-            <Image
-              width={100}
-              height={100}
-              src="/images/logo.png"
-              alt="An Lac Logo"
-              className="w-full h-full object-contain drop-shadow-md"
-            />
-          </div>
-
-          <div className={`text-center mt-0 md:hidden ${isCollapsed ? 'lg:hidden' : 'lg:block'}`}>
-            <h2 className="text-white text-xl font-bold font-display tracking-tight">An Lac</h2>
-            <p className="text-[#FFAB2D]/80 text-[10px] font-medium uppercase tracking-[0.2em] mt-1">{t('managerPortal')}</p>
-          </div>
-        </div>
-
-        {/* Navigation */}
-        <nav className="flex-1 px-4 md:px-2 lg:px-2 py-6 overflow-y-auto custom-scrollbar">
-          <div className="space-y-1.5">
-            {navItems.map((item) => {
-              const Icon = item.icon;
-              const active = isActive(item.href);
-              const label = t(item.key);
-
-              return (
-                <Link
-                  key={item.key}
-                  href={item.href}
-                  onClick={onClose} // Auto close on mobile
-                  className={`
-                    group flex items-center gap-3 px-4 md:px-0 lg:px-0 py-3 md:py-3 lg:py-3 rounded-xl transition-all duration-300 relative overflow-hidden md:justify-center 
-                    ${isCollapsed ? 'lg:justify-center' : 'lg:justify-start lg:px-4'}
-                    ${active
-                      ? "text-[#FFAB2D] bg-white/5 shadow-lg shadow-black/20 ring-1 ring-white/5"
-                      : "text-white/60 hover:text-white hover:bg-white/5 hover:shadow-md"
-                    }
-                  `}
-                  title={isCollapsed ? label : undefined} // Tooltip for collapsed state
-                >
-                  {/* Active Indicator Line */}
-                  {active && (
-                    <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-[#FFAB2D] rounded-r-full shadow-[0_0_12px_#FFAB2D]" />
-                  )}
-
-                  <Icon className={`w-5 h-5 transition-transform duration-300 ${active ? "scale-110" : "group-hover:scale-110"}`} />
-                  <span
-                    className={`
-                      text-[13px] font-medium tracking-wide ${active ? "font-semibold" : ""} 
-                      md:hidden ${isCollapsed ? 'lg:hidden' : 'lg:block'}
-                    `}
-                  >
-                    {label}
-                  </span>
-
-                  {/* Hover Glow */}
-                  <div className={`absolute inset-0 bg-gradient-to-r from-[#FFAB2D]/0 via-[#FFAB2D]/[0.03] to-[#FFAB2D]/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 ${active ? "hidden" : ""}`} />
-                </Link>
-              );
-            })}
-          </div>
-        </nav>
-
-        {/* User Profile Section */}
-        <div className={`p-4 md:p-2 mx-4 md:mx-2 mb-4 bg-white/5 rounded-2xl border border-white/5 shadow-lg backdrop-blur-sm ${isCollapsed ? 'lg:p-2 lg:mx-2 bg-transparent border-0 shadow-none' : 'lg:p-4 lg:mx-4'}`}>
-          <div className={`flex items-center gap-3 md:justify-center ${isCollapsed ? 'lg:justify-center' : 'lg:justify-start'}`}>
-            <div className={`flex items-center gap-3 flex-1 min-w-0 md:hidden ${isCollapsed ? 'lg:hidden' : 'lg:flex'}`}>
-              <div className="relative">
-                <div className="w-10 h-10 bg-gradient-to-br from-[#FFAB2D] to-[#E68A00] rounded-full flex items-center justify-center text-[#1A3A51] font-bold shadow-lg ring-2 ring-[#1A3A51] overflow-hidden">
-                  {/* Use first letter of username or AD as fallback */}
-                  {userInfo?.username ? userInfo.username.charAt(0).toUpperCase() : "AD"}
-                </div>
-                <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-[#1A3A51]" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <div className="text-white text-sm font-semibold truncate">
-                  {userInfo?.username || "Admin User"}
-                </div>
-                {/* Show roles if available */}
-                <div className="text-white/40 text-[10px] truncate">
-                  {userInfo?.roles && userInfo.roles.length > 0 ? userInfo.roles.join(", ") : "Online"}
-                </div>
-              </div>
-            </div>
-            <button
-              onClick={handleLogoutClick}
-              disabled={isLoggingOut}
-              className={`
-                transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed
-                ${isCollapsed || 'md:hidden' /* Logic for collapsed state styling */
-                  ? 'md:flex lg:flex p-3 rounded-xl bg-white/10 text-[#FFAB2D] hover:bg-[#FF2D2D] hover:text-white mx-auto'
-                  : 'p-2 rounded-lg text-white/40 hover:text-[#FF2D2D] hover:bg-[#FF2D2D]/10'
-                }
-              `}
-              title={isLoggingOut ? t('loggingOut') : t('logout')}
-            >
-              <LogOut className={`${isCollapsed ? 'w-5 h-5' : 'w-4 h-4 md:w-5 md:h-5'} ${isLoggingOut ? 'animate-pulse' : ''}`} />
-            </button>
-          </div>
-        </div>
       </div>
 
       <ConfirmModal
@@ -236,6 +316,23 @@ export function AdminSidebar({ onClose }: AdminSidebarProps) {
         cancelText={t('cancel')}
         variant="danger"
       />
+
+      {/* Styled scrollbar for the detail menu */}
+      <style jsx global>{`
+        .custom-scrollbar::-webkit-scrollbar {
+          width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+          background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+          background: rgba(255, 255, 255, 0.05);
+          border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+          background: rgba(255, 255, 255, 0.1);
+        }
+      `}</style>
     </>
   );
 }

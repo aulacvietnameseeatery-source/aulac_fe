@@ -1103,6 +1103,13 @@
     }
   },
   "AdminSidebar": {
+    "categories": {
+      "main": "MAIN",
+      "management": "MANAGEMENT",
+      "operations": "OPERATIONS",
+      "administration": "ADMINISTRATION",
+      "settings": "SETTINGS"
+    },
     "dashboard": "Dashboard",
     "tables": "Tables",
     "staff": "Staff",
@@ -1110,17 +1117,36 @@
     "dish": "Dish",
     "dishCategory": "Dish Category",
     "ingredient": "Ingredient",
+    "coupons": "Coupons",
     "orders": "Orders",
     "reports": "Reports",
     "emails": "Emails",
     "customers": "Customers",
     "reservations": "Reservations",
     "promotions": "Promotions",
-    "settings": "Settings",
+    "storeSettings": "Store Settings",
+    "notifications": "Notifications",
     "logout": "Logout",
     "loggingOut": "Logging out...",
     "managerPortal": "Manager Portal",
     "logoutMessage": "Are you sure you want to logout? You will be redirected to the login page.",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "expand": "Expand",
+    "collapse": "Collapse"
+  },
+  "Notifications": {
+    "title": "Notifications",
+    "markAllRead": "Mark all as read",
+    "tabs": {
+      "all": "All",
+      "unread": "Unread",
+      "inbox": "Inbox",
+      "kitchen": "Kitchen",
+      "orders": "Orders"
+    },
+    "empty": "No notifications",
+    "time": {
+      "ago": "{time} ago"
+    }
   }
 }

@@ -1049,6 +1049,13 @@
     }
   },
   "AdminSidebar": {
+    "categories": {
+      "main": "PRINCIPAL",
+      "management": "GESTION",
+      "operations": "OPÉRATIONS",
+      "administration": "ADMINISTRATION",
+      "settings": "RÉGLAGES"
+    },
     "dashboard": "Tableau de bord",
     "tables": "Tables",
     "staff": "Personnel",
@@ -1056,16 +1063,35 @@
     "dish": "Plats",
     "dishCategory": "Catégorie de plat",
     "ingredient": "Ingrédients",
+    "coupons": "Coupons",
     "orders": "Commandes",
     "reports": "Rapports",
     "emails": "E-mails",
     "customers": "Clients",
     "promotions": "Promotions",
-    "settings": "Paramètres",
+    "storeSettings": "Paramètres du magasin",
+    "notifications": "Notifications",
     "logout": "Déconnexion",
     "loggingOut": "Déconnexion...",
     "managerPortal": "Portail Gestionnaire",
     "logoutMessage": "Êtes-vous sûr de vouloir vous déconnecter ? Vous serez redirigé vers la page de connexion.",
-    "cancel": "Annuler"
+    "cancel": "Annuler",
+    "expand": "Agrandir",
+    "collapse": "Réduire"
+  },
+  "Notifications": {
+    "title": "Notifications",
+    "markAllRead": "Tout marquer comme lu",
+    "tabs": {
+      "all": "Tout",
+      "unread": "Non lu",
+      "inbox": "Boîte de réception",
+      "kitchen": "Cuisine",
+      "orders": "Commandes"
+    },
+    "empty": "Aucune notification",
+    "time": {
+      "ago": "Il y a {time}"
+    }
   }
 }

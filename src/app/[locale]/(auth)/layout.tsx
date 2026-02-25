@@ -57,7 +57,7 @@ export default function DashboardLayout({
               onClick={() => setIsMobileMenuOpen(false)}
             />
             {/* Sidebar Drawer */}
-            <div className="absolute left-0 top-0 bottom-0 w-72 animate-in slide-in-from-left duration-300 shadow-2xl">
+            <div className="absolute left-0 top-0 bottom-0 w-[310px] animate-in slide-in-from-left duration-300 shadow-2xl">
               <AdminSidebar onClose={() => setIsMobileMenuOpen(false)} />
             </div>
           </div>

@@ -1104,6 +1104,13 @@
     }
   },
   "AdminSidebar": {
+    "categories": {
+      "main": "CHÍNH",
+      "management": "QUẢN LÝ",
+      "operations": "VẬN HÀNH",
+      "administration": "QUẢN TRỊ",
+      "settings": "CÀI ĐẶT"
+    },
     "dashboard": "Bảng điều khiển",
     "tables": "Bàn",
     "staff": "Nhân viên",
@@ -1111,16 +1118,35 @@
     "dish": "Món ăn",
     "dishCategory": "Danh mục món",
     "ingredient": "Nguyên liệu",
+    "coupons": "Mã giảm giá",
     "orders": "Đơn hàng",
     "reports": "Báo cáo",
     "emails": "Email",
     "customers": "Khách hàng",
     "promotions": "Khuyến mãi",
-    "settings": "Cài đặt",
+    "storeSettings": "Cài đặt cửa hàng",
+    "notifications": "Thông báo",
     "logout": "Đăng xuất",
     "loggingOut": "Đang đăng xuất...",
     "managerPortal": "Cổng Quản Lý",
     "logoutMessage": "Bạn có chắc chắn muốn đăng xuất? Bạn sẽ được chuyển hướng đến trang đăng nhập.",
-    "cancel": "Hủy"
+    "cancel": "Hủy",
+    "expand": "Mở rộng",
+    "collapse": "Thu gọn"
+  },
+  "Notifications": {
+    "title": "Thông báo",
+    "markAllRead": "Đánh dấu tất cả là đã đọc",
+    "tabs": {
+      "all": "Tất cả",
+      "unread": "Chưa đọc",
+      "inbox": "Hộp thư",
+      "kitchen": "Bếp",
+      "orders": "Đơn hàng"
+    },
+    "empty": "Không có thông báo nào",
+    "time": {
+      "ago": "{time} trước"
+    }
   }
 }
