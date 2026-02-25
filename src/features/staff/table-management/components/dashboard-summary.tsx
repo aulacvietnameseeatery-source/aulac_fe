@@ -134,7 +134,7 @@ const MOCK_RESERVATIONS: IncomingReservation[] = [
     pax: 8,
     reservedTime: new Date(Date.now() + 90 * 60_000).toISOString(),
     tableCode: "V-01",
-    zone: "VIP_ROOM",
+    zone: "OUTDOOR",
     status: "PENDING",
     preOrderSummary: "3× Wagyu Set",
   },
@@ -144,7 +144,7 @@ const MOCK_RESERVATIONS: IncomingReservation[] = [
     pax: 2,
     reservedTime: new Date(Date.now() + 130 * 60_000).toISOString(),
     tableCode: "P-01",
-    zone: "PATIO",
+    zone: "OUTDOOR",
     status: "PENDING",
   },
 ];

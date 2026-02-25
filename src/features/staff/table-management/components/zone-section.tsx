@@ -42,8 +42,6 @@ const ZONE_SUBTITLES: Record<TableZone, string> = {
   INDOOR: "Main dining area",
   OUTDOOR: "Al fresco seating",
   ROOFTOP: "Upper-level terrace",
-  PATIO: "Covered patio area",
-  VIP_ROOM: "Private dining rooms",
 };
 
 export const ZoneSection: React.FC<ZoneSectionProps> = ({
