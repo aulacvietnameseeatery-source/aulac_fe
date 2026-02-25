@@ -110,6 +110,7 @@
     },
     "Composition": {
       "label": "La Composition",
+      "no_composition": "Aucune information de composition disponible",
       "item_1_title": "Vermicelles de Riz",
       "item_1_sub": "Style Hue",
       "item_1_desc": "Nouilles de riz épaisses et cylindriques avec une mastication satisfaisante, traditionnelles du Centre Vietnam.",

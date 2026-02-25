@@ -3,7 +3,7 @@ import HTMLFlipBook from 'react-pageflip';
 import { MenuCategory, MenuItemData } from '../data/mock-menu'; // Chỉ import Type từ mock-menu
 import { LeftPage } from './left-page';
 import { RightPage } from './right-page';
-import { ItemDetailModal } from './item-detail-modal';
+import { DishDetailModal } from '@/features/customer/dish-details';
 
 // Page Component Wrapper
 const Page = React.forwardRef<HTMLDivElement, { children: React.ReactNode, number?: number, className?: string }>((props, ref) => {
@@ -197,15 +197,11 @@ export const BookFrame = ({ menuData, onAddToCart }: BookFrameProps) => {
         >
 
             {/* Detail Modal */}
-            {selectedItem && (
-                <ItemDetailModal
-                    item={selectedItem}
-                    onClose={() => setSelectedItem(null)}
-                    onAddToCart={(item) => {
-                        if (onAddToCart) onAddToCart(item);
-                    }}
-                />
-            )}
+            <DishDetailModal
+                dishId={selectedItem ? parseInt(selectedItem.id) : null}
+                isOpen={selectedItem !== null}
+                onClose={() => setSelectedItem(null)}
+            />
 
             {/* CATEGORY FILTER (Responsive) */}
             {isMobile ? (

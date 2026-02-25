@@ -19,39 +19,39 @@ export function DishNarrative({ dish }: DishNarrativeProps) {
     <div>
       <div className="border-b border-blue-800/20 pb-2">
         {dish.categoryName && (
-          <div className="inline-block rounded-full bg-blue-800/10 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-blue-800 md:px-4 md:py-1.5 md:text-xs">
+          <div className="font-body inline-block rounded-full bg-blue-800/10 px-3 py-1 text-xs font-medium text-blue-800 md:px-4 md:py-1.5">
             {dish.categoryName}
           </div>
         )}
       </div>
 
       {/* Dish Name */}
-      <h2 className="mt-4 text-2xl font-bold leading-8 text-neutral-900 md:mt-6 md:text-3xl md:leading-9 lg:text-4xl lg:leading-10">
+      <h2 className="font-display mt-4 text-2xl font-semibold leading-8 text-neutral-900 md:mt-6 md:text-3xl md:leading-9 lg:text-4xl lg:leading-10">
         {dish.dishName}
       </h2>
 
       {/* Price */}
-      <div className="mt-3 text-xl font-semibold text-blue-800 md:text-2xl">
-        {dish.price != null ? `CHF ${dish.price.toLocaleString()}` : '—'}
+      <div className="font-display mt-3 text-xl font-semibold text-blue-800 md:text-2xl">
+        {dish.price?.toLocaleString('vi-VN')} 
       </div>
 
       {/* Slogan */}
       {dish.slogan && (
-        <div className="mt-4 text-2xl italic leading-8 text-gray-700 md:text-2xl md:leading-8">
+        <div className="font-body mt-4 text-lg italic leading-7 text-gray-700 md:text-xl md:leading-8">
           {dish.slogan}
         </div>
       )}
 
       {/* Short Description */}
       {dish.shortDescription && (
-        <div className="mt-3 text-xl leading-8 text-gray-600 md:text-xl md:leading-8">
+        <div className="font-body mt-3 text-base leading-7 text-gray-600 md:text-lg md:leading-8">
           {dish.shortDescription}
         </div>
       )}
 
       {/* Full Description */}
       {dish.description && (
-        <div className="mt-4 text-xl leading-8 text-gray-600 md:mt-6 md:text-xl md:leading-8">
+        <div className="font-body mt-4 text-base leading-7 text-gray-600 md:mt-6 md:text-lg md:leading-8">
           <span className="mr-2 inline-block align-top text-3xl font-semibold text-gray-900 md:text-3xl">{dish.description.charAt(0)}</span>
           {dish.description.substring(1)}
         </div>
@@ -62,10 +62,10 @@ export function DishNarrative({ dish }: DishNarrativeProps) {
         <div className="grid grid-cols-2 gap-4 md:gap-x-10 md:gap-y-6">
           {dish.prepTimeMinutes && (
             <div className="rounded-lg bg-slate-50 p-4 md:bg-transparent md:p-0">
-              <div className="text-sm font-bold uppercase tracking-wider text-gray-600 md:text-xs">
+              <div className="font-body text-xs font-medium text-gray-600 md:text-sm">
                 Prep Time
               </div>
-              <div className="mt-2 text-xl font-bold text-neutral-900 md:mt-1 md:text-base md:font-medium">
+              <div className="font-display mt-2 text-lg font-semibold text-neutral-900 md:mt-1 md:text-base">
                 {dish.prepTimeMinutes} min
               </div>
             </div>
@@ -73,10 +73,10 @@ export function DishNarrative({ dish }: DishNarrativeProps) {
 
           {dish.calories && (
             <div className="rounded-lg bg-slate-50 p-4 md:bg-transparent md:p-0">
-              <div className="text-sm font-bold uppercase tracking-wider text-gray-600 md:text-xs">
+              <div className="font-body text-xs font-medium text-gray-600 md:text-sm">
                 Calories
               </div>
-              <div className="mt-2 text-xl font-bold text-neutral-900 md:mt-1 md:text-base md:font-medium">
+              <div className="font-display mt-2 text-lg font-semibold text-neutral-900 md:mt-1 md:text-base">
                 {dish.calories} kcal
               </div>
             </div>
@@ -84,22 +84,22 @@ export function DishNarrative({ dish }: DishNarrativeProps) {
 
           {dish.cookTimeMinutes && (
             <div className="rounded-lg bg-slate-50 p-4 md:bg-transparent md:p-0">
-              <div className="text-sm font-bold uppercase tracking-wider text-gray-600 md:text-xs">
+              <div className="font-body text-xs font-medium text-gray-600 md:text-sm">
                 Cook Time
               </div>
-              <div className="mt-2 text-xl font-bold text-neutral-900 md:mt-1 md:text-base md:font-medium">
+              <div className="font-display mt-2 text-lg font-semibold text-neutral-900 md:mt-1 md:text-base">
                 {dish.cookTimeMinutes} min
               </div>
             </div>
           )}
 
-
+  
 
           <div className="rounded-lg bg-slate-50 p-4 md:bg-transparent md:p-0">
-            <div className="text-sm font-bold uppercase tracking-wider text-gray-600 md:text-xs">
+            <div className="font-body text-xs font-medium text-gray-600 md:text-sm">
               Spice Level
             </div>
-            <div className="mt-2 text-xl font-bold text-orange-600 md:mt-1 md:text-base md:font-medium">
+            <div className="font-display mt-2 text-lg font-semibold text-orange-600 md:mt-1 md:text-base">
               Medium
             </div>
           </div>

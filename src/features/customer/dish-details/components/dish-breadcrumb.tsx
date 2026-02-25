@@ -24,7 +24,7 @@ export function DishBreadcrumb({ dish }: DishBreadcrumbProps) {
                 className="group flex items-center gap-1.5 rounded-md px-2 py-1.5 transition-all duration-200 hover:bg-stone-100 active:scale-95"
               >
                 <Home className="h-3.5 w-3.5 text-stone-600 transition-colors group-hover:text-stone-900 md:h-4 md:w-4" />
-                <span className="font-semibold text-stone-700 transition-colors group-hover:text-stone-900">
+                <span className="font-body font-medium text-stone-700 transition-colors group-hover:text-stone-900">
                   {t("home")}
                 </span>
               </Link>
@@ -42,7 +42,7 @@ export function DishBreadcrumb({ dish }: DishBreadcrumbProps) {
                 className="group flex items-center gap-1.5 rounded-md px-2 py-1.5 transition-all duration-200 hover:bg-stone-100 active:scale-95"
               >
                 <UtensilsCrossed className="h-3.5 w-3.5 text-stone-600 transition-colors group-hover:text-stone-900 md:h-4 md:w-4" />
-                <span className="font-semibold text-stone-700 transition-colors group-hover:text-stone-900">
+                <span className="font-body font-medium text-stone-700 transition-colors group-hover:text-stone-900">
                   {t("menu")}
                 </span>
               </Link>
@@ -55,7 +55,7 @@ export function DishBreadcrumb({ dish }: DishBreadcrumbProps) {
 
             {/* Current Page */}
             <li className="flex items-center">
-              <span className="flex items-center gap-1.5 rounded-md bg-stone-200 px-2 py-1.5 font-bold text-stone-900">
+              <span className="font-body flex items-center gap-1.5 rounded-md bg-stone-200 px-2 py-1.5 font-semibold text-stone-900">
                 {dish.dishName}
               </span>
             </li>

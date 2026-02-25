@@ -12,7 +12,7 @@ export function LoginHeader() {
       </div>
 
       <div className="pt-2 text-center text-4xl font-bold leading-10 text-gray-800">
-        Au Lac
+        An Lac
       </div>
 
       <div className="pt-2 text-center text-xs font-semibold uppercase leading-4 tracking-[2.40px] text-blue-950/70">
