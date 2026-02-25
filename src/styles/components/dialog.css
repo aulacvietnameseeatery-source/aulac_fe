@@ -8,8 +8,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 49;
-    /* Đảm bảo luôn nằm trên cùng */
+    z-index: 50;
+    /* Đảm bảo luôn nằm trên cùng, above Drawer z-40 */
     animation: fadeIn 0.2s ease-out;
     padding: 16px;
     /* Để modal không dính sát lề trên mobile */

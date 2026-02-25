@@ -13,7 +13,6 @@ export function HeroSection() {
                 height={1080}
                 src="/images/qr-scan/hero-section/Diner.png"
                 alt="Atmosphere"
-                fill
                 className="object-cover transition-transform duration-1000 hover:scale-105"
             />
 

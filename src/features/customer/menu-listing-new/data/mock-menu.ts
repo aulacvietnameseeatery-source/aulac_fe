@@ -1,3 +1,10 @@
+export interface I18nText {
+    vi: string;
+    en: string;
+    fr: string;
+}
+
+// UI chỉ nhận string
 export interface MenuItemData {
     id: string;
     name: string;
@@ -6,9 +13,9 @@ export interface MenuItemData {
     image: string;
 }
 
+// UI chỉ nhận string
 export interface MenuCategory {
     id: string;
     name: string;
     items: MenuItemData[];
 }
-
