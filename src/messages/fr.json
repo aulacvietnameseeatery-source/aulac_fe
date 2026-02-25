@@ -979,6 +979,46 @@
       }
     }
   },
+  "Order": {
+    "List": {
+      "title": "Commandes",
+      "description": "Gérer et suivre toutes les commandes",
+      "searchPlaceholder": "Rechercher par numéro, client, personnel...",
+      "refresh": "Actualiser",
+      "kanbanLabel": "Kanban — Tous les statuts",
+      "tabs": {
+        "all": "Tout",
+        "pending": "En attente",
+        "inProgress": "En cours",
+        "completed": "Terminée",
+        "cancelled": "Annulée"
+      },
+      "statusCards": {
+        "all": "Tout",
+        "pending": "En attente",
+        "inProgress": "En cours",
+        "cancelled": "Annulée"
+      },
+      "kanban": {
+        "pending": "En attente",
+        "inProgress": "En cours",
+        "completed": "Terminée",
+        "cancelled": "Annulée",
+        "empty": "Aucune commande",
+        "start": "Démarrer",
+        "finish": "Terminer",
+        "complete": "Finaliser",
+        "printInvoice": "Imprimer la facture",
+        "reset": "Réinitialiser",
+        "delete": "Supprimer",
+        "cancel": "Annuler"
+      },
+      "empty": {
+        "title": "Aucune commande trouvée",
+        "hint": "Essayez de modifier vos filtres ou votre recherche"
+      }
+    }
+  },
   "AdminSidebar": {
     "dashboard": "Tableau de bord",
     "tables": "Tables",

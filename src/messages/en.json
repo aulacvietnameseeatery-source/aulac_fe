@@ -1033,6 +1033,46 @@
       }
     }
   },
+  "Order": {
+    "List": {
+      "title": "Orders",
+      "description": "Manage and track all orders",
+      "searchPlaceholder": "Search by order ID, customer, staff...",
+      "refresh": "Refresh",
+      "kanbanLabel": "Kanban — All statuses",
+      "tabs": {
+        "all": "All",
+        "pending": "Pending",
+        "inProgress": "In Progress",
+        "completed": "Completed",
+        "cancelled": "Cancelled"
+      },
+      "statusCards": {
+        "all": "All",
+        "pending": "Pending",
+        "inProgress": "In Progress",
+        "cancelled": "Cancelled"
+      },
+      "kanban": {
+        "pending": "Pending",
+        "inProgress": "In Progress",
+        "completed": "Completed",
+        "cancelled": "Cancelled",
+        "empty": "No orders",
+        "start": "Start",
+        "finish": "Complete",
+        "complete": "Done",
+        "printInvoice": "Print Invoice",
+        "reset": "Reset",
+        "delete": "Delete",
+        "cancel": "Cancel"
+      },
+      "empty": {
+        "title": "No orders found",
+        "hint": "Try adjusting your filters or search query"
+      }
+    }
+  },
   "AdminSidebar": {
     "dashboard": "Dashboard",
     "tables": "Tables",

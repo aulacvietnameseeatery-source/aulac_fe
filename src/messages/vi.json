@@ -1034,6 +1034,46 @@
       }
     }
   },
+  "Order": {
+    "List": {
+      "title": "Đơn hàng",
+      "description": "Quản lý và theo dõi tất cả đơn hàng",
+      "searchPlaceholder": "Tìm theo mã đơn, khách hàng, nhân viên...",
+      "refresh": "Làm mới",
+      "kanbanLabel": "Kanban — Tất cả trạng thái",
+      "tabs": {
+        "all": "Tất cả",
+        "pending": "Chờ xử lý",
+        "inProgress": "Đang làm",
+        "completed": "Hoàn thành",
+        "cancelled": "Đã huỷ"
+      },
+      "statusCards": {
+        "all": "Tất cả",
+        "pending": "Chờ xử lý",
+        "inProgress": "Đang làm",
+        "cancelled": "Đã huỷ"
+      },
+      "kanban": {
+        "pending": "Chờ xử lý",
+        "inProgress": "Đang làm",
+        "completed": "Hoàn thành",
+        "cancelled": "Đã huỷ",
+        "empty": "Không có đơn hàng",
+        "start": "Bắt đầu",
+        "finish": "Hoàn thành",
+        "complete": "Hoàn tất",
+        "printInvoice": "In hoá đơn",
+        "reset": "Đặt lại",
+        "delete": "Xoá",
+        "cancel": "Huỷ"
+      },
+      "empty": {
+        "title": "Không có đơn hàng nào",
+        "hint": "Thử thay đổi bộ lọc hoặc tìm kiếm khác"
+      }
+    }
+  },
   "AdminSidebar": {
     "dashboard": "Bảng điều khiển",
     "tables": "Bàn",
