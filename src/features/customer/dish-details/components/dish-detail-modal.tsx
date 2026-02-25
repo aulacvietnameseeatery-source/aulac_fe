@@ -4,7 +4,8 @@ import { useEffect, useState, useRef } from "react";
 import { createPortal } from "react-dom";
 import { X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { OrderPopup, useDishDetail } from "@/features/customer/dish-details";
+import { useDishDetail } from "@/features/customer/dish-details";
+import { TableSelectionModal } from "@/features/customer/menu-listing-new/components/table-selection-modal";
 import { useTranslations } from "next-intl";
 import Script from "next/script";
 
@@ -93,7 +94,7 @@ export function DishDetailModal({ dishId, isOpen, onClose }: DishDetailModalProp
             {/* Close */}
             <button
               onClick={onClose}
-              className="absolute top-3 right-3 z-[10000] flex h-8 w-8 items-center justify-center rounded-full bg-white/90 backdrop-blur-sm text-gray-700 shadow-md hover:bg-white hover:text-gray-900 transition-all duration-200"
+              className={`absolute top-3 right-3 z-[10000] flex h-8 w-8 items-center justify-center rounded-full bg-white/90 backdrop-blur-sm text-gray-700 shadow-md hover:bg-white hover:text-gray-900 transition-all duration-200 ${openPopup ? "hidden" : ""}`}
             >
               <X className="h-4 w-4" />
             </button>
@@ -168,7 +169,7 @@ export function DishDetailModal({ dishId, isOpen, onClose }: DishDetailModalProp
                 </div>
 
                 {/* ── RIGHT: Info panel ── */}
-                <div className="flex-1 p-4 overflow-y-auto no-scrollbar max-h-[400px] md:max-h-[500px]">
+                <div className="flex-1 p-4 overflow-y-auto no-scrollbar max-h-[400px] md:max-h-[500px] bg-white">
                   {/* Category */}
                   {dishData.data.categoryName && (
                     <span className="font-body inline-block rounded-full bg-blue-800/10 px-3 py-0.5 text-xs font-medium text-blue-800">
@@ -208,7 +209,7 @@ export function DishDetailModal({ dishId, isOpen, onClose }: DishDetailModalProp
                   )}
 
                   {/* Stats */}
-                  <div className="mt-3 grid grid-cols-2 gap-x-4 gap-y-2 border-t border-slate-200 pt-3">
+                  <div className="mt-4 grid grid-cols-2 gap-x-4 gap-y-2 border-t border-slate-200 pt-4">
                     {dishData.data.prepTimeMinutes && (
                       <div>
                         <div className="font-body text-[10px] text-gray-400 uppercase tracking-wide">Prep Time</div>
@@ -230,7 +231,7 @@ export function DishDetailModal({ dishId, isOpen, onClose }: DishDetailModalProp
                   </div>
 
                   {/* Composition */}
-                  <div className="mt-3 border-t border-slate-200 pt-3">
+                  <div className="mt-4 border-t border-slate-200 pt-4">
                     <div className="font-body text-[10px] font-semibold uppercase tracking-wide text-blue-800 mb-2">
                       {tComp("label")}
                     </div>
@@ -263,10 +264,12 @@ export function DishDetailModal({ dishId, isOpen, onClose }: DishDetailModalProp
               </div>
             )}
 
-            {/* Order Popup (logic unchanged) */}
-            {dishData?.success && (
-              <OrderPopup open={openPopup} onClose={() => setOpenPopup(false)} dish={dishData.data} />
-            )}
+            {/* Table Selection / QR Modal */}
+            <TableSelectionModal
+              isOpen={openPopup}
+              onConfirm={() => setOpenPopup(false)}
+              onClose={() => setOpenPopup(false)}
+            />
           </motion.div>
         </div>
       )}
