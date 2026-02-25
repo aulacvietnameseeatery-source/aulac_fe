@@ -1,6 +1,5 @@
 import { I18nText, MenuCategory, MenuItemData } from "../data/mock-menu";
 
-// Cập nhật DTO khớp với backend mới
 export interface DishDisplayDto {
     dishId: number;
     dishName: I18nText;
@@ -11,9 +10,24 @@ export interface DishDisplayDto {
     imageUrl: string | null;
 }
 
-// Hàm format dữ liệu dùng chung (Không dùng Hook nữa)
-export const formatMenuData = (dishes: DishDisplayDto[]): MenuCategory[] => {
-    const groupedData: Record<string, { catI18n: I18nText, items: MenuItemData[] }> = {};
+// 1. TẠO TYPE MỚI CHO DỮ LIỆU THÔ CHỨA ĐA NGÔN NGỮ
+export interface RawMenuItemData {
+    id: string;
+    name: I18nText;
+    price: number | string;
+    desc: I18nText;
+    image: string;
+}
+
+export interface RawMenuCategory {
+    id: string;
+    name: I18nText;
+    items: RawMenuItemData[];
+}
+
+// 2. Cập nhật hàm format trả về RawMenuCategory[]
+export const formatMenuData = (dishes: DishDisplayDto[]): RawMenuCategory[] => {
+    const groupedData: Record<string, { catI18n: I18nText, items: RawMenuItemData[] }> = {};
 
     dishes.forEach(dish => {
         const catKey = dish.categoryName?.en || "Uncategorized";
@@ -34,7 +48,7 @@ export const formatMenuData = (dishes: DishDisplayDto[]): MenuCategory[] => {
         });
     });
 
-    const formattedMenu: MenuCategory[] = Object.keys(groupedData).map(key => ({
+    const formattedMenu: RawMenuCategory[] = Object.keys(groupedData).map(key => ({
         id: key.toLowerCase().replace(/\s+/g, '-'),
         name: groupedData[key].catI18n,
         items: groupedData[key].items

@@ -5,12 +5,16 @@ import { AnimatePresence } from "framer-motion";
 import { Atmosphere } from "@/features/customer/menu-listing-new/components/atmosphere";
 import { BookFrame } from "@/features/customer/menu-listing-new/components/book-frame";
 import { CartItem } from "@/features/customer/menu-listing-new/types/cart";
+
 import { MenuCategory, MenuItemData } from "@/features/customer/menu-listing-new/data/mock-menu";
+import { RawMenuCategory } from "@/features/customer/menu-listing-new/hooks/use-menu-data";
+
 import { TableSelectionModal } from "@/features/customer/menu-listing-new/components/table-selection-modal";
 import { CartSummary } from "@/features/customer/menu-listing-new/components/cart-summary";
 
 interface Props {
-    initialMenuData: MenuCategory[];
+    // Nhận dữ liệu thô từ Server (chứa I18nText)
+    initialMenuData: RawMenuCategory[];
     locale: 'vi' | 'en' | 'fr';
 }
 
@@ -18,17 +22,19 @@ export default function MenuListingClient({ initialMenuData, locale }: Props) {
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
     const [tableNumber, setTableNumber] = useState("");
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [pendingQueue, setPendingQueue] = useState<any[]>([]);
+    const [pendingQueue, setPendingQueue] = useState<MenuItemData[]>([]);
 
-    // BỘ LỌC ĐA NGÔN NGỮ: Chỉ lấy đúng ngôn ngữ người dùng đang xem
-    const localizedMenu = useMemo(() => {
+    // MAPPING DATA: Biến RawMenuCategory (Object) thành MenuCategory (String)
+    const localizedMenu: MenuCategory[] = useMemo(() => {
         return initialMenuData.map(cat => ({
-            ...cat,
-            name: (cat.name as any)[locale] || (cat.name as any).en,
+            id: cat.id,
+            name: cat.name[locale] || cat.name.en, // Bóc ra chuỗi string
             items: cat.items.map(item => ({
-                ...item,
-                name: (item.name as any)[locale] || (item.name as any).en,
-                desc: (item.desc as any)[locale] || (item.desc as any).en
+                id: item.id,
+                name: item.name[locale] || item.name.en, // Bóc ra chuỗi string
+                price: item.price,
+                desc: item.desc[locale] || item.desc.en, // Bóc ra chuỗi string
+                image: item.image
             }))
         }));
     }, [initialMenuData, locale]);
@@ -99,7 +105,7 @@ export default function MenuListingClient({ initialMenuData, locale }: Props) {
             <div className="relative z-10 w-full max-w-[1400px]">
                 {/* Ép kiểu any để bỏ qua TypeScript strict type cho component BookFrame */}
                 <BookFrame
-                    menuData={localizedMenu as any}
+                    menuData={localizedMenu}
                     onAddToCart={handleAddToCartFromBook}
                 />
             </div>

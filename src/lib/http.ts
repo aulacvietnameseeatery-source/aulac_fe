@@ -8,7 +8,12 @@
 import { authStorage } from "./auth-storage";
 // import { CSRFProtection } from "./csrf"; // Đảm bảo bạn đã import đúng nếu cần
 
-export const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://127.0.0.1:7083";
+// 1. check server hay client để dùng URL phù hợp
+const isServer = typeof window === 'undefined';
+
+// 2. Server dùng IP, Client dùng localhost
+export const BASE_URL = process.env.NEXT_PUBLIC_API_URL ||
+    (isServer ? "https://127.0.0.1:7083" : "https://localhost:7083");
 
 interface FetchOptions extends RequestInit {
     headers?: Record<string, string>;
