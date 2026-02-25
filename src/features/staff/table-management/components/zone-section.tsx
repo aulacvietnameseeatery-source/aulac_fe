@@ -134,7 +134,7 @@ export const ZoneSection: React.FC<ZoneSectionProps> = ({
             {/* Zone online/offline toggle */}
             {onToggleZoneOnline && (
               <Button
-                variant={allOnline ? "outline" : "ghost"}
+                variant={"ghost"}
                 size="icon"
                 className={cn(
                   "size-7",
