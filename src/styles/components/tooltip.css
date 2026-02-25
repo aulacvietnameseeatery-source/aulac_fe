@@ -8,17 +8,19 @@
 /* Hộp chứa nội dung Tooltip */
 .admin-tooltip-box {
     position: absolute;
-    background-color: #1E293B; /* Navy đậm từ Figma */
+    background-color: #1E293B;
+    /* Navy đậm từ Figma */
     color: #FFFFFF;
     padding: 6px 10px;
     border-radius: 6px;
-    font-family: 'Lexend', sans-serif;
+    font-family: var(--font-lexend), sans-serif;
     font-size: 11px;
     font-weight: 400;
     white-space: nowrap;
     z-index: 1000;
     box-shadow: 0px 4px 6px -1px rgba(0, 0, 0, 0.1);
-    pointer-events: none; /* Không cản trở chuột */
+    pointer-events: none;
+    /* Không cản trở chuột */
     animation: tooltipFadeIn 0.2s ease-out;
 }
 
@@ -38,6 +40,7 @@
     left: 50%;
     transform: translateX(-50%) translateY(-8px);
 }
+
 .admin-tooltip-top .admin-tooltip-arrow {
     top: 100%;
     left: 50%;
@@ -52,6 +55,7 @@
     left: 50%;
     transform: translateX(-50%) translateY(8px);
 }
+
 .admin-tooltip-bottom .admin-tooltip-arrow {
     bottom: 100%;
     left: 50%;
@@ -66,6 +70,7 @@
     top: 50%;
     transform: translateY(-50%) translateX(-8px);
 }
+
 .admin-tooltip-left .admin-tooltip-arrow {
     left: 100%;
     top: 50%;
@@ -80,6 +85,7 @@
     top: 50%;
     transform: translateY(-50%) translateX(8px);
 }
+
 .admin-tooltip-right .admin-tooltip-arrow {
     right: 100%;
     top: 50%;
@@ -90,8 +96,11 @@
 
 /* Animation mượt mà */
 @keyframes tooltipFadeIn {
-    from { opacity: 0;
+    from {
+        opacity: 0;
     }
-    to { opacity: 1;
+
+    to {
+        opacity: 1;
     }
 }

@@ -513,43 +513,33 @@ export function BaseTable<T>({
 
                                     {/* Batch Actions Group */}
                                     {selectedItems.length > 0 && (
-                                        <div className="flex items-center gap-2 ml-4 border-l pl-4 border-gray-200">
-                                            <div className="text-sm text-gray-500 mr-2">
-                                                {t('selected')} <span className="font-bold text-gray-900">{selectedItems.length}</span>
+                                        <div className="feature-batch flex">
+                                            <div className="selected-count">
+                                                {t('selected')} <span className="font-bold">{selectedItems.length}</span>
                                             </div>
+                                            <div className="unselected" onClick={unselectAll}>{t('unselect')}</div>
 
-                                            <Button
-                                                variant="ghost"
-                                                size="sm"
-                                                onClick={unselectAll}
-                                                className="text-gray-500 hover:text-gray-700 h-8 mr-2"
-                                            >
-                                                {t('unselect')}
-                                            </Button>
-
-                                            <div className="flex items-center gap-2">
-                                                {batchActions.map((action) => (
-                                                    <Button
-                                                        key={action.label}
-                                                        // Use standard variants, but apply custom classes if provided
-                                                        variant={action.variant as any}
-                                                        size="sm"
-                                                        onClick={() => handleBatchAction(action)}
-                                                        className={cn(
-                                                            "h-8 shadow-sm transition-all",
-                                                            action.className,
-                                                            // If buttonType is solid, we might want to override standard variant styles if needed
-                                                            // For now, rely on variant + className
-                                                        )}
-                                                    >
-                                                        {/* Icon handling: prioritize mapped icons or use CSS classes */}
-                                                        {action.icon === 'check' && <div className="mi icon16 icon-check-white mr-1.5" />}
-                                                        {action.icon === 'close' && <div className="mi icon16 icon-close-white mr-1.5" />}
-                                                        {/* Render label */}
-                                                        {action.label}
-                                                    </Button>
-                                                ))}
-                                            </div>
+                                            {batchActions.map((action) => (
+                                                <Button
+                                                    key={action.label}
+                                                    // Use standard variants, but apply custom classes if provided
+                                                    variant={action.variant as any}
+                                                    size="sm"
+                                                    onClick={() => handleBatchAction(action)}
+                                                    className={cn(
+                                                        "h-8 shadow-sm transition-all",
+                                                        action.className,
+                                                        // If buttonType is solid, we might want to override standard variant styles if needed
+                                                        // For now, rely on variant + className
+                                                    )}
+                                                >
+                                                    {/* Icon handling: prioritize mapped icons or use CSS classes */}
+                                                    {action.icon === 'check' && <div className="mi icon16 icon-check-white mr-1.5" />}
+                                                    {action.icon === 'close' && <div className="mi icon16 icon-close-white mr-1.5" />}
+                                                    {/* Render label */}
+                                                    {action.label}
+                                                </Button>
+                                            ))}
                                         </div>
                                     )}
                                 </div>
@@ -571,7 +561,7 @@ export function BaseTable<T>({
 
                     <div className="voucher-body-grid">
                         <div className="ms-grid-viewer flex flex-col has-paging flex-box">
-                            <div 
+                            <div
                                 className={cn("ms-content-table sticky-1", !loading && "scroller")}
                                 style={loading ? { overflow: 'hidden' } : undefined}
                             >
@@ -855,7 +845,7 @@ export function BaseTable<T>({
                                                                 >
                                                                     <div>
                                                                         {renderCell ? (
-                                                                            renderCell( (item as any)[column.field], item, column, rowIndex)
+                                                                            renderCell((item as any)[column.field], item, column, rowIndex)
                                                                         ) : (
                                                                             <div
                                                                                 className="text-overflow"

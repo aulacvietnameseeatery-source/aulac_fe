@@ -17,7 +17,7 @@ interface MenuCardProps extends MenuItem {
 export const MenuCard = ({ id, name, price, desc, image, onOrder, onDetail }: MenuCardProps) => {
 
     const handleOrderClick = (e: React.MouseEvent) => {
-        e.stopPropagation(); // Stop bubble to avoid triggering detail if nested (though we will un-nest)
+        e.stopPropagation();
         const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
         const startPos = { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
         onOrder({ id, name, price, desc, image }, startPos);
@@ -29,51 +29,46 @@ export const MenuCard = ({ id, name, price, desc, image, onOrder, onDetail }: Me
         }
     };
 
+    const fallbackImg = '/images/menu-listing/menu-grid/Tiramisu.png';
+    const imgSrc = image && image.trim() !== '' ? image : fallbackImg;
+
     return (
-        <div className="relative w-full aspect-4/3 bg-[#0B252E] border border-[#C5A059]/30 shadow-lg overflow-hidden rounded-sm hover:border-[#C5A059] transition-all duration-500 group">
-            {/* Image - Click triggers Detail */}
-            <div
-                className="absolute inset-0 overflow-hidden cursor-pointer"
-                onClick={handleDetailClick}
-            >
+        <div
+            className="w-full flex flex-col items-center text-center group cursor-pointer bg-transparent justify-start"
+            onClick={handleDetailClick}
+        >
+            {/* GIẢM ẢNH XUỐNG CÒN 45% (Thay vì 55%). Đây là key để cứu chiều cao của thẻ! */}
+            <div className="relative w-[45%] aspect-square mb-[2%] rounded-full overflow-hidden border border-[#C5A059]/40 group-hover:border-[#C5A059] shadow-sm group-hover:shadow-md transition-all duration-500">
                 <Image
-                    width={1920}
-                    height={1080}
-                    src={image || '/images/logo.png'}
+                    width={300}
+                    height={300}
+                    src={imgSrc}
                     onError={(e) => {
-                        e.currentTarget.src = '/images/logo.png';
+                        e.currentTarget.src = fallbackImg;
+                        e.currentTarget.srcset = fallbackImg;
                     }}
                     alt={name}
-                    className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700 ease-out"
+                    className="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700 ease-out"
                 />
             </div>
 
-            {/* Gradient Overlay - Click triggers Detail */}
-            <div
-                className="absolute inset-0 bg-linear-to-t from-[#0f172a] via-[#0f172a]/40 to-transparent opacity-90 group-hover:opacity-80 transition-opacity duration-500 pointer-events-none"
-            />
+            {/* Các margin-bottom (mb) bên dưới cũng ép sát lại còn 1% */}
+            <h3 className="text-[#0f172a] font-display text-[7.5px] md:text-[8px] lg:text-[10px] xl:text-[11px] uppercase tracking-widest font-bold mb-[1%] px-[2%] line-clamp-2 transition-colors duration-300 group-hover:text-[#C5A059] leading-tight sm:leading-snug">
+                {name}
+            </h3>
 
-            {/* Content */}
-            <div className="absolute inset-0 p-1.5 sm:p-2 md:p-2.5 lg:p-3 flex flex-col justify-end pointer-events-none">
-                <h3 className="text-[#E5D9B6] font-display text-[7px] sm:text-[8px] md:text-[9px] lg:text-[10px] xl:text-xs uppercase tracking-wider font-bold mb-0.5 sm:mb-1 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-500 line-clamp-2">
-                    {name}
-                </h3>
+            <div className="w-[20%] h-[1px] bg-[#C5A059]/40 mb-[1%] transition-all duration-300 group-hover:w-[40%] group-hover:bg-[#C5A059]" />
 
-                <div className="w-4 sm:w-5 md:w-6 h-px bg-[#C5A059] mb-0.5 sm:mb-1 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
-
-                <div className="flex justify-between items-end gap-1 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-75 pointer-events-auto">
-                    <span className="text-[#C5A059] font-display font-bold text-[7px] sm:text-[8px] md:text-[9px] lg:text-[10px]">
-                        {typeof price === 'number' ? `${price} CHF` : price}
-                    </span>
-
-                    <button
-                        onClick={handleOrderClick}
-                        className="opacity-0 group-hover:opacity-100 bg-[#C5A059] text-[#0f172a] px-1 sm:px-1.5 md:px-2 py-0.5 text-[6px] sm:text-[7px] md:text-[8px] font-bold uppercase tracking-widest hover:bg-white transition-all duration-300 border border-[#C5A059] cursor-pointer whitespace-nowrap"
-                    >
-                        Order
-                    </button>
-                </div>
+            <div className="text-[#C5A059] font-serif font-bold text-[7.5px] md:text-[8px] lg:text-[10px] xl:text-[11px] mb-[1%]">
+                {typeof price === 'number' ? `${price.toFixed(2)} CHF` : price}
             </div>
+
+            <button
+                onClick={handleOrderClick}
+                className="opacity-0 translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 text-[#9A7B4F] text-[6px] md:text-[7px] lg:text-[8px] xl:text-[9.5px] font-bold uppercase tracking-widest hover:text-[#0f172a] transition-all duration-300 border-b border-transparent hover:border-[#0f172a]"
+            >
+                Order Now
+            </button>
         </div>
     );
 };

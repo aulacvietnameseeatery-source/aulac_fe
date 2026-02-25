@@ -3,13 +3,15 @@
     justify-content: space-between;
     align-items: center;
     padding: 16px 24px;
-    background-color: rgba(248, 250, 252, 0.3); /* Nền xám cực nhẹ */
+    background-color: rgba(248, 250, 252, 0.3);
+    /* Nền xám cực nhẹ */
     border-top: 1px solid #F1F5F9;
-    font-family: 'Lexend', sans-serif;
+    font-family: var(--font-lexend), sans-serif;
     width: 100%;
 }
 
-.admin-pagination-left, .admin-pagination-right {
+.admin-pagination-left,
+.admin-pagination-right {
     display: flex;
     align-items: center;
     gap: 12px;
@@ -94,7 +96,8 @@
 
 /* Active Page Style */
 .pg-num-btn.active {
-    background-color: #1B3A50; /* Màu Navy từ Figma */
+    background-color: #1B3A50;
+    /* Màu Navy từ Figma */
     color: white;
     font-weight: 700;
     box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05);

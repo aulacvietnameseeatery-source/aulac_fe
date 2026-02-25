@@ -27,7 +27,19 @@
 
 @media (min-width: 768px) {
     .header-inner {
-        @apply max-w-[1280px] px-8;
+        @apply max-w-[1280px] px-4;
+    }
+}
+
+@media (min-width: 1024px) {
+    .header-inner {
+        @apply px-6;
+    }
+}
+
+@media (min-width: 1280px) {
+    .header-inner {
+        @apply px-8;
     }
 }
 
@@ -47,19 +59,27 @@
 /* --- LOGO --- */
 /* 👇 ĐÃ SỬA: Xóa 'group' ở đây để tránh lỗi build v4 */
 .logo-wrapper {
-    @apply flex flex-col relative z-50;
+    @apply flex flex-col relative z-50 transition-all duration-500 ease-out;
+}
+
+.logo-wrapper.is-scrolled {
+    @apply flex-grow max-w-[250px] md:max-w-[300px] lg:max-w-[350px] xl:max-w-[400px];
+}
+
+.logo-wrapper.is-default {
+    @apply flex-grow-0;
 }
 
 .logo-title {
-    @apply font-display font-medium leading-none transition-all duration-300 origin-left;
+    @apply font-display font-medium leading-none transition-all duration-500 ease-out origin-left whitespace-nowrap;
 }
 
 .logo-title.is-default {
-    @apply text-[32px] md:text-[64px];
+    @apply text-[32px] md:text-[48px] lg:text-[56px] xl:text-[64px];
 }
 
 .logo-title.is-scrolled {
-    @apply text-[32px] md:text-[28px];
+    @apply text-[32px] md:text-[32px] lg:text-[36px] xl:text-[42px];
 }
 
 .logo-slogan-wrapper {
@@ -67,7 +87,7 @@
 }
 
 .logo-slogan-wrapper.is-default {
-    @apply max-h-0 opacity-0 mt-0 md:max-h-[60px] md:opacity-100 md:mt-1;
+    @apply max-h-0 opacity-0 mt-0 lg:max-h-15 lg:opacity-100 lg:mt-1;
 }
 
 .logo-slogan-wrapper.is-scrolled {
@@ -78,32 +98,38 @@
     @apply block text-[#D5A673] tracking-[0.2em] uppercase font-semibold text-[10px];
 }
 
-@media (min-width: 768px) {
+@media (min-width: 1024px) {
+    .slogan-main {
+        @apply text-[12px];
+    }
+}
+
+@media (min-width: 1280px) {
     .slogan-main {
         @apply text-[14px];
     }
 }
 
 .slogan-sub {
-    @apply hidden md:block mt-1 text-[12px] italic text-white/70;
+    @apply hidden lg:block mt-1 text-[11px] xl:text-[12px] italic text-white/70;
 }
 
 /* --- DESKTOP NAVIGATION --- */
 .nav-desktop {
-    @apply hidden md:flex items-center gap-8;
+    @apply hidden md:flex items-center gap-2 lg:gap-4 xl:gap-6;
 }
 
 .nav-link-desktop {
-    @apply flex items-center gap-2 text-[14px] uppercase tracking-[1.4px] hover:text-[#D5A673] transition-colors font-medium;
+    @apply flex items-center gap-1 text-[10px] lg:text-[11px] xl:text-[14px] uppercase tracking-[0.8px] lg:tracking-[1px] xl:tracking-[1.4px] hover:text-[#D5A673] transition-all font-medium whitespace-nowrap;
 }
 
 /* --- LANGUAGE SWITCHER --- */
 .lang-switcher-wrapper {
-    @apply hidden md:block overflow-hidden transition-all duration-300 ease-in-out;
+    @apply hidden lg:block overflow-hidden transition-all duration-300 ease-in-out;
 }
 
 .lang-switcher-wrapper.is-scrolled {
-    @apply max-w-[160px] opacity-100 ml-4;
+    @apply max-w-[160px] opacity-100 ml-2 lg:ml-3 xl:ml-4;
 }
 
 .lang-switcher-wrapper.is-default {
@@ -112,15 +138,15 @@
 
 /* --- RESERVE BUTTON --- */
 .reserve-btn {
-    @apply bg-[#FFAB2D] text-[#1A3A52] rounded shadow-sm hover:bg-[#FFAB2D]/90 transition-all duration-300 font-bold uppercase tracking-wide;
+    @apply bg-[#FFAB2D] text-[#1A3A52] rounded shadow-sm hover:bg-[#FFAB2D]/90 transition-all duration-300 font-bold uppercase tracking-wide whitespace-nowrap;
 }
 
 .reserve-btn.is-scrolled {
-    @apply px-6 py-2 text-[13px];
+    @apply px-3 py-1.5 text-[10px] lg:px-4 lg:py-2 lg:text-[11px] xl:px-6 xl:py-2 xl:text-[13px];
 }
 
 .reserve-btn.is-default {
-    @apply px-8 py-3 text-[14px];
+    @apply px-4 py-2 text-[11px] lg:px-6 lg:py-2.5 lg:text-[13px] xl:px-8 xl:py-3 xl:text-[14px];
 }
 
 /* --- MOBILE TOGGLE BUTTON --- */

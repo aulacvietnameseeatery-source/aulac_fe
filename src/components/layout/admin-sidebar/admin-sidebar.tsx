@@ -39,9 +39,9 @@ const navItems = [
   { key: "reports", href: "/dashboard/reports", icon: FileText },
   { key: "emails", href: "/dashboard/emails", icon: Mail },
   { key: "customers", href: "/dashboard/customers", icon: Users },
-    { key: "reservations", href: "/dashboard/reservations", icon: Users },
-    { key: "promotions", href: "/dashboard/promotions", icon: Tags },
-    { key: "settings", href: "/dashboard/settings", icon: Settings },
+  { key: "reservations", href: "/dashboard/reservations", icon: Users },
+  { key: "promotions", href: "/dashboard/promotions", icon: Tags },
+  { key: "settings", href: "/dashboard/settings", icon: Settings },
 ];
 
 interface AdminSidebarProps {
@@ -100,7 +100,7 @@ export function AdminSidebar({ onClose }: AdminSidebarProps) {
         {/* Desktop Collapse Toggle */}
         <button
           onClick={() => setIsCollapsed(!isCollapsed)}
-          className="hidden lg:flex absolute -right-3 top-20 w-6 h-6 bg-[#1A3A51] border border-white/10 rounded-full items-center justify-center text-[#FFAB2D] hover:bg-[#FFAB2D] hover:text-[#1A3A51] transition-all duration-300 z-50 shadow-lg"
+          className="hidden lg:flex absolute -right-3 top-20 w-6 h-6 bg-[#1A3A51] border border-white/10 rounded-full items-center justify-center text-[#FFAB2D] hover:bg-[#FFAB2D] hover:text-[#1A3A51] transition-all duration-300 z-30 shadow-lg"
         >
           {isCollapsed ? <ChevronRight size={14} /> : <ChevronLeft size={14} />}
         </button>
@@ -114,7 +114,7 @@ export function AdminSidebar({ onClose }: AdminSidebarProps) {
               height={1000}
               style={{ height: "100px", width: "auto" }}
               src="/images/logo.png"
-              alt="Au Lac Logo"
+              alt="An Lac Logo"
               className="block md:hidden lg:block w-full h-full object-contain drop-shadow-md"
             />
           )}
@@ -130,13 +130,13 @@ export function AdminSidebar({ onClose }: AdminSidebarProps) {
               width={100}
               height={100}
               src="/images/logo.png"
-              alt="Au Lac Logo"
+              alt="An Lac Logo"
               className="w-full h-full object-contain drop-shadow-md"
             />
           </div>
 
           <div className={`text-center mt-0 md:hidden ${isCollapsed ? 'lg:hidden' : 'lg:block'}`}>
-            <h2 className="text-white text-xl font-bold font-display tracking-tight">Au Lac</h2>
+            <h2 className="text-white text-xl font-bold font-display tracking-tight">An Lac</h2>
             <p className="text-[#FFAB2D]/80 text-[10px] font-medium uppercase tracking-[0.2em] mt-1">{t('managerPortal')}</p>
           </div>
         </div>

@@ -3,6 +3,8 @@
 // Maps to: GET /api/account/{id}/detail response
 // ============================================================
 
+import { AccountStatusCode } from '@/types/status-codes';
+
 /** Role detail as returned from /api/account/{id}/detail */
 export interface AccountRole {
   roleId: number;
@@ -53,7 +55,7 @@ export interface UpdateAccountRequest {
 }
 
 /** Request body for PUT /api/account/{id}/status */
-export type UpdateAccountStatusRequest = "ACTIVE" | "INACTIVE" | "LOCKED";
+export type UpdateAccountStatusRequest = AccountStatusCode;
 
 // ============================================================
 // Dialog Control Types
