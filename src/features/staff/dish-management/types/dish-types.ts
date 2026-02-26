@@ -1,10 +1,9 @@
 // features/admin/dish-management/dish-list/types/dish.types.ts
 
-export enum DishStatusCode {
-    AVAILABLE = 42,
-    OUT_OF_STOCK = 43,
-    HIDDEN = 44
-}
+import { DishStatusCode } from "@/types/status-codes";
+
+// DishStatusCode has been moved to @/types/status-codes.ts
+
 
 export interface GetDishesParams {
     pageIndex: number;

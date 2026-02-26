@@ -1,7 +1,8 @@
 .admin-switch-container {
     display: inline-flex;
     align-items: center;
-    gap: 8px; /* Khoảng cách giữa nút và chữ */
+    gap: 8px;
+    /* Khoảng cách giữa nút và chữ */
     user-select: none;
 }
 
@@ -21,12 +22,14 @@
 
 /* Trạng thái Inactive */
 .admin-switch-root.unchecked {
-    background-color: #E2E8F0; /* Màu nền xám khi tắt */
+    background-color: #E2E8F0;
+    /* Màu nền xám khi tắt */
 }
 
 /* Trạng thái Active */
 .admin-switch-root.checked {
-    background-color: #3B82F6; /* Màu xanh Active từ Figma */
+    background-color: #3B82F6;
+    /* Màu xanh Active từ Figma */
 }
 
 /* Viên bi tròn bên trong */
@@ -43,29 +46,33 @@
 
 /* Hiệu ứng trượt khi bật */
 .admin-switch-root.checked .admin-switch-thumb {
-    transform: translateX(16px); /* 36px - 14px - 3px*2 */
+    transform: translateX(16px);
+    /* 36px - 14px - 3px*2 */
 }
 
 /* Text đi kèm (Active/Inactive) */
 .admin-switch-text {
-    font-family: 'Lexend', sans-serif;
+    font-family: var(--font-lexend), sans-serif;
     font-size: 12px;
     font-weight: 500;
     line-height: 16px;
 }
 
 .admin-switch-text.active {
-    color: #2563EB; /* Màu xanh chữ Active */
+    color: #2563EB;
+    /* Màu xanh chữ Active */
 }
 
 .admin-switch-text.inactive {
-    color: #94A3B8; /* Màu xám chữ Inactive */
+    color: #94A3B8;
+    /* Màu xám chữ Inactive */
 }
 
 /* Trạng thái disabled */
 .admin-switch-container.disabled {
     opacity: 0.5;
 }
+
 .admin-switch-container.disabled .admin-switch-root {
     cursor: not-allowed;
 }

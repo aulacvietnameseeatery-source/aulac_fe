@@ -35,7 +35,7 @@ export default function DashboardLayout({
           >
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
           </button>
-          <span className="font-display font-bold text-[#1A3A51] text-lg">Au Lac Admin</span>
+          <span className="font-display font-bold text-[#1A3A51] text-lg">An Lac Admin</span>
         </div>
         <LanguageSwitcher variant="admin" isMobile={true} />
       </div>
@@ -57,7 +57,7 @@ export default function DashboardLayout({
               onClick={() => setIsMobileMenuOpen(false)}
             />
             {/* Sidebar Drawer */}
-            <div className="absolute left-0 top-0 bottom-0 w-72 animate-in slide-in-from-left duration-300 shadow-2xl">
+            <div className="absolute left-0 top-0 bottom-0 w-[310px] animate-in slide-in-from-left duration-300 shadow-2xl">
               <AdminSidebar onClose={() => setIsMobileMenuOpen(false)} />
             </div>
           </div>

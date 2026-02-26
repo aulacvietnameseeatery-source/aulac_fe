@@ -14,17 +14,19 @@ import { LANGUAGES, Language } from "../types/dish-detail.types";
 import { DishGallery } from "./dish-gallery";
 import { DishInfoSection } from "./dish-info-section";
 import { Lightbox } from "./lightbox";
+import { useTranslations } from "next-intl";
 
 type DishDetailProps = {
   dishId?: number;
 };
 
 export function DishDetailPage({ dishId }: DishDetailProps) {
+  const t = useTranslations("dishDetail");
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<Language>("en");
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
-  // 1. Sử dụng Custom Hook (đã bao gồm fetch + xử lý media)
+  // 1. Use a Custom Hook (includes fetching and media processing).
   const { dish, isLoading, staticImages, rotationImages } = useDishDetail(dishId!);
 
   // 2. Loading State
@@ -33,7 +35,7 @@ export function DishDetailPage({ dishId }: DishDetailProps) {
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="flex flex-col items-center gap-3">
           <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
-          <p className="text-gray-500 font-medium">Loading dish details...</p>
+          <p className="text-gray-500 font-medium">{t("states.loading")}</p>
         </div>
       </div>
     );
@@ -44,9 +46,9 @@ export function DishDetailPage({ dishId }: DishDetailProps) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
-          <h2 className="text-xl font-bold text-gray-900">Dish not found</h2>
+          <h2 className="text-xl font-bold text-gray-900">{t("states.notFound")}</h2>
           <button onClick={() => router.back()} className="text-blue-600 hover:underline mt-4">
-            Go Back
+            {t("states.goBack")}
           </button>
         </div>
       </div>
@@ -62,10 +64,10 @@ export function DishDetailPage({ dishId }: DishDetailProps) {
         <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
           <div>
             <h1 className="text-3xl md:text-4xl font-extrabold text-gray-900 tracking-tight flex items-center gap-3">
-              Dish Detail View
+              {t("header.title")}
             </h1>
             <p className="text-xl text-gray-500 mt-0.5 flex items-center gap-1">
-              <Info size={12} /> Read-only mode
+              <Info size={12} /> {t("header.readonly")}
             </p>
           </div>
 
@@ -73,7 +75,7 @@ export function DishDetailPage({ dishId }: DishDetailProps) {
             className="flex items-center gap-2 bg-gray-900 hover:bg-black text-white px-4 py-2 rounded-lg text-sm font-semibold shadow-sm transition-all"
             onClick={() => router.replace("edit")}
           >
-            <Edit size={16} /> <span className="hidden sm:inline">Edit Dish</span>
+            <Edit size={16} /> <span className="hidden sm:inline">{t("header.edit")}</span>
           </button>
         </div>
       </header>
@@ -101,17 +103,17 @@ export function DishDetailPage({ dishId }: DishDetailProps) {
 
         {/* CONTENT GRID */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
-          {/* LEFT: GALLERY & 360 */}
+          {/* LEFT: INFO & SPECS */}
+          <DishInfoSection 
+            dish={dish} 
+            activeTab={activeTab} 
+          />
+
+          {/* RIGHT: GALLERY & 360 */}
           <DishGallery 
             staticImages={staticImages} 
             rotationImages={rotationImages} 
             onImageClick={setLightboxIndex} 
-          />
-
-          {/* RIGHT: INFO & SPECS */}
-          <DishInfoSection 
-            dish={dish} 
-            activeTab={activeTab} 
           />
         </div>
       </main>

@@ -33,8 +33,9 @@ export const dishFormSchema = z.object({
   categoryId: z.number().min(1, "Category is required"),
   price: z.coerce.number().min(0, "Price must be non-negative"),
   dishStatusLvId: z.coerce.number().min(1, "Status is required"),
-  tagId: z.coerce.number().min(1, "Tag is required"),
-  dietId: nullableNumber,
+
+  tagIds: z.array(z.number()).min(1, "At least one tag is required"),
+
   isOnline: z.boolean(),
   chefRecommended: z.boolean(),
 
@@ -79,11 +80,10 @@ export function mapDishToFormValues(
       },
     },
 
-    categoryId: 1,
+    categoryId: dish.categoryId,
     price: dish.price,
     dishStatusLvId: dish.dishStatusLvId,
-    tagId: dish.tagId,
-    dietId: dish.dietId,
+    tagIds: dish.tagIds ?? [],
     isOnline: dish.isOnline,
     chefRecommended: dish.chefRecommended,
 

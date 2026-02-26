@@ -20,6 +20,7 @@ import { Permissions } from "@/types/const";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { useStatusBatchActions } from "@/features/staff/account-management/account-list/hooks/useStatusBatchActions";
+import { AccountStatusCode } from "@/types/status-codes";
 
 const AccountListContent = () => {
     const t = useTranslations("Account.List");
@@ -97,7 +98,7 @@ const AccountListContent = () => {
 
         setTogglingId(account.accountId);
         try {
-            const newStatus = checked ? "ACTIVE" : "INACTIVE";
+            const newStatus = checked ? AccountStatusCode.ACTIVE : AccountStatusCode.INACTIVE;
             const newStatusId = checked ? 1 : 2;
 
             // Optimistic Update
@@ -125,7 +126,7 @@ const AccountListContent = () => {
     };
 
     // Handle Batch Status Update
-    const handleBatchStatusUpdate = async (selectedAccounts: StaffAccount[], newStatus: "ACTIVE" | "INACTIVE") => {
+    const handleBatchStatusUpdate = async (selectedAccounts: StaffAccount[], newStatus: AccountStatusCode) => {
         try {
             // Filter out LOCKED accounts (status = 3)
             const updatableAccounts = selectedAccounts.filter(account => account.accountStatus !== 3);
@@ -140,7 +141,7 @@ const AccountListContent = () => {
                 toast.info(t("notifications.lockedAccountsSkipped", { count: lockedCount }));
             }
 
-            const newStatusId = newStatus === "ACTIVE" ? 1 : 2;
+            const newStatusId = newStatus === AccountStatusCode.ACTIVE ? 1 : 2;
 
             // Optimistic Update for updatable items only
             updatableAccounts.forEach(account => {
@@ -159,7 +160,7 @@ const AccountListContent = () => {
             await Promise.all(promises);
 
             const count = updatableAccounts.length;
-            const messageKey = newStatus === "ACTIVE" ? "notifications.batchActivateSuccess" : "notifications.batchDeactivateSuccess";
+            const messageKey = newStatus === AccountStatusCode.ACTIVE ? "notifications.batchActivateSuccess" : "notifications.batchDeactivateSuccess";
             toast.success(t(messageKey, { count }));
 
         } catch (error: any) {

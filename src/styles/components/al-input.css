@@ -203,7 +203,7 @@
 .al-input-title {
   display: block;
   margin-bottom: 0.375rem;
-  font-size: 0.875rem;
+  font-size: 1rem;
   font-weight: 500;
   color: var(--navi-blue, #1a3a52);
 }

@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { useDishList } from "@/features/staff/dish-management/hooks/use-dish-list";
 import { DishManagementDto } from "@/features/staff/dish-management/types/dish-types";
+import { DishStatusCode } from "@/types/status-codes";
 import { DishActions } from "@/features/staff/dish-management/components/dish-actions";
 import { staffDishService } from "@/features/staff/dish-management/services/dish-service";
 import { useStatusBatchActions } from "@/features/staff/dish-management/hooks/useStatusBatchActions";
@@ -49,7 +50,7 @@ const DishListContent = () => {
     const handleStatusToggle = async (dish: DishManagementDto, checked: boolean) => {
         setTogglingId(dish.dishId);
         try {
-            const newStatusCode = checked ? "AVAILABLE" : "HIDDEN";
+            const newStatusCode = checked ? DishStatusCode.AVAILABLE : DishStatusCode.HIDDEN;
 
             // Optimistic Update
             const updatedDish: DishManagementDto = {
@@ -74,7 +75,7 @@ const DishListContent = () => {
     };
 
     // Handle Batch Status Update
-    const handleBatchStatusUpdate = async (selectedDishes: DishManagementDto[], newStatus: "AVAILABLE" | "HIDDEN") => {
+    const handleBatchStatusUpdate = async (selectedDishes: DishManagementDto[], newStatus: DishStatusCode) => {
         try {
             // Optimistic Update for all selected items
             selectedDishes.forEach(dish => {
@@ -92,7 +93,7 @@ const DishListContent = () => {
             await Promise.all(promises);
 
             const count = selectedDishes.length;
-            const messageKey = newStatus === "AVAILABLE" ? "notifications.batchMakeAvailableSuccess" : "notifications.batchMakeHiddenSuccess";
+            const messageKey = newStatus === DishStatusCode.AVAILABLE ? "notifications.batchMakeAvailableSuccess" : "notifications.batchMakeHiddenSuccess";
             toast.success(t(messageKey, { count }));
 
         } catch (error: any) {
@@ -122,6 +123,17 @@ const DishListContent = () => {
             })),
         [filterOptions.statuses]
     );
+
+    const formatCurrency = (value: any): string => {
+        const num = typeof value === "string" ? parseFloat(value) : value;
+        if (isNaN(num) || num === null || num === undefined) return "-";
+
+        // Cách 1: Format chuẩn quốc tế (thường hiển thị: CHF 12.00)
+         return new Intl.NumberFormat('fr-CH', { style: 'currency', currency: 'CHF' }).format(num);
+
+        // Cách 2: Format chính xác theo string "12.00 CHF" mà bạn muốn
+        //return `${num.toFixed(2)} CHF`;
+    };
 
     // ---- Table Columns with built-in filterType + filterOptions ----
     const columns: TableColumn[] = useMemo(
@@ -169,7 +181,7 @@ const DishListContent = () => {
                 filterType: "number" as const,
                 cellRender: ({ value }: { value: any }) => (
                     <span className="font-bold text-blue-600">
-                        ${typeof value === "number" ? value.toFixed(2) : value}
+                       {formatCurrency(value)}
                     </span>
                 ),
             },
@@ -183,7 +195,7 @@ const DishListContent = () => {
                 cellRender: ({ item }: { value: any; item: any }) => (
                     <div className="flex justify-center">
                         <Switch
-                            checked={item.status === "AVAILABLE"}
+                            checked={item.status === DishStatusCode.AVAILABLE}
                             onChange={(checked) => handleStatusToggle(item, checked)}
                             disabled={togglingId === item.dishId}
                             showLabel={false}
@@ -197,7 +209,7 @@ const DishListContent = () => {
 
     // Global cell renderer (applies column alignment)
     const handleGlobalRenderCell = useCallback(
-        ( value: any, item: DishManagementDto, column: TableColumn, rowIndex: number) => {
+        (value: any, item: DishManagementDto, column: TableColumn, rowIndex: number) => {
             const content = column.cellRender
                 ? column.cellRender({ value, item, column, rowIndex })
                 : value;
@@ -231,7 +243,7 @@ const DishListContent = () => {
                             <Button
                                 onClick={handleCreate}
                                 variant="outline"
-                                className="shadow-md whitespace-nowrap bg-blue-600 text-white hover:bg-blue-700 border-none"
+                                className="shadow-md"
                             >
                                 <Plus className="mr-2 h-4 w-4" />
                                 {t("addNew")}

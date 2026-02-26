@@ -1,6 +1,6 @@
 {
   "Metadata": {
-    "title": "Au Lac - Vietnamese Eatery",
+    "title": "An Lac - Vietnamese Eatery",
     "description": "The pinnacle of Vietnamese culinary art in the heart of the city."
   },
   "Header": {
@@ -110,6 +110,7 @@
     },
     "Composition": {
       "label": "The Composition",
+      "no_composition": "No composition information available",
       "item_1_title": "Rice Vermicelli",
       "item_1_sub": "Hue Style",
       "item_1_desc": "Thick, cylindrical rice noodles with a satisfying chew, traditional to Central Vietnam.",
@@ -1031,9 +1032,249 @@
       "category": {
         "required": "Category is required"
       }
+    },
+    "Form": {
+      "header": {
+        "createTitle": "Create New Dish",
+        "editTitle": "Edit Dish",
+        "createDescription": "Fill in the details below to add a new item to the menu.",
+        "editDescription": "Update the information of this dish."
+      },
+      "actions": {
+        "discard": "Discard",
+        "createDish": "Create Dish",
+        "createing": "Creating...",
+        "saveChanges": "Save Changes",
+        "saving": "Saving..."
+      },
+      "toast": {
+        "created": "Dish created successfully",
+        "updated": "Dish updated successfully",
+        "error": "Something went wrong"
+      },
+      "core": {
+        "title": "Core Information",
+        "subtitle": "Classification & Pricing",
+        "category": "Category",
+        "selectCategory": "Select Category...",
+        "tags": "Dish Tags",
+        "price": "Base Price (CHF)",
+        "status": "Status",
+        "availableOnline": "Available Online"
+      },
+      "multilingual": {
+        "title": "Multilingual Content",
+        "subtitle": "Manage names and descriptions for menu display."
+      },
+      "media": {
+        "media360": {
+          "title": "360° Interaction",
+          "subtitle": "Spinner sequence"
+        },
+        "gallery": {
+          "title": "Gallery Images",
+          "subtitle": "Standard photos"
+        },
+        "badge": "360° VIEW",
+        "drag": "Drag to rotate",
+        "uploadTitle": "Upload 360° Sequence",
+        "uploadDesc": "Select 24-36 images sorted by name for interactive rotation.",
+        "chooseFiles": "Choose Files",
+        "sequenceLoaded": "Sequence Loaded",
+        "frame": "Frame",
+        "delete": "Delete Sequence",
+        "changeFiles": "Change Files",
+        "existing": "Existing",
+        "addImage": "Add Image",
+        "recommended": "Recommended: 800x800px (JPG, PNG)"
+      },
+      "additional": {
+        "title": "Additional Info",
+        "subtitle": "Nutritional info & timing",
+        "displayOrder": "Display Order",
+        "calories": "Calories (kcal)",
+        "prep": "Prep (min)",
+        "cook": "Cook (min)",
+        "chefRecommended": "Chef's Recommended"
+      }
+    }
+  },
+  "dishDetail": {
+    "header": {
+      "title": "Dish Detail View",
+      "readonly": "Read-only mode",
+      "edit": "Edit Dish"
+    },
+    "states": {
+      "loading": "Loading dish details...",
+      "notFound": "Dish not found",
+      "goBack": "Go Back"
+    },
+    "language": {
+      "en": "English",
+      "vi": "Vietnamese",
+      "fr": "French"
+    },
+    "info": {
+      "shortDescription": "Short Description",
+      "detailedDescription": "Detailed Description",
+      "internalNote": "Internal Note (Private)"
+    },
+    "specs": {
+      "title": "Core Specifications",
+      "category": "Category",
+      "basePrice": "Base Price",
+      "calories": "Calories",
+      "displayOrder": "Display Order",
+      "prepTime": "Prep Time",
+      "cookTime": "Cook Time",
+      "mins": "mins"
+    },
+    "gallery": {
+      "title": "Gallery",
+      "noImages": "No images available",
+      "clickHint": "Click image to expand • Scroll for more",
+      "no360": "360° view not available for this dish."
+    },
+    "status": {
+      "online": "Online",
+      "offline": "Offline",
+      "chefChoice": "Chef's Choice"
+    }
+  },
+  "Order": {
+    "List": {
+      "title": "Orders",
+      "description": "Manage and track all orders",
+      "searchPlaceholder": "Search by order ID, customer, staff...",
+      "refresh": "Refresh",
+      "addNewOrder": "Add New Order",
+      "kanbanLabel": "Kanban — All statuses",
+      "dateRange": {
+        "today": "Today",
+        "yesterday": "Yesterday",
+        "last7": "Last 7 Days",
+        "last30": "Last 30 Days",
+        "thisMonth": "This Month",
+        "lastMonth": "Last Month",
+        "custom": "Custom Range",
+        "from": "From",
+        "to": "To",
+        "apply": "Apply",
+        "label": "Date Range"
+      },
+      "tabs": {
+        "all": "All",
+        "pending": "Pending",
+        "inProgress": "In Progress",
+        "completed": "Completed",
+        "cancelled": "Cancelled"
+      },
+      "statusCards": {
+        "all": "All",
+        "pending": "Pending",
+        "inProgress": "In Progress",
+        "completed": "Completed",
+        "cancelled": "Cancelled"
+      },
+      "kanban": {
+        "pending": "Pending",
+        "inProgress": "In Progress",
+        "completed": "Completed",
+        "cancelled": "Cancelled",
+        "empty": "No orders",
+        "start": "Start",
+        "finish": "Complete",
+        "complete": "Done",
+        "printInvoice": "Print Invoice",
+        "reset": "Reset",
+        "delete": "Delete",
+        "cancel": "Cancel"
+      },
+      "empty": {
+        "title": "No orders found",
+        "hint": "Try adjusting your filters or search query"
+      },
+      "card": {
+        "table": "Table",
+        "tip": "Tip",
+        "items": "items",
+        "moreItems": "more items",
+        "collapse": "Collapse",
+        "actions": "Actions",
+        "note": "Note",
+        "rejectReason": "Reject Reason",
+        "source": {
+          "DINE_IN": "Dine In",
+          "TAKE_AWAY": "Take Away",
+          "TAKEAWAY": "Take Away",
+          "DELIVERY": "Delivery",
+          "Takeaway": "Take Away",
+          "Dine-in": "Dine In",
+          "Delivery": "Delivery"
+        },
+        "status": {
+          "Pending": "Pending",
+          "In progress": "In Progress",
+          "Completed": "Completed",
+          "Cancelled": "Cancelled"
+        },
+        "paymentStatus": {
+          "paid": "Paid",
+          "unpaid": "Unpaid"
+        },
+        "action": {
+          "view": "View Details",
+          "edit": "Edit Order",
+          "start": "Start",
+          "complete": "Complete",
+          "cancel": "Cancel",
+          "reset": "Reset",
+          "print": "Print Invoice",
+          "pay": "Pay & Complete",
+          "printReceipt": "Print Receipt"
+        },
+        "paymentSuccess": "Payment processed successfully",
+        "paymentError": "Failed to process payment"
+      }
+    },
+    "PaymentModal": {
+      "title": "Pay & Complete Order",
+      "finalTotal": "Final Total",
+      "orderInfo": "Order Info",
+      "orderNo": "Order No",
+      "noOfItems": "No of Items",
+      "orderType": "Order Type",
+      "orderedMenus": "Ordered Menus",
+      "subTotal": "Sub Total",
+      "tax": "Tax",
+      "serviceCharge": "Service Charge",
+      "tip": "Tip",
+      "paymentType": "Payment Type",
+      "cash": "Cash",
+      "card": "Card",
+      "scan": "Scan",
+      "discount": "Discount",
+      "tips": "Tips",
+      "coupon": "Coupon",
+      "add": "Add",
+      "givenAmount": "Given Amount",
+      "balance": "Balance",
+      "note": "Note",
+      "notePlaceholder": "Enter payment note...",
+      "close": "Close",
+      "payAndComplete": "Pay & Complete Order",
+      "paying": "Processing..."
     }
   },
   "AdminSidebar": {
+    "categories": {
+      "main": "MAIN",
+      "management": "MANAGEMENT",
+      "operations": "OPERATIONS",
+      "administration": "ADMINISTRATION",
+      "settings": "SETTINGS"
+    },
     "dashboard": "Dashboard",
     "tables": "Tables",
     "staff": "Staff",
@@ -1041,16 +1282,64 @@
     "dish": "Dish",
     "dishCategory": "Dish Category",
     "ingredient": "Ingredient",
+    "coupons": "Coupons",
     "orders": "Orders",
+    "kitchen": "Kitchen (KDS)",
     "reports": "Reports",
     "emails": "Emails",
     "customers": "Customers",
+    "reservations": "Reservations",
     "promotions": "Promotions",
-    "settings": "Settings",
+    "storeSettings": "Store Settings",
+    "notifications": "Notifications",
     "logout": "Logout",
     "loggingOut": "Logging out...",
     "managerPortal": "Manager Portal",
     "logoutMessage": "Are you sure you want to logout? You will be redirected to the login page.",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "expand": "Expand",
+    "collapse": "Collapse"
+  },
+  "Notifications": {
+    "title": "Notifications",
+    "markAllRead": "Mark all as read",
+    "tabs": {
+      "all": "All",
+      "unread": "Unread",
+      "inbox": "Inbox",
+      "kitchen": "Kitchen",
+      "orders": "Orders"
+    },
+    "empty": "No notifications",
+    "time": {
+      "ago": "{time} ago"
+    }
+  },
+  "Kitchen": {
+    "title": "Kitchen Display",
+    "description": "Monitor incoming orders and update item statuses in real-time",
+    "refresh": "Refresh",
+    "liveUpdates": "Live updates",
+    "note": "Note",
+    "tabs": {
+      "all": "All Orders",
+      "new": "New",
+      "inProgress": "In Progress"
+    },
+    "empty": {
+      "title": "No active orders",
+      "hint": "New orders will appear here automatically"
+    },
+    "status": {
+      "start": "Start",
+      "serve": "Serve",
+      "reject": "Reject"
+    },
+    "rejectReason": {
+      "label": "Reason",
+      "placeholder": "Enter reason...",
+      "confirm": "Confirm",
+      "cancel": "Cancel"
+    }
   }
 }

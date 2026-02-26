@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { Eye, EyeOff, ArrowRight, ArrowLeft } from "lucide-react";
 import { useLogin } from "../hooks/use-login";
 import { useRateLimit } from "@/hooks/use-rate-limit";
 
@@ -9,18 +10,18 @@ export function LoginForm() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  
+
   const { mutate: login, isPending, isError, error } = useLogin();
   const { isRateLimited, remainingAttempts, resetTime } = useRateLimit();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // Check rate limiting
     if (isRateLimited) {
       return;
     }
-    
+
     // Call login mutation
     login({ username, password });
   };
@@ -94,16 +95,18 @@ export function LoginForm() {
               disabled={isRateLimited}
               className="w-full rounded-2xl bg-white px-4 py-3.5 pr-12 text-sm leading-5 text-gray-900 shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-blue-950/40 disabled:opacity-50 disabled:cursor-not-allowed"
             />
-            
+
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
               className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
               tabIndex={-1}
             >
-              <span className="material-icons text-xl">
-                {showPassword ? "visibility_off" : "visibility"}
-              </span>
+              {showPassword ? (
+                <EyeOff className="h-5 w-5" />
+              ) : (
+                <Eye className="h-5 w-5" />
+              )}
             </button>
           </div>
         </div>
@@ -118,20 +121,25 @@ export function LoginForm() {
             {isPending ? "Signing In..." : isRateLimited ? "Too Many Attempts" : "Sign In"}
           </span>
           {!isPending && !isRateLimited && (
-            <span className="ml-2 material-icons text-sm leading-5 text-red-300">
-              arrow_forward
-            </span>
+            <ArrowRight className="ml-2 h-4 w-4 text-red-300" />
           )}
         </button>
       </form>
 
       {/* Divider + link */}
-      <div className="mt-7 border-t border-blue-950/5 pt-7 text-center">
+      <div className="mt-7 border-t border-blue-950/5 pt-7 text-center flex flex-col gap-3">
         <Link
           href="/forgot-password"
           className="text-sm font-medium leading-5 text-blue-950/60 hover:text-blue-950"
         >
           Forgot your password?
+        </Link>
+        <Link
+          href="/"
+          className="inline-flex items-center justify-center gap-1.5 text-sm font-medium leading-5 text-blue-950/60 hover:text-blue-950 transition-colors"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          Back to Home
         </Link>
       </div>
     </div>

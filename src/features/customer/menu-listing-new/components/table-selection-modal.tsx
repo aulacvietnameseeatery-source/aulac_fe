@@ -1,17 +1,19 @@
 "use client";
-import { motion, AnimatePresence } from "framer-motion";
-import { useState } from "react";
-import { cn } from "@/lib/utils";
-import { UtensilsCrossed, X, Camera, ChevronRight, Image as ImageIcon } from "lucide-react";
 
-// Dữ liệu giả lập các bàn
-const MOCK_TABLES = [
-    { id: "A-01", name: "Table A-01 (Window)" },
-    { id: "A-02", name: "Table A-02" },
-    { id: "B-01", name: "Table B-01 (Sofa)" },
-    { id: "B-02", name: "Table B-02" },
-    { id: "VIP-1", name: "VIP Room 1" },
-];
+import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect } from "react";
+import { cn } from "@/lib/utils";
+import {UtensilsCrossed, X, Camera, ChevronRight, Image as ImageIcon, RefreshCcw} from "lucide-react";
+import { api } from "@/lib/http";
+import type { ApiResponse } from "@/types/api-response.types";
+
+interface AvailableTableDto {
+    tableId: number;
+    tableCode: string;
+    capacity: number;
+    tableType: string;
+    zone: string;
+}
 
 export function TableSelectionModal({ isOpen, onConfirm, onClose }: {
     isOpen: boolean,
@@ -20,6 +22,34 @@ export function TableSelectionModal({ isOpen, onConfirm, onClose }: {
 }) {
     const [val, setVal] = useState("");
     const [isScanning, setIsScanning] = useState(false);
+
+    const [availableTables, setAvailableTables] = useState<AvailableTableDto[]>([]);
+    const [isLoading, setIsLoading] = useState(false);
+
+    useEffect(() => {
+        if (isOpen) {
+            const fetchAvailableTables = async () => {
+                setIsLoading(true);
+                try {
+                    const response = await api.get<ApiResponse<AvailableTableDto[]>>("/api/manual/table/availability");
+                    if (response.data) {
+                        setAvailableTables(response.data);
+                    }
+                } catch (error) {
+                    console.error("Lỗi khi tải danh sách bàn trống:", error);
+                } finally {
+                    setIsLoading(false);
+                }
+            };
+
+            fetchAvailableTables();
+        } else {
+            // Reset state khi Modal đóng
+            setVal("");
+            setIsScanning(false);
+            setAvailableTables([]);
+        }
+    }, [isOpen]);
 
     const handleCloseModal = () => {
         if (isScanning) {
@@ -124,23 +154,39 @@ export function TableSelectionModal({ isOpen, onConfirm, onClose }: {
                                                 <select
                                                     value={val}
                                                     onChange={(e) => setVal(e.target.value)}
+                                                    disabled={isLoading}
                                                     className={cn(
                                                         "w-full appearance-none bg-[#1A3A52] text-white text-base py-3 px-4 rounded-xl",
                                                         "border border-[#C5A059]/30 focus:border-[#C5A059] focus:ring-1 focus:ring-[#C5A059]/50",
-                                                        "outline-none transition-all duration-300 cursor-pointer font-display"
+                                                        "outline-none transition-all duration-300 cursor-pointer font-display",
+                                                        isLoading && "opacity-70 cursor-wait"
                                                     )}
                                                 >
                                                     <option value="" disabled hidden className="text-white/30">
-                                                        Select your table...
+                                                        {isLoading ? "Loading tables..." : "Select your table..."}
                                                     </option>
-                                                    {MOCK_TABLES.map((table) => (
-                                                        <option key={table.id} value={table.id} className="bg-[#204560] text-white">
-                                                            {table.name}
+
+                                                    {/* 4. Render danh sách bàn thực tế từ API */}
+                                                    {!isLoading && availableTables.length > 0 ? (
+                                                        availableTables.map((table) => (
+                                                            <option key={table.tableId} value={table.tableCode} className="bg-[#204560] text-white">
+                                                                Table {table.tableCode} ({table.zone})
+                                                            </option>
+                                                        ))
+                                                    ) : !isLoading && (
+                                                        <option value="" disabled className="bg-[#204560] text-white/50">
+                                                            No tables available
                                                         </option>
-                                                    ))}
+                                                    )}
                                                 </select>
                                                 <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-[#C5A059]">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                                                    {isLoading ? (
+                                                        <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1, ease: "linear" }}>
+                                                            <RefreshCcw size={16} />
+                                                        </motion.div>
+                                                    ) : (
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                                                    )}
                                                 </div>
                                             </div>
 
@@ -179,12 +225,9 @@ export function TableSelectionModal({ isOpen, onConfirm, onClose }: {
                             exit={{ opacity: 0 }}
                             className="fixed inset-0 z-[120] bg-black/95 flex flex-col items-center justify-center overflow-hidden"
                         >
-                            {/* Nền giả lập luồng Camera (Sau này thay bằng thẻ <video> thực tế của react-qr-reader) */}
                             <div className="absolute inset-0 bg-[#111] flex items-center justify-center z-0">
-                                {/* Nếu có camera feed thì nó sẽ hiển thị ở đây */}
                             </div>
 
-                            {/* --- TOP UI: Nút đóng --- */}
                             <div className="absolute top-0 left-0 right-0 p-4 md:p-6 flex justify-start z-30 pt-10 md:pt-12">
                                 <button
                                     onClick={() => setIsScanning(false)}
@@ -194,12 +237,10 @@ export function TableSelectionModal({ isOpen, onConfirm, onClose }: {
                                 </button>
                             </div>
 
-                            {/* --- MIDDLE UI: Text hướng dẫn --- */}
                             <div className="z-30 absolute top-24 md:top-32 flex flex-col items-center w-full">
                                 <p className="text-white text-center text-sm font-medium tracking-wide">
                                     Put QR in your camera frame to scan and check-in your table
                                 </p>
-                                {/* Giả lập các logo như trong ảnh mẫu (TPBank, VNPAY, v.v...) */}
                                 <div className="flex gap-4 items-center mt-4 opacity-80">
                                     <div className="h-4 w-12 bg-white/30 rounded-sm"></div>
                                     <div className="h-5 w-16 bg-white/30 rounded-sm"></div>
@@ -207,28 +248,23 @@ export function TableSelectionModal({ isOpen, onConfirm, onClose }: {
                                 </div>
                             </div>
 
-                            {/* --- VIEWFINDER (KHUNG ĐỤC LỖ) --- */}
                             <div
                                 className="relative w-[260px] md:w-[320px] aspect-square rounded-2xl z-20 overflow-hidden mt-8"
                                 style={{
-                                    // Hack: Dùng box-shadow siêu to để tạo nền mờ xung quanh khung ngắm
                                     boxShadow: "0 0 0 9999px rgba(0, 0, 0, 0.75)"
                                 }}
                             >
-                                {/* Tia laser quét màu Tím giống trong ảnh mẫu */}
                                 <motion.div
                                     animate={{ top: ["0%", "100%", "0%"] }}
                                     transition={{ duration: 2.5, repeat: Infinity, ease: "linear" }}
                                     className="absolute left-0 right-0 h-10 bg-gradient-to-b from-transparent via-purple-500/80 to-transparent z-30"
                                 />
 
-                                {/* 4 Góc định vị (Trắng mờ bo tròn nhẹ) */}
                                 <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-white/80 rounded-tl-xl pointer-events-none" />
                                 <div className="absolute top-0 right-0 w-8 h-8 border-t-2 border-r-2 border-white/80 rounded-tr-xl pointer-events-none" />
                                 <div className="absolute bottom-0 left-0 w-8 h-8 border-b-2 border-l-2 border-white/80 rounded-bl-xl pointer-events-none" />
                                 <div className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-white/80 rounded-br-xl pointer-events-none" />
                             </div>
-
                         </motion.div>
                     )}
                 </>

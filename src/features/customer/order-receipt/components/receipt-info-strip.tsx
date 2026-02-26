@@ -2,7 +2,7 @@ import { OrderReceipt } from "../types/receipt.types";
 import { useTranslations } from "next-intl";
 import "../styles/index.css";
 
-export default function ReceiptInfoStrip({ order }: { order: OrderReceipt }) {
+export default function ReceiptInfoStrip({ order, showStatus = true }: { order: OrderReceipt, showStatus?: boolean }) {
   const t = useTranslations("OrderReceipt.InfoStrip");
 
   return (
@@ -10,7 +10,7 @@ export default function ReceiptInfoStrip({ order }: { order: OrderReceipt }) {
       <Info label={t("date")} value={order.date} />
       <Info label={t("orderNumber")} value={order.id} align="right" />
       <Info label={t("time")} value={order.time} />
-      <Info label={t("status")} value={order.status} align="right" highlight />
+      {showStatus && <Info label={t("status")} value={order.status} align="right" highlight />}
     </div>
   );
 }

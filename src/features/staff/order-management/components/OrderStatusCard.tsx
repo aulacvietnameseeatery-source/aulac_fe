@@ -1,0 +1,39 @@
+import React from 'react';
+
+interface OrderStatusCardProps {
+    label: string;
+    count: number;
+    icon: React.ReactNode;
+    colorClass: string;
+    isActive?: boolean;
+    onClick?: () => void;
+}
+
+export const OrderStatusCard: React.FC<OrderStatusCardProps> = ({
+    label,
+    count,
+    icon,
+    colorClass,
+    isActive,
+    onClick,
+}) => {
+    return (
+        <div
+            onClick={onClick}
+            className={`
+        bg-white rounded-lg shadow-sm border p-2.5 flex items-center justify-between
+        transition-all duration-200
+        ${onClick ? 'cursor-pointer hover:shadow-md hover:-translate-y-0.5' : ''}
+        ${isActive ? 'ring-2 ring-blue-500 border-blue-200' : 'border-gray-100'}
+      `}
+        >
+            <div>
+                <span className="text-xs font-medium text-gray-500 mb-0.5 block">{label}</span>
+                <h4 className="text-lg font-bold text-gray-900 leading-none">{count}</h4>
+            </div>
+            <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm ${colorClass}`}>
+                {icon}
+            </div>
+        </div>
+    );
+};

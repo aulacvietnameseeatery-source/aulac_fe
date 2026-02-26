@@ -67,9 +67,7 @@ export const useDishList = () => {
         try {
             // Extract column-filter values
             const category = params.filters?.["categoryName"]?.value || undefined;
-            const status = params.filters?.["status"]?.value
-                ? Number(params.filters["status"].value)
-                : undefined;
+            const status = params.filters?.["status"]?.value || undefined;
 
             const data = await staffDishService.getDishes({
                 pageIndex: page,

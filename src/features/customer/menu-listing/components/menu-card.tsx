@@ -1,10 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { useTranslations, useLocale } from "next-intl";
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { DishDetailModal } from "@/features/customer/dish-details";
 
 export interface MenuItem {
     id: string;
@@ -33,6 +33,7 @@ export function MenuCard({ item, onOrder }: MenuCardProps) {
     const locale = useLocale() as "en" | "fr";
 
     const [isAdded, setIsAdded] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     const handleOrderClick = (e: React.MouseEvent) => {
         e.preventDefault();
@@ -54,13 +55,16 @@ export function MenuCard({ item, onOrder }: MenuCardProps) {
         setTimeout(() => setIsAdded(false), 2000);
     };
 
+    const handleCardClick = (e: React.MouseEvent) => {
+        e.preventDefault();
+        setIsModalOpen(true);
+    };
+
     const name = tGrid(`items.${item.translationKey}_name` as never);
     const description = tGrid(`items.${item.translationKey}_desc` as never);
 
     let categoryLabel = item.category;
     try { categoryLabel = tFilter(item.category.toLowerCase() as never); } catch { }
-
-    const detailHref = `/dish-details/${item.id}`;
 
     return (
         <motion.div
@@ -74,7 +78,11 @@ export function MenuCard({ item, onOrder }: MenuCardProps) {
             transition={{ type: "spring", stiffness: 300, damping: 20 }}
             className="group relative flex flex-col overflow-hidden rounded-2xl bg-white border border-[#E8E4DF]"
         >
-            <Link href={detailHref} className="relative h-[224px] w-full bg-[#F5F3F0] overflow-hidden block cursor-pointer">
+            {/* Image - Click to open modal */}
+            <div 
+                onClick={handleCardClick}
+                className="relative h-[224px] w-full bg-[#F5F3F0] overflow-hidden cursor-pointer"
+            >
                 <Image
                     width={1920}
                     height={1080}
@@ -88,14 +96,17 @@ export function MenuCard({ item, onOrder }: MenuCardProps) {
                         {categoryLabel}
                     </span>
                 </div>
-            </Link>
+            </div>
 
             <div className="flex flex-1 flex-col p-6">
-                <Link href={detailHref} className="block mb-2">
+                <div 
+                    onClick={handleCardClick}
+                    className="block mb-2 cursor-pointer"
+                >
                     <h3 className="font-display text-[20px] font-bold leading-[28px] text-[#0A0A0A] transition-colors hover:text-[#D4A574]">
                         {name}
                     </h3>
-                </Link>
+                </div>
 
                 <p className="mb-6 line-clamp-3 flex-1 font-body text-[14px] leading-[22px] text-[#7A7A7A]">
                     {description}
@@ -160,6 +171,13 @@ export function MenuCard({ item, onOrder }: MenuCardProps) {
                     </motion.button>
                 </div>
             </div>
+
+            {/* Dish Detail Modal */}
+            <DishDetailModal
+                dishId={isModalOpen ? parseInt(item.id) : null}
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+            />
         </motion.div>
     );
 }

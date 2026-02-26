@@ -22,4 +22,8 @@ export const Permissions = {
   CreateRole: 'ROLE:CREATE',
   UpdateRole: 'ROLE:UPDATE',
   DeleteRole: 'ROLE:DELETE',
+
+  // Order
+  ViewOrder: 'ORDER:READ',
+  UpdateOrderItemStatus: 'ORDER:UPDATE_ITEM_STATUS',
 } as const;
