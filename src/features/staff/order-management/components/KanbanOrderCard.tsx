@@ -13,6 +13,9 @@ import {
 import { useTranslations } from "next-intl";
 import { OrderHistory } from "../types/order-history.types";
 import { PrintOrderModal } from "./PrintOrderModal";
+import { PaymentModal } from "./PaymentModal";
+import { orderHistoryService } from "../services/order-history.service";
+import { toast } from "sonner";
 
 const SOURCE_LABEL: Record<string, { label: string; icon: React.ReactNode }> = {
     DINE_IN: { label: "Dine In", icon: <Utensils className="w-3 h-3" /> },
@@ -34,7 +37,8 @@ function formatTime(dateStr?: string) {
 }
 
 function formatCurrency(amount: number) {
-    return `CHF ${amount.toLocaleString()}`;
+    // Format with en-US to ensure dot for decimals instead of comma
+    return `CHF ${amount.toLocaleString('en-US')}`;
 }
 
 const VISIBLE_ITEMS = 3;
@@ -58,6 +62,26 @@ export const KanbanOrderCard: React.FC<KanbanOrderCardProps> = ({
     const [expanded, setExpanded] = useState(false);
     const [isPrintModalOpen, setIsPrintModalOpen] = useState(false);
     const [printType, setPrintType] = useState<'invoice' | 'receipt'>('receipt');
+    const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+    const [isProcessingPayment, setIsProcessingPayment] = useState(false);
+
+    const handlePaymentComplete = async (orderId: number, data: any) => {
+        setIsProcessingPayment(true);
+        try {
+            await orderHistoryService.processPayment(data);
+            toast.success(t('paymentSuccess') || 'Payment processed successfully');
+            setIsPaymentModalOpen(false);
+            if (onAction) {
+                // Refresh list using an action callback
+                onAction(orderId, 'pay_complete');
+            }
+        } catch (error) {
+            console.error('Payment failed:', error);
+            toast.error(t('paymentError') || 'Failed to process payment');
+        } finally {
+            setIsProcessingPayment(false);
+        }
+    };
 
     const sourceInfo = SOURCE_LABEL[order.source] ?? {
         label: order.source,
@@ -203,50 +227,89 @@ export const KanbanOrderCard: React.FC<KanbanOrderCardProps> = ({
 
                 {/* Action buttons */}
                 <div className="flex gap-2">
-                    {/* View details always present */}
-                    <button
-                        onClick={() => onAction?.(order.orderId, 'view')}
-                        className="flex-1 py-1.5 rounded-lg border border-gray-200 text-xs font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors"
-                    >
-                        {t('action.view')}
-                    </button>
-
                     {/* Secondary action based on status and payment */}
                     {(order.orderStatus === 'Pending' || order.orderStatus === 'In progress') ? (
-                        <button
-                            onClick={() => onAction?.(order.orderId, 'cancel')}
-                            className="flex-1 py-1.5 rounded-lg border border-red-200 text-xs font-medium text-red-600 bg-white hover:bg-red-50 transition-colors"
-                        >
-                            {t('action.cancel')}
-                        </button>
+                        <>
+                            <button
+                                onClick={() => onAction?.(order.orderId, 'view')}
+                                className="flex-1 py-1.5 rounded-lg border border-gray-200 text-xs font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors"
+                            >
+                                {t('action.view')}
+                            </button>
+                            <button
+                                onClick={() => onAction?.(order.orderId, 'cancel')}
+                                className="flex-1 py-1.5 rounded-lg border border-red-200 text-xs font-medium text-red-600 bg-white hover:bg-red-50 transition-colors"
+                            >
+                                {t('action.cancel')}
+                            </button>
+                        </>
                     ) : order.orderStatus === 'Completed' ? (
                         order.isPaid ? (
-                            <button
-                                onClick={() => { setPrintType('invoice'); setIsPrintModalOpen(true); }}
-                                className="flex-1 py-1.5 rounded-lg border border-gray-200 text-xs font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors"
-                            >
-                                {t('action.print')}
-                            </button>
+                            <>
+                                <button
+                                    onClick={() => onAction?.(order.orderId, 'view')}
+                                    className="flex-1 py-1.5 rounded-lg border border-gray-200 text-xs font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors"
+                                >
+                                    {t('action.view')}
+                                </button>
+                                <button
+                                    onClick={() => { setPrintType('invoice'); setIsPrintModalOpen(true); }}
+                                    className="flex-1 py-1.5 rounded-lg border border-gray-200 text-xs font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors"
+                                >
+                                    {t('action.print')}
+                                </button>
+                            </>
                         ) : (
-                            <button
-                                onClick={() => { setPrintType('receipt'); setIsPrintModalOpen(true); }}
-                                className="flex-1 py-1.5 rounded-lg border border-gray-200 text-xs font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors"
-                            >
-                                {t('action.printReceipt')}
-                            </button>
+                            <>
+                                <button
+                                    onClick={() => onAction?.(order.orderId, 'view')}
+                                    className="flex-1 py-1.5 rounded-lg border border-gray-200 text-xs font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors"
+                                    title={t('action.view')}
+                                >
+                                    {t('action.view')}
+                                </button>
+                                <button
+                                    onClick={() => setIsPaymentModalOpen(true)}
+                                    className="flex-1 py-1.5 rounded-lg border border-blue-200 text-xs font-medium text-blue-700 bg-blue-50 hover:bg-blue-100 transition-colors"
+                                >
+                                    {t('action.pay')}
+                                </button>
+                                <button
+                                    onClick={() => { setPrintType('receipt'); setIsPrintModalOpen(true); }}
+                                    className="flex-1 py-1.5 rounded-lg border border-gray-200 text-xs font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors"
+                                >
+                                    {t('action.printReceipt')}
+                                </button>
+                            </>
                         )
                     ) : (
-                        primaryAction && (
+                        <>
                             <button
-                                onClick={primaryAction.onClick}
-                                className="flex-1 py-1.5 rounded-lg border border-gray-200 text-xs font-medium text-gray-700 bg-gray-50 hover:bg-gray-100 transition-colors"
+                                onClick={() => onAction?.(order.orderId, 'view')}
+                                className="flex-1 py-1.5 rounded-lg border border-gray-200 text-xs font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors"
                             >
-                                {primaryAction.label}
+                                {t('action.view')}
                             </button>
-                        )
+                            {primaryAction && (
+                                <button
+                                    onClick={primaryAction.onClick}
+                                    className="flex-1 py-1.5 rounded-lg border border-gray-200 text-xs font-medium text-gray-700 bg-gray-50 hover:bg-gray-100 transition-colors"
+                                >
+                                    {primaryAction.label}
+                                </button>
+                            )}
+                        </>
                     )}
                 </div>
             </div>
+
+            <PaymentModal
+                order={order}
+                isOpen={isPaymentModalOpen}
+                onClose={() => setIsPaymentModalOpen(false)}
+                onPaymentComplete={handlePaymentComplete}
+                isLoading={isProcessingPayment}
+            />
 
             <PrintOrderModal
                 order={order}

@@ -1042,6 +1042,19 @@
       "refresh": "Refresh",
       "addNewOrder": "Add New Order",
       "kanbanLabel": "Kanban — All statuses",
+      "dateRange": {
+        "today": "Today",
+        "yesterday": "Yesterday",
+        "last7": "Last 7 Days",
+        "last30": "Last 30 Days",
+        "thisMonth": "This Month",
+        "lastMonth": "Last Month",
+        "custom": "Custom Range",
+        "from": "From",
+        "to": "To",
+        "apply": "Apply",
+        "label": "Date Range"
+      },
       "tabs": {
         "all": "All",
         "pending": "Pending",
@@ -1053,6 +1066,7 @@
         "all": "All",
         "pending": "Pending",
         "inProgress": "In Progress",
+        "completed": "Completed",
         "cancelled": "Cancelled"
       },
       "kanban": {

@@ -69,7 +69,8 @@ const ACTION_ICONS: Record<ActionKey, { icon: React.ReactNode; danger?: boolean 
 // ─── Helpers ────────────────────────────────────────────────────────────────
 
 function formatCurrency(amount: number) {
-    return `CHF ${amount.toLocaleString()}`;
+    // Format with en-US to ensure dot for decimals instead of comma
+    return `CHF ${amount.toLocaleString('en-US')}`;
 }
 
 const VISIBLE_ITEMS_COUNT = 3;

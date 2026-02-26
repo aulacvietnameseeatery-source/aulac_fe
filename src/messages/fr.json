@@ -988,6 +988,19 @@
       "refresh": "Actualiser",
       "addNewOrder": "Nouvelle commande",
       "kanbanLabel": "Kanban — Tous les statuts",
+      "dateRange": {
+        "today": "Aujourd'hui",
+        "yesterday": "Hier",
+        "last7": "7 derniers jours",
+        "last30": "30 derniers jours",
+        "thisMonth": "Ce mois",
+        "lastMonth": "Mois dernier",
+        "custom": "Personnalisé",
+        "from": "De",
+        "to": "À",
+        "apply": "Appliquer",
+        "label": "Période"
+      },
       "tabs": {
         "all": "Tout",
         "pending": "En attente",
@@ -999,6 +1012,7 @@
         "all": "Tout",
         "pending": "En attente",
         "inProgress": "En cours",
+        "completed": "Terminée",
         "cancelled": "Annulée"
       },
       "kanban": {

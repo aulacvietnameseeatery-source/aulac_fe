@@ -1042,6 +1042,19 @@
       "refresh": "Làm mới",
       "addNewOrder": "Thêm đơn hàng",
       "kanbanLabel": "Kanban — Tất cả trạng thái",
+      "dateRange": {
+        "today": "Hôm nay",
+        "yesterday": "Hôm qua",
+        "last7": "7 ngày qua",
+        "last30": "30 ngày qua",
+        "thisMonth": "Tháng này",
+        "lastMonth": "Tháng trước",
+        "custom": "Tùy chỉnh",
+        "from": "Từ",
+        "to": "Đến",
+        "apply": "Áp dụng",
+        "label": "Thời gian"
+      },
       "tabs": {
         "all": "Tất cả",
         "pending": "Chờ xử lý",
@@ -1053,6 +1066,7 @@
         "all": "Tất cả",
         "pending": "Chờ xử lý",
         "inProgress": "Đang làm",
+        "completed": "Hoàn thành",
         "cancelled": "Đã huỷ"
       },
       "kanban": {
