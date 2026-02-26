@@ -480,6 +480,26 @@
       "step_order": "Đặt món"
     }
   },
+  "FillInforCustomer": {
+    "title": "Chào Mừng Đến Au Lac",
+    "subtitle": "Vui lòng cung cấp thông tin của bạn để bắt đầu trải nghiệm ẩm thực",
+    "form": {
+      "fullName": "Họ và tên",
+      "fullNamePlaceholder": "Nhập họ và tên của bạn",
+      "phoneNumber": "Số điện thoại",
+      "phoneNumberPlaceholder": "Nhập số điện thoại của bạn",
+      "emailAddress": "Địa chỉ email",
+      "emailAddressPlaceholder": "Nhập địa chỉ email của bạn",
+      "tableNumber": "Số bàn",
+      "submitting": "Đang xử lý...",
+      "startDining": "Bắt đầu dùng bữa",
+      "errors": {
+        "phoneRequired": "Số điện thoại là bắt buộc",
+        "emailInvalid": "Địa chỉ email không hợp lệ"
+      }
+    },
+    "footer": "Ẩm thực Việt Nam thủ công"
+  },
   "ConfirmOrder": {
     "OrderItem": {
       "add_note": "Thêm ghi chú",

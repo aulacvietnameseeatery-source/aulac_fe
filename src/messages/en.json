@@ -480,6 +480,26 @@
       "step_order": "Order"
     }
   },
+  "FillInforCustomer": {
+    "title": "Welcome to Au Lac",
+    "subtitle": "Please provide your information to begin your culinary journey",
+    "form": {
+      "fullName": "Full Name",
+      "fullNamePlaceholder": "Enter your full name",
+      "phoneNumber": "Phone Number",
+      "phoneNumberPlaceholder": "Enter your phone number",
+      "emailAddress": "Email Address",
+      "emailAddressPlaceholder": "Enter your email address",
+      "tableNumber": "Table Number",
+      "submitting": "Submitting...",
+      "startDining": "Start Dining",
+      "errors": {
+        "phoneRequired": "Phone number is required",
+        "emailInvalid": "Invalid email address"
+      }
+    },
+    "footer": "Handcrafted Vietnamese Cuisine"
+  },
   "ConfirmOrder": {
     "OrderItem": {
       "add_note": "Add Note",

@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from "react";
 import { AnimatePresence } from "framer-motion";
+import { useRouter } from "next/navigation";
 import { Atmosphere } from "@/features/customer/menu-listing-new/components/atmosphere";
 import { BookFrame } from "@/features/customer/menu-listing-new/components/book-frame";
 import { CartItem } from "@/features/customer/menu-listing-new/types/cart";
@@ -19,6 +20,7 @@ interface Props {
 }
 
 export default function MenuListingClient({ initialMenuData, locale }: Props) {
+    const router = useRouter();
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
     const [tableNumber, setTableNumber] = useState("");
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -78,12 +80,8 @@ export default function MenuListingClient({ initialMenuData, locale }: Props) {
     };
 
     const handleTableConfirm = (val: string) => {
-        setTableNumber(val);
-        setIsModalOpen(false);
-        if (pendingQueue.length > 0) {
-            addToCart(pendingQueue);
-            setPendingQueue([]);
-        }
+        // Navigate to fill-infor-customer with table number
+        router.push(`/fill-infor-customer?table=${encodeURIComponent(val)}`);
     };
 
     const handleUpdateQuantity = (id: string, delta: number) => {
