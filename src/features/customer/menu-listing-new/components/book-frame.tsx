@@ -201,6 +201,7 @@ export const BookFrame = ({ menuData, onAddToCart }: BookFrameProps) => {
                 dishId={selectedItem ? parseInt(selectedItem.id) : null}
                 isOpen={selectedItem !== null}
                 onClose={() => setSelectedItem(null)}
+                onAddToCart={onAddToCart}
             />
 
             {/* CATEGORY FILTER (Responsive) */}

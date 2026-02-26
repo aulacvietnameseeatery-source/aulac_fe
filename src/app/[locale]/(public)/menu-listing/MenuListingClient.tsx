@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { AnimatePresence } from "framer-motion";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Atmosphere } from "@/features/customer/menu-listing-new/components/atmosphere";
 import { BookFrame } from "@/features/customer/menu-listing-new/components/book-frame";
 import { CartItem } from "@/features/customer/menu-listing-new/types/cart";
@@ -19,12 +19,64 @@ interface Props {
     locale: 'vi' | 'en' | 'fr';
 }
 
+const CART_STORAGE_KEY = "aulac_cart_items";
+const TABLE_STORAGE_KEY = "aulac_table_number";
+
 export default function MenuListingClient({ initialMenuData, locale }: Props) {
     const router = useRouter();
+    const searchParams = useSearchParams();
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
     const [tableNumber, setTableNumber] = useState("");
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [pendingQueue, setPendingQueue] = useState<MenuItemData[]>([]);
+
+    // Khôi phục cart và table number từ localStorage/URL khi component mount
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            try {
+                // Khôi phục cart
+                const savedCart = localStorage.getItem(CART_STORAGE_KEY);
+                if (savedCart) {
+                    setCartItems(JSON.parse(savedCart));
+                }
+                
+                // Khôi phục table number từ URL params hoặc localStorage
+                const tableFromUrl = searchParams.get("table");
+                const savedTable = localStorage.getItem(TABLE_STORAGE_KEY);
+                
+                if (tableFromUrl) {
+                    setTableNumber(tableFromUrl);
+                    localStorage.setItem(TABLE_STORAGE_KEY, tableFromUrl);
+                } else if (savedTable) {
+                    setTableNumber(savedTable);
+                }
+            } catch (error) {
+                console.error("Error loading from localStorage:", error);
+            }
+        }
+    }, [searchParams]);
+
+    // Lưu cart vào localStorage mỗi khi thay đổi
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            try {
+                localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cartItems));
+            } catch (error) {
+                console.error("Error saving cart to localStorage:", error);
+            }
+        }
+    }, [cartItems]);
+
+    // Lưu table number vào localStorage mỗi khi thay đổi
+    useEffect(() => {
+        if (typeof window !== 'undefined' && tableNumber) {
+            try {
+                localStorage.setItem(TABLE_STORAGE_KEY, tableNumber);
+            } catch (error) {
+                console.error("Error saving table to localStorage:", error);
+            }
+        }
+    }, [tableNumber]);
 
     // MAPPING DATA: Biến RawMenuCategory (Object) thành MenuCategory (String)
     const localizedMenu: MenuCategory[] = useMemo(() => {
@@ -80,6 +132,18 @@ export default function MenuListingClient({ initialMenuData, locale }: Props) {
     };
 
     const handleTableConfirm = (val: string) => {
+        // Set table number and save to localStorage
+        setTableNumber(val);
+        if (typeof window !== 'undefined') {
+            localStorage.setItem(TABLE_STORAGE_KEY, val);
+        }
+        
+        // Add pending items to cart if any
+        if (pendingQueue.length > 0) {
+            addToCart(pendingQueue);
+            setPendingQueue([]);
+        }
+        
         // Navigate to fill-infor-customer with table number
         router.push(`/fill-infor-customer?table=${encodeURIComponent(val)}`);
     };
@@ -90,6 +154,10 @@ export default function MenuListingClient({ initialMenuData, locale }: Props) {
 
     const handleRemoveItem = (id: string) => {
         setCartItems(prev => prev.filter(item => item.id !== id));
+    };
+
+    const handleUpdateNote = (id: string, note: string) => {
+        setCartItems(prev => prev.map(item => item.id === id ? { ...item, note } : item));
     };
 
     return (
@@ -109,9 +177,10 @@ export default function MenuListingClient({ initialMenuData, locale }: Props) {
 
 
             {/* ĐÃ SỬA: Canh phải cho cả Mobile (right-4) và Desktop (md:right-5) */}
+            {/* Hiển thị cart khi có table number (dù chưa có món) */}
             <div id="cart-destination" className="fixed bottom-6 right-4 md:bottom-8 md:right-5 z-50 pointer-events-none flex flex-col items-end justify-end">
                 <AnimatePresence>
-                    {cartItems.length > 0 && (
+                    {tableNumber && (
                         <div className="pointer-events-auto">
                         <CartSummary
                         cartItems={cartItems}
@@ -119,7 +188,10 @@ export default function MenuListingClient({ initialMenuData, locale }: Props) {
                     onUpdateTable={setTableNumber}
                     onUpdateQuantity={handleUpdateQuantity}
                     onRemoveItem={handleRemoveItem}
-                    onConfirm={() => console.log("Checkout requested:", cartItems)}
+                    onUpdateNote={handleUpdateNote}
+                    onConfirm={() => {
+                        // Tạm thời không xử lý gì
+                    }}
                 />
             </div>
             )}

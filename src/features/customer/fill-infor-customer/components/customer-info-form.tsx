@@ -13,10 +13,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 
 interface CustomerInfoFormProps {
-  tableNumber?: string;
+  tableNumber: string;
 }
 
-export function CustomerInfoForm({ tableNumber = "05" }: CustomerInfoFormProps) {
+export function CustomerInfoForm({ tableNumber }: CustomerInfoFormProps) {
   const t = useTranslations("FillInforCustomer");
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -44,14 +44,21 @@ export function CustomerInfoForm({ tableNumber = "05" }: CustomerInfoFormProps) 
   const onSubmit = async (data: CustomerInfoFormData) => {
     setIsSubmitting(true);
     try {
-      // TODO: Integrate with API when ready
-      console.log("Customer Info:", data);
+      // Save customer info and table to localStorage
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('aulac_customer_info', JSON.stringify({
+          fullName: data.fullName,
+          phoneNumber: data.phoneNumber,
+          emailAddress: data.emailAddress
+        }));
+        localStorage.setItem('aulac_table_number', tableNumber);
+      }
       
       // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 1000));
       
-      // Navigate to QR menu with table number
-      router.push(`/menu-qr?table=${encodeURIComponent(data.tableNumber || `Table ${tableNumber}`)}`);
+      // Navigate directly to menu-listing with table number
+      router.push(`/menu-listing?table=${encodeURIComponent(tableNumber)}`);
     } catch (error) {
       console.error("Error submitting form:", error);
     } finally {
