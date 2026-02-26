@@ -5,8 +5,7 @@ export type DishDetailResponse = {
   categoryId: number;
   price: number;
   dishStatusLvId: number;
-  tagId: number;
-  dietId: number | null;
+  tagIds: number[];
   isOnline: boolean;
   chefRecommended: boolean;
   displayOrder: number | null;

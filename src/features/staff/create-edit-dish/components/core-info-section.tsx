@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { UseFormReturn } from "react-hook-form";
+import { Controller, UseFormReturn } from "react-hook-form";
 import { DishFormValues } from "../types/schema";
 import { CategoryDto, DishDietDto, DishStatusDto, DishTagDto } from "../types/dish-detail.types";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
+import { ALCombobox } from "@/components/ui/al-combobox";
 
 export const CoreInfoSection: React.FC<{ 
   form: UseFormReturn<DishFormValues>, 
@@ -16,7 +17,8 @@ export const CoreInfoSection: React.FC<{
   statuses,
   tags,
   diets }) => {
-  const { register, formState: { errors } } = form;
+  const t = useTranslations("Dish.Form");
+  const { register, control, formState: { errors } } = form;
   const locale = useLocale() as 'vi' | 'en' | 'fr';
 
   // Helper function to get Category name according to language
@@ -34,6 +36,14 @@ export const CoreInfoSection: React.FC<{
     return item.i18n[locale] || item.i18n.en;
   };
 
+  // Map tags to format options for ALCombobox
+  const tagOptions = React.useMemo(() => {
+    return tags?.map(t => ({
+      value: t.valueId,
+      label: getLookupValueName(t)
+    })) || [];
+  }, [tags, locale]);
+
   return (
     <div className="py-2"> 
       
@@ -42,13 +52,13 @@ export const CoreInfoSection: React.FC<{
         {/* 1. CATEGORY */}
         <div className="space-y-2">
           <label className="text-sm font-medium text-gray-600">
-            Category <span className="text-red-500">*</span>
+            {t("core.category")} <span className="text-red-500">*</span>
           </label>
           <select 
             {...register("categoryId", { valueAsNumber: true})}
             className="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm focus:border-blue-500 outline-non"
           >
-            <option value="">Select Category...</option>
+            <option value="">{t("core.selectCategory")}</option>
             {categories?.map(c => (
               <option key={c.categoryId} value={c.categoryId}>
                 {getCategoryName(c)}
@@ -58,47 +68,31 @@ export const CoreInfoSection: React.FC<{
           {errors.categoryId && <p className="text-xs text-red-500">{errors.categoryId.message}</p>}
         </div>
 
-        {/* 2. DIET */}
+        {/* 2. TAG */}
         <div className="space-y-2">
           <label className="text-sm font-medium text-gray-600">
-            Special Diet <span className="text-gray-400 font-normal text-xs">(Optional)</span>
+            {t("core.tags")} <span className="text-red-500">*</span>
           </label>
-          <select 
-            {...register("dietId")}
-            className="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm focus:border-blue-500 outline-non"
-          >
-            <option value="">None</option>
-            {diets?.map(d => (
-              <option key={d.valueId} value={d.valueId}>
-                {getLookupValueName(d)}
-              </option>
-            ))}
-          </select>
+          <Controller
+            control={control}
+            name="tagIds"
+            render={({ field }) => (
+              <ALCombobox
+                options={tagOptions}
+                value={field.value}
+                onChange={(val) => field.onChange(val)}
+                multiple={true}
+                placeholder="Select Tags..."
+                error={errors.tagIds?.message} 
+              />
+            )}
+          />
         </div>
 
-        {/* 3. TAG */}
+        {/* 3. PRICE */}
         <div className="space-y-2">
           <label className="text-sm font-medium text-gray-600">
-            Dish Tag <span className="text-red-500">*</span>
-          </label>
-          <select 
-            {...register("tagId", { valueAsNumber: true })}
-            className="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm focus:border-blue-500 outline-non"
-          >
-            <option value="">Select Tag...</option>
-            {tags?.map(t => (
-              <option key={t.valueId} value={t.valueId}> 
-                {getLookupValueName(t)}
-              </option>
-            ))}
-          </select>
-          {errors.tagId && <p className="text-xs text-red-500">{errors.tagId.message}</p>}
-        </div>
-
-        {/* 4. PRICE */}
-        <div className="space-y-2">
-          <label className="text-sm font-medium text-gray-600">
-            Base Price (CHF) <span className="text-red-500">*</span>
+            {t("core.price")} <span className="text-red-500">*</span>
           </label>
           <input
             type="number"
@@ -110,9 +104,9 @@ export const CoreInfoSection: React.FC<{
           {errors.price && <p className="text-xs text-red-500">{errors.price.message}</p>}
         </div>
 
-        {/* 5. STATUS */}
+        {/* 4. STATUS */}
         <div className="space-y-2">
-          <label className="text-sm font-medium text-gray-600">Status</label>
+          <label className="text-sm font-medium text-gray-600">{t("core.status")}</label>
           <select 
             {...register("dishStatusLvId", { valueAsNumber: true})}
             className="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm focus:border-blue-500 outline-non"
@@ -125,7 +119,7 @@ export const CoreInfoSection: React.FC<{
           </select>
         </div>
 
-        {/* 6. IS ONLINE (Checkbox) */}
+        {/* 5. IS ONLINE (Checkbox) */}
         <div className="flex items-end h-full pb-0.5"> 
           <label className="flex items-center gap-3 cursor-pointer group p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors h-10 w-full">
             <input 
@@ -134,7 +128,7 @@ export const CoreInfoSection: React.FC<{
                 className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500 transition-transform" 
             />
             <span className="text-sm font-medium text-gray-600 group-hover:text-blue-700 select-none">
-              Available Online
+              {t("core.availableOnline")}
             </span>
           </label>
         </div>

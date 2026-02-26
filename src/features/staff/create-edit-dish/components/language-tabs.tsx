@@ -35,19 +35,18 @@ export const LanguageTabs: React.FC<LanguageTabsProps> = ({
   const translateMutation = useMutation({
     mutationFn: translateDishContent,
     onSuccess: (data) => {
-      // Data trả về: { translations: { "fr": { dishName: "..." }, "vi": { ... } } }
+      // Data returned: { translations: { "fr": { dishName: "..." }, "vi": { ... } } }
       let count = 0;
 
       Object.entries(data.translations).forEach(([langKey, content]) => {
         const targetLang = langKey as Language;
         
-        // Bỏ qua nếu response trả về ngôn ngữ trùng với tab hiện tại (đề phòng)
+        // Ignore the response if it returns a language that matches the current tab (as a precaution).
         if (targetLang === activeTab) return;
 
-        // Helper để set value nhanh
+        // Helper for quickly setting values
         const setField = (field: keyof DishI18nDto, value?: string | null) => {
           if (value) {
-            // Cấu trúc form: i18n.vi.dishName
             setValue(`i18n.${targetLang}.${field}` as any, value, {
               shouldDirty: true,
               shouldValidate: true,
@@ -73,16 +72,16 @@ export const LanguageTabs: React.FC<LanguageTabsProps> = ({
 
   // --- Handler ---
   const handleAutoTranslate = () => {
-    // 1. Lấy dữ liệu từ tab hiện tại
+    // 1. Get data from the current tab.
     const currentData = getValues(`i18n.${activeTab}`);
 
-    // 2. Validate cơ bản
+    // 2. Basic Validation
     if (!currentData?.dishName) {
       //toast.warning(`Please enter a Dish Name for ${LANGUAGE_LABELS[activeTab]} first.`);
       return;
     }
 
-    // 3. Gọi API
+    // 3. Call API
     translateMutation.mutate({
       sourceLang: activeTab,
       data: {

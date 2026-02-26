@@ -20,6 +20,7 @@ import { useCreateDish } from "../hooks/useCreateDish";
 import { useEditDish } from "../hooks/useEditDish";
 import { getAllActiveStatus, getAllCategories, getAllDiets, getAllTag, getDishById } from "../services/dish.service";
 import { useDishEditMedia } from "../hooks/useDishEditMedia";
+import { useTranslations } from "next-intl";
 
 type DishMutationVariables  = {
   form: DishFormValues;
@@ -33,6 +34,7 @@ type DishFormProps = {
 };
 
 export function DishForm({ mode, dishId, onSuccess }: DishFormProps) {
+  const t = useTranslations("Dish.Form");
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<Language>("en");
   const isEdit = mode === "edit";
@@ -103,11 +105,11 @@ export function DishForm({ mode, dishId, onSuccess }: DishFormProps) {
     mutationFn: ({ form, images }: DishMutationVariables) =>
       isEdit ? onEdit(dishId!, form, images, removedMediaIds) : onCreate(form, images),
     onSuccess: () => {
-      toast.success(isEdit ? "Dish updated" : "Dish created");
+      toast.success(isEdit ? t("toast.updated") : t("toast.created"));
       onSuccess?.();
     },
     onError: (err: any) => {
-      toast.error(err?.message ?? "Something went wrong");
+      toast.error(err?.message ?? t("toast.error"));
     },
   });
 
@@ -130,15 +132,13 @@ export function DishForm({ mode, dishId, onSuccess }: DishFormProps) {
   /* ---------------------- UI ---------------------- */
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
-      <Toaster position="top-center" richColors />
-      
       {/* Header */}
       <header className="flex-1 w-full max-w-7xl mx-auto space-y-6 mt-6">
           <div className="flex items-center justify-between">
             {/* <button onClick={() => router.back()} className="mt-1 p-2 hover:bg-gray-200 rounded-full text-gray-600"><ArrowLeft size={24} /></button> */}
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 tracking-tight">{isEdit ? "Edit Dish" : "Create New Dish"}</h1>
-              <p className="text-gray-500 mt-1">{isEdit ? "Fill in the details below to add a new item to the menu." : "Fill in the details below to add a new item to the menu."}</p>
+              <h1 className="text-3xl font-bold text-gray-900 tracking-tight">{isEdit ? t("header.editTitle") : t("header.createTitle")}</h1>
+              <p className="text-gray-500 mt-1">{isEdit ? t("header.editDescription") : t("header.createDescription")}</p>
             </div>
           </div>
       </header>
@@ -147,7 +147,7 @@ export function DishForm({ mode, dishId, onSuccess }: DishFormProps) {
       <main className="flex-1 w-full max-w-7xl mx-auto pb-16 space-y-6 mt-6">
         
         {/* ROW 1: CORE INFORMATION */}
-        <SectionWrapper title="Core Information" subtitle="Classification & Pricing">
+        <SectionWrapper title={t("core.title")} subtitle={t("core.subtitle")}>
           <CoreInfoSection
             form={form}
             statuses={statuses}
@@ -160,8 +160,8 @@ export function DishForm({ mode, dishId, onSuccess }: DishFormProps) {
         {/* ROW 2: MULTILINGUAL CONTENT */}
         <div className="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
             <div className="px-6 py-4 border-b border-gray-100 bg-gray-50/50">
-                <h3 className="text-base font-bold text-gray-900">Multilingual Content</h3>
-                <p className="text-xs text-gray-500 mt-0.5">Manage names and descriptions for menu display.</p>
+                <h3 className="text-base font-bold text-gray-900">{t("multilingual.title")}</h3>
+                <p className="text-xs text-gray-500 mt-0.5">{t("multilingual.subtitle")}</p>
             </div>
             <div className="p-2">
                 <LanguageTabs form={form} activeTab={activeTab} setActiveTab={setActiveTab} />
@@ -171,12 +171,12 @@ export function DishForm({ mode, dishId, onSuccess }: DishFormProps) {
         {/* ROW 3: MEDIA (360 + Static) */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
              {/* 3.1: 360 View */}
-            <SectionWrapper title="360° Interaction" subtitle="Spinner sequence">
+            <SectionWrapper title={t("mdeia.media360.title")} subtitle={t("media.media360.subtitle")}>
                 <ThreeSixtySection frames={images360} onChange={setImages360} />
             </SectionWrapper>
 
             {/* 3.2: Static Images */}
-            <SectionWrapper title="Gallery Images" subtitle="Standard photos">
+            <SectionWrapper title={t("media.gallery.title")} subtitle={t("media.gallery.subtitle")}>
                 <StaticImageSection
                     images={staticImages}
                     existingImages={existingImages}
@@ -193,23 +193,38 @@ export function DishForm({ mode, dishId, onSuccess }: DishFormProps) {
 
       </main>
 
-      {/* Sticky Footer */}
-
-      <div className="sticky bottom-0 z-20 px-6 bg-white border-t border-gray-200 py-4 shadow-[0_-4px_10px_rgba(0,0,0,0.05)]">
-        <div className="flex items-center justify-between w-full px-6">
-            <div className="text-sm text-gray-500 hidden sm:block"></div>
-            <div className="flex items-center gap-3 ml-auto">
-                <button type="button" onClick={() => router.back()} className="px-5 py-2.5 text-sm font-semibold text-red-600 hover:bg-red-50 rounded-lg flex items-center gap-2"><Trash2 size={18} /> Discard</button>
-                <div className="h-6 w-px bg-gray-300 mx-1 hidden sm:block"></div>
-                {/* <button type="button" onClick={handleSaveDraft} className="px-6 py-2.5 text-sm font-semibold text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 flex items-center gap-2"><FileEdit size={18} /> Save Draft</button> */}
-                {isEdit ?
-                    <button type="button" onClick={onSubmit} className="px-8 py-2.5 text-sm font-semibold text-white bg-gray-900 rounded-lg hover:bg-black flex items-center gap-2"><Save size={18} /> {mutation.isPending ? "Saving..." : "Save Changes"}</button>
-                 :
-                    <button type="button" onClick={onSubmit} className="px-8 py-2.5 text-sm font-semibold text-white bg-gray-900 rounded-lg hover:bg-black flex items-center gap-2"><Save size={18} /> {mutation.isPending ? "Creating..." : "Create Dish"}</button>
-                }
-            </div>
+      {/* Form Actions (Non-sticky) */}
+        <div className="w-full max-w-7xl mx-auto pt-6 border-t border-gray-200 flex items-center justify-end gap-3">
+            <button 
+                type="button" 
+                onClick={() => router.back()} 
+                className="px-5 py-2.5 text-sm font-semibold text-red-600 hover:bg-red-50 rounded-lg flex items-center gap-2 transition-colors"
+            >
+                <Trash2 size={18} /> {t("actions.discard")}
+            </button>
+            
+            <div className="h-6 w-px bg-gray-300 mx-1 hidden sm:block"></div>
+            
+            {isEdit ? (
+                <button 
+                    type="button" 
+                    onClick={onSubmit} 
+                    disabled={mutation.isPending}
+                    className="px-8 py-2.5 text-sm font-semibold text-white bg-gray-900 rounded-lg hover:bg-black flex items-center gap-2 transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
+                >
+                    <Save size={18} /> {mutation.isPending ? t("actions.saving") : t("actions.saveChanges")}
+                </button>
+            ) : (
+                <button 
+                    type="button" 
+                    onClick={onSubmit} 
+                    disabled={mutation.isPending}
+                    className="px-8 py-2.5 text-sm font-semibold text-white bg-gray-900 rounded-lg hover:bg-black flex items-center gap-2 transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
+                >
+                    <Save size={18} /> {mutation.isPending ? t("actions.creating") : t("actions.createDish")}
+                </button>
+            )}
         </div>
-      </div>
     </div>
   );
 }

@@ -978,6 +978,114 @@
       "category": {
         "required": "La catégorie est requise"
       }
+    },
+    "Form": {
+      "header": {
+        "createTitle": "Créer un nouveau plat",
+        "editTitle": "Modifier le plat",
+        "createDescription": "Remplissez les informations pour ajouter un plat au menu.",
+        "editDescription": "Mettre à jour les informations du plat."
+      },
+      "actions": {
+        "discard": "Annuler",
+        "createDish": "Créer le plat",
+        "creating": "Création...",
+        "saveChanges": "Enregistrer",
+        "saving": "Enregistrement..."
+      },
+      "toast": {
+        "created": "Plat créé avec succès",
+        "updated": "Plat mis à jour",
+        "error": "Une erreur est survenue"
+      },
+      "core": {
+        "title": "Informations Principales",
+        "subtitle": "Classification & Tarification",
+        "category": "Catégorie",
+        "selectCategory": "Sélectionner une catégorie...",
+        "tags": "Tags du plat",
+        "price": "Prix de base (CHF)",
+        "status": "Statut",
+        "availableOnline": "Disponible en ligne"
+      },
+      "multilingual": {
+        "title": "Contenu Multilingue",
+        "subtitle": "Gérer les noms et descriptions pour l'affichage du menu."
+      },
+      "media": {
+        "media360": {
+          "title": "Interaction 360°",
+          "subtitle": "Séquence d'images rotatives"
+        },
+        "gallery": {
+          "title": "Galerie d'Images",
+          "subtitle": "Photos standards"
+        },
+        "badge": "VUE 360°",
+        "drag": "Glisser pour faire pivoter",
+        "uploadTitle": "Télécharger séquence 360°",
+        "uploadDesc": "Sélectionnez 24-36 images triées par nom.",
+        "chooseFiles": "Choisir des fichiers",
+        "sequenceLoaded": "Séquence chargée",
+        "frame": "Image",
+        "delete": "Supprimer séquence",
+        "changeFiles": "Changer fichiers",
+        "existing": "Existant",
+        "addImage": "Ajouter image",
+        "recommended": "Recommandé : 800x800px (JPG, PNG)"
+      },
+      "additional": {
+        "title": "Informations supplémentaires",
+        "subtitle": "Nutrition & temps",
+        "displayOrder": "Ordre d'affichage",
+        "calories": "Calories (kcal)",
+        "prep": "Préparation (min)",
+        "cook": "Cuisson (min)",
+        "chefRecommended": "Recommandé par le chef"
+      }
+    }
+  },
+  "dishDetail": {
+    "header": {
+      "title": "Détail du Plat",
+      "readonly": "Mode lecture seule",
+      "edit": "Modifier le plat"
+    },
+    "states": {
+      "loading": "Chargement des détails du plat...",
+      "notFound": "Plat introuvable",
+      "goBack": "Retour"
+    },
+    "language": {
+      "en": "Anglais",
+      "vi": "Vietnamien",
+      "fr": "Français"
+    },
+    "info": {
+      "shortDescription": "Description courte",
+      "detailedDescription": "Description détaillée",
+      "internalNote": "Note interne (Privée)"
+    },
+    "specs": {
+      "title": "Spécifications principales",
+      "category": "Catégorie",
+      "basePrice": "Prix de base",
+      "calories": "Calories",
+      "displayOrder": "Ordre d'affichage",
+      "prepTime": "Temps de préparation",
+      "cookTime": "Temps de cuisson",
+      "mins": "min"
+    },
+    "gallery": {
+      "title": "Galerie",
+      "noImages": "Aucune image disponible",
+      "clickHint": "Cliquez pour agrandir • Faites défiler pour plus",
+      "no360": "Vue 360° non disponible pour ce plat."
+    },
+    "status": {
+      "online": "En ligne",
+      "offline": "Hors ligne",
+      "chefChoice": "Choix du chef"
     }
   },
   "Order": {

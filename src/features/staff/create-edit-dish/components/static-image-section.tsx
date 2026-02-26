@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { ImagePlus, X } from "lucide-react";
 import { BASE_URL } from "@/lib/http";
+import { useTranslations } from "next-intl";
 
 type ExistingImage = {
   mediaId: number;
@@ -13,6 +14,7 @@ export const StaticImageSection: React.FC<{
   onChange: (files: File[]) => void;
   onRemoveExisting: (mediaId: number) => void;
 }> = ({ images, existingImages, onChange, onRemoveExisting }) => {
+  const t = useTranslations("Dish.Form.media");
   const [newImagePreviews, setNewImagePreviews] = useState<string[]>([]);
 
   /* ---------- Cleanup object URLs ---------- */
@@ -72,7 +74,7 @@ export const StaticImageSection: React.FC<{
             </div>
 
             <div className="absolute bottom-2 left-2 bg-black/60 text-white text-[10px] px-1.5 py-0.5 rounded">
-              Existing
+              {t("existing")}
             </div>
           </div>
         ))}
@@ -112,14 +114,14 @@ export const StaticImageSection: React.FC<{
           <div className="p-3 rounded-full bg-gray-100 group-hover:bg-blue-100 group-hover:text-blue-600 transition-colors">
             <ImagePlus size={20} className="text-gray-400 group-hover:text-blue-600" />
           </div>
-          <span className="text-xs font-semibold text-gray-500 group-hover:text-blue-700">Add Image</span>
+          <span className="text-xs font-semibold text-gray-500 group-hover:text-blue-700">{t("addImage")}</span>
         </label>
 
       </div>
       
       {/* Helper text footer */}
       <p className="text-xs text-gray-400 mt-3 text-center">
-        Recommended: 800x800px (JPG, PNG)
+        {t("recommended")}
       </p>
     </div>
   );
