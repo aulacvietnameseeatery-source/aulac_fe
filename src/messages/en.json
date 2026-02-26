@@ -1032,6 +1032,114 @@
       "category": {
         "required": "Category is required"
       }
+    },
+    "Form": {
+      "header": {
+        "createTitle": "Create New Dish",
+        "editTitle": "Edit Dish",
+        "createDescription": "Fill in the details below to add a new item to the menu.",
+        "editDescription": "Update the information of this dish."
+      },
+      "actions": {
+        "discard": "Discard",
+        "createDish": "Create Dish",
+        "createing": "Creating...",
+        "saveChanges": "Save Changes",
+        "saving": "Saving..."
+      },
+      "toast": {
+        "created": "Dish created successfully",
+        "updated": "Dish updated successfully",
+        "error": "Something went wrong"
+      },
+      "core": {
+        "title": "Core Information",
+        "subtitle": "Classification & Pricing",
+        "category": "Category",
+        "selectCategory": "Select Category...",
+        "tags": "Dish Tags",
+        "price": "Base Price (CHF)",
+        "status": "Status",
+        "availableOnline": "Available Online"
+      },
+      "multilingual": {
+        "title": "Multilingual Content",
+        "subtitle": "Manage names and descriptions for menu display."
+      },
+      "media": {
+        "media360": {
+          "title": "360° Interaction",
+          "subtitle": "Spinner sequence"
+        },
+        "gallery": {
+          "title": "Gallery Images",
+          "subtitle": "Standard photos"
+        },
+        "badge": "360° VIEW",
+        "drag": "Drag to rotate",
+        "uploadTitle": "Upload 360° Sequence",
+        "uploadDesc": "Select 24-36 images sorted by name for interactive rotation.",
+        "chooseFiles": "Choose Files",
+        "sequenceLoaded": "Sequence Loaded",
+        "frame": "Frame",
+        "delete": "Delete Sequence",
+        "changeFiles": "Change Files",
+        "existing": "Existing",
+        "addImage": "Add Image",
+        "recommended": "Recommended: 800x800px (JPG, PNG)"
+      },
+      "additional": {
+        "title": "Additional Info",
+        "subtitle": "Nutritional info & timing",
+        "displayOrder": "Display Order",
+        "calories": "Calories (kcal)",
+        "prep": "Prep (min)",
+        "cook": "Cook (min)",
+        "chefRecommended": "Chef's Recommended"
+      }
+    }
+  },
+  "dishDetail": {
+    "header": {
+      "title": "Dish Detail View",
+      "readonly": "Read-only mode",
+      "edit": "Edit Dish"
+    },
+    "states": {
+      "loading": "Loading dish details...",
+      "notFound": "Dish not found",
+      "goBack": "Go Back"
+    },
+    "language": {
+      "en": "English",
+      "vi": "Vietnamese",
+      "fr": "French"
+    },
+    "info": {
+      "shortDescription": "Short Description",
+      "detailedDescription": "Detailed Description",
+      "internalNote": "Internal Note (Private)"
+    },
+    "specs": {
+      "title": "Core Specifications",
+      "category": "Category",
+      "basePrice": "Base Price",
+      "calories": "Calories",
+      "displayOrder": "Display Order",
+      "prepTime": "Prep Time",
+      "cookTime": "Cook Time",
+      "mins": "mins"
+    },
+    "gallery": {
+      "title": "Gallery",
+      "noImages": "No images available",
+      "clickHint": "Click image to expand • Scroll for more",
+      "no360": "360° view not available for this dish."
+    },
+    "status": {
+      "online": "Online",
+      "offline": "Offline",
+      "chefChoice": "Chef's Choice"
     }
   },
   "Order": {

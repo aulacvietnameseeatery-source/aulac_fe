@@ -2,6 +2,7 @@ import React from "react";
 import { cn } from "@/lib/utils";
 import { ReadOnly360Viewer } from "./read-only-360-viewer";
 import { BASE_URL } from "@/lib/http";
+import { useTranslations } from "next-intl";
 
 type Props = {
   staticImages: string[];
@@ -10,11 +11,12 @@ type Props = {
 };
 
 export const DishGallery = ({ staticImages, rotationImages, onImageClick }: Props) => {
+  const t = useTranslations("dishDetail");
   return (
     <div className="lg:col-span-5 space-y-8">
       {/* Static Images */}
       <div className="space-y-3">
-        <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wide">Gallery</h3>
+        <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wide">{t("gallery.title")}</h3>
         <div className="max-h-[500px] overflow-y-auto pr-2 custom-scrollbar"> 
           {staticImages.length > 0 ? (
             <div className="grid grid-cols-2 gap-2">
@@ -33,10 +35,10 @@ export const DishGallery = ({ staticImages, rotationImages, onImageClick }: Prop
               ))}
             </div>
           ) : (
-            <div className="p-8 text-center bg-gray-100 rounded-lg text-gray-500 italic text-sm">No images available</div>
+            <div className="p-8 text-center bg-gray-100 rounded-lg text-gray-500 italic text-sm">{t("gallery.noImages")}</div>
           )}
         </div>
-        <p className="text-xs text-gray-400 italic">Click image to expand • Scroll for more</p>
+        <p className="text-xs text-gray-400 italic">{t("gallery.clickHint")}</p>
       </div>
 
       {/* 360 View */}
@@ -44,7 +46,7 @@ export const DishGallery = ({ staticImages, rotationImages, onImageClick }: Prop
          <ReadOnly360Viewer images={rotationImages} />
       ) : (
         <div className="p-4 bg-gray-50 border border-dashed border-gray-200 rounded-lg text-center">
-           <p className="text-xs text-gray-400">360° view not available for this dish.</p>
+           <p className="text-xs text-gray-400">{t("gallery.no360")}</p>
         </div>
       )}
     </div>

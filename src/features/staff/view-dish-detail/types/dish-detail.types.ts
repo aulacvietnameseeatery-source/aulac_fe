@@ -3,10 +3,13 @@ export type Language = (typeof LANGUAGES)[number];
 
 export type DishDetailResponse = {
   dishId: number;
-  categoryName: string;
+  categoryName: Record<Language, string>;
   price: number;
-  dishStatus: string;
-  tagName: string;
+  dishStatus: Record<Language, string>;
+  tags: {
+    tagId: number;
+    names: Record<Language, string>;
+  }[];
   isOnline: boolean;
   chefRecommended: boolean;
   displayOrder: number | null;

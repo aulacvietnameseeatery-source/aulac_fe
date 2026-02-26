@@ -1,11 +1,13 @@
 import React, { useState, useRef, useEffect } from "react";
 import { RefreshCw, MoveHorizontal, Image as ImageIcon, RotateCw, Trash2, FolderOpen } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useTranslations } from "next-intl";
 
 export const ThreeSixtySection: React.FC<{
   frames: File[];
   onChange: (files: File[]) => void;
 }> = ({ frames, onChange }) => {
+  const t = useTranslations("Dish.Form.media");
   const [frameView, setFrameView] = useState<string[]>([]);
   const [currentFrame, setCurrentFrame] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
@@ -60,12 +62,12 @@ export const ThreeSixtySection: React.FC<{
                 
                 {/* 360 Badge */}
                 <div className="absolute top-3 left-3 bg-white/80 backdrop-blur-md px-2 py-1 rounded text-xs font-bold text-gray-800 flex items-center gap-1 shadow-sm">
-                    <RotateCw size={12} className="text-purple-600" /> 360° VIEW
+                    <RotateCw size={12} className="text-purple-600" /> {t("badge")}
                 </div>
 
                 {/* Instruction Overlay (Fade out on hover) */}
                 <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/60 backdrop-blur text-white px-3 py-1.5 rounded-full text-xs font-medium flex items-center gap-2 pointer-events-none transition-opacity group-hover:opacity-50">
-                    <MoveHorizontal size={14} /> Drag to rotate
+                    <MoveHorizontal size={14} /> {t("drag")}
                 </div>
             </div>
 
@@ -76,8 +78,8 @@ export const ThreeSixtySection: React.FC<{
                         {frameView.length}
                     </div>
                     <div className="flex flex-col">
-                        <span className="text-xs font-bold text-gray-700">Sequence Loaded</span>
-                        <span className="text-[10px] text-gray-500">Frame {currentFrame + 1}/{frameView.length}</span>
+                        <span className="text-xs font-bold text-gray-700">{t("sequenceLoaded")}</span>
+                        <span className="text-[10px] text-gray-500">{t("frame")} {currentFrame + 1}/{frameView.length}</span>
                     </div>
                 </div>
 
@@ -86,7 +88,7 @@ export const ThreeSixtySection: React.FC<{
                     <button 
                         onClick={() => setFrameView([])}
                         className="p-2 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors"
-                        title="Delete Sequence"
+                        title={t("delete")}
                     >
                         <Trash2 size={16} />
                     </button>
@@ -94,7 +96,7 @@ export const ThreeSixtySection: React.FC<{
                     {/* Nút re-upload */}
                     <label className="cursor-pointer bg-white border border-gray-300 hover:bg-gray-50 hover:border-gray-400 text-gray-700 px-3 py-1.5 rounded-md text-xs font-semibold flex items-center gap-2 shadow-sm transition-all">
                         <FolderOpen size={14} />
-                        Change Files
+                        {t("changeFiles")}
                         <input type="file" multiple accept="image/*" onChange={handleUpload} className="hidden" />
                     </label>
                 </div>
@@ -108,10 +110,10 @@ export const ThreeSixtySection: React.FC<{
                 <div className="w-12 h-12 bg-white rounded-full shadow-sm flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
                     <RefreshCw className="w-6 h-6 text-purple-500" />
                 </div>
-                <h4 className="text-sm font-bold text-gray-900">Upload 360° Sequence</h4>
-                <p className="text-xs text-gray-500 mt-1 max-w-[200px]">Select 24-36 images sorted by name for interactive rotation.</p>
+                <h4 className="text-sm font-bold text-gray-900">{t("uploadTitle")}</h4>
+                <p className="text-xs text-gray-500 mt-1 max-w-[200px]">{t("uploadDesc")}</p>
                 <div className="mt-4 px-4 py-1.5 bg-white border border-gray-200 rounded text-xs font-semibold text-gray-600 shadow-sm group-hover:text-purple-700 group-hover:border-purple-200">
-                    Choose Files
+                    {t("chooseFiles")}
                 </div>
             </div>
         </label>

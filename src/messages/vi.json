@@ -1032,6 +1032,114 @@
       "category": {
         "required": "Vui lòng chọn danh mục"
       }
+    },
+    "Form": {
+      "header": {
+        "createTitle": "Tạo món ăn mới",
+        "editTitle": "Chỉnh sửa món ăn",
+        "createDescription": "Nhập thông tin để thêm món vào thực đơn.",
+        "editDescription": "Cập nhật thông tin món ăn."
+      },
+      "actions": {
+        "discard": "Hủy",
+        "createDish": "Tạo món",
+        "creating": "Đang tạo...",
+        "saveChanges": "Lưu thay đổi",
+        "saving": "Đang lưu..."
+      },
+      "toast": {
+        "created": "Tạo món thành công",
+        "updated": "Cập nhật thành công",
+        "error": "Có lỗi xảy ra"
+      },
+      "core": {
+        "title": "Thông Tin Cơ Bản",
+        "subtitle": "Phân loại & Giá bán",
+        "category": "Danh mục",
+        "selectCategory": "Chọn danh mục...",
+        "tags": "Thẻ món ăn",
+        "price": "Giá cơ bản (CHF)",
+        "status": "Trạng thái",
+        "availableOnline": "Hiển thị Online"
+      },
+      "multilingual": {
+        "title": "Nội Dung Đa Ngôn Ngữ",
+        "subtitle": "Quản lý tên và mô tả để hiển thị trên menu."
+      },
+      "media": {
+        "media360": {
+          "title": "Tương Tác 360°",
+          "subtitle": "Chuỗi ảnh xoay"
+        },
+        "gallery": {
+          "title": "Thư Viện Ảnh",
+          "subtitle": "Hình ảnh tiêu chuẩn"
+        },
+        "badge": "XEM 360°",
+        "drag": "Kéo để xoay",
+        "uploadTitle": "Tải chuỗi ảnh 360°",
+        "uploadDesc": "Chọn 24-36 ảnh theo thứ tự tên để xoay.",
+        "chooseFiles": "Chọn ảnh",
+        "sequenceLoaded": "Đã tải chuỗi ảnh",
+        "frame": "Khung",
+        "delete": "Xóa chuỗi",
+        "changeFiles": "Đổi ảnh",
+        "existing": "Ảnh cũ",
+        "addImage": "Thêm ảnh",
+        "recommended": "Khuyến nghị: 800x800px (JPG, PNG)"
+      },
+      "additional": {
+        "title": "Thông tin bổ sung",
+        "subtitle": "Dinh dưỡng & thời gian",
+        "displayOrder": "Thứ tự hiển thị",
+        "calories": "Calo (kcal)",
+        "prep": "Chuẩn bị (phút)",
+        "cook": "Nấu (phút)",
+        "chefRecommended": "Món đề xuất"
+      }
+    }
+  },
+  "dishDetail": {
+    "header": {
+      "title": "Chi Tiết Món Ăn",
+      "readonly": "Chế độ chỉ xem",
+      "edit": "Chỉnh sửa món"
+    },
+    "states": {
+      "loading": "Đang tải thông tin món...",
+      "notFound": "Không tìm thấy món ăn",
+      "goBack": "Quay lại"
+    },
+    "language": {
+      "en": "Tiếng Anh",
+      "vi": "Tiếng Việt",
+      "fr": "Tiếng Pháp"
+    },
+    "info": {
+      "shortDescription": "Mô tả ngắn",
+      "detailedDescription": "Mô tả chi tiết",
+      "internalNote": "Ghi chú nội bộ (Riêng tư)"
+    },
+    "specs": {
+      "title": "Thông Số Chính",
+      "category": "Danh mục",
+      "basePrice": "Giá cơ bản",
+      "calories": "Calories",
+      "displayOrder": "Thứ tự hiển thị",
+      "prepTime": "Thời gian chuẩn bị",
+      "cookTime": "Thời gian nấu",
+      "mins": "phút"
+    },
+    "gallery": {
+      "title": "Thư viện ảnh",
+      "noImages": "Không có hình ảnh",
+      "clickHint": "Nhấn vào ảnh để phóng to • Cuộn để xem thêm",
+      "no360": "Món này không có ảnh 360°."
+    },
+    "status": {
+      "online": "Đang hiển thị",
+      "offline": "Ẩn",
+      "chefChoice": "Đề xuất bởi bếp trưởng"
     }
   },
   "Order": {
