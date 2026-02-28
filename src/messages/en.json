@@ -1264,6 +1264,49 @@
     "expand": "Expand",
     "collapse": "Collapse"
   },
+  "OrderHistory": {
+    "title": "Order History",
+    "fabLabel": "HISTORY",
+    "fabAriaLabel": "View order history",
+    "tableLabel": "Table",
+    "itemsCount": "{count} dishes",
+    "refresh": "Refresh",
+    "refreshAriaLabel": "Reload",
+    "close": "Close",
+    "closeAriaLabel": "Close",
+    "headers": {
+      "dish": "Dish",
+      "quantity": "QTY",
+      "price": "Price",
+      "status": "Status"
+    },
+    "status": {
+      "created": "Pending",
+      "inProgress": "In Progress",
+      "ready": "Ready",
+      "served": "Served",
+      "rejected": "Rejected"
+    },
+    "emptyState": {
+      "title": "No dishes ordered yet.",
+      "subtitle": "History will appear here after you place an order."
+    },
+    "chefNote": "Chef's Note:",
+    "estimatedTotal": "Estimated Total",
+    "requestPayment": "Request Payment",
+    "error": "Unable to load data",
+    "paymentPopup": {
+      "title": "Request Payment?",
+      "message": "A server will come to your table shortly with the bill for {tableLabel} {tableNumber}. Would you like to proceed?",
+      "estimatedTotalLabel": "ESTIMATED TOTAL",
+      "confirm": "CONFIRM",
+      "closeAriaLabel": "Close payment dialog"
+    },
+    "successPopup": {
+      "title": "Thank You!",
+      "message": "Your payment request for {tableLabel} {tableNumber} has been received. Our server will be with you shortly."
+    }
+  },
   "Notifications": {
     "title": "Notifications",
     "markAllRead": "Mark all as read",

@@ -13,6 +13,7 @@ import { RawMenuCategory } from "@/features/customer/menu-listing-new/hooks/use-
 
 import { TableSelectionModal } from "@/features/customer/menu-listing-new/components/table-selection-modal";
 import { CartSummary } from "@/features/customer/menu-listing-new/components/cart-summary";
+import { OrderHistoryFAB } from "@/features/customer/menu-listing-new/components/ordered-items-fab";
 
 
 interface Props {
@@ -23,34 +24,43 @@ interface Props {
 
 const CART_STORAGE_KEY = "aulac_cart_items";
 const TABLE_STORAGE_KEY = "aulac_table_number";
+const CURRENT_ORDER_ID_KEY = "aulac_current_order_id";
 
 export default function MenuListingClient({ initialMenuData, locale }: Props) {
     const router = useRouter();
     const searchParams = useSearchParams();
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
     const [tableNumber, setTableNumber] = useState("");
+    const [currentOrderId, setCurrentOrderId] = useState<number | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [pendingQueue, setPendingQueue] = useState<MenuItemData[]>([]);
     const [showSuccessPopup, setShowSuccessPopup] = useState(false);
     const [orderedTableNumber, setOrderedTableNumber] = useState("");
+    const [orderConfirmCount, setOrderConfirmCount] = useState(0);
 
-    // Khôi phục cart và table number từ localStorage/URL khi component mount
+    // Khôi phục cart và table number từ sessionStorage/URL khi component mount
     useEffect(() => {
         if (typeof window !== 'undefined') {
             try {
                 // Khôi phục cart
-                const savedCart = localStorage.getItem(CART_STORAGE_KEY);
+                const savedCart = sessionStorage.getItem(CART_STORAGE_KEY);
                 if (savedCart) {
                     setCartItems(JSON.parse(savedCart));
                 }
-                
-                // Khôi phục table number từ URL params hoặc localStorage
+
+                // Khôi phục current order id
+                const savedOrderId = sessionStorage.getItem(CURRENT_ORDER_ID_KEY);
+                if (savedOrderId) {
+                    setCurrentOrderId(Number(savedOrderId));
+                }
+
+                // Khôi phục table number từ URL params hoặc sessionStorage
                 const tableFromUrl = searchParams.get("table");
-                const savedTable = localStorage.getItem(TABLE_STORAGE_KEY);
+                const savedTable = sessionStorage.getItem(TABLE_STORAGE_KEY);
                 
                 if (tableFromUrl) {
                     setTableNumber(tableFromUrl);
-                    localStorage.setItem(TABLE_STORAGE_KEY, tableFromUrl);
+                    sessionStorage.setItem(TABLE_STORAGE_KEY, tableFromUrl);
                 } else if (savedTable) {
                     setTableNumber(savedTable);
                 }
@@ -60,24 +70,24 @@ export default function MenuListingClient({ initialMenuData, locale }: Props) {
         }
     }, [searchParams]);
 
-    // Lưu cart vào localStorage mỗi khi thay đổi
+    // Lưu cart vào sessionStorage mỗi khi thay đổi
     useEffect(() => {
         if (typeof window !== 'undefined') {
             try {
-                localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cartItems));
+                sessionStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cartItems));
             } catch (error) {
-                console.error("Error saving cart to localStorage:", error);
+                console.error("Error saving cart to sessionStorage:", error);
             }
         }
     }, [cartItems]);
 
-    // Lưu table number vào localStorage mỗi khi thay đổi
+    // Lưu table number vào sessionStorage mỗi khi thay đổi
     useEffect(() => {
         if (typeof window !== 'undefined' && tableNumber) {
             try {
-                localStorage.setItem(TABLE_STORAGE_KEY, tableNumber);
+                sessionStorage.setItem(TABLE_STORAGE_KEY, tableNumber);
             } catch (error) {
-                console.error("Error saving table to localStorage:", error);
+                console.error("Error saving table to sessionStorage:", error);
             }
         }
     }, [tableNumber]);
@@ -136,10 +146,10 @@ export default function MenuListingClient({ initialMenuData, locale }: Props) {
     };
 
     const handleTableConfirm = (val: string) => {
-        // Set table number and save to localStorage
+        // Set table number and save to sessionStorage
         setTableNumber(val);
         if (typeof window !== 'undefined') {
-            localStorage.setItem(TABLE_STORAGE_KEY, val);
+            sessionStorage.setItem(TABLE_STORAGE_KEY, val);
         }
         
         // Add pending items to cart if any
@@ -167,59 +177,119 @@ export default function MenuListingClient({ initialMenuData, locale }: Props) {
     const handleConfirmOrder = useCallback(async () => {
         if (cartItems.length === 0) return;
 
-        // Read customer info saved during fill-infor-customer step
-        let isGuest = true;
-        let customerPhone: string | undefined;
-        let customerFullName: string | undefined;
-        let customerEmail: string | undefined;
+        const itemsPayload = cartItems.map(item => ({
+            dishId: Number(item.id),
+            quantity: item.quantity,
+            price: item.price,
+            note: item.note || undefined,
+        }));
 
-        if (typeof window !== "undefined") {
-            const raw = localStorage.getItem("aulac_customer_info");
-            if (raw) {
-                try {
-                    const info = JSON.parse(raw);
-                    if (info.phoneNumber) {
-                        isGuest = false;
-                        customerPhone = info.phoneNumber;
-                        customerFullName = info.fullName || undefined;
-                        customerEmail = info.emailAddress || undefined;
-                    }
-                } catch {
-                    // malformed data – treat as guest
-                }
-            }
+        // Determine the active orderId (from state or sessionStorage as fallback)
+        let storedOrderId: number | null = currentOrderId;
+        if (!storedOrderId && typeof window !== 'undefined') {
+            const saved = sessionStorage.getItem(CURRENT_ORDER_ID_KEY);
+            storedOrderId = saved ? Number(saved) : null;
         }
-
-        const payload = {
-            tableCode: tableNumber,
-            isGuest,
-            customerPhone,
-            customerFullName,
-            customerEmail,
-            items: cartItems.map(item => ({
-                dishId: Number(item.id),
-                quantity: item.quantity,
-                price: item.price,
-                note: item.note || undefined,
-            })),
-        };
 
         try {
-          
-            // Clear cart and customer info after successful order
+            const { BASE_URL } = await import("@/lib/http");
+
+            if (storedOrderId) {
+                // ── Case 1: existing order → append items ──────────────────
+                const res = await fetch(`${BASE_URL}/api/orders/${storedOrderId}/items`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ items: itemsPayload }),
+                });
+
+                if (res.ok) {
+                    // Success – clear cart, show popup
+                    setOrderedTableNumber(tableNumber);
+                    setCartItems([]);
+                    if (typeof window !== 'undefined') {
+                        sessionStorage.removeItem(CART_STORAGE_KEY);
+                    }
+                    setOrderConfirmCount(prev => prev + 1);
+                    setShowSuccessPopup(true);
+                    return;
+                }
+
+                if (res.status !== 404) {
+                    const errBody = await res.json().catch(() => ({}));
+                    throw new Error(errBody?.userMessage || `HTTP ${res.status}`);
+                }
+
+                // 404 → stale orderId, fall through to create a new order
+                if (typeof window !== 'undefined') {
+                    sessionStorage.removeItem(CURRENT_ORDER_ID_KEY);
+                }
+                setCurrentOrderId(null);
+                storedOrderId = null;
+            }
+
+            // ── Case 2: no active order → create one ───────────────────────
+            let isGuest = true;
+            let customerPhone: string | undefined;
+            let customerFullName: string | undefined;
+            let customerEmail: string | undefined;
+
+            if (typeof window !== "undefined") {
+                const raw = sessionStorage.getItem("aulac_customer_info");
+                if (raw) {
+                    try {
+                        const info = JSON.parse(raw);
+                        if (info.phoneNumber) {
+                            isGuest = false;
+                            customerPhone = info.phoneNumber;
+                            customerFullName = info.fullName || undefined;
+                            customerEmail = info.emailAddress || undefined;
+                        }
+                    } catch {
+                        // malformed data – treat as guest
+                    }
+                }
+            }
+
+            const createRes = await fetch(`${BASE_URL}/api/orders`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    tableCode: tableNumber,
+                    isGuest,
+                    customerPhone,
+                    customerFullName,
+                    customerEmail,
+                    items: itemsPayload,
+                }),
+            });
+
+            if (!createRes.ok) {
+                const errBody = await createRes.json().catch(() => ({}));
+                throw new Error(errBody?.userMessage || `HTTP ${createRes.status}`);
+            }
+
+            const json = await createRes.json();
+            const newOrderId: number | null = json?.data?.orderId ?? null;
+            if (newOrderId) {
+                setCurrentOrderId(newOrderId);
+                if (typeof window !== 'undefined') {
+                    sessionStorage.setItem(CURRENT_ORDER_ID_KEY, String(newOrderId));
+                }
+            }
+
             setOrderedTableNumber(tableNumber);
             setCartItems([]);
-            if (typeof window !== "undefined") {
-                localStorage.removeItem("aulac_cart_items");
-                localStorage.removeItem("aulac_customer_info");
+            if (typeof window !== 'undefined') {
+                sessionStorage.removeItem(CART_STORAGE_KEY);
             }
+            setOrderConfirmCount(prev => prev + 1);
             setShowSuccessPopup(true);
         } catch (err: unknown) {
-            const message = err instanceof Error ? err.message : "Failed to create order";
-            console.error("[Order] Create order failed:", err);
+            const message = err instanceof Error ? err.message : "Failed to place order";
+            console.error("[Order] Failed:", err);
             alert(`Không thể tạo đơn hàng: ${message}`);
         }
-    }, [cartItems, tableNumber]);
+    }, [cartItems, tableNumber, currentOrderId]);
 
     return (
         <main className="relative flex-1 min-h-screen w-full flex items-center justify-center p-4 overflow-hidden bg-[#0f172a]">
@@ -274,23 +344,34 @@ export default function MenuListingClient({ initialMenuData, locale }: Props) {
             </div>
 
 
-            {/* ĐÃ SỬA: Canh phải cho cả Mobile (right-4) và Desktop (md:right-5) */}
-            {/* Hiển thị cart khi có table number (dù chưa có món) */}
+            {/* Bottom-left FAB: lịch sử đặt món */}
+            <div className="fixed bottom-6 left-4 md:bottom-8 md:left-5 z-50 pointer-events-auto">
+                <OrderHistoryFAB
+                    tableCode={tableNumber || undefined}
+                    tableNumber={tableNumber || undefined}
+                    refreshTrigger={orderConfirmCount}
+                    dishNameMap={Object.fromEntries(
+                        localizedMenu.flatMap(cat => cat.items.map(item => [Number(item.id), item.name]))
+                    )}
+                />
+            </div>
+
+            {/* Bottom-right FAB: cart / confirm order */}
             <div id="cart-destination" className="fixed bottom-6 right-4 md:bottom-8 md:right-5 z-50 pointer-events-none flex flex-col items-end justify-end">
                 <AnimatePresence>
                     {tableNumber && (
                         <div className="pointer-events-auto">
-                        <CartSummary
-                        cartItems={cartItems}
-                    tableNumber={tableNumber}
-                    onUpdateTable={setTableNumber}
-                    onUpdateQuantity={handleUpdateQuantity}
-                    onRemoveItem={handleRemoveItem}
-                    onUpdateNote={handleUpdateNote}
-                    onConfirm={handleConfirmOrder}
-                />
-            </div>
-            )}
+                            <CartSummary
+                                cartItems={cartItems}
+                                tableNumber={tableNumber}
+                                onUpdateTable={setTableNumber}
+                                onUpdateQuantity={handleUpdateQuantity}
+                                onRemoveItem={handleRemoveItem}
+                                onUpdateNote={handleUpdateNote}
+                                onConfirm={handleConfirmOrder}
+                            />
+                        </div>
+                    )}
                 </AnimatePresence>
             </div>
         </main>

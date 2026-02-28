@@ -1210,6 +1210,49 @@
     "expand": "Agrandir",
     "collapse": "Réduire"
   },
+  "OrderHistory": {
+    "title": "Historique des Commandes",
+    "fabLabel": "HISTORY",
+    "fabAriaLabel": "Voir l'historique des commandes",
+    "tableLabel": "Table",
+    "itemsCount": "{count} plats",
+    "refresh": "Actualiser",
+    "refreshAriaLabel": "Recharger",
+    "close": "Fermer",
+    "closeAriaLabel": "Fermer",
+    "headers": {
+      "dish": "Plat",
+      "quantity": "QTÉ",
+      "price": "Prix",
+      "status": "Statut"
+    },
+    "status": {
+      "created": "En attente",
+      "inProgress": "En cours",
+      "ready": "Prêt",
+      "served": "Servi",
+      "rejected": "Refusé"
+    },
+    "emptyState": {
+      "title": "Aucun plat commandé pour le moment.",
+      "subtitle": "L'historique apparaîtra ici après avoir passé une commande."
+    },
+    "chefNote": "Note du chef :",
+    "estimatedTotal": "Total estimé",
+    "requestPayment": "Demander le paiement",
+    "error": "Impossible de charger les données",
+    "paymentPopup": {
+      "title": "Demander le paiement ?",
+      "message": "Un serveur viendra à votre {tableLabel} {tableNumber} sous peu avec l'addition. Voulez-vous continuer ?",
+      "estimatedTotalLabel": "TOTAL ESTIMÉ",
+      "confirm": "CONFIRMER",
+      "closeAriaLabel": "Fermer la boîte de dialogue de paiement"
+    },
+    "successPopup": {
+      "title": "Merci !",
+      "message": "Votre demande de paiement pour {tableLabel} {tableNumber} a été reçue. Notre serveur sera avec vous sous peu."
+    }
+  },
   "Notifications": {
     "title": "Notifications",
     "markAllRead": "Tout marquer comme lu",
