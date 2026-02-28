@@ -5,6 +5,7 @@ import {
     BookmarkCheck,
     CalendarDays,
     CircleArrowOutDownRight,
+    CheckCircle2,
     ChevronDown,
     Loader,
     Loader2,
@@ -70,15 +71,15 @@ function OrdersContent() {
 
     // ── Date range filter ──────────────────────────────────────────────────
     type DatePreset = "today" | "yesterday" | "last7" | "last30" | "thisMonth" | "lastMonth" | "custom";
-    const DATE_PRESETS: { key: DatePreset; label: string }[] = [
-        { key: "today", label: "Today" },
-        { key: "yesterday", label: "Yesterday" },
-        { key: "last7", label: "Last 7 Days" },
-        { key: "last30", label: "Last 30 Days" },
-        { key: "thisMonth", label: "This Month" },
-        { key: "lastMonth", label: "Last Month" },
-        { key: "custom", label: "Custom Range" },
-    ];
+    const DATE_PRESETS: { key: DatePreset; label: string }[] = useMemo(() => [
+        { key: "today", label: t("dateRange.today") },
+        { key: "yesterday", label: t("dateRange.yesterday") },
+        { key: "last7", label: t("dateRange.last7") },
+        { key: "last30", label: t("dateRange.last30") },
+        { key: "thisMonth", label: t("dateRange.thisMonth") },
+        { key: "lastMonth", label: t("dateRange.lastMonth") },
+        { key: "custom", label: t("dateRange.custom") },
+    ], [t]);
 
     const [datePreset, setDatePreset] = useState<DatePreset | null>(null);
     const [customFrom, setCustomFrom] = useState("");  // YYYY-MM-DD
@@ -123,9 +124,9 @@ function OrdersContent() {
         if (!datePreset) return null;
         if (datePreset !== "custom") return DATE_PRESETS.find(p => p.key === datePreset)?.label ?? null;
         if (customFrom && customTo) return `${customFrom} – ${customTo}`;
-        if (customFrom) return `From ${customFrom}`;
-        return "Custom Range";
-    }, [datePreset, customFrom, customTo]);
+        if (customFrom) return `${t("dateRange.from")} ${customFrom}`;
+        return t("dateRange.custom");
+    }, [datePreset, customFrom, customTo, DATE_PRESETS, t]);
 
     const clearDateFilter = (e: React.MouseEvent) => {
         e.stopPropagation();
@@ -148,10 +149,11 @@ function OrdersContent() {
 
     // Status summary cards — counts từ API, không đổi khi filter
     const STATUS_CARDS = useMemo(() => [
-        { label: t("statusCards.all"), colorClass: "bg-gray-100 text-gray-600", icon: <BookmarkCheck className="w-5 h-5" />, count: counts.all },
-        { label: t("statusCards.pending"), colorClass: "bg-blue-100 text-blue-600", icon: <CircleArrowOutDownRight className="w-5 h-5" />, count: counts.pending },
-        { label: t("statusCards.inProgress"), colorClass: "bg-orange-100 text-orange-600", icon: <Loader className="w-5 h-5" />, count: counts.inProgress },
-        { label: t("statusCards.cancelled"), colorClass: "bg-red-100 text-red-600", icon: <UserX className="w-5 h-5" />, count: counts.cancelled },
+        { label: t("statusCards.all"), colorClass: "bg-gray-100 text-gray-600", icon: <BookmarkCheck className="w-4 h-4" />, count: counts.all },
+        { label: t("statusCards.pending"), colorClass: "bg-blue-100 text-blue-600", icon: <CircleArrowOutDownRight className="w-4 h-4" />, count: counts.pending },
+        { label: t("statusCards.inProgress"), colorClass: "bg-orange-100 text-orange-600", icon: <Loader className="w-4 h-4" />, count: counts.inProgress },
+        { label: t("statusCards.completed"), colorClass: "bg-green-100 text-green-600", icon: <CheckCircle2 className="w-4 h-4" />, count: counts.completed },
+        { label: t("statusCards.cancelled"), colorClass: "bg-red-100 text-red-600", icon: <UserX className="w-4 h-4" />, count: counts.cancelled },
     ], [t, counts]);
 
     // Debounce search — giống BaseTable
@@ -229,20 +231,20 @@ function OrdersContent() {
     return (
         <div className="w-full flex flex-col h-full">
             {/* ── Title row ───────────────────────────────────────────────── */}
-            <div className="flex items-center justify-between mb-4 flex-wrap gap-3">
+            <div className="flex items-center justify-between mb-2 flex-wrap gap-2">
                 <div>
-                    <h1 className="text-3xl font-bold text-gray-900 tracking-tight">{t("title")}</h1>
-                    <p className="text-sm text-gray-500 mt-1">{t("description")}</p>
+                    <h1 className="text-2xl font-bold text-gray-900 tracking-tight">{t("title")}</h1>
+                    <p className="text-xs text-gray-500 mt-0.5">{t("description")}</p>
                 </div>
                 {/* Add New Order button — same as staff renderTitle pattern */}
-                <Button variant="outline" className="shadow-md">
-                    <Plus className="mr-2 h-4 w-4" />
+                <Button variant="outline" size="sm" className="shadow-sm">
+                    <Plus className="mr-1.5 h-3.5 w-3.5" />
                     {t("addNewOrder")}
                 </Button>
             </div>
 
             {/* ── Status summary cards ─────────────────────────────────────── */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-2 mb-2">
                 {STATUS_CARDS.map((card) => (
                     <OrderStatusCard
                         key={card.label}
@@ -257,9 +259,9 @@ function OrdersContent() {
             {/* ── BaseTable-style toolbar ──────────────────────────────────── */}
             <div className="body-layout-list flex-1 flex flex-col min-h-0">
                 <div className="body-list flex flex-col flex-1 min-h-0">
-                    <div className="form-list flex flex-col flex-1 min-h-0">
-                        {/* Condition / search bar */}
-                        <div className="condition-box flex flex-row items-center w-full">
+                    {/* Condition / search bar - Exactly matches BaseTable structure */}
+                    <div className="form-list">
+                        <div className="condition-box flex flex-row items-center w-full h-full">
                             <div className="flex gap-2 items-center flex-1 flex-wrap">
                                 {/* Search — giống BaseTable */}
                                 <div className="ms-input ms-editor flex items-center search-input-list max-h-4" style={{ height: "auto" }}>
@@ -284,18 +286,18 @@ function OrdersContent() {
 
                                 {/* Tabs — chỉ hiển thị ở grid mode */}
                                 {viewMode === "grid" ? (
-                                    <div className="flex items-center gap-1 flex-wrap">
+                                    <div className="flex items-center gap-0.5 flex-wrap">
                                         {TABS.map((tab, idx) => (
                                             <button
                                                 key={tab.label}
                                                 onClick={() => handleTabChange(idx)}
-                                                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${activeTab === idx
+                                                className={`flex items-center gap-1 px-2 py-1 rounded-md text-xs font-medium transition-colors ${activeTab === idx
                                                     ? "bg-blue-600 text-white shadow-sm"
                                                     : "text-gray-600 hover:bg-gray-100"
                                                     }`}
                                             >
                                                 {tab.label}
-                                                <span className={`text-xs rounded-full px-1.5 py-0.5 font-semibold ${activeTab === idx
+                                                <span className={`text-[10px] leading-tight rounded-full px-1.5 py-0.5 font-semibold ${activeTab === idx
                                                     ? "bg-white/20 text-white"
                                                     : "bg-gray-200 text-gray-600"
                                                     }`}>
@@ -306,7 +308,7 @@ function OrdersContent() {
                                     </div>
                                 ) : (
                                     <span className="text-sm font-semibold text-gray-700">
-                                        {t("kanbanLabel")}
+                                        {/*{t("kanbanLabel")}*/}
                                     </span>
                                 )}
                                 {/* Date range filter */}
@@ -319,7 +321,7 @@ function OrdersContent() {
                                             }`}
                                     >
                                         <CalendarDays className="w-4 h-4" />
-                                        <span>{activeDateLabel ?? "Date Range"}</span>
+                                        <span>{activeDateLabel ?? t("dateRange.label")}</span>
                                         {datePreset ? (
                                             <X className="w-3.5 h-3.5 ml-0.5 text-blue-500" onClick={clearDateFilter} />
                                         ) : (
@@ -340,28 +342,28 @@ function OrdersContent() {
                                                 </button>
                                             ))}
                                             <div className="border-t border-gray-100 mt-1 pt-2 px-4 pb-3">
-                                                <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Custom Range</div>
+                                                <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">{t("dateRange.custom")}</div>
                                                 <div className="flex flex-col gap-1.5">
                                                     <input
                                                         type="date"
                                                         value={customFrom}
                                                         onChange={e => { setCustomFrom(e.target.value); setDatePreset("custom"); }}
                                                         className="w-full border border-gray-200 rounded-lg px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                                        placeholder="From"
+                                                        placeholder={t("dateRange.from")}
                                                     />
                                                     <input
                                                         type="date"
                                                         value={customTo}
                                                         onChange={e => { setCustomTo(e.target.value); setDatePreset("custom"); }}
                                                         className="w-full border border-gray-200 rounded-lg px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                                        placeholder="To"
+                                                        placeholder={t("dateRange.to")}
                                                     />
                                                 </div>
                                                 <button
                                                     onClick={() => setDatePickerOpen(false)}
                                                     className="mt-2 w-full bg-blue-600 text-white rounded-lg py-1.5 text-sm font-semibold hover:bg-blue-700 transition-colors"
                                                 >
-                                                    Apply
+                                                    {t("dateRange.apply")}
                                                 </button>
                                             </div>
                                         </div>
@@ -371,7 +373,7 @@ function OrdersContent() {
                             </div>
 
                             {/* Right: refresh + view toggle */}
-                            <div className="action flex items-center gap-2">
+                            <div className="action flex items-center gap-2 pr-2">
                                 <button
                                     className="ms-button btn-outline-neutral only-icon"
                                     onClick={handleRefresh}
@@ -399,85 +401,100 @@ function OrdersContent() {
                                 </div>
                             </div>
                         </div>
+                    </div>
 
-                        {/* ── Content area ────────────────────────────────────── */}
-                        <div className="voucher-body-grid flex-1 min-h-0">
-                            <div className="ms-grid-viewer flex flex-col has-paging flex-box">
-                                <div className="flex-1 overflow-auto p-4">
-                                    {isLoading ? (
-                                        <div className="flex items-center justify-center py-24">
-                                            <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
-                                        </div>
-                                    ) : viewMode === "kanban" ? (
-                                        /* ── KANBAN VIEW ───────────────────────────────── */
-                                        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
-                                            {KANBAN_COLUMNS.map((col) => {
-                                                const colOrders = getColumnOrders(col);
-                                                return (
-                                                    <div key={col.key} className="bg-gray-50 rounded-2xl border border-gray-200">
-                                                        <div className={`flex items-center justify-between ${col.headerColor} rounded-t-2xl px-4 py-3`}>
-                                                            <span className="text-white font-semibold text-sm">{t(`kanban.${col.key}`)}</span>
-                                                            <span className="text-white text-sm font-medium bg-white/20 rounded-full px-2 py-0.5">
-                                                                {col.key === "pending" ? counts.pending
-                                                                    : col.key === "inProgress" ? counts.inProgress
-                                                                        : col.key === "completed" ? counts.completed
-                                                                            : counts.cancelled}
-                                                            </span>
+                    {/* ── Content area ────────────────────────────────────── */}
+                    <div className="voucher-body-grid flex-1 min-h-0">
+                        {isLoading ? (
+                            <div className="flex items-center justify-center py-24 h-full">
+                                <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
+                            </div>
+                        ) : viewMode === "kanban" ? (
+                            /* ── KANBAN VIEW — full-height scrollable, no pagination ── */
+                            <div className="h-full overflow-auto p-4 custom-scrollbar">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+                                    {KANBAN_COLUMNS.map((col) => {
+                                        const colOrders = getColumnOrders(col);
+                                        return (
+                                            <div key={col.key} className="bg-gray-50 rounded-2xl border border-gray-200">
+                                                <div className={`flex items-center justify-between ${col.headerColor} rounded-t-2xl px-4 py-3`}>
+                                                    <span className="text-white font-semibold text-sm">{t(`kanban.${col.key}`)}</span>
+                                                    <span className="text-white text-sm font-medium bg-white/20 rounded-full px-2 py-0.5">
+                                                        {col.key === "pending" ? counts.pending
+                                                            : col.key === "inProgress" ? counts.inProgress
+                                                                : col.key === "completed" ? counts.completed
+                                                                    : counts.cancelled}
+                                                    </span>
+                                                </div>
+                                                <div className="p-3 flex flex-col gap-3">
+                                                    {colOrders.length === 0 ? (
+                                                        <div className="text-center py-10 text-gray-400 text-xs">
+                                                            {t("kanban.empty")}
                                                         </div>
-                                                        <div className="p-3 flex flex-col gap-3">
-                                                            {colOrders.length === 0 ? (
-                                                                <div className="text-center py-10 text-gray-400 text-xs">
-                                                                    {t("kanban.empty")}
-                                                                </div>
-                                                            ) : (
-                                                                colOrders.map((order) => (
-                                                                    <KanbanOrderCard
-                                                                        key={order.orderId}
-                                                                        order={order}
-                                                                        primaryAction={{ label: t(`kanban.${col.primaryKey}`), onClick: () => { } }}
-                                                                        secondaryAction={{ label: t(`kanban.${col.secondaryKey}`), onClick: () => { } }}
-                                                                    />
-                                                                ))
-                                                            )}
-                                                        </div>
-                                                    </div>
-                                                );
-                                            })}
-                                        </div>
-                                    ) : orders.length === 0 ? (
-                                        /* ── GRID empty state ───────────────────────────── */
-                                        <div className="flex flex-col items-center justify-center py-24 text-gray-400">
-                                            <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mb-4">
-                                                <Search className="w-7 h-7" />
+                                                    ) : (
+                                                        colOrders.map((order) => (
+                                                            <KanbanOrderCard
+                                                                key={order.orderId}
+                                                                order={order}
+                                                                primaryAction={{ label: t(`kanban.${col.primaryKey}`), onClick: () => { } }}
+                                                                secondaryAction={{ label: t(`kanban.${col.secondaryKey}`), onClick: () => { } }}
+                                                                onAction={(id, action) => {
+                                                                    console.log("Kanban Action:", action, "on order:", id);
+                                                                    // For now just refresh, similar to grid view
+                                                                    handleRefresh();
+                                                                }}
+                                                            />
+                                                        ))
+                                                    )}
+                                                </div>
                                             </div>
-                                            <p className="text-base font-medium">{t("empty.title")}</p>
-                                            <p className="text-sm mt-1">{t("empty.hint")}</p>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                        ) : (
+                            /* ── GRID VIEW — scrollable cards + inline pagination ── */
+                            <div className="h-full overflow-auto p-4 custom-scrollbar">
+                                {orders.length === 0 ? (
+                                    <div className="flex flex-col items-center justify-center h-full py-24 text-gray-400">
+                                        <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mb-4">
+                                            <Search className="w-7 h-7" />
                                         </div>
-                                    ) : (
-                                        /* ── GRID VIEW ─────────────────────────────────── */
-                                        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+                                        <p className="text-base font-medium">{t("empty.title")}</p>
+                                        <p className="text-sm mt-1">{t("empty.hint")}</p>
+                                    </div>
+                                ) : (
+                                    <div className="flex flex-col min-h-full">
+                                        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 mb-4 flex-1">
                                             {orders.map((order) => (
-                                                <OrderCard key={order.orderId} order={order} />
+                                                <OrderCard
+                                                    key={order.orderId}
+                                                    order={order}
+                                                    onStatusChange={handleRefresh}
+                                                    onAction={(id, action) => {
+                                                        console.log("Action:", action, "on order:", id);
+                                                        // Handle other actions if needed
+                                                        if (action !== 'pay') handleRefresh();
+                                                    }}
+                                                />
                                             ))}
                                         </div>
-                                    )}
-                                </div>
-
-                                {/* Pagination — chỉ ở grid mode */}
-                                {viewMode === "grid" && (
-                                    <TablePagination
-                                        totalCount={totalCount}
-                                        pageSize={pageSize}
-                                        pageSizes={[10, 20, 30, 50]}
-                                        pageInfo={pageInfo}
-                                        hasPrev={currentPage > 1}
-                                        hasNext={currentPage * pageSize < totalCount}
-                                        onPageChange={handlePageChange}
-                                        onPageSizeChange={handlePageSizeChange}
-                                    />
+                                        <div className="mt-auto">
+                                            <TablePagination
+                                                totalCount={totalCount}
+                                                pageSize={pageSize}
+                                                pageSizes={[10, 20, 30, 50]}
+                                                pageInfo={pageInfo}
+                                                hasPrev={currentPage > 1}
+                                                hasNext={currentPage * pageSize < totalCount}
+                                                onPageChange={handlePageChange}
+                                                onPageSizeChange={handlePageSizeChange}
+                                            />
+                                        </div>
+                                    </div>
                                 )}
                             </div>
-                        </div>
+                        )}
                     </div>
                 </div>
             </div>

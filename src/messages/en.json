@@ -1171,6 +1171,19 @@
       "refresh": "Refresh",
       "addNewOrder": "Add New Order",
       "kanbanLabel": "Kanban — All statuses",
+      "dateRange": {
+        "today": "Today",
+        "yesterday": "Yesterday",
+        "last7": "Last 7 Days",
+        "last30": "Last 30 Days",
+        "thisMonth": "This Month",
+        "lastMonth": "Last Month",
+        "custom": "Custom Range",
+        "from": "From",
+        "to": "To",
+        "apply": "Apply",
+        "label": "Date Range"
+      },
       "tabs": {
         "all": "All",
         "pending": "Pending",
@@ -1182,6 +1195,7 @@
         "all": "All",
         "pending": "Pending",
         "inProgress": "In Progress",
+        "completed": "Completed",
         "cancelled": "Cancelled"
       },
       "kanban": {
@@ -1209,16 +1223,26 @@
         "moreItems": "more items",
         "collapse": "Collapse",
         "actions": "Actions",
+        "note": "Note",
+        "rejectReason": "Reject Reason",
         "source": {
           "DINE_IN": "Dine In",
           "TAKE_AWAY": "Take Away",
-          "DELIVERY": "Delivery"
+          "TAKEAWAY": "Take Away",
+          "DELIVERY": "Delivery",
+          "Takeaway": "Take Away",
+          "Dine-in": "Dine In",
+          "Delivery": "Delivery"
         },
         "status": {
           "Pending": "Pending",
           "In progress": "In Progress",
           "Completed": "Completed",
           "Cancelled": "Cancelled"
+        },
+        "paymentStatus": {
+          "paid": "Paid",
+          "unpaid": "Unpaid"
         },
         "action": {
           "view": "View Details",
@@ -1227,9 +1251,104 @@
           "complete": "Complete",
           "cancel": "Cancel",
           "reset": "Reset",
-          "print": "Print Invoice"
-        }
+          "print": "Print Invoice",
+          "pay": "Pay & Complete",
+          "printReceipt": "Print Receipt"
+        },
+        "paymentSuccess": "Payment processed successfully",
+        "paymentError": "Failed to process payment"
       }
+    },
+    "Create": {
+      "title": "Create New Order",
+      "subtitle": "Select food and drinks to start serving the customer.",
+      "menuCatalog": "Menu Catalog",
+      "searchDish": "Find a dish...",
+      "dineIn": "Dine-in",
+      "takeAway": "Take-away",
+      "currentTicket": "Current Ticket",
+      "clear": "Clear",
+      "emptyTicket": "Ticket is empty",
+      "diningTable": "Dining Table",
+      "customer": "Customer",
+      "select": "Select",
+      "change": "Change",
+      "add": "Add",
+      "note": "Add a note (less spicy, no onions, etc.)",
+      "subtotal": "Subtotal",
+      "tax": "Tax (10%)",
+      "total": "Total",
+      "placeOrder": "Place Order",
+      "createInvoice": "Create Invoice",
+      "noTableSelected": "No table selected",
+      "anonymous": "Anonymous",
+      "selectFilterAll": "All",
+      "confirmSelection": "Confirm Selection",
+      "cancel": "Cancel",
+      "confirm": "Confirm",
+      "customerDetails": "Customer Details",
+      "phoneNumber": "Phone Number",
+      "fullName": "Full Name",
+      "email": "Email",
+      "saveDetails": "Save Details"
+    },
+    "Edit": {
+      "menuTitle": "Order Details",
+      "menuSubtitleEdit": "Select items to add to the current order.",
+      "menuSubtitleView": "This order has been paid. View-only mode.",
+      "clear": "Clear",
+      "cancel": "Cancel",
+      "editOrderTitle": "Edit Order #{id}",
+      "viewOrderTitle": "View Order #{id}",
+      "totalAmount": "Total Amount",
+      "orderedItems": "Ordered Items",
+      "newItems": "New Items",
+      "addMoreItemsHint": "Select items from the left menu to add",
+      "paidOrderWarning": "This order has been paid. Please create a new order.",
+      "addItemsButton": "Add Items to Order",
+      "createInvoice": "Create Invoice",
+      "newTotal": "Estimated Total",
+      "warningTitle": "Confirm Adding Items",
+      "completedOrderWarning": "This order is completed but not yet paid. Adding new items will change the order status back to In Progress. Are you sure?",
+      "confirmChangeStatus": "Confirm Add",
+      "successMessage": "Items added successfully!",
+      "takeAway": "Take Away",
+      "guest": "Guest",
+      "notePlaceholder": "Item note...",
+      "status": {
+        "Pending": "Pending",
+        "In progress": "In Progress",
+        "Completed": "Completed",
+        "Cancelled": "Cancelled"
+      }
+    },
+    "PaymentModal": {
+      "title": "Pay & Complete Order",
+      "finalTotal": "Final Total",
+      "orderInfo": "Order Info",
+      "orderNo": "Order No",
+      "noOfItems": "No of Items",
+      "orderType": "Order Type",
+      "orderedMenus": "Ordered Menus",
+      "subTotal": "Sub Total",
+      "tax": "Tax",
+      "serviceCharge": "Service Charge",
+      "tip": "Tip",
+      "paymentType": "Payment Type",
+      "cash": "Cash",
+      "card": "Card",
+      "scan": "Scan",
+      "discount": "Discount",
+      "tips": "Tips",
+      "coupon": "Coupon",
+      "add": "Add",
+      "givenAmount": "Given Amount",
+      "balance": "Balance",
+      "note": "Note",
+      "notePlaceholder": "Enter payment note...",
+      "close": "Close",
+      "payAndComplete": "Pay & Complete Order",
+      "paying": "Processing..."
     }
   },
   "AdminSidebar": {
@@ -1249,6 +1368,7 @@
     "ingredient": "Ingredient",
     "coupons": "Coupons",
     "orders": "Orders",
+    "kitchen": "Kitchen (KDS)",
     "reports": "Reports",
     "emails": "Emails",
     "customers": "Customers",
@@ -1320,6 +1440,33 @@
     "empty": "No notifications",
     "time": {
       "ago": "{time} ago"
+    }
+  },
+  "Kitchen": {
+    "title": "Kitchen Display",
+    "description": "Monitor incoming orders and update item statuses in real-time",
+    "refresh": "Refresh",
+    "liveUpdates": "Live updates",
+    "note": "Note",
+    "tabs": {
+      "all": "All Orders",
+      "new": "New",
+      "inProgress": "In Progress"
+    },
+    "empty": {
+      "title": "No active orders",
+      "hint": "New orders will appear here automatically"
+    },
+    "status": {
+      "start": "Start",
+      "serve": "Serve",
+      "reject": "Reject"
+    },
+    "rejectReason": {
+      "label": "Reason",
+      "placeholder": "Enter reason...",
+      "confirm": "Confirm",
+      "cancel": "Cancel"
     }
   }
 }

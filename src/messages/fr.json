@@ -1117,6 +1117,19 @@
       "refresh": "Actualiser",
       "addNewOrder": "Nouvelle commande",
       "kanbanLabel": "Kanban — Tous les statuts",
+      "dateRange": {
+        "today": "Aujourd'hui",
+        "yesterday": "Hier",
+        "last7": "7 derniers jours",
+        "last30": "30 derniers jours",
+        "thisMonth": "Ce mois",
+        "lastMonth": "Mois dernier",
+        "custom": "Personnalisé",
+        "from": "De",
+        "to": "À",
+        "apply": "Appliquer",
+        "label": "Période"
+      },
       "tabs": {
         "all": "Tout",
         "pending": "En attente",
@@ -1128,6 +1141,7 @@
         "all": "Tout",
         "pending": "En attente",
         "inProgress": "En cours",
+        "completed": "Terminée",
         "cancelled": "Annulée"
       },
       "kanban": {
@@ -1155,16 +1169,26 @@
         "moreItems": "de plus",
         "collapse": "Réduire",
         "actions": "Actions",
+        "note": "Note",
+        "rejectReason": "Raison du rejet",
         "source": {
           "DINE_IN": "Sur place",
           "TAKE_AWAY": "À emporter",
-          "DELIVERY": "Livraison"
+          "TAKEAWAY": "À emporter",
+          "DELIVERY": "Livraison",
+          "Takeaway": "À emporter",
+          "Dine-in": "Sur place",
+          "Delivery": "Livraison"
         },
         "status": {
           "Pending": "En attente",
           "In progress": "En cours",
           "Completed": "Terminée",
           "Cancelled": "Annulée"
+        },
+        "paymentStatus": {
+          "paid": "Payé",
+          "unpaid": "Non payé"
         },
         "action": {
           "view": "Détails",
@@ -1173,9 +1197,104 @@
           "complete": "Terminer",
           "cancel": "Annuler",
           "reset": "Réinitialiser",
-          "print": "Imprimer"
-        }
+          "print": "Imprimer la facture",
+          "pay": "Payer & Terminer",
+          "printReceipt": "Imprimer le reçu"
+        },
+        "paymentSuccess": "Paiement effectué avec succès",
+        "paymentError": "Échec du traitement du paiement"
       }
+    },
+    "Create": {
+      "title": "Créer une nouvelle commande",
+      "subtitle": "Sélectionnez des plats et boissons pour commencer à servir le client.",
+      "menuCatalog": "Menu",
+      "searchDish": "Rechercher un plat...",
+      "dineIn": "Sur place",
+      "takeAway": "À emporter",
+      "currentTicket": "Ticket en cours",
+      "clear": "Effacer",
+      "emptyTicket": "Ticket vide",
+      "diningTable": "Table",
+      "customer": "Client",
+      "select": "Sélectionner",
+      "change": "Modifier",
+      "add": "Ajouter",
+      "note": "Ajoutez une note (moins épicé, sans oignons, etc.)",
+      "subtotal": "Sous-total",
+      "tax": "Taxe (10%)",
+      "total": "Total",
+      "placeOrder": "Passer la commande",
+      "createInvoice": "Créer la facture",
+      "noTableSelected": "Aucune table sélectionnée",
+      "anonymous": "Client anonyme",
+      "selectFilterAll": "Tous",
+      "confirmSelection": "Confirmer la sélection",
+      "cancel": "Annuler",
+      "confirm": "Confirmer",
+      "customerDetails": "Informations du client",
+      "phoneNumber": "Numéro de téléphone",
+      "fullName": "Nom complet",
+      "email": "Email",
+      "saveDetails": "Enregistrer les informations"
+    },
+    "Edit": {
+      "menuTitle": "Détails de la commande",
+      "menuSubtitleEdit": "Sélectionnez des articles à ajouter à la commande actuelle.",
+      "menuSubtitleView": "Cette commande a été payée. Mode lecture seule.",
+      "clear": "Effacer",
+      "cancel": "Annuler",
+      "editOrderTitle": "Modifier la commande #{id}",
+      "viewOrderTitle": "Voir la commande #{id}",
+      "totalAmount": "Montant total",
+      "orderedItems": "Articles commandés",
+      "newItems": "Nouveaux articles",
+      "addMoreItemsHint": "Sélectionnez des articles dans le menu à gauche pour les ajouter",
+      "paidOrderWarning": "Cette commande a été payée. Veuillez créer une nouvelle commande.",
+      "addItemsButton": "Ajouter des articles à la commande",
+      "createInvoice": "Créer la facture",
+      "newTotal": "Total estimé",
+      "warningTitle": "Confirmer l'ajout",
+      "completedOrderWarning": "Cette commande est terminée mais non payée. Ajouter de nouveaux articles remettra la commande au statut En cours. Êtes-vous sûr ?",
+      "confirmChangeStatus": "Confirmer l'ajout",
+      "successMessage": "Articles ajoutés avec succès !",
+      "takeAway": "À emporter",
+      "guest": "Client",
+      "notePlaceholder": "Note sur l'article...",
+      "status": {
+        "Pending": "En attente",
+        "In progress": "En cours",
+        "Completed": "Terminé",
+        "Cancelled": "Annulé"
+      }
+    },
+    "PaymentModal": {
+      "title": "Payer & Terminer la commande",
+      "finalTotal": "Total final",
+      "orderInfo": "Infos commande",
+      "orderNo": "N° de commande",
+      "noOfItems": "Nombre d'articles",
+      "orderType": "Type de commande",
+      "orderedMenus": "Menus commandés",
+      "subTotal": "Sous-total",
+      "tax": "Taxe",
+      "serviceCharge": "Frais de service",
+      "tip": "Pourboire",
+      "paymentType": "Type de paiement",
+      "cash": "Espèces",
+      "card": "Carte",
+      "scan": "Scanner",
+      "discount": "Remise",
+      "tips": "Pourboires",
+      "coupon": "Coupon",
+      "add": "Ajouter",
+      "givenAmount": "Montant donné",
+      "balance": "Reliquat",
+      "note": "Note",
+      "notePlaceholder": "Saisir une note de paiement...",
+      "close": "Fermer",
+      "payAndComplete": "Payer & Terminer la commande",
+      "paying": "Traitement..."
     }
   },
   "AdminSidebar": {
@@ -1195,6 +1314,7 @@
     "ingredient": "Ingrédients",
     "coupons": "Coupons",
     "orders": "Commandes",
+    "kitchen": "Cuisine (KDS)",
     "reports": "Rapports",
     "emails": "E-mails",
     "customers": "Clients",
@@ -1266,6 +1386,33 @@
     "empty": "Aucune notification",
     "time": {
       "ago": "Il y a {time}"
+    }
+  },
+  "Kitchen": {
+    "title": "Affichage Cuisine",
+    "description": "Suivre les commandes entrantes et mettre à jour les statuts en temps réel",
+    "refresh": "Actualiser",
+    "liveUpdates": "Mises à jour en direct",
+    "note": "Note",
+    "tabs": {
+      "all": "Toutes",
+      "new": "Nouveaux",
+      "inProgress": "En cours"
+    },
+    "empty": {
+      "title": "Aucune commande active",
+      "hint": "Les nouvelles commandes apparaîtront automatiquement ici"
+    },
+    "status": {
+      "start": "Commencer",
+      "serve": "Servir",
+      "reject": "Rejeter"
+    },
+    "rejectReason": {
+      "label": "Raison",
+      "placeholder": "Entrez la raison...",
+      "confirm": "Confirmer",
+      "cancel": "Annuler"
     }
   }
 }

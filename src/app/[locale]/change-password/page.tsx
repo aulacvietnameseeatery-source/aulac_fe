@@ -7,6 +7,7 @@ import { Typography } from "@/components/ui/typography";
 import { useChangePassword, ChangePasswordForm } from "@/features/customer/auth/change-password";
 import { useEffect } from "react";
 import { CheckCircle2, ArrowLeft } from "lucide-react";
+import Image from "next/image";
 
 /**
  * Change Password Page
@@ -60,7 +61,7 @@ export default function ChangePasswordPage() {
         {/* Logo/Brand */}
         <div className="text-center mb-8">
           <div className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10 mb-4 shadow-lg">
-            <span className="material-icons text-3xl text-primary">spa</span>
+            <Image src="/images/logo.png" alt="An Lac" width={32} height={32} />
           </div>
           <Typography variant="h2" className="text-gray-900 mb-1">
             Au Lac
