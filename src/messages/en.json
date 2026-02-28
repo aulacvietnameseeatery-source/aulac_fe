@@ -480,6 +480,27 @@
       "step_order": "Order"
     }
   },
+  "FillInforCustomer": {
+    "title": "Welcome to Au Lac",
+    "subtitle": "Please provide your information to begin your culinary journey",
+    "form": {
+      "fullName": "Full Name",
+      "fullNamePlaceholder": "Enter your full name",
+      "phoneNumber": "Phone Number",
+      "phoneNumberPlaceholder": "Enter your phone number",
+      "emailAddress": "Email Address",
+      "emailAddressPlaceholder": "Enter your email address",
+      "tableNumber": "Table Number",
+      "submitting": "Submitting...",
+      "startDining": "Start Dining",
+      "skipToMenu": "Skip, browse the menu",
+      "errors": {
+        "phoneRequired": "Phone number is required",
+        "emailInvalid": "Invalid email address"
+      }
+    },
+    "footer": "Handcrafted Vietnamese Cuisine"
+  },
   "ConfirmOrder": {
     "OrderItem": {
       "add_note": "Add Note",
@@ -1362,6 +1383,49 @@
     "cancel": "Cancel",
     "expand": "Expand",
     "collapse": "Collapse"
+  },
+  "OrderHistory": {
+    "title": "Order History",
+    "fabLabel": "HISTORY",
+    "fabAriaLabel": "View order history",
+    "tableLabel": "Table",
+    "itemsCount": "{count} dishes",
+    "refresh": "Refresh",
+    "refreshAriaLabel": "Reload",
+    "close": "Close",
+    "closeAriaLabel": "Close",
+    "headers": {
+      "dish": "Dish",
+      "quantity": "QTY",
+      "price": "Price",
+      "status": "Status"
+    },
+    "status": {
+      "created": "Pending",
+      "inProgress": "In Progress",
+      "ready": "Ready",
+      "served": "Served",
+      "rejected": "Rejected"
+    },
+    "emptyState": {
+      "title": "No dishes ordered yet.",
+      "subtitle": "History will appear here after you place an order."
+    },
+    "chefNote": "Chef's Note:",
+    "estimatedTotal": "Estimated Total",
+    "requestPayment": "Request Payment",
+    "error": "Unable to load data",
+    "paymentPopup": {
+      "title": "Request Payment?",
+      "message": "A server will come to your table shortly with the bill for {tableLabel} {tableNumber}. Would you like to proceed?",
+      "estimatedTotalLabel": "ESTIMATED TOTAL",
+      "confirm": "CONFIRM",
+      "closeAriaLabel": "Close payment dialog"
+    },
+    "successPopup": {
+      "title": "Thank You!",
+      "message": "Your payment request for {tableLabel} {tableNumber} has been received. Our server will be with you shortly."
+    }
   },
   "Notifications": {
     "title": "Notifications",

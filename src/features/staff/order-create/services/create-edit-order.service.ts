@@ -25,7 +25,7 @@ export const createOrderService = {
   },
 
   createOrder: async (payload: CreateOrderRequest): Promise<void> => {
-    await api.post<ApiResponse<any>>('/api/orders', payload);
+    await api.post<ApiResponse<any>>('/api/orders/staff', payload);
   },
 
   getOrderById: async (id: number): Promise<OrderDetailDto> => {
@@ -33,6 +33,6 @@ export const createOrderService = {
     return res.data;
   },
   addItemsToOrder: async (orderId: number, payload: AddOrderItemsRequest): Promise<void> => {
-    await api.post(`/api/orders/${orderId}/items`, payload);
+    await api.post(`/api/orders/staff/${orderId}/items`, payload);
   }
 };
