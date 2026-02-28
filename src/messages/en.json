@@ -493,6 +493,7 @@
       "tableNumber": "Table Number",
       "submitting": "Submitting...",
       "startDining": "Start Dining",
+      "skipToMenu": "Skip, browse the menu",
       "errors": {
         "phoneRequired": "Phone number is required",
         "emailInvalid": "Invalid email address"

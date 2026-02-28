@@ -7,10 +7,19 @@ import { useForm } from "react-hook-form";
 import { useTranslations } from "next-intl";
 import { ArrowRight, Lock } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { CustomerInfoFormData } from "../types";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
+
+// Static schema used for type inference only
+const customerInfoSchema = z.object({
+  fullName: z.string().optional(),
+  phoneNumber: z.string().min(1),
+  emailAddress: z.string().email().optional().or(z.literal("")),
+  tableNumber: z.string(),
+});
+
+type CustomerInfoFormValues = z.infer<typeof customerInfoSchema>;
 
 interface CustomerInfoFormProps {
   tableNumber: string;
@@ -21,8 +30,8 @@ export function CustomerInfoForm({ tableNumber }: CustomerInfoFormProps) {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Create validation schema with translations
-  const customerInfoSchema = z.object({
+  // Schema with translated error messages used at runtime
+  const customerInfoSchemaI18n = z.object({
     fullName: z.string().optional(),
     phoneNumber: z.string().min(1, t("form.errors.phoneRequired")),
     emailAddress: z.string().email(t("form.errors.emailInvalid")).optional().or(z.literal("")),
@@ -33,15 +42,22 @@ export function CustomerInfoForm({ tableNumber }: CustomerInfoFormProps) {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<CustomerInfoFormData>({
-    resolver: zodResolver(customerInfoSchema),
+  } = useForm<CustomerInfoFormValues>({
+    resolver: zodResolver(customerInfoSchemaI18n),
     defaultValues: {
       tableNumber: `Table ${tableNumber}`,
       phoneNumber: "",
     },
   });
 
-  const onSubmit = async (data: CustomerInfoFormData) => {
+  const handleSkip = () => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('aulac_table_number', tableNumber);
+    }
+    router.push(`/menu-listing?table=${encodeURIComponent(tableNumber)}`);
+  };
+
+  const onSubmit = async (data: CustomerInfoFormValues) => {
     setIsSubmitting(true);
     try {
       // Save customer info and table to localStorage
@@ -107,7 +123,7 @@ export function CustomerInfoForm({ tableNumber }: CustomerInfoFormProps) {
             <div className="self-stretch flex flex-col justify-start items-start gap-1.5">
               <label className="self-stretch flex flex-col justify-start items-start">
                 <div className="self-stretch justify-center text-neutral-950 text-xs font-bold font-sans uppercase leading-4 tracking-wide">
-                  {t("form.phoneNumber")} <span className="text-red-500">*</span>
+                  {t("form.phoneNumber")}
                 </div>
               </label>
               <Input
@@ -171,6 +187,18 @@ export function CustomerInfoForm({ tableNumber }: CustomerInfoFormProps) {
               <div className="py-0.5 inline-flex flex-col justify-start items-start">
                 <ArrowRight className="w-3.5 h-4 text-blue-950" />
               </div>
+            </button>
+
+            {/* Skip Button */}
+            <button
+              type="button"
+              onClick={handleSkip}
+              className="self-stretch py-3 bg-transparent rounded-xl inline-flex justify-center items-center gap-1.5 hover:opacity-70 transition-opacity"
+            >
+              <span className="text-center justify-center text-blue-950/50 text-xs font-semibold font-sans leading-4 tracking-wide">
+                {t("form.skipToMenu")}
+              </span>
+              <ArrowRight className="w-3 h-3.5 text-blue-950/50" />
             </button>
           </div>
         </form>

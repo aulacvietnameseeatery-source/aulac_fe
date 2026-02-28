@@ -494,6 +494,7 @@
       "tableNumber": "Numéro de Table",
       "submitting": "En cours...",
       "startDining": "Commencer à Dîner",
+      "skipToMenu": "Ignorer, voir le menu",
       "errors": {
         "phoneRequired": "Le numéro de téléphone est requis",
         "emailInvalid": "Adresse e-mail invalide"

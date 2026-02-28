@@ -493,6 +493,7 @@
       "tableNumber": "Số bàn",
       "submitting": "Đang xử lý...",
       "startDining": "Bắt đầu dùng bữa",
+      "skipToMenu": "Bỏ qua, xem thực đơn",
       "errors": {
         "phoneRequired": "Số điện thoại là bắt buộc",
         "emailInvalid": "Địa chỉ email không hợp lệ"
