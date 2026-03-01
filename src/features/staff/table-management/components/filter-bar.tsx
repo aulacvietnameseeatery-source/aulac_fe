@@ -1,36 +1,33 @@
 "use client";
 
-import React from "react";
+import React, { useMemo } from "react";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ALCombobox } from "@/components/ui/al-combobox";
 import { KeywordSearch } from "@/components/ui/keyword-search/keyword-search";
 import { Card, CardContent } from "@/components/ui/card";
-import type { TableFilters, TableZone } from "../types";
-import { TABLE_ZONE_LABELS } from "../types";
-import { ALL_TYPES, ALL_STATUSES } from "../data";
-import { TABLE_TYPE_LABELS, TABLE_STATUS_CONFIG } from "../types";
+import type { TableFilters, TableStatus } from "../types";
+import { TABLE_STATUS_CONFIG, TABLE_STATUS_LV_IDS } from "../types";
+import {
+  useZonesQuery,
+  useTableTypesQuery,
+} from "../hooks/use-table-queries";
 
 interface FilterBarProps {
   filters: TableFilters;
   onFiltersChange: (filters: TableFilters) => void;
 }
 
-const ZONE_TABS: { value: TableZone | "ALL"; label: string }[] = [
-  { value: "ALL", label: "All Zones" },
-  ...Object.entries(TABLE_ZONE_LABELS).map(([key, label]) => ({
-    value: key as TableZone,
-    label,
-  })),
-];
+// ── Status options (statuses are always the 4 fixed statuses) ──
+const ALL_STATUSES = Object.keys(TABLE_STATUS_CONFIG) as Array<
+  keyof typeof TABLE_STATUS_CONFIG
+>;
 
-const TYPE_OPTIONS = [
-  { label: "All Types", value: "ALL" },
-  ...ALL_TYPES.map((t) => ({ label: TABLE_TYPE_LABELS[t], value: t as string })),
-];
-
-const STATUS_OPTIONS = [
+const STATIC_STATUS_OPTIONS = [
   { label: "All Statuses", value: "ALL" },
-  ...ALL_STATUSES.map((s) => ({ label: TABLE_STATUS_CONFIG[s].label, value: s as string })),
+  ...ALL_STATUSES.map((s) => ({
+    label: TABLE_STATUS_CONFIG[s].label,
+    value: s as string,
+  })),
 ];
 
 const ONLINE_OPTIONS = [
@@ -43,24 +40,72 @@ export const FilterBar: React.FC<FilterBarProps> = ({
   filters,
   onFiltersChange,
 }) => {
-  const updateFilter = <K extends keyof TableFilters>(
-    key: K,
-    value: TableFilters[K]
-  ) => {
-    onFiltersChange({ ...filters, [key]: value });
+  // ── Fetch lookup data ──
+  const { data: zones = [] } = useZonesQuery();
+  const { data: tableTypes = [] } = useTableTypesQuery();
+
+  // ── Zone tabs (dynamic from API) ──
+  const zoneTabs = useMemo(() => {
+    const dynamic = zones.map((z) => ({
+      key: String(z.valueId),
+      value: z.valueName,
+      label: z.valueName,
+      zoneId: z.valueId,
+    }));
+    return [{ key: "all", value: "ALL", label: "All Zones", zoneId: null as number | null }, ...dynamic];
+  }, [zones]);
+
+  // ── Type options (dynamic from API) ──
+  const typeOptions = useMemo(() => {
+    const dynamic = tableTypes.map((t) => ({
+      label: t.valueName,
+      value: t.valueName,
+      typeId: t.valueId,
+    }));
+    return [{ label: "All Types", value: "ALL", typeId: null as number | null }, ...dynamic];
+  }, [tableTypes]);
+
+  // ── Status options (dynamic from API, fallback to static config) ──
+  const statusOptions = STATIC_STATUS_OPTIONS;
+
+  const handleZoneChange = (val: string) => {
+    const tab = zoneTabs.find((t) => t.value === val);
+    onFiltersChange({
+      ...filters,
+      zone: val,
+      zoneId: tab?.zoneId ?? null,
+    });
+  };
+
+  const handleTypeChange = (val: string) => {
+    const opt = typeOptions.find((t) => t.value === val);
+    onFiltersChange({
+      ...filters,
+      type: val,
+      typeId: opt?.typeId ?? null,
+    });
+  };
+
+  const handleStatusChange = (val: string) => {
+    onFiltersChange({
+      ...filters,
+      status: val,
+      statusId: val !== "ALL" ? (TABLE_STATUS_LV_IDS[val as TableStatus] ?? null) : null,
+    });
   };
 
   return (
     <Card className="py-0 gap-0">
       <CardContent className="p-4 space-y-3">
         {/* Zone Tabs */}
-        <Tabs
-          value={filters.zone}
-          onValueChange={(val) => updateFilter("zone", val as TableZone | "ALL")}
-        >
+        <Tabs value={filters.zone} onValueChange={handleZoneChange}>
           <TabsList variant="line">
-            {ZONE_TABS.map((tab) => (
-              <TabsTrigger key={tab.value} value={tab.value} className="text-sm">
+            {zoneTabs.map((tab) => (
+              <TabsTrigger
+                key={tab.key}
+                value={tab.value}
+                className="text-sm"
+              >
                 {tab.label}
               </TabsTrigger>
             ))}
@@ -72,14 +117,16 @@ export const FilterBar: React.FC<FilterBarProps> = ({
           <KeywordSearch
             value={filters.search}
             placeholder="Search table code ..."
-            onChange={(val) => updateFilter("search", val)}
+            onChange={(val) =>
+              onFiltersChange({ ...filters, search: val })
+            }
             className="grow max-w-xs"
           />
 
           <ALCombobox
-            options={TYPE_OPTIONS}
+            options={typeOptions}
             value={filters.type}
-            onChange={(val) => updateFilter("type", val as TableFilters["type"])}
+            onChange={(val) => handleTypeChange(String(val))}
             placeholder="Type"
             searchable={false}
             clearable
@@ -88,9 +135,9 @@ export const FilterBar: React.FC<FilterBarProps> = ({
           />
 
           <ALCombobox
-            options={STATUS_OPTIONS}
+            options={statusOptions}
             value={filters.status}
-            onChange={(val) => updateFilter("status", val as TableFilters["status"])}
+            onChange={(val) => handleStatusChange(String(val))}
             placeholder="Status"
             searchable={false}
             clearable
@@ -101,7 +148,12 @@ export const FilterBar: React.FC<FilterBarProps> = ({
           <ALCombobox
             options={ONLINE_OPTIONS}
             value={filters.isOnline}
-            onChange={(val) => updateFilter("isOnline", val as TableFilters["isOnline"])}
+            onChange={(val) =>
+              onFiltersChange({
+                ...filters,
+                isOnline: val as TableFilters["isOnline"],
+              })
+            }
             placeholder="Connection"
             searchable={false}
             clearable

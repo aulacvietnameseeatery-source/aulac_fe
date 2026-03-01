@@ -1,6 +1,55 @@
 export { default } from "./table-management";
 export { default as TableManagement } from "./table-management";
-export type { RestaurantTable, TableFormData, TableFilters, DashboardSummary as DashboardSummaryType, TableStatus, TableType, TableZone, StatusConfig } from "./types";
-export { TABLE_STATUS_CONFIG, TABLE_TYPE_LABELS, TABLE_ZONE_LABELS, TABLE_ZONE_ICONS } from "./types";
+export type {
+  RestaurantTable,
+  TableFormData,
+  TableFilters,
+  DashboardSummary as DashboardSummaryType,
+  TableStatus,
+  TableType,
+  StatusConfig,
+  TableManagementDto,
+  TableDetailDto,
+  TableMediaDto,
+  UpcomingReservationDto,
+  CreateTableRequest,
+  UpdateTableRequest,
+  UpdateTableStatusRequest,
+  TableQueryParams,
+  LookupValueDto,
+  LookupValueI18nDto,
+  CreateLookupValueRequest,
+  UpdateLookupValueRequest,
+  BulkOnlineRequest,
+  QrCodeDto,
+} from "./types";
+export {
+  TABLE_STATUS_CONFIG,
+  TABLE_STATUS_LV_IDS,
+  ALLOWED_TRANSITIONS,
+  canTransitionTo,
+  mapDtoToTable,
+  mapDetailDtoToTable,
+  mapLookupI18n,
+} from "./types";
 export * from "./components";
-export { mockTables } from "./data";
+export { tableService } from "./services/table.service";
+export {
+  TABLE_QUERY_KEYS,
+  useTablesQuery,
+  useTableDetailQuery,
+  useCreateTableMutation,
+  useUpdateTableMutation,
+  useDeleteTableMutation,
+  useUpdateTableStatusMutation,
+  useZonesQuery,
+  useTableTypesQuery,
+  useCreateZoneMutation,
+  useCreateTableTypeMutation,
+  useUpdateZoneMutation,
+  useUpdateTableTypeMutation,
+  useDeleteZoneMutation,
+  useDeleteTableTypeMutation,
+  useBulkOnlineMutation,
+  useRegenerateQrMutation,
+} from "./hooks/use-table-queries";
