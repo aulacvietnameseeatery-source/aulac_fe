@@ -16,7 +16,6 @@ export const viewport: Viewport = {
   maximumScale: 1,
   userScalable: false,
   viewportFit: "cover",
-  // ĐÃ SỬA: Đổi sang màu Xanh Navi để thanh trạng thái trên điện thoại đồng bộ với Header
   themeColor: "#0f172a",
 };
 
