@@ -1,7 +1,7 @@
 /* src/styles/components/footer.css */
 
 .footer-wrapper {
-    @apply w-full bg-[#193752] border-t border-white/5 px-4 pt-10;
+    @apply w-full bg-[#152e42] border-t border-white/5 px-4 pt-10;
     /* Né thanh Home Indicator + khoảng trống cho nút BackToTop */
     padding-bottom: calc(40px + var(--safe-bottom));
 }
