@@ -23,7 +23,6 @@ import { useOrderHistory } from "@/features/staff/order-management/hooks/useOrde
 import { useOrderStatusCounts } from "@/features/staff/order-management/hooks/useOrderStatusCounts";
 import { OrderCard } from "@/features/staff/order-management/components/OrderCard";
 import { KanbanOrderCard } from "@/features/staff/order-management/components/KanbanOrderCard";
-import { OrderStatusCard } from "@/features/staff/order-management/components/OrderStatusCard";
 import { ProtectedRoute } from "@/components/protected-route";
 import { Permissions } from "@/types/const";
 import { OrderHistory } from "@/features/staff/order-management/types/order-history.types";
@@ -147,15 +146,6 @@ function OrdersContent() {
         { label: t("tabs.cancelled"), statusLvId: STATUS_LV_IDS.cancelled, count: counts.cancelled },
     ], [t, counts]);
 
-    // Status summary cards — counts từ API, không đổi khi filter
-    const STATUS_CARDS = useMemo(() => [
-        { label: t("statusCards.all"), colorClass: "bg-gray-100 text-gray-600", icon: <BookmarkCheck className="w-4 h-4" />, count: counts.all },
-        { label: t("statusCards.pending"), colorClass: "bg-blue-100 text-blue-600", icon: <CircleArrowOutDownRight className="w-4 h-4" />, count: counts.pending },
-        { label: t("statusCards.inProgress"), colorClass: "bg-orange-100 text-orange-600", icon: <Loader className="w-4 h-4" />, count: counts.inProgress },
-        { label: t("statusCards.completed"), colorClass: "bg-green-100 text-green-600", icon: <CheckCircle2 className="w-4 h-4" />, count: counts.completed },
-        { label: t("statusCards.cancelled"), colorClass: "bg-red-100 text-red-600", icon: <UserX className="w-4 h-4" />, count: counts.cancelled },
-    ], [t, counts]);
-
     // Debounce search — giống BaseTable
     useEffect(() => {
         if (debounceRef.current) clearTimeout(debounceRef.current);
@@ -243,18 +233,6 @@ function OrdersContent() {
                 </Button>
             </div>
 
-            {/* ── Status summary cards ─────────────────────────────────────── */}
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-2 mb-2">
-                {STATUS_CARDS.map((card) => (
-                    <OrderStatusCard
-                        key={card.label}
-                        label={card.label}
-                        count={card.count}
-                        icon={card.icon}
-                        colorClass={card.colorClass}
-                    />
-                ))}
-            </div>
 
             {/* ── BaseTable-style toolbar ──────────────────────────────────── */}
             <div className="body-layout-list flex-1 flex flex-col min-h-0">
