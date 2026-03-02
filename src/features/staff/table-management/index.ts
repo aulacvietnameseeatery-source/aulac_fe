@@ -16,6 +16,7 @@ export type {
   UpdateTableRequest,
   UpdateTableStatusRequest,
   TableQueryParams,
+  I18nMap,
   LookupValueDto,
   LookupValueI18nDto,
   CreateLookupValueRequest,

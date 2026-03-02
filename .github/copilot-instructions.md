@@ -60,6 +60,37 @@ The backend stores statuses, types, and zones as rows in a generic `LookupValue`
 
 FE enum mirrors live in `src/types/status-codes.ts` — values match `ValueCode` in the DB (`SCREAMING_SNAKE_CASE`).
 
+## Lookup UI Components
+
+Anytime a feature needs a **select/combobox that loads options from a BE LookupValue endpoint**, always use the shared infrastructure from `@/features/lookup` — **never create a new route, file, or custom combobox/modal from scratch**.
+
+| Need | Use |
+|------|-----|
+| Combobox with inline create + manager modal | `<LookupCombobox lookup={...} ... />` from `@/features/lookup` |
+| Standalone CRUD modal for a lookup entity | `<LookupManagerModal {...lookup} ... />` from `@/features/lookup` |
+| Data + CRUD callbacks for a lookup entity | `useLookupCrud({ baseUrl, queryKey, entityLabel })` from `@/features/lookup` |
+
+```ts
+// Pattern: one hook call wires up everything
+const zoneLookup = useLookupCrud({
+  baseUrl:     "/api/tables/zones",
+  queryKey:    ["tables", "zones"],
+  entityLabel: "Zone",
+});
+
+// Renders combobox + "Manage" button + full CRUD modal
+<LookupCombobox
+  lookup={zoneLookup}
+  title="Zone"
+  required
+  value={formData.zoneLvId}
+  onChange={(val) => setFormData(f => ({ ...f, zoneLvId: val }))}
+/>
+```
+
+The `LookupCombobox` component lives in `src/features/lookup/components/lookup-combobox.tsx`.
+The `LookupManagerModal` component lives in `src/features/lookup/components/lookup-manager-modal.tsx`.
+
 ## Auth
 
 - JWT access token in `localStorage` via `AuthStorage` singleton (`src/lib/auth-storage.ts`).
@@ -71,6 +102,8 @@ FE enum mirrors live in `src/types/status-codes.ts` — values match `ValueCode`
 ## UI Components
 
 shadcn/ui (new-york style) extended with project-specific components. Import from `@/components/ui/*`.
+
+**Component-first rule:** Always check `src/components/ui/` for a suitable existing component before creating a new one. If no component fits the need, **ask the user for confirmation** before building a new one. Do not silently create new UI primitives.
 
 | Component | Notes |
 |-----------|-------|
@@ -98,6 +131,7 @@ Tailwind CSS v4 with CSS variables for theming (`src/styles/globals.css`). Some 
 
 ## Conventions
 
+- **No deletions:** Never delete existing code when implementing changes. Instead, comment it out and rename it with a `// _OLD:` prefix on the comment (for inline blocks) or append `_DEPRECATED` to the identifier name. This preserves history and makes rollback trivial. Moving file is allowed to delete the old path, but the new file must be a copy-paste of the old content with changes applied, never a refactor that edits in place.
 - **File naming:** `kebab-case` for all files (`table-modal.tsx`, `dish.service.ts`, `table.types.ts`)
 - **Exports:** PascalCase named exports for components. Barrel `index.ts` in each feature
 - **Imports:** Use `@/*` path alias (maps to `src/*`)

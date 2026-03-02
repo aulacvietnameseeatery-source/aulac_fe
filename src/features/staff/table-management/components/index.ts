@@ -8,5 +8,3 @@ export { default as ZoneSection } from "./zone-section";
 export { default as FilterBar } from "./filter-bar";
 export { default as TableDetailPanel } from "./table-detail-panel";
 export { default as AddZoneModal } from "./add-zone-modal";
-export { default as LookupManagerModal } from "./lookup-manager-modal";
-export type { LookupManagerModalProps } from "./lookup-manager-modal";

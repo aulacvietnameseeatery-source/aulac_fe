@@ -1,10 +1,9 @@
 ﻿"use client";
 
-import React, { useState, useEffect, useCallback, useRef, useMemo } from "react";
-import { QRCodeCanvas } from "qrcode.react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Dialog } from "@/components/ui/dialog";
 import { ALInput } from "@/components/ui/al-input";
-import { ALCombobox } from "@/components/ui/al-combobox";
+import { ALCombobox } from "@/components/ui/al-combobox"; // used for static Status field (not a lookup entity)
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import {
@@ -16,17 +15,11 @@ import {
   FileUploadItemMetadata,
   FileUploadItemDelete,
 } from "@/components/ui/file-upload";
-import { RefreshCcw, Download, Eye, Upload, X, Trash2, Settings2 } from "lucide-react";
+import { RefreshCcw, Download, Eye, Upload, X, Trash2, ImageOff } from "lucide-react";
 import type { RestaurantTable, TableFormData, TableStatus } from "../types";
 import { TABLE_STATUS_CONFIG, TABLE_STATUS_LV_IDS } from "../types";
-import {
-  useZonesQuery,
-  useTableTypesQuery,
-  useCreateZoneMutation,
-  useCreateTableTypeMutation,
-  useRegenerateQrMutation,
-} from "../hooks/use-table-queries";
-import LookupManagerModal from "./lookup-manager-modal";
+import { useRegenerateQrMutation } from "../hooks/use-table-queries";
+import { useLookupCrud, LookupCombobox } from "@/features/lookup";
 
 interface TableModalProps {
   isOpen: boolean;
@@ -64,13 +57,17 @@ const TableModal: React.FC<TableModalProps> = ({
   const [formData, setFormData] = useState<TableFormData>(initialFormData);
   const [qrPreview, setQrPreview] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
-  const [isZoneManagerOpen, setIsZoneManagerOpen] = useState(false);
-  const [isTypeManagerOpen, setIsTypeManagerOpen] = useState(false);
-  const qrRef = useRef<HTMLDivElement>(null);
-
-  // ── Fetch lookup values ──
-  const { data: zones = [], isLoading: zonesLoading } = useZonesQuery();
-  const { data: tableTypes = [], isLoading: typesLoading } = useTableTypesQuery();
+  // ── Fetch lookup values via shared useLookupCrud ──
+  const zoneLookup = useLookupCrud({
+    baseUrl:     "/api/tables/zones",
+    queryKey:    ["tables", "zones"],
+    entityLabel: "Zone",
+  });
+  const typeLookup = useLookupCrud({
+    baseUrl:     "/api/tables/types",
+    queryKey:    ["tables", "types"],
+    entityLabel: "Table Type",
+  });
 
   // ── Static status options — statuses are fixed; value = numeric statusLvId ──
   const STATIC_STATUS_OPTIONS = (Object.keys(TABLE_STATUS_CONFIG) as TableStatus[]).map((s) => ({
@@ -90,38 +87,6 @@ const TableModal: React.FC<TableModalProps> = ({
       setQrPreview(true);
     },
   });
-
-  // ── Quick-create mutations ──
-  const createZoneMutation = useCreateZoneMutation({
-    onSuccess: (data) => {
-      // Auto-select the newly created zone
-      handleChange("zoneLvId", data.valueId);
-    },
-  });
-  const createTypeMutation = useCreateTableTypeMutation({
-    onSuccess: (data) => {
-      handleChange("typeLvId", data.valueId);
-    },
-  });
-
-  // ── Map lookup DTOs → ALCombobox options ──
-  const zoneOptions = useMemo(
-    () =>
-      zones.map((z) => ({
-        label: z.valueName,
-        value: String(z.valueId),
-      })),
-    [zones]
-  );
-
-  const typeOptions = useMemo(
-    () =>
-      tableTypes.map((t) => ({
-        label: t.valueName,
-        value: String(t.valueId),
-      })),
-    [tableTypes]
-  );
 
   useEffect(() => {
     if (mode === "edit" && table) {
@@ -166,15 +131,22 @@ const TableModal: React.FC<TableModalProps> = ({
     onSubmit({ ...submitData, images: allImages });
   };
 
-  const handleDownloadQR = useCallback(() => {
-    const canvas = qrRef.current?.querySelector("canvas");
-    if (!canvas) return;
-    const url = canvas.toDataURL("image/png");
-    const link = document.createElement("a");
-    link.download = `qr-${formData.tableCode || "table"}.png`;
-    link.href = url;
-    link.click();
-  }, [formData.tableCode]);
+  const handleDownloadQR = useCallback(async () => {
+    if (!formData.qrCodeImageUrl) return;
+    try {
+      const response = await fetch(formData.qrCodeImageUrl);
+      const blob = await response.blob();
+      const blobUrl = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.download = `qr-${formData.tableCode || "table"}.png`;
+      link.href = blobUrl;
+      link.click();
+      URL.revokeObjectURL(blobUrl);
+    } catch {
+      // Fallback: open in new tab
+      window.open(formData.qrCodeImageUrl, "_blank");
+    }
+  }, [formData.qrCodeImageUrl, formData.tableCode]);
 
   // Remove existing image
   const handleRemoveExistingImage = useCallback((index: number) => {
@@ -241,55 +213,21 @@ const TableModal: React.FC<TableModalProps> = ({
 
           {/* Zone + Type row */}
           <div className="grid grid-cols-2 gap-4">
-            <ALCombobox
+            <LookupCombobox
+              lookup={zoneLookup}
               title="Zone"
               required
-              options={zoneOptions}
-              value={formData.zoneLvId ? String(formData.zoneLvId) : undefined}
-              onChange={(val) => handleChange("zoneLvId", val ? Number(val) : "")}
               placeholder="Select zone"
-              searchable
-              isLoading={zonesLoading}
-              allowCreate
-              onCreateOption={(name) => {
-                createZoneMutation.mutate({ valueName: name });
-              }}
-              titleAction={
-                <button
-                  type="button"
-                  title="Manage zones"
-                  onClick={() => setIsZoneManagerOpen(true)}
-                  className="flex items-center gap-1 text-xs text-blue-600 hover:text-blue-800 font-medium transition-colors"
-                >
-                  <Settings2 size={11} />
-                  Manage
-                </button>
-              }
+              value={formData.zoneLvId}
+              onChange={(val) => handleChange("zoneLvId", val)}
             />
-            <ALCombobox
+            <LookupCombobox
+              lookup={typeLookup}
               title="Type"
               required
-              options={typeOptions}
-              value={formData.typeLvId ? String(formData.typeLvId) : undefined}
-              onChange={(val) => handleChange("typeLvId", val ? Number(val) : "")}
               placeholder="Select type"
-              searchable
-              isLoading={typesLoading}
-              allowCreate
-              onCreateOption={(name) => {
-                createTypeMutation.mutate({ valueName: name });
-              }}
-              titleAction={
-                <button
-                  type="button"
-                  title="Manage table types"
-                  onClick={() => setIsTypeManagerOpen(true)}
-                  className="flex items-center gap-1 text-xs text-blue-600 hover:text-blue-800 font-medium transition-colors"
-                >
-                  <Settings2 size={11} />
-                  Manage
-                </button>
-              }
+              value={formData.typeLvId}
+              onChange={(val) => handleChange("typeLvId", val)}
             />
           </div>
 
@@ -299,7 +237,7 @@ const TableModal: React.FC<TableModalProps> = ({
             required
             options={STATIC_STATUS_OPTIONS}
             value={formData.statusLvId ? String(formData.statusLvId) : undefined}
-            onChange={(val) => handleChange("statusLvId", val ? Number(val) : "")}
+            onChange={(val) => handleChange("statusLvId", val ? Number(val as string) : "")}
             placeholder="Select status"
             searchable={false}
           />
@@ -377,12 +315,8 @@ const TableModal: React.FC<TableModalProps> = ({
                         className="shrink-0 w-24 h-24 rounded bg-white p-1"
                       />
                     ) : (
-                      <div ref={qrRef} className="shrink-0 bg-white rounded p-2">
-                        <QRCodeCanvas
-                          value={formData.qrCodeUrl || ""}
-                          size={96}
-                          level="M"
-                        />
+                      <div className="shrink-0 w-24 h-24 rounded bg-white p-2 flex items-center justify-center">
+                        <ImageOff className="w-8 h-8 text-gray-300" />
                       </div>
                     )}
                     <div className="space-y-1 min-w-0">
@@ -486,27 +420,6 @@ const TableModal: React.FC<TableModalProps> = ({
       </form>
     </Dialog>
 
-    {/* Zone manager — opens on top of this modal */}
-    <LookupManagerModal
-      isOpen={isZoneManagerOpen}
-      onClose={() => setIsZoneManagerOpen(false)}
-      type="zone"
-      onCreated={(item) => {
-        handleChange("zoneLvId", item.valueId);
-        setIsZoneManagerOpen(false);
-      }}
-    />
-
-    {/* Type manager */}
-    <LookupManagerModal
-      isOpen={isTypeManagerOpen}
-      onClose={() => setIsTypeManagerOpen(false)}
-      type="tableType"
-      onCreated={(item) => {
-        handleChange("typeLvId", item.valueId);
-        setIsTypeManagerOpen(false);
-      }}
-    />
   </>
   );
 };

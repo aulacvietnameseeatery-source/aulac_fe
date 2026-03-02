@@ -4,7 +4,6 @@ import React, { useState, useEffect } from "react";
 import { Dialog } from "@/components/ui/dialog";
 import { ALInput } from "@/components/ui/al-input";
 import { Button } from "@/components/ui/button";
-import { Loader2 } from "lucide-react";
 import { useCreateZoneMutation } from "../hooks/use-table-queries";
 
 interface AddZoneModalProps {

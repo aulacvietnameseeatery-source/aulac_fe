@@ -1,4 +1,5 @@
 import { api } from "@/lib/http";
+import { createLookupService } from "@/features/lookup";
 import type { ApiResponse, PagedResult } from "@/types/api-response.types";
 import type {
   TableManagementDto,
@@ -8,13 +9,15 @@ import type {
   UpdateTableStatusRequest,
   TableQueryParams,
   LookupValueDto,
-  LookupValueI18nDto,
   CreateLookupValueRequest,
   UpdateLookupValueRequest,
   BulkOnlineRequest,
   QrCodeDto,
 } from "../types";
-import { mapLookupI18n } from "../types";
+
+// ── Shared lookup service instances ──
+const _zoneService = createLookupService("/api/tables/zones");
+const _typeService = createLookupService("/api/tables/types");
 
 /**
  * Table Management API service
@@ -109,70 +112,46 @@ export const tableService = {
     return res.data;
   },
 
-  // ── Lookup endpoints ──────────────────────────────────
+  // ── Lookup endpoints ── delegated to createLookupService instances ──
 
-  /**
-   * GET /api/tables/zones — List all zone lookup values
-   * Response shape: LookupValueI18nDto (no valueName, has i18n)
-   */
+  /** GET /api/tables/zones */
   async getZones(): Promise<LookupValueDto[]> {
-    const res = await api.get<ApiResponse<LookupValueI18nDto[]>>("/api/tables/zones");
-    return (res.data ?? []).map(mapLookupI18n);
+    return _zoneService.getAll();
   },
 
-  /**
-   * GET /api/tables/types — List all table type lookup values
-   * Response shape: LookupValueI18nDto (no valueName, has i18n)
-   */
+  /** GET /api/tables/types */
   async getTableTypes(): Promise<LookupValueDto[]> {
-    const res = await api.get<ApiResponse<LookupValueI18nDto[]>>("/api/tables/types");
-    return (res.data ?? []).map(mapLookupI18n);
+    return _typeService.getAll();
   },
 
-  /**
-   * POST /api/tables/zones — Quick-create a new zone
-   */
+  /** POST /api/tables/zones */
   async createZone(data: CreateLookupValueRequest): Promise<LookupValueDto> {
-    const res = await api.post<ApiResponse<LookupValueI18nDto>>("/api/tables/zones", data);
-    return mapLookupI18n(res.data);
+    return _zoneService.create(data);
   },
 
-  /**
-   * POST /api/tables/types — Quick-create a new table type
-   */
+  /** POST /api/tables/types */
   async createTableType(data: CreateLookupValueRequest): Promise<LookupValueDto> {
-    const res = await api.post<ApiResponse<LookupValueI18nDto>>("/api/tables/types", data);
-    return mapLookupI18n(res.data);
+    return _typeService.create(data);
   },
 
-  /**
-   * PUT /api/tables/zones/{id} — Update an existing zone
-   */
+  /** PUT /api/tables/zones/{id} */
   async updateZone(id: number, data: UpdateLookupValueRequest): Promise<LookupValueDto> {
-    const res = await api.put<ApiResponse<LookupValueI18nDto>>(`/api/tables/zones/${id}`, data);
-    return mapLookupI18n(res.data);
+    return _zoneService.update(id, data);
   },
 
-  /**
-   * DELETE /api/tables/zones/{id} — Delete a zone
-   */
+  /** DELETE /api/tables/zones/{id} */
   async deleteZone(id: number): Promise<void> {
-    await api.delete<ApiResponse<object>>(`/api/tables/zones/${id}`);
+    return _zoneService.remove(id);
   },
 
-  /**
-   * PUT /api/tables/types/{id} — Update an existing table type
-   */
+  /** PUT /api/tables/types/{id} */
   async updateTableType(id: number, data: UpdateLookupValueRequest): Promise<LookupValueDto> {
-    const res = await api.put<ApiResponse<LookupValueI18nDto>>(`/api/tables/types/${id}`, data);
-    return mapLookupI18n(res.data);
+    return _typeService.update(id, data);
   },
 
-  /**
-   * DELETE /api/tables/types/{id} — Delete a table type
-   */
+  /** DELETE /api/tables/types/{id} */
   async deleteTableType(id: number): Promise<void> {
-    await api.delete<ApiResponse<object>>(`/api/tables/types/${id}`);
+    return _typeService.remove(id);
   },
 
   /**

@@ -79,40 +79,19 @@ export interface UpdateTableStatusRequest {
 }
 
 // ──────────────────────────────────────────────────────────
-// Lookup value types (zones, types, statuses)
+// Lookup value types — re-exported from shared location
+// Import from "@/types/lookup.types" if needed outside this feature
 // ──────────────────────────────────────────────────────────
 
-/**
- * Raw shape returned by GET/POST/PUT zone and type endpoints.
- * The BE does NOT include `valueName` — display names come from the `i18n` map.
- */
-export interface LookupValueI18nDto {
-  valueId: number;
-  valueCode: string;
-  sortOrder: number;
-  i18n?: {
-    vi?: string;
-    en?: string;
-    fr?: string;
-  };
-}
+export type {
+  I18nMap,
+  LookupValueI18nDto,
+  LookupValueDto,
+  CreateLookupValueRequest,
+  UpdateLookupValueRequest,
+} from "@/features/lookup/types/lookup.types";
 
-/** FE-enriched shape — `valueName` is derived from `i18n` by the service layer. */
-export interface LookupValueDto extends LookupValueI18nDto {
-  valueName: string;  // populated from i18n.en ?? i18n.vi ?? valueCode
-  description?: string;
-}
-
-/**
- * Maps a raw BE lookup response to the FE-enriched DTO.
- * Call this in every service method that returns a lookup value.
- */
-export function mapLookupI18n(dto: LookupValueI18nDto): LookupValueDto {
-  return {
-    ...dto,
-    valueName: dto.i18n?.en ?? dto.i18n?.vi ?? dto.i18n?.fr ?? dto.valueCode,
-  };
-}
+export { mapLookupI18n } from "@/features/lookup/types/lookup.types";
 
 /** Returned by POST /api/tables/{id}/qr-code */
 export interface QrCodeDto {
@@ -124,19 +103,6 @@ export interface QrCodeDto {
 export interface BulkOnlineRequest {
   zoneId: number;
   isOnline: boolean;
-}
-
-export interface CreateLookupValueRequest {
-  valueName: string;
-  valueCode?: string;
-  description?: string;
-  sortOrder?: number;
-}
-
-export interface UpdateLookupValueRequest {
-  valueName?: string;
-  description?: string;
-  sortOrder?: number;
 }
 
 // ──────────────────────────────────────────────────────────
