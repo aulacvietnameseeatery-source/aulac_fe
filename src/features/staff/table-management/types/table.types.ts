@@ -1,47 +1,180 @@
-// Status for the restaurant table
-export type TableStatus = "AVAILABLE" | "OCCUPIED" | "RESERVED" | "CLEANING" | "OUT_OF_SERVICE";
+// ──────────────────────────────────────────────────────────
+// Status codes — mirrors BE LookupValue TABLE_STATUS
+// ──────────────────────────────────────────────────────────
+export type TableStatus = "AVAILABLE" | "OCCUPIED" | "RESERVED" | "LOCKED";
 
-// Type of restaurant table
-export type TableType = "REGULAR" | "VIP" | "BOOTH" | "BAR" | "HIGH_TOP";
+// Type codes — mirrors BE LookupValue TABLE_TYPE
+export type TableType = "REGULAR" | "VIP" | "BOOTH" | "BAR" | "HIGH_TOP" | "NORMAL" | "OUTDOOR";
 
-// Zone / floor area
+// Zone codes — mirrors BE LookupValue TABLE_ZONE
 export type TableZone = "INDOOR" | "OUTDOOR" | "ROOFTOP";
 
-// Main restaurant table entity
+// ──────────────────────────────────────────────────────────
+// API DTO types — match BE response exactly
+// ──────────────────────────────────────────────────────────
+
+/** Returned from GET /api/tables (list) */
+export interface TableManagementDto {
+  tableId: number;
+  tableCode: string;
+  capacity: number;
+  isOnline: boolean;
+  statusId: number;
+  statusCode: string;
+  statusName: string;
+  typeId: number;
+  typeName: string;
+  zoneId: number;
+  zoneName: string;
+}
+
+/** Returned from GET /api/tables/{id} (detail) */
+export interface TableDetailDto extends TableManagementDto {
+  qrCodeUrl: string | null;
+  qrCodeImageUrl: string | null;
+  images: TableMediaDto[];
+  activeOrdersCount: number;
+  hasErrors: boolean;
+  upcomingReservations: UpcomingReservationDto[];
+}
+
+export interface TableMediaDto {
+  mediaId: number;
+  url: string;
+  isPrimary: boolean;
+}
+
+export interface UpcomingReservationDto {
+  reservationId: number;
+  guestName: string;
+  pax: number;
+  reservedTime: string; // ISO 8601
+  statusCode: string;   // "PENDING" | "CONFIRMED"
+}
+
+// ──────────────────────────────────────────────────────────
+// Request types
+// ──────────────────────────────────────────────────────────
+
+export interface CreateTableRequest {
+  tableCode: string;
+  capacity: number;
+  isOnline?: boolean;
+  statusLvId: number;  // FK → lookup_value (TABLE_STATUS)
+  typeLvId: number;
+  zoneLvId: number;
+}
+
+export interface UpdateTableRequest {
+  tableCode?: string;
+  capacity?: number;
+  isOnline?: boolean;
+  statusLvId?: number;  // FK → lookup_value (TABLE_STATUS)
+  typeLvId?: number;
+  zoneLvId?: number;
+}
+
+export interface UpdateTableStatusRequest {
+  statusLvId: number;  // FK → lookup_value (TABLE_STATUS)
+}
+
+// ──────────────────────────────────────────────────────────
+// Lookup value types — re-exported from shared location
+// Import from "@/types/lookup.types" if needed outside this feature
+// ──────────────────────────────────────────────────────────
+
+export type {
+  I18nMap,
+  LookupValueI18nDto,
+  LookupValueDto,
+  CreateLookupValueRequest,
+  UpdateLookupValueRequest,
+} from "@/features/lookup/types/lookup.types";
+
+export { mapLookupI18n } from "@/features/lookup/types/lookup.types";
+
+/** Returned by POST /api/tables/{id}/qr-code */
+export interface QrCodeDto {
+  qrCodeUrl: string | null;
+  qrCodeImageUrl: string | null;
+}
+
+/** Body for PATCH /api/tables/bulk-online */
+export interface BulkOnlineRequest {
+  zoneId: number;
+  isOnline: boolean;
+}
+
+// ──────────────────────────────────────────────────────────
+// Query params for GET /api/tables
+// ──────────────────────────────────────────────────────────
+
+export interface TableQueryParams {
+  pageIndex?: number;
+  pageSize?: number;
+  search?: string;
+  zoneId?: number;
+  typeId?: number;
+  statusId?: number;  // lookup_value FK for TABLE_STATUS
+  isOnline?: boolean;
+}
+
+// ──────────────────────────────────────────────────────────
+// Internal FE model — mapped from DTO for UI components
+// ──────────────────────────────────────────────────────────
+
 export interface RestaurantTable {
   tableId: number;
   tableCode: string;
   capacity: number;
   status: TableStatus;
-  type: TableType;
-  zone: TableZone;
+  type: string;        // typeName from API (display string)
+  zone: string;        // zoneName from API (display string)
   isOnline: boolean;
+  statusId: number;
+  typeId: number;
+  zoneId: number;
+  statusName: string;
+  typeName: string;
+  zoneName: string;
   qrCodeUrl?: string;
-  qrCodeGenerated?: boolean;
-  image?: string;
-  images?: string[];
+  qrCodeImageUrl?: string;
+  images?: TableMediaDto[];
   activeOrders: number;
   hasErrors: boolean;
+  upcomingReservations?: UpcomingReservationDto[];
 }
 
-// Form data for creating / editing a table
+// ──────────────────────────────────────────────────────────
+// Form data for create/edit modal
+// ──────────────────────────────────────────────────────────
+
 export interface TableFormData {
   tableCode: string;
   capacity: number;
-  status: TableStatus | "";
-  type: TableType | "";
-  zone: TableZone | "";
+  statusLvId: number | "";  // FK → lookup_value (TABLE_STATUS)
+  typeLvId: number | "";
+  zoneLvId: number | "";
   isOnline: boolean;
+  // QR fields — read from BE response; regenerate via POST /api/tables/{id}/qr-code
   qrCodeUrl?: string;
+  qrCodeImageUrl?: string;
   qrCodeGenerated?: boolean;
+  // Image fields (P2 — no upload endpoint yet)
   images?: string[];
 }
 
-// Filters for the table management page
+// ──────────────────────────────────────────────────────────
+// Filters (UI state)
+// ──────────────────────────────────────────────────────────
+
 export interface TableFilters {
-  zone: TableZone | "ALL";
-  type: TableType | "ALL";
-  status: TableStatus | "ALL";
+  zone: string;           // "ALL" | zoneName string
+  zoneId: number | null;  // lookup_value FK for API filter
+  type: string;           // "ALL" | typeName string
+  typeId: number | null;  // lookup_value FK for API filter
+  status: string;         // "ALL" | statusCode string for display (e.g. "AVAILABLE")
+  statusId: number | null; // lookup_value FK for API filter
   isOnline: "ALL" | "ONLINE" | "OFFLINE";
   search: string;
 }
@@ -51,12 +184,14 @@ export interface DashboardSummary {
   available: number;
   occupied: number;
   reserved: number;
-  cleaning: number;
-  outOfService: number;
+  locked: number;
   withErrors: number;
 }
 
+// ──────────────────────────────────────────────────────────
 // Status display config
+// ──────────────────────────────────────────────────────────
+
 export interface StatusConfig {
   label: string;
   dotColor: string;
@@ -65,7 +200,21 @@ export interface StatusConfig {
   textColor: string;
 }
 
-// Lookup maps
+/**
+ * Static lookup_value IDs for the TABLE_STATUS group.
+ * These are the FK values (`statusLvId`) used in create/update/patch endpoints.
+ *
+ * ⚠️  Update these IDs to match the seeded lookup_value rows in your database.
+ *    You can verify them by checking any GET /api/tables response (statusId field)
+ *    or querying the lookup_value table directly.
+ */
+export const TABLE_STATUS_LV_IDS: Record<TableStatus, number> = {
+  AVAILABLE: 1,  // TODO: replace with actual seeded lookup_value ID
+  OCCUPIED: 2,   // TODO: replace with actual seeded lookup_value ID
+  RESERVED: 3,   // TODO: replace with actual seeded lookup_value ID
+  LOCKED: 4,     // TODO: replace with actual seeded lookup_value ID
+};
+
 export const TABLE_STATUS_CONFIG: Record<TableStatus, StatusConfig> = {
   AVAILABLE: {
     label: "Available",
@@ -88,15 +237,8 @@ export const TABLE_STATUS_CONFIG: Record<TableStatus, StatusConfig> = {
     borderColor: "border-amber-300",
     textColor: "text-amber-700",
   },
-  CLEANING: {
-    label: "Cleaning",
-    dotColor: "bg-blue-500",
-    bgColor: "bg-blue-50",
-    borderColor: "border-blue-300",
-    textColor: "text-blue-700",
-  },
-  OUT_OF_SERVICE: {
-    label: "Out of Service",
+  LOCKED: {
+    label: "Locked",
     dotColor: "bg-gray-400",
     bgColor: "bg-gray-100",
     borderColor: "border-gray-300",
@@ -104,22 +246,93 @@ export const TABLE_STATUS_CONFIG: Record<TableStatus, StatusConfig> = {
   },
 };
 
-export const TABLE_TYPE_LABELS: Record<TableType, string> = {
+// ──────────────────────────────────────────────────────────
+// Status transition rules (mirrors BE enforcement)
+// ──────────────────────────────────────────────────────────
+
+export const ALLOWED_TRANSITIONS: Record<TableStatus, TableStatus[]> = {
+  AVAILABLE: ["OCCUPIED", "RESERVED", "LOCKED"],
+  OCCUPIED: ["LOCKED"],
+  RESERVED: ["OCCUPIED", "AVAILABLE"],
+  LOCKED: ["AVAILABLE"],
+};
+
+export function canTransitionTo(current: string, next: string): boolean {
+  return (
+    ALLOWED_TRANSITIONS[current as TableStatus]?.includes(next as TableStatus) ?? false
+  );
+}
+
+// ──────────────────────────────────────────────────────────
+// Type & zone labels (display helpers)
+// ──────────────────────────────────────────────────────────
+
+export const TABLE_TYPE_LABELS: Record<string, string> = {
   REGULAR: "Regular",
+  NORMAL: "Normal",
   VIP: "VIP",
   BOOTH: "Booth",
   BAR: "Bar",
   HIGH_TOP: "High-Top",
+  OUTDOOR: "Outdoor",
 };
 
-export const TABLE_ZONE_LABELS: Record<TableZone, string> = {
+export const TABLE_ZONE_LABELS: Record<string, string> = {
   INDOOR: "Indoor",
   OUTDOOR: "Outdoor",
-  ROOFTOP: "Rooftop"
+  ROOFTOP: "Rooftop",
 };
 
-export const TABLE_ZONE_ICONS: Record<TableZone, string> = {
+export const TABLE_ZONE_ICONS: Record<string, string> = {
   INDOOR: "🏠",
   OUTDOOR: "🌿",
-  ROOFTOP: "🌤️"
+  ROOFTOP: "🌤️",
 };
+
+// ──────────────────────────────────────────────────────────
+// DTO → FE model mapper
+// ──────────────────────────────────────────────────────────
+
+export function mapDtoToTable(dto: TableManagementDto): RestaurantTable {
+  return {
+    tableId: dto.tableId,
+    tableCode: dto.tableCode,
+    capacity: dto.capacity,
+    status: (dto.statusCode as TableStatus) || "AVAILABLE",
+    type: dto.typeName,
+    zone: dto.zoneName,
+    isOnline: dto.isOnline,
+    statusId: dto.statusId,
+    typeId: dto.typeId,
+    zoneId: dto.zoneId,
+    statusName: dto.statusName,
+    typeName: dto.typeName,
+    zoneName: dto.zoneName,
+    activeOrders: 0,
+    hasErrors: false,
+  };
+}
+
+export function mapDetailDtoToTable(dto: TableDetailDto): RestaurantTable {
+  return {
+    tableId: dto.tableId,
+    tableCode: dto.tableCode,
+    capacity: dto.capacity,
+    status: (dto.statusCode as TableStatus) || "AVAILABLE",
+    type: dto.typeName,
+    zone: dto.zoneName,
+    isOnline: dto.isOnline,
+    statusId: dto.statusId,
+    typeId: dto.typeId,
+    zoneId: dto.zoneId,
+    statusName: dto.statusName,
+    typeName: dto.typeName,
+    zoneName: dto.zoneName,
+    qrCodeUrl: dto.qrCodeUrl ?? undefined,
+    qrCodeImageUrl: dto.qrCodeImageUrl ?? undefined,
+    images: dto.images,
+    activeOrders: dto.activeOrdersCount,
+    hasErrors: dto.hasErrors,
+    upcomingReservations: dto.upcomingReservations,
+  };
+}

@@ -78,8 +78,8 @@ export interface ALComboboxProps {
   /** Custom renderer for each option row. */
   renderOption?: (option: ALComboboxOption, isSelected: boolean) => React.ReactNode;
   /** Custom renderer for the selected value in the trigger. */
-  renderValue?: (option: ALComboboxOption) => React.ReactNode;
-
+  renderValue?: (option: ALComboboxOption) => React.ReactNode;  /** Extra node rendered on the right side of the title label (e.g. a manage button). */
+  titleAction?: React.ReactNode;
   // ── Async / Loading ─────────────────────────────────────
   /** Show a loading spinner in the dropdown. */
   isLoading?: boolean;
