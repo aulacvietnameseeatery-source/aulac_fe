@@ -481,6 +481,27 @@
       "step_order": "Commander"
     }
   },
+  "FillInforCustomer": {
+    "title": "Bienvenue chez Au Lac",
+    "subtitle": "Veuillez fournir vos informations pour commencer votre voyage culinaire",
+    "form": {
+      "fullName": "Nom Complet",
+      "fullNamePlaceholder": "Entrez votre nom complet",
+      "phoneNumber": "Numéro de Téléphone",
+      "phoneNumberPlaceholder": "Entrez votre numéro de téléphone",
+      "emailAddress": "Adresse E-mail",
+      "emailAddressPlaceholder": "Entrez votre adresse e-mail",
+      "tableNumber": "Numéro de Table",
+      "submitting": "En cours...",
+      "startDining": "Commencer à Dîner",
+      "skipToMenu": "Ignorer, voir le menu",
+      "errors": {
+        "phoneRequired": "Le numéro de téléphone est requis",
+        "emailInvalid": "Adresse e-mail invalide"
+      }
+    },
+    "footer": "Cuisine Vietnamienne Artisanale"
+  },
   "ConfirmOrder": {
     "OrderItem": {
       "add_note": "Ajouter une note",
@@ -1184,6 +1205,69 @@
         "paymentError": "Échec du traitement du paiement"
       }
     },
+    "Create": {
+      "title": "Créer une nouvelle commande",
+      "subtitle": "Sélectionnez des plats et boissons pour commencer à servir le client.",
+      "menuCatalog": "Menu",
+      "searchDish": "Rechercher un plat...",
+      "dineIn": "Sur place",
+      "takeAway": "À emporter",
+      "currentTicket": "Ticket en cours",
+      "clear": "Effacer",
+      "emptyTicket": "Ticket vide",
+      "diningTable": "Table",
+      "customer": "Client",
+      "select": "Sélectionner",
+      "change": "Modifier",
+      "add": "Ajouter",
+      "note": "Ajoutez une note (moins épicé, sans oignons, etc.)",
+      "subtotal": "Sous-total",
+      "tax": "Taxe (10%)",
+      "total": "Total",
+      "placeOrder": "Passer la commande",
+      "createInvoice": "Créer la facture",
+      "noTableSelected": "Aucune table sélectionnée",
+      "anonymous": "Client anonyme",
+      "selectFilterAll": "Tous",
+      "confirmSelection": "Confirmer la sélection",
+      "cancel": "Annuler",
+      "confirm": "Confirmer",
+      "customerDetails": "Informations du client",
+      "phoneNumber": "Numéro de téléphone",
+      "fullName": "Nom complet",
+      "email": "Email",
+      "saveDetails": "Enregistrer les informations"
+    },
+    "Edit": {
+      "menuTitle": "Détails de la commande",
+      "menuSubtitleEdit": "Sélectionnez des articles à ajouter à la commande actuelle.",
+      "menuSubtitleView": "Cette commande a été payée. Mode lecture seule.",
+      "clear": "Effacer",
+      "cancel": "Annuler",
+      "editOrderTitle": "Modifier la commande #{id}",
+      "viewOrderTitle": "Voir la commande #{id}",
+      "totalAmount": "Montant total",
+      "orderedItems": "Articles commandés",
+      "newItems": "Nouveaux articles",
+      "addMoreItemsHint": "Sélectionnez des articles dans le menu à gauche pour les ajouter",
+      "paidOrderWarning": "Cette commande a été payée. Veuillez créer une nouvelle commande.",
+      "addItemsButton": "Ajouter des articles à la commande",
+      "createInvoice": "Créer la facture",
+      "newTotal": "Total estimé",
+      "warningTitle": "Confirmer l'ajout",
+      "completedOrderWarning": "Cette commande est terminée mais non payée. Ajouter de nouveaux articles remettra la commande au statut En cours. Êtes-vous sûr ?",
+      "confirmChangeStatus": "Confirmer l'ajout",
+      "successMessage": "Articles ajoutés avec succès !",
+      "takeAway": "À emporter",
+      "guest": "Client",
+      "notePlaceholder": "Note sur l'article...",
+      "status": {
+        "Pending": "En attente",
+        "In progress": "En cours",
+        "Completed": "Terminé",
+        "Cancelled": "Annulé"
+      }
+    },
     "PaymentModal": {
       "title": "Payer & Terminer la commande",
       "finalTotal": "Total final",
@@ -1245,6 +1329,49 @@
     "cancel": "Annuler",
     "expand": "Agrandir",
     "collapse": "Réduire"
+  },
+  "OrderHistory": {
+    "title": "Historique des Commandes",
+    "fabLabel": "HISTORY",
+    "fabAriaLabel": "Voir l'historique des commandes",
+    "tableLabel": "Table",
+    "itemsCount": "{count} plats",
+    "refresh": "Actualiser",
+    "refreshAriaLabel": "Recharger",
+    "close": "Fermer",
+    "closeAriaLabel": "Fermer",
+    "headers": {
+      "dish": "Plat",
+      "quantity": "QTÉ",
+      "price": "Prix",
+      "status": "Statut"
+    },
+    "status": {
+      "created": "En attente",
+      "inProgress": "En cours",
+      "ready": "Prêt",
+      "served": "Servi",
+      "rejected": "Refusé"
+    },
+    "emptyState": {
+      "title": "Aucun plat commandé pour le moment.",
+      "subtitle": "L'historique apparaîtra ici après avoir passé une commande."
+    },
+    "chefNote": "Note du chef :",
+    "estimatedTotal": "Total estimé",
+    "requestPayment": "Demander le paiement",
+    "error": "Impossible de charger les données",
+    "paymentPopup": {
+      "title": "Demander le paiement ?",
+      "message": "Un serveur viendra à votre {tableLabel} {tableNumber} sous peu avec l'addition. Voulez-vous continuer ?",
+      "estimatedTotalLabel": "TOTAL ESTIMÉ",
+      "confirm": "CONFIRMER",
+      "closeAriaLabel": "Fermer la boîte de dialogue de paiement"
+    },
+    "successPopup": {
+      "title": "Merci !",
+      "message": "Votre demande de paiement pour {tableLabel} {tableNumber} a été reçue. Notre serveur sera avec vous sous peu."
+    }
   },
   "Notifications": {
     "title": "Notifications",

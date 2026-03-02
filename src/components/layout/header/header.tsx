@@ -3,35 +3,38 @@
 import Link from "next/link";
 import Image from "next/image";
 import {
-    Menu as MenuIcon, X, MapPin, Phone, Clock, Globe,
-    QrCode, Home, User
+    Menu as MenuIcon, X, MapPin, Phone, Clock,
+    QrCode, Home, User, ChevronDown
 } from "lucide-react";
-import { useState, useTransition, useEffect } from "react";
+import { useState, useTransition, useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
 import { usePathname, useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { NavLink } from "@/components/layout/header/nav-link";
-import { useIsMobile } from "@/hooks/header/useIsMobile";
-
-// Lưu ý: Đảm bảo file header.css đã được import (thông qua globals.css hoặc import trực tiếp tại đây nếu cấu hình cho phép)
+import { FR, GB, VN } from 'country-flag-icons/react/3x2';
 
 interface HeaderProps {
     isScrolled: boolean;
     locale: string;
 }
 
+// Đổi FLAG_MAP từ chuỗi string sang Component
+const FLAG_MAP: Record<string, React.ElementType> = {
+    fr: FR,
+    en: GB, // Tiếng Anh thường dùng cờ Anh (GB) hoặc Mỹ (US)
+    vi: VN,
+};
+
 export function Header({ isScrolled, locale }: HeaderProps) {
-    const isMobile = useIsMobile();
-
-    const effectiveScrolled = isMobile ? true : isScrolled;
-
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const [isLangDropdownOpen, setIsLangDropdownOpen] = useState(false);
+
     const [isPending, startTransition] = useTransition();
     const t = useTranslations('Header');
     const router = useRouter();
     const pathname = usePathname();
+    const langDropdownRef = useRef<HTMLDivElement>(null);
 
-    // Khóa cuộn trang khi mở menu mobile
     useEffect(() => {
         if (isMobileMenuOpen) {
             document.body.style.overflow = 'hidden';
@@ -41,8 +44,19 @@ export function Header({ isScrolled, locale }: HeaderProps) {
         return () => { document.body.style.overflow = 'unset'; };
     }, [isMobileMenuOpen]);
 
+    useEffect(() => {
+        function handleClickOutside(event: MouseEvent) {
+            if (langDropdownRef.current && !langDropdownRef.current.contains(event.target as Node)) {
+                setIsLangDropdownOpen(false);
+            }
+        }
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
+
     const switchLocale = (newLocale: string) => {
         if (newLocale === locale) return;
+        setIsLangDropdownOpen(false);
         const newPath = pathname.replace(`/${locale}`, `/${newLocale}`);
         startTransition(() => {
             router.replace(newPath);
@@ -52,245 +66,248 @@ export function Header({ isScrolled, locale }: HeaderProps) {
 
     const getLink = (path: string) => `/${locale}${path}`;
 
-    // Nav Items: Có Home và QR Icon
     const navItems = [
-        { label: t('home') || "Home", href: "/", icon: <Home size={18} className="-mt-0.5" /> },
-        { label: t('menu'), href: "/menu-listing" },
-        { label: t('about'), href: "/about-us" },
-        { label: t('contact'), href: "/contact" },
+        { label: t('home') || "HOME", href: "/", icon: <Home size={18} className="-mt-0.5" /> },
+        { label: t('menu') || "MENU", href: "/menu-listing" },
+        { label: t('about') || "ABOUT US", href: "/about-us" },
+        { label: t('contact') || "CONTACT", href: "/contact" },
         { label: "", href: "/qr-scan", icon: <QrCode size={24} />, isIconOnly: true },
     ];
 
-    const LanguageSwitcher = ({ className, isMobile = false }: { className?: string, isMobile?: boolean }) => (
-        <div className={cn("flex items-center gap-2 whitespace-nowrap", className)}>
-            {!isMobile && <Globe size={16} className="text-[#D5A673]" />}
-            <div className={cn("flex items-center gap-2 tracking-wide font-bold", isMobile ? "text-[16px]" : "text-[13px]")}>
-                <button
-                    onClick={() => switchLocale('en')}
-                    disabled={isPending}
-                    className={cn(
-                        "cursor-pointer hover:text-[#D5A673] transition-colors p-2",
-                        locale === 'en' ? "text-[#D5A673]" : "text-white/70",
-                        isPending && "opacity-50 cursor-wait"
-                    )}
-                >
-                    EN
-                </button>
-                <span className="opacity-40 text-white">|</span>
-                <button
-                    onClick={() => switchLocale('fr')}
-                    disabled={isPending}
-                    className={cn(
-                        "cursor-pointer hover:text-[#D5A673] transition-colors p-2",
-                        locale === 'fr' ? "text-[#D5A673]" : "text-white/70",
-                        isPending && "opacity-50 cursor-wait"
-                    )}
-                >
-                    FR
-                </button>
-                <span className="opacity-40 text-white">|</span>
-                <button
-                    onClick={() => switchLocale('vi')}
-                    disabled={isPending}
-                    className={cn(
-                        "cursor-pointer hover:text-[#D5A673] transition-colors p-2",
-                        locale === 'vi' ? "text-[#D5A673]" : "text-white/70",
-                        isPending && "opacity-50 cursor-wait"
-                    )}
-                >
-                    VI
-                </button>
-            </div>
+    // ==========================================
+    // COMPONENT: NGÔN NGỮ DESKTOP (Trải ngang, dùng Cờ)
+    // ==========================================
+    const LanguageDesktop = () => (
+        <div className="hidden lg:flex items-center gap-3">
+            {['fr', 'en', 'vi'].map((l, idx) => {
+                const FlagIcon = FLAG_MAP[l];
+                return (
+                    <div key={l} className="flex items-center gap-3">
+                        <button
+                            disabled={isPending}
+                            onClick={() => switchLocale(l)}
+                            className={cn(
+                                "transition-all duration-300 hover:scale-110",
+                                locale === l ? "opacity-100 scale-110 drop-shadow-[0_0_8px_rgba(255,255,255,0.4)]" : "opacity-40 hover:opacity-100",
+                                isPending && "cursor-wait"
+                            )}
+                            title={l.toUpperCase()}
+                        >
+                            <FlagIcon className="w-6 h-4 rounded-[2px] shadow-sm" />
+                        </button>
+                        {idx < 2 && <span className="text-white/20 text-xs font-light">|</span>}
+                    </div>
+                );
+            })}
         </div>
     );
 
+    // ==========================================
+    // COMPONENT: NGÔN NGỮ MOBILE (Dùng Icon SVG)
+    // ==========================================
+    const LanguageMobileDropdown = () => {
+        const CurrentFlag = FLAG_MAP[locale];
+        return (
+            <div className="relative lg:hidden" ref={langDropdownRef}>
+                <button
+                    onClick={() => setIsLangDropdownOpen(!isLangDropdownOpen)}
+                    className="flex items-center gap-1.5 bg-[#C5A059]/10 border border-[#C5A059]/30 px-2 py-1.5 rounded-sm hover:bg-[#C5A059]/20 transition-colors"
+                >
+                    <CurrentFlag className="w-5 h-3.5 rounded-[1px]" />
+                    <ChevronDown size={14} className={cn("text-[#C5A059] transition-transform duration-300", isLangDropdownOpen && "rotate-180")} />
+                </button>
+
+                {isLangDropdownOpen && (
+                    <div className="absolute top-full right-0 mt-2 bg-[#0A111A] border border-[#C5A059]/40 rounded shadow-xl overflow-hidden z-[110] flex flex-col min-w-[60px]">
+                        {['fr', 'en', 'vi'].map(l => {
+                            const DropdownFlag = FLAG_MAP[l];
+                            return (
+                                <button
+                                    key={l}
+                                    disabled={isPending}
+                                    onClick={() => switchLocale(l)}
+                                    className={cn(
+                                        "px-4 py-3 transition-colors hover:bg-white/10 flex justify-center items-center",
+                                        locale === l ? "bg-white/5" : "",
+                                        isPending && "opacity-50 cursor-wait"
+                                    )}
+                                >
+                                    <DropdownFlag className="w-6 h-4 rounded-[2px]" />
+                                </button>
+                            );
+                        })}
+                    </div>
+                )}
+            </div>
+        );
+    };
+
     return (
-        <header className={cn("header-container",
-            isMobileMenuOpen ? "is-mobile-open" : (effectiveScrolled ? "is-scrolled" : "is-default")
+        <header className={cn(
+            "fixed top-0 left-0 right-0 z-[100] transition-all duration-500 w-full",
+            // XỬ LÝ NỀN (BACKGROUND):
+            "max-lg:bg-[#152e42] max-lg:py-3 max-lg:border-b max-lg:border-[#C5A059]/20",
+            isScrolled
+                ? "lg:bg-[#152e42]/95 lg:backdrop-blur-md lg:shadow-lg lg:py-2 lg:border-b lg:border-[#C5A059]/20"
+                : "lg:bg-[#152e42] lg:py-4"
         )}>
-            <div className="header-inner">
+            {/* Box Container chung */}
+            <div className="w-full max-w-[1600px] mx-auto px-4 md:px-8 lg:px-12 flex flex-col transition-all duration-500">
 
-                {/* ===== TOP BAR ===== */}
-                <div className={cn("top-bar", effectiveScrolled ? "is-scrolled" : "is-default")}>
+                {/* ======================================= */}
+                {/* DÒNG 1: LOGO, MENU CHÍNH & NÚT CHỨC NĂNG */}
+                {/* ======================================= */}
+                <div className="flex items-center justify-between">
 
-                    {/* LOGO */}
-                    {/* 👇 ĐÃ SỬA: Xóa class 'group' ở đây */}
-                    <Link href={getLink("/")} className={cn("logo-wrapper", effectiveScrolled ? "is-scrolled" : "is-default")} onClick={() => setIsMobileMenuOpen(false)}>
-                        <div className="flex items-center">
-                            <Image
-                                src="/images/logo.png"
-                                alt="An Lac Logo"
-                                width={1080}
-                                height={1080}
-                                className={cn(
-                                    "object-contain transition-all duration-300",
-                                    effectiveScrolled ? "w-12 md:w-12 lg:w-14 xl:w-15" : "w-15 md:w-16 lg:w-18 xl:w-21"
-                                )}
-                            />
-                            <div className="flex flex-col justify-center">
-                                <div className="flex items-center gap-2">
-                                    <h1 className={cn("logo-title", effectiveScrolled ? "is-scrolled" : "is-default")}>
-                                        An Lac
-                                    </h1>
-
-                                </div>
-                                <div className={cn("logo-slogan-wrapper", effectiveScrolled ? "is-scrolled" : "is-default")}>
-                                    <span className="slogan-main">{t('slogan_1')}</span>
-                                    <span className="slogan-sub">{t('slogan_2')}</span>
-                                </div>
+                    {/* 1. LOGO (Trái) */}
+                    <Link href={getLink("/")} className="flex items-center gap-4 z-50" onClick={() => setIsMobileMenuOpen(false)}>
+                        <Image
+                            src="/images/logo.png"
+                            alt="An Lac Logo"
+                            width={1080}
+                            height={1080}
+                            className={cn(
+                                "object-contain transition-all duration-500 drop-shadow-[0_0_8px_rgba(197,160,89,0.3)]",
+                                isScrolled ? "w-10 md:w-12 lg:w-14" : "w-12 md:w-14 lg:w-[64px]"
+                            )}
+                        />
+                        <div className="flex flex-col justify-center">
+                            <h1 className={cn(
+                                "font-serif text-[#C5A059] font-bold tracking-[0.1em] uppercase transition-all duration-500 leading-none mb-1",
+                                isScrolled ? "text-xl md:text-2xl lg:text-[28px]" : "text-2xl md:text-3xl lg:text-[34px]"
+                            )}>
+                                An Lac
+                            </h1>
+                            <div className="hidden lg:flex items-center gap-2 text-[8px] xl:text-[9px] font-bold tracking-[0.15em] uppercase text-white/70">
+                                <span>VIETNAMESE EATERY</span>
                             </div>
 
+                            <div className="hidden lg:flex items-center gap-2 text-[8px] xl:text-[9px] font-bold tracking-[0.15em] uppercase text-white/70">
+                                <span>SAVEURS DU VIETNAM, ESPRIT CONVIVIAL</span>
+                            </div>
                         </div>
                     </Link>
-                    {/* Desktop Nav */}
 
-                    <nav className="nav-desktop">
-                        {navItems.map((item) => (
+                    {/* 2. MENU GIỮA (CHỈ DESKTOP) */}
+                    <nav className="hidden lg:flex items-center gap-10 xl:gap-14 absolute left-1/2 -translate-x-1/2">
+                        {navItems.filter(item => !item.isIconOnly).map((item) => (
                             <NavLink
                                 key={item.href}
                                 href={getLink(item.href)}
-                                title={item.isIconOnly ? t('qr_scan') : item.label}
-                                className={cn("nav-link-desktop", item.isIconOnly && "text-[#D5A673]")}
+                                title={item.label}
+                                className="text-white hover:text-[#C5A059] text-[13px] font-bold tracking-[0.1em] uppercase transition-colors"
                             >
-                                {item.icon && <span>{item.icon}</span>}
-                                {!item.isIconOnly && <span>{item.label}</span>}
+                                {item.label}
                             </NavLink>
                         ))}
                     </nav>
-                    {/* ACTIONS */}
-                    <div className="flex items-center gap-1 md:gap-2 lg:gap-4 xl:gap-6">
 
+                    {/* 3. ACTIONS PHẢI */}
+                    <div className="flex items-center gap-4 lg:gap-6 z-50">
 
-                        {/* Lang Switcher */}
-                        <div className={cn("lang-switcher-wrapper", effectiveScrolled ? "is-scrolled" : "is-default")}>
-                            <LanguageSwitcher />
-                        </div>
-                        {/* Reserve Button */}
-                        <div className="hidden md:block">
+                        {/* Ngôn ngữ Mobile */}
+                        <LanguageMobileDropdown />
+
+                        {/* Ngôn ngữ Desktop */}
+                        <LanguageDesktop />
+
+                        {/* Nút QR */}
+                        <Link href={getLink("/qr-scan")} className="text-[#C5A059] hover:text-[#FDE08B] transition-colors p-1.5 lg:p-2 border border-[#C5A059]/40 rounded hover:bg-[#C5A059]/10" title={t('qr_scan')}>
+                            <QrCode size={20} className="lg:w-[22px] lg:h-[22px]" />
+                        </Link>
+
+                        {/* Các nút dành riêng Desktop */}
+                        <div className="hidden lg:flex items-center gap-6 pl-2">
                             <Link href={getLink("/reservation")}>
-                                <button className={cn("reserve-btn", effectiveScrolled ? "is-scrolled" : "is-default")}>
-                                    {t('reserve')}
+                                <button className="bg-[#C5A059] text-[#0f172a] px-6 py-2.5 text-xs font-bold uppercase tracking-[0.15em] hover:bg-[#D4AF6A] transition-colors rounded-sm shadow-md">
+                                    RESERVE
                                 </button>
                             </Link>
-                        </div>
 
-                        {/* Staff Login (Desktop) */}
-                        <div className="hidden lg:block">
-                            <Link href={getLink("/login")} className="text-white/80 hover:text-[#D5A673] transition-colors" title="Login as Staff">
-                                <User className="w-5 h-5 xl:w-6 xl:h-6" />
+                            <Link href={getLink("/login")} className="text-white hover:text-[#C5A059] transition-colors" title="Login as Staff">
+                                <User size={20} />
                             </Link>
                         </div>
 
-                        {/* Mobile Toggle */}
+                        {/* Hamburger Mobile */}
                         <button
-                            className="mobile-toggle-btn"
+                            className="lg:hidden text-white hover:text-[#C5A059] transition-colors ml-1"
                             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                         >
-                            {isMobileMenuOpen ? <X size={32} /> : <MenuIcon size={32} />}
+                            {isMobileMenuOpen ? <X size={28} /> : <MenuIcon size={28} />}
                         </button>
                     </div>
                 </div>
 
-                {/* ===== INFO BAR ===== */}
-                <div className={cn("info-bar", effectiveScrolled ? "is-scrolled" : "is-default")}>
-                    <div className="info-content">
-                        <div className="flex items-center gap-8">
-                            <div className="info-item">
-                                <MapPin size={16} className="info-icon" />
-                                <span>123 Elegance Street, City Center</span>
-                            </div>
-                            <div className="info-item">
-                                <Phone size={16} className="info-icon" />
-                                <span>+1 (555) 888-0123</span>
-                            </div>
+                {/* ======================================= */}
+                {/* DÒNG 2: THANH THÔNG TIN (CHỈ DESKTOP) */}
+                {/* Tự động thu gọn và biến mất khi Scroll */}
+                {/* ======================================= */}
+                <div className={cn(
+                    "hidden lg:flex items-center justify-between w-full transition-all duration-500 ease-in-out origin-top",
+                    isScrolled ? "h-0 opacity-0 overflow-hidden mt-0 pt-0" : "h-[42px] opacity-100 mt-4 pt-4 border-t border-white/10"
+                )}>
+                    <div className="flex items-center gap-10 text-white/70">
+                        <div className="flex items-center gap-2">
+                            <MapPin size={14} className="text-[#C5A059]"/>
+                            <span className="text-[10px] xl:text-[11px] font-medium tracking-[0.15em] uppercase">Quai du Mont-Blanc 13 1201 Geneva</span>
                         </div>
-                        <div className="flex items-center gap-8">
-                            <div className="info-item">
-                                <Clock size={16} className="info-icon" />
-                                <span>11:00 AM – 11:00 PM</span>
-                            </div>
-                            <LanguageSwitcher />
+                        <div className="flex items-center gap-2">
+                            <Phone size={14} className="text-[#C5A059]"/>
+                            <span className="text-[10px] xl:text-[11px] font-medium tracking-[0.15em] uppercase">+41 22 123 45 67</span>
                         </div>
                     </div>
+                    <div className="flex items-center gap-2 text-white/70">
+                        <Clock size={14} className="text-[#C5A059]"/>
+                        <span className="text-[10px] xl:text-[11px] font-medium tracking-[0.15em] uppercase">Mon - Sun: 11:30 AM - 11:00 PM</span>
+                    </div>
                 </div>
+
             </div>
 
             {/* ===== MOBILE MENU OVERLAY ===== */}
             {isMobileMenuOpen && (
-                <div className="mobile-menu-overlay">
-                    <div className="mobile-menu-inner">
-                        {/* Mobile Menu Header */}
-                        <div className="flex items-center justify-between pb-6 border-b border-white/10">
-                            <span className="text-[20px] font-display font-medium text-white">An Lac</span>
-                            <button
-                                onClick={() => setIsMobileMenuOpen(false)}
-                                className="p-2 -mr-2 text-white/80 hover:text-[#D5A673] transition-colors"
-                            >
-                                <X size={28} />
-                            </button>
-                        </div>
-
-                        {/* Menu Items */}
-                        <nav className="flex flex-col gap-2 mt-8">
-                            {navItems.map((item, index) => (
-                                <Link
-                                    key={item.href}
-                                    href={getLink(item.href)}
-                                    onClick={() => setIsMobileMenuOpen(false)}
-                                    className="mobile-nav-link animate-in slide-in-from-bottom-2 fade-in duration-500"
-                                    style={{ animationDelay: `${100 + index * 50}ms`, animationFillMode: 'both' }}
-                                >
-                                    <span>{item.isIconOnly ? t('qr_scan') : item.label}</span>
-                                    {item.icon ? (
-                                        <span className="text-[#D5A673]">{item.icon}</span>
-                                    ) : (
-                                        <span className="w-1.5 h-1.5 rounded-full bg-white/20" />
-                                    )}
-                                </Link>
-                            ))}
-                        </nav>
-
-                        {/* Reserve */}
-                        <div className="mt-8 px-2">
-                            <Link href={getLink("/reservation")} onClick={() => setIsMobileMenuOpen(false)}>
-                                <button className="mobile-reserve-btn">
-                                    {t('reserve')}
-                                </button>
-                            </Link>
-                        </div>
-
-                        {/* Staff Login */}
-                        <div className="mt-4 px-2">
+                <div className="fixed inset-0 top-[76px] bg-[#152e42] z-[90] flex flex-col px-6 py-8 overflow-y-auto">
+                    <nav className="flex flex-col mt-4">
+                        {navItems.filter(item => !item.isIconOnly).map((item, index) => (
                             <Link
-                                href={getLink("/login")}
+                                key={item.href}
+                                href={getLink(item.href)}
                                 onClick={() => setIsMobileMenuOpen(false)}
-                                className="flex items-center justify-center gap-2 text-white/60 hover:text-[#D5A673] transition-colors py-3 text-sm uppercase tracking-widest font-medium"
+                                className="flex items-center justify-between py-6 border-b border-[#C5A059]/20 group"
                             >
-                                <User size={18} />
-                                <span>Login as Staff</span>
+                                <span className="text-white group-hover:text-[#C5A059] text-xl font-serif uppercase tracking-[0.2em] transition-colors">
+                                    {item.label}
+                                </span>
+                                {item.icon ? (
+                                    <span className="text-[#C5A059]">{item.icon}</span>
+                                ) : (
+                                    <span className="w-1.5 h-1.5 rounded-full bg-[#C5A059]/40 group-hover:bg-[#C5A059] transition-colors" />
+                                )}
                             </Link>
-                        </div>
+                        ))}
+                    </nav>
 
-                        {/* Contact Info */}
-                        <div className="mobile-info-section">
-                            <div className="flex items-center gap-4 text-white/80">
-                                <MapPin size={20} className="text-[#D5A673]" />
-                                <span className="text-sm">123 Elegance Street, City Center</span>
-                            </div>
-                            <div className="flex items-center gap-4 text-white/80">
-                                <Phone size={20} className="text-[#D5A673]" />
-                                <span className="text-sm">+1 (555) 888-0123</span>
-                            </div>
-                            <div className="flex items-center gap-4 text-white/80">
-                                <Clock size={20} className="text-[#D5A673]" />
-                                <span className="text-sm">11:00 AM – 11:00 PM</span>
-                            </div>
-                        </div>
+                    <div className="mt-12 flex flex-col gap-4">
+                        <Link href={getLink("/reservation")} onClick={() => setIsMobileMenuOpen(false)}>
+                            <button className="w-full bg-[#C5A059] text-[#0f172a] py-4 text-sm font-bold uppercase tracking-widest hover:bg-[#D4AF6A] transition-colors rounded-sm shadow-lg">
+                                RESERVE
+                            </button>
+                        </Link>
+                        <Link
+                            href={getLink("/login")}
+                            onClick={() => setIsMobileMenuOpen(false)}
+                            className="flex items-center justify-center gap-3 text-white/70 hover:text-[#C5A059] transition-colors py-4 text-xs uppercase tracking-[0.15em] font-medium border border-[#C5A059]/30 rounded-sm bg-[#C5A059]/5"
+                        >
+                            <User size={18} />
+                            <span>LOGIN AS STAFF</span>
+                        </Link>
+                    </div>
 
-                        {/* Language */}
-                        <div className="mobile-lang-section">
-                            <LanguageSwitcher isMobile={true} />
-                        </div>
+                    <div className="mt-auto pt-12 pb-8 flex flex-col gap-4 text-white/70">
+                        <div className="flex items-start gap-4"><MapPin size={18} className="text-[#C5A059] shrink-0 mt-0.5" /><span className="text-sm tracking-wider leading-relaxed">Quai du Mont-Blanc 13 1201 Geneva</span></div>
+                        <div className="flex items-center gap-4"><Phone size={18} className="text-[#C5A059] shrink-0" /><span className="text-sm tracking-wider">+41 22 123 45 67</span></div>
+                        <div className="flex items-center gap-4"><Clock size={18} className="text-[#C5A059] shrink-0" /><span className="text-sm tracking-wider">Mon - Sun: 11:30 AM - 11:00 PM</span></div>
                     </div>
                 </div>
             )}
