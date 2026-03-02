@@ -10,14 +10,14 @@ import { inter, playfair, lexend } from "@/lib/fonts";
 
 import "@/styles/globals.css";
 
-
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
   viewportFit: "cover",
-  themeColor: "#FAF9F6",
+  // ĐÃ SỬA: Đổi sang màu Xanh Navi để thanh trạng thái trên điện thoại đồng bộ với Header
+  themeColor: "#0f172a",
 };
 
 export async function generateMetadata(
@@ -29,6 +29,18 @@ export async function generateMetadata(
   return {
     title: (messages as any).Metadata?.title ?? "An Lac",
     description: (messages as any).Metadata?.description ?? "Vietnamese Eatery",
+
+
+    manifest: "/manifest.webmanifest",
+    appleWebApp: {
+      capable: true,
+      title: "An Lac",
+      statusBarStyle: "black-translucent",
+    },
+    icons: {
+      icon: "/images/logo.png",
+      apple: "/images/logo.png",
+    },
   };
 }
 
@@ -44,17 +56,17 @@ export default async function LocaleLayout(
   const messages = await getMessages({ locale });
 
   return (
-    <html lang={locale}>
-    <body className={`${inter.variable} ${playfair.variable} ${lexend.variable} antialiased`}>
-        <QueryProvider>
-          <AuthProvider>
-            <NextIntlClientProvider locale={locale} messages={messages}>
-              {children}
-              <Toaster />
-            </NextIntlClientProvider>
-          </AuthProvider>
-        </QueryProvider>
+      <html lang={locale}>
+      <body className={`${inter.variable} ${playfair.variable} ${lexend.variable} antialiased`}>
+      <QueryProvider>
+        <AuthProvider>
+          <NextIntlClientProvider locale={locale} messages={messages}>
+            {children}
+            <Toaster />
+          </NextIntlClientProvider>
+        </AuthProvider>
+      </QueryProvider>
       </body>
-    </html>
+      </html>
   );
 }
