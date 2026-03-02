@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { MenuCategory } from '../data/mock-menu';
-import { useParams } from 'next/navigation'; // THÊM IMPORT NÀY
+import { useParams } from 'next/navigation';
 
 interface PageProps {
     categories: MenuCategory[];
@@ -54,7 +54,8 @@ const ELEMENT_DICT: Record<string, any> = {
     }
 };
 
-export const LeftPage = ({ categories, activeCategoryId, onCategoryClick }: PageProps) => {
+// SỬA LỖI 1: Bỏ onCategoryClick khỏi tham số hàm để tránh cảnh báo unused-vars
+export const LeftPage = ({ categories, activeCategoryId }: PageProps) => {
     // 1. LẤY NGÔN NGỮ HIỆN TẠI
     const params = useParams();
     const currentLocale = (params?.locale as string) || 'fr'; // fr, en, hoặc vi
@@ -62,7 +63,6 @@ export const LeftPage = ({ categories, activeCategoryId, onCategoryClick }: Page
     const currentCat = categories.find(c => c.id === activeCategoryId);
 
     // 2. MAPPING LOGIC (Thay thế bằng data thật từ Backend sau này)
-    // Ví dụ: const tagCode = currentCat.elementTag || 'TAG_WATER';
     let tagCode = 'TAG_WATER';
     if (activeCategoryId === 'cat-1') tagCode = 'TAG_EARTH';
     if (activeCategoryId === 'cat-3') tagCode = 'TAG_WOOD';
@@ -107,7 +107,8 @@ export const LeftPage = ({ categories, activeCategoryId, onCategoryClick }: Page
                 {/* Story Tự Động Thay Đổi */}
                 <div className="flex flex-col gap-2 md:gap-3">
                     <p className="text-[#0f172a]/90 font-serif italic text-[11px] md:text-sm lg:text-base leading-relaxed font-semibold">
-                        "{elementStory}"
+                        {/* SỬA LỖI 2: Đổi dấu "" thành &quot; */}
+                        &quot;{elementStory}&quot;
                     </p>
                 </div>
             </div>
