@@ -26,4 +26,11 @@ export const Permissions = {
   // Order
   ViewOrder: 'ORDER:READ',
   UpdateOrderItemStatus: 'ORDER:UPDATE_ITEM_STATUS',
+
+  // Table
+  ViewTable: 'TABLE:READ',
+  CreateTable: 'TABLE:CREATE',
+  EditTable: 'TABLE:EDIT',
+  DeleteTable: 'TABLE:DELETE',
+  UpdateTableStatus: 'TABLE:UPDATE_STATUS',
 } as const;

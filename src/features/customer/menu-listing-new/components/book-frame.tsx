@@ -41,7 +41,7 @@ export const BookFrame = ({ menuData, onAddToCart }: BookFrameProps) => {
     const [isMobile, setIsMobile] = useState(false);
 
     // 2. GENERATE PAGES LOGIC
-    const ITEMS_PER_PAGE = 6;
+    const ITEMS_PER_PAGE = 3;
 
     interface PageConfig {
         type: 'content';
@@ -201,6 +201,7 @@ export const BookFrame = ({ menuData, onAddToCart }: BookFrameProps) => {
                 dishId={selectedItem ? parseInt(selectedItem.id) : null}
                 isOpen={selectedItem !== null}
                 onClose={() => setSelectedItem(null)}
+                onAddToCart={onAddToCart}
             />
 
             {/* CATEGORY FILTER (Responsive) */}
@@ -241,10 +242,6 @@ export const BookFrame = ({ menuData, onAddToCart }: BookFrameProps) => {
                     </div>
                 </div>
             ) : (
-                // DESKTOP: LEFT VERTICAL TABS - CONCEPT 1 (TAB LIỀN TRANG)
-                // DESKTOP: LEFT VERTICAL TABS - CONCEPT 2 (THẺ KẸP MẠ VÀNG)
-                // DESKTOP: LEFT VERTICAL TABS - CONCEPT 4 (THẺ KÍNH MỜ)
-                // DESKTOP: LEFT VERTICAL TABS - CONCEPT 5 (ĐUÔI RUY BĂNG)
                 // CONCEPT: CỔNG VÒM ĐÔNG DƯƠNG
                 <div className="absolute top-[5%] bottom-[5%] -left-8 lg:-left-12 w-32 lg:w-36 z-50 flex flex-col justify-center gap-3 py-10">
                     {menuData.map((cat) => {
@@ -289,7 +286,7 @@ export const BookFrame = ({ menuData, onAddToCart }: BookFrameProps) => {
                     w-8 h-8 md:w-10 md:h-10 rounded-full bg-[#06181F]/80 border border-[#C5A059] text-[#C5A059] 
                     flex items-center justify-center shadow-lg hover:bg-[#C5A059] hover:text-[#06181F] transition-all
                     ${currentPage <= 1 ? 'opacity-0 pointer-events-none' : 'opacity-100'}
-                    ${isMobile ? 'left-4' : 'left-30'}
+                    ${isMobile ? 'left-4' : 'left-27'}
                 `}
             >
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6" /></svg>

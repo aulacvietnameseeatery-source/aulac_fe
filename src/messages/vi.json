@@ -480,6 +480,27 @@
       "step_order": "Đặt món"
     }
   },
+  "FillInforCustomer": {
+    "title": "Chào Mừng Đến Au Lac",
+    "subtitle": "Vui lòng cung cấp thông tin của bạn để bắt đầu trải nghiệm ẩm thực",
+    "form": {
+      "fullName": "Họ và tên",
+      "fullNamePlaceholder": "Nhập họ và tên của bạn",
+      "phoneNumber": "Số điện thoại",
+      "phoneNumberPlaceholder": "Nhập số điện thoại của bạn",
+      "emailAddress": "Địa chỉ email",
+      "emailAddressPlaceholder": "Nhập địa chỉ email của bạn",
+      "tableNumber": "Số bàn",
+      "submitting": "Đang xử lý...",
+      "startDining": "Bắt đầu dùng bữa",
+      "skipToMenu": "Bỏ qua, xem thực đơn",
+      "errors": {
+        "phoneRequired": "Số điện thoại là bắt buộc",
+        "emailInvalid": "Địa chỉ email không hợp lệ"
+      }
+    },
+    "footer": "Ẩm thực Việt Nam thủ công"
+  },
   "ConfirmOrder": {
     "OrderItem": {
       "add_note": "Thêm ghi chú",
@@ -1238,6 +1259,69 @@
         "paymentError": "Thanh toán thất bại"
       }
     },
+    "Create": {
+      "title": "Tạo đơn hàng mới",
+      "subtitle": "Chọn món ăn và thức uống để bắt đầu phục vụ khách hàng.",
+      "menuCatalog": "Thực Đơn",
+      "searchDish": "Tìm món ăn...",
+      "dineIn": "Tại bàn",
+      "takeAway": "Mang đi",
+      "currentTicket": "Phiếu Hiện Tại",
+      "clear": "Xóa",
+      "emptyTicket": "Phiếu đang trống",
+      "diningTable": "Bàn Ăn",
+      "customer": "Khách Hàng",
+      "select": "Chọn",
+      "change": "Đổi",
+      "add": "Thêm",
+      "note": "Thêm ghi chú (ít cay, không hành...)",
+      "subtotal": "Tạm tính",
+      "tax": "Thuế (10%)",
+      "total": "Tổng cộng",
+      "placeOrder": "Đặt Món",
+      "createInvoice": "Tạo Hóa Đơn",
+      "noTableSelected": "Chưa chọn bàn",
+      "anonymous": "Khách vãng lai",
+      "selectFilterAll": "Tất cả",
+      "confirmSelection": "Xác nhận chọn",
+      "cancel": "Hủy",
+      "confirm": "Xác nhận",
+      "customerDetails": "Thông tin khách hàng",
+      "phoneNumber": "Số điện thoại",
+      "fullName": "Họ và tên",
+      "email": "Email",
+      "saveDetails": "Lưu thông tin"
+    },
+    "Edit": {
+      "menuTitle": "Chi tiết đơn hàng",
+      "menuSubtitleEdit": "Chọn món để thêm vào đơn hàng hiện tại.",
+      "menuSubtitleView": "Đơn hàng đã thanh toán. Đang ở chế độ chỉ xem.",
+      "clear": "Xóa",
+      "cancel": "Huỷ",
+      "editOrderTitle": "Chỉnh sửa Order #{id}",
+      "viewOrderTitle": "Xem Order #{id}",
+      "totalAmount": "Tổng tiền",
+      "orderedItems": "Món đã gọi",
+      "newItems": "Món thêm mới",
+      "addMoreItemsHint": "Chọn món từ thực đơn bên trái để thêm",
+      "paidOrderWarning": "Order đã thanh toán. Vui lòng tạo order mới.",
+      "addItemsButton": "Thêm món vào Order",
+      "createInvoice": "Tạo Hóa Đơn",
+      "newTotal": "Tổng dự kiến",
+      "warningTitle": "Xác nhận thêm món",
+      "completedOrderWarning": "Order này đã hoàn tất nhưng chưa thanh toán. Thêm món mới sẽ chuyển order về trạng thái Đang phục vụ (In Progress). Bạn có chắc chắn?",
+      "confirmChangeStatus": "Đồng ý thêm",
+      "successMessage": "Đã thêm món thành công!",
+      "takeAway": "Mang đi",
+      "guest": "Khách lẻ",
+      "notePlaceholder": "Ghi chú món...",
+      "status": {
+          "Pending": "Chờ xử lý",
+          "In progress": "Đang làm",
+          "Completed": "Hoàn thành",
+          "Cancelled": "Đã huỷ"
+        }
+    },
     "PaymentModal": {
       "title": "Thanh toán & Hoàn tất đơn hàng",
       "finalTotal": "Tổng cộng cuối cùng",
@@ -1299,6 +1383,49 @@
     "cancel": "Hủy",
     "expand": "Mở rộng",
     "collapse": "Thu gọn"
+  },
+  "OrderHistory": {
+    "title": "Lịch Sử Đặt Món",
+    "fabLabel": "HISTORY",
+    "fabAriaLabel": "Xem lịch sử đặt món",
+    "tableLabel": "Bàn",
+    "itemsCount": "{count} món",
+    "refresh": "Tải lại",
+    "refreshAriaLabel": "Tải lại",
+    "close": "Đóng",
+    "closeAriaLabel": "Đóng",
+    "headers": {
+      "dish": "Món",
+      "quantity": "SL",
+      "price": "Giá",
+      "status": "Trạng thái"
+    },
+    "status": {
+      "created": "Đang chờ",
+      "inProgress": "Đang làm",
+      "ready": "Sẵn sàng",
+      "served": "Đã phục vụ",
+      "rejected": "Từ chối"
+    },
+    "emptyState": {
+      "title": "Chưa có món nào được đặt.",
+      "subtitle": "Lịch sử sẽ hiện ở đây sau khi bạn đặt món."
+    },
+    "chefNote": "Ghi chú từ bếp:",
+    "estimatedTotal": "Tổng ước tính",
+    "requestPayment": "Yêu cầu thanh toán",
+    "error": "Không thể tải dữ liệu",
+    "paymentPopup": {
+      "title": "Yêu cầu thanh toán?",
+      "message": "Nhân viên sẽ mang hóa đơn đến {tableLabel} {tableNumber} của bạn ngay. Bạn có muốn tiếp tục?",
+      "estimatedTotalLabel": "TỔNG ƯỚC TÍNH",
+      "confirm": "XÁC NHẬN",
+      "closeAriaLabel": "Đóng hộp thoại thanh toán"
+    },
+    "successPopup": {
+      "title": "Cảm ơn bạn!",
+      "message": "Yêu cầu thanh toán cho {tableLabel} {tableNumber} đã được tiếp nhận. Nhân viên sẽ đến ngay."
+    }
   },
   "Notifications": {
     "title": "Thông báo",

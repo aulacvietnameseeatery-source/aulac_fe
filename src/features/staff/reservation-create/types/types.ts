@@ -20,7 +20,6 @@ export interface TableAvailabilityDto {
 
 // Map from public class CreateManualReservationRequest
 export interface CreateReservationRequest {
-  lockToken?: string | null;
   tableId: number;
   customerName: string;
   phone: string;
@@ -32,7 +31,6 @@ export interface CreateReservationRequest {
 }
 
 export interface CreateReservationResponse {
-  lockToken?: string | null;
   reservationId: number;
   customerName: string;
   phone: string;

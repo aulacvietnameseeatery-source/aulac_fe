@@ -1,10 +1,9 @@
 ﻿"use client";
 
-import React, { useState, useEffect, useCallback, useRef } from "react";
-import { QRCodeCanvas } from "qrcode.react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Dialog } from "@/components/ui/dialog";
 import { ALInput } from "@/components/ui/al-input";
-import { ALCombobox } from "@/components/ui/al-combobox";
+import { ALCombobox } from "@/components/ui/al-combobox"; // used for static Status field (not a lookup entity)
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import {
@@ -16,20 +15,11 @@ import {
   FileUploadItemMetadata,
   FileUploadItemDelete,
 } from "@/components/ui/file-upload";
-import { RefreshCcw, Download, Eye, Upload, X, Trash2 } from "lucide-react";
-import type {
-  RestaurantTable,
-  TableFormData,
-  TableType,
-  TableZone,
-  TableStatus,
-} from "../types";
-import { ALL_TYPES, ALL_ZONES, ALL_STATUSES } from "../data";
-import {
-  TABLE_TYPE_LABELS,
-  TABLE_ZONE_LABELS,
-  TABLE_STATUS_CONFIG,
-} from "../types";
+import { RefreshCcw, Download, Eye, Upload, X, Trash2, ImageOff } from "lucide-react";
+import type { RestaurantTable, TableFormData, TableStatus } from "../types";
+import { TABLE_STATUS_CONFIG, TABLE_STATUS_LV_IDS } from "../types";
+import { useRegenerateQrMutation } from "../hooks/use-table-queries";
+import { useLookupCrud, LookupCombobox } from "@/features/lookup";
 
 interface TableModalProps {
   isOpen: boolean;
@@ -37,34 +27,24 @@ interface TableModalProps {
   table?: RestaurantTable | null;
   onClose: () => void;
   onSubmit: (data: TableFormData) => void;
+  isSubmitting?: boolean;
 }
 
 const initialFormData: TableFormData = {
   tableCode: "",
   capacity: 2,
-  status: "",
-  type: "",
-  zone: "",
+  statusLvId: "",
+  typeLvId: "",
+  zoneLvId: "",
   isOnline: true,
   qrCodeUrl: "",
+  qrCodeImageUrl: "",
   qrCodeGenerated: false,
   images: [],
 };
 
-const TYPE_OPTIONS = ALL_TYPES.map((t) => ({
-  label: TABLE_TYPE_LABELS[t],
-  value: t,
-}));
-
-const ZONE_OPTIONS = ALL_ZONES.map((z) => ({
-  label: TABLE_ZONE_LABELS[z],
-  value: z,
-}));
-
-const STATUS_OPTIONS = ALL_STATUSES.map((s) => ({
-  label: TABLE_STATUS_CONFIG[s].label,
-  value: s,
-}));
+// ── Lookup options ──
+// Fetched dynamically from API. Quick-create via ALCombobox allowCreate.
 
 const TableModal: React.FC<TableModalProps> = ({
   isOpen,
@@ -72,24 +52,55 @@ const TableModal: React.FC<TableModalProps> = ({
   table,
   onClose,
   onSubmit,
+  isSubmitting = false,
 }) => {
   const [formData, setFormData] = useState<TableFormData>(initialFormData);
   const [qrPreview, setQrPreview] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
-  const qrRef = useRef<HTMLDivElement>(null);
+  // ── Fetch lookup values via shared useLookupCrud ──
+  const zoneLookup = useLookupCrud({
+    baseUrl:     "/api/tables/zones",
+    queryKey:    ["tables", "zones"],
+    entityLabel: "Zone",
+  });
+  const typeLookup = useLookupCrud({
+    baseUrl:     "/api/tables/types",
+    queryKey:    ["tables", "types"],
+    entityLabel: "Table Type",
+  });
+
+  // ── Static status options — statuses are fixed; value = numeric statusLvId ──
+  const STATIC_STATUS_OPTIONS = (Object.keys(TABLE_STATUS_CONFIG) as TableStatus[]).map((s) => ({
+    label: TABLE_STATUS_CONFIG[s].label,
+    value: String(TABLE_STATUS_LV_IDS[s]),
+  }));
+
+  // ── Regenerate QR mutation (edit mode only) ──
+  const regenerateQrMutation = useRegenerateQrMutation({
+    onSuccess: (data) => {
+      setFormData((prev) => ({
+        ...prev,
+        qrCodeUrl: data.qrCodeUrl ?? "",
+        qrCodeImageUrl: data.qrCodeImageUrl ?? "",
+        qrCodeGenerated: true,
+      }));
+      setQrPreview(true);
+    },
+  });
 
   useEffect(() => {
     if (mode === "edit" && table) {
       setFormData({
         tableCode: table.tableCode,
         capacity: table.capacity,
-        status: table.status,
-        type: table.type,
-        zone: table.zone,
+        statusLvId: table.statusId || "",
+        typeLvId: table.typeId || "",
+        zoneLvId: table.zoneId || "",
         isOnline: table.isOnline,
         qrCodeUrl: table.qrCodeUrl || "",
-        qrCodeGenerated: table.qrCodeGenerated || !!table.qrCodeUrl,
-        images: table.images || [],
+        qrCodeImageUrl: table.qrCodeImageUrl || "",
+        qrCodeGenerated: !!table.qrCodeUrl,
+        images: table.images?.map((img) => img.url) || [],
       });
     } else {
       setFormData(initialFormData);
@@ -107,36 +118,35 @@ const TableModal: React.FC<TableModalProps> = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    // Convert string IDs to numbers for submission
+    const submitData: TableFormData = {
+      ...formData,
+      statusLvId: formData.statusLvId ? Number(formData.statusLvId) : "",
+      typeLvId: formData.typeLvId ? Number(formData.typeLvId) : "",
+      zoneLvId: formData.zoneLvId ? Number(formData.zoneLvId) : "",
+    };
+    // Append any newly uploaded files as blob URLs (P2 — no upload endpoint yet)
     const newImageUrls = uploadedFiles.map((f) => URL.createObjectURL(f));
     const allImages = [...(formData.images || []), ...newImageUrls];
-    onSubmit({ ...formData, images: allImages });
-    onClose();
+    onSubmit({ ...submitData, images: allImages });
   };
 
-  // QR Code handlers
-  const qrUrl = formData.tableCode
-    ? `/order?table=${formData.tableCode}`
-    : "";
-
-  const handleGenerateQR = useCallback(() => {
-    if (!formData.tableCode) return;
-    setFormData((prev) => ({
-      ...prev,
-      qrCodeUrl: qrUrl,
-      qrCodeGenerated: true,
-    }));
-    setQrPreview(true);
-  }, [formData.tableCode, qrUrl]);
-
-  const handleDownloadQR = useCallback(() => {
-    const canvas = qrRef.current?.querySelector("canvas");
-    if (!canvas) return;
-    const url = canvas.toDataURL("image/png");
-    const link = document.createElement("a");
-    link.download = `qr-${formData.tableCode || "table"}.png`;
-    link.href = url;
-    link.click();
-  }, [formData.tableCode]);
+  const handleDownloadQR = useCallback(async () => {
+    if (!formData.qrCodeImageUrl) return;
+    try {
+      const response = await fetch(formData.qrCodeImageUrl);
+      const blob = await response.blob();
+      const blobUrl = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.download = `qr-${formData.tableCode || "table"}.png`;
+      link.href = blobUrl;
+      link.click();
+      URL.revokeObjectURL(blobUrl);
+    } catch {
+      // Fallback: open in new tab
+      window.open(formData.qrCodeImageUrl, "_blank");
+    }
+  }, [formData.qrCodeImageUrl, formData.tableCode]);
 
   // Remove existing image
   const handleRemoveExistingImage = useCallback((index: number) => {
@@ -147,6 +157,7 @@ const TableModal: React.FC<TableModalProps> = ({
   }, []);
 
   return (
+    <>
     <Dialog
       open={isOpen}
       onClose={onClose}
@@ -159,6 +170,7 @@ const TableModal: React.FC<TableModalProps> = ({
             variant="outline"
             className="w-full"
             onClick={onClose}
+            disabled={isSubmitting}
           >
             Cancel
           </Button>
@@ -167,6 +179,8 @@ const TableModal: React.FC<TableModalProps> = ({
             form="table-form"
             variant="primary"
             className="w-full"
+            disabled={isSubmitting}
+            isLoading={isSubmitting}
           >
             {mode === "add" ? "Add Table" : "Save Changes"}
           </Button>
@@ -199,23 +213,21 @@ const TableModal: React.FC<TableModalProps> = ({
 
           {/* Zone + Type row */}
           <div className="grid grid-cols-2 gap-4">
-            <ALCombobox
+            <LookupCombobox
+              lookup={zoneLookup}
               title="Zone"
               required
-              options={ZONE_OPTIONS}
-              value={formData.zone || undefined}
-              onChange={(val) => handleChange("zone", val as TableZone)}
               placeholder="Select zone"
-              searchable={false}
+              value={formData.zoneLvId}
+              onChange={(val) => handleChange("zoneLvId", val)}
             />
-            <ALCombobox
+            <LookupCombobox
+              lookup={typeLookup}
               title="Type"
               required
-              options={TYPE_OPTIONS}
-              value={formData.type || undefined}
-              onChange={(val) => handleChange("type", val as TableType)}
               placeholder="Select type"
-              searchable={false}
+              value={formData.typeLvId}
+              onChange={(val) => handleChange("typeLvId", val)}
             />
           </div>
 
@@ -223,9 +235,9 @@ const TableModal: React.FC<TableModalProps> = ({
           <ALCombobox
             title="Status"
             required
-            options={STATUS_OPTIONS}
-            value={formData.status || undefined}
-            onChange={(val) => handleChange("status", val as TableStatus)}
+            options={STATIC_STATUS_OPTIONS}
+            value={formData.statusLvId ? String(formData.statusLvId) : undefined}
+            onChange={(val) => handleChange("statusLvId", val ? Number(val as string) : "")}
             placeholder="Select status"
             searchable={false}
           />
@@ -253,67 +265,79 @@ const TableModal: React.FC<TableModalProps> = ({
               <div className="grow border-t border-gray-100" />
             </div>
 
-            <div className="flex items-center gap-2">
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={handleGenerateQR}
-                disabled={!formData.tableCode}
-              >
-                <RefreshCcw size={13} className="mr-1" />
-                Generate QR
-              </Button>
-              {formData.qrCodeGenerated && (
-                <>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={handleDownloadQR}
-                  >
-                    <Download size={13} className="mr-1" />
-                    Download
-                  </Button>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => setQrPreview((v) => !v)}
-                  >
-                    <Eye size={13} className="mr-1" />
-                    {qrPreview ? "Hide" : "Preview"}
-                  </Button>
-                </>
-              )}
-            </div>
-
-            {formData.qrCodeGenerated && qrPreview && (
-              <div className="bg-gray-50 rounded-lg p-4 flex items-start gap-4">
-                <div ref={qrRef} className="shrink-0 bg-white rounded p-2">
-                  <QRCodeCanvas
-                    value={formData.qrCodeUrl || qrUrl}
-                    size={96}
-                    level="M"
-                  />
-                </div>
-                <div className="space-y-1 min-w-0">
-                  <p className="text-xs text-gray-500">
-                    <span className="font-medium text-gray-600">Status:</span>{" "}
-                    Generated
-                  </p>
-                  <p className="text-xs text-gray-500 break-all">
-                    <span className="font-medium text-gray-600">URL:</span>{" "}
-                    {formData.qrCodeUrl || qrUrl}
-                  </p>
-                </div>
-              </div>
-            )}
-
-            {!formData.qrCodeGenerated && (
+            {mode === "add" ? (
               <p className="text-xs text-gray-400">
-                Enter a table code and click Generate to create a QR code.
+                A QR code is generated automatically when the table is created.
               </p>
+            ) : (
+              <>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    className="inline-flex items-center gap-1.5 text-xs font-medium text-blue-600 hover:text-blue-800 transition-colors disabled:opacity-50"
+                    onClick={() => table && regenerateQrMutation.mutate(table.tableId)}
+                    disabled={regenerateQrMutation.isPending}
+                  >
+                    <RefreshCcw size={13} className={regenerateQrMutation.isPending ? "animate-spin" : ""} />
+                    Regenerate QR
+                  </button>
+                  {formData.qrCodeGenerated && (
+                    <>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={handleDownloadQR}
+                      >
+                        <Download size={13} className="mr-1" />
+                        Download
+                      </Button>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => setQrPreview((v) => !v)}
+                      >
+                        <Eye size={13} className="mr-1" />
+                        {qrPreview ? "Hide" : "Preview"}
+                      </Button>
+                    </>
+                  )}
+                </div>
+
+                {formData.qrCodeGenerated && qrPreview && (
+                  <div className="bg-gray-50 rounded-lg p-4 flex items-start gap-4">
+                    {formData.qrCodeImageUrl ? (
+                      /* eslint-disable-next-line @next/next/no-img-element */
+                      <img
+                        src={formData.qrCodeImageUrl}
+                        alt="QR code"
+                        className="shrink-0 w-24 h-24 rounded bg-white p-1"
+                      />
+                    ) : (
+                      <div className="shrink-0 w-24 h-24 rounded bg-white p-2 flex items-center justify-center">
+                        <ImageOff className="w-8 h-8 text-gray-300" />
+                      </div>
+                    )}
+                    <div className="space-y-1 min-w-0">
+                      <p className="text-xs text-gray-500">
+                        <span className="font-medium text-gray-600">Status:</span>{" "}
+                        Active
+                      </p>
+                      <p className="text-xs text-gray-500 break-all">
+                        <span className="font-medium text-gray-600">Token:</span>{" "}
+                        {formData.qrCodeUrl || "—"}
+                      </p>
+                    </div>
+                  </div>
+                )}
+
+                {!formData.qrCodeGenerated && (
+                  <p className="text-xs text-gray-400">
+                    No QR code yet. Click “Regenerate QR” to create one.
+                  </p>
+                )}
+              </>
             )}
           </div>
 
@@ -395,6 +419,8 @@ const TableModal: React.FC<TableModalProps> = ({
         </div>
       </form>
     </Dialog>
+
+  </>
   );
 };
 

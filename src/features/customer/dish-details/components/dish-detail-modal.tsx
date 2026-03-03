@@ -19,6 +19,7 @@ interface DishDetailModalProps {
   dishId: number | null;
   isOpen: boolean;
   onClose: () => void;
+  onAddToCart?: (item: { id: string; name: string; price: number; image: string; desc: string }) => void;
 }
 
 const FALLBACK_IMAGES = [
@@ -31,7 +32,7 @@ const HERO_IMAGE = "/images/dish-detail/dish-hero/dish-hero.png";
 const CLOUD_NAME = "dkstc8tkg";
 const SPIN_TAG = "tiramisu-360";
 
-export function DishDetailModal({ dishId, isOpen, onClose }: DishDetailModalProps) {
+export function DishDetailModal({ dishId, isOpen, onClose, onAddToCart }: DishDetailModalProps) {
   const { data: dishData, isLoading, error } = useDishDetail(dishId || 0);
   const [openPopup, setOpenPopup] = useState(false);
   const [viewMode, setViewMode] = useState<"photo" | "360" | "video">("photo");
@@ -150,7 +151,20 @@ export function DishDetailModal({ dishId, isOpen, onClose }: DishDetailModalProp
                   {viewMode !== "360" && (
                     <button
                       type="button"
-                      onClick={() => setOpenPopup(true)}
+                      onClick={() => {
+                        if (onAddToCart && dishData?.data) {
+                          onAddToCart({
+                            id: String(dishData.data.dishId),
+                            name: dishData.data.dishName,
+                            price: dishData.data.price,
+                            image: dishData.data.imageUrls?.[0] || '',
+                            desc: dishData.data.shortDescription || dishData.data.description || '',
+                          });
+                          onClose();
+                        } else {
+                          setOpenPopup(true);
+                        }
+                      }}
                       className="absolute bottom-4 left-4 right-4 z-20 h-10 rounded-lg bg-[#FFAB2D] px-4 shadow-lg hover:bg-[#FFAB2D]/90 transition-colors"
                     >
                       <span className="font-body text-sm font-bold text-[#1A3A52] tracking-widest uppercase">{tHero("order_now")}</span>

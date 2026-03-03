@@ -5,8 +5,10 @@ import { createPortal } from "react-dom";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { MoreVertical, Pencil, Trash2, Eye } from "lucide-react";
+import { PermissionGuard } from "@/components/permission-guard";
+import { Permissions } from "@/types/const";
 import type { RestaurantTable, TableStatus } from "../types";
-import { TABLE_STATUS_CONFIG, TABLE_TYPE_LABELS } from "../types";
+import { TABLE_STATUS_CONFIG, ALLOWED_TRANSITIONS, canTransitionTo } from "../types";
 import StatusBadge from "./status-badge";
 
 interface TableCardProps {
@@ -17,13 +19,7 @@ interface TableCardProps {
   onStatusChange?: (tableId: number, status: TableStatus) => void;
 }
 
-const STATUS_QUICK_ACTIONS: { status: TableStatus; label: string }[] = [
-  { status: "AVAILABLE", label: "Set Available" },
-  { status: "OCCUPIED", label: "Set Occupied" },
-  { status: "RESERVED", label: "Set Reserved" },
-  { status: "CLEANING", label: "Set Cleaning" },
-  { status: "OUT_OF_SERVICE", label: "Out of Service" },
-];
+const ALL_STATUSES: TableStatus[] = ["AVAILABLE", "OCCUPIED", "RESERVED", "LOCKED"];
 
 const TableCard: React.FC<TableCardProps> = ({
   table,
@@ -76,10 +72,10 @@ const TableCard: React.FC<TableCardProps> = ({
       onClick={() => onSelect?.(table)}
     >
       {/* Table image */}
-      {table.image && (
+      {table.images && table.images.length > 0 && (
         <div className="relative w-full h-28 bg-gray-50">
           <Image
-            src={table.image}
+            src={table.images[0].url}
             alt={table.tableCode}
             fill
             className="object-cover"
@@ -141,55 +137,64 @@ const TableCard: React.FC<TableCardProps> = ({
                   <Eye size={14} className="mr-2 text-gray-400" />
                   View Details
                 </button>
-                <button
-                  className="flex items-center w-full px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                  onClick={() => {
-                    onEdit(table);
-                    setMenuOpen(false);
-                  }}
-                >
-                  <Pencil size={14} className="mr-2 text-gray-400" />
-                  Edit
-                </button>
+                <PermissionGuard permission={Permissions.EditTable}>
+                  <button
+                    className="flex items-center w-full px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                    onClick={() => {
+                      onEdit(table);
+                      setMenuOpen(false);
+                    }}
+                  >
+                    <Pencil size={14} className="mr-2 text-gray-400" />
+                    Edit
+                  </button>
+                </PermissionGuard>
                 {onStatusChange && (
-                  <>
-                    <hr className="my-1 border-gray-100" />
-                    {STATUS_QUICK_ACTIONS.filter((a) => a.status !== table.status).map(
-                      (action) => {
-                        const actionConf = TABLE_STATUS_CONFIG[action.status];
-                        return (
-                          <button
-                            key={action.status}
-                            className="flex items-center w-full px-3 py-1.5 text-xs text-gray-600 hover:bg-gray-50 transition-colors"
-                            onClick={() => {
-                              onStatusChange(table.tableId, action.status);
-                              setMenuOpen(false);
-                            }}
-                          >
-                            <span
-                              className={cn(
-                                "w-2 h-2 rounded-full mr-2",
-                                actionConf.dotColor
-                              )}
-                            />
-                            {action.label}
-                          </button>
-                        );
-                      }
-                    )}
-                  </>
+                  <PermissionGuard permission={Permissions.UpdateTableStatus}>
+                    <>
+                      <hr className="my-1 border-gray-100" />
+                      {ALL_STATUSES
+                        .filter((s) => s !== table.status && canTransitionTo(table.status, s))
+                        .map((status) => {
+                          const actionConf = TABLE_STATUS_CONFIG[status];
+                          return (
+                            <button
+                              key={status}
+                              className="flex items-center w-full px-3 py-1.5 text-xs text-gray-600 hover:bg-gray-50 transition-colors"
+                              onClick={() => {
+                                onStatusChange(
+                                  table.tableId,
+                                  status
+                                );
+                                setMenuOpen(false);
+                              }}
+                            >
+                              <span
+                                className={cn(
+                                  "w-2 h-2 rounded-full mr-2",
+                                  actionConf.dotColor
+                                )}
+                              />
+                              Set {actionConf.label}
+                            </button>
+                          );
+                        })}
+                    </>
+                  </PermissionGuard>
                 )}
                 <hr className="my-1 border-gray-100" />
-                <button
-                  className="flex items-center w-full px-3 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
-                  onClick={() => {
-                    onDelete(table);
-                    setMenuOpen(false);
-                  }}
-                >
-                  <Trash2 size={14} className="mr-2" />
-                  Delete
-                </button>
+                <PermissionGuard permission={Permissions.DeleteTable}>
+                  <button
+                    className="flex items-center w-full px-3 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
+                    onClick={() => {
+                      onDelete(table);
+                      setMenuOpen(false);
+                    }}
+                  >
+                    <Trash2 size={14} className="mr-2" />
+                    Delete
+                  </button>
+                </PermissionGuard>
               </div>,
               document.body
             )}
@@ -202,10 +207,10 @@ const TableCard: React.FC<TableCardProps> = ({
         <span
           className={cn(
             "font-medium",
-            table.type === "VIP" ? "text-amber-600" : "text-gray-500"
+            table.typeName === "VIP" ? "text-amber-600" : "text-gray-500"
           )}
         >
-          {TABLE_TYPE_LABELS[table.type]}
+          {table.typeName}
         </span>
       </div>
 

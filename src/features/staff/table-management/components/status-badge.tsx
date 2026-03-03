@@ -11,8 +11,7 @@ const STATUS_VARIANT: Record<TableStatus, "success" | "destructive" | "warning" 
   AVAILABLE: "success",
   OCCUPIED: "destructive",
   RESERVED: "warning",
-  CLEANING: "info",
-  OUT_OF_SERVICE: "secondary",
+  LOCKED: "secondary",
 };
 
 interface StatusBadgeProps {
@@ -29,7 +28,15 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({
   className,
 }) => {
   const config = TABLE_STATUS_CONFIG[status];
-  const variant = STATUS_VARIANT[status];
+  const variant = STATUS_VARIANT[status] ?? "secondary";
+
+  if (!config) {
+    return (
+      <Badge variant="secondary" className={className}>
+        {status}
+      </Badge>
+    );
+  }
 
   return (
     <Badge
