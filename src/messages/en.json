@@ -21,7 +21,7 @@
     "newsletter": "Newsletter",
     "newsletter_desc": "Join our circle for exclusive events and\nseasonal masterpiece previews.",
     "email_placeholder": "Email Address",
-    "copyright": "© 2026 Au Lac Vietnamese Eatery. All Rights Reserved.",
+    "copyright": "© 2026 An Lac Vietnamese Eatery. All Rights Reserved.",
     "privacy": "Privacy",
     "terms": "Terms",
     "sitemap": "Sitemap"
@@ -36,7 +36,7 @@
       "label": "The Craftsmen",
       "title": "Mastering the\nSoul of Taste",
       "chef_1_name": "Executive Chef Minh",
-      "chef_1_quote": "\"Cuisine is the bridge between history and the senses. At Au Lac, we don't just cook; we curate memories through traditional spices and modern textures.\"",
+      "chef_1_quote": "\"Cuisine is the bridge between history and the senses. At An Lac, we don't just cook; we curate memories through traditional spices and modern textures.\"",
       "chef_2_name": "Sous Chef Linh",
       "chef_2_quote": "\"Balance is our north star. The contrast of hot and cold, crisp and soft, sweet and savory defines the Vietnamese identity.\"",
       "cta": "Read Their Story"
@@ -176,7 +176,7 @@
     },
     "Video": {
       "title": "The Culinary Preparation",
-      "subtitle": "A Film by Au Lac",
+      "subtitle": "A Film by An Lac",
       "duration_label": "Duration",
       "duration_value": "02:45 MIN",
       "resolution_label": "Resolution",
@@ -255,7 +255,7 @@
     "BookingModal": {
       "selectedTable": "Selected Table",
       "title": "Confirm Reservation",
-      "restaurantName": "Au Lac Vietnamese Eatery",
+      "restaurantName": "An Lac Vietnamese Eatery",
       "date": "Date",
       "time": "Time",
       "guests": "Guests",
@@ -415,7 +415,7 @@
       }
     },
     "Footer": {
-      "copyright": "© 2024 Au Lac Vietnamese Eatery - Geneva. All Rights Reserved."
+      "copyright": "© 2024 An Lac Vietnamese Eatery - Geneva. All Rights Reserved."
     }
   },
   "MenuListing": {
@@ -481,7 +481,7 @@
     }
   },
   "FillInforCustomer": {
-    "title": "Welcome to Au Lac",
+    "title": "Welcome to An Lac",
     "subtitle": "Please provide your information to begin your culinary journey",
     "form": {
       "fullName": "Full Name",

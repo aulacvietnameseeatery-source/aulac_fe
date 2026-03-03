@@ -21,7 +21,7 @@
     "newsletter": "Bản tin",
     "newsletter_desc": "Tham gia cộng đồng của chúng tôi để nhận thông tin về\nsự kiện độc quyền và món ăn mùa mới.",
     "email_placeholder": "Địa chỉ email",
-    "copyright": "© 2026 Au Lac Nhà Hàng Việt Nam. Bản quyền đã được bảo hộ.",
+    "copyright": "© 2026 An Lac Nhà Hàng Việt Nam. Bản quyền đã được bảo hộ.",
     "privacy": "Quyền riêng tư",
     "terms": "Điều khoản",
     "sitemap": "Sơ đồ trang web"
@@ -36,7 +36,7 @@
       "label": "Nghệ Nhân",
       "title": "Làm Chủ\nLinh Hồn Hương Vị",
       "chef_1_name": "Bếp Trưởng Minh",
-      "chef_1_quote": "\"Ẩm thực là cầu nối giữa lịch sử và giác quan. Tại Au Lac, chúng tôi không chỉ nấu; chúng tôi tạo nên ký ức qua gia vị truyền thống và kết cấu hiện đại.\"",
+      "chef_1_quote": "\"Ẩm thực là cầu nối giữa lịch sử và giác quan. Tại An Lac, chúng tôi không chỉ nấu; chúng tôi tạo nên ký ức qua gia vị truyền thống và kết cấu hiện đại.\"",
       "chef_2_name": "Phó Bếp Trưởng Linh",
       "chef_2_quote": "\"Sự cân bằng là kim chỉ nam của chúng tôi. Sự tương phản giữa nóng và lạnh, giòn và mềm, ngọt và mặn định hình bản sắc Việt Nam.\"",
       "cta": "Đọc câu chuyện"
@@ -176,7 +176,7 @@
     },
     "Video": {
       "title": "Quy Trình Chế Biến",
-      "subtitle": "Một phim của Au Lac",
+      "subtitle": "Một phim của An Lac",
       "duration_label": "Thời lượng",
       "duration_value": "02:45 PHÚT",
       "resolution_label": "Độ phân giải",
@@ -255,7 +255,7 @@
     "BookingModal": {
       "selectedTable": "Bàn Đã Chọn",
       "title": "Xác Nhận Đặt Bàn",
-      "restaurantName": "Au Lac Nhà Hàng Việt Nam",
+      "restaurantName": "An Lac Nhà Hàng Việt Nam",
       "date": "Ngày",
       "time": "Giờ",
       "guests": "Khách",
@@ -415,7 +415,7 @@
       }
     },
     "Footer": {
-      "copyright": "© 2024 Au Lac Nhà Hàng Việt Nam - Geneva. Bản quyền đã được bảo hộ."
+      "copyright": "© 2024 An Lac Nhà Hàng Việt Nam - Geneva. Bản quyền đã được bảo hộ."
     }
   },
   "MenuListing": {
@@ -481,7 +481,7 @@
     }
   },
   "FillInforCustomer": {
-    "title": "Chào Mừng Đến Au Lac",
+    "title": "Chào Mừng Đến An Lac",
     "subtitle": "Vui lòng cung cấp thông tin của bạn để bắt đầu trải nghiệm ẩm thực",
     "form": {
       "fullName": "Họ và tên",

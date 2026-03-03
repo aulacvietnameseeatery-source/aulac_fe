@@ -105,9 +105,15 @@ export interface OrderHistoryFABProps {
   dishNameMap?: Record<number, string>;
   /** Increment this value to trigger a silent background refresh of the badge count */
   refreshTrigger?: number;
+  /** When true, forces the popup to close (used when other popup opens) */
+  forceClose?: boolean;
+  /** Callback when popup open state changes */
+  onOpenChange?: (isOpen: boolean) => void;
+  /** When true, forces the popup to open (used after order success) */
+  forceOpen?: boolean;
 }
 
-export function OrderHistoryFAB({ tableCode, tableNumber, dishNameMap = {}, refreshTrigger = 0 }: OrderHistoryFABProps) {
+export function OrderHistoryFAB({ tableCode, tableNumber, dishNameMap = {}, refreshTrigger = 0, forceClose = false, forceOpen = false, onOpenChange }: OrderHistoryFABProps) {
   const t = useTranslations("OrderHistory");
   const router = useRouter();
   const effectiveTable = tableCode || tableNumber || "";
@@ -216,26 +222,44 @@ export function OrderHistoryFAB({ tableCode, tableNumber, dishNameMap = {}, refr
   const totalItems = history?.totalItems ?? 0;
   const estimatedTotal = history?.estimatedTotal ?? 0;
 
+  // Listen to forceClose prop to close popup when other popup opens
+  useEffect(() => {
+    if (forceClose && isOpen) {
+      setIsOpen(false);
+    }
+  }, [forceClose, isOpen]);
+
+  // Listen to forceOpen prop to open popup programmatically
+  useEffect(() => {
+    if (forceOpen && !isOpen) {
+      setIsOpen(true);
+      onOpenChange?.(true);
+    }
+  }, [forceOpen]);
+
   return (
     <>
       {/* ── FAB button ── */}
       <motion.button
-        onClick={() => setIsOpen(true)}
+        onClick={() => {
+          setIsOpen(true);
+          onOpenChange?.(true);
+        }}
         whileHover={{ scale: 1.08 }}
         whileTap={{ scale: 0.93 }}
         className="relative flex flex-col items-center justify-center gap-[3px] focus:outline-none"
         aria-label={t("fabAriaLabel")}
       >
-        {/* Circle button */}
+        {/* Circle button - increased size */}
         <div
-          className="w-14 h-14 rounded-full flex items-center justify-center"
+          className="w-[68px] h-[68px] rounded-full flex items-center justify-center"
           style={{
             background: "radial-gradient(circle at 35% 30%, #2a3f60, #0f1f3d)",
             boxShadow:
               "0 0 0 2px #c9a84c, 0 4px 20px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,220,100,0.15)",
           }}
         >
-          <ScrollText size={26} strokeWidth={1.6} className="text-[#e8c97a] drop-shadow-sm" />
+          <ScrollText size={30} strokeWidth={1.6} className="text-[#e8c97a] drop-shadow-sm" />
 
           {/* Badge: total item count */}
           {totalItems > 0 && (
@@ -272,7 +296,10 @@ export function OrderHistoryFAB({ tableCode, tableNumber, dishNameMap = {}, refr
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              onClick={() => setIsOpen(false)}
+              onClick={() => {
+                setIsOpen(false);
+                onOpenChange?.(false);
+              }}
               className="fixed inset-0 z-[90] bg-black/60 backdrop-blur-sm"
             />
 
@@ -290,14 +317,9 @@ export function OrderHistoryFAB({ tableCode, tableNumber, dishNameMap = {}, refr
                 boxShadow: "0 24px 64px rgba(0,0,0,0.7), 0 0 0 1px rgba(201,168,76,0.1)",
               }}
             >
-              {/* Drag handle */}
-              <div className="flex justify-center pt-3 pb-1 flex-shrink-0">
-                <div className="w-10 h-1 rounded-full" style={{ background: "rgba(201,168,76,0.35)" }} />
-              </div>
-
               {/* ── Header ── */}
               <div
-                className="flex items-center justify-between px-5 py-3 border-b flex-shrink-0"
+                className="flex items-center justify-between px-5 py-4 border-b flex-shrink-0"
                 style={{ borderColor: "rgba(201,168,76,0.25)" }}
               >
                 <div className="flex items-center gap-3">
@@ -329,7 +351,10 @@ export function OrderHistoryFAB({ tableCode, tableNumber, dishNameMap = {}, refr
                     <RefreshCw size={14} className={`text-[#8ba3c7] ${loading ? "animate-spin" : ""}`} />
                   </button>
                   <button
-                    onClick={() => setIsOpen(false)}
+                    onClick={() => {
+                      setIsOpen(false);
+                      onOpenChange?.(false);
+                    }}
                     className="w-8 h-8 rounded-full flex items-center justify-center"
                     style={{ background: "rgba(255,255,255,0.06)" }}
                     aria-label={t("closeAriaLabel")}
@@ -359,8 +384,8 @@ export function OrderHistoryFAB({ tableCode, tableNumber, dishNameMap = {}, refr
                 {/* Column headers */}
                 {allItems.length > 0 && (
                   <div
-                    className="grid gap-x-2 px-2 pb-2 text-[10px] font-semibold tracking-widest uppercase sticky top-0"
-                    style={{ gridTemplateColumns: "1fr 28px 60px 72px", color: "rgba(139,163,199,0.55)", background: "transparent" }}
+                    className="grid gap-x-2 px-2 pb-3 text-xs font-bold tracking-widest uppercase"
+                    style={{ gridTemplateColumns: "1fr 28px 60px 72px", color: "rgba(139,163,199,0.7)", background: "transparent" }}
                   >
                     <span>{t("headers.dish")}</span>
                     <span className="text-center">{t("headers.quantity")}</span>

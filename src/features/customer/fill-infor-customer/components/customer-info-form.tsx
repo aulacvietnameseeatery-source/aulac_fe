@@ -12,13 +12,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { api } from "@/lib/http";
 
-const CURRENT_ORDER_ID_KEY = "aulac_current_order_id";
-
-// API Response wrapper type
-interface ApiResponse<T> {
-  data: T;
-}
-
 // Static schema used for type inference only
 const customerInfoSchema = z.object({
   fullName: z.string().optional(),
@@ -37,6 +30,17 @@ export function CustomerInfoForm({ tableNumber }: CustomerInfoFormProps) {
   const t = useTranslations("FillInforCustomer");
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Helper function to update table status to OCCUPIED
+  const updateTableStatusToOccupied = async () => {
+    try {
+      // Call public API to mark table as occupied (no authentication required)
+      await api.post(`/api/public/tables/${encodeURIComponent(tableNumber)}/occupy`, {});
+    } catch (error) {
+      console.error("Error updating table status:", error);
+      // Don't block user flow if status update fails
+    }
+  };
 
   // Schema with translated error messages used at runtime
   const customerInfoSchemaI18n = z.object({
@@ -58,49 +62,23 @@ export function CustomerInfoForm({ tableNumber }: CustomerInfoFormProps) {
     },
   });
 
-  /**
-   * Creates an order immediately on the backend so that subsequent "add items"
-   * calls can reuse the same order row instead of creating a new one each time.
-   */
-  const createOrder = async (opts: {
-    isGuest: boolean;
-    customerPhone?: string;
-    customerFullName?: string;
-    customerEmail?: string;
-  }): Promise<number | null> => {
-    try {
-      const res = await api.post<ApiResponse<{ orderId: number }>>('/api/orders', {
-        tableCode: tableNumber,
-        isGuest: opts.isGuest,
-        customerPhone: opts.customerPhone,
-        customerFullName: opts.customerFullName,
-        customerEmail: opts.customerEmail,
-        items: [],
-      });
-      
-      const orderId: number | null = res?.data?.orderId ?? null;
-      if (orderId && typeof window !== 'undefined') {
-        sessionStorage.setItem(CURRENT_ORDER_ID_KEY, String(orderId));
-      }
-      return orderId;
-    } catch (err) {
-      console.error("[FillInfor] Failed to pre-create order:", err);
-    }
-    return null;
-  };
-
   const handleSkip = async () => {
+    // Update table status to OCCUPIED before navigating
+    await updateTableStatusToOccupied();
+    
     if (typeof window !== 'undefined') {
       sessionStorage.setItem('aulac_table_number', tableNumber);
     }
-    // Pre-create a guest order so the menu page can add items to it
-    await createOrder({ isGuest: true });
+
     router.push(`/menu-listing?table=${encodeURIComponent(tableNumber)}`);
   };
 
   const onSubmit = async (data: CustomerInfoFormValues) => {
     setIsSubmitting(true);
     try {
+      // Update table status to OCCUPIED before saving info
+      await updateTableStatusToOccupied();
+      
       // Save customer info and table to sessionStorage
       if (typeof window !== 'undefined') {
         sessionStorage.setItem('aulac_customer_info', JSON.stringify({
@@ -111,19 +89,10 @@ export function CustomerInfoForm({ tableNumber }: CustomerInfoFormProps) {
         sessionStorage.setItem('aulac_table_number', tableNumber);
       }
 
-      // Pre-create the order with customer info so the menu page can append items to it
-      await createOrder({
-        isGuest: false,
-        customerPhone: data.phoneNumber,
-        customerFullName: data.fullName || undefined,
-        customerEmail: data.emailAddress || undefined,
-      });
-
       // Navigate directly to menu-listing with table number
       router.push(`/menu-listing?table=${encodeURIComponent(tableNumber)}`);
     } catch (error) {
       console.error("Error submitting form:", error);
-      // Still navigate even if order pre-creation failed
       router.push(`/menu-listing?table=${encodeURIComponent(tableNumber)}`);
     } finally {
       setIsSubmitting(false);
