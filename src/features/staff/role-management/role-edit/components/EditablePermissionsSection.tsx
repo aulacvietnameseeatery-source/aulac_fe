@@ -1,4 +1,4 @@
-// src/features/auth/role-edit/components/EditablePermissionsSection.tsx
+
 'use client';
 
 import React from 'react';

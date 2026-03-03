@@ -145,6 +145,11 @@ async function http<T>(path: string, options?: FetchOptions): Promise<T> {
                     throw new Error(errorBody.userMessage || errorBody.message || `HTTP Error: ${retryResponse.status}`);
                 }
 
+                // Check if response has content (e.g., 204 No Content)
+                if (retryResponse.status === 204 || retryResponse.headers.get('content-length') === '0') {
+                    return undefined as T;
+                }
+
                 return (await retryResponse.json()) as T;
             } catch (refreshError) {
                 processQueue(new Error("Token refresh failed"), null);
@@ -173,6 +178,11 @@ async function http<T>(path: string, options?: FetchOptions): Promise<T> {
                 status: response.status
             };
             throw error;
+        }
+
+        // Check if response has content (e.g., 204 No Content)
+        if (response.status === 204 || response.headers.get('content-length') === '0') {
+            return undefined as T;
         }
 
         return (await response.json()) as T;

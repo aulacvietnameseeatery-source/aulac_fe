@@ -1,7 +1,7 @@
 import React from "react";
 import { Edit, Trash2, Eye, Loader2 } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { RoleDto } from "@/features/staff/role-list";
+import { RoleDto } from "@/features/staff/role-management/role-list";
 
 type Props = {
   roles: RoleDto[];

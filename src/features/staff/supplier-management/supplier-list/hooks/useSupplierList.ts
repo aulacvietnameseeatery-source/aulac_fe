@@ -1,14 +1,14 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { DishCategory, CategoryFilters } from "../types";
-import { listCategoryService } from "../services/listCategoryService";
+import { Supplier, SupplierFilters } from "../types";
+import { listSupplierService } from "../services/listSupplierService";
 import type { FilterState } from '@/hooks/table/useTableFiltering';
 import type { SortStateItem } from '@/hooks/table/useTableSorting';
 
-export const useCategoryList = () => {
+export const useSupplierList = () => {
   // Data State
-  const [categories, setCategories] = useState<DishCategory[]>([]);
+  const [suppliers, setSuppliers] = useState<Supplier[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [totalCount, setTotalCount] = useState(0);
   const [paginationInfo, setPaginationInfo] = useState({
@@ -16,7 +16,7 @@ export const useCategoryList = () => {
     pageSize: 10,
   });
 
-  // Fetch categories from API - compatible with BaseTable onDataChange
+  // Fetch suppliers from API - compatible with BaseTable onDataChange
   const onDataChange = useCallback((params: {
     search?: string;
     filters?: Record<string, FilterState>;
@@ -28,24 +28,23 @@ export const useCategoryList = () => {
       try {
         setIsLoading(true);
         
-        const apiFilters: CategoryFilters = {
+        const apiFilters: SupplierFilters = {
           search: params.search || undefined,
-          isDisabled: params.filters?.isDisabled?.value !== undefined ? params.filters.isDisabled.value === 'true' : undefined,
           pageIndex: params.page || 1,
           pageSize: params.pageSize || 10,
         };
 
-        const result = await listCategoryService.getCategories(apiFilters);
+        const result = await listSupplierService.getSuppliers(apiFilters);
         
-        setCategories(result.pageData);
+        setSuppliers(result.pageData);
         setTotalCount(result.totalCount);
         setPaginationInfo({
           page: params.page || 1,
           pageSize: params.pageSize || 10,
         });
       } catch (error) {
-        console.error("Error fetching categories:", error);
-        setCategories([]);
+        console.error("Error fetching suppliers:", error);
+        setSuppliers([]);
         setTotalCount(0);
       } finally {
         setIsLoading(false);
@@ -64,22 +63,12 @@ export const useCategoryList = () => {
     });
   }, [paginationInfo, onDataChange]);
 
-  // Update category locally (for optimistic updates)
-  const updateCategoryLocally = useCallback((updatedCategory: DishCategory) => {
-    setCategories(prev =>
-      prev.map(cat =>
-        cat.categoryId === updatedCategory.categoryId ? updatedCategory : cat
-      )
-    );
-  }, []);
-
   return {
-    categories,
+    suppliers,
     isLoading,
     totalCount,
     paginationInfo,
     onDataChange,
     refresh,
-    updateCategoryLocally,
   };
 };
