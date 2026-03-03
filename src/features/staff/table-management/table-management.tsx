@@ -150,23 +150,24 @@ const TableManagement: React.FC = () => {
 
   // ── Handlers ──
   const handleAddTable = useCallback(
-    (formData: TableFormData) => {
-    if (!formData.typeLvId || !formData.zoneLvId || !formData.statusLvId)
-      return;
-    createMutation.mutate({
-      tableCode: formData.tableCode,
-      capacity: formData.capacity,
-      isOnline: formData.isOnline,
-      statusLvId: formData.statusLvId as number,
-      typeLvId: formData.typeLvId as number,
-      zoneLvId: formData.zoneLvId as number,
-    });
+    (formData: TableFormData, pendingFiles: File[], _removedImageIds: number[]) => {
+      if (!formData.typeLvId || !formData.zoneLvId || !formData.statusLvId)
+        return;
+      createMutation.mutate({
+        tableCode: formData.tableCode,
+        capacity: formData.capacity,
+        isOnline: formData.isOnline,
+        statusLvId: formData.statusLvId as number,
+        typeLvId: formData.typeLvId as number,
+        zoneLvId: formData.zoneLvId as number,
+        images: pendingFiles.length > 0 ? pendingFiles : undefined,
+      });
     },
     [createMutation]
   );
 
   const handleEditTable = useCallback(
-    (formData: TableFormData) => {
+    (formData: TableFormData, pendingFiles: File[], removedImageIds: number[]) => {
       if (!selectedTable) return;
       updateMutation.mutate({
         id: selectedTable.tableId,
@@ -175,12 +176,10 @@ const TableManagement: React.FC = () => {
           capacity: formData.capacity,
           isOnline: formData.isOnline,
           statusLvId: formData.statusLvId ? (formData.statusLvId as number) : undefined,
-          typeLvId: formData.typeLvId
-            ? (formData.typeLvId as number)
-            : undefined,
-          zoneLvId: formData.zoneLvId
-            ? (formData.zoneLvId as number)
-            : undefined,
+          typeLvId: formData.typeLvId ? (formData.typeLvId as number) : undefined,
+          zoneLvId: formData.zoneLvId ? (formData.zoneLvId as number) : undefined,
+          images: pendingFiles.length > 0 ? pendingFiles : undefined,
+          removedImageIds: removedImageIds.length > 0 ? removedImageIds : undefined,
         },
       });
     },

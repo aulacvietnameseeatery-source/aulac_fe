@@ -4,6 +4,7 @@ import type { ApiResponse, PagedResult } from "@/types/api-response.types";
 import type {
   TableManagementDto,
   TableDetailDto,
+  TableMediaDto,
   CreateTableRequest,
   UpdateTableRequest,
   UpdateTableStatusRequest,
@@ -65,27 +66,51 @@ export const tableService = {
   },
 
   /**
-   * POST /api/tables — Create a new table
-   * Returns 201 Created
+   * POST /api/tables — Create a new table (multipart/form-data)
+   * Images are optional and uploaded in the same request.
+   * Returns 201 Created with TableDetailDto.
    */
   async createTable(data: CreateTableRequest): Promise<TableManagementDto> {
+    const form = new FormData();
+    form.append("TableCode", data.tableCode);
+    form.append("Capacity", String(data.capacity));
+    form.append("IsOnline", String(data.isOnline ?? false));
+    form.append("StatusLvId", String(data.statusLvId));
+    form.append("TypeLvId", String(data.typeLvId));
+    form.append("ZoneLvId", String(data.zoneLvId));
+    data.images?.forEach((f) => form.append("Images", f));
+
     const res = await api.post<ApiResponse<TableManagementDto>>(
       "/api/tables",
-      data
+      form
     );
     return res.data;
   },
 
   /**
-   * PUT /api/tables/{id} — Partial update (null/absent fields not modified)
+   * PUT /api/tables/{id} — Update table data and/or images in one request (multipart/form-data)
+   * - Images: new files to add
+   * - RemovedImageIds: comma-separated mediaIds to delete
+   * Returns the final TableDetailDto after all changes.
    */
   async updateTable(
     id: number,
     data: UpdateTableRequest
   ): Promise<TableManagementDto> {
+    const form = new FormData();
+    if (data.tableCode !== undefined) form.append("TableCode", data.tableCode);
+    if (data.capacity !== undefined) form.append("Capacity", String(data.capacity));
+    if (data.isOnline !== undefined) form.append("IsOnline", String(data.isOnline));
+    if (data.statusLvId !== undefined) form.append("StatusLvId", String(data.statusLvId));
+    if (data.typeLvId !== undefined) form.append("TypeLvId", String(data.typeLvId));
+    if (data.zoneLvId !== undefined) form.append("ZoneLvId", String(data.zoneLvId));
+    data.images?.forEach((f) => form.append("Images", f));
+    if (data.removedImageIds?.length)
+      form.append("RemovedImageIds", data.removedImageIds.join(","));
+
     const res = await api.put<ApiResponse<TableManagementDto>>(
       `/api/tables/${id}`,
-      data
+      form
     );
     return res.data;
   },
@@ -163,6 +188,29 @@ export const tableService = {
       data
     );
     return res.data ?? { affectedCount: 0 };
+  },
+
+  /**
+   * POST /api/tables/{id}/media — Upload images for a table
+   * Accepts multipart/form-data with field name `files`.
+   * Returns 201 with the uploaded media DTOs.
+   */
+  async uploadTableMedia(tableId: number, files: File[]): Promise<TableMediaDto[]> {
+    const form = new FormData();
+    files.forEach((f) => form.append("files", f));
+    const res = await api.post<ApiResponse<TableMediaDto[]>>(
+      `/api/tables/${tableId}/media`,
+      form
+    );
+    return res.data ?? [];
+  },
+
+  /**
+   * DELETE /api/tables/{id}/media/{mediaId} — Remove a single image
+   * Returns 204 No Content on success.
+   */
+  async deleteTableMedia(tableId: number, mediaId: number): Promise<void> {
+    await api.delete<ApiResponse<object>>(`/api/tables/${tableId}/media/${mediaId}`);
   },
 
   /**
