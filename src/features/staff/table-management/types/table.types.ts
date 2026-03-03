@@ -209,10 +209,10 @@ export interface StatusConfig {
  *    or querying the lookup_value table directly.
  */
 export const TABLE_STATUS_LV_IDS: Record<TableStatus, number> = {
-  AVAILABLE: 1,  // TODO: replace with actual seeded lookup_value ID
-  OCCUPIED: 2,   // TODO: replace with actual seeded lookup_value ID
-  RESERVED: 3,   // TODO: replace with actual seeded lookup_value ID
-  LOCKED: 4,     // TODO: replace with actual seeded lookup_value ID
+  AVAILABLE: 14,  // TODO: replace with actual seeded lookup_value ID
+  OCCUPIED: 15,   // TODO: replace with actual seeded lookup_value ID
+  RESERVED: 16,   // TODO: replace with actual seeded lookup_value ID
+  LOCKED: 17,     // TODO: replace with actual seeded lookup_value ID
 };
 
 export const TABLE_STATUS_CONFIG: Record<TableStatus, StatusConfig> = {
