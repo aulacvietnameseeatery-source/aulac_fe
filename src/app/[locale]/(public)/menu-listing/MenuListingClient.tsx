@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useMemo, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { CheckCircle } from "lucide-react";
 import { api } from "@/lib/http";
 import { ApiResponse } from "@/types/api-response.types";
@@ -11,26 +11,25 @@ import { BookFrame } from "@/features/customer/menu-listing-new/components/book-
 import { CartItem } from "@/features/customer/menu-listing-new/types/cart";
 
 import { MenuCategory, MenuItemData } from "@/features/customer/menu-listing-new/data/mock-menu";
-import { RawMenuCategory } from "@/features/customer/menu-listing-new/hooks/use-menu-data";
 
+import { BASE_URL } from "@/lib/http";
 import { TableSelectionModal } from "@/features/customer/menu-listing-new/components/table-selection-modal";
 import { CartSummary } from "@/features/customer/menu-listing-new/components/cart-summary";
 import { OrderHistoryFAB } from "@/features/customer/menu-listing-new/components/ordered-items-fab";
 
 
 interface Props {
-    // Nhận dữ liệu thô từ Server (chứa I18nText)
-    initialMenuData: RawMenuCategory[];
-    locale: 'vi' | 'en' | 'fr';
+    // Nhận dữ liệu đã được flatten locale từ Server (plain strings)
+    initialMenuData: MenuCategory[];
+    tableFromUrl?: string;
 }
 
 const CART_STORAGE_KEY = "aulac_cart_items";
 const TABLE_STORAGE_KEY = "aulac_table_number";
 const CURRENT_ORDER_ID_KEY = "aulac_current_order_id";
 
-export default function MenuListingClient({ initialMenuData, locale }: Props) {
+export default function MenuListingClient({ initialMenuData, tableFromUrl }: Props) {
     const router = useRouter();
-    const searchParams = useSearchParams();
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
     const [tableNumber, setTableNumber] = useState("");
     const [currentOrderId, setCurrentOrderId] = useState<number | null>(null);
@@ -45,10 +44,7 @@ export default function MenuListingClient({ initialMenuData, locale }: Props) {
     useEffect(() => {
         if (typeof window !== 'undefined') {
             try {
-                // Khôi phục table number từ URL params hoặc sessionStorage
-                const tableFromUrl = searchParams.get("table");
-                const savedTable = sessionStorage.getItem(TABLE_STORAGE_KEY);
-                
+                // tableFromUrl đã được truyền từ Server Component (page.tsx)
                 if (tableFromUrl) {
                     // URL có table parameter - set và lưu vào sessionStorage
                     setTableNumber(tableFromUrl);
@@ -75,10 +71,10 @@ export default function MenuListingClient({ initialMenuData, locale }: Props) {
                     setCurrentOrderId(null);
                 }
             } catch (error) {
-                console.error("Error loading from localStorage:", error);
+                console.error("Error loading from sessionStorage:", error);
             }
         }
-    }, [searchParams]);
+    }, [tableFromUrl]);
 
     // Lưu cart vào sessionStorage mỗi khi thay đổi
     useEffect(() => {
@@ -102,23 +98,12 @@ export default function MenuListingClient({ initialMenuData, locale }: Props) {
         }
     }, [tableNumber]);
 
-    // MAPPING DATA: Biến RawMenuCategory (Object) thành MenuCategory (String)
-    const localizedMenu: MenuCategory[] = useMemo(() => {
-        return initialMenuData.map(cat => ({
-            id: cat.id,
-            name: cat.name[locale] || cat.name.en, // Bóc ra chuỗi string
-            items: cat.items.map(item => ({
-                id: item.id,
-                name: item.name[locale] || item.name.en, // Bóc ra chuỗi string
-                price: item.price,
-                desc: item.desc[locale] || item.desc.en, // Bóc ra chuỗi string
-                image: item.image
-            }))
-        }));
-    }, [initialMenuData, locale]);
+    // Locale đã được flatten trên Server — initialMenuData là MenuCategory[] thuần string
+    // _OLD: const localizedMenu = useMemo(() => initialMenuData.map(cat => ({ name: cat.name[locale]... })), [initialMenuData, locale])
+    const localizedMenu = initialMenuData;
 
     // Thêm vào giỏ hàng
-    const addToCart = (itemsToAdd: any[]) => {
+    const addToCart = (itemsToAdd: MenuItemData[]) => {
         setCartItems((prev) => {
             const newCart = [...prev];
             itemsToAdd.forEach(newItem => {

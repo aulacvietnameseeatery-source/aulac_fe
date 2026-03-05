@@ -4,21 +4,15 @@ import React, { useState, useEffect, useCallback } from "react";
 import { Dialog } from "@/components/ui/dialog";
 import { ALInput } from "@/components/ui/al-input";
 import { ALCombobox } from "@/components/ui/al-combobox"; // used for static Status field (not a lookup entity)
+import { ALFileUploader } from "@/components/ui/al-file-uploader";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
-import {
-  FileUpload,
-  FileUploadDropzone,
-  FileUploadList,
-  FileUploadItem,
-  FileUploadItemPreview,
-  FileUploadItemMetadata,
-  FileUploadItemDelete,
-} from "@/components/ui/file-upload";
-import { RefreshCcw, Download, Eye, Upload, X, Trash2, ImageOff } from "lucide-react";
+import { RefreshCcw, Download, Eye, ImageOff } from "lucide-react";
 import type { RestaurantTable, TableFormData, TableStatus } from "../types";
 import { TABLE_STATUS_CONFIG, TABLE_STATUS_LV_IDS } from "../types";
-import { useRegenerateQrMutation } from "../hooks/use-table-queries";
+import {
+  useRegenerateQrMutation,
+} from "../hooks/use-table-queries";
 import { useLookupCrud, LookupCombobox } from "@/features/lookup";
 
 interface TableModalProps {
@@ -26,7 +20,7 @@ interface TableModalProps {
   mode: "add" | "edit";
   table?: RestaurantTable | null;
   onClose: () => void;
-  onSubmit: (data: TableFormData) => void;
+  onSubmit: (data: TableFormData, pendingFiles: File[], removedImageIds: number[]) => void;
   isSubmitting?: boolean;
 }
 
@@ -56,7 +50,8 @@ const TableModal: React.FC<TableModalProps> = ({
 }) => {
   const [formData, setFormData] = useState<TableFormData>(initialFormData);
   const [qrPreview, setQrPreview] = useState(false);
-  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
+  const [pendingFiles, setPendingFiles] = useState<File[]>([]);
+  const [removedImageIds, setRemovedImageIds] = useState<number[]>([]);
   // ── Fetch lookup values via shared useLookupCrud ──
   const zoneLookup = useLookupCrud({
     baseUrl:     "/api/tables/zones",
@@ -100,13 +95,14 @@ const TableModal: React.FC<TableModalProps> = ({
         qrCodeUrl: table.qrCodeUrl || "",
         qrCodeImageUrl: table.qrCodeImageUrl || "",
         qrCodeGenerated: !!table.qrCodeUrl,
-        images: table.images?.map((img) => img.url) || [],
+        images: table.images ?? [],
       });
     } else {
       setFormData(initialFormData);
       setQrPreview(false);
     }
-    setUploadedFiles([]);
+    setPendingFiles([]);
+    setRemovedImageIds([]);
   }, [mode, table, isOpen]);
 
   const handleChange = (
@@ -125,10 +121,8 @@ const TableModal: React.FC<TableModalProps> = ({
       typeLvId: formData.typeLvId ? Number(formData.typeLvId) : "",
       zoneLvId: formData.zoneLvId ? Number(formData.zoneLvId) : "",
     };
-    // Append any newly uploaded files as blob URLs (P2 — no upload endpoint yet)
-    const newImageUrls = uploadedFiles.map((f) => URL.createObjectURL(f));
-    const allImages = [...(formData.images || []), ...newImageUrls];
-    onSubmit({ ...submitData, images: allImages });
+    // Images and removals are bundled into the create/update request by the parent
+    onSubmit(submitData, pendingFiles, removedImageIds);
   };
 
   const handleDownloadQR = useCallback(async () => {
@@ -147,14 +141,6 @@ const TableModal: React.FC<TableModalProps> = ({
       window.open(formData.qrCodeImageUrl, "_blank");
     }
   }, [formData.qrCodeImageUrl, formData.tableCode]);
-
-  // Remove existing image
-  const handleRemoveExistingImage = useCallback((index: number) => {
-    setFormData((prev) => ({
-      ...prev,
-      images: (prev.images || []).filter((_, i) => i !== index),
-    }));
-  }, []);
 
   return (
     <>
@@ -350,71 +336,34 @@ const TableModal: React.FC<TableModalProps> = ({
               <div className="grow border-t border-gray-100" />
             </div>
 
-            {/* Existing images (edit mode) */}
-            {(formData.images?.length ?? 0) > 0 && (
-              <div className="flex flex-wrap gap-2">
-                {formData.images!.map((img, idx) => (
-                  <div
-                    key={idx}
-                    className="relative group/img w-20 h-20 rounded-lg overflow-hidden border border-gray-200 bg-gray-50"
-                  >
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={img}
-                      alt={`Photo ${idx + 1}`}
-                      className="w-full h-full object-cover"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => handleRemoveExistingImage(idx)}
-                      className="absolute top-0.5 right-0.5 p-0.5 rounded-full bg-black/50 text-white opacity-0 group-hover/img:opacity-100 transition-opacity"
-                    >
-                      <X size={12} />
-                    </button>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {/* New file upload */}
-            <FileUpload
-              value={uploadedFiles}
-              onValueChange={setUploadedFiles}
-              accept="image/*"
-              multiple
-              maxFiles={5}
-              maxSize={5 * 1024 * 1024}
-            >
-              <FileUploadDropzone className="min-h-0 gap-1.5 p-4">
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <Upload size={16} />
-                  <span>Drop images here or click to upload</span>
-                </div>
-                <p className="text-xs text-muted-foreground/70">
-                  PNG, JPG up to 5MB each (max 5 files)
-                </p>
-              </FileUploadDropzone>
-              <FileUploadList className="mt-2">
-                {uploadedFiles.map((file) => (
-                  <FileUploadItem key={file.name + file.size} value={file}>
-                    <div className="flex items-center gap-2">
-                      <FileUploadItemPreview className="size-10 shrink-0" />
-                      <FileUploadItemMetadata size="sm" className="flex-1" />
-                      <FileUploadItemDelete asChild>
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="icon"
-                          className="size-7"
-                        >
-                          <Trash2 size={14} />
-                        </Button>
-                      </FileUploadItemDelete>
-                    </div>
-                  </FileUploadItem>
-                ))}
-              </FileUploadList>
-            </FileUpload>
+            <ALFileUploader
+                  existingFiles={(formData.images ?? []).map((img) => ({
+                    id: img.mediaId,
+                    url: img.url,
+                    isPrimary: img.isPrimary,
+                  }))}
+                  onDeleteExisting={(id) => {
+                    const numId = Number(id);
+                    // Mark for removal (sent on submit) and hide optimistically
+                    setRemovedImageIds((prev) => [...prev, numId]);
+                    setFormData((prev) => ({
+                      ...prev,
+                      images: (prev.images ?? []).filter(
+                        (img) => img.mediaId !== numId
+                      ),
+                    }));
+                  }}
+                  deletingExistingId={null}
+                  pendingFiles={pendingFiles}
+                  onPendingChange={setPendingFiles}
+                  isUploading={isSubmitting}
+                  accept="image/*"
+                  acceptHint={["PNG", "JPG", "GIF", "WEBP"]}
+                  maxFiles={5}
+                  maxSizeBytes={5 * 1024 * 1024}
+                  variant="image"
+                  disabled={isSubmitting}
+                />
           </div>
         </div>
       </form>
