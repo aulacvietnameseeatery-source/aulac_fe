@@ -496,7 +496,10 @@
       "skipToMenu": "Skip, browse the menu",
       "errors": {
         "phoneRequired": "Phone number is required",
-        "emailInvalid": "Invalid email address"
+        "emailInvalid": "Invalid email address",
+        "tableOccupied": "This table is already occupied",
+        "tableOccupiedDesc": "This table is being used by another customer. Please choose another table.",
+        "updateFailed": "Failed to update table status. Please try again."
       }
     },
     "footer": "Handcrafted Vietnamese Cuisine"

@@ -36,9 +36,27 @@ export function CustomerInfoForm({ tableNumber }: CustomerInfoFormProps) {
     try {
       // Call public API to mark table as occupied (no authentication required)
       await api.post(`/api/public/tables/${encodeURIComponent(tableNumber)}/occupy`, {});
-    } catch (error) {
-      console.error("Error updating table status:", error);
-      // Don't block user flow if status update fails
+      return true;
+    } catch (error: any) {
+      // Check if table is already occupied (409 Conflict)
+      if (error.response?.status === 409) {
+        // This is expected behavior - table is occupied by another customer
+        // Clear sessionStorage before redirect to prevent showing cart/history with stale table
+        if (typeof window !== 'undefined') {
+          sessionStorage.removeItem('aulac_table_number');
+          sessionStorage.removeItem('aulac_cart_items');
+          sessionStorage.removeItem('aulac_current_order_id');
+        }
+        // Redirect immediately to home page to select another table
+        router.push("/");
+        return false;
+      }
+      
+      // Log unexpected errors only
+      console.error("Unexpected error updating table status:", error);
+      
+      // For other errors, don't block user flow
+      return true;
     }
   };
 
@@ -64,7 +82,12 @@ export function CustomerInfoForm({ tableNumber }: CustomerInfoFormProps) {
 
   const handleSkip = async () => {
     // Update table status to OCCUPIED before navigating
-    await updateTableStatusToOccupied();
+    const success = await updateTableStatusToOccupied();
+    
+    // Only proceed if table was successfully occupied
+    if (!success) {
+      return;
+    }
     
     if (typeof window !== 'undefined') {
       sessionStorage.setItem('aulac_table_number', tableNumber);
@@ -77,7 +100,13 @@ export function CustomerInfoForm({ tableNumber }: CustomerInfoFormProps) {
     setIsSubmitting(true);
     try {
       // Update table status to OCCUPIED before saving info
-      await updateTableStatusToOccupied();
+      const success = await updateTableStatusToOccupied();
+      
+      // Only proceed if table was successfully occupied
+      if (!success) {
+        setIsSubmitting(false);
+        return;
+      }
       
       // Save customer info and table to sessionStorage
       if (typeof window !== 'undefined') {
@@ -93,7 +122,7 @@ export function CustomerInfoForm({ tableNumber }: CustomerInfoFormProps) {
       router.push(`/menu-listing?table=${encodeURIComponent(tableNumber)}`);
     } catch (error) {
       console.error("Error submitting form:", error);
-      router.push(`/menu-listing?table=${encodeURIComponent(tableNumber)}`);
+      setIsSubmitting(false);
     } finally {
       setIsSubmitting(false);
     }

@@ -496,7 +496,10 @@
       "skipToMenu": "Bỏ qua, xem thực đơn",
       "errors": {
         "phoneRequired": "Số điện thoại là bắt buộc",
-        "emailInvalid": "Địa chỉ email không hợp lệ"
+        "emailInvalid": "Địa chỉ email không hợp lệ",
+        "tableOccupied": "Bàn này đã có khách",
+        "tableOccupiedDesc": "Bàn này đã có người khác sử dụng. Vui lòng chọn bàn khác.",
+        "updateFailed": "Không thể cập nhật trạng thái bàn. Vui lòng thử lại."
       }
     },
     "footer": "Ẩm thực Việt Nam thủ công"

@@ -45,27 +45,34 @@ export default function MenuListingClient({ initialMenuData, locale }: Props) {
     useEffect(() => {
         if (typeof window !== 'undefined') {
             try {
-                // Khôi phục cart
-                const savedCart = sessionStorage.getItem(CART_STORAGE_KEY);
-                if (savedCart) {
-                    setCartItems(JSON.parse(savedCart));
-                }
-
-                // Khôi phục current order id
-                const savedOrderId = sessionStorage.getItem(CURRENT_ORDER_ID_KEY);
-                if (savedOrderId) {
-                    setCurrentOrderId(Number(savedOrderId));
-                }
-
                 // Khôi phục table number từ URL params hoặc sessionStorage
                 const tableFromUrl = searchParams.get("table");
                 const savedTable = sessionStorage.getItem(TABLE_STORAGE_KEY);
                 
                 if (tableFromUrl) {
+                    // URL có table parameter - set và lưu vào sessionStorage
                     setTableNumber(tableFromUrl);
                     sessionStorage.setItem(TABLE_STORAGE_KEY, tableFromUrl);
-                } else if (savedTable) {
-                    setTableNumber(savedTable);
+                    
+                    // Khôi phục cart
+                    const savedCart = sessionStorage.getItem(CART_STORAGE_KEY);
+                    if (savedCart) {
+                        setCartItems(JSON.parse(savedCart));
+                    }
+
+                    // Khôi phục current order id
+                    const savedOrderId = sessionStorage.getItem(CURRENT_ORDER_ID_KEY);
+                    if (savedOrderId) {
+                        setCurrentOrderId(Number(savedOrderId));
+                    }
+                } else {
+                    // URL không có table parameter - xóa tất cả data liên quan
+                    sessionStorage.removeItem(TABLE_STORAGE_KEY);
+                    sessionStorage.removeItem(CART_STORAGE_KEY);
+                    sessionStorage.removeItem(CURRENT_ORDER_ID_KEY);
+                    setTableNumber("");
+                    setCartItems([]);
+                    setCurrentOrderId(null);
                 }
             } catch (error) {
                 console.error("Error loading from localStorage:", error);

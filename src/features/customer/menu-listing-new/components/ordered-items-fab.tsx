@@ -37,7 +37,7 @@ interface CustomerOrderHistory {
   tableCode: string;
   totalItems: number;
   estimatedTotal: number;
-  rounds: Array<{ items: OrderItemData[] }>;
+  items: OrderItemData[];
 }
 
 // ─── Status configs ───────────────────────────────────────────────────────
@@ -217,8 +217,8 @@ export function OrderHistoryFAB({ tableCode, tableNumber, dishNameMap = {}, refr
       .catch(() => { /* ignore silent errors */ });
   }, [refreshTrigger]);
 
-  // Flatten all items from all rounds into one list
-  const allItems: OrderItemData[] = history?.rounds.flatMap((r) => r.items) ?? [];
+  // All items from history
+  const allItems: OrderItemData[] = history?.items ?? [];
   const totalItems = history?.totalItems ?? 0;
   const estimatedTotal = history?.estimatedTotal ?? 0;
 

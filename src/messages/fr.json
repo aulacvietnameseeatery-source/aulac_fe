@@ -497,7 +497,10 @@
       "skipToMenu": "Ignorer, voir le menu",
       "errors": {
         "phoneRequired": "Le numéro de téléphone est requis",
-        "emailInvalid": "Adresse e-mail invalide"
+        "emailInvalid": "Adresse e-mail invalide",
+        "tableOccupied": "Cette table est déjà occupée",
+        "tableOccupiedDesc": "Cette table est utilisée par un autre client. Veuillez choisir une autre table.",
+        "updateFailed": "Échec de la mise à jour du statut de la table. Veuillez réessayer."
       }
     },
     "footer": "Cuisine Vietnamienne Artisanale"
