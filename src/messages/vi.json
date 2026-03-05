@@ -1468,5 +1468,43 @@
       "confirm": "Xác nhận",
       "cancel": "Hủy"
     }
+  },
+  "ReservationManagement": {
+    "List": {
+      "title": "Danh sách đặt bàn",
+      "searchPlaceholder": "Tìm tên khách, số điện thoại...",
+      "addNew": "Thêm mới",
+      "all": "Tất cả",
+      "empty": "Không tìm thấy đơn đặt bàn nào"
+    },
+    "Card": {
+      "table": "Bàn",
+      "guests": "Khách",
+      "createdOn": "Tạo lúc",
+      "status": "Trạng thái",
+      "late": "Trễ giờ",
+      "viewNote": "Ghi chú",
+      "customerNotes": "Ghi chú của khách:",
+      "noNotes": "Không có yêu cầu đặc biệt hay gọi món trước.",
+      "checkIn": "Nhận bàn",
+      "na": "Chưa xếp"
+    },
+    "CheckInModal": {
+      "title": "Khách nhận bàn",
+      "arrivalMsg": "{name} đã đến nhận bàn lúc {time} ({pax} khách).",
+      "assignTable": "Xếp bàn",
+      "selectPlaceholder": "-- Chọn một bàn trống --",
+      "noTablesAvailable": "Hiện không có bàn trống",
+      "tableOption": "{code} ({zone} - Sức chứa: {capacity})",
+      "capacityHint": "Gợi ý: Hãy xếp khách vào bàn có sức chứa ≥ {pax}",
+      "cancel": "Hủy bỏ",
+      "confirm": "Xác nhận",
+      "loading": "Đang tải danh sách bàn..."
+    },
+    "Messages": {
+      "checkInSuccess": "Khách nhận bàn thành công!",
+      "checkInFail": "Lỗi khi cập nhật nhận bàn",
+      "loadTablesFail": "Lỗi khi tải danh sách bàn trống."
+    }
   }
 }

@@ -1468,5 +1468,43 @@
       "confirm": "Confirm",
       "cancel": "Cancel"
     }
+  },
+  "ReservationManagement": {
+    "List": {
+      "title": "Reservations",
+      "searchPlaceholder": "Search customer, phone...",
+      "addNew": "Add New",
+      "all": "All",
+      "empty": "No reservations found"
+    },
+    "Card": {
+      "table": "Table",
+      "guests": "Guests",
+      "createdOn": "Created on",
+      "status": "Status",
+      "late": "Late",
+      "viewNote": "View Note",
+      "customerNotes": "Customer Notes:",
+      "noNotes": "No special requests or pre-orders for this reservation.",
+      "checkIn": "Check In",
+      "na": "N/A"
+    },
+    "CheckInModal": {
+      "title": "Check-in Guest",
+      "arrivalMsg": "{name} has arrived for their {time} reservation ({pax} guests).",
+      "assignTable": "Assign Table",
+      "selectPlaceholder": "-- Select an available table --",
+      "noTablesAvailable": "No tables available",
+      "tableOption": "{code} ({zone} - Capacity: {capacity})",
+      "capacityHint": "Hint: Try to assign a table with capacity ≥ {pax}",
+      "cancel": "Cancel",
+      "confirm": "Confirm Check-in",
+      "loading": "Loading tables..."
+    },
+    "Messages": {
+      "checkInSuccess": "Guest checked in successfully!",
+      "checkInFail": "Failed to check in reservation",
+      "loadTablesFail": "Failed to load available tables."
+    }
   }
 }

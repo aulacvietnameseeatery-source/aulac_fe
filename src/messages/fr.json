@@ -1414,5 +1414,43 @@
       "confirm": "Confirmer",
       "cancel": "Annuler"
     }
+  },
+  "ReservationManagement": {
+    "List": {
+      "title": "Réservations",
+      "searchPlaceholder": "Rechercher un client, un téléphone...",
+      "addNew": "Nouveau",
+      "all": "Tout",
+      "empty": "Aucune réservation trouvée"
+    },
+    "Card": {
+      "table": "Table",
+      "guests": "Invités",
+      "createdOn": "Créé le",
+      "status": "Statut",
+      "late": "En retard",
+      "viewNote": "Voir la note",
+      "customerNotes": "Notes du client :",
+      "noNotes": "Aucune demande spéciale ou précommande pour cette réservation.",
+      "checkIn": "Enregistrer",
+      "na": "N/D"
+    },
+    "CheckInModal": {
+      "title": "Enregistrement du client",
+      "arrivalMsg": "{name} est arrivé(e) pour sa réservation de {time} ({pax} invités).",
+      "assignTable": "Attribuer une table",
+      "selectPlaceholder": "-- Sélectionnez une table disponible --",
+      "noTablesAvailable": "Aucune table disponible",
+      "tableOption": "{code} ({zone} - Capacité : {capacity})",
+      "capacityHint": "Astuce : Essayez d'attribuer une table avec une capacité ≥ {pax}",
+      "cancel": "Annuler",
+      "confirm": "Confirmer",
+      "loading": "Chargement des tables..."
+    },
+    "Messages": {
+      "checkInSuccess": "Client enregistré avec succès !",
+      "checkInFail": "Échec de l'enregistrement de la réservation",
+      "loadTablesFail": "Échec du chargement des tables disponibles."
+    }
   }
 }
