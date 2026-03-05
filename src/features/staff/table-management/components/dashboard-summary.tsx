@@ -14,11 +14,8 @@ import {
   MapPin,
   User,
 } from "lucide-react";
-import type { RestaurantTable, TableZone, TableStatus } from "../types";
-import {
-  TABLE_STATUS_CONFIG,
-  TABLE_ZONE_LABELS,
-} from "../types";
+import type { RestaurantTable, TableStatus } from "../types";
+import { TABLE_STATUS_CONFIG } from "../types";
 
 /* ─── Props ──────────────────────────────────────────────── */
 
@@ -103,7 +100,7 @@ interface IncomingReservation {
   pax: number;
   reservedTime: string; // ISO string
   tableCode: string;
-  zone: TableZone;
+  zoneName: string;
   status: "PENDING" | "CONFIRMED";
   preOrderSummary?: string;
 }
@@ -115,7 +112,7 @@ const MOCK_RESERVATIONS: IncomingReservation[] = [
     pax: 4,
     reservedTime: new Date(Date.now() + 25 * 60_000).toISOString(),
     tableCode: "T-03",
-    zone: "INDOOR",
+    zoneName: "Indoor",
     status: "CONFIRMED",
     preOrderSummary: "2× Pho, 1× Spring Roll",
   },
@@ -125,7 +122,7 @@ const MOCK_RESERVATIONS: IncomingReservation[] = [
     pax: 6,
     reservedTime: new Date(Date.now() + 55 * 60_000).toISOString(),
     tableCode: "T-12",
-    zone: "OUTDOOR",
+    zoneName: "Outdoor",
     status: "CONFIRMED",
   },
   {
@@ -134,7 +131,7 @@ const MOCK_RESERVATIONS: IncomingReservation[] = [
     pax: 8,
     reservedTime: new Date(Date.now() + 90 * 60_000).toISOString(),
     tableCode: "V-01",
-    zone: "OUTDOOR",
+    zoneName: "Rooftop",
     status: "PENDING",
     preOrderSummary: "3× Wagyu Set",
   },
@@ -144,7 +141,7 @@ const MOCK_RESERVATIONS: IncomingReservation[] = [
     pax: 2,
     reservedTime: new Date(Date.now() + 130 * 60_000).toISOString(),
     tableCode: "P-01",
-    zone: "OUTDOOR",
+    zoneName: "Indoor",
     status: "PENDING",
   },
 ];
@@ -213,7 +210,7 @@ const ReservationCard: React.FC<{ r: IncomingReservation }> = ({ r }) => {
         <span>·</span>
         <MapPin size={10} className="shrink-0" />
         <span className="truncate">
-          {r.tableCode} · {TABLE_ZONE_LABELS[r.zone]}
+          {r.tableCode} · {r.zoneName}
         </span>
       </div>
 
@@ -240,8 +237,7 @@ export const DashboardSummary: React.FC<DashboardSummaryProps> = ({
       AVAILABLE: 0,
       OCCUPIED: 0,
       RESERVED: 0,
-      CLEANING: 0,
-      OUT_OF_SERVICE: 0,
+      LOCKED: 0,
     };
     tables.forEach((t) => counts[t.status]++);
 

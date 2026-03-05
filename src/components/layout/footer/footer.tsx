@@ -3,7 +3,9 @@
 import Link from "next/link";
 import { Facebook, Instagram, ArrowRight } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { BackToTop } from "@/components/ui/back-to-top"; // Import component mới
+import { BackToTop } from "@/components/ui/back-to-top";
+import {cn} from "@/lib/utils";
+import Image from "next/image"; // Import component mới
 
 interface FooterProps {
     locale?: string;
@@ -22,9 +24,15 @@ export function Footer({ locale = "en" }: FooterProps) {
                     {/* CỘT 1: BRAND (Full width mobile) */}
                     <div className="footer-brand-col flex flex-col gap-[20px] md:gap-[28px]">
                         <div className="flex items-center gap-3">
-                            <div className="relative w-9 h-11">
-                                <div className="absolute left-[1.5px] top-[5.5px] w-[33px] h-[31.5px] bg-[#C9A961]" />
-                            </div>
+                            <Image
+                                src="/images/logo.png"
+                                alt="An Lac Logo"
+                                width={80}
+                                height={80}
+                                className={cn(
+                                    "object-contain transition-all duration-500 drop-shadow-[0_0_8px_rgba(197,160,89,0.3)]"
+                                )}
+                            />
                             <span className="footer-brand-title">
                                 An Lac
                             </span>

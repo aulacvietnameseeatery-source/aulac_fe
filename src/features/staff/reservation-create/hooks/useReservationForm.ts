@@ -80,26 +80,26 @@ export const useReservationForm = (t: (key: string, values?: any) => string) => 
   // Auto-fetch tables logic
   useEffect(() => {
     const fetchTables = async () => {
-        if (!date || !time || !partySize) {
+      if (!date || !time || !partySize) {
         setTables([]);
         return;
       }
       const isValid = validateDateTime(date, time);
       if (!isValid) {
         setTables([]);
-        return; 
+        return;
       }
-        setIsLoadingTables(true);
-        setIsTableChecked(true);
-        setSelectedTableId(null);
-        try {
-          const data = await reservationService.getAvailableTables(date, time, Number(partySize));
-          setTables(data);
-        } catch (error) {
+      setIsLoadingTables(true);
+      setIsTableChecked(true);
+      setSelectedTableId(null);
+      try {
+        const data = await reservationService.getAvailableTables(date, time, Number(partySize));
+        setTables(data);
+      } catch (error) {
 
-        } finally {
-          setIsLoadingTables(false);
-        }
+      } finally {
+        setIsLoadingTables(false);
+      }
     };
     const timer = setTimeout(fetchTables, 500);
     return () => clearTimeout(timer);
@@ -124,7 +124,6 @@ export const useReservationForm = (t: (key: string, values?: any) => string) => 
     const reservedTime = new Date(`${date}T${time}`).toISOString();
     try {
       const payload = {
-        lockToken: null,
         tableId: selectedTableId,
         customerName: fullName,
         phone: phone,
@@ -145,8 +144,8 @@ export const useReservationForm = (t: (key: string, values?: any) => string) => 
       });
 
       setTimeout(() => {
-          router.push('/dashboard/reservation'); 
-        }, 1500);
+        router.push('/dashboard/reservation');
+      }, 1500);
     } catch (error: any) {
       toast.error(t("errors.failTitle"), {
         description: error.message || t("errors.systemError"),

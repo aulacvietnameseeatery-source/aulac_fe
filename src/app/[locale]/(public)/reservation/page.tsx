@@ -82,54 +82,18 @@ function ReservationContent() {
   useEffect(() => {
     if (!connection) return;
 
-    const handleUpdate = (data: any) => {
-      if (data && data.lockedUntil) {
-        const until = new Date(data.lockedUntil).getTime();
-        const now = new Date().getTime();
-        const delay = until - now;
-        if (delay > 0) {
-          setTimeout(() => {
-            fetchAvailability();
-          }, delay + 1000); // Add 1s buffer
-        }
-      }
+    const handleUpdate = () => {
       fetchAvailability();
     };
 
-    connection.on("TableLocked", handleUpdate);
-    connection.on("TableUnlocked", handleUpdate);
     connection.on("ReservationCreated", handleUpdate);
     connection.on("ReservationStatusChanged", handleUpdate);
 
     return () => {
-      connection.off("TableLocked", handleUpdate);
-      connection.off("TableUnlocked", handleUpdate);
       connection.off("ReservationCreated", handleUpdate);
       connection.off("ReservationStatusChanged", handleUpdate);
     };
   }, [connection, fetchAvailability]);
-
-  // Set timeouts for existing locks in `tables`
-  useEffect(() => {
-    const timers: NodeJS.Timeout[] = [];
-    tables.forEach(t => {
-      if (!t.isAvailable && t.lockedUntil) {
-        const until = new Date(t.lockedUntil).getTime();
-        const now = new Date().getTime();
-        const delay = until - now;
-        if (delay > 0) {
-          const timer = setTimeout(() => {
-            fetchAvailability();
-          }, delay + 1000);
-          timers.push(timer);
-        }
-      }
-    });
-
-    return () => {
-      timers.forEach(clearTimeout);
-    };
-  }, [tables, fetchAvailability]);
 
 
   // Handle Selection

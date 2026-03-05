@@ -3,8 +3,10 @@
 import React from "react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
-import { Pencil, Trash2, QrCode } from "lucide-react";
+import { Pencil, Trash2, QrCode, CalendarClock, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { PermissionGuard } from "@/components/permission-guard";
+import { Permissions } from "@/types/const";
 import {
   Drawer,
   DrawerClose,
@@ -17,9 +19,10 @@ import {
 import type { RestaurantTable, TableStatus } from "../types";
 import {
   TABLE_STATUS_CONFIG,
-  TABLE_TYPE_LABELS,
-  TABLE_ZONE_LABELS,
+  ALLOWED_TRANSITIONS,
+  canTransitionTo,
 } from "../types";
+import { useTableDetailQuery } from "../hooks/use-table-queries";
 import StatusBadge from "./status-badge";
 
 interface TableDetailPanelProps {
@@ -31,13 +34,7 @@ interface TableDetailPanelProps {
   onStatusChange?: (tableId: number, status: TableStatus) => void;
 }
 
-const STATUS_ACTIONS: { status: TableStatus; label: string }[] = [
-  { status: "AVAILABLE", label: "Available" },
-  { status: "OCCUPIED", label: "Occupied" },
-  { status: "RESERVED", label: "Reserved" },
-  { status: "CLEANING", label: "Cleaning" },
-  { status: "OUT_OF_SERVICE", label: "Out of Service" },
-];
+const ALL_STATUSES: TableStatus[] = ["AVAILABLE", "OCCUPIED", "RESERVED", "LOCKED"];
 
 export const TableDetailPanel: React.FC<TableDetailPanelProps> = ({
   table,
@@ -47,9 +44,22 @@ export const TableDetailPanel: React.FC<TableDetailPanelProps> = ({
   onDelete,
   onStatusChange,
 }) => {
+  // Fetch full detail when panel is open
+  const { data: detailData } = useTableDetailQuery(
+    isOpen && table ? table.tableId : null
+  );
+
   if (!table) return null;
 
-  const config = TABLE_STATUS_CONFIG[table.status];
+  const config = TABLE_STATUS_CONFIG[table.status] ?? TABLE_STATUS_CONFIG.AVAILABLE;
+
+  // Use detail data for enriched fields, fall back to list data
+  const activeOrdersCount = detailData?.activeOrdersCount ?? table.activeOrders;
+  const hasErrors = detailData?.hasErrors ?? table.hasErrors;
+  const upcomingReservations = detailData?.upcomingReservations ?? [];
+  const images = detailData?.images ?? table.images ?? [];
+  const qrCodeUrl = detailData?.qrCodeUrl ?? table.qrCodeUrl;
+  const qrCodeImageUrl = detailData?.qrCodeImageUrl ?? table.qrCodeImageUrl;
 
   return (
     <Drawer open={isOpen} onOpenChange={(open) => !open && onClose()} direction="right">
@@ -85,10 +95,10 @@ export const TableDetailPanel: React.FC<TableDetailPanelProps> = ({
         {/* Scrollable Content */}
         <div className="flex-1 overflow-y-auto p-5 space-y-6">
           {/* Table image */}
-          {table.image && (
+          {images.length > 0 && (
             <div className="relative w-full h-44 rounded-lg overflow-hidden bg-gray-50">
               <Image
-                src={table.image}
+                src={images[0].url}
                 alt={table.tableCode}
                 fill
                 className="object-cover"
@@ -103,8 +113,8 @@ export const TableDetailPanel: React.FC<TableDetailPanelProps> = ({
               Details
             </h5>
             <div className="grid grid-cols-2 gap-4">
-              <InfoRow label="Zone" value={TABLE_ZONE_LABELS[table.zone]} />
-              <InfoRow label="Type" value={TABLE_TYPE_LABELS[table.type]} />
+              <InfoRow label="Zone" value={table.zoneName} />
+              <InfoRow label="Type" value={table.typeName} />
               <InfoRow label="Capacity" value={`${table.capacity} seats`} />
               <InfoRow
                 label="Connection"
@@ -121,10 +131,10 @@ export const TableDetailPanel: React.FC<TableDetailPanelProps> = ({
             <h5 className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
               Active Orders
             </h5>
-            {table.activeOrders > 0 ? (
+            {activeOrdersCount > 0 ? (
               <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 text-sm text-amber-700">
-                {table.activeOrders} active order
-                {table.activeOrders > 1 ? "s" : ""} on this table
+                {activeOrdersCount} active order
+                {activeOrdersCount > 1 ? "s" : ""} on this table
               </div>
             ) : (
               <p className="text-sm text-gray-400">No active orders</p>
@@ -132,7 +142,7 @@ export const TableDetailPanel: React.FC<TableDetailPanelProps> = ({
           </div>
 
           {/* Error info */}
-          {table.hasErrors && (
+          {hasErrors && (
             <div className="space-y-2">
               <h5 className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
                 Errors
@@ -143,83 +153,154 @@ export const TableDetailPanel: React.FC<TableDetailPanelProps> = ({
             </div>
           )}
 
+          {/* Upcoming Reservations */}
+          {upcomingReservations.length > 0 && (
+            <div className="space-y-2">
+              <h5 className="text-xs font-semibold text-gray-400 uppercase tracking-wider flex items-center gap-1.5">
+                <CalendarClock size={13} />
+                Upcoming Reservations ({upcomingReservations.length})
+              </h5>
+              <div className="space-y-2">
+                {upcomingReservations.map((r) => (
+                  <div
+                    key={r.reservationId}
+                    className="flex items-center justify-between rounded-lg border border-gray-100 bg-gray-50/60 p-3"
+                  >
+                    <div className="flex items-center gap-2 min-w-0">
+                      <User size={14} className="text-gray-400 shrink-0" />
+                      <div className="min-w-0">
+                        <p className="text-sm font-medium text-gray-700 truncate">
+                          {r.guestName}
+                        </p>
+                        <p className="text-[10px] text-gray-400">
+                          {r.pax} pax &middot;{" "}
+                          {new Date(r.reservedTime).toLocaleString([], {
+                            month: "short",
+                            day: "numeric",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })}
+                        </p>
+                      </div>
+                    </div>
+                    <span
+                      className={cn(
+                        "text-[10px] font-semibold px-2 py-0.5 rounded-full whitespace-nowrap",
+                        r.statusCode === "CONFIRMED"
+                          ? "bg-emerald-50 text-emerald-700"
+                          : "bg-gray-100 text-gray-500"
+                      )}
+                    >
+                      {r.statusCode === "CONFIRMED" ? "Confirmed" : "Pending"}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* QR Code */}
-          {table.qrCodeUrl && (
+          {(qrCodeUrl || qrCodeImageUrl) && (
             <div className="space-y-2">
               <h5 className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
                 QR Code
               </h5>
               <div className="bg-gray-50 rounded-lg p-4 flex flex-col items-center gap-2">
-                <QrCode size={64} className="text-gray-600" />
-                <span className="text-xs text-gray-400 break-all text-center">
-                  {table.qrCodeUrl}
-                </span>
+                {qrCodeImageUrl ? (
+                  <Image
+                    src={qrCodeImageUrl}
+                    alt="QR Code"
+                    width={96}
+                    height={96}
+                    className="rounded"
+                  />
+                ) : (
+                  <QrCode size={64} className="text-gray-600" />
+                )}
+                {qrCodeUrl && (
+                  <span className="text-xs text-gray-400 break-all text-center">
+                    {qrCodeUrl}
+                  </span>
+                )}
               </div>
             </div>
           )}
 
           {/* Quick status change */}
           {onStatusChange && (
-            <div className="space-y-2">
-              <h5 className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
-                Quick Status Change
-              </h5>
-              <div className="flex flex-wrap gap-2">
-                {STATUS_ACTIONS.map((action) => {
-                  const actionConf = TABLE_STATUS_CONFIG[action.status];
-                  const isActive = table.status === action.status;
-                  return (
-                    <button
-                      key={action.status}
-                      disabled={isActive}
-                      onClick={() =>
-                        onStatusChange(table.tableId, action.status)
-                      }
-                      className={cn(
-                        "text-xs px-3 py-1.5 rounded-full border transition-colors font-medium",
-                        isActive
-                          ? cn(
-                              actionConf.bgColor,
-                              actionConf.borderColor,
-                              actionConf.textColor,
-                              "cursor-default"
-                            )
-                          : "border-gray-200 text-gray-500 hover:border-gray-300 hover:bg-gray-50"
-                      )}
-                    >
-                      <span
+            <PermissionGuard permission={Permissions.UpdateTableStatus}>
+              <div className="space-y-2">
+                <h5 className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                  Quick Status Change
+                </h5>
+                <div className="flex flex-wrap gap-2">
+                  {ALL_STATUSES.map((status) => {
+                    const actionConf = TABLE_STATUS_CONFIG[status];
+                    const isActive = table.status === status;
+                    const isAllowed =
+                      isActive || canTransitionTo(table.status, status);
+                    return (
+                      <button
+                        key={status}
+                        disabled={isActive || !isAllowed}
+                        onClick={() =>
+                          onStatusChange(
+                            table.tableId,
+                            status
+                          )
+                        }
                         className={cn(
-                          "inline-block w-1.5 h-1.5 rounded-full mr-1.5",
-                          actionConf.dotColor
+                          "text-xs px-3 py-1.5 rounded-full border transition-colors font-medium",
+                          isActive
+                            ? cn(
+                                actionConf.bgColor,
+                                actionConf.borderColor,
+                                actionConf.textColor,
+                                "cursor-default"
+                              )
+                            : !isAllowed
+                            ? "border-gray-100 text-gray-300 cursor-not-allowed opacity-50"
+                            : "border-gray-200 text-gray-500 hover:border-gray-300 hover:bg-gray-50"
                         )}
-                      />
-                      {action.label}
-                    </button>
-                  );
-                })}
+                      >
+                        <span
+                          className={cn(
+                            "inline-block w-1.5 h-1.5 rounded-full mr-1.5",
+                            actionConf.dotColor
+                          )}
+                        />
+                        {actionConf.label}
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
-            </div>
+            </PermissionGuard>
           )}
         </div>
 
         {/* Footer actions */}
         <DrawerFooter className="border-t bg-gray-50 flex-row gap-3">
-          <Button
-            variant="outline"
-            className="flex-1"
-            onClick={() => onEdit(table)}
-          >
-            <Pencil size={14} className="mr-1.5" />
-            Edit
-          </Button>
-          <Button
-            variant="danger"
-            className="flex-1"
-            onClick={() => onDelete(table)}
-          >
-            <Trash2 size={14} className="mr-1.5" />
-            Delete
-          </Button>
+          <PermissionGuard permission={Permissions.EditTable}>
+            <Button
+              variant="outline"
+              className="flex-1"
+              onClick={() => onEdit(table)}
+            >
+              <Pencil size={14} className="mr-1.5" />
+              Edit
+            </Button>
+          </PermissionGuard>
+          <PermissionGuard permission={Permissions.DeleteTable}>
+            <Button
+              variant="danger"
+              className="flex-1"
+              onClick={() => onDelete(table)}
+            >
+              <Trash2 size={14} className="mr-1.5" />
+              Delete
+            </Button>
+          </PermissionGuard>
         </DrawerFooter>
       </DrawerContent>
     </Drawer>

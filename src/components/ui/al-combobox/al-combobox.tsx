@@ -90,6 +90,7 @@ const ALCombobox: React.FC<ALComboboxProps> = ({
   popoverClassName,
   maxHeight = 240,
   name,
+  titleAction,
 }) => {
   const [open, setOpen] = React.useState(false);
   const [search, setSearch] = React.useState("");
@@ -386,10 +387,13 @@ const ALCombobox: React.FC<ALComboboxProps> = ({
     <div className={cn("w-full", wrapperClassName)}>
       {/* Title / Label */}
       {title && (
-        <label className="al-cb-title">
-          {title}
-          {required && <span className="al-cb-required">*</span>}
-        </label>
+        <div className="flex items-center justify-between mb-1">
+          <label className="al-cb-title !mb-0">
+            {title}
+            {required && <span className="al-cb-required">*</span>}
+          </label>
+          {titleAction && <span>{titleAction}</span>}
+        </div>
       )}
 
       <PopoverPrimitive.Root

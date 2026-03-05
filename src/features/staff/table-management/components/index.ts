@@ -7,3 +7,4 @@ export { default as DashboardSummary } from "./dashboard-summary";
 export { default as ZoneSection } from "./zone-section";
 export { default as FilterBar } from "./filter-bar";
 export { default as TableDetailPanel } from "./table-detail-panel";
+export { default as AddZoneModal } from "./add-zone-modal";

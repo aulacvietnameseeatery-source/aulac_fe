@@ -17,20 +17,16 @@ import {
   WifiOff,
   Users,
 } from "lucide-react";
-import type { RestaurantTable, TableStatus, TableZone } from "../types";
-import {
-  TABLE_ZONE_LABELS,
-  TABLE_ZONE_ICONS,
-  TABLE_STATUS_CONFIG,
-} from "../types";
+import type { RestaurantTable, TableStatus } from "../types";
+import { TABLE_STATUS_CONFIG } from "../types";
 import TableCard from "./table-card";
 
 interface ZoneSectionProps {
-  zone: TableZone;
+  zone: string;
   tables: RestaurantTable[];
   collapsed?: boolean;
-  onToggleCollapse?: (zone: TableZone) => void;
-  onToggleZoneOnline?: (zone: TableZone, online: boolean) => void;
+  onToggleCollapse?: (zone: string) => void;
+  onToggleZoneOnline?: (zoneId: number, online: boolean) => void;
   maxHeight?: number;
   onEdit: (table: RestaurantTable) => void;
   onDelete: (table: RestaurantTable) => void;
@@ -38,10 +34,10 @@ interface ZoneSectionProps {
   onStatusChange?: (tableId: number, status: TableStatus) => void;
 }
 
-const ZONE_SUBTITLES: Record<TableZone, string> = {
-  INDOOR: "Main dining area",
-  OUTDOOR: "Al fresco seating",
-  ROOFTOP: "Upper-level terrace",
+const ZONE_SUBTITLES: Record<string, string> = {
+  Indoor: "Main dining area",
+  Outdoor: "Al fresco seating",
+  Rooftop: "Upper-level terrace",
 };
 
 export const ZoneSection: React.FC<ZoneSectionProps> = ({
@@ -84,13 +80,13 @@ export const ZoneSection: React.FC<ZoneSectionProps> = ({
           {/* Zone icon */}
           <div className="min-w-0">
             <CardTitle className="text-lg font-semibold text-gray-800 flex items-center gap-2">
-              {TABLE_ZONE_LABELS[zone]}
+              {zone}
               <span className="text-xs font-normal text-gray-400 bg-gray-100 rounded-full px-2 py-0.5">
                 {tables.length}
               </span>
             </CardTitle>
             <p className="text-[11px] text-gray-400 mt-0.5">
-              {ZONE_SUBTITLES[zone]}
+              {ZONE_SUBTITLES[zone] ?? zone}
             </p>
           </div>
         </div>
@@ -139,7 +135,7 @@ export const ZoneSection: React.FC<ZoneSectionProps> = ({
                   allOnline ? "text-emerald-600" : "text-gray-400"
                 )}
                 title={allOnline ? "Set zone offline" : "Set zone online"}
-                onClick={() => onToggleZoneOnline(zone, !allOnline)}
+                onClick={() => onToggleZoneOnline(tables[0]?.zoneId ?? 0, !allOnline)}
               >
                 {allOnline ? <Wifi size={14} /> : <WifiOff size={14} />}
               </Button>
@@ -172,6 +168,7 @@ export const ZoneSection: React.FC<ZoneSectionProps> = ({
                 { count: stats.available, color: TABLE_STATUS_CONFIG.AVAILABLE.dotColor },
                 { count: stats.occupied, color: TABLE_STATUS_CONFIG.OCCUPIED.dotColor },
                 { count: stats.reserved, color: TABLE_STATUS_CONFIG.RESERVED.dotColor },
+                { count: tables.filter((t) => t.status === "LOCKED").length, color: TABLE_STATUS_CONFIG.LOCKED.dotColor },
               ] as const)
                 .filter((seg) => seg.count > 0)
                 .map((seg, idx) => (

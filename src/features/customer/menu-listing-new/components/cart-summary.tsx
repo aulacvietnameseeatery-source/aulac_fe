@@ -16,6 +16,8 @@ interface CartSummaryProps {
     onUpdateNote: (id: string, note: string) => void;
     onConfirm: () => void;
     className?: string;
+    forceClose?: boolean;
+    onOpenChange?: (isOpen: boolean) => void;
 }
 
 export function CartSummary({
@@ -26,7 +28,9 @@ export function CartSummary({
                                 onRemoveItem,
                                 onUpdateNote,
                                 onConfirm,
-                                className
+                                className,
+                                forceClose = false,
+                                onOpenChange
                             }: CartSummaryProps) {
     const t = useTranslations("MenuListing.CartSummary");
     const controls = useAnimation();
@@ -99,7 +103,15 @@ export function CartSummary({
     const handleExpandToggle = useCallback((e: React.MouseEvent) => {
         e.stopPropagation();
         setIsExpanded(false);
-    }, []);
+        onOpenChange?.(false);
+    }, [onOpenChange]);
+
+    // Listen to forceClose prop to close popup when other popup opens
+    useEffect(() => {
+        if (forceClose && isExpanded) {
+            setIsExpanded(false);
+        }
+    }, [forceClose, isExpanded]);
 
     // --- 2. COMPONENT CON: NỘI DUNG LÁ TO (DESKTOP) ---
     const CartContentOld = ({ isOverlay = false }: { isOverlay?: boolean }) => (
@@ -237,7 +249,12 @@ export function CartSummary({
             animate={{ opacity: 1, scale: isBumping && !isExpanded ? 1.1 : 1 }}
             exit={{ opacity: 0, scale: 0.8 }}
             transition={{ type: "spring", stiffness: 300, damping: 25 }}
-            onClick={() => !isExpanded && setIsExpanded(true)}
+            onClick={() => {
+                if (!isExpanded) {
+                    setIsExpanded(true);
+                    onOpenChange?.(true);
+                }
+            }}
             style={{ willChange: 'transform, opacity' }}
             className={cn(
                 "bg-[#204560] overflow-hidden transition-all duration-300 shadow-[0px_10px_40px_-10px_rgba(0,0,0,0.5)]",
