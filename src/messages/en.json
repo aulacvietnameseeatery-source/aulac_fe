@@ -1461,7 +1461,7 @@
     "roles": "Roles",
     "dish": "Dish",
     "dishCategory": "Dish Category",
-    "ingredient": "Ingredient",
+    "ingredients": "Ingredients",
     "suppliers": "Suppliers",
     "coupons": "Coupons",
     "orders": "Orders",
@@ -1602,6 +1602,39 @@
       "checkInSuccess": "Guest checked in successfully!",
       "checkInFail": "Failed to check in reservation",
       "loadTablesFail": "Failed to load available tables."
+    }
+  },
+  "Ingredient": {
+    "List": {
+      "title": "Ingredients",
+      "description": "Manage inventory, recipe items, and stock levels.",
+      "searchPlaceholder": "Search ingredients...",
+      "addNew": "Add Ingredient",
+      "export": "Export",
+      "import": "Import",
+      "importing": "Importing...",
+      "table": {
+        "ingredientName": "Ingredient Name",
+        "unit": "Unit",
+        "category": "Category",
+        "uncategorized": "Uncategorized",
+        "suppliers": "Suppliers",
+        "inStock": "In Stock",
+        "lowStock": "Low Stock"
+      },
+      "notifications": {
+        "deleteConfirm": "Are you sure you want to delete {name}?",
+        "deleteSuccess": "Ingredient deleted successfully.",
+        "deleteError": "Failed to delete ingredient.",
+        "createSuccess": "Ingredient created successfully!",
+        "updateSuccess": "Ingredient updated successfully!",
+        "actionError": "Operation failed.",
+        "noDataExport": "No data to export.",
+        "exportSuccess": "Exported successfully!",
+        "invalidExcel": "No valid ingredients found in the Excel file.",
+        "importSuccess": "Successfully imported {success}/{total} ingredients.",
+        "readExcelError": "Failed to read Excel file. Please check the format."
+      }
     }
   }
 }

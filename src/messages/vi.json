@@ -1461,7 +1461,7 @@
     "roles": "Vai trò",
     "dish": "Món ăn",
     "dishCategory": "Danh mục món",
-    "ingredient": "Nguyên liệu",
+    "ingredients": "Nguyên liệu",
     "suppliers": "Nhà cung cấp",
     "coupons": "Mã giảm giá",
     "orders": "Đơn hàng",
@@ -1602,6 +1602,39 @@
       "checkInSuccess": "Khách nhận bàn thành công!",
       "checkInFail": "Lỗi khi cập nhật nhận bàn",
       "loadTablesFail": "Lỗi khi tải danh sách bàn trống."
+    }
+  },
+  "Ingredient": {
+    "List": {
+      "title": "Kho Nguyên Liệu",
+      "description": "Quản lý kho, nguyên liệu công thức và mức tồn kho.",
+      "searchPlaceholder": "Tìm kiếm nguyên liệu...",
+      "addNew": "Thêm nguyên liệu",
+      "export": "Xuất Excel",
+      "import": "Nhập Excel",
+      "importing": "Đang nhập...",
+      "table": {
+        "ingredientName": "Tên Nguyên Liệu",
+        "unit": "ĐVT",
+        "category": "Danh mục",
+        "uncategorized": "Chưa phân loại",
+        "suppliers": "Nhà cung cấp",
+        "inStock": "Tồn kho",
+        "lowStock": "Sắp hết hàng"
+      },
+      "notifications": {
+        "deleteConfirm": "Bạn có chắc chắn muốn xóa {name} không?",
+        "deleteSuccess": "Đã xóa nguyên liệu thành công.",
+        "deleteError": "Xóa nguyên liệu thất bại.",
+        "createSuccess": "Thêm mới nguyên liệu thành công!",
+        "updateSuccess": "Cập nhật nguyên liệu thành công!",
+        "actionError": "Thao tác thất bại.",
+        "noDataExport": "Không có dữ liệu để xuất.",
+        "exportSuccess": "Xuất file thành công!",
+        "invalidExcel": "Không tìm thấy nguyên liệu hợp lệ trong file Excel.",
+        "importSuccess": "Đã nhập thành công {success}/{total} nguyên liệu.",
+        "readExcelError": "Lỗi đọc file Excel. Vui lòng kiểm tra lại định dạng."
+      }
     }
   }
 }

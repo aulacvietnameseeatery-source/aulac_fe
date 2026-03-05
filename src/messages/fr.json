@@ -1392,7 +1392,7 @@
     "roles": "Rôles",
     "dish": "Plats",
     "dishCategory": "Catégorie de plat",
-    "ingredient": "Ingrédients",
+    "ingredients": "Ingrédients",
     "suppliers": "Fournisseurs",
     "coupons": "Coupons",
     "orders": "Commandes",
@@ -1533,6 +1533,39 @@
       "checkInSuccess": "Client enregistré avec succès !",
       "checkInFail": "Échec de l'enregistrement de la réservation",
       "loadTablesFail": "Échec du chargement des tables disponibles."
+    }
+  },
+  "Ingredient": {
+    "List": {
+      "title": "Ingrédients",
+      "description": "Gérer l'inventaire, les articles de recette et les niveaux de stock.",
+      "searchPlaceholder": "Rechercher des ingrédients...",
+      "addNew": "Ajouter un ingrédient",
+      "export": "Exporter",
+      "import": "Importer",
+      "importing": "Importation...",
+      "table": {
+        "ingredientName": "Nom de l'ingrédient",
+        "unit": "Unité",
+        "category": "Catégorie",
+        "uncategorized": "Non catégorisé",
+        "suppliers": "Fournisseurs",
+        "inStock": "En stock",
+        "lowStock": "Stock faible"
+      },
+      "notifications": {
+        "deleteConfirm": "Êtes-vous sûr de vouloir supprimer {name} ?",
+        "deleteSuccess": "Ingrédient supprimé avec succès.",
+        "deleteError": "Échec de la suppression de l'ingrédient.",
+        "createSuccess": "Ingrédient créé avec succès !",
+        "updateSuccess": "Ingrédient mis à jour avec succès !",
+        "actionError": "L'opération a échoué.",
+        "noDataExport": "Aucune donnée à exporter.",
+        "exportSuccess": "Exporté avec succès !",
+        "invalidExcel": "Aucun ingrédient valide trouvé dans le fichier Excel.",
+        "importSuccess": "{success}/{total} ingrédients importés avec succès.",
+        "readExcelError": "Échec de la lecture du fichier Excel. Veuillez vérifier le format."
+      }
     }
   }
 }
