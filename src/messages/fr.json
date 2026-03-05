@@ -21,7 +21,7 @@
     "newsletter": "Newsletter",
     "newsletter_desc": "Rejoignez notre cercle pour des événements exclusifs et\ndes avant-premières de créations saisonnières.",
     "email_placeholder": "Adresse e-mail",
-    "copyright": "© 2026 Au Lac Table Vietnamienne. Tous droits réservés.",
+    "copyright": "© 2026 An Lac Table Vietnamienne. Tous droits réservés.",
     "privacy": "Confidentialité",
     "terms": "Conditions",
     "sitemap": "Plan du site"
@@ -36,7 +36,7 @@
       "label": "Les Artisans",
       "title": "Maîtriser l’âme du goût",
       "chef_1_name": "Chef Exécutif Minh",
-      "chef_1_quote": "\"La cuisine est un pont entre l’histoire et les sens. Chez Au Lac, nous ne cuisinons pas seulement ; nous façonnons des souvenirs à travers des épices ancestrales et des textures modernes.\"",
+      "chef_1_quote": "\"La cuisine est un pont entre l’histoire et les sens. Chez An Lac, nous ne cuisinons pas seulement ; nous façonnons des souvenirs à travers des épices ancestrales et des textures modernes.\"",
       "chef_2_name": "Sous-cheffe Linh",
       "chef_2_quote": "\"L’équilibre est notre boussole. Le contraste entre chaud et froid, croquant et fondant, sucré et salé définit l’identité vietnamienne.\"",
       "cta": "Découvrir leur histoire"
@@ -176,7 +176,7 @@
     },
     "Video": {
       "title": "La Préparation Culinaire",
-      "subtitle": "Un Film par Au Lac",
+      "subtitle": "Un Film par An Lac",
       "duration_label": "Durée",
       "duration_value": "02:45 MIN",
       "resolution_label": "Résolution",
@@ -255,7 +255,7 @@
     "BookingModal": {
       "selectedTable": "Table sélectionnée",
       "title": "Confirmer la réservation",
-      "restaurantName": "Au Lac – Cuisine Vietnamienne",
+      "restaurantName": "An Lac – Cuisine Vietnamienne",
       "date": "Date",
       "time": "Heure",
       "guests": "Convives",
@@ -416,7 +416,7 @@
       }
     },
     "Footer": {
-      "copyright": "© 2024 Au Lac Vietnamese Eatery - Genève. Tous droits réservés."
+      "copyright": "© 2024 An Lac Vietnamese Eatery - Genève. Tous droits réservés."
     }
   },
   "MenuListing": {
@@ -482,7 +482,7 @@
     }
   },
   "FillInforCustomer": {
-    "title": "Bienvenue chez Au Lac",
+    "title": "Bienvenue chez An Lac",
     "subtitle": "Veuillez fournir vos informations pour commencer votre voyage culinaire",
     "form": {
       "fullName": "Nom Complet",
@@ -497,7 +497,10 @@
       "skipToMenu": "Ignorer, voir le menu",
       "errors": {
         "phoneRequired": "Le numéro de téléphone est requis",
-        "emailInvalid": "Adresse e-mail invalide"
+        "emailInvalid": "Adresse e-mail invalide",
+        "tableOccupied": "Cette table est déjà occupée",
+        "tableOccupiedDesc": "Cette table est utilisée par un autre client. Veuillez choisir une autre table.",
+        "updateFailed": "Échec de la mise à jour du statut de la table. Veuillez réessayer."
       }
     },
     "footer": "Cuisine Vietnamienne Artisanale"
