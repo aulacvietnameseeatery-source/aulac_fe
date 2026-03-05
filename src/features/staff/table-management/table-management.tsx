@@ -270,7 +270,7 @@ const TableManagement: React.FC = () => {
               Add Zone
             </Button>
             <Button
-              variant="primary"
+              variant="outline"
               size="sm"
               onClick={() => setIsAddModalOpen(true)}
             >

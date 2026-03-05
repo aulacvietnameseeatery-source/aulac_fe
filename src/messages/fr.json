@@ -1392,7 +1392,7 @@
     "roles": "Rôles",
     "dish": "Plats",
     "dishCategory": "Catégorie de plat",
-    "ingredient": "Ingrédients",
+    "ingredients": "Ingrédients",
     "suppliers": "Fournisseurs",
     "coupons": "Coupons",
     "orders": "Commandes",
@@ -1495,6 +1495,77 @@
       "placeholder": "Entrez la raison...",
       "confirm": "Confirmer",
       "cancel": "Annuler"
+    }
+  },
+  "ReservationManagement": {
+    "List": {
+      "title": "Réservations",
+      "searchPlaceholder": "Rechercher un client, un téléphone...",
+      "addNew": "Nouveau",
+      "all": "Tout",
+      "empty": "Aucune réservation trouvée"
+    },
+    "Card": {
+      "table": "Table",
+      "guests": "Invités",
+      "createdOn": "Créé le",
+      "status": "Statut",
+      "late": "En retard",
+      "viewNote": "Voir la note",
+      "customerNotes": "Notes du client :",
+      "noNotes": "Aucune demande spéciale ou précommande pour cette réservation.",
+      "checkIn": "Enregistrer",
+      "na": "N/D"
+    },
+    "CheckInModal": {
+      "title": "Enregistrement du client",
+      "arrivalMsg": "{name} est arrivé(e) pour sa réservation de {time} ({pax} invités).",
+      "assignTable": "Attribuer une table",
+      "selectPlaceholder": "-- Sélectionnez une table disponible --",
+      "noTablesAvailable": "Aucune table disponible",
+      "tableOption": "{code} ({zone} - Capacité : {capacity})",
+      "capacityHint": "Astuce : Essayez d'attribuer une table avec une capacité ≥ {pax}",
+      "cancel": "Annuler",
+      "confirm": "Confirmer",
+      "loading": "Chargement des tables..."
+    },
+    "Messages": {
+      "checkInSuccess": "Client enregistré avec succès !",
+      "checkInFail": "Échec de l'enregistrement de la réservation",
+      "loadTablesFail": "Échec du chargement des tables disponibles."
+    }
+  },
+  "Ingredient": {
+    "List": {
+      "title": "Ingrédients",
+      "description": "Gérer l'inventaire, les articles de recette et les niveaux de stock.",
+      "searchPlaceholder": "Rechercher des ingrédients...",
+      "addNew": "Ajouter un ingrédient",
+      "export": "Exporter",
+      "import": "Importer",
+      "importing": "Importation...",
+      "table": {
+        "ingredientName": "Nom de l'ingrédient",
+        "unit": "Unité",
+        "category": "Catégorie",
+        "uncategorized": "Non catégorisé",
+        "suppliers": "Fournisseurs",
+        "inStock": "En stock",
+        "lowStock": "Stock faible"
+      },
+      "notifications": {
+        "deleteConfirm": "Êtes-vous sûr de vouloir supprimer {name} ?",
+        "deleteSuccess": "Ingrédient supprimé avec succès.",
+        "deleteError": "Échec de la suppression de l'ingrédient.",
+        "createSuccess": "Ingrédient créé avec succès !",
+        "updateSuccess": "Ingrédient mis à jour avec succès !",
+        "actionError": "L'opération a échoué.",
+        "noDataExport": "Aucune donnée à exporter.",
+        "exportSuccess": "Exporté avec succès !",
+        "invalidExcel": "Aucun ingrédient valide trouvé dans le fichier Excel.",
+        "importSuccess": "{success}/{total} ingrédients importés avec succès.",
+        "readExcelError": "Échec de la lecture du fichier Excel. Veuillez vérifier le format."
+      }
     }
   }
 }

@@ -11,6 +11,9 @@ export interface ReservationDto {
     statusName: string;
     preOrderSummary?: string; // Có thể null
     createdAt?: string;
+    // --- THÊM TRƯỜNG CHO BÀN ---
+    tableId?: number | null;
+    tableName?: string | null;
 }
 
 export interface ReservationStatusDto {

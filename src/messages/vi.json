@@ -1461,7 +1461,7 @@
     "roles": "Vai trò",
     "dish": "Món ăn",
     "dishCategory": "Danh mục món",
-    "ingredient": "Nguyên liệu",
+    "ingredients": "Nguyên liệu",
     "suppliers": "Nhà cung cấp",
     "coupons": "Mã giảm giá",
     "orders": "Đơn hàng",
@@ -1564,6 +1564,77 @@
       "placeholder": "Nhập lý do...",
       "confirm": "Xác nhận",
       "cancel": "Hủy"
+    }
+  },
+  "ReservationManagement": {
+    "List": {
+      "title": "Danh sách đặt bàn",
+      "searchPlaceholder": "Tìm tên khách, số điện thoại...",
+      "addNew": "Thêm mới",
+      "all": "Tất cả",
+      "empty": "Không tìm thấy đơn đặt bàn nào"
+    },
+    "Card": {
+      "table": "Bàn",
+      "guests": "Khách",
+      "createdOn": "Tạo lúc",
+      "status": "Trạng thái",
+      "late": "Trễ giờ",
+      "viewNote": "Ghi chú",
+      "customerNotes": "Ghi chú của khách:",
+      "noNotes": "Không có yêu cầu đặc biệt hay gọi món trước.",
+      "checkIn": "Nhận bàn",
+      "na": "Chưa xếp"
+    },
+    "CheckInModal": {
+      "title": "Khách nhận bàn",
+      "arrivalMsg": "{name} đã đến nhận bàn lúc {time} ({pax} khách).",
+      "assignTable": "Xếp bàn",
+      "selectPlaceholder": "-- Chọn một bàn trống --",
+      "noTablesAvailable": "Hiện không có bàn trống",
+      "tableOption": "{code} ({zone} - Sức chứa: {capacity})",
+      "capacityHint": "Gợi ý: Hãy xếp khách vào bàn có sức chứa ≥ {pax}",
+      "cancel": "Hủy bỏ",
+      "confirm": "Xác nhận",
+      "loading": "Đang tải danh sách bàn..."
+    },
+    "Messages": {
+      "checkInSuccess": "Khách nhận bàn thành công!",
+      "checkInFail": "Lỗi khi cập nhật nhận bàn",
+      "loadTablesFail": "Lỗi khi tải danh sách bàn trống."
+    }
+  },
+  "Ingredient": {
+    "List": {
+      "title": "Kho Nguyên Liệu",
+      "description": "Quản lý kho, nguyên liệu công thức và mức tồn kho.",
+      "searchPlaceholder": "Tìm kiếm nguyên liệu...",
+      "addNew": "Thêm nguyên liệu",
+      "export": "Xuất Excel",
+      "import": "Nhập Excel",
+      "importing": "Đang nhập...",
+      "table": {
+        "ingredientName": "Tên Nguyên Liệu",
+        "unit": "ĐVT",
+        "category": "Danh mục",
+        "uncategorized": "Chưa phân loại",
+        "suppliers": "Nhà cung cấp",
+        "inStock": "Tồn kho",
+        "lowStock": "Sắp hết hàng"
+      },
+      "notifications": {
+        "deleteConfirm": "Bạn có chắc chắn muốn xóa {name} không?",
+        "deleteSuccess": "Đã xóa nguyên liệu thành công.",
+        "deleteError": "Xóa nguyên liệu thất bại.",
+        "createSuccess": "Thêm mới nguyên liệu thành công!",
+        "updateSuccess": "Cập nhật nguyên liệu thành công!",
+        "actionError": "Thao tác thất bại.",
+        "noDataExport": "Không có dữ liệu để xuất.",
+        "exportSuccess": "Xuất file thành công!",
+        "invalidExcel": "Không tìm thấy nguyên liệu hợp lệ trong file Excel.",
+        "importSuccess": "Đã nhập thành công {success}/{total} nguyên liệu.",
+        "readExcelError": "Lỗi đọc file Excel. Vui lòng kiểm tra lại định dạng."
+      }
     }
   }
 }

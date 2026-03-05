@@ -55,7 +55,7 @@ const navigation = [
     items: [
       { key: "dish", href: "/dashboard/dish", icon: UtensilsCrossed },
       { key: "dishCategory", href: "/dashboard/dish-category", icon: FolderOpen },
-      { key: "ingredient", href: "/dashboard/ingredient", icon: Package },
+      { key: "ingredients", href: "/dashboard/ingredients", icon: Package },
       { key: "suppliers", href: "/dashboard/suppliers", icon: Truck },
       { key: "coupons", href: "/dashboard/coupons", icon: TicketPercent },
     ]
