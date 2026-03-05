@@ -839,6 +839,84 @@
       }
     }
   },
+  "Supplier": {
+    "List": {
+      "title": "Gestion des Fournisseurs",
+      "description": "Gérer et organiser vos fournisseurs efficacement.",
+      "searchPlaceholder": "Rechercher par nom, téléphone ou email...",
+      "addNew": "Ajouter un Fournisseur",
+      "table": {
+        "no": "N°",
+        "name": "Nom du Fournisseur",
+        "phone": "Téléphone",
+        "email": "Email"
+      },
+      "deleteModal": {
+        "title": "Supprimer le Fournisseur",
+        "message": "Êtes-vous sûr de vouloir supprimer \"{name}\" ? Cette action est irréversible.",
+        "confirm": "Supprimer",
+        "cancel": "Annuler"
+      },
+      "notifications": {
+        "deleteSuccess": "Fournisseur supprimé avec succès",
+        "deleteError": "Échec de la suppression du fournisseur"
+      }
+    },
+    "Add": {
+      "title": "Ajouter un Nouveau Fournisseur",
+      "subtitle": "Créer un nouvel enregistrement de fournisseur avec ses coordonnées.",
+      "supplierName": "Nom du Fournisseur",
+      "supplierNamePlaceholder": "Saisir le nom du fournisseur",
+      "phone": "Numéro de Téléphone",
+      "phonePlaceholder": "Saisir le numéro de téléphone (optionnel)",
+      "email": "Email",
+      "emailPlaceholder": "Saisir l'adresse e-mail (optionnel)",
+      "cancel": "Annuler",
+      "saveButton": "Ajouter le Fournisseur",
+      "validation": {
+        "nameRequired": "Le nom du fournisseur est obligatoire",
+        "nameMaxLength": "Le nom du fournisseur ne peut pas dépasser 200 caractères",
+        "phoneInvalid": "Le numéro de téléphone ne doit contenir que des chiffres",
+        "phoneMaxLength": "Le numéro de téléphone ne peut pas dépasser 50 caractères",
+        "emailInvalid": "Veuillez saisir une adresse e-mail valide",
+        "emailMaxLength": "L'e-mail ne peut pas dépasser 150 caractères",
+        "fixErrors": "Veuillez corriger les erreurs avant de soumettre"
+      },
+      "notifications": {
+        "createSuccess": "Fournisseur ajouté avec succès",
+        "createError": "Échec de l'ajout du fournisseur"
+      }
+    },
+    "Edit": {
+      "title": "Modifier le Fournisseur",
+      "subtitle": "Mettre à jour les informations et coordonnées du fournisseur.",
+      "supplierName": "Nom du Fournisseur",
+      "supplierNamePlaceholder": "Saisir le nom du fournisseur",
+      "phone": "Numéro de Téléphone",
+      "phonePlaceholder": "Saisir le numéro de téléphone (optionnel)",
+      "email": "Email",
+      "emailPlaceholder": "Saisir l'adresse e-mail (optionnel)",
+      "cancel": "Annuler",
+      "saveButton": "Enregistrer les Modifications",
+      "loading": "Chargement des données du fournisseur...",
+      "errorTitle": "Impossible de charger le fournisseur",
+      "backToList": "Retour à la Liste",
+      "validation": {
+        "nameRequired": "Le nom du fournisseur est obligatoire",
+        "nameMaxLength": "Le nom du fournisseur ne peut pas dépasser 200 caractères",
+        "phoneInvalid": "Le numéro de téléphone ne doit contenir que des chiffres",
+        "phoneMaxLength": "Le numéro de téléphone ne peut pas dépasser 50 caractères",
+        "emailInvalid": "Veuillez saisir une adresse e-mail valide",
+        "emailMaxLength": "L'e-mail ne peut pas dépasser 150 caractères",
+        "fixErrors": "Veuillez corriger les erreurs avant de soumettre"
+      },
+      "notifications": {
+        "updateSuccess": "Fournisseur mis à jour avec succès",
+        "updateError": "Échec de la mise à jour du fournisseur",
+        "loadError": "Échec du chargement des données du fournisseur"
+      }
+    }
+  },
   "common": {
     "table": {
       "searchPlaceholder": "Rechercher",
@@ -1315,6 +1393,7 @@
     "dish": "Plats",
     "dishCategory": "Catégorie de plat",
     "ingredient": "Ingrédients",
+    "suppliers": "Fournisseurs",
     "coupons": "Coupons",
     "orders": "Commandes",
     "kitchen": "Cuisine (KDS)",

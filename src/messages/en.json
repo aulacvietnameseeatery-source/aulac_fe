@@ -843,6 +843,84 @@
       }
     }
   },
+  "Supplier": {
+    "List": {
+      "title": "Supplier Management",
+      "description": "Manage and organize your suppliers efficiently.",
+      "searchPlaceholder": "Search by name, phone, or email...",
+      "addNew": "Add New Supplier",
+      "table": {
+        "no": "No.",
+        "name": "Supplier Name",
+        "phone": "Phone",
+        "email": "Email"
+      },
+      "deleteModal": {
+        "title": "Delete Supplier",
+        "message": "Are you sure you want to delete \"{name}\"? This action cannot be undone.",
+        "confirm": "Delete",
+        "cancel": "Cancel"
+      },
+      "notifications": {
+        "deleteSuccess": "Supplier deleted successfully",
+        "deleteError": "Failed to delete supplier"
+      }
+    },
+    "Add": {
+      "title": "Add New Supplier",
+      "subtitle": "Create a new supplier record with their contact information.",
+      "supplierName": "Supplier Name",
+      "supplierNamePlaceholder": "Enter supplier name",
+      "phone": "Phone Number",
+      "phonePlaceholder": "Enter phone number (optional)",
+      "email": "Email",
+      "emailPlaceholder": "Enter email address (optional)",
+      "cancel": "Cancel",
+      "saveButton": "Add Supplier",
+      "validation": {
+        "nameRequired": "Supplier name is required",
+        "nameMaxLength": "Supplier name cannot exceed 200 characters",
+        "phoneInvalid": "Phone number must contain only digits",
+        "phoneMaxLength": "Phone number cannot exceed 50 characters",
+        "emailInvalid": "Please enter a valid email address",
+        "emailMaxLength": "Email cannot exceed 150 characters",
+        "fixErrors": "Please fix the errors before submitting"
+      },
+      "notifications": {
+        "createSuccess": "Supplier added successfully",
+        "createError": "Failed to add supplier"
+      }
+    },
+    "Edit": {
+      "title": "Edit Supplier",
+      "subtitle": "Update supplier information and contact details.",
+      "supplierName": "Supplier Name",
+      "supplierNamePlaceholder": "Enter supplier name",
+      "phone": "Phone Number",
+      "phonePlaceholder": "Enter phone number (optional)",
+      "email": "Email",
+      "emailPlaceholder": "Enter email address (optional)",
+      "cancel": "Cancel",
+      "saveButton": "Save Changes",
+      "loading": "Loading supplier data...",
+      "errorTitle": "Unable to load supplier",
+      "backToList": "Back to List",
+      "validation": {
+        "nameRequired": "Supplier name is required",
+        "nameMaxLength": "Supplier name cannot exceed 200 characters",
+        "phoneInvalid": "Phone number must contain only digits",
+        "phoneMaxLength": "Phone number cannot exceed 50 characters",
+        "emailInvalid": "Please enter a valid email address",
+        "emailMaxLength": "Email cannot exceed 150 characters",
+        "fixErrors": "Please fix the errors before submitting"
+      },
+      "notifications": {
+        "updateSuccess": "Supplier updated successfully",
+        "updateError": "Failed to update supplier",
+        "loadError": "Failed to load supplier data"
+      }
+    }
+  },
   "common": {
     "table": {
       "searchPlaceholder": "Search",
@@ -941,6 +1019,21 @@
       "description": "Manage and organize your restaurant menu categories efficiently.",
       "searchPlaceholder": "Search by category name...",
       "addNew": "Add New Category",
+      "table": {
+        "no": "No.",
+        "name": "Name",
+        "description": "Description",
+        "status": "Status"
+      },
+      "status": {
+        "active": "Active",
+        "inactive": "Inactive"
+      },
+      "notifications": {
+        "activated": "Category activated successfully",
+        "deactivated": "Category deactivated successfully",
+        "updateError": "Failed to update category status"
+      },
       "filters": {
         "allStatuses": "All Statuses",
         "active": "Active",
@@ -1369,6 +1462,7 @@
     "dish": "Dish",
     "dishCategory": "Dish Category",
     "ingredient": "Ingredient",
+    "suppliers": "Suppliers",
     "coupons": "Coupons",
     "orders": "Orders",
     "kitchen": "Kitchen (KDS)",

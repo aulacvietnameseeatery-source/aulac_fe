@@ -843,6 +843,84 @@
       }
     }
   },
+  "Supplier": {
+    "List": {
+      "title": "Quản lý Nhà cung cấp",
+      "description": "Quản lý và tổ chức các nhà cung cấp một cách hiệu quả.",
+      "searchPlaceholder": "Tìm theo tên, số điện thoại hoặc email...",
+      "addNew": "Thêm Nhà cung cấp Mới",
+      "table": {
+        "no": "STT",
+        "name": "Tên Nhà cung cấp",
+        "phone": "Số điện thoại",
+        "email": "Email"
+      },
+      "deleteModal": {
+        "title": "Xóa Nhà cung cấp",
+        "message": "Bạn có chắc chắn muốn xóa \"{name}\"? Hành động này không thể hoàn tác.",
+        "confirm": "Xóa",
+        "cancel": "Hủy"
+      },
+      "notifications": {
+        "deleteSuccess": "Đã xóa nhà cung cấp thành công",
+        "deleteError": "Không thể xóa nhà cung cấp"
+      }
+    },
+    "Add": {
+      "title": "Thêm Nhà cung cấp Mới",
+      "subtitle": "Tạo hồ sơ nhà cung cấp mới với thông tin liên hệ.",
+      "supplierName": "Tên Nhà cung cấp",
+      "supplierNamePlaceholder": "Nhập tên nhà cung cấp",
+      "phone": "Số điện thoại",
+      "phonePlaceholder": "Nhập số điện thoại (không bắt buộc)",
+      "email": "Email",
+      "emailPlaceholder": "Nhập địa chỉ email (không bắt buộc)",
+      "cancel": "Hủy",
+      "saveButton": "Thêm Nhà cung cấp",
+      "validation": {
+        "nameRequired": "Tên nhà cung cấp là bắt buộc",
+        "nameMaxLength": "Tên nhà cung cấp không được vượt quá 200 ký tự",
+        "phoneInvalid": "Số điện thoại chỉ được chứa chữ số",
+        "phoneMaxLength": "Số điện thoại không được vượt quá 50 ký tự",
+        "emailInvalid": "Vui lòng nhập địa chỉ email hợp lệ",
+        "emailMaxLength": "Email không được vượt quá 150 ký tự",
+        "fixErrors": "Vui lòng sửa các lỗi trước khi gửi"
+      },
+      "notifications": {
+        "createSuccess": "Đã thêm nhà cung cấp thành công",
+        "createError": "Không thể thêm nhà cung cấp"
+      }
+    },
+    "Edit": {
+      "title": "Chỉnh sửa Nhà cung cấp",
+      "subtitle": "Cập nhật thông tin và chi tiết liên hệ nhà cung cấp.",
+      "supplierName": "Tên Nhà cung cấp",
+      "supplierNamePlaceholder": "Nhập tên nhà cung cấp",
+      "phone": "Số điện thoại",
+      "phonePlaceholder": "Nhập số điện thoại (không bắt buộc)",
+      "email": "Email",
+      "emailPlaceholder": "Nhập địa chỉ email (không bắt buộc)",
+      "cancel": "Hủy",
+      "saveButton": "Lưu Thay đổi",
+      "loading": "Đang tải dữ liệu nhà cung cấp...",
+      "errorTitle": "Không thể tải nhà cung cấp",
+      "backToList": "Quay lại Danh sách",
+      "validation": {
+        "nameRequired": "Tên nhà cung cấp là bắt buộc",
+        "nameMaxLength": "Tên nhà cung cấp không được vượt quá 200 ký tự",
+        "phoneInvalid": "Số điện thoại chỉ được chứa chữ số",
+        "phoneMaxLength": "Số điện thoại không được vượt quá 50 ký tự",
+        "emailInvalid": "Vui lòng nhập địa chỉ email hợp lệ",
+        "emailMaxLength": "Email không được vượt quá 150 ký tự",
+        "fixErrors": "Vui lòng sửa các lỗi trước khi gửi"
+      },
+      "notifications": {
+        "updateSuccess": "Đã cập nhật nhà cung cấp thành công",
+        "updateError": "Không thể cập nhật nhà cung cấp",
+        "loadError": "Không thể tải dữ liệu nhà cung cấp"
+      }
+    }
+  },
   "common": {
     "table": {
       "searchPlaceholder": "Tìm kiếm",
@@ -941,6 +1019,21 @@
       "description": "Quản lý và tổ chức các danh mục thực đơn nhà hàng một cách hiệu quả.",
       "searchPlaceholder": "Tìm theo tên danh mục...",
       "addNew": "Thêm Danh mục Mới",
+      "table": {
+        "no": "STT",
+        "name": "Tên",
+        "description": "Mô tả",
+        "status": "Trạng thái"
+      },
+      "status": {
+        "active": "Hoạt động",
+        "inactive": "Không hoạt động"
+      },
+      "notifications": {
+        "activated": "Đã kích hoạt danh mục thành công",
+        "deactivated": "Đã vô hiệu hóa danh mục thành công",
+        "updateError": "Không thể cập nhật trạng thái danh mục"
+      },
       "filters": {
         "allStatuses": "Tất cả Trạng thái",
         "active": "Hoạt động",
@@ -1369,6 +1462,7 @@
     "dish": "Món ăn",
     "dishCategory": "Danh mục món",
     "ingredient": "Nguyên liệu",
+    "suppliers": "Nhà cung cấp",
     "coupons": "Mã giảm giá",
     "orders": "Đơn hàng",
     "kitchen": "Bếp (KDS)",

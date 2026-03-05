@@ -5,14 +5,14 @@ import { Plus } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 
-interface CategoryHeaderProps {
+interface SupplierHeaderProps {
   onCreateClick: () => void;
 }
 
-export const CategoryHeader = ({ 
+export const SupplierHeader = ({ 
   onCreateClick,
-}: CategoryHeaderProps) => {
-  const t = useTranslations("DishCategory.List");
+}: SupplierHeaderProps) => {
+  const t = useTranslations("Supplier.List");
   
   return (
     <div className="flex justify-between items-center w-full">

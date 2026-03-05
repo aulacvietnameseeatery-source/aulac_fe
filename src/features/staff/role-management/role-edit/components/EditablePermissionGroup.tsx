@@ -1,4 +1,4 @@
-// src/features/auth/role-edit/components/EditablePermissionGroup.tsx
+
 'use client';
 
 import React, { useState } from 'react';

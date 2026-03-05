@@ -28,7 +28,8 @@ import {
   Bell,
   Warehouse,
   TicketPercent,
-  ChefHat
+  ChefHat,
+  Truck
 } from "lucide-react";
 import { useAuth } from "@/components/providers/auth-provider";
 import { useLogout } from "@/features/customer/auth/login/hooks";
@@ -55,6 +56,7 @@ const navigation = [
       { key: "dish", href: "/dashboard/dish", icon: UtensilsCrossed },
       { key: "dishCategory", href: "/dashboard/dish-category", icon: FolderOpen },
       { key: "ingredient", href: "/dashboard/ingredient", icon: Package },
+      { key: "suppliers", href: "/dashboard/suppliers", icon: Truck },
       { key: "coupons", href: "/dashboard/coupons", icon: TicketPercent },
     ]
   },

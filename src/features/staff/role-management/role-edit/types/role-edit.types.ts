@@ -1,4 +1,4 @@
-// src/features/auth/role-edit/types/role-edit.types.ts
+
 
 export type UpdateRoleRequest = {
   roleName: string;
