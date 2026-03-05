@@ -3,8 +3,8 @@
 
 import React, { Suspense } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { useRoleEdit } from "@/features/auth/role-edit/hooks/useRoleEdit";
-import { RoleEditForm } from "@/features/auth/role-edit/components/RoleEditForm";
+import { useRoleEdit } from "@/features/staff/role-management/role-edit/hooks/useRoleEdit";
+import { RoleEditForm } from "@/features/staff/role-management/role-edit/components/RoleEditForm";
 import { Loader2, AlertCircle } from "lucide-react";
 import { useTranslations } from "next-intl";
 
