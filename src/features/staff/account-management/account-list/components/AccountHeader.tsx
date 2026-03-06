@@ -22,10 +22,10 @@ interface AccountHeaderProps {
   onStatusChange: (status?: number) => void;
 }
 
-export const AccountHeader = ({ 
-  searchTerm, 
-  isLoading, 
-  onSearchChange, 
+export const AccountHeader = ({
+  searchTerm,
+  isLoading,
+  onSearchChange,
   onCreateClick,
   roleId,
   status,
@@ -55,7 +55,7 @@ export const AccountHeader = ({
         <div className="flex flex-col lg:flex-row items-stretch lg:items-center gap-3 flex-1">
           {/* Search Component */}
           <div className="w-full lg:w-[420px]">
-            <KeywordSearch 
+            <KeywordSearch
               value={searchTerm}
               onChange={onSearchChange}
               placeholder={t("searchPlaceholder")}
@@ -110,9 +110,9 @@ export const AccountHeader = ({
 
         {/* Add Button */}
         <PermissionGuard permission={Permissions.CreateAccount}>
-          <Button 
+          <Button
             onClick={onCreateClick}
-            variant="outline" 
+            variant="outline"
             className="w-full lg:w-auto shadow-md whitespace-nowrap"
           >
             <Plus className="mr-2 h-4 w-4" />

@@ -16,16 +16,16 @@ interface CategoryHeaderProps {
   onStatusFilterChange: (value: StatusFilterType) => void;
 }
 
-export const CategoryHeader = ({ 
-  searchTerm, 
-  isLoading, 
-  onSearchChange, 
+export const CategoryHeader = ({
+  searchTerm,
+  isLoading,
+  onSearchChange,
   onCreateClick,
   statusFilter,
   onStatusFilterChange,
 }: CategoryHeaderProps) => {
   const t = useTranslations("DishCategory.List");
-  
+
   return (
     <div className="flex flex-col gap-6 mb-2 w-full">
       {/* 1. Title Section */}
@@ -44,7 +44,7 @@ export const CategoryHeader = ({
         <div className="flex flex-col lg:flex-row items-stretch lg:items-center gap-3 flex-1">
           {/* Search Component */}
           <div className="w-full lg:w-[420px]">
-            <KeywordSearch 
+            <KeywordSearch
               value={searchTerm}
               onChange={onSearchChange}
               placeholder={t("searchPlaceholder")}
@@ -70,9 +70,9 @@ export const CategoryHeader = ({
         </div>
 
         {/* Right: Add Button */}
-        <Button 
+        <Button
           onClick={onCreateClick}
-          variant="outline" 
+          variant="outline"
           className="w-full lg:w-auto shadow-md"
         >
           <Plus className="mr-2 h-4 w-4" />
