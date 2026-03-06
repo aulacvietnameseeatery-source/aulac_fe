@@ -1,98 +1,85 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
-import { DishCategory, CategoryFilters, StatusFilter } from "../types";
+import { useState, useCallback } from "react";
+import { DishCategory, CategoryFilters } from "../types";
 import { listCategoryService } from "../services/listCategoryService";
+import type { FilterState } from '@/hooks/table/useTableFiltering';
+import type { SortStateItem } from '@/hooks/table/useTableSorting';
 
 export const useCategoryList = () => {
-  // Filters State
-  const [filters, setFilters] = useState<{
-    searchTerm: string;
-    statusFilter: StatusFilter;
-  }>({
-    searchTerm: '',
-    statusFilter: 'all',
-  });
-
-  // Pagination State
-  const [pagination, setPagination] = useState({
-    pageIndex: 1,
-    pageSize: 10,
-    totalCount: 0,
-    totalPage: 0,
-  });
-
   // Data State
   const [categories, setCategories] = useState<DishCategory[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [totalCount, setTotalCount] = useState(0);
+  const [paginationInfo, setPaginationInfo] = useState({
+    page: 1,
+    pageSize: 10,
+  });
 
-  // Fetch categories from API
-  const fetchCategories = useCallback(async () => {
-    try {
-      setIsLoading(true);
-      
-      const apiFilters: CategoryFilters = {
-        search: filters.searchTerm || undefined,
-        isDisabled: filters.statusFilter === 'all' ? undefined : filters.statusFilter === 'inactive',
-        pageIndex: pagination.pageIndex,
-        pageSize: pagination.pageSize,
-      };
+  // Fetch categories from API - compatible with BaseTable onDataChange
+  const onDataChange = useCallback((params: {
+    search?: string;
+    filters?: Record<string, FilterState>;
+    sort?: SortStateItem[];
+    page?: number;
+    pageSize?: number;
+  }) => {
+    const fetchData = async () => {
+      try {
+        setIsLoading(true);
+        
+        const apiFilters: CategoryFilters = {
+          search: params.search || undefined,
+          isDisabled: params.filters?.isDisabled?.value !== undefined ? params.filters.isDisabled.value === 'true' : undefined,
+          pageIndex: params.page || 1,
+          pageSize: params.pageSize || 10,
+        };
 
-      const result = await listCategoryService.getCategories(apiFilters);
-      
-      setCategories(result.pageData);
-      setPagination(prev => ({
-        ...prev,
-        totalCount: result.totalCount,
-        totalPage: result.totalPage,
-      }));
-    } catch (error) {
-      console.error("Error fetching categories:", error);
-      setCategories([]);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [filters.searchTerm, filters.statusFilter, pagination.pageIndex, pagination.pageSize]);
+        const result = await listCategoryService.getCategories(apiFilters);
+        
+        setCategories(result.pageData);
+        setTotalCount(result.totalCount);
+        setPaginationInfo({
+          page: params.page || 1,
+          pageSize: params.pageSize || 10,
+        });
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+        setCategories([]);
+        setTotalCount(0);
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-  // Fetch on dependency changes
-  useEffect(() => {
-    fetchCategories();
-  }, [fetchCategories]);
+    fetchData();
+  }, []);
 
-  // Action Handlers
-  const onSearchChange = (value: string) => {
-    setFilters(prev => ({ ...prev, searchTerm: value }));
-    setPagination(prev => ({ ...prev, pageIndex: 1 }));
-  };
+  // Refresh function
+  const refresh = useCallback(() => {
+    // Trigger a re-fetch by calling onDataChange with current pagination
+    onDataChange({
+      page: paginationInfo.page,
+      pageSize: paginationInfo.pageSize,
+    });
+  }, [paginationInfo, onDataChange]);
 
-  const onStatusFilterChange = (value: StatusFilter) => {
-    setFilters(prev => ({ ...prev, statusFilter: value }));
-    setPagination(prev => ({ ...prev, pageIndex: 1 }));
-  };
-
-  const onPageChange = (page: number) => {
-    setPagination(prev => ({ ...prev, pageIndex: page }));
-  };
-
-  const onPageSizeChange = (size: number) => {
-    setPagination(prev => ({ ...prev, pageSize: size, pageIndex: 1 }));
-  };
-
-  const refresh = () => {
-    fetchCategories();
-  };
+  // Update category locally (for optimistic updates)
+  const updateCategoryLocally = useCallback((updatedCategory: DishCategory) => {
+    setCategories(prev =>
+      prev.map(cat =>
+        cat.categoryId === updatedCategory.categoryId ? updatedCategory : cat
+      )
+    );
+  }, []);
 
   return {
     categories,
     isLoading,
-    pagination,
-    filters,
-    actions: {
-      onSearchChange,
-      onStatusFilterChange,
-      onPageChange,
-      onPageSizeChange,
-      refresh,
-    },
+    totalCount,
+    paginationInfo,
+    onDataChange,
+    refresh,
+    updateCategoryLocally,
   };
 };

@@ -1,8 +1,8 @@
 // src/app/[locale]/(auth)/dashboard/roles/create/page.tsx
 "use client";
 
-import { RoleCreateForm } from "@/features/auth/role-create";
-import { useRoleCreate } from "@/features/auth/role-create";
+import { RoleCreateForm } from "@/features/staff/role-management/role-create/components/RoleCreateForm";
+import { useRoleCreate } from "@/features/staff/role-management/role-create/hooks/useRoleCreate";
 import { Loader2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 

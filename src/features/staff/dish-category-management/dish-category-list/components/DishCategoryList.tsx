@@ -4,20 +4,25 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { BaseTable } from "@/components/ui/table/base-table";
 import { TableColumn } from "@/types/table.types";
-import { Pagination } from "@/components/ui/pagination";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 import { CategoryHeader } from './CategoryHeader';
 import { CategoryActions } from './CategoryActions';
 import { useCategoryList } from '../hooks/useCategoryList';
 import { useToggleCategoryStatus } from '../hooks/useListDishCategories';
 import { DishCategory } from '../types';
+import { Switch } from "@/components/ui/switch";
 
 export default function DishCategoryList() {
   const router = useRouter();
+  const t = useTranslations("DishCategory.List");
   
   // Logic Hook
-  const { categories, isLoading, pagination, filters, actions } = useCategoryList();
+  const { categories, isLoading, totalCount, paginationInfo, onDataChange, refresh, updateCategoryLocally } = useCategoryList();
   const { toggleStatus } = useToggleCategoryStatus();
+
+  // State for toggling status
+  const [togglingId, setTogglingId] = useState<number | null>(null);
 
   // Action Handlers
   const handleEdit = (category: DishCategory) => {
@@ -28,75 +33,102 @@ export default function DishCategoryList() {
     router.push('/dashboard/dish-category/add');
   };
 
-  const handleToggleStatus = async (category: DishCategory) => {
+  // Handle Status Toggle with optimistic update
+  const handleStatusToggle = async (category: DishCategory, checked: boolean) => {
+    setTogglingId(category.categoryId);
     try {
-      await toggleStatus(category.categoryId, !category.isDisabled);
-      toast.success(`Category ${!category.isDisabled ? 'disabled' : 'enabled'} successfully`);
-      actions.refresh();
+      const newIsDisabled = !checked;
+
+      // Optimistic Update
+      const updatedCategory: DishCategory = {
+        ...category,
+        isDisabled: newIsDisabled,
+      };
+      updateCategoryLocally(updatedCategory);
+
+      // API Call
+      await toggleStatus(category.categoryId, newIsDisabled);
+      toast.success(t(checked ? "notifications.activated" : "notifications.deactivated"));
     } catch (error) {
       console.error('Failed to toggle status:', error);
-      toast.error('Failed to update category status');
+      toast.error(t("notifications.updateError"));
+      
+      // Revert on failure
+      refresh();
+    } finally {
+      setTogglingId(null);
     }
   };
 
-  // Handler for the Pagination Component
-  const handlePaginationChange = useCallback((page: number, pageSize: number) => {
-    if (page !== pagination.pageIndex) {
-      actions.onPageChange(page);
-    }
-    if (pageSize !== pagination.pageSize) {
-      actions.onPageSizeChange(pageSize);
-    }
-  }, [pagination.pageIndex, pagination.pageSize, actions]);
-
-  // Status Badge Render
+  // Status Badge Render - only used for display
   const renderStatusBadge = (isDisabled: boolean) => {
     if (!isDisabled) {
       return (
         <span className="bg-green-50 text-green-700 px-2 py-1 rounded text-xs font-medium border border-green-200">
-          Active
+          {t("status.active")}
         </span>
       );
     }
     return (
       <span className="bg-gray-50 text-gray-700 px-2 py-1 rounded text-xs font-medium border border-gray-200">
-        Inactive
+        {t("status.inactive")}
       </span>
     );
   };
+
+  // Status filter options for table column
+  const statusFilterOptions = useMemo(() => [
+    { label: t("status.active"), value: 'false' },
+    { label: t("status.inactive"), value: 'true' },
+  ], [t]);
 
   // Table Columns Config
   const columns: TableColumn[] = useMemo(() => [
     {
       field: 'id',
-      header: 'No.',
+      header: t("table.no"),
       width: '80px',
       align: 'center',
       sortable: false,
       cellRender: ({ rowIndex }) =>
-        (pagination.pageIndex - 1) * pagination.pageSize + rowIndex + 1,
+        (paginationInfo.page - 1) * paginationInfo.pageSize + rowIndex + 1,
     },
     {
       field: 'categoryName',
-      header: 'Name',
+      header: t("table.name"),
       sortable: false,
       width: '250px',
+      filterType: 'text' as const,
     },
     {
       field: 'description',
-      header: 'Description',
+      header: t("table.description"),
       sortable: false,
       cellRender: ({ value }) => value || <span className="text-gray-400 italic">-</span>,
     },
     {
       field: 'isDisabled',
-      header: 'Status',
+      header: t("table.status"),
       align: 'center',
       width: '120px',
       sortable: false,
-      cellRender: ({ value }) => renderStatusBadge(value),
+      filterType: 'select' as const,
+      filterOptions: statusFilterOptions,
+      cellRender: ({ value, item }: { value: boolean; item: DishCategory }) => {
+        // Show toggle switch for status like account list
+        return (
+          <div className="flex justify-center">
+            <Switch
+              checked={!value}  // isDisabled = false means active/checked
+              onChange={(checked) => handleStatusToggle(item, checked)}
+              disabled={togglingId === item.categoryId}
+              showLabel={false}
+            />
+          </div>
+        );
+      },
     },
-  ], [pagination.pageIndex, pagination.pageSize]);
+  ], [paginationInfo.page, paginationInfo.pageSize, t, statusFilterOptions, togglingId]);
 
   const handleGlobalRenderCell = useCallback(( value: any, item: DishCategory, column: TableColumn, rowIndex: number) => {
     const content = column.cellRender 
@@ -114,41 +146,28 @@ export default function DishCategoryList() {
   }, []);
 
   return (
-    <div className="flex flex-col h-full bg-gray-50/50">
-      <div className="p-6 pb-2 md:p-8 md:pb-4">
-        <CategoryHeader 
-          searchTerm={filters.searchTerm}
-          isLoading={isLoading}
-          onSearchChange={actions.onSearchChange}
-          onCreateClick={handleCreate}
-          statusFilter={filters.statusFilter}
-          onStatusFilterChange={actions.onStatusFilterChange}
-        />
-      </div>
-      
+    <div className="w-full h-full flex flex-col overflow-hidden">
       <BaseTable<DishCategory>
         data={categories}
         loading={isLoading}
         columns={columns}
         rowKey="categoryId"
-        total={categories.length}
-        onRefresh={actions.refresh}
+        total={totalCount}
+        onDataChange={onDataChange}
+        onRefresh={refresh}
+        searchPlaceholder={t("searchPlaceholder")}
+        defaultRowsPerPage={10}
+        rowsPerPageOptions={[10, 20, 50, 100]}
+        renderTitle={() => (
+          <CategoryHeader onCreateClick={handleCreate} />
+        )}
         renderCell={handleGlobalRenderCell}
         renderActionColumn={(item) => (
           <CategoryActions 
             category={item}
             onEdit={handleEdit}
-            onToggleStatus={handleToggleStatus}
           />
         )}
-      />
-
-      <Pagination 
-        current={pagination.pageIndex}
-        pageSize={pagination.pageSize}
-        total={pagination.totalCount}
-        onChange={handlePaginationChange}
-        pageSizeOptions={[10, 20, 50, 100]}
       />
     </div>
   );
