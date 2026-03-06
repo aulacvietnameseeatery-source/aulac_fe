@@ -1567,5 +1567,109 @@
         "readExcelError": "Échec de la lecture du fichier Excel. Veuillez vérifier le format."
       }
     }
+  },
+  "Promotion": {
+    "List": {
+      "title": "Liste des promotions",
+      "description": "Gérez les promotions et les campagnes de réduction du restaurant.",
+      "addNew": "Ajouter",
+      "searchPlaceholder": "Rechercher par code promo ou nom...",
+      "table": {
+        "no": "N°",
+        "promoCode": "Code Promo",
+        "discount": "Réduction",
+        "startTime": "Date de début",
+        "endTime": "Date de fin",
+        "usage": "Utilisation",
+        "status": "Statut"
+      },
+      "filters": {
+        "allStatuses": "Tous les statuts",
+        "allTypes": "Tous les types"
+      },
+      "actions": {
+        "view": "Voir les détails",
+        "edit": "Modifier"
+      },
+      "notifications": {
+        "statusUpdated": "Statut mis à jour avec succès",
+        "statusUpdateError": "Une erreur est survenue lors de la mise à jour du statut"
+      }
+    },
+    "createTitle": "Créer une nouvelle promotion",
+    "createSubTitle": "Le système changera automatiquement le statut selon la période d'application.",
+    "editTitle": "Détails de la promotion #{id}",
+    "noData": "Aucune donnée trouvée",
+    "Form": {
+      "basicInfo": "1. Informations de base",
+      "promoCode": "Code promotionnel",
+      "promoCodePlaceholder": "Exemple : SUMMER24",
+      "promoName": "Nom de la promotion",
+      "promoNamePlaceholder": "Entrez le nom de la promotion...",
+      "desc": "Description",
+      "descPlaceholder": "Entrez une description détaillée...",
+      "start": "Heure de début",
+      "end": "Heure de fin",
+      "discountConfig": "2. Configuration de la réduction",
+      "discountType": "Type de réduction",
+      "typePercent": "Pourcentage (%)",
+      "typeFixed": "Montant fixe",
+      "discountValue": "Valeur de la réduction",
+      "discountValuePlaceholder": "Entrez la valeur...",
+      "maxUsage": "Limite d'utilisation (optionnel)",
+      "unlimited": "Illimité",
+      "rules": "3. Conditions (Rules)",
+      "ruleDesc": "La commande doit atteindre au moins ${minOrder} et {minQty} articles. Elle doit également contenir le plat/la catégorie requis (si sélectionné).",
+      "minOrder": "Valeur minimale de commande",
+      "minOrderPlaceholder": "0",
+      "minQty": "Quantité minimale",
+      "minQtyPlaceholder": "0",
+      "reqDish": "Plat requis (optionnel)",
+      "reqDishPlaceholder": "Sélectionnez un plat requis...",
+      "reqCate": "Catégorie requise (optionnel)",
+      "reqCatePlaceholder": "Sélectionnez une catégorie requise...",
+      "targets": "4. Cibles (Targets)",
+      "targetDescAll": "La promotion s'appliquera à : toute la commande",
+      "targetDescFiltered": "La promotion s'appliquera à : uniquement aux plats/catégories sélectionnés ci-dessous",
+      "targetDish": "Appliquer à un plat spécifique",
+      "targetDishPlaceholder": "Laisser vide pour ignorer...",
+      "targetCate": "Appliquer à une catégorie spécifique",
+      "targetCatePlaceholder": "Laisser vide pour ignorer...",
+      "btnDisable": "Désactiver",
+      "btnCancel": "Annuler",
+      "btnSave": "Enregistrer la promotion",
+      "btnSaving": "Enregistrement...",
+      "statusLockWarning": "Le statut actuel est {status}. Les conditions de configuration sont verrouillées.",
+      "confirmDisable": "Désactiver cette promotion ? Cette action est irréversible.",
+      "successCreate": "Création réussie",
+      "successUpdate": "Mise à jour réussie",
+      "successDisable": "Désactivée avec succès",
+      "errorSave": "Une erreur est survenue lors de l'enregistrement"
+    },
+    "Detail": {
+      "title": "Détails de la promotion #{id}",
+      "status": "Statut",
+      "usedCount": "Utilisée : {count} fois",
+      "rulesInfo": "Règles d'application",
+      "noRule": "Aucune condition",
+      "targetsInfo": "Cibles d'application",
+      "hasTarget": "Appliquée uniquement aux produits/catégories spécifiés.",
+      "back": "Retour"
+    },
+    "Status": {
+      "SCHEDULED": "Planifiée",
+      "ACTIVE": "Active",
+      "EXPIRED": "Expirée",
+      "DISABLED": "Désactivée"
+    },
+    "Validation": {
+      "promoCodeMin": "Le code promo doit contenir au moins 3 caractères",
+      "startTimeRequired": "Veuillez sélectionner l'heure de début",
+      "endTimeRequired": "Veuillez sélectionner l'heure de fin",
+      "discountMinPercent": "Minimum 1 %",
+      "discountMaxPercent": "Maximum 100 %",
+      "discountPositive": "Doit être supérieur à 0",
+      "endTimeAfterStartTime": "La fin doit être après le début"
+    }
   }
 }

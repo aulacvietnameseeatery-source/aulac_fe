@@ -1636,5 +1636,109 @@
         "readExcelError": "Failed to read Excel file. Please check the format."
       }
     }
+  },
+  "Promotion": {
+    "List": {
+      "title": "Promotion List",
+      "description": "Manage restaurant promotions and discount campaigns.",
+      "addNew": "Add New",
+      "searchPlaceholder": "Search by promo code or name...",
+      "table": {
+        "no": "No.",
+        "promoCode": "Promo Code",
+        "discount": "Discount",
+        "startTime": "Start Time",
+        "endTime": "End Time",
+        "usage": "Usage",
+        "status": "Status"
+      },
+      "filters": {
+        "allStatuses": "All Statuses",
+        "allTypes": "All Types"
+      },
+      "actions": {
+        "view": "View Details",
+        "edit": "Edit"
+      },
+      "notifications": {
+        "statusUpdated": "Status updated successfully",
+        "statusUpdateError": "An error occurred while updating the status"
+      }
+    },
+    "createTitle": "Create New Promotion",
+    "createSubTitle": "The system will automatically change its state according to the applied time.",
+    "editTitle": "Promotion Details #{id}",
+    "noData": "No data found",
+    "Form": {
+      "basicInfo": "1. Basic Information",
+      "promoCode": "Promo Code",
+      "promoCodePlaceholder": "e.g., SUMMER24",
+      "promoName": "Promotion Name",
+      "promoNamePlaceholder": "Enter promotion name...",
+      "desc": "Description",
+      "descPlaceholder": "Enter detailed description...",
+      "start": "Start Time",
+      "end": "End Time",
+      "discountConfig": "2. Discount Configuration",
+      "discountType": "Discount Type",
+      "typePercent": "Percentage (%)",
+      "typeFixed": "Fixed Amount",
+      "discountValue": "Discount Value",
+      "discountValuePlaceholder": "Enter value...",
+      "maxUsage": "Max Usage (Optional)",
+      "unlimited": "Unlimited",
+      "rules": "3. Conditions (Rules)",
+      "ruleDesc": "Order must reach a minimum of ${minOrder} and {minQty} items. Must also contain required dish/category (if selected).",
+      "minOrder": "Min Order Value",
+      "minOrderPlaceholder": "0",
+      "minQty": "Min Quantity",
+      "minQtyPlaceholder": "0",
+      "reqDish": "Required Dish (Optional)",
+      "reqDishPlaceholder": "Select required dishes...",
+      "reqCate": "Required Category (Optional)",
+      "reqCatePlaceholder": "Select required categories...",
+      "targets": "4. Targets",
+      "targetDescAll": "Promotion applies to: Entire order",
+      "targetDescFiltered": "Promotion applies to: Only selected dishes/categories below",
+      "targetDish": "Apply to specific Dish",
+      "targetDishPlaceholder": "Leave blank to skip...",
+      "targetCate": "Apply to specific Category",
+      "targetCatePlaceholder": "Leave blank to skip...",
+      "btnDisable": "Disable",
+      "btnCancel": "Cancel",
+      "btnSave": "Save Promotion",
+      "btnSaving": "Saving...",
+      "statusLockWarning": "Current status is {status}. Configuration conditions are locked.",
+      "confirmDisable": "Disable this promotion? This action cannot be undone.",
+      "successCreate": "Created successfully",
+      "successUpdate": "Updated successfully",
+      "successDisable": "Disabled successfully",
+      "errorSave": "An error occurred while saving"
+    },
+    "Detail": {
+      "title": "Promotion Details #{id}",
+      "status": "Status",
+      "usedCount": "Used: {count} times",
+      "rulesInfo": "Applied Rules",
+      "noRule": "No conditions",
+      "hasTarget": "Applies to specified products/categories.",
+      "targetsInfo": "Applied Targets",
+      "back": "Back"
+    },
+    "Status": {
+      "SCHEDULED": "Scheduled",
+      "ACTIVE": "Active",
+      "EXPIRED": "Expired",
+      "DISABLED": "Disabled"
+    },
+    "Validation": {
+      "promoCodeMin": "Promo code must be at least 3 characters",
+      "startTimeRequired": "Please select a start time",
+      "endTimeRequired": "Please select an end time",
+      "discountMinPercent": "Minimum 1%",
+      "discountMaxPercent": "Maximum 100%",
+      "discountPositive": "Must be greater than 0",
+      "endTimeAfterStartTime": "End time must be after start time"
+    }
   }
 }
