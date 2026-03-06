@@ -33,4 +33,9 @@ export const Permissions = {
   EditTable: 'TABLE:EDIT',
   DeleteTable: 'TABLE:DELETE',
   UpdateTableStatus: 'TABLE:UPDATE_STATUS',
+
+  // Promotion
+  ViewPromotion: 'PROMOTION:READ',
+  CreatePromotion: 'PROMOTION:CREATE',
+  UpdatePromotion: 'PROMOTION:UPDATE',
 } as const;

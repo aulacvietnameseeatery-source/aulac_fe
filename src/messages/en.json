@@ -21,7 +21,7 @@
     "newsletter": "Newsletter",
     "newsletter_desc": "Join our circle for exclusive events and\nseasonal masterpiece previews.",
     "email_placeholder": "Email Address",
-    "copyright": "© 2026 Au Lac Vietnamese Eatery. All Rights Reserved.",
+    "copyright": "© 2026 An Lac Vietnamese Eatery. All Rights Reserved.",
     "privacy": "Privacy",
     "terms": "Terms",
     "sitemap": "Sitemap"
@@ -36,7 +36,7 @@
       "label": "The Craftsmen",
       "title": "Mastering the\nSoul of Taste",
       "chef_1_name": "Executive Chef Minh",
-      "chef_1_quote": "\"Cuisine is the bridge between history and the senses. At Au Lac, we don't just cook; we curate memories through traditional spices and modern textures.\"",
+      "chef_1_quote": "\"Cuisine is the bridge between history and the senses. At An Lac, we don't just cook; we curate memories through traditional spices and modern textures.\"",
       "chef_2_name": "Sous Chef Linh",
       "chef_2_quote": "\"Balance is our north star. The contrast of hot and cold, crisp and soft, sweet and savory defines the Vietnamese identity.\"",
       "cta": "Read Their Story"
@@ -176,7 +176,7 @@
     },
     "Video": {
       "title": "The Culinary Preparation",
-      "subtitle": "A Film by Au Lac",
+      "subtitle": "A Film by An Lac",
       "duration_label": "Duration",
       "duration_value": "02:45 MIN",
       "resolution_label": "Resolution",
@@ -255,7 +255,7 @@
     "BookingModal": {
       "selectedTable": "Selected Table",
       "title": "Confirm Reservation",
-      "restaurantName": "Au Lac Vietnamese Eatery",
+      "restaurantName": "An Lac Vietnamese Eatery",
       "date": "Date",
       "time": "Time",
       "guests": "Guests",
@@ -415,7 +415,7 @@
       }
     },
     "Footer": {
-      "copyright": "© 2024 Au Lac Vietnamese Eatery - Geneva. All Rights Reserved."
+      "copyright": "© 2024 An Lac Vietnamese Eatery - Geneva. All Rights Reserved."
     }
   },
   "MenuListing": {
@@ -481,7 +481,7 @@
     }
   },
   "FillInforCustomer": {
-    "title": "Welcome to Au Lac",
+    "title": "Welcome to An Lac",
     "subtitle": "Please provide your information to begin your culinary journey",
     "form": {
       "fullName": "Full Name",
@@ -496,7 +496,10 @@
       "skipToMenu": "Skip, browse the menu",
       "errors": {
         "phoneRequired": "Phone number is required",
-        "emailInvalid": "Invalid email address"
+        "emailInvalid": "Invalid email address",
+        "tableOccupied": "This table is already occupied",
+        "tableOccupiedDesc": "This table is being used by another customer. Please choose another table.",
+        "updateFailed": "Failed to update table status. Please try again."
       }
     },
     "footer": "Handcrafted Vietnamese Cuisine"
@@ -840,6 +843,84 @@
       }
     }
   },
+  "Supplier": {
+    "List": {
+      "title": "Supplier Management",
+      "description": "Manage and organize your suppliers efficiently.",
+      "searchPlaceholder": "Search by name, phone, or email...",
+      "addNew": "Add New Supplier",
+      "table": {
+        "no": "No.",
+        "name": "Supplier Name",
+        "phone": "Phone",
+        "email": "Email"
+      },
+      "deleteModal": {
+        "title": "Delete Supplier",
+        "message": "Are you sure you want to delete \"{name}\"? This action cannot be undone.",
+        "confirm": "Delete",
+        "cancel": "Cancel"
+      },
+      "notifications": {
+        "deleteSuccess": "Supplier deleted successfully",
+        "deleteError": "Failed to delete supplier"
+      }
+    },
+    "Add": {
+      "title": "Add New Supplier",
+      "subtitle": "Create a new supplier record with their contact information.",
+      "supplierName": "Supplier Name",
+      "supplierNamePlaceholder": "Enter supplier name",
+      "phone": "Phone Number",
+      "phonePlaceholder": "Enter phone number (optional)",
+      "email": "Email",
+      "emailPlaceholder": "Enter email address (optional)",
+      "cancel": "Cancel",
+      "saveButton": "Add Supplier",
+      "validation": {
+        "nameRequired": "Supplier name is required",
+        "nameMaxLength": "Supplier name cannot exceed 200 characters",
+        "phoneInvalid": "Phone number must contain only digits",
+        "phoneMaxLength": "Phone number cannot exceed 50 characters",
+        "emailInvalid": "Please enter a valid email address",
+        "emailMaxLength": "Email cannot exceed 150 characters",
+        "fixErrors": "Please fix the errors before submitting"
+      },
+      "notifications": {
+        "createSuccess": "Supplier added successfully",
+        "createError": "Failed to add supplier"
+      }
+    },
+    "Edit": {
+      "title": "Edit Supplier",
+      "subtitle": "Update supplier information and contact details.",
+      "supplierName": "Supplier Name",
+      "supplierNamePlaceholder": "Enter supplier name",
+      "phone": "Phone Number",
+      "phonePlaceholder": "Enter phone number (optional)",
+      "email": "Email",
+      "emailPlaceholder": "Enter email address (optional)",
+      "cancel": "Cancel",
+      "saveButton": "Save Changes",
+      "loading": "Loading supplier data...",
+      "errorTitle": "Unable to load supplier",
+      "backToList": "Back to List",
+      "validation": {
+        "nameRequired": "Supplier name is required",
+        "nameMaxLength": "Supplier name cannot exceed 200 characters",
+        "phoneInvalid": "Phone number must contain only digits",
+        "phoneMaxLength": "Phone number cannot exceed 50 characters",
+        "emailInvalid": "Please enter a valid email address",
+        "emailMaxLength": "Email cannot exceed 150 characters",
+        "fixErrors": "Please fix the errors before submitting"
+      },
+      "notifications": {
+        "updateSuccess": "Supplier updated successfully",
+        "updateError": "Failed to update supplier",
+        "loadError": "Failed to load supplier data"
+      }
+    }
+  },
   "common": {
     "table": {
       "searchPlaceholder": "Search",
@@ -938,6 +1019,21 @@
       "description": "Manage and organize your restaurant menu categories efficiently.",
       "searchPlaceholder": "Search by category name...",
       "addNew": "Add New Category",
+      "table": {
+        "no": "No.",
+        "name": "Name",
+        "description": "Description",
+        "status": "Status"
+      },
+      "status": {
+        "active": "Active",
+        "inactive": "Inactive"
+      },
+      "notifications": {
+        "activated": "Category activated successfully",
+        "deactivated": "Category deactivated successfully",
+        "updateError": "Failed to update category status"
+      },
       "filters": {
         "allStatuses": "All Statuses",
         "active": "Active",
@@ -1365,7 +1461,8 @@
     "roles": "Roles",
     "dish": "Dish",
     "dishCategory": "Dish Category",
-    "ingredient": "Ingredient",
+    "ingredients": "Ingredients",
+    "suppliers": "Suppliers",
     "coupons": "Coupons",
     "orders": "Orders",
     "kitchen": "Kitchen (KDS)",
@@ -1467,6 +1564,181 @@
       "placeholder": "Enter reason...",
       "confirm": "Confirm",
       "cancel": "Cancel"
+    }
+  },
+  "ReservationManagement": {
+    "List": {
+      "title": "Reservations",
+      "searchPlaceholder": "Search customer, phone...",
+      "addNew": "Add New",
+      "all": "All",
+      "empty": "No reservations found"
+    },
+    "Card": {
+      "table": "Table",
+      "guests": "Guests",
+      "createdOn": "Created on",
+      "status": "Status",
+      "late": "Late",
+      "viewNote": "View Note",
+      "customerNotes": "Customer Notes:",
+      "noNotes": "No special requests or pre-orders for this reservation.",
+      "checkIn": "Check In",
+      "na": "N/A"
+    },
+    "CheckInModal": {
+      "title": "Check-in Guest",
+      "arrivalMsg": "{name} has arrived for their {time} reservation ({pax} guests).",
+      "assignTable": "Assign Table",
+      "selectPlaceholder": "-- Select an available table --",
+      "noTablesAvailable": "No tables available",
+      "tableOption": "{code} ({zone} - Capacity: {capacity})",
+      "capacityHint": "Hint: Try to assign a table with capacity ≥ {pax}",
+      "cancel": "Cancel",
+      "confirm": "Confirm Check-in",
+      "loading": "Loading tables..."
+    },
+    "Messages": {
+      "checkInSuccess": "Guest checked in successfully!",
+      "checkInFail": "Failed to check in reservation",
+      "loadTablesFail": "Failed to load available tables."
+    }
+  },
+  "Ingredient": {
+    "List": {
+      "title": "Ingredients",
+      "description": "Manage inventory, recipe items, and stock levels.",
+      "searchPlaceholder": "Search ingredients...",
+      "addNew": "Add Ingredient",
+      "export": "Export",
+      "import": "Import",
+      "importing": "Importing...",
+      "table": {
+        "ingredientName": "Ingredient Name",
+        "unit": "Unit",
+        "category": "Category",
+        "uncategorized": "Uncategorized",
+        "suppliers": "Suppliers",
+        "inStock": "In Stock",
+        "lowStock": "Low Stock"
+      },
+      "notifications": {
+        "deleteConfirm": "Are you sure you want to delete {name}?",
+        "deleteSuccess": "Ingredient deleted successfully.",
+        "deleteError": "Failed to delete ingredient.",
+        "createSuccess": "Ingredient created successfully!",
+        "updateSuccess": "Ingredient updated successfully!",
+        "actionError": "Operation failed.",
+        "noDataExport": "No data to export.",
+        "exportSuccess": "Exported successfully!",
+        "invalidExcel": "No valid ingredients found in the Excel file.",
+        "importSuccess": "Successfully imported {success}/{total} ingredients.",
+        "readExcelError": "Failed to read Excel file. Please check the format."
+      }
+    }
+  },
+  "Promotion": {
+    "List": {
+      "title": "Promotion List",
+      "description": "Manage restaurant promotions and discount campaigns.",
+      "addNew": "Add New",
+      "searchPlaceholder": "Search by promo code or name...",
+      "table": {
+        "no": "No.",
+        "promoCode": "Promo Code",
+        "discount": "Discount",
+        "startTime": "Start Time",
+        "endTime": "End Time",
+        "usage": "Usage",
+        "status": "Status"
+      },
+      "filters": {
+        "allStatuses": "All Statuses",
+        "allTypes": "All Types"
+      },
+      "actions": {
+        "view": "View Details",
+        "edit": "Edit"
+      },
+      "notifications": {
+        "statusUpdated": "Status updated successfully",
+        "statusUpdateError": "An error occurred while updating the status"
+      }
+    },
+    "createTitle": "Create New Promotion",
+    "createSubTitle": "The system will automatically change its state according to the applied time.",
+    "editTitle": "Promotion Details #{id}",
+    "noData": "No data found",
+    "Form": {
+      "basicInfo": "1. Basic Information",
+      "promoCode": "Promo Code",
+      "promoCodePlaceholder": "e.g., SUMMER24",
+      "promoName": "Promotion Name",
+      "promoNamePlaceholder": "Enter promotion name...",
+      "desc": "Description",
+      "descPlaceholder": "Enter detailed description...",
+      "start": "Start Time",
+      "end": "End Time",
+      "discountConfig": "2. Discount Configuration",
+      "discountType": "Discount Type",
+      "typePercent": "Percentage (%)",
+      "typeFixed": "Fixed Amount",
+      "discountValue": "Discount Value",
+      "discountValuePlaceholder": "Enter value...",
+      "maxUsage": "Max Usage (Optional)",
+      "unlimited": "Unlimited",
+      "rules": "3. Conditions (Rules)",
+      "ruleDesc": "Order must reach a minimum of ${minOrder} and {minQty} items. Must also contain required dish/category (if selected).",
+      "minOrder": "Min Order Value",
+      "minOrderPlaceholder": "0",
+      "minQty": "Min Quantity",
+      "minQtyPlaceholder": "0",
+      "reqDish": "Required Dish (Optional)",
+      "reqDishPlaceholder": "Select required dishes...",
+      "reqCate": "Required Category (Optional)",
+      "reqCatePlaceholder": "Select required categories...",
+      "targets": "4. Targets",
+      "targetDescAll": "Promotion applies to: Entire order",
+      "targetDescFiltered": "Promotion applies to: Only selected dishes/categories below",
+      "targetDish": "Apply to specific Dish",
+      "targetDishPlaceholder": "Leave blank to skip...",
+      "targetCate": "Apply to specific Category",
+      "targetCatePlaceholder": "Leave blank to skip...",
+      "btnDisable": "Disable",
+      "btnCancel": "Cancel",
+      "btnSave": "Save Promotion",
+      "btnSaving": "Saving...",
+      "statusLockWarning": "Current status is {status}. Configuration conditions are locked.",
+      "confirmDisable": "Disable this promotion? This action cannot be undone.",
+      "successCreate": "Created successfully",
+      "successUpdate": "Updated successfully",
+      "successDisable": "Disabled successfully",
+      "errorSave": "An error occurred while saving"
+    },
+    "Detail": {
+      "title": "Promotion Details #{id}",
+      "status": "Status",
+      "usedCount": "Used: {count} times",
+      "rulesInfo": "Applied Rules",
+      "noRule": "No conditions",
+      "hasTarget": "Applies to specified products/categories.",
+      "targetsInfo": "Applied Targets",
+      "back": "Back"
+    },
+    "Status": {
+      "SCHEDULED": "Scheduled",
+      "ACTIVE": "Active",
+      "EXPIRED": "Expired",
+      "DISABLED": "Disabled"
+    },
+    "Validation": {
+      "promoCodeMin": "Promo code must be at least 3 characters",
+      "startTimeRequired": "Please select a start time",
+      "endTimeRequired": "Please select an end time",
+      "discountMinPercent": "Minimum 1%",
+      "discountMaxPercent": "Maximum 100%",
+      "discountPositive": "Must be greater than 0",
+      "endTimeAfterStartTime": "End time must be after start time"
     }
   }
 }

@@ -24,5 +24,16 @@ export const reservationService = {
     getReservationStatuses: async (): Promise<ReservationStatusDto[]> => {
         const response = await api.get<ApiResponse<ReservationStatusDto[]>>(`/api/reservations/statuses`);
         return response.data;
+    },
+    // 3. API Check-in (Gán bàn & Đổi trạng thái sang CHECKED_IN)
+    // Cần tạo endpoint PATCH /api/reservations/{id}/check-in
+    // Endpoint này BE cần làm 3 việc:
+    // - Đổi statusId của Reservation thành 23 (CHECKED_IN)
+    // - Lưu tableId vào Reservation
+    // - Đổi statusLvId của Table thành 15 (OCCUPIED)
+    checkInReservation: async (reservationId: number, tableId: number): Promise<void> => {
+        await api.patch(`/api/reservations/${reservationId}/check-in`, {
+            tableId: tableId
+        });
     }
 };

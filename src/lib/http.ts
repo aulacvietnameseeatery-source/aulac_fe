@@ -8,12 +8,12 @@
 import { authStorage } from "./auth-storage";
 // import { CSRFProtection } from "./csrf"; // Đảm bảo bạn đã import đúng nếu cần
 
-// 1. check server hay client để dùng URL phù hợp
-const isServer = typeof window === 'undefined';
-
-// 2. Server dùng IP, Client dùng localhost
-export const BASE_URL = process.env.NEXT_PUBLIC_API_URL ||
-    (isServer ? "https://127.0.0.1:7083" : "https://localhost:7083");
+// URL của backend API.
+// - DEV: fallback về localhost:7083 (tự ký TLS, xử lý bởi instrumentation.ts)
+// - PRODUCTION: BẮT BUỘC phải set NEXT_PUBLIC_API_URL trong môi trường deploy
+//   (Vercel → Project Settings → Environment Variables, hoặc .env.production)
+//   Ví dụ: NEXT_PUBLIC_API_URL=https://api.aulac.com
+export const BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "https://localhost:7083";
 
 interface FetchOptions extends RequestInit {
     headers?: Record<string, string>;
@@ -145,6 +145,11 @@ async function http<T>(path: string, options?: FetchOptions): Promise<T> {
                     throw new Error(errorBody.userMessage || errorBody.message || `HTTP Error: ${retryResponse.status}`);
                 }
 
+                // Check if response has content (e.g., 204 No Content)
+                if (retryResponse.status === 204 || retryResponse.headers.get('content-length') === '0') {
+                    return undefined as T;
+                }
+
                 return (await retryResponse.json()) as T;
             } catch (refreshError) {
                 processQueue(new Error("Token refresh failed"), null);
@@ -173,6 +178,11 @@ async function http<T>(path: string, options?: FetchOptions): Promise<T> {
                 status: response.status
             };
             throw error;
+        }
+
+        // Check if response has content (e.g., 204 No Content)
+        if (response.status === 204 || response.headers.get('content-length') === '0') {
+            return undefined as T;
         }
 
         return (await response.json()) as T;

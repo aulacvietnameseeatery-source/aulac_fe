@@ -21,7 +21,7 @@
     "newsletter": "Bản tin",
     "newsletter_desc": "Tham gia cộng đồng của chúng tôi để nhận thông tin về\nsự kiện độc quyền và món ăn mùa mới.",
     "email_placeholder": "Địa chỉ email",
-    "copyright": "© 2026 Au Lac Nhà Hàng Việt Nam. Bản quyền đã được bảo hộ.",
+    "copyright": "© 2026 An Lac Nhà Hàng Việt Nam. Bản quyền đã được bảo hộ.",
     "privacy": "Quyền riêng tư",
     "terms": "Điều khoản",
     "sitemap": "Sơ đồ trang web"
@@ -36,7 +36,7 @@
       "label": "Nghệ Nhân",
       "title": "Làm Chủ\nLinh Hồn Hương Vị",
       "chef_1_name": "Bếp Trưởng Minh",
-      "chef_1_quote": "\"Ẩm thực là cầu nối giữa lịch sử và giác quan. Tại Au Lac, chúng tôi không chỉ nấu; chúng tôi tạo nên ký ức qua gia vị truyền thống và kết cấu hiện đại.\"",
+      "chef_1_quote": "\"Ẩm thực là cầu nối giữa lịch sử và giác quan. Tại An Lac, chúng tôi không chỉ nấu; chúng tôi tạo nên ký ức qua gia vị truyền thống và kết cấu hiện đại.\"",
       "chef_2_name": "Phó Bếp Trưởng Linh",
       "chef_2_quote": "\"Sự cân bằng là kim chỉ nam của chúng tôi. Sự tương phản giữa nóng và lạnh, giòn và mềm, ngọt và mặn định hình bản sắc Việt Nam.\"",
       "cta": "Đọc câu chuyện"
@@ -176,7 +176,7 @@
     },
     "Video": {
       "title": "Quy Trình Chế Biến",
-      "subtitle": "Một phim của Au Lac",
+      "subtitle": "Một phim của An Lac",
       "duration_label": "Thời lượng",
       "duration_value": "02:45 PHÚT",
       "resolution_label": "Độ phân giải",
@@ -255,7 +255,7 @@
     "BookingModal": {
       "selectedTable": "Bàn Đã Chọn",
       "title": "Xác Nhận Đặt Bàn",
-      "restaurantName": "Au Lac Nhà Hàng Việt Nam",
+      "restaurantName": "An Lac Nhà Hàng Việt Nam",
       "date": "Ngày",
       "time": "Giờ",
       "guests": "Khách",
@@ -415,7 +415,7 @@
       }
     },
     "Footer": {
-      "copyright": "© 2024 Au Lac Nhà Hàng Việt Nam - Geneva. Bản quyền đã được bảo hộ."
+      "copyright": "© 2024 An Lac Nhà Hàng Việt Nam - Geneva. Bản quyền đã được bảo hộ."
     }
   },
   "MenuListing": {
@@ -481,7 +481,7 @@
     }
   },
   "FillInforCustomer": {
-    "title": "Chào Mừng Đến Au Lac",
+    "title": "Chào Mừng Đến An Lac",
     "subtitle": "Vui lòng cung cấp thông tin của bạn để bắt đầu trải nghiệm ẩm thực",
     "form": {
       "fullName": "Họ và tên",
@@ -496,7 +496,10 @@
       "skipToMenu": "Bỏ qua, xem thực đơn",
       "errors": {
         "phoneRequired": "Số điện thoại là bắt buộc",
-        "emailInvalid": "Địa chỉ email không hợp lệ"
+        "emailInvalid": "Địa chỉ email không hợp lệ",
+        "tableOccupied": "Bàn này đã có khách",
+        "tableOccupiedDesc": "Bàn này đã có người khác sử dụng. Vui lòng chọn bàn khác.",
+        "updateFailed": "Không thể cập nhật trạng thái bàn. Vui lòng thử lại."
       }
     },
     "footer": "Ẩm thực Việt Nam thủ công"
@@ -840,6 +843,84 @@
       }
     }
   },
+  "Supplier": {
+    "List": {
+      "title": "Quản lý Nhà cung cấp",
+      "description": "Quản lý và tổ chức các nhà cung cấp một cách hiệu quả.",
+      "searchPlaceholder": "Tìm theo tên, số điện thoại hoặc email...",
+      "addNew": "Thêm Nhà cung cấp Mới",
+      "table": {
+        "no": "STT",
+        "name": "Tên Nhà cung cấp",
+        "phone": "Số điện thoại",
+        "email": "Email"
+      },
+      "deleteModal": {
+        "title": "Xóa Nhà cung cấp",
+        "message": "Bạn có chắc chắn muốn xóa \"{name}\"? Hành động này không thể hoàn tác.",
+        "confirm": "Xóa",
+        "cancel": "Hủy"
+      },
+      "notifications": {
+        "deleteSuccess": "Đã xóa nhà cung cấp thành công",
+        "deleteError": "Không thể xóa nhà cung cấp"
+      }
+    },
+    "Add": {
+      "title": "Thêm Nhà cung cấp Mới",
+      "subtitle": "Tạo hồ sơ nhà cung cấp mới với thông tin liên hệ.",
+      "supplierName": "Tên Nhà cung cấp",
+      "supplierNamePlaceholder": "Nhập tên nhà cung cấp",
+      "phone": "Số điện thoại",
+      "phonePlaceholder": "Nhập số điện thoại (không bắt buộc)",
+      "email": "Email",
+      "emailPlaceholder": "Nhập địa chỉ email (không bắt buộc)",
+      "cancel": "Hủy",
+      "saveButton": "Thêm Nhà cung cấp",
+      "validation": {
+        "nameRequired": "Tên nhà cung cấp là bắt buộc",
+        "nameMaxLength": "Tên nhà cung cấp không được vượt quá 200 ký tự",
+        "phoneInvalid": "Số điện thoại chỉ được chứa chữ số",
+        "phoneMaxLength": "Số điện thoại không được vượt quá 50 ký tự",
+        "emailInvalid": "Vui lòng nhập địa chỉ email hợp lệ",
+        "emailMaxLength": "Email không được vượt quá 150 ký tự",
+        "fixErrors": "Vui lòng sửa các lỗi trước khi gửi"
+      },
+      "notifications": {
+        "createSuccess": "Đã thêm nhà cung cấp thành công",
+        "createError": "Không thể thêm nhà cung cấp"
+      }
+    },
+    "Edit": {
+      "title": "Chỉnh sửa Nhà cung cấp",
+      "subtitle": "Cập nhật thông tin và chi tiết liên hệ nhà cung cấp.",
+      "supplierName": "Tên Nhà cung cấp",
+      "supplierNamePlaceholder": "Nhập tên nhà cung cấp",
+      "phone": "Số điện thoại",
+      "phonePlaceholder": "Nhập số điện thoại (không bắt buộc)",
+      "email": "Email",
+      "emailPlaceholder": "Nhập địa chỉ email (không bắt buộc)",
+      "cancel": "Hủy",
+      "saveButton": "Lưu Thay đổi",
+      "loading": "Đang tải dữ liệu nhà cung cấp...",
+      "errorTitle": "Không thể tải nhà cung cấp",
+      "backToList": "Quay lại Danh sách",
+      "validation": {
+        "nameRequired": "Tên nhà cung cấp là bắt buộc",
+        "nameMaxLength": "Tên nhà cung cấp không được vượt quá 200 ký tự",
+        "phoneInvalid": "Số điện thoại chỉ được chứa chữ số",
+        "phoneMaxLength": "Số điện thoại không được vượt quá 50 ký tự",
+        "emailInvalid": "Vui lòng nhập địa chỉ email hợp lệ",
+        "emailMaxLength": "Email không được vượt quá 150 ký tự",
+        "fixErrors": "Vui lòng sửa các lỗi trước khi gửi"
+      },
+      "notifications": {
+        "updateSuccess": "Đã cập nhật nhà cung cấp thành công",
+        "updateError": "Không thể cập nhật nhà cung cấp",
+        "loadError": "Không thể tải dữ liệu nhà cung cấp"
+      }
+    }
+  },
   "common": {
     "table": {
       "searchPlaceholder": "Tìm kiếm",
@@ -938,6 +1019,21 @@
       "description": "Quản lý và tổ chức các danh mục thực đơn nhà hàng một cách hiệu quả.",
       "searchPlaceholder": "Tìm theo tên danh mục...",
       "addNew": "Thêm Danh mục Mới",
+      "table": {
+        "no": "STT",
+        "name": "Tên",
+        "description": "Mô tả",
+        "status": "Trạng thái"
+      },
+      "status": {
+        "active": "Hoạt động",
+        "inactive": "Không hoạt động"
+      },
+      "notifications": {
+        "activated": "Đã kích hoạt danh mục thành công",
+        "deactivated": "Đã vô hiệu hóa danh mục thành công",
+        "updateError": "Không thể cập nhật trạng thái danh mục"
+      },
       "filters": {
         "allStatuses": "Tất cả Trạng thái",
         "active": "Hoạt động",
@@ -1365,7 +1461,8 @@
     "roles": "Vai trò",
     "dish": "Món ăn",
     "dishCategory": "Danh mục món",
-    "ingredient": "Nguyên liệu",
+    "ingredients": "Nguyên liệu",
+    "suppliers": "Nhà cung cấp",
     "coupons": "Mã giảm giá",
     "orders": "Đơn hàng",
     "kitchen": "Bếp (KDS)",
@@ -1467,6 +1564,181 @@
       "placeholder": "Nhập lý do...",
       "confirm": "Xác nhận",
       "cancel": "Hủy"
+    }
+  },
+  "ReservationManagement": {
+    "List": {
+      "title": "Danh sách đặt bàn",
+      "searchPlaceholder": "Tìm tên khách, số điện thoại...",
+      "addNew": "Thêm mới",
+      "all": "Tất cả",
+      "empty": "Không tìm thấy đơn đặt bàn nào"
+    },
+    "Card": {
+      "table": "Bàn",
+      "guests": "Khách",
+      "createdOn": "Tạo lúc",
+      "status": "Trạng thái",
+      "late": "Trễ giờ",
+      "viewNote": "Ghi chú",
+      "customerNotes": "Ghi chú của khách:",
+      "noNotes": "Không có yêu cầu đặc biệt hay gọi món trước.",
+      "checkIn": "Nhận bàn",
+      "na": "Chưa xếp"
+    },
+    "CheckInModal": {
+      "title": "Khách nhận bàn",
+      "arrivalMsg": "{name} đã đến nhận bàn lúc {time} ({pax} khách).",
+      "assignTable": "Xếp bàn",
+      "selectPlaceholder": "-- Chọn một bàn trống --",
+      "noTablesAvailable": "Hiện không có bàn trống",
+      "tableOption": "{code} ({zone} - Sức chứa: {capacity})",
+      "capacityHint": "Gợi ý: Hãy xếp khách vào bàn có sức chứa ≥ {pax}",
+      "cancel": "Hủy bỏ",
+      "confirm": "Xác nhận",
+      "loading": "Đang tải danh sách bàn..."
+    },
+    "Messages": {
+      "checkInSuccess": "Khách nhận bàn thành công!",
+      "checkInFail": "Lỗi khi cập nhật nhận bàn",
+      "loadTablesFail": "Lỗi khi tải danh sách bàn trống."
+    }
+  },
+  "Ingredient": {
+    "List": {
+      "title": "Kho Nguyên Liệu",
+      "description": "Quản lý kho, nguyên liệu công thức và mức tồn kho.",
+      "searchPlaceholder": "Tìm kiếm nguyên liệu...",
+      "addNew": "Thêm nguyên liệu",
+      "export": "Xuất Excel",
+      "import": "Nhập Excel",
+      "importing": "Đang nhập...",
+      "table": {
+        "ingredientName": "Tên Nguyên Liệu",
+        "unit": "ĐVT",
+        "category": "Danh mục",
+        "uncategorized": "Chưa phân loại",
+        "suppliers": "Nhà cung cấp",
+        "inStock": "Tồn kho",
+        "lowStock": "Sắp hết hàng"
+      },
+      "notifications": {
+        "deleteConfirm": "Bạn có chắc chắn muốn xóa {name} không?",
+        "deleteSuccess": "Đã xóa nguyên liệu thành công.",
+        "deleteError": "Xóa nguyên liệu thất bại.",
+        "createSuccess": "Thêm mới nguyên liệu thành công!",
+        "updateSuccess": "Cập nhật nguyên liệu thành công!",
+        "actionError": "Thao tác thất bại.",
+        "noDataExport": "Không có dữ liệu để xuất.",
+        "exportSuccess": "Xuất file thành công!",
+        "invalidExcel": "Không tìm thấy nguyên liệu hợp lệ trong file Excel.",
+        "importSuccess": "Đã nhập thành công {success}/{total} nguyên liệu.",
+        "readExcelError": "Lỗi đọc file Excel. Vui lòng kiểm tra lại định dạng."
+      }
+    }
+  },
+  "Promotion": {
+    "List": {
+      "title": "Danh sách Khuyến mãi",
+      "description": "Quản lý các chương trình khuyến mãi và mã giảm giá của nhà hàng.",
+      "addNew": "Thêm mới",
+      "searchPlaceholder": "Tìm kiếm theo mã hoặc tên khuyến mãi...",
+      "table": {
+        "no": "STT",
+        "promoCode": "Mã KM",
+        "discount": "Giảm giá",
+        "startTime": "Bắt đầu",
+        "endTime": "Kết thúc",
+        "usage": "Sử dụng",
+        "status": "Trạng thái"
+      },
+      "filters": {
+        "allStatuses": "Tất cả trạng thái",
+        "allTypes": "Tất cả loại"
+      },
+      "actions": {
+        "view": "Xem chi tiết",
+        "edit": "Chỉnh sửa"
+      },
+      "notifications": {
+        "statusUpdated": "Cập nhật trạng thái thành công",
+        "statusUpdateError": "Đã xảy ra lỗi khi cập nhật trạng thái"
+      }
+    },
+    "createTitle": "Tạo Khuyến Mãi Mới",
+    "createSubTitle": "Hệ thống sẽ tự động chuyển trạng thái theo thời gian áp dụng.",
+    "editTitle": "Chi tiết Khuyến Mãi #{id}",
+    "noData": "Không tìm thấy dữ liệu",
+    "Form": {
+      "basicInfo": "1. Thông tin cơ bản",
+      "promoCode": "Mã Khuyến Mãi",
+      "promoCodePlaceholder": "Ví dụ: SUMMER24",
+      "promoName": "Tên Chương Trình",
+      "promoNamePlaceholder": "Nhập tên chương trình...",
+      "desc": "Mô tả",
+      "descPlaceholder": "Nhập mô tả chi tiết...",
+      "start": "Thời gian bắt đầu",
+      "end": "Thời gian kết thúc",
+      "discountConfig": "2. Cấu hình Giảm giá",
+      "discountType": "Loại Giảm",
+      "typePercent": "Phần Trăm (%)",
+      "typeFixed": "Số Tiền",
+      "discountValue": "Giá trị giảm",
+      "discountValuePlaceholder": "Nhập giá trị...",
+      "maxUsage": "Giới hạn số lần (Tùy chọn)",
+      "unlimited": "Không giới hạn",
+      "rules": "3. Điều kiện (Rules)",
+      "ruleDesc": "Đơn hàng cần đạt tối thiểu ${minOrder} và {minQty} sản phẩm. Đồng thời phải chứa món ăn/danh mục yêu cầu (nếu có chọn).",
+      "minOrder": "Giá trị ĐH tối thiểu",
+      "minOrderPlaceholder": "0",
+      "minQty": "Số lượng tối thiểu",
+      "minQtyPlaceholder": "0",
+      "reqDish": "Bắt buộc có Món (Tùy chọn)",
+      "reqDishPlaceholder": "Chọn món yêu cầu...",
+      "reqCate": "Bắt buộc có Danh mục (Tùy chọn)",
+      "reqCatePlaceholder": "Chọn danh mục yêu cầu...",
+      "targets": "4. Đối tượng (Targets)",
+      "targetDescAll": "Khuyến mãi sẽ áp dụng lên: Toàn bộ đơn hàng",
+      "targetDescFiltered": "Khuyến mãi sẽ áp dụng lên: Chỉ các món/danh mục được chọn bên dưới",
+      "targetDish": "Áp dụng cho Món cụ thể",
+      "targetDishPlaceholder": "Để trống để bỏ qua...",
+      "targetCate": "Áp dụng cho Danh mục cụ thể",
+      "targetCatePlaceholder": "Để trống để bỏ qua...",
+      "btnDisable": "Vô hiệu hóa (Disable)",
+      "btnCancel": "Hủy",
+      "btnSave": "Lưu Khuyến Mãi",
+      "btnSaving": "Đang lưu...",
+      "statusLockWarning": "Trạng thái hiện tại là {status}. Các điều kiện cấu hình đã bị khóa.",
+      "confirmDisable": "Vô hiệu hóa Khuyến Mãi này? Không thể hoàn tác.",
+      "successCreate": "Tạo thành công",
+      "successUpdate": "Cập nhật thành công",
+      "successDisable": "Đã vô hiệu hóa",
+      "errorSave": "Có lỗi xảy ra khi lưu"
+    },
+    "Detail": {
+      "title": "Chi tiết Khuyến Mãi #{id}",
+      "status": "Trạng thái",
+      "usedCount": "Đã sử dụng: {count} lần",
+      "rulesInfo": "Quy tắc áp dụng",
+      "noRule": "Không có điều kiện",
+      "targetsInfo": "Đối tượng áp dụng",
+      "hasTarget": "Áp dụng cho các sản phẩm/danh mục được chỉ định.",
+      "back": "Quay lại"
+    },
+    "Status": {
+      "SCHEDULED": "Sắp diễn ra",
+      "ACTIVE": "Đang diễn ra",
+      "EXPIRED": "Đã kết thúc",
+      "DISABLED": "Bị vô hiệu"
+    },
+    "Validation": {
+      "promoCodeMin": "Mã KM phải từ 3 ký tự",
+      "startTimeRequired": "Vui lòng chọn thời gian bắt đầu",
+      "endTimeRequired": "Vui lòng chọn thời gian kết thúc",
+      "discountMinPercent": "Tối thiểu 1%",
+      "discountMaxPercent": "Tối đa 100%",
+      "discountPositive": "Phải lớn hơn 0",
+      "endTimeAfterStartTime": "Kết thúc phải sau bắt đầu"
     }
   }
 }

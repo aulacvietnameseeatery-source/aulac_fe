@@ -22,8 +22,8 @@ export const useReservationList = () => {
     // Filter State
     const [filters, setFilters] = useState({
         search: "",
-        date: new Date(), // Mặc định là Today
-        statusId: null as number | null, // null = All
+        date: null as Date | null,
+        statusId: null as number | null,
     });
 
     // 1. Fetch Statuses (Tabs) - Chạy 1 lần
@@ -47,7 +47,7 @@ export const useReservationList = () => {
                 pageIndex: pagination.pageIndex,
                 pageSize: pagination.pageSize,
                 search: filters.search,
-                date: format(filters.date, "yyyy-MM-dd"), // Format gửi lên BE
+                date: filters.date ? format(filters.date, "yyyy-MM-dd") : undefined,
                 statusId: filters.statusId || undefined,
             };
 
@@ -76,7 +76,7 @@ export const useReservationList = () => {
         setPagination(prev => ({ ...prev, pageIndex: 1 }));
     };
 
-    const onDateChange = (date: Date) => {
+    const onDateChange = (date: Date | null) => {
         setFilters(prev => ({ ...prev, date: date }));
         setPagination(prev => ({ ...prev, pageIndex: 1 }));
     };

@@ -26,6 +26,7 @@ export interface TableManagementDto {
   typeName: string;
   zoneId: number;
   zoneName: string;
+  images: TableMediaDto[];
 }
 
 /** Returned from GET /api/tables/{id} (detail) */
@@ -63,15 +64,18 @@ export interface CreateTableRequest {
   statusLvId: number;  // FK → lookup_value (TABLE_STATUS)
   typeLvId: number;
   zoneLvId: number;
+  images?: File[];       // optional images — sent as multipart/form-data
 }
 
 export interface UpdateTableRequest {
   tableCode?: string;
   capacity?: number;
   isOnline?: boolean;
-  statusLvId?: number;  // FK → lookup_value (TABLE_STATUS)
+  statusLvId?: number;    // FK → lookup_value (TABLE_STATUS)
   typeLvId?: number;
   zoneLvId?: number;
+  images?: File[];         // new images to add
+  removedImageIds?: number[];  // mediaIds to delete
 }
 
 export interface UpdateTableStatusRequest {
@@ -160,8 +164,8 @@ export interface TableFormData {
   qrCodeUrl?: string;
   qrCodeImageUrl?: string;
   qrCodeGenerated?: boolean;
-  // Image fields (P2 — no upload endpoint yet)
-  images?: string[];
+  // Image fields — TableMediaDto so mediaId is available for delete calls
+  images?: TableMediaDto[];
 }
 
 // ──────────────────────────────────────────────────────────
@@ -308,6 +312,7 @@ export function mapDtoToTable(dto: TableManagementDto): RestaurantTable {
     statusName: dto.statusName,
     typeName: dto.typeName,
     zoneName: dto.zoneName,
+    images: dto.images ?? [],
     activeOrders: 0,
     hasErrors: false,
   };

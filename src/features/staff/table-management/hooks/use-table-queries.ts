@@ -8,6 +8,7 @@ import type {
   UpdateTableStatusRequest,
   TableManagementDto,
   TableDetailDto,
+  TableMediaDto,
   LookupValueDto,
   CreateLookupValueRequest,
   UpdateLookupValueRequest,
@@ -467,6 +468,63 @@ export function useRegenerateQrMutation(callbacks?: {
     onError: (error: any) => {
       const msg = error?.response?.data?.userMessage || error.message;
       toast.error("Failed to regenerate QR code", { description: msg });
+      callbacks?.onError?.(error);
+    },
+  });
+}
+
+/**
+ * POST /api/tables/{id}/media — Upload images for a table
+ */
+export function useUploadTableMediaMutation(callbacks?: {
+  onSuccess?: (data: TableMediaDto[]) => void;
+  onError?: (error: Error) => void;
+}) {
+  const queryClient = useQueryClient();
+
+  return useMutation<
+    TableMediaDto[],
+    Error,
+    { tableId: number; files: File[] }
+  >({
+    mutationFn: ({ tableId, files }) =>
+      tableService.uploadTableMedia(tableId, files),
+
+    onSuccess: (data, { tableId }) => {
+      toast.success(`${data.length} image(s) uploaded successfully`);
+      queryClient.invalidateQueries({ queryKey: TABLE_QUERY_KEYS.detail(tableId) });
+      callbacks?.onSuccess?.(data);
+    },
+
+    onError: (error: any) => {
+      const msg = error?.response?.data?.userMessage || error.message;
+      toast.error("Upload failed", { description: msg });
+      callbacks?.onError?.(error);
+    },
+  });
+}
+
+/**
+ * DELETE /api/tables/{id}/media/{mediaId} — Remove a single image
+ */
+export function useDeleteTableMediaMutation(callbacks?: {
+  onSuccess?: () => void;
+  onError?: (error: Error) => void;
+}) {
+  const queryClient = useQueryClient();
+
+  return useMutation<void, Error, { tableId: number; mediaId: number }>({
+    mutationFn: ({ tableId, mediaId }) =>
+      tableService.deleteTableMedia(tableId, mediaId),
+
+    onSuccess: (_, { tableId }) => {
+      queryClient.invalidateQueries({ queryKey: TABLE_QUERY_KEYS.detail(tableId) });
+      callbacks?.onSuccess?.();
+    },
+
+    onError: (error: any) => {
+      const msg = error?.response?.data?.userMessage || error.message;
+      toast.error("Failed to delete image", { description: msg });
       callbacks?.onError?.(error);
     },
   });
