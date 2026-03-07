@@ -2,7 +2,6 @@
 
 import React, { useRef, useEffect, useState, useCallback } from "react";
 import { createPortal } from "react-dom";
-import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { MoreVertical, Pencil, Trash2, Eye } from "lucide-react";
 import { PermissionGuard } from "@/components/permission-guard";
@@ -71,19 +70,6 @@ const TableCard: React.FC<TableCardProps> = ({
       )}
       onClick={() => onSelect?.(table)}
     >
-      {/* Table image */}
-      {table.images && table.images.length > 0 && (
-        <div className="relative w-full h-28 bg-gray-50">
-          <Image
-            src={table.images[0].url}
-            alt={table.tableCode}
-            fill
-            className="object-cover"
-            sizes="(max-width: 640px) 100vw, 240px"
-          />
-        </div>
-      )}
-
       <div className="p-4">
         {/* Top row: table code + context menu */}
         <div className="flex items-start justify-between mb-2">

@@ -7,7 +7,8 @@ import { ALCombobox } from "@/components/ui/al-combobox"; // used for static Sta
 import { ALFileUploader } from "@/components/ui/al-file-uploader";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
-import { RefreshCcw, Download, Eye, ImageOff } from "lucide-react";
+import { RefreshCcw, Download, Eye, EyeOff, ImageOff } from "lucide-react";
+import { QRCodeSVG } from "qrcode.react";
 import type { RestaurantTable, TableFormData, TableStatus } from "../types";
 import { TABLE_STATUS_CONFIG, TABLE_STATUS_LV_IDS } from "../types";
 import {
@@ -97,6 +98,8 @@ const TableModal: React.FC<TableModalProps> = ({
         qrCodeGenerated: !!table.qrCodeUrl,
         images: table.images ?? [],
       });
+      // Auto-show QR preview when editing a table that already has a QR image
+      setQrPreview(!!table.qrCodeImageUrl);
     } else {
       setFormData(initialFormData);
       setQrPreview(false);
@@ -252,9 +255,33 @@ const TableModal: React.FC<TableModalProps> = ({
             </div>
 
             {mode === "add" ? (
-              <p className="text-xs text-gray-400">
-                A QR code is generated automatically when the table is created.
-              </p>
+              /* Client-side QR preview — updates live as the user types the table code */
+              <div className="space-y-2">
+                {formData.tableCode.trim() ? (
+                  <div className="bg-gray-50 rounded-lg p-4 flex items-start gap-4">
+                    <div className="shrink-0 rounded bg-white p-1.5">
+                      <QRCodeSVG
+                        value={`${typeof window !== "undefined" ? window.location.origin : ""}/order?table=${encodeURIComponent(formData.tableCode.trim())}`}
+                        size={80}
+                        level="M"
+                      />
+                    </div>
+                    <div className="space-y-1 min-w-0">
+                      <p className="text-xs font-medium text-gray-600">Preview QR Code</p>
+                      <p className="text-[10px] text-gray-400 break-all">
+                        Encodes: /order?table={formData.tableCode.trim()}
+                      </p>
+                      <p className="text-[10px] text-gray-400">
+                        The server will add a secure token when the table is saved.
+                      </p>
+                    </div>
+                  </div>
+                ) : (
+                  <p className="text-xs text-gray-400">
+                    Enter a table code above to preview the QR code.
+                  </p>
+                )}
+              </div>
             ) : (
               <>
                 <div className="flex items-center gap-2">
@@ -284,8 +311,11 @@ const TableModal: React.FC<TableModalProps> = ({
                         size="sm"
                         onClick={() => setQrPreview((v) => !v)}
                       >
-                        <Eye size={13} className="mr-1" />
-                        {qrPreview ? "Hide" : "Preview"}
+                        {qrPreview ? (
+                          <><EyeOff size={13} className="mr-1" />Hide</>
+                        ) : (
+                          <><Eye size={13} className="mr-1" />Preview</>
+                        )}
                       </Button>
                     </>
                   )}
