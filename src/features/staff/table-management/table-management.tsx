@@ -61,6 +61,9 @@ const TableManagement: React.FC = () => {
   // Zone collapse state
   const [collapsedZones, setCollapsedZones] = useState<Set<string>>(new Set());
 
+  // Tracks whether the detail panel was open before an edit modal was triggered from it
+  const [detailOpenBeforeEdit, setDetailOpenBeforeEdit] = useState(false);
+
   // ── Build API query params from filters ──
   const queryParams = useMemo<TableQueryParams>(() => {
     const params: TableQueryParams = {
@@ -124,7 +127,14 @@ const TableManagement: React.FC = () => {
     },
   });
 
-  const statusMutation = useUpdateTableStatusMutation();
+  const statusMutation = useUpdateTableStatusMutation({
+    onSuccess: (data) => {
+      // Keep the open detail panel in sync with the updated status
+      if (detailTable?.tableId === data.tableId) {
+        setDetailTable(mapDtoToTable(data));
+      }
+    },
+  });
   const bulkOnlineMutation = useBulkOnlineMutation();
 
   // ── Group by zone for display ──
@@ -203,6 +213,14 @@ const TableManagement: React.FC = () => {
   const handleSelectTable = useCallback((table: RestaurantTable) => {
     setDetailTable(table);
     setIsDetailOpen(true);
+  }, []);
+
+  // Edit triggered from the detail panel — hide the panel first, reopen when modal closes
+  const handleEditFromDetail = useCallback((t: RestaurantTable) => {
+    setDetailOpenBeforeEdit(true);
+    setIsDetailOpen(false);
+    setSelectedTable(t);
+    setIsEditModalOpen(true);
   }, []);
 
   const handleToggleZoneCollapse = useCallback((zone: string) => {
@@ -347,6 +365,11 @@ const TableManagement: React.FC = () => {
         onClose={() => {
           setIsEditModalOpen(false);
           setSelectedTable(null);
+          // Reopen detail panel if it was shown before the edit was triggered
+          if (detailOpenBeforeEdit) {
+            setIsDetailOpen(true);
+            setDetailOpenBeforeEdit(false);
+          }
         }}
         onSubmit={handleEditTable}
         isSubmitting={updateMutation.isPending}
@@ -372,10 +395,7 @@ const TableManagement: React.FC = () => {
           setIsDetailOpen(false);
           setDetailTable(null);
         }}
-        onEdit={(t) => {
-          setSelectedTable(t);
-          setIsEditModalOpen(true);
-        }}
+        onEdit={handleEditFromDetail}
         onDelete={(t) => {
           setSelectedTable(t);
           setIsDeleteModalOpen(true);
