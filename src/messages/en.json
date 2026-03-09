@@ -1472,6 +1472,7 @@
     "reservations": "Reservations",
     "promotions": "Promotions",
     "storeSettings": "Store Settings",
+    "systemSettings": "System Settings",
     "notifications": "Notifications",
     "logout": "Logout",
     "loggingOut": "Logging out...",
@@ -1739,6 +1740,25 @@
       "discountMaxPercent": "Maximum 100%",
       "discountPositive": "Must be greater than 0",
       "endTimeAfterStartTime": "End time must be after start time"
+    }
+  },
+  "SystemSettings": {
+    "title": "Store Settings",
+    "description": "Manage application and store configurations.",
+    "refresh": "Refresh",
+    "loading": "Loading settings...",
+    "noSettings": "No settings found.",
+    "settingCount": "{count, plural, one {# setting} other {# settings}}",
+    "sensitiveHidden": "sensitive hidden",
+    "addSetting": "Add New Setting",
+    "add": "Add Setting",
+    "cancel": "Cancel",
+    "save": "Save",
+    "saving": "Saving...",
+    "notifications": {
+      "saveSuccess": "Settings for group '{group}' saved successfully.",
+      "createSuccess": "Setting created successfully.",
+      "saveError": "Failed to save settings."
     }
   }
 }

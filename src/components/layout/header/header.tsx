@@ -12,6 +12,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { NavLink } from "@/components/layout/header/nav-link";
 import { FR, GB, VN } from 'country-flag-icons/react/3x2';
+import { useStoreSettings } from "@/hooks/use-store-settings";
 
 interface HeaderProps {
     isScrolled: boolean;
@@ -28,6 +29,8 @@ const FLAG_MAP: Record<string, React.ElementType> = {
 export function Header({ isScrolled, locale }: HeaderProps) {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isLangDropdownOpen, setIsLangDropdownOpen] = useState(false);
+
+    const { data: storeSettings } = useStoreSettings();
 
     const [isPending, startTransition] = useTransition();
     const t = useTranslations('Header');
@@ -249,17 +252,25 @@ export function Header({ isScrolled, locale }: HeaderProps) {
                 )}>
                     <div className="flex items-center gap-10 text-white/70">
                         <div className="flex items-center gap-2">
-                            <MapPin size={14} className="text-[#C5A059]"/>
-                            <span className="text-[10px] xl:text-[11px] font-medium tracking-[0.15em] uppercase">Quai du Mont-Blanc 13 1201 Geneva</span>
+                            <MapPin size={14} className="text-[#C5A059]" />
+                            <span className="text-[10px] xl:text-[11px] font-medium tracking-[0.15em] uppercase">
+                                {storeSettings?.streetAddress && storeSettings?.city
+                                    ? `${storeSettings.streetAddress}, ${storeSettings.city}`.trim()
+                                    : ""}
+                            </span>
                         </div>
                         <div className="flex items-center gap-2">
-                            <Phone size={14} className="text-[#C5A059]"/>
-                            <span className="text-[10px] xl:text-[11px] font-medium tracking-[0.15em] uppercase">+41 22 123 45 67</span>
+                            <Phone size={14} className="text-[#C5A059]" />
+                            <span className="text-[10px] xl:text-[11px] font-medium tracking-[0.15em] uppercase">
+                                {storeSettings?.phone || ""}
+                            </span>
                         </div>
                     </div>
                     <div className="flex items-center gap-2 text-white/70">
-                        <Clock size={14} className="text-[#C5A059]"/>
-                        <span className="text-[10px] xl:text-[11px] font-medium tracking-[0.15em] uppercase">Mon - Sun: 11:30 AM - 11:00 PM</span>
+                        <Clock size={14} className="text-[#C5A059]" />
+                        <span className="text-[10px] xl:text-[11px] font-medium tracking-[0.15em] uppercase">
+                            {storeSettings?.openingHours || ""}
+                        </span>
                     </div>
                 </div>
 
@@ -305,9 +316,26 @@ export function Header({ isScrolled, locale }: HeaderProps) {
                     </div>
 
                     <div className="mt-auto pt-12 pb-8 flex flex-col gap-4 text-white/70">
-                        <div className="flex items-start gap-4"><MapPin size={18} className="text-[#C5A059] shrink-0 mt-0.5" /><span className="text-sm tracking-wider leading-relaxed">Quai du Mont-Blanc 13 1201 Geneva</span></div>
-                        <div className="flex items-center gap-4"><Phone size={18} className="text-[#C5A059] shrink-0" /><span className="text-sm tracking-wider">+41 22 123 45 67</span></div>
-                        <div className="flex items-center gap-4"><Clock size={18} className="text-[#C5A059] shrink-0" /><span className="text-sm tracking-wider">Mon - Sun: 11:30 AM - 11:00 PM</span></div>
+                        <div className="flex items-start gap-4">
+                            <MapPin size={18} className="text-[#C5A059] shrink-0 mt-0.5" />
+                            <span className="text-sm tracking-wider leading-relaxed">
+                                {storeSettings?.streetAddress && storeSettings?.city
+                                    ? `${storeSettings.streetAddress}, ${storeSettings.city}`.trim()
+                                    : ""}
+                            </span>
+                        </div>
+                        <div className="flex items-center gap-4">
+                            <Phone size={18} className="text-[#C5A059] shrink-0" />
+                            <span className="text-sm tracking-wider">
+                                {storeSettings?.phone || ""}
+                            </span>
+                        </div>
+                        <div className="flex items-center gap-4">
+                            <Clock size={18} className="text-[#C5A059] shrink-0" />
+                            <span className="text-sm tracking-wider">
+                                {storeSettings?.openingHours || ""}
+                            </span>
+                        </div>
                     </div>
                 </div>
             )}
