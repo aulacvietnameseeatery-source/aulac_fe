@@ -1412,11 +1412,11 @@
       "guest": "Khách lẻ",
       "notePlaceholder": "Ghi chú món...",
       "status": {
-          "Pending": "Chờ xử lý",
-          "In progress": "Đang làm",
-          "Completed": "Hoàn thành",
-          "Cancelled": "Đã huỷ"
-        }
+        "Pending": "Chờ xử lý",
+        "In progress": "Đang làm",
+        "Completed": "Hoàn thành",
+        "Cancelled": "Đã huỷ"
+      }
     },
     "PaymentModal": {
       "title": "Thanh toán & Hoàn tất đơn hàng",
@@ -1472,6 +1472,7 @@
     "reservations": "Đặt bàn",
     "promotions": "Khuyến mãi",
     "storeSettings": "Cài đặt cửa hàng",
+    "systemSettings": "Cài đặt hệ thống",
     "notifications": "Thông báo",
     "logout": "Đăng xuất",
     "loggingOut": "Đang đăng xuất...",
@@ -1739,6 +1740,25 @@
       "discountMaxPercent": "Tối đa 100%",
       "discountPositive": "Phải lớn hơn 0",
       "endTimeAfterStartTime": "Kết thúc phải sau bắt đầu"
+    }
+  },
+  "SystemSettings": {
+    "title": "Cài đặt cửa hàng",
+    "description": "Quản lý cấu hình ứng dụng và cửa hàng.",
+    "refresh": "Làm mới",
+    "loading": "Đang tải cài đặt...",
+    "noSettings": "Không tìm thấy cài đặt.",
+    "settingCount": "{count} cài đặt",
+    "sensitiveHidden": "ẩn nhạy cảm",
+    "addSetting": "Thêm cài đặt mới",
+    "add": "Thêm cài đặt",
+    "cancel": "Hủy",
+    "save": "Lưu",
+    "saving": "Đang lưu...",
+    "notifications": {
+      "saveSuccess": "Đã lưu cài đặt nhóm '{group}' thành công.",
+      "createSuccess": "Tạo cài đặt mới thành công.",
+      "saveError": "Lưu cài đặt thất bại."
     }
   }
 }

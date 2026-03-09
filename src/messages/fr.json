@@ -1403,6 +1403,7 @@
     "reservations": "Réservations",
     "promotions": "Promotions",
     "storeSettings": "Paramètres du magasin",
+    "systemSettings": "Paramètres système",
     "notifications": "Notifications",
     "logout": "Déconnexion",
     "loggingOut": "Déconnexion...",
@@ -1670,6 +1671,25 @@
       "discountMaxPercent": "Maximum 100 %",
       "discountPositive": "Doit être supérieur à 0",
       "endTimeAfterStartTime": "La fin doit être après le début"
+    }
+  },
+  "SystemSettings": {
+    "title": "Paramètres de la boutique",
+    "description": "Gérez la configuration de l'application et de la boutique.",
+    "refresh": "Actualiser",
+    "loading": "Chargement des paramètres...",
+    "noSettings": "Aucun paramètre trouvé.",
+    "settingCount": "{count, plural, one {# paramètre} other {# paramètres}}",
+    "sensitiveHidden": "sensibles masqués",
+    "addSetting": "Ajouter un nouveau paramètre",
+    "add": "Ajouter le paramètre",
+    "cancel": "Annuler",
+    "save": "Enregistrer",
+    "saving": "Enregistrement...",
+    "notifications": {
+      "saveSuccess": "Paramètres du groupe '{group}' enregistrés avec succès.",
+      "createSuccess": "Paramètre créé avec succès.",
+      "saveError": "Échec de l'enregistrement des paramètres."
     }
   }
 }

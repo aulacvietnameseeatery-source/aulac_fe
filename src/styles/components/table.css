@@ -17,11 +17,14 @@
     display: flex;
     flex-direction: column;
 }
-.form-list{
-    height: 52px;
+
+.form-list {
+    min-height: 52px;
+    height: auto;
     border-bottom: 1px solid #e5e7eb;
     padding: 4px;
 }
+
 .form-list .condition-box {
     padding: 8px 16px;
     background: #fff;
@@ -41,7 +44,9 @@
 
 .search-input-list {
     transition: all .2s cubic-bezier(.4, 0, .2, 1);
-    width: 200px;
+    min-width: 200px;
+    width: fit-content;
+    max-width: 400px;
 }
 
 
@@ -178,6 +183,7 @@ th.ms-th {
     box-shadow: inset -1px 0 0 #E5E7EB;
 
 }
+
 .ms-th.ms-col-th .lock {
     z-index: 3;
 }
@@ -751,7 +757,7 @@ th.ms-th:hover .filter--default {
 /* Input Container */
 .input-container {
     border-radius: 4px;
-    padding: 6px 10px;
+    padding: 4px 10px;
     min-height: 28px;
     background: #fff;
     transition: all 0.2s ease;

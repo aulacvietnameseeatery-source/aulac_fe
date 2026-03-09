@@ -463,16 +463,17 @@ export function BaseTable<T>({
                             {/* Toolbar */}
                             <div className="condition-box flex flex-row items-center w-full">
                                 <div className="flex gap-2 items-center">
-                                    <div className="ms-input ms-editor w-full flex items-center gap-4 search-input-list max-h-4" style={{ height: 'auto' }}>
+                                    <div className="ms-input ms-editor w-full flex items-center gap-4 search-input-list" style={{ height: 'auto' }}>
                                         <div className="flex-1 flex items-center input-container border pointer">
                                             <div className="mi icon16 icon left search"></div>
                                             <input
                                                 value={searchQuery}
                                                 onChange={(e) => setSearchQuery(e.target.value)}
-                                                className="ms-input-item flex w-full"
+                                                className="ms-input-item flex w-full min-w-[200px]"
                                                 placeholder={searchPlaceholder}
                                                 type="text"
                                                 autoComplete="on"
+                                                size={Math.max(searchPlaceholder?.length || 20, searchQuery.length) + 2}
                                             />
                                         </div>
                                     </div>

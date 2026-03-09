@@ -13,6 +13,8 @@ import {
   CalendarClock,
   MapPin,
   User,
+  ChevronDown,
+  ChevronUp,
 } from "lucide-react";
 import type { RestaurantTable, TableStatus } from "../types";
 import { TABLE_STATUS_CONFIG } from "../types";
@@ -231,6 +233,19 @@ export const DashboardSummary: React.FC<DashboardSummaryProps> = ({
 }) => {
   const total = tables.length;
 
+  const [isCollapsed, setIsCollapsed] = React.useState(() => {
+    if (typeof window === "undefined") return false;
+    return localStorage.getItem("au-lac-dashboard-collapsed") === "true";
+  });
+
+  const handleToggle = () => {
+    setIsCollapsed((prev) => {
+      const next = !prev;
+      localStorage.setItem("au-lac-dashboard-collapsed", String(next));
+      return next;
+    });
+  };
+
   /* Status segments */
   const statusSegments = useMemo<StatusSegment[]>(() => {
     const counts: Record<TableStatus, number> = {
@@ -273,82 +288,97 @@ export const DashboardSummary: React.FC<DashboardSummaryProps> = ({
         {/* Title row */}
         <div className="flex items-center justify-between">
           <h4 className="text-lg font-semibold text-gray-800">Overview</h4>
-          <span className="text-xs text-gray-400">
-            {total} tables &middot; {stats.totalCapacity} seats
-          </span>
-        </div>
-
-        {/* Compact status bar */}
-        <StatusBar segments={statusSegments} total={total} />
-
-        {/* KPI Stats row */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          <StatCard
-            icon={<Users size={16} />}
-            label="Total Capacity"
-            value={stats.totalCapacity}
-            sub={`Avg ${total > 0 ? Math.round(stats.totalCapacity / total) : 0} seats/table`}
-          />
-          <StatCard
-            icon={<Wifi size={16} />}
-            label="Online"
-            value={
-              <span className="flex items-baseline gap-1.5">
-                {stats.online}
-                {stats.offline > 0 && (
-                  <span className="text-xs font-normal text-gray-400 flex items-center gap-0.5">
-                    <WifiOff size={10} /> {stats.offline}
-                  </span>
-                )}
-              </span>
-            }
-            accent="text-emerald-700"
-          />
-          <StatCard
-            icon={<ShoppingBag size={16} />}
-            label="Active Orders"
-            value={stats.activeOrders}
-            accent={stats.activeOrders > 0 ? "text-blue-700" : "text-gray-800"}
-          />
-          <StatCard
-            icon={<AlertTriangle size={16} />}
-            label="Errors"
-            value={stats.withErrors}
-            accent={stats.withErrors > 0 ? "text-orange-600" : "text-gray-800"}
-            sub={stats.withErrors > 0 ? "Needs attention" : "All clear"}
-          />
-        </div>
-
-        {/* Incoming Reservations */}
-        <div className="space-y-2">
-          <div className="flex items-center justify-between">
-            <h5 className="flex items-center gap-1.5 text-xs font-semibold text-gray-400 uppercase tracking-wider">
-              <CalendarClock size={13} />
-              Incoming Reservations
-              <span className="text-[11px] font-normal normal-case tracking-normal text-gray-400">
-                ({MOCK_RESERVATIONS.length})
-              </span>
-            </h5>
-            <Link
-              href="/dashboard/reservation"
-              className="text-xs text-blue-600 underline underline-offset-2 hover:text-blue-800 transition-colors"
+          <div className="flex items-center gap-2">
+            <span className="text-xs text-gray-400">
+              {total} tables &middot; {stats.totalCapacity} seats
+            </span>
+            <button
+              type="button"
+              onClick={handleToggle}
+              className="p-1 rounded hover:bg-gray-100 text-gray-400 hover:text-gray-600 transition-colors"
+              aria-label={isCollapsed ? "Expand overview" : "Collapse overview"}
             >
-              See all
-            </Link>
+              {isCollapsed ? <ChevronDown size={16} /> : <ChevronUp size={16} />}
+            </button>
           </div>
-
-          {MOCK_RESERVATIONS.length === 0 ? (
-            <p className="text-xs text-gray-400 py-3 text-center">
-              No upcoming reservations
-            </p>
-          ) : (
-            <div className="flex gap-2 overflow-x-auto pb-1 -mx-1 px-1">
-              {MOCK_RESERVATIONS.map((r) => (
-                <ReservationCard key={r.reservationId} r={r} />
-              ))}
-            </div>
-          )}
         </div>
+
+        {/* Collapsible body */}
+        {!isCollapsed && (
+          <>
+            {/* Compact status bar */}
+            <StatusBar segments={statusSegments} total={total} />
+
+            {/* KPI Stats row */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              <StatCard
+                icon={<Users size={16} />}
+                label="Total Capacity"
+                value={stats.totalCapacity}
+                sub={`Avg ${total > 0 ? Math.round(stats.totalCapacity / total) : 0} seats/table`}
+              />
+              <StatCard
+                icon={<Wifi size={16} />}
+                label="Online"
+                value={
+                  <span className="flex items-baseline gap-1.5">
+                    {stats.online}
+                    {stats.offline > 0 && (
+                      <span className="text-xs font-normal text-gray-400 flex items-center gap-0.5">
+                        <WifiOff size={10} /> {stats.offline}
+                      </span>
+                    )}
+                  </span>
+                }
+                accent="text-emerald-700"
+              />
+              <StatCard
+                icon={<ShoppingBag size={16} />}
+                label="Active Orders"
+                value={stats.activeOrders}
+                accent={stats.activeOrders > 0 ? "text-blue-700" : "text-gray-800"}
+              />
+              <StatCard
+                icon={<AlertTriangle size={16} />}
+                label="Errors"
+                value={stats.withErrors}
+                accent={stats.withErrors > 0 ? "text-orange-600" : "text-gray-800"}
+                sub={stats.withErrors > 0 ? "Needs attention" : "All clear"}
+              />
+            </div>
+
+            {/* Incoming Reservations */}
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <h5 className="flex items-center gap-1.5 text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                  <CalendarClock size={13} />
+                  Incoming Reservations
+                  <span className="text-[11px] font-normal normal-case tracking-normal text-gray-400">
+                    ({MOCK_RESERVATIONS.length})
+                  </span>
+                </h5>
+                <Link
+                  href="/dashboard/reservation"
+                  className="text-xs text-blue-600 underline underline-offset-2 hover:text-blue-800 transition-colors"
+                >
+                  See all
+                </Link>
+              </div>
+
+              {MOCK_RESERVATIONS.length === 0 ? (
+                <p className="text-xs text-gray-400 py-3 text-center">
+                  No upcoming reservations
+                </p>
+              ) : (
+                <div className="flex gap-2 overflow-x-auto pb-1 -mx-1 px-1">
+                  {MOCK_RESERVATIONS.map((r) => (
+                    <ReservationCard key={r.reservationId} r={r} />
+                  ))}
+                </div>
+              )}
+            </div>
+          </>
+        )}
       </CardContent>
     </Card>
   );

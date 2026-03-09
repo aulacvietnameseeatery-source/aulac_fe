@@ -65,7 +65,7 @@ export function KeywordSearch({
     if (e.key === "Enter") {
       onSearch?.(localValue);
       // Nếu muốn Enter trigger search ngay lập tức bỏ qua debounce:
-      onChange(localValue); 
+      onChange(localValue);
     }
   };
 

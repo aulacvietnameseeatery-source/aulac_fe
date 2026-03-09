@@ -4,8 +4,9 @@ import Link from "next/link";
 import { Facebook, Instagram, ArrowRight } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { BackToTop } from "@/components/ui/back-to-top";
-import {cn} from "@/lib/utils";
-import Image from "next/image"; // Import component mới
+import { cn } from "@/lib/utils";
+import Image from "next/image";
+import { useStoreSettings } from "@/hooks/use-store-settings";
 
 interface FooterProps {
     locale?: string;
@@ -13,6 +14,7 @@ interface FooterProps {
 
 export function Footer({ locale = "en" }: FooterProps) {
     const t = useTranslations('Footer');
+    const { data: storeSettings } = useStoreSettings();
 
     return (
         <footer className="footer-wrapper relative">
@@ -34,7 +36,7 @@ export function Footer({ locale = "en" }: FooterProps) {
                                 )}
                             />
                             <span className="footer-brand-title">
-                                An Lac
+                                {storeSettings?.name || ""}
                             </span>
                         </div>
                         <p className="footer-text max-w-[300px]">
@@ -46,8 +48,8 @@ export function Footer({ locale = "en" }: FooterProps) {
                     <div className="footer-res-col flex flex-col gap-4">
                         <h4 className="footer-heading">{t('reservations')}</h4>
                         <div className="flex flex-col gap-0.5">
-                            <p className="footer-link">+1 (555) 892 0122</p>
-                            <p className="footer-link break-words">concierge@anlac.art</p>
+                            <p className="footer-link">{storeSettings?.phone || ""}</p>
+                            <p className="footer-link break-words">{storeSettings?.email || ""}</p>
                         </div>
                         <div className="flex gap-3 mt-1">
                             {/* group ở đây để hover icon đổi màu */}
@@ -64,9 +66,13 @@ export function Footer({ locale = "en" }: FooterProps) {
                     <div className="footer-loc-col flex flex-col gap-4">
                         <h4 className="footer-heading">{t('location')}</h4>
                         <p className="footer-link">
-                            128 Heritage Street,
-                            <br />
-                            District 1, HCM City
+                            {storeSettings?.streetAddress ? (
+                                <>
+                                    {storeSettings.streetAddress},
+                                    <br />
+                                    {storeSettings.city}
+                                </>
+                            ) : null}
                         </p>
                         <Link
                             href="https://maps.google.com"
