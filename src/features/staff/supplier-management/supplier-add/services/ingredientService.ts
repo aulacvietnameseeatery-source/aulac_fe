@@ -15,7 +15,7 @@ export interface Ingredient {
 
 export const ingredientService = {
   getAllIngredients: async (): Promise<Ingredient[]> => {
-    const response = await api.get<ApiResponse<Ingredient[]>>("/api/ingredients");
+    const response = await api.get<ApiResponse<Ingredient[]>>("/api/ingredients/all");
     return response.data;
   },
 };
