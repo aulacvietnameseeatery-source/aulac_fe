@@ -1,0 +1,21 @@
+import { api } from "@/lib/http";
+
+interface ApiResponse<T> {
+  success: boolean;
+  code: number;
+  userMessage: string;
+  data: T;
+}
+
+export interface Ingredient {
+  ingredientId: number;
+  ingredientName: string;
+  unit: string;
+}
+
+export const ingredientService = {
+  getAllIngredients: async (): Promise<Ingredient[]> => {
+    const response = await api.get<ApiResponse<Ingredient[]>>("/api/ingredients");
+    return response.data;
+  },
+};

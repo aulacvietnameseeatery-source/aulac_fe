@@ -875,6 +875,8 @@
       "phonePlaceholder": "Enter phone number (optional)",
       "email": "Email",
       "emailPlaceholder": "Enter email address (optional)",
+      "ingredients": "Supplied Ingredients",
+      "ingredientsPlaceholder": "Select ingredients this supplier provides",
       "cancel": "Cancel",
       "saveButton": "Add Supplier",
       "validation": {
@@ -900,6 +902,8 @@
       "phonePlaceholder": "Enter phone number (optional)",
       "email": "Email",
       "emailPlaceholder": "Enter email address (optional)",
+      "ingredients": "Supplied Ingredients",
+      "ingredientsPlaceholder": "Select ingredients this supplier provides",
       "cancel": "Cancel",
       "saveButton": "Save Changes",
       "loading": "Loading supplier data...",
@@ -919,6 +923,25 @@
         "updateError": "Failed to update supplier",
         "loadError": "Failed to load supplier data"
       }
+    },
+    "Detail": {
+      "title": "Supplier Details",
+      "subtitle": "View supplier information and contact details.",
+      "back": "Back",
+      "edit": "Edit",
+      "information": "Supplier Information",
+      "supplierName": "Supplier Name",
+      "name": "Name",
+      "phone": "Phone",
+      "email": "Email",
+      "ingredients": "Supplied Ingredients",
+      "ingredientName": "Ingredient Name",
+      "unit": "Unit",
+      "noIngredients": "This supplier does not supply any ingredients yet.",
+      "notFound": "Supplier not found",
+      "backToList": "Back to List",
+      "loading": "Loading supplier data...",
+      "errorTitle": "Unable to load supplier"
     }
   },
   "common": {

@@ -875,6 +875,8 @@
       "phonePlaceholder": "Nhập số điện thoại (không bắt buộc)",
       "email": "Email",
       "emailPlaceholder": "Nhập địa chỉ email (không bắt buộc)",
+      "ingredients": "Nguyên vật liệu cung cấp",
+      "ingredientsPlaceholder": "Chọn nguyên liệu mà nhà cung cấp cung cấp",
       "cancel": "Hủy",
       "saveButton": "Thêm Nhà cung cấp",
       "validation": {
@@ -900,6 +902,8 @@
       "phonePlaceholder": "Nhập số điện thoại (không bắt buộc)",
       "email": "Email",
       "emailPlaceholder": "Nhập địa chỉ email (không bắt buộc)",
+      "ingredients": "Nguyên vật liệu cung cấp",
+      "ingredientsPlaceholder": "Chọn nguyên liệu mà nhà cung cấp cung cấp",
       "cancel": "Hủy",
       "saveButton": "Lưu Thay đổi",
       "loading": "Đang tải dữ liệu nhà cung cấp...",
@@ -919,6 +923,25 @@
         "updateError": "Không thể cập nhật nhà cung cấp",
         "loadError": "Không thể tải dữ liệu nhà cung cấp"
       }
+    },
+    "Detail": {
+      "title": "Chi tiết Nhà cung cấp",
+      "subtitle": "Xem thông tin và chi tiết liên hệ nhà cung cấp.",
+      "back": "Quay lại",
+      "edit": "Chỉnh sửa",
+      "information": "Thông tin Nhà cung cấp",
+      "supplierName": "Tên Nhà cung cấp",
+      "name": "Tên",
+      "phone": "Điện thoại",
+      "email": "Email",
+      "ingredients": "Nguyên vật liệu cung cấp",
+      "ingredientName": "Tên nguyên liệu",
+      "unit": "Đơn vị",
+      "noIngredients": "Nhà cung cấp này chưa cung cấp nguyên vật liệu nào.",
+      "notFound": "Không tìm thấy nhà cung cấp",
+      "backToList": "Quay lại danh sách",
+      "loading": "Đang tải dữ liệu nhà cung cấp...",
+      "errorTitle": "Không thể tải nhà cung cấp"
     }
   },
   "common": {
