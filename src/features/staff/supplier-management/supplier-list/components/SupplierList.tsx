@@ -26,6 +26,10 @@ export default function SupplierList() {
   const [isDeleting, setIsDeleting] = useState(false);
 
   // Action Handlers
+  const handleView = (supplier: Supplier) => {
+    router.push(`/dashboard/suppliers/${supplier.supplierId}`);
+  };
+
   const handleEdit = (supplier: Supplier) => {
     router.push(`/dashboard/suppliers/edit/${supplier.supplierId}`);
   };
@@ -138,6 +142,7 @@ export default function SupplierList() {
           renderActionColumn={(item) => (
             <SupplierActions 
               supplier={item}
+              onView={handleView}
               onEdit={handleEdit}
               onDelete={handleDeleteClick}
             />
