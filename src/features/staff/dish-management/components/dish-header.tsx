@@ -31,18 +31,18 @@ interface DishHeaderProps {
 }
 
 export const DishHeader = ({
-                               searchTerm,
-                               isLoading,
-                               onSearchChange,
-                               onCreateClick,
-                               category,
-                               status,
-                               categories,
-                               statuses, // Nhận prop mới
-                               isLoadingFilters,
-                               onCategoryChange,
-                               onStatusChange,
-                           }: DishHeaderProps) => {
+    searchTerm,
+    isLoading,
+    onSearchChange,
+    onCreateClick,
+    category,
+    status,
+    categories,
+    statuses, // Nhận prop mới
+    isLoadingFilters,
+    onCategoryChange,
+    onStatusChange,
+}: DishHeaderProps) => {
     const t = useTranslations("Dish.List");
 
     return (

@@ -13,11 +13,11 @@ interface RoleHeaderProps {
   onCreateClick: () => void;
 }
 
-export const RoleHeader = ({ 
-  searchTerm, 
-  isLoading, 
-  onSearchChange, 
-  onCreateClick 
+export const RoleHeader = ({
+  searchTerm,
+  isLoading,
+  onSearchChange,
+  onCreateClick
 }: RoleHeaderProps) => {
   const t = useTranslations("Role.List");
 
@@ -36,7 +36,7 @@ export const RoleHeader = ({
       {/* 2. Toolbar Section (Search + Add Button) */}
       <div className="flex flex-col md:flex-row justify-between items-center gap-4">
         {/* Search Component */}
-        <KeywordSearch 
+        <KeywordSearch
           value={searchTerm}
           onChange={onSearchChange}
           placeholder={t("searchPlaceholder")}
@@ -46,9 +46,9 @@ export const RoleHeader = ({
 
         {/* Add Button */}
         <PermissionGuard permission={Permissions.CreateRole}>
-          <Button 
+          <Button
             onClick={onCreateClick}
-            variant="outline" 
+            variant="outline"
             className="w-full md:w-auto shadow-md"
           >
             <Plus className="mr-2 h-4 w-4" />
