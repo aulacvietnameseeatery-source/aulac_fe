@@ -1415,7 +1415,7 @@
     "roles": "Rôles",
     "dish": "Plats",
     "dishCategory": "Catégorie de plat",
-    "ingredient": "Ingrédients",
+    "ingredients": "Ingrédients",
     "suppliers": "Fournisseurs",
     "coupons": "Coupons",
     "orders": "Commandes",
@@ -1426,6 +1426,7 @@
     "reservations": "Réservations",
     "promotions": "Promotions",
     "storeSettings": "Paramètres du magasin",
+    "systemSettings": "Paramètres système",
     "notifications": "Notifications",
     "logout": "Déconnexion",
     "loggingOut": "Déconnexion...",
@@ -1518,6 +1519,200 @@
       "placeholder": "Entrez la raison...",
       "confirm": "Confirmer",
       "cancel": "Annuler"
+    }
+  },
+  "ReservationManagement": {
+    "List": {
+      "title": "Réservations",
+      "searchPlaceholder": "Rechercher un client, un téléphone...",
+      "addNew": "Nouveau",
+      "all": "Tout",
+      "empty": "Aucune réservation trouvée"
+    },
+    "Card": {
+      "table": "Table",
+      "guests": "Invités",
+      "createdOn": "Créé le",
+      "status": "Statut",
+      "late": "En retard",
+      "viewNote": "Voir la note",
+      "customerNotes": "Notes du client :",
+      "noNotes": "Aucune demande spéciale ou précommande pour cette réservation.",
+      "checkIn": "Enregistrer",
+      "na": "N/D"
+    },
+    "CheckInModal": {
+      "title": "Enregistrement du client",
+      "arrivalMsg": "{name} est arrivé(e) pour sa réservation de {time} ({pax} invités).",
+      "assignTable": "Attribuer une table",
+      "selectPlaceholder": "-- Sélectionnez une table disponible --",
+      "noTablesAvailable": "Aucune table disponible",
+      "tableOption": "{code} ({zone} - Capacité : {capacity})",
+      "capacityHint": "Astuce : Essayez d'attribuer une table avec une capacité ≥ {pax}",
+      "cancel": "Annuler",
+      "confirm": "Confirmer",
+      "loading": "Chargement des tables..."
+    },
+    "Messages": {
+      "checkInSuccess": "Client enregistré avec succès !",
+      "checkInFail": "Échec de l'enregistrement de la réservation",
+      "loadTablesFail": "Échec du chargement des tables disponibles."
+    }
+  },
+  "Ingredient": {
+    "List": {
+      "title": "Ingrédients",
+      "description": "Gérer l'inventaire, les articles de recette et les niveaux de stock.",
+      "searchPlaceholder": "Rechercher des ingrédients...",
+      "addNew": "Ajouter un ingrédient",
+      "export": "Exporter",
+      "import": "Importer",
+      "importing": "Importation...",
+      "table": {
+        "ingredientName": "Nom de l'ingrédient",
+        "unit": "Unité",
+        "category": "Catégorie",
+        "uncategorized": "Non catégorisé",
+        "suppliers": "Fournisseurs",
+        "inStock": "En stock",
+        "lowStock": "Stock faible"
+      },
+      "notifications": {
+        "deleteConfirm": "Êtes-vous sûr de vouloir supprimer {name} ?",
+        "deleteSuccess": "Ingrédient supprimé avec succès.",
+        "deleteError": "Échec de la suppression de l'ingrédient.",
+        "createSuccess": "Ingrédient créé avec succès !",
+        "updateSuccess": "Ingrédient mis à jour avec succès !",
+        "actionError": "L'opération a échoué.",
+        "noDataExport": "Aucune donnée à exporter.",
+        "exportSuccess": "Exporté avec succès !",
+        "invalidExcel": "Aucun ingrédient valide trouvé dans le fichier Excel.",
+        "importSuccess": "{success}/{total} ingrédients importés avec succès.",
+        "readExcelError": "Échec de la lecture du fichier Excel. Veuillez vérifier le format."
+      }
+    }
+  },
+  "Promotion": {
+    "List": {
+      "title": "Liste des promotions",
+      "description": "Gérez les promotions et les campagnes de réduction du restaurant.",
+      "addNew": "Ajouter",
+      "searchPlaceholder": "Rechercher par code promo ou nom...",
+      "table": {
+        "no": "N°",
+        "promoCode": "Code Promo",
+        "discount": "Réduction",
+        "startTime": "Date de début",
+        "endTime": "Date de fin",
+        "usage": "Utilisation",
+        "status": "Statut"
+      },
+      "filters": {
+        "allStatuses": "Tous les statuts",
+        "allTypes": "Tous les types"
+      },
+      "actions": {
+        "view": "Voir les détails",
+        "edit": "Modifier"
+      },
+      "notifications": {
+        "statusUpdated": "Statut mis à jour avec succès",
+        "statusUpdateError": "Une erreur est survenue lors de la mise à jour du statut"
+      }
+    },
+    "createTitle": "Créer une nouvelle promotion",
+    "createSubTitle": "Le système changera automatiquement le statut selon la période d'application.",
+    "editTitle": "Détails de la promotion #{id}",
+    "noData": "Aucune donnée trouvée",
+    "Form": {
+      "basicInfo": "1. Informations de base",
+      "promoCode": "Code promotionnel",
+      "promoCodePlaceholder": "Exemple : SUMMER24",
+      "promoName": "Nom de la promotion",
+      "promoNamePlaceholder": "Entrez le nom de la promotion...",
+      "desc": "Description",
+      "descPlaceholder": "Entrez une description détaillée...",
+      "start": "Heure de début",
+      "end": "Heure de fin",
+      "discountConfig": "2. Configuration de la réduction",
+      "discountType": "Type de réduction",
+      "typePercent": "Pourcentage (%)",
+      "typeFixed": "Montant fixe",
+      "discountValue": "Valeur de la réduction",
+      "discountValuePlaceholder": "Entrez la valeur...",
+      "maxUsage": "Limite d'utilisation (optionnel)",
+      "unlimited": "Illimité",
+      "rules": "3. Conditions (Rules)",
+      "ruleDesc": "La commande doit atteindre au moins ${minOrder} et {minQty} articles. Elle doit également contenir le plat/la catégorie requis (si sélectionné).",
+      "minOrder": "Valeur minimale de commande",
+      "minOrderPlaceholder": "0",
+      "minQty": "Quantité minimale",
+      "minQtyPlaceholder": "0",
+      "reqDish": "Plat requis (optionnel)",
+      "reqDishPlaceholder": "Sélectionnez un plat requis...",
+      "reqCate": "Catégorie requise (optionnel)",
+      "reqCatePlaceholder": "Sélectionnez une catégorie requise...",
+      "targets": "4. Cibles (Targets)",
+      "targetDescAll": "La promotion s'appliquera à : toute la commande",
+      "targetDescFiltered": "La promotion s'appliquera à : uniquement aux plats/catégories sélectionnés ci-dessous",
+      "targetDish": "Appliquer à un plat spécifique",
+      "targetDishPlaceholder": "Laisser vide pour ignorer...",
+      "targetCate": "Appliquer à une catégorie spécifique",
+      "targetCatePlaceholder": "Laisser vide pour ignorer...",
+      "btnDisable": "Désactiver",
+      "btnCancel": "Annuler",
+      "btnSave": "Enregistrer la promotion",
+      "btnSaving": "Enregistrement...",
+      "statusLockWarning": "Le statut actuel est {status}. Les conditions de configuration sont verrouillées.",
+      "confirmDisable": "Désactiver cette promotion ? Cette action est irréversible.",
+      "successCreate": "Création réussie",
+      "successUpdate": "Mise à jour réussie",
+      "successDisable": "Désactivée avec succès",
+      "errorSave": "Une erreur est survenue lors de l'enregistrement"
+    },
+    "Detail": {
+      "title": "Détails de la promotion #{id}",
+      "status": "Statut",
+      "usedCount": "Utilisée : {count} fois",
+      "rulesInfo": "Règles d'application",
+      "noRule": "Aucune condition",
+      "targetsInfo": "Cibles d'application",
+      "hasTarget": "Appliquée uniquement aux produits/catégories spécifiés.",
+      "back": "Retour"
+    },
+    "Status": {
+      "SCHEDULED": "Planifiée",
+      "ACTIVE": "Active",
+      "EXPIRED": "Expirée",
+      "DISABLED": "Désactivée"
+    },
+    "Validation": {
+      "promoCodeMin": "Le code promo doit contenir au moins 3 caractères",
+      "startTimeRequired": "Veuillez sélectionner l'heure de début",
+      "endTimeRequired": "Veuillez sélectionner l'heure de fin",
+      "discountMinPercent": "Minimum 1 %",
+      "discountMaxPercent": "Maximum 100 %",
+      "discountPositive": "Doit être supérieur à 0",
+      "endTimeAfterStartTime": "La fin doit être après le début"
+    }
+  },
+  "SystemSettings": {
+    "title": "Paramètres de la boutique",
+    "description": "Gérez la configuration de l'application et de la boutique.",
+    "refresh": "Actualiser",
+    "loading": "Chargement des paramètres...",
+    "noSettings": "Aucun paramètre trouvé.",
+    "settingCount": "{count, plural, one {# paramètre} other {# paramètres}}",
+    "sensitiveHidden": "sensibles masqués",
+    "addSetting": "Ajouter un nouveau paramètre",
+    "add": "Ajouter le paramètre",
+    "cancel": "Annuler",
+    "save": "Enregistrer",
+    "saving": "Enregistrement...",
+    "notifications": {
+      "saveSuccess": "Paramètres du groupe '{group}' enregistrés avec succès.",
+      "createSuccess": "Paramètre créé avec succès.",
+      "saveError": "Échec de l'enregistrement des paramètres."
     }
   }
 }

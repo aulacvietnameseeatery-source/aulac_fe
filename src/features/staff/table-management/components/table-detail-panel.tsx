@@ -63,7 +63,7 @@ export const TableDetailPanel: React.FC<TableDetailPanelProps> = ({
 
   return (
     <Drawer open={isOpen} onOpenChange={(open) => !open && onClose()} direction="right">
-      <DrawerContent className="h-full w-full max-w-md ml-auto rounded-none data-[vaul-drawer-direction=right]:sm:max-w-md">
+      <DrawerContent className="h-full w-full max-w-2xl ml-auto rounded-none data-[vaul-drawer-direction=right]:sm:max-w-2xl">
         {/* Header */}
         <DrawerHeader className="border-b px-5 py-4">
           <div className="flex items-center justify-between">
@@ -285,7 +285,12 @@ export const TableDetailPanel: React.FC<TableDetailPanelProps> = ({
             <Button
               variant="outline"
               className="flex-1"
-              onClick={() => onEdit(table)}
+              onClick={() => onEdit({
+                ...table,
+                // Forward QR fields from the detail query so the edit modal can show them
+                qrCodeUrl: qrCodeUrl ?? undefined,
+                qrCodeImageUrl: qrCodeImageUrl ?? undefined,
+              })}
             >
               <Pencil size={14} className="mr-1.5" />
               Edit

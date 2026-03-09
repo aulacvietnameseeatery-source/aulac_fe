@@ -1435,11 +1435,11 @@
       "guest": "Khách lẻ",
       "notePlaceholder": "Ghi chú món...",
       "status": {
-          "Pending": "Chờ xử lý",
-          "In progress": "Đang làm",
-          "Completed": "Hoàn thành",
-          "Cancelled": "Đã huỷ"
-        }
+        "Pending": "Chờ xử lý",
+        "In progress": "Đang làm",
+        "Completed": "Hoàn thành",
+        "Cancelled": "Đã huỷ"
+      }
     },
     "PaymentModal": {
       "title": "Thanh toán & Hoàn tất đơn hàng",
@@ -1484,7 +1484,7 @@
     "roles": "Vai trò",
     "dish": "Món ăn",
     "dishCategory": "Danh mục món",
-    "ingredient": "Nguyên liệu",
+    "ingredients": "Nguyên liệu",
     "suppliers": "Nhà cung cấp",
     "coupons": "Mã giảm giá",
     "orders": "Đơn hàng",
@@ -1495,6 +1495,7 @@
     "reservations": "Đặt bàn",
     "promotions": "Khuyến mãi",
     "storeSettings": "Cài đặt cửa hàng",
+    "systemSettings": "Cài đặt hệ thống",
     "notifications": "Thông báo",
     "logout": "Đăng xuất",
     "loggingOut": "Đang đăng xuất...",
@@ -1587,6 +1588,200 @@
       "placeholder": "Nhập lý do...",
       "confirm": "Xác nhận",
       "cancel": "Hủy"
+    }
+  },
+  "ReservationManagement": {
+    "List": {
+      "title": "Danh sách đặt bàn",
+      "searchPlaceholder": "Tìm tên khách, số điện thoại...",
+      "addNew": "Thêm mới",
+      "all": "Tất cả",
+      "empty": "Không tìm thấy đơn đặt bàn nào"
+    },
+    "Card": {
+      "table": "Bàn",
+      "guests": "Khách",
+      "createdOn": "Tạo lúc",
+      "status": "Trạng thái",
+      "late": "Trễ giờ",
+      "viewNote": "Ghi chú",
+      "customerNotes": "Ghi chú của khách:",
+      "noNotes": "Không có yêu cầu đặc biệt hay gọi món trước.",
+      "checkIn": "Nhận bàn",
+      "na": "Chưa xếp"
+    },
+    "CheckInModal": {
+      "title": "Khách nhận bàn",
+      "arrivalMsg": "{name} đã đến nhận bàn lúc {time} ({pax} khách).",
+      "assignTable": "Xếp bàn",
+      "selectPlaceholder": "-- Chọn một bàn trống --",
+      "noTablesAvailable": "Hiện không có bàn trống",
+      "tableOption": "{code} ({zone} - Sức chứa: {capacity})",
+      "capacityHint": "Gợi ý: Hãy xếp khách vào bàn có sức chứa ≥ {pax}",
+      "cancel": "Hủy bỏ",
+      "confirm": "Xác nhận",
+      "loading": "Đang tải danh sách bàn..."
+    },
+    "Messages": {
+      "checkInSuccess": "Khách nhận bàn thành công!",
+      "checkInFail": "Lỗi khi cập nhật nhận bàn",
+      "loadTablesFail": "Lỗi khi tải danh sách bàn trống."
+    }
+  },
+  "Ingredient": {
+    "List": {
+      "title": "Kho Nguyên Liệu",
+      "description": "Quản lý kho, nguyên liệu công thức và mức tồn kho.",
+      "searchPlaceholder": "Tìm kiếm nguyên liệu...",
+      "addNew": "Thêm nguyên liệu",
+      "export": "Xuất Excel",
+      "import": "Nhập Excel",
+      "importing": "Đang nhập...",
+      "table": {
+        "ingredientName": "Tên Nguyên Liệu",
+        "unit": "ĐVT",
+        "category": "Danh mục",
+        "uncategorized": "Chưa phân loại",
+        "suppliers": "Nhà cung cấp",
+        "inStock": "Tồn kho",
+        "lowStock": "Sắp hết hàng"
+      },
+      "notifications": {
+        "deleteConfirm": "Bạn có chắc chắn muốn xóa {name} không?",
+        "deleteSuccess": "Đã xóa nguyên liệu thành công.",
+        "deleteError": "Xóa nguyên liệu thất bại.",
+        "createSuccess": "Thêm mới nguyên liệu thành công!",
+        "updateSuccess": "Cập nhật nguyên liệu thành công!",
+        "actionError": "Thao tác thất bại.",
+        "noDataExport": "Không có dữ liệu để xuất.",
+        "exportSuccess": "Xuất file thành công!",
+        "invalidExcel": "Không tìm thấy nguyên liệu hợp lệ trong file Excel.",
+        "importSuccess": "Đã nhập thành công {success}/{total} nguyên liệu.",
+        "readExcelError": "Lỗi đọc file Excel. Vui lòng kiểm tra lại định dạng."
+      }
+    }
+  },
+  "Promotion": {
+    "List": {
+      "title": "Danh sách Khuyến mãi",
+      "description": "Quản lý các chương trình khuyến mãi và mã giảm giá của nhà hàng.",
+      "addNew": "Thêm mới",
+      "searchPlaceholder": "Tìm kiếm theo mã hoặc tên khuyến mãi...",
+      "table": {
+        "no": "STT",
+        "promoCode": "Mã KM",
+        "discount": "Giảm giá",
+        "startTime": "Bắt đầu",
+        "endTime": "Kết thúc",
+        "usage": "Sử dụng",
+        "status": "Trạng thái"
+      },
+      "filters": {
+        "allStatuses": "Tất cả trạng thái",
+        "allTypes": "Tất cả loại"
+      },
+      "actions": {
+        "view": "Xem chi tiết",
+        "edit": "Chỉnh sửa"
+      },
+      "notifications": {
+        "statusUpdated": "Cập nhật trạng thái thành công",
+        "statusUpdateError": "Đã xảy ra lỗi khi cập nhật trạng thái"
+      }
+    },
+    "createTitle": "Tạo Khuyến Mãi Mới",
+    "createSubTitle": "Hệ thống sẽ tự động chuyển trạng thái theo thời gian áp dụng.",
+    "editTitle": "Chi tiết Khuyến Mãi #{id}",
+    "noData": "Không tìm thấy dữ liệu",
+    "Form": {
+      "basicInfo": "1. Thông tin cơ bản",
+      "promoCode": "Mã Khuyến Mãi",
+      "promoCodePlaceholder": "Ví dụ: SUMMER24",
+      "promoName": "Tên Chương Trình",
+      "promoNamePlaceholder": "Nhập tên chương trình...",
+      "desc": "Mô tả",
+      "descPlaceholder": "Nhập mô tả chi tiết...",
+      "start": "Thời gian bắt đầu",
+      "end": "Thời gian kết thúc",
+      "discountConfig": "2. Cấu hình Giảm giá",
+      "discountType": "Loại Giảm",
+      "typePercent": "Phần Trăm (%)",
+      "typeFixed": "Số Tiền",
+      "discountValue": "Giá trị giảm",
+      "discountValuePlaceholder": "Nhập giá trị...",
+      "maxUsage": "Giới hạn số lần (Tùy chọn)",
+      "unlimited": "Không giới hạn",
+      "rules": "3. Điều kiện (Rules)",
+      "ruleDesc": "Đơn hàng cần đạt tối thiểu ${minOrder} và {minQty} sản phẩm. Đồng thời phải chứa món ăn/danh mục yêu cầu (nếu có chọn).",
+      "minOrder": "Giá trị ĐH tối thiểu",
+      "minOrderPlaceholder": "0",
+      "minQty": "Số lượng tối thiểu",
+      "minQtyPlaceholder": "0",
+      "reqDish": "Bắt buộc có Món (Tùy chọn)",
+      "reqDishPlaceholder": "Chọn món yêu cầu...",
+      "reqCate": "Bắt buộc có Danh mục (Tùy chọn)",
+      "reqCatePlaceholder": "Chọn danh mục yêu cầu...",
+      "targets": "4. Đối tượng (Targets)",
+      "targetDescAll": "Khuyến mãi sẽ áp dụng lên: Toàn bộ đơn hàng",
+      "targetDescFiltered": "Khuyến mãi sẽ áp dụng lên: Chỉ các món/danh mục được chọn bên dưới",
+      "targetDish": "Áp dụng cho Món cụ thể",
+      "targetDishPlaceholder": "Để trống để bỏ qua...",
+      "targetCate": "Áp dụng cho Danh mục cụ thể",
+      "targetCatePlaceholder": "Để trống để bỏ qua...",
+      "btnDisable": "Vô hiệu hóa (Disable)",
+      "btnCancel": "Hủy",
+      "btnSave": "Lưu Khuyến Mãi",
+      "btnSaving": "Đang lưu...",
+      "statusLockWarning": "Trạng thái hiện tại là {status}. Các điều kiện cấu hình đã bị khóa.",
+      "confirmDisable": "Vô hiệu hóa Khuyến Mãi này? Không thể hoàn tác.",
+      "successCreate": "Tạo thành công",
+      "successUpdate": "Cập nhật thành công",
+      "successDisable": "Đã vô hiệu hóa",
+      "errorSave": "Có lỗi xảy ra khi lưu"
+    },
+    "Detail": {
+      "title": "Chi tiết Khuyến Mãi #{id}",
+      "status": "Trạng thái",
+      "usedCount": "Đã sử dụng: {count} lần",
+      "rulesInfo": "Quy tắc áp dụng",
+      "noRule": "Không có điều kiện",
+      "targetsInfo": "Đối tượng áp dụng",
+      "hasTarget": "Áp dụng cho các sản phẩm/danh mục được chỉ định.",
+      "back": "Quay lại"
+    },
+    "Status": {
+      "SCHEDULED": "Sắp diễn ra",
+      "ACTIVE": "Đang diễn ra",
+      "EXPIRED": "Đã kết thúc",
+      "DISABLED": "Bị vô hiệu"
+    },
+    "Validation": {
+      "promoCodeMin": "Mã KM phải từ 3 ký tự",
+      "startTimeRequired": "Vui lòng chọn thời gian bắt đầu",
+      "endTimeRequired": "Vui lòng chọn thời gian kết thúc",
+      "discountMinPercent": "Tối thiểu 1%",
+      "discountMaxPercent": "Tối đa 100%",
+      "discountPositive": "Phải lớn hơn 0",
+      "endTimeAfterStartTime": "Kết thúc phải sau bắt đầu"
+    }
+  },
+  "SystemSettings": {
+    "title": "Cài đặt cửa hàng",
+    "description": "Quản lý cấu hình ứng dụng và cửa hàng.",
+    "refresh": "Làm mới",
+    "loading": "Đang tải cài đặt...",
+    "noSettings": "Không tìm thấy cài đặt.",
+    "settingCount": "{count} cài đặt",
+    "sensitiveHidden": "ẩn nhạy cảm",
+    "addSetting": "Thêm cài đặt mới",
+    "add": "Thêm cài đặt",
+    "cancel": "Hủy",
+    "save": "Lưu",
+    "saving": "Đang lưu...",
+    "notifications": {
+      "saveSuccess": "Đã lưu cài đặt nhóm '{group}' thành công.",
+      "createSuccess": "Tạo cài đặt mới thành công.",
+      "saveError": "Lưu cài đặt thất bại."
     }
   }
 }
