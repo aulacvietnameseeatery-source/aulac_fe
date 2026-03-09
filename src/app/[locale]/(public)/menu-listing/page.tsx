@@ -11,7 +11,7 @@ import MenuListingLoading from "./loading";
 // Dùng trực tiếp fetch thay vì api.get để:
 // 1) Tránh auth logic (localStorage, token refresh) không dùng được trên Server
 // 2) Cho phép ISR caching qua next.revalidate
-const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "https://localhost:7083";
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://localhost:7083";
 
 export default async function MenuListingPage({
     params,
