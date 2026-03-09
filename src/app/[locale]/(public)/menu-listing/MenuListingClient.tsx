@@ -11,24 +11,23 @@ import { BookFrame } from "@/features/customer/menu-listing-new/components/book-
 import { CartItem } from "@/features/customer/menu-listing-new/types/cart";
 
 import { MenuCategory, MenuItemData } from "@/features/customer/menu-listing-new/data/mock-menu";
-
-import { BASE_URL } from "@/lib/http";
 import { TableSelectionModal } from "@/features/customer/menu-listing-new/components/table-selection-modal";
 import { CartSummary } from "@/features/customer/menu-listing-new/components/cart-summary";
 import { OrderHistoryFAB } from "@/features/customer/menu-listing-new/components/ordered-items-fab";
 
 
 interface Props {
-    // Nhận dữ liệu đã được flatten locale từ Server (plain strings)
+    // Nhận dữ liệu menu đã được flatten locale trước khi truyền vào UI
     initialMenuData: MenuCategory[];
     tableFromUrl?: string;
+    fetchError?: string | null;
 }
 
 const CART_STORAGE_KEY = "aulac_cart_items";
 const TABLE_STORAGE_KEY = "aulac_table_number";
 const CURRENT_ORDER_ID_KEY = "aulac_current_order_id";
 
-export default function MenuListingClient({ initialMenuData, tableFromUrl }: Props) {
+export default function MenuListingClient({ initialMenuData, tableFromUrl, fetchError }: Props) {
     const router = useRouter();
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
     const [tableNumber, setTableNumber] = useState("");
@@ -274,6 +273,11 @@ export default function MenuListingClient({ initialMenuData, tableFromUrl }: Pro
 
     return (
         <main className="relative flex-1 min-h-screen w-full flex items-center justify-center p-4 overflow-hidden bg-[#0f172a]">
+            {fetchError ? (
+                <div className="fixed left-1/2 top-4 z-90 w-[calc(100%-2rem)] max-w-xl -translate-x-1/2 rounded-2xl border border-amber-300/40 bg-amber-50/95 px-4 py-3 text-center text-sm font-medium text-amber-900 shadow-lg backdrop-blur-sm">
+                    {fetchError}
+                </div>
+            ) : null}
 
             {/* Order Success Popup */}
             <AnimatePresence>
@@ -283,7 +287,7 @@ export default function MenuListingClient({ initialMenuData, tableFromUrl }: Pro
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm px-4"
+                        className="fixed inset-0 z-100 flex items-center justify-center bg-black/60 backdrop-blur-sm px-4"
                     >
                         <motion.div
                             initial={{ scale: 0.85, opacity: 0, y: 20 }}
@@ -323,7 +327,7 @@ export default function MenuListingClient({ initialMenuData, tableFromUrl }: Pro
                 onClose={() => setIsModalOpen(false)}
             />
             <Atmosphere />
-            <div className="relative z-10 w-full max-w-[1400px]">
+            <div className="relative z-10 w-full max-w-350">
                 <BookFrame
                     menuData={localizedMenu}
                     onAddToCart={handleAddToCartFromBook}
