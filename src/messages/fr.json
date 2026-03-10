@@ -1436,7 +1436,157 @@
     "logoutMessage": "Êtes-vous sûr de vouloir vous déconnecter ? Vous serez redirigé vers la page de connexion.",
     "cancel": "Annuler",
     "expand": "Agrandir",
-    "collapse": "Réduire"
+    "collapse": "Réduire",
+    "shifts": "Plannings",
+    "shiftsLive": "Tableau de Présence",
+    "shiftsReports": "Rapports de Quart",
+    "myShifts": "Mes Quarts"
+  },
+  "ShiftManagement": {
+    "Common": {
+      "shiftType": "Type de quart",
+      "businessDate": "Date de travail",
+      "plannedStart": "Début prévu",
+      "plannedEnd": "Fin prévue",
+      "status": "Statut",
+      "notes": "Notes",
+      "assignedStaff": "Personnel assigné",
+      "role": "Rôle",
+      "checkIn": "Pointage entrée",
+      "checkOut": "Pointage sortie",
+      "late": "En retard",
+      "absent": "Absent",
+      "onDuty": "En service",
+      "completed": "Terminé",
+      "scheduled": "Planifié",
+      "workedHours": "Heures travaillées",
+      "lateMinutes": "Retard de {minutes} min",
+      "earlyLeaveMinutes": "Parti {minutes} min avant",
+      "reason": "Raison",
+      "adjustmentReason": "Motif d'ajustement"
+    },
+    "Schedule": {
+      "title": "Plannings de Quart",
+      "description": "Créez, publiez et gérez les plannings et affectations du personnel.",
+      "addNew": "Créer un quart",
+      "createTitle": "Créer un planning",
+      "editTitle": "Modifier le planning",
+      "publishConfirm": "Publier ce planning ? Le personnel pourra le consulter.",
+      "cancelConfirm": "Annuler ce planning ? Cette action est irréversible.",
+      "noSchedules": "Aucun planning trouvé.",
+      "assignStaff": "Affecter le personnel",
+      "cancelAssignment": "Annuler l'affectation",
+      "cancelAssignmentConfirm": "Annuler cette affectation ?",
+      "table": {
+        "date": "Date",
+        "shiftType": "Type de quart",
+        "timeRange": "Horaire",
+        "status": "Statut",
+        "assigned": "Affecté",
+        "actions": "Actions"
+      },
+      "actions": {
+        "publish": "Publier",
+        "close": "Fermer",
+        "cancel": "Annuler",
+        "edit": "Modifier",
+        "viewAssignments": "Voir les affectations"
+      }
+    },
+    "Live": {
+      "title": "Tableau de Présence en Direct",
+      "description": "Vue en temps réel de la présence du quart du jour.",
+      "summary": {
+        "scheduled": "Planifié",
+        "active": "En service",
+        "late": "En retard",
+        "absent": "Absent",
+        "completed": "Terminé"
+      },
+      "table": {
+        "staff": "Personnel",
+        "role": "Rôle",
+        "shiftType": "Type de quart",
+        "plannedTime": "Horaire prévu",
+        "checkIn": "Entrée",
+        "checkOut": "Sortie",
+        "status": "Statut",
+        "lateMinutes": "Retard (min)"
+      }
+    },
+    "MyShift": {
+      "title": "Mes Quarts",
+      "description": "Consultez vos quarts assignés et pointez votre entrée/sortie.",
+      "todayShift": "Quart du jour",
+      "upcomingShifts": "Prochains quarts",
+      "pastShifts": "Quarts passés",
+      "noShifts": "Aucun quart assigné.",
+      "checkInBtn": "Pointer Entrée",
+      "checkOutBtn": "Pointer Sortie",
+      "checkedInAt": "Entrée à {time}",
+      "checkedOutAt": "Sortie à {time}"
+    },
+    "Reports": {
+      "title": "Rapports de Quart",
+      "description": "Résumé des présences, heures travaillées et exceptions.",
+      "tabs": {
+        "attendance": "Présences",
+        "workedHours": "Heures travaillées",
+        "exceptions": "Exceptions"
+      },
+      "filters": {
+        "fromDate": "Date de début",
+        "toDate": "Date de fin",
+        "staff": "Membre du personnel",
+        "shiftType": "Type de quart",
+        "attendanceStatus": "Statut de présence",
+        "applyFilters": "Appliquer",
+        "clearFilters": "Effacer"
+      },
+      "attendance": {
+        "totalAssigned": "Total affecté",
+        "attendanceRate": "Taux de présence",
+        "lateCount": "Retards",
+        "absentCount": "Absences",
+        "table": {
+          "staff": "Personnel",
+          "role": "Rôle",
+          "assigned": "Affecté",
+          "present": "Présent",
+          "late": "En retard",
+          "absent": "Absent",
+          "rate": "Taux"
+        }
+      },
+      "workedHours": {
+        "totalScheduled": "Heures planifiées",
+        "totalWorked": "Heures travaillées",
+        "variance": "Écart",
+        "table": {
+          "staff": "Personnel",
+          "role": "Rôle",
+          "scheduledMin": "Planifié (min)",
+          "workedMin": "Travaillé (min)",
+          "varianceMin": "Écart (min)",
+          "incomplete": "Incomplet"
+        }
+      },
+      "exceptions": {
+        "lateCount": "Retards",
+        "absentCount": "Absences",
+        "earlyLeaveCount": "Départs anticipés",
+        "adjustmentCount": "Ajustements manuels",
+        "table": {
+          "date": "Date",
+          "staff": "Personnel",
+          "role": "Rôle",
+          "shiftType": "Type de quart",
+          "exceptionType": "Exception",
+          "minutesAffected": "Minutes",
+          "reviewer": "Révisé par"
+        }
+      }
+    }
   },
   "OrderHistory": {
     "title": "Historique des Commandes",

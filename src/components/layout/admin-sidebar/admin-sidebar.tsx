@@ -32,7 +32,12 @@ import {
   ChefHat,
   Truck,
   FileSpreadsheet,
-  BadgeDollarSign
+  BadgeDollarSign,
+  Truck,
+  Clock,
+  Radio,
+  BarChart3,
+  UserCheck,
 } from "lucide-react";
 
 import { useAuth } from "@/components/providers/auth-provider";
@@ -72,6 +77,10 @@ const navigation = [
       { key: "customers", href: "/dashboard/customers", icon: UserRound },
       { key: "invoices", href: "/dashboard/invoices", icon: FileSpreadsheet },
       { key: "payments", href: "/dashboard/payments", icon: BadgeDollarSign },
+      { key: "shifts", href: "/dashboard/shifts", icon: Clock },
+      { key: "shiftsLive", href: "/dashboard/shifts/live", icon: Radio },
+      { key: "shiftsReports", href: "/dashboard/shifts/reports", icon: BarChart3 },
+      { key: "myShifts", href: "/dashboard/my-shifts", icon: UserCheck },
     ]
   },
   {

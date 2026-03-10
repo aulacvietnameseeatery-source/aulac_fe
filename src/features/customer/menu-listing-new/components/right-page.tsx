@@ -12,7 +12,6 @@ interface PageProps {
 
 export const RightPage = ({ title, items, onItemClick, onAddToCart }: PageProps) => {
     const fallbackImg = '/images/menu-listing/menu-grid/Tiramisu.png';
-    const backendBaseUrl = 'https://localhost:7083'; // Cấu hình gốc trỏ về Backend
 
     return (
         <div className="w-full h-full relative flex flex-col font-serif overflow-hidden bg-[#FDFBF7]">
@@ -37,7 +36,7 @@ export const RightPage = ({ title, items, onItemClick, onAddToCart }: PageProps)
                         // Logic Xử lý đường dẫn ảnh từ Backend
                         let imgSrc = item.image && item.image.trim() !== '' ? item.image : fallbackImg;
                         if (imgSrc.startsWith('/uploads/')) {
-                            imgSrc = `${backendBaseUrl}${imgSrc}`;
+                            imgSrc = `${imgSrc}`;
                         }
 
                         return (

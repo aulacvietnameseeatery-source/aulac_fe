@@ -1505,7 +1505,157 @@
     "logoutMessage": "Bạn có chắc chắn muốn đăng xuất? Bạn sẽ được chuyển hướng đến trang đăng nhập.",
     "cancel": "Hủy",
     "expand": "Mở rộng",
-    "collapse": "Thu gọn"
+    "collapse": "Thu gọn",
+    "shifts": "Lịch Ca",
+    "shiftsLive": "Bảng Trực Ca",
+    "shiftsReports": "Báo Cáo Ca",
+    "myShifts": "Ca Của Tôi"
+  },
+  "ShiftManagement": {
+    "Common": {
+      "shiftType": "Loại ca",
+      "businessDate": "Ngày làm việc",
+      "plannedStart": "Giờ bắt đầu",
+      "plannedEnd": "Giờ kết thúc",
+      "status": "Trạng thái",
+      "notes": "Ghi chú",
+      "assignedStaff": "Nhân viên phân công",
+      "role": "Vai trò",
+      "checkIn": "Chấm công vào",
+      "checkOut": "Chấm công ra",
+      "late": "Trễ",
+      "absent": "Vắng mặt",
+      "onDuty": "Đang làm việc",
+      "completed": "Hoàn thành",
+      "scheduled": "Đã lên lịch",
+      "workedHours": "Giờ làm việc",
+      "lateMinutes": "Trễ {minutes} phút",
+      "earlyLeaveMinutes": "Về sớm {minutes} phút",
+      "reason": "Lý do",
+      "adjustmentReason": "Lý do điều chỉnh"
+    },
+    "Schedule": {
+      "title": "Lịch Ca Làm Việc",
+      "description": "Tạo, công bố và quản lý lịch ca và phân công nhân viên.",
+      "addNew": "Tạo Ca",
+      "createTitle": "Tạo Lịch Ca",
+      "editTitle": "Chỉnh Sửa Lịch Ca",
+      "publishConfirm": "Công bố ca này? Nhân viên sẽ có thể xem.",
+      "cancelConfirm": "Hủy ca này? Không thể hoàn tác.",
+      "noSchedules": "Không tìm thấy lịch ca.",
+      "assignStaff": "Phân Công Nhân Viên",
+      "cancelAssignment": "Hủy Phân Công",
+      "cancelAssignmentConfirm": "Hủy phân công này?",
+      "table": {
+        "date": "Ngày",
+        "shiftType": "Loại Ca",
+        "timeRange": "Khung Giờ",
+        "status": "Trạng Thái",
+        "assigned": "Phân Công",
+        "actions": "Thao Tác"
+      },
+      "actions": {
+        "publish": "Công Bố",
+        "close": "Đóng Ca",
+        "cancel": "Hủy",
+        "edit": "Chỉnh Sửa",
+        "viewAssignments": "Xem Phân Công"
+      }
+    },
+    "Live": {
+      "title": "Bảng Trực Ca Trực Tiếp",
+      "description": "Xem trực tiếp tình trạng chấm công ca hôm nay.",
+      "summary": {
+        "scheduled": "Đã Lên Lịch",
+        "active": "Đang Làm",
+        "late": "Trễ",
+        "absent": "Vắng",
+        "completed": "Hoàn Thành"
+      },
+      "table": {
+        "staff": "Nhân Viên",
+        "role": "Vai Trò",
+        "shiftType": "Loại Ca",
+        "plannedTime": "Giờ Kế Hoạch",
+        "checkIn": "Vào",
+        "checkOut": "Ra",
+        "status": "Trạng Thái",
+        "lateMinutes": "Trễ (phút)"
+      }
+    },
+    "MyShift": {
+      "title": "Ca Của Tôi",
+      "description": "Xem ca được phân công và chấm công vào/ra.",
+      "todayShift": "Ca Hôm Nay",
+      "upcomingShifts": "Ca Sắp Tới",
+      "pastShifts": "Ca Đã Qua",
+      "noShifts": "Không có ca được phân công.",
+      "checkInBtn": "Chấm Công Vào",
+      "checkOutBtn": "Chấm Công Ra",
+      "checkedInAt": "Đã vào lúc {time}",
+      "checkedOutAt": "Đã ra lúc {time}"
+    },
+    "Reports": {
+      "title": "Báo Cáo Ca",
+      "description": "Báo cáo chấm công, giờ làm và ngoại lệ.",
+      "tabs": {
+        "attendance": "Chấm Công",
+        "workedHours": "Giờ Làm",
+        "exceptions": "Ngoại Lệ"
+      },
+      "filters": {
+        "fromDate": "Từ Ngày",
+        "toDate": "Đến Ngày",
+        "staff": "Nhân Viên",
+        "shiftType": "Loại Ca",
+        "attendanceStatus": "Trạng Thái Chấm Công",
+        "applyFilters": "Áp Dụng",
+        "clearFilters": "Xóa"
+      },
+      "attendance": {
+        "totalAssigned": "Tổng Phân Công",
+        "attendanceRate": "Tỷ Lệ Chấm Công",
+        "lateCount": "Trễ",
+        "absentCount": "Vắng",
+        "table": {
+          "staff": "Nhân Viên",
+          "role": "Vai Trò",
+          "assigned": "Phân Công",
+          "present": "Có Mặt",
+          "late": "Trễ",
+          "absent": "Vắng",
+          "rate": "Tỷ Lệ"
+        }
+      },
+      "workedHours": {
+        "totalScheduled": "Tổng Giờ KH",
+        "totalWorked": "Tổng Giờ Làm",
+        "variance": "Chênh Lệch",
+        "table": {
+          "staff": "Nhân Viên",
+          "role": "Vai Trò",
+          "scheduledMin": "KH (phút)",
+          "workedMin": "Làm (phút)",
+          "varianceMin": "Chênh (phút)",
+          "incomplete": "Thiếu Dữ Liệu"
+        }
+      },
+      "exceptions": {
+        "lateCount": "Đến Trễ",
+        "absentCount": "Vắng Mặt",
+        "earlyLeaveCount": "Về Sớm",
+        "adjustmentCount": "Điều Chỉnh Thủ Công",
+        "table": {
+          "date": "Ngày",
+          "staff": "Nhân Viên",
+          "role": "Vai Trò",
+          "shiftType": "Loại Ca",
+          "exceptionType": "Loại Ngoại Lệ",
+          "minutesAffected": "Phút",
+          "reviewer": "Người Duyệt"
+        }
+      }
+    }
   },
   "OrderHistory": {
     "title": "Lịch Sử Đặt Món",

@@ -1505,7 +1505,157 @@
     "logoutMessage": "Are you sure you want to logout? You will be redirected to the login page.",
     "cancel": "Cancel",
     "expand": "Expand",
-    "collapse": "Collapse"
+    "collapse": "Collapse",
+    "shifts": "Schedules",
+    "shiftsLive": "Live Board",
+    "shiftsReports": "Shift Reports",
+    "myShifts": "My Shifts"
+  },
+  "ShiftManagement": {
+    "Common": {
+      "shiftType": "Shift Type",
+      "businessDate": "Business Date",
+      "plannedStart": "Planned Start",
+      "plannedEnd": "Planned End",
+      "status": "Status",
+      "notes": "Notes",
+      "assignedStaff": "Assigned Staff",
+      "role": "Role",
+      "checkIn": "Check In",
+      "checkOut": "Check Out",
+      "late": "Late",
+      "absent": "Absent",
+      "onDuty": "On Duty",
+      "completed": "Completed",
+      "scheduled": "Scheduled",
+      "workedHours": "Worked Hours",
+      "lateMinutes": "Late by {minutes} min",
+      "earlyLeaveMinutes": "Left {minutes} min early",
+      "reason": "Reason",
+      "adjustmentReason": "Adjustment Reason"
+    },
+    "Schedule": {
+      "title": "Shift Schedules",
+      "description": "Create, publish, and manage shift schedules and staff assignments.",
+      "addNew": "Create Schedule",
+      "createTitle": "Create Shift Schedule",
+      "editTitle": "Edit Shift Schedule",
+      "publishConfirm": "Publish this schedule? Staff will be able to see it.",
+      "cancelConfirm": "Cancel this schedule? This cannot be undone.",
+      "noSchedules": "No schedules found.",
+      "assignStaff": "Assign Staff",
+      "cancelAssignment": "Cancel Assignment",
+      "cancelAssignmentConfirm": "Cancel this assignment?",
+      "table": {
+        "date": "Date",
+        "shiftType": "Shift Type",
+        "timeRange": "Time Range",
+        "status": "Status",
+        "assigned": "Assigned",
+        "actions": "Actions"
+      },
+      "actions": {
+        "publish": "Publish",
+        "close": "Close",
+        "cancel": "Cancel",
+        "edit": "Edit",
+        "viewAssignments": "View Assignments"
+      }
+    },
+    "Live": {
+      "title": "Live On-Duty Board",
+      "description": "Real-time view of today's shift attendance.",
+      "summary": {
+        "scheduled": "Scheduled",
+        "active": "Active",
+        "late": "Late",
+        "absent": "Absent",
+        "completed": "Completed"
+      },
+      "table": {
+        "staff": "Staff",
+        "role": "Role",
+        "shiftType": "Shift Type",
+        "plannedTime": "Planned Time",
+        "checkIn": "Check-In",
+        "checkOut": "Check-Out",
+        "status": "Status",
+        "lateMinutes": "Late (min)"
+      }
+    },
+    "MyShift": {
+      "title": "My Shifts",
+      "description": "View your assigned shifts and check in or check out.",
+      "todayShift": "Today's Shift",
+      "upcomingShifts": "Upcoming Shifts",
+      "pastShifts": "Past Shifts",
+      "noShifts": "No shifts assigned.",
+      "checkInBtn": "Check In",
+      "checkOutBtn": "Check Out",
+      "checkedInAt": "Checked in at {time}",
+      "checkedOutAt": "Checked out at {time}"
+    },
+    "Reports": {
+      "title": "Shift Reports",
+      "description": "Attendance summary, worked hours, and exception reports.",
+      "tabs": {
+        "attendance": "Attendance",
+        "workedHours": "Worked Hours",
+        "exceptions": "Exceptions"
+      },
+      "filters": {
+        "fromDate": "From Date",
+        "toDate": "To Date",
+        "staff": "Staff Member",
+        "shiftType": "Shift Type",
+        "attendanceStatus": "Attendance Status",
+        "applyFilters": "Apply",
+        "clearFilters": "Clear"
+      },
+      "attendance": {
+        "totalAssigned": "Total Assigned",
+        "attendanceRate": "Attendance Rate",
+        "lateCount": "Late",
+        "absentCount": "Absent",
+        "table": {
+          "staff": "Staff",
+          "role": "Role",
+          "assigned": "Assigned",
+          "present": "Present",
+          "late": "Late",
+          "absent": "Absent",
+          "rate": "Rate"
+        }
+      },
+      "workedHours": {
+        "totalScheduled": "Total Scheduled",
+        "totalWorked": "Total Worked",
+        "variance": "Variance",
+        "table": {
+          "staff": "Staff",
+          "role": "Role",
+          "scheduledMin": "Scheduled (min)",
+          "workedMin": "Worked (min)",
+          "varianceMin": "Variance (min)",
+          "incomplete": "Incomplete"
+        }
+      },
+      "exceptions": {
+        "lateCount": "Late Arrivals",
+        "absentCount": "Absences",
+        "earlyLeaveCount": "Early Departures",
+        "adjustmentCount": "Manual Adjustments",
+        "table": {
+          "date": "Date",
+          "staff": "Staff",
+          "role": "Role",
+          "shiftType": "Shift Type",
+          "exceptionType": "Exception",
+          "minutesAffected": "Minutes",
+          "reviewer": "Reviewed By"
+        }
+      }
+    }
   },
   "OrderHistory": {
     "title": "Order History",
