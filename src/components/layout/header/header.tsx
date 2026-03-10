@@ -6,17 +6,15 @@ import {
     Menu as MenuIcon, X, MapPin, Phone, Clock,
     QrCode, Home, User, ChevronDown
 } from "lucide-react";
-import {useState, useTransition, useEffect, useRef} from "react";
+import { useState, useTransition, useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
 import { usePathname, useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { NavLink } from "@/components/layout/header/nav-link";
 import { FR, GB, VN } from 'country-flag-icons/react/3x2';
 import { useStoreSettings } from "@/hooks/use-store-settings";
-// Import Dropdown Components
-import { Dropdown, DropdownContent, DropdownItem } from "@/components/ui/dropdown";
-// Import Modal quét QR/Chọn bàn
-import { TableSelectionModal } from "@/features/customer/menu-listing-new/components/table-selection-modal";
+
+import { QrScannerModal } from "@/components/ui/qr-scanner-modal";
 
 interface HeaderProps {
     isScrolled: boolean;
@@ -31,14 +29,17 @@ const FLAG_MAP: Record<string, React.ElementType> = {
 
 export function Header({ isScrolled, locale }: HeaderProps) {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-    const [isQrModalOpen, setIsQrModalOpen] = useState(false); // State mở Modal QR
+    const [isLangDropdownOpen, setIsLangDropdownOpen] = useState(false);
+
+    // 2. STATE RIÊNG BIỆT QUẢN LÝ BẬT TẮT CAMERA
+    const [isQrScannerOpen, setIsQrScannerOpen] = useState(false);
 
     const { data: storeSettings } = useStoreSettings();
-
     const [isPending, startTransition] = useTransition();
     const t = useTranslations('Header');
     const router = useRouter();
     const pathname = usePathname();
+    const langDropdownRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         if (isMobileMenuOpen) {
@@ -49,8 +50,19 @@ export function Header({ isScrolled, locale }: HeaderProps) {
         return () => { document.body.style.overflow = 'unset'; };
     }, [isMobileMenuOpen]);
 
+    useEffect(() => {
+        function handleClickOutside(event: MouseEvent) {
+            if (langDropdownRef.current && !langDropdownRef.current.contains(event.target as Node)) {
+                setIsLangDropdownOpen(false);
+            }
+        }
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
+
     const switchLocale = (newLocale: string) => {
         if (newLocale === locale) return;
+        setIsLangDropdownOpen(false);
         const newPath = pathname.replace(`/${locale}`, `/${newLocale}`);
         startTransition(() => {
             router.replace(newPath);
@@ -67,79 +79,59 @@ export function Header({ isScrolled, locale }: HeaderProps) {
         { label: t('contact') || "CONTACT", href: "/contact" },
     ];
 
-    // Xử lý sau khi chọn bàn xong từ Modal
-    const handleTableConfirm = (val: string) => {
-        setIsQrModalOpen(false);
-        // Lưu vào sessionStorage để đồng bộ với chức năng giỏ hàng
-        sessionStorage.setItem("aulac_table_number", val);
-        router.push(getLink(`/menu-listing?table=${encodeURIComponent(val)}`));
-    };
+    const LanguageDesktop = () => (
+        <div className="hidden lg:flex items-center gap-3">
+            {['fr', 'en', 'vi'].map((l, idx) => {
+                const FlagIcon = FLAG_MAP[l];
+                return (
+                    <div key={l} className="flex items-center gap-3">
+                        <button
+                            disabled={isPending}
+                            onClick={() => switchLocale(l)}
+                            className={cn(
+                                "transition-all duration-300 hover:scale-110",
+                                locale === l ? "opacity-100 scale-110 drop-shadow-[0_0_8px_rgba(255,255,255,0.4)]" : "opacity-40 hover:opacity-100",
+                                isPending && "cursor-wait"
+                            )}
+                            title={l.toUpperCase()}
+                        >
+                            <FlagIcon className="w-6 h-4 rounded-[2px] shadow-sm" />
+                        </button>
+                        {idx < 2 && <span className="text-white/20 text-xs font-light">|</span>}
+                    </div>
+                );
+            })}
+        </div>
+    );
 
-    const LanguageSelector = ({ isMobile = false }: { isMobile?: boolean }) => {
-        const [isOpen, setIsOpen] = useState(false);
-        const dropdownRef = useRef<HTMLDivElement>(null);
+    const LanguageMobileDropdown = () => {
         const CurrentFlag = FLAG_MAP[locale];
-
-        useEffect(() => {
-            const handleClickOutside = (event: MouseEvent) => {
-                if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-                    setIsOpen(false);
-                }
-            };
-            document.addEventListener("mousedown", handleClickOutside);
-            return () => document.removeEventListener("mousedown", handleClickOutside);
-        }, []);
-
-        const handleSelect = (l: string) => {
-            setIsOpen(false);
-            switchLocale(l);
-        };
-
         return (
-            <div className="relative inline-block text-left z-[110]" ref={dropdownRef}>
-                {/* Nút bấm (Trigger) */}
+            <div className="relative lg:hidden" ref={langDropdownRef}>
                 <button
-                    onClick={() => setIsOpen(!isOpen)}
-                    className={cn(
-                        "flex items-center gap-2 border border-[#C5A059]/30 rounded-sm hover:bg-[#C5A059]/20 transition-colors",
-                        isMobile ? "bg-[#C5A059]/10 px-2 py-1.5" : "px-3 py-1.5 bg-[#152e42]/80 backdrop-blur-sm"
-                    )}
+                    onClick={() => setIsLangDropdownOpen(!isLangDropdownOpen)}
+                    className="flex items-center gap-1.5 bg-[#C5A059]/10 border border-[#C5A059]/30 px-2 py-1.5 rounded-sm hover:bg-[#C5A059]/20 transition-colors"
                 >
-                    <CurrentFlag className={cn("rounded-[1px] shadow-sm", isMobile ? "w-5 h-3.5" : "w-6 h-4")} />
-                    {!isMobile && (
-                        <span className="text-[#C5A059] text-xs font-bold uppercase tracking-wider">
-                            {locale}
-                        </span>
-                    )}
-                    <ChevronDown size={14} className={cn("text-[#C5A059] transition-transform duration-200", isOpen && "rotate-180")} />
+                    <CurrentFlag className="w-5 h-3.5 rounded-[1px]" />
+                    <ChevronDown size={14} className={cn("text-[#C5A059] transition-transform duration-300", isLangDropdownOpen && "rotate-180")} />
                 </button>
 
-                {/* Hộp Dropdown (Content) */}
-                {isOpen && (
-                    <div className={cn(
-                        "absolute top-full mt-2 bg-[#0A111A] border border-[#C5A059]/40 shadow-xl rounded overflow-hidden flex flex-col min-w-[120px] origin-top-right animate-in fade-in zoom-in-95",
-                        isMobile ? "right-0" : "right-0" // Luôn neo về góc phải
-                    )}>
+                {isLangDropdownOpen && (
+                    <div className="absolute top-full right-0 mt-2 bg-[#0A111A] border border-[#C5A059]/40 rounded shadow-xl overflow-hidden z-[110] flex flex-col min-w-[60px]">
                         {['fr', 'en', 'vi'].map(l => {
                             const DropdownFlag = FLAG_MAP[l];
                             return (
                                 <button
                                     key={l}
                                     disabled={isPending}
-                                    onClick={() => handleSelect(l)}
+                                    onClick={() => switchLocale(l)}
                                     className={cn(
-                                        "px-4 py-3 transition-colors hover:bg-white/10 flex items-center gap-3 w-full text-left",
-                                        locale === l && "bg-white/5",
+                                        "px-4 py-3 transition-colors hover:bg-white/10 flex justify-center items-center",
+                                        locale === l ? "bg-white/5" : "",
                                         isPending && "opacity-50 cursor-wait"
                                     )}
                                 >
-                                    <DropdownFlag className="w-6 h-4 rounded-[2px] shadow-sm shrink-0" />
-                                    <span className={cn(
-                                        "text-xs font-bold uppercase tracking-wider",
-                                        locale === l ? "text-[#C5A059]" : "text-white/70"
-                                    )}>
-                                        {l === 'vi' ? 'Tiếng Việt' : l === 'en' ? 'English' : 'Français'}
-                                    </span>
+                                    <DropdownFlag className="w-6 h-4 rounded-[2px]" />
                                 </button>
                             );
                         })}
@@ -151,11 +143,10 @@ export function Header({ isScrolled, locale }: HeaderProps) {
 
     return (
         <>
-            {/* Modal Quét QR / Chọn bàn */}
-            <TableSelectionModal
-                isOpen={isQrModalOpen}
-                onConfirm={handleTableConfirm}
-                onClose={() => setIsQrModalOpen(false)}
+            {/* 3. TÍCH HỢP MODAL CAMERA VÀO UI */}
+            <QrScannerModal
+                isOpen={isQrScannerOpen}
+                onClose={() => setIsQrScannerOpen(false)}
             />
 
             <header className={cn(
@@ -166,9 +157,7 @@ export function Header({ isScrolled, locale }: HeaderProps) {
                     : "lg:bg-[#152e42] lg:py-4"
             )}>
                 <div className="w-full max-w-[1600px] mx-auto px-4 md:px-8 lg:px-12 flex flex-col transition-all duration-500">
-
                     <div className="flex items-center justify-between">
-
                         {/* 1. LOGO */}
                         <Link href={getLink("/")} className="flex items-center gap-4 z-50" onClick={() => setIsMobileMenuOpen(false)}>
                             <Image
@@ -213,21 +202,18 @@ export function Header({ isScrolled, locale }: HeaderProps) {
 
                         {/* 3. ACTIONS PHẢI */}
                         <div className="flex items-center gap-4 lg:gap-6 z-50">
+                            <LanguageMobileDropdown />
+                            <LanguageDesktop />
 
-                            {/* Dropdown Ngôn ngữ (Mobile ẩn Desktop, Desktop ẩn Mobile) */}
-                            <div className="lg:hidden"><LanguageSelector isMobile={true} /></div>
-                            <div className="hidden lg:block"><LanguageSelector isMobile={false} /></div>
-
-                            {/* Nút bật Camera QR */}
+                            {/* 4. NÚT KÍCH HOẠT CAMERA BÊN DESKTOP */}
                             <button
-                                onClick={() => setIsQrModalOpen(true)}
-                                className="text-[#C5A059] hover:text-[#FDE08B] transition-colors p-1.5 lg:p-2 border border-[#C5A059]/40 rounded hover:bg-[#C5A059]/10"
+                                onClick={() => setIsQrScannerOpen(true)}
+                                className="text-[#C5A059] hover:text-[#FDE08B] transition-colors p-1.5 lg:p-2 border border-[#C5A059]/40 rounded hover:bg-[#C5A059]/10 cursor-pointer"
                                 title={t('qr_scan')}
                             >
                                 <QrCode size={20} className="lg:w-[22px] lg:h-[22px]" />
                             </button>
 
-                            {/* Nút Desktop */}
                             <div className="hidden lg:flex items-center gap-6 pl-2">
                                 <Link href={getLink("/reservation")}>
                                     <button className="bg-[#C5A059] text-[#0f172a] px-6 py-2.5 text-xs font-bold uppercase tracking-[0.15em] hover:bg-[#D4AF6A] transition-colors rounded-sm shadow-md">
@@ -240,7 +226,6 @@ export function Header({ isScrolled, locale }: HeaderProps) {
                                 </Link>
                             </div>
 
-                            {/* Hamburger Mobile */}
                             <button
                                 className="lg:hidden text-white hover:text-[#C5A059] transition-colors ml-1"
                                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -250,7 +235,7 @@ export function Header({ isScrolled, locale }: HeaderProps) {
                         </div>
                     </div>
 
-                    {/* DÒNG 2: THANH THÔNG TIN DESKTOP */}
+                    {/* DÒNG 2: THANH THÔNG TIN (CHỈ DESKTOP) */}
                     <div className={cn(
                         "hidden lg:flex items-center justify-between w-full transition-all duration-500 ease-in-out origin-top",
                         isScrolled ? "h-0 opacity-0 overflow-hidden mt-0 pt-0" : "h-[42px] opacity-100 mt-4 pt-4 border-t border-white/10"
@@ -278,14 +263,13 @@ export function Header({ isScrolled, locale }: HeaderProps) {
                             </span>
                         </div>
                     </div>
-
                 </div>
 
                 {/* MOBILE MENU */}
                 {isMobileMenuOpen && (
                     <div className="fixed inset-0 top-[76px] bg-[#152e42] z-[90] flex flex-col px-6 py-8 overflow-y-auto">
                         <nav className="flex flex-col mt-4">
-                            {navItems.map((item) => (
+                            {navItems.map((item, index) => (
                                 <Link
                                     key={item.href}
                                     href={getLink(item.href)}
@@ -302,6 +286,19 @@ export function Header({ isScrolled, locale }: HeaderProps) {
                                     )}
                                 </Link>
                             ))}
+                            {/* 5. NÚT KÍCH HOẠT CAMERA TRÊN MOBILE */}
+                            <button
+                                onClick={() => {
+                                    setIsMobileMenuOpen(false);
+                                    setIsQrScannerOpen(true);
+                                }}
+                                className="flex items-center justify-between py-6 border-b border-[#C5A059]/20 group text-left w-full"
+                            >
+                                <span className="text-white group-hover:text-[#C5A059] text-xl font-serif uppercase tracking-[0.2em] transition-colors">
+                                    SCAN QR
+                                </span>
+                                <span className="text-[#C5A059]"><QrCode size={24} /></span>
+                            </button>
                         </nav>
 
                         <div className="mt-12 flex flex-col gap-4">
