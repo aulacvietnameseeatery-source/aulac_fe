@@ -2,11 +2,11 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
-import { cn } from "@/lib/utils";
 import { UtensilsCrossed, X, Camera, ChevronRight, RefreshCcw } from "lucide-react";
-import { api } from "@/lib/http";
-import type { ApiResponse } from "@/types/api-response.types";
-import { Scanner } from '@yudiel/react-qr-scanner'; // IMPORT THƯ VIỆN CAMERA VÀO ĐÂY
+import { Scanner } from '@yudiel/react-qr-scanner';
+import {ApiResponse} from "../../../../types/api-response.types";
+import {api} from "../../../../lib/http";
+import {cn} from "../../../../lib/utils";
 
 interface AvailableTableDto {
     tableId: number;
