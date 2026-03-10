@@ -3,6 +3,7 @@
 import { useState, useMemo } from "react";
 import { Plus, RefreshCcw, Users, Eye, Pencil } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ALDatePicker } from "@/components/ui/al-date-picker";
 import { PermissionGuard } from "@/components/permission-guard";
 import { Permissions } from "@/types/const";
 import {
@@ -81,18 +82,20 @@ export function ShiftScheduleList() {
       {/* Toolbar */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
         <div className="flex flex-wrap items-center gap-2">
-          <input
-            type="date"
+          <ALDatePicker
             value={fromDate}
-            onChange={(e) => setFromDate(e.target.value)}
-            className="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary bg-background"
+            onChange={(val) => setFromDate(val)}
+            placeholder="From date"
+            clearable
+            inputSize="sm"
           />
           <span className="text-muted-foreground text-sm">–</span>
-          <input
-            type="date"
+          <ALDatePicker
             value={toDate}
-            onChange={(e) => setToDate(e.target.value)}
-            className="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary bg-background"
+            onChange={(val) => setToDate(val)}
+            placeholder="To date"
+            clearable
+            inputSize="sm"
           />
           <Button variant="outline" size="sm" onClick={() => refetch()} disabled={isLoading}>
             <RefreshCcw className="w-4 h-4" />
@@ -152,7 +155,8 @@ export function ShiftScheduleList() {
                         variant="ghost"
                         size="sm"
                         onClick={() => handleViewAssignments(s)}
-                        title="View assignments"
+                        data-tooltip-content="View assignments"
+                        data-tooltip-id="my-tooltip"
                       >
                         <Eye className="w-4 h-4" />
                       </Button>
@@ -164,7 +168,8 @@ export function ShiftScheduleList() {
                             variant="ghost"
                             size="sm"
                             onClick={() => handleEdit(s)}
-                            title="Edit schedule"
+                            data-tooltip-content="Edit schedule"
+                            data-tooltip-id="my-tooltip"
                           >
                             <Pencil className="w-4 h-4" />
                           </Button>

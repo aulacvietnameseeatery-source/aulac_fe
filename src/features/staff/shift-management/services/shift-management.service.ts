@@ -5,6 +5,7 @@ import type {
   ShiftScheduleDetailDto,
   ShiftAssignmentDto,
   AttendanceRecordDto,
+  AttendanceReportRowDto,
   LiveShiftBoardDto,
   WorkedHoursReportRowDto,
   AttendanceExceptionReportRowDto,
@@ -168,7 +169,7 @@ export const shiftManagementService = {
 
   async getAttendanceReport(
     params: GetAttendanceReportParams = {}
-  ): Promise<PagedResult<ShiftAssignmentDto>> {
+  ): Promise<PagedResult<AttendanceReportRowDto>> {
     const query = toQuery({
       fromDate: params.fromDate,
       toDate: params.toDate,
@@ -178,7 +179,7 @@ export const shiftManagementService = {
       pageIndex: params.pageIndex ?? 1,
       pageSize: params.pageSize ?? 20,
     });
-    const res = await api.get<ApiResponse<PagedResult<ShiftAssignmentDto>>>(
+    const res = await api.get<ApiResponse<PagedResult<AttendanceReportRowDto>>>(
       `${BASE}/reports/attendance${query}`
     );
     return (

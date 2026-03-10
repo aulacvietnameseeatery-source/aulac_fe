@@ -130,7 +130,8 @@ export const KanbanOrderCard: React.FC<KanbanOrderCardProps> = ({
                         {order.orderStatus === 'Completed' && (
                             <div
                                 className={`flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded border ${order.isPaid ? PAYMENT_STYLES.paid : PAYMENT_STYLES.unpaid}`}
-                                title={order.isPaid ? t('paymentStatus.paid') : t('paymentStatus.unpaid')}
+                                data-tooltip-content={order.isPaid ? t('paymentStatus.paid') : t('paymentStatus.unpaid')}
+                                data-tooltip-id="my-tooltip"
                             >
                                 {order.isPaid ? t('paymentStatus.paid') : t('paymentStatus.unpaid')}
                             </div>
@@ -264,7 +265,8 @@ export const KanbanOrderCard: React.FC<KanbanOrderCardProps> = ({
                                 <button
                                     onClick={() => onAction?.(order.orderId, 'view')}
                                     className="flex-1 py-1.5 rounded-lg border border-gray-200 text-xs font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors"
-                                    title={t('action.view')}
+                                    data-tooltip-content={t('action.view')}
+                                    data-tooltip-id="my-tooltip"
                                 >
                                     {t('action.view')}
                                 </button>

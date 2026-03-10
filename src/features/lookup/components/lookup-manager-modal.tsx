@@ -232,7 +232,8 @@ const LookupManagerModal: React.FC<LookupManagerModalProps> = ({
         return (
           <span
             key={key}
-            title={`${flag} name: ${item.i18n?.[key] || "—"}\ndescription: ${item.descriptionI18n?.[key] || "—"}`}
+            data-tooltip-content={`${flag} name: ${item.i18n?.[key] || "—"} | description: ${item.descriptionI18n?.[key] || "—"}`}
+            data-tooltip-id="my-tooltip"
             className={cn(
               "text-[10px] px-1 py-0 rounded leading-4 border select-none",
               hasName
@@ -385,7 +386,8 @@ const LookupManagerModal: React.FC<LookupManagerModalProps> = ({
                         >
                           <button
                             type="button"
-                            title={`Edit ${entityLabel}`}
+                            data-tooltip-content={`Edit ${entityLabel}`}
+                            data-tooltip-id="my-tooltip"
                             onClick={() => handleStartEdit(item)}
                             className="p-1.5 rounded hover:bg-white hover:shadow-sm text-gray-400 hover:text-indigo-600 transition-colors"
                           >
@@ -393,7 +395,8 @@ const LookupManagerModal: React.FC<LookupManagerModalProps> = ({
                           </button>
                           <button
                             type="button"
-                            title={`Delete ${entityLabel}`}
+                            data-tooltip-content={`Delete ${entityLabel}`}
+                            data-tooltip-id="my-tooltip"
                             onClick={() => handleDeleteClick(item)}
                             className="p-1.5 rounded hover:bg-red-50 text-gray-400 hover:text-red-500 transition-colors"
                           >

@@ -20,7 +20,8 @@ import {
   useStaffForAssignmentQuery,
 } from "../hooks/use-shift-queries";
 import { ShiftStatusBadge } from "./shift-status-badge";
-import type { ShiftScheduleListDto } from "../types/shift-management.types";
+import { AttendanceAdjustmentDialog } from "./attendance-adjustment-dialog";
+import type { ShiftScheduleListDto, AttendanceRecordDto } from "../types/shift-management.types";
 
 interface Props {
   open: boolean;
@@ -31,6 +32,7 @@ interface Props {
 export function ShiftAssignmentPanel({ open, onClose, schedule }: Props) {
   const [selectedStaffIds, setSelectedStaffIds] = useState<number[]>([]);
   const [showAddStaff, setShowAddStaff] = useState(false);
+  const [adjustTarget, setAdjustTarget] = useState<AttendanceRecordDto | null>(null);
 
   const { data: assignmentsPage, isLoading: assignmentsLoading } = useShiftAssignmentsQuery(
     { shiftScheduleId: schedule.shiftScheduleId, pageSize: 100 }
@@ -90,6 +92,7 @@ export function ShiftAssignmentPanel({ open, onClose, schedule }: Props) {
   }
 
   return (
+    <>
     <Drawer open={open} onOpenChange={(v) => !v && onClose()}>
       <DrawerContent className="sm:max-w-xl flex flex-col">
         <DrawerHeader className="border-b pb-4">
@@ -137,6 +140,18 @@ export function ShiftAssignmentPanel({ open, onClose, schedule }: Props) {
                 </div>
                 <div className="flex items-center gap-2">
                   <ShiftStatusBadge statusCode={a.assignmentStatusCode} type="assignment" />
+                  {a.attendance && (
+                    <PermissionGuard permission={Permissions.AdjustAttendance}>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => setAdjustTarget(a.attendance)}
+                        className="text-xs"
+                      >
+                        Adjust
+                      </Button>
+                    </PermissionGuard>
+                  )}
                   {a.assignmentStatusCode !== "CANCELLED" && (
                     <PermissionGuard permission={Permissions.AssignShift}>
                       <Button
@@ -226,5 +241,14 @@ export function ShiftAssignmentPanel({ open, onClose, schedule }: Props) {
         </div>
       </DrawerContent>
     </Drawer>
+
+    {adjustTarget && (
+      <AttendanceAdjustmentDialog
+        open={!!adjustTarget}
+        onClose={() => setAdjustTarget(null)}
+        attendanceRecord={adjustTarget}
+      />
+    )}
+    </>
   );
 }

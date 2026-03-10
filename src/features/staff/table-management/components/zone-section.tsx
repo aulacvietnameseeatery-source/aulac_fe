@@ -134,7 +134,8 @@ export const ZoneSection: React.FC<ZoneSectionProps> = ({
                   "size-7",
                   allOnline ? "text-emerald-600" : "text-gray-400"
                 )}
-                title={allOnline ? "Set zone offline" : "Set zone online"}
+                data-tooltip-content={allOnline ? "Set zone offline" : "Set zone online"}
+                data-tooltip-id="my-tooltip"
                 onClick={() => onToggleZoneOnline(tables[0]?.zoneId ?? 0, !allOnline)}
               >
                 {allOnline ? <Wifi size={14} /> : <WifiOff size={14} />}

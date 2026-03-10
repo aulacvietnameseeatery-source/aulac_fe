@@ -28,7 +28,8 @@ export const CategoryActions = ({
       <button 
         onClick={(e) => handleAction(e, onEdit)}
         className="text-gray-400 hover:text-blue-600 transition-colors cursor-pointer p-1"
-        title="Edit Category"
+        data-tooltip-content="Edit Category"
+        data-tooltip-id="my-tooltip"
       >
         <Edit size={18} />
       </button>

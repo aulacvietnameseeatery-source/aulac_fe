@@ -49,7 +49,8 @@ const StatusBar: React.FC<{ segments: StatusSegment[]; total: number }> = ({
             key={s.status}
             className={cn("h-full transition-all duration-500", s.color)}
             style={{ width: `${s.pct}%` }}
-            title={`${s.label}: ${s.count}`}
+            data-tooltip-content={`${s.label}: ${s.count}`}
+            data-tooltip-id="my-tooltip"
           />
         ))}
     </div>
