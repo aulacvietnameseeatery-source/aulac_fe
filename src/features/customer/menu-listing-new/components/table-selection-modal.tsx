@@ -3,9 +3,10 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
-import {UtensilsCrossed, X, Camera, ChevronRight, Image as ImageIcon, RefreshCcw} from "lucide-react";
+import { UtensilsCrossed, X, Camera, ChevronRight, RefreshCcw } from "lucide-react";
 import { api } from "@/lib/http";
 import type { ApiResponse } from "@/types/api-response.types";
+import { Scanner } from '@yudiel/react-qr-scanner'; // IMPORT THƯ VIỆN CAMERA VÀO ĐÂY
 
 interface AvailableTableDto {
     tableId: number;
@@ -22,6 +23,9 @@ export function TableSelectionModal({ isOpen, onConfirm, onClose }: {
 }) {
     const [val, setVal] = useState("");
     const [isScanning, setIsScanning] = useState(false);
+
+    // Loose-typed alias to avoid upstream prop typing mismatch
+    const AnyScanner: any = Scanner;
 
     const [availableTables, setAvailableTables] = useState<AvailableTableDto[]>([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -225,45 +229,75 @@ export function TableSelectionModal({ isOpen, onConfirm, onClose }: {
                             exit={{ opacity: 0 }}
                             className="fixed inset-0 z-[120] bg-black/95 flex flex-col items-center justify-center overflow-hidden"
                         >
-                            <div className="absolute inset-0 bg-[#111] flex items-center justify-center z-0">
+                            {/* CAMERA FULLSCREEN CHÌM PHÍA SAU */}
+                            <div className="absolute inset-0 z-0 flex items-center justify-center bg-[#111]">
+                                <AnyScanner
+                                    onResult={(text: string) => {
+                                        let tableCode = text;
+                                        // Thử kiểm tra xem text có phải là 1 URL chứa param ?table=... hay không
+                                        try {
+                                            const url = new URL(text);
+                                            const tableParam = url.searchParams.get("table");
+                                            if (tableParam) {
+                                                tableCode = tableParam;
+                                            }
+                                        } catch (e) {
+                                        }
+
+                                        onConfirm(tableCode);
+
+                                        // Reset và đóng camera
+                                        setIsScanning(false);
+                                        setVal("");
+                                    }}
+                                    onError={(error: unknown) => {
+                                        console.error("Lỗi camera: ", (error as any)?.message ?? error);
+                                    }}
+                                    components={{
+                                        tracker: undefined,
+                                    }}
+                                    styles={{
+                                        container: { width: '100%', height: '100%' },
+                                        video: { objectFit: 'cover' }
+                                    }}
+                                />
                             </div>
 
+                            {/* Nút Đóng (quay lại chọn bàn thủ công) */}
                             <div className="absolute top-0 left-0 right-0 p-4 md:p-6 flex justify-start z-30 pt-10 md:pt-12">
                                 <button
                                     onClick={() => setIsScanning(false)}
-                                    className="text-white hover:text-white/70 transition-colors p-2"
+                                    className="text-white hover:text-[#C5A059] transition-colors p-2 bg-black/30 rounded-full backdrop-blur-sm"
                                 >
                                     <X size={28} />
                                 </button>
                             </div>
 
-                            <div className="z-30 absolute top-24 md:top-32 flex flex-col items-center w-full">
-                                <p className="text-white text-center text-sm font-medium tracking-wide">
+                            <div className="z-30 absolute top-24 md:top-32 flex flex-col items-center w-full px-4 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+                                <p className="text-white text-center text-sm md:text-base font-medium tracking-wide">
                                     Put QR in your camera frame to scan and check-in your table
                                 </p>
-                                <div className="flex gap-4 items-center mt-4 opacity-80">
-                                    <div className="h-4 w-12 bg-white/30 rounded-sm"></div>
-                                    <div className="h-5 w-16 bg-white/30 rounded-sm"></div>
-                                    <div className="h-4 w-12 bg-white/30 rounded-sm"></div>
-                                </div>
                             </div>
 
+                            {/* Khung Cutout Camera (Vùng nhìn xuyên thấu) */}
                             <div
                                 className="relative w-[260px] md:w-[320px] aspect-square rounded-2xl z-20 overflow-hidden mt-8"
                                 style={{
-                                    boxShadow: "0 0 0 9999px rgba(0, 0, 0, 0.75)"
+                                    boxShadow: "0 0 0 9999px rgba(0, 0, 0, 0.75)" // Làm tối xung quanh
                                 }}
                             >
+                                {/* Thanh quét laser (Chạy lên xuống) */}
                                 <motion.div
                                     animate={{ top: ["0%", "100%", "0%"] }}
                                     transition={{ duration: 2.5, repeat: Infinity, ease: "linear" }}
-                                    className="absolute left-0 right-0 h-10 bg-gradient-to-b from-transparent via-purple-500/80 to-transparent z-30"
+                                    className="absolute left-0 right-0 h-10 bg-gradient-to-b from-transparent via-[#C5A059]/60 to-transparent z-30"
                                 />
 
-                                <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-white/80 rounded-tl-xl pointer-events-none" />
-                                <div className="absolute top-0 right-0 w-8 h-8 border-t-2 border-r-2 border-white/80 rounded-tr-xl pointer-events-none" />
-                                <div className="absolute bottom-0 left-0 w-8 h-8 border-b-2 border-l-2 border-white/80 rounded-bl-xl pointer-events-none" />
-                                <div className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-white/80 rounded-br-xl pointer-events-none" />
+                                {/* 4 Góc bo khung quét màu Vàng đồng */}
+                                <div className="absolute top-0 left-0 w-8 h-8 border-t-[3px] border-l-[3px] border-[#C5A059] rounded-tl-xl pointer-events-none" />
+                                <div className="absolute top-0 right-0 w-8 h-8 border-t-[3px] border-r-[3px] border-[#C5A059] rounded-tr-xl pointer-events-none" />
+                                <div className="absolute bottom-0 left-0 w-8 h-8 border-b-[3px] border-l-[3px] border-[#C5A059] rounded-bl-xl pointer-events-none" />
+                                <div className="absolute bottom-0 right-0 w-8 h-8 border-b-[3px] border-r-[3px] border-[#C5A059] rounded-br-xl pointer-events-none" />
                             </div>
                         </motion.div>
                     )}
