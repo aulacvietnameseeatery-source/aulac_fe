@@ -31,6 +31,9 @@ import {
   TicketPercent,
   ChefHat,
   Truck,
+  FileSpreadsheet,
+  BadgeDollarSign,
+  Truck,
   Clock,
   Radio,
   BarChart3,
@@ -72,6 +75,8 @@ const navigation = [
     items: [
       { key: "tables", href: "/dashboard/tables", icon: Table },
       { key: "customers", href: "/dashboard/customers", icon: UserRound },
+      { key: "invoices", href: "/dashboard/invoices", icon: FileSpreadsheet },
+      { key: "payments", href: "/dashboard/payments", icon: BadgeDollarSign },
       { key: "shifts", href: "/dashboard/shifts", icon: Clock },
       { key: "shiftsLive", href: "/dashboard/shifts/live", icon: Radio },
       { key: "shiftsReports", href: "/dashboard/shifts/reports", icon: BarChart3 },

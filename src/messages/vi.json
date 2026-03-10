@@ -1488,6 +1488,8 @@
     "suppliers": "Nhà cung cấp",
     "coupons": "Mã giảm giá",
     "orders": "Đơn hàng",
+    "invoices": "Hóa đơn",
+    "payments": "Thanh toán",
     "kitchen": "Bếp (KDS)",
     "reports": "Báo cáo",
     "emails": "Email",
@@ -1933,5 +1935,39 @@
       "createSuccess": "Tạo cài đặt mới thành công.",
       "saveError": "Lưu cài đặt thất bại."
     }
+  },
+  "InvoiceDetail": {
+    "title": "Chi tiết hóa đơn",
+    "loading": "Đang tải hóa đơn...",
+    "errorLoad": "Lỗi khi tải hóa đơn",
+    "notFound": "Không tìm thấy hóa đơn.",
+    "exportPrint": "Xuất / In",
+    "back": "Quay lại",
+    "status": {
+      "paid": "Đã thanh toán"
+    },
+    "from": "Hóa đơn từ",
+    "phone": "Điện thoại",
+    "to": "Khách hàng",
+    "walkInCustomer": "Khách lẻ",
+    "date": "Ngày",
+    "type": "Loại",
+    "table": "Bàn",
+    "items": "Chi tiết món",
+    "no": "STT",
+    "itemDetails": "Tên món",
+    "qty": "SL",
+    "rate": "Đơn giá",
+    "amount": "Thành tiền",
+    "terms": "Điều khoản và Quy định",
+    "term1": "1. Cảm ơn quý khách đã dùng bữa.",
+    "term2": "2. Vui lòng giữ lại biên lai này để đối chiếu.",
+    "paymentVerified": "Lưu ý: Thanh toán đã được xác nhận bởi {staffName}.",
+    "subtotal": "Tạm tính",
+    "discount": "Giảm giá",
+    "total": "Tổng cộng ($)",
+    "downloadPdf": "Tải PDF",
+    "printInvoice": "In hóa đơn",
+    "defaultStaff": "Nhân viên"
   }
 }
