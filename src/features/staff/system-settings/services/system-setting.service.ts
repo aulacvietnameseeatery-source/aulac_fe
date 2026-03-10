@@ -26,6 +26,18 @@ export const getGroupSettings = async (
 };
 
 /**
+ * Fetch settings for a specific group (Public/Anonymous).
+ */
+export const getPublicGroupSettings = async (
+    group: string
+): Promise<SystemSettingDetailDto[]> => {
+    const response = await api.get<ApiResponse<{ groupName: string; settings: SystemSettingDetailDto[] }>>(
+        `/api/system-settings/public/groups/${group}`
+    );
+    return response.data.settings;
+};
+
+/**
  * Bulk-update all settings for a specific group.
  */
 export const updateGroupSettings = async (
