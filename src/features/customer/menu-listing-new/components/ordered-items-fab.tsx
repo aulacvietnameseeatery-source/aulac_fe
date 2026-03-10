@@ -310,7 +310,7 @@ export function OrderHistoryFAB({ tableCode, tableNumber, dishNameMap = {}, refr
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.88, opacity: 0, y: 24 }}
               transition={{ type: "spring", stiffness: 320, damping: 32 }}
-              className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[91] w-[92vw] md:w-[390px] h-[82vh] md:h-[640px] rounded-[28px] overflow-hidden flex flex-col"
+              className="fixed top-[calc(50%+20px)] left-1/2 -translate-x-1/2 -translate-y-1/2 z-[91] w-[92vw] md:w-[390px] h-[82vh] md:h-[640px] rounded-[28px] overflow-hidden flex flex-col"
               style={{
                 background: "linear-gradient(170deg, #192848 0%, #0f1f3d 100%)",
                 border: "1px solid rgba(201,168,76,0.35)",

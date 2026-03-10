@@ -306,7 +306,7 @@ export default function MenuListingClient({ initialMenuData, tableFromUrl }: Pro
                 />
             </div>
 
-            <div id="cart-destination" className="fixed bottom-6 right-4 md:bottom-8 md:right-5 z-50 pointer-events-none flex flex-row items-end gap-4">
+            <div id="cart-destination" className="fixed bottom-6 md:bottom-8 inset-x-0 z-50 pointer-events-none flex flex-row items-end justify-center gap-4">
                 <AnimatePresence>
                     {tableNumber && (
                         <>
