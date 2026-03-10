@@ -30,7 +30,9 @@ import {
   Warehouse,
   TicketPercent,
   ChefHat,
-  Truck
+  Truck,
+  FileSpreadsheet,
+  BadgeDollarSign
 } from "lucide-react";
 
 import { useAuth } from "@/components/providers/auth-provider";
@@ -68,6 +70,8 @@ const navigation = [
     items: [
       { key: "tables", href: "/dashboard/tables", icon: Table },
       { key: "customers", href: "/dashboard/customers", icon: UserRound },
+      { key: "invoices", href: "/dashboard/invoices", icon: FileSpreadsheet },
+      { key: "payments", href: "/dashboard/payments", icon: BadgeDollarSign },
     ]
   },
   {

@@ -1488,6 +1488,8 @@
     "suppliers": "Suppliers",
     "coupons": "Coupons",
     "orders": "Orders",
+    "invoices": "Invoices",
+    "payments": "Payments",
     "kitchen": "Kitchen (KDS)",
     "reports": "Reports",
     "emails": "Emails",
@@ -1783,5 +1785,39 @@
       "createSuccess": "Setting created successfully.",
       "saveError": "Failed to save settings."
     }
+  },
+  "InvoiceDetail": {
+    "title": "Invoice Details",
+    "loading": "Loading invoice...",
+    "errorLoad": "Failed to load invoice",
+    "notFound": "Invoice not found.",
+    "exportPrint": "Export / Print",
+    "back": "Back",
+    "status": {
+      "paid": "Paid"
+    },
+    "from": "Invoice From",
+    "phone": "Phone",
+    "to": "Bill To",
+    "walkInCustomer": "Walk-in Customer",
+    "date": "Date",
+    "type": "Type",
+    "table": "Table",
+    "items": "Items Details",
+    "no": "#",
+    "itemDetails": "Item Details",
+    "qty": "Qty",
+    "rate": "Rate",
+    "amount": "Amount",
+    "terms": "Terms and Conditions",
+    "term1": "1. Thank you for dining with us.",
+    "term2": "2. Please keep this receipt for your records.",
+    "paymentVerified": "Note: Payment was verified by {staffName}.",
+    "subtotal": "Subtotal",
+    "discount": "Discount",
+    "total": "Total ($)",
+    "downloadPdf": "Download PDF",
+    "printInvoice": "Print Invoice",
+    "defaultStaff": "Staff"
   }
 }

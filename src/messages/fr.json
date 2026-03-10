@@ -1419,6 +1419,8 @@
     "suppliers": "Fournisseurs",
     "coupons": "Coupons",
     "orders": "Commandes",
+    "invoices": "Factures",
+    "payments": "Paiements",
     "kitchen": "Cuisine (KDS)",
     "reports": "Rapports",
     "emails": "E-mails",
@@ -1714,5 +1716,39 @@
       "createSuccess": "Paramètre créé avec succès.",
       "saveError": "Échec de l'enregistrement des paramètres."
     }
+  },
+  "InvoiceDetail": {
+    "title": "Détails de la facture",
+    "loading": "Chargement de la facture...",
+    "errorLoad": "Échec du chargement de la facture",
+    "notFound": "Facture introuvable.",
+    "exportPrint": "Exporter / Imprimer",
+    "back": "Retour",
+    "status": {
+      "paid": "Payée"
+    },
+    "from": "Facture de",
+    "phone": "Téléphone",
+    "to": "Facturé à",
+    "walkInCustomer": "Client de passage",
+    "date": "Date",
+    "type": "Type",
+    "table": "Table",
+    "items": "Détails des articles",
+    "no": "N°",
+    "itemDetails": "Détails de l'article",
+    "qty": "Qté",
+    "rate": "Prix",
+    "amount": "Montant",
+    "terms": "Termes et Conditions",
+    "term1": "1. Merci d'avoir dîné avec nous.",
+    "term2": "2. Veuillez conserver ce reçu pour vos dossiers.",
+    "paymentVerified": "Note : Le paiement a été vérifié par {staffName}.",
+    "subtotal": "Sous-total",
+    "discount": "Remise",
+    "total": "Total ($)",
+    "downloadPdf": "Télécharger en PDF",
+    "printInvoice": "Imprimer la facture",
+    "defaultStaff": "Personnel"
   }
 }
