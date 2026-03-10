@@ -1,17 +1,19 @@
 "use client";
 
 import React from "react";
-import { Edit, Trash2 } from "lucide-react";
+import { Edit, Trash2, Eye } from "lucide-react";
 import { Supplier } from "../types";
 
 interface SupplierActionsProps {
   supplier: Supplier;
+  onView: (supplier: Supplier) => void;
   onEdit: (supplier: Supplier) => void;
   onDelete: (supplier: Supplier) => void;
 }
 
 export const SupplierActions = ({ 
   supplier, 
+  onView,
   onEdit,
   onDelete, 
 }: SupplierActionsProps) => {
@@ -26,6 +28,15 @@ export const SupplierActions = ({
 
   return (
     <div className="flex justify-end items-center gap-3">
+      {/* View Button */}
+      <button 
+        onClick={(e) => handleAction(e, onView)}
+        className="text-gray-400 hover:text-green-600 transition-colors cursor-pointer p-1"
+        title="View Details"
+      >
+        <Eye size={18} />
+      </button>
+
       {/* Edit Button */}
       <button 
         onClick={(e) => handleAction(e, onEdit)}

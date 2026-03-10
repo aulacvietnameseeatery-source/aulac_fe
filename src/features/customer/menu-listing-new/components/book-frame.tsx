@@ -4,11 +4,12 @@ import { MenuCategory, MenuItemData } from '../data/mock-menu'; // Chỉ import 
 import { LeftPage } from './left-page';
 import { RightPage } from './right-page';
 import { DishDetailModal } from '@/features/customer/dish-details';
+import { motion, PanInfo } from 'framer-motion';
 
 // Page Component Wrapper
 const Page = React.forwardRef<HTMLDivElement, { children: React.ReactNode, number?: number, className?: string }>((props, ref) => {
     return (
-        <div className={`demoPage bg-[#0f172a] h-full ${props.className} overflow-hidden`} ref={ref}>
+        <div className={`demoPage bg-[#0f172a] h-full ${props.className} overflow-hidden select-none touch-none`} ref={ref} style={{ WebkitTapHighlightColor: 'transparent' }}>
             <div className="h-full w-full relative">
                 {props.children}
             </div>
@@ -159,6 +160,17 @@ export const BookFrame = ({ menuData, onAddToCart }: BookFrameProps) => {
         }
     };
 
+    const handleSwipe = (_event: any, info: PanInfo) => {
+        const swipeThreshold = 50;
+        if (info.offset.x < -swipeThreshold) {
+            // Right to Left -> Next
+            handleNext();
+        } else if (info.offset.x > swipeThreshold) {
+            // Left to Right -> Prev
+            handlePrev();
+        }
+    };
+
     // Derived Active Category
     const activeCategoryId = pageToCategoryMap[currentPage] || (currentPage > 0 ? Object.values(pageToCategoryMap).pop() : null);
 
@@ -189,10 +201,11 @@ export const BookFrame = ({ menuData, onAddToCart }: BookFrameProps) => {
 
     return (
         <div
-            className={`relative w-full mx-auto z-10 shadow-2xl transition-all duration-500 font-serif perspective-[2000px] ${isMobile ? 'pl-0 mt-12 mb-4' : 'pl-[100px]'}`}
+            className={`relative w-full mx-auto z-10 shadow-2xl transition-all duration-500 font-serif perspective-[2000px] select-none touch-pan-y ${isMobile ? 'pl-0 mt-12 mb-4' : 'pl-[100px]'}`}
             style={{
                 maxWidth: isMobile ? '100%' : 'min(1400px, calc((100vh - 140px) * (3 / 2)))',
-                width: '100%'
+                width: '100%',
+                WebkitTapHighlightColor: 'transparent'
             }}
         >
 
@@ -254,23 +267,21 @@ export const BookFrame = ({ menuData, onAddToCart }: BookFrameProps) => {
                             >
                                 {/* KHỐI NỀN */}
                                 <div
-                                    className={`absolute inset-0 transition-all duration-500 rounded-l-full ${
-                                        isActive
-                                            ? 'bg-[#9A7B4F] shadow-[-4px_4px_10px_rgba(0,0,0,0.3)]'
-                                            : 'bg-transparent border-y border-l border-[#C5A059]/30 shadow-[-2px_0px_10px_rgba(197,160,89,0.15)]'
-                                    }`}
+                                    className={`absolute inset-0 transition-all duration-500 rounded-l-full ${isActive
+                                        ? 'bg-[#9A7B4F] shadow-[-4px_4px_10px_rgba(0,0,0,0.3)]'
+                                        : 'bg-transparent border-y border-l border-[#C5A059]/30 shadow-[-2px_0px_10px_rgba(197,160,89,0.15)]'
+                                        }`}
                                 ></div>
 
                                 {/* TEXT */}
                                 <span
-                                    className={`relative z-10 font-display text-[9px] lg:text-[11px] font-bold uppercase tracking-widest text-right leading-tight transition-all duration-300 ${
-                                        isActive
-                                            ? 'text-[#0f172a]'
-                                            : 'text-[#C5A059]/80 drop-shadow-[0_0_4px_rgba(197,160,89,0.4)] hover:text-[#FDE08B] hover:drop-shadow-[0_0_8px_rgba(253,224,139,0.8)]'
-                                    }`}
+                                    className={`relative z-10 font-display text-[9px] lg:text-[11px] font-bold uppercase tracking-widest text-right leading-tight transition-all duration-300 ${isActive
+                                        ? 'text-[#0f172a]'
+                                        : 'text-[#C5A059]/80 drop-shadow-[0_0_4px_rgba(197,160,89,0.4)] hover:text-[#FDE08B] hover:drop-shadow-[0_0_8px_rgba(253,224,139,0.8)]'
+                                        }`}
                                 >
-                    {cat.name}
-                </span>
+                                    {cat.name}
+                                </span>
                             </div>
                         );
                     })}
@@ -322,77 +333,81 @@ export const BookFrame = ({ menuData, onAddToCart }: BookFrameProps) => {
                         className={`absolute inset-0 top-[3%] bottom-[3%] ${isMobile ? 'left-[4%] right-[2%]' : 'left-[2%] right-[2%]'}`}
                     >
                         {isReady && (
-                            <HTMLFlipBook
-                                key={`${isMobile ? 'mobile' : 'desktop'}-${bookDimensions.width}-${bookDimensions.height}`}
-                                width={bookDimensions.width}
-                                height={bookDimensions.height}
-                                size="fixed"
-                                minWidth={200}
-                                maxWidth={1000}
-                                minHeight={300}
-                                maxHeight={1500}
-                                maxShadowOpacity={isMobile ? 0.1 : 0.5}
-                                showCover={!isMobile}
-                                mobileScrollSupport={true}
-                                className="shadow-md"
-                                style={{}}
-                                flippingTime={isMobile ? 600 : 1000}
-                                startPage={1}
-                                drawShadow={!isMobile}
-                                autoSize={true}
-                                ref={bookRef}
-                                clickEventForward={true}
-                                useMouseEvents={false}
-                                onFlip={(e) => setCurrentPage(e.data)}
-                                usePortrait={isMobile}
-                                startZIndex={0}
-                                swipeDistance={0}
-                                showPageCorners={false}
-                                disableFlipByClick={false}
+                            <motion.div
+                                className="w-full h-full"
+                                onPanEnd={handleSwipe}
                             >
-                                {/* DUMMY PAGE 0 (Spacer for alignment) */}
-                                <Page number={0} className="w-full h-full bg-transparent" key="spacer">
-                                    <div className="w-full h-full pointer-events-none" />
-                                </Page>
+                                <HTMLFlipBook
+                                    key={`${isMobile ? 'mobile' : 'desktop'}-${bookDimensions.width}-${bookDimensions.height}`}
+                                    width={bookDimensions.width}
+                                    height={bookDimensions.height}
+                                    size="fixed"
+                                    minWidth={200}
+                                    maxWidth={1000}
+                                    minHeight={300}
+                                    maxHeight={1500}
+                                    maxShadowOpacity={isMobile ? 0.1 : 0.5}
+                                    showCover={!isMobile}
+                                    mobileScrollSupport={true}
+                                    className="shadow-md"
+                                    style={{}}
+                                    flippingTime={isMobile ? 600 : 1000}
+                                    startPage={1}
+                                    drawShadow={!isMobile}
+                                    autoSize={true}
+                                    ref={bookRef}
+                                    clickEventForward={true}
+                                    useMouseEvents={false}
+                                    onFlip={(e) => setCurrentPage(e.data)}
+                                    usePortrait={isMobile}
+                                    startZIndex={0}
+                                    swipeDistance={0}
+                                    showPageCorners={false}
+                                    disableFlipByClick={false}
+                                >
+                                    {/* DUMMY PAGE 0 (Spacer for alignment) */}
+                                    <Page number={0} className="w-full h-full bg-transparent" key="spacer">
+                                        <div className="w-full h-full pointer-events-none" />
+                                    </Page>
 
-                                {/* DYNAMIC SPREADS - FLATTENED */}
-                                {spreads.flatMap((spread, idx) => {
-                                    if (isMobile) {
-                                        // Mobile: Return Single Item Page
-                                        return [
-                                            <Page number={spread.pageIndex} key={`spread-${idx}-mobile`}>
-                                                <RightPage
-                                                    title={spread.category.name}
-                                                    items={spread.items}
-                                                    onItemClick={setSelectedItem}
-                                                    onAddToCart={onAddToCart}
-                                                />
-                                            </Page>
-                                        ];
-                                    } else {
-                                        // Desktop: Return Pair (Left + Right)
-                                        return [
-                                            /* LEFT PAGE: Categories */
-                                            <Page number={spread.pageIndex} key={`spread-${idx}-left`}>
-                                                <LeftPage
-                                                    categories={menuData} // Chuyển menuData thực tế vào
-                                                    activeCategoryId={spread.category.id}
-                                                    onCategoryClick={handleCategoryClick}
-                                                />
-                                            </Page>,
-                                            /* RIGHT PAGE: Items */
-                                            <Page number={spread.pageIndex + 1} key={`spread-${idx}-right`}>
-                                                <RightPage
-                                                    title={spread.category.name}
-                                                    items={spread.items}
-                                                    onItemClick={setSelectedItem}
-                                                    onAddToCart={onAddToCart}
-                                                />
-                                            </Page>
-                                        ];
-                                    }
-                                })}
-                            </HTMLFlipBook>
+                                    {/* DYNAMIC SPREADS - FLATTENED */}
+                                    {spreads.flatMap((spread, idx) => {
+                                        if (isMobile) {
+                                            // Mobile: Return Single Item Page
+                                            return [
+                                                <Page number={spread.pageIndex} key={`spread-${idx}-mobile`}>
+                                                    <RightPage
+                                                        title={spread.category.name}
+                                                        items={spread.items}
+                                                        onItemClick={setSelectedItem}
+                                                        onAddToCart={onAddToCart}
+                                                    />
+                                                </Page>
+                                            ];
+                                        } else {
+                                            // Desktop: Return Pair (Left + Right)
+                                            return [
+                                                /* LEFT PAGE: Categories */
+                                                <Page number={spread.pageIndex} key={`spread-${idx}-left`}>
+                                                    <LeftPage
+                                                        categories={menuData}
+                                                        activeCategoryId={spread.category.id}
+                                                    />
+                                                </Page>,
+                                                /* RIGHT PAGE: Items */
+                                                <Page number={spread.pageIndex + 1} key={`spread-${idx}-right`}>
+                                                    <RightPage
+                                                        title={spread.category.name}
+                                                        items={spread.items}
+                                                        onItemClick={setSelectedItem}
+                                                        onAddToCart={onAddToCart}
+                                                    />
+                                                </Page>
+                                            ];
+                                        }
+                                    })}
+                                </HTMLFlipBook>
+                            </motion.div>
                         )}
                     </div>
                 </div>
