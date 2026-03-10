@@ -30,7 +30,11 @@ import {
   Warehouse,
   TicketPercent,
   ChefHat,
-  Truck
+  Truck,
+  Clock,
+  Radio,
+  BarChart3,
+  UserCheck,
 } from "lucide-react";
 
 import { useAuth } from "@/components/providers/auth-provider";
@@ -68,6 +72,10 @@ const navigation = [
     items: [
       { key: "tables", href: "/dashboard/tables", icon: Table },
       { key: "customers", href: "/dashboard/customers", icon: UserRound },
+      { key: "shifts", href: "/dashboard/shifts", icon: Clock },
+      { key: "shiftsLive", href: "/dashboard/shifts/live", icon: Radio },
+      { key: "shiftsReports", href: "/dashboard/shifts/reports", icon: BarChart3 },
+      { key: "myShifts", href: "/dashboard/my-shifts", icon: UserCheck },
     ]
   },
   {

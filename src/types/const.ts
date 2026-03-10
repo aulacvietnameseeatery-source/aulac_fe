@@ -38,4 +38,14 @@ export const Permissions = {
   ViewPromotion: 'PROMOTION:READ',
   CreatePromotion: 'PROMOTION:CREATE',
   UpdatePromotion: 'PROMOTION:UPDATE',
+
+  // Shift Management
+  ViewShift: 'SHIFT:READ',
+  ScheduleShift: 'SHIFT:SCHEDULE',
+  AssignShift: 'SHIFT:ASSIGN',
+  CheckInShift: 'SHIFT:CHECK_IN',
+  CheckOutShift: 'SHIFT:CHECK_OUT',
+  AdjustAttendance: 'SHIFT:ADJUST_ATTENDANCE',
+  ViewShiftReport: 'SHIFT:REPORT_READ',
+  CloseShift: 'SHIFT:CLOSE',
 } as const;
