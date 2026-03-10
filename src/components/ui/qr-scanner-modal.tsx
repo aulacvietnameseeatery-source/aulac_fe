@@ -25,8 +25,6 @@ export function QrScannerModal({ isOpen, onClose }: QrScannerModalProps) {
                                 if (result?.[0]?.rawValue) {
                                     console.log("QR Result:", result[0].rawValue);
 
-                                    // xử lý url / table code ở đây
-                                    // ví dụ redirect
                                     window.location.href = result[0].rawValue;
                                 }
                             }}
@@ -34,7 +32,7 @@ export function QrScannerModal({ isOpen, onClose }: QrScannerModalProps) {
                                 console.error("Lỗi camera:", error);
                             }}
                             components={{
-                                audio: false,
+                                // _OLD: audio: false, // audio is not part of IScannerComponents
                                 tracker: undefined,
                             }}
                             styles={{
