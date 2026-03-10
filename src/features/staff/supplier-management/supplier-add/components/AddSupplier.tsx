@@ -10,6 +10,7 @@ import FormCard from './FormCard';
 import SupplierNameInput from './SupplierNameInput';
 import PhoneInput from './PhoneInput';
 import EmailInput from './EmailInput';
+import IngredientsSelect from './IngredientsSelect';
 import { FormErrors } from '../types';
 
 export default function AddSupplier() {
@@ -18,6 +19,7 @@ export default function AddSupplier() {
   const [supplierName, setSupplierName] = useState('');
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
+  const [ingredientIds, setIngredientIds] = useState<number[]>([]);
   const [errors, setErrors] = useState<FormErrors>({});
 
   const { createSupplier, isLoading, error } = useCreateSupplier();
@@ -62,6 +64,7 @@ export default function AddSupplier() {
         supplierName: supplierName.trim(),
         phone: phone.trim() || undefined,
         email: email.trim() || undefined,
+        ingredientIds,
       });
       
       router.push('/dashboard/suppliers');
@@ -103,6 +106,11 @@ export default function AddSupplier() {
             value={email}
             onChange={setEmail}
             error={errors.email}
+          />
+
+          <IngredientsSelect
+            value={ingredientIds}
+            onChange={setIngredientIds}
           />
         </FormCard>
       </div>

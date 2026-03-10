@@ -375,9 +375,8 @@ export const BookFrame = ({ menuData, onAddToCart }: BookFrameProps) => {
                                             /* LEFT PAGE: Categories */
                                             <Page number={spread.pageIndex} key={`spread-${idx}-left`}>
                                                 <LeftPage
-                                                    categories={menuData} // Chuyển menuData thực tế vào
+                                                    categories={menuData}
                                                     activeCategoryId={spread.category.id}
-                                                    onCategoryClick={handleCategoryClick}
                                                 />
                                             </Page>,
                                             /* RIGHT PAGE: Items */

@@ -871,6 +871,8 @@
       "phonePlaceholder": "Saisir le numéro de téléphone (optionnel)",
       "email": "Email",
       "emailPlaceholder": "Saisir l'adresse e-mail (optionnel)",
+      "ingredients": "Ingrédients fournis",
+      "ingredientsPlaceholder": "Sélectionner les ingrédients que ce fournisseur fournit",
       "cancel": "Annuler",
       "saveButton": "Ajouter le Fournisseur",
       "validation": {
@@ -896,6 +898,8 @@
       "phonePlaceholder": "Saisir le numéro de téléphone (optionnel)",
       "email": "Email",
       "emailPlaceholder": "Saisir l'adresse e-mail (optionnel)",
+      "ingredients": "Ingrédients fournis",
+      "ingredientsPlaceholder": "Sélectionner les ingrédients que ce fournisseur fournit",
       "cancel": "Annuler",
       "saveButton": "Enregistrer les Modifications",
       "loading": "Chargement des données du fournisseur...",
@@ -915,6 +919,25 @@
         "updateError": "Échec de la mise à jour du fournisseur",
         "loadError": "Échec du chargement des données du fournisseur"
       }
+    },
+    "Detail": {
+      "title": "Détails du fournisseur",
+      "subtitle": "Voir les informations et coordonnées du fournisseur.",
+      "back": "Retour",
+      "edit": "Modifier",
+      "information": "Informations du fournisseur",
+      "supplierName": "Nom du Fournisseur",
+      "name": "Nom",
+      "phone": "Téléphone",
+      "email": "Email",
+      "ingredients": "Ingrédients fournis",
+      "ingredientName": "Nom de l'ingrédient",
+      "unit": "Unité",
+      "noIngredients": "Ce fournisseur ne fournit encore aucun ingrédient.",
+      "notFound": "Fournisseur introuvable",
+      "backToList": "Retour à la liste",
+      "loading": "Chargement des données du fournisseur...",
+      "errorTitle": "Impossible de charger le fournisseur"
     }
   },
   "common": {

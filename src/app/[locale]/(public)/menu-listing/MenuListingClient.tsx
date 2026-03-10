@@ -4,22 +4,21 @@ import { useState, useEffect, useCallback } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { CheckCircle } from "lucide-react";
+// Import toast từ thư viện sonner
+import { toast } from "sonner";
+
 import { api } from "@/lib/http";
 import { ApiResponse } from "@/types/api-response.types";
 import { Atmosphere } from "@/features/customer/menu-listing-new/components/atmosphere";
 import { BookFrame } from "@/features/customer/menu-listing-new/components/book-frame";
 import { CartItem } from "@/features/customer/menu-listing-new/types/cart";
-
 import { MenuCategory, MenuItemData } from "@/features/customer/menu-listing-new/data/mock-menu";
-
 import { BASE_URL } from "@/lib/http";
 import { TableSelectionModal } from "@/features/customer/menu-listing-new/components/table-selection-modal";
 import { CartSummary } from "@/features/customer/menu-listing-new/components/cart-summary";
 import { OrderHistoryFAB } from "@/features/customer/menu-listing-new/components/ordered-items-fab";
 
-
 interface Props {
-    // Nhận dữ liệu đã được flatten locale từ Server (plain strings)
     initialMenuData: MenuCategory[];
     tableFromUrl?: string;
 }
@@ -40,29 +39,20 @@ export default function MenuListingClient({ initialMenuData, tableFromUrl }: Pro
     const [orderConfirmCount, setOrderConfirmCount] = useState(0);
     const [openPopup, setOpenPopup] = useState<'cart' | 'history' | null>(null);
 
-    // Khôi phục cart và table number từ sessionStorage/URL khi component mount
+    // Khôi phục cart và table number từ sessionStorage/URL
     useEffect(() => {
         if (typeof window !== 'undefined') {
             try {
-                // tableFromUrl đã được truyền từ Server Component (page.tsx)
                 if (tableFromUrl) {
-                    // URL có table parameter - set và lưu vào sessionStorage
                     setTableNumber(tableFromUrl);
                     sessionStorage.setItem(TABLE_STORAGE_KEY, tableFromUrl);
-                    
-                    // Khôi phục cart
-                    const savedCart = sessionStorage.getItem(CART_STORAGE_KEY);
-                    if (savedCart) {
-                        setCartItems(JSON.parse(savedCart));
-                    }
 
-                    // Khôi phục current order id
+                    const savedCart = sessionStorage.getItem(CART_STORAGE_KEY);
+                    if (savedCart) setCartItems(JSON.parse(savedCart));
+
                     const savedOrderId = sessionStorage.getItem(CURRENT_ORDER_ID_KEY);
-                    if (savedOrderId) {
-                        setCurrentOrderId(Number(savedOrderId));
-                    }
+                    if (savedOrderId) setCurrentOrderId(Number(savedOrderId));
                 } else {
-                    // URL không có table parameter - xóa tất cả data liên quan
                     sessionStorage.removeItem(TABLE_STORAGE_KEY);
                     sessionStorage.removeItem(CART_STORAGE_KEY);
                     sessionStorage.removeItem(CURRENT_ORDER_ID_KEY);
@@ -71,35 +61,32 @@ export default function MenuListingClient({ initialMenuData, tableFromUrl }: Pro
                     setCurrentOrderId(null);
                 }
             } catch (error) {
-                console.error("Error loading from sessionStorage:", error);
+                // Thay thế console.error
+                toast.error("Không thể tải dữ liệu giỏ hàng cũ.");
             }
         }
     }, [tableFromUrl]);
 
-    // Lưu cart vào sessionStorage mỗi khi thay đổi
     useEffect(() => {
         if (typeof window !== 'undefined') {
             try {
                 sessionStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cartItems));
             } catch (error) {
-                console.error("Error saving cart to sessionStorage:", error);
+                toast.error("Không thể lưu giỏ hàng hiện tại.");
             }
         }
     }, [cartItems]);
 
-    // Lưu table number vào sessionStorage mỗi khi thay đổi
     useEffect(() => {
         if (typeof window !== 'undefined' && tableNumber) {
             try {
                 sessionStorage.setItem(TABLE_STORAGE_KEY, tableNumber);
             } catch (error) {
-                console.error("Error saving table to sessionStorage:", error);
+                toast.error("Không thể lưu thông tin số bàn.");
             }
         }
     }, [tableNumber]);
 
-    // Locale đã được flatten trên Server — initialMenuData là MenuCategory[] thuần string
-    // _OLD: const localizedMenu = useMemo(() => initialMenuData.map(cat => ({ name: cat.name[locale]... })), [initialMenuData, locale])
     const localizedMenu = initialMenuData;
 
     // Thêm vào giỏ hàng
@@ -120,12 +107,14 @@ export default function MenuListingClient({ initialMenuData, tableFromUrl }: Pro
                 } else {
                     newCart.push({
                         id: newItem.id,
-                        name: newItem.name, // Sẽ lấy đúng tên đã được dịch
+                        name: newItem.name,
                         price: priceNumber,
                         quantity: 1,
                         image: newItem.image
                     });
                 }
+
+                toast.success(`Đã thêm ${newItem.name} vào giỏ hàng`);
             });
             return newCart;
         });
@@ -141,19 +130,16 @@ export default function MenuListingClient({ initialMenuData, tableFromUrl }: Pro
     };
 
     const handleTableConfirm = (val: string) => {
-        // Set table number and save to sessionStorage
         setTableNumber(val);
         if (typeof window !== 'undefined') {
             sessionStorage.setItem(TABLE_STORAGE_KEY, val);
         }
-        
-        // Add pending items to cart if any
+
         if (pendingQueue.length > 0) {
             addToCart(pendingQueue);
             setPendingQueue([]);
         }
-        
-        // Navigate to fill-infor-customer with table number
+
         router.push(`/fill-infor-customer?table=${encodeURIComponent(val)}`);
     };
 
@@ -179,7 +165,6 @@ export default function MenuListingClient({ initialMenuData, tableFromUrl }: Pro
             note: item.note || undefined,
         }));
 
-        // Determine the active orderId (from state or sessionStorage as fallback)
         let storedOrderId: number | null = currentOrderId;
         if (!storedOrderId && typeof window !== 'undefined') {
             const saved = sessionStorage.getItem(CURRENT_ORDER_ID_KEY);
@@ -188,13 +173,11 @@ export default function MenuListingClient({ initialMenuData, tableFromUrl }: Pro
 
         try {
             if (storedOrderId) {
-                // ── Case 1: existing order → append items ──────────────────
                 try {
                     await api.post<ApiResponse<object>>(`/api/orders/${storedOrderId}/items`, {
                         items: itemsPayload
                     });
 
-                    // Success – clear cart, show popup
                     setOrderedTableNumber(tableNumber);
                     setCartItems([]);
                     if (typeof window !== 'undefined') {
@@ -204,7 +187,6 @@ export default function MenuListingClient({ initialMenuData, tableFromUrl }: Pro
                     setShowSuccessPopup(true);
                     return;
                 } catch (err: any) {
-                    // 404 → stale orderId, fall through to create a new order
                     if (err.response?.status === 404) {
                         if (typeof window !== 'undefined') {
                             sessionStorage.removeItem(CURRENT_ORDER_ID_KEY);
@@ -212,13 +194,11 @@ export default function MenuListingClient({ initialMenuData, tableFromUrl }: Pro
                         setCurrentOrderId(null);
                         storedOrderId = null;
                     } else {
-                        // Other errors, throw
                         throw err;
                     }
                 }
             }
 
-            // ── Case 2: no active order → create one ───────────────────────
             let isGuest = true;
             let customerPhone: string | undefined;
             let customerFullName: string | undefined;
@@ -236,7 +216,6 @@ export default function MenuListingClient({ initialMenuData, tableFromUrl }: Pro
                             customerEmail = info.emailAddress || undefined;
                         }
                     } catch {
-                        // malformed data – treat as guest
                     }
                 }
             }
@@ -266,16 +245,14 @@ export default function MenuListingClient({ initialMenuData, tableFromUrl }: Pro
             setOrderConfirmCount(prev => prev + 1);
             setShowSuccessPopup(true);
         } catch (err: unknown) {
-            const message = err instanceof Error ? err.message : "Failed to place order";
-            console.error("[Order] Failed:", err);
-            alert(`Không thể tạo đơn hàng: ${message}`);
+            const message = err instanceof Error ? err.message : "Vui lòng thử lại sau.";
+            toast.error(`Không thể tạo đơn hàng: ${message}`);
         }
     }, [cartItems, tableNumber, currentOrderId]);
 
     return (
         <main className="relative flex-1 min-h-screen w-full flex items-center justify-center p-4 overflow-hidden bg-[#0f172a]">
 
-            {/* Order Success Popup */}
             <AnimatePresence>
                 {showSuccessPopup && (
                     <motion.div
@@ -293,22 +270,21 @@ export default function MenuListingClient({ initialMenuData, tableFromUrl }: Pro
                             className="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-8 flex flex-col items-center text-center gap-4"
                         >
                             <CheckCircle className="text-[#FFAB2D]" size={64} strokeWidth={1.5} />
-                            <h2 className="text-[#1A3A51] text-2xl font-bold leading-tight">
+                            <h2 className="text-[#1A3A51] text-2xl font-bold font-serif leading-tight">
                                 Order Placed<br />Successfully!
                             </h2>
-                            <p className="text-slate-500 text-sm leading-relaxed">
+                            <p className="text-slate-500 text-sm font-serif leading-relaxed">
                                 Your order is being prepared and will be served shortly at{" "}
                                 <span className="font-bold text-[#1A3A51]">Table {orderedTableNumber}</span>.
                             </p>
                             <button
                                 onClick={() => {
                                     setShowSuccessPopup(false);
-                                    // Automatically open history popup after brief delay
                                     setTimeout(() => {
                                         setOpenPopup('history');
                                     }, 300);
                                 }}
-                                className="mt-2 w-full bg-[#FFAB2D] hover:bg-[#FFB94D] active:bg-[#F09E20] text-white font-bold text-sm tracking-widest uppercase py-4 rounded-xl transition-colors"
+                                className="mt-2 w-full bg-[#C5A059] hover:bg-[#b08c4a] active:bg-[#9c7a3f] text-white font-bold font-serif text-sm tracking-widest uppercase py-4 rounded-xl transition-colors"
                             >
                                 Continue Browsing
                             </button>
@@ -330,13 +306,10 @@ export default function MenuListingClient({ initialMenuData, tableFromUrl }: Pro
                 />
             </div>
 
-
-            {/* Bottom-right FAB: history + cart horizontal layout */}
             <div id="cart-destination" className="fixed bottom-6 right-4 md:bottom-8 md:right-5 z-50 pointer-events-none flex flex-row items-end gap-4">
                 <AnimatePresence>
                     {tableNumber && (
                         <>
-                            {/* History FAB */}
                             <motion.div
                                 className="pointer-events-auto"
                                 initial={{ scale: 0.8, opacity: 0 }}
@@ -356,8 +329,7 @@ export default function MenuListingClient({ initialMenuData, tableFromUrl }: Pro
                                     onOpenChange={(isOpen) => setOpenPopup(isOpen ? 'history' : null)}
                                 />
                             </motion.div>
-                            
-                            {/* Cart Summary */}
+
                             <motion.div
                                 className="pointer-events-auto"
                                 initial={{ scale: 0.8, opacity: 0 }}

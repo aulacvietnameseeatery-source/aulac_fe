@@ -10,6 +10,7 @@ import FormCard from './FormCard';
 import SupplierNameInput from './SupplierNameInput';
 import PhoneInput from './PhoneInput';
 import EmailInput from './EmailInput';
+import IngredientsSelect from './IngredientsSelect';
 import LoadingState from './LoadingState';
 import ErrorState from './ErrorState';
 import { FormErrors } from '../types';
@@ -24,6 +25,7 @@ export default function EditSupplier({ supplierId }: EditSupplierProps) {
   const [supplierName, setSupplierName] = useState('');
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
+  const [ingredientIds, setIngredientIds] = useState<number[]>([]);
   const [errors, setErrors] = useState<FormErrors>({});
 
   const numericId = parseInt(supplierId, 10);
@@ -35,6 +37,7 @@ export default function EditSupplier({ supplierId }: EditSupplierProps) {
       setSupplierName(supplier.supplierName);
       setPhone(supplier.phone || '');
       setEmail(supplier.email || '');
+      setIngredientIds(supplier.ingredients.map(i => i.ingredientId));
     }
   }, [supplier]);
 
@@ -78,6 +81,7 @@ export default function EditSupplier({ supplierId }: EditSupplierProps) {
         supplierName: supplierName.trim(),
         phone: phone.trim() || undefined,
         email: email.trim() || undefined,
+        ingredientIds,
       });
       
       router.push('/dashboard/suppliers');
@@ -132,6 +136,11 @@ export default function EditSupplier({ supplierId }: EditSupplierProps) {
             value={email}
             onChange={setEmail}
             error={errors.email}
+          />
+
+          <IngredientsSelect
+            value={ingredientIds}
+            onChange={setIngredientIds}
           />
         </FormCard>
       </div>
