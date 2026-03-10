@@ -1,10 +1,14 @@
+"use client";
+
 import { MapPin, Phone, Mail, Clock } from "lucide-react";
 import { ContactItem } from "./contact-item";
 import { useTranslations } from "next-intl";
 import "../styles/index.css";
+import { useStoreSettings } from "@/hooks/use-store-settings";
 
 export function ContactInfoList() {
   const t = useTranslations("Contact.Info");
+  const { data: storeSettings } = useStoreSettings();
 
   return (
     <div className="contact-info-list-wrapper">
@@ -12,30 +16,29 @@ export function ContactInfoList() {
         icon={<MapPin />}
         label="Our Home"
         content={
-          <>
-            {t("address").split("\n").map((line, i) => (
-              <span key={i}>
-                {line}
-                <br />
-              </span>
-            ))}
-          </>
+          storeSettings?.streetAddress ? (
+            <>
+              {storeSettings.streetAddress},
+              <br />
+              {storeSettings.city}
+            </>
+          ) : ""
         }
       />
       <ContactItem
         icon={<Phone />}
         label={t("phoneLabel")}
-        content={t("phone")}
+        content={storeSettings?.phone || ""}
       />
       <ContactItem
         icon={<Mail />}
         label={t("emailLabel")}
-        content={t("email")}
+        content={storeSettings?.email || ""}
       />
       <ContactItem
         icon={<Clock />}
         label={t("hoursLabel")}
-        content={t("hours")}
+        content={storeSettings?.openingHours || ""}
       />
     </div>
   );

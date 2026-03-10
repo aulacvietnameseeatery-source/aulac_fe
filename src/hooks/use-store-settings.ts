@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { getGroupSettings } from '@/features/staff/system-settings/services/system-setting.service';
+import { getPublicGroupSettings } from '@/features/staff/system-settings/services/system-setting.service';
 
 export interface StoreSettings {
     logoUrl: string;
@@ -15,9 +15,9 @@ export interface StoreSettings {
 
 export const useStoreSettings = () => {
     return useQuery({
-        queryKey: ['system-settings', 'store'],
+        queryKey: ['system-settings', 'store', 'public'],
         queryFn: async () => {
-            const settings = await getGroupSettings('store');
+            const settings = await getPublicGroupSettings('store');
             const data: StoreSettings = {
                 logoUrl: '',
                 name: '',
