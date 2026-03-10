@@ -20,7 +20,7 @@ import { api } from "@/lib/http";
 
 // ─── Types ────────────────────────────────────────────────────────────────
 
-type OrderItemStatus = "CREATED" | "IN_PROGRESS" | "READY" | "SERVED" | "REJECTED";
+type OrderItemStatus = "CREATED" | "IN_PROGRESS" | "READY" | "SERVED" | "REJECTED" | "CANCELLED";
 
 interface OrderItemData {
   orderItemId: number;
@@ -49,6 +49,7 @@ const getItemStatusIcon = (status: string) => {
     READY: CheckCircle2,
     SERVED: CheckCircle2,
     REJECTED: XCircle,
+    CANCELLED: XCircle,
   };
   return configs[status] || Clock;
 };
@@ -79,6 +80,11 @@ const getItemStatusStyles = (status: string) => {
       bg: "rgba(220,60,60,0.15)",
       text: "#f87171",
       border: "rgba(220,60,60,0.35)",
+    },
+    CANCELLED: {
+      bg: "rgba(128,128,128,0.15)",
+      text: "#9ca3af",
+      border: "rgba(128,128,128,0.35)",
     },
   };
   return configs[status] || configs.CREATED;
@@ -123,6 +129,7 @@ export function OrderHistoryFAB({ tableCode, tableNumber, dishNameMap = {}, refr
   const [history, setHistory] = useState<CustomerOrderHistory | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [cancellingItems, setCancellingItems] = useState<Set<number>>(new Set());
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const redirectTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -157,13 +164,14 @@ export function OrderHistoryFAB({ tableCode, tableNumber, dishNameMap = {}, refr
 
   // Helper function to get translated status label
   const getStatusLabel = (status: string): string => {
-    const statusKey = status.toLowerCase().replace('_', '');
+    const statusKey = status.toUpperCase();
     const statusMap: Record<string, string> = {
-      'created': 'created',
-      'inprogress': 'inProgress',
-      'ready': 'ready',
-      'served': 'served',
-      'rejected': 'rejected',
+      'CREATED': 'created',
+      'IN_PROGRESS': 'inProgress',
+      'READY': 'ready',
+      'SERVED': 'served',
+      'REJECTED': 'rejected',
+      'CANCELLED': 'cancelled',
     };
     const key = statusMap[statusKey] || 'created';
     return t(`status.${key}`);
@@ -192,6 +200,24 @@ export function OrderHistoryFAB({ tableCode, tableNumber, dishNameMap = {}, refr
       setLoading(false);
     }
   }, []);
+
+  // ── Cancel order item ─────────────────────────────────────────────────
+  const handleCancelItem = useCallback(async (orderItemId: number) => {
+    setCancellingItems(prev => new Set(prev).add(orderItemId));
+    try {
+      await api.patch(`/api/orders/items/${orderItemId}/cancel`, {});
+      // Refresh the order history after successful cancellation
+      await load();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : t("cancelError"));
+    } finally {
+      setCancellingItems(prev => {
+        const next = new Set(prev);
+        next.delete(orderItemId);
+        return next;
+      });
+    }
+  }, [load, t]);
 
   useEffect(() => {
     const hasSession = typeof window !== 'undefined' && !!sessionStorage.getItem(CURRENT_ORDER_ID_KEY);
@@ -417,6 +443,9 @@ export function OrderHistoryFAB({ tableCode, tableNumber, dishNameMap = {}, refr
                       const styles = getItemStatusStyles(statusKey);
                       const statusLabel = getStatusLabel(statusKey);
                       const isRejected = statusKey === "REJECTED";
+                      const isCancelled = statusKey === "CANCELLED";
+                      const canCancel = statusKey === "CREATED";
+                      const isCancelling = cancellingItems.has(item.orderItemId);
 
                       const localizedName = dishNameMap[item.dishId] || item.dishName;
 
@@ -426,13 +455,13 @@ export function OrderHistoryFAB({ tableCode, tableNumber, dishNameMap = {}, refr
                             className="grid items-start gap-x-2 rounded-xl px-2 py-2"
                             style={{
                               gridTemplateColumns: "1fr 28px 60px 72px",
-                              background: isRejected ? "rgba(220,60,60,0.06)" : "rgba(255,255,255,0.04)",
-                              border: `1px solid ${isRejected ? "rgba(220,60,60,0.2)" : "rgba(201,168,76,0.12)"}`,
+                              background: isRejected || isCancelled ? "rgba(220,60,60,0.06)" : "rgba(255,255,255,0.04)",
+                              border: `1px solid ${isRejected || isCancelled ? "rgba(220,60,60,0.2)" : "rgba(201,168,76,0.12)"}`,
                             }}
                           >
                             {/* Name + note */}
                             <div className="min-w-0">
-                              <p className={`text-[13px] font-semibold leading-snug truncate ${isRejected ? "line-through text-[#6b84a8]" : "text-[#e8d9b0]"}`}>
+                              <p className={`text-[13px] font-semibold leading-snug truncate ${isRejected || isCancelled ? "line-through text-[#6b84a8]" : "text-[#e8d9b0]"}`}>
                                 {localizedName}
                               </p>
                               {item.note && (
@@ -454,6 +483,24 @@ export function OrderHistoryFAB({ tableCode, tableNumber, dishNameMap = {}, refr
                               <span>{statusLabel}</span>
                             </div>
                           </div>
+
+                          {/* Cancel button for CREATED items */}
+                          {canCancel && (
+                            <div className="mt-1 mx-0.5 flex justify-end">
+                              <button
+                                onClick={() => handleCancelItem(item.orderItemId)}
+                                disabled={isCancelling}
+                                className="px-3 py-1 rounded-lg text-[10px] font-semibold uppercase tracking-wider transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+                                style={{
+                                  background: "rgba(220,60,60,0.12)",
+                                  border: "1px solid rgba(220,60,60,0.3)",
+                                  color: "#f87171",
+                                }}
+                              >
+                                {isCancelling ? t("cancelling") : t("cancelItem")}
+                              </button>
+                            </div>
+                          )}
 
                           {/* Chef note for rejected items */}
                           {isRejected && item.rejectReason && (

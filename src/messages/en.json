@@ -1526,7 +1526,8 @@
       "inProgress": "In Progress",
       "ready": "Ready",
       "served": "Served",
-      "rejected": "Rejected"
+      "rejected": "Rejected",
+      "cancelled": "Cancelled"
     },
     "emptyState": {
       "title": "No dishes ordered yet.",
@@ -1536,6 +1537,9 @@
     "estimatedTotal": "Estimated Total",
     "requestPayment": "Request Payment",
     "error": "Unable to load data",
+    "cancelItem": "Cancel Item",
+    "cancelling": "Cancelling...",
+    "cancelError": "Cannot cancel item",
     "paymentPopup": {
       "title": "Request Payment?",
       "message": "A server will come to your table shortly with the bill for {tableLabel} {tableNumber}. Would you like to proceed?",
