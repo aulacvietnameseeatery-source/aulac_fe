@@ -76,3 +76,32 @@ export enum RoleStatusCode {
     ACTIVE = "ACTIVE",
     INACTIVE = "INACTIVE",
 }
+
+export enum ShiftTypeCode {
+    MORNING = "MORNING",
+    LUNCH = "LUNCH",
+    EVENING = "EVENING",
+}
+
+export enum ShiftStatusCode {
+    DRAFT = "DRAFT",
+    PUBLISHED = "PUBLISHED",
+    CLOSED = "CLOSED",
+    CANCELLED = "CANCELLED",
+}
+
+export enum ShiftAssignmentStatusCode {
+    ASSIGNED = "ASSIGNED",
+    CONFIRMED = "CONFIRMED",
+    CANCELLED = "CANCELLED",
+}
+
+export enum AttendanceStatusCode {
+    SCHEDULED = "SCHEDULED",
+    ACTIVE = "ACTIVE",
+    COMPLETED = "COMPLETED",
+    LATE = "LATE",
+    ABSENT = "ABSENT",
+    EARLY_LEAVE = "EARLY_LEAVE",
+    EXCUSED = "EXCUSED",
+}
