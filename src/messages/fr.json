@@ -1168,49 +1168,57 @@
         "cook": "Cuisson (min)",
         "chefRecommended": "Recommandé par le chef"
       }
-    }
-  },
-  "dishDetail": {
-    "header": {
-      "title": "Détail du Plat",
-      "readonly": "Mode lecture seule",
-      "edit": "Modifier le plat"
     },
-    "states": {
-      "loading": "Chargement des détails du plat...",
-      "notFound": "Plat introuvable",
-      "goBack": "Retour"
-    },
-    "language": {
-      "en": "Anglais",
-      "vi": "Vietnamien",
-      "fr": "Français"
-    },
-    "info": {
-      "shortDescription": "Description courte",
-      "detailedDescription": "Description détaillée",
-      "internalNote": "Note interne (Privée)"
-    },
-    "specs": {
-      "title": "Spécifications principales",
-      "category": "Catégorie",
-      "basePrice": "Prix de base",
-      "calories": "Calories",
-      "displayOrder": "Ordre d'affichage",
-      "prepTime": "Temps de préparation",
-      "cookTime": "Temps de cuisson",
-      "mins": "min"
-    },
-    "gallery": {
-      "title": "Galerie",
-      "noImages": "Aucune image disponible",
-      "clickHint": "Cliquez pour agrandir • Faites défiler pour plus",
-      "no360": "Vue 360° non disponible pour ce plat."
-    },
-    "status": {
-      "online": "En ligne",
-      "offline": "Hors ligne",
-      "chefChoice": "Choix du chef"
+    "Detail": {
+      "header": {
+        "titleFallback": "Détails du plat",
+        "subtitle": "Consultation des informations du plat en mode lecture seule",
+        "back": "Retour",
+        "edit": "Modifier",
+        "loading": "Chargement des détails..."
+      },
+      "core": {
+        "title": "Informations de base",
+        "subtitle": "Paramètres de base et catégorisation",
+        "category": "Catégorie",
+        "basePrice": "Prix de base",
+        "status": "Statut",
+        "visibility": "Visibilité",
+        "online": "Disponible en ligne",
+        "offline": "Hors ligne",
+        "tags": "Étiquettes",
+        "noTags": "Aucune étiquette"
+      },
+      "multilingual": {
+        "title": "Contenu multilingue",
+        "subtitle": "Traductions du contenu du plat",
+        "dishName": "Nom du plat",
+        "description": "Description",
+        "noDescription": "Aucune description...",
+        "shortDescription": "Description courte",
+        "slogan": "Slogan",
+        "internalNote": "Note interne"
+      },
+      "media": {
+        "360Title": "Médias 360°",
+        "framesUploaded": "{count} images téléchargées",
+        "images360": "{count} Images (Vue 360°)",
+        "no360": "Aucun média 360°",
+        "galleryTitle": "Galerie",
+        "staticUploaded": "{count} images statiques téléchargées",
+        "primary": "Principal",
+        "noGallery": "Aucune image dans la galerie"
+      },
+      "additional": {
+        "title": "Informations supplémentaires",
+        "subtitle": "Détails nutritionnels et opérationnels",
+        "displayOrder": "Ordre d'affichage",
+        "calories": "Calories",
+        "prepTime": "Temps de prép.",
+        "cookTime": "Temps de cuisson",
+        "chefRecommended": "Recommandé par le chef",
+        "notChefRecommended": "Non recommandé par le chef"
+      }
     }
   },
   "Order": {

@@ -1237,49 +1237,57 @@
         "cook": "Nấu (phút)",
         "chefRecommended": "Món đề xuất"
       }
-    }
-  },
-  "dishDetail": {
-    "header": {
-      "title": "Chi Tiết Món Ăn",
-      "readonly": "Chế độ chỉ xem",
-      "edit": "Chỉnh sửa món"
     },
-    "states": {
-      "loading": "Đang tải thông tin món...",
-      "notFound": "Không tìm thấy món ăn",
-      "goBack": "Quay lại"
-    },
-    "language": {
-      "en": "Tiếng Anh",
-      "vi": "Tiếng Việt",
-      "fr": "Tiếng Pháp"
-    },
-    "info": {
-      "shortDescription": "Mô tả ngắn",
-      "detailedDescription": "Mô tả chi tiết",
-      "internalNote": "Ghi chú nội bộ (Riêng tư)"
-    },
-    "specs": {
-      "title": "Thông Số Chính",
-      "category": "Danh mục",
-      "basePrice": "Giá cơ bản",
-      "calories": "Calories",
-      "displayOrder": "Thứ tự hiển thị",
-      "prepTime": "Thời gian chuẩn bị",
-      "cookTime": "Thời gian nấu",
-      "mins": "phút"
-    },
-    "gallery": {
-      "title": "Thư viện ảnh",
-      "noImages": "Không có hình ảnh",
-      "clickHint": "Nhấn vào ảnh để phóng to • Cuộn để xem thêm",
-      "no360": "Món này không có ảnh 360°."
-    },
-    "status": {
-      "online": "Đang hiển thị",
-      "offline": "Ẩn",
-      "chefChoice": "Đề xuất bởi bếp trưởng"
+    "Detail": {
+      "header": {
+        "titleFallback": "Chi tiết món ăn",
+        "subtitle": "Đang xem thông tin món ăn ở chế độ chỉ đọc",
+        "back": "Quay lại",
+        "edit": "Chỉnh sửa món",
+        "loading": "Đang tải thông tin món ăn..."
+      },
+      "core": {
+        "title": "Thông tin cơ bản",
+        "subtitle": "Cài đặt cơ bản và phân loại món ăn",
+        "category": "Danh mục",
+        "basePrice": "Giá gốc",
+        "status": "Trạng thái",
+        "visibility": "Hiển thị",
+        "online": "Hiển thị Online",
+        "offline": "Đang ẩn",
+        "tags": "Nhãn (Tags)",
+        "noTags": "Chưa chọn nhãn nào"
+      },
+      "multilingual": {
+        "title": "Nội dung đa ngôn ngữ",
+        "subtitle": "Các bản dịch nội dung của món ăn",
+        "dishName": "Tên món ăn",
+        "description": "Mô tả",
+        "noDescription": "Chưa có mô tả...",
+        "shortDescription": "Mô tả ngắn",
+        "slogan": "Slogan (Khẩu hiệu)",
+        "internalNote": "Ghi chú nội bộ"
+      },
+      "media": {
+        "360Title": "Ảnh 360°",
+        "framesUploaded": "Đã tải lên {count} khung hình",
+        "images360": "{count} Ảnh (Góc nhìn 360°)",
+        "no360": "Chưa có ảnh 360° nào",
+        "galleryTitle": "Thư viện ảnh",
+        "staticUploaded": "Đã tải lên {count} ảnh tĩnh",
+        "primary": "Ảnh chính",
+        "noGallery": "Không có ảnh nào trong thư viện"
+      },
+      "additional": {
+        "title": "Thông tin bổ sung",
+        "subtitle": "Chi tiết về dinh dưỡng và vận hành",
+        "displayOrder": "Thứ tự hiển thị",
+        "calories": "Calo (Kcal)",
+        "prepTime": "Thời gian chuẩn bị",
+        "cookTime": "Thời gian nấu",
+        "chefRecommended": "Đầu bếp khuyên dùng",
+        "notChefRecommended": "Không đánh dấu khuyên dùng"
+      }
     }
   },
   "Order": {
