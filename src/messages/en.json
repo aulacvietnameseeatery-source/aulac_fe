@@ -1237,49 +1237,57 @@
         "cook": "Cook (min)",
         "chefRecommended": "Chef's Recommended"
       }
-    }
-  },
-  "dishDetail": {
-    "header": {
-      "title": "Dish Detail View",
-      "readonly": "Read-only mode",
-      "edit": "Edit Dish"
     },
-    "states": {
-      "loading": "Loading dish details...",
-      "notFound": "Dish not found",
-      "goBack": "Go Back"
-    },
-    "language": {
-      "en": "English",
-      "vi": "Vietnamese",
-      "fr": "French"
-    },
-    "info": {
-      "shortDescription": "Short Description",
-      "detailedDescription": "Detailed Description",
-      "internalNote": "Internal Note (Private)"
-    },
-    "specs": {
-      "title": "Core Specifications",
-      "category": "Category",
-      "basePrice": "Base Price",
-      "calories": "Calories",
-      "displayOrder": "Display Order",
-      "prepTime": "Prep Time",
-      "cookTime": "Cook Time",
-      "mins": "mins"
-    },
-    "gallery": {
-      "title": "Gallery",
-      "noImages": "No images available",
-      "clickHint": "Click image to expand • Scroll for more",
-      "no360": "360° view not available for this dish."
-    },
-    "status": {
-      "online": "Online",
-      "offline": "Offline",
-      "chefChoice": "Chef's Choice"
+    "Detail": {
+      "header": {
+        "titleFallback": "Dish Details",
+        "subtitle": "Viewing dish information in read-only mode",
+        "back": "Back",
+        "edit": "Edit Dish",
+        "loading": "Loading dish details..."
+      },
+      "core": {
+        "title": "Core Information",
+        "subtitle": "Basic dish settings and categorization",
+        "category": "Category",
+        "basePrice": "Base Price",
+        "status": "Status",
+        "visibility": "Visibility",
+        "online": "Available Online",
+        "offline": "Offline",
+        "tags": "Tags",
+        "noTags": "No tags selected"
+      },
+      "multilingual": {
+        "title": "Multilingual Content",
+        "subtitle": "Content translations for the dish",
+        "dishName": "Dish Name",
+        "description": "Description",
+        "noDescription": "No description...",
+        "shortDescription": "Short Description",
+        "slogan": "Slogan",
+        "internalNote": "Internal Note"
+      },
+      "media": {
+        "360Title": "360° Media",
+        "framesUploaded": "{count} frames uploaded",
+        "images360": "{count} Images (360° View)",
+        "no360": "No 360° media uploaded",
+        "galleryTitle": "Gallery",
+        "staticUploaded": "{count} static images uploaded",
+        "primary": "Primary",
+        "noGallery": "No gallery images"
+      },
+      "additional": {
+        "title": "Additional Information",
+        "subtitle": "Nutritional and operational details",
+        "displayOrder": "Display Order",
+        "calories": "Calories",
+        "prepTime": "Prep Time",
+        "cookTime": "Cook Time",
+        "chefRecommended": "Recommended by Chef",
+        "notChefRecommended": "Not marked as Chef Recommended"
+      }
     }
   },
   "Order": {

@@ -1,1 +1,1 @@
-export { DishDetailPage } from "./components/dish-detail-page";
+export { DishViewDetail } from "./components/dish-view-detail";

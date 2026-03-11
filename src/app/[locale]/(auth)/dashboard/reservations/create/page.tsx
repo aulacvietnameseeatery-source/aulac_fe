@@ -9,7 +9,7 @@ const CreateReservationPage = () => {
   const { formState, tableState, loadingState, setters, handlers } = useReservationForm(t);
 
   return (
-    <div className="min-h-screen bg-slate-50 font-sans text-slate-800 p-6 flex justify-center">
+    <div className="min-h-screen font-sans text-slate-800 flex justify-center">
       <div className="w-full max-w-5xl flex flex-col gap-6">
         
         {/* Header */}
