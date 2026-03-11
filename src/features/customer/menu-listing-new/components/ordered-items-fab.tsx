@@ -17,10 +17,11 @@ import {
   Check,
 } from "lucide-react";
 import { api } from "@/lib/http";
+import { ALConfirmDialog } from "@/components/ui/al-confirm-dialog";
 
 // ─── Types ────────────────────────────────────────────────────────────────
 
-type OrderItemStatus = "CREATED" | "IN_PROGRESS" | "READY" | "SERVED" | "REJECTED";
+type OrderItemStatus = "CREATED" | "IN_PROGRESS" | "READY" | "SERVED" | "REJECTED" | "CANCELLED";
 
 interface OrderItemData {
   orderItemId: number;
@@ -49,6 +50,7 @@ const getItemStatusIcon = (status: string) => {
     READY: CheckCircle2,
     SERVED: CheckCircle2,
     REJECTED: XCircle,
+    CANCELLED: XCircle,
   };
   return configs[status] || Clock;
 };
@@ -79,6 +81,11 @@ const getItemStatusStyles = (status: string) => {
       bg: "rgba(220,60,60,0.15)",
       text: "#f87171",
       border: "rgba(220,60,60,0.35)",
+    },
+    CANCELLED: {
+      bg: "rgba(128,128,128,0.15)",
+      text: "#9ca3af",
+      border: "rgba(128,128,128,0.35)",
     },
   };
   return configs[status] || configs.CREATED;
@@ -123,6 +130,17 @@ export function OrderHistoryFAB({ tableCode, tableNumber, dishNameMap = {}, refr
   const [history, setHistory] = useState<CustomerOrderHistory | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [cancellingItems, setCancellingItems] = useState<Set<number>>(new Set());
+  const [cancelConfirmItemId, setCancelConfirmItemId] = useState<number | null>(null);
+
+  // Derive the dish name of the item pending cancel confirmation
+  const cancelConfirmItemDishName = cancelConfirmItemId !== null
+    ? (() => {
+        const item = history?.items.find(i => i.orderItemId === cancelConfirmItemId);
+        if (!item) return "";
+        return dishNameMap[item.dishId] || item.dishName;
+      })()
+    : "";
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const redirectTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -131,7 +149,7 @@ export function OrderHistoryFAB({ tableCode, tableNumber, dishNameMap = {}, refr
     if (typeof window !== 'undefined') {
       sessionStorage.removeItem(CURRENT_ORDER_ID_KEY);
       sessionStorage.removeItem('aulac_table_number');
-      sessionStorage.removeItem('aulac_customer_info');
+
       sessionStorage.removeItem('aulac_cart_items');
     }
   }, []);
@@ -157,13 +175,14 @@ export function OrderHistoryFAB({ tableCode, tableNumber, dishNameMap = {}, refr
 
   // Helper function to get translated status label
   const getStatusLabel = (status: string): string => {
-    const statusKey = status.toLowerCase().replace('_', '');
+    const statusKey = status.toUpperCase();
     const statusMap: Record<string, string> = {
-      'created': 'created',
-      'inprogress': 'inProgress',
-      'ready': 'ready',
-      'served': 'served',
-      'rejected': 'rejected',
+      'CREATED': 'created',
+      'IN_PROGRESS': 'inProgress',
+      'READY': 'ready',
+      'SERVED': 'served',
+      'REJECTED': 'rejected',
+      'CANCELLED': 'cancelled',
     };
     const key = statusMap[statusKey] || 'created';
     return t(`status.${key}`);
@@ -192,6 +211,24 @@ export function OrderHistoryFAB({ tableCode, tableNumber, dishNameMap = {}, refr
       setLoading(false);
     }
   }, []);
+
+  // ── Cancel order item ─────────────────────────────────────────────────
+  const handleCancelItem = useCallback(async (orderItemId: number) => {
+    setCancellingItems(prev => new Set(prev).add(orderItemId));
+    try {
+      await api.patch(`/api/orders/items/${orderItemId}/cancel`, {});
+      // Refresh the order history after successful cancellation
+      await load();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : t("cancelError"));
+    } finally {
+      setCancellingItems(prev => {
+        const next = new Set(prev);
+        next.delete(orderItemId);
+        return next;
+      });
+    }
+  }, [load, t]);
 
   useEffect(() => {
     const hasSession = typeof window !== 'undefined' && !!sessionStorage.getItem(CURRENT_ORDER_ID_KEY);
@@ -310,7 +347,7 @@ export function OrderHistoryFAB({ tableCode, tableNumber, dishNameMap = {}, refr
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.88, opacity: 0, y: 24 }}
               transition={{ type: "spring", stiffness: 320, damping: 32 }}
-              className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[91] w-[92vw] md:w-[390px] h-[82vh] md:h-[640px] rounded-[28px] overflow-hidden flex flex-col"
+              className="fixed top-[calc(50%+20px)] left-1/2 -translate-x-1/2 -translate-y-1/2 z-[91] w-[92vw] md:w-[500px] h-[82vh] md:h-[640px] rounded-[28px] overflow-hidden flex flex-col"
               style={{
                 background: "linear-gradient(170deg, #192848 0%, #0f1f3d 100%)",
                 border: "1px solid rgba(201,168,76,0.35)",
@@ -385,7 +422,7 @@ export function OrderHistoryFAB({ tableCode, tableNumber, dishNameMap = {}, refr
                 {allItems.length > 0 && (
                   <div
                     className="grid gap-x-2 px-2 pb-3 text-xs font-bold tracking-widest uppercase"
-                    style={{ gridTemplateColumns: "1fr 28px 60px 72px", color: "rgba(139,163,199,0.7)", background: "transparent" }}
+                    style={{ gridTemplateColumns: "1fr 32px 68px 90px", color: "rgba(139,163,199,0.7)", background: "transparent" }}
                   >
                     <span>{t("headers.dish")}</span>
                     <span className="text-center">{t("headers.quantity")}</span>
@@ -417,6 +454,9 @@ export function OrderHistoryFAB({ tableCode, tableNumber, dishNameMap = {}, refr
                       const styles = getItemStatusStyles(statusKey);
                       const statusLabel = getStatusLabel(statusKey);
                       const isRejected = statusKey === "REJECTED";
+                      const isCancelled = statusKey === "CANCELLED";
+                      const canCancel = statusKey === "CREATED";
+                      const isCancelling = cancellingItems.has(item.orderItemId);
 
                       const localizedName = dishNameMap[item.dishId] || item.dishName;
 
@@ -425,14 +465,14 @@ export function OrderHistoryFAB({ tableCode, tableNumber, dishNameMap = {}, refr
                           <div
                             className="grid items-start gap-x-2 rounded-xl px-2 py-2"
                             style={{
-                              gridTemplateColumns: "1fr 28px 60px 72px",
-                              background: isRejected ? "rgba(220,60,60,0.06)" : "rgba(255,255,255,0.04)",
-                              border: `1px solid ${isRejected ? "rgba(220,60,60,0.2)" : "rgba(201,168,76,0.12)"}`,
+                              gridTemplateColumns: "1fr 32px 68px 90px",
+                              background: isRejected || isCancelled ? "rgba(220,60,60,0.06)" : "rgba(255,255,255,0.04)",
+                              border: `1px solid ${isRejected || isCancelled ? "rgba(220,60,60,0.2)" : "rgba(201,168,76,0.12)"}`,
                             }}
                           >
                             {/* Name + note */}
                             <div className="min-w-0">
-                              <p className={`text-[13px] font-semibold leading-snug truncate ${isRejected ? "line-through text-[#6b84a8]" : "text-[#e8d9b0]"}`}>
+                              <p className={`text-[13px] font-semibold leading-snug truncate ${isRejected || isCancelled ? "line-through text-[#6b84a8]" : "text-[#e8d9b0]"}`}>
                                 {localizedName}
                               </p>
                               {item.note && (
@@ -454,6 +494,24 @@ export function OrderHistoryFAB({ tableCode, tableNumber, dishNameMap = {}, refr
                               <span>{statusLabel}</span>
                             </div>
                           </div>
+
+                          {/* Cancel button for CREATED items */}
+                          {canCancel && (
+                            <div className="mt-1 mx-0.5 flex justify-end">
+                              <button
+                                onClick={() => setCancelConfirmItemId(item.orderItemId)}
+                                disabled={isCancelling}
+                                className="px-3 py-1 rounded-lg text-[10px] font-semibold uppercase tracking-wider transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+                                style={{
+                                  background: "rgba(220,60,60,0.12)",
+                                  border: "1px solid rgba(220,60,60,0.3)",
+                                  color: "#f87171",
+                                }}
+                              >
+                                {isCancelling ? t("cancelling") : t("cancelItem")}
+                              </button>
+                            </div>
+                          )}
 
                           {/* Chef note for rejected items */}
                           {isRejected && item.rejectReason && (
@@ -513,6 +571,23 @@ export function OrderHistoryFAB({ tableCode, tableNumber, dishNameMap = {}, refr
           </>
         )}
       </AnimatePresence>
+
+      {/* ── Cancel Item Confirmation Popup ── */}
+      <ALConfirmDialog
+        isOpen={cancelConfirmItemId !== null}
+        onClose={() => setCancelConfirmItemId(null)}
+        onConfirm={() => {
+          const itemId = cancelConfirmItemId;
+          setCancelConfirmItemId(null);
+          if (itemId !== null) handleCancelItem(itemId);
+        }}
+        variant="warning"
+        title={t("cancelPopup.title")}
+        message={t("cancelPopup.message", { dishName: cancelConfirmItemDishName })}
+        confirmText={t("cancelPopup.yes")}
+        cancelText={t("cancelPopup.no")}
+        confirmButtonVariant="danger"
+      />
 
       {/* ── Payment Confirmation Popup ── */}
       <AnimatePresence>

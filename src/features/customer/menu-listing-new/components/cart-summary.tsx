@@ -260,7 +260,7 @@ export function CartSummary({
                 "bg-[#204560] overflow-hidden transition-all duration-300 shadow-[0px_10px_40px_-10px_rgba(0,0,0,0.5)]",
                 // XỬ LÝ CSS RESPONSIVE CHO 3 TRẠNG THÁI:
                 isExpanded
-                    ? "w-[92vw] md:w-[320px] h-[70vh] md:h-[550px] rounded-[28px] md:rounded-[24px] border border-[#C5A059]/30 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 md:static md:translate-x-0 md:translate-y-0 cursor-default shadow-2xl z-[100]"
+                    ? "w-[92vw] md:w-[320px] h-[70vh] md:h-[550px] rounded-[28px] md:rounded-[24px] border border-[#C5A059]/30 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 cursor-default shadow-2xl z-[100]"
                     : isMobile
                         ? "relative w-[72px] h-[90px] rounded-tl-[60px] rounded-br-[60px] rotate-[-15deg] border-[1.5px] border-[#C5A059] bg-[#204560] cursor-pointer z-50 flex items-center justify-center shadow-[0_10px_25px_rgba(0,0,0,0.6)]"
                         : "relative w-[286px] h-[357px] rounded-tl-[256px] rounded-br-[256px] rotate-[-15deg] border border-[#C5A059]/50 cursor-pointer shadow-[0px_25px_60px_-15px_rgba(0,0,0,0.6)]",

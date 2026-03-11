@@ -1679,7 +1679,8 @@
       "inProgress": "Đang làm",
       "ready": "Sẵn sàng",
       "served": "Đã phục vụ",
-      "rejected": "Từ chối"
+      "rejected": "Từ chối",
+      "cancelled": "Đã hủy"
     },
     "emptyState": {
       "title": "Chưa có món nào được đặt.",
@@ -1689,6 +1690,15 @@
     "estimatedTotal": "Tổng ước tính",
     "requestPayment": "Yêu cầu thanh toán",
     "error": "Không thể tải dữ liệu",
+    "cancelItem": "Hủy món",
+    "cancelling": "Đang hủy...",
+    "cancelError": "Không thể hủy món",
+    "cancelPopup": {
+      "title": "Hủy món này?",
+      "message": "Bạn có chắc chắn muốn hủy \"{dishName}\" không? Hành động này không thể hoàn tác.",
+      "yes": "Có, Hủy",
+      "no": "Không, Giữ lại"
+    },
     "paymentPopup": {
       "title": "Yêu cầu thanh toán?",
       "message": "Nhân viên sẽ mang hóa đơn đến {tableLabel} {tableNumber} của bạn ngay. Bạn có muốn tiếp tục?",

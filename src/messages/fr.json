@@ -1610,7 +1610,8 @@
       "inProgress": "En cours",
       "ready": "Prêt",
       "served": "Servi",
-      "rejected": "Refusé"
+      "rejected": "Refusé",
+      "cancelled": "Annulé"
     },
     "emptyState": {
       "title": "Aucun plat commandé pour le moment.",
@@ -1620,6 +1621,15 @@
     "estimatedTotal": "Total estimé",
     "requestPayment": "Demander le paiement",
     "error": "Impossible de charger les données",
+    "cancelItem": "Annuler l'article",
+    "cancelling": "Annulation...",
+    "cancelError": "Impossible d'annuler l'article",
+    "cancelPopup": {
+      "title": "Annuler cet article ?",
+      "message": "Êtes-vous sûr de vouloir annuler \"{dishName}\" ? Cette action est irréversible.",
+      "yes": "Oui, Annuler",
+      "no": "Non, Garder"
+    },
     "paymentPopup": {
       "title": "Demander le paiement ?",
       "message": "Un serveur viendra à votre {tableLabel} {tableNumber} sous peu avec l'addition. Voulez-vous continuer ?",

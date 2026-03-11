@@ -15,10 +15,10 @@ export default async function MenuListingPage({
                                                   searchParams,
                                               }: {
     params: Promise<{ locale: string }>;
-    searchParams: Promise<{ table?: string }>;
+    searchParams: Promise<{ table?: string; token?: string }>;
 }) {
     // Parallel-await cả hai Promise để không block lẫn nhau
-    const [{ locale }, { table }] = await Promise.all([params, searchParams]);
+    const [{ locale }, { table, token }] = await Promise.all([params, searchParams]);
     const loc = locale as 'vi' | 'en' | 'fr';
 
     let menuData: MenuCategory[] = [];
@@ -79,6 +79,7 @@ export default async function MenuListingPage({
             <MenuListingClient
                 initialMenuData={menuData}
                 tableFromUrl={table}
+                tokenFromUrl={token}
             />
         </Suspense>
     );
