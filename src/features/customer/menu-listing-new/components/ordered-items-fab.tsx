@@ -16,6 +16,7 @@ import {
   CreditCard,
   Check,
 } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { api } from "@/lib/http";
 import { ALConfirmDialog } from "@/components/ui/al-confirm-dialog";
 
@@ -276,83 +277,99 @@ export function OrderHistoryFAB({ tableCode, tableNumber, dishNameMap = {}, refr
 
   return (
     <>
-      {/* ── FAB button ── */}
-      <motion.button
-        onClick={() => {
-          setIsOpen(true);
-          onOpenChange?.(true);
-        }}
-        whileHover={{ scale: 1.08 }}
-        whileTap={{ scale: 0.93 }}
-        className="relative flex flex-col items-center justify-center gap-[3px] focus:outline-none"
-        aria-label={t("fabAriaLabel")}
-      >
-        {/* Circle button - increased size */}
-        <div
-          className="w-[68px] h-[68px] rounded-full flex items-center justify-center"
-          style={{
-            background: "radial-gradient(circle at 35% 30%, #2a3f60, #0f1f3d)",
-            boxShadow:
-              "0 0 0 2px #c9a84c, 0 4px 20px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,220,100,0.15)",
-          }}
-        >
-          <ScrollText size={30} strokeWidth={1.6} className="text-[#e8c97a] drop-shadow-sm" />
-
-          {/* Badge: total item count */}
-          {totalItems > 0 && (
-            <motion.span
-              key={totalItems}
-              initial={{ scale: 0.5, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              className="absolute -top-1 -right-1 min-w-[20px] h-5 px-1 rounded-full flex items-center justify-center text-[11px] font-bold text-[#0f1f3d] leading-none"
-              style={{
-                background: "linear-gradient(135deg, #f5d77a, #c9a84c)",
-                boxShadow: "0 2px 6px rgba(0,0,0,0.4)",
-              }}
-            >
-              {totalItems}
-            </motion.span>
-          )}
-        </div>
-
-        <span
-          className="text-[10px] font-semibold tracking-widest uppercase"
-          style={{ color: "#c9a84c", textShadow: "0 1px 4px rgba(0,0,0,0.6)" }}
-        >
-          {t("fabLabel")}
-        </span>
-      </motion.button>
-
-      {/* ── Modal ── */}
+      {/* ── Backdrop (only when expanded) ── */}
       <AnimatePresence>
         {isOpen && (
-          <>
-            {/* Backdrop */}
+          <motion.div
+            key="history-backdrop"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => {
+              setIsOpen(false);
+              onOpenChange?.(false);
+            }}
+            className="fixed inset-0 z-[89] bg-black/60 backdrop-blur-sm"
+          />
+        )}
+      </AnimatePresence>
+
+      {/* ── Morphing container: FAB ↔ Panel ── */}
+      <div className={cn(
+        "flex flex-col items-center",
+        isOpen ? "contents" : "gap-[3px]"
+      )}>
+        <motion.div
+          layout
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.8 }}
+          transition={{
+            layout: { type: "spring", stiffness: 200, damping: 28 },
+            opacity: { duration: 0.2 },
+            scale: { type: "spring", stiffness: 300, damping: 25 },
+          }}
+          onClick={() => {
+            if (!isOpen) {
+              setIsOpen(true);
+              onOpenChange?.(true);
+            }
+          }}
+          className={cn(
+            "transition-[border-radius,box-shadow] duration-300",
+            isOpen
+              ? "w-[92vw] md:w-[500px] h-[82vh] md:h-[640px] md:max-h-[calc(100vh-160px)] rounded-[28px] fixed top-[calc(50%+20px)] md:top-[calc(50%+50px)] left-1/2 -translate-x-1/2 -translate-y-1/2 z-[91] cursor-default flex flex-col overflow-hidden"
+              : "relative w-[68px] h-[68px] rounded-full cursor-pointer flex items-center justify-center overflow-visible"
+          )}
+          style={{
+            background: isOpen
+              ? "linear-gradient(170deg, #192848 0%, #0f1f3d 100%)"
+              : "#204560",
+            border: isOpen
+              ? "1px solid rgba(201,168,76,0.35)"
+              : "2px solid #c9a84c",
+            boxShadow: isOpen
+              ? "0 24px 64px rgba(0,0,0,0.7), 0 0 0 1px rgba(201,168,76,0.1)"
+              : "0 4px 20px rgba(0,0,0,0.55)",
+          }}
+          aria-label={t("fabAriaLabel")}
+        >
+          <AnimatePresence mode="wait">
+            {!isOpen ? (
+              /* ── Collapsed FAB content ── */
+              <motion.div
+                key="fab-content"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0, transition: { duration: 0.1 } }}
+                className="flex items-center justify-center w-full h-full relative"
+              >
+                <ScrollText size={30} strokeWidth={1.6} className="text-[#e8c97a] drop-shadow-sm" />
+
+                {/* Badge: total item count */}
+                {totalItems > 0 && (
+                  <motion.span
+                    key={totalItems}
+                    initial={{ scale: 0.5, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    className="absolute -top-1 -right-1 min-w-[20px] h-5 px-1 rounded-full flex items-center justify-center text-[11px] font-bold text-[#0f1f3d] leading-none"
+                    style={{
+                      background: "linear-gradient(135deg, #f5d77a, #c9a84c)",
+                      boxShadow: "0 2px 6px rgba(0,0,0,0.4)",
+                    }}
+                  >
+                    {totalItems}
+                  </motion.span>
+                )}
+              </motion.div>
+            ) : (
+              /* ── Expanded panel content ── */
             <motion.div
-              key="history-backdrop"
+              key="panel-content"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => {
-                setIsOpen(false);
-                onOpenChange?.(false);
-              }}
-              className="fixed inset-0 z-[90] bg-black/60 backdrop-blur-sm"
-            />
-
-            {/* Panel */}
-            <motion.div
-              key="history-panel"
-              initial={{ scale: 0.88, opacity: 0, y: 24 }}
-              animate={{ scale: 1, opacity: 1, y: 0 }}
-              exit={{ scale: 0.88, opacity: 0, y: 24 }}
-              transition={{ type: "spring", stiffness: 320, damping: 32 }}
-              className="fixed top-[calc(50%+20px)] left-1/2 -translate-x-1/2 -translate-y-1/2 z-[91] w-[92vw] md:w-[500px] h-[82vh] md:h-[640px] rounded-[28px] overflow-hidden flex flex-col"
-              style={{
-                background: "linear-gradient(170deg, #192848 0%, #0f1f3d 100%)",
-                border: "1px solid rgba(201,168,76,0.35)",
-                boxShadow: "0 24px 64px rgba(0,0,0,0.7), 0 0 0 1px rgba(201,168,76,0.1)",
-              }}
+              exit={{ opacity: 0, transition: { duration: 0.1 } }}
+              className="flex flex-col w-full h-full"
             >
               {/* ── Header ── */}
               <div
@@ -568,9 +585,20 @@ export function OrderHistoryFAB({ tableCode, tableNumber, dishNameMap = {}, refr
                 </div>
               )}
             </motion.div>
-          </>
-        )}
-      </AnimatePresence>
+          )}
+        </AnimatePresence>
+      </motion.div>
+
+      {/* Label below the circle (only when collapsed) */}
+      {!isOpen && (
+        <span
+          className="text-[10px] font-semibold tracking-widest uppercase"
+          style={{ color: "#c9a84c", textShadow: "0 1px 4px rgba(0,0,0,0.6)" }}
+        >
+          {t("fabLabel")}
+        </span>
+      )}
+      </div>
 
       {/* ── Cancel Item Confirmation Popup ── */}
       <ALConfirmDialog
