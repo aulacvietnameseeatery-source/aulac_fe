@@ -1475,6 +1475,7 @@
       "main": "MAIN",
       "management": "MANAGEMENT",
       "operations": "OPERATIONS",
+      "shifts": "SHIFTS",
       "administration": "ADMINISTRATION",
       "settings": "SETTINGS"
     },

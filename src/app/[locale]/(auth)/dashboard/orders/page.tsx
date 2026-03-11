@@ -17,6 +17,7 @@ import {
     X,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { TablePagination } from "@/components/ui/table/table-pagination";
 import { useOrderHistory } from "@/features/staff/order-management/hooks/useOrderHistory";
@@ -53,9 +54,9 @@ const KANBAN_COLUMNS: KanbanColumnConfig[] = [
 const SEARCH_DEBOUNCE_MS = 400;
 const KANBAN_PAGE_SIZE = 50;
 
-// ─── Main Content ──────────────────────────────────────────────────────────
 function OrdersContent() {
     const t = useTranslations("Order.List");
+    const router = useRouter();
 
     const { orders, isLoading, totalCount, onDataChange, refresh: refreshList } = useOrderHistory();
     const { counts, fetchCounts } = useOrderStatusCounts();
@@ -242,23 +243,18 @@ function OrdersContent() {
                         <div className="condition-box flex flex-row items-center w-full h-full">
                             <div className="flex gap-2 items-center flex-1 flex-wrap">
                                 {/* Search — giống BaseTable */}
-                                <div className="ms-input ms-editor flex items-center search-input-list max-h-4" style={{ height: "auto" }}>
+                                <div className="ms-input ms-editor w-full flex items-center gap-4 search-input-list" style={{ height: "auto" }}>
                                     <div className="flex-1 flex items-center input-container border pointer">
                                         <div className="mi icon16 icon left search" />
                                         <input
                                             value={searchInput}
                                             onChange={(e) => setSearchInput(e.target.value)}
-                                            className="ms-input-item flex"
+                                            className="ms-input-item flex w-full min-w-[200px]"
                                             placeholder={t("searchPlaceholder")}
                                             type="text"
                                             autoComplete="on"
+                                            size={Math.max((t("searchPlaceholder") as string)?.length || 20, searchInput.length) + 2}
                                         />
-                                        {searchInput && (
-                                            <button
-                                                className="mi icon16 icon right close mr-1"
-                                                onClick={() => setSearchInput("")}
-                                            />
-                                        )}
                                     </div>
                                 </div>
 
@@ -418,8 +414,11 @@ function OrdersContent() {
                                                                 secondaryAction={{ label: t(`kanban.${col.secondaryKey}`), onClick: () => { } }}
                                                                 onAction={(id, action) => {
                                                                     console.log("Kanban Action:", action, "on order:", id);
-                                                                    // For now just refresh, similar to grid view
-                                                                    handleRefresh();
+                                                                    if (action === "view" || action === "edit") {
+                                                                        router.push(`/dashboard/orders/${id}/edit`);
+                                                                    } else if (action !== 'pay') {
+                                                                        handleRefresh();
+                                                                    }
                                                                 }}
                                                             />
                                                         ))
@@ -451,8 +450,11 @@ function OrdersContent() {
                                                     onStatusChange={handleRefresh}
                                                     onAction={(id, action) => {
                                                         console.log("Action:", action, "on order:", id);
-                                                        // Handle other actions if needed
-                                                        if (action !== 'pay') handleRefresh();
+                                                        if (action === "view" || action === "edit") {
+                                                            router.push(`/dashboard/orders/${id}/edit`);
+                                                        } else if (action !== 'pay') {
+                                                            handleRefresh();
+                                                        }
                                                     }}
                                                 />
                                             ))}
