@@ -10,8 +10,10 @@ import { ReservationCard } from "@/features/staff/reservation-management/compone
 import { CheckInModal } from "@/features/staff/reservation-management/components/check-in-modal";
 import { ReservationDto } from "@/features/staff/reservation-management/types/reservation-types";
 import {TablePagination} from "@/components/ui/table";
+import { useRouter } from "next/navigation";
 
 const ReservationListContent = () => {
+    const router = useRouter();
     const {
         reservations,
         statuses,
@@ -43,6 +45,10 @@ const ReservationListContent = () => {
         if (newPage !== pageIndex) {
             actions.onPageChange(newPage);
         }
+    };
+
+    const handleCreate = () => {
+        router.push(`/dashboard/reservations/create`);
     };
 
     const [checkInReservation, setCheckInReservation] = useState<ReservationDto | null>(null);
@@ -124,6 +130,7 @@ const ReservationListContent = () => {
                         </div>
 
                         <Button
+                            onClick={handleCreate}
                             variant="outline"
                             size="sm"
                         >

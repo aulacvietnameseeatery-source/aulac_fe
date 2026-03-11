@@ -219,6 +219,10 @@ function OrdersContent() {
         return orders.filter((o) => lower.includes(o.orderStatus.toLowerCase()));
     };
 
+    const handleCreate = () => {
+        router.push(`/dashboard/orders/create`);
+    };
+
     return (
         <div className="w-full flex flex-col h-full">
             {/* ── Title row ───────────────────────────────────────────────── */}
@@ -228,7 +232,7 @@ function OrdersContent() {
                     <p className="text-xs text-gray-500 mt-0.5">{t("description")}</p>
                 </div>
                 {/* Add New Order button — same as staff renderTitle pattern */}
-                <Button variant="outline" size="sm" className="shadow-sm">
+                <Button onClick={handleCreate} variant="outline" size="sm" className="shadow-sm">
                     <Plus className="mr-1.5 h-3.5 w-3.5" />
                     {t("addNewOrder")}
                 </Button>
