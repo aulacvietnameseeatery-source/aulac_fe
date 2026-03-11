@@ -11,6 +11,8 @@ import { CheckInModal } from "@/features/staff/reservation-management/components
 import { ReservationDto } from "@/features/staff/reservation-management/types/reservation-types";
 import {TablePagination} from "@/components/ui/table";
 import { useRouter } from "next/navigation";
+import { ProtectedRoute } from "@/components/protected-route";
+import { Permissions } from "@/types/const";
 
 const ReservationListContent = () => {
     const router = useRouter();
@@ -155,6 +157,7 @@ const ReservationListContent = () => {
                                     key={item.reservationId}
                                     reservation={item}
                                     onCheckIn={() => setCheckInReservation(item)}
+                                    onCardClick={(id) => router.push(`/dashboard/reservations/${id}`)}
                                 />
                             ))}
                         </div>
@@ -202,8 +205,10 @@ const ReservationListContent = () => {
 
 export default function ReservationPage() {
     return (
-        <Suspense fallback={<div className="flex h-screen items-center justify-center"><Loader2 className="animate-spin text-gray-400" /></div>}>
-            <ReservationListContent />
-        </Suspense>
+        <ProtectedRoute permission={Permissions.ViewReservation}>
+            <Suspense fallback={<div className="flex h-screen items-center justify-center"><Loader2 className="animate-spin text-gray-400" /></div>}>
+                <ReservationListContent />
+            </Suspense>
+        </ProtectedRoute>
     );
 }

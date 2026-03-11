@@ -1712,6 +1712,39 @@
       "checkIn": "Enregistrer",
       "na": "N/D"
     },
+    "Detail": {
+      "title": "Détails de la réservation",
+      "back": "Retour",
+      "backToList": "Retour aux réservations",
+      "edit": "Modifier",
+      "delete": "Supprimer",
+      "reservationId": "ID de réservation",
+      "loading": "Chargement des détails de la réservation...",
+      "notFound": "Réservation introuvable",
+      "Customer": {
+        "title": "Informations client",
+        "fullName": "Nom complet",
+        "phoneNumber": "Numéro de téléphone",
+        "emailAddress": "Adresse e-mail",
+        "partySize": "Nombre de convives",
+        "guest": "invité",
+        "guests": "invités"
+      },
+      "Booking": {
+        "title": "Informations de réservation",
+        "reservedDate": "Date réservée",
+        "reservedTime": "Heure réservée",
+        "status": "Statut",
+        "bookingSource": "Source de réservation",
+        "createdOn": "Créé le"
+      },
+      "Table": {
+        "title": "Informations sur la table",
+        "noTables": "Aucune table assignée",
+        "capacity": "Capacité",
+        "totalTables": "Total des tables assignées"
+      }
+    },
     "CheckInModal": {
       "title": "Enregistrement du client",
       "arrivalMsg": "{name} est arrivé(e) pour sa réservation de {time} ({pax} invités).",
