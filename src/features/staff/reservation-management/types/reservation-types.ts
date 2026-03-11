@@ -29,3 +29,29 @@ export interface GetReservationsParams {
     date?: string; // YYYY-MM-DD
     statusId?: number;
 }
+
+// --- Reservation Detail ---
+export interface ReservationDetailDto {
+    reservationId: number;
+    customerName: string;
+    phone: string;
+    email?: string;
+    partySize: number;
+    reservedTime: string;
+    createdAt?: string;
+    statusId: number;
+    statusName: string;
+    statusCode: string;
+    sourceId: number;
+    sourceName: string;
+    sourceCode: string;
+    tables: ReservationTableDto[];
+}
+
+export interface ReservationTableDto {
+    tableId: number;
+    tableCode: string;
+    capacity: number;
+    tableType: string;
+    zone: string;
+}

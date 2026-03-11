@@ -9,9 +9,10 @@ interface ReservationCardProps {
     onCheckIn?: () => void;
     onEdit?: (id: number) => void;
     onDelete?: (id: number) => void;
+    onCardClick?: (id: number) => void;
 }
 
-export const ReservationCard = ({ reservation,onCheckIn ,onEdit, onDelete }: ReservationCardProps) => {
+export const ReservationCard = ({ reservation,onCheckIn ,onEdit, onDelete, onCardClick }: ReservationCardProps) => {
 
     const getBadgeVariant = (statusId: number): any => {
         switch (statusId) {
@@ -24,8 +25,17 @@ export const ReservationCard = ({ reservation,onCheckIn ,onEdit, onDelete }: Res
         }
     };
 
+    const handleCardClick = () => {
+        if (onCardClick) {
+            onCardClick(reservation.reservationId);
+        }
+    };
+
     return (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-5 hover:shadow-md transition-shadow">
+        <div 
+            onClick={handleCardClick}
+            className={`bg-white rounded-xl shadow-sm border border-gray-200 p-5 hover:shadow-md transition-shadow ${onCardClick ? 'cursor-pointer' : ''}`}
+        >
 
             {/* Header: Date & Customer Info */}
             <div className="flex items-start gap-4 mb-4">
@@ -83,18 +93,30 @@ export const ReservationCard = ({ reservation,onCheckIn ,onEdit, onDelete }: Res
 
             {/* Footer Actions */}
             <div className="flex items-center justify-between">
-                <button className="px-3 py-1.5 text-[13px] font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                <button 
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        // TODO: Implement view note
+                    }}
+                    className="px-3 py-1.5 text-[13px] font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                >
                     View Note
                 </button>
                 <div className="flex items-center gap-2">
                     <button
-                        onClick={() => onEdit?.(reservation.reservationId)}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            onEdit?.(reservation.reservationId);
+                        }}
                         className="p-2 text-gray-600 bg-white border border-gray-200 rounded-full hover:text-blue-600 hover:bg-blue-50 transition-colors shadow-sm"
                     >
                         <Pencil className="w-4 h-4" />
                     </button>
                     <button
-                        onClick={() => onDelete?.(reservation.reservationId)}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            onDelete?.(reservation.reservationId);
+                        }}
                         className="p-2 text-red-500 bg-white border border-gray-200 rounded-full hover:text-red-700 hover:bg-red-50 transition-colors shadow-sm"
                     >
                         <Trash2 className="w-4 h-4" />

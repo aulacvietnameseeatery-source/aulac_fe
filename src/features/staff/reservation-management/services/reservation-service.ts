@@ -1,7 +1,7 @@
 // features/staff/reservation/services/reservation-service.ts
 
 import { ApiResponse, PagedResult } from "@/types/api-response.types";
-import { ReservationDto, ReservationStatusDto, GetReservationsParams } from "../types/reservation-types";
+import { ReservationDto, ReservationStatusDto, GetReservationsParams, ReservationDetailDto } from "../types/reservation-types";
 import {api} from "@/lib/http";
 
 export const reservationService = {
@@ -35,5 +35,11 @@ export const reservationService = {
         await api.patch(`/api/reservations/${reservationId}/check-in`, {
             tableId: tableId
         });
+    },
+
+    // 4. Get Reservation Detail
+    getReservationDetail: async (reservationId: number): Promise<ReservationDetailDto> => {
+        const response = await api.get<ApiResponse<ReservationDetailDto>>(`/api/reservations/${reservationId}`);
+        return response.data;
     }
 };

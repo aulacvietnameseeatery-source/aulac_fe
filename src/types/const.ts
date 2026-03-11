@@ -48,4 +48,10 @@ export const Permissions = {
   AdjustAttendance: 'SHIFT:ADJUST_ATTENDANCE',
   ViewShiftReport: 'SHIFT:REPORT_READ',
   CloseShift: 'SHIFT:CLOSE',
+
+  // Reservation
+  ViewReservation: 'RESERVATION:READ',
+  CreateReservation: 'RESERVATION:CREATE',
+  UpdateReservation: 'RESERVATION:UPDATE',
+  DeleteReservation: 'RESERVATION:DELETE',
 } as const;
