@@ -148,7 +148,8 @@ export function DishDetailModal({ dishId, isOpen, onClose, onAddToCart }: DishDe
                   )}
 
                   {/* Order Now */}
-                  {viewMode !== "360" && (
+                  {/* _OLD: viewMode !== "360" && ( — removed condition to show button on all tabs including 360 */}
+                  {(
                     <button
                       type="button"
                       onClick={() => {

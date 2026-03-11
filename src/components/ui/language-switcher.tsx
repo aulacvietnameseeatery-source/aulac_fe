@@ -1,7 +1,7 @@
 "use client";
 
 import { useTransition } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useLocale } from "next-intl";
 import { Globe, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -29,12 +29,15 @@ export function LanguageSwitcher({
     const locale = useLocale();
     const router = useRouter();
     const pathname = usePathname();
+    const searchParams = useSearchParams();
 
     const switchLocale = (newLocale: string) => {
         if (newLocale === locale) return;
         const newPath = pathname.replace(`/${locale}`, `/${newLocale}`);
+        const query = searchParams.toString();
+        const fullPath = query ? `${newPath}?${query}` : newPath;
         startTransition(() => {
-            router.replace(newPath);
+            router.replace(fullPath);
             router.refresh();
         });
     };

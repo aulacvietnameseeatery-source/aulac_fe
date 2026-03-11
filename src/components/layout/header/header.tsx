@@ -8,7 +8,7 @@ import {
 } from "lucide-react";
 import { useState, useTransition, useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { NavLink } from "@/components/layout/header/nav-link";
 import { FR, GB, VN } from 'country-flag-icons/react/3x2';
@@ -39,6 +39,7 @@ export function Header({ isScrolled, locale }: HeaderProps) {
     const t = useTranslations('Header');
     const router = useRouter();
     const pathname = usePathname();
+    const searchParams = useSearchParams();
 
     useEffect(() => {
         if (isMobileMenuOpen) {
@@ -52,8 +53,10 @@ export function Header({ isScrolled, locale }: HeaderProps) {
     const switchLocale = (newLocale: string) => {
         if (newLocale === locale) return;
         const newPath = pathname.replace(`/${locale}`, `/${newLocale}`);
+        const query = searchParams.toString();
+        const fullPath = query ? `${newPath}?${query}` : newPath;
         startTransition(() => {
-            router.replace(newPath);
+            router.replace(fullPath);
             router.refresh();
         });
     };
