@@ -18,7 +18,7 @@ interface AvailableTableDto {
 
 export function TableSelectionModal({ isOpen, onConfirm, onClose }: {
     isOpen: boolean,
-    onConfirm: (val: string) => void,
+    onConfirm: (val: string, qrToken?: string) => void,
     onClose: () => void
 }) {
     const [val, setVal] = useState("");
@@ -234,17 +234,22 @@ export function TableSelectionModal({ isOpen, onConfirm, onClose }: {
                                 <AnyScanner
                                     onResult={(text: string) => {
                                         let tableCode = text;
+                                        let qrToken: string | undefined;
                                         // Thử kiểm tra xem text có phải là 1 URL chứa param ?table=... hay không
                                         try {
                                             const url = new URL(text);
                                             const tableParam = url.searchParams.get("table");
+                                            const tokenParam = url.searchParams.get("token");
                                             if (tableParam) {
                                                 tableCode = tableParam;
+                                            }
+                                            if (tokenParam) {
+                                                qrToken = tokenParam;
                                             }
                                         } catch (e) {
                                         }
 
-                                        onConfirm(tableCode);
+                                        onConfirm(tableCode, qrToken);
 
                                         // Reset và đóng camera
                                         setIsScanning(false);

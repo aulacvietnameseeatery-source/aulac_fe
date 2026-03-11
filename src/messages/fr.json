@@ -1471,6 +1471,12 @@
     "cancelItem": "Annuler l'article",
     "cancelling": "Annulation...",
     "cancelError": "Impossible d'annuler l'article",
+    "cancelPopup": {
+      "title": "Annuler cet article ?",
+      "message": "Êtes-vous sûr de vouloir annuler \"{dishName}\" ? Cette action est irréversible.",
+      "yes": "Oui, Annuler",
+      "no": "Non, Garder"
+    },
     "paymentPopup": {
       "title": "Demander le paiement ?",
       "message": "Un serveur viendra à votre {tableLabel} {tableNumber} sous peu avec l'addition. Voulez-vous continuer ?",

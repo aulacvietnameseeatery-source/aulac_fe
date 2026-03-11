@@ -261,7 +261,7 @@ const TableModal: React.FC<TableModalProps> = ({
                   <div className="bg-gray-50 rounded-lg p-4 flex items-start gap-4">
                     <div className="shrink-0 rounded bg-white p-1.5">
                       <QRCodeSVG
-                        value={`${typeof window !== "undefined" ? window.location.origin : ""}/order?table=${encodeURIComponent(formData.tableCode.trim())}`}
+                        value={`${typeof window !== "undefined" ? window.location.origin : ""}/menu-listing?table=${encodeURIComponent(formData.tableCode.trim())}`}
                         size={80}
                         level="M"
                       />
@@ -269,7 +269,7 @@ const TableModal: React.FC<TableModalProps> = ({
                     <div className="space-y-1 min-w-0">
                       <p className="text-xs font-medium text-gray-600">Preview QR Code</p>
                       <p className="text-[10px] text-gray-400 break-all">
-                        Encodes: /order?table={formData.tableCode.trim()}
+                        Encodes: /menu-listing?table={formData.tableCode.trim()}
                       </p>
                       <p className="text-[10px] text-gray-400">
                         The server will add a secure token when the table is saved.
