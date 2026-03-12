@@ -102,6 +102,7 @@ const navigation = [
     icon: Settings,
     items: [
       { key: "storeSettings", href: "/dashboard/store-settings", icon: Warehouse },
+      { key: "systemSettings", href: "/dashboard/system-settings", icon: Settings2 },
       { key: "notifications", href: "/dashboard/notifications", icon: Bell },
       { key: "promotions", href: "/dashboard/promotions", icon: Tags },
       { key: "emails", href: "/dashboard/emails", icon: Mail },
