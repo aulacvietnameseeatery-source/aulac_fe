@@ -4,6 +4,7 @@ import { DishFormValues } from "../types/schema";
 import { CategoryDto, DishDietDto, DishStatusDto, DishTagDto } from "../types/dish-detail.types";
 import { useLocale, useTranslations } from "next-intl";
 import { ALCombobox } from "@/components/ui/al-combobox";
+import { ALInput } from "@/components/ui/al-input";
 
 export const CoreInfoSection: React.FC<{ 
   form: UseFormReturn<DishFormValues>, 
@@ -94,14 +95,15 @@ export const CoreInfoSection: React.FC<{
           <label className="text-sm font-medium text-gray-600">
             {t("core.price")} <span className="text-red-500">*</span>
           </label>
-          <input
+          <ALInput
+            // Bỏ prop title="" đi để không dùng label mặc định của component
+            required
             type="number"
             step="0.01"
-            {...register("price")}
             placeholder="0.00"
-            className="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm focus:border-blue-500 outline-non"
+            error={errors.price?.message}
+            {...register("price")}
           />
-          {errors.price && <p className="text-xs text-red-500">{errors.price.message}</p>}
         </div>
 
         {/* 4. STATUS */}

@@ -11,7 +11,7 @@ export default function CreatePromotionPage() {
   };
 
   return (
-    <div className="max-w-5xl mx-auto">
+    <div className="mx-auto">
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-[#1A3A51]">{t("createTitle")}</h1>
         <p className="text-slate-500 mt-1">{t("createSubTitle")}</p>
