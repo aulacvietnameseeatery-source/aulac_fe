@@ -45,7 +45,7 @@ export default function PromotionDetailPage() {
   const statusStr = detail.promotionStatus || "SCHEDULED";
   
   return (
-    <div className="max-w-6xl mx-auto">
+    <div className="mx-auto">
       <button onClick={() => router.back()} className="flex items-center gap-2 text-slate-500 hover:text-slate-800 mb-6 font-medium">
         <ArrowLeft size={16} /> {t("back")}
       </button>

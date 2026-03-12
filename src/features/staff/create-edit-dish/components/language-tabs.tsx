@@ -6,6 +6,7 @@ import { AlertCircle, Loader2, Sparkles } from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
 import { translateDishContent } from "../services/dish.service";
 import { DishI18nDto } from "../types/dish-detail.types";
+import { ALInput } from "@/components/ui/al-input";
 
 interface LanguageTabsProps {
   form: UseFormReturn<DishFormValues>;
@@ -145,18 +146,12 @@ export const LanguageTabs: React.FC<LanguageTabsProps> = ({
             <label className="text-sm font-semibold text-gray-900">
               Dish Name ({activeTab.toUpperCase()}) <span className="text-red-500">*</span>
             </label>
-            <input
+            <ALInput
               key={`dishName-${activeTab}`}
               {...register(`i18n.${activeTab}.dishName`)}
-              className={cn(
-                "w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all text-base",
-                errors.i18n?.[activeTab]?.dishName ? "border-red-300 bg-red-50" : "border-gray-200"
-              )}
               placeholder={`e.g. Traditional Beef Noodle Soup`}
+              error={errors.i18n?.[activeTab]?.dishName?.message}
             />
-            {errors.i18n?.[activeTab]?.dishName && (
-              <p className="text-sm text-red-500 font-medium">{errors.i18n[activeTab]?.dishName?.message}</p>
-            )}
         </div>
 
         {/* Description */}
@@ -183,31 +178,32 @@ export const LanguageTabs: React.FC<LanguageTabsProps> = ({
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
             <div className="space-y-2">
               <label className="text-sm font-medium text-gray-600">Short Description</label>
-              <input
+              <ALInput
                 key={`shortDescription-${activeTab}`}
                 {...register(`i18n.${activeTab}.shortDescription`)}
-                className="w-full px-4 py-2.5 border border-gray-200 rounded-lg outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                 placeholder="Max 100 chars for mobile view"
+                error={errors.i18n?.[activeTab]?.shortDescription?.message}
               />
             </div>
             <div className="space-y-2">
               <label className="text-sm font-medium text-gray-600">Slogan</label>
-              <input
+              <ALInput
                 key={`slogan-${activeTab}`}
                 {...register(`i18n.${activeTab}.slogan`)}
-                className="w-full px-4 py-2.5 border border-gray-200 rounded-lg outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                 placeholder="e.g. Best seller!"
+                error={errors.i18n?.[activeTab]?.slogan?.message}
               />
             </div>
         </div>
           
         <div className="space-y-2 pt-2 border-t border-dashed border-gray-200">
               <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Note ({activeTab})</label>
-              <input
+              <ALInput
                 key={`note-${activeTab}`}
                 {...register(`i18n.${activeTab}.note`)}
-                className="w-full px-4 py-2.5 border border-gray-200 rounded-lg outline-none focus:border-blue-500 bg-yellow-50/50 text-sm"
+                className="bg-yellow-50/50"
                 placeholder="Note for chefs or waiters regarding this language version..."
+                error={errors.i18n?.[activeTab]?.note?.message}
               />
         </div>
       </div>
