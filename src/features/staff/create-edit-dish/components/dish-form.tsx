@@ -171,7 +171,7 @@ export function DishForm({ mode, dishId, onSuccess }: DishFormProps) {
         {/* ROW 3: MEDIA (360 + Static) */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
              {/* 3.1: 360 View */}
-            <SectionWrapper title={t("mdeia.media360.title")} subtitle={t("media.media360.subtitle")}>
+            <SectionWrapper title={t("media.media360.title")} subtitle={t("media.media360.subtitle")}>
                 <ThreeSixtySection frames={images360} onChange={setImages360} />
             </SectionWrapper>
 

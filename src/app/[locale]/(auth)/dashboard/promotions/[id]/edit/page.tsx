@@ -29,7 +29,7 @@ export default function EditPromotionPage() {
   };
 
   return (
-    <div className="max-w-5xl mx-auto">
+    <div className="mx-auto">
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-[#1A3A51]">{t("editTitle", { id })}</h1>
       </div>
