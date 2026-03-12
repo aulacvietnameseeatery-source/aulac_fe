@@ -1747,8 +1747,10 @@
     "title": "Affichage Cuisine",
     "description": "Suivre les commandes entrantes et mettre à jour les statuts en temps réel",
     "refresh": "Actualiser",
+    "searchPlaceholder": "Rechercher une table, une commande, un plat...",
     "liveUpdates": "Mises à jour en direct",
     "note": "Note",
+    "orderType": "Sur place",
     "tabs": {
       "all": "Toutes",
       "new": "Nouveaux",
@@ -1759,6 +1761,15 @@
       "hint": "Les nouvelles commandes apparaîtront automatiquement ici"
     },
     "status": {
+      "all": "Tout",
+      "new": "Nouveau",
+      "inKitchen": "En cuisine",
+      "rejected": "Rejeté",
+      "completed": "Terminé"
+    },
+    "actions": {
+      "print": "Imprimer la commande",
+      "markDone": "Terminer",
       "start": "Commencer",
       "serve": "Servir",
       "reject": "Rejeter"

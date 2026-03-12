@@ -1751,8 +1751,10 @@
     "title": "Kitchen Display",
     "description": "Monitor incoming orders and update item statuses in real-time",
     "refresh": "Refresh",
+    "searchPlaceholder": "Search by table, order ID, dish...",
     "liveUpdates": "Live updates",
     "note": "Note",
+    "orderType": "Dine-in",
     "tabs": {
       "all": "All Orders",
       "new": "New",
@@ -1763,6 +1765,15 @@
       "hint": "New orders will appear here automatically"
     },
     "status": {
+      "all": "All",
+      "new": "New",
+      "inKitchen": "In Kitchen",
+      "rejected": "Rejected",
+      "completed": "Completed"
+    },
+    "actions": {
+      "print": "Print Order",
+      "markDone": "Mark Done",
       "start": "Start",
       "serve": "Serve",
       "reject": "Reject"

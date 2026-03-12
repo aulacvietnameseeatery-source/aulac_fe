@@ -1751,8 +1751,10 @@
     "title": "Màn Hình Bếp",
     "description": "Theo dõi đơn hàng và cập nhật trạng thái món ăn theo thời gian thực",
     "refresh": "Làm mới",
+    "searchPlaceholder": "Tìm kiếm bàn, mã đơn, món ăn...",
     "liveUpdates": "Cập nhật trực tiếp",
     "note": "Ghi chú",
+    "orderType": "Ăn tại bàn",
     "tabs": {
       "all": "Tất cả",
       "new": "Mới",
@@ -1763,6 +1765,15 @@
       "hint": "Đơn hàng mới sẽ tự động xuất hiện tại đây"
     },
     "status": {
+      "all": "Tất cả",
+      "new": "Mới",
+      "inKitchen": "Đang làm",
+      "rejected": "Bị từ chối",
+      "completed": "Hoàn tất"
+    },
+    "actions": {
+      "print": "In đơn hàng",
+      "markDone": "Hoàn tất",
       "start": "Bắt đầu",
       "serve": "Phục vụ",
       "reject": "Từ chối"

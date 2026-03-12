@@ -4,6 +4,7 @@ import { DishFormValues } from "../types/schema";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useTranslations } from "next-intl";
+import { ALInput } from "@/components/ui/al-input";
 
 export const AdditionalSection: React.FC<{ form: UseFormReturn<DishFormValues> }> = ({ form }) => {
   const t = useTranslations("Dish.Form.additional");
@@ -31,24 +32,41 @@ export const AdditionalSection: React.FC<{ form: UseFormReturn<DishFormValues> }
         isOpen ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
       )}>
         <div className="p-6 space-y-4">
-          <div className="space-y-1.5">
+           <div className="space-y-1.5">
              <label className="text-sm font-medium text-gray-600">{t("displayOrder")}</label>
-             <input type="number" {...register("displayOrder")} className="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm focus:border-blue-500 outline-none" placeholder="0" />
+             <ALInput 
+               type="number" 
+               {...register("displayOrder")} 
+               placeholder="0"
+             />
            </div>
            
            <div className="space-y-1.5">
              <label className="text-sm font-medium text-gray-600">{t("calories")}</label>
-             <input type="number" {...register("calories")} className="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm focus:border-blue-500 outline-none" placeholder="e.g. 450" />
+             <ALInput 
+               type="number" 
+               {...register("calories")} 
+               placeholder="e.g. 450"
+             />
            </div>
 
            <div className="grid grid-cols-2 gap-4">
              <div className="space-y-1.5">
                <label className="text-sm font-medium text-gray-600">{t("prep")}</label>
-               <input type="number" {...register("prepTimeMinutes")} className="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm focus:border-blue-500 outline-none" placeholder="15" />
+               <ALInput 
+                 type="number" 
+                 {...register("prepTimeMinutes")} 
+                 placeholder="15"
+               />
              </div>
+             
              <div className="space-y-1.5">
                <label className="text-sm font-medium text-gray-600">{t("cook")}</label>
-               <input type="number" {...register("cookTimeMinutes")} className="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm focus:border-blue-500 outline-none" placeholder="20" />
+               <ALInput 
+                 type="number" 
+                 {...register("cookTimeMinutes")} 
+                 placeholder="20"
+               />
              </div>
            </div>
 

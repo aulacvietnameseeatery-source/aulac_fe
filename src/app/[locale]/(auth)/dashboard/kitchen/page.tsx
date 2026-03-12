@@ -2,22 +2,23 @@
 
 import React, { useCallback, useMemo, useState } from "react";
 import {
-    ChefHat,
-    Loader2,
     RefreshCw,
+    Search
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { ProtectedRoute } from "@/components/protected-route";
 import { Permissions } from "@/types/const";
 import { useKitchen } from "@/features/staff/kitchen/hooks/useKitchen";
 import { KitchenOrderCard } from "@/features/staff/kitchen/components/KitchenOrderCard";
-
-type KDSTab = "all" | "new" | "inProgress";
+import { KitchenStatusBar } from "@/features/staff/kitchen/components/KitchenStatusBar";
+import { KitchenOrderGrid } from "@/features/staff/kitchen/components/KitchenOrderGrid";
+import { KeywordSearch } from "@/components/ui/keyword-search/keyword-search";
 
 function KitchenContent() {
     const t = useTranslations("Kitchen");
-    const { orders, isLoading, isUpdating, updateItemStatus, refresh } = useKitchen();
-    const [activeTab, setActiveTab] = useState<KDSTab>("all");
+    const { orders, isLoading, isUpdating, updateItemStatus, batchUpdateItemStatus, refresh } = useKitchen();
+    const [searchQuery, setSearchQuery] = useState("");
+    const [activeStatus, setActiveStatus] = useState<string | null>(null);
     const [isRefreshing, setIsRefreshing] = useState(false);
 
     const handleRefresh = useCallback(async () => {
@@ -33,123 +34,121 @@ function KitchenContent() {
         [updateItemStatus],
     );
 
-    // Count items per status across all orders
-    const counts = useMemo(() => {
-        let newCount = 0;
-        let inProgressCount = 0;
+    const handleBatchUpdateStatus = useCallback(
+        (updates: { orderItemId: number; status: string; rejectReason?: string }[]) => {
+            batchUpdateItemStatus(updates);
+        },
+        [batchUpdateItemStatus],
+    );
 
-        for (const order of orders) {
-            for (const item of order.items) {
-                if (item.itemStatus === "Created") newCount++;
-                else if (item.itemStatus === "In progress") inProgressCount++;
+    // Filter orders based on search query and active status
+    const filteredOrders = useMemo(() => {
+        return orders.filter((order) => {
+            const searchLower = searchQuery.toLowerCase();
+            const matchesSearch =
+                order.orderId.toString().includes(searchLower) ||
+                order.tableCode.toLowerCase().includes(searchLower) ||
+                order.items.some(item => item.dishName.toLowerCase().includes(searchLower));
+
+            if (!matchesSearch) return false;
+
+            if (activeStatus) {
+                return getOrderDisplayStatus(order.items) === activeStatus;
             }
-        }
 
-        return {
-            all: orders.length,
-            new: newCount,
-            inProgress: inProgressCount,
-        };
+            return true;
+        });
+    }, [orders, searchQuery, activeStatus]);
+
+    // Calculate status counts
+    const orderCounts = useMemo(() => {
+        const counts = { all: orders.length, new: 0, inKitchen: 0, rejected: 0, completed: 0 };
+
+        orders.forEach(order => {
+            const status = getOrderDisplayStatus(order.items);
+            if (status === 'completed') counts.completed++;
+            else if (status === 'rejected') counts.rejected++;
+            else if (status === 'in-kitchen') counts.inKitchen++;
+            else counts.new++;
+        });
+
+        return counts;
     }, [orders]);
 
-    // Filter orders based on active tab
-    const filteredOrders = useMemo(() => {
-        if (activeTab === "all") return orders;
-        const statusMap: Record<string, string> = {
-            new: "Created",
-            inProgress: "In progress",
-        };
-        const target = statusMap[activeTab];
-        return orders.filter((o) => o.items.some((i) => i.itemStatus === target));
-    }, [orders, activeTab]);
-
-    const TABS: { key: KDSTab; label: string; count: number; color: string }[] = [
-        { key: "all", label: t("tabs.all"), count: counts.all, color: "bg-gray-700" },
-        { key: "new", label: t("tabs.new"), count: counts.new, color: "bg-amber-500" },
-        { key: "inProgress", label: t("tabs.inProgress"), count: counts.inProgress, color: "bg-blue-500" },
-    ];
-
     return (
-        <div className="w-full flex flex-col h-full">
-            {/* ── Title ─────────────────────────────────────────── */}
-            <div className="flex items-center justify-between mb-4 flex-wrap gap-3">
-                <div>
-                    <h1 className="text-3xl font-bold text-gray-900 tracking-tight flex items-center gap-2">
-                        {t("title")}
-                    </h1>
-                    <p className="text-sm text-gray-500 mt-1">{t("description")}</p>
+        <div className="w-full flex flex-col h-full bg-[#F8F9FA] px-4 md:px-0">
+            {/* Page Header - Responsive Row */}
+            <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 mb-8 mt-2">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6 lg:gap-8 w-full lg:w-auto">
+                    {/* Title and Refresh */}
+                    <div className="flex items-center gap-3">
+                        <h1 className="text-xl font-bold text-gray-900 leading-none whitespace-nowrap">
+                            {t("title") || "Màn Hình Bếp"}
+                        </h1>
+                        <button
+                            onClick={handleRefresh}
+                            disabled={isLoading || isRefreshing}
+                            className="p-2 bg-white border border-gray-100 rounded-lg hover:bg-gray-50 transition-colors shadow-sm disabled:opacity-50 group shrink-0"
+                            title={t("refresh") || "Refresh"}
+                        >
+                            <RefreshCw className={`w-3.5 h-3.5 text-gray-600 transition-transform duration-500 ${isRefreshing ? "animate-spin" : "group-hover:rotate-180"}`} />
+                        </button>
+                    </div>
+
+                    {/* Order Status Bar */}
+                    <div className="w-full sm:w-auto">
+                        <KitchenStatusBar
+                            orderCounts={orderCounts}
+                            activeStatus={activeStatus}
+                            onStatusChange={setActiveStatus}
+                            t={t}
+                        />
+                    </div>
+                </div>
+
+                {/* Search Bar - Responsive width */}
+                <div className="w-full lg:w-64 xl:w-80">
+                    <KeywordSearch
+                        value={searchQuery}
+                        onChange={setSearchQuery}
+                        placeholder={t("searchPlaceholder") || "Tìm kiếm..."}
+                        loading={isLoading}
+                    />
                 </div>
             </div>
 
-
-            {/* ── Tabs bar ──────────────────────────────────────── */}
-            <div className="flex items-center gap-1 mb-4 flex-wrap">
-                {TABS.map((tab) => (
-                    <button
-                        key={tab.key}
-                        onClick={() => setActiveTab(tab.key)}
-                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${activeTab === tab.key
-                            ? "bg-blue-600 text-white shadow-sm"
-                            : "text-gray-600 hover:bg-gray-100"
-                            }`}
-                    >
-                        {tab.label}
-                        <span className={`text-xs rounded-full px-1.5 py-0.5 font-semibold ${activeTab === tab.key
-                            ? "bg-white/20 text-white"
-                            : "bg-gray-200 text-gray-600"
-                            }`}>
-                            {tab.count}
-                        </span>
-                    </button>
-                ))}
-
-                <div className="ml-auto flex items-center gap-2">
-                    <div className="flex items-center justify-center w-8 h-8 rounded-lg border border-gray-200 bg-white shadow-sm" title={t("liveUpdates")}>
-                        <span className="relative flex h-2 w-2">
-                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
-                            <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500" />
-                        </span>
-                    </div>
-                    <button
-                        className="ms-button btn-outline-neutral only-icon"
-                        onClick={handleRefresh}
-                        title={t("refresh")}
-                        disabled={isLoading || isRefreshing}
-                    >
-                        <div className={`icon reload mi icon16${(isLoading || isRefreshing) ? " animate-spin" : ""}`}>&nbsp;</div>
-                    </button>
-                </div>
-            </div>
-
-            {/* ── Order cards grid ──────────────────────────────── */}
-            <div className="flex-1 overflow-auto min-h-0 custom-scrollbar">
-                {isLoading ? (
-                    <div className="flex items-center justify-center py-24 h-full">
-                        <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
-                    </div>
-                ) : filteredOrders.length === 0 ? (
-                    <div className="flex flex-col items-center justify-center py-24 text-gray-400">
-                        <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mb-4">
-                        </div>
-                        <p className="text-base font-medium">{t("empty.title")}</p>
-                        <p className="text-sm mt-1">{t("empty.hint")}</p>
-                    </div>
-                ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 p-1">
-                        {filteredOrders.map((order) => (
-                            <KitchenOrderCard
-                                key={order.orderId}
-                                order={order}
-                                onUpdateStatus={handleUpdateStatus}
-                                isUpdating={isUpdating}
-                                t={t}
-                            />
-                        ))}
-                    </div>
-                )}
+            {/* Orders Grid */}
+            <div className="flex-1 overflow-auto custom-scrollbar -mx-1 px-1">
+                <KitchenOrderGrid
+                    orders={filteredOrders}
+                    loading={isLoading}
+                    onUpdateStatus={handleUpdateStatus}
+                    onBatchUpdateStatus={handleBatchUpdateStatus}
+                    isUpdating={isUpdating}
+                    t={t}
+                />
             </div>
         </div>
     );
+}
+
+// Map backend items to a single order status for display in status bar
+function getOrderDisplayStatus(items: any[]) {
+    const isFinished = (s: string) => ["Served", "Ready", "Rejected"].includes(s);
+    const isTrulyFinished = (s: string) => ["Served", "Ready"].includes(s);
+    const hasProgress = (s: string) => ["In progress", "Served", "Ready"].includes(s);
+
+    // 1. All items are Rejected -> Order is Rejected
+    if (items.length > 0 && items.every(i => i.itemStatus === "Rejected")) return "rejected";
+
+    // 2. All items are finished (mix of Served/Ready/Rejected, but at least one success) -> Order is Completed
+    if (items.every(i => isFinished(i.itemStatus))) return "completed";
+
+    // 3. Any item is started or finished (but not all are finished/rejected) -> Order is In Kitchen
+    if (items.some(i => hasProgress(i.itemStatus))) return "in-kitchen";
+
+    // 4. Otherwise it's New
+    return "new";
 }
 
 export default function KitchenPage() {
