@@ -35,10 +35,28 @@ export function useKitchen() {
             setIsUpdating(true);
             try {
                 await kitchenService.updateItemStatus(orderItemId, request);
-                // Optimistically refresh
                 await fetchOrders();
             } catch (err) {
                 console.error('Failed to update item status', err);
+                throw err;
+            } finally {
+                setIsUpdating(false);
+            }
+        },
+        [fetchOrders],
+    );
+
+    const batchUpdateItemStatus = useCallback(
+        async (updates: { orderItemId: number; status: string; rejectReason?: string }[]) => {
+            setIsUpdating(true);
+            try {
+                // Execute all updates. Using Promise.all here.
+                await Promise.all(
+                    updates.map((u) => kitchenService.updateItemStatus(u.orderItemId, { status: u.status, rejectReason: u.rejectReason })),
+                );
+                await fetchOrders();
+            } catch (err) {
+                console.error('Failed to update multiple item statuses', err);
                 throw err;
             } finally {
                 setIsUpdating(false);
@@ -52,5 +70,5 @@ export function useKitchen() {
         await fetchOrders();
     }, [fetchOrders]);
 
-    return { orders, isLoading, isUpdating, updateItemStatus, refresh };
+    return { orders, isLoading, isUpdating, updateItemStatus, batchUpdateItemStatus, refresh };
 }

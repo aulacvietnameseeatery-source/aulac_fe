@@ -1,50 +1,97 @@
 "use client";
 
-import React, { useState } from "react";
-import { AlertTriangle, MessageSquare } from "lucide-react";
+import React, { useState, useMemo } from "react";
+import {
+    User,
+    Clock,
+    AlertCircle,
+    FileText,
+    Play,
+    CheckCircle2,
+    Printer,
+    MessageSquare,
+    AlertTriangle
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
 import type { KitchenOrder, KitchenOrderItem } from "../types/kitchen.types";
+import { format } from "date-fns";
 
 // ─── Status helpers ─────────────────────────────────────────────────────────
-const STATUS_CONFIG: Record<string, { bg: string; text: string; label: string; dot: string }> = {
-    Created: { bg: "bg-amber-50", text: "text-amber-700", label: "New", dot: "bg-amber-400" },
-    "In progress": { bg: "bg-blue-50", text: "text-blue-700", label: "In Progress", dot: "bg-blue-400" },
-    Ready: { bg: "bg-emerald-50", text: "text-emerald-700", label: "Ready", dot: "bg-emerald-400" },
-    Served: { bg: "bg-gray-100", text: "text-gray-500", label: "Served", dot: "bg-gray-400" },
-    Rejected: { bg: "bg-red-50", text: "text-red-600", label: "Rejected", dot: "bg-red-400" },
+
+// Map backend status to UI design status for the card header
+const getOrderCardStatus = (items: KitchenOrderItem[]) => {
+    const isFinished = (s: string) => ["Served", "Ready", "Rejected"].includes(s);
+    const hasProgress = (s: string) => ["In progress", "Served", "Ready"].includes(s);
+
+    // 1. All items are Rejected -> Order is Rejected
+    if (items.length > 0 && items.every(i => i.itemStatus === "Rejected")) return "rejected";
+
+    // 2. All items are finished -> Order is Completed
+    if (items.every(i => isFinished(i.itemStatus))) return "completed";
+
+    // 3. Any item is started or finished -> Order is In Kitchen
+    if (items.some(i => hasProgress(i.itemStatus))) return "in-kitchen";
+
+    return "new";
 };
 
-function statusOf(s: string) {
-    return STATUS_CONFIG[s] ?? STATUS_CONFIG["Created"];
-}
+const STATUS_CONFIG: Record<string, { bg: string; text: string; headerBg: string }> = {
+    "new": {
+        bg: "bg-gray-100",
+        text: "text-gray-900",
+        headerBg: "bg-gray-500"
+    },
+    "in-kitchen": {
+        bg: "bg-orange-50",
+        text: "text-orange-900",
+        headerBg: "bg-orange-600"
+    },
+    "rejected": {
+        bg: "bg-red-50",
+        text: "text-red-900",
+        headerBg: "bg-red-500"
+    },
+    "completed": {
+        bg: "bg-green-50",
+        text: "text-green-900",
+        headerBg: "bg-green-600"
+    },
+};
 
-function nextStatus(current: string): string | null {
-    if (current === "Created") return "IN_PROGRESS";
-    if (current === "In progress") return "SERVED"; // Skip READY
-    return null;
-}
+const getItemStatusColor = (status: string) => {
+    switch (status) {
+        case 'Served':
+        case 'Ready':
+            return 'bg-green-500 border-green-500';
+        case 'Rejected':
+            return 'bg-red-500 border-red-500';
+        case 'In progress':
+            return 'bg-blue-500 border-blue-500';
+        default:
+            return 'bg-gray-300 border-gray-300';
+    }
+};
 
-function nextLabel(current: string): string | null {
-    if (current === "Created") return "Start";
-    if (current === "In progress") return "Serve"; // Skip Ready label
-    return null;
-}
-
-
-// ─── Props ──────────────────────────────────────────────────────────────────
 interface KitchenOrderCardProps {
     order: KitchenOrder;
     onUpdateStatus: (orderItemId: number, status: string, rejectReason?: string) => void;
+    onBatchUpdateStatus: (updates: { orderItemId: number; status: string; rejectReason?: string }[]) => void;
     isUpdating: boolean;
-    t: any; // Translation function from useTranslations("Kitchen")
+    t: any;
 }
 
-export function KitchenOrderCard({ order, onUpdateStatus, isUpdating, t }: KitchenOrderCardProps) {
+export function KitchenOrderCard({ order, onUpdateStatus, onBatchUpdateStatus, isUpdating, t }: KitchenOrderCardProps) {
     const [rejectItemId, setRejectItemId] = useState<number | null>(null);
     const [rejectReason, setRejectReason] = useState("");
 
+    const status = useMemo(() => getOrderCardStatus(order.items), [order.items]);
+    const config = STATUS_CONFIG[status] || STATUS_CONFIG["new"];
+
+    const formattedDate = order.createdAt ? format(new Date(order.createdAt), "dd MMM yyyy") : "-";
+    const formattedTime = order.createdAt ? format(new Date(order.createdAt), "hh:mm a") : "-";
+
     const handleReject = (itemId: number) => {
         if (rejectItemId === itemId) {
-            // Submit rejection
             if (rejectReason.trim()) {
                 onUpdateStatus(itemId, "REJECTED", rejectReason.trim());
                 setRejectItemId(null);
@@ -61,142 +108,193 @@ export function KitchenOrderCard({ order, onUpdateStatus, isUpdating, t }: Kitch
         setRejectReason("");
     };
 
+    // Progress bar based on Served/Ready items
+    const progressPercentage = useMemo(() => {
+        const total = order.items.length;
+        if (total === 0) return 0;
+        const done = order.items.filter(i => i.itemStatus === "Served" || i.itemStatus === "Ready").length;
+        return (done / total) * 100;
+    }, [order.items]);
 
     return (
-        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden flex flex-col">
-            {/* ── Header ─────────────────────────────────────────────── */}
-            <div className="px-4 py-3 bg-gradient-to-r from-gray-900 to-gray-800 flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                    <span className="text-white font-bold text-sm">#{order.orderId}</span>
-                    <span className="text-gray-400 text-xs">•</span>
-                    <span className="text-amber-400 font-semibold text-sm">{order.tableCode}</span>
+        <div className="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden flex flex-col h-full hover:shadow-md transition-shadow">
+            {/* Header */}
+            <div className={`${config.headerBg} px-4 py-3.5`}>
+                <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                        <div className="p-2 bg-white/20 rounded-xl backdrop-blur-sm">
+                            <User className="w-5 h-5 text-white" />
+                        </div>
+                        <div className="flex-1">
+                            <h3 className="text-sm font-bold text-white">
+                                {order.tableCode}
+                            </h3>
+                            <p className="text-[10px] text-white/80 font-medium uppercase tracking-wider">
+                                {t?.("orderType") || "Dine In"}
+                            </p>
+                        </div>
+                    </div>
+                    <div className="bg-white/20 backdrop-blur-sm rounded-lg px-2.5 py-1">
+                        <span className="text-xs font-bold text-white">
+                            #{order.orderId}
+                        </span>
+                    </div>
                 </div>
             </div>
 
-            {/* ── Item list ───────────────────────────────────────────── */}
-            <div className="flex-1 divide-y divide-gray-100">
-                {order.items.map((item) => {
-                    const cfg = statusOf(item.itemStatus);
-                    const next = nextStatus(item.itemStatus);
-                    const label = nextLabel(item.itemStatus);
-                    const isRejecting = rejectItemId === item.orderItemId;
-
-                    return (
-                        <div key={item.orderItemId} className="px-4 py-3">
-                            {/* Item info row */}
-                            <div className="flex items-start justify-between gap-2">
-                                <div className="flex-1 min-w-0">
-                                    <div className="flex items-center gap-2">
-                                        <span className="bg-gray-800 text-white text-[10px] font-bold w-5 h-5 rounded flex items-center justify-center flex-shrink-0">
-                                            {item.quantity}
-                                        </span>
-                                        <span className="text-sm font-semibold text-gray-800 truncate">
-                                            {item.dishName}
-                                        </span>
-                                    </div>
-                                    {item.note && (
-                                        <div className="flex items-start gap-1.5 mt-1.5 ml-7 p-2 bg-gray-50/50 rounded-lg border border-gray-100">
-                                            <MessageSquare className="w-3.5 h-3.5 text-gray-400 mt-0.5 flex-shrink-0" />
-                                            <p className="text-[11px] font-bold text-gray-600 leading-relaxed">
-                                                <span className="font-bold tracking-wider text-[9px] mr-1.5 text-gray-400 uppercase opacity-70">
-                                                    {t("note")}:
-                                                </span>
-                                                {item.note}
-                                            </p>
-                                        </div>
-                                    )}
-                                    {item.rejectReason && (
-                                        <div className="flex items-start gap-1.5 mt-1.5 ml-7 p-2 bg-red-50/50 rounded-lg border border-red-100">
-                                            <AlertTriangle className="w-3.5 h-3.5 text-red-400 mt-0.5 flex-shrink-0" />
-                                            <p className="text-[11px] text-red-600 leading-relaxed font-medium">
-                                                <span className="font-bold tracking-wider text-[9px] mr-1.5 text-red-400 uppercase opacity-70">
-                                                    {t("rejectReason.label")}:
-                                                </span>
-                                                {item.rejectReason}
-                                            </p>
-                                        </div>
-                                    )}
-                                </div>
-
-                                {/* Status badge */}
-                                <span className={`flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold ${cfg.bg} ${cfg.text}`}>
-                                    <span className={`w-1.5 h-1.5 rounded-full ${cfg.dot}`} />
-                                    {cfg.label}
-                                </span>
-                            </div>
-
-                            {/* Action buttons */}
-                            <div className="flex items-center gap-2 mt-2 ml-7">
-                                {next && label && (
-                                    <button
-                                        disabled={isUpdating}
-                                        onClick={() => onUpdateStatus(item.orderItemId, next)}
-                                        className="flex items-center gap-1 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold rounded-lg transition-colors disabled:opacity-50"
-                                    >
-                                        {label}
-                                    </button>
-                                )}
-                                {item.itemStatus !== "Rejected" && item.itemStatus !== "Served" && (
-                                    <button
-                                        disabled={isUpdating}
-                                        onClick={() => handleReject(item.orderItemId)}
-                                        className="flex items-center gap-1 px-3 py-1.5 bg-red-50 hover:bg-red-100 text-red-600 text-xs font-semibold rounded-lg transition-colors disabled:opacity-50 border border-red-200"
-                                    >
-                                        Reject
-                                    </button>
-                                )}
-                            </div>
-
-                            {/* Reject reason input */}
-                            {isRejecting && (
-                                <div className="mt-2 ml-7 flex items-center gap-2">
-                                    <input
-                                        autoFocus
-                                        value={rejectReason}
-                                        onChange={(e) => setRejectReason(e.target.value)}
-                                        onKeyDown={(e) => {
-                                            if (e.key === "Enter" && rejectReason.trim()) {
-                                                onUpdateStatus(item.orderItemId, "REJECTED", rejectReason.trim());
-                                                setRejectItemId(null);
-                                                setRejectReason("");
-                                            }
-                                            if (e.key === "Escape") cancelReject();
-                                        }}
-                                        placeholder="Enter reason..."
-                                        className="flex-1 text-xs border border-red-200 rounded-lg px-2.5 py-1.5 focus:outline-none focus:ring-2 focus:ring-red-400 bg-red-50"
-                                    />
-                                    <button
-                                        onClick={() => {
-                                            if (rejectReason.trim()) {
-                                                onUpdateStatus(item.orderItemId, "REJECTED", rejectReason.trim());
-                                                setRejectItemId(null);
-                                                setRejectReason("");
-                                            }
-                                        }}
-                                        disabled={!rejectReason.trim()}
-                                        className="px-2.5 py-1.5 bg-red-600 text-white text-xs font-semibold rounded-lg hover:bg-red-700 disabled:opacity-50"
-                                    >
-                                        Confirm
-                                    </button>
-                                    <button
-                                        onClick={cancelReject}
-                                        className="px-2.5 py-1.5 text-gray-500 text-xs font-medium rounded-lg hover:bg-gray-100"
-                                    >
-                                        Cancel
-                                    </button>
-                                </div>
-                            )}
+            {/* Order Info */}
+            <div className="px-5 py-3 border-b border-gray-50 bg-gray-50/30">
+                <div className="flex justify-between items-center text-[11px] text-gray-500 font-medium">
+                    <div className="space-y-1">
+                        <div>
+                            <span>Token No : </span>
+                            <span className="text-gray-900 font-bold">{order.orderId % 100}</span>
                         </div>
-                    );
-                })}
+                        <div className="flex items-center gap-1.5 text-gray-400">
+                            <Clock className="w-3 h-3" />
+                            <span>{formattedTime}</span>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            {/* ── Footer ──────────────────────────────────────────────── */}
-            <div className="px-4 py-2 bg-gray-50 border-t border-gray-100 flex items-center justify-between">
-                <span className="text-[11px] text-gray-400">
-                    {order.items.length} item{order.items.length !== 1 ? "s" : ""}
-                </span>
+            {/* Order Items */}
+            <div className="px-5 py-4 flex-1 space-y-4 max-h-[300px] overflow-y-auto custom-scrollbar">
+                <div className="space-y-3">
+                    {order.items.map((item) => (
+                        <div key={item.orderItemId} className="group">
+                            <div className="flex justify-between items-start">
+                                <div className="flex items-start flex-1">
+                                    <div className={`w-3 h-3 rounded-full border-2 ${getItemStatusColor(item.itemStatus)} flex-shrink-0 mt-1 mr-3 flex items-center justify-center`}>
+                                        <div className={`w-1 h-1 rounded-full ${['Served', 'Ready'].includes(item.itemStatus) ? 'bg-white' : ''}`}></div>
+                                    </div>
+                                    <div className="flex-1">
+                                        <div className="flex items-center gap-2">
+                                            <span className="text-xs font-bold text-gray-800">
+                                                {item.dishName}
+                                            </span>
+                                            <span className="text-[10px] text-gray-400 font-bold">×{item.quantity}</span>
+                                        </div>
+
+                                        {item.note && (
+                                            <div className="flex items-center gap-1.5 bg-gray-50 rounded-lg px-2 py-1 mt-1.5 border border-gray-100/50">
+                                                <MessageSquare className="w-3 h-3 text-gray-400" />
+                                                <span className="text-[10px] text-gray-600 font-medium">
+                                                    {t?.("note") || "Note"}: {item.note}
+                                                </span>
+                                            </div>
+                                        )}
+
+                                        {item.rejectReason && (
+                                            <div className="flex items-center gap-1.5 bg-red-50 rounded-lg px-2 py-1 mt-1.5 border border-red-100">
+                                                <AlertTriangle className="w-3 h-3 text-red-400" />
+                                                <span className="text-[10px] text-red-600 font-medium italic">
+                                                    {item.rejectReason}
+                                                </span>
+                                            </div>
+                                        )}
+
+                                        {/* Item specific actions */}
+                                        {item.itemStatus !== "Served" && item.itemStatus !== "Rejected" && (
+                                            <div className="flex items-center gap-2 mt-2 transition-opacity">
+                                                {item.itemStatus === "Created" && (
+                                                    <button
+                                                        disabled={isUpdating}
+                                                        onClick={() => onUpdateStatus(item.orderItemId, "IN_PROGRESS")}
+                                                        className="text-[10px] font-bold text-blue-600 hover:text-blue-700 underline"
+                                                    >
+                                                        {t?.("actions.start") || "Start"}
+                                                    </button>
+                                                )}
+                                                {item.itemStatus === "In progress" && (
+                                                    <button
+                                                        disabled={isUpdating}
+                                                        onClick={() => onUpdateStatus(item.orderItemId, "SERVED")}
+                                                        className="text-[10px] font-bold text-green-600 hover:text-green-700 underline"
+                                                    >
+                                                        {t?.("actions.serve") || "Serve"}
+                                                    </button>
+                                                )}
+                                                <button
+                                                    disabled={isUpdating}
+                                                    onClick={() => handleReject(item.orderItemId)}
+                                                    className="text-[10px] font-bold text-red-600 hover:text-red-700 underline"
+                                                >
+                                                    {t?.("actions.reject") || "Reject"}
+                                                </button>
+                                            </div>
+                                        )}
+
+                                        {rejectItemId === item.orderItemId && (
+                                            <div className="mt-2 space-y-2">
+                                                <input
+                                                    autoFocus
+                                                    value={rejectReason}
+                                                    onChange={(e) => setRejectReason(e.target.value)}
+                                                    placeholder="Reason..."
+                                                    className="w-full text-[10px] border border-red-200 rounded-lg px-2 py-1.5 focus:outline-none bg-red-50"
+                                                />
+                                                <div className="flex gap-2">
+                                                    <button onClick={() => handleReject(item.orderItemId)} className="text-[10px] bg-red-600 text-white px-2 py-1 rounded">Confirm</button>
+                                                    <button onClick={cancelReject} className="text-[10px] text-gray-400">Cancel</button>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
             </div>
-        </div >
+
+            {/* Footer / Progress */}
+            <div className="px-5 py-4 space-y-3 mt-auto border-t border-gray-50 bg-gray-50/20">
+                <div className="space-y-2">
+                    <div className="flex justify-between items-center text-[10px] font-bold text-gray-400">
+                        <div className="bg-gray-100 flex-1 h-1.5 rounded-full overflow-hidden mr-4">
+                            <div
+                                className="bg-green-500 h-full transition-all duration-500"
+                                style={{ width: `${progressPercentage}%` }}
+                            ></div>
+                        </div>
+                        <div className="flex items-center gap-1">
+                            <span className="text-gray-900 font-bold">{Math.round(progressPercentage)}%</span>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Main Action Buttons */}
+                <div className="pt-2">
+                    {status === 'completed' ? (
+                        <Button
+                            variant="outline"
+                            className="w-full h-9 gap-2 border-gray-200 text-gray-700 font-bold text-xs rounded-xl hover:bg-gray-100"
+                        >
+                            <Printer className="w-4 h-4" />
+                            {t?.("actions.print") || "Print Order"}
+                        </Button>
+                    ) : (
+                        <Button
+                            variant="outline"
+                            onClick={() => {
+                                const updates = order.items
+                                    .filter(item => item.itemStatus !== "Served" && item.itemStatus !== "Ready" && item.itemStatus !== "Rejected")
+                                    .map(item => ({ orderItemId: item.orderItemId, status: "SERVED" }));
+
+                                if (updates.length > 0) {
+                                    onBatchUpdateStatus(updates);
+                                }
+                            }}
+                            disabled={isUpdating || progressPercentage === 100}
+                            className="w-full h-9 gap-2 border-gray-200 text-gray-700 font-bold text-xs rounded-xl hover:bg-gray-50 bg-white"
+                        >
+                            <CheckCircle2 className="w-4 h-4" />
+                            {t?.("actions.markDone") || "Mark Done"}
+                        </Button>
+                    )}
+                </div>
+            </div>
+        </div>
     );
 }
