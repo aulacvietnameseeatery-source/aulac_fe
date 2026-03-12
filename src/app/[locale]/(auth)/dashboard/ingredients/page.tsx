@@ -17,9 +17,8 @@ import IngredientModal from "@/features/staff/ingredient-management/components/i
 import { AdjustStockModal } from "@/features/staff/ingredient-management/components/adjust-stock-modal";
 import { ingredientService } from "@/features/staff/ingredient-management/services/ingredient-service";
 import { format } from "date-fns";
-import {listSupplierService} from "@/features/staff/supplier-management/supplier-list";
-import {excelUtils} from "@/features/staff/reservation-management/utils/excel-utils";
-
+import { listSupplierService } from "@/features/staff/supplier-management/supplier-list";
+import { excelUtils } from "@/features/staff/reservation-management/utils/excel-utils";
 
 const IngredientListContent = () => {
 
@@ -35,7 +34,6 @@ const IngredientListContent = () => {
         refresh,
     } = useIngredientList();
 
-    // -- State quản lý Modals, Excel & Suppliers --
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
     const [isAdjustModalOpen, setIsAdjustModalOpen] = useState(false);
     const [selectedIngredient, setSelectedIngredient] = useState<IngredientDto | null>(null);
@@ -51,7 +49,6 @@ const IngredientListContent = () => {
         const fetchSuppliers = async () => {
             try {
                 const res = await listSupplierService.getSuppliers({ pageIndex: 1, pageSize: 1000, search: "" });
-
                 const mappedSuppliers: SupplierBasicDto[] = res.pageData.map((s: any) => ({
                     supplierId: s.supplierId || s.id,
                     supplierName: s.supplierName || s.name,
@@ -66,7 +63,6 @@ const IngredientListContent = () => {
         fetchSuppliers();
     }, []);
 
-    // -- Handlers --
     const handleCreate = () => {
         setModalMode("add");
         setSelectedIngredient(null);
@@ -118,7 +114,6 @@ const IngredientListContent = () => {
         }
     };
 
-    // -- Excel Handlers --
     const handleExport = () => {
         if (!ingredients || ingredients.length === 0) {
             toast.error(t("notifications.noDataExport"));
@@ -165,7 +160,6 @@ const IngredientListContent = () => {
         }
     };
 
-    // -- Định nghĩa Cột cho BaseTable dùng t() --
     const columns: TableColumn[] = useMemo(() => [
         {
             field: "ingredientName",
@@ -182,7 +176,7 @@ const IngredientListContent = () => {
                         )}
                     </div>
                     <div className="flex flex-col">
-                        <span className="font-semibold text-gray-900">{item.ingredientName}</span>
+                        <span className="font-semibold text-gray-900 line-clamp-1">{item.ingredientName}</span>
                         <span className="text-xs text-gray-500">{t("table.unit")}: {item.unit}</span>
                     </div>
                 </div>
@@ -193,7 +187,7 @@ const IngredientListContent = () => {
             header: t("table.category"),
             width: "150px",
             cellRender: ({ value }: { value: string }) => (
-                <span className="text-gray-600 font-medium bg-gray-100 px-2 py-1 rounded-md text-xs">
+                <span className="text-gray-600 font-medium bg-gray-100 px-2 py-1 rounded-md text-xs whitespace-nowrap">
                     {value || t("table.uncategorized")}
                 </span>
             ),
@@ -206,7 +200,7 @@ const IngredientListContent = () => {
                 <div className="flex flex-wrap gap-1">
                     {item.suppliers && item.suppliers.length > 0 ? (
                         item.suppliers.map(s => (
-                            <span key={s.supplierId} className="text-[11px] px-2 py-0.5 bg-blue-50 text-blue-700 rounded-full border border-blue-100">
+                            <span key={s.supplierId} className="text-[11px] px-2 py-0.5 bg-blue-50 text-blue-700 rounded-full border border-blue-100 whitespace-nowrap">
                                 {s.supplierName}
                             </span>
                         ))
@@ -229,7 +223,7 @@ const IngredientListContent = () => {
                             {item.quantityOnHand} <span className="text-xs font-normal text-gray-500">{item.unit}</span>
                         </span>
                         {isLowStock && (
-                            <span className="flex items-center text-[10px] text-red-500 font-medium mt-0.5">
+                            <span className="flex items-center text-[10px] text-red-500 font-medium mt-0.5 whitespace-nowrap">
                                 <AlertTriangle className="w-3 h-3 mr-0.5" /> {t("table.lowStock")}
                             </span>
                         )}
@@ -266,8 +260,9 @@ const IngredientListContent = () => {
                             <p className="text-sm text-gray-500 mt-1">{t("description")}</p>
                         </div>
 
-                        <div className="flex items-center gap-2">
-                            <Button variant="outline" className="shadow-sm bg-white" onClick={handleExport}>
+                        {/* RESPONSIVE: Wrap các nút và cho phép kéo giãn flex-1 trên mobile */}
+                        <div className="flex flex-wrap items-center gap-2 w-full md:w-auto">
+                            <Button variant="outline" className="flex-1 md:flex-none shadow-sm bg-white whitespace-nowrap" onClick={handleExport}>
                                 <Download className="mr-2 h-4 w-4" /> {t("export")}
                             </Button>
 
@@ -280,7 +275,7 @@ const IngredientListContent = () => {
                             />
                             <Button
                                 variant="outline"
-                                className="shadow-sm bg-white"
+                                className="flex-1 md:flex-none shadow-sm bg-white whitespace-nowrap"
                                 onClick={() => fileInputRef.current?.click()}
                                 disabled={isImporting}
                             >
@@ -288,7 +283,9 @@ const IngredientListContent = () => {
                                 {isImporting ? t("importing") : t("import")}
                             </Button>
 
-                            <Button onClick={handleCreate} variant="primary" className="shadow-md">
+                            <Button
+                                variant="outline"
+                                onClick={handleCreate} className="flex-1 md:flex-none shadow-md whitespace-nowrap">
                                 <Plus className="mr-2 h-4 w-4" /> {t("addNew")}
                             </Button>
                         </div>
@@ -313,7 +310,7 @@ const IngredientListContent = () => {
                 onClose={() => setIsCreateModalOpen(false)}
                 onSubmit={handleSaveIngredient}
                 isSubmitting={isSubmitting}
-                availableSuppliers={availableSuppliers} // Dữ liệu thật đã được truyền vào
+                availableSuppliers={availableSuppliers}
             />
 
             <AdjustStockModal

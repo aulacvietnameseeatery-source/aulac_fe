@@ -1,6 +1,6 @@
 // features/staff/ingredient-management/components/ingredient-actions.tsx
 import React from "react";
-import { MoreHorizontal, Pencil, Trash2, PackagePlus, History } from "lucide-react";
+import {MoreHorizontal, Pencil, Trash2, PackagePlus, History, Edit} from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 // Import custom Dropdown của bạn (Hãy điều chỉnh đường dẫn import cho đúng với thư mục của bạn)
@@ -39,14 +39,18 @@ export const IngredientActions: React.FC<IngredientActionsProps> = ({
     return (
         <div className="flex items-center justify-end gap-2">
             {/* Nút Sửa */}
-            <Button variant="ghost" size="icon" onClick={() => onEdit(ingredient)} title="Edit">
-                <Pencil className="w-4 h-4 text-gray-600" />
-            </Button>
+            <button
+                className="text-gray-400 hover:text-blue-600 transition-colors cursor-pointer p-1"
+                onClick={() => onEdit(ingredient)} title="Edit">
+                <Edit size={18} />
+            </button>
 
             {/* Nút Xóa */}
-            <Button variant="ghost" size="icon" onClick={() => onDelete(ingredient)} title="Delete">
-                <Trash2 className="w-4 h-4 text-red-500" />
-            </Button>
+            <button
+                className="text-gray-400 hover:text-red-600 transition-colors cursor-pointer p-1"
+                onClick={() => onDelete(ingredient)} title="Delete">
+                <Trash2 size={18} />
+            </button>
 
             {/* Menu Mở rộng cho Kho sử dụng Custom Dropdown */}
             <Dropdown
