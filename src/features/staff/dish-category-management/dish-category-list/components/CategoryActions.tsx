@@ -1,7 +1,8 @@
 "use client";
 
 import React from "react";
-import { Edit } from "lucide-react";
+import { Pencil } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { DishCategory } from "../types";
 
 interface CategoryActionsProps {
@@ -13,25 +14,17 @@ export const CategoryActions = ({
   category, 
   onEdit, 
 }: CategoryActionsProps) => {
-  // Helper to prevent click events from spreading to rows.
-  const handleAction = (
-    e: React.MouseEvent, 
-    action: (item: DishCategory) => void
-  ) => {
-    e.stopPropagation();
-    action(category);
-  };
-
   return (
-    <div className="flex justify-end items-center gap-3">
+    <div className="flex items-center justify-end gap-2">
       {/* Edit Button */}
-      <button 
-        onClick={(e) => handleAction(e, onEdit)}
-        className="text-gray-400 hover:text-blue-600 transition-colors cursor-pointer p-1"
-        title="Edit Category"
+      <Button 
+        variant="ghost" 
+        size="icon" 
+        onClick={() => onEdit(category)}
+        title="Edit"
       >
-        <Edit size={18} />
-      </button>
+        <Pencil className="w-4 h-4 text-gray-600" />
+      </Button>
     </div>
   );
 };

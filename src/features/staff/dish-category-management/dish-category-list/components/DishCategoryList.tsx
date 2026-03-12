@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useCallback, useMemo, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { BaseTable } from "@/components/ui/table/base-table";
 import { TableColumn } from "@/types/table.types";
 import { toast } from "sonner";
@@ -12,9 +11,12 @@ import { useCategoryList } from '../hooks/useCategoryList';
 import { useToggleCategoryStatus } from '../hooks/useListDishCategories';
 import { DishCategory } from '../types';
 import { Switch } from "@/components/ui/switch";
+import { useStatusBatchActions } from '../hooks/useStatusBatchActions';
+import DishCategoryModal, { SaveCategoryRequest } from './DishCategoryModal';
+import { createCategoryService } from '../../dish-category-add/services/createCategoryService';
+import { editCategoryService } from '../../dish-category-edit/services/editCategoryService';
 
 export default function DishCategoryList() {
-  const router = useRouter();
   const t = useTranslations("DishCategory.List");
   
   // Logic Hook
@@ -24,13 +26,23 @@ export default function DishCategoryList() {
   // State for toggling status
   const [togglingId, setTogglingId] = useState<number | null>(null);
 
+  // Modal state
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalMode, setModalMode] = useState<"add" | "edit">("add");
+  const [selectedCategory, setSelectedCategory] = useState<DishCategory | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   // Action Handlers
   const handleEdit = (category: DishCategory) => {
-    router.push(`/dashboard/dish-category/edit/${category.categoryId}`);
+    setModalMode("edit");
+    setSelectedCategory(category);
+    setIsModalOpen(true);
   };
 
   const handleCreate = () => {
-    router.push('/dashboard/dish-category/add');
+    setModalMode("add");
+    setSelectedCategory(null);
+    setIsModalOpen(true);
   };
 
   // Handle Status Toggle with optimistic update
@@ -59,6 +71,61 @@ export default function DishCategoryList() {
       setTogglingId(null);
     }
   };
+
+  // Handle Save (Create or Update)
+  const handleSaveCategory = async (submitData: SaveCategoryRequest) => {
+    setIsSubmitting(true);
+    try {
+      if (modalMode === "add") {
+        await createCategoryService.createCategory(submitData);
+        toast.success(t("notifications.createSuccess"));
+      } else if (selectedCategory) {
+        await editCategoryService.updateCategory(selectedCategory.categoryId, submitData);
+        toast.success(t("notifications.updateSuccess"));
+      }
+      setIsModalOpen(false);
+      refresh();
+    } catch (error: any) {
+      toast.error(error.response?.data?.userMessage || t("notifications.actionError"));
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  // Handle Batch Status Update
+  const handleBatchStatusUpdate = async (selectedCategories: DishCategory[], isDisabled: boolean) => {
+    try {
+      // Optimistic Update for all selected items
+      selectedCategories.forEach(category => {
+        updateCategoryLocally({
+          ...category,
+          isDisabled: isDisabled
+        });
+      });
+
+      // API Calls
+      const promises = selectedCategories.map(category =>
+        toggleStatus(category.categoryId, isDisabled)
+      );
+
+      await Promise.all(promises);
+
+      const count = selectedCategories.length;
+      const messageKey = !isDisabled ? "notifications.batchActivateSuccess" : "notifications.batchDeactivateSuccess";
+      toast.success(t(messageKey, { count }));
+
+    } catch (error: any) {
+      console.error("Batch update failed:", error);
+      toast.error(t("notifications.batchUpdateError"));
+      refresh(); // Revert on error
+    }
+  };
+
+  // Batch Actions Configuration
+  const batchActions = useStatusBatchActions({
+    t,
+    onUpdate: handleBatchStatusUpdate
+  });
 
   // Status Badge Render - only used for display
   const renderStatusBadge = (isDisabled: boolean) => {
@@ -168,8 +235,17 @@ export default function DishCategoryList() {
             onEdit={handleEdit}
           />
         )}
+        batchActions={batchActions}
+      />
+
+      <DishCategoryModal
+        isOpen={isModalOpen}
+        mode={modalMode}
+        category={selectedCategory}
+        onClose={() => setIsModalOpen(false)}
+        onSubmit={handleSaveCategory}
+        isSubmitting={isSubmitting}
       />
     </div>
   );
 }
-

@@ -844,6 +844,7 @@
     }
   },
   "Supplier": {
+    "close": "Close",
     "List": {
       "title": "Supplier Management",
       "description": "Manage and organize your suppliers efficiently.",
@@ -1042,6 +1043,7 @@
       "description": "Manage and organize your restaurant menu categories efficiently.",
       "searchPlaceholder": "Search by category name...",
       "addNew": "Add New Category",
+      "cancel": "Cancel",
       "table": {
         "no": "No.",
         "name": "Name",
@@ -1055,12 +1057,22 @@
       "notifications": {
         "activated": "Category activated successfully",
         "deactivated": "Category deactivated successfully",
-        "updateError": "Failed to update category status"
+        "updateError": "Failed to update category status",
+        "createSuccess": "Category created successfully",
+        "updateSuccess": "Category updated successfully",
+        "actionError": "An error occurred while processing the request",
+        "batchActivateSuccess": "Successfully activated {count} categories",
+        "batchDeactivateSuccess": "Successfully deactivated {count} categories",
+        "batchUpdateError": "An error occurred while updating batch status"
       },
       "filters": {
         "allStatuses": "All Statuses",
         "active": "Active",
         "inactive": "Inactive"
+      },
+      "batchActions": {
+        "activate": "Activate",
+        "deactivate": "Deactivate"
       }
     },
     "Add": {
@@ -1089,6 +1101,7 @@
       "description": "Description",
       "descriptionPlaceholder": "Provide a brief description of this category and what types of dishes it includes...",
       "status": "Category Status",
+      "statusDescription": "Toggle to activate or hide this category",
       "statusActive": "This category is active and visible in the menu",
       "statusInactive": "This category is inactive and hidden from customers",
       "validation": {

@@ -840,6 +840,7 @@
     }
   },
   "Supplier": {
+    "close": "Fermer",
     "List": {
       "title": "Gestion des Fournisseurs",
       "description": "Gérer et organiser vos fournisseurs efficacement.",
@@ -1030,6 +1031,83 @@
       "confirmed": "Confirmée",
       "checkedIn": "Installé",
       "phoneHint": "*Les réservations téléphoniques sont confirmées par défaut."
+    }
+  },
+  "DishCategory": {
+    "List": {
+      "title": "Gestion des catégories de plats",
+      "description": "Gérez et organisez vos catégories de menu de restaurant de manière efficace.",
+      "searchPlaceholder": "Rechercher par nom de catégorie...",
+      "addNew": "Ajouter une nouvelle catégorie",
+      "cancel": "Annuler",
+      "table": {
+        "no": "N°",
+        "name": "Nom",
+        "description": "Description",
+        "status": "Statut"
+      },
+      "status": {
+        "active": "Actif",
+        "inactive": "Inactif"
+      },
+      "notifications": {
+        "activated": "Catégorie activée avec succès",
+        "deactivated": "Catégorie désactivée avec succès",
+        "updateError": "Échec de la mise à jour du statut de la catégorie",
+        "createSuccess": "Catégorie créée avec succès",
+        "updateSuccess": "Catégorie mise à jour avec succès",
+        "actionError": "Une erreur s'est produite lors du traitement de la demande",
+        "batchActivateSuccess": "{count} catégorie(s) activée(s) avec succès",
+        "batchDeactivateSuccess": "{count} catégorie(s) désactivée(s) avec succès",
+        "batchUpdateError": "Une erreur s'est produite lors de la mise à jour par lot"
+      },
+      "filters": {
+        "allStatuses": "Tous les statuts",
+        "active": "Actif",
+        "inactive": "Inactif"
+      },
+      "batchActions": {
+        "activate": "Activer",
+        "deactivate": "Désactiver"
+      }
+    },
+    "Add": {
+      "title": "Ajouter une nouvelle catégorie de plats",
+      "subtitle": "Créez une nouvelle catégorie pour organiser vos éléments de menu",
+      "saveButton": "Créer une catégorie",
+      "cancel": "Annuler",
+      "categoryName": "Nom de la catégorie",
+      "categoryNamePlaceholder": "ex : Entrées, Plat principal, Desserts",
+      "description": "Description",
+      "descriptionPlaceholder": "Fournissez une brève description de cette catégorie et des types de plats qu'elle comprend...",
+      "validation": {
+        "nameRequired": "Le nom de la catégorie est requis",
+        "nameMaxLength": "Le nom de la catégorie ne peut pas dépasser 100 caractères",
+        "descriptionMaxLength": "La description ne peut pas dépasser 100 caractères",
+        "fixErrors": "Veuillez corriger les erreurs de validation"
+      }
+    },
+    "Edit": {
+      "title": "Modifier la catégorie de plats",
+      "subtitle": "Mettre à jour les informations et les paramètres de la catégorie",
+      "saveButton": "Enregistrer les modifications",
+      "cancel": "Annuler",
+      "categoryName": "Nom de la catégorie",
+      "categoryNamePlaceholder": "ex : Entrées, Plat principal, Desserts",
+      "description": "Description",
+      "descriptionPlaceholder": "Fournissez une brève description de cette catégorie et des types de plats qu'elle comprend...",
+      "status": "Statut de la catégorie",
+      "statusDescription": "Basculer pour activer ou masquer cette catégorie",
+      "statusActive": "Cette catégorie est active et visible dans le menu",
+      "statusInactive": "Cette catégorie est inactive et masquée aux clients",
+      "validation": {
+        "nameRequired": "Le nom de la catégorie est requis",
+        "nameMaxLength": "Le nom de la catégorie ne peut pas dépasser 100 caractères",
+        "descriptionMaxLength": "La description ne peut pas dépasser 100 caractères",
+        "fixErrors": "Veuillez corriger les erreurs de validation"
+      },
+      "loading": "Chargement...",
+      "backToList": "Retour à la liste"
     }
   },
   "Dish": {
