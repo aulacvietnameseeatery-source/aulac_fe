@@ -82,7 +82,7 @@ export const CreateOrderPage = () => {
 
   // Tạo OrderItems từ giỏ hàng hiện tại
   const mappedOrderItems: OrderItem[] = cart.map((item, index) => ({
-    orderItemId: -(index + 1), // ID tạm thời do chưa tạo order thực tế
+    orderItemId: -(index + 1), // Temporary ID
     dishId: item.dishId,
     dishName: item.localName,
     quantity: item.quantity,
@@ -94,13 +94,13 @@ export const CreateOrderPage = () => {
   const cartTotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const totalItemCount = cart.reduce((acc, item) => acc + item.quantity, 0);
 
-  // Tạo mock OrderHistory từ các state hiện tại
+  // create mock OrderHistory
   const mappedOrderHistory: OrderHistory = {
-    orderId: 0, // Đơn mới nên chưa có ID
+    orderId: 0, 
     tableId: selectedTable?.tableId || 0,
     tableCode: selectedTable?.tableCode || '',
     staffId: 0,
-    staffName: '', // Bạn có thể thêm logic lấy tên nhân viên đang login nếu cần
+    staffName: '', 
     customerId: customer?.customerId || 0,
     customerName: customer?.fullName || '',
     totalAmount: cartTotal,
@@ -113,8 +113,7 @@ export const CreateOrderPage = () => {
   };
 
   return (
-    // Sử dụng h-[100dvh] và overflow-hidden để CHỐNG scroll toàn trang
-    <div className="flex flex-col lg:flex-row h-[100dvh] lg:h-full w-full font-sans overflow-hidden bg-[#FDFBF9]">
+    <div className="flex flex-col lg:flex-row h-[100dvh] lg:h-full w-full font-sans overflow-hidden">
       
       {/* ── Nút mở Ticket trên Mobile ── */}
       {!showMobileTicket && (
