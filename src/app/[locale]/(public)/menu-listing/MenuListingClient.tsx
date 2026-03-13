@@ -153,11 +153,15 @@ export default function MenuListingClient({ initialMenuData, tableFromUrl, token
                         image: newItem.image
                     });
                 }
-
-                toast.success(`Đã thêm ${newItem.name} vào giỏ hàng`);
             });
             return newCart;
         });
+        // Hiển thị thông báo bên ngoài setCartItems để tránh bị gọi 2 lần (React StrictMode)
+        if (itemsToAdd.length === 1) {
+            toast.success(`Đã thêm ${itemsToAdd[0].name} vào giỏ hàng`);
+        } else {
+            toast.success(`Đã thêm ${itemsToAdd.length} món vào giỏ hàng`);
+        }
     };
 
     const handleAddToCartFromBook = (item: any) => {

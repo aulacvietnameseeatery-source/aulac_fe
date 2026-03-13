@@ -1734,6 +1734,7 @@
     "cancelItem": "Annuler l'article",
     "cancelling": "Annulation...",
     "cancelError": "Impossible d'annuler l'article",
+    "cancelNotAllowed": "\u201c{dishName}\u201d a déjà été traité par le personnel et ne peut plus être annulé.",
     "cancelPopup": {
       "title": "Annuler cet article ?",
       "message": "Êtes-vous sûr de vouloir annuler \"{dishName}\" ? Cette action est irréversible.",

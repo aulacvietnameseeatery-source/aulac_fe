@@ -1738,6 +1738,7 @@
     "cancelItem": "Cancel Item",
     "cancelling": "Cancelling...",
     "cancelError": "Cannot cancel item",
+    "cancelNotAllowed": "\u201c{dishName}\u201d has already been processed by staff and can no longer be cancelled.",
     "cancelPopup": {
       "title": "Cancel This Item?",
       "message": "Are you sure you want to cancel \"{dishName}\"? This action cannot be undone.",

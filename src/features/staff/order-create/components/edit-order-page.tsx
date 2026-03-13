@@ -145,7 +145,7 @@ export const EditOrderPage = ({ orderId }: { orderId: number }) => {
       note: item.note || undefined
     }))),
     ...newCart.map((item, index) => ({
-      orderItemId: -(index + 1), // ID tạm thời cho các món mới chưa lưu
+      orderItemId: -(index + 1), // Temporary ID
       dishId: item.dishId,
       dishName: item.localName,
       quantity: item.quantity,
@@ -178,7 +178,7 @@ export const EditOrderPage = ({ orderId }: { orderId: number }) => {
   };
 
   return (
-    <div className="flex flex-col lg:flex-row h-[100dvh] lg:h-full w-full font-sans overflow-hidden bg-[#FDFBF9]">
+    <div className="flex flex-col lg:flex-row h-[100dvh] lg:h-full w-full font-sans overflow-hidden">
       
       {/* ── Nút mở Ticket trên Mobile ── */}
       {!showMobileTicket && (

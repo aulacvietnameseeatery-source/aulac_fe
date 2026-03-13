@@ -181,6 +181,7 @@ export interface TableFilters {
   statusId: number | null; // lookup_value FK for API filter
   isOnline: "ALL" | "ONLINE" | "OFFLINE";
   search: string;
+  targetTime?: string;
 }
 
 // Dashboard summary counts
