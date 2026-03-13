@@ -131,6 +131,7 @@ export function OrderHistoryFAB({ tableCode, tableNumber, dishNameMap = {}, refr
   const [history, setHistory] = useState<CustomerOrderHistory | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [cancelNotAllowedDishName, setCancelNotAllowedDishName] = useState<string | null>(null);
   const [cancellingItems, setCancellingItems] = useState<Set<number>>(new Set());
   const [cancelConfirmItemId, setCancelConfirmItemId] = useState<number | null>(null);
 
@@ -217,6 +218,21 @@ export function OrderHistoryFAB({ tableCode, tableNumber, dishNameMap = {}, refr
   const handleCancelItem = useCallback(async (orderItemId: number) => {
     setCancellingItems(prev => new Set(prev).add(orderItemId));
     try {
+      // Re-fetch order to verify status is still CREATED before cancelling
+      const storedOrderId = typeof window !== 'undefined'
+        ? sessionStorage.getItem(CURRENT_ORDER_ID_KEY)
+        : null;
+      if (storedOrderId) {
+        const freshData = await fetchOrderByOrderId(Number(storedOrderId));
+        const freshItem = freshData.items.find(i => i.orderItemId === orderItemId);
+        if (!freshItem || freshItem.itemStatus.toUpperCase() !== "CREATED") {
+          // Status changed – refresh UI and abort cancel
+          setHistory(freshData);
+          const dishName = freshItem ? (dishNameMap[freshItem.dishId] || freshItem.dishName) : "";
+          setCancelNotAllowedDishName(dishName);
+          return;
+        }
+      }
       await api.patch(`/api/orders/items/${orderItemId}/cancel`, {});
       // Refresh the order history after successful cancellation
       await load();
@@ -421,6 +437,29 @@ export function OrderHistoryFAB({ tableCode, tableNumber, dishNameMap = {}, refr
               {/* ── Body (scrollable) ── */}
               <div className="overflow-y-auto flex-1 px-4 py-3">
                 {/* Error */}
+                {cancelNotAllowedDishName !== null && (
+                  <div
+                    className="flex items-start gap-2 px-3 py-2 rounded-xl mb-3 text-xs"
+                    style={{
+                      background: "rgba(220,60,60,0.12)",
+                      border: "1px solid rgba(220,60,60,0.3)",
+                      color: "#f87171",
+                    }}
+                  >
+                    <AlertTriangle size={13} strokeWidth={2} className="shrink-0 mt-0.5" />
+                    <span className="flex-1">
+                      {t("cancelNotAllowed", { dishName: cancelNotAllowedDishName })}
+                    </span>
+                    <button
+                      onClick={() => setCancelNotAllowedDishName(null)}
+                      className="shrink-0 ml-1 opacity-60 hover:opacity-100 transition-opacity"
+                      aria-label="close"
+                    >
+                      <X size={13} strokeWidth={2.5} />
+                    </button>
+                  </div>
+                )}
+
                 {error && (
                   <div
                     className="flex items-center gap-2 px-3 py-2 rounded-xl mb-3 text-xs"
@@ -431,7 +470,14 @@ export function OrderHistoryFAB({ tableCode, tableNumber, dishNameMap = {}, refr
                     }}
                   >
                     <AlertTriangle size={13} strokeWidth={2} />
-                    {error}
+                    <span className="flex-1">{error}</span>
+                    <button
+                      onClick={() => setError(null)}
+                      className="shrink-0 ml-1 opacity-60 hover:opacity-100 transition-opacity"
+                      aria-label="close"
+                    >
+                      <X size={13} strokeWidth={2.5} />
+                    </button>
                   </div>
                 )}
 
@@ -500,7 +546,7 @@ export function OrderHistoryFAB({ tableCode, tableNumber, dishNameMap = {}, refr
                             <p className="text-[#8ba3c7] text-xs text-center leading-tight pt-0.5">{item.quantity}×</p>
                             {/* Price */}
                             <p className="text-[#c9a84c] text-xs text-right font-medium leading-tight pt-0.5">
-                              {(item.price * item.quantity).toLocaleString("vi-VN")}
+                              {(item.price * item.quantity).toFixed(2)} <span className="text-[10px]">CHF</span>
                             </p>
                             {/* Status badge */}
                             <div
@@ -691,7 +737,7 @@ export function OrderHistoryFAB({ tableCode, tableNumber, dishNameMap = {}, refr
                       {t("paymentPopup.estimatedTotalLabel")}
                     </span>
                     <span className="text-[#2a3f5f] text-2xl font-bold">
-                      ${estimatedTotal.toFixed(2)}
+                      {estimatedTotal.toFixed(2)} <span className="text-base">CHF</span>
                     </span>
                   </div>
                 </div>
