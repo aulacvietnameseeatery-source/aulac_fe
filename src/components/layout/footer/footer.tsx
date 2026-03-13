@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Facebook, Instagram, ArrowRight } from "lucide-react";
+import { Facebook, Instagram, Music2 as Tiktok, ArrowRight } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { BackToTop } from "@/components/ui/back-to-top";
 import { cn } from "@/lib/utils";
@@ -52,13 +52,21 @@ export function Footer({ locale = "en" }: FooterProps) {
                             <p className="footer-link break-words">{storeSettings?.email || ""}</p>
                         </div>
                         <div className="flex gap-3 mt-1">
-                            {/* group ở đây để hover icon đổi màu */}
-                            <div className="social-btn group">
-                                <Facebook size={18} className="social-icon" />
-                            </div>
-                            <div className="social-btn group">
-                                <Instagram size={18} className="social-icon" />
-                            </div>
+                            {storeSettings?.facebookLink && (
+                                <Link href={storeSettings.facebookLink} target="_blank" className="social-btn group">
+                                    <Facebook size={18} className="social-icon" />
+                                </Link>
+                            )}
+                            {storeSettings?.instagramLink && (
+                                <Link href={storeSettings.instagramLink} target="_blank" className="social-btn group">
+                                    <Instagram size={18} className="social-icon" />
+                                </Link>
+                            )}
+                            {storeSettings?.tiktokLink && (
+                                <Link href={storeSettings.tiktokLink} target="_blank" className="social-btn group">
+                                    <Tiktok size={18} className="social-icon" />
+                                </Link>
+                            )}
                         </div>
                     </div>
 

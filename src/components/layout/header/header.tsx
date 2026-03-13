@@ -4,7 +4,8 @@ import Link from "next/link";
 import Image from "next/image";
 import {
     Menu as MenuIcon, X, MapPin, Phone, Clock,
-    QrCode, Home, User, ChevronDown
+    QrCode, Home, User, ChevronDown,
+    Facebook, Instagram, Music2 as Tiktok
 } from "lucide-react";
 import { useState, useTransition, useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
@@ -330,6 +331,25 @@ export function Header({ isScrolled, locale }: HeaderProps) {
                                 <User size={18} />
                                 <span>{isAuthenticated ? "GO TO DASHBOARD" : "LOGIN AS STAFF"}</span>
                             </Link>
+
+                            {/* Social Media Links for Mobile */}
+                            <div className="flex items-center justify-center gap-6 mt-6 pb-8">
+                                {storeSettings?.facebookLink && (
+                                    <a href={storeSettings.facebookLink} target="_blank" rel="noopener noreferrer" className="text-white/60 hover:text-[#C5A059] transition-colors">
+                                        <Facebook size={24} />
+                                    </a>
+                                )}
+                                {storeSettings?.instagramLink && (
+                                    <a href={storeSettings.instagramLink} target="_blank" rel="noopener noreferrer" className="text-white/60 hover:text-[#C5A059] transition-colors">
+                                        <Instagram size={24} />
+                                    </a>
+                                )}
+                                {storeSettings?.tiktokLink && (
+                                    <a href={storeSettings.tiktokLink} target="_blank" rel="noopener noreferrer" className="text-white/60 hover:text-[#C5A059] transition-colors">
+                                        <Tiktok size={24} />
+                                    </a>
+                                )}
+                            </div>
                         </div>
                     </div>
                 )}
