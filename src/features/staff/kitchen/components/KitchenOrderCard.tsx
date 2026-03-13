@@ -119,23 +119,23 @@ export function KitchenOrderCard({ order, onUpdateStatus, onBatchUpdateStatus, i
     return (
         <div className="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden flex flex-col h-full hover:shadow-md transition-shadow">
             {/* Header */}
-            <div className={`${config.headerBg} px-4 py-3.5`}>
+            <div className={`${config.headerBg} px-3 py-2.5 sm:px-4 sm:py-3.5`}>
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                        <div className="p-2 bg-white/20 rounded-xl backdrop-blur-sm">
-                            <User className="w-5 h-5 text-white" />
+                        <div className="p-1.5 sm:p-2 bg-white/20 rounded-lg sm:rounded-xl backdrop-blur-sm">
+                            <User className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
                         </div>
                         <div className="flex-1">
-                            <h3 className="text-sm font-bold text-white">
+                            <h3 className="text-xs sm:text-sm font-bold text-white">
                                 {order.tableCode}
                             </h3>
-                            <p className="text-[10px] text-white/80 font-medium uppercase tracking-wider">
+                            <p className="text-[9px] sm:text-[10px] text-white/80 font-medium uppercase tracking-wider">
                                 {t?.("orderType") || "Dine In"}
                             </p>
                         </div>
                     </div>
-                    <div className="bg-white/20 backdrop-blur-sm rounded-lg px-2.5 py-1">
-                        <span className="text-xs font-bold text-white">
+                    <div className="bg-white/20 backdrop-blur-sm rounded-lg px-2 py-0.5 sm:px-2.5 sm:py-1">
+                        <span className="text-[10px] sm:text-xs font-bold text-white">
                             #{order.orderId}
                         </span>
                     </div>
@@ -143,15 +143,15 @@ export function KitchenOrderCard({ order, onUpdateStatus, onBatchUpdateStatus, i
             </div>
 
             {/* Order Info */}
-            <div className="px-5 py-3 border-b border-gray-50 bg-gray-50/30">
-                <div className="flex justify-between items-center text-[11px] text-gray-500 font-medium">
-                    <div className="space-y-1">
+            <div className="px-3 py-2 sm:px-5 sm:py-3 border-b border-gray-50 bg-gray-50/30">
+                <div className="flex justify-between items-center text-[10px] sm:text-[11px] text-gray-500 font-medium">
+                    <div className="flex flex-row items-center gap-4 sm:gap-0 sm:flex-col sm:items-start sm:space-y-1">
                         <div>
                             <span>Token No : </span>
                             <span className="text-gray-900 font-bold">{order.orderId % 100}</span>
                         </div>
                         <div className="flex items-center gap-1.5 text-gray-400">
-                            <Clock className="w-3 h-3" />
+                            <Clock className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
                             <span>{formattedTime}</span>
                         </div>
                     </div>
@@ -159,28 +159,28 @@ export function KitchenOrderCard({ order, onUpdateStatus, onBatchUpdateStatus, i
             </div>
 
             {/* Order Items */}
-            <div className="px-5 py-4 flex-1 space-y-4 max-h-[300px] overflow-y-auto custom-scrollbar">
-                <div className="space-y-3">
+            <div className="px-3 py-3 sm:px-5 sm:py-4 flex-1 space-y-3 sm:space-y-4 max-h-[250px] sm:max-h-[300px] overflow-y-auto custom-scrollbar">
+                <div className="space-y-2.5 sm:space-y-3">
                     {order.items.map((item) => (
                         <div key={item.orderItemId} className="group">
                             <div className="flex justify-between items-start">
                                 <div className="flex items-start flex-1">
-                                    <div className={`w-3 h-3 rounded-full border-2 ${getItemStatusColor(item.itemStatus)} flex-shrink-0 mt-1 mr-3 flex items-center justify-center`}>
-                                        <div className={`w-1 h-1 rounded-full ${['Served', 'Ready'].includes(item.itemStatus) ? 'bg-white' : ''}`}></div>
+                                    <div className={`w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full border-2 ${getItemStatusColor(item.itemStatus)} flex-shrink-0 mt-1 mr-2.5 sm:mr-3 flex items-center justify-center`}>
+                                        <div className={`w-0.5 h-0.5 sm:w-1 sm:h-1 rounded-full ${['Served', 'Ready'].includes(item.itemStatus) ? 'bg-white' : ''}`}></div>
                                     </div>
                                     <div className="flex-1">
-                                        <div className="flex items-center gap-2">
-                                            <span className="text-xs font-bold text-gray-800">
+                                        <div className="flex items-center flex-wrap gap-x-2 gap-y-1">
+                                            <span className="text-[11px] sm:text-xs font-bold text-gray-800 break-words">
                                                 {item.dishName}
                                             </span>
-                                            <span className="text-[10px] text-gray-400 font-bold">×{item.quantity}</span>
+                                            <span className="text-[9px] sm:text-[10px] text-gray-400 font-bold">×{item.quantity}</span>
                                         </div>
 
                                         {item.note && (
-                                            <div className="flex items-center gap-1.5 bg-gray-50 rounded-lg px-2 py-1 mt-1.5 border border-gray-100/50">
-                                                <MessageSquare className="w-3 h-3 text-gray-400" />
-                                                <span className="text-[10px] text-gray-600 font-medium">
-                                                    {t?.("note") || "Note"}: {item.note}
+                                            <div className="flex items-center gap-1 bg-gray-50 rounded-lg px-2 py-1 mt-1 border border-gray-100/50">
+                                                <MessageSquare className="w-2.5 h-2.5 text-gray-400" />
+                                                <span className="text-[9px] text-gray-600 font-medium">
+                                                    {item.note}
                                                 </span>
                                             </div>
                                         )}
@@ -249,10 +249,10 @@ export function KitchenOrderCard({ order, onUpdateStatus, onBatchUpdateStatus, i
             </div>
 
             {/* Footer / Progress */}
-            <div className="px-5 py-4 space-y-3 mt-auto border-t border-gray-50 bg-gray-50/20">
-                <div className="space-y-2">
-                    <div className="flex justify-between items-center text-[10px] font-bold text-gray-400">
-                        <div className="bg-gray-100 flex-1 h-1.5 rounded-full overflow-hidden mr-4">
+            <div className="px-3 py-3 sm:px-5 sm:py-4 space-y-2.5 sm:space-y-3 mt-auto border-t border-gray-50 bg-gray-50/20">
+                <div className="space-y-1.5 sm:space-y-2">
+                    <div className="flex justify-between items-center text-[9px] sm:text-[10px] font-bold text-gray-400">
+                        <div className="bg-gray-100 flex-1 h-1 sm:h-1.5 rounded-full overflow-hidden mr-3 sm:mr-4">
                             <div
                                 className="bg-green-500 h-full transition-all duration-500"
                                 style={{ width: `${progressPercentage}%` }}

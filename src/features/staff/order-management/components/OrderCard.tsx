@@ -43,8 +43,6 @@ const PAYMENT_STYLES = {
     unpaid: 'bg-rose-50 text-rose-600 border-rose-100',
 };
 
-const ALL_STATUSES = Object.keys(STATUS_STYLES);
-
 // Context actions per status
 type ActionKey = 'view' | 'edit' | 'start' | 'complete' | 'cancel' | 'reset' | 'print' | 'pay' | 'printReceipt';
 const STATUS_ACTIONS: Record<string, ActionKey[]> = {
@@ -89,20 +87,17 @@ export const OrderCard: React.FC<OrderCardProps> = ({ order, onStatusChange, onA
     const t = useTranslations('Order.List.card');
     const format = useFormatter();
     const [expanded, setExpanded] = useState(false);
-    const [statusOpen, setStatusOpen] = useState(false);
     const [actionsOpen, setActionsOpen] = useState(false);
     const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
     const [isProcessingPayment, setIsProcessingPayment] = useState(false);
     const [isPrintModalOpen, setIsPrintModalOpen] = useState(false);
     const [printType, setPrintType] = useState<'invoice' | 'receipt'>('receipt');
 
-    const statusRef = useRef<HTMLDivElement>(null);
     const actionsRef = useRef<HTMLDivElement>(null);
 
     // Close dropdowns on outside click
     useEffect(() => {
         const handler = (e: MouseEvent) => {
-            if (statusRef.current && !statusRef.current.contains(e.target as Node)) setStatusOpen(false);
             if (actionsRef.current && !actionsRef.current.contains(e.target as Node)) setActionsOpen(false);
         };
         document.addEventListener('mousedown', handler);
@@ -185,8 +180,10 @@ export const OrderCard: React.FC<OrderCardProps> = ({ order, onStatusChange, onA
                                 </span>
                                 {order.source === 'DINE_IN' && order.tableCode && (
                                     <>
-                                        <span className="text-gray-300 text-xs">|</span>
-                                        <span className="text-xs text-gray-500">{t('table')} {order.tableCode}</span>
+                                        <span className="text-gray-300 text-xs text-blue-100 italic">|</span>
+                                        <span className="text-xs font-bold text-blue-700 bg-blue-50 px-1.5 py-0.5 rounded border border-blue-100 shadow-sm animate-in fade-in zoom-in duration-300">
+                                            {t('table')} {order.tableCode}
+                                        </span>
                                     </>
                                 )}
                             </div>
@@ -196,36 +193,12 @@ export const OrderCard: React.FC<OrderCardProps> = ({ order, onStatusChange, onA
                     {/* Right: status dropdown + 3-dot menu */}
                     <div className="flex items-center gap-1.5 flex-shrink-0">
 
-                        {/* Status dropdown */}
-                        <div className="relative" ref={statusRef}>
-                            <button
-                                onClick={() => { setStatusOpen(o => !o); setActionsOpen(false); }}
-                                className={`flex items-center gap-1 text-xs font-medium px-2 py-1 rounded-full transition-colors ${statusStyle} hover:opacity-80`}
-                            >
-                                {t(`status.${order.orderStatus}`)}
-                                <ChevronDown className="w-3 h-3" />
-                            </button>
-
-                            {statusOpen && (
-                                <div className="absolute right-0 top-full mt-1 z-50 bg-white border border-gray-200 rounded-lg shadow-lg w-40 py-1 text-xs">
-                                    {ALL_STATUSES.map(s => {
-                                        const style = STATUS_STYLES[s];
-                                        return (
-                                            <button
-                                                key={s}
-                                                onClick={() => {
-                                                    onStatusChange?.(order.orderId, s);
-                                                    setStatusOpen(false);
-                                                }}
-                                                className={`w-full text-left flex items-center gap-2 px-3 py-2 hover:bg-gray-50 transition-colors ${order.orderStatus === s ? 'font-semibold' : ''}`}
-                                            >
-                                                <span className={`inline-block w-2 h-2 rounded-full ${style.split(' ')[0].replace('bg-', 'bg-')}`} />
-                                                {t(`status.${s}`)}
-                                            </button>
-                                        );
-                                    })}
-                                </div>
-                            )}
+                        {/* Status badge (static) */}
+                        <div
+                            className={`flex items-center gap-1 text-xs font-medium px-2.5 py-1 rounded-full ${statusStyle}`}
+                        >
+                            <span className={`w-1.5 h-1.5 rounded-full ${statusStyle.split(' ')[0].replace('bg-', 'bg-')}`} />
+                            {t(`status.${order.orderStatus}`)}
                         </div>
 
                         {/* Payment badge */}
@@ -242,7 +215,7 @@ export const OrderCard: React.FC<OrderCardProps> = ({ order, onStatusChange, onA
                         {/* 3-dot actions menu */}
                         <div className="relative" ref={actionsRef}>
                             <button
-                                onClick={() => { setActionsOpen(o => !o); setStatusOpen(false); }}
+                                onClick={() => { setActionsOpen(o => !o); }}
                                 className="p-1 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
                                 title={t('actions')}
                             >

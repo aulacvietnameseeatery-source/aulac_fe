@@ -27,8 +27,8 @@ export const CurrentTicket: React.FC<Props> = ({
   const t = useTranslations("Order.Create");
 
   const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-//   const tax = subtotal * 0.1;
-//   const total = subtotal + tax;
+  //   const tax = subtotal * 0.1;
+  //   const total = subtotal + tax;
 
   const isPlaceOrderDisabled = cart.length === 0 || (orderType === 'DINE_IN' && !selectedTable);
 
@@ -61,7 +61,7 @@ export const CurrentTicket: React.FC<Props> = ({
               <div className="flex items-stretch gap-2">
                 <div className="flex-1 flex items-center gap-2 bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm">
                   <LayoutGrid className="w-4 h-4 text-gray-400 shrink-0" />
-                  <span className="font-medium text-gray-700 truncate">
+                  <span className="font-bold text-blue-700 truncate">
                     {selectedTable ? `${selectedTable.tableCode} - ${selectedTable.zoneName}` : t('noTableSelected')}
                   </span>
                 </div>
@@ -115,7 +115,7 @@ export const CurrentTicket: React.FC<Props> = ({
                   </button>
                 </div>
               </div>
-              
+
               {/* Bottom row: Note input */}
               <input
                 type="text"

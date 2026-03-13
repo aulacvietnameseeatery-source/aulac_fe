@@ -844,6 +844,7 @@
     }
   },
   "Supplier": {
+    "close": "Đóng",
     "List": {
       "title": "Quản lý Nhà cung cấp",
       "description": "Quản lý và tổ chức các nhà cung cấp một cách hiệu quả.",
@@ -1042,6 +1043,7 @@
       "description": "Quản lý và tổ chức các danh mục thực đơn nhà hàng một cách hiệu quả.",
       "searchPlaceholder": "Tìm theo tên danh mục...",
       "addNew": "Thêm Danh mục Mới",
+      "cancel": "Hủy",
       "table": {
         "no": "STT",
         "name": "Tên",
@@ -1055,12 +1057,22 @@
       "notifications": {
         "activated": "Đã kích hoạt danh mục thành công",
         "deactivated": "Đã vô hiệu hóa danh mục thành công",
-        "updateError": "Không thể cập nhật trạng thái danh mục"
+        "updateError": "Không thể cập nhật trạng thái danh mục",
+        "createSuccess": "Tạo danh mục thành công",
+        "updateSuccess": "Cập nhật danh mục thành công",
+        "actionError": "Có lỗi xảy ra khi xử lý yêu cầu",
+        "batchActivateSuccess": "Đã kích hoạt {count} danh mục thành công",
+        "batchDeactivateSuccess": "Đã vô hiệu hóa {count} danh mục thành công",
+        "batchUpdateError": "Có lỗi xảy ra khi cập nhật trạng thái hàng loạt"
       },
       "filters": {
         "allStatuses": "Tất cả Trạng thái",
         "active": "Hoạt động",
         "inactive": "Không hoạt động"
+      },
+      "batchActions": {
+        "activate": "Kích hoạt",
+        "deactivate": "Vô hiệu hóa"
       }
     },
     "Add": {
@@ -1089,6 +1101,7 @@
       "description": "Mô tả",
       "descriptionPlaceholder": "Cung cấp mô tả ngắn về danh mục này và các loại món ăn trong danh mục...",
       "status": "Trạng thái Danh mục",
+      "statusDescription": "Bật để kích hoạt hoặc tắt để ẩn danh mục này",
       "statusActive": "Danh mục đang hoạt động và hiển thị trong thực đơn",
       "statusInactive": "Danh mục không hoạt động và ẩn khỏi khách hàng",
       "validation": {
@@ -1447,7 +1460,9 @@
         "In progress": "Đang làm",
         "Completed": "Hoàn thành",
         "Cancelled": "Đã huỷ"
-      }
+      },
+      "tableLabel": "Bàn",
+      "customerLabel": "Khách hàng"
     },
     "PaymentModal": {
       "title": "Thanh toán & Hoàn tất đơn hàng",
