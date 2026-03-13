@@ -15,15 +15,28 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const router = useRouter();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, isInitialized } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
-    // Check authentication and redirect if not logged in
-    if (!isAuthenticated) {
+    // Only check authentication after auth state is initialized
+    // This prevents false redirects when auth is still loading from localStorage
+    if (isInitialized && !isAuthenticated) {
       router.push("/login");
     }
-  }, [isAuthenticated, router]);
+  }, [isAuthenticated, isInitialized, router]);
+
+  // Show loading state while auth is initializing
+  if (!isInitialized) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-[#F8F9FA]">
+        <div className="text-center">
+          <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-[#1A3A51] border-r-transparent"></div>
+          <p className="mt-4 text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="main-container relative min-h-screen bg-[#F8F9FA]">
