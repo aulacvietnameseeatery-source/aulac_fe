@@ -83,6 +83,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
                 </div>
             }
         >
+        <div onClick={(e) => e.stopPropagation()}>
             <div className="space-y-6 md:space-y-8 max-h-[70vh] overflow-y-auto px-1 custom-scrollbar">
                 {/* Final Total Banner */}
                 <div className="bg-gray-50 rounded-xl p-4 md:p-6 text-center border border-gray-100">
@@ -242,6 +243,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
                     </div>
                 </div>
             </div>
+        </div>
         </Dialog>
     );
 };

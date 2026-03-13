@@ -30,9 +30,9 @@ export const PrintOrderModal: React.FC<PrintOrderModalProps> = ({ order, isOpen,
         id: `#${order.orderId}`,
         date: order.createdAt ? new Date(order.createdAt).toLocaleDateString() : 'N/A',
         time: order.createdAt ? new Date(order.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'N/A',
-        status: order.isPaid ? t('paymentStatus.paid') : t('paymentStatus.unpaid'),
-        paymentMethod: order.isPaid ? t('paymentStatus.paid') : '',
-        tips: order.tipAmount ?? 0,
+        status: type === 'invoice' ? t('paymentStatus.unpaid') : (order.isPaid ? t('paymentStatus.paid') : t('paymentStatus.unpaid')),
+        paymentMethod: (type === 'receipt' && order.isPaid) ? t('paymentStatus.paid') : '',
+        tips: type === 'invoice' ? 0 : (order.tipAmount ?? 0),
         items: order.orderItems.map((item): ReceiptItem => ({
             name: item.dishName,
             qty: item.quantity,
@@ -83,7 +83,10 @@ export const PrintOrderModal: React.FC<PrintOrderModalProps> = ({ order, isOpen,
     };
 
     return (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+        <div
+            className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
+            onClick={(e) => e.stopPropagation()}
+        >
             <div className="bg-white rounded-2xl shadow-2xl w-full max-w-xl max-h-[90vh] flex flex-col overflow-hidden animate-in fade-in zoom-in duration-200">
                 {/* Header */}
                 <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">

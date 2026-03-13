@@ -321,10 +321,10 @@ export const StoreProfileForm = () => {
             {/* Sticky Actions Bar - Align with DishForm style */}
             <div className="pt-8 flex items-center justify-end gap-4 border-t border-gray-200 mt-10 pb-10">
                 <Button
-                    variant="ghost"
+                    variant="outline"
                     onClick={loadSettings}
                     disabled={isSaving}
-                    className="px-6 h-11 text-sm font-semibold text-gray-500 hover:text-gray-900 hover:bg-gray-100 transition-all"
+                    className="px-6 h-11 text-sm font-semibold text-gray-500 hover:text-gray-900 border-gray-300 transition-all"
                 >
                     {t('reset')}
                 </Button>

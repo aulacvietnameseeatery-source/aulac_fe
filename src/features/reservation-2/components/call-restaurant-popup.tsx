@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { X, Phone, Copy, Clock } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
+import { useStoreSettings } from '@/hooks/use-store-settings';
 
 interface CallRestaurantPopupProps {
     isOpen: boolean;
@@ -11,11 +12,12 @@ interface CallRestaurantPopupProps {
 export default function CallRestaurantPopup({ isOpen, onClose }: CallRestaurantPopupProps) {
     const t = useTranslations('Reservation.CallButton');
     const [copied, setCopied] = useState(false);
+    const { data: storeSettings, isLoading } = useStoreSettings();
 
     if (!isOpen) return null;
 
-    const phoneNumber = "+84 28 3822 5264";
-    const phoneDisplay = "(+84) 28 3822 5264";
+    const phoneNumber = storeSettings?.phone || "+84 28 3822 5264";
+    const phoneDisplay = storeSettings?.phone || "(+84) 28 3822 5264";
 
     const handleCopy = async () => {
         try {
@@ -59,7 +61,9 @@ export default function CallRestaurantPopup({ isOpen, onClose }: CallRestaurantP
                 {/* Restaurant Name */}
                 <div className="text-center mb-4">
                     <p className="text-sm text-slate-500 mb-1">{t('restaurant')}</p>
-                    <p className="font-semibold text-slate-800">Au Lac Vietnamese Eatery</p>
+                    <p className="font-semibold text-slate-800">
+                        {isLoading ? "..." : (storeSettings?.name || "Au Lac Vietnamese Eatery")}
+                    </p>
                 </div>
 
                 {/* Phone Number */}
@@ -69,7 +73,7 @@ export default function CallRestaurantPopup({ isOpen, onClose }: CallRestaurantP
                         href={`tel:${phoneNumber}`}
                         className="block text-3xl font-bold text-emerald-600 text-center hover:text-emerald-700 transition-colors mb-4"
                     >
-                        {phoneDisplay}
+                        {isLoading ? "..." : phoneDisplay}
                     </a>
 
                     {/* Copy Button */}
@@ -85,9 +89,9 @@ export default function CallRestaurantPopup({ isOpen, onClose }: CallRestaurantP
                 </div>
 
                 {/* Operating Hours */}
-                <div className="flex items-center justify-center gap-2 text-sm text-slate-600 mb-6">
-                    <Clock size={16} />
-                    <span>{t('hours')}</span>
+                <div className="flex items-center justify-center gap-2 text-sm text-slate-600 mb-6 font-medium">
+                    <Clock size={16} className="text-emerald-600" />
+                    <span>{isLoading ? "..." : (storeSettings?.openingHours || t('hours'))}</span>
                 </div>
 
                 {/* Call Now Button */}

@@ -94,7 +94,10 @@ export const KanbanOrderCard: React.FC<KanbanOrderCardProps> = ({
     const hiddenCount = order.orderItems.length - VISIBLE_ITEMS;
 
     return (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-200">
+        <div
+            className="bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-200 cursor-pointer"
+            onClick={() => onAction?.(order.orderId, 'view')}
+        >
             <div className="p-4">
                 {/* Header */}
                 <div className="flex items-start justify-between gap-3 mb-3">
@@ -201,7 +204,7 @@ export const KanbanOrderCard: React.FC<KanbanOrderCardProps> = ({
 
                     {order.orderItems.length > VISIBLE_ITEMS && (
                         <button
-                            onClick={() => setExpanded((v) => !v)}
+                            onClick={(e) => { e.stopPropagation(); setExpanded((v) => !v); }}
                             className="mt-2 flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-700 transition-colors"
                         >
                             {expanded ? (
@@ -231,13 +234,13 @@ export const KanbanOrderCard: React.FC<KanbanOrderCardProps> = ({
                     {(order.orderStatus === 'Pending' || order.orderStatus === 'In progress') ? (
                         <>
                             <button
-                                onClick={() => onAction?.(order.orderId, 'view')}
+                                onClick={(e) => { e.stopPropagation(); onAction?.(order.orderId, 'view'); }}
                                 className="flex-1 py-1.5 rounded-lg border border-gray-200 text-xs font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors"
                             >
                                 {t('action.view')}
                             </button>
                             <button
-                                onClick={() => onAction?.(order.orderId, 'cancel')}
+                                onClick={(e) => { e.stopPropagation(); onAction?.(order.orderId, 'cancel'); }}
                                 className="flex-1 py-1.5 rounded-lg border border-red-200 text-xs font-medium text-red-600 bg-white hover:bg-red-50 transition-colors"
                             >
                                 {t('action.cancel')}
@@ -247,52 +250,52 @@ export const KanbanOrderCard: React.FC<KanbanOrderCardProps> = ({
                         order.isPaid ? (
                             <>
                                 <button
-                                    onClick={() => onAction?.(order.orderId, 'view')}
+                                    onClick={(e) => { e.stopPropagation(); onAction?.(order.orderId, 'view'); }}
                                     className="flex-1 py-1.5 rounded-lg border border-gray-200 text-xs font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors"
                                 >
                                     {t('action.view')}
                                 </button>
                                 <button
-                                    onClick={() => { setPrintType('invoice'); setIsPrintModalOpen(true); }}
+                                    onClick={(e) => { e.stopPropagation(); setPrintType('receipt'); setIsPrintModalOpen(true); }}
                                     className="flex-1 py-1.5 rounded-lg border border-gray-200 text-xs font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors"
                                 >
-                                    {t('action.print')}
+                                    {t('action.printReceipt')}
                                 </button>
                             </>
                         ) : (
                             <>
                                 <button
-                                    onClick={() => onAction?.(order.orderId, 'view')}
+                                    onClick={(e) => { e.stopPropagation(); onAction?.(order.orderId, 'view'); }}
                                     className="flex-1 py-1.5 rounded-lg border border-gray-200 text-xs font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors"
                                     title={t('action.view')}
                                 >
                                     {t('action.view')}
                                 </button>
                                 <button
-                                    onClick={() => setIsPaymentModalOpen(true)}
+                                    onClick={(e) => { e.stopPropagation(); setIsPaymentModalOpen(true); }}
                                     className="flex-1 py-1.5 rounded-lg border border-blue-200 text-xs font-medium text-blue-700 bg-blue-50 hover:bg-blue-100 transition-colors"
                                 >
                                     {t('action.pay')}
                                 </button>
                                 <button
-                                    onClick={() => { setPrintType('receipt'); setIsPrintModalOpen(true); }}
+                                    onClick={(e) => { e.stopPropagation(); setPrintType('invoice'); setIsPrintModalOpen(true); }}
                                     className="flex-1 py-1.5 rounded-lg border border-gray-200 text-xs font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors"
                                 >
-                                    {t('action.printReceipt')}
+                                    {t('action.print')}
                                 </button>
                             </>
                         )
                     ) : (
                         <>
                             <button
-                                onClick={() => onAction?.(order.orderId, 'view')}
+                                onClick={(e) => { e.stopPropagation(); onAction?.(order.orderId, 'view'); }}
                                 className="flex-1 py-1.5 rounded-lg border border-gray-200 text-xs font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors"
                             >
                                 {t('action.view')}
                             </button>
                             {primaryAction && (
                                 <button
-                                    onClick={primaryAction.onClick}
+                                    onClick={(e) => { e.stopPropagation(); primaryAction.onClick(); }}
                                     className="flex-1 py-1.5 rounded-lg border border-gray-200 text-xs font-medium text-gray-700 bg-gray-50 hover:bg-gray-100 transition-colors"
                                 >
                                     {primaryAction.label}
