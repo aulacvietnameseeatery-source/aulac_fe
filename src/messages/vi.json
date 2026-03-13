@@ -1740,6 +1740,7 @@
     "cancelItem": "Hủy món",
     "cancelling": "Đang hủy...",
     "cancelError": "Không thể hủy món",
+    "cancelNotAllowed": "\u201c{dishName}\u201d đã được nhân viên xử lý và không thể hủy nữa.",
     "cancelPopup": {
       "title": "Hủy món này?",
       "message": "Bạn có chắc chắn muốn hủy \"{dishName}\" không? Hành động này không thể hoàn tác.",

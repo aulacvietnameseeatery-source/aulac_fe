@@ -125,7 +125,7 @@ export function CartSummary({
 
             <div className="flex flex-col items-center gap-1 mb-8">
                 <span className={cn("text-[42px] font-display font-light leading-none tracking-tight", isOverlay ? "text-[#1A3A52]" : "text-white")}>
-                    ${totalPrice.toFixed(2)}
+                    {totalPrice.toFixed(2)} <span className="text-[28px]">CHF</span>
                 </span>
                 <span className={cn("text-[10px] font-display font-medium uppercase tracking-[1.5px] mt-2", isOverlay ? "text-[#1A3A52]/80" : "text-white/70")}>
                     {t("items_count", { count: totalItems })}
@@ -166,7 +166,7 @@ export function CartSummary({
                         <div className="flex justify-between items-center">
                             <div className="flex flex-col">
                                 <span className="font-medium text-sm text-white/90 line-clamp-1">{item.name}</span>
-                                <span className="text-xs text-[#C5A059] font-display mt-0.5">${(item.price * item.quantity).toFixed(2)}</span>
+                                <span className="text-xs text-[#C5A059] font-display mt-0.5">{(item.price * item.quantity).toFixed(2)} <span className="text-[10px]">CHF</span></span>
                             </div>
                             <div className="flex items-center gap-2 md:gap-3 ml-2">
                                 <div className="flex items-center bg-[#204560] rounded-lg border border-[#C5A059]/20 h-8">
@@ -223,7 +223,7 @@ export function CartSummary({
             <div className="mt-4 pt-4 border-t border-[#C5A059]/20">
                 <div className="flex justify-between items-center mb-4">
                     <span className="text-sm uppercase tracking-wider text-white/60">Total</span>
-                    <span className="text-2xl font-display font-bold text-[#C5A059]">${totalPrice.toFixed(2)}</span>
+                    <span className="text-2xl font-display font-bold text-[#C5A059]">{totalPrice.toFixed(2)} <span className="text-base">CHF</span></span>
                 </div>
                 <button 
                     onClick={handleConfirm} 
