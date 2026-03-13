@@ -27,14 +27,15 @@ import { useEffect } from 'react';
  * ```
  */
 export function useRequireAuth(redirectTo: string = '/login') {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, isInitialized } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
-    if (!isAuthenticated) {
+    // Only redirect after auth is initialized to prevent false negatives
+    if (isInitialized && !isAuthenticated) {
       router.push(redirectTo);
     }
-  }, [isAuthenticated, router, redirectTo]);
+  }, [isAuthenticated, isInitialized, router, redirectTo]);
 
   return isAuthenticated;
 }
@@ -62,14 +63,23 @@ export function useRequirePermission(
   permission: string,
   redirectTo: string = '/unauthorized'
 ) {
+  const { isAuthenticated, isInitialized } = useAuth();
   const { can } = usePermissions();
   const router = useRouter();
 
   useEffect(() => {
+    // Wait for auth to initialize before checking
+    if (!isInitialized) return;
+
+    if (!isAuthenticated) {
+      router.push('/login');
+      return;
+    }
+
     if (!can(permission)) {
       router.push(redirectTo);
     }
-  }, [can, permission, router, redirectTo]);
+  }, [isAuthenticated, isInitialized, can, permission, router, redirectTo]);
 
   return can(permission);
 }
@@ -97,14 +107,23 @@ export function useRequireAnyPermission(
   permissions: string[],
   redirectTo: string = '/unauthorized'
 ) {
+  const { isAuthenticated, isInitialized } = useAuth();
   const { canAny } = usePermissions();
   const router = useRouter();
 
   useEffect(() => {
+    // Wait for auth to initialize before checking
+    if (!isInitialized) return;
+
+    if (!isAuthenticated) {
+      router.push('/login');
+      return;
+    }
+
     if (!canAny(permissions)) {
       router.push(redirectTo);
     }
-  }, [canAny, permissions, router, redirectTo]);
+  }, [isAuthenticated, isInitialized, canAny, permissions, router, redirectTo]);
 
   return canAny(permissions);
 }
@@ -132,14 +151,23 @@ export function useRequireAllPermissions(
   permissions: string[],
   redirectTo: string = '/unauthorized'
 ) {
+  const { isAuthenticated, isInitialized } = useAuth();
   const { canAll } = usePermissions();
   const router = useRouter();
 
   useEffect(() => {
+    // Wait for auth to initialize before checking
+    if (!isInitialized) return;
+
+    if (!isAuthenticated) {
+      router.push('/login');
+      return;
+    }
+
     if (!canAll(permissions)) {
       router.push(redirectTo);
     }
-  }, [canAll, permissions, router, redirectTo]);
+  }, [isAuthenticated, isInitialized, canAll, permissions, router, redirectTo]);
 
   return canAll(permissions);
 }
@@ -164,14 +192,15 @@ export function useRequireAllPermissions(
  * ```
  */
 export function useGuestOnly(redirectTo: string = '/dashboard') {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, isInitialized } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
-    if (isAuthenticated) {
+    // Only redirect after auth is initialized
+    if (isInitialized && isAuthenticated) {
       router.push(redirectTo);
     }
-  }, [isAuthenticated, router, redirectTo]);
+  }, [isAuthenticated, isInitialized, router, redirectTo]);
 
   return !isAuthenticated;
 }

@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useParams } from "next/navigation";
 import {
   LayoutDashboard,
   Table,
@@ -116,6 +116,8 @@ interface AdminSidebarProps {
 
 export function AdminSidebar({ onClose }: AdminSidebarProps) {
   const pathname = usePathname();
+  const params = useParams();
+  const locale = params.locale as string || 'vi';
   const { userInfo } = useAuth();
   const { mutate: logout, isPending: isLoggingOut } = useLogout();
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
@@ -180,7 +182,7 @@ export function AdminSidebar({ onClose }: AdminSidebarProps) {
 
         {/* Column 1: Mini Sidebar */}
         <div className="w-[70px] bg-[#1A3A51] border-r border-white/5 flex flex-col items-center py-6 z-30">
-          <Link href="/dashboard" className="mb-8 px-2 transition-transform hover:scale-105 active:scale-95">
+          <Link href={`/${locale}/`} className="mb-8 px-2 transition-transform hover:scale-105 active:scale-95" title="Về Trang Chủ">
             <Image
               width={40}
               height={40}
