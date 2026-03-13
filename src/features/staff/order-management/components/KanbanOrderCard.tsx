@@ -116,8 +116,8 @@ export const KanbanOrderCard: React.FC<KanbanOrderCardProps> = ({
                                 {order.source === "DINE_IN" && order.tableCode && (
                                     <>
                                         <span className="text-gray-300 text-xs">|</span>
-                                        <span className="text-xs text-gray-500">
-                                            Bàn {order.tableCode}
+                                        <span className="text-xs font-bold text-blue-700 bg-blue-50 px-1.5 py-0.5 rounded border border-blue-100 shadow-sm animate-in fade-in zoom-in duration-300">
+                                            {t('table') || 'Bàn'} {order.tableCode}
                                         </span>
                                     </>
                                 )}

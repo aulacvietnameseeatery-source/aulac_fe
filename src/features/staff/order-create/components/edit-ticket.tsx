@@ -22,7 +22,7 @@ export const EditTicket: React.FC<Props> = ({
 
   // Tính tiền
   const newSubtotal = newCart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-//   const newTax = newSubtotal * 0.1; // (Nếu áp dụng thuế cho món mới)
+  //   const newTax = newSubtotal * 0.1; // (Nếu áp dụng thuế cho món mới)
   const finalTotal = orderInfo.totalAmount + newSubtotal;
 
   const isDisableSubmit = newCart.length === 0 || orderInfo.isPaid;
@@ -30,19 +30,19 @@ export const EditTicket: React.FC<Props> = ({
   // Bảng màu trạng thái chuẩn chỉnh
   const getStatusColor = (status: string) => {
     const s = status.toLowerCase();
-    switch(s) {
+    switch (s) {
       // Order Statuses
       case 'pending': return 'text-orange-600 bg-orange-50 border-orange-200';
       case 'completed': return 'text-green-700 bg-green-100 border-green-300';
       case 'cancelled': return 'text-red-700 bg-red-100 border-red-300';
-      
+
       // Order Item Statuses
       case 'created': return 'text-gray-600 bg-gray-100 border-gray-200';
       case 'in_progress': return 'text-blue-600 bg-blue-50 border-blue-200';
       case 'ready': return 'text-purple-600 bg-purple-50 border-purple-200';
       case 'served': return 'text-teal-600 bg-teal-50 border-teal-200';
       case 'rejected': return 'text-red-600 bg-red-50 border-red-200';
-      
+
       default: return 'text-gray-600 bg-gray-100 border-gray-200';
     }
   };
@@ -54,7 +54,7 @@ export const EditTicket: React.FC<Props> = ({
 
   return (
     <div className="w-full lg:w-[400px] xl:w-[450px] h-[75vh] lg:h-full flex flex-col bg-white rounded-2xl shadow-xl border border-gray-200 shrink-0 z-10 overflow-hidden">
-      
+
       {/* HEADER: Đổi Title tùy thuộc vào trạng thái Paid/Unpaid */}
       <div className="shrink-0 p-4 lg:p-5 border-b border-gray-100 flex flex-col gap-3 bg-gray-50 z-20">
         <div className="flex items-center justify-between">
@@ -71,11 +71,11 @@ export const EditTicket: React.FC<Props> = ({
 
         <div className="grid grid-cols-2 gap-2 text-sm">
           <div className="bg-white p-2 rounded border border-gray-200">
-            <span className="text-xs text-gray-400 block uppercase tracking-wide">Table</span>
-            <span className="font-semibold text-gray-800">{orderInfo.tableCode || t('takeAway')}</span>
+            <span className="text-xs text-gray-400 block uppercase tracking-wide">{t('tableLabel') || 'Bàn'}</span>
+            <span className="font-semibold text-gray-800 text-blue-700">{orderInfo.tableCode || t('takeAway')}</span>
           </div>
           <div className="bg-white p-2 rounded border border-gray-200">
-            <span className="text-xs text-gray-400 block uppercase tracking-wide">Customer</span>
+            <span className="text-xs text-gray-400 block uppercase tracking-wide">{t('customerLabel') || 'Khách hàng'}</span>
             <span className="font-semibold text-gray-800">{orderInfo.customerName || t('guest')}</span>
           </div>
         </div>
@@ -83,7 +83,7 @@ export const EditTicket: React.FC<Props> = ({
 
       {/* BODY: ITEMS LIST */}
       <div className="flex-1 overflow-y-auto p-4 lg:p-5 space-y-4 bg-slate-50 min-h-0">
-        
+
         {/* MÓN CŨ (READ-ONLY) */}
         <div>
           <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">{t('orderedItems')}</h3>
@@ -124,7 +124,7 @@ export const EditTicket: React.FC<Props> = ({
                 <button onClick={onClearCart} className="text-xs font-bold text-gray-400 hover:text-red-500 uppercase">{t('clear')}</button>
               )}
             </div>
-            
+
             {newCart.length === 0 ? (
               <div className="flex flex-col items-center justify-center text-gray-400 py-6 border-2 border-dashed border-gray-200 rounded-xl bg-white">
                 <UtensilsCrossed className="w-6 h-6 opacity-30 mb-1" />
@@ -186,15 +186,15 @@ export const EditTicket: React.FC<Props> = ({
           </div>
         ) : (
           <div className="grid grid-cols-2 gap-3">
-            <button 
-              onClick={onCreateInvoice} 
+            <button
+              onClick={onCreateInvoice}
               className="cursor-pointer bg-white border-2 border-[#1A3A51] text-[#1A3A51] font-bold py-3 rounded-xl flex items-center justify-center gap-2 disabled:opacity-50 text-sm hover:bg-gray-50"
             >
               <FileText className="w-4 h-4" /> {t('createInvoice', { fallback: 'Hóa Đơn' })}
             </button>
-            <button 
-              onClick={onSubmitItems} 
-              disabled={isDisableSubmit} 
+            <button
+              onClick={onSubmitItems}
+              disabled={isDisableSubmit}
               className="cursor-pointer bg-[#1A3A51] text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2 disabled:opacity-50 text-sm hover:bg-[#122b3e]"
             >
               <Plus className="w-4 h-4" /> {t('addItemsButton')}
