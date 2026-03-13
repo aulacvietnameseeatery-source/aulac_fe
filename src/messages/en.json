@@ -845,6 +845,7 @@
   },
   "Supplier": {
     "close": "Close",
+    "edit": "Edit",
     "List": {
       "title": "Supplier Management",
       "description": "Manage and organize your suppliers efficiently.",

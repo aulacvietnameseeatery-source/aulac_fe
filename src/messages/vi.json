@@ -845,6 +845,7 @@
   },
   "Supplier": {
     "close": "Đóng",
+    "edit": "Chỉnh sửa",
     "List": {
       "title": "Quản lý Nhà cung cấp",
       "description": "Quản lý và tổ chức các nhà cung cấp một cách hiệu quả.",
