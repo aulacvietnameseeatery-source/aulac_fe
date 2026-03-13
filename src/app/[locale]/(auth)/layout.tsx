@@ -7,6 +7,7 @@ import { useAuth } from "@/components/providers/auth-provider";
 import "../../../styles/adminLayout.css"
 import { Tooltip } from "react-tooltip";
 import { LanguageSwitcher } from "@/components/ui/language-switcher";
+import { DashboardTopNav } from "@/components/ui/dashboard-top-nav";
 
 export default function DashboardLayout({
   children,
@@ -76,11 +77,19 @@ export default function DashboardLayout({
           </div>
         )}
 
+        {/* --- MAIN CONTENT AREA --- */}
         <div className="main-right flex-1 flex flex-col h-full overflow-hidden">
-          {/* Desktop Top Bar */}
-          <div className="hidden md:flex items-center justify-end px-8 py-4 bg-white border-b border-gray-100">
-            <LanguageSwitcher variant="admin" />
-          </div>
+          
+          {/* --- UPDATED DESKTOP TOP BAR --- */}
+          <header className="hidden md:flex items-center justify-between px-6 py-3 bg-white border-b border-gray-100 shadow-sm">
+            {/* Quick Navigation Buttons */}
+            <DashboardTopNav />
+
+            {/* Right Side Actions */}
+            <div className="flex items-center gap-4">
+              <LanguageSwitcher variant="admin" />
+            </div>
+          </header>
 
           <div className="main-view flex-1 overflow-auto p-4 md:p-8">
             {/* View for page content */}
