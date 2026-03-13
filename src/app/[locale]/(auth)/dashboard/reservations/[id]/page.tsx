@@ -36,7 +36,7 @@ const ReservationDetailPage = () => {
 
     if (isLoading) {
         return (
-            <div className="flex items-center justify-center min-h-screen bg-[#f8f9fa]">
+            <div className="flex items-center justify-center min-h-screen">
                 <div className="flex flex-col items-center gap-3">
                     <Loader2 className="w-10 h-10 animate-spin text-blue-600" />
                     <p className="text-sm text-gray-500 font-medium">{t("loading")}</p>
@@ -47,15 +47,16 @@ const ReservationDetailPage = () => {
 
     if (error || !reservation) {
         return (
-            <div className="min-h-screen bg-[#f8f9fa] p-6">
-                <div className="max-w-5xl mx-auto">
-                    <button
+            <div className="min-h-screen p-6">
+                <div className="mx-auto">
+                    <Button
                         onClick={handleBack}
-                        className="mb-6 flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors"
+                        variant="ghost"
+                        className="mb-6 flex items-center gap-2"
                     >
                         <ArrowLeft size={20} />
                         <span className="font-medium">{t("backToList")}</span>
-                    </button>
+                    </Button>
                     
                     <div className="bg-white rounded-xl shadow-sm border border-red-200 p-10 text-center">
                         <p className="text-red-600 text-lg font-semibold">
@@ -69,18 +70,19 @@ const ReservationDetailPage = () => {
 
     return (
         <ProtectedRoute permission={Permissions.ViewReservation}>
-            <div className="min-h-screen bg-[#f8f9fa] p-4 md:p-6">
-                <div className="max-w-5xl mx-auto">
+            <div className="min-h-screen p-4 md:p-6">
+                <div className="mx-auto">
                 {/* Header */}
                 <div className="mb-6 flex items-center justify-between">
                     <div className="flex items-center gap-4">
-                        <button
+                        <Button
                             onClick={handleBack}
-                            className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors"
+                            variant="ghost"
+                            className="flex items-center gap-2"
                         >
                             <ArrowLeft size={20} />
                             <span className="font-medium">{t("back")}</span>
-                        </button>
+                        </Button>
                         <div className="h-6 w-px bg-gray-300"></div>
                         <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
                             {t("title")}
