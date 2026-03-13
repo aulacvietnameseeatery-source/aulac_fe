@@ -77,10 +77,10 @@ export const TableSelectionModal: React.FC<Props> = ({ isOpen, onClose, tables, 
                 const isLocked = table.statusCode === 'LOCKED';
 
                 return (
-                  <button key={table.tableId} onClick={() => handleTableClick(table)} disabled={isLocked}
+                  <button key={table.tableId} onClick={() => handleTableClick(table)} disabled={isLocked || isOccupied}
                     className={`cursor-pointer relative flex flex-col items-center justify-center p-4 rounded-xl border-2 w-full h-full min-h-[100px]
                       ${isSelected ? 'border-[#1A3A51] bg-[#1A3A51]/5' : 'border-transparent bg-white shadow-sm'}
-                      ${isOccupied ? 'opacity-80 bg-red-50/50 border-red-100' : ''}
+                      ${isOccupied ? 'opacity-80 cursor-not-allowed bg-red-50/50 border-red-100' : ''}
                       ${isReserved ? 'border-orange-200 bg-orange-50' : ''}
                       ${isLocked ? 'opacity-50 cursor-not-allowed bg-gray-100' : ''}
                     `}

@@ -1432,6 +1432,7 @@
       "menuTitle": "Détails de la commande",
       "menuSubtitleEdit": "Sélectionnez des articles à ajouter à la commande actuelle.",
       "menuSubtitleView": "Cette commande a été payée. Mode lecture seule.",
+      "menuSubtitleCancelled": "Cette commande a été annulée. Mode lecture seule.",
       "clear": "Effacer",
       "cancel": "Annuler",
       "editOrderTitle": "Modifier la commande #{id}",
@@ -1441,8 +1442,10 @@
       "newItems": "Nouveaux articles",
       "addMoreItemsHint": "Sélectionnez des articles dans le menu à gauche pour les ajouter",
       "paidOrderWarning": "Cette commande a été payée. Veuillez créer une nouvelle commande.",
+      "cancelledOrderWarning": "La commande a été annulée. Il est impossible de modifier ou d'imprimer la facture.",
       "addItemsButton": "Ajouter des articles à la commande",
       "createInvoice": "Créer la facture",
+      "createReceipt": "Créer un reçu",
       "newTotal": "Total estimé",
       "warningTitle": "Confirmer l'ajout",
       "completedOrderWarning": "Cette commande est terminée mais non payée. Ajouter de nouveaux articles remettra la commande au statut En cours. Êtes-vous sûr ?",
@@ -1457,6 +1460,27 @@
         "Completed": "Terminé",
         "Cancelled": "Annulé"
       }
+    },
+    "RecentOrders": {
+      "title": "Commandes récentes",
+      "refresh": "Actualiser",
+      "filterAll": "Toutes",
+      "dineIn": "Sur place",
+      "takeAway": "À emporter",
+      "loading": "Chargement des commandes...",
+      "noOrdersFound": "Aucune commande trouvée.",
+      "table": "Table",
+      "status": {
+        "PENDING": "En attente",
+        "IN_PROGRESS": "En cours",
+        "COMPLETED": "Terminée",
+        "CANCELLED": "Annulée"
+      }
+    },
+    "DishDetail": {
+      "noDescription": "Aucune description disponible.",
+      "price": "Prix",
+      "addToOrder": "Ajouter à la commande"
     },
     "PaymentModal": {
       "title": "Payer & Terminer la commande",
