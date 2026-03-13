@@ -3,6 +3,7 @@ import { useTranslations } from 'next-intl';
 import { Search } from 'lucide-react';
 import { DishDto, CategoryDto } from '../types/create-order.types';
 import { BASE_URL } from "@/lib/http";
+import { useDraggableScroll } from '@/hooks/use-draggable-scroll';
 
 interface Props {
   isReadOnly?: boolean;
@@ -15,6 +16,8 @@ export const MenuCatalog: React.FC<Props> = ({ isReadOnly, title, subtitle, dish
   const t = useTranslations("Order.Create");
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | 'ALL'>('ALL');
+
+  const scrollProps = useDraggableScroll<HTMLDivElement>();
 
   const filteredDishes = useMemo(() => {
     return dishes.filter((dish) => {
@@ -44,7 +47,7 @@ export const MenuCatalog: React.FC<Props> = ({ isReadOnly, title, subtitle, dish
       </div>
 
       {/* Category Tabs (Cố định, cuộn ngang) */}
-      <div className="shrink-0 flex gap-2 overflow-x-auto pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden border-b border-[#D5BA98]/20">
+      <div {...scrollProps} className="shrink-0 flex gap-2 overflow-x-auto pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden border-b border-[#D5BA98]/20">
         <button
           onClick={() => setSelectedCategoryId('ALL')}
           className={`flex items-center px-4 py-2 rounded-lg border shrink-0 transition-all font-medium text-sm ${

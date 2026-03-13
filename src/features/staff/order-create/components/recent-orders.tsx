@@ -3,6 +3,7 @@ import { ShoppingBag, Utensils, LayoutGrid, Clock, RefreshCw } from 'lucide-reac
 import { createOrderService } from '../services/create-edit-order.service';
 import { RecentOrderDto } from '../types/create-order.types';
 import { useTranslations } from 'next-intl';
+import { useDraggableScroll } from '@/hooks/use-draggable-scroll';
 
 const getStatusColor = (status: string) => {
   switch (status) {
@@ -31,6 +32,8 @@ export const RecentOrders = () => {
   const [filter, setFilter] = useState<'ALL' | 'DINE_IN' | 'TAKEAWAY'>('ALL');
   const [orders, setOrders] = useState<RecentOrderDto[]>([]);
   const [loading, setLoading] = useState(true);
+
+  const scrollProps = useDraggableScroll<HTMLDivElement>();
 
   const fetchOrders = async () => {
     setLoading(true);
@@ -72,7 +75,7 @@ export const RecentOrders = () => {
         </div>
       </div>
 
-      <div className="flex gap-3 overflow-x-auto pb-2 [scrollbar-width:none]">
+      <div {...scrollProps} className="flex gap-3 overflow-x-auto pb-2 [scrollbar-width:none]">
         {loading && orders.length === 0 ? (
           <div className="text-[#1A3A52]/50 text-xs py-4 flex items-center gap-2">
              <RefreshCw className="w-4 h-4 animate-spin" /> {t('loading')}
