@@ -1990,8 +1990,8 @@
     }
   },
   "SystemSettings": {
-    "title": "Paramètres de la boutique",
-    "description": "Gérez la configuration de l'application et de la boutique.",
+    "title": "Paramètres système",
+    "description": "Gérez les paramètres et les configurations du système.",
     "refresh": "Actualiser",
     "loading": "Chargement des paramètres...",
     "noSettings": "Aucun paramètre trouvé.",
@@ -2006,6 +2006,73 @@
       "saveSuccess": "Paramètres du groupe '{group}' enregistrés avec succès.",
       "createSuccess": "Paramètre créé avec succès.",
       "saveError": "Échec de l'enregistrement des paramètres."
+    },
+    "StoreProfile": {
+      "identity": "Identité du Magasin",
+      "identityDesc": "Mettez à jour le logo et le nom officiel de votre magasin.",
+      "contactLocation": "Contact et Emplacement",
+      "contactLocationDesc": "Détails de l'adresse et coordonnées du magasin.",
+      "operating": "Opérations",
+      "operatingDesc": "Heures d'ouverture et autres détails opérationnels.",
+      "changeLogo": "Changer le logo",
+      "uploadLogo": "Télécharger le logo",
+      "remove": "Supprimer",
+      "storeName": "Nom du magasin",
+      "storeNamePlaceholder": "Entrez le tên du restaurant/magasin",
+      "streetAddress": "Adresse",
+      "streetAddressPlaceholder": "Par exemple : Avenue Jacques Dalcroze 9",
+      "postalCode": "Code postal",
+      "postalCodePlaceholder": "1000",
+      "city": "Ville",
+      "cityPlaceholder": "Nom de la ville",
+      "country": "Pays / Région",
+      "countryPlaceholder": "Nom du pays",
+      "email": "Adresse e-mail",
+      "emailPlaceholder": "contact@restaurant.com",
+      "phone": "Numéro de téléphone",
+      "phonePlaceholder": "+33 1 23 45 67 89",
+      "openingHours": "Heures d'ouverture",
+      "openingHoursPlaceholder": "Ex : lun - dim : 08h00 - 22h00",
+      "saveChanges": "Enregistrer les modifications",
+      "reset": "Réinitialiser",
+      "saving": "Enregistrement...",
+      "clickToUpload": "Logo",
+      "uploadSuccess": "Logo téléchargé avec succès",
+      "uploadError": "Échec du téléchargement du logo",
+      "fileSizeError": "La taille du fichier doit être inférieure à 5 Mo",
+      "updateSuccess": "Profil du magasin mis à jour avec succès",
+      "updateError": "Échec de l'enregistrement du profil du magasin"
+    },
+    "General": {
+      "title": "Paramètres système",
+      "addNew": "Ajouter un paramètre",
+      "empty": "Aucun paramètre général trouvé",
+      "emptyDesc": "Utilisez le bouton \"Ajouter un paramètre\" ci-dessus pour créer un groupe comme \"reservation\"."
+    },
+    "AddModal": {
+      "key": "Clé du paramètre",
+      "keyPlaceholder": "Ex : default_password, password.min_length",
+      "name": "Nom du paramètre (optionnel)",
+      "namePlaceholder": "Un nom lisible pour ce paramètre",
+      "type": "Type de valeur",
+      "value": "Valeur",
+      "valuePlaceholder": "Valeur du paramètre...",
+      "description": "Description (optionnelle)",
+      "descriptionPlaceholder": "À quoi sert ce paramètre ?",
+      "sensitive": "Données sensibles",
+      "sensitiveDesc": "Masquer la valeur par défaut (ex : mots de passe, clés API)"
+    },
+    "Field": {
+      "sensitiveHidden": "Sensible – valeur masquée",
+      "jsonPlaceholder": "Valeur JSON...",
+      "sensitive": "Sensible",
+      "types": {
+        "STRING": "Texte",
+        "INT": "Entier",
+        "DECIMAL": "Décimal",
+        "BOOL": "Booléen",
+        "JSON": "JSON"
+      }
     }
   },
   "InvoiceDetail": {

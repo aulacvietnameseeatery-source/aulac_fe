@@ -1994,8 +1994,8 @@
     }
   },
   "SystemSettings": {
-    "title": "Store Settings",
-    "description": "Manage application and store configurations.",
+    "title": "System Settings",
+    "description": "Manage system parameters and configurations.",
     "refresh": "Refresh",
     "loading": "Loading settings...",
     "noSettings": "No settings found.",
@@ -2010,6 +2010,73 @@
       "saveSuccess": "Settings for group '{group}' saved successfully.",
       "createSuccess": "Setting created successfully.",
       "saveError": "Failed to save settings."
+    },
+    "StoreProfile": {
+      "identity": "Store Identity",
+      "identityDesc": "Update your store logo and official name.",
+      "contactLocation": "Contact & Location",
+      "contactLocationDesc": "Address details and store contact information.",
+      "operating": "Operations",
+      "operatingDesc": "Business hours and other operational details.",
+      "changeLogo": "Change Logo",
+      "uploadLogo": "Upload Logo",
+      "remove": "Remove",
+      "storeName": "Store Name",
+      "storeNamePlaceholder": "Enter restaurant/store name",
+      "streetAddress": "Street Address",
+      "streetAddressPlaceholder": "E.g. Avenue Jacques Dalcroze 9",
+      "postalCode": "Postal Code",
+      "postalCodePlaceholder": "1000",
+      "city": "City",
+      "cityPlaceholder": "City Name",
+      "country": "Country / Region",
+      "countryPlaceholder": "Country Name",
+      "email": "Email Address",
+      "emailPlaceholder": "contact@restaurant.com",
+      "phone": "Phone Number",
+      "phonePlaceholder": "+84 123 456 789",
+      "openingHours": "Opening Hours",
+      "openingHoursPlaceholder": "E.g. Mon - Sun: 08:00 AM - 10:00 PM",
+      "saveChanges": "Save Changes",
+      "reset": "Reset",
+      "saving": "Saving...",
+      "clickToUpload": "Logo",
+      "uploadSuccess": "Logo uploaded successfully",
+      "uploadError": "Failed to upload logo",
+      "fileSizeError": "File size must be less than 5MB",
+      "updateSuccess": "Store profile updated successfully",
+      "updateError": "Failed to save store profile"
+    },
+    "General": {
+      "title": "System Parameters",
+      "addNew": "Add New Setting",
+      "empty": "No general settings found",
+      "emptyDesc": "Use the \"Add New Setting\" button above to create a group like \"reservation\"."
+    },
+    "AddModal": {
+      "key": "Setting Key",
+      "keyPlaceholder": "e.g. default_password, password.min_length",
+      "name": "Setting Name (Optional)",
+      "namePlaceholder": "A readable name for this setting",
+      "type": "Value Type",
+      "value": "Value",
+      "valuePlaceholder": "Setting value...",
+      "description": "Description (Optional)",
+      "descriptionPlaceholder": "What is this setting for?",
+      "sensitive": "Sensitive Data",
+      "sensitiveDesc": "Hide value by default (e.g. passwords, API keys)"
+    },
+    "Field": {
+      "sensitiveHidden": "Sensitive – value hidden",
+      "jsonPlaceholder": "JSON value...",
+      "sensitive": "Sensitive",
+      "types": {
+        "STRING": "Text",
+        "INT": "Integer",
+        "DECIMAL": "Decimal",
+        "BOOL": "Boolean",
+        "JSON": "JSON"
+      }
     }
   },
   "InvoiceDetail": {

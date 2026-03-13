@@ -10,15 +10,19 @@ const SystemSettingsContent = () => {
     const st = useTranslations("SystemSettings");
 
     return (
-        <div className="flex flex-col h-full bg-gray-50/50 overflow-auto p-6 pb-10">
-            <div className="flex flex-col gap-2 mb-6">
-                <h1 className="text-3xl font-bold text-gray-900 tracking-tight">
-                    {st("title")}
-                </h1>
-                <p className="text-sm text-gray-500">{st("description")}</p>
-            </div>
+        <div className="flex flex-col h-full bg-gray-50 overflow-auto">
+            <header className="w-full max-w-7xl mx-auto space-y-6 mt-6 px-4 md:px-0">
+                <div className="flex flex-col gap-2">
+                    <h1 className="text-3xl font-bold text-gray-900 tracking-tight">
+                        {st("title")}
+                    </h1>
+                    <p className="text-sm text-gray-500">{st("description")}</p>
+                </div>
+            </header>
 
-            <GeneralSettings />
+            <main className="w-full max-w-7xl mx-auto pb-16 space-y-6 mt-6 px-4 md:px-0">
+                <GeneralSettings />
+            </main>
         </div>
     );
 };

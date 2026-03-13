@@ -114,6 +114,7 @@ export const SettingGroupCard: React.FC<SettingGroupCardProps> = ({
                         <PermissionGuard permission={Permissions.ManageSystemSettings}>
                             <Button
                                 onClick={handleSave}
+                                variant="default"
                                 disabled={isSaving || editableCount === 0}
                                 size="sm"
                                 className="min-w-[100px]"
@@ -124,10 +125,7 @@ export const SettingGroupCard: React.FC<SettingGroupCardProps> = ({
                                         {t('saving')}
                                     </>
                                 ) : (
-                                    <>
-                                        <Save className="h-4 w-4 mr-2" />
-                                        {t('save')}
-                                    </>
+                                    t('save')
                                 )}
                             </Button>
                         </PermissionGuard>

@@ -1996,8 +1996,8 @@
     }
   },
   "SystemSettings": {
-    "title": "Cài đặt cửa hàng",
-    "description": "Quản lý cấu hình ứng dụng và cửa hàng.",
+    "title": "Cài đặt hệ thống",
+    "description": "Quản lý các tham số và cấu hình hệ thống.",
     "refresh": "Làm mới",
     "loading": "Đang tải cài đặt...",
     "noSettings": "Không tìm thấy cài đặt.",
@@ -2012,6 +2012,73 @@
       "saveSuccess": "Đã lưu cài đặt nhóm '{group}' thành công.",
       "createSuccess": "Tạo cài đặt mới thành công.",
       "saveError": "Lưu cài đặt thất bại."
+    },
+    "StoreProfile": {
+      "identity": "Danh tính Cửa hàng",
+      "identityDesc": "Cập nhật logo và tên chính thức của cửa hàng.",
+      "contactLocation": "Liên hệ & Vị trí",
+      "contactLocationDesc": "Thông tin địa chỉ và các phương thức liên lạc của cửa hàng.",
+      "operating": "Hoạt động",
+      "operatingDesc": "Thời gian phục vụ và các thông tin vận hành khác.",
+      "changeLogo": "Đổi Logo",
+      "uploadLogo": "Tải Logo lên",
+      "remove": "Gỡ bỏ",
+      "storeName": "Tên cửa hàng",
+      "storeNamePlaceholder": "Nhập tên nhà hàng/cửa hàng",
+      "streetAddress": "Địa chỉ đường",
+      "streetAddressPlaceholder": "Ví dụ: Số 9, Ngõ 123, Đường Jacques Dalcroze",
+      "postalCode": "Mã bưu chính",
+      "postalCodePlaceholder": "1000",
+      "city": "Thành phố",
+      "cityPlaceholder": "Hà Nội",
+      "country": "Quốc gia",
+      "countryPlaceholder": "Việt Nam",
+      "email": "Địa chỉ Email",
+      "emailPlaceholder": "contact@restaurant.com",
+      "phone": "Số điện thoại",
+      "phonePlaceholder": "+84 123 456 789",
+      "openingHours": "Giờ mở cửa",
+      "openingHoursPlaceholder": "Ví dụ: Thứ 2 - Chủ Nhật: 08:00 - 22:00",
+      "saveChanges": "Lưu thay đổi",
+      "reset": "Khôi phục",
+      "saving": "Đang lưu...",
+      "clickToUpload": "Logo",
+      "uploadSuccess": "Logo tải lên thành công",
+      "uploadError": "Tải lên logo thất bại",
+      "fileSizeError": "Kích thước tệp phải nhỏ hơn 5MB",
+      "updateSuccess": "Cập nhật hồ sơ cửa hàng thành công",
+      "updateError": "Lưu hồ sơ cửa hàng thất bại"
+    },
+    "General": {
+      "title": "Tham số hệ thống",
+      "addNew": "Thêm cài đặt mới",
+      "empty": "Không tìm thấy cài đặt chung",
+      "emptyDesc": "Sử dụng nút \"Thêm cài đặt mới\" ở trên để tạo một nhóm như \"reservation\"."
+    },
+    "AddModal": {
+      "key": "Khóa cài đặt",
+      "keyPlaceholder": "vd: default_password, password.min_length",
+      "name": "Tên cài đặt (Tùy chọn)",
+      "namePlaceholder": "Một tên dễ đọc cho cài đặt này",
+      "type": "Loại giá trị",
+      "value": "Giá trị",
+      "valuePlaceholder": "Giá trị cài đặt...",
+      "description": "Mô tả (Tùy chọn)",
+      "descriptionPlaceholder": "Cài đặt này dùng để làm gì?",
+      "sensitive": "Dữ liệu nhạy cảm",
+      "sensitiveDesc": "Ẩn giá trị theo mặc định (vd: mật khẩu, khóa API)"
+    },
+    "Field": {
+      "sensitiveHidden": "Nhạy cảm – giá trị bị ẩn",
+      "jsonPlaceholder": "Giá trị JSON...",
+      "sensitive": "Nhạy cảm",
+      "types": {
+        "STRING": "Văn bản",
+        "INT": "Số nguyên",
+        "DECIMAL": "Số thập phân",
+        "BOOL": "Boolean",
+        "JSON": "JSON"
+      }
     }
   },
   "InvoiceDetail": {
