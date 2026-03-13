@@ -77,43 +77,45 @@ function KitchenContent() {
 
     return (
         <div className="w-full flex flex-col h-full bg-[#F8F9FA] px-4 md:px-0">
-            {/* Page Header - Responsive Row */}
-            <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 mb-8 mt-2">
-                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6 lg:gap-8 w-full lg:w-auto">
-                    {/* Title and Refresh */}
-                    <div className="flex items-center gap-3">
-                        <h1 className="text-xl font-bold text-gray-900 leading-none whitespace-nowrap">
-                            {t("title") || "Màn Hình Bếp"}
-                        </h1>
-                        <button
-                            onClick={handleRefresh}
-                            disabled={isLoading || isRefreshing}
-                            className="p-2 bg-white border border-gray-100 rounded-lg hover:bg-gray-50 transition-colors shadow-sm disabled:opacity-50 group shrink-0"
-                            title={t("refresh") || "Refresh"}
-                        >
-                            <RefreshCw className={`w-3.5 h-3.5 text-gray-600 transition-transform duration-500 ${isRefreshing ? "animate-spin" : "group-hover:rotate-180"}`} />
-                        </button>
+            {/* Page Header - Compact & Sticky on Mobile */}
+            <div className="sticky top-0 z-20 bg-[#F8F9FA]/90 backdrop-blur-md -mx-4 px-4 py-2 border-b border-gray-100 mb-4 lg:relative lg:top-auto lg:z-auto lg:bg-transparent lg:backdrop-blur-none lg:mx-0 lg:px-0 lg:py-0 lg:border-none lg:mb-6 lg:mt-1">
+                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 lg:gap-4">
+                    <div className="flex items-center justify-between lg:justify-start gap-4 sm:gap-6 w-full lg:w-auto">
+                        {/* Title and Refresh */}
+                        <div className="flex items-center gap-2">
+                            <h1 className="text-base sm:text-lg font-bold text-gray-900 leading-none whitespace-nowrap">
+                                {t("title") || "Màn Hình Bếp"}
+                            </h1>
+                            <button
+                                onClick={handleRefresh}
+                                disabled={isLoading || isRefreshing}
+                                className="p-1.5 bg-white border border-gray-100 rounded-lg hover:bg-gray-50 transition-colors shadow-sm disabled:opacity-50 group shrink-0"
+                                title={t("refresh") || "Refresh"}
+                            >
+                                <RefreshCw className={`w-3 h-3 text-gray-600 transition-transform duration-500 ${isRefreshing ? "animate-spin" : "group-hover:rotate-180"}`} />
+                            </button>
+                        </div>
+
+                        {/* Order Status Bar - Scrollable Row */}
+                        <div className="flex-1 lg:flex-initial min-w-0">
+                            <KitchenStatusBar
+                                orderCounts={orderCounts}
+                                activeStatus={activeStatus}
+                                onStatusChange={setActiveStatus}
+                                t={t}
+                            />
+                        </div>
                     </div>
 
-                    {/* Order Status Bar */}
-                    <div className="w-full sm:w-auto">
-                        <KitchenStatusBar
-                            orderCounts={orderCounts}
-                            activeStatus={activeStatus}
-                            onStatusChange={setActiveStatus}
-                            t={t}
+                    {/* Search Bar - Full width on Mobile */}
+                    <div className="w-full lg:w-64 xl:w-72">
+                        <KeywordSearch
+                            value={searchQuery}
+                            onChange={setSearchQuery}
+                            placeholder={t("searchPlaceholder") || "Tìm kiếm..."}
+                            loading={isLoading}
                         />
                     </div>
-                </div>
-
-                {/* Search Bar - Responsive width */}
-                <div className="w-full lg:w-64 xl:w-80">
-                    <KeywordSearch
-                        value={searchQuery}
-                        onChange={setSearchQuery}
-                        placeholder={t("searchPlaceholder") || "Tìm kiếm..."}
-                        loading={isLoading}
-                    />
                 </div>
             </div>
 
