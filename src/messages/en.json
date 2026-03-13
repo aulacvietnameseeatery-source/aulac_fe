@@ -1436,6 +1436,7 @@
       "menuTitle": "Order Details",
       "menuSubtitleEdit": "Select items to add to the current order.",
       "menuSubtitleView": "This order has been paid. View-only mode.",
+      "menuSubtitleCancelled": "This order has been cancelled. View-only mode.",
       "clear": "Clear",
       "cancel": "Cancel",
       "editOrderTitle": "Edit Order #{id}",
@@ -1445,8 +1446,10 @@
       "newItems": "New Items",
       "addMoreItemsHint": "Select items from the left menu to add",
       "paidOrderWarning": "This order has been paid. Please create a new order.",
+      "cancelledOrderWarning": "The order has been cancelled. It is not possible to edit or print the invoice.",
       "addItemsButton": "Add Items to Order",
       "createInvoice": "Create Invoice",
+      "createReceipt": "Create Receipt",
       "newTotal": "Estimated Total",
       "warningTitle": "Confirm Adding Items",
       "completedOrderWarning": "This order is completed but not yet paid. Adding new items will change the order status back to In Progress. Are you sure?",
@@ -1461,6 +1464,27 @@
         "Completed": "Completed",
         "Cancelled": "Cancelled"
       }
+    },
+    "RecentOrders": {
+      "title": "Recent Orders",
+      "refresh": "Refresh",
+      "filterAll": "All",
+      "dineIn": "Dine-in",
+      "takeAway": "Takeaway",
+      "loading": "Loading orders...",
+      "noOrdersFound": "No orders found.",
+      "table": "Table",
+      "status": {
+        "PENDING": "Pending",
+        "IN_PROGRESS": "In Progress",
+        "COMPLETED": "Completed",
+        "CANCELLED": "Cancelled"
+      }
+    },
+    "DishDetail": {
+      "noDescription": "No description available.",
+      "price": "Price",
+      "addToOrder": "Add to Order"
     },
     "PaymentModal": {
       "title": "Pay & Complete Order",
