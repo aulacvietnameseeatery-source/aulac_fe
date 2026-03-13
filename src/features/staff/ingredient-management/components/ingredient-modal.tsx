@@ -60,7 +60,6 @@ const IngredientModal: React.FC<IngredientModalProps> = ({
     const [pendingFiles, setPendingFiles] = useState<File[]>([]);
     const [removedImageIds, setRemovedImageIds] = useState<number[]>([]);
 
-    // ── Fetch lookup values cho Loại nguyên liệu (Category) ──
     const typeLookup = useLookupCrud({
         baseUrl: "/api/ingredients/types",
         queryKey: ["ingredients", "types"],
@@ -75,7 +74,6 @@ const IngredientModal: React.FC<IngredientModalProps> = ({
                 typeLvId: ingredient.typeLvId || "",
                 minStockLevel: ingredient.minStockLevel,
                 supplierIds: ingredient.suppliers?.map(s => s.supplierId) || [],
-                // Giả sử backend trả về ImageUrl và ImageId
                 images: ingredient.imageId ? [{ mediaId: ingredient.imageId, url: ingredient.imageUrl }] : [],
             });
         } else {
@@ -89,7 +87,6 @@ const IngredientModal: React.FC<IngredientModalProps> = ({
         setFormData((prev) => ({ ...prev, [field]: value }));
     };
 
-    // ── Logic thêm/xóa Nhà cung cấp (Tag UI) ──
     const handleAddSupplier = (supplierIdStr: string) => {
         const supplierId = Number(supplierIdStr);
         if (supplierId && !formData.supplierIds.includes(supplierId)) {
@@ -119,7 +116,6 @@ const IngredientModal: React.FC<IngredientModalProps> = ({
         onSubmit(submitData, pendingFiles, removedImageIds);
     };
 
-    // supplier dropdown chỉ hiển thị những nhà cung cấp chưa được chọn
     const supplierOptions = availableSuppliers
         .filter(s => !formData.supplierIds.includes(s.supplierId))
         .map(s => ({
@@ -132,13 +128,14 @@ const IngredientModal: React.FC<IngredientModalProps> = ({
             open={isOpen}
             onClose={onClose}
             title={mode === "add" ? "Add New Ingredient" : "Edit Ingredient"}
-            width="660px"
+            width="min(95vw, 660px)" // Responsive width cho Dialog
             footer={
-                <div className="flex items-center gap-3 w-full">
+                // Chuyển nút Hủy xuống dưới trên mobile, giãn đều trên desktop
+                <div className="flex flex-col-reverse sm:flex-row items-center gap-3 w-full">
                     <Button
                         type="button"
                         variant="outline"
-                        className="w-full"
+                        className="w-full sm:flex-1"
                         onClick={onClose}
                         disabled={isSubmitting}
                     >
@@ -147,8 +144,7 @@ const IngredientModal: React.FC<IngredientModalProps> = ({
                     <Button
                         type="submit"
                         form="ingredient-form"
-                        variant="primary"
-                        className="w-full"
+                        className="w-full sm:flex-1"
                         disabled={isSubmitting}
                         isLoading={isSubmitting}
                     >
@@ -157,11 +153,11 @@ const IngredientModal: React.FC<IngredientModalProps> = ({
                 </div>
             }
         >
-            <form id="ingredient-form" onSubmit={handleSubmit}>
-                <div className="space-y-5 p-5">
-                    {/* Name + Unit row */}
-                    <div className="grid grid-cols-3 gap-4">
-                        <div className="col-span-2">
+            <form id="ingredient-form" onSubmit={handleSubmit} className="max-h-[75vh] overflow-y-auto">
+                <div className="space-y-4 md:space-y-5 p-4 md:p-5">
+                    {/* RESPONSIVE: Name + Unit xếp chồng trên mobile (grid-cols-1), dàn hàng ngang trên md (grid-cols-3) */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div className="md:col-span-2">
                             <ALInput
                                 title="Ingredient Name"
                                 required
@@ -170,7 +166,7 @@ const IngredientModal: React.FC<IngredientModalProps> = ({
                                 onChange={(e) => handleChange("ingredientName", e.target.value)}
                             />
                         </div>
-                        <div className="col-span-1">
+                        <div className="md:col-span-1">
                             <ALCombobox
                                 title="Unit"
                                 required
@@ -183,8 +179,8 @@ const IngredientModal: React.FC<IngredientModalProps> = ({
                         </div>
                     </div>
 
-                    {/* Type + Min Stock row */}
-                    <div className="grid grid-cols-2 gap-4">
+                    {/* RESPONSIVE: Type + Min Stock xếp chồng trên mobile, chia đôi trên máy tính */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <LookupCombobox
                             lookup={typeLookup}
                             title="Category"
@@ -208,13 +204,13 @@ const IngredientModal: React.FC<IngredientModalProps> = ({
                     {/* Suppliers Section (Tag UI) */}
                     <div className="space-y-3">
                         <div className="flex items-center gap-2">
-                            <h5 className="text-sm font-semibold text-gray-500 uppercase tracking-wider">
+                            <h5 className="text-xs md:text-sm font-semibold text-gray-500 uppercase tracking-wider">
                                 Suppliers
                             </h5>
                             <div className="grow border-t border-gray-100" />
                         </div>
 
-                        <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                        <div className="bg-gray-50 rounded-lg p-3 md:p-4 border border-gray-200">
                             <div className="mb-3">
                                 <ALCombobox
                                     title=""
@@ -226,7 +222,6 @@ const IngredientModal: React.FC<IngredientModalProps> = ({
                                 />
                             </div>
 
-                            {/* Selected Suppliers Badges */}
                             <div className="flex flex-wrap gap-2">
                                 {formData.supplierIds.length === 0 && (
                                     <span className="text-sm text-gray-400 italic">No suppliers assigned yet.</span>
@@ -254,7 +249,7 @@ const IngredientModal: React.FC<IngredientModalProps> = ({
                     {/* Media Section */}
                     <div className="space-y-3">
                         <div className="flex items-center gap-2">
-                            <h5 className="text-sm font-semibold text-gray-500 uppercase tracking-wider">
+                            <h5 className="text-xs md:text-sm font-semibold text-gray-500 uppercase tracking-wider">
                                 Image
                             </h5>
                             <div className="grow border-t border-gray-100" />
