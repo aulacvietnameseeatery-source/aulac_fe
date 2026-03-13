@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
-import { X, Search, Loader2 } from 'lucide-react';
+import { X, Search, Loader2, Award, Star } from 'lucide-react';
 import { createOrderService } from '../services/create-edit-order.service';
 import { CustomerDto } from '../types/create-order.types';
 
@@ -33,7 +33,7 @@ export const CustomerSearchModal: React.FC<Props> = ({ isOpen, onClose, currentC
     setError('');
     try {
       const result = await createOrderService.getCustomerByPhone(phone);
-      if (result) {
+      if (result && result.customerId) {
         setSearchedCustomer(result);
       } else {
         setError('Customer not found.');
@@ -43,6 +43,7 @@ export const CustomerSearchModal: React.FC<Props> = ({ isOpen, onClose, currentC
       setError('Error finding customer or not exists.');
       setSearchedCustomer(null);
     } finally {
+      console.log(searchedCustomer)
       setLoading(false);
     }
   };
@@ -87,15 +88,35 @@ export const CustomerSearchModal: React.FC<Props> = ({ isOpen, onClose, currentC
             {error && <p className="text-red-500 text-xs mt-1.5">{error}</p>}
           </div>
 
-          {searchedCustomer && (
             <div className="p-3 bg-blue-50/50 border border-blue-100 rounded-xl space-y-3">
               <div>
                 <label className="text-xs font-semibold text-gray-500 block mb-1">{t('fullName')}</label>
-                <input disabled value={searchedCustomer.fullName} className="w-full bg-white border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-700 font-medium" />
+                <input disabled value={searchedCustomer ? searchedCustomer.fullName : ''} className="w-full bg-white border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-700 font-medium" />
               </div>
               <div>
                 <label className="text-xs font-semibold text-gray-500 block mb-1">{t('email')}</label>
-                <input disabled value={searchedCustomer.email} className="w-full bg-white border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-700" />
+                <input disabled value={searchedCustomer ? searchedCustomer.email : ''} className="w-full bg-white border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-700" />
+              </div>
+            </div>
+
+            {searchedCustomer && (
+            <div className="grid grid-cols-2 gap-3">
+              <div className="bg-[#1A3A52]/5 border border-[#1A3A52]/10 rounded-lg p-2.5 flex flex-col justify-center">
+                <span className="text-[10px] font-bold text-[#1A3A52]/60 uppercase flex items-center gap-1 mb-1">
+                  <Award className="w-3 h-3" /> Membership
+                </span>
+                <span className={`text-sm font-bold ${searchedCustomer.isMember ? 'text-green-600' : 'text-[#1A3A52]/70'}`}>
+                  {searchedCustomer.isMember ? 'VIP Member' : 'Standard'}
+                </span>
+              </div>
+
+              <div className="bg-[#D5BA98]/10 border border-[#D5BA98]/30 rounded-lg p-2.5 flex flex-col justify-center">
+                <span className="text-[10px] font-bold text-[#1A3A52]/60 uppercase flex items-center gap-1 mb-1">
+                  <Star className="w-3 h-3 text-[#D5BA98]" /> Loyalty Points
+                </span>
+                <span className="text-sm font-bold text-[#1A3A52]">
+                  {searchedCustomer.loyaltyPoints} pts
+                </span>
               </div>
             </div>
           )}
