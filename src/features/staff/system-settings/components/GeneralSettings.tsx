@@ -58,7 +58,7 @@ export const GeneralSettings: React.FC = () => {
                     </div>
                     <h3 className="text-base font-medium text-gray-900">No general settings found</h3>
                     <p className="text-sm text-gray-500 max-w-xs mt-1">
-                        Use the "Add New Setting" button above to create a group like "reservation".
+                        Use the &quot;Add New Setting&quot; button above to create a group like &quot;reservation&quot;.
                     </p>
                 </div>
             ) : (

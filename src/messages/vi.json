@@ -1460,7 +1460,9 @@
         "In progress": "Đang làm",
         "Completed": "Hoàn thành",
         "Cancelled": "Đã huỷ"
-      }
+      },
+      "tableLabel": "Bàn",
+      "customerLabel": "Khách hàng"
     },
     "PaymentModal": {
       "title": "Thanh toán & Hoàn tất đơn hàng",
