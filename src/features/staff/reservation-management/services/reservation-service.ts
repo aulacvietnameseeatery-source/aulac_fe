@@ -2,7 +2,7 @@
 
 import { ApiResponse, PagedResult } from "@/types/api-response.types";
 import { ReservationDto, ReservationStatusDto, GetReservationsParams, ReservationDetailDto } from "../types/reservation-types";
-import {api} from "@/lib/http";
+import { api } from "@/lib/http";
 
 export const reservationService = {
     // 1. Get List Reservations

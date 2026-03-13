@@ -9,7 +9,7 @@ import { useReservationList } from "@/features/staff/reservation-management/hook
 import { ReservationCard } from "@/features/staff/reservation-management/components/reservation-card";
 import { CheckInModal } from "@/features/staff/reservation-management/components/check-in-modal";
 import { ReservationDto } from "@/features/staff/reservation-management/types/reservation-types";
-import {TablePagination} from "@/components/ui/table";
+import { TablePagination } from "@/components/ui/table";
 import { useRouter } from "next/navigation";
 import { ProtectedRoute } from "@/components/protected-route";
 import { Permissions } from "@/types/const";
@@ -92,11 +92,10 @@ const ReservationListContent = () => {
                         <div className="flex bg-gray-100/80 p-1 rounded-lg border border-gray-200/60 overflow-x-auto hide-scrollbar">
                             <button
                                 onClick={() => actions.onStatusChange(null)}
-                                className={`px-4 py-1 text-[13px] font-medium rounded-md transition-all whitespace-nowrap ${
-                                    filters.statusId === null
+                                className={`px-4 py-1 text-[13px] font-medium rounded-md transition-all whitespace-nowrap ${filters.statusId === null
                                         ? 'bg-white text-gray-900 shadow-sm border border-gray-200'
                                         : 'text-gray-500 hover:text-gray-700 hover:bg-gray-200/50'
-                                }`}
+                                    }`}
                             >
                                 All
                             </button>
@@ -104,11 +103,10 @@ const ReservationListContent = () => {
                                 <button
                                     key={status.statusId}
                                     onClick={() => actions.onStatusChange(status.statusId)}
-                                    className={`px-4 py-1 text-[13px] font-medium rounded-md transition-all whitespace-nowrap ${
-                                        filters.statusId === status.statusId
+                                    className={`px-4 py-1 text-[13px] font-medium rounded-md transition-all whitespace-nowrap ${filters.statusId === status.statusId
                                             ? 'bg-white text-gray-900 shadow-sm border border-gray-200'
                                             : 'text-gray-500 hover:text-gray-700 hover:bg-gray-200/50'
-                                    }`}
+                                        }`}
                                 >
                                     {status.statusName}
                                 </button>
