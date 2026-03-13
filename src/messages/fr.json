@@ -840,6 +840,7 @@
     }
   },
   "Supplier": {
+    "close": "Fermer",
     "List": {
       "title": "Gestion des Fournisseurs",
       "description": "Gérer et organiser vos fournisseurs efficacement.",
@@ -1030,6 +1031,83 @@
       "confirmed": "Confirmée",
       "checkedIn": "Installé",
       "phoneHint": "*Les réservations téléphoniques sont confirmées par défaut."
+    }
+  },
+  "DishCategory": {
+    "List": {
+      "title": "Gestion des catégories de plats",
+      "description": "Gérez et organisez vos catégories de menu de restaurant de manière efficace.",
+      "searchPlaceholder": "Rechercher par nom de catégorie...",
+      "addNew": "Ajouter une nouvelle catégorie",
+      "cancel": "Annuler",
+      "table": {
+        "no": "N°",
+        "name": "Nom",
+        "description": "Description",
+        "status": "Statut"
+      },
+      "status": {
+        "active": "Actif",
+        "inactive": "Inactif"
+      },
+      "notifications": {
+        "activated": "Catégorie activée avec succès",
+        "deactivated": "Catégorie désactivée avec succès",
+        "updateError": "Échec de la mise à jour du statut de la catégorie",
+        "createSuccess": "Catégorie créée avec succès",
+        "updateSuccess": "Catégorie mise à jour avec succès",
+        "actionError": "Une erreur s'est produite lors du traitement de la demande",
+        "batchActivateSuccess": "{count} catégorie(s) activée(s) avec succès",
+        "batchDeactivateSuccess": "{count} catégorie(s) désactivée(s) avec succès",
+        "batchUpdateError": "Une erreur s'est produite lors de la mise à jour par lot"
+      },
+      "filters": {
+        "allStatuses": "Tous les statuts",
+        "active": "Actif",
+        "inactive": "Inactif"
+      },
+      "batchActions": {
+        "activate": "Activer",
+        "deactivate": "Désactiver"
+      }
+    },
+    "Add": {
+      "title": "Ajouter une nouvelle catégorie de plats",
+      "subtitle": "Créez une nouvelle catégorie pour organiser vos éléments de menu",
+      "saveButton": "Créer une catégorie",
+      "cancel": "Annuler",
+      "categoryName": "Nom de la catégorie",
+      "categoryNamePlaceholder": "ex : Entrées, Plat principal, Desserts",
+      "description": "Description",
+      "descriptionPlaceholder": "Fournissez une brève description de cette catégorie et des types de plats qu'elle comprend...",
+      "validation": {
+        "nameRequired": "Le nom de la catégorie est requis",
+        "nameMaxLength": "Le nom de la catégorie ne peut pas dépasser 100 caractères",
+        "descriptionMaxLength": "La description ne peut pas dépasser 100 caractères",
+        "fixErrors": "Veuillez corriger les erreurs de validation"
+      }
+    },
+    "Edit": {
+      "title": "Modifier la catégorie de plats",
+      "subtitle": "Mettre à jour les informations et les paramètres de la catégorie",
+      "saveButton": "Enregistrer les modifications",
+      "cancel": "Annuler",
+      "categoryName": "Nom de la catégorie",
+      "categoryNamePlaceholder": "ex : Entrées, Plat principal, Desserts",
+      "description": "Description",
+      "descriptionPlaceholder": "Fournissez une brève description de cette catégorie et des types de plats qu'elle comprend...",
+      "status": "Statut de la catégorie",
+      "statusDescription": "Basculer pour activer ou masquer cette catégorie",
+      "statusActive": "Cette catégorie est active et visible dans le menu",
+      "statusInactive": "Cette catégorie est inactive et masquée aux clients",
+      "validation": {
+        "nameRequired": "Le nom de la catégorie est requis",
+        "nameMaxLength": "Le nom de la catégorie ne peut pas dépasser 100 caractères",
+        "descriptionMaxLength": "La description ne peut pas dépasser 100 caractères",
+        "fixErrors": "Veuillez corriger les erreurs de validation"
+      },
+      "loading": "Chargement...",
+      "backToList": "Retour à la liste"
     }
   },
   "Dish": {
@@ -1354,6 +1432,7 @@
       "menuTitle": "Détails de la commande",
       "menuSubtitleEdit": "Sélectionnez des articles à ajouter à la commande actuelle.",
       "menuSubtitleView": "Cette commande a été payée. Mode lecture seule.",
+      "menuSubtitleCancelled": "Cette commande a été annulée. Mode lecture seule.",
       "clear": "Effacer",
       "cancel": "Annuler",
       "editOrderTitle": "Modifier la commande #{id}",
@@ -1363,8 +1442,10 @@
       "newItems": "Nouveaux articles",
       "addMoreItemsHint": "Sélectionnez des articles dans le menu à gauche pour les ajouter",
       "paidOrderWarning": "Cette commande a été payée. Veuillez créer une nouvelle commande.",
+      "cancelledOrderWarning": "La commande a été annulée. Il est impossible de modifier ou d'imprimer la facture.",
       "addItemsButton": "Ajouter des articles à la commande",
       "createInvoice": "Créer la facture",
+      "createReceipt": "Créer un reçu",
       "newTotal": "Total estimé",
       "warningTitle": "Confirmer l'ajout",
       "completedOrderWarning": "Cette commande est terminée mais non payée. Ajouter de nouveaux articles remettra la commande au statut En cours. Êtes-vous sûr ?",
@@ -1379,6 +1460,27 @@
         "Completed": "Terminé",
         "Cancelled": "Annulé"
       }
+    },
+    "RecentOrders": {
+      "title": "Commandes récentes",
+      "refresh": "Actualiser",
+      "filterAll": "Toutes",
+      "dineIn": "Sur place",
+      "takeAway": "À emporter",
+      "loading": "Chargement des commandes...",
+      "noOrdersFound": "Aucune commande trouvée.",
+      "table": "Table",
+      "status": {
+        "PENDING": "En attente",
+        "IN_PROGRESS": "En cours",
+        "COMPLETED": "Terminée",
+        "CANCELLED": "Annulée"
+      }
+    },
+    "DishDetail": {
+      "noDescription": "Aucune description disponible.",
+      "price": "Prix",
+      "addToOrder": "Ajouter à la commande"
     },
     "PaymentModal": {
       "title": "Payer & Terminer la commande",
@@ -1912,8 +2014,8 @@
     }
   },
   "SystemSettings": {
-    "title": "Paramètres de la boutique",
-    "description": "Gérez la configuration de l'application et de la boutique.",
+    "title": "Paramètres système",
+    "description": "Gérez les paramètres et les configurations du système.",
     "refresh": "Actualiser",
     "loading": "Chargement des paramètres...",
     "noSettings": "Aucun paramètre trouvé.",
@@ -1928,6 +2030,73 @@
       "saveSuccess": "Paramètres du groupe '{group}' enregistrés avec succès.",
       "createSuccess": "Paramètre créé avec succès.",
       "saveError": "Échec de l'enregistrement des paramètres."
+    },
+    "StoreProfile": {
+      "identity": "Identité du Magasin",
+      "identityDesc": "Mettez à jour le logo et le nom officiel de votre magasin.",
+      "contactLocation": "Contact et Emplacement",
+      "contactLocationDesc": "Détails de l'adresse et coordonnées du magasin.",
+      "operating": "Opérations",
+      "operatingDesc": "Heures d'ouverture et autres détails opérationnels.",
+      "changeLogo": "Changer le logo",
+      "uploadLogo": "Télécharger le logo",
+      "remove": "Supprimer",
+      "storeName": "Nom du magasin",
+      "storeNamePlaceholder": "Entrez le tên du restaurant/magasin",
+      "streetAddress": "Adresse",
+      "streetAddressPlaceholder": "Par exemple : Avenue Jacques Dalcroze 9",
+      "postalCode": "Code postal",
+      "postalCodePlaceholder": "1000",
+      "city": "Ville",
+      "cityPlaceholder": "Nom de la ville",
+      "country": "Pays / Région",
+      "countryPlaceholder": "Nom du pays",
+      "email": "Adresse e-mail",
+      "emailPlaceholder": "contact@restaurant.com",
+      "phone": "Numéro de téléphone",
+      "phonePlaceholder": "+33 1 23 45 67 89",
+      "openingHours": "Heures d'ouverture",
+      "openingHoursPlaceholder": "Ex : lun - dim : 08h00 - 22h00",
+      "saveChanges": "Enregistrer les modifications",
+      "reset": "Réinitialiser",
+      "saving": "Enregistrement...",
+      "clickToUpload": "Logo",
+      "uploadSuccess": "Logo téléchargé avec succès",
+      "uploadError": "Échec du téléchargement du logo",
+      "fileSizeError": "La taille du fichier doit être inférieure à 5 Mo",
+      "updateSuccess": "Profil du magasin mis à jour avec succès",
+      "updateError": "Échec de l'enregistrement du profil du magasin"
+    },
+    "General": {
+      "title": "Paramètres système",
+      "addNew": "Ajouter un paramètre",
+      "empty": "Aucun paramètre général trouvé",
+      "emptyDesc": "Utilisez le bouton \"Ajouter un paramètre\" ci-dessus pour créer un groupe comme \"reservation\"."
+    },
+    "AddModal": {
+      "key": "Clé du paramètre",
+      "keyPlaceholder": "Ex : default_password, password.min_length",
+      "name": "Nom du paramètre (optionnel)",
+      "namePlaceholder": "Un nom lisible pour ce paramètre",
+      "type": "Type de valeur",
+      "value": "Valeur",
+      "valuePlaceholder": "Valeur du paramètre...",
+      "description": "Description (optionnelle)",
+      "descriptionPlaceholder": "À quoi sert ce paramètre ?",
+      "sensitive": "Données sensibles",
+      "sensitiveDesc": "Masquer la valeur par défaut (ex : mots de passe, clés API)"
+    },
+    "Field": {
+      "sensitiveHidden": "Sensible – valeur masquée",
+      "jsonPlaceholder": "Valeur JSON...",
+      "sensitive": "Sensible",
+      "types": {
+        "STRING": "Texte",
+        "INT": "Entier",
+        "DECIMAL": "Décimal",
+        "BOOL": "Booléen",
+        "JSON": "JSON"
+      }
     }
   },
   "InvoiceDetail": {

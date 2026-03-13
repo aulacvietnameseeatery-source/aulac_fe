@@ -41,6 +41,7 @@ export function DishDetailModal({ dishId, isOpen, onClose, onAddToCart }: DishDe
   const tHero = useTranslations("DishDetails.Hero");
   const tComp = useTranslations("DishDetails.Composition");
 
+
   useEffect(() => {
     document.body.style.overflow = isOpen ? "hidden" : "auto";
     return () => { document.body.style.overflow = "auto"; };
@@ -115,15 +116,15 @@ export function DishDetailModal({ dishId, isOpen, onClose, onAddToCart }: DishDe
             ) : (
               <div className="flex flex-col md:flex-row">
                 {/* ── LEFT: Image panel ── */}
-                <div className="relative w-full md:w-[380px] md:shrink-0 h-[340px] md:h-[480px] bg-[#0a0f1e] overflow-hidden shrink-0">
+                <div className="relative w-full md:w-[380px] md:shrink-0 h-[340px] md:h-[480px] bg-[#0a0f1e] overflow-hidden shrink-0 flex flex-col">
                   <Script src="https://product-gallery.cloudinary.com/all.js" strategy="lazyOnload" />
 
                   {/* Gold border overlay on image */}
-                  <div className="pointer-events-none absolute inset-0 z-20 border-r border-[#C5A059]/30" />
+                  <div className="pointer-events-none absolute inset-0 z-20 md:border-r border-[#C5A059]/30" />
 
                   {/* Photo */}
                   {viewMode === "photo" && (
-                    <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="absolute inset-0 flex items-center justify-center pb-16 md:pb-0">
                       <img
                         src={dishData.data.imageUrls?.[0] || HERO_IMAGE}
                         alt={dishData.data.dishName}
@@ -137,12 +138,12 @@ export function DishDetailModal({ dishId, isOpen, onClose, onAddToCart }: DishDe
                   {/* 360 */}
                   <div
                     id="cloudinary-360-modal"
-                    className={`absolute inset-0 w-full h-full z-10 bg-[#0a0f1e] ${viewMode === "360" ? "block" : "hidden"}`}
+                    className={`absolute inset-0 w-full h-full z-10 bg-[#0a0f1e] pb-16 md:pb-0 ${viewMode === "360" ? "block" : "hidden"}`}
                   />
 
                   {/* Video */}
                   {viewMode === "video" && (
-                    <div className="absolute inset-0 z-10 flex items-center justify-center bg-black animate-in fade-in">
+                    <div className="absolute inset-0 z-10 flex items-center justify-center bg-black animate-in fade-in pb-16 md:pb-0">
                       <p className="text-[#C5A059] text-sm font-medium tracking-widest uppercase">Video Coming Soon</p>
                     </div>
                   )}
@@ -166,7 +167,7 @@ export function DishDetailModal({ dishId, isOpen, onClose, onAddToCart }: DishDe
                           setOpenPopup(true);
                         }
                       }}
-                      className="absolute bottom-4 left-4 right-4 z-20 h-10 rounded-lg bg-[#FFAB2D] px-4 shadow-lg hover:bg-[#FFAB2D]/90 transition-colors"
+                      className="absolute bottom-4 md:bottom-4 left-4 right-4 z-30 h-10 rounded-lg bg-[#FFAB2D] px-4 shadow-lg hover:bg-[#FFAB2D]/90 transition-colors"
                     >
                       <span className="font-body text-sm font-bold text-[#1A3A52] tracking-widest uppercase">{tHero("order_now")}</span>
                     </button>
@@ -207,7 +208,7 @@ export function DishDetailModal({ dishId, isOpen, onClose, onAddToCart }: DishDe
 
                   {/* Price */}
                   <div className="font-display mt-1.5 text-lg font-bold text-[#C5A059]">
-                    {dishData.data.price?.toLocaleString("vi-VN")} ₫
+                    {dishData.data.price?.toLocaleString("en-US")} CHF
                   </div>
 
                   {/* Divider */}

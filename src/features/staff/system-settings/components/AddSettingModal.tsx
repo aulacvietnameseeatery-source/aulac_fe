@@ -63,7 +63,7 @@ export const AddSettingModal = ({ open, onClose, onSuccess }: Props) => {
             <Button variant="outline" onClick={onClose} disabled={isSubmitting}>
                 {t('cancel') || 'Cancel'}
             </Button>
-            <Button onClick={handleSubmit} disabled={isSubmitting || !key.trim()}>
+            <Button variant="default" onClick={handleSubmit} disabled={isSubmitting || !key.trim()}>
                 {isSubmitting ? t('saving') || 'Saving...' : t('add') || 'Add Setting'}
             </Button>
         </div>
@@ -73,27 +73,27 @@ export const AddSettingModal = ({ open, onClose, onSuccess }: Props) => {
         <Dialog open={open} onClose={onClose} title={t('addSetting') || 'Add New Setting'} width="500px" footer={footer}>
             <div className="flex flex-col gap-4 py-4">
                 <div className="flex flex-col gap-2">
-                    <label className="text-sm font-medium">Setting Key</label>
+                    <label className="text-sm font-medium">{t('AddModal.key')}</label>
                     <Input
                         value={key}
                         onChange={(e) => setKey(e.target.value)}
-                        placeholder="e.g. default_password, password.min_length"
+                        placeholder={t('AddModal.keyPlaceholder')}
                         disabled={isSubmitting}
                     />
                 </div>
 
                 <div className="flex flex-col gap-2">
-                    <label className="text-sm font-medium">Setting Name (Optional)</label>
+                    <label className="text-sm font-medium">{t('AddModal.name')}</label>
                     <Input
                         value={settingName}
                         onChange={(e) => setSettingName(e.target.value)}
-                        placeholder="A readable name for this setting"
+                        placeholder={t('AddModal.namePlaceholder')}
                         disabled={isSubmitting}
                     />
                 </div>
 
                 <div className="flex flex-col gap-2">
-                    <label className="text-sm font-medium">Value Type</label>
+                    <label className="text-sm font-medium">{t('AddModal.type')}</label>
                     <select
                         className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background disabled:cursor-not-allowed disabled:opacity-50"
                         value={valueType}
@@ -109,7 +109,7 @@ export const AddSettingModal = ({ open, onClose, onSuccess }: Props) => {
                 </div>
 
                 <div className="flex flex-col gap-2">
-                    <label className="text-sm font-medium">Value</label>
+                    <label className="text-sm font-medium">{t('AddModal.value')}</label>
                     {valueType === 'BOOL' ? (
                         <div className="flex items-center gap-2 mt-1">
                             <Switch checked={valueBool} onChange={setValueBool} disabled={isSubmitting} />
@@ -128,26 +128,26 @@ export const AddSettingModal = ({ open, onClose, onSuccess }: Props) => {
                             type={valueType === 'INT' || valueType === 'DECIMAL' ? 'number' : 'text'}
                             value={valueStr}
                             onChange={(e) => setValueStr(e.target.value)}
-                            placeholder="Setting value..."
+                            placeholder={t('AddModal.valuePlaceholder')}
                             disabled={isSubmitting}
                         />
                     )}
                 </div>
 
                 <div className="flex flex-col gap-2">
-                    <label className="text-sm font-medium">Description (Optional)</label>
+                    <label className="text-sm font-medium">{t('AddModal.description')}</label>
                     <Input
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
-                        placeholder="What is this setting for?"
+                        placeholder={t('AddModal.descriptionPlaceholder')}
                         disabled={isSubmitting}
                     />
                 </div>
 
                 <div className="flex items-center justify-between p-3 border rounded-md bg-gray-50/50 mt-2">
                     <div className="flex flex-col gap-1">
-                        <span className="text-sm font-medium">Sensitive Data</span>
-                        <span className="text-xs text-muted-foreground">Hide value by default (e.g. passwords, API keys)</span>
+                        <span className="text-sm font-medium">{t('AddModal.sensitive')}</span>
+                        <span className="text-xs text-muted-foreground">{t('AddModal.sensitiveDesc')}</span>
                     </div>
                     <Switch checked={isSensitive} onChange={setIsSensitive} disabled={isSubmitting} />
                 </div>

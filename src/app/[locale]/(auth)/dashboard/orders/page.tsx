@@ -2,17 +2,12 @@
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
-    BookmarkCheck,
     CalendarDays,
-    CircleArrowOutDownRight,
-    CheckCircle2,
     ChevronDown,
-    Loader,
     Loader2,
     LayoutGrid,
     Plus,
     SquareKanban,
-    UserX,
     Search,
     X,
 } from "lucide-react";

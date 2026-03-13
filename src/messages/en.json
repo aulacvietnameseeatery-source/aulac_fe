@@ -844,6 +844,7 @@
     }
   },
   "Supplier": {
+    "close": "Close",
     "List": {
       "title": "Supplier Management",
       "description": "Manage and organize your suppliers efficiently.",
@@ -1042,6 +1043,7 @@
       "description": "Manage and organize your restaurant menu categories efficiently.",
       "searchPlaceholder": "Search by category name...",
       "addNew": "Add New Category",
+      "cancel": "Cancel",
       "table": {
         "no": "No.",
         "name": "Name",
@@ -1055,12 +1057,22 @@
       "notifications": {
         "activated": "Category activated successfully",
         "deactivated": "Category deactivated successfully",
-        "updateError": "Failed to update category status"
+        "updateError": "Failed to update category status",
+        "createSuccess": "Category created successfully",
+        "updateSuccess": "Category updated successfully",
+        "actionError": "An error occurred while processing the request",
+        "batchActivateSuccess": "Successfully activated {count} categories",
+        "batchDeactivateSuccess": "Successfully deactivated {count} categories",
+        "batchUpdateError": "An error occurred while updating batch status"
       },
       "filters": {
         "allStatuses": "All Statuses",
         "active": "Active",
         "inactive": "Inactive"
+      },
+      "batchActions": {
+        "activate": "Activate",
+        "deactivate": "Deactivate"
       }
     },
     "Add": {
@@ -1089,6 +1101,7 @@
       "description": "Description",
       "descriptionPlaceholder": "Provide a brief description of this category and what types of dishes it includes...",
       "status": "Category Status",
+      "statusDescription": "Toggle to activate or hide this category",
       "statusActive": "This category is active and visible in the menu",
       "statusInactive": "This category is inactive and hidden from customers",
       "validation": {
@@ -1423,6 +1436,7 @@
       "menuTitle": "Order Details",
       "menuSubtitleEdit": "Select items to add to the current order.",
       "menuSubtitleView": "This order has been paid. View-only mode.",
+      "menuSubtitleCancelled": "This order has been cancelled. View-only mode.",
       "clear": "Clear",
       "cancel": "Cancel",
       "editOrderTitle": "Edit Order #{id}",
@@ -1432,8 +1446,10 @@
       "newItems": "New Items",
       "addMoreItemsHint": "Select items from the left menu to add",
       "paidOrderWarning": "This order has been paid. Please create a new order.",
+      "cancelledOrderWarning": "The order has been cancelled. It is not possible to edit or print the invoice.",
       "addItemsButton": "Add Items to Order",
       "createInvoice": "Create Invoice",
+      "createReceipt": "Create Receipt",
       "newTotal": "Estimated Total",
       "warningTitle": "Confirm Adding Items",
       "completedOrderWarning": "This order is completed but not yet paid. Adding new items will change the order status back to In Progress. Are you sure?",
@@ -1448,6 +1464,27 @@
         "Completed": "Completed",
         "Cancelled": "Cancelled"
       }
+    },
+    "RecentOrders": {
+      "title": "Recent Orders",
+      "refresh": "Refresh",
+      "filterAll": "All",
+      "dineIn": "Dine-in",
+      "takeAway": "Takeaway",
+      "loading": "Loading orders...",
+      "noOrdersFound": "No orders found.",
+      "table": "Table",
+      "status": {
+        "PENDING": "Pending",
+        "IN_PROGRESS": "In Progress",
+        "COMPLETED": "Completed",
+        "CANCELLED": "Cancelled"
+      }
+    },
+    "DishDetail": {
+      "noDescription": "No description available.",
+      "price": "Price",
+      "addToOrder": "Add to Order"
     },
     "PaymentModal": {
       "title": "Pay & Complete Order",
@@ -1981,8 +2018,8 @@
     }
   },
   "SystemSettings": {
-    "title": "Store Settings",
-    "description": "Manage application and store configurations.",
+    "title": "System Settings",
+    "description": "Manage system parameters and configurations.",
     "refresh": "Refresh",
     "loading": "Loading settings...",
     "noSettings": "No settings found.",
@@ -1997,6 +2034,73 @@
       "saveSuccess": "Settings for group '{group}' saved successfully.",
       "createSuccess": "Setting created successfully.",
       "saveError": "Failed to save settings."
+    },
+    "StoreProfile": {
+      "identity": "Store Identity",
+      "identityDesc": "Update your store logo and official name.",
+      "contactLocation": "Contact & Location",
+      "contactLocationDesc": "Address details and store contact information.",
+      "operating": "Operations",
+      "operatingDesc": "Business hours and other operational details.",
+      "changeLogo": "Change Logo",
+      "uploadLogo": "Upload Logo",
+      "remove": "Remove",
+      "storeName": "Store Name",
+      "storeNamePlaceholder": "Enter restaurant/store name",
+      "streetAddress": "Street Address",
+      "streetAddressPlaceholder": "E.g. Avenue Jacques Dalcroze 9",
+      "postalCode": "Postal Code",
+      "postalCodePlaceholder": "1000",
+      "city": "City",
+      "cityPlaceholder": "City Name",
+      "country": "Country / Region",
+      "countryPlaceholder": "Country Name",
+      "email": "Email Address",
+      "emailPlaceholder": "contact@restaurant.com",
+      "phone": "Phone Number",
+      "phonePlaceholder": "+84 123 456 789",
+      "openingHours": "Opening Hours",
+      "openingHoursPlaceholder": "E.g. Mon - Sun: 08:00 AM - 10:00 PM",
+      "saveChanges": "Save Changes",
+      "reset": "Reset",
+      "saving": "Saving...",
+      "clickToUpload": "Logo",
+      "uploadSuccess": "Logo uploaded successfully",
+      "uploadError": "Failed to upload logo",
+      "fileSizeError": "File size must be less than 5MB",
+      "updateSuccess": "Store profile updated successfully",
+      "updateError": "Failed to save store profile"
+    },
+    "General": {
+      "title": "System Parameters",
+      "addNew": "Add New Setting",
+      "empty": "No general settings found",
+      "emptyDesc": "Use the \"Add New Setting\" button above to create a group like \"reservation\"."
+    },
+    "AddModal": {
+      "key": "Setting Key",
+      "keyPlaceholder": "e.g. default_password, password.min_length",
+      "name": "Setting Name (Optional)",
+      "namePlaceholder": "A readable name for this setting",
+      "type": "Value Type",
+      "value": "Value",
+      "valuePlaceholder": "Setting value...",
+      "description": "Description (Optional)",
+      "descriptionPlaceholder": "What is this setting for?",
+      "sensitive": "Sensitive Data",
+      "sensitiveDesc": "Hide value by default (e.g. passwords, API keys)"
+    },
+    "Field": {
+      "sensitiveHidden": "Sensitive – value hidden",
+      "jsonPlaceholder": "JSON value...",
+      "sensitive": "Sensitive",
+      "types": {
+        "STRING": "Text",
+        "INT": "Integer",
+        "DECIMAL": "Decimal",
+        "BOOL": "Boolean",
+        "JSON": "JSON"
+      }
     }
   },
   "InvoiceDetail": {

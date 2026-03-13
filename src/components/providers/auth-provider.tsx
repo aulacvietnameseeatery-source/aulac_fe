@@ -13,6 +13,7 @@ import { useTokenRefresh } from '@/hooks/use-token-refresh';
 interface AuthContextType {
   token: string | null;
   isAuthenticated: boolean;
+  isInitialized: boolean;
   userInfo: ReturnType<typeof getUserInfo>;
   login: (token: string) => void;
   logout: () => void;
@@ -242,6 +243,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const value: AuthContextType = {
     token,
     isAuthenticated,
+    isInitialized,
     userInfo,
     login,
     logout,

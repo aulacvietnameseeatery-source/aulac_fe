@@ -36,17 +36,18 @@ export const GeneralSettings: React.FC = () => {
             <div className="flex justify-between items-center">
                 <div className="flex items-center gap-2">
                     <Settings className="h-5 w-5 text-primary" />
-                    <h2 className="text-xl font-semibold tracking-tight">System Parameters</h2>
+                    <h2 className="text-xl font-semibold tracking-tight">{t('General.title')}</h2>
                 </div>
 
                 <PermissionGuard permission={Permissions.ManageSystemSettings}>
                     <Button
                         onClick={() => setIsAddModalOpen(true)}
+                        variant="outline"
                         className="shadow-sm hover:shadow-md transition-all gap-2"
                         size="sm"
                     >
                         <Plus className="h-4 w-4" />
-                        Add New Setting
+                        {t('General.addNew')}
                     </Button>
                 </PermissionGuard>
             </div>
@@ -56,9 +57,9 @@ export const GeneralSettings: React.FC = () => {
                     <div className="w-12 h-12 bg-gray-50 rounded-full flex items-center justify-center mb-4">
                         <Settings className="h-6 w-6 text-gray-400" />
                     </div>
-                    <h3 className="text-base font-medium text-gray-900">No general settings found</h3>
+                    <h3 className="text-base font-medium text-gray-900">{t('General.empty')}</h3>
                     <p className="text-sm text-gray-500 max-w-xs mt-1">
-                        Use the "Add New Setting" button above to create a group like "reservation".
+                        {t('General.emptyDesc')}
                     </p>
                 </div>
             ) : (

@@ -9,15 +9,24 @@ const buttonVariants = cva(
     {
         variants: {
             variant: {
+                // Nút chính mặc định: Save Changes, Submit Form,
                 default: "bg-navy-DEFAULT text-white hover:bg-navy-header",
-                primary: "bg-orange-DEFAULT text-navy-DEFAULT hover:bg-orange-DEFAULT/90 font-bold", // Nút cam (Reserve)
-                outline: "border border-navy-DEFAULT bg-transparent hover:bg-navy-DEFAULT/10 text-navy-DEFAULT", // Nút viền
-                ghost: "hover:bg-slate-100 hover:text-slate-900", // Nút trong suốt
-                link: "text-navy-DEFAULT underline-offset-4 hover:underline", // Nút link
-                gold: "bg-gold-classic text-white hover:bg-gold-classic/90", // Nút vàng
-                success: "bg-green-600 text-white hover:bg-green-700 shadow-sm", // Nút thành công (Active)
-                danger: "bg-red-600 text-white hover:bg-red-700 shadow-sm", // Nút nguy hiểm (Deactive)
+                // Nút cam nổi bật: Reserve, Order Now.
+                primary: "bg-orange-DEFAULT text-navy-DEFAULT hover:bg-orange-DEFAULT/90 font-bold",
+                // Nút viền: Refresh, Cancel, Edit (Header),  Add New. .
+                outline: "border border-navy-DEFAULT bg-transparent hover:bg-navy-DEFAULT/10 text-navy-DEFAULT",
+                // Nút trong suốt: Icon Edit/View/Delete trong hàng, các hành động tinh tế.
+                ghost: "hover:bg-slate-100 hover:text-slate-900",
+                // Nút dạng liên kết: Xem thêm, Forgot password.
+                link: "text-navy-DEFAULT underline-offset-4 hover:underline",
+                // Nút vàng: VIP, Premium, ưu đãi đặc biệt.
+                gold: "bg-gold-classic text-white hover:bg-gold-classic/90",
+                // Nút thành công: Active, Hoàn thành, Duyệt.
+                success: "bg-green-600 text-white hover:bg-green-700 shadow-sm",
+                // Nút nguy hiểm: Xoá, Deactive, Reject.
+                danger: "bg-red-600 text-white hover:bg-red-700 shadow-sm",
             },
+
             size: {
                 default: "h-10 px-4 py-2",
                 sm: "h-9 rounded-md px-3",

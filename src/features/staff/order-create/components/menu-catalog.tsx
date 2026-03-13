@@ -1,93 +1,115 @@
 import React, { useState, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
-import { Search, Plus, Filter } from 'lucide-react';
+import { Search } from 'lucide-react';
 import { DishDto, CategoryDto } from '../types/create-order.types';
+import { BASE_URL } from "@/lib/http";
+import { useDraggableScroll } from '@/hooks/use-draggable-scroll';
 
 interface Props {
-  title: string;          
-  subtitle: string;      
   isReadOnly?: boolean;
-  dishes: DishDto[];
-  categories: CategoryDto[];
-  locale: string;
-  getLocalizedDishName: (dish: DishDto) => string;
-  getLocalizedCategoryName: (cat: CategoryDto) => string;
-  onAddToCart: (dish: DishDto) => void;
+  title: string; subtitle: string; dishes: DishDto[]; categories: CategoryDto[]; locale: string;
+  getLocalizedDishName: (dish: DishDto) => string; getLocalizedCategoryName: (cat: CategoryDto) => string;
+  onDishClick: (dish: DishDto) => void;
 }
 
-export const MenuCatalog: React.FC<Props> = ({ title, subtitle, isReadOnly = false, dishes, categories, locale, getLocalizedDishName, getLocalizedCategoryName, onAddToCart }) => {
+export const MenuCatalog: React.FC<Props> = ({ isReadOnly, title, subtitle, dishes, categories, locale, getLocalizedDishName, getLocalizedCategoryName, onDishClick }) => {
   const t = useTranslations("Order.Create");
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | 'ALL'>('ALL');
 
+  const scrollProps = useDraggableScroll<HTMLDivElement>();
+
   const filteredDishes = useMemo(() => {
     return dishes.filter((dish) => {
-      // 1. Lọc theo tên
       const matchSearch = getLocalizedDishName(dish).toLowerCase().includes(searchQuery.toLowerCase());
-      // 2. Lọc theo danh mục
       const matchCategory = selectedCategoryId === 'ALL' || dish.categoryId === selectedCategoryId;
-      
       return matchSearch && matchCategory;
     });
   }, [dishes, searchQuery, selectedCategoryId, locale, getLocalizedDishName]);
 
   return (
-    <div className="flex-1 flex flex-col min-h-[60vh] lg:min-h-0 min-w-0 bg-white rounded-2xl shadow-sm overflow-hidden">
-      <div className="shrink-0 px-6 py-5 border-b border-gray-100">
-        <h1 className="text-2xl md:text-3xl font-bold text-[#1A3A51]">{title}</h1>
-        <p className="text-sm text-gray-500 mt-1">{subtitle}</p>
-      </div>
-      
-      <div className="flex-1 overflow-y-auto p-4 md:p-6 bg-gray-50/50 flex flex-col">
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 mb-6">
-          <h2 className="text-lg font-bold text-gray-800">{t('menuCatalog')}</h2>
-          
-          <div className="flex flex-col sm:flex-row items-center gap-3">
-            {/* Filter Category */}
-            <div className="relative w-full sm:w-auto">
-              <Filter className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4 pointer-events-none" />
-              <select
-                value={selectedCategoryId}
-                onChange={(e) => setSelectedCategoryId(e.target.value === 'ALL' ? 'ALL' : Number(e.target.value))}
-                className="w-full sm:w-48 pl-9 pr-8 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#1A3A51] appearance-none cursor-pointer"
-              >
-                <option value="ALL">{t('selectFilterAll')}</option>
-                {categories.map((cat) => (
-                  <option key={cat.categoryId} value={cat.categoryId}>
-                    {getLocalizedCategoryName(cat)}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {/* Search Input */}
-            <div className="relative w-full sm:w-auto">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
-              <input type="text" placeholder={t('searchDish')} value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full sm:w-64 pl-9 pr-4 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#1A3A51]"
-              />
-            </div>
-          </div>
+    // Dùng h-full flex flex-col để phần header đứng yên, phần grid cuộn
+    <div className="flex flex-col h-full gap-4">
+      {/* Header & Search (Cố định - shrink-0) */}
+      <div className="shrink-0 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h2 className="text-[#1A3A52] text-xl font-semibold tracking-wide">{title}</h2>
+          <p className="text-sm text-[#1A3A52]/60 mt-0.5">{subtitle}</p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
-          {/* ... (Phần render danh sách món ăn giữ nguyên như cũ) */}
-          {filteredDishes.map((dish) => (
-            <div key={dish.dishId} className="bg-white border border-gray-100 rounded-xl p-4 shadow-sm flex flex-col justify-between h-full hover:shadow-md transition-shadow">
-              <div>
-                <div className="flex justify-between items-start gap-2 mb-2">
-                  <h3 className="font-semibold text-gray-900 leading-tight">{getLocalizedDishName(dish)}</h3>
-                  <span className="font-semibold text-gray-700 bg-gray-50 px-2 py-1 rounded-md text-sm shrink-0 border border-gray-100">
-                    CHF {dish.price.toFixed(2)}
-                  </span>
+        <div className="flex items-center bg-white border border-[#D5BA98]/40 rounded-lg px-3 py-2 gap-2 focus-within:border-[#1A3A52] transition-colors shadow-sm">
+          <Search className="w-4 h-4 text-[#1A3A52]/50" />
+          <input 
+            type="text" placeholder={t('searchDish')} value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}
+            className="outline-none text-sm text-[#1A3A52] bg-transparent w-full sm:w-48 placeholder:text-[#1A3A52]/40"
+          />
+        </div>
+      </div>
+
+      {/* Category Tabs (Cố định, cuộn ngang) */}
+      <div {...scrollProps} className="shrink-0 flex gap-2 overflow-x-auto pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden border-b border-[#D5BA98]/20">
+        <button
+          onClick={() => setSelectedCategoryId('ALL')}
+          className={`flex items-center px-4 py-2 rounded-lg border shrink-0 transition-all font-medium text-sm ${
+            selectedCategoryId === 'ALL' ? "border-[#1A3A52] bg-[#1A3A52] text-[#D5BA98] shadow-sm" : "border-[#D5BA98]/40 bg-[#FDFBF9] text-[#1A3A52]/70 hover:bg-[#D5BA98]/20"
+          }`}
+        >
+          {t('selectFilterAll')}
+        </button>
+        {categories.map((cat) => (
+          <button
+            key={cat.categoryId} onClick={() => setSelectedCategoryId(cat.categoryId)}
+            className={`flex items-center px-4 py-2 rounded-lg border shrink-0 transition-all font-medium text-sm ${
+              selectedCategoryId === cat.categoryId ? "border-[#1A3A52] bg-[#1A3A52] text-[#D5BA98] shadow-sm" : "border-[#D5BA98]/40 bg-[#FDFBF9] text-[#1A3A52]/70 hover:bg-[#D5BA98]/20"
+            }`}
+          >
+            {getLocalizedCategoryName(cat)}
+          </button>
+        ))}
+      </div>
+
+      {/* Menu Grid (Phần này sẽ tự động cuộn dọc) */}
+      <div className="flex-1 min-h-0 overflow-y-auto [scrollbar-width:thin] pr-1">
+        <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-4 pb-4">
+          {filteredDishes.map((dish) => {
+            const categoryName = categories.find(c => c.categoryId === dish.categoryId) ? getLocalizedCategoryName(categories.find(c => c.categoryId === dish.categoryId)!) : 'Menu';
+            const imgSrc = dish.imageUrl ? dish.imageUrl : '/images/logo.png';
+
+            return (
+              <div 
+                key={dish.dishId} onClick={() => !isReadOnly && onDishClick(dish)}
+                className="bg-white border border-[#D5BA98]/30 hover:border-[#1A3A52] rounded-xl overflow-hidden hover:shadow-lg transition-all cursor-pointer flex flex-col group"
+              >
+                <div className="relative h-28 overflow-hidden bg-[#D5BA98]/10 flex items-center justify-center">
+                  <img 
+                    src={`${BASE_URL}${imgSrc}`} 
+                    alt={getLocalizedDishName(dish)} 
+                    className="w-full h-full object-cover"
+                    loading="lazy"
+                    onError={(e) => {
+                      e.currentTarget.src = '/images/logo.png';
+                      e.currentTarget.className = "w-1/2 h-1/2 object-contain opacity-50"; 
+                    }}
+                  />
+                  {!isReadOnly && <div className="absolute inset-0 bg-[#1A3A52]/0 group-hover:bg-[#1A3A52]/5 transition-colors" />}
                 </div>
-                <p className="text-sm text-gray-500 line-clamp-2">{dish.i18n[locale]?.description || dish.i18n['en']?.description}</p>
+                <div className="p-3 flex flex-col flex-1">
+                  <span className="text-[10px] text-[#1A3A52]/50 uppercase font-semibold mb-1 tracking-wider">{categoryName}</span>
+                  <p className="text-[#1A3A52] text-sm font-semibold leading-tight mb-2 line-clamp-2 flex-1">
+                    {getLocalizedDishName(dish)}
+                  </p>
+                  <div className="flex items-center justify-between mt-auto">
+                    <span className="text-[#1A3A52] font-bold text-base">CHF {dish.price.toFixed(2)}</span>
+                    {!isReadOnly && (
+                      <div className="w-6 h-6 rounded-full border border-[#1A3A52] flex items-center justify-center text-[#1A3A52] group-hover:bg-[#1A3A52] group-hover:text-[#D5BA98] transition-colors">
+                        +
+                      </div>
+                    )}
+                  </div>
+                </div>
               </div>
-              <button onClick={() => onAddToCart(dish)} disabled={isReadOnly} className="cursor-pointer mt-4 w-full flex items-center justify-center gap-2 py-2 border border-gray-200 rounded-lg text-sm font-semibold text-[#1A3A51] hover:bg-gray-50 transition-colors">
-                <Plus className="w-4 h-4" /> {t('add').toUpperCase()}
-              </button>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </div>
