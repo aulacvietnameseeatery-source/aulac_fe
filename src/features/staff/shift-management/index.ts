@@ -1,5 +1,6 @@
 export { ShiftManagement } from "./shift-management";
 export { ShiftLive } from "./shift-live/shift-live";
+export { AttendanceAdjustmentDialog } from "./components/attendance-adjustment-dialog";
 export { ShiftReports } from "./shift-reports/shift-reports";
 export { MyShifts } from "./my-shifts/my-shifts";
 export { ShiftStatusBadge } from "./components/shift-status-badge";

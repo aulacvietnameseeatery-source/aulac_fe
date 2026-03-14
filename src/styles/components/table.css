@@ -10,7 +10,7 @@
 }
 
 .body-list {
-    background-color: #fff;
+    background-color: #FDFBF9;
     border-radius: 4px;
     overflow: hidden;
     height: 100%;
@@ -21,13 +21,13 @@
 .form-list {
     min-height: 52px;
     height: auto;
-    border-bottom: 1px solid #e5e7eb;
+    border-bottom: 1px solid rgba(213, 186, 152, 0.45);
     padding: 4px;
 }
 
 .form-list .condition-box {
     padding: 8px 16px;
-    background: #fff;
+    background: #FDFBF9;
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
 }
@@ -51,7 +51,7 @@
 
 
 .feature-batch {
-    background-color: #fff;
+    background-color: #FDFBF9;
     align-items: center;
     display: flex;
     gap: 8px;
@@ -60,13 +60,13 @@
 }
 
 .feature-batch .selected-count {
-    color: #111827;
+    color: #1A3A52;
     font-size: 14px;
     line-height: 20px;
 }
 
 .feature-batch .unselected {
-    color: #009b71;
+    color: #4A5D4E;
     cursor: pointer;
     margin: 0 8px;
 }
@@ -91,13 +91,13 @@
 }
 
 .icon-button:hover {
-    background-color: #f3f4f6;
+    background-color: rgba(213, 186, 152, 0.2);
     border-radius: 4px;
 }
 
 /* Table styles */
 .ms-grid-viewer {
-    background-color: #fff;
+    background-color: #FDFBF9;
     position: relative;
     border-radius: 2px;
     width: 100%;
@@ -137,7 +137,7 @@
 /* Header styles */
 .ms-thead {
     height: 30px;
-    color: #262626;
+    color: #1A3A52;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -146,8 +146,8 @@
 
 th.ms-th {
     font-weight: 400;
-    background: #F3F4F6;
-    border-bottom: 1px solid #D1D5DB;
+    background: rgba(213, 186, 152, 0.22);
+    border-bottom: 1px solid rgba(213, 186, 152, 0.55);
     position: sticky;
     top: 0;
     z-index: 2;
@@ -180,7 +180,7 @@ th.ms-th {
 /* Pinned Col Style */
 
 .ms-tr .ms-col-td:nth-last-child(1 of.lock) {
-    box-shadow: inset -1px 0 0 #E5E7EB;
+    box-shadow: inset -1px 0 0 rgba(213, 186, 152, 0.5);
 
 }
 
@@ -231,13 +231,13 @@ th.ms-th {
 }
 
 .ms-tr:not(.loading):hover td {
-    background-color: #e5e7eb;
+    background-color: rgba(213, 186, 152, 0.2);
 }
 
 .ms-tr.row-selected td,
 .ms-tr.row-selected:hover td,
 .ms-tr.row-checked td {
-    background-color: #a4f6d3;
+    background-color: rgba(213, 186, 152, 0.35);
 }
 
 /* Body cell styles */
@@ -245,13 +245,13 @@ th.ms-th {
     padding: 0 16px;
     height: 32px;
     vertical-align: middle;
-    background-color: #fff;
-    border-bottom: 1px solid #E5E7EB;
+    background-color: #FDFBF9;
+    border-bottom: 1px solid rgba(213, 186, 152, 0.45);
 }
 
 .ms-tr td {
     overflow: hidden;
-    background-color: #fff;
+    background-color: #FDFBF9;
 }
 
 .ms-td div {
@@ -289,7 +289,7 @@ th.ms-th {
     text-align: center;
     position: sticky;
     left: 0;
-    background-color: #fff;
+    background-color: #FDFBF9;
 }
 
 .ms-td.multiple-cell {
@@ -301,7 +301,7 @@ th.ms-th {
 }
 
 th.ms-th.multiple-cell .ms-checkbox {
-    border-right: 1px solid #D1D5DB !important;
+    border-right: 1px solid rgba(213, 186, 152, 0.6) !important;
 }
 
 th.ms-th .filter--default {
@@ -313,7 +313,7 @@ th.ms-th:hover .filter--default {
 }
 
 .text-view {
-    color: #111827;
+    color: #1A3A52;
     display: -webkit-box;
     -webkit-box-orient: vertical;
     overflow: hidden;
@@ -342,12 +342,12 @@ th.ms-th:hover .filter--default {
     margin-right: 8px;
     white-space: normal;
     align-items: center;
-    background-color: #f3f4f6;
+    background-color: rgba(213, 186, 152, 0.2);
 }
 
 .filter-conditions .delete-all-filter {
     display: inline-block;
-    color: #f06666;
+    color: #8C3A3A;
     cursor: pointer;
     white-space: nowrap;
 }
@@ -369,7 +369,7 @@ th.ms-th:hover .filter--default {
 .ms-th-content {
     max-width: 100%;
     padding: 0 16px;
-    border-right: 1px solid #D1D5DB;
+    border-right: 1px solid rgba(213, 186, 152, 0.6);
     display: flex;
     align-items: center;
     position: relative;
@@ -394,7 +394,7 @@ th.ms-th:hover .filter--default {
     position: absolute;
     text-align: center;
     font-style: normal;
-    color: #111827;
+    color: #1A3A52;
     top: 0;
     left: 50%;
     transform: translate(-50%, 100%);
@@ -420,7 +420,7 @@ th.ms-th:hover .filter--default {
     height: 44px;
     min-height: 44px;
     align-items: center;
-    background-color: #f3f4f6;
+    background-color: rgba(213, 186, 152, 0.2);
     top: 100%;
 }
 
@@ -430,13 +430,13 @@ th.ms-th:hover .filter--default {
 }
 
 .ms-pagination .total-label {
-    color: #262626;
+    color: #1A3A52;
 }
 
 .ms-pagination .total {
     margin-left: 4px;
     font-weight: 700;
-    color: #111827;
+    color: #1A3A52;
 }
 
 .ms-pagination .pagination-sticky {
@@ -480,8 +480,8 @@ th.ms-th:hover .filter--default {
 }
 
 .filter-card {
-    background: #fff;
-    border: 1px solid #d1d5db;
+    background: #FDFBF9;
+    border: 1px solid rgba(213, 186, 152, 0.65);
     border-radius: 8px;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
     min-width: 200px;
@@ -504,7 +504,7 @@ th.ms-th:hover .filter--default {
 .filter-input {
     width: 100%;
     padding: 8px;
-    border: 1px solid #d1d5db;
+    border: 1px solid rgba(213, 186, 152, 0.65);
     border-radius: 4px;
     font-size: 13px;
 }
@@ -520,7 +520,7 @@ th.ms-th:hover .filter--default {
     list-style: none;
     animation: slide-down .2s ease;
     z-index: 9999;
-    background-color: #fff;
+    background-color: #FDFBF9;
     box-shadow: 0 0 8px #0000001a, 0 8px 16px #0000001a;
     border-radius: 4px;
     margin: 0;
@@ -542,14 +542,14 @@ th.ms-th:hover .filter--default {
 
 .menu-wrapper-item:hover {
     outline: 0;
-    background-color: #f3f4f6;
+    background-color: rgba(213, 186, 152, 0.2);
     border-radius: 2px;
     transition: all .2s ease;
 }
 
 .menu-wrapper-item.checked {
-    color: #009b71;
-    background-color: #dcfce7;
+    color: #4A5D4E;
+    background-color: rgba(213, 186, 152, 0.3);
 }
 
 .menu-wrapper-item.menu-wrapper-item-icon {
@@ -565,7 +565,7 @@ th.ms-th:hover .filter--default {
     align-items: flex-start;
     align-self: stretch;
     height: 1px;
-    background: #d1d5db;
+    background: rgba(213, 186, 152, 0.65);
 }
 
 .padding-horizontal {
@@ -585,7 +585,7 @@ th.ms-th:hover .filter--default {
 
 .condition-container {
     border: none;
-    background: white;
+    background: #FDFBF9;
     min-width: 350px;
     max-width: 350px;
     width: fit-content;
@@ -652,7 +652,7 @@ th.ms-th:hover .filter--default {
 }
 
 .scroller::-webkit-scrollbar-thumb {
-    background: #d1d5db;
+    background: rgba(213, 186, 152, 0.65);
     border-radius: 4px;
 }
 
@@ -695,24 +695,24 @@ th.ms-th:hover .filter--default {
 }
 
 .ms-input-item {
-    background: #fff;
+    background: #FDFBF9;
     border: none;
     outline: none;
     font-size: 13px;
     line-height: 20px;
-    color: #111827;
+    color: #1A3A52;
     padding: 0;
     height: 100%;
 }
 
 .ms-input-item:disabled {
-    background-color: #f3f4f6;
-    color: #9ca3af;
+    background-color: rgba(213, 186, 152, 0.2);
+    color: rgba(26, 58, 82, 0.45);
     cursor: not-allowed;
 }
 
 .ms-input-item::placeholder {
-    color: #9ca3af;
+    color: rgba(26, 58, 82, 0.45);
 }
 
 .ms-input-item:focus {
@@ -730,24 +730,24 @@ th.ms-th:hover .filter--default {
 }
 
 .ms-input-item {
-    background: #fff;
+    background: #FDFBF9;
     border: none;
     outline: none;
     font-size: 13px;
     line-height: 20px;
-    color: #111827;
+    color: #1A3A52;
     padding: 0;
     height: 100%;
 }
 
 .ms-input-item:disabled {
-    background-color: #f3f4f6;
-    color: #9ca3af;
+    background-color: rgba(213, 186, 152, 0.2);
+    color: rgba(26, 58, 82, 0.45);
     cursor: not-allowed;
 }
 
 .ms-input-item::placeholder {
-    color: #9ca3af;
+    color: rgba(26, 58, 82, 0.45);
 }
 
 .ms-input-item:focus {
@@ -759,16 +759,16 @@ th.ms-th:hover .filter--default {
     border-radius: 4px;
     padding: 4px 10px;
     min-height: 28px;
-    background: #fff;
+    background: #FDFBF9;
     transition: all 0.2s ease;
 }
 
 .input-container.border {
-    border: 1px solid #d1d5db;
+    border: 1px solid rgba(213, 186, 152, 0.65);
 }
 
 .input-container:hover:not(.disabled) {
-    border-color: #9ca3af;
+    border-color: rgba(26, 58, 82, 0.45);
 }
 
 .input-container:focus-within:not(.disabled) {
@@ -776,11 +776,11 @@ th.ms-th:hover .filter--default {
 }
 
 .input-container.error {
-    border-color: #e54848 !important;
+    border-color: #8C3A3A !important;
 }
 
 .input-container.disabled {
-    background-color: #f3f4f6;
+    background-color: rgba(213, 186, 152, 0.2);
     cursor: not-allowed;
-    border-color: #d1d5db;
+    border-color: rgba(213, 186, 152, 0.65);
 }

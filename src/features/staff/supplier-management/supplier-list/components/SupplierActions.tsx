@@ -32,7 +32,8 @@ export const SupplierActions = ({
       <button 
         onClick={(e) => handleAction(e, onView)}
         className="text-gray-400 hover:text-green-600 transition-colors cursor-pointer p-1"
-        title="View Details"
+        data-tooltip-content="View Details"
+        data-tooltip-id="my-tooltip"
       >
         <Eye size={18} />
       </button>
@@ -41,7 +42,8 @@ export const SupplierActions = ({
       <button 
         onClick={(e) => handleAction(e, onEdit)}
         className="text-gray-400 hover:text-blue-600 transition-colors cursor-pointer p-1"
-        title="Edit Supplier"
+        data-tooltip-content="Edit Supplier"
+        data-tooltip-id="my-tooltip"
       >
         <Edit size={18} />
       </button>
@@ -50,7 +52,8 @@ export const SupplierActions = ({
       <button 
         onClick={(e) => handleAction(e, onDelete)}
         className="text-gray-400 hover:text-red-600 transition-colors cursor-pointer p-1"
-        title="Delete Supplier"
+        data-tooltip-content="Delete Supplier"
+        data-tooltip-id="my-tooltip"
       >
         <Trash2 size={18} />
       </button>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { Calendar, Armchair, Check, Edit3, X, Clock, User, Phone, Mail, ChevronDown, ChevronUp } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import { ALDatePicker } from "@/components/ui/al-date-picker";
 import "../styles/index.css";
 
 interface ReservationSidebarProps {
@@ -161,7 +162,8 @@ export default function ReservationSidebar({
                   <button
                     onClick={handleCancel}
                     className="sidebar-datetime-cancel-button"
-                    title="Cancel"
+                    data-tooltip-content="Cancel"
+                    data-tooltip-id="my-tooltip"
                   >
                     <X size={16} />
                   </button>
@@ -192,11 +194,11 @@ export default function ReservationSidebar({
                   <label className="sidebar-date-label">
                     {t("datetime.selectDate")}
                   </label>
-                  <input
-                    type="date"
+                  <ALDatePicker
                     value={tempDate}
-                    onChange={(e) => setTempDate(e.target.value)}
-                    className="sidebar-date-input"
+                    onChange={(val) => setTempDate(val)}
+                    placeholder={t("datetime.selectDate")}
+                    groupClassName="sidebar-date-input-override"
                   />
                 </div>
 

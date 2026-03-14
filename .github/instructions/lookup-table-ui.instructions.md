@@ -30,18 +30,45 @@ Frontend enum mirrors live in `src/types/status-codes.ts`. **Never hardcode Valu
 
 ---
 
+## Non-Configurable Lookup Types
+
+Some lookup types are **non-configurable** by business rules. For these types:
+- You can update `name`, `description`, and `sortOrder`.
+- You cannot add or delete values.
+
+This behavior is enforced centrally in `@/features/lookup` via
+`NON_CONFIGURABLE_LOOKUP_TYPES` and `isLookupTypeConfigurable()`.
+
+Current non-configurable types:
+- `LOOKUP_TYPE.AccountStatus`
+- `LOOKUP_TYPE.InventoryTxType`
+- `LOOKUP_TYPE.InventoryTxStatus`
+- `LOOKUP_TYPE.TableStatus`
+- `LOOKUP_TYPE.ReservationStatus`
+- `LOOKUP_TYPE.OrderStatus`
+- `LOOKUP_TYPE.OrderItemStatus`
+- `LOOKUP_TYPE.DishStatus`
+- `LOOKUP_TYPE.PromotionStatus`
+- `LOOKUP_TYPE.TableZone`
+- `LOOKUP_TYPE.ShiftStatus`
+- `LOOKUP_TYPE.ShiftAssignmentStatus`
+- `LOOKUP_TYPE.AttendanceStatus`
+
+---
+
 ## Pattern A — `LookupCombobox` (most common)
 
 This is the default choice whenever a form field lets the user pick a lookup value.
 
 ```tsx
-import { useLookupCrud, LookupCombobox } from "@/features/lookup";
+import { LOOKUP_TYPE, useLookupCrud, LookupCombobox } from "@/features/lookup";
 
 // 1. One hook wires up everything
 const zoneLookup = useLookupCrud({
-  baseUrl:     "/api/tables/zones",
-  queryKey:    ["tables", "zones"],   // must be unique across app
+  typeId:      LOOKUP_TYPE.TableZone,
+  queryKey:    ["lookups", "table-zone"], // must be unique across app
   entityLabel: "Zone",                // used in toast messages
+  typeLabel:   "Zone",                // optional; sent on DELETE as ?typeLabel=Zone
 });
 
 // 2. One component renders combobox + "Manage" button + full CRUD modal
@@ -75,12 +102,13 @@ Key props:
 Use when you need a dedicated "Manage Zones" button that opens the full CRUD modal independently of a combobox.
 
 ```tsx
-import { useLookupCrud, LookupManagerModal } from "@/features/lookup";
+import { LOOKUP_TYPE, useLookupCrud, LookupManagerModal } from "@/features/lookup";
 
 const zoneLookup = useLookupCrud({
-  baseUrl:     "/api/tables/zones",
-  queryKey:    ["tables", "zones"],
+  typeId:      LOOKUP_TYPE.TableZone,
+  queryKey:    ["lookups", "table-zone"],
   entityLabel: "Zone",
+  typeLabel:   "Zone",
 });
 
 <LookupManagerModal
@@ -98,7 +126,12 @@ const zoneLookup = useLookupCrud({
 When the standard components don't fit your layout, use the hook directly:
 
 ```ts
-const zoneLookup = useLookupCrud({ baseUrl: "/api/tables/zones", queryKey: ["tables","zones"], entityLabel: "Zone" });
+const zoneLookup = useLookupCrud({
+  typeId: LOOKUP_TYPE.TableZone,
+  queryKey: ["lookups", "table-zone"],
+  entityLabel: "Zone",
+  typeLabel: "Zone",
+});
 
 // Available from the hook:
 zoneLookup.items          // LookupValueDto[]
@@ -154,8 +187,8 @@ Use `statusCode` (not `statusLvId`) as the key — codes are stable across envir
 
 ```tsx
 // components/table-form.tsx
-const zoneLookup  = useLookupCrud({ baseUrl: "/api/tables/zones", queryKey: ["tables","zones"],  entityLabel: "Zone"  });
-const typeLookup  = useLookupCrud({ baseUrl: "/api/tables/types", queryKey: ["tables","types"],  entityLabel: "Type"  });
+const zoneLookup  = useLookupCrud({ typeId: LOOKUP_TYPE.TableZone, queryKey: ["lookups","table-zone"], entityLabel: "Zone", typeLabel: "Zone" });
+const typeLookup  = useLookupCrud({ typeId: LOOKUP_TYPE.TableType, queryKey: ["lookups","table-type"], entityLabel: "Type", typeLabel: "Type" });
 
 <LookupCombobox lookup={zoneLookup}  title="Zone" value={form.zoneLvId}  onChange={v => setForm(f => ({...f, zoneLvId:  v }))} />
 <LookupCombobox lookup={typeLookup}  title="Type" value={form.typeLvId}  onChange={v => setForm(f => ({...f, typeLvId:  v }))} />

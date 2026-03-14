@@ -68,14 +68,17 @@ Anytime a feature needs a **select/combobox that loads options from a BE LookupV
 |------|-----|
 | Combobox with inline create + manager modal | `<LookupCombobox lookup={...} ... />` from `@/features/lookup` |
 | Standalone CRUD modal for a lookup entity | `<LookupManagerModal {...lookup} ... />` from `@/features/lookup` |
-| Data + CRUD callbacks for a lookup entity | `useLookupCrud({ baseUrl, queryKey, entityLabel })` from `@/features/lookup` |
+| Data + CRUD callbacks for a lookup entity | `useLookupCrud({ typeId, queryKey, entityLabel, typeLabel? })` from `@/features/lookup` |
 
 ```ts
 // Pattern: one hook call wires up everything
+import { LOOKUP_TYPE, useLookupCrud } from "@/features/lookup";
+
 const zoneLookup = useLookupCrud({
-  baseUrl:     "/api/tables/zones",
-  queryKey:    ["tables", "zones"],
+  typeId:      LOOKUP_TYPE.TableZone,
+  queryKey:    ["lookups", "table-zone"],
   entityLabel: "Zone",
+  typeLabel:   "Zone", // optional; helps BE return clearer delete conflict messages
 });
 
 // Renders combobox + "Manage" button + full CRUD modal

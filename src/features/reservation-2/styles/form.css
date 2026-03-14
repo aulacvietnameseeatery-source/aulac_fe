@@ -17,6 +17,15 @@
     @apply w-full text-sm font-bold text-slate-900 bg-white border border-stone-300 rounded-lg px-3 py-2 focus:outline-none focus:border-slate-900 focus:ring-1 focus:ring-slate-900 transition-all;
   }
 
+  /* Override ALDatePicker trigger to match sidebar style */
+  .sidebar-date-input-override {
+    @apply h-auto! py-2 text-sm font-bold text-slate-900 bg-white border-stone-300 rounded-lg;
+  }
+  .sidebar-date-input-override:focus,
+  .sidebar-date-input-override[data-state="open"] {
+    @apply border-slate-900 ring-1 ring-slate-900 shadow-none;
+  }
+
   .sidebar-date-label {
     @apply text-xs font-bold text-stone-400 uppercase;
   }

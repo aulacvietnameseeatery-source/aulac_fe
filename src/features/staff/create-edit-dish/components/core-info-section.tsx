@@ -1,10 +1,11 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useMemo } from "react";
 import { Controller, UseFormReturn } from "react-hook-form";
 import { DishFormValues } from "../types/schema";
 import { CategoryDto, DishDietDto, DishStatusDto, DishTagDto } from "../types/dish-detail.types";
 import { useLocale, useTranslations } from "next-intl";
 import { ALCombobox } from "@/components/ui/al-combobox";
 import { ALInput } from "@/components/ui/al-input";
+import { LOOKUP_TYPE, LookupCombobox, useLookupCrud } from "@/features/lookup";
 
 export const CoreInfoSection: React.FC<{ 
   form: UseFormReturn<DishFormValues>, 
@@ -14,28 +15,35 @@ export const CoreInfoSection: React.FC<{
   diets?: DishDietDto[]  
 }> = ({ 
   form, 
-  categories, 
-  statuses,
-  tags,
-  diets }) => {
+  categories,
+}) => {
   const t = useTranslations("Dish.Form");
   const { register, control, formState: { errors } } = form;
   const locale = useLocale() as 'vi' | 'en' | 'fr';
 
+  // _OLD: statuses/tags were passed via props; now loaded from generic lookup API by typeId.
+  const tagLookup = useLookupCrud({
+    typeId: LOOKUP_TYPE.Tag,
+    queryKey: ["lookups", "dish-tag"],
+    entityLabel: "Tag",
+    typeLabel: "Tag",
+  });
+
+  const statusLookup = useLookupCrud({
+    typeId: LOOKUP_TYPE.DishStatus,
+    queryKey: ["lookups", "dish-status"],
+    entityLabel: "Dish Status",
+    typeLabel: "Dish Status",
+  });
+
   // Helper function to get Category name according to language
-  const getCategoryName = (cat: CategoryDto) => {
+  const getCategoryName = useCallback((cat: CategoryDto) => {
     switch (locale) {
       case 'vi': return cat.nameVi;
       case 'fr': return cat.nameFr;
       default: return cat.nameEn;
     }
-  };
-
-  // Helper function to retrieve Tag/Status names according to language
-  const getLookupValueName = (item: DishTagDto | DishStatusDto) => {
-    // Fallback to 'en' if language key is not found.
-    return item.i18n[locale] || item.i18n.en;
-  };
+  }, [locale]);
 
   // Map options for ALCombobox
   const categoryOptions = useMemo(() => {
@@ -43,22 +51,7 @@ export const CoreInfoSection: React.FC<{
       value: String(c.categoryId),
       label: getCategoryName(c)
     })) || [];
-  }, [categories, locale]);
-
-  // Map tags to format options for ALCombobox
-  const tagOptions = React.useMemo(() => {
-    return tags?.map(t => ({
-      value: t.valueId,
-      label: getLookupValueName(t)
-    })) || [];
-  }, [tags, locale]);
-
-  const statusOptions = useMemo(() => {
-    return statuses?.map(s => ({
-      value: String(s.valueId),
-      label: getLookupValueName(s)
-    })) || [];
-  }, [statuses, locale]);
+  }, [categories, getCategoryName]);
 
   return (
     <div className="py-2"> 
@@ -67,14 +60,14 @@ export const CoreInfoSection: React.FC<{
         
         {/* 1. CATEGORY */}
         <div className="space-y-2">
-          <label className="text-sm font-medium text-gray-600">
-            {t("core.category")} <span className="text-red-500">*</span>
-          </label>
+          {/* _OLD: External label moved into ALCombobox via title + required props. */}
           <Controller
             control={control}
             name="categoryId"
             render={({ field }) => (
               <ALCombobox
+                title={t("core.category")}
+                required
                 options={categoryOptions}
                 value={field.value ? String(field.value) : undefined}
                 onChange={(val) => field.onChange(val ? Number(val) : undefined)}
@@ -88,20 +81,21 @@ export const CoreInfoSection: React.FC<{
 
         {/* 2. TAG */}
         <div className="space-y-2">
-          <label className="text-sm font-medium text-gray-600">
-            {t("core.tags")} <span className="text-red-500">*</span>
-          </label>
+          {/* _OLD: External label moved into LookupCombobox via title + required props. */}
           <Controller
             control={control}
             name="tagIds"
             render={({ field }) => (
-              <ALCombobox
-                options={tagOptions}
-                value={field.value}
-                onChange={(val) => field.onChange(val)}
-                multiple={true}
+              <LookupCombobox
+                lookup={tagLookup}
+                title={t("core.tags")}
+                required
+                value={field.value ?? []}
+                onChange={(val) => field.onChange(Array.isArray(val) ? val : [])}
+                multiple
                 placeholder="Select Tags..."
-                error={errors.tagIds?.message} 
+                error={errors.tagIds?.message}
+                locale={locale}
               />
             )}
           />
@@ -109,11 +103,9 @@ export const CoreInfoSection: React.FC<{
 
         {/* 3. PRICE */}
         <div className="space-y-2">
-          <label className="text-sm font-medium text-gray-600">
-            {t("core.price")} <span className="text-red-500">*</span>
-          </label>
+          {/* _OLD: External label moved into ALInput via title + required props. */}
           <ALInput
-            // Bỏ prop title="" đi để không dùng label mặc định của component
+            title={t("core.price")}
             required
             type="number"
             step="0.01"
@@ -125,17 +117,20 @@ export const CoreInfoSection: React.FC<{
 
         {/* 4. STATUS */}
         <div className="space-y-2">
-          <label className="text-sm font-medium text-gray-600">{t("core.status")}</label>
+          {/* _OLD: External label moved into LookupCombobox via title + required props. */}
           <Controller
             control={control}
             name="dishStatusLvId"
             render={({ field }) => (
-              <ALCombobox
-                options={statusOptions}
-                value={field.value ? String(field.value) : undefined}
-                onChange={(val) => field.onChange(val ? Number(val) : undefined)}
+              <LookupCombobox
+                lookup={statusLookup}
+                title={t("core.status")}
+                required
+                value={field.value ? Number(field.value) : undefined}
+                onChange={(val) => field.onChange(val === "" ? undefined : Number(val))}
                 placeholder="Select status"
                 error={errors.dishStatusLvId?.message}
+                locale={locale}
               />
             )}
           />

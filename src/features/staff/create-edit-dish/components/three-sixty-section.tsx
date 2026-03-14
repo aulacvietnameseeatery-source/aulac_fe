@@ -88,7 +88,8 @@ export const ThreeSixtySection: React.FC<{
                     <button 
                         onClick={() => setFrameView([])}
                         className="p-2 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors"
-                        title={t("delete")}
+                        data-tooltip-content={t("delete")}
+                        data-tooltip-id="my-tooltip"
                     >
                         <Trash2 size={16} />
                     </button>

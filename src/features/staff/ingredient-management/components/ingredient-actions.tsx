@@ -31,7 +31,7 @@ export const IngredientActions: React.FC<IngredientActionsProps> = ({
 
     // Định nghĩa nút Trigger cho Dropdown
     const triggerButton = (
-        <Button variant="ghost" size="icon" title="More Actions">
+        <Button variant="ghost" size="icon" data-tooltip-content="More Actions" data-tooltip-id="my-tooltip">
             <MoreHorizontal className="w-4 h-4 text-gray-600" />
         </Button>
     );
@@ -39,18 +39,14 @@ export const IngredientActions: React.FC<IngredientActionsProps> = ({
     return (
         <div className="flex items-center justify-end gap-2">
             {/* Nút Sửa */}
-            <button
-                className="text-gray-400 hover:text-blue-600 transition-colors cursor-pointer p-1"
-                onClick={() => onEdit(ingredient)} title="Edit">
-                <Edit size={18} />
-            </button>
+            <Button variant="ghost" size="icon" onClick={() => onEdit(ingredient)} data-tooltip-content="Edit" data-tooltip-id="my-tooltip">
+                <Pencil className="w-4 h-4 text-gray-600" />
+            </Button>
 
             {/* Nút Xóa */}
-            <button
-                className="text-gray-400 hover:text-red-600 transition-colors cursor-pointer p-1"
-                onClick={() => onDelete(ingredient)} title="Delete">
-                <Trash2 size={18} />
-            </button>
+            <Button variant="ghost" size="icon" onClick={() => onDelete(ingredient)} data-tooltip-content="Delete" data-tooltip-id="my-tooltip">
+                <Trash2 className="w-4 h-4 text-red-500" />
+            </Button>
 
             {/* Menu Mở rộng cho Kho sử dụng Custom Dropdown */}
             <Dropdown

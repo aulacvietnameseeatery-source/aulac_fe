@@ -36,7 +36,8 @@ export const RoleActions = ({
       <PermissionGuard permission={Permissions.ViewRole}>
         <button 
           className="text-gray-400 hover:text-blue-600 transition-colors cursor-pointer p-1"
-          title={t("actions.view")}
+          data-tooltip-content={t("actions.view")}
+          data-tooltip-id="my-tooltip"
           onClick={(e) => handleAction(e, onView)}
         >
           <Eye size={18} />
@@ -46,7 +47,8 @@ export const RoleActions = ({
       <PermissionGuard permission={Permissions.UpdateRole}>
         <button 
           className="text-gray-400 hover:text-blue-600 transition-colors cursor-pointer p-1"
-          title={t("actions.edit")}
+          data-tooltip-content={t("actions.edit")}
+          data-tooltip-id="my-tooltip"
           onClick={(e) => handleAction(e, onEdit)}
         >
           <Edit size={18} />
@@ -56,7 +58,8 @@ export const RoleActions = ({
       <PermissionGuard permission={Permissions.DeleteRole}>
         <button 
           className="text-gray-400 hover:text-red-500 transition-colors cursor-pointer p-1"
-          title={t("actions.delete")}
+          data-tooltip-content={t("actions.delete")}
+          data-tooltip-id="my-tooltip"
           onClick={(e) => handleAction(e, onDelete)}
         >
           <Trash2 size={18} />

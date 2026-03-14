@@ -46,6 +46,11 @@ export interface ShiftAssignmentDto {
   assignedAt: string;
   assignedByName: string;
   attendance: AttendanceRecordDto | null;
+  // Schedule context — included by BE on /assignments/my and enriched assignment endpoints
+  businessDate?: string;
+  shiftTypeName?: string;
+  plannedStartAt?: string;
+  plannedEndAt?: string;
 }
 
 // ─── Attendance ───────────────────────────────────────────────────────────────
@@ -89,6 +94,7 @@ export interface LiveShiftBoardRowDto {
   actualCheckOutAt: string | null;
   attendanceStatusCode: AttendanceStatusCode;
   lateMinutes: number;
+  attendanceId?: number;
 }
 
 export interface LiveShiftBoardDto {
@@ -98,6 +104,18 @@ export interface LiveShiftBoardDto {
 }
 
 // ─── Reports ──────────────────────────────────────────────────────────────────
+
+export interface AttendanceReportRowDto {
+  staffId: number;
+  staffName: string;
+  roleName: string;
+  assignedShifts: number;
+  presentShifts: number;
+  lateShifts: number;
+  absentShifts: number;
+  workedMinutes: number;
+  averageLateMinutes: number;
+}
 
 export interface WorkedHoursReportRowDto {
   staffId: number;

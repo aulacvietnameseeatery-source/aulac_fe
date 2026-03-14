@@ -55,8 +55,8 @@ const groupOptions = (options: ALComboboxOption[]) => {
   return map;
 };
 
-// MAX badges shown before "+N more"
-const MAX_BADGES = 3;
+// MAX badges shown before "+N more" (default, overridable via maxTags)
+const DEFAULT_MAX_BADGES = 3;
 
 // ─── Component ──────────────────────────────────────────────
 
@@ -85,6 +85,8 @@ const ALCombobox: React.FC<ALComboboxProps> = ({
   grouped = false,
   disabled = false,
   readOnly = false,
+  tagMode = "collapse",
+  maxTags = DEFAULT_MAX_BADGES,
   className,
   wrapperClassName,
   popoverClassName,
@@ -224,10 +226,18 @@ const ALCombobox: React.FC<ALComboboxProps> = ({
   // ── Render: trigger value area ────────────────────────────
   const renderTriggerContent = () => {
     if (multiple && selected.length > 0) {
-      const visible = selected.slice(0, MAX_BADGES);
-      const extra = selected.length - MAX_BADGES;
+      const isExpand = tagMode === "expand";
+      const limit = isExpand ? selected.length : maxTags;
+      const visible = selected.slice(0, limit);
+      const extra = selected.length - limit;
+
+      // Build tooltip text for overflow badge
+      const overflowLabels = extra > 0
+        ? selected.slice(limit).map((val) => getOption(val)?.label ?? val).join(", ")
+        : "";
+
       return (
-        <div className="al-cb-badges">
+        <div className={cn("al-cb-badges", isExpand && "al-cb-badges--expand")}>
           {visible.map((val) => {
             const opt = getOption(val);
             return (
@@ -247,7 +257,13 @@ const ALCombobox: React.FC<ALComboboxProps> = ({
             );
           })}
           {extra > 0 && (
-            <span className="al-cb-badge-overflow">+{extra}</span>
+            <span
+              className="al-cb-badge-overflow"
+              data-tooltip-content={overflowLabels}
+              data-tooltip-id="my-tooltip"
+            >
+              +{extra}
+            </span>
           )}
         </div>
       );
@@ -417,6 +433,7 @@ const ALCombobox: React.FC<ALComboboxProps> = ({
               sizeClass(inputSize),
               stateClass(state, error),
               disabled && "al-cb-trigger--disabled",
+              multiple && tagMode === "expand" && selected.length > 0 && "al-cb-trigger--expand",
               className
             )}
             onKeyDown={handleKeyDown}

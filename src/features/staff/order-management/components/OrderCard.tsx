@@ -203,7 +203,8 @@ export const OrderCard: React.FC<OrderCardProps> = ({ order, onStatusChange, onA
                         {showPaymentBadge && (
                             <div
                                 className={`flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded border ${order.isPaid ? PAYMENT_STYLES.paid : PAYMENT_STYLES.unpaid}`}
-                                title={order.isPaid ? t('paymentStatus.paid') : t('paymentStatus.unpaid')}
+                                data-tooltip-content={order.isPaid ? t('paymentStatus.paid') : t('paymentStatus.unpaid')}
+                                data-tooltip-id="my-tooltip"
                             >
                                 <CreditCard className="w-2.5 h-2.5" />
                                 {order.isPaid ? t('paymentStatus.paid') : t('paymentStatus.unpaid')}
@@ -215,7 +216,8 @@ export const OrderCard: React.FC<OrderCardProps> = ({ order, onStatusChange, onA
                             <button
                                 onClick={(e) => { e.stopPropagation(); setActionsOpen(o => !o); }}
                                 className="p-1 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
-                                title={t('actions')}
+                                data-tooltip-content={t('actions')}
+                                data-tooltip-id="my-tooltip"
                             >
                                 <MoreHorizontal className="w-4 h-4" />
                             </button>

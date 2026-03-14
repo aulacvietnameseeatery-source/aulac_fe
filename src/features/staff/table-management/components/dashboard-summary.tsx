@@ -41,7 +41,7 @@ const StatusBar: React.FC<{ segments: StatusSegment[]; total: number }> = ({
 }) => (
   <div className="space-y-2">
     {/* Bar */}
-    <div className="flex h-2 rounded-full overflow-hidden bg-gray-100">
+    <div className="flex h-2 overflow-hidden rounded-full bg-[#D5BA98]/25">
       {segments
         .filter((s) => s.count > 0)
         .map((s) => (
@@ -49,7 +49,8 @@ const StatusBar: React.FC<{ segments: StatusSegment[]; total: number }> = ({
             key={s.status}
             className={cn("h-full transition-all duration-500", s.color)}
             style={{ width: `${s.pct}%` }}
-            title={`${s.label}: ${s.count}`}
+            data-tooltip-content={`${s.label}: ${s.count}`}
+            data-tooltip-id="my-tooltip"
           />
         ))}
     </div>
@@ -58,14 +59,14 @@ const StatusBar: React.FC<{ segments: StatusSegment[]; total: number }> = ({
       {segments.map((s) => (
         <div key={s.status} className="flex items-center gap-1.5">
           <span className={cn("w-2 h-2 rounded-full shrink-0", s.color)} />
-          <span className="text-[11px] text-gray-500">
+          <span className="text-[11px] text-[#1A3A52]/70">
             {s.label}{" "}
-            <span className="font-semibold text-gray-700">{s.count}</span>
+            <span className="font-semibold text-[#1A3A52]">{s.count}</span>
           </span>
         </div>
       ))}
       {total > 0 && (
-        <span className="ml-auto text-[11px] text-gray-400">{total} total</span>
+        <span className="ml-auto text-[11px] text-[#1A3A52]/55">{total} total</span>
       )}
     </div>
   </div>
@@ -79,17 +80,19 @@ const StatCard: React.FC<{
   value: React.ReactNode;
   sub?: string;
   accent?: string;
-}> = ({ icon, label, value, sub, accent = "text-gray-800" }) => (
-  <div className="flex items-start gap-3 rounded-lg bg-gray-50/80 px-3.5 py-3 min-w-0">
-    <div className="mt-0.5 shrink-0 text-gray-400">{icon}</div>
+}> = ({ icon, label, value, sub, accent = "text-[#1A3A52]" }) => (
+  <div className="min-w-0 rounded-lg border border-[#D5BA98]/45 bg-[#D5BA98]/10 px-3.5 py-3">
+    <div className="flex items-start gap-3">
+    <div className="mt-0.5 shrink-0 text-[#1A3A52]/60">{icon}</div>
     <div className="min-w-0">
-      <p className="text-[11px] text-gray-400 uppercase tracking-wide leading-none mb-1">
+      <p className="mb-1 text-[11px] uppercase leading-none tracking-wide text-[#1A3A52]/60">
         {label}
       </p>
       <p className={cn("text-lg font-bold leading-none", accent)}>{value}</p>
       {sub && (
-        <p className="text-[10px] text-gray-400 mt-1 truncate">{sub}</p>
+        <p className="mt-1 truncate text-[10px] text-[#1A3A52]/60">{sub}</p>
       )}
+    </div>
     </div>
   </div>
 );
@@ -168,15 +171,15 @@ function formatTime(iso: string): string {
 const ReservationCard: React.FC<{ r: IncomingReservation }> = ({ r }) => {
   const isConfirmed = r.status === "CONFIRMED";
   return (
-    <div className="flex flex-col justify-between shrink-0 w-44 rounded-lg border border-gray-100 bg-white p-3 hover:bg-gray-50/60 transition-colors">
+    <div className="flex w-44 shrink-0 flex-col justify-between rounded-lg border border-[#D5BA98]/55 bg-[#FDFBF9] p-3 transition-colors hover:bg-[#D5BA98]/15">
       {/* Time + status row */}
       <div className="flex items-start justify-between gap-1 mb-2">
         <div
           className={cn(
             "flex flex-col items-center rounded-md px-2 py-1.5",
             isConfirmed
-              ? "bg-amber-50 text-amber-700"
-              : "bg-gray-50 text-gray-500"
+              ? "bg-[#D5BA98]/35 text-[#1A3A52]"
+              : "bg-[#D5BA98]/15 text-[#1A3A52]/70"
           )}
         >
           <span className="text-xs font-bold leading-none">
@@ -190,8 +193,8 @@ const ReservationCard: React.FC<{ r: IncomingReservation }> = ({ r }) => {
           className={cn(
             "text-[10px] font-semibold px-2 py-0.5 rounded-full whitespace-nowrap",
             isConfirmed
-              ? "bg-emerald-50 text-emerald-700"
-              : "bg-gray-100 text-gray-500"
+              ? "bg-[#4A5D4E]/15 text-[#4A5D4E]"
+              : "bg-[#D5BA98]/20 text-[#1A3A52]/70"
           )}
         >
           {isConfirmed ? "Confirmed" : "Pending"}
@@ -200,14 +203,14 @@ const ReservationCard: React.FC<{ r: IncomingReservation }> = ({ r }) => {
 
       {/* Guest */}
       <div className="flex items-center gap-1.5 mb-1">
-        <User size={12} className="text-gray-400 shrink-0" />
-        <p className="text-xs font-semibold text-gray-700 truncate">
+        <User size={12} className="shrink-0 text-[#1A3A52]/50" />
+        <p className="truncate text-xs font-semibold text-[#1A3A52]">
           {r.guestName}
         </p>
       </div>
 
       {/* Pax + Table */}
-      <div className="flex items-center gap-1 text-[10px] text-gray-400 mb-1">
+      <div className="mb-1 flex items-center gap-1 text-[10px] text-[#1A3A52]/55">
         <span>{r.pax} pax</span>
         <span>·</span>
         <MapPin size={10} className="shrink-0" />
@@ -218,7 +221,7 @@ const ReservationCard: React.FC<{ r: IncomingReservation }> = ({ r }) => {
 
       {/* Pre-order */}
       {r.preOrderSummary && (
-        <p className="text-[10px] text-blue-500 truncate mt-auto">
+        <p className="mt-auto truncate text-[10px] text-[#1A3A52]/75">
           🍽 {r.preOrderSummary}
         </p>
       )}
@@ -283,19 +286,19 @@ export const DashboardSummary: React.FC<DashboardSummaryProps> = ({
   }, [tables, total]);
 
   return (
-    <Card className="py-0 gap-0">
+    <Card className="gap-0 border-[#D5BA98]/50 bg-[#FDFBF9] py-0 shadow-none">
       <CardContent className="p-5 space-y-4">
         {/* Title row */}
         <div className="flex items-center justify-between">
-          <h4 className="text-lg font-semibold text-gray-800">Overview</h4>
+          <h4 className="text-lg font-semibold text-[#1A3A52]">Overview</h4>
           <div className="flex items-center gap-2">
-            <span className="text-xs text-gray-400">
+            <span className="text-xs text-[#1A3A52]/60">
               {total} tables &middot; {stats.totalCapacity} seats
             </span>
             <button
               type="button"
               onClick={handleToggle}
-              className="p-1 rounded hover:bg-gray-100 text-gray-400 hover:text-gray-600 transition-colors"
+              className="rounded p-1 text-[#1A3A52]/55 transition-colors hover:bg-[#D5BA98]/25 hover:text-[#1A3A52]"
               aria-label={isCollapsed ? "Expand overview" : "Collapse overview"}
             >
               {isCollapsed ? <ChevronDown size={16} /> : <ChevronUp size={16} />}
@@ -324,25 +327,25 @@ export const DashboardSummary: React.FC<DashboardSummaryProps> = ({
                   <span className="flex items-baseline gap-1.5">
                     {stats.online}
                     {stats.offline > 0 && (
-                      <span className="text-xs font-normal text-gray-400 flex items-center gap-0.5">
+                      <span className="flex items-center gap-0.5 text-xs font-normal text-[#1A3A52]/55">
                         <WifiOff size={10} /> {stats.offline}
                       </span>
                     )}
                   </span>
                 }
-                accent="text-emerald-700"
+                accent="text-[#4A5D4E]"
               />
               <StatCard
                 icon={<ShoppingBag size={16} />}
                 label="Active Orders"
                 value={stats.activeOrders}
-                accent={stats.activeOrders > 0 ? "text-blue-700" : "text-gray-800"}
+                accent={stats.activeOrders > 0 ? "text-[#1A3A52]" : "text-[#1A3A52]"}
               />
               <StatCard
                 icon={<AlertTriangle size={16} />}
                 label="Errors"
                 value={stats.withErrors}
-                accent={stats.withErrors > 0 ? "text-orange-600" : "text-gray-800"}
+                accent={stats.withErrors > 0 ? "text-[#8C3A3A]" : "text-[#1A3A52]"}
                 sub={stats.withErrors > 0 ? "Needs attention" : "All clear"}
               />
             </div>
@@ -350,23 +353,23 @@ export const DashboardSummary: React.FC<DashboardSummaryProps> = ({
             {/* Incoming Reservations */}
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <h5 className="flex items-center gap-1.5 text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                <h5 className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-[#1A3A52]/60">
                   <CalendarClock size={13} />
                   Incoming Reservations
-                  <span className="text-[11px] font-normal normal-case tracking-normal text-gray-400">
+                  <span className="text-[11px] font-normal normal-case tracking-normal text-[#1A3A52]/55">
                     ({MOCK_RESERVATIONS.length})
                   </span>
                 </h5>
                 <Link
                   href="/dashboard/reservation"
-                  className="text-xs text-blue-600 underline underline-offset-2 hover:text-blue-800 transition-colors"
+                  className="text-xs text-[#1A3A52] underline underline-offset-2 transition-colors hover:text-[#1A3A52]/75"
                 >
                   See all
                 </Link>
               </div>
 
               {MOCK_RESERVATIONS.length === 0 ? (
-                <p className="text-xs text-gray-400 py-3 text-center">
+                <p className="py-3 text-center text-xs text-[#1A3A52]/55">
                   No upcoming reservations
                 </p>
               ) : (
