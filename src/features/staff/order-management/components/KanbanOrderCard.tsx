@@ -143,11 +143,18 @@ export const KanbanOrderCard: React.FC<KanbanOrderCardProps> = ({
 
                 {/* Meta */}
                 <div className="flex items-center justify-between mb-3">
-                    <p className="text-xs text-gray-500">
-                        <span className="font-medium text-gray-700">
-                            {order.customerName ?? order.staffName}
-                        </span>
-                    </p>
+                    <div className="min-w-0">
+                        <p className="text-xs text-gray-500">
+                            <span className="font-medium text-gray-700 block truncate">
+                                {order.customerName ?? order.staffName}
+                            </span>
+                            {order.tableCode && (
+                                <span className="text-[11px] text-blue-700 font-semibold block mt-0.5">
+                                    {t('table') || 'Bàn'} {order.tableCode}
+                                </span>
+                            )}
+                        </p>
+                    </div>
                     <div className="flex items-center gap-1 text-xs text-gray-500">
                         <Clock className="w-3 h-3" />
                         {formatTime(order.createdAt)}

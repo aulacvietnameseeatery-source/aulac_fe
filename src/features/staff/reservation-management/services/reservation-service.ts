@@ -47,4 +47,14 @@ export const reservationService = {
             notes: notes
         });
     },
+
+    // 6. Cập nhật thông tin đặt bàn
+    updateReservation: async (reservationId: number, data: any): Promise<void> => {
+        await api.put(`/api/reservations/${reservationId}`, data);
+    },
+
+    // 7. Xóa đặt bàn
+    deleteReservation: async (reservationId: number): Promise<void> => {
+        await api.delete(`/api/reservations/${reservationId}`);
+    },
 };

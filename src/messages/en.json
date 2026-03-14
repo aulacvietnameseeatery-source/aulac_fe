@@ -1503,16 +1503,19 @@
       "card": "Card",
       "scan": "Scan",
       "discount": "Discount",
-      "tips": "Tips",
       "coupon": "Coupon",
-      "add": "Add",
+      "tip": "Tip",
       "givenAmount": "Given Amount",
       "balance": "Balance",
       "note": "Note",
       "notePlaceholder": "Enter payment note...",
       "close": "Close",
       "payAndComplete": "Pay & Complete Order",
-      "paying": "Processing..."
+      "paying": "Processing...",
+      "enterTip": "Enter tip amount",
+      "selectDiscount": "Select or enter discount",
+      "selectCoupon": "Select coupon",
+      "promotions": "Promotions"
     }
   },
   "AdminSidebar": {

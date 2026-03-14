@@ -76,7 +76,7 @@ function OrdersContent() {
         { key: "custom", label: t("dateRange.custom") },
     ], [t]);
 
-    const [datePreset, setDatePreset] = useState<DatePreset | null>(null);
+    const [datePreset, setDatePreset] = useState<DatePreset | null>("today");
     const [customFrom, setCustomFrom] = useState("");  // YYYY-MM-DD
     const [customTo, setCustomTo] = useState("");  // YYYY-MM-DD
     const [datePickerOpen, setDatePickerOpen] = useState(false);

@@ -45,6 +45,7 @@ export interface ReservationDetailDto {
     sourceId: number;
     sourceName: string;
     sourceCode: string;
+    notes?: string;
     tables: ReservationTableDto[];
 }
 
@@ -54,4 +55,15 @@ export interface ReservationTableDto {
     capacity: number;
     tableType: string;
     zone: string;
+}
+
+export interface UpdateReservationRequest {
+    customerName: string;
+    phone: string;
+    email?: string;
+    partySize: number;
+    reservedTime: string;
+    notes?: string;
+    statusId?: number;
+    tableIds?: number[];
 }

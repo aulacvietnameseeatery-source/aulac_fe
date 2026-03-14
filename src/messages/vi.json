@@ -1505,16 +1505,19 @@
       "card": "Thẻ",
       "scan": "Chuyển khoản / Quét mã",
       "discount": "Giảm giá",
-      "tips": "Tiền tip",
       "coupon": "Mã giảm giá",
-      "add": "Thêm",
+      "tip": "Tiền tip",
       "givenAmount": "Số tiền khách đưa",
       "balance": "Tiền thừa",
       "note": "Ghi chú",
       "notePlaceholder": "Nhập ghi chú thanh toán...",
       "close": "Đóng",
       "payAndComplete": "Thanh toán & Hoàn tất",
-      "paying": "Đang thanh toán..."
+      "paying": "Đang thanh toán...",
+      "enterTip": "Nhập số tiền tip",
+      "selectDiscount": "Chọn hoặc nhập giảm giá",
+      "selectCoupon": "Chọn mã giảm giá",
+      "promotions": "Khuyến mãi"
     }
   },
   "AdminSidebar": {

@@ -29,7 +29,7 @@ export function DashboardTopNav() {
           <Link
             key={item.id}
             href={item.href}
-            className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm transition-all duration-200 ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-[13px] transition-all duration-200 ${
               isActive
                 ? "text-[#1A3A52] bg-[#D5BA98]/20 font-semibold shadow-sm"
                 : "text-gray-500 hover:text-[#1A3A52] hover:bg-gray-50"

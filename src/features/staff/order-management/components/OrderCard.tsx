@@ -251,9 +251,16 @@ export const OrderCard: React.FC<OrderCardProps> = ({ order, onStatusChange, onA
 
                 {/* ── Meta row ── */}
                 <div className="flex items-center justify-between mb-3">
-                    <span className="text-xs font-medium text-gray-700">
-                        {order.customerName ?? order.staffName}
-                    </span>
+                    <div className="min-w-0">
+                        <span className="text-xs font-medium text-gray-700 block truncate">
+                            {order.customerName ?? order.staffName}
+                        </span>
+                        {order.tableCode && (
+                            <span className="text-[11px] text-blue-700 font-semibold block mt-0.5">
+                                {t('table')} {order.tableCode}
+                            </span>
+                        )}
+                    </div>
                     <div className="flex items-center gap-1.5 text-sm font-semibold text-gray-700">
                         <Clock className="w-4 h-4" />
                         {order.createdAt ? format.dateTime(new Date(order.createdAt), { hour: '2-digit', minute: '2-digit' }) : '—'}

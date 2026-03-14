@@ -13,8 +13,11 @@ import {
     Dialog,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { ALInput } from '@/components/ui/al-input';
+import { ALCombobox } from '@/components/ui/al-combobox';
 import { OrderHistory } from '../types/order-history.types';
+import { staffPromotionService } from '../../promotion-management/promotion-list/services/promotion-service';
+import { PromotionListDTO } from '../../promotion-management/promotion-list/types/promotion-types';
 
 interface PaymentModalProps {
     order: OrderHistory;
@@ -36,14 +39,48 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
     const format = useFormatter();
 
     const [paymentType, setPaymentType] = useState<'cash' | 'card' | 'scan'>('cash');
-    const [givenAmount, setGivenAmount] = useState<number>(order.totalAmount);
+    const [tipAmount, setTipAmount] = useState<number>(0);
+    const [discountValue, setDiscountValue] = useState<number>(0);
+    const [selectedCouponId, setSelectedCouponId] = useState<number | null>(null);
+    const [promotions, setPromotions] = useState<PromotionListDTO[]>([]);
     const [note, setNote] = useState('');
+
+    // Fetch promotions
+    React.useEffect(() => {
+        const fetchPromotions = async () => {
+            try {
+                const res = await staffPromotionService.getPromotions({ 
+                    pageIndex: 1, 
+                    pageSize: 100, 
+                    promotionStatus: 'ACTIVE' 
+                });
+                setPromotions(res.pageData);
+            } catch (err) {
+                console.error('Failed to fetch promotions', err);
+            }
+        };
+        fetchPromotions();
+    }, []);
 
     const subTotal = order.orderItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
     const tax = subTotal * 0.1; // Example 10%
     const serviceCharge = 15; // Example fixed
-    const total = order.totalAmount;
+
+    const selectedCoupon = promotions.find(p => p.promotionId === selectedCouponId);
+    const couponDiscount = selectedCoupon 
+        ? (selectedCoupon.type === 'PERCENT' ? (subTotal * (selectedCoupon.discountValue / 100)) : selectedCoupon.discountValue)
+        : 0;
+
+    const totalDiscount = discountValue + couponDiscount;
+    const total = Math.max(0, subTotal + tax + serviceCharge + tipAmount - totalDiscount);
+    
+    const [givenAmount, setGivenAmount] = useState<number>(total);
     const balance = Math.max(0, givenAmount - total);
+
+    // Sync givenAmount when total changes
+    React.useEffect(() => {
+        setGivenAmount(total);
+    }, [total]);
 
     const handlePay = () => {
         const methodMap: Record<string, string> = {
@@ -57,7 +94,8 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
             receivedAmount: givenAmount,
             paymentMethod: methodMap[paymentType],
             note: note || undefined,
-            tipAmount: order.tipAmount || undefined
+            tipAmount: tipAmount || undefined,
+            discountAmount: totalDiscount || undefined
         });
     };
 
@@ -144,10 +182,16 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
                                 <span>{t('serviceCharge')}</span>
                                 <span>{format.number(serviceCharge, { style: 'currency', currency: 'CHF' })}</span>
                             </div>
-                            {order.tipAmount != null && order.tipAmount > 0 && (
+                            {totalDiscount > 0 && (
+                                <div className="flex justify-between text-red-600 font-medium">
+                                    <span>{t('discount')}</span>
+                                    <span>-{format.number(totalDiscount, { style: 'currency', currency: 'CHF' })}</span>
+                                </div>
+                            )}
+                            {(tipAmount > 0) && (
                                 <div className="flex justify-between text-emerald-600 font-medium">
                                     <span>{t('tip')}</span>
-                                    <span>{format.number(order.tipAmount, { style: 'currency', currency: 'CHF' })}</span>
+                                    <span>{format.number(tipAmount, { style: 'currency', currency: 'CHF' })}</span>
                                 </div>
                             )}
                         </section>
@@ -186,46 +230,62 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
                         </section>
 
                         <div className="space-y-4">
-                            <div className="flex items-center justify-between p-3 border border-gray-100 rounded-lg bg-gray-50/50">
-                                <span className="text-sm text-gray-700 font-medium">{t('discount')}</span>
-                                <Button variant="outline" size="sm" className="h-8 gap-1 text-xs font-bold uppercase">
-                                    <Plus className="w-3 h-3" />
-                                    {t('add')}
-                                </Button>
-                            </div>
-                            <div className="flex items-center justify-between p-3 border border-gray-100 rounded-lg bg-gray-50/50">
-                                <span className="text-sm text-gray-700 font-medium">{t('tips')}</span>
-                                <Button variant="outline" size="sm" className="h-8 gap-1 text-xs font-bold uppercase">
-                                    <Plus className="w-3 h-3" />
-                                    {t('add')}
-                                </Button>
-                            </div>
-                            <div className="flex items-center justify-between p-3 border border-gray-100 rounded-lg bg-gray-50/50">
-                                <span className="text-sm text-gray-700 font-medium">{t('coupon')}</span>
-                                <Button variant="outline" size="sm" className="h-8 gap-1 text-xs font-bold uppercase">
-                                    <Plus className="w-3 h-3" />
-                                    {t('add')}
-                                </Button>
+                            <ALInput
+                                title={t('tip')}
+                                type="number"
+                                value={tipAmount}
+                                onChange={(e) => setTipAmount(Number(e.target.value))}
+                                textEnd="CHF"
+                                placeholder={t('enterTip' as any) || "Enter tip amount"}
+                            />
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <ALCombobox
+                                    title={t('discount')}
+                                    options={[
+                                        ...promotions.map(p => ({
+                                            label: `${p.promoName} (${p.discountValue}${p.type === 'PERCENT' ? '%' : ' CHF'})`,
+                                            value: p.discountValue,
+                                            description: p.promoCode,
+                                            group: t('promotions' as any) || 'Promotions'
+                                        })),
+                                    ]}
+                                    value={discountValue}
+                                    onChange={(val) => setDiscountValue(Number(val))}
+                                    placeholder={t('selectDiscount' as any) || "Select or enter discount"}
+                                    allowCreate
+                                    onCreateOption={(val) => setDiscountValue(Number(val))}
+                                />
+
+                                <ALCombobox
+                                    title={t('coupon')}
+                                    options={promotions.map(p => ({
+                                        label: p.promoCode,
+                                        value: p.promotionId,
+                                        description: p.promoName,
+                                    }))}
+                                    value={selectedCouponId ?? ''}
+                                    onChange={(val) => setSelectedCouponId(Number(val) || null)}
+                                    placeholder={t('selectCoupon' as any) || "Select coupon"}
+                                />
                             </div>
                         </div>
 
                         <div className="grid grid-cols-2 gap-4">
-                            <div className="space-y-1.5">
-                                <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">
-                                    {t('givenAmount')} <span className="text-red-500">*</span>
-                                </label>
-                                <Input
-                                    type="number"
-                                    value={givenAmount}
-                                    onChange={(e) => setGivenAmount(Number(e.target.value))}
-                                    className="h-12 font-bold text-lg"
-                                />
-                            </div>
+                            <ALInput
+                                title={t('givenAmount')}
+                                required
+                                type="number"
+                                value={givenAmount}
+                                onChange={(e) => setGivenAmount(Number(e.target.value))}
+                                className="font-bold text-lg"
+                                textEnd="CHF"
+                            />
                             <div className="space-y-1.5">
                                 <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">
                                     {t('balance')} <span className="text-red-500">*</span>
                                 </label>
-                                <div className="h-12 border border-blue-200 bg-blue-50/30 rounded-md flex items-center px-3 font-bold text-lg text-blue-700">
+                                <div className="h-10 border border-blue-200 bg-blue-50/30 rounded-md flex items-center px-3 font-bold text-lg text-blue-700">
                                     {format.number(balance, { style: 'currency', currency: 'CHF' })}
                                 </div>
                             </div>
