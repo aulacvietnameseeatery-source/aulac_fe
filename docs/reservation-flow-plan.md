@@ -80,6 +80,91 @@ The Reservation module manages the entire lifecycle of a customer's booking requ
 - **`TableManagementContent.tsx`**:
     - Table Management screen with a "Time Machine" feature (Date/time picker `datetime-local` combined with Debounced Search) allowing staff to foresee the restaurant's layout in the future.
 
+### 4.3. Core Data Models (Frontend Interfaces)
+
+To ensure seamless data mapping between the Backend and Frontend, the following core interfaces are defined in TypeScript. These interfaces clearly demonstrate the Many-to-Many relationship and the "Time Machine" feature.
+
+#### A. Reservation Models
+*Defines the structure of booking requests and their assigned tables.*
+
+```typescript
+ 1. Used in the main reservation list (ReservationCard)
+export interface ReservationDto {
+    reservationId: number;
+    reservedTime: string; // ISO 8601 Date string
+    customerName: string;
+    phone: string;
+    pax: number;
+    statusId: number;
+    statusName: string;
+    // Concatenated string of assigned tables (e.g., "T01, V02")
+    tableName?: string | null; 
+    notes?: string;
+}
+
+// 2. Used in the Reservation Detail page
+export interface ReservationDetailDto {
+    reservationId: number;
+    customerName: string;
+    partySize: number;
+    reservedTime: string;
+    statusName: string;
+    statusCode: string;
+    notes?: string;
+    // List of tables specifically assigned to this reservation
+    tables: ReservationTableDto[]; 
+}
+
+export interface ReservationTableDto {
+    tableId: number;
+    tableCode: string;
+    capacity: number;
+    tableType: string;
+    zone: string; // Crucial for Zone Locking logic
+}
+
+B. Table & Time Machine Models
+Defines how tables are queried (with overlap checking) and how they display their future bookings.
+// 1. Query parameters including the "Time Machine" targetTime
+export interface TableQueryParams {
+  pageIndex?: number;
+  pageSize?: number;
+  search?: string;
+  zoneId?: number;
+  typeId?: number;
+  statusId?: number; 
+  isOnline?: boolean;
+  // Triggers the overlap-checking algorithm in BE
+  targetTime?: string; 
+}
+
+// 2. Returned from GET /api/tables
+export interface TableManagementDto {
+  tableId: number;
+  tableCode: string;
+  capacity: number;
+  isOnline: boolean;
+  statusCode: string; // "AVAILABLE" | "OCCUPIED" | "RESERVED" | "LOCKED"
+  typeName: string;
+  zoneName: string;
+}
+
+// 3. Returned from GET /api/tables/{id} (Table Detail Panel)
+export interface TableDetailDto extends TableManagementDto {
+  activeOrdersCount: number;
+  hasErrors: boolean;
+  // Cross-module data: Shows future bookings for this specific table
+  upcomingReservations: UpcomingReservationDto[]; 
+}
+
+// 4. Embedded inside TableDetailDto
+export interface UpcomingReservationDto {
+  reservationId: number;
+  guestName: string;
+  pax: number;
+  reservedTime: string; // ISO 8601
+  statusCode: string;   // "PENDING" | "CONFIRMED"
+}
 ---
 
 ## 5. INTEGRITY CONSTRAINTS
