@@ -28,7 +28,7 @@ export interface ALDatePickerProps {
   onChange?: (value: string) => void;
   /** Placeholder when no date is selected. @default "Pick a date" */
   placeholder?: string;
-  /** date-fns format string for displaying the selected date. @default "PPP" */
+  /** date-fns format string for displaying the selected date. @default "dd/MM/yyyy" */
   displayFormat?: string;
 
   // ── Calendar constraints ───────────────────────────────────

@@ -114,7 +114,7 @@ export const KanbanOrderCard: React.FC<KanbanOrderCardProps> = ({
                     <div className="relative flex-shrink-0 flex items-center">
                         {order.orderStatus === 'Completed' && (
                             <div
-                                className={`flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded border ${order.isPaid ? PAYMENT_STYLES.paid : PAYMENT_STYLES.unpaid}`}
+                                className={`flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded border ${order.isPaid ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-rose-50 text-rose-600 border-rose-100'}`}
                                 data-tooltip-content={order.isPaid ? t('paymentStatus.paid') : t('paymentStatus.unpaid')}
                                 data-tooltip-id="my-tooltip"
                             >

@@ -9,12 +9,13 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { RefreshCcw, Download, Eye, EyeOff, ImageOff } from "lucide-react";
 import { QRCodeSVG } from "qrcode.react";
+import { toast } from "sonner";
 import type { RestaurantTable, TableFormData, TableStatus } from "../types";
 import { TABLE_STATUS_CONFIG, TABLE_STATUS_LV_IDS } from "../types";
 import {
   useRegenerateQrMutation,
 } from "../hooks/use-table-queries";
-import { useLookupCrud, LookupCombobox } from "@/features/lookup";
+import { LOOKUP_TYPE, useLookupCrud, LookupCombobox } from "@/features/lookup";
 
 interface TableModalProps {
   isOpen: boolean;
@@ -50,19 +51,24 @@ const TableModal: React.FC<TableModalProps> = ({
   isSubmitting = false,
 }) => {
   const [formData, setFormData] = useState<TableFormData>(initialFormData);
+  const [formErrors, setFormErrors] = useState<
+    Partial<Record<"tableCode" | "capacity" | "zoneLvId" | "typeLvId" | "statusLvId", string>>
+  >({});
   const [qrPreview, setQrPreview] = useState(false);
   const [pendingFiles, setPendingFiles] = useState<File[]>([]);
   const [removedImageIds, setRemovedImageIds] = useState<number[]>([]);
   // ── Fetch lookup values via shared useLookupCrud ──
   const zoneLookup = useLookupCrud({
-    baseUrl:     "/api/tables/zones",
-    queryKey:    ["tables", "zones"],
+    typeId:      LOOKUP_TYPE.TableZone,
+    queryKey:    ["lookups", "table-zone"],
     entityLabel: "Zone",
+    typeLabel:   "Zone",
   });
   const typeLookup = useLookupCrud({
-    baseUrl:     "/api/tables/types",
-    queryKey:    ["tables", "types"],
+    typeId:      LOOKUP_TYPE.TableType,
+    queryKey:    ["lookups", "table-type"],
     entityLabel: "Table Type",
+    typeLabel:   "Table Type",
   });
 
   // ── Static status options — statuses are fixed; value = numeric statusLvId ──
@@ -112,11 +118,43 @@ const TableModal: React.FC<TableModalProps> = ({
     field: keyof TableFormData,
     value: string | number | boolean | string[]
   ) => {
+    if (field in formErrors) {
+      setFormErrors((prev) => ({ ...prev, [field]: undefined }));
+    }
     setFormData((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const validateForm = () => {
+    const nextErrors: typeof formErrors = {};
+
+    if (!String(formData.tableCode ?? "").trim()) {
+      nextErrors.tableCode = "Table code is required";
+    }
+    if (!Number(formData.capacity) || Number(formData.capacity) < 1) {
+      nextErrors.capacity = "Capacity must be at least 1";
+    }
+    if (!formData.zoneLvId) {
+      nextErrors.zoneLvId = "Zone is required";
+    }
+    if (!formData.typeLvId) {
+      nextErrors.typeLvId = "Type is required";
+    }
+    if (!formData.statusLvId) {
+      nextErrors.statusLvId = "Status is required";
+    }
+
+    setFormErrors(nextErrors);
+    return Object.keys(nextErrors).length === 0;
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!validateForm()) {
+      toast.error("Please fix the highlighted fields before saving");
+      return;
+    }
+
     // Convert string IDs to numbers for submission
     const submitData: TableFormData = {
       ...formData,
@@ -185,6 +223,7 @@ const TableModal: React.FC<TableModalProps> = ({
               required
               placeholder="e.g. T-01"
               value={formData.tableCode}
+              error={formErrors.tableCode}
               onChange={(e) => handleChange("tableCode", e.target.value)}
             />
             <ALInput
@@ -194,6 +233,7 @@ const TableModal: React.FC<TableModalProps> = ({
               min={1}
               max={20}
               value={formData.capacity}
+              error={formErrors.capacity}
               onChange={(e) =>
                 handleChange("capacity", parseInt(e.target.value) || 1)
               }
@@ -208,7 +248,10 @@ const TableModal: React.FC<TableModalProps> = ({
               required
               placeholder="Select zone"
               value={formData.zoneLvId}
-              onChange={(val) => handleChange("zoneLvId", val)}
+              error={formErrors.zoneLvId}
+              onChange={(val) =>
+                handleChange("zoneLvId", Array.isArray(val) ? "" : val)
+              }
             />
             <LookupCombobox
               lookup={typeLookup}
@@ -216,7 +259,10 @@ const TableModal: React.FC<TableModalProps> = ({
               required
               placeholder="Select type"
               value={formData.typeLvId}
-              onChange={(val) => handleChange("typeLvId", val)}
+              error={formErrors.typeLvId}
+              onChange={(val) =>
+                handleChange("typeLvId", Array.isArray(val) ? "" : val)
+              }
             />
           </div>
 
@@ -228,6 +274,7 @@ const TableModal: React.FC<TableModalProps> = ({
             value={formData.statusLvId ? String(formData.statusLvId) : undefined}
             onChange={(val) => handleChange("statusLvId", val ? Number(val as string) : "")}
             placeholder="Select status"
+            error={formErrors.statusLvId}
             searchable={false}
           />
 

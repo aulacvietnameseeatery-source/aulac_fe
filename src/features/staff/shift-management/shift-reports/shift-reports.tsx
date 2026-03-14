@@ -56,24 +56,32 @@ interface FilterBarProps {
 
 function FilterBar({ filters, onChange, onRefetch, isLoading }: FilterBarProps) {
   return (
-    <div className="flex flex-wrap items-center gap-3">
-      <label className="text-sm text-muted-foreground">From:</label>
+    <div className="flex flex-wrap items-center gap-3 rounded-xl border border-[#D5BA98]/50 bg-[#FDFBF9] p-3">
+      <label className="text-sm text-[#1A3A52]/70">From:</label>
       <ALDatePicker
         value={filters.fromDate}
         onChange={(val) => onChange({ ...filters, fromDate: val })}
         placeholder="From date"
         clearable
         inputSize="sm"
+        wrapperClassName="w-48"
       />
-      <label className="text-sm text-muted-foreground">To:</label>
+      <label className="text-sm text-[#1A3A52]/70">To:</label>
       <ALDatePicker
         value={filters.toDate}
         onChange={(val) => onChange({ ...filters, toDate: val })}
         placeholder="To date"
         clearable
         inputSize="sm"
+        wrapperClassName="w-48"
       />
-      <Button variant="outline" size="sm" onClick={onRefetch} disabled={isLoading}>
+      <Button
+        variant="outline"
+        size="sm"
+        onClick={onRefetch}
+        disabled={isLoading}
+        className="border-[#D5BA98]/70 bg-[#FDFBF9] text-[#1A3A52] hover:bg-[#D5BA98]/20"
+      >
         <RefreshCcw className="w-4 h-4" />
       </Button>
     </div>
@@ -90,11 +98,11 @@ interface KpiProps {
 
 function Kpi({ label, value, sub }: KpiProps) {
   return (
-    <Card className="py-4">
+    <Card className="py-4 border-[#D5BA98]/50 bg-[#FDFBF9] shadow-none">
       <CardContent className="px-5">
-        <p className="text-2xl font-bold leading-none">{value}</p>
-        {sub && <p className="text-sm text-muted-foreground mt-0.5">{sub}</p>}
-        <p className="text-xs text-muted-foreground mt-1">{label}</p>
+        <p className="text-2xl font-semibold leading-none text-[#1A3A52]">{value}</p>
+        {sub && <p className="mt-0.5 text-sm text-[#1A3A52]/70">{sub}</p>}
+        <p className="mt-1 text-xs text-[#1A3A52]/65">{label}</p>
       </CardContent>
     </Card>
   );
@@ -104,7 +112,7 @@ function Kpi({ label, value, sub }: KpiProps) {
 
 function TableState({ loading }: { loading: boolean }) {
   return (
-    <div className="flex items-center justify-center py-14 text-muted-foreground text-sm">
+    <div className="flex items-center justify-center py-14 text-sm text-[#1A3A52]/70">
       {loading ? "Loading…" : "No data for the selected range."}
     </div>
   );
@@ -132,25 +140,25 @@ function AttendanceTab({ rows, loading }: { rows: AttendanceReportRowDto[]; load
       ) : loading ? (
         <TableState loading={loading} />
       ) : (
-        <div className="overflow-x-auto rounded-lg border border-border">
+        <div className="overflow-x-auto rounded-xl border border-[#D5BA98]/60 bg-[#FDFBF9]">
           <table className="w-full text-sm">
-            <thead className="bg-muted/50">
+            <thead className="bg-[#D5BA98]/20">
               <tr>
                 {["Staff", "Role", "Assigned", "Present", "Late", "Absent", "Rate"].map((h) => (
-                  <th key={h} className="text-left px-4 py-3 font-medium text-muted-foreground">{h}</th>
+                  <th key={h} className="px-4 py-3 text-left font-medium text-[#1A3A52]/80">{h}</th>
                 ))}
               </tr>
             </thead>
-            <tbody className="divide-y divide-border">
+            <tbody className="divide-y divide-[#D5BA98]/40">
               {rows.map((r) => (
-                <tr key={r.staffId} className="hover:bg-muted/30 transition-colors">
-                  <td className="px-4 py-3 font-medium">{r.staffName}</td>
-                  <td className="px-4 py-3 text-muted-foreground">{r.roleName}</td>
-                  <td className="px-4 py-3">{r.assignedShifts}</td>
-                  <td className="px-4 py-3">{r.presentShifts}</td>
+                <tr key={r.staffId} className="transition-colors hover:bg-[#D5BA98]/15">
+                  <td className="px-4 py-3 font-medium text-[#1A3A52]">{r.staffName}</td>
+                  <td className="px-4 py-3 text-[#1A3A52]/70">{r.roleName}</td>
+                  <td className="px-4 py-3 text-[#1A3A52]">{r.assignedShifts}</td>
+                  <td className="px-4 py-3 text-[#1A3A52]">{r.presentShifts}</td>
                   <td className="px-4 py-3">
                     {r.lateShifts > 0 ? (
-                      <Badge variant="warning">{r.lateShifts}</Badge>
+                      <Badge variant="warning" className="border-[#D5BA98]/60 bg-[#D5BA98]/25 text-[#1A3A52]">{r.lateShifts}</Badge>
                     ) : r.lateShifts}
                   </td>
                   <td className="px-4 py-3">
@@ -158,7 +166,7 @@ function AttendanceTab({ rows, loading }: { rows: AttendanceReportRowDto[]; load
                       <Badge variant="destructive">{r.absentShifts}</Badge>
                     ) : r.absentShifts}
                   </td>
-                  <td className="px-4 py-3">{pct(r.presentShifts, r.assignedShifts)}</td>
+                  <td className="px-4 py-3 text-[#1A3A52]">{pct(r.presentShifts, r.assignedShifts)}</td>
                 </tr>
               ))}
             </tbody>
@@ -193,29 +201,29 @@ function WorkedHoursTab({ rows, loading }: { rows: WorkedHoursReportRowDto[]; lo
       ) : loading ? (
         <TableState loading={loading} />
       ) : (
-        <div className="overflow-x-auto rounded-lg border border-border">
+        <div className="overflow-x-auto rounded-xl border border-[#D5BA98]/60 bg-[#FDFBF9]">
           <table className="w-full text-sm">
-            <thead className="bg-muted/50">
+            <thead className="bg-[#D5BA98]/20">
               <tr>
                 {["Staff", "Scheduled", "Worked", "Variance", "Incomplete"].map((h) => (
-                  <th key={h} className="text-left px-4 py-3 font-medium text-muted-foreground">{h}</th>
+                  <th key={h} className="px-4 py-3 text-left font-medium text-[#1A3A52]/80">{h}</th>
                 ))}
               </tr>
             </thead>
-            <tbody className="divide-y divide-border">
+            <tbody className="divide-y divide-[#D5BA98]/40">
               {rows.map((r) => (
-                <tr key={r.staffId} className="hover:bg-muted/30 transition-colors">
-                  <td className="px-4 py-3 font-medium">{r.staffName}</td>
-                  <td className="px-4 py-3">{minToHM(r.scheduledMinutes)}</td>
-                  <td className="px-4 py-3">{minToHM(r.workedMinutes)}</td>
-                  <td className={`px-4 py-3 font-medium ${r.varianceMinutes < 0 ? "text-destructive" : "text-green-600"}`}>
+                <tr key={r.staffId} className="transition-colors hover:bg-[#D5BA98]/15">
+                  <td className="px-4 py-3 font-medium text-[#1A3A52]">{r.staffName}</td>
+                  <td className="px-4 py-3 text-[#1A3A52]">{minToHM(r.scheduledMinutes)}</td>
+                  <td className="px-4 py-3 text-[#1A3A52]">{minToHM(r.workedMinutes)}</td>
+                  <td className={`px-4 py-3 font-medium ${r.varianceMinutes < 0 ? "text-[#8C3A3A]" : "text-[#4A5D4E]"}`}>
                     {r.varianceMinutes >= 0 ? "+" : ""}{minToHM(Math.abs(r.varianceMinutes))}
                   </td>
                   <td className="px-4 py-3">
                     {r.incompleteRecords > 0 ? (
-                      <Badge variant="warning">{r.incompleteRecords}</Badge>
+                      <Badge variant="warning" className="border-[#D5BA98]/60 bg-[#D5BA98]/25 text-[#1A3A52]">{r.incompleteRecords}</Badge>
                     ) : (
-                      <span className="text-muted-foreground">—</span>
+                      <span className="text-[#1A3A52]/50">—</span>
                     )}
                   </td>
                 </tr>
@@ -250,32 +258,32 @@ function ExceptionsTab({ rows, loading }: { rows: AttendanceExceptionReportRowDt
       ) : loading ? (
         <TableState loading={loading} />
       ) : (
-        <div className="overflow-x-auto rounded-lg border border-border">
+        <div className="overflow-x-auto rounded-xl border border-[#D5BA98]/60 bg-[#FDFBF9]">
           <table className="w-full text-sm">
-            <thead className="bg-muted/50">
+            <thead className="bg-[#D5BA98]/20">
               <tr>
                 {["Date", "Staff", "Role", "Shift", "Exception", "Min Affected", "Reviewed By"].map((h) => (
-                  <th key={h} className="text-left px-4 py-3 font-medium text-muted-foreground">{h}</th>
+                  <th key={h} className="px-4 py-3 text-left font-medium text-[#1A3A52]/80">{h}</th>
                 ))}
               </tr>
             </thead>
-            <tbody className="divide-y divide-border">
+            <tbody className="divide-y divide-[#D5BA98]/40">
               {rows.map((r, i) => (
-                <tr key={i} className="hover:bg-muted/30 transition-colors">
-                  <td className="px-4 py-3">{r.businessDate}</td>
-                  <td className="px-4 py-3 font-medium">{r.staffName}</td>
-                  <td className="px-4 py-3 text-muted-foreground">{r.roleName}</td>
-                  <td className="px-4 py-3 text-muted-foreground">{r.shiftTypeCode}</td>
+                <tr key={i} className="transition-colors hover:bg-[#D5BA98]/15">
+                  <td className="px-4 py-3 text-[#1A3A52]">{r.businessDate}</td>
+                  <td className="px-4 py-3 font-medium text-[#1A3A52]">{r.staffName}</td>
+                  <td className="px-4 py-3 text-[#1A3A52]/70">{r.roleName}</td>
+                  <td className="px-4 py-3 text-[#1A3A52]/70">{r.shiftTypeCode}</td>
                   <td className="px-4 py-3">
                     <Badge variant={r.exceptionType === "ABSENT" ? "destructive" : "warning"}>
                       {r.exceptionType}
                     </Badge>
                     {r.isManualAdjustment && (
-                      <Badge variant="secondary" className="ml-1">Adjusted</Badge>
+                      <Badge variant="secondary" className="ml-1 border-[#D5BA98]/60 bg-[#D5BA98]/20 text-[#1A3A52]">Adjusted</Badge>
                     )}
                   </td>
-                  <td className="px-4 py-3">{r.minutesAffected > 0 ? r.minutesAffected : "—"}</td>
-                  <td className="px-4 py-3 text-muted-foreground">{r.reviewerName ?? "—"}</td>
+                  <td className="px-4 py-3 text-[#1A3A52]">{r.minutesAffected > 0 ? r.minutesAffected : "—"}</td>
+                  <td className="px-4 py-3 text-[#1A3A52]/70">{r.reviewerName ?? "—"}</td>
                 </tr>
               ))}
             </tbody>
@@ -326,15 +334,15 @@ export function ShiftReports() {
   const isLoading = activeTab === "attendance" ? attLoading : activeTab === "workedHours" ? whLoading : excLoading;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 rounded-2xl border border-[#D5BA98]/40 bg-linear-to-b from-[#FDFBF9] via-[#D5BA98]/10 to-[#FDFBF9] p-5 sm:p-6">
       {/* Header */}
       <div className="flex items-start justify-between">
         <div>
           <div className="flex items-center gap-2">
-            <BarChart2 className="w-5 h-5 text-muted-foreground" />
-            <h1 className="text-2xl font-semibold">Shift Reports</h1>
+            <BarChart2 className="h-5 w-5 text-[#1A3A52]/80" />
+            <h1 className="text-2xl font-semibold tracking-wide text-[#1A3A52]">Shift Reports</h1>
           </div>
-          <p className="text-sm text-muted-foreground mt-0.5">
+          <p className="mt-0.5 text-sm text-[#1A3A52]/70">
             Attendance summary, worked hours, and exception reports.
           </p>
         </div>
@@ -350,10 +358,10 @@ export function ShiftReports() {
 
       {/* Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList>
-          <TabsTrigger value="attendance">Attendance</TabsTrigger>
-          <TabsTrigger value="workedHours">Worked Hours</TabsTrigger>
-          <TabsTrigger value="exceptions">Exceptions</TabsTrigger>
+        <TabsList className="border border-[#D5BA98]/60 bg-[#FDFBF9]">
+          <TabsTrigger value="attendance" className="data-[state=active]:bg-[#1A3A52] data-[state=active]:text-[#FDFBF9]">Attendance</TabsTrigger>
+          <TabsTrigger value="workedHours" className="data-[state=active]:bg-[#1A3A52] data-[state=active]:text-[#FDFBF9]">Worked Hours</TabsTrigger>
+          <TabsTrigger value="exceptions" className="data-[state=active]:bg-[#1A3A52] data-[state=active]:text-[#FDFBF9]">Exceptions</TabsTrigger>
         </TabsList>
 
         <TabsContent value="attendance" className="mt-4">

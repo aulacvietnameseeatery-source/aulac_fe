@@ -31,10 +31,10 @@ function ShiftRow({ a }: { a: ShiftAssignmentDto }) {
   const statusCode = att?.attendanceStatusCode ?? "SCHEDULED";
 
   return (
-    <div className="flex items-center justify-between rounded-lg border border-border px-4 py-3 hover:bg-muted/30 transition-colors">
+    <div className="flex items-center justify-between rounded-lg border border-[#D5BA98]/60 bg-[#FDFBF9] px-4 py-3 transition-colors hover:bg-[#D5BA98]/15">
       <div className="space-y-0.5 min-w-0">
-        <p className="text-sm font-medium truncate">{a.shiftTypeName ?? `Schedule #${a.shiftScheduleId}`}</p>
-        <p className="text-xs text-muted-foreground">
+        <p className="truncate text-sm font-medium text-[#1A3A52]">{a.shiftTypeName ?? `Schedule #${a.shiftScheduleId}`}</p>
+        <p className="text-xs text-[#1A3A52]/70">
           {a.businessDate} · {fmt(a.plannedStartAt)} – {fmt(a.plannedEndAt)}
         </p>
       </div>
@@ -94,26 +94,32 @@ export function MyShifts() {
   );
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 rounded-2xl border border-[#D5BA98]/40 bg-linear-to-b from-[#FDFBF9] via-[#D5BA98]/10 to-[#FDFBF9] p-5 sm:p-6">
       {/* Header */}
       <div className="flex items-start justify-between">
         <div>
-          <h1 className="text-2xl font-semibold">My Shifts</h1>
-          <p className="text-sm text-muted-foreground">
+          <h1 className="text-2xl font-semibold tracking-wide text-[#1A3A52]">My Shifts</h1>
+          <p className="text-sm text-[#1A3A52]/70">
             View your assigned shifts and check in or check out.
           </p>
         </div>
-        <Button variant="outline" size="sm" onClick={() => refetch()} disabled={isLoading}>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => refetch()}
+          disabled={isLoading}
+          className="border-[#D5BA98]/70 bg-[#FDFBF9] text-[#1A3A52] hover:bg-[#D5BA98]/20"
+        >
           <RefreshCcw className="w-4 h-4" />
         </Button>
       </div>
 
       {isLoading ? (
-        <div className="flex items-center justify-center py-20 text-muted-foreground text-sm">
+        <div className="flex items-center justify-center py-20 text-sm text-[#1A3A52]/70">
           Loading shifts…
         </div>
       ) : all.length === 0 ? (
-        <div className="flex flex-col items-center justify-center py-20 gap-3 text-muted-foreground">
+        <div className="flex flex-col items-center justify-center gap-3 py-20 text-[#1A3A52]/70">
           <CalendarDays className="w-10 h-10" />
           <p className="text-sm">No shifts assigned in the next 30 days.</p>
         </div>
@@ -122,7 +128,7 @@ export function MyShifts() {
           {/* Today */}
           {todayShifts.length > 0 && (
             <section className="space-y-3">
-              <h2 className="text-base font-semibold">Today</h2>
+              <h2 className="text-base font-semibold text-[#1A3A52]">Today</h2>
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {todayShifts.map((a) => (
                   <CheckInCard key={a.shiftAssignmentId} assignment={a} />
@@ -134,7 +140,7 @@ export function MyShifts() {
           {/* Upcoming */}
           {upcoming.length > 0 && (
             <section className="space-y-3">
-              <h2 className="text-base font-semibold">Upcoming</h2>
+              <h2 className="text-base font-semibold text-[#1A3A52]">Upcoming</h2>
               <div className="space-y-2">
                 {upcoming.map((a) => (
                   <ShiftRow key={a.shiftAssignmentId} a={a} />
@@ -146,7 +152,7 @@ export function MyShifts() {
           {/* Past */}
           {past.length > 0 && (
             <section className="space-y-3">
-              <h2 className="text-base font-semibold text-muted-foreground">Past Shifts</h2>
+              <h2 className="text-base font-semibold text-[#1A3A52]/70">Past Shifts</h2>
               <div className="space-y-2">
                 {past.map((a) => (
                   <ShiftRow key={a.shiftAssignmentId} a={a} />

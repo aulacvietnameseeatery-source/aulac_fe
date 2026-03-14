@@ -50,16 +50,19 @@ interface SummaryCardProps {
   value: number;
   icon: React.ReactNode;
   accent: string;
+  cardClass?: string;
+  valueClass?: string;
+  labelClass?: string;
 }
 
-function SummaryCard({ label, value, icon, accent }: SummaryCardProps) {
+function SummaryCard({ label, value, icon, accent, cardClass, valueClass, labelClass }: SummaryCardProps) {
   return (
-    <Card className="py-4">
+    <Card className={`py-4 border-[#D5BA98]/50 bg-[#FDFBF9] shadow-none ${cardClass ?? ""}`}>
       <CardContent className="px-5 flex items-center gap-4">
-        <div className={`rounded-full p-2 ${accent}`}>{icon}</div>
+        <div className={`rounded-full p-2 border border-[#D5BA98]/40 ${accent}`}>{icon}</div>
         <div>
-          <p className="text-2xl font-bold leading-none">{value}</p>
-          <p className="text-xs text-muted-foreground mt-0.5">{label}</p>
+          <p className={`text-2xl font-semibold leading-none text-[#1A3A52] ${valueClass ?? ""}`}>{value}</p>
+          <p className={`text-xs text-[#1A3A52]/70 mt-0.5 ${labelClass ?? ""}`}>{label}</p>
         </div>
       </CardContent>
     </Card>
@@ -96,36 +99,43 @@ export function ShiftLive() {
 
   return (
     <>
-    <div className="space-y-6">
+    <div className="space-y-6 rounded-2xl border border-[#D5BA98]/40 bg-linear-to-b from-[#FDFBF9] via-[#D5BA98]/10 to-[#FDFBF9] p-5 sm:p-6">
       {/* Header */}
       <div className="flex items-start justify-between">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="text-2xl font-semibold">Live On-Duty Board</h1>
-            <span className="flex items-center gap-1 rounded-full bg-green-100 px-2 py-0.5 text-xs text-green-700 font-medium">
-              <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+            <h1 className="text-2xl font-semibold tracking-wide text-[#1A3A52]">Live On-Duty Board</h1>
+            <span className="flex items-center gap-1 rounded-full border border-[#D5BA98]/60 bg-[#D5BA98]/20 px-2 py-0.5 text-xs font-medium text-[#1A3A52]">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#1A3A52] animate-pulse" />
               Live
             </span>
           </div>
-          <p className="text-sm text-muted-foreground mt-0.5">
+          <p className="mt-0.5 text-sm text-[#1A3A52]/70">
             Real-time attendance for today&apos;s shifts. Auto-refreshes every 30 s.
-            {lastUpdated && <span className="ml-2 text-xs">Last updated: {lastUpdated}</span>}
+            {lastUpdated && <span className="ml-2 text-xs text-[#1A3A52]/60">Last updated: {lastUpdated}</span>}
           </p>
         </div>
-        <Button variant="outline" size="sm" onClick={() => refetch()} disabled={isLoading}>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => refetch()}
+          disabled={isLoading}
+          className="border-[#D5BA98]/70 bg-[#FDFBF9] text-[#1A3A52] hover:bg-[#D5BA98]/20"
+        >
           <RefreshCcw className="w-4 h-4" />
         </Button>
       </div>
 
       {/* Date picker */}
       <div className="flex items-center gap-2">
-        <label className="text-sm text-muted-foreground">Date:</label>
+        <label className="text-sm text-[#1A3A52]/70">Date:</label>
         <ALDatePicker
           value={businessDate}
           onChange={(val) => setBusinessDate(val)}
           placeholder="Select date"
           clearable
           inputSize="sm"
+          wrapperClassName="w-38"
         />
       </div>
 
@@ -135,32 +145,33 @@ export function ShiftLive() {
           <SummaryCard
             label="Scheduled"
             value={summary.scheduled}
-            icon={<Clock className="w-4 h-4 text-muted-foreground" />}
-            accent="bg-muted"
+            icon={<Clock className="w-4 h-4 text-[#1A3A52]/70" />}
+            accent="bg-[#D5BA98]/20"
           />
           <SummaryCard
             label="On Duty"
             value={summary.active}
-            icon={<Zap className="w-4 h-4 text-primary" />}
-            accent="bg-primary/10"
+            icon={<Zap className="w-4 h-4 text-[#1A3A52]" />}
+            accent="bg-[#1A3A52]/10"
+            cardClass="bg-[#1A3A52]/5"
           />
           <SummaryCard
             label="Late"
             value={summary.late}
-            icon={<AlertCircle className="w-4 h-4 text-destructive" />}
-            accent="bg-destructive/10"
+            icon={<AlertCircle className="w-4 h-4 text-[#8C3A3A]" />}
+            accent="bg-[#8C3A3A]/10"
           />
           <SummaryCard
             label="Absent"
             value={summary.absent}
-            icon={<Users className="w-4 h-4 text-destructive" />}
-            accent="bg-destructive/10"
+            icon={<Users className="w-4 h-4 text-[#8C3A3A]" />}
+            accent="bg-[#8C3A3A]/10"
           />
           <SummaryCard
             label="Completed"
             value={summary.completed}
-            icon={<CheckCircle2 className="w-4 h-4 text-green-600" />}
-            accent="bg-green-50"
+            icon={<CheckCircle2 className="w-4 h-4 text-[#4A5D4E]" />}
+            accent="bg-[#D5BA98]/25"
           />
         </div>
       )}
@@ -173,8 +184,8 @@ export function ShiftLive() {
             onClick={() => setStatusFilter(code)}
             className={`px-3 py-1 rounded-full border transition-colors ${
               statusFilter === code
-                ? "bg-foreground text-background border-foreground"
-                : "border-border text-muted-foreground hover:border-foreground/40 hover:text-foreground"
+                ? "border-[#1A3A52] bg-[#1A3A52] text-[#FDFBF9]"
+                : "border-[#D5BA98]/70 bg-[#FDFBF9] text-[#1A3A52]/70 hover:border-[#1A3A52]/40 hover:text-[#1A3A52]"
             }`}
           >
             {code === "" ? "All" : code.charAt(0) + code.slice(1).toLowerCase()}
@@ -184,60 +195,60 @@ export function ShiftLive() {
 
       {/* Board table */}
       {isLoading ? (
-        <div className="flex items-center justify-center py-16 text-muted-foreground text-sm">
+        <div className="flex items-center justify-center py-16 text-sm text-[#1A3A52]/70">
           Loading board…
         </div>
       ) : filtered.length === 0 ? (
-        <div className="flex items-center justify-center py-16 text-muted-foreground text-sm">
+        <div className="flex items-center justify-center py-16 text-sm text-[#1A3A52]/70">
           No attendance records for this date{statusFilter ? ` with status "${statusFilter}"` : ""}.
         </div>
       ) : (
-        <div className="overflow-x-auto rounded-lg border border-border">
+        <div className="overflow-x-auto rounded-xl border border-[#D5BA98]/60 bg-[#FDFBF9]">
           <table className="w-full text-sm">
-            <thead className="bg-muted/50">
+            <thead className="bg-[#D5BA98]/20">
               <tr>
-                <th className="text-left px-4 py-3 font-medium text-muted-foreground">Staff</th>
-                <th className="text-left px-4 py-3 font-medium text-muted-foreground">Role</th>
-                <th className="text-left px-4 py-3 font-medium text-muted-foreground">Shift</th>
-                <th className="text-left px-4 py-3 font-medium text-muted-foreground">Planned</th>
-                <th className="text-left px-4 py-3 font-medium text-muted-foreground">Check-in</th>
-                <th className="text-left px-4 py-3 font-medium text-muted-foreground">Check-out</th>
-                <th className="text-left px-4 py-3 font-medium text-muted-foreground">Status</th>
-                <th className="text-left px-4 py-3 font-medium text-muted-foreground">Late (min)</th>
+                <th className="px-4 py-3 text-left font-medium text-[#1A3A52]/80">Staff</th>
+                <th className="px-4 py-3 text-left font-medium text-[#1A3A52]/80">Role</th>
+                <th className="px-4 py-3 text-left font-medium text-[#1A3A52]/80">Shift</th>
+                <th className="px-4 py-3 text-left font-medium text-[#1A3A52]/80">Planned</th>
+                <th className="px-4 py-3 text-left font-medium text-[#1A3A52]/80">Check-in</th>
+                <th className="px-4 py-3 text-left font-medium text-[#1A3A52]/80">Check-out</th>
+                <th className="px-4 py-3 text-left font-medium text-[#1A3A52]/80">Status</th>
+                <th className="px-4 py-3 text-left font-medium text-[#1A3A52]/80">Late (min)</th>
                 <th className="px-4 py-3" />
               </tr>
             </thead>
-            <tbody className="divide-y divide-border">
+            <tbody className="divide-y divide-[#D5BA98]/40">
               {filtered.map((r) => (
                 <tr
                   key={r.shiftAssignmentId}
-                  className="hover:bg-muted/30 transition-colors"
+                  className="transition-colors hover:bg-[#D5BA98]/15"
                 >
-                  <td className="px-4 py-3 font-medium">{r.staffName}</td>
-                  <td className="px-4 py-3 text-muted-foreground">{r.roleName}</td>
-                  <td className="px-4 py-3 text-muted-foreground">{r.shiftTypeCode}</td>
-                  <td className="px-4 py-3 text-muted-foreground">
+                  <td className="px-4 py-3 font-medium text-[#1A3A52]">{r.staffName}</td>
+                  <td className="px-4 py-3 text-[#1A3A52]/70">{r.roleName}</td>
+                  <td className="px-4 py-3 text-[#1A3A52]/70">{r.shiftTypeCode}</td>
+                  <td className="px-4 py-3 text-[#1A3A52]/70">
                     {fmt(r.plannedStartAt)} – {fmt(r.plannedEndAt)}
                   </td>
-                  <td className="px-4 py-3">{fmt(r.actualCheckInAt)}</td>
-                  <td className="px-4 py-3">{fmt(r.actualCheckOutAt)}</td>
+                  <td className="px-4 py-3 text-[#1A3A52]">{fmt(r.actualCheckInAt)}</td>
+                  <td className="px-4 py-3 text-[#1A3A52]">{fmt(r.actualCheckOutAt)}</td>
                   <td className="px-4 py-3">
                     <ShiftStatusBadge statusCode={r.attendanceStatusCode} type="attendance" />
                   </td>
                   <td className="px-4 py-3">
                     {r.lateMinutes > 0 ? (
-                      <span className="text-destructive font-medium">{r.lateMinutes}</span>
+                      <span className="font-medium text-[#8C3A3A]">{r.lateMinutes}</span>
                     ) : (
-                      <span className="text-muted-foreground">—</span>
+                      <span className="text-[#1A3A52]/50">—</span>
                     )}
                   </td>
                   <td className="px-4 py-3">
                     {r.attendanceId && (
                       <PermissionGuard permission={Permissions.AdjustAttendance}>
                         <Button
-                          variant="ghost"
+                          variant="outline"
                           size="sm"
-                          className="text-xs h-7 px-2"
+                          className="h-7 border-[#D5BA98]/70 bg-[#FDFBF9] px-2 text-xs text-[#1A3A52] hover:bg-[#D5BA98]/20"
                           onClick={() =>
                             setAdjustTarget({
                               attendanceId: r.attendanceId!,

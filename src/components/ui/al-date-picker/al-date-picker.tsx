@@ -2,9 +2,10 @@
 
 import * as React from "react";
 import { CalendarIcon, X } from "lucide-react";
-import { format, parse, isValid } from "date-fns";
+import { format, getMonth, getYear, isValid, parse } from "date-fns";
 import { cn } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar";
+import { ALCombobox } from "@/components/ui/al-combobox";
 import {
   Popover,
   PopoverContent,
@@ -29,9 +30,9 @@ const sizeClass = (size: ALInputSize = "default") =>
 /** Map size prop → font class */
 const fontClass = (size: ALInputSize = "default") =>
   ({
-    sm: "text-xs",
-    default: "text-sm",
-    lg: "text-base",
+    sm: "text-md bold",
+    default: "text-lg bold",
+    lg: "text-xl bold",
   })[size];
 
 /** Resolve visual state, auto-detecting error from props */
@@ -76,7 +77,7 @@ const ALDatePicker = React.forwardRef<HTMLButtonElement, ALDatePickerProps>(
       value,
       onChange,
       placeholder = "Pick a date",
-      displayFormat = "PPP",
+      displayFormat = "dd/MM/yyyy",
 
       // Calendar props
       minDate,
@@ -100,7 +101,63 @@ const ALDatePicker = React.forwardRef<HTMLButtonElement, ALDatePickerProps>(
   ) => {
     const [open, setOpen] = React.useState(false);
 
-    const selectedDate = parseDate(value);
+    const selectedDate = React.useMemo(() => parseDate(value), [value]);
+    const [visibleMonth, setVisibleMonth] = React.useState<Date>(
+      selectedDate ?? new Date()
+    );
+
+    React.useEffect(() => {
+      if (selectedDate) {
+        setVisibleMonth((prev) => {
+          const sameMonth =
+            prev.getFullYear() === selectedDate.getFullYear() &&
+            prev.getMonth() === selectedDate.getMonth();
+          return sameMonth ? prev : selectedDate;
+        });
+      }
+    }, [selectedDate]);
+
+    const minParsed = parseDate(minDate);
+    const maxParsed = parseDate(maxDate);
+    const fromYear = minParsed ? getYear(minParsed) : 2020;
+    const toYear = maxParsed ? getYear(maxParsed) : 2030;
+
+    const monthOptions = React.useMemo(
+      () =>
+        Array.from({ length: 12 }, (_, index) => ({
+          label: format(new Date(2000, index, 1), "MMMM"),
+          value: String(index),
+        })),
+      []
+    );
+
+    const yearOptions = React.useMemo(
+      () =>
+        Array.from({ length: Math.max(1, toYear - fromYear + 1) }, (_, index) => {
+          const year = fromYear + index;
+          return {
+            label: String(year),
+            value: String(year),
+          };
+        }),
+      [fromYear, toYear]
+    );
+
+    const handleMonthChange = (val: string | number | (string | number)[] | undefined) => {
+      if (Array.isArray(val) || val === undefined || val === "") return;
+      const nextMonth = Number(val);
+      if (Number.isNaN(nextMonth)) return;
+
+      setVisibleMonth((prev) => new Date(getYear(prev), nextMonth, 1));
+    };
+
+    const handleYearChange = (val: string | number | (string | number)[] | undefined) => {
+      if (Array.isArray(val) || val === undefined || val === "") return;
+      const nextYear = Number(val);
+      if (Number.isNaN(nextYear)) return;
+
+      setVisibleMonth((prev) => new Date(nextYear, getMonth(prev), 1));
+    };
 
     const handleSelect = (date: Date | undefined) => {
       if (readOnly) return;
@@ -173,7 +230,7 @@ const ALDatePicker = React.forwardRef<HTMLButtonElement, ALDatePickerProps>(
 
               <span
                 className={cn(
-                  "al-input-field text-left pl-0",
+                  "al-input-field flex items-center text-left pl-0",
                   !selectedDate && "text-muted-foreground",
                   className
                 )}
@@ -202,16 +259,36 @@ const ALDatePicker = React.forwardRef<HTMLButtonElement, ALDatePickerProps>(
             </button>
           </PopoverTrigger>
 
-          <PopoverContent className="w-auto p-0" align="start">
+          <PopoverContent className="w-[320px] p-0 border-[#D5BA98]/50" align="start">
+            <div className="grid grid-cols-2 gap-2 p-3 border-b border-[#D5BA98]/30">
+              <ALCombobox
+                options={monthOptions}
+                value={String(getMonth(visibleMonth))}
+                onChange={handleMonthChange}
+                inputSize="sm"
+                searchable={false}
+                placeholder="Month"
+              />
+              <ALCombobox
+                options={yearOptions}
+                value={String(getYear(visibleMonth))}
+                onChange={handleYearChange}
+                inputSize="sm"
+                searchable={false}
+                placeholder="Year"
+              />
+            </div>
             <Calendar
               mode="single"
-              captionLayout="dropdown"
+              className="w-full"
+              captionLayout="label"
               selected={selectedDate}
               onSelect={handleSelect}
-              defaultMonth={selectedDate ?? new Date()}
+              month={visibleMonth}
+              onMonthChange={setVisibleMonth}
               disabled={disabledMatcher.length > 0 ? disabledMatcher : undefined}
-              fromYear={2020}
-              toYear={2030}
+              fromYear={fromYear}
+              toYear={toYear}
             />
           </PopoverContent>
         </Popover>
