@@ -8,20 +8,21 @@ import { Permissions } from '@/types/const';
 import { StoreProfileForm } from '@/features/staff/system-settings/components/StoreProfileForm';
 
 const SystemSettingsContent = () => {
-    const t = useTranslations('SystemSettings');
+    const t = useTranslations('AdminSidebar');
 
     return (
-        <div className="flex flex-col h-full bg-gray-50/50 overflow-auto p-6 pb-10">
-            <div className="flex justify-between items-center w-full mb-6">
-                <div>
+        <div className="flex flex-col h-full bg-gray-50 overflow-auto">
+            <header className="w-full max-w-7xl mx-auto space-y-6 mt-6 px-4 md:px-0">
+                <div className="flex flex-col gap-2">
                     <h1 className="text-3xl font-bold text-gray-900 tracking-tight">
-                        {t('title')}
+                        {t('storeSettings')}
                     </h1>
-                    <p className="text-sm text-gray-500 mt-1">{t('description')}</p>
                 </div>
-            </div>
+            </header>
 
-            <StoreProfileForm />
+            <main className="w-full max-w-7xl mx-auto pb-16 space-y-6 mt-6 px-4 md:px-0">
+                <StoreProfileForm />
+            </main>
         </div>
     );
 };

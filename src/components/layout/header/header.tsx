@@ -4,15 +4,17 @@ import Link from "next/link";
 import Image from "next/image";
 import {
     Menu as MenuIcon, X, MapPin, Phone, Clock,
-    QrCode, Home, User, ChevronDown
+    QrCode, Home, User, ChevronDown,
+    Facebook, Instagram, Music2 as Tiktok
 } from "lucide-react";
 import { useState, useTransition, useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { NavLink } from "@/components/layout/header/nav-link";
 import { FR, GB, VN } from 'country-flag-icons/react/3x2';
 import { useStoreSettings } from "@/hooks/use-store-settings";
+import { useAuth } from "@/components/providers/auth-provider";
 
 // IMPORT COMPONENT QUÉT QR ĐỘC LẬP
 import { QrScannerModal } from "@/components/ui/qr-scanner-modal";
@@ -35,10 +37,12 @@ export function Header({ isScrolled, locale }: HeaderProps) {
     const [isQrScannerOpen, setIsQrScannerOpen] = useState(false);
 
     const { data: storeSettings } = useStoreSettings();
+    const { isAuthenticated } = useAuth();
     const [isPending, startTransition] = useTransition();
     const t = useTranslations('Header');
     const router = useRouter();
     const pathname = usePathname();
+    const searchParams = useSearchParams();
 
     useEffect(() => {
         if (isMobileMenuOpen) {
@@ -52,13 +56,20 @@ export function Header({ isScrolled, locale }: HeaderProps) {
     const switchLocale = (newLocale: string) => {
         if (newLocale === locale) return;
         const newPath = pathname.replace(`/${locale}`, `/${newLocale}`);
+        const query = searchParams.toString();
+        const fullPath = query ? `${newPath}?${query}` : newPath;
         startTransition(() => {
-            router.replace(newPath);
+            router.replace(fullPath);
             router.refresh();
         });
     };
 
     const getLink = (path: string) => `/${locale}${path}`;
+
+    // Handle staff login navigation - go to dashboard if already authenticated, otherwise go to login
+    const getStaffLoginLink = () => {
+        return isAuthenticated ? getLink('/dashboard') : getLink('/login');
+    };
 
     const navItems = [
         { label: t('home') || "HOME", href: "/", icon: <Home size={18} className="-mt-0.5" /> },
@@ -226,7 +237,7 @@ export function Header({ isScrolled, locale }: HeaderProps) {
                                     </button>
                                 </Link>
 
-                                <Link href={getLink("/login")} className="text-white hover:text-[#C5A059] transition-colors" title="Login as Staff">
+                                <Link href={getStaffLoginLink()} className="text-white hover:text-[#C5A059] transition-colors" title={isAuthenticated ? "Go to Dashboard" : "Login as Staff"}>
                                     <User size={20} />
                                 </Link>
                             </div>
@@ -313,13 +324,32 @@ export function Header({ isScrolled, locale }: HeaderProps) {
                                 </button>
                             </Link>
                             <Link
-                                href={getLink("/login")}
+                                href={getStaffLoginLink()}
                                 onClick={() => setIsMobileMenuOpen(false)}
                                 className="flex items-center justify-center gap-3 text-white/70 hover:text-[#C5A059] transition-colors py-4 text-xs uppercase tracking-[0.15em] font-medium border border-[#C5A059]/30 rounded-sm bg-[#C5A059]/5"
                             >
                                 <User size={18} />
-                                <span>LOGIN AS STAFF</span>
+                                <span>{isAuthenticated ? "GO TO DASHBOARD" : "LOGIN AS STAFF"}</span>
                             </Link>
+
+                            {/* Social Media Links for Mobile */}
+                            <div className="flex items-center justify-center gap-6 mt-6 pb-8">
+                                {storeSettings?.facebookLink && (
+                                    <a href={storeSettings.facebookLink} target="_blank" rel="noopener noreferrer" className="text-white/60 hover:text-[#C5A059] transition-colors">
+                                        <Facebook size={24} />
+                                    </a>
+                                )}
+                                {storeSettings?.instagramLink && (
+                                    <a href={storeSettings.instagramLink} target="_blank" rel="noopener noreferrer" className="text-white/60 hover:text-[#C5A059] transition-colors">
+                                        <Instagram size={24} />
+                                    </a>
+                                )}
+                                {storeSettings?.tiktokLink && (
+                                    <a href={storeSettings.tiktokLink} target="_blank" rel="noopener noreferrer" className="text-white/60 hover:text-[#C5A059] transition-colors">
+                                        <Tiktok size={24} />
+                                    </a>
+                                )}
+                            </div>
                         </div>
                     </div>
                 )}

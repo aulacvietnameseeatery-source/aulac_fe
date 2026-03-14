@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { format } from "date-fns";
 import { toast } from "sonner";
+import { useDebounce } from 'use-debounce';
 import { reservationService } from "../services/reservation-service";
 import { ReservationDto, ReservationStatusDto, GetReservationsParams } from "../types/reservation-types";
 
@@ -11,7 +12,6 @@ export const useReservationList = () => {
     const [statuses, setStatuses] = useState<ReservationStatusDto[]>([]);
     const [isLoading, setIsLoading] = useState(false);
 
-    // Pagination State
     const [pagination, setPagination] = useState({
         pageIndex: 1,
         pageSize: 10,
@@ -19,14 +19,18 @@ export const useReservationList = () => {
         totalPage: 0,
     });
 
-    // Filter State
+    // Tách riêng state cho thanh search input (Để gõ không bị lag)
+    const [searchInput, setSearchInput] = useState("");
+
+    // Tạo ra 1 biến debouncedSearch (Chỉ cập nhật sau khi ngừng gõ 500ms)
+    const [debouncedSearch] = useDebounce(searchInput, 500);
+
     const [filters, setFilters] = useState({
-        search: "",
         date: null as Date | null,
         statusId: null as number | null,
     });
 
-    // 1. Fetch Statuses (Tabs) - Chạy 1 lần
+    // 1. Fetch Statuses
     useEffect(() => {
         const fetchStatuses = async () => {
             try {
@@ -39,14 +43,14 @@ export const useReservationList = () => {
         fetchStatuses();
     }, []);
 
-    // 2. Fetch Reservations - Chạy khi filter thay đổi
+    // 2. Fetch Reservations - Lắng nghe thêm biến debouncedSearch
     const fetchReservations = useCallback(async () => {
         setIsLoading(true);
         try {
             const params: GetReservationsParams = {
                 pageIndex: pagination.pageIndex,
                 pageSize: pagination.pageSize,
-                search: filters.search,
+                search: debouncedSearch, // <-- DÙNG BIẾN DEBOUNCE ĐỂ GỌI API
                 date: filters.date ? format(filters.date, "yyyy-MM-dd") : undefined,
                 statusId: filters.statusId || undefined,
             };
@@ -64,7 +68,7 @@ export const useReservationList = () => {
         } finally {
             setIsLoading(false);
         }
-    }, [pagination.pageIndex, pagination.pageSize, filters]);
+    }, [pagination.pageIndex, pagination.pageSize, filters, debouncedSearch]); // <-- Thêm debouncedSearch vào dependencies
 
     useEffect(() => {
         fetchReservations();
@@ -72,7 +76,8 @@ export const useReservationList = () => {
 
     // --- ACTIONS ---
     const onSearchChange = (value: string) => {
-        setFilters(prev => ({ ...prev, search: value }));
+        // Chỉ cập nhật value cho thanh input, CHƯA gọi API
+        setSearchInput(value);
         setPagination(prev => ({ ...prev, pageIndex: 1 }));
     };
 
@@ -91,10 +96,13 @@ export const useReservationList = () => {
 
     return {
         reservations,
-        statuses, // Danh sách tabs
+        statuses,
         isLoading,
         pagination,
-        filters,
+        filters: {
+            ...filters,
+            search: searchInput
+        },
         actions: {
             refresh: fetchReservations,
             onSearchChange,

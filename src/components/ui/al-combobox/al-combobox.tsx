@@ -243,14 +243,16 @@ const ALCombobox: React.FC<ALComboboxProps> = ({
             return (
               <span key={val} className="al-cb-badge">
                 {renderValue && opt ? renderValue(opt) : opt?.label ?? val}
-                <button
-                  type="button"
+                <span
+                  role="button"
+                  tabIndex={0}
                   className="al-cb-badge__remove"
                   onClick={(e) => handleRemoveBadge(val, e)}
+                  onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); handleRemoveBadge(val, e as any); } }}
                   aria-label={`Remove ${opt?.label ?? val}`}
                 >
                   <X size={8} />
-                </button>
+                </span>
               </span>
             );
           })}

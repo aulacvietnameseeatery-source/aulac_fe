@@ -2,21 +2,18 @@
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
-    BookmarkCheck,
     CalendarDays,
-    CircleArrowOutDownRight,
-    CheckCircle2,
     ChevronDown,
-    Loader,
+    RefreshCw,
     Loader2,
     LayoutGrid,
     Plus,
     SquareKanban,
-    UserX,
     Search,
     X,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { TablePagination } from "@/components/ui/table/table-pagination";
 import { useOrderHistory } from "@/features/staff/order-management/hooks/useOrderHistory";
@@ -53,9 +50,9 @@ const KANBAN_COLUMNS: KanbanColumnConfig[] = [
 const SEARCH_DEBOUNCE_MS = 400;
 const KANBAN_PAGE_SIZE = 50;
 
-// ─── Main Content ──────────────────────────────────────────────────────────
 function OrdersContent() {
     const t = useTranslations("Order.List");
+    const router = useRouter();
 
     const { orders, isLoading, totalCount, onDataChange, refresh: refreshList } = useOrderHistory();
     const { counts, fetchCounts } = useOrderStatusCounts();
@@ -218,64 +215,43 @@ function OrdersContent() {
         return orders.filter((o) => lower.includes(o.orderStatus.toLowerCase()));
     };
 
+    const handleCreate = () => {
+        router.push(`/dashboard/orders/create`);
+    };
+
     return (
-        <div className="w-full flex flex-col h-full">
-            {/* ── Title row ───────────────────────────────────────────────── */}
-            <div className="flex items-center justify-between mb-2 flex-wrap gap-2">
-                <div>
-                    <h1 className="text-2xl font-bold text-gray-900 tracking-tight">{t("title")}</h1>
-                    <p className="text-xs text-gray-500 mt-0.5">{t("description")}</p>
-                </div>
-                {/* Add New Order button — same as staff renderTitle pattern */}
-                <Button variant="outline" size="sm" className="shadow-sm">
-                    <Plus className="mr-1.5 h-3.5 w-3.5" />
-                    {t("addNewOrder")}
-                </Button>
-            </div>
+        <div className="w-full flex flex-col h-full bg-[#F8F9FA] px-4 md:px-0">
+            <div className="sticky top-0 z-20 bg-[#F8F9FA]/90 backdrop-blur-md -mx-4 px-4 py-2 border-b border-gray-100 mb-4 lg:relative lg:top-auto lg:z-auto lg:bg-transparent lg:backdrop-blur-none lg:mx-0 lg:px-0 lg:py-0 lg:border-none lg:mb-6 lg:mt-1">
+                <div className="flex flex-col gap-3 lg:gap-4">
+                    <div className="flex items-start sm:items-center justify-between flex-wrap gap-2">
+                        <div>
+                            <h1 className="text-base sm:text-lg font-bold text-gray-900 leading-none whitespace-nowrap">
+                                {t("title")}
+                            </h1>
+                            <p className="text-xs text-gray-500 mt-1">{t("description")}</p>
+                        </div>
+                        <Button onClick={handleCreate} variant="outline" size="sm" className="h-9 px-3.5 text-sm font-semibold bg-white border-gray-200 shadow-sm">
+                            <Plus className="mr-1.5 h-3.5 w-3.5" />
+                            {t("addNewOrder")}
+                        </Button>
+                    </div>
 
-
-            {/* ── BaseTable-style toolbar ──────────────────────────────────── */}
-            <div className="body-layout-list flex-1 flex flex-col min-h-0">
-                <div className="body-list flex flex-col flex-1 min-h-0">
-                    {/* Condition / search bar - Exactly matches BaseTable structure */}
-                    <div className="form-list">
-                        <div className="condition-box flex flex-row items-center w-full h-full">
-                            <div className="flex gap-2 items-center flex-1 flex-wrap">
-                                {/* Search — giống BaseTable */}
-                                <div className="ms-input ms-editor flex items-center search-input-list max-h-4" style={{ height: "auto" }}>
-                                    <div className="flex-1 flex items-center input-container border pointer">
-                                        <div className="mi icon16 icon left search" />
-                                        <input
-                                            value={searchInput}
-                                            onChange={(e) => setSearchInput(e.target.value)}
-                                            className="ms-input-item flex"
-                                            placeholder={t("searchPlaceholder")}
-                                            type="text"
-                                            autoComplete="on"
-                                        />
-                                        {searchInput && (
-                                            <button
-                                                className="mi icon16 icon right close mr-1"
-                                                onClick={() => setSearchInput("")}
-                                            />
-                                        )}
-                                    </div>
-                                </div>
-
-                                {/* Tabs — chỉ hiển thị ở grid mode */}
-                                {viewMode === "grid" ? (
-                                    <div className="flex items-center gap-0.5 flex-wrap">
+                    <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-2.5 xl:gap-4">
+                        <div className="flex-1 min-w-0">
+                            {viewMode === "grid" ? (
+                                <div className="-mx-0.5 overflow-x-auto">
+                                    <div className="px-0.5 flex items-center gap-1.5 min-w-max">
                                         {TABS.map((tab, idx) => (
                                             <button
                                                 key={tab.label}
                                                 onClick={() => handleTabChange(idx)}
-                                                className={`flex items-center gap-1 px-2 py-1 rounded-md text-xs font-medium transition-colors ${activeTab === idx
+                                                className={`h-8 inline-flex items-center gap-1.5 px-3 rounded-lg text-xs font-semibold transition-colors whitespace-nowrap ${activeTab === idx
                                                     ? "bg-blue-600 text-white shadow-sm"
-                                                    : "text-gray-600 hover:bg-gray-100"
+                                                    : "text-gray-600 bg-white border border-gray-200 hover:bg-gray-50"
                                                     }`}
                                             >
-                                                {tab.label}
-                                                <span className={`text-[10px] leading-tight rounded-full px-1.5 py-0.5 font-semibold ${activeTab === idx
+                                                <span>{tab.label}</span>
+                                                <span className={`text-[10px] leading-tight rounded-full px-1.5 py-0.5 font-bold ${activeTab === idx
                                                     ? "bg-white/20 text-white"
                                                     : "bg-gray-200 text-gray-600"
                                                     }`}>
@@ -284,16 +260,32 @@ function OrdersContent() {
                                             </button>
                                         ))}
                                     </div>
-                                ) : (
-                                    <span className="text-sm font-semibold text-gray-700">
-                                        {/*{t("kanbanLabel")}*/}
-                                    </span>
-                                )}
-                                {/* Date range filter */}
+                                </div>
+                            ) : (
+                                <div className="text-xs sm:text-sm font-medium text-gray-500 px-0.5">
+                                    {t("kanbanLabel")}
+                                </div>
+                            )}
+                        </div>
+
+                        <div className="w-full xl:w-auto flex flex-col sm:flex-row sm:items-center gap-2">
+                            <div className="relative w-full xl:w-72">
+                                <Search className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                                <input
+                                    value={searchInput}
+                                    onChange={(e) => setSearchInput(e.target.value)}
+                                    className="w-full h-9 rounded-lg border border-gray-200 bg-white pl-9 pr-3 text-sm text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                                    placeholder={t("searchPlaceholder")}
+                                    type="text"
+                                    autoComplete="on"
+                                />
+                            </div>
+
+                            <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap">
                                 <div className="relative" ref={datePickerRef}>
                                     <button
                                         onClick={() => setDatePickerOpen(o => !o)}
-                                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-sm font-medium transition-colors ${datePreset
+                                        className={`h-9 inline-flex items-center gap-1.5 px-3 rounded-lg border text-sm font-semibold transition-colors ${datePreset
                                             ? "bg-blue-50 border-blue-300 text-blue-700"
                                             : "bg-white border-gray-200 text-gray-600 hover:bg-gray-50"
                                             }`}
@@ -308,7 +300,7 @@ function OrdersContent() {
                                     </button>
 
                                     {datePickerOpen && (
-                                        <div className="absolute left-0 top-full mt-1 z-50 bg-white border border-gray-200 rounded-xl shadow-xl w-64 py-1 text-sm">
+                                        <div className="absolute right-0 sm:left-0 sm:right-auto top-full mt-1 z-50 bg-white border border-gray-200 rounded-xl shadow-xl w-64 py-1 text-sm">
                                             {DATE_PRESETS.filter(p => p.key !== "custom").map(preset => (
                                                 <button
                                                     key={preset.key}
@@ -348,31 +340,27 @@ function OrdersContent() {
                                     )}
                                 </div>
 
-                            </div>
-
-                            {/* Right: refresh + view toggle */}
-                            <div className="action flex items-center gap-2 pr-2">
                                 <button
-                                    className="ms-button btn-outline-neutral only-icon"
                                     onClick={handleRefresh}
-                                    title={t("refresh")}
                                     disabled={isLoading || isRefreshing}
+                                    className="p-1.5 bg-white border border-gray-100 rounded-lg hover:bg-gray-50 transition-colors shadow-sm disabled:opacity-50 group shrink-0"
+                                    title={t("refresh")}
                                 >
-                                    <div className={`icon reload mi icon16${(isLoading || isRefreshing) ? " animate-spin" : ""}`}>&nbsp;</div>
+                                    <RefreshCw className={`w-3 h-3 text-gray-600 transition-transform duration-500 ${(isLoading || isRefreshing) ? "animate-spin" : "group-hover:rotate-180"}`} />
                                 </button>
 
-                                <div className="flex items-center border border-gray-200 rounded-lg bg-white p-0.5 gap-0.5">
+                                <div className="h-8 inline-flex items-center border border-gray-200 rounded-lg bg-white p-0.5 gap-0.5">
                                     <button
                                         onClick={() => handleViewMode("grid")}
                                         title="Grid"
-                                        className={`p-1.5 rounded-md transition-colors ${viewMode === "grid" ? "bg-blue-600 text-white shadow-sm" : "text-gray-500 hover:bg-gray-100"}`}
+                                        className={`h-full px-2 rounded-md transition-colors ${viewMode === "grid" ? "bg-blue-600 text-white shadow-sm" : "text-gray-500 hover:bg-gray-100"}`}
                                     >
                                         <LayoutGrid className="w-4 h-4" />
                                     </button>
                                     <button
                                         onClick={() => handleViewMode("kanban")}
                                         title="Kanban"
-                                        className={`p-1.5 rounded-md transition-colors ${viewMode === "kanban" ? "bg-blue-600 text-white shadow-sm" : "text-gray-500 hover:bg-gray-100"}`}
+                                        className={`h-full px-2 rounded-md transition-colors ${viewMode === "kanban" ? "bg-blue-600 text-white shadow-sm" : "text-gray-500 hover:bg-gray-100"}`}
                                     >
                                         <SquareKanban className="w-4 h-4" />
                                     </button>
@@ -380,17 +368,20 @@ function OrdersContent() {
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
 
-                    {/* ── Content area ────────────────────────────────────── */}
-                    <div className="voucher-body-grid flex-1 min-h-0">
+            <div className="flex-1 min-h-0">
+                <div className="h-full">
+                    <div className="voucher-body-grid flex-1 min-h-0 h-full">
                         {isLoading ? (
                             <div className="flex items-center justify-center py-24 h-full">
                                 <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
                             </div>
                         ) : viewMode === "kanban" ? (
                             /* ── KANBAN VIEW — full-height scrollable, no pagination ── */
-                            <div className="h-full overflow-auto p-4 custom-scrollbar">
-                                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+                            <div className="h-full overflow-auto p-0 custom-scrollbar">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3 sm:gap-4">
                                     {KANBAN_COLUMNS.map((col) => {
                                         const colOrders = getColumnOrders(col);
                                         return (
@@ -418,8 +409,11 @@ function OrdersContent() {
                                                                 secondaryAction={{ label: t(`kanban.${col.secondaryKey}`), onClick: () => { } }}
                                                                 onAction={(id, action) => {
                                                                     console.log("Kanban Action:", action, "on order:", id);
-                                                                    // For now just refresh, similar to grid view
-                                                                    handleRefresh();
+                                                                    if (action === "view" || action === "edit") {
+                                                                        router.push(`/dashboard/orders/${id}/edit`);
+                                                                    } else if (action !== 'pay') {
+                                                                        handleRefresh();
+                                                                    }
                                                                 }}
                                                             />
                                                         ))
@@ -432,7 +426,7 @@ function OrdersContent() {
                             </div>
                         ) : (
                             /* ── GRID VIEW — scrollable cards + inline pagination ── */
-                            <div className="h-full overflow-auto p-4 custom-scrollbar">
+                            <div className="h-full overflow-auto p-0 custom-scrollbar">
                                 {orders.length === 0 ? (
                                     <div className="flex flex-col items-center justify-center h-full py-24 text-gray-400">
                                         <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mb-4">
@@ -443,7 +437,7 @@ function OrdersContent() {
                                     </div>
                                 ) : (
                                     <div className="flex flex-col min-h-full">
-                                        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 mb-4 flex-1">
+                                        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-4 mb-4 flex-1">
                                             {orders.map((order) => (
                                                 <OrderCard
                                                     key={order.orderId}
@@ -451,8 +445,11 @@ function OrdersContent() {
                                                     onStatusChange={handleRefresh}
                                                     onAction={(id, action) => {
                                                         console.log("Action:", action, "on order:", id);
-                                                        // Handle other actions if needed
-                                                        if (action !== 'pay') handleRefresh();
+                                                        if (action === "view" || action === "edit") {
+                                                            router.push(`/dashboard/orders/${id}/edit`);
+                                                        } else if (action !== 'pay') {
+                                                            handleRefresh();
+                                                        }
                                                     }}
                                                 />
                                             ))}

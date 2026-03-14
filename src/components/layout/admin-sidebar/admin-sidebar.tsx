@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useParams } from "next/navigation";
 import {
   LayoutDashboard,
   Table,
@@ -31,6 +31,8 @@ import {
   TicketPercent,
   ChefHat,
   Truck,
+  FileSpreadsheet,
+  BadgeDollarSign,
   Clock,
   Radio,
   BarChart3,
@@ -72,6 +74,14 @@ const navigation = [
     items: [
       { key: "tables", href: "/dashboard/tables", icon: Table },
       { key: "customers", href: "/dashboard/customers", icon: UserRound },
+      { key: "invoices", href: "/dashboard/invoices", icon: FileSpreadsheet },
+      { key: "payments", href: "/dashboard/payments", icon: BadgeDollarSign },
+    ]
+  },
+  {
+    status: "shifts",
+    icon: Clock,
+    items: [
       { key: "shifts", href: "/dashboard/shifts", icon: Clock },
       { key: "shiftsLive", href: "/dashboard/shifts/live", icon: Radio },
       { key: "shiftsReports", href: "/dashboard/shifts/reports", icon: BarChart3 },
@@ -92,6 +102,7 @@ const navigation = [
     icon: Settings,
     items: [
       { key: "storeSettings", href: "/dashboard/store-settings", icon: Warehouse },
+      { key: "systemSettings", href: "/dashboard/system-settings", icon: Settings2 },
       { key: "notifications", href: "/dashboard/notifications", icon: Bell },
       { key: "promotions", href: "/dashboard/promotions", icon: Tags },
       { key: "emails", href: "/dashboard/emails", icon: Mail },
@@ -105,6 +116,8 @@ interface AdminSidebarProps {
 
 export function AdminSidebar({ onClose }: AdminSidebarProps) {
   const pathname = usePathname();
+  const params = useParams();
+  const locale = params.locale as string || 'vi';
   const { userInfo } = useAuth();
   const { mutate: logout, isPending: isLoggingOut } = useLogout();
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
@@ -169,7 +182,7 @@ export function AdminSidebar({ onClose }: AdminSidebarProps) {
 
         {/* Column 1: Mini Sidebar */}
         <div className="w-[70px] bg-[#1A3A51] border-r border-white/5 flex flex-col items-center py-6 z-30">
-          <Link href="/dashboard" className="mb-8 px-2 transition-transform hover:scale-105 active:scale-95">
+          <Link href={`/${locale}/`} className="mb-8 px-2 transition-transform hover:scale-105 active:scale-95" title="Về Trang Chủ">
             <Image
               width={40}
               height={40}

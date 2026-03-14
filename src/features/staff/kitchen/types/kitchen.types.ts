@@ -1,10 +1,11 @@
 // KDS-specific types — maps from KitchenOrderDTO / KitchenOrderItemDTO (backend)
+import type { OrderItemStatusCode } from '@/types/status-codes';
 
 export interface KitchenOrderItem {
     orderItemId: number;
     dishName: string;
     quantity: number;
-    itemStatus: string; // CREATED | IN_PROGRESS | READY | SERVED | REJECTED
+    itemStatus: OrderItemStatusCode | string;
     note?: string;
     rejectReason?: string;
 }
@@ -18,6 +19,6 @@ export interface KitchenOrder {
 }
 
 export interface UpdateItemStatusRequest {
-    status: string;
+    status: OrderItemStatusCode;
     rejectReason?: string;
 }

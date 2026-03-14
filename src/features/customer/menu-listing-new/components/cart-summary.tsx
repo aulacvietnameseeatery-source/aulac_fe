@@ -125,7 +125,7 @@ export function CartSummary({
 
             <div className="flex flex-col items-center gap-1 mb-8">
                 <span className={cn("text-[42px] font-display font-light leading-none tracking-tight", isOverlay ? "text-[#1A3A52]" : "text-white")}>
-                    ${totalPrice.toFixed(2)}
+                    {totalPrice.toFixed(2)} <span className="text-[28px]">CHF</span>
                 </span>
                 <span className={cn("text-[10px] font-display font-medium uppercase tracking-[1.5px] mt-2", isOverlay ? "text-[#1A3A52]/80" : "text-white/70")}>
                     {t("items_count", { count: totalItems })}
@@ -166,7 +166,7 @@ export function CartSummary({
                         <div className="flex justify-between items-center">
                             <div className="flex flex-col">
                                 <span className="font-medium text-sm text-white/90 line-clamp-1">{item.name}</span>
-                                <span className="text-xs text-[#C5A059] font-display mt-0.5">${(item.price * item.quantity).toFixed(2)}</span>
+                                <span className="text-xs text-[#C5A059] font-display mt-0.5">{(item.price * item.quantity).toFixed(2)} <span className="text-[10px]">CHF</span></span>
                             </div>
                             <div className="flex items-center gap-2 md:gap-3 ml-2">
                                 <div className="flex items-center bg-[#204560] rounded-lg border border-[#C5A059]/20 h-8">
@@ -223,7 +223,7 @@ export function CartSummary({
             <div className="mt-4 pt-4 border-t border-[#C5A059]/20">
                 <div className="flex justify-between items-center mb-4">
                     <span className="text-sm uppercase tracking-wider text-white/60">Total</span>
-                    <span className="text-2xl font-display font-bold text-[#C5A059]">${totalPrice.toFixed(2)}</span>
+                    <span className="text-2xl font-display font-bold text-[#C5A059]">{totalPrice.toFixed(2)} <span className="text-base">CHF</span></span>
                 </div>
                 <button 
                     onClick={handleConfirm} 
@@ -260,7 +260,7 @@ export function CartSummary({
                 "bg-[#204560] overflow-hidden transition-all duration-300 shadow-[0px_10px_40px_-10px_rgba(0,0,0,0.5)]",
                 // XỬ LÝ CSS RESPONSIVE CHO 3 TRẠNG THÁI:
                 isExpanded
-                    ? "w-[92vw] md:w-[320px] h-[70vh] md:h-[550px] rounded-[28px] md:rounded-[24px] border border-[#C5A059]/30 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 md:static md:translate-x-0 md:translate-y-0 cursor-default shadow-2xl z-[100]"
+                    ? "w-[92vw] md:w-[320px] h-[70vh] md:h-[550px] rounded-[28px] md:rounded-[24px] border border-[#C5A059]/30 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 cursor-default shadow-2xl z-[100]"
                     : isMobile
                         ? "relative w-[72px] h-[90px] rounded-tl-[60px] rounded-br-[60px] rotate-[-15deg] border-[1.5px] border-[#C5A059] bg-[#204560] cursor-pointer z-50 flex items-center justify-center shadow-[0_10px_25px_rgba(0,0,0,0.6)]"
                         : "relative w-[286px] h-[357px] rounded-tl-[256px] rounded-br-[256px] rotate-[-15deg] border border-[#C5A059]/50 cursor-pointer shadow-[0px_25px_60px_-15px_rgba(0,0,0,0.6)]",

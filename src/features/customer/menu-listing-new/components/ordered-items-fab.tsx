@@ -16,11 +16,13 @@ import {
   CreditCard,
   Check,
 } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { api } from "@/lib/http";
+import { ALConfirmDialog } from "@/components/ui/al-confirm-dialog";
 
 // ─── Types ────────────────────────────────────────────────────────────────
 
-type OrderItemStatus = "CREATED" | "IN_PROGRESS" | "READY" | "SERVED" | "REJECTED";
+type OrderItemStatus = "CREATED" | "IN_PROGRESS" | "READY" | "SERVED" | "REJECTED" | "CANCELLED";
 
 interface OrderItemData {
   orderItemId: number;
@@ -49,6 +51,7 @@ const getItemStatusIcon = (status: string) => {
     READY: CheckCircle2,
     SERVED: CheckCircle2,
     REJECTED: XCircle,
+    CANCELLED: XCircle,
   };
   return configs[status] || Clock;
 };
@@ -79,6 +82,11 @@ const getItemStatusStyles = (status: string) => {
       bg: "rgba(220,60,60,0.15)",
       text: "#f87171",
       border: "rgba(220,60,60,0.35)",
+    },
+    CANCELLED: {
+      bg: "rgba(128,128,128,0.15)",
+      text: "#9ca3af",
+      border: "rgba(128,128,128,0.35)",
     },
   };
   return configs[status] || configs.CREATED;
@@ -123,6 +131,18 @@ export function OrderHistoryFAB({ tableCode, tableNumber, dishNameMap = {}, refr
   const [history, setHistory] = useState<CustomerOrderHistory | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [cancelNotAllowedDishName, setCancelNotAllowedDishName] = useState<string | null>(null);
+  const [cancellingItems, setCancellingItems] = useState<Set<number>>(new Set());
+  const [cancelConfirmItemId, setCancelConfirmItemId] = useState<number | null>(null);
+
+  // Derive the dish name of the item pending cancel confirmation
+  const cancelConfirmItemDishName = cancelConfirmItemId !== null
+    ? (() => {
+        const item = history?.items.find(i => i.orderItemId === cancelConfirmItemId);
+        if (!item) return "";
+        return dishNameMap[item.dishId] || item.dishName;
+      })()
+    : "";
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const redirectTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -131,7 +151,7 @@ export function OrderHistoryFAB({ tableCode, tableNumber, dishNameMap = {}, refr
     if (typeof window !== 'undefined') {
       sessionStorage.removeItem(CURRENT_ORDER_ID_KEY);
       sessionStorage.removeItem('aulac_table_number');
-      sessionStorage.removeItem('aulac_customer_info');
+
       sessionStorage.removeItem('aulac_cart_items');
     }
   }, []);
@@ -157,13 +177,14 @@ export function OrderHistoryFAB({ tableCode, tableNumber, dishNameMap = {}, refr
 
   // Helper function to get translated status label
   const getStatusLabel = (status: string): string => {
-    const statusKey = status.toLowerCase().replace('_', '');
+    const statusKey = status.toUpperCase();
     const statusMap: Record<string, string> = {
-      'created': 'created',
-      'inprogress': 'inProgress',
-      'ready': 'ready',
-      'served': 'served',
-      'rejected': 'rejected',
+      'CREATED': 'created',
+      'IN_PROGRESS': 'inProgress',
+      'READY': 'ready',
+      'SERVED': 'served',
+      'REJECTED': 'rejected',
+      'CANCELLED': 'cancelled',
     };
     const key = statusMap[statusKey] || 'created';
     return t(`status.${key}`);
@@ -192,6 +213,39 @@ export function OrderHistoryFAB({ tableCode, tableNumber, dishNameMap = {}, refr
       setLoading(false);
     }
   }, []);
+
+  // ── Cancel order item ─────────────────────────────────────────────────
+  const handleCancelItem = useCallback(async (orderItemId: number) => {
+    setCancellingItems(prev => new Set(prev).add(orderItemId));
+    try {
+      // Re-fetch order to verify status is still CREATED before cancelling
+      const storedOrderId = typeof window !== 'undefined'
+        ? sessionStorage.getItem(CURRENT_ORDER_ID_KEY)
+        : null;
+      if (storedOrderId) {
+        const freshData = await fetchOrderByOrderId(Number(storedOrderId));
+        const freshItem = freshData.items.find(i => i.orderItemId === orderItemId);
+        if (!freshItem || freshItem.itemStatus.toUpperCase() !== "CREATED") {
+          // Status changed – refresh UI and abort cancel
+          setHistory(freshData);
+          const dishName = freshItem ? (dishNameMap[freshItem.dishId] || freshItem.dishName) : "";
+          setCancelNotAllowedDishName(dishName);
+          return;
+        }
+      }
+      await api.patch(`/api/orders/items/${orderItemId}/cancel`, {});
+      // Refresh the order history after successful cancellation
+      await load();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : t("cancelError"));
+    } finally {
+      setCancellingItems(prev => {
+        const next = new Set(prev);
+        next.delete(orderItemId);
+        return next;
+      });
+    }
+  }, [load, t]);
 
   useEffect(() => {
     const hasSession = typeof window !== 'undefined' && !!sessionStorage.getItem(CURRENT_ORDER_ID_KEY);
@@ -239,83 +293,99 @@ export function OrderHistoryFAB({ tableCode, tableNumber, dishNameMap = {}, refr
 
   return (
     <>
-      {/* ── FAB button ── */}
-      <motion.button
-        onClick={() => {
-          setIsOpen(true);
-          onOpenChange?.(true);
-        }}
-        whileHover={{ scale: 1.08 }}
-        whileTap={{ scale: 0.93 }}
-        className="relative flex flex-col items-center justify-center gap-[3px] focus:outline-none"
-        aria-label={t("fabAriaLabel")}
-      >
-        {/* Circle button - increased size */}
-        <div
-          className="w-[68px] h-[68px] rounded-full flex items-center justify-center"
-          style={{
-            background: "radial-gradient(circle at 35% 30%, #2a3f60, #0f1f3d)",
-            boxShadow:
-              "0 0 0 2px #c9a84c, 0 4px 20px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,220,100,0.15)",
-          }}
-        >
-          <ScrollText size={30} strokeWidth={1.6} className="text-[#e8c97a] drop-shadow-sm" />
-
-          {/* Badge: total item count */}
-          {totalItems > 0 && (
-            <motion.span
-              key={totalItems}
-              initial={{ scale: 0.5, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              className="absolute -top-1 -right-1 min-w-[20px] h-5 px-1 rounded-full flex items-center justify-center text-[11px] font-bold text-[#0f1f3d] leading-none"
-              style={{
-                background: "linear-gradient(135deg, #f5d77a, #c9a84c)",
-                boxShadow: "0 2px 6px rgba(0,0,0,0.4)",
-              }}
-            >
-              {totalItems}
-            </motion.span>
-          )}
-        </div>
-
-        <span
-          className="text-[10px] font-semibold tracking-widest uppercase"
-          style={{ color: "#c9a84c", textShadow: "0 1px 4px rgba(0,0,0,0.6)" }}
-        >
-          {t("fabLabel")}
-        </span>
-      </motion.button>
-
-      {/* ── Modal ── */}
+      {/* ── Backdrop (only when expanded) ── */}
       <AnimatePresence>
         {isOpen && (
-          <>
-            {/* Backdrop */}
+          <motion.div
+            key="history-backdrop"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => {
+              setIsOpen(false);
+              onOpenChange?.(false);
+            }}
+            className="fixed inset-0 z-[89] bg-black/60 backdrop-blur-sm"
+          />
+        )}
+      </AnimatePresence>
+
+      {/* ── Morphing container: FAB ↔ Panel ── */}
+      <div className={cn(
+        "flex flex-col items-center",
+        isOpen ? "contents" : "gap-[3px]"
+      )}>
+        <motion.div
+          layout
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.8 }}
+          transition={{
+            layout: { type: "spring", stiffness: 200, damping: 28 },
+            opacity: { duration: 0.2 },
+            scale: { type: "spring", stiffness: 300, damping: 25 },
+          }}
+          onClick={() => {
+            if (!isOpen) {
+              setIsOpen(true);
+              onOpenChange?.(true);
+            }
+          }}
+          className={cn(
+            "transition-[border-radius,box-shadow] duration-300",
+            isOpen
+              ? "w-[92vw] md:w-[500px] h-[82vh] md:h-[640px] md:max-h-[calc(100vh-160px)] rounded-[28px] fixed top-[calc(50%+20px)] md:top-[calc(50%+50px)] left-1/2 -translate-x-1/2 -translate-y-1/2 z-[91] cursor-default flex flex-col overflow-hidden"
+              : "relative w-[68px] h-[68px] rounded-full cursor-pointer flex items-center justify-center overflow-visible"
+          )}
+          style={{
+            background: isOpen
+              ? "linear-gradient(170deg, #192848 0%, #0f1f3d 100%)"
+              : "#204560",
+            border: isOpen
+              ? "1px solid rgba(201,168,76,0.35)"
+              : "2px solid #c9a84c",
+            boxShadow: isOpen
+              ? "0 24px 64px rgba(0,0,0,0.7), 0 0 0 1px rgba(201,168,76,0.1)"
+              : "0 4px 20px rgba(0,0,0,0.55)",
+          }}
+          aria-label={t("fabAriaLabel")}
+        >
+          <AnimatePresence mode="wait">
+            {!isOpen ? (
+              /* ── Collapsed FAB content ── */
+              <motion.div
+                key="fab-content"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0, transition: { duration: 0.1 } }}
+                className="flex items-center justify-center w-full h-full relative"
+              >
+                <ScrollText size={30} strokeWidth={1.6} className="text-[#e8c97a] drop-shadow-sm" />
+
+                {/* Badge: total item count */}
+                {totalItems > 0 && (
+                  <motion.span
+                    key={totalItems}
+                    initial={{ scale: 0.5, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    className="absolute -top-1 -right-1 min-w-[20px] h-5 px-1 rounded-full flex items-center justify-center text-[11px] font-bold text-[#0f1f3d] leading-none"
+                    style={{
+                      background: "linear-gradient(135deg, #f5d77a, #c9a84c)",
+                      boxShadow: "0 2px 6px rgba(0,0,0,0.4)",
+                    }}
+                  >
+                    {totalItems}
+                  </motion.span>
+                )}
+              </motion.div>
+            ) : (
+              /* ── Expanded panel content ── */
             <motion.div
-              key="history-backdrop"
+              key="panel-content"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => {
-                setIsOpen(false);
-                onOpenChange?.(false);
-              }}
-              className="fixed inset-0 z-[90] bg-black/60 backdrop-blur-sm"
-            />
-
-            {/* Panel */}
-            <motion.div
-              key="history-panel"
-              initial={{ scale: 0.88, opacity: 0, y: 24 }}
-              animate={{ scale: 1, opacity: 1, y: 0 }}
-              exit={{ scale: 0.88, opacity: 0, y: 24 }}
-              transition={{ type: "spring", stiffness: 320, damping: 32 }}
-              className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[91] w-[92vw] md:w-[390px] h-[82vh] md:h-[640px] rounded-[28px] overflow-hidden flex flex-col"
-              style={{
-                background: "linear-gradient(170deg, #192848 0%, #0f1f3d 100%)",
-                border: "1px solid rgba(201,168,76,0.35)",
-                boxShadow: "0 24px 64px rgba(0,0,0,0.7), 0 0 0 1px rgba(201,168,76,0.1)",
-              }}
+              exit={{ opacity: 0, transition: { duration: 0.1 } }}
+              className="flex flex-col w-full h-full"
             >
               {/* ── Header ── */}
               <div
@@ -367,6 +437,29 @@ export function OrderHistoryFAB({ tableCode, tableNumber, dishNameMap = {}, refr
               {/* ── Body (scrollable) ── */}
               <div className="overflow-y-auto flex-1 px-4 py-3">
                 {/* Error */}
+                {cancelNotAllowedDishName !== null && (
+                  <div
+                    className="flex items-start gap-2 px-3 py-2 rounded-xl mb-3 text-xs"
+                    style={{
+                      background: "rgba(220,60,60,0.12)",
+                      border: "1px solid rgba(220,60,60,0.3)",
+                      color: "#f87171",
+                    }}
+                  >
+                    <AlertTriangle size={13} strokeWidth={2} className="shrink-0 mt-0.5" />
+                    <span className="flex-1">
+                      {t("cancelNotAllowed", { dishName: cancelNotAllowedDishName })}
+                    </span>
+                    <button
+                      onClick={() => setCancelNotAllowedDishName(null)}
+                      className="shrink-0 ml-1 opacity-60 hover:opacity-100 transition-opacity"
+                      aria-label="close"
+                    >
+                      <X size={13} strokeWidth={2.5} />
+                    </button>
+                  </div>
+                )}
+
                 {error && (
                   <div
                     className="flex items-center gap-2 px-3 py-2 rounded-xl mb-3 text-xs"
@@ -377,7 +470,14 @@ export function OrderHistoryFAB({ tableCode, tableNumber, dishNameMap = {}, refr
                     }}
                   >
                     <AlertTriangle size={13} strokeWidth={2} />
-                    {error}
+                    <span className="flex-1">{error}</span>
+                    <button
+                      onClick={() => setError(null)}
+                      className="shrink-0 ml-1 opacity-60 hover:opacity-100 transition-opacity"
+                      aria-label="close"
+                    >
+                      <X size={13} strokeWidth={2.5} />
+                    </button>
                   </div>
                 )}
 
@@ -385,7 +485,7 @@ export function OrderHistoryFAB({ tableCode, tableNumber, dishNameMap = {}, refr
                 {allItems.length > 0 && (
                   <div
                     className="grid gap-x-2 px-2 pb-3 text-xs font-bold tracking-widest uppercase"
-                    style={{ gridTemplateColumns: "1fr 28px 60px 72px", color: "rgba(139,163,199,0.7)", background: "transparent" }}
+                    style={{ gridTemplateColumns: "1fr 32px 68px 90px", color: "rgba(139,163,199,0.7)", background: "transparent" }}
                   >
                     <span>{t("headers.dish")}</span>
                     <span className="text-center">{t("headers.quantity")}</span>
@@ -417,6 +517,9 @@ export function OrderHistoryFAB({ tableCode, tableNumber, dishNameMap = {}, refr
                       const styles = getItemStatusStyles(statusKey);
                       const statusLabel = getStatusLabel(statusKey);
                       const isRejected = statusKey === "REJECTED";
+                      const isCancelled = statusKey === "CANCELLED";
+                      const canCancel = statusKey === "CREATED";
+                      const isCancelling = cancellingItems.has(item.orderItemId);
 
                       const localizedName = dishNameMap[item.dishId] || item.dishName;
 
@@ -425,14 +528,14 @@ export function OrderHistoryFAB({ tableCode, tableNumber, dishNameMap = {}, refr
                           <div
                             className="grid items-start gap-x-2 rounded-xl px-2 py-2"
                             style={{
-                              gridTemplateColumns: "1fr 28px 60px 72px",
-                              background: isRejected ? "rgba(220,60,60,0.06)" : "rgba(255,255,255,0.04)",
-                              border: `1px solid ${isRejected ? "rgba(220,60,60,0.2)" : "rgba(201,168,76,0.12)"}`,
+                              gridTemplateColumns: "1fr 32px 68px 90px",
+                              background: isRejected || isCancelled ? "rgba(220,60,60,0.06)" : "rgba(255,255,255,0.04)",
+                              border: `1px solid ${isRejected || isCancelled ? "rgba(220,60,60,0.2)" : "rgba(201,168,76,0.12)"}`,
                             }}
                           >
                             {/* Name + note */}
                             <div className="min-w-0">
-                              <p className={`text-[13px] font-semibold leading-snug truncate ${isRejected ? "line-through text-[#6b84a8]" : "text-[#e8d9b0]"}`}>
+                              <p className={`text-[13px] font-semibold leading-snug truncate ${isRejected || isCancelled ? "line-through text-[#6b84a8]" : "text-[#e8d9b0]"}`}>
                                 {localizedName}
                               </p>
                               {item.note && (
@@ -443,7 +546,7 @@ export function OrderHistoryFAB({ tableCode, tableNumber, dishNameMap = {}, refr
                             <p className="text-[#8ba3c7] text-xs text-center leading-tight pt-0.5">{item.quantity}×</p>
                             {/* Price */}
                             <p className="text-[#c9a84c] text-xs text-right font-medium leading-tight pt-0.5">
-                              {(item.price * item.quantity).toLocaleString("vi-VN")}
+                              {(item.price * item.quantity).toFixed(2)} <span className="text-[10px]">CHF</span>
                             </p>
                             {/* Status badge */}
                             <div
@@ -454,6 +557,24 @@ export function OrderHistoryFAB({ tableCode, tableNumber, dishNameMap = {}, refr
                               <span>{statusLabel}</span>
                             </div>
                           </div>
+
+                          {/* Cancel button for CREATED items */}
+                          {canCancel && (
+                            <div className="mt-1 mx-0.5 flex justify-end">
+                              <button
+                                onClick={() => setCancelConfirmItemId(item.orderItemId)}
+                                disabled={isCancelling}
+                                className="px-3 py-1 rounded-lg text-[10px] font-semibold uppercase tracking-wider transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+                                style={{
+                                  background: "rgba(220,60,60,0.12)",
+                                  border: "1px solid rgba(220,60,60,0.3)",
+                                  color: "#f87171",
+                                }}
+                              >
+                                {isCancelling ? t("cancelling") : t("cancelItem")}
+                              </button>
+                            </div>
+                          )}
 
                           {/* Chef note for rejected items */}
                           {isRejected && item.rejectReason && (
@@ -510,9 +631,37 @@ export function OrderHistoryFAB({ tableCode, tableNumber, dishNameMap = {}, refr
                 </div>
               )}
             </motion.div>
-          </>
-        )}
-      </AnimatePresence>
+          )}
+        </AnimatePresence>
+      </motion.div>
+
+      {/* Label below the circle (only when collapsed) */}
+      {!isOpen && (
+        <span
+          className="text-[10px] font-semibold tracking-widest uppercase"
+          style={{ color: "#c9a84c", textShadow: "0 1px 4px rgba(0,0,0,0.6)" }}
+        >
+          {t("fabLabel")}
+        </span>
+      )}
+      </div>
+
+      {/* ── Cancel Item Confirmation Popup ── */}
+      <ALConfirmDialog
+        isOpen={cancelConfirmItemId !== null}
+        onClose={() => setCancelConfirmItemId(null)}
+        onConfirm={() => {
+          const itemId = cancelConfirmItemId;
+          setCancelConfirmItemId(null);
+          if (itemId !== null) handleCancelItem(itemId);
+        }}
+        variant="warning"
+        title={t("cancelPopup.title")}
+        message={t("cancelPopup.message", { dishName: cancelConfirmItemDishName })}
+        confirmText={t("cancelPopup.yes")}
+        cancelText={t("cancelPopup.no")}
+        confirmButtonVariant="danger"
+      />
 
       {/* ── Payment Confirmation Popup ── */}
       <AnimatePresence>
@@ -588,7 +737,7 @@ export function OrderHistoryFAB({ tableCode, tableNumber, dishNameMap = {}, refr
                       {t("paymentPopup.estimatedTotalLabel")}
                     </span>
                     <span className="text-[#2a3f5f] text-2xl font-bold">
-                      ${estimatedTotal.toFixed(2)}
+                      {estimatedTotal.toFixed(2)} <span className="text-base">CHF</span>
                     </span>
                   </div>
                 </div>

@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Controller, UseFormReturn } from "react-hook-form";
 import { DishFormValues } from "../types/schema";
 import { CategoryDto, DishDietDto, DishStatusDto, DishTagDto } from "../types/dish-detail.types";
 import { useLocale, useTranslations } from "next-intl";
 import { ALCombobox } from "@/components/ui/al-combobox";
+import { ALInput } from "@/components/ui/al-input";
 
 export const CoreInfoSection: React.FC<{ 
   form: UseFormReturn<DishFormValues>, 
@@ -36,6 +37,14 @@ export const CoreInfoSection: React.FC<{
     return item.i18n[locale] || item.i18n.en;
   };
 
+  // Map options for ALCombobox
+  const categoryOptions = useMemo(() => {
+    return categories?.map(c => ({
+      value: String(c.categoryId),
+      label: getCategoryName(c)
+    })) || [];
+  }, [categories, locale]);
+
   // Map tags to format options for ALCombobox
   const tagOptions = React.useMemo(() => {
     return tags?.map(t => ({
@@ -43,6 +52,13 @@ export const CoreInfoSection: React.FC<{
       label: getLookupValueName(t)
     })) || [];
   }, [tags, locale]);
+
+  const statusOptions = useMemo(() => {
+    return statuses?.map(s => ({
+      value: String(s.valueId),
+      label: getLookupValueName(s)
+    })) || [];
+  }, [statuses, locale]);
 
   return (
     <div className="py-2"> 
@@ -54,18 +70,20 @@ export const CoreInfoSection: React.FC<{
           <label className="text-sm font-medium text-gray-600">
             {t("core.category")} <span className="text-red-500">*</span>
           </label>
-          <select 
-            {...register("categoryId", { valueAsNumber: true})}
-            className="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm focus:border-blue-500 outline-non"
-          >
-            <option value="">{t("core.selectCategory")}</option>
-            {categories?.map(c => (
-              <option key={c.categoryId} value={c.categoryId}>
-                {getCategoryName(c)}
-              </option>
-            ))}
-          </select>
-          {errors.categoryId && <p className="text-xs text-red-500">{errors.categoryId.message}</p>}
+          <Controller
+            control={control}
+            name="categoryId"
+            render={({ field }) => (
+              <ALCombobox
+                options={categoryOptions}
+                value={field.value ? String(field.value) : undefined}
+                onChange={(val) => field.onChange(val ? Number(val) : undefined)}
+                placeholder={t("core.selectCategory")}
+                error={errors.categoryId?.message}
+                searchable
+              />
+            )}
+          />
         </div>
 
         {/* 2. TAG */}
@@ -94,29 +112,33 @@ export const CoreInfoSection: React.FC<{
           <label className="text-sm font-medium text-gray-600">
             {t("core.price")} <span className="text-red-500">*</span>
           </label>
-          <input
+          <ALInput
+            // Bỏ prop title="" đi để không dùng label mặc định của component
+            required
             type="number"
             step="0.01"
-            {...register("price")}
             placeholder="0.00"
-            className="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm focus:border-blue-500 outline-non"
+            error={errors.price?.message}
+            {...register("price")}
           />
-          {errors.price && <p className="text-xs text-red-500">{errors.price.message}</p>}
         </div>
 
         {/* 4. STATUS */}
         <div className="space-y-2">
           <label className="text-sm font-medium text-gray-600">{t("core.status")}</label>
-          <select 
-            {...register("dishStatusLvId", { valueAsNumber: true})}
-            className="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm focus:border-blue-500 outline-non"
-          >
-            {statuses?.map(s => (
-              <option key={s.valueId} value={s.valueId}> 
-                {getLookupValueName(s)}
-              </option>
-            ))}
-          </select>
+          <Controller
+            control={control}
+            name="dishStatusLvId"
+            render={({ field }) => (
+              <ALCombobox
+                options={statusOptions}
+                value={field.value ? String(field.value) : undefined}
+                onChange={(val) => field.onChange(val ? Number(val) : undefined)}
+                placeholder="Select status"
+                error={errors.dishStatusLvId?.message}
+              />
+            )}
+          />
         </div>
 
         {/* 5. IS ONLINE (Checkbox) */}

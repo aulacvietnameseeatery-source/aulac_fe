@@ -12,10 +12,16 @@ import { useSupplierList } from '../hooks/useSupplierList';
 import { listSupplierService } from '../services/listSupplierService';
 import { Supplier } from '../types';
 import { ConfirmModal } from "@/components/layout/admin-sidebar/confirm-modal";
+import { SupplierModal, SupplierFormData } from '../../components/supplier-modal';
+import { editSupplierService } from '../../supplier-edit/services/editSupplierService';
+import { createSupplierService } from '../../supplier-add/services/createSupplierService';
+import { Supplier as SupplierDetail } from '../../supplier-edit/types';
 
 export default function SupplierList() {
   const router = useRouter();
   const t = useTranslations("Supplier.List");
+  const tAdd = useTranslations("Supplier.Add");
+  const tEdit = useTranslations("Supplier.Edit");
   
   // Logic Hook
   const { suppliers, isLoading, totalCount, paginationInfo, onDataChange, refresh } = useSupplierList();
@@ -25,17 +31,48 @@ export default function SupplierList() {
   const [supplierToDelete, setSupplierToDelete] = useState<Supplier | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
+  // Supplier modal state
+  const [supplierModalOpen, setSupplierModalOpen] = useState(false);
+  const [supplierModalMode, setSupplierModalMode] = useState<"add" | "edit" | "view">("add");
+  const [selectedSupplier, setSelectedSupplier] = useState<SupplierDetail | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isLoadingDetail, setIsLoadingDetail] = useState(false);
+
   // Action Handlers
-  const handleView = (supplier: Supplier) => {
-    router.push(`/dashboard/suppliers/${supplier.supplierId}`);
+  const handleView = async (supplier: Supplier) => {
+    setIsLoadingDetail(true);
+    try {
+      const detail = await editSupplierService.getSupplier(supplier.supplierId);
+      setSelectedSupplier(detail);
+      setSupplierModalMode("view");
+      setSupplierModalOpen(true);
+    } catch (error: any) {
+      console.error('Failed to load supplier details:', error);
+      toast.error(error.response?.data?.userMessage || "Failed to load supplier details");
+    } finally {
+      setIsLoadingDetail(false);
+    }
   };
 
-  const handleEdit = (supplier: Supplier) => {
-    router.push(`/dashboard/suppliers/edit/${supplier.supplierId}`);
+  const handleEdit = async (supplier: Supplier) => {
+    setIsLoadingDetail(true);
+    try {
+      const detail = await editSupplierService.getSupplier(supplier.supplierId);
+      setSelectedSupplier(detail);
+      setSupplierModalMode("edit");
+      setSupplierModalOpen(true);
+    } catch (error: any) {
+      console.error('Failed to load supplier details:', error);
+      toast.error(error.response?.data?.userMessage || "Failed to load supplier details");
+    } finally {
+      setIsLoadingDetail(false);
+    }
   };
 
   const handleCreate = () => {
-    router.push('/dashboard/suppliers/add');
+    setSelectedSupplier(null);
+    setSupplierModalMode("add");
+    setSupplierModalOpen(true);
   };
 
   const handleDeleteClick = (supplier: Supplier) => {
@@ -65,6 +102,44 @@ export default function SupplierList() {
   const handleCloseDeleteModal = () => {
     setDeleteModalOpen(false);
     setSupplierToDelete(null);
+  };
+
+  const handleCloseSupplierModal = () => {
+    setSupplierModalOpen(false);
+    setSelectedSupplier(null);
+  };
+
+  const handleSubmitSupplier = async (formData: SupplierFormData) => {
+    setIsSubmitting(true);
+    try {
+      if (supplierModalMode === "add") {
+        await createSupplierService.createSupplier({
+          supplierName: formData.supplierName.trim(),
+          phone: formData.phone.trim() || undefined,
+          email: formData.email.trim() || undefined,
+          ingredientIds: formData.ingredientIds,
+        });
+        toast.success(tAdd("notifications.createSuccess"));
+      } else if (supplierModalMode === "edit" && selectedSupplier) {
+        await editSupplierService.updateSupplier(selectedSupplier.supplierId, {
+          supplierName: formData.supplierName.trim(),
+          phone: formData.phone.trim() || undefined,
+          email: formData.email.trim() || undefined,
+          ingredientIds: formData.ingredientIds,
+        });
+        toast.success(tEdit("notifications.updateSuccess"));
+      }
+      
+      refresh();
+      handleCloseSupplierModal();
+    } catch (error: any) {
+      console.error('Failed to save supplier:', error);
+      const errorMessage = error.response?.data?.userMessage || 
+        (supplierModalMode === "add" ? tAdd("notifications.createError") : tEdit("notifications.updateError"));
+      toast.error(errorMessage);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   // Table Columns Config
@@ -161,6 +236,17 @@ export default function SupplierList() {
         cancelText={t("deleteModal.cancel")}
         isLoading={isDeleting}
         variant="danger"
+      />
+
+      {/* Supplier Add/Edit/View Modal */}
+      <SupplierModal
+        isOpen={supplierModalOpen}
+        mode={supplierModalMode}
+        supplier={selectedSupplier}
+        onClose={handleCloseSupplierModal}
+        onSubmit={handleSubmitSupplier}
+        onEdit={() => setSupplierModalMode("edit")}
+        isSubmitting={isSubmitting}
       />
     </>
   );

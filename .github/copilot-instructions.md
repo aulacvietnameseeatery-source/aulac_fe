@@ -125,9 +125,38 @@ Icons: `lucide-react`. Utility: `cn()` from `@/lib/utils` (twMerge + clsx).
 2. Create hook in `hooks/useXForm.ts` → `useForm({ resolver: zodResolver(schema), mode: "onBlur" })`
 3. Submit via `useMutation` from TanStack Query
 
-## Styling
+## Styling & Color Palette
 
-Tailwind CSS v4 with CSS variables for theming (`src/styles/globals.css`). Some complex components have companion CSS files in `src/styles/components/`. Three font families: Inter (body), Playfair Display (headings), Lexend.
+Tailwind CSS v4 with CSS variables for theming (`src/styles/globals.css`). Some complex components have companion CSS files in `src/styles/components/`.
+
+### Brand Colors
+
+| Token | Hex | Usage |
+|-------|-----|-------|
+| **Primary (Navy Blue)** | `#1A3A52` | Primary text, prominent UI elements, active states, active tab backgrounds, contrast sections |
+| **Secondary (Beige)** | `#D5BA98` | Accents, dividing lines, borders, secondary badges, subtle highlights |
+| **Light Beige** | `#D5BA98` at 10–30% opacity, or `#FDFBF9` | Main backgrounds, muted containers, hovered items |
+| **Semantic — Success** | `#D5BA98` or muted green `#4A5D4E` | Only when absolutely necessary |
+| **Semantic — Warning** | Muted red `#8C3A3A` | Never use harsh `#ff3636` |
+
+Tailwind usage examples: `text-[#1A3A52]`, `bg-[#1A3A52]`, `border-[#D5BA98]`, `bg-[#D5BA98]/30`, `bg-[#FDFBF9]`, `text-[#1A3A52]/70`.
+
+### Typography
+
+| Role | Font Family | Notes |
+|------|-------------|-------|
+| Headings & accents | `Cormorant Garamond` | Elegant, traditional serif |
+| Body & UI elements | `Inter` | Clean, readable sans-serif |
+
+Favor light font weights (`font-light`), relaxed letter spacing (`tracking-wide`), and subtle italicization for emphasis.
+
+### General UI Rules
+
+1. **Borders** — Replace harsh grays (`#e2e8f0`) with soft beige (`border-[#D5BA98]/30` or `border-[#D5BA98]/50`).
+2. **Text** — Avoid pure black (`#000`) or harsh dark grays (`#0f172a`). Use Navy Blue (`text-[#1A3A52]`) for primary text and Navy Blue with opacity (`text-[#1A3A52]/70`) for secondary text.
+3. **Backgrounds** — Avoid pure white (`#fff`) blocks on stark gray (`#f5f6fa`). Use a warm, soft progression from white to light beige (`bg-[#D5BA98]/10` → `bg-[#D5BA98]/30`).
+4. **Shadows** — Use very soft, diffused shadows or eliminate them in favor of subtle border definitions.
+5. **Vibe** — The UI should feel calm, unhurried, balanced, and serene.
 
 ## Conventions
 

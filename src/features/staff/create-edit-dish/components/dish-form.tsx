@@ -21,6 +21,7 @@ import { useEditDish } from "../hooks/useEditDish";
 import { getAllActiveStatus, getAllCategories, getAllDiets, getAllTag, getDishById } from "../services/dish.service";
 import { useDishEditMedia } from "../hooks/useDishEditMedia";
 import { useTranslations } from "next-intl";
+import { Button } from "@/components/ui/button";
 
 type DishMutationVariables  = {
   form: DishFormValues;
@@ -133,7 +134,7 @@ export function DishForm({ mode, dishId, onSuccess }: DishFormProps) {
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
       {/* Header */}
-      <header className="flex-1 w-full max-w-7xl mx-auto space-y-6 mt-6">
+      <header className="flex-1 w-full mx-auto space-y-6 mt-6">
           <div className="flex items-center justify-between">
             {/* <button onClick={() => router.back()} className="mt-1 p-2 hover:bg-gray-200 rounded-full text-gray-600"><ArrowLeft size={24} /></button> */}
             <div>
@@ -144,7 +145,7 @@ export function DishForm({ mode, dishId, onSuccess }: DishFormProps) {
       </header>
 
       {/* Main Content */}
-      <main className="flex-1 w-full max-w-7xl mx-auto pb-16 space-y-6 mt-6">
+      <main className="flex-1 w-full mx-auto pb-16 space-y-6 mt-6">
         
         {/* ROW 1: CORE INFORMATION */}
         <SectionWrapper title={t("core.title")} subtitle={t("core.subtitle")}>
@@ -171,7 +172,7 @@ export function DishForm({ mode, dishId, onSuccess }: DishFormProps) {
         {/* ROW 3: MEDIA (360 + Static) */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
              {/* 3.1: 360 View */}
-            <SectionWrapper title={t("mdeia.media360.title")} subtitle={t("media.media360.subtitle")}>
+            <SectionWrapper title={t("media.media360.title")} subtitle={t("media.media360.subtitle")}>
                 <ThreeSixtySection frames={images360} onChange={setImages360} />
             </SectionWrapper>
 
@@ -194,36 +195,31 @@ export function DishForm({ mode, dishId, onSuccess }: DishFormProps) {
       </main>
 
       {/* Form Actions (Non-sticky) */}
-        <div className="w-full max-w-7xl mx-auto pt-6 border-t border-gray-200 flex items-center justify-end gap-3">
-            <button 
+        <div className="w-full mx-auto pt-6 border-t border-gray-200 flex items-center justify-end gap-3">
+            <Button 
                 type="button" 
+                variant="outline"
                 onClick={() => router.back()} 
-                className="px-5 py-2.5 text-sm font-semibold text-red-600 hover:bg-red-50 rounded-lg flex items-center gap-2 transition-colors"
+                className="w-full sm:w-auto"
             >
-                <Trash2 size={18} /> {t("actions.discard")}
-            </button>
+              {t("actions.cancel")}
+            </Button>
             
             <div className="h-6 w-px bg-gray-300 mx-1 hidden sm:block"></div>
             
-            {isEdit ? (
-                <button 
-                    type="button" 
-                    onClick={onSubmit} 
-                    disabled={mutation.isPending}
-                    className="px-8 py-2.5 text-sm font-semibold text-white bg-gray-900 rounded-lg hover:bg-black flex items-center gap-2 transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
-                >
-                    <Save size={18} /> {mutation.isPending ? t("actions.saving") : t("actions.saveChanges")}
-                </button>
-            ) : (
-                <button 
-                    type="button" 
-                    onClick={onSubmit} 
-                    disabled={mutation.isPending}
-                    className="px-8 py-2.5 text-sm font-semibold text-white bg-gray-900 rounded-lg hover:bg-black flex items-center gap-2 transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
-                >
-                    <Save size={18} /> {mutation.isPending ? t("actions.creating") : t("actions.createDish")}
-                </button>
-            )}
+            <Button 
+                type="button" 
+                variant="default"
+                onClick={onSubmit} 
+                isLoading={mutation.isPending}
+                className="px-8 py-2.5 gap-2"
+            >
+                {!mutation.isPending} 
+                {isEdit 
+                    ? (mutation.isPending ? t("actions.saving") : t("actions.saveChanges"))
+                    : (mutation.isPending ? t("actions.creating") : t("actions.createDish"))
+                }
+            </Button>
         </div>
     </div>
   );

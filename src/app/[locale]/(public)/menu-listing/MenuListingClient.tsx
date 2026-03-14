@@ -21,13 +21,15 @@ import { OrderHistoryFAB } from "@/features/customer/menu-listing-new/components
 interface Props {
     initialMenuData: MenuCategory[];
     tableFromUrl?: string;
+    tokenFromUrl?: string;
 }
 
 const CART_STORAGE_KEY = "aulac_cart_items";
 const TABLE_STORAGE_KEY = "aulac_table_number";
 const CURRENT_ORDER_ID_KEY = "aulac_current_order_id";
+const TOKEN_STORAGE_KEY = "aulac_qr_token";
 
-export default function MenuListingClient({ initialMenuData, tableFromUrl }: Props) {
+export default function MenuListingClient({ initialMenuData, tableFromUrl, tokenFromUrl }: Props) {
     const router = useRouter();
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
     const [tableNumber, setTableNumber] = useState("");
@@ -38,34 +40,72 @@ export default function MenuListingClient({ initialMenuData, tableFromUrl }: Pro
     const [orderedTableNumber, setOrderedTableNumber] = useState("");
     const [orderConfirmCount, setOrderConfirmCount] = useState(0);
     const [openPopup, setOpenPopup] = useState<'cart' | 'history' | null>(null);
+    const [isValidatingTable, setIsValidatingTable] = useState(false);
 
     // Khôi phục cart và table number từ sessionStorage/URL
     useEffect(() => {
-        if (typeof window !== 'undefined') {
+        if (typeof window === 'undefined') return;
+
+        if (!tableFromUrl) {
+            sessionStorage.removeItem(TABLE_STORAGE_KEY);
+            sessionStorage.removeItem(CART_STORAGE_KEY);
+            sessionStorage.removeItem(CURRENT_ORDER_ID_KEY);
+            sessionStorage.removeItem(TOKEN_STORAGE_KEY);
+            setTableNumber("");
+            setCartItems([]);
+            setCurrentOrderId(null);
+            return;
+        }
+
+        const savedTable = sessionStorage.getItem(TABLE_STORAGE_KEY);
+
+        if (savedTable === tableFromUrl) {
+            // Cùng tab, reload trang → tin tưởng session hiện tại
+            setTableNumber(tableFromUrl);
             try {
-                if (tableFromUrl) {
+                const savedCart = sessionStorage.getItem(CART_STORAGE_KEY);
+                if (savedCart) setCartItems(JSON.parse(savedCart));
+                const savedOrderId = sessionStorage.getItem(CURRENT_ORDER_ID_KEY);
+                if (savedOrderId) setCurrentOrderId(Number(savedOrderId));
+            } catch {
+                toast.error("Không thể tải dữ liệu giỏ hàng cũ.");
+            }
+        } else {
+            // Tab mới hoặc copy link → xác thực quyền truy cập bàn
+            setIsValidatingTable(true);
+            const tokenParam = tokenFromUrl ? `?token=${encodeURIComponent(tokenFromUrl)}` : '';
+            api.post(`/api/public/tables/${encodeURIComponent(tableFromUrl)}/occupy${tokenParam}`, {})
+                .then(() => {
+                    // Bàn trống, occupy thành công → cho phép truy cập
                     setTableNumber(tableFromUrl);
                     sessionStorage.setItem(TABLE_STORAGE_KEY, tableFromUrl);
-
-                    const savedCart = sessionStorage.getItem(CART_STORAGE_KEY);
-                    if (savedCart) setCartItems(JSON.parse(savedCart));
-
-                    const savedOrderId = sessionStorage.getItem(CURRENT_ORDER_ID_KEY);
-                    if (savedOrderId) setCurrentOrderId(Number(savedOrderId));
-                } else {
+                    if (tokenFromUrl) {
+                        sessionStorage.setItem(TOKEN_STORAGE_KEY, tokenFromUrl);
+                    }
+                })
+                .catch((error: any) => {
+                    if (error.response?.status === 409) {
+                        toast.error("Bàn này đã có người sử dụng. Không thể truy cập.");
+                    } else if (error.response?.status === 404) {
+                        toast.error("Mã bàn không tồn tại.");
+                    } else if (error.response?.status === 400) {
+                        toast.error("Mã QR không hợp lệ. Vui lòng quét lại mã QR trên bàn.");
+                    } else {
+                        toast.error("Không thể xác thực bàn. Vui lòng thử lại.");
+                    }
+                    // Xóa table param khỏi URL và chuyển về trang menu không có bàn
                     sessionStorage.removeItem(TABLE_STORAGE_KEY);
                     sessionStorage.removeItem(CART_STORAGE_KEY);
                     sessionStorage.removeItem(CURRENT_ORDER_ID_KEY);
+                    sessionStorage.removeItem(TOKEN_STORAGE_KEY);
                     setTableNumber("");
                     setCartItems([]);
                     setCurrentOrderId(null);
-                }
-            } catch (error) {
-                // Thay thế console.error
-                toast.error("Không thể tải dữ liệu giỏ hàng cũ.");
-            }
+                    router.replace('/menu-listing');
+                })
+                .finally(() => setIsValidatingTable(false));
         }
-    }, [tableFromUrl]);
+    }, [tableFromUrl, tokenFromUrl, router]);
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
@@ -113,11 +153,15 @@ export default function MenuListingClient({ initialMenuData, tableFromUrl }: Pro
                         image: newItem.image
                     });
                 }
-
-                toast.success(`Đã thêm ${newItem.name} vào giỏ hàng`);
             });
             return newCart;
         });
+        // Hiển thị thông báo bên ngoài setCartItems để tránh bị gọi 2 lần (React StrictMode)
+        if (itemsToAdd.length === 1) {
+            toast.success(`Đã thêm ${itemsToAdd[0].name} vào giỏ hàng`);
+        } else {
+            toast.success(`Đã thêm ${itemsToAdd.length} món vào giỏ hàng`);
+        }
     };
 
     const handleAddToCartFromBook = (item: any) => {
@@ -129,10 +173,34 @@ export default function MenuListingClient({ initialMenuData, tableFromUrl }: Pro
         }
     };
 
-    const handleTableConfirm = (val: string) => {
+    const handleTableConfirm = async (val: string, qrToken?: string) => {
         setTableNumber(val);
         if (typeof window !== 'undefined') {
             sessionStorage.setItem(TABLE_STORAGE_KEY, val);
+        }
+
+        // Occupy the table directly (no customer info page)
+        try {
+            const tokenParam = qrToken ? `?token=${encodeURIComponent(qrToken)}` : '';
+            await api.post(`/api/public/tables/${encodeURIComponent(val)}/occupy${tokenParam}`, {});
+            if (qrToken && typeof window !== 'undefined') {
+                sessionStorage.setItem(TOKEN_STORAGE_KEY, qrToken);
+            }
+        } catch (error: any) {
+            if (error.response?.status === 409) {
+                toast.error("Bàn này đã có người sử dụng. Vui lòng chọn bàn khác.");
+                if (typeof window !== 'undefined') {
+                    sessionStorage.removeItem(TABLE_STORAGE_KEY);
+                    sessionStorage.removeItem(CART_STORAGE_KEY);
+                    sessionStorage.removeItem(CURRENT_ORDER_ID_KEY);
+                    sessionStorage.removeItem(TOKEN_STORAGE_KEY);
+                }
+                setTableNumber("");
+                setCartItems([]);
+                setCurrentOrderId(null);
+                return;
+            }
+            // For other errors, don't block user flow
         }
 
         if (pendingQueue.length > 0) {
@@ -140,7 +208,9 @@ export default function MenuListingClient({ initialMenuData, tableFromUrl }: Pro
             setPendingQueue([]);
         }
 
-        router.push(`/fill-infor-customer?table=${encodeURIComponent(val)}`);
+        setIsModalOpen(false);
+        const tokenQuery = qrToken ? `&token=${encodeURIComponent(qrToken)}` : '';
+        router.push(`/menu-listing?table=${encodeURIComponent(val)}${tokenQuery}`);
     };
 
     const handleUpdateQuantity = (id: string, delta: number) => {
@@ -199,33 +269,8 @@ export default function MenuListingClient({ initialMenuData, tableFromUrl }: Pro
                 }
             }
 
-            let isGuest = true;
-            let customerPhone: string | undefined;
-            let customerFullName: string | undefined;
-            let customerEmail: string | undefined;
-
-            if (typeof window !== "undefined") {
-                const raw = sessionStorage.getItem("aulac_customer_info");
-                if (raw) {
-                    try {
-                        const info = JSON.parse(raw);
-                        if (info.phoneNumber) {
-                            isGuest = false;
-                            customerPhone = info.phoneNumber;
-                            customerFullName = info.fullName || undefined;
-                            customerEmail = info.emailAddress || undefined;
-                        }
-                    } catch {
-                    }
-                }
-            }
-
             const response = await api.post<ApiResponse<{ orderId: number }>>('/api/orders', {
                 tableCode: tableNumber,
-                isGuest,
-                customerPhone,
-                customerFullName,
-                customerEmail,
                 items: itemsPayload,
             });
 
@@ -306,7 +351,7 @@ export default function MenuListingClient({ initialMenuData, tableFromUrl }: Pro
                 />
             </div>
 
-            <div id="cart-destination" className="fixed bottom-6 right-4 md:bottom-8 md:right-5 z-50 pointer-events-none flex flex-row items-end gap-4">
+            <div id="cart-destination" className="fixed bottom-6 md:bottom-8 inset-x-0 z-50 pointer-events-none flex flex-row items-end justify-center md:justify-end md:pr-8 gap-4">
                 <AnimatePresence>
                     {tableNumber && (
                         <>

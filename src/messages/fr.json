@@ -840,6 +840,8 @@
     }
   },
   "Supplier": {
+    "close": "Fermer",
+    "edit": "Modifier",
     "List": {
       "title": "Gestion des Fournisseurs",
       "description": "Gérer et organiser vos fournisseurs efficacement.",
@@ -1032,6 +1034,83 @@
       "phoneHint": "*Les réservations téléphoniques sont confirmées par défaut."
     }
   },
+  "DishCategory": {
+    "List": {
+      "title": "Gestion des catégories de plats",
+      "description": "Gérez et organisez vos catégories de menu de restaurant de manière efficace.",
+      "searchPlaceholder": "Rechercher par nom de catégorie...",
+      "addNew": "Ajouter une nouvelle catégorie",
+      "cancel": "Annuler",
+      "table": {
+        "no": "N°",
+        "name": "Nom",
+        "description": "Description",
+        "status": "Statut"
+      },
+      "status": {
+        "active": "Actif",
+        "inactive": "Inactif"
+      },
+      "notifications": {
+        "activated": "Catégorie activée avec succès",
+        "deactivated": "Catégorie désactivée avec succès",
+        "updateError": "Échec de la mise à jour du statut de la catégorie",
+        "createSuccess": "Catégorie créée avec succès",
+        "updateSuccess": "Catégorie mise à jour avec succès",
+        "actionError": "Une erreur s'est produite lors du traitement de la demande",
+        "batchActivateSuccess": "{count} catégorie(s) activée(s) avec succès",
+        "batchDeactivateSuccess": "{count} catégorie(s) désactivée(s) avec succès",
+        "batchUpdateError": "Une erreur s'est produite lors de la mise à jour par lot"
+      },
+      "filters": {
+        "allStatuses": "Tous les statuts",
+        "active": "Actif",
+        "inactive": "Inactif"
+      },
+      "batchActions": {
+        "activate": "Activer",
+        "deactivate": "Désactiver"
+      }
+    },
+    "Add": {
+      "title": "Ajouter une nouvelle catégorie de plats",
+      "subtitle": "Créez une nouvelle catégorie pour organiser vos éléments de menu",
+      "saveButton": "Créer une catégorie",
+      "cancel": "Annuler",
+      "categoryName": "Nom de la catégorie",
+      "categoryNamePlaceholder": "ex : Entrées, Plat principal, Desserts",
+      "description": "Description",
+      "descriptionPlaceholder": "Fournissez une brève description de cette catégorie et des types de plats qu'elle comprend...",
+      "validation": {
+        "nameRequired": "Le nom de la catégorie est requis",
+        "nameMaxLength": "Le nom de la catégorie ne peut pas dépasser 100 caractères",
+        "descriptionMaxLength": "La description ne peut pas dépasser 100 caractères",
+        "fixErrors": "Veuillez corriger les erreurs de validation"
+      }
+    },
+    "Edit": {
+      "title": "Modifier la catégorie de plats",
+      "subtitle": "Mettre à jour les informations et les paramètres de la catégorie",
+      "saveButton": "Enregistrer les modifications",
+      "cancel": "Annuler",
+      "categoryName": "Nom de la catégorie",
+      "categoryNamePlaceholder": "ex : Entrées, Plat principal, Desserts",
+      "description": "Description",
+      "descriptionPlaceholder": "Fournissez une brève description de cette catégorie et des types de plats qu'elle comprend...",
+      "status": "Statut de la catégorie",
+      "statusDescription": "Basculer pour activer ou masquer cette catégorie",
+      "statusActive": "Cette catégorie est active et visible dans le menu",
+      "statusInactive": "Cette catégorie est inactive et masquée aux clients",
+      "validation": {
+        "nameRequired": "Le nom de la catégorie est requis",
+        "nameMaxLength": "Le nom de la catégorie ne peut pas dépasser 100 caractères",
+        "descriptionMaxLength": "La description ne peut pas dépasser 100 caractères",
+        "fixErrors": "Veuillez corriger les erreurs de validation"
+      },
+      "loading": "Chargement...",
+      "backToList": "Retour à la liste"
+    }
+  },
   "Dish": {
     "List": {
       "title": "Gestion des plats",
@@ -1112,7 +1191,7 @@
         "editDescription": "Mettre à jour les informations du plat."
       },
       "actions": {
-        "discard": "Annuler",
+        "cancel": "Cancelar",
         "createDish": "Créer le plat",
         "creating": "Création...",
         "saveChanges": "Enregistrer",
@@ -1168,49 +1247,57 @@
         "cook": "Cuisson (min)",
         "chefRecommended": "Recommandé par le chef"
       }
-    }
-  },
-  "dishDetail": {
-    "header": {
-      "title": "Détail du Plat",
-      "readonly": "Mode lecture seule",
-      "edit": "Modifier le plat"
     },
-    "states": {
-      "loading": "Chargement des détails du plat...",
-      "notFound": "Plat introuvable",
-      "goBack": "Retour"
-    },
-    "language": {
-      "en": "Anglais",
-      "vi": "Vietnamien",
-      "fr": "Français"
-    },
-    "info": {
-      "shortDescription": "Description courte",
-      "detailedDescription": "Description détaillée",
-      "internalNote": "Note interne (Privée)"
-    },
-    "specs": {
-      "title": "Spécifications principales",
-      "category": "Catégorie",
-      "basePrice": "Prix de base",
-      "calories": "Calories",
-      "displayOrder": "Ordre d'affichage",
-      "prepTime": "Temps de préparation",
-      "cookTime": "Temps de cuisson",
-      "mins": "min"
-    },
-    "gallery": {
-      "title": "Galerie",
-      "noImages": "Aucune image disponible",
-      "clickHint": "Cliquez pour agrandir • Faites défiler pour plus",
-      "no360": "Vue 360° non disponible pour ce plat."
-    },
-    "status": {
-      "online": "En ligne",
-      "offline": "Hors ligne",
-      "chefChoice": "Choix du chef"
+    "Detail": {
+      "header": {
+        "titleFallback": "Détails du plat",
+        "subtitle": "Consultation des informations du plat en mode lecture seule",
+        "back": "Retour",
+        "edit": "Modifier",
+        "loading": "Chargement des détails..."
+      },
+      "core": {
+        "title": "Informations de base",
+        "subtitle": "Paramètres de base et catégorisation",
+        "category": "Catégorie",
+        "basePrice": "Prix de base",
+        "status": "Statut",
+        "visibility": "Visibilité",
+        "online": "Disponible en ligne",
+        "offline": "Hors ligne",
+        "tags": "Étiquettes",
+        "noTags": "Aucune étiquette"
+      },
+      "multilingual": {
+        "title": "Contenu multilingue",
+        "subtitle": "Traductions du contenu du plat",
+        "dishName": "Nom du plat",
+        "description": "Description",
+        "noDescription": "Aucune description...",
+        "shortDescription": "Description courte",
+        "slogan": "Slogan",
+        "internalNote": "Note interne"
+      },
+      "media": {
+        "360Title": "Médias 360°",
+        "framesUploaded": "{count} images téléchargées",
+        "images360": "{count} Images (Vue 360°)",
+        "no360": "Aucun média 360°",
+        "galleryTitle": "Galerie",
+        "staticUploaded": "{count} images statiques téléchargées",
+        "primary": "Principal",
+        "noGallery": "Aucune image dans la galerie"
+      },
+      "additional": {
+        "title": "Informations supplémentaires",
+        "subtitle": "Détails nutritionnels et opérationnels",
+        "displayOrder": "Ordre d'affichage",
+        "calories": "Calories",
+        "prepTime": "Temps de prép.",
+        "cookTime": "Temps de cuisson",
+        "chefRecommended": "Recommandé par le chef",
+        "notChefRecommended": "Non recommandé par le chef"
+      }
     }
   },
   "Order": {
@@ -1275,6 +1362,7 @@
         "actions": "Actions",
         "note": "Note",
         "rejectReason": "Raison du rejet",
+        "guest": "Invité",
         "source": {
           "DINE_IN": "Sur place",
           "TAKE_AWAY": "À emporter",
@@ -1346,6 +1434,7 @@
       "menuTitle": "Détails de la commande",
       "menuSubtitleEdit": "Sélectionnez des articles à ajouter à la commande actuelle.",
       "menuSubtitleView": "Cette commande a été payée. Mode lecture seule.",
+      "menuSubtitleCancelled": "Cette commande a été annulée. Mode lecture seule.",
       "clear": "Effacer",
       "cancel": "Annuler",
       "editOrderTitle": "Modifier la commande #{id}",
@@ -1355,13 +1444,20 @@
       "newItems": "Nouveaux articles",
       "addMoreItemsHint": "Sélectionnez des articles dans le menu à gauche pour les ajouter",
       "paidOrderWarning": "Cette commande a été payée. Veuillez créer une nouvelle commande.",
+      "cancelledOrderWarning": "La commande a été annulée. Il est impossible de modifier ou d'imprimer la facture.",
+      "change": "Modifier",
+      "table": "Table",
       "addItemsButton": "Ajouter des articles à la commande",
       "createInvoice": "Créer la facture",
+      "createReceipt": "Créer un reçu",
       "newTotal": "Total estimé",
       "warningTitle": "Confirmer l'ajout",
       "completedOrderWarning": "Cette commande est terminée mais non payée. Ajouter de nouveaux articles remettra la commande au statut En cours. Êtes-vous sûr ?",
       "confirmChangeStatus": "Confirmer l'ajout",
-      "successMessage": "Articles ajoutés avec succès !",
+      "saving": "Enregistrement...",
+      "successMessage": "Modifications enregistrées avec succès !",
+      "errorMessage": "Une erreur est survenue !",
+      "loading": "Chargement...",
       "takeAway": "À emporter",
       "guest": "Client",
       "notePlaceholder": "Note sur l'article...",
@@ -1370,7 +1466,30 @@
         "In progress": "En cours",
         "Completed": "Terminé",
         "Cancelled": "Annulé"
+      },
+      "tableLabel": "Table",
+      "customerLabel": "Client"
+    },
+    "RecentOrders": {
+      "title": "Commandes récentes",
+      "refresh": "Actualiser",
+      "filterAll": "Toutes",
+      "dineIn": "Sur place",
+      "takeAway": "À emporter",
+      "loading": "Chargement des commandes...",
+      "noOrdersFound": "Aucune commande trouvée.",
+      "table": "Table",
+      "status": {
+        "PENDING": "En attente",
+        "IN_PROGRESS": "En cours",
+        "COMPLETED": "Terminée",
+        "CANCELLED": "Annulée"
       }
+    },
+    "DishDetail": {
+      "noDescription": "Aucune description disponible.",
+      "price": "Prix",
+      "addToOrder": "Ajouter à la commande"
     },
     "PaymentModal": {
       "title": "Payer & Terminer la commande",
@@ -1398,7 +1517,11 @@
       "notePlaceholder": "Saisir une note de paiement...",
       "close": "Fermer",
       "payAndComplete": "Payer & Terminer la commande",
-      "paying": "Traitement..."
+      "paying": "Traitement...",
+      "enterTip": "Saisir le montant du pourboire",
+      "selectDiscount": "Sélectionner ou saisir une remise",
+      "selectCoupon": "Sélectionner un coupon",
+      "promotions": "Promotions"
     }
   },
   "AdminSidebar": {
@@ -1406,6 +1529,7 @@
       "main": "PRINCIPAL",
       "management": "GESTION",
       "operations": "OPÉRATIONS",
+      "shifts": "QUARTS",
       "administration": "ADMINISTRATION",
       "settings": "RÉGLAGES"
     },
@@ -1419,6 +1543,8 @@
     "suppliers": "Fournisseurs",
     "coupons": "Coupons",
     "orders": "Commandes",
+    "invoices": "Factures",
+    "payments": "Paiements",
     "kitchen": "Cuisine (KDS)",
     "reports": "Rapports",
     "emails": "E-mails",
@@ -1439,6 +1565,13 @@
     "shiftsLive": "Tableau de Présence",
     "shiftsReports": "Rapports de Quart",
     "myShifts": "Mes Quarts"
+  },
+  "DashboardTopNav": {
+    "pos": "Caisse (POS)",
+    "orders": "Commandes",
+    "kitchen": "Cuisine",
+    "reservation": "Réservations",
+    "table": "Tables"
   },
   "ShiftManagement": {
     "Common": {
@@ -1607,7 +1740,8 @@
       "inProgress": "En cours",
       "ready": "Prêt",
       "served": "Servi",
-      "rejected": "Refusé"
+      "rejected": "Refusé",
+      "cancelled": "Annulé"
     },
     "emptyState": {
       "title": "Aucun plat commandé pour le moment.",
@@ -1617,6 +1751,16 @@
     "estimatedTotal": "Total estimé",
     "requestPayment": "Demander le paiement",
     "error": "Impossible de charger les données",
+    "cancelItem": "Annuler l'article",
+    "cancelling": "Annulation...",
+    "cancelError": "Impossible d'annuler l'article",
+    "cancelNotAllowed": "\u201c{dishName}\u201d a déjà été traité par le personnel et ne peut plus être annulé.",
+    "cancelPopup": {
+      "title": "Annuler cet article ?",
+      "message": "Êtes-vous sûr de vouloir annuler \"{dishName}\" ? Cette action est irréversible.",
+      "yes": "Oui, Annuler",
+      "no": "Non, Garder"
+    },
     "paymentPopup": {
       "title": "Demander le paiement ?",
       "message": "Un serveur viendra à votre {tableLabel} {tableNumber} sous peu avec l'addition. Voulez-vous continuer ?",
@@ -1648,8 +1792,11 @@
     "title": "Affichage Cuisine",
     "description": "Suivre les commandes entrantes et mettre à jour les statuts en temps réel",
     "refresh": "Actualiser",
+    "searchPlaceholder": "Rechercher une table, une commande, un plat...",
     "liveUpdates": "Mises à jour en direct",
+    "tokenNo": "N° de jeton:",
     "note": "Note",
+    "orderType": "Sur place",
     "tabs": {
       "all": "Toutes",
       "new": "Nouveaux",
@@ -1660,9 +1807,24 @@
       "hint": "Les nouvelles commandes apparaîtront automatiquement ici"
     },
     "status": {
+      "all": "Tout",
+      "new": "Nouveau",
+      "inKitchen": "En cuisine",
+      "rejected": "Rejeté",
+      "completed": "Terminé",
+      "CREATED": "Nouveau",
+      "IN_PROGRESS": "En préparation",
+      "READY": "Prêt",
+      "SERVED": "Servi",
+      "REJECTED": "Rejeté"
+    },
+    "actions": {
+      "print": "Imprimer la commande",
+      "markDone": "Terminer",
       "start": "Commencer",
       "serve": "Servir",
-      "reject": "Rejeter"
+      "reject": "Rejeter",
+      "cancel": "Annuler"
     },
     "rejectReason": {
       "label": "Raison",
@@ -1690,6 +1852,39 @@
       "noNotes": "Aucune demande spéciale ou précommande pour cette réservation.",
       "checkIn": "Enregistrer",
       "na": "N/D"
+    },
+    "Detail": {
+      "title": "Détails de la réservation",
+      "back": "Retour",
+      "backToList": "Retour aux réservations",
+      "edit": "Modifier",
+      "delete": "Supprimer",
+      "reservationId": "ID de réservation",
+      "loading": "Chargement des détails de la réservation...",
+      "notFound": "Réservation introuvable",
+      "Customer": {
+        "title": "Informations client",
+        "fullName": "Nom complet",
+        "phoneNumber": "Numéro de téléphone",
+        "emailAddress": "Adresse e-mail",
+        "partySize": "Nombre de convives",
+        "guest": "invité",
+        "guests": "invités"
+      },
+      "Booking": {
+        "title": "Informations de réservation",
+        "reservedDate": "Date réservée",
+        "reservedTime": "Heure réservée",
+        "status": "Statut",
+        "bookingSource": "Source de réservation",
+        "createdOn": "Créé le"
+      },
+      "Table": {
+        "title": "Informations sur la table",
+        "noTables": "Aucune table assignée",
+        "capacity": "Capacité",
+        "totalTables": "Total des tables assignées"
+      }
     },
     "CheckInModal": {
       "title": "Enregistrement du client",
@@ -1847,8 +2042,8 @@
     }
   },
   "SystemSettings": {
-    "title": "Paramètres de la boutique",
-    "description": "Gérez la configuration de l'application et de la boutique.",
+    "title": "Paramètres système",
+    "description": "Gérez les paramètres et les configurations du système.",
     "refresh": "Actualiser",
     "loading": "Chargement des paramètres...",
     "noSettings": "Aucun paramètre trouvé.",
@@ -1863,6 +2058,115 @@
       "saveSuccess": "Paramètres du groupe '{group}' enregistrés avec succès.",
       "createSuccess": "Paramètre créé avec succès.",
       "saveError": "Échec de l'enregistrement des paramètres."
+    },
+    "StoreProfile": {
+      "identity": "Identité du Magasin",
+      "identityDesc": "Mettez à jour le logo et le nom officiel de votre magasin.",
+      "contactLocation": "Contact et Emplacement",
+      "contactLocationDesc": "Détails de l'adresse et coordonnées du magasin.",
+      "operating": "Opérations",
+      "operatingDesc": "Heures d'ouverture et autres détails opérationnels.",
+      "socialMedia": "Réseaux Sociaux",
+      "socialMediaDesc": "La présence de votre magasin sur les réseaux sociaux.",
+      "changeLogo": "Changer le logo",
+      "uploadLogo": "Télécharger le logo",
+      "remove": "Supprimer",
+      "storeName": "Nom du magasin",
+      "storeNamePlaceholder": "Entrez le tên du restaurant/magasin",
+      "streetAddress": "Adresse",
+      "streetAddressPlaceholder": "Par exemple : Avenue Jacques Dalcroze 9",
+      "postalCode": "Code postal",
+      "postalCodePlaceholder": "1000",
+      "city": "Ville",
+      "cityPlaceholder": "Nom de la ville",
+      "country": "Pays / Région",
+      "countryPlaceholder": "Nom du pays",
+      "email": "Adresse e-mail",
+      "emailPlaceholder": "contact@restaurant.com",
+      "phone": "Numéro de téléphone",
+      "phonePlaceholder": "+33 1 23 45 67 89",
+      "openingHours": "Heures d'ouverture",
+      "openingHoursPlaceholder": "Ex : lun - dim : 08h00 - 22h00",
+      "facebookLink": "Lien Facebook",
+      "facebookPlaceholder": "https://facebook.com/votrepage",
+      "instagramLink": "Lien Instagram",
+      "instagramPlaceholder": "https://instagram.com/votreprofil",
+      "tiktokLink": "Lien TikTok",
+      "tiktokPlaceholder": "https://tiktok.com/@votreprofil",
+      "saveChanges": "Enregistrer les modifications",
+      "reset": "Réinitialiser",
+      "saving": "Enregistrement...",
+      "clickToUpload": "Logo",
+      "uploadSuccess": "Logo téléchargé avec succès",
+      "uploadError": "Échec du téléchargement du logo",
+      "fileSizeError": "La taille du fichier doit être inférieure à 5 Mo",
+      "updateSuccess": "Profil du magasin mis à jour avec succès",
+      "updateError": "Échec de l'enregistrement du profil du magasin"
+    },
+    "General": {
+      "title": "Paramètres système",
+      "addNew": "Ajouter un paramètre",
+      "empty": "Aucun paramètre général trouvé",
+      "emptyDesc": "Utilisez le bouton \"Ajouter un paramètre\" ci-dessus pour créer un groupe comme \"reservation\"."
+    },
+    "AddModal": {
+      "key": "Clé du paramètre",
+      "keyPlaceholder": "Ex : default_password, password.min_length",
+      "name": "Nom du paramètre (optionnel)",
+      "namePlaceholder": "Un nom lisible pour ce paramètre",
+      "type": "Type de valeur",
+      "value": "Valeur",
+      "valuePlaceholder": "Valeur du paramètre...",
+      "description": "Description (optionnelle)",
+      "descriptionPlaceholder": "À quoi sert ce paramètre ?",
+      "sensitive": "Données sensibles",
+      "sensitiveDesc": "Masquer la valeur par défaut (ex : mots de passe, clés API)"
+    },
+    "Field": {
+      "sensitiveHidden": "Sensible – valeur masquée",
+      "jsonPlaceholder": "Valeur JSON...",
+      "sensitive": "Sensible",
+      "types": {
+        "STRING": "Texte",
+        "INT": "Entier",
+        "DECIMAL": "Décimal",
+        "BOOL": "Booléen",
+        "JSON": "JSON"
+      }
     }
+  },
+  "InvoiceDetail": {
+    "title": "Détails de la facture",
+    "loading": "Chargement de la facture...",
+    "errorLoad": "Échec du chargement de la facture",
+    "notFound": "Facture introuvable.",
+    "exportPrint": "Exporter / Imprimer",
+    "back": "Retour",
+    "status": {
+      "paid": "Payée"
+    },
+    "from": "Facture de",
+    "phone": "Téléphone",
+    "to": "Facturé à",
+    "walkInCustomer": "Client de passage",
+    "date": "Date",
+    "type": "Type",
+    "table": "Table",
+    "items": "Détails des articles",
+    "no": "N°",
+    "itemDetails": "Détails de l'article",
+    "qty": "Qté",
+    "rate": "Prix",
+    "amount": "Montant",
+    "terms": "Termes et Conditions",
+    "term1": "1. Merci d'avoir dîné avec nous.",
+    "term2": "2. Veuillez conserver ce reçu pour vos dossiers.",
+    "paymentVerified": "Note : Le paiement a été vérifié par {staffName}.",
+    "subtotal": "Sous-total",
+    "discount": "Remise",
+    "total": "Total ($)",
+    "downloadPdf": "Télécharger en PDF",
+    "printInvoice": "Imprimer la facture",
+    "defaultStaff": "Personnel"
   }
 }

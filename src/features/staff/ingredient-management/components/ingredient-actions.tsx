@@ -1,6 +1,6 @@
 // features/staff/ingredient-management/components/ingredient-actions.tsx
 import React from "react";
-import { MoreHorizontal, Pencil, Trash2, PackagePlus, History } from "lucide-react";
+import {MoreHorizontal, Pencil, Trash2, PackagePlus, History, Edit} from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 // Import custom Dropdown của bạn (Hãy điều chỉnh đường dẫn import cho đúng với thư mục của bạn)
