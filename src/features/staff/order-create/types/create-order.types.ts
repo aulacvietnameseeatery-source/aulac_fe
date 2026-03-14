@@ -56,7 +56,7 @@ export type CreateOrderItemDto = {
 
 export type CreateOrderRequest = {
   tableId?: number;
-  customerId?: number;
+  customer?: OrderCustomerDto | null;
   source: OrderSourceCode;
   items: CreateOrderItemDto[];
 };
@@ -74,4 +74,11 @@ export type RecentOrderDto = {
   tableCode?: string | null;
   createdAt: string;
   status: 'PENDING' | 'IN_PROGRESS' | 'COMPLETED' | 'CANCELLED';
+};
+
+export type OrderCustomerDto = {
+  customerId?: number | null;
+  fullName?: string;
+  phone?: string;
+  email?: string;
 };

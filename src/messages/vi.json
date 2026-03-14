@@ -1194,7 +1194,7 @@
         "editDescription": "Cập nhật thông tin món ăn."
       },
       "actions": {
-        "discard": "Hủy",
+        "cancel": "Hủy bỏ",
         "createDish": "Tạo món",
         "creating": "Đang tạo...",
         "saveChanges": "Lưu thay đổi",
@@ -1448,6 +1448,8 @@
       "addMoreItemsHint": "Chọn món từ thực đơn bên trái để thêm",
       "paidOrderWarning": "Đơn hàng đã thanh toán. Vui lòng tạo đơn hàng mới.",
       "cancelledOrderWarning": "Đơn hàng đã bị hủy. Không thể chỉnh sửa hoặc in hóa đơn.",
+      "change": "Đổi",
+      "table": "Bàn",
       "addItemsButton": "Thêm món vào đơn hàng",
       "createInvoice": "Tạo Hóa Đơn",
       "createReceipt": "Tạo biên lai",
@@ -1455,7 +1457,10 @@
       "warningTitle": "Xác nhận thêm món",
       "completedOrderWarning": "Đơn hàng này đã hoàn tất nhưng chưa thanh toán. Thêm món mới sẽ chuyển đơn hàng về trạng thái Đang phục vụ (In Progress). Bạn có chắc chắn?",
       "confirmChangeStatus": "Đồng ý thêm",
-      "successMessage": "Đã thêm món thành công!",
+      "saving": "Đang lưu...",
+      "successMessage": "Lưu thay đổi thành công!",
+      "errorMessage": "Có lỗi xảy ra!",
+      "loading": "Đang tải...",
       "takeAway": "Mang đi",
       "guest": "Khách lẻ",
       "notePlaceholder": "Ghi chú món...",
@@ -1562,6 +1567,13 @@
     "shiftsLive": "Bảng Trực Ca",
     "shiftsReports": "Báo Cáo Ca",
     "myShifts": "Ca Của Tôi"
+  },
+  "DashboardTopNav": {
+    "pos": "Bán hàng (POS)",
+    "orders": "Đơn hàng",
+    "kitchen": "Khu bếp",
+    "reservation": "Đặt bàn",
+    "table": "Sơ đồ bàn"
   },
   "ShiftManagement": {
     "Common": {

@@ -1,6 +1,7 @@
 import React from 'react';
 import { AlertCircle, Calendar as CalIcon, Clock, Users } from 'lucide-react';
 import { useTranslations } from "next-intl";
+import { ALInput } from '@/components/ui/al-input';
 
 interface Props {
   date: string;
@@ -35,14 +36,23 @@ export const BookingDetailsSection: React.FC<Props> = ({
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div>
           <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">{t("date")}<span className="text-red-500">*</span></label>
-          <input type="date" min={todayString} value={date} onChange={(e) => onDateChange(e.target.value)} className="w-full px-4 py-3 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+          <ALInput 
+            type="date" 
+            min={todayString} 
+            value={date} 
+            onChange={(e: any) => onDateChange(e.target.value)} 
+          />
         </div>
         <div>
           <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">{t("time")}<span className="text-red-500">*</span></label>
           <div className="relative">
-            <input type="time" min={minTime} value={time} onChange={(e) => onTimeChange(e.target.value)} className={`w-full px-4 py-3 bg-white border rounded-lg focus:outline-none focus:ring-2 transition-colors
-                ${validationError ? 'border-red-500 focus:ring-red-200' : 'border-slate-300 focus:ring-blue-500'}`} />
-            {/* <Clock className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" size={18} /> */}
+            <ALInput 
+            type="time" 
+            min={minTime} 
+            value={time} 
+            onChange={(e: any) => onTimeChange(e.target.value)}
+            error={validationError || undefined} 
+          />
           </div>
           {validationError && (
             <div className="flex items-center gap-1 text-red-500 text-xs mt-1.5 font-medium animate-pulse">
@@ -54,8 +64,13 @@ export const BookingDetailsSection: React.FC<Props> = ({
         <div>
           <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">{t("partySize")}<span className="text-red-500">*</span></label>
           <div className="relative">
-            <input type="number" min="1" value={partySize} onChange={(e) => onSizeChange(e.target.value ? parseInt(e.target.value) : '')} placeholder={t("enterSize")} className="w-full px-4 py-3 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
-            <Users className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" size={18} />
+            <ALInput 
+              type="number" 
+              min="1" 
+              value={partySize} 
+              onChange={(e: any) => onSizeChange(e.target.value ? parseInt(e.target.value) : '')} 
+              placeholder={t("enterSize")} 
+            />
           </div>
         </div>
       </div>

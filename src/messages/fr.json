@@ -1190,7 +1190,7 @@
         "editDescription": "Mettre à jour les informations du plat."
       },
       "actions": {
-        "discard": "Annuler",
+        "cancel": "Cancelar",
         "createDish": "Créer le plat",
         "creating": "Création...",
         "saveChanges": "Enregistrer",
@@ -1444,6 +1444,8 @@
       "addMoreItemsHint": "Sélectionnez des articles dans le menu à gauche pour les ajouter",
       "paidOrderWarning": "Cette commande a été payée. Veuillez créer une nouvelle commande.",
       "cancelledOrderWarning": "La commande a été annulée. Il est impossible de modifier ou d'imprimer la facture.",
+      "change": "Modifier",
+      "table": "Table",
       "addItemsButton": "Ajouter des articles à la commande",
       "createInvoice": "Créer la facture",
       "createReceipt": "Créer un reçu",
@@ -1451,7 +1453,10 @@
       "warningTitle": "Confirmer l'ajout",
       "completedOrderWarning": "Cette commande est terminée mais non payée. Ajouter de nouveaux articles remettra la commande au statut En cours. Êtes-vous sûr ?",
       "confirmChangeStatus": "Confirmer l'ajout",
-      "successMessage": "Articles ajoutés avec succès !",
+      "saving": "Enregistrement...",
+      "successMessage": "Modifications enregistrées avec succès !",
+      "errorMessage": "Une erreur est survenue !",
+      "loading": "Chargement...",
       "takeAway": "À emporter",
       "guest": "Client",
       "notePlaceholder": "Note sur l'article...",
@@ -1559,6 +1564,13 @@
     "shiftsLive": "Tableau de Présence",
     "shiftsReports": "Rapports de Quart",
     "myShifts": "Mes Quarts"
+  },
+  "DashboardTopNav": {
+    "pos": "Caisse (POS)",
+    "orders": "Commandes",
+    "kitchen": "Cuisine",
+    "reservation": "Réservations",
+    "table": "Tables"
   },
   "ShiftManagement": {
     "Common": {

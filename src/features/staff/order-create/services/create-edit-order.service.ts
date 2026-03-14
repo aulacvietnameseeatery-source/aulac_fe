@@ -24,7 +24,13 @@ export const createOrderService = {
     return res.data;
   },
 
+  getCustomerById: async (id: number): Promise<CustomerDto> => {
+    const res = await api.get<ApiResponse<CustomerDto>>(`/api/customers/${id}`);
+    return res.data;
+  },
+
   createOrder: async (payload: CreateOrderRequest): Promise<void> => {
+    console.log(payload);
     await api.post<ApiResponse<any>>('/api/orders/staff', payload);
   },
 
