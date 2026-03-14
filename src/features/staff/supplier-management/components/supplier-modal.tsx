@@ -1,11 +1,10 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { Dialog } from "@/components/ui/dialog";
 import { ALInput } from "@/components/ui/al-input";
 import { ALCombobox } from "@/components/ui/al-combobox";
 import { Button } from "@/components/ui/button";
-import { X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import type { Supplier, Ingredient } from "../supplier-edit/types";
 import { ingredientService, Ingredient as IngredientSimple } from "../supplier-add/services/ingredientService";
@@ -16,6 +15,7 @@ interface SupplierModalProps {
     supplier?: Supplier | null;
     onClose: () => void;
     onSubmit: (data: SupplierFormData) => void;
+    onEdit?: () => void;
     isSubmitting?: boolean;
 }
 
@@ -39,6 +39,7 @@ export const SupplierModal: React.FC<SupplierModalProps> = ({
     supplier,
     onClose,
     onSubmit,
+    onEdit,
     isSubmitting = false,
 }) => {
     const t = useTranslations(mode === "add" ? "Supplier.Add" : mode === "edit" ? "Supplier.Edit" : "Supplier.Detail");
@@ -141,25 +142,13 @@ export const SupplierModal: React.FC<SupplierModalProps> = ({
         onSubmit(formData);
     };
 
-    const handleToggleIngredient = (ingredientId: number) => {
-        if (mode === "view") return;
 
-        if (formData.ingredientIds.includes(ingredientId)) {
-            setFormData(prev => ({
-                ...prev,
-                ingredientIds: prev.ingredientIds.filter(id => id !== ingredientId)
-            }));
-        } else {
-            setFormData(prev => ({
-                ...prev,
-                ingredientIds: [...prev.ingredientIds, ingredientId]
-            }));
-        }
-    };
-
-    // Get selected ingredients data
-    const selectedIngredients = availableIngredients.filter(ing =>
-        formData.ingredientIds.includes(ing.ingredientId)
+    const ingredientOptions = useMemo(() =>
+        availableIngredients.map(ing => ({
+            value: ing.ingredientId,
+            label: `${ing.ingredientName} (${ing.unit})`
+        })),
+        [availableIngredients]
     );
 
     const getTitle = () => {
@@ -187,6 +176,16 @@ export const SupplierModal: React.FC<SupplierModalProps> = ({
                     >
                         {isViewMode ? tCommon("close") || "Close" : t("cancel")}
                     </Button>
+                    {isViewMode && onEdit && (
+                        <Button
+                            type="button"
+                            variant="primary"
+                            className="w-full"
+                            onClick={onEdit}
+                        >
+                            {tCommon("edit") || "Edit"}
+                        </Button>
+                    )}
                     {!isViewMode && (
                         <Button
                             type="submit"
@@ -212,7 +211,7 @@ export const SupplierModal: React.FC<SupplierModalProps> = ({
                         value={formData.supplierName}
                         onChange={(e) => handleChange("supplierName", e.target.value)}
                         error={errors.supplierName}
-                        disabled={isViewMode}
+                        readOnly={isViewMode}
                     />
 
                     {/* Phone & Email row */}
@@ -223,7 +222,7 @@ export const SupplierModal: React.FC<SupplierModalProps> = ({
                             value={formData.phone}
                             onChange={(e) => handleChange("phone", e.target.value)}
                             error={errors.phone}
-                            disabled={isViewMode}
+                            readOnly={isViewMode}
                         />
                         <ALInput
                             title={t("email")}
@@ -232,80 +231,25 @@ export const SupplierModal: React.FC<SupplierModalProps> = ({
                             value={formData.email}
                             onChange={(e) => handleChange("email", e.target.value)}
                             error={errors.email}
-                            disabled={isViewMode}
+                            readOnly={isViewMode}
                         />
                     </div>
 
                     {/* Ingredients Section */}
                     <div className="space-y-3">
-                        <div className="flex items-center gap-2">
-                            <h5 className="text-sm font-semibold text-gray-500 uppercase tracking-wider">
-                                {t("ingredients")}
-                            </h5>
-                            <div className="grow border-t border-gray-100" />
-                        </div>
-
-                        {isLoadingIngredients ? (
-                            <div className="text-sm text-gray-500 p-4">Loading ingredients...</div>
-                        ) : (
-                            <>
-                                {!isViewMode && (
-                                    <div className="bg-gray-50 rounded-lg p-4 border border-gray-200 max-h-60 overflow-y-auto">
-                                        {availableIngredients.length === 0 ? (
-                                            <div className="text-sm text-gray-500">No ingredients available</div>
-                                        ) : (
-                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                                                {availableIngredients.map((ingredient) => (
-                                                    <label
-                                                        key={ingredient.ingredientId}
-                                                        className="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-2 rounded"
-                                                    >
-                                                        <input
-                                                            type="checkbox"
-                                                            checked={formData.ingredientIds.includes(ingredient.ingredientId)}
-                                                            onChange={() => handleToggleIngredient(ingredient.ingredientId)}
-                                                            className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                                                        />
-                                                        <span className="text-sm text-gray-700">
-                                                            {ingredient.ingredientName} ({ingredient.unit})
-                                                        </span>
-                                                    </label>
-                                                ))}
-                                            </div>
-                                        )}
-                                    </div>
-                                )}
-
-                                {/* Display selected ingredients as badges */}
-                                {(isViewMode || formData.ingredientIds.length > 0) && (
-                                    <div className="flex flex-wrap gap-2 p-3 bg-gray-50 rounded-lg border border-gray-200">
-                                        {selectedIngredients.length === 0 ? (
-                                            <span className="text-sm text-gray-400 italic">No ingredients assigned yet.</span>
-                                        ) : (
-                                            selectedIngredients.map(ingredient => (
-                                                <div 
-                                                    key={ingredient.ingredientId} 
-                                                    className="inline-flex items-center gap-1.5 px-3 py-1 bg-blue-50 text-blue-700 border border-blue-200 rounded-full text-sm"
-                                                >
-                                                    <span className="font-medium">
-                                                        {ingredient.ingredientName} ({ingredient.unit})
-                                                    </span>
-                                                    {!isViewMode && (
-                                                        <button
-                                                            type="button"
-                                                            onClick={() => handleToggleIngredient(ingredient.ingredientId)}
-                                                            className="p-0.5 hover:bg-blue-200 rounded-full transition-colors text-blue-500 hover:text-blue-800"
-                                                        >
-                                                            <X size={14} />
-                                                        </button>
-                                                    )}
-                                                </div>
-                                            ))
-                                        )}
-                                    </div>
-                                )}
-                            </>
-                        )}
+                        <ALCombobox
+                            title={t("ingredients")}
+                            options={ingredientOptions}
+                            value={formData.ingredientIds}
+                            onChange={(val) => {
+                                if (!isViewMode) handleChange("ingredientIds", val as number[]);
+                            }}
+                            multiple={true}
+                            searchable={true}
+                            placeholder={isViewMode ? "" : t("ingredientsPlaceholder")}
+                            isLoading={isLoadingIngredients}
+                            readOnly={isViewMode}
+                        />
                     </div>
                 </div>
             </form>

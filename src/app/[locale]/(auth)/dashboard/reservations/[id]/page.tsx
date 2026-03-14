@@ -70,7 +70,7 @@ const ReservationDetailPage = () => {
 
     return (
         <ProtectedRoute permission={Permissions.ViewReservation}>
-            <div className="min-h-screen p-4 md:p-6">
+            <div className="min-h-screen">
                 <div className="mx-auto">
                 {/* Header */}
                 <div className="mb-6 flex items-center justify-between">
