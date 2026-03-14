@@ -2,7 +2,7 @@
 
 import { ApiResponse, PagedResult } from "@/types/api-response.types";
 import { ReservationDto, ReservationStatusDto, GetReservationsParams, ReservationDetailDto } from "../types/reservation-types";
-import {api} from "@/lib/http";
+import { api } from "@/lib/http";
 
 export const reservationService = {
     // 1. Get List Reservations
@@ -46,5 +46,15 @@ export const reservationService = {
             status: statusCode,
             notes: notes
         });
+    },
+
+    // 6. Cập nhật thông tin đặt bàn
+    updateReservation: async (reservationId: number, data: any): Promise<void> => {
+        await api.put(`/api/reservations/${reservationId}`, data);
+    },
+
+    // 7. Xóa đặt bàn
+    deleteReservation: async (reservationId: number): Promise<void> => {
+        await api.delete(`/api/reservations/${reservationId}`);
     },
 };

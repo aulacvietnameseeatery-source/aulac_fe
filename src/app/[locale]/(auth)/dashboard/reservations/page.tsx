@@ -14,6 +14,8 @@ import { ProtectedRoute } from "@/components/protected-route";
 import { Permissions } from "@/types/const";
 import { reservationService } from "@/features/staff/reservation-management/services/reservation-service";
 import { toast } from "sonner";
+import { EditReservationModal } from "@/features/staff/reservation-management/components/edit-reservation-modal";
+import { ALConfirmDialog } from "@/components/ui/al-confirm-dialog";
 
 const ReservationListContent = () => {
     const router = useRouter();
@@ -53,6 +55,9 @@ const ReservationListContent = () => {
     };
 
     const [assignTableReservation, setAssignTableReservation] = useState<ReservationDto | null>(null);
+    const [editReservationId, setEditReservationId] = useState<number | null>(null);
+    const [deleteReservationId, setDeleteReservationId] = useState<number | null>(null);
+    const [isDeleting, setIsDeleting] = useState(false);
 
     const handleStatusUpdate = async (reservationId: number, statusCode: string) => {
         try {
@@ -61,6 +66,21 @@ const ReservationListContent = () => {
             actions.refresh();
         } catch (error: any) {
             toast.error(error.message || "Lỗi khi cập nhật trạng thái");
+        }
+    };
+
+    const handleDelete = async () => {
+        if (!deleteReservationId) return;
+        setIsDeleting(true);
+        try {
+            await reservationService.deleteReservation(deleteReservationId);
+            toast.success("Xóa đơn đặt bàn thành công!");
+            actions.refresh();
+        } catch (error: any) {
+            toast.error(error.message || "Lỗi khi xóa đơn đặt bàn");
+        } finally {
+            setIsDeleting(false);
+            setDeleteReservationId(null);
         }
     };
 
@@ -173,6 +193,8 @@ const ReservationListContent = () => {
                                     reservation={item}
                                     statuses={statuses}
                                     onAssignTable={() => setAssignTableReservation(item)}
+                                    onEdit={(id) => setEditReservationId(id)}
+                                    onDelete={(id) => setDeleteReservationId(id)}
                                     onCardClick={(id) => router.push(`/dashboard/reservations/${id}`)}
                                     onStatusUpdate={handleStatusUpdate}
                                 />
@@ -215,6 +237,29 @@ const ReservationListContent = () => {
                     }}
                 />
             )}
+            
+            {editReservationId && (
+                <EditReservationModal
+                    reservationId={editReservationId}
+                    onClose={() => setEditReservationId(null)}
+                    onSuccess={() => {
+                        setEditReservationId(null);
+                        actions.refresh();
+                    }}
+                />
+            )}
+
+            <ALConfirmDialog
+                isOpen={!!deleteReservationId}
+                onClose={() => setDeleteReservationId(null)}
+                onConfirm={handleDelete}
+                variant="delete"
+                title="Xóa đơn đặt bàn"
+                message="Bạn có chắc chắn muốn xóa đơn đặt bàn này? Hành động này không thể hoàn tác và sẽ giải phóng các bàn đã gán (nếu có)."
+                isLoading={isDeleting}
+                confirmText="Xác nhận xóa"
+                cancelText="Hủy"
+            />
         </div>
     );
 };
