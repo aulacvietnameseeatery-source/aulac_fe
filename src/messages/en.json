@@ -1365,6 +1365,7 @@
         "actions": "Actions",
         "note": "Note",
         "rejectReason": "Reject Reason",
+        "guest": "Guest",
         "source": {
           "DINE_IN": "Dine In",
           "TAKE_AWAY": "Take Away",
@@ -1463,7 +1464,9 @@
         "In progress": "In Progress",
         "Completed": "Completed",
         "Cancelled": "Cancelled"
-      }
+      },
+      "tableLabel": "Table",
+      "customerLabel": "Customer"
     },
     "RecentOrders": {
       "title": "Recent Orders",
@@ -1781,6 +1784,7 @@
     "refresh": "Refresh",
     "searchPlaceholder": "Search by table, order ID, dish...",
     "liveUpdates": "Live updates",
+    "tokenNo": "Token No:",
     "note": "Note",
     "orderType": "Dine-in",
     "tabs": {
@@ -1797,14 +1801,20 @@
       "new": "New",
       "inKitchen": "In Kitchen",
       "rejected": "Rejected",
-      "completed": "Completed"
+      "completed": "Completed",
+      "CREATED": "New",
+      "IN_PROGRESS": "Preparing",
+      "READY": "Ready",
+      "SERVED": "Served",
+      "REJECTED": "Rejected"
     },
     "actions": {
       "print": "Print Order",
       "markDone": "Mark Done",
       "start": "Start",
       "serve": "Serve",
-      "reject": "Reject"
+      "reject": "Reject",
+      "cancel": "Cancel"
     },
     "rejectReason": {
       "label": "Reason",

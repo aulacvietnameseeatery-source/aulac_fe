@@ -20,6 +20,7 @@ export const EditTicket: React.FC<Props> = ({
   orderInfo, newCart, onUpdateQuantity, onUpdateNote, onRemoveFromCart, onClearCart, onSubmitItems, onCreateInvoice, onCloseMobile
 }) => {
   const t = useTranslations("Order.Edit");
+  const tCommon = useTranslations("Order.List.card");
 
   const newSubtotal = newCart.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const finalTotal = orderInfo.totalAmount + newSubtotal;
@@ -30,7 +31,7 @@ export const EditTicket: React.FC<Props> = ({
 
   const getStatusColor = (status: string) => {
     const s = status.toLowerCase();
-    switch(s) {
+    switch (s) {
       case 'pending': return 'text-orange-700 bg-orange-50 border-orange-200';
       case 'completed': return 'text-green-700 bg-green-50 border-green-200';
       case 'cancelled': return 'text-red-700 bg-red-50 border-red-200';
@@ -47,13 +48,13 @@ export const EditTicket: React.FC<Props> = ({
 
   return (
     <div className="flex flex-col h-full bg-white font-sans w-full">
-      
+
       {/* HEADER */}
       <div className="shrink-0 p-4 lg:p-5 border-b border-[#D5BA98]/30 flex flex-col gap-3 bg-[#FDFBF9] z-20">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <button onClick={onCloseMobile} className="lg:hidden p-1 bg-[#D5BA98]/20 text-[#1A3A52] rounded-md">
-               <X className="w-5 h-5" />
+              <X className="w-5 h-5" />
             </button>
             {orderInfo.isPaid ? <Eye className="w-5 h-5 text-[#1A3A52]/50" /> : <Receipt className="w-5 h-5 text-[#1A3A52]" />}
             <h2 className={`text-lg font-bold ${orderInfo.isPaid ? 'text-[#1A3A52]/70' : 'text-[#1A3A52]'}`}>
@@ -67,11 +68,15 @@ export const EditTicket: React.FC<Props> = ({
 
         <div className="grid grid-cols-2 gap-2 text-sm mt-1">
           <div className="bg-white p-2 rounded-lg border border-[#D5BA98]/40 shadow-sm">
-            <span className="text-[10px] text-[#1A3A52]/50 block uppercase tracking-wide font-bold mb-0.5">Table</span>
+            <span className="text-[10px] text-[#1A3A52]/50 block uppercase tracking-wide font-bold mb-0.5">
+              {t('tableLabel')}
+            </span>
             <span className="font-bold text-[#1A3A52]">{orderInfo.tableCode || t('takeAway')}</span>
           </div>
           <div className="bg-white p-2 rounded-lg border border-[#D5BA98]/40 shadow-sm">
-            <span className="text-[10px] text-[#1A3A52]/50 block uppercase tracking-wide font-bold mb-0.5">Customer</span>
+            <span className="text-[10px] text-[#1A3A52]/50 block uppercase tracking-wide font-bold mb-0.5">
+              {t('customerLabel')}
+            </span>
             <span className="font-bold text-[#1A3A52] truncate block">{orderInfo.customerName || t('guest')}</span>
           </div>
         </div>
@@ -79,7 +84,7 @@ export const EditTicket: React.FC<Props> = ({
 
       {/* BODY: ITEMS LIST */}
       <div className="flex-1 overflow-y-auto p-4 lg:p-5 space-y-4 bg-[#FDFBF9]/50 min-h-0">
-        
+
         {/* MÓN CŨ (READ-ONLY) */}
         <div>
           <h3 className="text-[10px] font-bold text-[#1A3A52]/50 uppercase tracking-wider mb-2">{t('orderedItems')}</h3>
@@ -91,7 +96,7 @@ export const EditTicket: React.FC<Props> = ({
                     <div className="font-bold text-sm text-[#1A3A52]">
                       {item.quantity}x {item.dishName}
                     </div>
-                    {item.note && <div className="text-xs text-[#1A3A52]/60 italic mt-0.5">Note: {item.note}</div>}
+                    {item.note && <div className="text-xs text-[#1A3A52]/60 italic mt-0.5">{tCommon('note')}: {item.note}</div>}
                   </div>
                   <div className="text-right shrink-0">
                     <div className="font-bold text-sm text-[#1A3A52]">CHF {(item.price * item.quantity).toFixed(2)}</div>
@@ -103,7 +108,7 @@ export const EditTicket: React.FC<Props> = ({
                 {item.rejectReason && (
                   <div className="mt-2 text-[11px] font-medium text-[#8C3A3A] bg-[#8C3A3A]/10 p-1.5 rounded flex gap-1.5 items-start">
                     <AlertTriangle className="w-3.5 h-3.5 shrink-0" />
-                    <span>Lý do hủy: {item.rejectReason}</span>
+                    <span>{tCommon('rejectReason')}: {item.rejectReason}</span>
                   </div>
                 )}
               </div>
@@ -131,7 +136,7 @@ export const EditTicket: React.FC<Props> = ({
                 {newCart.map((item) => (
                   <div key={item.dishId} className="bg-white border border-[#1A3A52]/30 rounded-xl p-3 shadow-sm flex flex-col gap-2 relative overflow-hidden">
                     <div className="absolute left-0 top-0 bottom-0 w-1 bg-[#1A3A52]"></div>
-                    
+
                     <div className="flex justify-between items-start gap-2 mb-1 pl-1">
                       <div className="min-w-0 pr-2">
                         <p className="text-[#1A3A52] text-sm font-bold leading-tight truncate">
@@ -139,7 +144,7 @@ export const EditTicket: React.FC<Props> = ({
                         </p>
                         <div className="text-[#1A3A52]/70 font-semibold text-xs mt-1">CHF {(item.price * item.quantity).toFixed(2)}</div>
                       </div>
-                      <button 
+                      <button
                         onClick={() => onRemoveFromCart(item.dishId)}
                         className="text-[#1A3A52]/40 hover:text-[#8C3A3A] hover:bg-[#8C3A3A]/10 p-1.5 rounded-md transition-colors shrink-0"
                       >
@@ -197,15 +202,15 @@ export const EditTicket: React.FC<Props> = ({
           </div>
         ) : (
           <div className="grid grid-cols-4 gap-2">
-            <button 
-              onClick={onCreateInvoice} 
+            <button
+              onClick={onCreateInvoice}
               className="col-span-2 bg-white border-2 border-[#1A3A52] text-[#1A3A52] font-bold py-3 rounded-xl flex items-center justify-center gap-2 text-sm hover:bg-[#FDFBF9] transition"
             >
               <FileText className="w-4 h-4" /> {t('createInvoice')}
             </button>
-            <button 
-              onClick={onSubmitItems} 
-              disabled={isDisableSubmit} 
+            <button
+              onClick={onSubmitItems}
+              disabled={isDisableSubmit}
               className="col-span-2 bg-[#1A3A52] text-[#D5BA98] font-bold py-3 rounded-xl flex items-center justify-center gap-2 disabled:opacity-50 text-sm hover:bg-[#1A3A52]/90 transition shadow-lg shadow-[#1A3A52]/20"
             >
               {t('addItemsButton')}

@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { KitchenOrder } from "../types/kitchen.types";
-import { format } from "date-fns";
+import { useFormatter } from "next-intl";
 import {
     DONE_ITEM_STATUSES,
     getOrderDisplayStatus,
@@ -75,10 +75,10 @@ export function KitchenOrderCard({ order, onUpdateStatus, onBatchUpdateStatus, i
     const [rejectReason, setRejectReason] = useState("");
     const [isPrintModalOpen, setIsPrintModalOpen] = useState(false);
 
+    const format = useFormatter();
     const status = useMemo(() => getOrderDisplayStatus(order.items), [order.items]);
     const config = STATUS_CONFIG[status] || STATUS_CONFIG["new"];
-
-    const formattedTime = order.createdAt ? format(new Date(order.createdAt), "hh:mm a") : "-";
+    const formattedTime = order.createdAt ? format.dateTime(new Date(order.createdAt), { hour: '2-digit', minute: '2-digit' }) : "-";
 
     const handleReject = (itemId: number) => {
         if (rejectItemId === itemId) {
@@ -146,7 +146,7 @@ export function KitchenOrderCard({ order, onUpdateStatus, onBatchUpdateStatus, i
             <div className="px-3 py-2 sm:px-5 sm:py-3 border-b border-gray-50 bg-gray-50/30">
                 <div className="flex items-center justify-between gap-3 text-[11px] sm:text-xs text-gray-600 font-medium">
                     <div className="flex items-center gap-1.5">
-                        <span>Token No:</span>
+                        <span>{t?.("tokenNo") || "Token No:"}</span>
                         <span className="text-gray-900 font-bold">{order.orderId % 100}</span>
                     </div>
                     <div className="flex items-center gap-1.5 text-gray-500">
@@ -165,105 +165,105 @@ export function KitchenOrderCard({ order, onUpdateStatus, onBatchUpdateStatus, i
                         const itemUpdating = isItemUpdating(item.orderItemId);
 
                         return (
-                        <div key={item.orderItemId} className="group border border-gray-100 rounded-xl p-2.5 sm:p-3 bg-white">
-                            <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2.5">
-                                <div className="flex items-start flex-1 min-w-0">
-                                    <div className={`w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full border-2 ${getItemStatusColor(item.itemStatus)} flex-shrink-0 mt-1 mr-2.5 sm:mr-3 flex items-center justify-center`}>
-                                        <div className={`w-0.5 h-0.5 sm:w-1 sm:h-1 rounded-full ${DONE_ITEM_STATUSES.includes(normalizedStatus as OrderItemStatusCode) ? 'bg-white' : ''}`}></div>
-                                    </div>
-
-                                    <div className="flex-1 min-w-0">
-                                        <div className="flex items-center flex-wrap gap-x-2 gap-y-1">
-                                            <span className="text-xs sm:text-sm font-bold text-gray-800 break-words">
-                                                {item.dishName}
-                                            </span>
-                                            <span className="text-[10px] sm:text-xs text-gray-500 font-bold">x{item.quantity}</span>
+                            <div key={item.orderItemId} className="group border border-gray-100 rounded-xl p-2.5 sm:p-3 bg-white">
+                                <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2.5">
+                                    <div className="flex items-start flex-1 min-w-0">
+                                        <div className={`w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full border-2 ${getItemStatusColor(item.itemStatus)} flex-shrink-0 mt-1 mr-2.5 sm:mr-3 flex items-center justify-center`}>
+                                            <div className={`w-0.5 h-0.5 sm:w-1 sm:h-1 rounded-full ${DONE_ITEM_STATUSES.includes(normalizedStatus as OrderItemStatusCode) ? 'bg-white' : ''}`}></div>
                                         </div>
 
-                                        {item.note && (
-                                            <div className="flex items-center gap-1.5 bg-gray-50 rounded-lg px-2.5 py-1.5 mt-1.5 border border-gray-100/60">
-                                                <MessageSquare className="w-3 h-3 text-gray-400" />
-                                                <span className="text-[10px] sm:text-xs text-gray-600 font-medium break-words">
-                                                    {item.note}
+                                        <div className="flex-1 min-w-0">
+                                            <div className="flex items-center flex-wrap gap-x-2 gap-y-1">
+                                                <span className="text-xs sm:text-sm font-bold text-gray-800 break-words">
+                                                    {item.dishName}
                                                 </span>
+                                                <span className="text-[10px] sm:text-xs text-gray-500 font-bold">x{item.quantity}</span>
                                             </div>
-                                        )}
 
-                                        {item.rejectReason && (
-                                            <div className="flex items-center gap-1.5 bg-red-50 rounded-lg px-2.5 py-1.5 mt-1.5 border border-red-100">
-                                                <AlertTriangle className="w-3 h-3 text-red-400" />
-                                                <span className="text-[10px] sm:text-xs text-red-600 font-medium italic break-words">
-                                                    {item.rejectReason}
-                                                </span>
-                                            </div>
-                                        )}
+                                            {item.note && (
+                                                <div className="flex items-center gap-1.5 bg-gray-50 rounded-lg px-2.5 py-1.5 mt-1.5 border border-gray-100/60">
+                                                    <MessageSquare className="w-3 h-3 text-gray-400" />
+                                                    <span className="text-[10px] sm:text-xs text-gray-600 font-medium break-words">
+                                                        {item.note}
+                                                    </span>
+                                                </div>
+                                            )}
+
+                                            {item.rejectReason && (
+                                                <div className="flex items-center gap-1.5 bg-red-50 rounded-lg px-2.5 py-1.5 mt-1.5 border border-red-100">
+                                                    <AlertTriangle className="w-3 h-3 text-red-400" />
+                                                    <span className="text-[10px] sm:text-xs text-red-600 font-medium italic break-words">
+                                                        {item.rejectReason}
+                                                    </span>
+                                                </div>
+                                            )}
+                                        </div>
                                     </div>
+
+                                    {/* Item specific actions: larger touch targets and placed near each item */}
+                                    {canAction && (
+                                        <div className="flex items-center sm:justify-end gap-2 sm:min-w-[170px]">
+                                            {normalizedStatus === OrderItemStatusCode.CREATED && (
+                                                <button
+                                                    type="button"
+                                                    disabled={itemUpdating}
+                                                    onClick={() => onUpdateStatus(item.orderItemId, OrderItemStatusCode.IN_PROGRESS)}
+                                                    className="h-9 px-3 sm:px-4 rounded-lg text-xs sm:text-sm font-semibold text-blue-700 bg-blue-50 border border-blue-200 hover:bg-blue-100 disabled:opacity-50"
+                                                >
+                                                    {t?.("actions.start") || "Start"}
+                                                </button>
+                                            )}
+                                            {normalizedStatus === OrderItemStatusCode.IN_PROGRESS && (
+                                                <button
+                                                    type="button"
+                                                    disabled={itemUpdating}
+                                                    onClick={() => onUpdateStatus(item.orderItemId, OrderItemStatusCode.SERVED)}
+                                                    className="h-9 px-3 sm:px-4 rounded-lg text-xs sm:text-sm font-semibold text-green-700 bg-green-50 border border-green-200 hover:bg-green-100 disabled:opacity-50"
+                                                >
+                                                    {t?.("actions.serve") || "Serve"}
+                                                </button>
+                                            )}
+                                            <button
+                                                type="button"
+                                                disabled={itemUpdating}
+                                                onClick={() => handleReject(item.orderItemId)}
+                                                className="h-9 px-3 sm:px-4 rounded-lg text-xs sm:text-sm font-semibold text-red-700 bg-red-50 border border-red-200 hover:bg-red-100 disabled:opacity-50"
+                                            >
+                                                {t?.("actions.reject") || "Reject"}
+                                            </button>
+                                        </div>
+                                    )}
                                 </div>
 
-                                {/* Item specific actions: larger touch targets and placed near each item */}
-                                {canAction && (
-                                    <div className="flex items-center sm:justify-end gap-2 sm:min-w-[170px]">
-                                        {normalizedStatus === OrderItemStatusCode.CREATED && (
+                                {rejectItemId === item.orderItemId && (
+                                    <div className="mt-2.5 space-y-2">
+                                        <input
+                                            autoFocus
+                                            value={rejectReason}
+                                            onChange={(e) => setRejectReason(e.target.value)}
+                                            placeholder={t?.("rejectReason.placeholder") || "Nhập lý do từ chối..."}
+                                            className="w-full h-10 text-xs sm:text-sm border border-red-200 rounded-lg px-3 focus:outline-none focus:ring-2 focus:ring-red-100 bg-red-50"
+                                        />
+                                        <div className="flex gap-2">
                                             <button
                                                 type="button"
-                                                disabled={itemUpdating}
-                                                onClick={() => onUpdateStatus(item.orderItemId, OrderItemStatusCode.IN_PROGRESS)}
-                                                className="h-9 px-3 sm:px-4 rounded-lg text-xs sm:text-sm font-semibold text-blue-700 bg-blue-50 border border-blue-200 hover:bg-blue-100 disabled:opacity-50"
+                                                disabled={itemUpdating || !rejectReason.trim()}
+                                                onClick={() => handleReject(item.orderItemId)}
+                                                className="h-9 px-3 rounded-lg text-xs sm:text-sm font-semibold bg-red-600 text-white hover:bg-red-700 disabled:opacity-50"
                                             >
-                                                {t?.("actions.start") || "Start"}
+                                                {t?.("rejectReason.confirm") || "Confirm"}
                                             </button>
-                                        )}
-                                        {normalizedStatus === OrderItemStatusCode.IN_PROGRESS && (
                                             <button
                                                 type="button"
-                                                disabled={itemUpdating}
-                                                onClick={() => onUpdateStatus(item.orderItemId, OrderItemStatusCode.SERVED)}
-                                                className="h-9 px-3 sm:px-4 rounded-lg text-xs sm:text-sm font-semibold text-green-700 bg-green-50 border border-green-200 hover:bg-green-100 disabled:opacity-50"
+                                                onClick={cancelReject}
+                                                className="h-9 px-3 rounded-lg text-xs sm:text-sm font-semibold text-gray-600 bg-gray-100 hover:bg-gray-200"
                                             >
-                                                {t?.("actions.serve") || "Serve"}
+                                                {t?.("rejectReason.cancel") || "Cancel"}
                                             </button>
-                                        )}
-                                        <button
-                                            type="button"
-                                            disabled={itemUpdating}
-                                            onClick={() => handleReject(item.orderItemId)}
-                                            className="h-9 px-3 sm:px-4 rounded-lg text-xs sm:text-sm font-semibold text-red-700 bg-red-50 border border-red-200 hover:bg-red-100 disabled:opacity-50"
-                                        >
-                                            {t?.("actions.reject") || "Reject"}
-                                        </button>
+                                        </div>
                                     </div>
                                 )}
                             </div>
-
-                            {rejectItemId === item.orderItemId && (
-                                <div className="mt-2.5 space-y-2">
-                                    <input
-                                        autoFocus
-                                        value={rejectReason}
-                                        onChange={(e) => setRejectReason(e.target.value)}
-                                        placeholder={t?.("actions.rejectReasonPlaceholder") || "Nhập lý do từ chối..."}
-                                        className="w-full h-10 text-xs sm:text-sm border border-red-200 rounded-lg px-3 focus:outline-none focus:ring-2 focus:ring-red-100 bg-red-50"
-                                    />
-                                    <div className="flex gap-2">
-                                        <button
-                                            type="button"
-                                            disabled={itemUpdating || !rejectReason.trim()}
-                                            onClick={() => handleReject(item.orderItemId)}
-                                            className="h-9 px-3 rounded-lg text-xs sm:text-sm font-semibold bg-red-600 text-white hover:bg-red-700 disabled:opacity-50"
-                                        >
-                                            {t?.("actions.confirm") || "Confirm"}
-                                        </button>
-                                        <button
-                                            type="button"
-                                            onClick={cancelReject}
-                                            className="h-9 px-3 rounded-lg text-xs sm:text-sm font-semibold text-gray-600 bg-gray-100 hover:bg-gray-200"
-                                        >
-                                            {t?.("actions.cancel") || "Cancel"}
-                                        </button>
-                                    </div>
-                                </div>
-                            )}
-                        </div>
                         );
                     })}
                 </div>

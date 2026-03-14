@@ -1361,6 +1361,7 @@
         "actions": "Actions",
         "note": "Note",
         "rejectReason": "Raison du rejet",
+        "guest": "Invité",
         "source": {
           "DINE_IN": "Sur place",
           "TAKE_AWAY": "À emporter",
@@ -1459,7 +1460,9 @@
         "In progress": "En cours",
         "Completed": "Terminé",
         "Cancelled": "Annulé"
-      }
+      },
+      "tableLabel": "Table",
+      "customerLabel": "Client"
     },
     "RecentOrders": {
       "title": "Commandes récentes",
@@ -1508,7 +1511,11 @@
       "notePlaceholder": "Saisir une note de paiement...",
       "close": "Fermer",
       "payAndComplete": "Payer & Terminer la commande",
-      "paying": "Traitement..."
+      "paying": "Traitement...",
+      "enterTip": "Saisir le montant du pourboire",
+      "selectDiscount": "Sélectionner ou saisir une remise",
+      "selectCoupon": "Sélectionner un coupon",
+      "promotions": "Promotions"
     }
   },
   "AdminSidebar": {
@@ -1774,6 +1781,7 @@
     "refresh": "Actualiser",
     "searchPlaceholder": "Rechercher une table, une commande, un plat...",
     "liveUpdates": "Mises à jour en direct",
+    "tokenNo": "N° de jeton:",
     "note": "Note",
     "orderType": "Sur place",
     "tabs": {
@@ -1790,14 +1798,20 @@
       "new": "Nouveau",
       "inKitchen": "En cuisine",
       "rejected": "Rejeté",
-      "completed": "Terminé"
+      "completed": "Terminé",
+      "CREATED": "Nouveau",
+      "IN_PROGRESS": "En préparation",
+      "READY": "Prêt",
+      "SERVED": "Servi",
+      "REJECTED": "Rejeté"
     },
     "actions": {
       "print": "Imprimer la commande",
       "markDone": "Terminer",
       "start": "Commencer",
       "serve": "Servir",
-      "reject": "Rejeter"
+      "reject": "Rejeter",
+      "cancel": "Annuler"
     },
     "rejectReason": {
       "label": "Raison",

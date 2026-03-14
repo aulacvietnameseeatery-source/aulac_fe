@@ -2,7 +2,7 @@
 
 import React, { useMemo, useRef } from "react";
 import { X, Printer, Clock } from "lucide-react";
-import { format } from "date-fns";
+import { useFormatter } from "next-intl";
 import type { KitchenOrder } from "../types/kitchen.types";
 import { isProcessedItemStatus, normalizeKitchenItemStatus } from "../utils/kitchen-status";
 
@@ -16,8 +16,10 @@ interface KitchenPrintModalProps {
 export function KitchenPrintModal({ order, isOpen, onClose, t }: KitchenPrintModalProps) {
     const printRef = useRef<HTMLDivElement>(null);
 
-    const formattedTime = order.createdAt ? format(new Date(order.createdAt), "HH:mm") : "-";
-    const formattedDate = order.createdAt ? format(new Date(order.createdAt), "dd/MM/yyyy") : "-";
+    const format = useFormatter();
+
+    const formattedTime = order.createdAt ? format.dateTime(new Date(order.createdAt), { hour: '2-digit', minute: '2-digit' }) : "-";
+    const formattedDate = order.createdAt ? format.dateTime(new Date(order.createdAt), { day: '2-digit', month: '2-digit', year: 'numeric' }) : "-";
 
     const processedCount = useMemo(
         () =>
@@ -81,13 +83,13 @@ export function KitchenPrintModal({ order, isOpen, onClose, t }: KitchenPrintMod
                 <div className="p-4 bg-gray-100 max-h-[65vh] overflow-auto custom-scrollbar">
                     <div ref={printRef} className="bg-white border border-gray-200 rounded-xl overflow-hidden">
                         <div className="bg-gray-900 text-white px-4 py-3">
-                            <p className="text-sm font-bold">Kitchen Ticket</p>
-                            <p className="text-xs text-gray-200">Table {order.tableCode} - #{order.orderId}</p>
+                            <p className="text-sm font-bold">{t?.("title") || "Kitchen Ticket"}</p>
+                            <p className="text-xs text-gray-200">{t?.("orderType") || "Table"} {order.tableCode} - #{order.orderId}</p>
                         </div>
 
                         <div className="px-4 py-3 border-b border-gray-100 text-xs text-gray-600 space-y-1.5">
                             <div className="flex items-center justify-between">
-                                <span>Token No</span>
+                                <span>{t?.("tokenNo") || "Token No"}</span>
                                 <span className="font-semibold text-gray-900">{order.orderId % 100}</span>
                             </div>
                             <div className="flex items-center justify-between">
@@ -107,9 +109,9 @@ export function KitchenPrintModal({ order, isOpen, onClose, t }: KitchenPrintMod
                                         <span className="text-sm font-semibold text-gray-800">{item.dishName}</span>
                                         <span className="text-sm font-bold text-gray-900">x{item.quantity}</span>
                                     </div>
-                                    <p className="text-[11px] text-gray-500 mt-0.5">{normalizeKitchenItemStatus(item.itemStatus)}</p>
-                                    {item.note ? <p className="text-[11px] text-gray-600 mt-1">Note: {item.note}</p> : null}
-                                    {item.rejectReason ? <p className="text-[11px] text-red-600 mt-1">Reject: {item.rejectReason}</p> : null}
+                                    <p className="text-[11px] text-gray-500 mt-0.5">{t?.(`status.${normalizeKitchenItemStatus(item.itemStatus)}`) || item.itemStatus}</p>
+                                    {item.note ? <p className="text-[11px] text-gray-600 mt-1">{t?.("note") || "Note"}: {item.note}</p> : null}
+                                    {item.rejectReason ? <p className="text-[11px] text-red-600 mt-1">{t?.("rejectReason.label") || "Reject"}: {item.rejectReason}</p> : null}
                                 </div>
                             ))}
                         </div>

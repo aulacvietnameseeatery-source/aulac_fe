@@ -66,11 +66,6 @@ const ACTION_ICONS: Record<ActionKey, { icon: React.ReactNode; danger?: boolean 
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
 
-function formatCurrency(amount: number) {
-    // Format with en-US to ensure dot for decimals instead of comma
-    return `CHF ${amount.toLocaleString('en-US')}`;
-}
-
 const VISIBLE_ITEMS_COUNT = 3;
 
 // ─── Props ───────────────────────────────────────────────────────────────────
@@ -279,7 +274,7 @@ export const OrderCard: React.FC<OrderCardProps> = ({ order, onStatusChange, onA
                                     </div>
                                     <div className="flex items-center gap-2 flex-shrink-0 ml-2">
                                         <span className="text-gray-500">×{item.quantity}</span>
-                                        <span className="text-gray-400 font-mono">{formatCurrency(item.price)}</span>
+                                        <span className="text-gray-400 font-mono">{format.number(item.price, { style: 'currency', currency: 'CHF' })}</span>
                                     </div>
                                 </div>
                                 {item.note && (
@@ -323,10 +318,10 @@ export const OrderCard: React.FC<OrderCardProps> = ({ order, onStatusChange, onA
                 {/* ── Footer ── */}
                 <div className="flex items-center justify-between pt-3 border-t border-gray-100">
                     <div className="flex flex-col">
-                        <span className="text-sm font-bold text-gray-900">{formatCurrency(order.totalAmount)}</span>
+                        <span className="text-sm font-bold text-gray-900">{format.number(order.totalAmount, { style: 'currency', currency: 'CHF' })}</span>
                         {order.tipAmount != null && order.tipAmount > 0 && (
                             <span className="text-xs text-emerald-600 font-medium">
-                                + {t('tip')} {formatCurrency(order.tipAmount)}
+                                + {t('tip')} {format.number(order.tipAmount, { style: 'currency', currency: 'CHF' })}
                             </span>
                         )}
                     </div>

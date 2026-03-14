@@ -10,36 +10,12 @@ import {
     ChevronDown,
     ChevronUp,
 } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useFormatter } from "next-intl";
 import { OrderHistory } from "../types/order-history.types";
 import { PrintOrderModal } from "./PrintOrderModal";
 import { PaymentModal } from "./PaymentModal";
 import { orderHistoryService } from "../services/order-history.service";
 import { toast } from "sonner";
-
-const SOURCE_LABEL: Record<string, { label: string; icon: React.ReactNode }> = {
-    DINE_IN: { label: "Dine In", icon: <Utensils className="w-3 h-3" /> },
-    TAKE_AWAY: { label: "Take Away", icon: <Package className="w-3 h-3" /> },
-    DELIVERY: { label: "Delivery", icon: <Bike className="w-3 h-3" /> },
-};
-
-const PAYMENT_STYLES = {
-    paid: 'bg-emerald-50 text-emerald-600 border-emerald-100',
-    unpaid: 'bg-rose-50 text-rose-600 border-rose-100',
-};
-
-function formatTime(dateStr?: string) {
-    if (!dateStr) return "—";
-    return new Date(dateStr).toLocaleTimeString("vi-VN", {
-        hour: "2-digit",
-        minute: "2-digit",
-    });
-}
-
-function formatCurrency(amount: number) {
-    // Format with en-US to ensure dot for decimals instead of comma
-    return `CHF ${amount.toLocaleString('en-US')}`;
-}
 
 const VISIBLE_ITEMS = 3;
 
@@ -59,6 +35,7 @@ export const KanbanOrderCard: React.FC<KanbanOrderCardProps> = ({
     onAction,
 }) => {
     const t = useTranslations("Order.List.card");
+    const format = useFormatter();
     const [expanded, setExpanded] = useState(false);
     const [isPrintModalOpen, setIsPrintModalOpen] = useState(false);
     const [printType, setPrintType] = useState<'invoice' | 'receipt'>('receipt');
@@ -83,9 +60,14 @@ export const KanbanOrderCard: React.FC<KanbanOrderCardProps> = ({
         }
     };
 
-    const sourceInfo = SOURCE_LABEL[order.source] ?? {
-        label: order.source,
-        icon: <ShoppingBag className="w-3 h-3" />,
+    const getSourceIcon = (source: string) => {
+        switch (source) {
+            case 'DINE_IN': return <Utensils className="w-3 h-3" />;
+            case 'TAKE_AWAY':
+            case 'TAKEAWAY': return <Package className="w-3 h-3" />;
+            case 'DELIVERY': return <Bike className="w-3 h-3" />;
+            default: return <ShoppingBag className="w-3 h-3" />;
+        }
     };
 
     const visibleItems = expanded
@@ -113,14 +95,14 @@ export const KanbanOrderCard: React.FC<KanbanOrderCardProps> = ({
                             </h6>
                             <div className="flex items-center gap-1.5 flex-wrap">
                                 <span className="flex items-center gap-1 text-xs text-gray-500">
-                                    {sourceInfo.icon}
-                                    {sourceInfo.label}
+                                    {getSourceIcon(order.source)}
+                                    {t(`source.${order.source}`)}
                                 </span>
                                 {order.source === "DINE_IN" && order.tableCode && (
                                     <>
                                         <span className="text-gray-300 text-xs">|</span>
                                         <span className="text-xs font-bold text-blue-700 bg-blue-50 px-1.5 py-0.5 rounded border border-blue-100 shadow-sm animate-in fade-in zoom-in duration-300">
-                                            {t('table') || 'Bàn'} {order.tableCode}
+                                            {t('table')} {order.tableCode}
                                         </span>
                                     </>
                                 )}
@@ -132,7 +114,7 @@ export const KanbanOrderCard: React.FC<KanbanOrderCardProps> = ({
                     <div className="relative flex-shrink-0 flex items-center">
                         {order.orderStatus === 'Completed' && (
                             <div
-                                className={`flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded border ${order.isPaid ? PAYMENT_STYLES.paid : PAYMENT_STYLES.unpaid}`}
+                                className={`flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded border ${order.isPaid ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-rose-50 text-rose-600 border-rose-100'}`}
                                 title={order.isPaid ? t('paymentStatus.paid') : t('paymentStatus.unpaid')}
                             >
                                 {order.isPaid ? t('paymentStatus.paid') : t('paymentStatus.unpaid')}
@@ -146,18 +128,18 @@ export const KanbanOrderCard: React.FC<KanbanOrderCardProps> = ({
                     <div className="min-w-0">
                         <p className="text-xs text-gray-500">
                             <span className="font-medium text-gray-700 block truncate">
-                                {order.customerName ?? order.staffName}
+                                {order.customerName ?? order.staffName ?? t('guest')}
                             </span>
                             {order.tableCode && (
                                 <span className="text-[11px] text-blue-700 font-semibold block mt-0.5">
-                                    {t('table') || 'Bàn'} {order.tableCode}
+                                    {t('table')} {order.tableCode}
                                 </span>
                             )}
                         </p>
                     </div>
                     <div className="flex items-center gap-1 text-xs text-gray-500">
                         <Clock className="w-3 h-3" />
-                        {formatTime(order.createdAt)}
+                        {order.createdAt ? format.dateTime(new Date(order.createdAt), { hour: '2-digit', minute: '2-digit' }) : "—"}
                     </div>
                 </div>
 
@@ -216,11 +198,11 @@ export const KanbanOrderCard: React.FC<KanbanOrderCardProps> = ({
                         >
                             {expanded ? (
                                 <>
-                                    <ChevronUp className="w-3 h-3" /> Thu gọn
+                                    <ChevronUp className="w-3 h-3" /> {t('collapse')}
                                 </>
                             ) : (
                                 <>
-                                    <ChevronDown className="w-3 h-3" />+{hiddenCount} món nữa
+                                    <ChevronDown className="w-3 h-3" />+{hiddenCount} {t('moreItems')}
                                 </>
                             )}
                         </button>
@@ -230,9 +212,9 @@ export const KanbanOrderCard: React.FC<KanbanOrderCardProps> = ({
                 {/* Footer total */}
                 <div className="flex items-center justify-between border-t border-gray-100 pt-3 mb-3">
                     <span className="text-sm font-bold text-gray-900">
-                        {formatCurrency(order.totalAmount)}
+                        {format.number(order.totalAmount, { style: 'currency', currency: 'CHF' })}
                     </span>
-                    <span className="text-xs text-gray-500">{order.itemCount} món</span>
+                    <span className="text-xs text-gray-500">{order.itemCount} {t('items')}</span>
                 </div>
 
                 {/* Action buttons */}
