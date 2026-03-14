@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useFormatter } from 'next-intl';
 import { X, Printer } from 'lucide-react';
 import { OrderHistory } from '../types/order-history.types';
 import {
@@ -21,6 +21,7 @@ interface PrintOrderModalProps {
 export const PrintOrderModal: React.FC<PrintOrderModalProps> = ({ order, isOpen, onClose, type }) => {
     const t = useTranslations('Order.List.card');
     const rt = useTranslations('OrderReceipt');
+    const format = useFormatter();
     const printRef = useRef<HTMLDivElement>(null);
 
     if (!isOpen) return null;
@@ -28,8 +29,8 @@ export const PrintOrderModal: React.FC<PrintOrderModalProps> = ({ order, isOpen,
     // Map OrderHistory to OrderReceipt
     const mappedOrder: OrderReceipt = {
         id: `#${order.orderId}`,
-        date: order.createdAt ? new Date(order.createdAt).toLocaleDateString() : 'N/A',
-        time: order.createdAt ? new Date(order.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'N/A',
+        date: order.createdAt ? format.dateTime(new Date(order.createdAt), { dateStyle: 'medium' }) : 'N/A',
+        time: order.createdAt ? format.dateTime(new Date(order.createdAt), { timeStyle: 'short' }) : 'N/A',
         status: type === 'invoice' ? t('paymentStatus.unpaid') : (order.isPaid ? t('paymentStatus.paid') : t('paymentStatus.unpaid')),
         paymentMethod: (type === 'receipt' && order.isPaid) ? t('paymentStatus.paid') : '',
         tips: type === 'invoice' ? 0 : (order.tipAmount ?? 0),
@@ -59,7 +60,7 @@ export const PrintOrderModal: React.FC<PrintOrderModalProps> = ({ order, isOpen,
         printWindow.document.write(`
             <html>
                 <head>
-                    <title>${type === 'invoice' ? 'Invoice' : 'Receipt'} #${order.orderId}</title>
+                    <title>${type === 'invoice' ? t('action.print') : t('action.printReceipt')} #${order.orderId}</title>
                     ${styles}
                     <style>
                         body { background: white !important; margin: 0; padding: 20px; }

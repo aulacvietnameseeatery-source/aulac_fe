@@ -1365,6 +1365,7 @@
         "actions": "Hành động",
         "note": "Ghi chú",
         "rejectReason": "Lý do",
+        "guest": "Khách vãng lai",
         "source": {
           "DINE_IN": "Tại bàn",
           "TAKE_AWAY": "Mang về",
@@ -1783,6 +1784,7 @@
     "refresh": "Làm mới",
     "searchPlaceholder": "Tìm kiếm bàn, mã đơn, món ăn...",
     "liveUpdates": "Cập nhật trực tiếp",
+    "tokenNo": "Số TT:",
     "note": "Ghi chú",
     "orderType": "Ăn tại bàn",
     "tabs": {
@@ -1799,14 +1801,20 @@
       "new": "Mới",
       "inKitchen": "Đang làm",
       "rejected": "Bị từ chối",
-      "completed": "Hoàn tất"
+      "completed": "Hoàn tất",
+      "CREATED": "Mới",
+      "IN_PROGRESS": "Đang làm",
+      "READY": "Sẵn sàng",
+      "SERVED": "Đã phục vụ",
+      "REJECTED": "Bị từ chối"
     },
     "actions": {
       "print": "In đơn hàng",
       "markDone": "Hoàn tất",
       "start": "Bắt đầu",
       "serve": "Phục vụ",
-      "reject": "Từ chối"
+      "reject": "Từ chối",
+      "cancel": "Hủy"
     },
     "rejectReason": {
       "label": "Lý do",
