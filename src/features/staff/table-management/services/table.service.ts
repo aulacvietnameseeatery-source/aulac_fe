@@ -223,4 +223,12 @@ export const tableService = {
     );
     return res.data;
   },
+
+  /**
+   * GET /api/tables/available?targetTime=... — Lấy danh sách bàn trống theo giờ
+   */
+  async getAvailableTables(targetTime: string): Promise<any[]> {
+    const res = await api.get<ApiResponse<any[]>>(`/api/tables/available?targetTime=${encodeURIComponent(targetTime)}`);
+    return res.data ?? [];
+  },
 };

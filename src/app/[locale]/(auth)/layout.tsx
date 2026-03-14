@@ -7,6 +7,7 @@ import { useAuth } from "@/components/providers/auth-provider";
 import "../../../styles/adminLayout.css"
 import { Tooltip } from "react-tooltip";
 import { LanguageSwitcher } from "@/components/ui/language-switcher";
+import { DashboardTopNav } from "@/components/ui/dashboard-top-nav";
 
 export default function DashboardLayout({
   children,
@@ -14,20 +15,33 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const router = useRouter();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, isInitialized } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
-    // Check authentication and redirect if not logged in
-    if (!isAuthenticated) {
+    // Only check authentication after auth state is initialized
+    // This prevents false redirects when auth is still loading from localStorage
+    if (isInitialized && !isAuthenticated) {
       router.push("/login");
     }
-  }, [isAuthenticated, router]);
+  }, [isAuthenticated, isInitialized, router]);
+
+  // Show loading state while auth is initializing
+  if (!isInitialized) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-[#F8F9FA]">
+        <div className="text-center">
+          <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-[#1A3A51] border-r-transparent"></div>
+          <p className="mt-4 text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="main-container relative min-h-screen bg-[#F8F9FA]">
       {/* Mobile Header for Toggle */}
-      <div className="md:hidden fixed top-0 left-0 right-0 z-40 bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between shadow-sm">
+      <div className="md:hidden fixed top-0 left-0 right-0 z-40 bg-white border-b border-gray-200 px-4 py-2 flex items-center justify-between shadow-sm">
         <div className="flex items-center gap-3">
           <button
             onClick={() => setIsMobileMenuOpen(true)}
@@ -35,7 +49,7 @@ export default function DashboardLayout({
           >
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
           </button>
-          <span className="font-display font-bold text-[#1A3A51] text-lg">An Lac Admin</span>
+          <span className="font-display font-bold text-[#1A3A51] text-base">An Lac Admin</span>
         </div>
         <LanguageSwitcher variant="admin" isMobile={true} />
       </div>
@@ -63,11 +77,19 @@ export default function DashboardLayout({
           </div>
         )}
 
+        {/* --- MAIN CONTENT AREA --- */}
         <div className="main-right flex-1 flex flex-col h-full overflow-hidden">
-          {/* Desktop Top Bar */}
-          <div className="hidden md:flex items-center justify-end px-8 py-4 bg-white border-b border-gray-100">
-            <LanguageSwitcher variant="admin" />
-          </div>
+          
+          {/* --- UPDATED DESKTOP TOP BAR --- */}
+          <header className="hidden md:flex items-center justify-between px-6 py-2 bg-white border-b border-gray-100 shadow-sm">
+            {/* Quick Navigation Buttons */}
+            <DashboardTopNav />
+
+            {/* Right Side Actions */}
+            <div className="flex items-center gap-4">
+              <LanguageSwitcher variant="admin" />
+            </div>
+          </header>
 
           <div className="main-view flex-1 overflow-auto p-4 md:p-8">
             {/* View for page content */}

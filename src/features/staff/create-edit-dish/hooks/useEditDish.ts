@@ -19,9 +19,7 @@ export function useEditDish() {
     try {
       setLoading(true);
       await editDish(dishId, data, images, removedMediaIds);
-      toast.success("Dish created successfully");
     } catch {
-      toast.error("Create dish failed");
     } finally {
       setLoading(false);
     }

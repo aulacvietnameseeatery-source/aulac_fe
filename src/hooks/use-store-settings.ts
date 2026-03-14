@@ -11,6 +11,9 @@ export interface StoreSettings {
     email: string;
     phone: string;
     openingHours: string;
+    facebookLink: string;
+    instagramLink: string;
+    tiktokLink: string;
 }
 
 export const useStoreSettings = () => {
@@ -28,6 +31,9 @@ export const useStoreSettings = () => {
                 email: '',
                 phone: '',
                 openingHours: '',
+                facebookLink: '',
+                instagramLink: '',
+                tiktokLink: '',
             };
 
             settings.forEach(s => {

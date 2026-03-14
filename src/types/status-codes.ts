@@ -36,6 +36,7 @@ export enum ReservationStatusCode {
     CHECKED_IN = "CHECKED_IN",
     CANCELLED = "CANCELLED",
     NO_SHOW = "NO_SHOW",
+    COMPLETED = "COMPLETED",
 }
 
 export enum OrderStatusCode {

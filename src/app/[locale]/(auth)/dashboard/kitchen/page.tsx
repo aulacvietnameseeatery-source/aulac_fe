@@ -1,24 +1,25 @@
 "use client";
 
 import React, { useCallback, useMemo, useState } from "react";
-import {
-    RefreshCw,
-    Search
-} from "lucide-react";
+import { RefreshCw } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { ProtectedRoute } from "@/components/protected-route";
 import { Permissions } from "@/types/const";
 import { useKitchen } from "@/features/staff/kitchen/hooks/useKitchen";
-import { KitchenOrderCard } from "@/features/staff/kitchen/components/KitchenOrderCard";
 import { KitchenStatusBar } from "@/features/staff/kitchen/components/KitchenStatusBar";
 import { KitchenOrderGrid } from "@/features/staff/kitchen/components/KitchenOrderGrid";
 import { KeywordSearch } from "@/components/ui/keyword-search/keyword-search";
+import {
+    getOrderDisplayStatus,
+    type KitchenDisplayStatus,
+} from "@/features/staff/kitchen/utils/kitchen-status";
+import type { UpdateItemStatusRequest } from "@/features/staff/kitchen/types/kitchen.types";
 
 function KitchenContent() {
     const t = useTranslations("Kitchen");
-    const { orders, isLoading, isUpdating, updateItemStatus, batchUpdateItemStatus, refresh } = useKitchen();
+    const { orders, isLoading, isUpdating, isItemUpdating, updateItemStatus, batchUpdateItemStatus, refresh } = useKitchen();
     const [searchQuery, setSearchQuery] = useState("");
-    const [activeStatus, setActiveStatus] = useState<string | null>(null);
+    const [activeStatus, setActiveStatus] = useState<KitchenDisplayStatus>("all");
     const [isRefreshing, setIsRefreshing] = useState(false);
 
     const handleRefresh = useCallback(async () => {
@@ -28,14 +29,14 @@ function KitchenContent() {
     }, [refresh]);
 
     const handleUpdateStatus = useCallback(
-        (orderItemId: number, status: string, rejectReason?: string) => {
+        (orderItemId: number, status: UpdateItemStatusRequest['status'], rejectReason?: string) => {
             updateItemStatus(orderItemId, { status, rejectReason });
         },
         [updateItemStatus],
     );
 
     const handleBatchUpdateStatus = useCallback(
-        (updates: { orderItemId: number; status: string; rejectReason?: string }[]) => {
+        (updates: { orderItemId: number; status: UpdateItemStatusRequest['status']; rejectReason?: string }[]) => {
             batchUpdateItemStatus(updates);
         },
         [batchUpdateItemStatus],
@@ -43,8 +44,17 @@ function KitchenContent() {
 
     // Filter orders based on search query and active status
     const filteredOrders = useMemo(() => {
-        return orders.filter((order) => {
-            const searchLower = searchQuery.toLowerCase();
+        const statusPriority: Record<KitchenDisplayStatus, number> = {
+            "in-kitchen": 1,
+            "new": 2,
+            "rejected": 3,
+            "completed": 4,
+            "all": 99,
+        };
+
+        const searchLower = searchQuery.trim().toLowerCase();
+
+        const matched = orders.filter((order) => {
             const matchesSearch =
                 order.orderId.toString().includes(searchLower) ||
                 order.tableCode.toLowerCase().includes(searchLower) ||
@@ -52,11 +62,22 @@ function KitchenContent() {
 
             if (!matchesSearch) return false;
 
-            if (activeStatus) {
+            if (activeStatus !== "all") {
                 return getOrderDisplayStatus(order.items) === activeStatus;
             }
 
             return true;
+        });
+
+        return matched.sort((a, b) => {
+            const statusA = getOrderDisplayStatus(a.items);
+            const statusB = getOrderDisplayStatus(b.items);
+            const priorityDiff = statusPriority[statusA] - statusPriority[statusB];
+            if (priorityDiff !== 0) return priorityDiff;
+
+            const timeA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+            const timeB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+            return timeA - timeB;
         });
     }, [orders, searchQuery, activeStatus]);
 
@@ -127,30 +148,12 @@ function KitchenContent() {
                     onUpdateStatus={handleUpdateStatus}
                     onBatchUpdateStatus={handleBatchUpdateStatus}
                     isUpdating={isUpdating}
+                    isItemUpdating={isItemUpdating}
                     t={t}
                 />
             </div>
         </div>
     );
-}
-
-// Map backend items to a single order status for display in status bar
-function getOrderDisplayStatus(items: any[]) {
-    const isFinished = (s: string) => ["Served", "Ready", "Rejected"].includes(s);
-    const isTrulyFinished = (s: string) => ["Served", "Ready"].includes(s);
-    const hasProgress = (s: string) => ["In progress", "Served", "Ready"].includes(s);
-
-    // 1. All items are Rejected -> Order is Rejected
-    if (items.length > 0 && items.every(i => i.itemStatus === "Rejected")) return "rejected";
-
-    // 2. All items are finished (mix of Served/Ready/Rejected, but at least one success) -> Order is Completed
-    if (items.every(i => isFinished(i.itemStatus))) return "completed";
-
-    // 3. Any item is started or finished (but not all are finished/rejected) -> Order is In Kitchen
-    if (items.some(i => hasProgress(i.itemStatus))) return "in-kitchen";
-
-    // 4. Otherwise it's New
-    return "new";
 }
 
 export default function KitchenPage() {

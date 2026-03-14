@@ -339,7 +339,7 @@
       "address": "Quai du Mont-Blanc 13, Geneva"
     },
     "Actions": {
-      "viewReceipt": "Xem Hóa Đơn",
+      "viewReceipt": "Xem biên lai",
       "backHome": "Quay về Trang Chủ"
     }
   },
@@ -845,6 +845,7 @@
   },
   "Supplier": {
     "close": "Đóng",
+    "edit": "Chỉnh sửa",
     "List": {
       "title": "Quản lý Nhà cung cấp",
       "description": "Quản lý và tổ chức các nhà cung cấp một cách hiệu quả.",
@@ -1194,7 +1195,7 @@
         "editDescription": "Cập nhật thông tin món ăn."
       },
       "actions": {
-        "discard": "Hủy",
+        "cancel": "Hủy bỏ",
         "createDish": "Tạo món",
         "creating": "Đang tạo...",
         "saveChanges": "Lưu thay đổi",
@@ -1365,6 +1366,7 @@
         "actions": "Hành động",
         "note": "Ghi chú",
         "rejectReason": "Lý do",
+        "guest": "Khách vãng lai",
         "source": {
           "DINE_IN": "Tại bàn",
           "TAKE_AWAY": "Mang về",
@@ -1436,22 +1438,30 @@
       "menuTitle": "Chi tiết đơn hàng",
       "menuSubtitleEdit": "Chọn món để thêm vào đơn hàng hiện tại.",
       "menuSubtitleView": "Đơn hàng đã thanh toán. Đang ở chế độ chỉ xem.",
+      "menuSubtitleCancelled": "Đơn hàng đã bị hủy. Đang ở chế độ chỉ xem.",
       "clear": "Xóa",
       "cancel": "Huỷ",
-      "editOrderTitle": "Chỉnh sửa Order #{id}",
-      "viewOrderTitle": "Xem Order #{id}",
+      "editOrderTitle": "Chỉnh sửa đơn hàng #{id}",
+      "viewOrderTitle": "Xem đơn hàng #{id}",
       "totalAmount": "Tổng tiền",
       "orderedItems": "Món đã gọi",
       "newItems": "Món thêm mới",
       "addMoreItemsHint": "Chọn món từ thực đơn bên trái để thêm",
-      "paidOrderWarning": "Order đã thanh toán. Vui lòng tạo order mới.",
-      "addItemsButton": "Thêm món vào Order",
+      "paidOrderWarning": "Đơn hàng đã thanh toán. Vui lòng tạo đơn hàng mới.",
+      "cancelledOrderWarning": "Đơn hàng đã bị hủy. Không thể chỉnh sửa hoặc in hóa đơn.",
+      "change": "Đổi",
+      "table": "Bàn",
+      "addItemsButton": "Thêm món vào đơn hàng",
       "createInvoice": "Tạo Hóa Đơn",
+      "createReceipt": "Tạo biên lai",
       "newTotal": "Tổng dự kiến",
       "warningTitle": "Xác nhận thêm món",
-      "completedOrderWarning": "Order này đã hoàn tất nhưng chưa thanh toán. Thêm món mới sẽ chuyển order về trạng thái Đang phục vụ (In Progress). Bạn có chắc chắn?",
+      "completedOrderWarning": "Đơn hàng này đã hoàn tất nhưng chưa thanh toán. Thêm món mới sẽ chuyển đơn hàng về trạng thái Đang phục vụ (In Progress). Bạn có chắc chắn?",
       "confirmChangeStatus": "Đồng ý thêm",
-      "successMessage": "Đã thêm món thành công!",
+      "saving": "Đang lưu...",
+      "successMessage": "Lưu thay đổi thành công!",
+      "errorMessage": "Có lỗi xảy ra!",
+      "loading": "Đang tải...",
       "takeAway": "Mang đi",
       "guest": "Khách lẻ",
       "notePlaceholder": "Ghi chú món...",
@@ -1463,6 +1473,27 @@
       },
       "tableLabel": "Bàn",
       "customerLabel": "Khách hàng"
+    },
+    "RecentOrders": {
+      "title": "Đơn hàng gần đây",
+      "refresh": "Làm mới",
+      "filterAll": "Tất cả",
+      "dineIn": "Tại bàn",
+      "takeAway": "Mang đi",
+      "loading": "Đang tải đơn hàng...",
+      "noOrdersFound": "Chưa có đơn hàng nào.",
+      "table": "Bàn",
+      "status": {
+        "PENDING": "Đang chờ",
+        "IN_PROGRESS": "Đang thực hiện",
+        "COMPLETED": "Hoàn thành",
+        "CANCELLED": "Đã hủy"
+      }
+    },
+    "DishDetail": {
+      "noDescription": "Chưa có mô tả.",
+      "price": "Giá",
+      "addToOrder": "Thêm vào đơn"
     },
     "PaymentModal": {
       "title": "Thanh toán & Hoàn tất đơn hàng",
@@ -1481,16 +1512,19 @@
       "card": "Thẻ",
       "scan": "Chuyển khoản / Quét mã",
       "discount": "Giảm giá",
-      "tips": "Tiền tip",
       "coupon": "Mã giảm giá",
-      "add": "Thêm",
+      "tip": "Tiền tip",
       "givenAmount": "Số tiền khách đưa",
       "balance": "Tiền thừa",
       "note": "Ghi chú",
       "notePlaceholder": "Nhập ghi chú thanh toán...",
       "close": "Đóng",
       "payAndComplete": "Thanh toán & Hoàn tất",
-      "paying": "Đang thanh toán..."
+      "paying": "Đang thanh toán...",
+      "enterTip": "Nhập số tiền tip",
+      "selectDiscount": "Chọn hoặc nhập giảm giá",
+      "selectCoupon": "Chọn mã giảm giá",
+      "promotions": "Khuyến mãi"
     }
   },
   "AdminSidebar": {
@@ -1534,6 +1568,13 @@
     "shiftsLive": "Bảng Trực Ca",
     "shiftsReports": "Báo Cáo Ca",
     "myShifts": "Ca Của Tôi"
+  },
+  "DashboardTopNav": {
+    "pos": "Bán hàng (POS)",
+    "orders": "Đơn hàng",
+    "kitchen": "Khu bếp",
+    "reservation": "Đặt bàn",
+    "table": "Sơ đồ bàn"
   },
   "ShiftManagement": {
     "Common": {
@@ -1716,6 +1757,7 @@
     "cancelItem": "Hủy món",
     "cancelling": "Đang hủy...",
     "cancelError": "Không thể hủy món",
+    "cancelNotAllowed": "\u201c{dishName}\u201d đã được nhân viên xử lý và không thể hủy nữa.",
     "cancelPopup": {
       "title": "Hủy món này?",
       "message": "Bạn có chắc chắn muốn hủy \"{dishName}\" không? Hành động này không thể hoàn tác.",
@@ -1755,6 +1797,7 @@
     "refresh": "Làm mới",
     "searchPlaceholder": "Tìm kiếm bàn, mã đơn, món ăn...",
     "liveUpdates": "Cập nhật trực tiếp",
+    "tokenNo": "Số TT:",
     "note": "Ghi chú",
     "orderType": "Ăn tại bàn",
     "tabs": {
@@ -1771,14 +1814,20 @@
       "new": "Mới",
       "inKitchen": "Đang làm",
       "rejected": "Bị từ chối",
-      "completed": "Hoàn tất"
+      "completed": "Hoàn tất",
+      "CREATED": "Mới",
+      "IN_PROGRESS": "Đang làm",
+      "READY": "Sẵn sàng",
+      "SERVED": "Đã phục vụ",
+      "REJECTED": "Bị từ chối"
     },
     "actions": {
       "print": "In đơn hàng",
       "markDone": "Hoàn tất",
       "start": "Bắt đầu",
       "serve": "Phục vụ",
-      "reject": "Từ chối"
+      "reject": "Từ chối",
+      "cancel": "Hủy"
     },
     "rejectReason": {
       "label": "Lý do",
@@ -1996,8 +2045,8 @@
     }
   },
   "SystemSettings": {
-    "title": "Cài đặt cửa hàng",
-    "description": "Quản lý cấu hình ứng dụng và cửa hàng.",
+    "title": "Cài đặt hệ thống",
+    "description": "Quản lý các tham số và cấu hình hệ thống.",
     "refresh": "Làm mới",
     "loading": "Đang tải cài đặt...",
     "noSettings": "Không tìm thấy cài đặt.",
@@ -2012,6 +2061,81 @@
       "saveSuccess": "Đã lưu cài đặt nhóm '{group}' thành công.",
       "createSuccess": "Tạo cài đặt mới thành công.",
       "saveError": "Lưu cài đặt thất bại."
+    },
+    "StoreProfile": {
+      "identity": "Danh tính Cửa hàng",
+      "identityDesc": "Cập nhật logo và tên chính thức của cửa hàng.",
+      "contactLocation": "Liên hệ & Vị trí",
+      "contactLocationDesc": "Thông tin địa chỉ và các phương thức liên lạc của cửa hàng.",
+      "operating": "Hoạt động",
+      "operatingDesc": "Thời gian phục vụ và các thông tin vận hành khác.",
+      "socialMedia": "Mạng xã hội",
+      "socialMediaDesc": "Sự hiện diện của cửa hàng trên mạng xã hội.",
+      "changeLogo": "Đổi Logo",
+      "uploadLogo": "Tải Logo lên",
+      "remove": "Gỡ bỏ",
+      "storeName": "Tên cửa hàng",
+      "storeNamePlaceholder": "Nhập tên nhà hàng/cửa hàng",
+      "streetAddress": "Địa chỉ đường",
+      "streetAddressPlaceholder": "Ví dụ: Số 9, Ngõ 123, Đường Jacques Dalcroze",
+      "postalCode": "Mã bưu chính",
+      "postalCodePlaceholder": "1000",
+      "city": "Thành phố",
+      "cityPlaceholder": "Hà Nội",
+      "country": "Quốc gia",
+      "countryPlaceholder": "Việt Nam",
+      "email": "Địa chỉ Email",
+      "emailPlaceholder": "contact@restaurant.com",
+      "phone": "Số điện thoại",
+      "phonePlaceholder": "+84 123 456 789",
+      "openingHours": "Giờ mở cửa",
+      "openingHoursPlaceholder": "Ví dụ: Thứ 2 - Chủ Nhật: 08:00 - 22:00",
+      "facebookLink": "Liên kết Facebook",
+      "facebookPlaceholder": "https://facebook.com/trangcuaban",
+      "instagramLink": "Liên kết Instagram",
+      "instagramPlaceholder": "https://instagram.com/trangcuaban",
+      "tiktokLink": "Liên kết TikTok",
+      "tiktokPlaceholder": "https://tiktok.com/@trangcuaban",
+      "saveChanges": "Lưu thay đổi",
+      "reset": "Khôi phục",
+      "saving": "Đang lưu...",
+      "clickToUpload": "Logo",
+      "uploadSuccess": "Logo tải lên thành công",
+      "uploadError": "Tải lên logo thất bại",
+      "fileSizeError": "Kích thước tệp phải nhỏ hơn 5MB",
+      "updateSuccess": "Cập nhật hồ sơ cửa hàng thành công",
+      "updateError": "Lưu hồ sơ cửa hàng thất bại"
+    },
+    "General": {
+      "title": "Tham số hệ thống",
+      "addNew": "Thêm cài đặt mới",
+      "empty": "Không tìm thấy cài đặt chung",
+      "emptyDesc": "Sử dụng nút \"Thêm cài đặt mới\" ở trên để tạo một nhóm như \"reservation\"."
+    },
+    "AddModal": {
+      "key": "Khóa cài đặt",
+      "keyPlaceholder": "vd: default_password, password.min_length",
+      "name": "Tên cài đặt (Tùy chọn)",
+      "namePlaceholder": "Một tên dễ đọc cho cài đặt này",
+      "type": "Loại giá trị",
+      "value": "Giá trị",
+      "valuePlaceholder": "Giá trị cài đặt...",
+      "description": "Mô tả (Tùy chọn)",
+      "descriptionPlaceholder": "Cài đặt này dùng để làm gì?",
+      "sensitive": "Dữ liệu nhạy cảm",
+      "sensitiveDesc": "Ẩn giá trị theo mặc định (vd: mật khẩu, khóa API)"
+    },
+    "Field": {
+      "sensitiveHidden": "Nhạy cảm – giá trị bị ẩn",
+      "jsonPlaceholder": "Giá trị JSON...",
+      "sensitive": "Nhạy cảm",
+      "types": {
+        "STRING": "Văn bản",
+        "INT": "Số nguyên",
+        "DECIMAL": "Số thập phân",
+        "BOOL": "Boolean",
+        "JSON": "JSON"
+      }
     }
   },
   "InvoiceDetail": {

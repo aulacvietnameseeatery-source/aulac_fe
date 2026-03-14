@@ -1,6 +1,7 @@
 // features/staff/reservation/types/reservation-types.ts
 
 export interface ReservationDto {
+    notes: string;
     reservationId: number;
     reservedTime: string; // ISO Date string
     customerName: string;
@@ -11,7 +12,6 @@ export interface ReservationDto {
     statusName: string;
     preOrderSummary?: string; // Có thể null
     createdAt?: string;
-    // --- THÊM TRƯỜNG CHO BÀN ---
     tableId?: number | null;
     tableName?: string | null;
 }
@@ -45,6 +45,7 @@ export interface ReservationDetailDto {
     sourceId: number;
     sourceName: string;
     sourceCode: string;
+    notes?: string;
     tables: ReservationTableDto[];
 }
 
@@ -54,4 +55,15 @@ export interface ReservationTableDto {
     capacity: number;
     tableType: string;
     zone: string;
+}
+
+export interface UpdateReservationRequest {
+    customerName: string;
+    phone: string;
+    email?: string;
+    partySize: number;
+    reservedTime: string;
+    notes?: string;
+    statusId?: number;
+    tableIds?: number[];
 }

@@ -845,6 +845,7 @@
   },
   "Supplier": {
     "close": "Close",
+    "edit": "Edit",
     "List": {
       "title": "Supplier Management",
       "description": "Manage and organize your suppliers efficiently.",
@@ -1194,7 +1195,7 @@
         "editDescription": "Update the information of this dish."
       },
       "actions": {
-        "discard": "Discard",
+        "cancel": "Cancel",
         "createDish": "Create Dish",
         "createing": "Creating...",
         "saveChanges": "Save Changes",
@@ -1365,6 +1366,7 @@
         "actions": "Actions",
         "note": "Note",
         "rejectReason": "Reject Reason",
+        "guest": "Guest",
         "source": {
           "DINE_IN": "Dine In",
           "TAKE_AWAY": "Take Away",
@@ -1436,6 +1438,7 @@
       "menuTitle": "Order Details",
       "menuSubtitleEdit": "Select items to add to the current order.",
       "menuSubtitleView": "This order has been paid. View-only mode.",
+      "menuSubtitleCancelled": "This order has been cancelled. View-only mode.",
       "clear": "Clear",
       "cancel": "Cancel",
       "editOrderTitle": "Edit Order #{id}",
@@ -1445,13 +1448,20 @@
       "newItems": "New Items",
       "addMoreItemsHint": "Select items from the left menu to add",
       "paidOrderWarning": "This order has been paid. Please create a new order.",
-      "addItemsButton": "Add Items to Order",
+      "cancelledOrderWarning": "The order has been cancelled. It is not possible to edit or print the invoice.",
+      "change": "Change",
+      "table": "Table",
+      "addItemsButton": "Save Changes",
       "createInvoice": "Create Invoice",
+      "createReceipt": "Create Receipt",
       "newTotal": "Estimated Total",
       "warningTitle": "Confirm Adding Items",
       "completedOrderWarning": "This order is completed but not yet paid. Adding new items will change the order status back to In Progress. Are you sure?",
       "confirmChangeStatus": "Confirm Add",
-      "successMessage": "Items added successfully!",
+      "saving": "Saving...",
+      "successMessage": "Changes saved successfully!",
+      "errorMessage": "An error occurred!",
+      "loading":"Loading...",
       "takeAway": "Take Away",
       "guest": "Guest",
       "notePlaceholder": "Item note...",
@@ -1460,7 +1470,30 @@
         "In progress": "In Progress",
         "Completed": "Completed",
         "Cancelled": "Cancelled"
+      },
+      "tableLabel": "Table",
+      "customerLabel": "Customer"
+    },
+    "RecentOrders": {
+      "title": "Recent Orders",
+      "refresh": "Refresh",
+      "filterAll": "All",
+      "dineIn": "Dine-in",
+      "takeAway": "Takeaway",
+      "loading": "Loading orders...",
+      "noOrdersFound": "No orders found.",
+      "table": "Table",
+      "status": {
+        "PENDING": "Pending",
+        "IN_PROGRESS": "In Progress",
+        "COMPLETED": "Completed",
+        "CANCELLED": "Cancelled"
       }
+    },
+    "DishDetail": {
+      "noDescription": "No description available.",
+      "price": "Price",
+      "addToOrder": "Add to Order"
     },
     "PaymentModal": {
       "title": "Pay & Complete Order",
@@ -1479,16 +1512,19 @@
       "card": "Card",
       "scan": "Scan",
       "discount": "Discount",
-      "tips": "Tips",
       "coupon": "Coupon",
-      "add": "Add",
+      "tip": "Tip",
       "givenAmount": "Given Amount",
       "balance": "Balance",
       "note": "Note",
       "notePlaceholder": "Enter payment note...",
       "close": "Close",
       "payAndComplete": "Pay & Complete Order",
-      "paying": "Processing..."
+      "paying": "Processing...",
+      "enterTip": "Enter tip amount",
+      "selectDiscount": "Select or enter discount",
+      "selectCoupon": "Select coupon",
+      "promotions": "Promotions"
     }
   },
   "AdminSidebar": {
@@ -1532,6 +1568,13 @@
     "shiftsLive": "Live Board",
     "shiftsReports": "Shift Reports",
     "myShifts": "My Shifts"
+  },
+  "DashboardTopNav": {
+    "pos": "POS",
+    "orders": "Orders",
+    "kitchen": "Kitchen",
+    "reservation": "Reservations",
+    "table": "Tables"
   },
   "ShiftManagement": {
     "Common": {
@@ -1714,6 +1757,7 @@
     "cancelItem": "Cancel Item",
     "cancelling": "Cancelling...",
     "cancelError": "Cannot cancel item",
+    "cancelNotAllowed": "\u201c{dishName}\u201d has already been processed by staff and can no longer be cancelled.",
     "cancelPopup": {
       "title": "Cancel This Item?",
       "message": "Are you sure you want to cancel \"{dishName}\"? This action cannot be undone.",
@@ -1753,6 +1797,7 @@
     "refresh": "Refresh",
     "searchPlaceholder": "Search by table, order ID, dish...",
     "liveUpdates": "Live updates",
+    "tokenNo": "Token No:",
     "note": "Note",
     "orderType": "Dine-in",
     "tabs": {
@@ -1769,14 +1814,20 @@
       "new": "New",
       "inKitchen": "In Kitchen",
       "rejected": "Rejected",
-      "completed": "Completed"
+      "completed": "Completed",
+      "CREATED": "New",
+      "IN_PROGRESS": "Preparing",
+      "READY": "Ready",
+      "SERVED": "Served",
+      "REJECTED": "Rejected"
     },
     "actions": {
       "print": "Print Order",
       "markDone": "Mark Done",
       "start": "Start",
       "serve": "Serve",
-      "reject": "Reject"
+      "reject": "Reject",
+      "cancel": "Cancel"
     },
     "rejectReason": {
       "label": "Reason",
@@ -1994,8 +2045,8 @@
     }
   },
   "SystemSettings": {
-    "title": "Store Settings",
-    "description": "Manage application and store configurations.",
+    "title": "System Settings",
+    "description": "Manage system parameters and configurations.",
     "refresh": "Refresh",
     "loading": "Loading settings...",
     "noSettings": "No settings found.",
@@ -2010,6 +2061,81 @@
       "saveSuccess": "Settings for group '{group}' saved successfully.",
       "createSuccess": "Setting created successfully.",
       "saveError": "Failed to save settings."
+    },
+    "StoreProfile": {
+      "identity": "Store Identity",
+      "identityDesc": "Update your store logo and official name.",
+      "contactLocation": "Contact & Location",
+      "contactLocationDesc": "Address details and store contact information.",
+      "operating": "Operations",
+      "operatingDesc": "Business hours and other operational details.",
+      "socialMedia": "Social Media",
+      "socialMediaDesc": "Your store's social media presence.",
+      "changeLogo": "Change Logo",
+      "uploadLogo": "Upload Logo",
+      "remove": "Remove",
+      "storeName": "Store Name",
+      "storeNamePlaceholder": "Enter restaurant/store name",
+      "streetAddress": "Street Address",
+      "streetAddressPlaceholder": "E.g. Avenue Jacques Dalcroze 9",
+      "postalCode": "Postal Code",
+      "postalCodePlaceholder": "1000",
+      "city": "City",
+      "cityPlaceholder": "City Name",
+      "country": "Country / Region",
+      "countryPlaceholder": "Country Name",
+      "email": "Email Address",
+      "emailPlaceholder": "contact@restaurant.com",
+      "phone": "Phone Number",
+      "phonePlaceholder": "+84 123 456 789",
+      "openingHours": "Opening Hours",
+      "openingHoursPlaceholder": "E.g. Mon - Sun: 08:00 AM - 10:00 PM",
+      "facebookLink": "Facebook Link",
+      "facebookPlaceholder": "https://facebook.com/yourpage",
+      "instagramLink": "Instagram Link",
+      "instagramPlaceholder": "https://instagram.com/yourprofile",
+      "tiktokLink": "TikTok Link",
+      "tiktokPlaceholder": "https://tiktok.com/@yourprofile",
+      "saveChanges": "Save Changes",
+      "reset": "Reset",
+      "saving": "Saving...",
+      "clickToUpload": "Logo",
+      "uploadSuccess": "Logo uploaded successfully",
+      "uploadError": "Failed to upload logo",
+      "fileSizeError": "File size must be less than 5MB",
+      "updateSuccess": "Store profile updated successfully",
+      "updateError": "Failed to save store profile"
+    },
+    "General": {
+      "title": "System Parameters",
+      "addNew": "Add New Setting",
+      "empty": "No general settings found",
+      "emptyDesc": "Use the \"Add New Setting\" button above to create a group like \"reservation\"."
+    },
+    "AddModal": {
+      "key": "Setting Key",
+      "keyPlaceholder": "e.g. default_password, password.min_length",
+      "name": "Setting Name (Optional)",
+      "namePlaceholder": "A readable name for this setting",
+      "type": "Value Type",
+      "value": "Value",
+      "valuePlaceholder": "Setting value...",
+      "description": "Description (Optional)",
+      "descriptionPlaceholder": "What is this setting for?",
+      "sensitive": "Sensitive Data",
+      "sensitiveDesc": "Hide value by default (e.g. passwords, API keys)"
+    },
+    "Field": {
+      "sensitiveHidden": "Sensitive – value hidden",
+      "jsonPlaceholder": "JSON value...",
+      "sensitive": "Sensitive",
+      "types": {
+        "STRING": "Text",
+        "INT": "Integer",
+        "DECIMAL": "Decimal",
+        "BOOL": "Boolean",
+        "JSON": "JSON"
+      }
     }
   },
   "InvoiceDetail": {

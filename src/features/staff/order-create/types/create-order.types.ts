@@ -19,6 +19,7 @@ export type DishDto = {
   price: number;
   chefRecommended?: boolean | null;
   displayOrder?: number | null;
+  imageUrl?: string | null;
   i18n: Record<string, LocalizedDishInfo>;
 };
 
@@ -55,7 +56,7 @@ export type CreateOrderItemDto = {
 
 export type CreateOrderRequest = {
   tableId?: number;
-  customerId?: number;
+  customer?: OrderCustomerDto | null;
   source: OrderSourceCode;
   items: CreateOrderItemDto[];
 };
@@ -64,4 +65,20 @@ export type CartItem = DishDto & {
   quantity: number;
   localName: string;
   note?: string;
+};
+
+export type RecentOrderDto = {
+  orderId: number;
+  customerName: string;
+  source: 'DINE_IN' | 'TAKEAWAY';
+  tableCode?: string | null;
+  createdAt: string;
+  status: 'PENDING' | 'IN_PROGRESS' | 'COMPLETED' | 'CANCELLED';
+};
+
+export type OrderCustomerDto = {
+  customerId?: number | null;
+  fullName?: string;
+  phone?: string;
+  email?: string;
 };

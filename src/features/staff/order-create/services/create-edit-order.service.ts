@@ -1,6 +1,6 @@
 import { api } from "@/lib/http";
 import { ApiResponse } from "@/types/api-response.types";
-import { DishDto, TableDto, CustomerDto, CreateOrderRequest, CategoryDto } from "../types/create-order.types";
+import { DishDto, TableDto, CustomerDto, CreateOrderRequest, CategoryDto, RecentOrderDto } from "../types/create-order.types";
 import { AddOrderItemsRequest, OrderDetailDto } from "../types/edit-order.types";
 
 export const createOrderService = {
@@ -24,7 +24,13 @@ export const createOrderService = {
     return res.data;
   },
 
+  getCustomerById: async (id: number): Promise<CustomerDto> => {
+    const res = await api.get<ApiResponse<CustomerDto>>(`/api/customers/${id}`);
+    return res.data;
+  },
+
   createOrder: async (payload: CreateOrderRequest): Promise<void> => {
+    console.log(payload);
     await api.post<ApiResponse<any>>('/api/orders/staff', payload);
   },
 
@@ -32,7 +38,13 @@ export const createOrderService = {
     const res = await api.get<ApiResponse<OrderDetailDto>>(`/api/orders/${id}`);
     return res.data;
   },
+
   addItemsToOrder: async (orderId: number, payload: AddOrderItemsRequest): Promise<void> => {
     await api.post(`/api/orders/staff/${orderId}/items`, payload);
+  },
+
+  getRecentOrders: async (limit: number = 20): Promise<RecentOrderDto[]> => {
+    const res = await api.get<ApiResponse<RecentOrderDto[]>>(`/api/orders/recent?limit=${limit}`);
+    return res.data;
   }
 };

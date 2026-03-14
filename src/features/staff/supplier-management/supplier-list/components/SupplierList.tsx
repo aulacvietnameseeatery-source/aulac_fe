@@ -245,6 +245,7 @@ export default function SupplierList() {
         supplier={selectedSupplier}
         onClose={handleCloseSupplierModal}
         onSubmit={handleSubmitSupplier}
+        onEdit={() => setSupplierModalMode("edit")}
         isSubmitting={isSubmitting}
       />
     </>

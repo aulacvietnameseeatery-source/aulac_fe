@@ -3,14 +3,15 @@
 import React from "react";
 import { Loader2 } from "lucide-react";
 import { KitchenOrderCard } from "./KitchenOrderCard";
-import type { KitchenOrder } from "../types/kitchen.types";
+import type { KitchenOrder, UpdateItemStatusRequest } from "../types/kitchen.types";
 
 interface KitchenOrderGridProps {
     orders: KitchenOrder[];
     loading: boolean;
-    onUpdateStatus: (orderItemId: number, status: string, rejectReason?: string) => void;
-    onBatchUpdateStatus: (updates: { orderItemId: number; status: string; rejectReason?: string }[]) => void;
+    onUpdateStatus: (orderItemId: number, status: UpdateItemStatusRequest['status'], rejectReason?: string) => void;
+    onBatchUpdateStatus: (updates: { orderItemId: number; status: UpdateItemStatusRequest['status']; rejectReason?: string }[]) => void;
     isUpdating: boolean;
+    isItemUpdating: (orderItemId: number) => boolean;
     t: any;
 }
 
@@ -20,6 +21,7 @@ export function KitchenOrderGrid({
     onUpdateStatus,
     onBatchUpdateStatus,
     isUpdating,
+    isItemUpdating,
     t
 }: KitchenOrderGridProps) {
     if (loading) {
@@ -64,6 +66,7 @@ export function KitchenOrderGrid({
                     onUpdateStatus={onUpdateStatus}
                     onBatchUpdateStatus={onBatchUpdateStatus}
                     isUpdating={isUpdating}
+                    isItemUpdating={isItemUpdating}
                     t={t}
                 />
             ))}

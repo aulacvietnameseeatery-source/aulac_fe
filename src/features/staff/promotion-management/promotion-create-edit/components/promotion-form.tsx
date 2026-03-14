@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useMemo } from "react";
 import { Controller } from "react-hook-form";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
@@ -11,6 +11,7 @@ import { ALCombobox } from "@/components/ui/al-combobox/al-combobox";
 import { PromotionFormValues } from "../schemas/promotion.schema";
 import { useTranslations } from "next-intl";
 import { ALInput } from "@/components/ui/al-input";
+import { Button } from "@/components/ui/button";
 
 interface Props {
   initialData?: PromotionFormValues;
@@ -25,6 +26,11 @@ export const PromotionForm = ({ initialData, isEditMode = false, onSubmitAction 
   const { form, dishOpts, cateOpts, currentStatus, permissions } = usePromotionForm(initialData, isEditMode);
   const { register, control, handleSubmit, watch, formState: { errors, isSubmitting } } = form;
   const { canEditCore, canEditEndTime, canDisable } = permissions;
+
+  const typeOptions = useMemo(() => [
+    { value: "PERCENT", label: t("typePercent") },
+    { value: "FIXED_AMOUNT", label: t("typeFixed") }
+  ], [t]);
 
   const onSubmit = async (data: PromotionFormValues) => {
     try {
@@ -111,10 +117,19 @@ export const PromotionForm = ({ initialData, isEditMode = false, onSubmitAction 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
             <label className="text-sm font-semibold text-slate-700">{t("discountType")}</label>
-            <select {...register("type")} className="w-full border px-3 py-2 rounded-lg mt-1 bg-white">
-              <option value="PERCENT">{t("typePercent")}</option>
-              <option value="FIXED_AMOUNT">{t("typeFixed")}</option>
-            </select>
+            <Controller
+              control={control}
+              name="type"
+              render={({ field }) => (
+                <ALCombobox
+                  options={typeOptions}
+                  value={field.value}
+                  onChange={(val) => field.onChange(val)}
+                  placeholder="Select type"
+                  error={errors.type?.message}
+                />
+              )}
+            />
           </div>
           <div className="space-y-1.5">
             <label className="text-sm font-semibold text-slate-700">{t("discountValue")}</label>
@@ -190,12 +205,23 @@ export const PromotionForm = ({ initialData, isEditMode = false, onSubmitAction 
 
         </div>
         <div className="flex gap-3 w-full sm:w-auto">
-          <button type="button" onClick={() => router.back()} className="px-6 py-2.5 border border-slate-300 rounded-lg font-semibold text-slate-700 hover:bg-slate-50 transition-colors w-full sm:w-auto text-center">
+          <Button 
+            type="button" 
+            variant="outline" 
+            onClick={() => router.back()} 
+            className="w-full sm:w-auto"
+          >
             {t("btnCancel")}
-          </button>
-          <button type="submit" disabled={isSubmitting || currentStatus === "EXPIRED" || currentStatus === "DISABLED"} className="px-8 py-2.5 bg-[#1A3A51] text-white rounded-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#122b3e] transition-colors w-full sm:w-auto">
+          </Button>
+          <Button 
+            type="submit" 
+            variant="default"
+            isLoading={isSubmitting}
+            disabled={currentStatus === "EXPIRED" || currentStatus === "DISABLED"} 
+            className="w-full sm:w-auto"
+          >
             {isSubmitting ? t("btnSaving") : t("btnSave")}
-          </button>
+          </Button>
         </div>
       </div>
     </form>

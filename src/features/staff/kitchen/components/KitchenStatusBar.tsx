@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import type { KitchenDisplayStatus } from "../utils/kitchen-status";
 
 interface KitchenStatusBarProps {
     orderCounts: {
@@ -10,8 +11,8 @@ interface KitchenStatusBarProps {
         rejected: number;
         completed: number;
     };
-    activeStatus: string | null;
-    onStatusChange: (status: string | null) => void;
+    activeStatus: KitchenDisplayStatus;
+    onStatusChange: (status: KitchenDisplayStatus) => void;
     t: any;
 }
 
@@ -61,7 +62,7 @@ export function KitchenStatusBar({ orderCounts, activeStatus, onStatusChange, t 
                 return (
                     <button
                         key={status.key}
-                        onClick={() => onStatusChange(isActive ? null : status.key)}
+                        onClick={() => onStatusChange(status.key as KitchenDisplayStatus)}
                         className={`flex items-center gap-2 px-2.5 py-1 border rounded-lg shadow-sm h-8 shrink-0 transition-all ${isActive
                             ? "bg-gray-900 border-gray-900"
                             : "bg-white border-gray-100 hover:border-gray-200"
