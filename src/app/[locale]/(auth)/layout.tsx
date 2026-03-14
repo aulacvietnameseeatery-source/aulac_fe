@@ -41,7 +41,7 @@ export default function DashboardLayout({
   return (
     <div className="main-container relative min-h-screen bg-[#F8F9FA]">
       {/* Mobile Header for Toggle */}
-      <div className="md:hidden fixed top-0 left-0 right-0 z-40 bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between shadow-sm">
+      <div className="md:hidden fixed top-0 left-0 right-0 z-40 bg-white border-b border-gray-200 px-4 py-2 flex items-center justify-between shadow-sm">
         <div className="flex items-center gap-3">
           <button
             onClick={() => setIsMobileMenuOpen(true)}
@@ -49,7 +49,7 @@ export default function DashboardLayout({
           >
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
           </button>
-          <span className="font-display font-bold text-[#1A3A51] text-lg">An Lac Admin</span>
+          <span className="font-display font-bold text-[#1A3A51] text-base">An Lac Admin</span>
         </div>
         <LanguageSwitcher variant="admin" isMobile={true} />
       </div>
@@ -81,7 +81,7 @@ export default function DashboardLayout({
         <div className="main-right flex-1 flex flex-col h-full overflow-hidden">
           
           {/* --- UPDATED DESKTOP TOP BAR --- */}
-          <header className="hidden md:flex items-center justify-between px-6 py-3 bg-white border-b border-gray-100 shadow-sm">
+          <header className="hidden md:flex items-center justify-between px-6 py-2 bg-white border-b border-gray-100 shadow-sm">
             {/* Quick Navigation Buttons */}
             <DashboardTopNav />
 

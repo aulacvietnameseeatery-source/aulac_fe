@@ -9,10 +9,10 @@ import { EditTicket } from './edit-ticket';
 import { RecentOrders } from './recent-orders';
 import { DishDetailModal } from './dish-detail-modal';
 import { OrderDetailDto } from '../types/edit-order.types';
-import { DishDto } from '../types/create-order.types';
+import { DishDto, CustomerDto } from '../types/create-order.types';
 import { Dialog } from '@/components/ui/dialog';
 import { AlertTriangle, Menu } from 'lucide-react';
-import { InvoiceModal } from './invoice-modal';
+import { CustomerSearchModal } from './customer-search-modal';
 import { toast } from 'sonner';
 import { OrderHistory, OrderItem } from '../../order-management/types/order-history.types';
 import { PrintOrderModal } from '../../order-management/components/PrintOrderModal';
@@ -25,9 +25,13 @@ export const EditOrderPage = ({ orderId }: { orderId: number }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [isPrintModalOpen, setIsPrintModalOpen] = useState(false);
+  const [showCustomerPopup, setShowCustomerPopup] = useState(false);
   
   const [selectedDish, setSelectedDish] = useState<DishDto | null>(null);
   const [showMobileTicket, setShowMobileTicket] = useState(false);
+
+  const [customer, setCustomer] = useState<Partial<CustomerDto> | null>(null);
+  const [initialCustomer, setInitialCustomer] = useState<Partial<CustomerDto> | null>(null);
 
   const { 
     locale, isLoading: isMenuLoading, dishes, categories, cart: newCart, 
@@ -41,6 +45,24 @@ export const EditOrderPage = ({ orderId }: { orderId: number }) => {
       try {
         const data = await createOrderService.getOrderById(orderId);
         setOrderInfo(data);
+
+        if (data.customerId) {
+          if (data.customerId !== 68) {
+            try {
+              const fullCustomerData = await createOrderService.getCustomerById(data.customerId);
+              setCustomer(fullCustomerData); 
+              setInitialCustomer(fullCustomerData);
+            } catch (customerError) {
+              const fallbackCustomer = { customerId: data.customerId, fullName: data.customerName };
+              setCustomer(fallbackCustomer);
+              setInitialCustomer(fallbackCustomer);
+            }
+          } else {
+            const guestCustomer = { customerId: data.customerId, fullName: data.customerName };
+            setCustomer(guestCustomer);
+            setInitialCustomer(guestCustomer);
+          }
+        }
       } catch (error) {
         console.error("Failed to fetch order", error);
       } finally {
@@ -53,7 +75,7 @@ export const EditOrderPage = ({ orderId }: { orderId: number }) => {
   const handleSubmitAttempt = () => {
     if (!orderInfo) return;
     
-    if (orderInfo.orderStatus === 'Completed' && !orderInfo.isPaid) {
+    if (orderInfo.orderStatus === 'Completed' && !orderInfo.isPaid && newCartTotal > 0) {
       setShowConfirmModal(true);
     } else {
       executeAddItems();
@@ -61,28 +83,37 @@ export const EditOrderPage = ({ orderId }: { orderId: number }) => {
   };
 
   const executeAddItems = async () => {
-    if (!orderInfo || newCart.length === 0) return;
+    if (!orderInfo) return;
     setIsSubmitting(true);
     try {
-      const addItemsPromise = createOrderService.addItemsToOrder(orderInfo.orderId, {
+      const payload = {
+        // Map object Customer
+        customer: customer ? {
+          customerId: customer.customerId === 0 ? null : customer.customerId,
+          fullName: customer.fullName,
+          phone: customer.phone,
+          email: customer.email
+        } : null,
         items: newCart.map(i => ({ dishId: i.dishId, quantity: i.quantity, note: i.note }))
-      }).then(async () => {
+      };
+
+      const addItemsPromise = createOrderService.addItemsToOrder(orderInfo.orderId, payload as any).then(async () => {
         // Reload data
         const updatedOrder = await createOrderService.getOrderById(orderInfo.orderId);
         setOrderInfo(updatedOrder);
         clearCart();
         setShowConfirmModal(false);
-        setShowMobileTicket(false); // Đóng ticket trên mobile sau khi add xong
+        setShowMobileTicket(false); 
       });
       toast.promise(addItemsPromise, {
-        loading: 'Đang thêm món...',
+        loading: t('saving'),
         success: t('successMessage'),
-        error: 'Có lỗi xảy ra khi thêm món!',
+        error: t('errorMessage'),
       });
       
     } catch (error) {
       console.error(error);
-      toast.error('Error adding items');
+      toast.error(t('errorMessage'));
     } finally {
       setIsSubmitting(false);
     }
@@ -117,15 +148,6 @@ export const EditOrderPage = ({ orderId }: { orderId: number }) => {
   if (!orderInfo) {
     return <div className="p-10 text-center text-[#8C3A3A] font-bold">Order not found.</div>;
   }
-
-  const combinedCartForInvoice = [
-    ...(orderInfo?.orderItems.map(item => ({
-      dishId: item.dishId, quantity: item.quantity, price: item.price,
-      localName: item.dishName, note: item.note || undefined,
-      categoryId: 0, imageBase64: '', isActive: true, i18n: {} 
-    })) || []),
-    ...newCart
-  ];
 
   function toOrderSourceCode(value: string): string {
     return value.trim().toUpperCase().replace(/[-\s]+/g, "_");
@@ -177,6 +199,12 @@ export const EditOrderPage = ({ orderId }: { orderId: number }) => {
     itemCount: totalItemCount
   };
 
+  const isCustomerChanged = 
+    customer?.customerId !== initialCustomer?.customerId ||
+    customer?.fullName !== initialCustomer?.fullName ||
+    customer?.phone !== initialCustomer?.phone ||
+    customer?.email !== initialCustomer?.email;
+
   return (
     <div className="flex flex-col lg:flex-row h-[100dvh] lg:h-full w-full font-sans overflow-hidden">
       
@@ -227,11 +255,14 @@ export const EditOrderPage = ({ orderId }: { orderId: number }) => {
         <EditTicket 
           orderInfo={orderInfo}
           newCart={newCart}
+          customer={customer}
+          onOpenCustomerModal={() => setShowCustomerPopup(true)}
           onUpdateQuantity={updateQuantity}
           onUpdateNote={updateNote}
           onRemoveFromCart={removeFromCart}
           onClearCart={clearCart}
           onSubmitItems={handleSubmitAttempt}
+          isCustomerChanged={isCustomerChanged}
           onCreateInvoice={() => setIsPrintModalOpen(true)}
           onCloseMobile={() => setShowMobileTicket(false)}
         />
@@ -252,6 +283,13 @@ export const EditOrderPage = ({ orderId }: { orderId: number }) => {
         getLocalizedDishName={getLocalizedDishName}
       />
 
+      <CustomerSearchModal 
+        isOpen={showCustomerPopup} 
+        onClose={() => setShowCustomerPopup(false)} 
+        currentCustomer={customer} 
+        onSelectCustomer={setCustomer} 
+      />
+
       <PrintOrderModal
         order={mappedOrderHistory}
         isOpen={isPrintModalOpen}
@@ -269,7 +307,7 @@ export const EditOrderPage = ({ orderId }: { orderId: number }) => {
               {t('cancel')}
             </button>
             <button disabled={isSubmitting} onClick={executeAddItems} className="px-4 py-2 font-bold bg-[#1A3A52] text-[#D5BA98] rounded-lg flex items-center gap-2 hover:bg-[#1A3A52]/90 transition">
-              {isSubmitting ? 'Loading...' : t('confirmChangeStatus')}
+              {isSubmitting ? t('loading') : t('confirmChangeStatus')}
             </button>
           </div>
         }

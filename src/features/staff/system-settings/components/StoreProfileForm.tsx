@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
-import { ImagePlus, Trash2, Save, Loader2, Upload } from 'lucide-react';
+import { ImagePlus, Trash2, Save, Loader2, Upload, Facebook, Instagram, Music2 as Tiktok } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { getGroupSettings, updateGroupSettings, uploadLogo } from '../services/system-setting.service';
 import { BulkUpdateSettingItemDto } from '../types/system-setting.types';
@@ -25,6 +25,9 @@ export const StoreProfileForm = () => {
         email: '',
         phone: '',
         openingHours: '',
+        facebookLink: '',
+        instagramLink: '',
+        tiktokLink: '',
     });
 
     useEffect(() => {
@@ -89,7 +92,10 @@ export const StoreProfileForm = () => {
                 country: 'Country / Region',
                 email: 'Email',
                 phone: 'Phone',
-                openingHours: 'Opening Hours'
+                openingHours: 'Opening Hours',
+                facebookLink: 'Facebook Link',
+                instagramLink: 'Instagram Link',
+                tiktokLink: 'TikTok Link'
             };
 
             const items: BulkUpdateSettingItemDto[] = Object.entries(formData).map(([key, value]) => ({
@@ -318,13 +324,61 @@ export const StoreProfileForm = () => {
                 </div>
             </div>
 
+            {/* Social Media Section */}
+            <div className="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
+                <div className="px-6 py-4 border-b border-gray-100 bg-gray-50/50">
+                    <h3 className="text-lg font-bold text-gray-900">{t('socialMedia')}</h3>
+                    <p className="text-sm text-gray-500 mt-0.5">{t('socialMediaDesc')}</p>
+                </div>
+                <div className="p-6 space-y-6">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div>
+                            <label className="flex items-center text-sm font-bold text-gray-700 mb-2 uppercase tracking-wide">
+                                <Facebook className="w-4 h-4 mr-2 text-blue-600" />
+                                {t('facebookLink')}
+                            </label>
+                            <Input
+                                placeholder={t('facebookPlaceholder')}
+                                value={formData.facebookLink}
+                                onChange={(e) => handleChange('facebookLink', e.target.value)}
+                                className="h-12 text-base"
+                            />
+                        </div>
+                        <div>
+                            <label className="flex items-center text-sm font-bold text-gray-700 mb-2 uppercase tracking-wide">
+                                <Instagram className="w-4 h-4 mr-2 text-pink-600" />
+                                {t('instagramLink')}
+                            </label>
+                            <Input
+                                placeholder={t('instagramPlaceholder')}
+                                value={formData.instagramLink}
+                                onChange={(e) => handleChange('instagramLink', e.target.value)}
+                                className="h-12 text-base"
+                            />
+                        </div>
+                        <div>
+                            <label className="flex items-center text-sm font-bold text-gray-700 mb-2 uppercase tracking-wide">
+                                <Tiktok className="w-4 h-4 mr-2 text-black" />
+                                {t('tiktokLink')}
+                            </label>
+                            <Input
+                                placeholder={t('tiktokPlaceholder')}
+                                value={formData.tiktokLink}
+                                onChange={(e) => handleChange('tiktokLink', e.target.value)}
+                                className="h-12 text-base"
+                            />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             {/* Sticky Actions Bar - Align with DishForm style */}
             <div className="pt-8 flex items-center justify-end gap-4 border-t border-gray-200 mt-10 pb-10">
                 <Button
-                    variant="ghost"
+                    variant="outline"
                     onClick={loadSettings}
                     disabled={isSaving}
-                    className="px-6 h-11 text-sm font-semibold text-gray-500 hover:text-gray-900 hover:bg-gray-100 transition-all"
+                    className="px-6 h-11 text-sm font-semibold text-gray-500 hover:text-gray-900 border-gray-300 transition-all"
                 >
                     {t('reset')}
                 </Button>

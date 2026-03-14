@@ -1195,7 +1195,7 @@
         "editDescription": "Update the information of this dish."
       },
       "actions": {
-        "discard": "Discard",
+        "cancel": "Cancel",
         "createDish": "Create Dish",
         "createing": "Creating...",
         "saveChanges": "Save Changes",
@@ -1366,6 +1366,7 @@
         "actions": "Actions",
         "note": "Note",
         "rejectReason": "Reject Reason",
+        "guest": "Guest",
         "source": {
           "DINE_IN": "Dine In",
           "TAKE_AWAY": "Take Away",
@@ -1448,14 +1449,19 @@
       "addMoreItemsHint": "Select items from the left menu to add",
       "paidOrderWarning": "This order has been paid. Please create a new order.",
       "cancelledOrderWarning": "The order has been cancelled. It is not possible to edit or print the invoice.",
-      "addItemsButton": "Add Items to Order",
+      "change": "Change",
+      "table": "Table",
+      "addItemsButton": "Save Changes",
       "createInvoice": "Create Invoice",
       "createReceipt": "Create Receipt",
       "newTotal": "Estimated Total",
       "warningTitle": "Confirm Adding Items",
       "completedOrderWarning": "This order is completed but not yet paid. Adding new items will change the order status back to In Progress. Are you sure?",
       "confirmChangeStatus": "Confirm Add",
-      "successMessage": "Items added successfully!",
+      "saving": "Saving...",
+      "successMessage": "Changes saved successfully!",
+      "errorMessage": "An error occurred!",
+      "loading":"Loading...",
       "takeAway": "Take Away",
       "guest": "Guest",
       "notePlaceholder": "Item note...",
@@ -1464,7 +1470,9 @@
         "In progress": "In Progress",
         "Completed": "Completed",
         "Cancelled": "Cancelled"
-      }
+      },
+      "tableLabel": "Table",
+      "customerLabel": "Customer"
     },
     "RecentOrders": {
       "title": "Recent Orders",
@@ -1504,16 +1512,19 @@
       "card": "Card",
       "scan": "Scan",
       "discount": "Discount",
-      "tips": "Tips",
       "coupon": "Coupon",
-      "add": "Add",
+      "tip": "Tip",
       "givenAmount": "Given Amount",
       "balance": "Balance",
       "note": "Note",
       "notePlaceholder": "Enter payment note...",
       "close": "Close",
       "payAndComplete": "Pay & Complete Order",
-      "paying": "Processing..."
+      "paying": "Processing...",
+      "enterTip": "Enter tip amount",
+      "selectDiscount": "Select or enter discount",
+      "selectCoupon": "Select coupon",
+      "promotions": "Promotions"
     }
   },
   "AdminSidebar": {
@@ -1557,6 +1568,13 @@
     "shiftsLive": "Live Board",
     "shiftsReports": "Shift Reports",
     "myShifts": "My Shifts"
+  },
+  "DashboardTopNav": {
+    "pos": "POS",
+    "orders": "Orders",
+    "kitchen": "Kitchen",
+    "reservation": "Reservations",
+    "table": "Tables"
   },
   "ShiftManagement": {
     "Common": {
@@ -1779,6 +1797,7 @@
     "refresh": "Refresh",
     "searchPlaceholder": "Search by table, order ID, dish...",
     "liveUpdates": "Live updates",
+    "tokenNo": "Token No:",
     "note": "Note",
     "orderType": "Dine-in",
     "tabs": {
@@ -1795,14 +1814,20 @@
       "new": "New",
       "inKitchen": "In Kitchen",
       "rejected": "Rejected",
-      "completed": "Completed"
+      "completed": "Completed",
+      "CREATED": "New",
+      "IN_PROGRESS": "Preparing",
+      "READY": "Ready",
+      "SERVED": "Served",
+      "REJECTED": "Rejected"
     },
     "actions": {
       "print": "Print Order",
       "markDone": "Mark Done",
       "start": "Start",
       "serve": "Serve",
-      "reject": "Reject"
+      "reject": "Reject",
+      "cancel": "Cancel"
     },
     "rejectReason": {
       "label": "Reason",
@@ -2044,6 +2069,8 @@
       "contactLocationDesc": "Address details and store contact information.",
       "operating": "Operations",
       "operatingDesc": "Business hours and other operational details.",
+      "socialMedia": "Social Media",
+      "socialMediaDesc": "Your store's social media presence.",
       "changeLogo": "Change Logo",
       "uploadLogo": "Upload Logo",
       "remove": "Remove",
@@ -2063,6 +2090,12 @@
       "phonePlaceholder": "+84 123 456 789",
       "openingHours": "Opening Hours",
       "openingHoursPlaceholder": "E.g. Mon - Sun: 08:00 AM - 10:00 PM",
+      "facebookLink": "Facebook Link",
+      "facebookPlaceholder": "https://facebook.com/yourpage",
+      "instagramLink": "Instagram Link",
+      "instagramPlaceholder": "https://instagram.com/yourprofile",
+      "tiktokLink": "TikTok Link",
+      "tiktokPlaceholder": "https://tiktok.com/@yourprofile",
       "saveChanges": "Save Changes",
       "reset": "Reset",
       "saving": "Saving...",

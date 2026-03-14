@@ -7,7 +7,6 @@ import { MenuCatalog } from './menu-catalog';
 import { CurrentTicket } from './current-ticket';
 import { TableSelectionModal } from './table-selection-modal';
 import { CustomerSearchModal } from './customer-search-modal';
-import { InvoiceModal } from './invoice-modal';
 import { RecentOrders } from './recent-orders';
 import { DishDetailModal } from './dish-detail-modal';
 import { useTranslations } from 'next-intl';
@@ -35,7 +34,12 @@ export const CreateOrderPage = () => {
     try {
       await createOrderService.createOrder({
         tableId: selectedTable?.tableId,
-        customerId: customer?.customerId,
+        customer: customer ? {
+          customerId: customer.customerId === 0 ? null : customer.customerId,
+          fullName: customer.fullName,
+          phone: customer.phone,
+          email: customer.email
+        } : undefined,
         source: orderType,
         items: cart.map(item => ({ 
           dishId: item.dishId, 
@@ -53,16 +57,16 @@ export const CreateOrderPage = () => {
     }
   };
 
-  // Hàm xử lý thêm món với số lượng tùy chỉnh từ Modal
+  // The Modal function handles adding items with custom quantities.
   const handleAddDishWithQuantity = (dish: DishDto, quantity: number) => {
     const existing = cart.find(item => item.dishId === dish.dishId);
     if (!existing) {
-      addToCart(dish); // Add lần đầu (hook mặc định là 1)
+      addToCart(dish); 
       if (quantity > 1) {
-        updateQuantity(dish.dishId, quantity - 1); // Cộng thêm phần dư
+        updateQuantity(dish.dishId, quantity - 1); 
       }
     } else {
-      updateQuantity(dish.dishId, quantity); // Nếu đã có thì cộng thêm
+      updateQuantity(dish.dishId, quantity); 
     }
     setSelectedDish(null);
   };
@@ -75,12 +79,12 @@ export const CreateOrderPage = () => {
     );
   }
 
-  // ── MAPPING SANG DỮ LIỆU CỦA PRINT ORDER MODAL ──
+  // ──MAPPING DATA TO PRINT ORDER MODAL ──
   function toOrderSourceCode(value: string): string {
     return value.trim().toUpperCase().replace(/[-\s]+/g, "_");
   }
 
-  // Tạo OrderItems từ giỏ hàng hiện tại
+  // Create Order Items from the current shopping cart
   const mappedOrderItems: OrderItem[] = cart.map((item, index) => ({
     orderItemId: -(index + 1), // Temporary ID
     dishId: item.dishId,
@@ -115,7 +119,7 @@ export const CreateOrderPage = () => {
   return (
     <div className="flex flex-col lg:flex-row h-[100dvh] lg:h-full w-full font-sans overflow-hidden">
       
-      {/* ── Nút mở Ticket trên Mobile ── */}
+      {/* ── Ticket opening button on Mobile ── */}
       {!showMobileTicket && (
         <button 
           onClick={() => setShowMobileTicket(true)}

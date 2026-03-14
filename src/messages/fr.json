@@ -1191,7 +1191,7 @@
         "editDescription": "Mettre à jour les informations du plat."
       },
       "actions": {
-        "discard": "Annuler",
+        "cancel": "Cancelar",
         "createDish": "Créer le plat",
         "creating": "Création...",
         "saveChanges": "Enregistrer",
@@ -1362,6 +1362,7 @@
         "actions": "Actions",
         "note": "Note",
         "rejectReason": "Raison du rejet",
+        "guest": "Invité",
         "source": {
           "DINE_IN": "Sur place",
           "TAKE_AWAY": "À emporter",
@@ -1444,6 +1445,8 @@
       "addMoreItemsHint": "Sélectionnez des articles dans le menu à gauche pour les ajouter",
       "paidOrderWarning": "Cette commande a été payée. Veuillez créer une nouvelle commande.",
       "cancelledOrderWarning": "La commande a été annulée. Il est impossible de modifier ou d'imprimer la facture.",
+      "change": "Modifier",
+      "table": "Table",
       "addItemsButton": "Ajouter des articles à la commande",
       "createInvoice": "Créer la facture",
       "createReceipt": "Créer un reçu",
@@ -1451,7 +1454,10 @@
       "warningTitle": "Confirmer l'ajout",
       "completedOrderWarning": "Cette commande est terminée mais non payée. Ajouter de nouveaux articles remettra la commande au statut En cours. Êtes-vous sûr ?",
       "confirmChangeStatus": "Confirmer l'ajout",
-      "successMessage": "Articles ajoutés avec succès !",
+      "saving": "Enregistrement...",
+      "successMessage": "Modifications enregistrées avec succès !",
+      "errorMessage": "Une erreur est survenue !",
+      "loading": "Chargement...",
       "takeAway": "À emporter",
       "guest": "Client",
       "notePlaceholder": "Note sur l'article...",
@@ -1460,7 +1466,9 @@
         "In progress": "En cours",
         "Completed": "Terminé",
         "Cancelled": "Annulé"
-      }
+      },
+      "tableLabel": "Table",
+      "customerLabel": "Client"
     },
     "RecentOrders": {
       "title": "Commandes récentes",
@@ -1509,7 +1517,11 @@
       "notePlaceholder": "Saisir une note de paiement...",
       "close": "Fermer",
       "payAndComplete": "Payer & Terminer la commande",
-      "paying": "Traitement..."
+      "paying": "Traitement...",
+      "enterTip": "Saisir le montant du pourboire",
+      "selectDiscount": "Sélectionner ou saisir une remise",
+      "selectCoupon": "Sélectionner un coupon",
+      "promotions": "Promotions"
     }
   },
   "AdminSidebar": {
@@ -1553,6 +1565,13 @@
     "shiftsLive": "Tableau de Présence",
     "shiftsReports": "Rapports de Quart",
     "myShifts": "Mes Quarts"
+  },
+  "DashboardTopNav": {
+    "pos": "Caisse (POS)",
+    "orders": "Commandes",
+    "kitchen": "Cuisine",
+    "reservation": "Réservations",
+    "table": "Tables"
   },
   "ShiftManagement": {
     "Common": {
@@ -1775,6 +1794,7 @@
     "refresh": "Actualiser",
     "searchPlaceholder": "Rechercher une table, une commande, un plat...",
     "liveUpdates": "Mises à jour en direct",
+    "tokenNo": "N° de jeton:",
     "note": "Note",
     "orderType": "Sur place",
     "tabs": {
@@ -1791,14 +1811,20 @@
       "new": "Nouveau",
       "inKitchen": "En cuisine",
       "rejected": "Rejeté",
-      "completed": "Terminé"
+      "completed": "Terminé",
+      "CREATED": "Nouveau",
+      "IN_PROGRESS": "En préparation",
+      "READY": "Prêt",
+      "SERVED": "Servi",
+      "REJECTED": "Rejeté"
     },
     "actions": {
       "print": "Imprimer la commande",
       "markDone": "Terminer",
       "start": "Commencer",
       "serve": "Servir",
-      "reject": "Rejeter"
+      "reject": "Rejeter",
+      "cancel": "Annuler"
     },
     "rejectReason": {
       "label": "Raison",
@@ -2040,6 +2066,8 @@
       "contactLocationDesc": "Détails de l'adresse et coordonnées du magasin.",
       "operating": "Opérations",
       "operatingDesc": "Heures d'ouverture et autres détails opérationnels.",
+      "socialMedia": "Réseaux Sociaux",
+      "socialMediaDesc": "La présence de votre magasin sur les réseaux sociaux.",
       "changeLogo": "Changer le logo",
       "uploadLogo": "Télécharger le logo",
       "remove": "Supprimer",
@@ -2059,6 +2087,12 @@
       "phonePlaceholder": "+33 1 23 45 67 89",
       "openingHours": "Heures d'ouverture",
       "openingHoursPlaceholder": "Ex : lun - dim : 08h00 - 22h00",
+      "facebookLink": "Lien Facebook",
+      "facebookPlaceholder": "https://facebook.com/votrepage",
+      "instagramLink": "Lien Instagram",
+      "instagramPlaceholder": "https://instagram.com/votreprofil",
+      "tiktokLink": "Lien TikTok",
+      "tiktokPlaceholder": "https://tiktok.com/@votreprofil",
       "saveChanges": "Enregistrer les modifications",
       "reset": "Réinitialiser",
       "saving": "Enregistrement...",

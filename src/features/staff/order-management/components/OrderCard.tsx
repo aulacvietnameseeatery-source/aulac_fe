@@ -66,11 +66,6 @@ const ACTION_ICONS: Record<ActionKey, { icon: React.ReactNode; danger?: boolean 
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
 
-function formatCurrency(amount: number) {
-    // Format with en-US to ensure dot for decimals instead of comma
-    return `CHF ${amount.toLocaleString('en-US')}`;
-}
-
 const VISIBLE_ITEMS_COUNT = 3;
 
 // ─── Props ───────────────────────────────────────────────────────────────────
@@ -110,13 +105,13 @@ export const OrderCard: React.FC<OrderCardProps> = ({ order, onStatusChange, onA
     // Filter context actions
     const contextActions: ActionKey[] = (STATUS_ACTIONS[order.orderStatus] ?? ['view']).filter(action => {
         if (action === 'print') {
-            return order.orderStatus === 'Completed' && order.isPaid;
+            return order.orderStatus === 'Completed' && !order.isPaid;
         }
         if (action === 'pay') {
             return order.orderStatus === 'Completed' && !order.isPaid;
         }
         if (action === 'printReceipt') {
-            return order.orderStatus === 'Completed' && !order.isPaid;
+            return order.orderStatus === 'Completed' && order.isPaid;
         }
         return true;
     });
@@ -161,7 +156,10 @@ export const OrderCard: React.FC<OrderCardProps> = ({ order, onStatusChange, onA
     };
 
     return (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 flex flex-col hover:shadow-md transition-shadow duration-200">
+        <div
+            className="bg-white rounded-xl shadow-sm border border-gray-100 flex flex-col hover:shadow-md transition-shadow duration-200 cursor-pointer"
+            onClick={() => onAction?.(order.orderId, 'view')}
+        >
             <div className="p-4 flex flex-col flex-1">
 
                 {/* ── Header ── */}
@@ -215,7 +213,7 @@ export const OrderCard: React.FC<OrderCardProps> = ({ order, onStatusChange, onA
                         {/* 3-dot actions menu */}
                         <div className="relative" ref={actionsRef}>
                             <button
-                                onClick={() => { setActionsOpen(o => !o); }}
+                                onClick={(e) => { e.stopPropagation(); setActionsOpen(o => !o); }}
                                 className="p-1 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
                                 title={t('actions')}
                             >
@@ -223,13 +221,16 @@ export const OrderCard: React.FC<OrderCardProps> = ({ order, onStatusChange, onA
                             </button>
 
                             {actionsOpen && (
-                                <div className="absolute right-0 top-full mt-1 z-50 bg-white border border-gray-200 rounded-lg shadow-lg w-44 py-1 text-xs">
+                                <div
+                                    className="absolute right-0 top-full mt-1 z-50 bg-white border border-gray-200 rounded-lg shadow-lg w-44 py-1 text-xs"
+                                    onClick={(e) => e.stopPropagation()}
+                                >
                                     {contextActions.map(key => {
                                         const iconWrap = ACTION_ICONS[key];
                                         return (
                                             <button
                                                 key={key}
-                                                onClick={() => handleActionClick(key)}
+                                                onClick={(e) => { e.stopPropagation(); handleActionClick(key); }}
                                                 className={`w-full text-left flex items-center gap-2 px-3 py-2 hover:bg-gray-50 transition-colors ${iconWrap.danger ? 'text-red-600 hover:bg-red-50' : 'text-gray-700'}`}
                                             >
                                                 {iconWrap.icon}
@@ -245,9 +246,16 @@ export const OrderCard: React.FC<OrderCardProps> = ({ order, onStatusChange, onA
 
                 {/* ── Meta row ── */}
                 <div className="flex items-center justify-between mb-3">
-                    <span className="text-xs font-medium text-gray-700">
-                        {order.customerName ?? order.staffName}
-                    </span>
+                    <div className="min-w-0">
+                        <span className="text-xs font-medium text-gray-700 block truncate">
+                            {order.customerName ?? order.staffName}
+                        </span>
+                        {order.tableCode && (
+                            <span className="text-[11px] text-blue-700 font-semibold block mt-0.5">
+                                {t('table')} {order.tableCode}
+                            </span>
+                        )}
+                    </div>
                     <div className="flex items-center gap-1.5 text-sm font-semibold text-gray-700">
                         <Clock className="w-4 h-4" />
                         {order.createdAt ? format.dateTime(new Date(order.createdAt), { hour: '2-digit', minute: '2-digit' }) : '—'}
@@ -266,7 +274,7 @@ export const OrderCard: React.FC<OrderCardProps> = ({ order, onStatusChange, onA
                                     </div>
                                     <div className="flex items-center gap-2 flex-shrink-0 ml-2">
                                         <span className="text-gray-500">×{item.quantity}</span>
-                                        <span className="text-gray-400 font-mono">{formatCurrency(item.price)}</span>
+                                        <span className="text-gray-400 font-mono">{format.number(item.price, { style: 'currency', currency: 'CHF' })}</span>
                                     </div>
                                 </div>
                                 {item.note && (
@@ -295,7 +303,7 @@ export const OrderCard: React.FC<OrderCardProps> = ({ order, onStatusChange, onA
 
                     {order.orderItems.length > VISIBLE_ITEMS_COUNT && (
                         <button
-                            onClick={() => setExpanded(prev => !prev)}
+                            onClick={(e) => { e.stopPropagation(); setExpanded(prev => !prev); }}
                             className="mt-2 flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-700 transition-colors"
                         >
                             {expanded ? (
@@ -310,10 +318,10 @@ export const OrderCard: React.FC<OrderCardProps> = ({ order, onStatusChange, onA
                 {/* ── Footer ── */}
                 <div className="flex items-center justify-between pt-3 border-t border-gray-100">
                     <div className="flex flex-col">
-                        <span className="text-sm font-bold text-gray-900">{formatCurrency(order.totalAmount)}</span>
+                        <span className="text-sm font-bold text-gray-900">{format.number(order.totalAmount, { style: 'currency', currency: 'CHF' })}</span>
                         {order.tipAmount != null && order.tipAmount > 0 && (
                             <span className="text-xs text-emerald-600 font-medium">
-                                + {t('tip')} {formatCurrency(order.tipAmount)}
+                                + {t('tip')} {format.number(order.tipAmount, { style: 'currency', currency: 'CHF' })}
                             </span>
                         )}
                     </div>

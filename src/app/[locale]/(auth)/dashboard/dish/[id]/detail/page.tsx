@@ -6,6 +6,7 @@ import { Loader2, ArrowLeft, Edit3 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { getDishDetailById } from "@/features/staff/view-dish-detail/services/dish.service";
 import { DishViewDetail } from "@/features/staff/view-dish-detail";
+import { Button } from "@/components/ui/button";
 
 export default function DishDetailPage() {
   const router = useRouter();
@@ -47,18 +48,20 @@ export default function DishDetailPage() {
             <p className="text-gray-500 mt-1">{t("header.subtitle")}</p>
           </div>
           <div className="flex items-center gap-3">
-            <button 
-              onClick={() => router.back()} 
-              className="px-4 py-2 text-sm font-semibold text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+            <Button 
+              variant="outline" 
+              onClick={() => router.back()}
+              className="gap-2"
             >
                {t("header.back")}
-            </button>
-            <button 
+            </Button>
+            <Button 
+              variant="default"
               onClick={handleEdit}
-              className="px-4 py-2 text-sm font-semibold text-white bg-gray-900 rounded-lg hover:bg-black flex items-center gap-2 transition-colors"
+              className="gap-2"
             >
-              <Edit3 size={16} /> {t("header.edit")}
-            </button>
+              {t("header.edit")}
+            </Button>
           </div>
         </div>
       </header>
