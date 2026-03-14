@@ -20,6 +20,12 @@ const nextConfig: NextConfig = {
         hostname: "171.244.143.241",
         port: "8888",
         pathname: "/uploads/**"
+      },
+      {
+        protocol: "https",
+        hostname: "api.anlacviet.ch",
+        port: "8443",
+        pathname: "/uploads/**",
       }
     ],
   },
