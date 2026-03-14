@@ -1194,7 +1194,7 @@
         "editDescription": "Update the information of this dish."
       },
       "actions": {
-        "discard": "Discard",
+        "cancel": "Cancel",
         "createDish": "Create Dish",
         "createing": "Creating...",
         "saveChanges": "Save Changes",
@@ -1448,14 +1448,19 @@
       "addMoreItemsHint": "Select items from the left menu to add",
       "paidOrderWarning": "This order has been paid. Please create a new order.",
       "cancelledOrderWarning": "The order has been cancelled. It is not possible to edit or print the invoice.",
-      "addItemsButton": "Add Items to Order",
+      "change": "Change",
+      "table": "Table",
+      "addItemsButton": "Save Changes",
       "createInvoice": "Create Invoice",
       "createReceipt": "Create Receipt",
       "newTotal": "Estimated Total",
       "warningTitle": "Confirm Adding Items",
       "completedOrderWarning": "This order is completed but not yet paid. Adding new items will change the order status back to In Progress. Are you sure?",
       "confirmChangeStatus": "Confirm Add",
-      "successMessage": "Items added successfully!",
+      "saving": "Saving...",
+      "successMessage": "Changes saved successfully!",
+      "errorMessage": "An error occurred!",
+      "loading":"Loading...",
       "takeAway": "Take Away",
       "guest": "Guest",
       "notePlaceholder": "Item note...",
@@ -1562,6 +1567,13 @@
     "shiftsLive": "Live Board",
     "shiftsReports": "Shift Reports",
     "myShifts": "My Shifts"
+  },
+  "DashboardTopNav": {
+    "pos": "POS",
+    "orders": "Orders",
+    "kitchen": "Kitchen",
+    "reservation": "Reservations",
+    "table": "Tables"
   },
   "ShiftManagement": {
     "Common": {

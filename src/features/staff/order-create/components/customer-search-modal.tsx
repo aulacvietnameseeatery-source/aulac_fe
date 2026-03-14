@@ -1,55 +1,90 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
-import { X, Search, Loader2, Award, Star } from 'lucide-react';
+import { X, Search, Loader2, Award, Star, Info } from 'lucide-react';
 import { createOrderService } from '../services/create-edit-order.service';
 import { CustomerDto } from '../types/create-order.types';
 
 interface Props {
   isOpen: boolean;
   onClose: () => void;
-  currentCustomer: CustomerDto | null;
+  currentCustomer: Partial<CustomerDto> | null;
   onSelectCustomer: (customer: CustomerDto | null) => void;
 }
 
 export const CustomerSearchModal: React.FC<Props> = ({ isOpen, onClose, currentCustomer, onSelectCustomer }) => {
   const t = useTranslations("Order.Create");
   const [phone, setPhone] = useState('');
+  const [fullName, setFullName] = useState('');
+  const [email, setEmail] = useState('');
+  const [customerId, setCustomerId] = useState<number | null>(null);
+
+  const [originalCustomerData, setOriginalCustomerData] = useState<CustomerDto | null>(null);
+
   const [searchedCustomer, setSearchedCustomer] = useState<CustomerDto | null>(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [message, setMessage] = useState({ text: '', type: '' });
 
   // Reset form mỗi khi mở modal
   useEffect(() => {
     if (isOpen) {
       setPhone(currentCustomer?.phone || '');
-      setSearchedCustomer(currentCustomer);
-      setError('');
+      setFullName(currentCustomer?.fullName || '');
+      setEmail(currentCustomer?.email || '');
+      setCustomerId(currentCustomer?.customerId || null);
+      
+      // Nếu customer có ID thì lưu làm originalData để hiện thẻ VIP
+      if (currentCustomer?.customerId && currentCustomer.customerId != 68) {
+        setOriginalCustomerData(currentCustomer as CustomerDto);
+      } else {
+        setOriginalCustomerData(null);
+      }
+      setMessage({ text: '', type: '' });
     }
   }, [isOpen, currentCustomer]);
+
+  const handlePhoneChange = (val: string) => {
+    setPhone(val);
+    setCustomerId(null);
+    setOriginalCustomerData(null);
+    setMessage({ text: '', type: '' });
+  };
 
   const handleSearch = async () => {
     if (!phone.trim()) return;
     setLoading(true);
-    setError('');
+    setMessage({ text: '', type: '' });
+    
     try {
       const result = await createOrderService.getCustomerByPhone(phone);
       if (result && result.customerId) {
-        setSearchedCustomer(result);
+        setCustomerId(result.customerId);
+        setFullName(result.fullName || '');
+        setEmail(result.email || '');
+        setOriginalCustomerData(result);
+        setMessage({ text: 'Customer found. You can update details below.', type: 'success' });
       } else {
-        setError('Customer not found.');
-        setSearchedCustomer(null);
+        setCustomerId(null);
+        setOriginalCustomerData(null);
+        setMessage({ text: 'Customer not found. You can enter details to create a new one.', type: 'info' });
       }
     } catch (err) {
-      setError('Error finding customer or not exists.');
-      setSearchedCustomer(null);
+      setCustomerId(null);
+      setOriginalCustomerData(null);
+      setMessage({ text: 'Customer not found. Enter info to create new.', type: 'info' });
     } finally {
-      console.log(searchedCustomer)
       setLoading(false);
     }
   };
 
   const handleSave = () => {
-    onSelectCustomer(searchedCustomer);
+    onSelectCustomer({
+      customerId: customerId || 0,
+      phone,
+      fullName,
+      email,
+      isMember: originalCustomerData?.isMember || false,
+      loyaltyPoints: originalCustomerData?.loyaltyPoints || 0
+    } as CustomerDto);
     onClose();
   };
 
@@ -59,6 +94,8 @@ export const CustomerSearchModal: React.FC<Props> = ({ isOpen, onClose, currentC
   };
 
   if (!isOpen) return null;
+
+  const canSave = phone.trim() !== '';
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
@@ -85,28 +122,42 @@ export const CustomerSearchModal: React.FC<Props> = ({ isOpen, onClose, currentC
                 {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Search className="w-4 h-4" />}
               </button>
             </div>
-            {error && <p className="text-red-500 text-xs mt-1.5">{error}</p>}
+            {message.text && (
+              <p className={`text-xs mt-1.5 font-medium flex items-center gap-1 ${message.type === 'success' ? 'text-green-600' : 'text-blue-600'}`}>
+                <Info className="w-3.5 h-3.5" /> {message.text}
+              </p>
+            )}
           </div>
 
             <div className="p-3 bg-blue-50/50 border border-blue-100 rounded-xl space-y-3">
               <div>
-                <label className="text-xs font-semibold text-gray-500 block mb-1">{t('fullName')}</label>
-                <input disabled value={searchedCustomer ? searchedCustomer.fullName : ''} className="w-full bg-white border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-700 font-medium" />
-              </div>
-              <div>
-                <label className="text-xs font-semibold text-gray-500 block mb-1">{t('email')}</label>
-                <input disabled value={searchedCustomer ? searchedCustomer.email : ''} className="w-full bg-white border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-700" />
-              </div>
+              <label className="text-xs font-semibold text-[#1A3A52]/50 block mb-1 uppercase tracking-wide">{t('fullName', { fallback: 'Full Name' })} *</label>
+              <input 
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+                placeholder="Enter customer name"
+                className="w-full bg-white border border-[#D5BA98]/40 rounded-lg px-3 py-2 text-sm text-[#1A3A52] font-bold outline-none focus:border-[#1A3A52] transition-colors" 
+              />
+            </div>
+            <div>
+              <label className="text-xs font-semibold text-[#1A3A52]/50 block mb-1 uppercase tracking-wide">{t('email', { fallback: 'Email' })}</label>
+              <input 
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="email@example.com"
+                className="w-full bg-white border border-[#D5BA98]/40 rounded-lg px-3 py-2 text-sm text-[#1A3A52] outline-none focus:border-[#1A3A52] transition-colors" 
+              />
+            </div>
             </div>
 
-            {searchedCustomer && (
+            {originalCustomerData && customerId && (
             <div className="grid grid-cols-2 gap-3">
               <div className="bg-[#1A3A52]/5 border border-[#1A3A52]/10 rounded-lg p-2.5 flex flex-col justify-center">
                 <span className="text-[10px] font-bold text-[#1A3A52]/60 uppercase flex items-center gap-1 mb-1">
                   <Award className="w-3 h-3" /> Membership
                 </span>
-                <span className={`text-sm font-bold ${searchedCustomer.isMember ? 'text-green-600' : 'text-[#1A3A52]/70'}`}>
-                  {searchedCustomer.isMember ? 'VIP Member' : 'Standard'}
+                <span className={`text-sm font-bold ${originalCustomerData.isMember ? 'text-green-600' : 'text-[#1A3A52]/70'}`}>
+                  {originalCustomerData.isMember ? 'VIP Member' : 'Standard'}
                 </span>
               </div>
 
@@ -115,7 +166,7 @@ export const CustomerSearchModal: React.FC<Props> = ({ isOpen, onClose, currentC
                   <Star className="w-3 h-3 text-[#D5BA98]" /> Loyalty Points
                 </span>
                 <span className="text-sm font-bold text-[#1A3A52]">
-                  {searchedCustomer.loyaltyPoints} pts
+                  {originalCustomerData.loyaltyPoints} pts
                 </span>
               </div>
             </div>
@@ -125,7 +176,7 @@ export const CustomerSearchModal: React.FC<Props> = ({ isOpen, onClose, currentC
              <button onClick={handleClear} className="cursor-pointer flex-1 py-2.5 font-medium bg-red-50 text-red-600 rounded-xl text-sm">
                 Clear Customer
              </button>
-            <button onClick={handleSave} disabled={!searchedCustomer} className="cursor-pointer flex-1 py-2.5 font-medium bg-[#1A3A51] text-white rounded-xl text-sm disabled:opacity-50">
+            <button onClick={handleSave} disabled={!canSave} className="cursor-pointer flex-1 py-2.5 font-medium bg-[#1A3A51] text-white rounded-xl text-sm disabled:opacity-50">
               {t('saveDetails')}
             </button>
           </div>
