@@ -3,6 +3,7 @@
 import { useState, useMemo } from "react";
 import { Plus, RefreshCcw, Users, Eye, Pencil } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ALDatePicker } from "@/components/ui/al-date-picker";
 import { PermissionGuard } from "@/components/permission-guard";
 import { Permissions } from "@/types/const";
 import {
@@ -77,29 +78,47 @@ export function ShiftScheduleList() {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 rounded-2xl border border-[#D5BA98]/40 bg-linear-to-b from-[#FDFBF9] via-[#D5BA98]/10 to-[#FDFBF9] p-5 sm:p-6">
+      
+      <div>
+        <h1 className="text-2xl font-semibold">Shift Management</h1>
+        <p className="text-sm text-muted-foreground">
+          Create, publish, and manage shift schedules and staff assignments.
+        </p>
+      </div>
+      
       {/* Toolbar */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-        <div className="flex flex-wrap items-center gap-2">
-          <input
-            type="date"
+        <div className="flex flex-wrap items-center gap-2 rounded-xl border border-[#D5BA98]/50 bg-[#FDFBF9] p-2">
+          <ALDatePicker
             value={fromDate}
-            onChange={(e) => setFromDate(e.target.value)}
-            className="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary bg-background"
+            onChange={(val) => setFromDate(val)}
+            placeholder="From date"
+            clearable
+            inputSize="sm"
+            wrapperClassName="w-38"
           />
-          <span className="text-muted-foreground text-sm">–</span>
-          <input
-            type="date"
+          <span className="text-sm text-[#1A3A52]/60">–</span>
+          <ALDatePicker
             value={toDate}
-            onChange={(e) => setToDate(e.target.value)}
-            className="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary bg-background"
+            onChange={(val) => setToDate(val)}
+            placeholder="To date"
+            clearable
+            inputSize="sm"
+            wrapperClassName="w-38"
           />
-          <Button variant="outline" size="sm" onClick={() => refetch()} disabled={isLoading}>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => refetch()}
+            disabled={isLoading}
+            className="border-[#D5BA98]/70 bg-[#FDFBF9] text-[#1A3A52] hover:bg-[#D5BA98]/20"
+          >
             <RefreshCcw className="w-4 h-4" />
           </Button>
         </div>
         <PermissionGuard permission={Permissions.ScheduleShift}>
-          <Button onClick={handleCreate} className="gap-2">
+          <Button onClick={handleCreate} className="gap-2 bg-[#1A3A52] text-[#FDFBF9] hover:bg-[#1A3A52]/90">
             <Plus className="w-4 h-4" />
             Create Schedule
           </Button>
@@ -108,39 +127,39 @@ export function ShiftScheduleList() {
 
       {/* Table */}
       {isLoading ? (
-        <div className="flex items-center justify-center py-16 text-muted-foreground text-sm">
+        <div className="flex items-center justify-center py-16 text-sm text-[#1A3A52]/70">
           Loading schedules…
         </div>
       ) : schedules.length === 0 ? (
-        <div className="flex items-center justify-center py-16 text-muted-foreground text-sm">
+        <div className="flex items-center justify-center py-16 text-sm text-[#1A3A52]/70">
           No shift schedules found. Adjust the date range or create a new schedule.
         </div>
       ) : (
-        <div className="overflow-x-auto rounded-lg border border-border">
+        <div className="overflow-x-auto rounded-xl border border-[#D5BA98]/60 bg-[#FDFBF9]">
           <table className="w-full text-sm">
-            <thead className="bg-muted/50">
+            <thead className="bg-[#D5BA98]/20">
               <tr>
-                <th className="text-left px-4 py-3 font-medium text-muted-foreground">Date</th>
-                <th className="text-left px-4 py-3 font-medium text-muted-foreground">Shift Type</th>
-                <th className="text-left px-4 py-3 font-medium text-muted-foreground">Time Range</th>
-                <th className="text-left px-4 py-3 font-medium text-muted-foreground">Status</th>
-                <th className="text-left px-4 py-3 font-medium text-muted-foreground">Assigned</th>
-                <th className="text-right px-4 py-3 font-medium text-muted-foreground">Actions</th>
+                <th className="px-4 py-3 text-left font-medium text-[#1A3A52]/80">Date</th>
+                <th className="px-4 py-3 text-left font-medium text-[#1A3A52]/80">Shift Type</th>
+                <th className="px-4 py-3 text-left font-medium text-[#1A3A52]/80">Time Range</th>
+                <th className="px-4 py-3 text-left font-medium text-[#1A3A52]/80">Status</th>
+                <th className="px-4 py-3 text-left font-medium text-[#1A3A52]/80">Assigned</th>
+                <th className="px-4 py-3 text-right font-medium text-[#1A3A52]/80">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-border">
+            <tbody className="divide-y divide-[#D5BA98]/40">
               {schedules.map((s) => (
-                <tr key={s.shiftScheduleId} className="hover:bg-muted/30 transition-colors">
-                  <td className="px-4 py-3 font-medium">{s.businessDate}</td>
-                  <td className="px-4 py-3">{s.shiftTypeName}</td>
-                  <td className="px-4 py-3 text-muted-foreground">
+                <tr key={s.shiftScheduleId} className="transition-colors hover:bg-[#D5BA98]/15">
+                  <td className="px-4 py-3 font-medium text-[#1A3A52]">{s.businessDate}</td>
+                  <td className="px-4 py-3 text-[#1A3A52]">{s.shiftTypeName}</td>
+                  <td className="px-4 py-3 text-[#1A3A52]/70">
                     {formatTime(s.plannedStartAt)} – {formatTime(s.plannedEndAt)}
                   </td>
                   <td className="px-4 py-3">
                     <ShiftStatusBadge statusCode={s.statusCode} type="schedule" />
                   </td>
                   <td className="px-4 py-3">
-                    <span className="inline-flex items-center gap-1 text-muted-foreground">
+                    <span className="inline-flex items-center gap-1 text-[#1A3A52]/70">
                       <Users className="w-3.5 h-3.5" />
                       {s.assignmentCount}
                     </span>
@@ -149,10 +168,12 @@ export function ShiftScheduleList() {
                     <div className="flex items-center justify-end gap-1.5">
                       {/* View Assignments — always available */}
                       <Button
-                        variant="ghost"
+                        variant="outline"
                         size="sm"
+                        className="border-[#D5BA98]/60 bg-[#FDFBF9] text-[#1A3A52] hover:bg-[#D5BA98]/20"
                         onClick={() => handleViewAssignments(s)}
-                        title="View assignments"
+                        data-tooltip-content="View assignments"
+                        data-tooltip-id="my-tooltip"
                       >
                         <Eye className="w-4 h-4" />
                       </Button>
@@ -161,10 +182,12 @@ export function ShiftScheduleList() {
                       {s.statusCode === "DRAFT" && (
                         <PermissionGuard permission={Permissions.ScheduleShift}>
                           <Button
-                            variant="ghost"
+                            variant="outline"
                             size="sm"
+                            className="border-[#D5BA98]/60 bg-[#FDFBF9] text-[#1A3A52] hover:bg-[#D5BA98]/20"
                             onClick={() => handleEdit(s)}
-                            title="Edit schedule"
+                            data-tooltip-content="Edit schedule"
+                            data-tooltip-id="my-tooltip"
                           >
                             <Pencil className="w-4 h-4" />
                           </Button>
@@ -176,6 +199,7 @@ export function ShiftScheduleList() {
                         <PermissionGuard permission={Permissions.ScheduleShift}>
                           <Button
                             size="sm"
+                            className="bg-[#1A3A52] text-[#FDFBF9] hover:bg-[#1A3A52]/90"
                             onClick={() => handlePublish(s.shiftScheduleId)}
                             isLoading={publish.isPending}
                           >
@@ -190,6 +214,7 @@ export function ShiftScheduleList() {
                           <Button
                             variant="outline"
                             size="sm"
+                            className="border-[#D5BA98]/70 bg-[#FDFBF9] text-[#1A3A52] hover:bg-[#D5BA98]/20"
                             onClick={() => handleClose(s.shiftScheduleId)}
                             isLoading={close.isPending}
                           >

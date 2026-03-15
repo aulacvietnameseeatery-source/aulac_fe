@@ -12,6 +12,63 @@ export interface I18nMap {
 }
 
 /**
+ * Lookup type IDs from backend `Core.Enum.LookupType`.
+ * Use these IDs with `/api/lookups/{typeId}` endpoints.
+ */
+export const LOOKUP_TYPE = {
+  AccountStatus: 1,
+  InventoryTxType: 2,
+  InventoryTxStatus: 3,
+  MediaType: 4,
+  TableStatus: 5,
+  TableType: 6,
+  ReservationSource: 7,
+  ReservationStatus: 8,
+  OrderSource: 9,
+  OrderStatus: 10,
+  PaymentMethod: 11,
+  DishStatus: 12,
+  OrderItemStatus: 13,
+  Severity: 14,
+  PromotionType: 15,
+  PromotionStatus: 16,
+  IngredientType: 17,
+  Tag: 18,
+  TableZone: 19,
+  DishDiet: 20,
+  ShiftType: 21,
+  ShiftStatus: 22,
+  ShiftAssignmentStatus: 23,
+  AttendanceStatus: 24,
+} as const;
+
+export type LookupTypeId = (typeof LOOKUP_TYPE)[keyof typeof LOOKUP_TYPE];
+
+/**
+ * Lookup types that are NOT configurable (cannot add/delete values).
+ * They can still be updated (name, description, sortOrder).
+ */
+export const NON_CONFIGURABLE_LOOKUP_TYPES = new Set<LookupTypeId>([
+  LOOKUP_TYPE.AccountStatus,
+  LOOKUP_TYPE.InventoryTxType,
+  LOOKUP_TYPE.InventoryTxStatus,
+  LOOKUP_TYPE.TableStatus,
+  LOOKUP_TYPE.ReservationStatus,
+  LOOKUP_TYPE.OrderStatus,
+  LOOKUP_TYPE.OrderItemStatus,
+  LOOKUP_TYPE.DishStatus,
+  LOOKUP_TYPE.PromotionStatus,
+  LOOKUP_TYPE.TableZone,
+  LOOKUP_TYPE.ShiftStatus,
+  LOOKUP_TYPE.ShiftAssignmentStatus,
+  LOOKUP_TYPE.AttendanceStatus,
+]);
+
+export function isLookupTypeConfigurable(typeId: LookupTypeId): boolean {
+  return !NON_CONFIGURABLE_LOOKUP_TYPES.has(typeId);
+}
+
+/**
  * Raw shape returned by any BE lookup GET/POST/PUT endpoint.
  * The BE does NOT include `valueName` — display names come from the `i18n` map.
  */

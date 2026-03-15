@@ -59,21 +59,24 @@ export const RoleTable = ({ roles, isLoading, startIndex, onView, onEdit, onDele
                       <button
                         onClick={() => onView(role.roleId)}
                         className="text-gray-400 hover:text-blue-600 transition-colors cursor-pointer"
-                        title={t("actions.view")}
+                        data-tooltip-content={t("actions.view")}
+                        data-tooltip-id="my-tooltip"
                       >
                         <Eye size={18} />
                       </button>
                       <button
                         onClick={() => onEdit(role.roleId)}
                         className="text-gray-400 hover:text-blue-600 transition-colors cursor-pointer"
-                        title={t("actions.edit")}
+                        data-tooltip-content={t("actions.edit")}
+                        data-tooltip-id="my-tooltip"
                       >
                         <Edit size={18} />
                       </button>
                       <button
                         onClick={() => onDelete(role.roleId)}
                         className="text-gray-400 hover:text-red-500 transition-colors cursor-pointer"
-                        title={t("actions.delete")}
+                        data-tooltip-content={t("actions.delete")}
+                        data-tooltip-id="my-tooltip"
                       >
                         <Trash2 size={18} />
                       </button>

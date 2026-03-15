@@ -1,6 +1,7 @@
 import React from 'react';
 import { Calendar, Clock } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import { ALDatePicker } from "@/components/ui/al-date-picker";
 
 interface DateTimeSelectProps {
     date: string;
@@ -20,8 +21,8 @@ export default function DateTimeSelect({
     const t = useTranslations('Reservation.Sidebar');
     const tControls = useTranslations('Reservation.Controls');
 
-    const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        onDateTimeChange(e.target.value, time);
+    const handleDateChange = (val: string) => {
+        onDateTimeChange(val, time);
     };
 
     return (
@@ -30,16 +31,13 @@ export default function DateTimeSelect({
                 <label className="text-[10px] font-bold text-stone-400 uppercase tracking-widest block mb-1">
                     {t('datetime.selectDate')}
                 </label>
-                <div className="relative">
-                    <Calendar size={14} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-stone-400 pointer-events-none" />
-                    <input
-                        type="date"
-                        min={new Date().toISOString().split('T')[0]}
-                        value={date}
-                        onChange={handleDateChange}
-                        className="w-full bg-slate-50 border border-slate-200 rounded-lg py-2 pl-8 pr-2 text-sm font-bold text-[#1A3A52] focus:outline-none focus:border-[#1A3A52]"
-                    />
-                </div>
+                <ALDatePicker
+                    value={date}
+                    onChange={handleDateChange}
+                    minDate={new Date().toISOString().split('T')[0]}
+                    placeholder={t('datetime.selectDate')}
+                    inputSize="sm"
+                />
             </div>
 
             <div className="flex-1 w-full md:w-auto min-w-0">

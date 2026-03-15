@@ -7,7 +7,7 @@
  * Pass the result of `useLookupCrud()` via the `lookup` prop — no extra wiring needed.
  *
  * Usage:
- *   const zoneLookup = useLookupCrud({ baseUrl: "/api/tables/zones", queryKey: ["tables","zones"], entityLabel: "Zone" });
+ *   const zoneLookup = useLookupCrud({ typeId: LOOKUP_TYPE.TableZone, queryKey: ["lookups","table-zone"], entityLabel: "Zone", typeLabel: "Zone" });
  *
  *   <LookupCombobox
  *     lookup={zoneLookup}
@@ -36,13 +36,16 @@ export interface LookupComboboxProps {
   title: string;
   required?: boolean;
   placeholder?: string;
-  /** Currently selected valueId. Pass `""` or `undefined` for no selection. */
-  value: number | string | undefined;
+  /** Currently selected valueId(s). Pass `""` / `undefined` / `[]` for no selection. */
+  value: number | string | Array<number | string> | undefined;
+  /** Enable multi-select mode. @default false */
+  multiple?: boolean;
   /**
-   * Called with the selected `valueId` as a number, or `""` when cleared.
-   * Cast to the FK field directly: `onChange={(val) => setFormData(f => ({ ...f, zoneLvId: val }))}`
+   * Called with selected `valueId`.
+   * - single mode: `number | ""`
+   * - multiple mode: `number[]`
    */
-  onChange: (val: number | "") => void;
+  onChange: (val: number | "" | number[]) => void;
   /**
    * Optional: called after a new item is successfully created via the manager modal.
    * Use this to auto-select the newly created item in the parent form.
@@ -50,6 +53,10 @@ export interface LookupComboboxProps {
   onCreated?: (item: LookupValueDto) => void;
   /** Whether the combobox is disabled */
   disabled?: boolean;
+  /** Optional validation message */
+  error?: string;
+  /** Locale for displaying translated names */
+  locale?: "en" | "vi" | "fr";
 }
 
 // ─── Component ────────────────────────────────────────────────
@@ -60,33 +67,83 @@ const LookupCombobox: React.FC<LookupComboboxProps> = ({
   required,
   placeholder,
   value,
+  multiple = false,
   onChange,
   onCreated,
   disabled,
+  error,
+  locale,
 }) => {
   const [isManagerOpen, setIsManagerOpen] = useState(false);
+  const isConfigurable = lookup.isConfigurable ?? true;
 
   // Convert lookup items → ALCombobox options (value = string representation of valueId)
   const options = useMemo(
-    () => lookup.items.map((item) => ({ label: item.valueName, value: String(item.valueId) })),
-    [lookup.items]
+    () =>
+      lookup.items.map((item) => ({
+        label: locale ? item.i18n?.[locale] ?? item.i18n?.en ?? item.valueName : item.valueName,
+        value: String(item.valueId),
+      })),
+    [lookup.items, locale]
   );
 
   const handleChange = (val: string | number | (string | number)[] | undefined) => {
-    if (Array.isArray(val)) return; // LookupCombobox is single-select only
+    if (multiple) {
+      if (!Array.isArray(val)) {
+        onChange([]);
+        return;
+      }
+      onChange(
+        val
+          .map((item) => Number(item))
+          .filter((item) => !Number.isNaN(item))
+      );
+      return;
+    }
+
+    if (Array.isArray(val)) {
+      onChange("");
+      return;
+    }
+
     onChange(val ? Number(val) : "");
   };
 
+  const selectedValues = useMemo(
+    () =>
+      Array.isArray(value)
+        ? value
+            .map((item) => Number(item))
+            .filter((item) => !Number.isNaN(item))
+        : [],
+    [value]
+  );
+
   const handleCreateOption = (name: string) => {
+    if (!isConfigurable) return;
     lookup.onSave({ valueName: name }).then((item) => {
-      onChange(item.valueId);
+      if (multiple) {
+        const next = selectedValues.includes(item.valueId)
+          ? selectedValues
+          : [...selectedValues, item.valueId];
+        onChange(next);
+      } else {
+        onChange(item.valueId);
+      }
       onCreated?.(item);
     });
   };
 
   const handleCreatedFromManager = (item: LookupValueDto) => {
     onCreated?.(item);
-    onChange(item.valueId);
+    if (multiple) {
+      const next = selectedValues.includes(item.valueId)
+        ? selectedValues
+        : [...selectedValues, item.valueId];
+      onChange(next);
+    } else {
+      onChange(item.valueId);
+    }
     setIsManagerOpen(false);
   };
 
@@ -97,13 +154,21 @@ const LookupCombobox: React.FC<LookupComboboxProps> = ({
         required={required}
         placeholder={placeholder}
         options={options}
-        value={value ? String(value) : undefined}
+        value={
+          multiple
+            ? selectedValues.map((item) => String(item))
+            : value
+              ? String(value)
+              : undefined
+        }
         onChange={handleChange}
+        multiple={multiple}
         searchable
+        error={error}
         isLoading={lookup.isLoading}
         disabled={disabled}
-        allowCreate
-        onCreateOption={handleCreateOption}
+        allowCreate={isConfigurable}
+        onCreateOption={isConfigurable ? handleCreateOption : undefined}
         titleAction={
           <button
             type="button"

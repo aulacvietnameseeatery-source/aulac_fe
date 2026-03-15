@@ -3,8 +3,10 @@
 import React, { useState, useMemo, useCallback, useEffect } from "react";
 import { CirclePlus, RefreshCcw, Loader2, MapPin, Search, Clock } from "lucide-react"; // Thêm icon Clock
 import { Button } from "@/components/ui/button";
+import { ALDatePicker } from "@/components/ui/al-date-picker";
 import { PermissionGuard } from "@/components/permission-guard";
 import { Permissions } from "@/types/const";
+import { LookupManagerModal, LOOKUP_TYPE, useLookupCrud } from "@/features/lookup";
 import { useDebounce } from "use-debounce";
 import { format } from "date-fns"; // Dùng để format ngày giờ
 import type {
@@ -21,7 +23,9 @@ import {
   useDeleteTableMutation,
   useUpdateTableStatusMutation,
   useBulkOnlineMutation,
+  TABLE_QUERY_KEYS,
 } from "./hooks/use-table-queries";
+import { useQueryClient } from "@tanstack/react-query";
 import {
   DashboardSummary,
   FilterBar,
@@ -29,7 +33,6 @@ import {
   TableModal,
   DeleteModal,
   TableDetailPanel,
-  AddZoneModal,
 } from "./components";
 
 const DEFAULT_FILTERS: TableFilters = {
@@ -46,6 +49,7 @@ const DEFAULT_FILTERS: TableFilters = {
 
 export const TableManagementContent: React.FC = () => {
   const [filters, setFilters] = useState<TableFilters>(DEFAULT_FILTERS);
+  const queryClient = useQueryClient();
 
   // --- STATE CHO DEBOUNCE SEARCH ---
   const [searchInput, setSearchInput] = useState("");
@@ -108,6 +112,14 @@ export const TableManagementContent: React.FC = () => {
   const statusMutation = useUpdateTableStatusMutation({ onSuccess: (data) => { if (detailTable?.tableId === data.tableId) { setDetailTable(mapDtoToTable(data)); } } });
   const bulkOnlineMutation = useBulkOnlineMutation();
 
+  const zoneLookup = useLookupCrud({
+    typeId: LOOKUP_TYPE.TableZone,
+    queryKey: ["lookups", "table-zone", "table-management"],
+    entityLabel: "Zone",
+    typeLabel: "Zone",
+    isConfigurable: true,
+  });
+
   const groupedByZone = useMemo(() => {
     const groups: Record<string, RestaurantTable[]> = {};
     tables.forEach((t) => {
@@ -127,6 +139,7 @@ export const TableManagementContent: React.FC = () => {
 
   // ... (Các handlers khác giữ nguyên) ...
   const handleAddTable = useCallback((formData: TableFormData, pendingFiles: File[], _removedImageIds: number[]) => {
+    void _removedImageIds;
     if (!formData.typeLvId || !formData.zoneLvId || !formData.statusLvId) return;
     createMutation.mutate({ tableCode: formData.tableCode, capacity: formData.capacity, isOnline: formData.isOnline, statusLvId: formData.statusLvId as number, typeLvId: formData.typeLvId as number, zoneLvId: formData.zoneLvId as number, images: pendingFiles.length > 0 ? pendingFiles : undefined });
   }, [createMutation]);
@@ -153,19 +166,19 @@ export const TableManagementContent: React.FC = () => {
   const availableCount = tables.filter((t) => t.status === "AVAILABLE").length;
 
   return (
-      <div className="space-y-6">
+      <div className="space-y-6 rounded-2xl border border-[#D5BA98]/40 bg-linear-to-b from-[#FDFBF9] via-[#D5BA98]/10 to-[#FDFBF9] p-5 sm:p-6">
         {/* Page Header & Toolbar */}
         <div className="flex flex-col xl:flex-row items-start xl:items-center justify-between gap-5 mb-2">
 
           {/* Title Info */}
           <div className="shrink-0">
-            <h3 className="text-[28px] font-bold text-gray-900 m-0">
+            <h3 className="m-0 text-[28px] font-bold tracking-wide text-[#1A3A52]">
               Table Management
             </h3>
-            <p className="text-sm text-gray-500 mt-1">
+            <p className="mt-1 text-sm text-[#1A3A52]/70">
               {tables.length} table{tables.length !== 1 ? "s" : ""}
               {filters.zone !== "ALL" && ` in ${filters.zone}`}
-              {" "}&middot; <span className="text-green-600 font-medium">{availableCount} available</span>
+              {" "}&middot; <span className="font-medium text-[#4A5D4E]">{availableCount} available</span>
             </p>
           </div>
 
@@ -173,62 +186,43 @@ export const TableManagementContent: React.FC = () => {
           <div className="flex flex-col sm:flex-row flex-wrap items-center xl:justify-end gap-3 w-full xl:w-auto">
 
             {/* 1. MÁY QUÉT THỜI GIAN (TIME MACHINE) */}
-            <div className="relative flex items-center bg-white border border-gray-300 rounded-lg shadow-sm h-[38px] w-full sm:w-auto sm:min-w-[220px] focus-within:border-indigo-500 focus-within:ring-1 focus-within:ring-indigo-500 transition-all overflow-hidden group">
-              <div
-                  className="px-3 bg-indigo-50/50 border-r border-gray-200 h-full flex items-center justify-center shrink-0 cursor-pointer group-hover:bg-indigo-50 transition-colors"
-                  onClick={() => {
-                    const input = document.getElementById('time-machine-input');
-                    if (input && 'showPicker' in input) {
-                      (input as any).showPicker();
-                    }
-                  }}
-              >
-                <Clock className="w-4 h-4 text-indigo-600" />
-              </div>
-              <input
-                  id="time-machine-input"
-                  type="datetime-local"
-                  value={filters.targetTime}
-                  onChange={(e) => setFilters(prev => ({ ...prev, targetTime: e.target.value }))}
-                  className="px-3 py-1.5 w-full h-full outline-none text-[13px] text-gray-700 bg-transparent font-medium"
-                  title="Chọn giờ để xem bàn trống"
+            <div className="w-full sm:min-w-55 sm:w-auto">
+              <ALDatePicker
+                value={filters.targetTime}
+                onChange={(val) => setFilters((prev) => ({ ...prev, targetTime: val }))}
+                placeholder="Pick target date"
+                clearable
+                inputSize="sm"
+                wrapperClassName="w-full"
+                groupClassName="border-[#D5BA98]/60 bg-[#FDFBF9] text-[#1A3A52]"
               />
-              {filters.targetTime && (
-                  <button
-                      onClick={() => setFilters(prev => ({ ...prev, targetTime: "" }))}
-                      className="absolute right-2 text-gray-400 hover:text-red-500 transition-colors bg-white pl-1"
-                      title="Xóa bộ lọc thời gian"
-                  >
-                    <svg width="14" height="14" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11.7816 4.03157C12.0062 3.80702 12.0062 3.44295 11.7816 3.2184C11.5571 2.99385 11.193 2.99385 10.9685 3.2184L7.50005 6.68682L4.03164 3.2184C3.80708 2.99385 3.44301 2.99385 3.21846 3.2184C2.99391 3.44295 2.99391 3.80702 3.21846 4.03157L6.68688 7.49999L3.21846 10.9684C2.99391 11.193 2.99391 11.557 3.21846 11.7816C3.44301 12.0061 3.80708 12.0061 4.03164 11.7816L7.50005 8.31316L10.9685 11.7816C11.193 12.0061 11.5571 12.0061 11.7816 11.7816C12.0062 11.557 12.0062 11.193 11.7816 10.9684L8.31322 7.49999L11.7816 4.03157Z" fill="currentColor" fillRule="evenodd" clipRule="evenodd"></path></svg>
-                  </button>
-              )}
             </div>
 
             {/* 2. THANH SEARCH TEXT */}
-            <div className="relative flex items-center bg-white border border-gray-300 rounded-lg overflow-hidden shadow-sm h-[38px] w-full sm:w-auto sm:min-w-[220px] focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500 transition-all">
-              <div className="px-3 bg-gray-50/50 border-r border-gray-200 h-full flex items-center justify-center shrink-0">
-                <Search className="w-4 h-4 text-gray-500" />
+            <div className="relative flex h-9.5 w-full items-center overflow-hidden rounded-lg border border-[#D5BA98]/60 bg-[#FDFBF9] shadow-sm transition-all focus-within:border-[#1A3A52]/40 focus-within:ring-1 focus-within:ring-[#1A3A52]/30 sm:min-w-55 sm:w-auto">
+              <div className="flex h-full shrink-0 items-center justify-center border-r border-[#D5BA98]/50 bg-[#D5BA98]/20 px-3">
+                <Search className="h-4 w-4 text-[#1A3A52]/70" />
               </div>
               <input
                   type="text"
                   placeholder="Search table code..."
                   value={searchInput}
                   onChange={(e) => setSearchInput(e.target.value)}
-                  className="px-3 py-1.5 w-full h-full outline-none text-[13px] text-gray-700 placeholder:text-gray-400"
+                  className="h-full w-full px-3 py-1.5 text-[13px] text-[#1A3A52] placeholder:text-[#1A3A52]/45 outline-none"
               />
             </div>
 
             {/* 3. NÚT CHỨC NĂNG */}
             <div className="flex items-center justify-end gap-2 w-full sm:w-auto">
-              <Button variant="outline" size="sm" onClick={handleRefresh} disabled={isLoading} className="h-[38px] text-[13px] px-3">
-                {isLoading ? <Loader2 size={14} className="mr-1.5 animate-spin" /> : <RefreshCcw size={14} className="mr-1.5 text-gray-500" />}
+              <Button variant="outline" size="sm" onClick={handleRefresh} disabled={isLoading} className="h-9.5 border-[#D5BA98]/70 bg-[#FDFBF9] px-3 text-[13px] text-[#1A3A52] hover:bg-[#D5BA98]/20">
+                {isLoading ? <Loader2 size={14} className="mr-1.5 animate-spin" /> : <RefreshCcw size={14} className="mr-1.5 text-[#1A3A52]/70" />}
                 Refresh
               </Button>
               <PermissionGuard permission={Permissions.CreateTable}>
-                <Button variant="outline" size="sm" onClick={() => setIsAddZoneModalOpen(true)} className="h-[38px] text-[13px] px-3">
-                  <MapPin size={14} className="mr-1.5 text-gray-500" /> Add Zone
+                <Button variant="outline" size="sm" onClick={() => setIsAddZoneModalOpen(true)} className="h-9.5 border-[#D5BA98]/70 bg-[#FDFBF9] px-3 text-[13px] text-[#1A3A52] hover:bg-[#D5BA98]/20">
+                  <MapPin size={14} className="mr-1.5 text-[#1A3A52]/70" /> Add Zone
                 </Button>
-                <Button variant="default" size="sm" onClick={() => setIsAddModalOpen(true)} className="h-[38px] text-[13px] px-3 bg-gray-900 hover:bg-gray-800">
+                <Button variant="default" size="sm" onClick={() => setIsAddModalOpen(true)} className="h-9.5 bg-[#1A3A52] px-3 text-[13px] text-[#FDFBF9] hover:bg-[#1A3A52]/90">
                   <CirclePlus size={14} className="mr-1.5" /> Add Table
                 </Button>
               </PermissionGuard>
@@ -238,9 +232,9 @@ export const TableManagementContent: React.FC = () => {
 
         {/* THÔNG BÁO NẾU ĐANG BẬT MÁY QUÉT THỜI GIAN */}
         {filters.targetTime && (
-            <div className="bg-indigo-50 border border-indigo-200 text-indigo-800 px-4 py-2 rounded-lg text-sm flex items-center gap-2">
+            <div className="flex items-center gap-2 rounded-lg border border-[#D5BA98]/70 bg-[#D5BA98]/20 px-4 py-2 text-sm text-[#1A3A52]">
               <Clock size={16} />
-              Đang hiển thị các bàn <strong>TRỐNG</strong> vào lúc: {format(new Date(filters.targetTime), "HH:mm - dd/MM/yyyy")}
+              Đang hiển thị các bàn <strong>TRỐNG</strong> vào ngày: {format(new Date(filters.targetTime), "dd/MM/yyyy")}
             </div>
         )}
 
@@ -249,8 +243,8 @@ export const TableManagementContent: React.FC = () => {
 
         {isLoading && tables.length === 0 && (
             <div className="flex items-center justify-center py-16">
-              <Loader2 size={24} className="animate-spin text-gray-400 mr-2" />
-              <span className="text-gray-400">Loading tables...</span>
+              <Loader2 size={24} className="mr-2 animate-spin text-[#1A3A52]/60" />
+              <span className="text-[#1A3A52]/60">Loading tables...</span>
             </div>
         )}
 
@@ -274,8 +268,8 @@ export const TableManagementContent: React.FC = () => {
             </div>
         ) : (
             !isLoading && (
-                <div className="flex flex-col items-center justify-center py-16 text-gray-400">
-                  <p className="text-base font-medium">No tables found</p>
+                <div className="flex flex-col items-center justify-center py-16 text-[#1A3A52]/65">
+                  <p className="text-base font-medium text-[#1A3A52]">No tables found</p>
                   <p className="text-sm mt-1">Try adjusting your filters or add a new table.</p>
                 </div>
             )
@@ -285,14 +279,22 @@ export const TableManagementContent: React.FC = () => {
         <TableModal isOpen={isEditModalOpen} mode="edit" table={selectedTable} onClose={() => { setIsEditModalOpen(false); setSelectedTable(null); if (detailOpenBeforeEdit) { setIsDetailOpen(true); setDetailOpenBeforeEdit(false); } }} onSubmit={handleEditTable} isSubmitting={updateMutation.isPending} />
         <DeleteModal isOpen={isDeleteModalOpen} table={selectedTable} onClose={() => { setIsDeleteModalOpen(false); setSelectedTable(null); }} onConfirm={handleDeleteTable} isDeleting={deleteMutation.isPending} />
         <TableDetailPanel table={detailTable} isOpen={isDetailOpen} onClose={() => { setIsDetailOpen(false); setDetailTable(null); }} onEdit={handleEditFromDetail} onDelete={(t) => { setSelectedTable(t); setIsDeleteModalOpen(true); }} onStatusChange={handleStatusChange} />
-        <AddZoneModal isOpen={isAddZoneModalOpen} onClose={() => setIsAddZoneModalOpen(false)} />
+        <LookupManagerModal
+          {...zoneLookup}
+          isOpen={isAddZoneModalOpen}
+          onClose={() => setIsAddZoneModalOpen(false)}
+          onCreated={() => {
+            queryClient.invalidateQueries({ queryKey: TABLE_QUERY_KEYS.zones() });
+            refetch();
+          }}
+        />
       </div>
   );
 };
 
 export default function TableManagementPage() {
   return (
-      <div className="w-full h-full bg-[#f8f9fa] p-4 md:p-6 font-sans">
+      <div className="h-full w-full bg-[#FDFBF9]">
         <TableManagementContent />
       </div>
   );

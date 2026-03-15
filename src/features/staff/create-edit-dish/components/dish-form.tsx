@@ -2,8 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { toast, Toaster } from "sonner";
-import { ArrowLeft, Save, Trash2, Image as ImageIcon } from "lucide-react";
+import { toast } from "sonner";
 
 import { DishFormValues, Language, mapDishToFormValues } from "../types/schema";
 
@@ -18,7 +17,7 @@ import { useRouter } from "next/navigation";
 import { DishImagesState, useDishImages } from "../hooks/useDishImages";
 import { useCreateDish } from "../hooks/useCreateDish";
 import { useEditDish } from "../hooks/useEditDish";
-import { getAllActiveStatus, getAllCategories, getAllDiets, getAllTag, getDishById } from "../services/dish.service";
+import { getAllCategories, getDishById } from "../services/dish.service";
 import { useDishEditMedia } from "../hooks/useDishEditMedia";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
@@ -59,23 +58,10 @@ export function DishForm({ mode, dishId, onSuccess }: DishFormProps) {
     queryFn: () => getAllCategories()
   })
 
-  const { data: statuses } = useQuery({
-    queryKey: ["status"],
-    queryFn: () => getAllActiveStatus(),
-  })
-
-  const { data: tags } = useQuery({
-    queryKey: ["tags"],
-    queryFn: () => getAllTag(),
-  })
-
-  const { data: diets } = useQuery({ queryKey: ["diets"], queryFn: () => getAllDiets() });
-
   /* ---------------------- Form ---------------------- */
   const form = useDishForm();
 
-  const { trigger, getValues } = form;
-  const { onCreate, loading } = useCreateDish();
+  const { onCreate } = useCreateDish();
   const { onEdit } = useEditDish();
 
   /* ---------------------- Load dish (edit) ---------------------- */
@@ -86,7 +72,7 @@ export function DishForm({ mode, dishId, onSuccess }: DishFormProps) {
   });
 
   useEffect(() => {
-    if (data && categories?.length && statuses?.length) {
+    if (data && categories?.length) {
       form.reset(mapDishToFormValues(data));
 
       setExistingImages(
@@ -99,7 +85,7 @@ export function DishForm({ mode, dishId, onSuccess }: DishFormProps) {
             }))
         );
     }
-  }, [data, form]);
+  }, [data, categories?.length, form, setExistingImages]);
 
   /* ---------------------- Mutation ---------------------- */
   const mutation = useMutation({
@@ -151,10 +137,7 @@ export function DishForm({ mode, dishId, onSuccess }: DishFormProps) {
         <SectionWrapper title={t("core.title")} subtitle={t("core.subtitle")}>
           <CoreInfoSection
             form={form}
-            statuses={statuses}
             categories={categories}
-            tags={tags} 
-            diets={diets}
           />
         </SectionWrapper>
 

@@ -63,8 +63,8 @@ const TableCard: React.FC<TableCardProps> = ({
   return (
     <div
       className={cn(
-        "relative rounded-lg border bg-white overflow-hidden transition-all duration-200 cursor-pointer group",
-        "hover:shadow-md",
+        "group relative cursor-pointer overflow-hidden rounded-lg border bg-[#FDFBF9] transition-all duration-200",
+        "hover:shadow-sm",
         config.borderColor,
         isOffline && "opacity-55"
       )}
@@ -80,12 +80,12 @@ const TableCard: React.FC<TableCardProps> = ({
           <div className="flex items-center gap-1.5">
             <StatusBadge status={table.status} size="sm" />
             {isOffline && (
-              <span className="text-[9px] font-medium px-1.5 py-0.5 rounded bg-gray-100 text-gray-400 uppercase tracking-wide">
+              <span className="rounded bg-[#D5BA98]/20 px-1.5 py-0.5 text-[9px] font-medium uppercase tracking-wide text-[#1A3A52]/60">
                 Offline
               </span>
             )}
             {table.hasErrors && (
-              <span className="text-[9px] font-medium px-1.5 py-0.5 rounded bg-orange-50 text-orange-500 uppercase tracking-wide">
+              <span className="rounded bg-[#8C3A3A]/12 px-1.5 py-0.5 text-[9px] font-medium uppercase tracking-wide text-[#8C3A3A]">
                 Error
               </span>
             )}
@@ -96,7 +96,7 @@ const TableCard: React.FC<TableCardProps> = ({
         <div>
           <button
             ref={btnRef}
-            className="p-1 rounded text-gray-300 hover:text-gray-600 hover:bg-gray-100 transition-colors opacity-0 group-hover:opacity-100"
+            className="rounded p-1 text-[#1A3A52]/40 opacity-0 transition-colors group-hover:opacity-100 hover:bg-[#D5BA98]/20 hover:text-[#1A3A52]"
             onClick={(e) => {
               e.stopPropagation();
               updateMenuPos();
@@ -109,36 +109,36 @@ const TableCard: React.FC<TableCardProps> = ({
             createPortal(
               <div
                 ref={menuRef}
-                className="fixed bg-white border border-gray-200 rounded-lg shadow-xl z-50 py-1 min-w-40"
+                className="fixed z-50 min-w-40 rounded-lg border border-[#D5BA98]/60 bg-[#FDFBF9] py-1 shadow-lg"
                 style={{ top: menuPos.top, left: menuPos.left, transform: "translateX(-100%)" }}
                 onClick={(e) => e.stopPropagation()}
               >
                 <button
-                  className="flex items-center w-full px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                  className="flex w-full items-center px-3 py-2 text-sm text-[#1A3A52] transition-colors hover:bg-[#D5BA98]/15"
                   onClick={() => {
                     onSelect?.(table);
                     setMenuOpen(false);
                   }}
                 >
-                  <Eye size={14} className="mr-2 text-gray-400" />
+                  <Eye size={14} className="mr-2 text-[#1A3A52]/55" />
                   View Details
                 </button>
                 <PermissionGuard permission={Permissions.EditTable}>
                   <button
-                    className="flex items-center w-full px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                    className="flex w-full items-center px-3 py-2 text-sm text-[#1A3A52] transition-colors hover:bg-[#D5BA98]/15"
                     onClick={() => {
                       onEdit(table);
                       setMenuOpen(false);
                     }}
                   >
-                    <Pencil size={14} className="mr-2 text-gray-400" />
+                    <Pencil size={14} className="mr-2 text-[#1A3A52]/55" />
                     Edit
                   </button>
                 </PermissionGuard>
                 {onStatusChange && (
                   <PermissionGuard permission={Permissions.UpdateTableStatus}>
                     <>
-                      <hr className="my-1 border-gray-100" />
+                      <hr className="my-1 border-[#D5BA98]/35" />
                       {ALL_STATUSES
                         .filter((s) => s !== table.status && canTransitionTo(table.status, s))
                         .map((status) => {
@@ -146,7 +146,7 @@ const TableCard: React.FC<TableCardProps> = ({
                           return (
                             <button
                               key={status}
-                              className="flex items-center w-full px-3 py-1.5 text-xs text-gray-600 hover:bg-gray-50 transition-colors"
+                              className="flex w-full items-center px-3 py-1.5 text-xs text-[#1A3A52]/80 transition-colors hover:bg-[#D5BA98]/15"
                               onClick={() => {
                                 onStatusChange(
                                   table.tableId,
@@ -168,10 +168,10 @@ const TableCard: React.FC<TableCardProps> = ({
                     </>
                   </PermissionGuard>
                 )}
-                <hr className="my-1 border-gray-100" />
+                <hr className="my-1 border-[#D5BA98]/35" />
                 <PermissionGuard permission={Permissions.DeleteTable}>
                   <button
-                    className="flex items-center w-full px-3 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
+                    className="flex w-full items-center px-3 py-2 text-sm text-[#8C3A3A] transition-colors hover:bg-[#8C3A3A]/10"
                     onClick={() => {
                       onDelete(table);
                       setMenuOpen(false);
@@ -188,12 +188,12 @@ const TableCard: React.FC<TableCardProps> = ({
       </div>
 
       {/* Bottom meta row */}
-      <div className="flex items-center justify-between text-[11px] text-gray-400 pt-2 border-t border-gray-50">
+      <div className="flex items-center justify-between border-t border-[#D5BA98]/35 pt-2 text-[11px] text-[#1A3A52]/60">
         <span>{table.capacity} seats</span>
         <span
           className={cn(
             "font-medium",
-            table.typeName === "VIP" ? "text-amber-600" : "text-gray-500"
+            table.typeName === "VIP" ? "text-[#4A5D4E]" : "text-[#1A3A52]/75"
           )}
         >
           {table.typeName}
@@ -202,7 +202,7 @@ const TableCard: React.FC<TableCardProps> = ({
 
       {/* Active orders line */}
       {table.activeOrders > 0 && (
-        <p className="text-[10px] text-gray-400 mt-1.5">
+        <p className="mt-1.5 text-[10px] text-[#1A3A52]/65">
           {table.activeOrders} active order{table.activeOrders > 1 ? "s" : ""}
         </p>
       )}

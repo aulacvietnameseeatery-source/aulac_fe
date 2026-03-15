@@ -70,7 +70,7 @@ Backend statuses / types / zones are stored as `LookupValue` rows. DTOs expose:
 |------|----------------|
 | Combobox + inline create + manager modal | `<LookupCombobox>` from `@/features/lookup` |
 | Standalone CRUD modal | `<LookupManagerModal>` from `@/features/lookup` |
-| Data + CRUD callbacks | `useLookupCrud({ baseUrl, queryKey, entityLabel })` from `@/features/lookup` |
+| Data + CRUD callbacks | `useLookupCrud({ typeId, queryKey, entityLabel, typeLabel? })` from `@/features/lookup` |
 
 Never build a custom combobox/modal for lookup data from scratch.
 

@@ -1,5 +1,5 @@
 import { api } from "@/lib/http";
-import { createLookupService } from "@/features/lookup";
+import { LOOKUP_TYPE, createLookupService } from "@/features/lookup";
 import type { ApiResponse, PagedResult } from "@/types/api-response.types";
 import type {
   TableManagementDto,
@@ -17,8 +17,8 @@ import type {
 } from "../types";
 
 // ── Shared lookup service instances ──
-const _zoneService = createLookupService("/api/tables/zones");
-const _typeService = createLookupService("/api/tables/types");
+const _zoneService = createLookupService(LOOKUP_TYPE.TableZone, { typeLabel: "Zone" });
+const _typeService = createLookupService(LOOKUP_TYPE.TableType, { typeLabel: "Table Type" });
 
 /**
  * Table Management API service
@@ -139,42 +139,42 @@ export const tableService = {
 
   // ── Lookup endpoints ── delegated to createLookupService instances ──
 
-  /** GET /api/tables/zones */
+  /** GET /api/lookups/{TableZone} */
   async getZones(): Promise<LookupValueDto[]> {
     return _zoneService.getAll();
   },
 
-  /** GET /api/tables/types */
+  /** GET /api/lookups/{TableType} */
   async getTableTypes(): Promise<LookupValueDto[]> {
     return _typeService.getAll();
   },
 
-  /** POST /api/tables/zones */
+  /** POST /api/lookups/{TableZone} */
   async createZone(data: CreateLookupValueRequest): Promise<LookupValueDto> {
     return _zoneService.create(data);
   },
 
-  /** POST /api/tables/types */
+  /** POST /api/lookups/{TableType} */
   async createTableType(data: CreateLookupValueRequest): Promise<LookupValueDto> {
     return _typeService.create(data);
   },
 
-  /** PUT /api/tables/zones/{id} */
+  /** PUT /api/lookups/{TableZone}/{id} */
   async updateZone(id: number, data: UpdateLookupValueRequest): Promise<LookupValueDto> {
     return _zoneService.update(id, data);
   },
 
-  /** DELETE /api/tables/zones/{id} */
+  /** DELETE /api/lookups/{TableZone}/{id} */
   async deleteZone(id: number): Promise<void> {
     return _zoneService.remove(id);
   },
 
-  /** PUT /api/tables/types/{id} */
+  /** PUT /api/lookups/{TableType}/{id} */
   async updateTableType(id: number, data: UpdateLookupValueRequest): Promise<LookupValueDto> {
     return _typeService.update(id, data);
   },
 
-  /** DELETE /api/tables/types/{id} */
+  /** DELETE /api/lookups/{TableType}/{id} */
   async deleteTableType(id: number): Promise<void> {
     return _typeService.remove(id);
   },

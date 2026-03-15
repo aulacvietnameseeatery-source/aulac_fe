@@ -35,7 +35,8 @@ export const DishActions = ({
             <PermissionGuard permission={Permissions.ViewDish}>
                 <button
                     className="text-gray-400 hover:text-blue-600 transition-colors cursor-pointer p-1"
-                    title={t("actions.view").toString()}
+                    data-tooltip-content={t("actions.view").toString()}
+                    data-tooltip-id="my-tooltip"
                     onClick={(e) => handleAction(e, onView)}
                 >
                     <Eye size={18} />
@@ -46,7 +47,8 @@ export const DishActions = ({
             <PermissionGuard permission={Permissions.EditDish}>
                 <button
                     className="text-gray-400 hover:text-blue-600 transition-colors cursor-pointer p-1"
-                    title={t("actions.edit").toString()}
+                    data-tooltip-content={t("actions.edit").toString()}
+                    data-tooltip-id="my-tooltip"
                     onClick={(e) => handleAction(e, onEdit)}
                 >
                     <Edit size={18} />

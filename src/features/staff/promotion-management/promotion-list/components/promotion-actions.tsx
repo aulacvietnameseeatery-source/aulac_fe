@@ -26,7 +26,8 @@ export const PromotionActions = ({ promotion, onView, onEdit }: PromotionActions
             <PermissionGuard permission={Permissions.ViewPromotion}>
                 <button
                     className="text-gray-400 hover:text-blue-600 transition-colors cursor-pointer p-1"
-                    title={t("actions.view")}
+                    data-tooltip-content={t("actions.view")}
+                    data-tooltip-id="my-tooltip"
                     onClick={(e) => handleAction(e, onView)}
                 >
                     <Eye size={18} />
@@ -36,7 +37,8 @@ export const PromotionActions = ({ promotion, onView, onEdit }: PromotionActions
             <PermissionGuard permission={Permissions.UpdatePromotion}>
                 <button
                     className="text-gray-400 hover:text-blue-600 transition-colors cursor-pointer p-1"
-                    title={t("actions.edit")}
+                    data-tooltip-content={t("actions.edit")}
+                    data-tooltip-id="my-tooltip"
                     onClick={(e) => handleAction(e, onEdit)}
                 >
                     <Edit size={18} />
