@@ -30,15 +30,15 @@ export function KitchenOrderGrid({
                 {[...Array(8)].map((_, i) => (
                     <div
                         key={i}
-                        className="bg-white rounded-2xl border border-gray-100 p-6 animate-pulse"
+                        className="bg-white rounded-2xl border border-slate-200 p-6 animate-pulse"
                     >
-                        <div className="h-16 bg-gray-100 rounded mb-4"></div>
+                        <div className="h-16 bg-[#D5BA98]/18 rounded mb-4"></div>
                         <div className="space-y-3">
-                            <div className="h-4 bg-gray-100 rounded w-3/4"></div>
-                            <div className="h-4 bg-gray-100 rounded w-1/2"></div>
-                            <div className="h-4 bg-gray-100 rounded w-2/3"></div>
+                            <div className="h-4 bg-[#D5BA98]/18 rounded w-3/4"></div>
+                            <div className="h-4 bg-[#D5BA98]/18 rounded w-1/2"></div>
+                            <div className="h-4 bg-[#D5BA98]/18 rounded w-2/3"></div>
                         </div>
-                        <div className="h-10 bg-gray-100 rounded mt-4"></div>
+                        <div className="h-10 bg-[#D5BA98]/18 rounded mt-4"></div>
                     </div>
                 ))}
             </div>
@@ -47,8 +47,8 @@ export function KitchenOrderGrid({
 
     if (orders.length === 0) {
         return (
-            <div className="flex flex-col items-center justify-center py-24 text-gray-400">
-                <div className="w-16 h-16 rounded-full bg-gray-50 flex items-center justify-center mb-4">
+            <div className="flex flex-col items-center justify-center py-24 text-[#1A3A52]/50">
+                <div className="w-16 h-16 rounded-full bg-[#D5BA98]/15 flex items-center justify-center mb-4">
                     <img src="/images/img_margin_2.svg" alt="Empty" className="w-8 h-8 opacity-20" />
                 </div>
                 <p className="text-base font-medium">{t?.("empty.title") || "No orders found"}</p>

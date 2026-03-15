@@ -36,10 +36,10 @@ interface KanbanColumnConfig {
 }
 
 const KANBAN_COLUMNS: KanbanColumnConfig[] = [
-    { key: "pending", headerColor: "bg-gray-800", statuses: ["Pending"], primaryKey: "start", secondaryKey: "cancel" },
-    { key: "inProgress", headerColor: "bg-blue-600", statuses: ["In progress"], primaryKey: "finish", secondaryKey: "cancel" },
-    { key: "completed", headerColor: "bg-green-600", statuses: ["Completed"], primaryKey: "complete", secondaryKey: "printInvoice" },
-    { key: "cancelled", headerColor: "bg-red-500", statuses: ["Cancelled"], primaryKey: "reset", secondaryKey: "delete" },
+    { key: "pending", headerColor: "bg-[#1A3A52]", statuses: ["Pending"], primaryKey: "start", secondaryKey: "cancel" },
+    { key: "inProgress", headerColor: "bg-[#1A3A52]/80", statuses: ["In progress"], primaryKey: "finish", secondaryKey: "cancel" },
+    { key: "completed", headerColor: "bg-[#4A5D4E]", statuses: ["Completed"], primaryKey: "complete", secondaryKey: "printInvoice" },
+    { key: "cancelled", headerColor: "bg-[#8C3A3A]", statuses: ["Cancelled"], primaryKey: "reset", secondaryKey: "delete" },
 ];
 
 const SEARCH_DEBOUNCE_MS = 400;
@@ -239,17 +239,17 @@ function OrdersContent() {
     };
 
     return (
-        <div className="w-full flex flex-col h-full bg-[#F8F9FA] px-4 md:px-0">
-            <div className="sticky top-0 z-20 bg-[#F8F9FA]/90 backdrop-blur-md -mx-4 px-4 py-2 border-b border-gray-100 mb-4 lg:relative lg:top-auto lg:z-auto lg:bg-transparent lg:backdrop-blur-none lg:mx-0 lg:px-0 lg:py-0 lg:border-none lg:mb-6 lg:mt-1">
+        <div className="w-full flex flex-col h-full bg-[#FDFBF9] px-4 md:px-0">
+            <div className="sticky top-0 z-20 bg-[#FDFBF9]/90 backdrop-blur-md -mx-4 px-4 py-2 border-b border-[#D5BA98]/30 mb-4 lg:relative lg:top-auto lg:z-auto lg:bg-transparent lg:backdrop-blur-none lg:mx-0 lg:px-0 lg:py-0 lg:border-none lg:mb-6 lg:mt-1">
                 <div className="flex flex-col gap-3 lg:gap-4">
                     <div className="flex items-start sm:items-center justify-between flex-wrap gap-2">
                         <div>
-                            <h1 className="text-base sm:text-lg font-bold text-gray-900 leading-none whitespace-nowrap">
+                            <h1 className="text-base sm:text-lg font-bold text-[#1A3A52] leading-none whitespace-nowrap">
                                 {t("title")}
                             </h1>
-                            <p className="text-xs text-gray-500 mt-1">{t("description")}</p>
+                            <p className="text-xs text-[#1A3A52]/60 mt-1">{t("description")}</p>
                         </div>
-                        <Button onClick={handleCreate} variant="outline" size="sm" className="h-9 px-3.5 text-sm font-semibold bg-white border-gray-200 shadow-sm">
+                        <Button onClick={handleCreate} variant="outline" size="sm" className="h-9 px-3.5 text-sm font-semibold bg-[#FDFBF9] border-[#D5BA98]/60 text-[#1A3A52] hover:bg-[#D5BA98]/10 shadow-none">
                             <Plus className="mr-1.5 h-3.5 w-3.5" />
                             {t("addNewOrder")}
                         </Button>
@@ -265,14 +265,14 @@ function OrdersContent() {
                                                 key={tab.label}
                                                 onClick={() => handleTabChange(idx)}
                                                 className={`h-8 inline-flex items-center gap-1.5 px-3 rounded-lg text-xs font-semibold transition-colors whitespace-nowrap ${activeTab === idx
-                                                    ? "bg-blue-600 text-white shadow-sm"
-                                                    : "text-gray-600 bg-white border border-gray-200 hover:bg-gray-50"
+                                                    ? "bg-[#1A3A52] text-white shadow-sm"
+                                                    : "text-[#1A3A52]/70 bg-[#FDFBF9] border border-[#D5BA98]/50 hover:bg-[#D5BA98]/10"
                                                     }`}
                                             >
                                                 <span>{tab.label}</span>
                                                 <span className={`text-[10px] leading-tight rounded-full px-1.5 py-0.5 font-bold ${activeTab === idx
                                                     ? "bg-white/20 text-white"
-                                                    : "bg-gray-200 text-gray-600"
+                                                    : "bg-[#D5BA98]/25 text-[#1A3A52]/70"
                                                     }`}>
                                                     {tab.count}
                                                 </span>
@@ -281,7 +281,7 @@ function OrdersContent() {
                                     </div>
                                 </div>
                             ) : (
-                                <div className="text-xs sm:text-sm font-medium text-gray-500 px-0.5">
+                                <div className="text-xs sm:text-sm font-medium text-[#1A3A52]/60 px-0.5">
                                     {t("kanbanLabel")}
                                 </div>
                             )}
@@ -289,11 +289,11 @@ function OrdersContent() {
 
                         <div className="w-full xl:w-auto flex flex-col sm:flex-row sm:items-center gap-2">
                             <div className="relative w-full xl:w-72">
-                                <Search className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                                <Search className="w-4 h-4 text-[#1A3A52]/40 absolute left-3 top-1/2 -translate-y-1/2" />
                                 <input
                                     value={searchInput}
                                     onChange={(e) => setSearchInput(e.target.value)}
-                                    className="w-full h-9 rounded-lg border border-gray-200 bg-white pl-9 pr-3 text-sm text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                                    className="w-full h-9 rounded-lg border border-[#D5BA98]/60 bg-[#FDFBF9] pl-9 pr-3 text-sm text-[#1A3A52] placeholder:text-[#1A3A52]/40 focus:outline-none focus:ring-2 focus:ring-[#1A3A52]/15 focus:border-[#1A3A52]/40"
                                     placeholder={t("searchPlaceholder")}
                                     type="text"
                                     autoComplete="on"
@@ -305,52 +305,52 @@ function OrdersContent() {
                                     <button
                                         onClick={() => setDatePickerOpen(o => !o)}
                                         className={`h-9 inline-flex items-center gap-1.5 px-3 rounded-lg border text-sm font-semibold transition-colors ${datePreset
-                                            ? "bg-blue-50 border-blue-300 text-blue-700"
-                                            : "bg-white border-gray-200 text-gray-600 hover:bg-gray-50"
+                                            ? "bg-[#D5BA98]/20 border-[#D5BA98]/70 text-[#1A3A52]"
+                                            : "bg-[#FDFBF9] border-[#D5BA98]/60 text-[#1A3A52]/70 hover:bg-[#D5BA98]/10"
                                             }`}
                                     >
                                         <CalendarDays className="w-4 h-4" />
                                         <span>{activeDateLabel ?? t("dateRange.label")}</span>
                                         {datePreset ? (
-                                            <X className="w-3.5 h-3.5 ml-0.5 text-blue-500" onClick={clearDateFilter} />
+                                            <X className="w-3.5 h-3.5 ml-0.5 text-[#1A3A52]/60" onClick={clearDateFilter} />
                                         ) : (
                                             <ChevronDown className="w-3.5 h-3.5 ml-0.5" />
                                         )}
                                     </button>
 
                                     {datePickerOpen && (
-                                        <div className="absolute right-0 sm:left-0 sm:right-auto top-full mt-1 z-50 bg-white border border-gray-200 rounded-xl shadow-xl w-64 py-1 text-sm">
+                                        <div className="absolute right-0 sm:left-0 sm:right-auto top-full mt-1 z-50 bg-[#FDFBF9] border border-[#D5BA98]/50 rounded-xl shadow-xl w-64 py-1 text-sm">
                                             {DATE_PRESETS.filter(p => p.key !== "custom").map(preset => (
                                                 <button
                                                     key={preset.key}
                                                     onClick={() => { setDatePreset(preset.key); setDatePickerOpen(false); }}
-                                                    className={`w-full text-left px-4 py-2.5 hover:bg-blue-50 transition-colors ${datePreset === preset.key ? "bg-blue-600 text-white font-semibold" : "text-gray-700"
+                                                    className={`w-full text-left px-4 py-2.5 hover:bg-[#D5BA98]/15 transition-colors ${datePreset === preset.key ? "bg-[#1A3A52] text-white font-semibold" : "text-[#1A3A52]"
                                                         }`}
                                                 >
                                                     {preset.label}
                                                 </button>
                                             ))}
-                                            <div className="border-t border-gray-100 mt-1 pt-2 px-4 pb-3">
-                                                <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">{t("dateRange.custom")}</div>
+                                            <div className="border-t border-[#D5BA98]/40 mt-1 pt-2 px-4 pb-3">
+                                                <div className="text-xs font-semibold text-[#1A3A52]/50 uppercase tracking-wider mb-2">{t("dateRange.custom")}</div>
                                                 <div className="flex flex-col gap-1.5">
                                                     <input
                                                         type="date"
                                                         value={customFrom}
                                                         onChange={e => { setCustomFrom(e.target.value); setDatePreset("custom"); }}
-                                                        className="w-full border border-gray-200 rounded-lg px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                        className="w-full border border-[#D5BA98]/60 rounded-lg px-2 py-1.5 text-sm text-[#1A3A52] bg-[#FDFBF9] focus:outline-none focus:ring-2 focus:ring-[#1A3A52]/20"
                                                         placeholder={t("dateRange.from")}
                                                     />
                                                     <input
                                                         type="date"
                                                         value={customTo}
                                                         onChange={e => { setCustomTo(e.target.value); setDatePreset("custom"); }}
-                                                        className="w-full border border-gray-200 rounded-lg px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                        className="w-full border border-[#D5BA98]/60 rounded-lg px-2 py-1.5 text-sm text-[#1A3A52] bg-[#FDFBF9] focus:outline-none focus:ring-2 focus:ring-[#1A3A52]/20"
                                                         placeholder={t("dateRange.to")}
                                                     />
                                                 </div>
                                                 <button
                                                     onClick={() => setDatePickerOpen(false)}
-                                                    className="mt-2 w-full bg-blue-600 text-white rounded-lg py-1.5 text-sm font-semibold hover:bg-blue-700 transition-colors"
+                                                    className="mt-2 w-full bg-[#1A3A52] text-white rounded-lg py-1.5 text-sm font-semibold hover:bg-[#1A3A52]/90 transition-colors"
                                                 >
                                                     {t("dateRange.apply")}
                                                 </button>
@@ -362,24 +362,24 @@ function OrdersContent() {
                                 <button
                                     onClick={handleRefresh}
                                     disabled={isLoading || isRefreshing}
-                                    className="p-1.5 bg-white border border-gray-100 rounded-lg hover:bg-gray-50 transition-colors shadow-sm disabled:opacity-50 group shrink-0"
+                                    className="p-1.5 bg-[#FDFBF9] border border-[#D5BA98]/50 rounded-lg hover:bg-[#D5BA98]/10 transition-colors shadow-none disabled:opacity-50 group shrink-0"
                                     title={t("refresh")}
                                 >
-                                    <RefreshCw className={`w-3 h-3 text-gray-600 transition-transform duration-500 ${(isLoading || isRefreshing) ? "animate-spin" : "group-hover:rotate-180"}`} />
+                                    <RefreshCw className={`w-3 h-3 text-[#1A3A52]/60 transition-transform duration-500 ${(isLoading || isRefreshing) ? "animate-spin" : "group-hover:rotate-180"}`} />
                                 </button>
 
-                                <div className="h-8 inline-flex items-center border border-gray-200 rounded-lg bg-white p-0.5 gap-0.5">
+                                <div className="h-8 inline-flex items-center border border-[#D5BA98]/60 rounded-lg bg-[#FDFBF9] p-0.5 gap-0.5">
                                     <button
                                         onClick={() => handleViewMode("grid")}
                                         title="Grid"
-                                        className={`h-full px-2 rounded-md transition-colors ${viewMode === "grid" ? "bg-blue-600 text-white shadow-sm" : "text-gray-500 hover:bg-gray-100"}`}
+                                        className={`h-full px-2 rounded-md transition-colors ${viewMode === "grid" ? "bg-[#1A3A52] text-white shadow-sm" : "text-[#1A3A52]/50 hover:bg-[#D5BA98]/15"}`}
                                     >
                                         <LayoutGrid className="w-4 h-4" />
                                     </button>
                                     <button
                                         onClick={() => handleViewMode("kanban")}
                                         title="Kanban"
-                                        className={`h-full px-2 rounded-md transition-colors ${viewMode === "kanban" ? "bg-blue-600 text-white shadow-sm" : "text-gray-500 hover:bg-gray-100"}`}
+                                        className={`h-full px-2 rounded-md transition-colors ${viewMode === "kanban" ? "bg-[#1A3A52] text-white shadow-sm" : "text-[#1A3A52]/50 hover:bg-[#D5BA98]/15"}`}
                                     >
                                         <SquareKanban className="w-4 h-4" />
                                     </button>
@@ -395,7 +395,7 @@ function OrdersContent() {
                     <div className="voucher-body-grid flex-1 min-h-0 h-full">
                         {isLoading ? (
                             <div className="flex items-center justify-center py-24 h-full">
-                                <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
+                                <Loader2 className="w-8 h-8 animate-spin text-[#1A3A52]" />
                             </div>
                         ) : viewMode === "kanban" ? (
                             /* ── KANBAN VIEW — full-height scrollable, no pagination ── */
@@ -404,7 +404,7 @@ function OrdersContent() {
                                     {KANBAN_COLUMNS.map((col) => {
                                         const colOrders = getColumnOrders(col);
                                         return (
-                                            <div key={col.key} className="bg-gray-50 rounded-2xl border border-gray-200">
+                                            <div key={col.key} className="bg-white rounded-2xl border border-slate-200 shadow-sm">
                                                 <div className={`flex items-center justify-between ${col.headerColor} rounded-t-2xl px-4 py-3`}>
                                                     <span className="text-white font-semibold text-sm">{t(`kanban.${col.key}`)}</span>
                                                     <span className="text-white text-sm font-medium bg-white/20 rounded-full px-2 py-0.5">
@@ -416,7 +416,7 @@ function OrdersContent() {
                                                 </div>
                                                 <div className="p-3 flex flex-col gap-3">
                                                     {colOrders.length === 0 ? (
-                                                        <div className="text-center py-10 text-gray-400 text-xs">
+                                                        <div className="text-center py-10 text-[#1A3A52]/40 text-xs">
                                                             {t("kanban.empty")}
                                                         </div>
                                                     ) : (
@@ -445,10 +445,10 @@ function OrdersContent() {
                             </div>
                         ) : (
                             /* ── GRID VIEW — scrollable cards + inline pagination ── */
-                            <div className="h-full overflow-auto p-0 custom-scrollbar">
+                            <div className="h-full flex flex-col overflow-hidden p-0">
                                 {orders.length === 0 ? (
-                                    <div className="flex flex-col items-center justify-center h-full py-24 text-gray-400">
-                                        <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mb-4">
+                                    <div className="flex flex-col items-center justify-center h-full py-24 text-[#1A3A52]/50">
+                                        <div className="w-16 h-16 rounded-full bg-[#D5BA98]/20 flex items-center justify-center mb-4">
                                             <Search className="w-7 h-7" />
                                         </div>
                                         <p className="text-base font-medium">{t("empty.title")}</p>
@@ -473,7 +473,7 @@ function OrdersContent() {
                                                 />
                                             ))}
                                         </div>
-                                        <div className="mt-auto">
+                                        <div className="shrink-0 border-t rounded-xl border-[#D5BA98]/40 bg-[#FDFBF9]">
                                             <TablePagination
                                                 totalCount={totalCount}
                                                 pageSize={pageSize}

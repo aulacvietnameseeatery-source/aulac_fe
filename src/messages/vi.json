@@ -1522,6 +1522,8 @@
       "payAndComplete": "Thanh toán & Hoàn tất",
       "paying": "Đang thanh toán...",
       "enterTip": "Nhập số tiền tip",
+      "specificTargetDesc": "Áp dụng cho món chỉ định",
+      "entireOrderDesc": "Áp dụng cho toàn bộ đơn",
       "selectDiscount": "Chọn hoặc nhập giảm giá",
       "selectCoupon": "Chọn mã giảm giá",
       "promotions": "Khuyến mãi"
@@ -2171,5 +2173,34 @@
     "downloadPdf": "Tải PDF",
     "printInvoice": "In hóa đơn",
     "defaultStaff": "Nhân viên"
+  },
+  "Customer": {
+    "List": {
+      "title": "Quản lý khách hàng",
+      "description": "Quản lý và xem thông tin khách hàng, lịch sử đặt hàng và điểm thành viên.",
+      "searchPlaceholder": "Tìm kiếm theo tên, SĐT hoặc email...",
+      "addNew": "Thêm khách hàng",
+      "table": {
+        "no": "STT",
+        "customerName": "Khách hàng",
+        "email": "Email",
+        "type": "Loại",
+        "orders": "Đơn hàng",
+        "points": "Điểm",
+        "lastOrder": "Đơn gần nhất"
+      },
+      "filters": {
+        "member": "Thành viên",
+        "guest": "Khách vãng lai"
+      },
+      "labels": {
+        "member": "Thành viên",
+        "guest": "Khách vãng lai"
+      },
+      "actions": {
+        "view": "Xem chi tiết",
+        "edit": "Chỉnh sửa thông tin"
+      }
+    }
   }
 }

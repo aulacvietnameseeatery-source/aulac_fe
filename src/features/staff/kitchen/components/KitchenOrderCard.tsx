@@ -26,24 +26,24 @@ import type { UpdateItemStatusRequest } from "../types/kitchen.types";
 
 const STATUS_CONFIG: Record<string, { bg: string; text: string; headerBg: string }> = {
     "new": {
-        bg: "bg-gray-100",
-        text: "text-gray-900",
-        headerBg: "bg-gray-500"
+        bg: "bg-amber-100",
+        text: "text-amber-800",
+        headerBg: "bg-amber-600"
     },
     "in-kitchen": {
-        bg: "bg-orange-50",
-        text: "text-orange-900",
-        headerBg: "bg-orange-600"
+        bg: "bg-blue-100",
+        text: "text-blue-800",
+        headerBg: "bg-blue-600"
     },
     "rejected": {
-        bg: "bg-red-50",
-        text: "text-red-900",
-        headerBg: "bg-red-500"
+        bg: "bg-red-100",
+        text: "text-red-800",
+        headerBg: "bg-red-600"
     },
     "completed": {
-        bg: "bg-green-50",
-        text: "text-green-900",
-        headerBg: "bg-green-600"
+        bg: "bg-emerald-100",
+        text: "text-emerald-800",
+        headerBg: "bg-emerald-600"
     },
 };
 
@@ -51,13 +51,13 @@ const getItemStatusColor = (status: string) => {
     switch (normalizeKitchenItemStatus(status)) {
         case OrderItemStatusCode.SERVED:
         case OrderItemStatusCode.READY:
-            return 'bg-green-500 border-green-500';
+            return 'bg-emerald-500 border-emerald-500';
         case OrderItemStatusCode.REJECTED:
             return 'bg-red-500 border-red-500';
         case OrderItemStatusCode.IN_PROGRESS:
             return 'bg-blue-500 border-blue-500';
         default:
-            return 'bg-gray-300 border-gray-300';
+            return 'bg-slate-300 border-slate-300';
     }
 };
 
@@ -117,7 +117,7 @@ export function KitchenOrderCard({ order, onUpdateStatus, onBatchUpdateStatus, i
     }, [order.items]);
 
     return (
-        <div className="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden flex flex-col h-full hover:shadow-md transition-shadow">
+        <div className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden flex flex-col h-full hover:-translate-y-0.5 hover:shadow-md transition-all">
             {/* Header */}
             <div className={`${config.headerBg} px-3 py-2.5 sm:px-4 sm:py-3.5`}>
                 <div className="flex items-center justify-between">
@@ -143,13 +143,13 @@ export function KitchenOrderCard({ order, onUpdateStatus, onBatchUpdateStatus, i
             </div>
 
             {/* Order Info */}
-            <div className="px-3 py-2 sm:px-5 sm:py-3 border-b border-gray-50 bg-gray-50/30">
-                <div className="flex items-center justify-between gap-3 text-[11px] sm:text-xs text-gray-600 font-medium">
+            <div className="px-3 py-2 sm:px-5 sm:py-3 border-b border-[#D5BA98]/20 bg-[#D5BA98]/10">
+                <div className="flex items-center justify-between gap-3 text-[11px] sm:text-xs text-[#1A3A52]/70 font-medium">
                     <div className="flex items-center gap-1.5">
                         <span>{t?.("tokenNo") || "Token No:"}</span>
-                        <span className="text-gray-900 font-bold">{order.orderId % 100}</span>
+                        <span className="text-[#1A3A52] font-bold">{order.orderId % 100}</span>
                     </div>
-                    <div className="flex items-center gap-1.5 text-gray-500">
+                    <div className="flex items-center gap-1.5 text-[#1A3A52]/60">
                         <Clock className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                         <span className="font-semibold">{formattedTime}</span>
                     </div>
@@ -157,7 +157,7 @@ export function KitchenOrderCard({ order, onUpdateStatus, onBatchUpdateStatus, i
             </div>
 
             {/* Order Items */}
-            <div className="px-3 py-3 sm:px-5 sm:py-4 flex-1 space-y-3 sm:space-y-4 max-h-[250px] sm:max-h-[300px] overflow-y-auto custom-scrollbar">
+            <div className="px-3 py-3 sm:px-5 sm:py-4 flex-1 space-y-3 sm:space-y-4 max-h-62.5 sm:max-h-75 overflow-y-auto custom-scrollbar">
                 <div className="space-y-2.5 sm:space-y-3">
                     {order.items.map((item) => {
                         const normalizedStatus = normalizeKitchenItemStatus(item.itemStatus);
@@ -165,34 +165,34 @@ export function KitchenOrderCard({ order, onUpdateStatus, onBatchUpdateStatus, i
                         const itemUpdating = isItemUpdating(item.orderItemId);
 
                         return (
-                            <div key={item.orderItemId} className="group border border-gray-100 rounded-xl p-2.5 sm:p-3 bg-white">
+                            <div key={item.orderItemId} className="group border border-slate-200 rounded-xl p-2.5 sm:p-3 bg-white">
                                 <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2.5">
                                     <div className="flex items-start flex-1 min-w-0">
-                                        <div className={`w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full border-2 ${getItemStatusColor(item.itemStatus)} flex-shrink-0 mt-1 mr-2.5 sm:mr-3 flex items-center justify-center`}>
+                                        <div className={`w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full border-2 ${getItemStatusColor(item.itemStatus)} shrink-0 mt-1 mr-2.5 sm:mr-3 flex items-center justify-center`}>
                                             <div className={`w-0.5 h-0.5 sm:w-1 sm:h-1 rounded-full ${DONE_ITEM_STATUSES.includes(normalizedStatus as OrderItemStatusCode) ? 'bg-white' : ''}`}></div>
                                         </div>
 
                                         <div className="flex-1 min-w-0">
                                             <div className="flex items-center flex-wrap gap-x-2 gap-y-1">
-                                                <span className="text-xs sm:text-sm font-bold text-gray-800 break-words">
+                                                <span className="text-xs sm:text-sm font-bold text-[#1A3A52] wrap-break-word">
                                                     {item.dishName}
                                                 </span>
-                                                <span className="text-[10px] sm:text-xs text-gray-500 font-bold">x{item.quantity}</span>
+                                                <span className="text-[10px] sm:text-xs text-[#1A3A52]/55 font-bold">x{item.quantity}</span>
                                             </div>
 
                                             {item.note && (
-                                                <div className="flex items-center gap-1.5 bg-gray-50 rounded-lg px-2.5 py-1.5 mt-1.5 border border-gray-100/60">
-                                                    <MessageSquare className="w-3 h-3 text-gray-400" />
-                                                    <span className="text-[10px] sm:text-xs text-gray-600 font-medium break-words">
+                                                <div className="flex items-center gap-1.5 bg-[#D5BA98]/12 rounded-lg px-2.5 py-1.5 mt-1.5 border border-[#D5BA98]/30">
+                                                    <MessageSquare className="w-3 h-3 text-[#1A3A52]/45" />
+                                                    <span className="text-[10px] sm:text-xs text-[#1A3A52]/70 font-medium wrap-break-word">
                                                         {item.note}
                                                     </span>
                                                 </div>
                                             )}
 
                                             {item.rejectReason && (
-                                                <div className="flex items-center gap-1.5 bg-red-50 rounded-lg px-2.5 py-1.5 mt-1.5 border border-red-100">
-                                                    <AlertTriangle className="w-3 h-3 text-red-400" />
-                                                    <span className="text-[10px] sm:text-xs text-red-600 font-medium italic break-words">
+                                                <div className="flex items-center gap-1.5 bg-[#8C3A3A]/8 rounded-lg px-2.5 py-1.5 mt-1.5 border border-[#8C3A3A]/20">
+                                                    <AlertTriangle className="w-3 h-3 text-[#8C3A3A]" />
+                                                    <span className="text-[10px] sm:text-xs text-[#8C3A3A] font-medium italic wrap-break-word">
                                                         {item.rejectReason}
                                                     </span>
                                                 </div>
@@ -202,13 +202,13 @@ export function KitchenOrderCard({ order, onUpdateStatus, onBatchUpdateStatus, i
 
                                     {/* Item specific actions: larger touch targets and placed near each item */}
                                     {canAction && (
-                                        <div className="flex items-center sm:justify-end gap-2 sm:min-w-[170px]">
+                                        <div className="flex items-center sm:justify-end gap-2 sm:min-w-42.5">
                                             {normalizedStatus === OrderItemStatusCode.CREATED && (
                                                 <button
                                                     type="button"
                                                     disabled={itemUpdating}
                                                     onClick={() => onUpdateStatus(item.orderItemId, OrderItemStatusCode.IN_PROGRESS)}
-                                                    className="h-9 px-3 sm:px-4 rounded-lg text-xs sm:text-sm font-semibold text-blue-700 bg-blue-50 border border-blue-200 hover:bg-blue-100 disabled:opacity-50"
+                                                    className="h-9 px-3 sm:px-4 rounded-lg text-xs sm:text-sm font-semibold text-[#1A3A52] bg-[#D5BA98]/18 border border-[#D5BA98]/50 hover:bg-[#D5BA98]/28 disabled:opacity-50"
                                                 >
                                                     {t?.("actions.start") || "Start"}
                                                 </button>
@@ -218,7 +218,7 @@ export function KitchenOrderCard({ order, onUpdateStatus, onBatchUpdateStatus, i
                                                     type="button"
                                                     disabled={itemUpdating}
                                                     onClick={() => onUpdateStatus(item.orderItemId, OrderItemStatusCode.SERVED)}
-                                                    className="h-9 px-3 sm:px-4 rounded-lg text-xs sm:text-sm font-semibold text-green-700 bg-green-50 border border-green-200 hover:bg-green-100 disabled:opacity-50"
+                                                    className="h-9 px-3 sm:px-4 rounded-lg text-xs sm:text-sm font-semibold text-[#4A5D4E] bg-[#D5BA98]/18 border border-[#D5BA98]/50 hover:bg-[#D5BA98]/28 disabled:opacity-50"
                                                 >
                                                     {t?.("actions.serve") || "Serve"}
                                                 </button>
@@ -227,7 +227,7 @@ export function KitchenOrderCard({ order, onUpdateStatus, onBatchUpdateStatus, i
                                                 type="button"
                                                 disabled={itemUpdating}
                                                 onClick={() => handleReject(item.orderItemId)}
-                                                className="h-9 px-3 sm:px-4 rounded-lg text-xs sm:text-sm font-semibold text-red-700 bg-red-50 border border-red-200 hover:bg-red-100 disabled:opacity-50"
+                                                className="h-9 px-3 sm:px-4 rounded-lg text-xs sm:text-sm font-semibold text-[#8C3A3A] bg-[#8C3A3A]/8 border border-[#8C3A3A]/25 hover:bg-[#8C3A3A]/12 disabled:opacity-50"
                                             >
                                                 {t?.("actions.reject") || "Reject"}
                                             </button>
@@ -242,21 +242,21 @@ export function KitchenOrderCard({ order, onUpdateStatus, onBatchUpdateStatus, i
                                             value={rejectReason}
                                             onChange={(e) => setRejectReason(e.target.value)}
                                             placeholder={t?.("rejectReason.placeholder") || "Nhập lý do từ chối..."}
-                                            className="w-full h-10 text-xs sm:text-sm border border-red-200 rounded-lg px-3 focus:outline-none focus:ring-2 focus:ring-red-100 bg-red-50"
+                                            className="w-full h-10 text-xs sm:text-sm border border-[#8C3A3A]/25 rounded-lg px-3 text-[#1A3A52] focus:outline-none focus:ring-2 focus:ring-[#8C3A3A]/10 bg-[#FDFBF9]"
                                         />
                                         <div className="flex gap-2">
                                             <button
                                                 type="button"
                                                 disabled={itemUpdating || !rejectReason.trim()}
                                                 onClick={() => handleReject(item.orderItemId)}
-                                                className="h-9 px-3 rounded-lg text-xs sm:text-sm font-semibold bg-red-600 text-white hover:bg-red-700 disabled:opacity-50"
+                                                className="h-9 px-3 rounded-lg text-xs sm:text-sm font-semibold bg-[#8C3A3A] text-white hover:bg-[#8C3A3A]/90 disabled:opacity-50"
                                             >
                                                 {t?.("rejectReason.confirm") || "Confirm"}
                                             </button>
                                             <button
                                                 type="button"
                                                 onClick={cancelReject}
-                                                className="h-9 px-3 rounded-lg text-xs sm:text-sm font-semibold text-gray-600 bg-gray-100 hover:bg-gray-200"
+                                                className="h-9 px-3 rounded-lg text-xs sm:text-sm font-semibold text-[#1A3A52]/70 bg-[#D5BA98]/15 hover:bg-[#D5BA98]/25"
                                             >
                                                 {t?.("rejectReason.cancel") || "Cancel"}
                                             </button>
@@ -270,20 +270,20 @@ export function KitchenOrderCard({ order, onUpdateStatus, onBatchUpdateStatus, i
             </div>
 
             {/* Footer / Progress */}
-            <div className="px-3 py-3 sm:px-5 sm:py-4 space-y-2.5 sm:space-y-3 mt-auto border-t border-gray-50 bg-gray-50/20">
+            <div className="px-3 py-3 sm:px-5 sm:py-4 space-y-2.5 sm:space-y-3 mt-auto border-t border-[#D5BA98]/20 bg-[#D5BA98]/10">
                 <div className="space-y-1.5 sm:space-y-2">
-                    <div className="flex justify-between items-center text-[9px] sm:text-[10px] font-bold text-gray-400">
-                        <div className="bg-gray-100 flex-1 h-1 sm:h-1.5 rounded-full overflow-hidden mr-3 sm:mr-4">
+                    <div className="flex justify-between items-center text-[9px] sm:text-[10px] font-bold text-[#1A3A52]/40">
+                        <div className="bg-[#D5BA98]/20 flex-1 h-1 sm:h-1.5 rounded-full overflow-hidden mr-3 sm:mr-4">
                             <div
-                                className="bg-green-500 h-full transition-all duration-500"
+                                className="bg-[#4A5D4E] h-full transition-all duration-500"
                                 style={{ width: `${progressPercentage}%` }}
                             ></div>
                         </div>
                         <div className="flex items-center gap-1.5">
-                            <span className="text-gray-500 font-semibold">
+                            <span className="text-[#1A3A52]/60 font-semibold">
                                 {processedItems}/{order.items.length}
                             </span>
-                            <span className="text-gray-900 font-bold">{Math.round(progressPercentage)}%</span>
+                            <span className="text-[#1A3A52] font-bold">{Math.round(progressPercentage)}%</span>
                         </div>
                     </div>
                 </div>
@@ -294,7 +294,7 @@ export function KitchenOrderCard({ order, onUpdateStatus, onBatchUpdateStatus, i
                         <Button
                             variant="outline"
                             onClick={() => setIsPrintModalOpen(true)}
-                            className="w-full h-9 gap-2 border-gray-200 text-gray-700 font-bold text-xs rounded-xl hover:bg-gray-100"
+                            className="w-full h-9 gap-2 border-[#D5BA98]/60 text-[#1A3A52] bg-[#FDFBF9] font-bold text-xs rounded-xl hover:bg-[#D5BA98]/10"
                         >
                             <Printer className="w-4 h-4" />
                             {t?.("actions.print") || "Print Order"}
@@ -304,7 +304,7 @@ export function KitchenOrderCard({ order, onUpdateStatus, onBatchUpdateStatus, i
                             <Button
                                 variant="outline"
                                 onClick={() => setIsPrintModalOpen(true)}
-                                className="h-9 gap-2 border-gray-200 text-gray-700 font-bold text-xs rounded-xl hover:bg-gray-100"
+                                className="h-9 gap-2 border-[#D5BA98]/60 text-[#1A3A52] bg-[#FDFBF9] font-bold text-xs rounded-xl hover:bg-[#D5BA98]/10"
                             >
                                 <Printer className="w-4 h-4" />
                                 {t?.("actions.print") || "Print Order"}
@@ -321,7 +321,7 @@ export function KitchenOrderCard({ order, onUpdateStatus, onBatchUpdateStatus, i
                                     }
                                 }}
                                 disabled={isUpdating || progressPercentage === 100}
-                                className="h-9 gap-2 border-gray-200 text-gray-700 font-bold text-xs rounded-xl hover:bg-gray-50 bg-white"
+                                className="h-9 gap-2 border-[#D5BA98]/60 text-[#1A3A52] font-bold text-xs rounded-xl hover:bg-[#D5BA98]/10 bg-[#FDFBF9]"
                             >
                                 <CheckCircle2 className="w-4 h-4" />
                                 {t?.("actions.markDone") || "Mark Done"}

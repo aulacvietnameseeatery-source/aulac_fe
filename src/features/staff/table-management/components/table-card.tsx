@@ -63,9 +63,8 @@ const TableCard: React.FC<TableCardProps> = ({
   return (
     <div
       className={cn(
-        "group relative cursor-pointer overflow-hidden rounded-lg border bg-[#FDFBF9] transition-all duration-200",
-        "hover:shadow-sm",
-        config.borderColor,
+        "group relative cursor-pointer overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm transition-all duration-200",
+        "hover:-translate-y-0.5 hover:shadow-md",
         isOffline && "opacity-55"
       )}
       onClick={() => onSelect?.(table)}

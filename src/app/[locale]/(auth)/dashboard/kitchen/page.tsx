@@ -97,23 +97,23 @@ function KitchenContent() {
     }, [orders]);
 
     return (
-        <div className="w-full flex flex-col h-full bg-[#F8F9FA] px-4 md:px-0">
+        <div className="w-full flex flex-col h-full bg-[#FDFBF9] px-4 md:px-0">
             {/* Page Header - Compact & Sticky on Mobile */}
-            <div className="sticky top-0 z-20 bg-[#F8F9FA]/90 backdrop-blur-md -mx-4 px-4 py-2 border-b border-gray-100 mb-4 lg:relative lg:top-auto lg:z-auto lg:bg-transparent lg:backdrop-blur-none lg:mx-0 lg:px-0 lg:py-0 lg:border-none lg:mb-6 lg:mt-1">
+            <div className="sticky top-0 z-20 bg-[#FDFBF9]/90 backdrop-blur-md -mx-4 px-4 py-2 border-b border-[#D5BA98]/30 mb-4 lg:relative lg:top-auto lg:z-auto lg:bg-transparent lg:backdrop-blur-none lg:mx-0 lg:px-0 lg:py-0 lg:border-none lg:mb-6 lg:mt-1">
                 <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 lg:gap-4">
                     <div className="flex items-center justify-between lg:justify-start gap-4 sm:gap-6 w-full lg:w-auto">
                         {/* Title and Refresh */}
                         <div className="flex items-center gap-2">
-                            <h1 className="text-base sm:text-lg font-bold text-gray-900 leading-none whitespace-nowrap">
+                            <h1 className="text-base sm:text-lg font-bold text-[#1A3A52] leading-none whitespace-nowrap">
                                 {t("title") || "Màn Hình Bếp"}
                             </h1>
                             <button
                                 onClick={handleRefresh}
                                 disabled={isLoading || isRefreshing}
-                                className="p-1.5 bg-white border border-gray-100 rounded-lg hover:bg-gray-50 transition-colors shadow-sm disabled:opacity-50 group shrink-0"
+                                className="p-1.5 bg-[#FDFBF9] border border-[#D5BA98]/50 rounded-lg hover:bg-[#D5BA98]/10 transition-colors shadow-none disabled:opacity-50 group shrink-0"
                                 title={t("refresh") || "Refresh"}
                             >
-                                <RefreshCw className={`w-3 h-3 text-gray-600 transition-transform duration-500 ${isRefreshing ? "animate-spin" : "group-hover:rotate-180"}`} />
+                                <RefreshCw className={`w-3 h-3 text-[#1A3A52]/60 transition-transform duration-500 ${isRefreshing ? "animate-spin" : "group-hover:rotate-180"}`} />
                             </button>
                         </div>
 
@@ -141,7 +141,7 @@ function KitchenContent() {
             </div>
 
             {/* Orders Grid */}
-            <div className="flex-1 overflow-auto custom-scrollbar -mx-1 px-1">
+            <div className="flex-1 overflow-auto custom-scrollbar -mx-1 px-1 pb-1">
                 <KitchenOrderGrid
                     orders={filteredOrders}
                     loading={isLoading}
