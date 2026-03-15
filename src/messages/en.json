@@ -1353,6 +1353,12 @@
         "delete": "Delete",
         "cancel": "Cancel"
       },
+      "viewMode": {
+        "grid": "Grid view",
+        "kanban": "Kanban view"
+      },
+      "statusUpdateSuccess": "Order status updated",
+      "statusUpdateError": "Failed to update order status",
       "empty": {
         "title": "No orders found",
         "hint": "Try adjusting your filters or search query"
@@ -1511,7 +1517,7 @@
       "cash": "Cash",
       "card": "Card",
       "scan": "Scan",
-      "discount": "Discount",
+      "promotion": "Promotion",
       "coupon": "Coupon",
       "tip": "Tip",
       "givenAmount": "Given Amount",
@@ -1522,9 +1528,7 @@
       "payAndComplete": "Pay & Complete Order",
       "paying": "Processing...",
       "enterTip": "Enter tip amount",
-      "specificTargetDesc": "Applies to specific items",
-      "entireOrderDesc": "Applies to entire order",
-      "selectDiscount": "Select or enter discount",
+      "selectPromotion": "Select promotion",
       "selectCoupon": "Select coupon",
       "promotions": "Promotions"
     }

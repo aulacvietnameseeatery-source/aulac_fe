@@ -1349,6 +1349,12 @@
         "delete": "Supprimer",
         "cancel": "Annuler"
       },
+      "viewMode": {
+        "grid": "Vue grille",
+        "kanban": "Vue kanban"
+      },
+      "statusUpdateSuccess": "Le statut de la commande a été mis à jour",
+      "statusUpdateError": "Impossible de mettre à jour le statut de la commande",
       "empty": {
         "title": "Aucune commande trouvée",
         "hint": "Essayez de modifier vos filtres ou votre recherche"
@@ -1507,10 +1513,8 @@
       "cash": "Espèces",
       "card": "Carte",
       "scan": "Scanner",
-      "discount": "Remise",
-      "tips": "Pourboires",
+      "promotion": "Promotion",
       "coupon": "Coupon",
-      "add": "Ajouter",
       "givenAmount": "Montant donné",
       "balance": "Reliquat",
       "note": "Note",
@@ -1519,9 +1523,7 @@
       "payAndComplete": "Payer & Terminer la commande",
       "paying": "Traitement...",
       "enterTip": "Saisir le montant du pourboire",
-      "specificTargetDesc": "S'applique à des articles spécifiques",
-      "entireOrderDesc": "S'applique à toute la commande",
-      "selectDiscount": "Sélectionner ou saisir une remise",
+      "selectPromotion": "Sélectionner une promotion",
       "selectCoupon": "Sélectionner un coupon",
       "promotions": "Promotions"
     }

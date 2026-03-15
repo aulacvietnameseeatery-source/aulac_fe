@@ -22,6 +22,8 @@ import { PaymentModal } from './PaymentModal';
 import { PrintOrderModal } from './PrintOrderModal';
 import { orderHistoryService } from '../services/order-history.service';
 import { toast } from 'sonner';
+import { CouponDTO } from '../../coupon-management/coupon-list/types/coupon.types';
+import { PromotionListDTO } from '../../promotion-management/promotion-list/types/promotion-types';
 
 // ─── Constants ──────────────────────────────────────────────────────────────
 
@@ -74,11 +76,13 @@ interface OrderCardProps {
     order: OrderHistory;
     onStatusChange?: (orderId: number, newStatus: string) => void;
     onAction?: (orderId: number, action: ActionKey) => void;
+    couponOptions?: CouponDTO[];
+    promotionOptions?: PromotionListDTO[];
 }
 
 // ─── Component ───────────────────────────────────────────────────────────────
 
-export const OrderCard: React.FC<OrderCardProps> = ({ order, onStatusChange, onAction }) => {
+export const OrderCard: React.FC<OrderCardProps> = ({ order, onStatusChange, onAction, couponOptions = [], promotionOptions = [] }) => {
     const t = useTranslations('Order.List.card');
     const format = useFormatter();
     const [expanded, setExpanded] = useState(false);
@@ -337,6 +341,8 @@ export const OrderCard: React.FC<OrderCardProps> = ({ order, onStatusChange, onA
                 onClose={() => setIsPaymentModalOpen(false)}
                 onPaymentComplete={handlePaymentComplete}
                 isLoading={isProcessingPayment}
+                couponOptions={couponOptions}
+                promotionOptions={promotionOptions}
             />
 
             <PrintOrderModal

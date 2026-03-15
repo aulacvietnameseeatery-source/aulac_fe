@@ -18,6 +18,11 @@ export const staffPromotionService = {
         return response.data;
     },
 
+    getCoupons: async (): Promise<PromotionListDTO[]> => {
+        const response = await api.get<ApiResponse<PromotionListDTO[]>>('/api/coupons');
+        return response.data ?? [];
+    },
+
     activatePromotion: async (promotionId: number): Promise<void> => {
         await api.put(`/api/promotions/${promotionId}/activate`, promotionId);
     },
