@@ -1,248 +1,180 @@
 "use client";
 
-import { useState, useMemo } from "react";
-import { Plus, RefreshCcw, Users, Eye, Pencil } from "lucide-react";
+import { useState, useMemo, useCallback, type ReactNode } from "react";
+import { Plus, RefreshCcw, Pencil } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ALDatePicker } from "@/components/ui/al-date-picker";
+import { BaseTable } from "@/components/ui/table/base-table";
 import { PermissionGuard } from "@/components/permission-guard";
 import { Permissions } from "@/types/const";
-import {
-  useShiftSchedulesQuery,
-  usePublishScheduleMutation,
-  useCloseScheduleMutation,
-} from "../hooks/use-shift-queries";
+import type { TableColumn } from "@/types/table.types";
+import type { TableDataChangeParams } from "@/types/table-data-change.types";
+import { useShiftAssignmentsQuery, useCancelAssignmentMutation } from "../hooks/use-shift-queries";
 import { ShiftStatusBadge } from "./shift-status-badge";
-import { ShiftScheduleForm } from "./shift-schedule-form";
-import { ShiftAssignmentPanel } from "./shift-assignment-panel";
-import type { ShiftScheduleListDto, GetSchedulesParams } from "../types/shift-management.types";
+import { ShiftAssignmentForm } from "./shift-assignment-form";
+import { AttendanceAdjustmentDialog } from "./attendance-adjustment-dialog";
+import type { ShiftAssignmentListDto, AttendanceRecordDto } from "../types/shift-management.types";
 
 export function ShiftScheduleList() {
-  // ── Filters ──
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
+  const [tableParams, setTableParams] = useState<TableDataChangeParams>({ page: 1, pageSize: 10 });
 
-  // ── Modal / panel state ──
   const [formOpen, setFormOpen] = useState(false);
-  const [editTarget, setEditTarget] = useState<ShiftScheduleListDto | null>(null);
-  const [panelOpen, setPanelOpen] = useState(false);
-  const [panelSchedule, setPanelSchedule] = useState<ShiftScheduleListDto | null>(null);
+  const [editTarget, setEditTarget] = useState<ShiftAssignmentListDto | null>(null);
+  const [adjustTarget, setAdjustTarget] = useState<AttendanceRecordDto | null>(null);
 
-  // ── Query ──
-  const params = useMemo<GetSchedulesParams>(
+  const handleTableDataChange = useCallback((next: TableDataChangeParams) => {
+    setTableParams((prev) => {
+      const isSame =
+        (prev.page ?? 1) === (next.page ?? 1) &&
+        (prev.pageSize ?? 10) === (next.pageSize ?? 10);
+      return isSame ? prev : next;
+    });
+  }, []);
+
+  const params = useMemo(
     () => ({
       fromDate: fromDate || undefined,
       toDate: toDate || undefined,
-      pageSize: 50,
+      isActive: true as const,
+      pageIndex: tableParams.page ?? 1,
+      pageSize: tableParams.pageSize ?? 10,
     }),
-    [fromDate, toDate]
+    [fromDate, toDate, tableParams.page, tableParams.pageSize]
   );
 
-  const { data, isLoading, refetch } = useShiftSchedulesQuery(params);
-  const schedules = data?.pageData ?? [];
+  const { data, isLoading, refetch } = useShiftAssignmentsQuery(params);
+  const assignments = data?.pageData ?? [];
+  const cancelAssignment = useCancelAssignmentMutation();
 
-  // ── Mutations ──
-  const publish = usePublishScheduleMutation();
-  const close = useCloseScheduleMutation();
-
-  const handleCreate = () => {
-    setEditTarget(null);
-    setFormOpen(true);
-  };
-
-  const handleEdit = (s: ShiftScheduleListDto) => {
-    setEditTarget(s);
-    setFormOpen(true);
-  };
-
-  const handleViewAssignments = (s: ShiftScheduleListDto) => {
-    setPanelSchedule(s);
-    setPanelOpen(true);
-  };
-
-  const handlePublish = (id: number) => {
-    if (!confirm("Publish this schedule? Staff will be able to see it.")) return;
-    publish.mutate(id);
-  };
-
-  const handleClose = (id: number) => {
-    if (!confirm("Close this shift? This cannot be undone.")) return;
-    close.mutate(id);
+  const handleCreate = () => { setEditTarget(null); setFormOpen(true); };
+  const handleEdit = (a: ShiftAssignmentListDto) => { setEditTarget(a); setFormOpen(true); };
+  const handleCancel = (id: number) => {
+    if (!confirm("Cancel this assignment?")) return;
+    cancelAssignment.mutate(id);
   };
 
   function formatTime(iso: string) {
-    try {
-      return new Date(iso).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-    } catch {
-      return iso;
-    }
+    try { return new Date(iso).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }); }
+    catch { return iso; }
   }
 
+  const columns = useMemo<TableColumn[]>(
+    () => [
+      {
+        field: "rowNo", header: "No", width: "72px", align: "center", sortable: false,
+        cellRender: ({ rowIndex }) =>
+          ((tableParams.page ?? 1) - 1) * (tableParams.pageSize ?? 10) + rowIndex + 1,
+      },
+      { field: "workDate", header: "Date", width: "140px", sortable: false },
+      {
+        field: "templateName", header: "Template", sortable: false,
+        cellRender: ({ item }) => item.templateName,
+      },
+      { field: "staffName", header: "Staff", sortable: false },
+      {
+        field: "timeRange", header: "Planned Time", sortable: false,
+        cellRender: ({ item }) =>
+          `${formatTime(item.plannedStartAt)} – ${formatTime(item.plannedEndAt)}`,
+      },
+      {
+        field: "isActive", header: "Status", width: "120px", sortable: false,
+        cellRender: ({ item }) => (
+          <ShiftStatusBadge
+            statusCode={item.isActive ? "active" : "cancelled"}
+            type="assignment"
+          />
+        ),
+      },
+    ],
+    [tableParams.page, tableParams.pageSize]
+  );
+
+  const handleGlobalRenderCell = (
+    value: unknown, item: ShiftAssignmentListDto, column: TableColumn, rowIndex: number
+  ) => {
+    const content = column.cellRender ? column.cellRender({ value, item, column, rowIndex }) : value;
+    if (column.align) return <div style={{ textAlign: column.align }}>{content as ReactNode}</div>;
+    return content as ReactNode;
+  };
+
   return (
-    <div className="space-y-4 rounded-2xl border border-[#D5BA98]/40 bg-linear-to-b from-[#FDFBF9] via-[#D5BA98]/10 to-[#FDFBF9] p-5 sm:p-6">
-      
-      <div>
-        <h1 className="text-2xl font-semibold">Shift Management</h1>
-        <p className="text-sm text-muted-foreground">
-          Create, publish, and manage shift schedules and staff assignments.
-        </p>
-      </div>
-      
-      {/* Toolbar */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-        <div className="flex flex-wrap items-center gap-2 rounded-xl border border-[#D5BA98]/50 bg-[#FDFBF9] p-2">
-          <ALDatePicker
-            value={fromDate}
-            onChange={(val) => setFromDate(val)}
-            placeholder="From date"
-            clearable
-            inputSize="sm"
-            wrapperClassName="w-38"
-          />
-          <span className="text-sm text-[#1A3A52]/60">–</span>
-          <ALDatePicker
-            value={toDate}
-            onChange={(val) => setToDate(val)}
-            placeholder="To date"
-            clearable
-            inputSize="sm"
-            wrapperClassName="w-38"
-          />
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => refetch()}
-            disabled={isLoading}
-            className="border-[#D5BA98]/70 bg-[#FDFBF9] text-[#1A3A52] hover:bg-[#D5BA98]/20"
-          >
-            <RefreshCcw className="w-4 h-4" />
-          </Button>
-        </div>
-        <PermissionGuard permission={Permissions.ScheduleShift}>
-          <Button onClick={handleCreate} className="gap-2 bg-[#1A3A52] text-[#FDFBF9] hover:bg-[#1A3A52]/90">
-            <Plus className="w-4 h-4" />
-            Create Schedule
-          </Button>
-        </PermissionGuard>
-      </div>
+    <div className="space-y-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
+      <BaseTable<ShiftAssignmentListDto>
+        data={assignments}
+        loading={isLoading}
+        columns={columns}
+        rowKey="shiftAssignmentId"
+        total={data?.totalCount ?? 0}
+        onDataChange={handleTableDataChange}
+        onRefresh={refetch}
+        searchPlaceholder="Search assignments"
+        defaultRowsPerPage={10}
+        rowsPerPageOptions={[10, 20, 50, 100]}
+        renderTitle={() => (
+          <div className="w-full flex items-center justify-between gap-3">
+            <div>
+              <h1 className="text-2xl font-semibold tracking-wide text-[#1A3A52]">Shift Assignments</h1>
+              <p className="text-sm text-[#1A3A52]/70">
+                Assign staff to shift templates and track attendance.
+              </p>
+            </div>
+            <PermissionGuard permission={Permissions.AssignShift}>
+              <Button onClick={handleCreate} className="gap-2 bg-[#1A3A52] text-[#FDFBF9] hover:bg-[#1A3A52]/90">
+                <Plus className="w-4 h-4" />
+                New Assignment
+              </Button>
+            </PermissionGuard>
+          </div>
+        )}
+        renderToolbarAppend={() => (
+          <div className="flex flex-wrap items-center gap-2 rounded-xl border border-slate-200 bg-white p-2 shadow-sm">
+            <ALDatePicker value={fromDate} onChange={setFromDate} placeholder="From date" clearable inputSize="sm" wrapperClassName="w-38" />
+            <span className="text-sm text-[#1A3A52]/60">-</span>
+            <ALDatePicker value={toDate} onChange={setToDate} placeholder="To date" clearable inputSize="sm" wrapperClassName="w-38" />
+            <Button variant="outline" size="sm" onClick={() => refetch()} disabled={isLoading}
+              className="border-slate-300 bg-white text-[#1A3A52] hover:bg-slate-100">
+              <RefreshCcw className="w-4 h-4" />
+            </Button>
+          </div>
+        )}
+        renderCell={handleGlobalRenderCell}
+        renderActionColumn={(a) => (
+          <div className="flex items-center justify-end gap-1.5">
+            <PermissionGuard permission={Permissions.AssignShift}>
+              <Button variant="outline" size="sm"
+                className="border-slate-300 bg-white text-[#1A3A52] hover:bg-slate-100"
+                onClick={() => handleEdit(a)}>
+                <Pencil className="w-4 h-4" />
+              </Button>
+            </PermissionGuard>
+            {a.isActive && (
+              <PermissionGuard permission={Permissions.AssignShift}>
+                <Button variant="outline" size="sm"
+                  className="border-destructive/40 text-destructive hover:bg-destructive/10"
+                  onClick={() => handleCancel(a.shiftAssignmentId)}
+                  disabled={cancelAssignment.isPending}>
+                  Cancel
+                </Button>
+              </PermissionGuard>
+            )}
+          </div>
+        )}
+        renderNoData={() => (
+          <div className="flex items-center justify-center rounded-xl border border-slate-200 bg-[#FDFBF9] py-16 text-sm text-[#1A3A52]/70">
+            No assignments found. Adjust the date range or create a new assignment.
+          </div>
+        )}
+      />
 
-      {/* Table */}
-      {isLoading ? (
-        <div className="flex items-center justify-center py-16 text-sm text-[#1A3A52]/70">
-          Loading schedules…
-        </div>
-      ) : schedules.length === 0 ? (
-        <div className="flex items-center justify-center py-16 text-sm text-[#1A3A52]/70">
-          No shift schedules found. Adjust the date range or create a new schedule.
-        </div>
-      ) : (
-        <div className="overflow-x-auto rounded-xl border border-[#D5BA98]/60 bg-[#FDFBF9]">
-          <table className="w-full text-sm">
-            <thead className="bg-[#D5BA98]/20">
-              <tr>
-                <th className="px-4 py-3 text-left font-medium text-[#1A3A52]/80">Date</th>
-                <th className="px-4 py-3 text-left font-medium text-[#1A3A52]/80">Shift Type</th>
-                <th className="px-4 py-3 text-left font-medium text-[#1A3A52]/80">Time Range</th>
-                <th className="px-4 py-3 text-left font-medium text-[#1A3A52]/80">Status</th>
-                <th className="px-4 py-3 text-left font-medium text-[#1A3A52]/80">Assigned</th>
-                <th className="px-4 py-3 text-right font-medium text-[#1A3A52]/80">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-[#D5BA98]/40">
-              {schedules.map((s) => (
-                <tr key={s.shiftScheduleId} className="transition-colors hover:bg-[#D5BA98]/15">
-                  <td className="px-4 py-3 font-medium text-[#1A3A52]">{s.businessDate}</td>
-                  <td className="px-4 py-3 text-[#1A3A52]">{s.shiftTypeName}</td>
-                  <td className="px-4 py-3 text-[#1A3A52]/70">
-                    {formatTime(s.plannedStartAt)} – {formatTime(s.plannedEndAt)}
-                  </td>
-                  <td className="px-4 py-3">
-                    <ShiftStatusBadge statusCode={s.statusCode} type="schedule" />
-                  </td>
-                  <td className="px-4 py-3">
-                    <span className="inline-flex items-center gap-1 text-[#1A3A52]/70">
-                      <Users className="w-3.5 h-3.5" />
-                      {s.assignmentCount}
-                    </span>
-                  </td>
-                  <td className="px-4 py-3">
-                    <div className="flex items-center justify-end gap-1.5">
-                      {/* View Assignments — always available */}
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="border-[#D5BA98]/60 bg-[#FDFBF9] text-[#1A3A52] hover:bg-[#D5BA98]/20"
-                        onClick={() => handleViewAssignments(s)}
-                        data-tooltip-content="View assignments"
-                        data-tooltip-id="my-tooltip"
-                      >
-                        <Eye className="w-4 h-4" />
-                      </Button>
+      <ShiftAssignmentForm open={formOpen} onClose={() => setFormOpen(false)} editTarget={editTarget} />
 
-                      {/* Edit — only for DRAFT */}
-                      {s.statusCode === "DRAFT" && (
-                        <PermissionGuard permission={Permissions.ScheduleShift}>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            className="border-[#D5BA98]/60 bg-[#FDFBF9] text-[#1A3A52] hover:bg-[#D5BA98]/20"
-                            onClick={() => handleEdit(s)}
-                            data-tooltip-content="Edit schedule"
-                            data-tooltip-id="my-tooltip"
-                          >
-                            <Pencil className="w-4 h-4" />
-                          </Button>
-                        </PermissionGuard>
-                      )}
-
-                      {/* Publish — only for DRAFT */}
-                      {s.statusCode === "DRAFT" && (
-                        <PermissionGuard permission={Permissions.ScheduleShift}>
-                          <Button
-                            size="sm"
-                            className="bg-[#1A3A52] text-[#FDFBF9] hover:bg-[#1A3A52]/90"
-                            onClick={() => handlePublish(s.shiftScheduleId)}
-                            isLoading={publish.isPending}
-                          >
-                            Publish
-                          </Button>
-                        </PermissionGuard>
-                      )}
-
-                      {/* Close — only for PUBLISHED */}
-                      {s.statusCode === "PUBLISHED" && (
-                        <PermissionGuard permission={Permissions.CloseShift}>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            className="border-[#D5BA98]/70 bg-[#FDFBF9] text-[#1A3A52] hover:bg-[#D5BA98]/20"
-                            onClick={() => handleClose(s.shiftScheduleId)}
-                            isLoading={close.isPending}
-                          >
-                            Close
-                          </Button>
-                        </PermissionGuard>
-                      )}
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-
-      {/* Create / Edit Dialog */}
-      <ShiftScheduleForm open={formOpen} onClose={() => setFormOpen(false)} editTarget={editTarget} />
-
-      {/* Assignment Panel */}
-      {panelSchedule && (
-        <ShiftAssignmentPanel
-          open={panelOpen}
-          onClose={() => {
-            setPanelOpen(false);
-            setPanelSchedule(null);
-          }}
-          schedule={panelSchedule}
+      {adjustTarget && (
+        <AttendanceAdjustmentDialog
+          open={!!adjustTarget}
+          onClose={() => setAdjustTarget(null)}
+          attendanceRecord={adjustTarget}
         />
       )}
     </div>

@@ -2,16 +2,16 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { shiftManagementService } from "../services/shift-management.service";
 import type {
-  GetSchedulesParams,
+  GetTemplatesParams,
   GetAssignmentsParams,
-  GetLiveBoardParams,
+  GetMyShiftsParams,
   GetAttendanceReportParams,
   GetWorkedHoursReportParams,
   GetExceptionsReportParams,
-  GetMyShiftsParams,
-  CreateShiftScheduleRequest,
-  UpdateShiftScheduleRequest,
-  CreateAssignmentsRequest,
+  CreateShiftTemplateRequest,
+  UpdateShiftTemplateRequest,
+  CreateShiftAssignmentRequest,
+  UpdateShiftAssignmentRequest,
   AdjustAttendanceRequest,
 } from "../types/shift-management.types";
 
@@ -19,12 +19,12 @@ import type {
 
 export const SHIFT_QUERY_KEYS = {
   all: ["shifts"] as const,
-  schedules: () => [...SHIFT_QUERY_KEYS.all, "schedules"] as const,
-  scheduleList: (params: object) => [...SHIFT_QUERY_KEYS.schedules(), params] as const,
-  scheduleDetail: (id: number) => [...SHIFT_QUERY_KEYS.schedules(), "detail", id] as const,
+  templates: () => [...SHIFT_QUERY_KEYS.all, "templates"] as const,
+  templateList: (params: object) => [...SHIFT_QUERY_KEYS.templates(), "list", params] as const,
+  templateById: (id: number) => [...SHIFT_QUERY_KEYS.templates(), "detail", id] as const,
   assignments: () => [...SHIFT_QUERY_KEYS.all, "assignments"] as const,
   assignmentList: (params: object) => [...SHIFT_QUERY_KEYS.assignments(), params] as const,
-  live: (params: object) => [...SHIFT_QUERY_KEYS.all, "live", params] as const,
+  assignmentById: (id: number) => [...SHIFT_QUERY_KEYS.assignments(), "detail", id] as const,
   reports: () => [...SHIFT_QUERY_KEYS.all, "reports"] as const,
   attendanceReport: (params: object) =>
     [...SHIFT_QUERY_KEYS.reports(), "attendance", params] as const,
@@ -35,47 +35,58 @@ export const SHIFT_QUERY_KEYS = {
   myShifts: (params: object) => [...SHIFT_QUERY_KEYS.all, "my-shifts", params] as const,
 };
 
-// ─── Schedule Queries ─────────────────────────────────────────────────────────
+// ─── Template Queries ─────────────────────────────────────────────────────────
 
-export function useShiftSchedulesQuery(params: GetSchedulesParams = {}) {
+export function useShiftTemplatesQuery(params: GetTemplatesParams = {}) {
   return useQuery({
-    queryKey: SHIFT_QUERY_KEYS.scheduleList(params),
-    queryFn: () => shiftManagementService.getSchedules(params),
+    queryKey: SHIFT_QUERY_KEYS.templateList(params),
+    queryFn: () => shiftManagementService.getTemplates(params),
   });
 }
 
-export function useShiftScheduleDetailQuery(id: number, enabled = true) {
+export function useShiftTemplateDetailQuery(id: number, enabled = true) {
   return useQuery({
-    queryKey: SHIFT_QUERY_KEYS.scheduleDetail(id),
-    queryFn: () => shiftManagementService.getScheduleById(id),
+    queryKey: SHIFT_QUERY_KEYS.templateById(id),
+    queryFn: () => shiftManagementService.getTemplateById(id),
     enabled: enabled && id > 0,
   });
 }
 
-export function useCreateShiftScheduleMutation() {
+export function useCreateShiftTemplateMutation() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (body: CreateShiftScheduleRequest) =>
-      shiftManagementService.createSchedule(body),
+    mutationFn: (body: CreateShiftTemplateRequest) =>
+      shiftManagementService.createTemplate(body),
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: SHIFT_QUERY_KEYS.schedules() });
-      toast.success("Shift schedule created");
+      qc.invalidateQueries({ queryKey: SHIFT_QUERY_KEYS.templates() });
+      toast.success("Shift template created");
     },
-    onError: () => toast.error("Failed to create shift schedule"),
+    onError: () => toast.error("Failed to create shift template"),
   });
 }
 
-export function useUpdateShiftScheduleMutation() {
+export function useUpdateShiftTemplateMutation() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: ({ id, body }: { id: number; body: UpdateShiftScheduleRequest }) =>
-      shiftManagementService.updateSchedule(id, body),
+    mutationFn: ({ id, body }: { id: number; body: UpdateShiftTemplateRequest }) =>
+      shiftManagementService.updateTemplate(id, body),
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: SHIFT_QUERY_KEYS.schedules() });
-      qc.invalidateQueries({ queryKey: SHIFT_QUERY_KEYS.all });
-      toast.success("Shift schedule updated");
+      qc.invalidateQueries({ queryKey: SHIFT_QUERY_KEYS.templates() });
+      toast.success("Shift template updated");
     },
-    onError: () => toast.error("Failed to update shift schedule"),
+    onError: () => toast.error("Failed to update shift template"),
+  });
+}
+
+export function useDeactivateShiftTemplateMutation() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (id: number) => shiftManagementService.deactivateTemplate(id),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: SHIFT_QUERY_KEYS.templates() });
+      toast.success("Shift template deactivated");
+    },
+    onError: () => toast.error("Failed to deactivate template"),
   });
 }
 
@@ -85,21 +96,40 @@ export function useShiftAssignmentsQuery(params: GetAssignmentsParams = {}) {
   return useQuery({
     queryKey: SHIFT_QUERY_KEYS.assignmentList(params),
     queryFn: () => shiftManagementService.getAssignments(params),
-    enabled: Object.keys(params).length > 0,
   });
 }
 
-export function useCreateAssignmentsMutation() {
+export function useShiftAssignmentDetailQuery(id: number, enabled = true) {
+  return useQuery({
+    queryKey: SHIFT_QUERY_KEYS.assignmentById(id),
+    queryFn: () => shiftManagementService.getAssignmentById(id),
+    enabled: enabled && id > 0,
+  });
+}
+
+export function useCreateAssignmentMutation() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (body: CreateAssignmentsRequest) =>
-      shiftManagementService.createAssignments(body),
+    mutationFn: (body: CreateShiftAssignmentRequest) =>
+      shiftManagementService.createAssignment(body),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: SHIFT_QUERY_KEYS.assignments() });
-      qc.invalidateQueries({ queryKey: SHIFT_QUERY_KEYS.schedules() });
-      toast.success("Staff assigned successfully");
+      toast.success("Staff assigned to shift");
     },
     onError: () => toast.error("Failed to assign staff"),
+  });
+}
+
+export function useUpdateAssignmentMutation() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, body }: { id: number; body: UpdateShiftAssignmentRequest }) =>
+      shiftManagementService.updateAssignment(id, body),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: SHIFT_QUERY_KEYS.assignments() });
+      toast.success("Shift assignment updated");
+    },
+    onError: () => toast.error("Failed to update assignment"),
   });
 }
 
@@ -109,34 +139,9 @@ export function useCancelAssignmentMutation() {
     mutationFn: (id: number) => shiftManagementService.cancelAssignment(id),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: SHIFT_QUERY_KEYS.assignments() });
-      qc.invalidateQueries({ queryKey: SHIFT_QUERY_KEYS.schedules() });
       toast.success("Assignment cancelled");
     },
     onError: () => toast.error("Failed to cancel assignment"),
-  });
-}
-
-export function usePublishScheduleMutation() {
-  const qc = useQueryClient();
-  return useMutation({
-    mutationFn: (id: number) => shiftManagementService.publishSchedule(id),
-    onSuccess: () => {
-      qc.invalidateQueries({ queryKey: SHIFT_QUERY_KEYS.schedules() });
-      toast.success("Schedule published");
-    },
-    onError: () => toast.error("Failed to publish schedule"),
-  });
-}
-
-export function useCloseScheduleMutation() {
-  const qc = useQueryClient();
-  return useMutation({
-    mutationFn: (id: number) => shiftManagementService.closeSchedule(id),
-    onSuccess: () => {
-      qc.invalidateQueries({ queryKey: SHIFT_QUERY_KEYS.schedules() });
-      toast.success("Shift closed");
-    },
-    onError: () => toast.error("Failed to close shift"),
   });
 }
 
@@ -145,18 +150,18 @@ export function useStaffForAssignmentQuery(enabled = true) {
     queryKey: [...SHIFT_QUERY_KEYS.all, "staff-list"],
     queryFn: () => shiftManagementService.getStaffList(),
     enabled,
-    staleTime: 5 * 60 * 1000,
   });
 }
+
+// ─── Attendance Mutations ─────────────────────────────────────────────────────
 
 export function useCheckInMutation() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: (assignmentId: number) => shiftManagementService.checkIn(assignmentId),
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: SHIFT_QUERY_KEYS.myShifts({}) });
       qc.invalidateQueries({ queryKey: SHIFT_QUERY_KEYS.assignments() });
-      qc.invalidateQueries({ queryKey: ["shifts", "live"] });
+      qc.invalidateQueries({ queryKey: SHIFT_QUERY_KEYS.myShifts({}) });
       toast.success("Checked in successfully");
     },
     onError: () => toast.error("Failed to check in"),
@@ -168,9 +173,8 @@ export function useCheckOutMutation() {
   return useMutation({
     mutationFn: (assignmentId: number) => shiftManagementService.checkOut(assignmentId),
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: SHIFT_QUERY_KEYS.myShifts({}) });
       qc.invalidateQueries({ queryKey: SHIFT_QUERY_KEYS.assignments() });
-      qc.invalidateQueries({ queryKey: ["shifts", "live"] });
+      qc.invalidateQueries({ queryKey: SHIFT_QUERY_KEYS.myShifts({}) });
       toast.success("Checked out successfully");
     },
     onError: () => toast.error("Failed to check out"),
@@ -180,31 +184,14 @@ export function useCheckOutMutation() {
 export function useAdjustAttendanceMutation() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: ({
-      attendanceId,
-      body,
-    }: {
-      attendanceId: number;
-      body: AdjustAttendanceRequest;
-    }) => shiftManagementService.adjustAttendance(attendanceId, body),
+    mutationFn: ({ attendanceId, body }: { attendanceId: number; body: AdjustAttendanceRequest }) =>
+      shiftManagementService.adjustAttendance(attendanceId, body),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: SHIFT_QUERY_KEYS.assignments() });
-      qc.invalidateQueries({ queryKey: ["shifts", "live"] });
       qc.invalidateQueries({ queryKey: SHIFT_QUERY_KEYS.reports() });
       toast.success("Attendance adjusted");
     },
     onError: () => toast.error("Failed to adjust attendance"),
-  });
-}
-
-// ─── Live Board ───────────────────────────────────────────────────────────────
-
-export function useLiveDutyBoardQuery(params: GetLiveBoardParams = {}) {
-  return useQuery({
-    queryKey: SHIFT_QUERY_KEYS.live(params),
-    queryFn: () => shiftManagementService.getLiveBoard(params),
-    // Poll every 30s as SignalR fallback
-    refetchInterval: 30_000,
   });
 }
 
@@ -217,10 +204,7 @@ export function useAttendanceReportQuery(params: GetAttendanceReportParams = {})
   });
 }
 
-export function useWorkedHoursReportQuery(
-  params: GetWorkedHoursReportParams,
-  enabled = true
-) {
+export function useWorkedHoursReportQuery(params: GetWorkedHoursReportParams, enabled = true) {
   return useQuery({
     queryKey: SHIFT_QUERY_KEYS.workedHoursReport(params),
     queryFn: () => shiftManagementService.getWorkedHoursReport(params),
@@ -228,10 +212,7 @@ export function useWorkedHoursReportQuery(
   });
 }
 
-export function useExceptionsReportQuery(
-  params: GetExceptionsReportParams,
-  enabled = true
-) {
+export function useExceptionsReportQuery(params: GetExceptionsReportParams, enabled = true) {
   return useQuery({
     queryKey: SHIFT_QUERY_KEYS.exceptionsReport(params),
     queryFn: () => shiftManagementService.getExceptionsReport(params),
@@ -247,3 +228,25 @@ export function useMyShiftsQuery(params: GetMyShiftsParams = {}) {
     queryFn: () => shiftManagementService.getMyShifts(params),
   });
 }
+
+// ─── Deprecated stubs (kept so existing import sites don't break) ─────────────
+
+/** @deprecated ShiftSchedule is removed. All schedules are now assignments. */
+export const useShiftSchedulesQuery = useShiftAssignmentsQuery;
+/** @deprecated */
+export const useCreateShiftScheduleMutation = useCreateAssignmentMutation;
+/** @deprecated */
+export const useCreateAssignmentsMutation = useCreateAssignmentMutation;
+/** @deprecated */
+export const useShiftScheduleDetailQuery = () =>
+  ({ data: undefined, isLoading: false } as ReturnType<typeof useShiftAssignmentDetailQuery>);
+/** @deprecated */
+export const usePublishScheduleMutation = () => ({ mutate: () => {} } as never);
+/** @deprecated */
+export const useCloseScheduleMutation = () => ({ mutate: () => {} } as never);
+/** @deprecated */
+export const useUpdateShiftScheduleMutation = () => ({ mutate: () => {} } as never);
+/** @deprecated */
+export const useCreateShiftSchedulesRangeMutation = () => ({ mutate: () => {} } as never);
+/** @deprecated */
+export const useLiveDutyBoardQuery = () => ({ data: undefined, isLoading: false } as never);
