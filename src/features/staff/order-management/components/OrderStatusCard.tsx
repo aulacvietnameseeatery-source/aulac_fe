@@ -21,15 +21,15 @@ export const OrderStatusCard: React.FC<OrderStatusCardProps> = ({
         <div
             onClick={onClick}
             className={`
-        bg-white rounded-lg shadow-sm border p-2.5 flex items-center justify-between
+        bg-[#FDFBF9] rounded-lg shadow-none border p-2.5 flex items-center justify-between
         transition-all duration-200
-        ${onClick ? 'cursor-pointer hover:shadow-md hover:-translate-y-0.5' : ''}
-        ${isActive ? 'ring-2 ring-blue-500 border-blue-200' : 'border-gray-100'}
+        ${onClick ? 'cursor-pointer hover:border-[#D5BA98]/70 hover:-translate-y-0.5' : ''}
+        ${isActive ? 'ring-2 ring-[#1A3A52]/20 border-[#1A3A52]/35' : 'border-[#D5BA98]/45'}
       `}
         >
             <div>
-                <span className="text-xs font-medium text-gray-500 mb-0.5 block">{label}</span>
-                <h4 className="text-lg font-bold text-gray-900 leading-none">{count}</h4>
+                <span className="text-xs font-medium text-[#1A3A52]/55 mb-0.5 block">{label}</span>
+                <h4 className="text-lg font-bold text-[#1A3A52] leading-none">{count}</h4>
             </div>
             <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm ${colorClass}`}>
                 {icon}

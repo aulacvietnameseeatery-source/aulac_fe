@@ -22,36 +22,41 @@ export function KitchenStatusBar({ orderCounts, activeStatus, onStatusChange, t 
             key: "all",
             label: t?.("status.all") || "Tất cả",
             count: orderCounts.all,
-            bg: "bg-gray-900",
-            dot: "bg-white"
+            bg: "bg-slate-700",
+            dot: "bg-white",
+            active: "bg-slate-700 border-slate-700"
         },
         {
             key: "new",
             label: t?.("status.new") || "Mới",
             count: orderCounts.new,
-            bg: "bg-[#F0F2F5]",
-            dot: "bg-gray-400"
+            bg: "bg-amber-500",
+            dot: "bg-amber-500",
+            active: "bg-amber-600 border-amber-600"
         },
         {
             key: "in-kitchen",
             label: t?.("status.inKitchen") || "Đang làm",
             count: orderCounts.inKitchen,
-            bg: "bg-[#FF7A00]",
-            dot: "bg-white"
+            bg: "bg-blue-500",
+            dot: "bg-blue-500",
+            active: "bg-blue-600 border-blue-600"
         },
         {
             key: "rejected",
             label: t?.("status.rejected") || "Bị từ chối",
             count: orderCounts.rejected,
-            bg: "bg-[#FF3B30]",
-            dot: "bg-white"
+            bg: "bg-red-500",
+            dot: "bg-red-500",
+            active: "bg-red-600 border-red-600"
         },
         {
             key: "completed",
             label: t?.("status.completed") || "Hoàn tất",
             count: orderCounts.completed,
-            bg: "bg-[#00C853]",
-            dot: "bg-white"
+            bg: "bg-emerald-500",
+            dot: "bg-emerald-500",
+            active: "bg-emerald-600 border-emerald-600"
         }
     ];
 
@@ -64,17 +69,17 @@ export function KitchenStatusBar({ orderCounts, activeStatus, onStatusChange, t 
                         key={status.key}
                         onClick={() => onStatusChange(status.key as KitchenDisplayStatus)}
                         className={`flex items-center gap-2 px-2.5 py-1 border rounded-lg shadow-sm h-8 shrink-0 transition-all ${isActive
-                            ? "bg-gray-900 border-gray-900"
-                            : "bg-white border-gray-100 hover:border-gray-200"
+                            ? status.active
+                            : "bg-[#FDFBF9] border-[#D5BA98]/45 hover:border-[#D5BA98]/70 shadow-none"
                             }`}
                     >
                         <div className="flex items-center gap-1.5">
-                            <div className={`w-3 h-3 rounded-full ${status.key === 'all' && isActive ? 'bg-white' : status.bg} flex-shrink-0 border border-black/5`} />
-                            <span className={`text-[11px] font-medium leading-none ${isActive ? "text-white" : "text-gray-600"}`}>
+                            <div className={`w-3 h-3 rounded-full ${isActive ? 'bg-white' : status.dot} shrink-0 border border-black/5`} />
+                            <span className={`text-[11px] font-medium leading-none ${isActive ? "text-white" : "text-[#1A3A52]/70"}`}>
                                 {status.label}
                             </span>
                         </div>
-                        <span className={`text-xs font-bold leading-none ${isActive ? "text-white" : "text-gray-900"}`}>
+                        <span className={`text-xs font-bold leading-none ${isActive ? "text-white" : "text-[#1A3A52]"}`}>
                             {status.count.toString().padStart(2, '0')}
                         </span>
                     </button>
