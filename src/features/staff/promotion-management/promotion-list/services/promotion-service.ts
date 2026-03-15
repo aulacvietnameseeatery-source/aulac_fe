@@ -1,5 +1,5 @@
 import { ApiResponse, PagedResult } from "@/types/api-response.types";
-import { PromotionListDTO, GetPromotionsParams } from "../types/promotion-types";
+import { PromotionListDTO, GetPromotionsParams, AvailablePromotionDTO } from "../types/promotion-types";
 import { api } from "@/lib/http";
 
 export const staffPromotionService = {
@@ -24,5 +24,10 @@ export const staffPromotionService = {
 
     disablePromotion: async (promotionId: number): Promise<void> => {
         await api.put(`/api/promotions/${promotionId}/disable`, promotionId);
-    }
+    },
+
+    getAvailablePromotions: async (orderId: number): Promise<AvailablePromotionDTO[]> => {
+        const response = await api.get<ApiResponse<AvailablePromotionDTO[]>>(`/api/promotions/available/${orderId}`);
+        return response.data; 
+    },
 };

@@ -74,7 +74,7 @@ export default function PromotionDetailPage() {
             <div>
               <p className="text-xs text-slate-500 uppercase font-bold">{tForm("discountValue")}</p>
               <p className="font-semibold text-lg text-green-600">
-                {detail.discountValue} {detail.type === "PERCENT" ? "%" : "VNĐ"}
+                {detail.discountValue} {detail.type === "PERCENT" ? "%" : "CHF"}
               </p>
             </div>
             <div>

@@ -17,7 +17,7 @@ import { ALInput } from '@/components/ui/al-input';
 import { ALCombobox } from '@/components/ui/al-combobox';
 import { OrderHistory } from '../types/order-history.types';
 import { staffPromotionService } from '../../promotion-management/promotion-list/services/promotion-service';
-import { PromotionListDTO } from '../../promotion-management/promotion-list/types/promotion-types';
+import { AvailablePromotionDTO, PromotionListDTO } from '../../promotion-management/promotion-list/types/promotion-types';
 
 interface PaymentModalProps {
     order: OrderHistory;
@@ -40,10 +40,12 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
 
     const [paymentType, setPaymentType] = useState<'cash' | 'card' | 'scan'>('cash');
     const [tipAmount, setTipAmount] = useState<number>(0);
-    const [discountValue, setDiscountValue] = useState<number>(0);
     const [selectedCouponId, setSelectedCouponId] = useState<number | null>(null);
     const [promotions, setPromotions] = useState<PromotionListDTO[]>([]);
     const [note, setNote] = useState('');
+    const [availablePromotions, setAvailablePromotions] = useState<AvailablePromotionDTO[]>([]);
+    const [selectedDiscountId, setSelectedDiscountId] = useState<string>(''); 
+    const [discountAmount, setDiscountAmount] = useState<number>(0);
 
     // Fetch promotions
     React.useEffect(() => {
@@ -62,6 +64,21 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
         fetchPromotions();
     }, []);
 
+    // Fetch available promotions
+    React.useEffect(() => {
+        const fetchAvailablePromotions = async () => {
+            try {
+                const res = await staffPromotionService.getAvailablePromotions(order.orderId);
+                setAvailablePromotions(res);
+            } catch (err) {
+                console.error('Failed to fetch available promotions', err);
+            }
+        };
+        if (isOpen) {
+            fetchAvailablePromotions();
+        }
+    }, [order.orderId, isOpen]);
+
     const subTotal = order.orderItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
     const tax = subTotal * 0.1; // Example 10%
     const serviceCharge = 15; // Example fixed
@@ -71,7 +88,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
         ? (selectedCoupon.type === 'PERCENT' ? (subTotal * (selectedCoupon.discountValue / 100)) : selectedCoupon.discountValue)
         : 0;
 
-    const totalDiscount = discountValue + couponDiscount;
+    const totalDiscount = discountAmount + couponDiscount;
     const total = Math.max(0, subTotal + tax + serviceCharge + tipAmount - totalDiscount);
 
     const [givenAmount, setGivenAmount] = useState<number>(total);
@@ -243,18 +260,34 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
                                     <ALCombobox
                                         title={t('discount')}
                                         options={[
-                                            ...promotions.map(p => ({
-                                                label: `${p.promoName} (${p.discountValue}${p.type === 'PERCENT' ? '%' : ' CHF'})`,
-                                                value: p.discountValue,
-                                                description: p.promoCode,
+                                            ...availablePromotions.map(p => ({
+                                                label: `${p.promoName} (${p.discountValue}${p.promotionType === 'PERCENT' ? '%' : ' CHF'})`,
+                                                value: p.promotionId.toString(),
+                                                description: p.hasTarget 
+                                                    ? t('specificTargetDesc') 
+                                                    : t('entireOrderDesc'),   
                                                 group: t('promotions')
                                             })),
                                         ]}
-                                        value={discountValue}
-                                        onChange={(val) => setDiscountValue(Number(val))}
+                                        value={selectedDiscountId}
+                                        onChange={(val) => {
+                                            if (!val) {
+                                                setSelectedDiscountId('');
+                                                setDiscountAmount(0);
+                                                return;
+                                            }
+
+                                            const stringVal = String(val);
+                                            setSelectedDiscountId(stringVal);
+                                            const promo = availablePromotions.find(p => p.promotionId.toString() === stringVal);
+                                            if (promo) {
+                                                setDiscountAmount(promo.estimatedDiscount);
+                                            } else {
+                                                setDiscountAmount(0);
+                                            }
+                                        }}
                                         placeholder={t('selectDiscount')}
-                                        allowCreate
-                                        onCreateOption={(val) => setDiscountValue(Number(val))}
+                                        clearable={true}
                                     />
 
                                     <ALCombobox
