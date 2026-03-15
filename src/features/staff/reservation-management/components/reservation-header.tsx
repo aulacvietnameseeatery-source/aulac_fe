@@ -26,6 +26,24 @@ export const ReservationHeader = ({
                                       statuses
                                   }: ReservationHeaderProps) => {
 
+    const getStatusTabClasses = (statusId: number | null): string => {
+        if (statusId === null) return "bg-slate-700 border-slate-700 text-white shadow-sm";
+
+        switch (statusId) {
+            case 21:
+                return "bg-amber-600 border-amber-600 text-white shadow-sm";
+            case 22:
+                return "bg-blue-600 border-blue-600 text-white shadow-sm";
+            case 23:
+                return "bg-emerald-600 border-emerald-600 text-white shadow-sm";
+            case 24:
+            case 25:
+                return "bg-red-600 border-red-600 text-white shadow-sm";
+            default:
+                return "bg-slate-700 border-slate-700 text-white shadow-sm";
+        }
+    };
+
     // Helper check active date
     const isToday = isSameDay(currentDate, new Date());
     const isTomorrow = isSameDay(currentDate, addDays(new Date(), 1));
@@ -92,7 +110,7 @@ export const ReservationHeader = ({
                         className={`
                             px-4 py-1.5 text-sm font-medium rounded-lg border transition-all
                             ${currentStatusId === null
-                            ? 'bg-green-900 border-green-900 text-white shadow-sm' // Active Style (giống Figma Dark Green)
+                            ? getStatusTabClasses(null)
                             : 'bg-white border-gray-200 text-gray-600 hover:bg-gray-50'}
                         `}
                     >
@@ -107,7 +125,7 @@ export const ReservationHeader = ({
                             className={`
                                 px-4 py-1.5 text-sm font-medium rounded-lg border transition-all
                                 ${currentStatusId === status.statusId
-                                ? 'bg-green-900 border-green-900 text-white shadow-sm'
+                                ? getStatusTabClasses(status.statusId)
                                 : 'bg-white border-gray-200 text-gray-600 hover:bg-gray-50'}
                             `}
                         >

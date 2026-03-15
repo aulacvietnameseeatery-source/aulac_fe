@@ -166,7 +166,7 @@ export const TableManagementContent: React.FC = () => {
   const availableCount = tables.filter((t) => t.status === "AVAILABLE").length;
 
   return (
-      <div className="space-y-6 rounded-2xl border border-[#D5BA98]/40 bg-linear-to-b from-[#FDFBF9] via-[#D5BA98]/10 to-[#FDFBF9] p-5 sm:p-6">
+      <div className="space-y-6 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
         {/* Page Header & Toolbar */}
         <div className="flex flex-col xl:flex-row items-start xl:items-center justify-between gap-5 mb-2">
 
