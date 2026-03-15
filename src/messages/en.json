@@ -1522,6 +1522,8 @@
       "payAndComplete": "Pay & Complete Order",
       "paying": "Processing...",
       "enterTip": "Enter tip amount",
+      "specificTargetDesc": "Applies to specific items",
+      "entireOrderDesc": "Applies to entire order",
       "selectDiscount": "Select or enter discount",
       "selectCoupon": "Select coupon",
       "promotions": "Promotions"
@@ -2171,5 +2173,34 @@
     "downloadPdf": "Download PDF",
     "printInvoice": "Print Invoice",
     "defaultStaff": "Staff"
+  },
+  "Customer": {
+    "List": {
+      "title": "Customer Management",
+      "description": "Manage and view customer information, order history, and loyalty points.",
+      "searchPlaceholder": "Search by name, phone, or email...",
+      "addNew": "Add New Customer",
+      "table": {
+        "no": "No.",
+        "customerName": "Customer",
+        "email": "Email",
+        "type": "Type",
+        "orders": "Orders",
+        "points": "Points",
+        "lastOrder": "Last Order"
+      },
+      "filters": {
+        "member": "Member",
+        "guest": "Guest"
+      },
+      "labels": {
+        "member": "Member",
+        "guest": "Guest"
+      },
+      "actions": {
+        "view": "View Details",
+        "edit": "Edit Customer"
+      }
+    }
   }
 }

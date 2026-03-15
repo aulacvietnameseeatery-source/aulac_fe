@@ -1519,6 +1519,8 @@
       "payAndComplete": "Payer & Terminer la commande",
       "paying": "Traitement...",
       "enterTip": "Saisir le montant du pourboire",
+      "specificTargetDesc": "S'applique à des articles spécifiques",
+      "entireOrderDesc": "S'applique à toute la commande",
       "selectDiscount": "Sélectionner ou saisir une remise",
       "selectCoupon": "Sélectionner un coupon",
       "promotions": "Promotions"
@@ -2168,5 +2170,34 @@
     "downloadPdf": "Télécharger en PDF",
     "printInvoice": "Imprimer la facture",
     "defaultStaff": "Personnel"
+  },
+  "Customer": {
+    "List": {
+      "title": "Gestion des clients",
+      "description": "Gérez et consultez les informations des clients, l'historique des commandes et les points de fidélité.",
+      "searchPlaceholder": "Rechercher par nom, téléphone ou email...",
+      "addNew": "Ajouter un client",
+      "table": {
+        "no": "N°",
+        "customerName": "Client",
+        "email": "Email",
+        "type": "Type",
+        "orders": "Commandes",
+        "points": "Points",
+        "lastOrder": "Dernière commande"
+      },
+      "filters": {
+        "member": "Membre",
+        "guest": "Invité"
+      },
+      "labels": {
+        "member": "Membre",
+        "guest": "Invité"
+      },
+      "actions": {
+        "view": "Voir les détails",
+        "edit": "Modifier le client"
+      }
+    }
   }
 }
