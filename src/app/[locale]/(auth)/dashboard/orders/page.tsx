@@ -23,14 +23,9 @@ import { KanbanOrderCard } from "@/features/staff/order-management/components/Ka
 import { ProtectedRoute } from "@/components/protected-route";
 import { Permissions } from "@/types/const";
 import { OrderHistory } from "@/features/staff/order-management/types/order-history.types";
-
-// statusLvId phải khớp với value_id trong bảng lookup_value (type_id = 10)
-const STATUS_LV_IDS = {
-    pending: 28,
-    inProgress: 29,
-    completed: 30,
-    cancelled: 31,
-} as const;
+import { OrderStatusCode } from "@/types/status-codes";
+import { orderHistoryService } from "@/features/staff/order-management/services/order-history.service";
+import { toast } from "sonner";
 
 interface KanbanColumnConfig {
     key: "pending" | "inProgress" | "completed" | "cancelled";
@@ -136,11 +131,11 @@ function OrdersContent() {
 
     // Tabs config — label + badge count từ API
     const TABS = useMemo(() => [
-        { label: t("tabs.all"), statusLvId: undefined, count: counts.all },
-        { label: t("tabs.pending"), statusLvId: STATUS_LV_IDS.pending, count: counts.pending },
-        { label: t("tabs.inProgress"), statusLvId: STATUS_LV_IDS.inProgress, count: counts.inProgress },
-        { label: t("tabs.completed"), statusLvId: STATUS_LV_IDS.completed, count: counts.completed },
-        { label: t("tabs.cancelled"), statusLvId: STATUS_LV_IDS.cancelled, count: counts.cancelled },
+        { label: t("tabs.all"), statusCode: undefined, count: counts.all },
+        { label: t("tabs.pending"), statusCode: OrderStatusCode.PENDING, count: counts.pending },
+        { label: t("tabs.inProgress"), statusCode: OrderStatusCode.IN_PROGRESS, count: counts.inProgress },
+        { label: t("tabs.completed"), statusCode: OrderStatusCode.COMPLETED, count: counts.completed },
+        { label: t("tabs.cancelled"), statusCode: OrderStatusCode.CANCELLED, count: counts.cancelled },
     ], [t, counts]);
 
     // Debounce search — giống BaseTable
@@ -156,7 +151,7 @@ function OrdersContent() {
     // Trigger data fetch khi params thay đổi
     useEffect(() => {
         const effectivePageSize = viewMode === "kanban" ? KANBAN_PAGE_SIZE : pageSize;
-        const statusLvId = viewMode === "kanban" ? undefined : TABS[activeTab].statusLvId;
+        const statusCode = viewMode === "kanban" ? undefined : TABS[activeTab].statusCode;
 
         // Compute date range from preset
         let fromDate: Date | undefined;
@@ -174,7 +169,7 @@ function OrdersContent() {
             page: viewMode === "kanban" ? 1 : currentPage,
             pageSize: effectivePageSize,
             search: searchQuery || undefined,
-            orderStatusLvId: statusLvId,
+            orderStatusCode: statusCode,
             fromDate,
             toDate,
         });
@@ -188,6 +183,30 @@ function OrdersContent() {
         await Promise.all([refreshList(), fetchCounts()]);
         setIsRefreshing(false);
     }, [refreshList, fetchCounts]);
+
+    const handleOrderAction = useCallback(async (orderId: number, action: string) => {
+        const statusMap: Partial<Record<string, OrderStatusCode>> = {
+            start: OrderStatusCode.IN_PROGRESS,
+            finish: OrderStatusCode.COMPLETED,
+            complete: OrderStatusCode.COMPLETED,
+            cancel: OrderStatusCode.CANCELLED,
+            reset: OrderStatusCode.PENDING,
+        };
+
+        const targetStatus = statusMap[action];
+        if (!targetStatus) {
+            return;
+        }
+
+        try {
+            await orderHistoryService.updateOrderStatus(orderId, targetStatus);
+            toast.success("Order status updated");
+            await handleRefresh();
+        } catch (error) {
+            console.error("Failed to update order status:", error);
+            toast.error("Failed to update order status");
+        }
+    }, [handleRefresh]);
 
     // Pagination helpers
     const pageInfo = useMemo(() => {
@@ -405,14 +424,14 @@ function OrdersContent() {
                                                             <KanbanOrderCard
                                                                 key={order.orderId}
                                                                 order={order}
-                                                                primaryAction={{ label: t(`kanban.${col.primaryKey}`), onClick: () => { } }}
-                                                                secondaryAction={{ label: t(`kanban.${col.secondaryKey}`), onClick: () => { } }}
+                                                                primaryAction={{ label: t(`kanban.${col.primaryKey}`), onClick: () => { void handleOrderAction(order.orderId, col.primaryKey); } }}
+                                                                secondaryAction={{ label: t(`kanban.${col.secondaryKey}`), onClick: () => { void handleOrderAction(order.orderId, col.secondaryKey); } }}
                                                                 onAction={(id, action) => {
                                                                     console.log("Kanban Action:", action, "on order:", id);
                                                                     if (action === "view" || action === "edit") {
                                                                         router.push(`/dashboard/orders/${id}/edit`);
                                                                     } else if (action !== 'pay') {
-                                                                        handleRefresh();
+                                                                        void handleOrderAction(id, action);
                                                                     }
                                                                 }}
                                                             />
@@ -436,25 +455,23 @@ function OrdersContent() {
                                         <p className="text-sm mt-1">{t("empty.hint")}</p>
                                     </div>
                                 ) : (
-                                    <div className="flex flex-col h-full min-h-0">
-                                        <div className="flex-1 min-h-0 overflow-auto custom-scrollbar pr-1">
-                                            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-4 mb-4">
-                                                {orders.map((order) => (
-                                                    <OrderCard
-                                                        key={order.orderId}
-                                                        order={order}
-                                                        onStatusChange={handleRefresh}
-                                                        onAction={(id, action) => {
-                                                            console.log("Action:", action, "on order:", id);
-                                                            if (action === "view" || action === "edit") {
-                                                                router.push(`/dashboard/orders/${id}/edit`);
-                                                            } else if (action !== 'pay') {
-                                                                handleRefresh();
-                                                            }
-                                                        }}
-                                                    />
-                                                ))}
-                                            </div>
+                                    <div className="flex flex-col min-h-full">
+                                        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-4 mb-4 flex-1">
+                                            {orders.map((order) => (
+                                                <OrderCard
+                                                    key={order.orderId}
+                                                    order={order}
+                                                    onStatusChange={handleRefresh}
+                                                    onAction={(id, action) => {
+                                                        console.log("Action:", action, "on order:", id);
+                                                        if (action === "view" || action === "edit") {
+                                                            router.push(`/dashboard/orders/${id}/edit`);
+                                                        } else if (action !== 'pay') {
+                                                            void handleOrderAction(id, action);
+                                                        }
+                                                    }}
+                                                />
+                                            ))}
                                         </div>
                                         <div className="shrink-0 border-t rounded-xl border-[#D5BA98]/40 bg-[#FDFBF9]">
                                             <TablePagination

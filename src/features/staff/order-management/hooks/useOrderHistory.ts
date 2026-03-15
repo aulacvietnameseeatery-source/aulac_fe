@@ -2,11 +2,12 @@ import { useState, useCallback, useRef } from 'react';
 import { OrderHistory } from '../types/order-history.types';
 import { orderHistoryService } from '../services/order-history.service';
 import type { TableDataChangeParams } from '@/types/table-data-change.types';
+import { OrderStatusCode } from '@/types/status-codes';
 
 /**
  * Data-fetching hook for order history.
  * Driven by onDataChange — accepts search/page/pageSize from caller.
- * Extra param: orderStatusLvId (column filter, not part of BaseTable schema).
+ * Extra param: orderStatusCode (column filter, not part of BaseTable schema).
  */
 export const useOrderHistory = () => {
     const [orders, setOrders] = useState<OrderHistory[]>([]);
@@ -15,13 +16,13 @@ export const useOrderHistory = () => {
     const [paginationInfo, setPaginationInfo] = useState({ page: 1, pageSize: 10 });
 
     // Dedup + latest-request tracking
-    const latestParamsRef = useRef<TableDataChangeParams & { orderStatusLvId?: number; fromDate?: Date; toDate?: Date }>({});
+    const latestParamsRef = useRef<TableDataChangeParams & { orderStatusCode?: OrderStatusCode; fromDate?: Date; toDate?: Date }>({});
     const lastFetchHashRef = useRef('');
     const fetchIdRef = useRef(0);
 
     /** Called by BaseTable onDataChange or manual trigger */
     const onDataChange = useCallback(async (
-        params: TableDataChangeParams & { orderStatusLvId?: number; fromDate?: Date; toDate?: Date }
+        params: TableDataChangeParams & { orderStatusCode?: OrderStatusCode; fromDate?: Date; toDate?: Date }
     ) => {
         const hash = JSON.stringify(params);
         if (hash === lastFetchHashRef.current) return;
@@ -40,7 +41,7 @@ export const useOrderHistory = () => {
                 pageIndex: page,
                 pageSize,
                 search: params.search || undefined,
-                orderStatusLvId: params.orderStatusLvId,
+                orderStatusCode: params.orderStatusCode,
                 fromDate: params.fromDate?.toISOString(),
                 toDate: params.toDate?.toISOString(),
             });
