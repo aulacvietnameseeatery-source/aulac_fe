@@ -16,6 +16,8 @@ import { PrintOrderModal } from "./PrintOrderModal";
 import { PaymentModal } from "./PaymentModal";
 import { orderHistoryService } from "../services/order-history.service";
 import { toast } from "sonner";
+import { CouponDTO } from "../../coupon-management/coupon-list/types/coupon.types";
+import { PromotionListDTO } from "../../promotion-management/promotion-list/types/promotion-types";
 
 const VISIBLE_ITEMS = 3;
 
@@ -26,6 +28,8 @@ interface KanbanOrderCardProps {
     /** Secondary action button label & handler */
     secondaryAction?: { label: string; onClick: () => void };
     onAction?: (orderId: number, action: string) => void;
+    couponOptions?: CouponDTO[];
+    promotionOptions?: PromotionListDTO[];
 }
 
 export const KanbanOrderCard: React.FC<KanbanOrderCardProps> = ({
@@ -33,6 +37,8 @@ export const KanbanOrderCard: React.FC<KanbanOrderCardProps> = ({
     primaryAction,
     secondaryAction: _secondaryAction_DEPRECATED,
     onAction,
+    couponOptions = [],
+    promotionOptions = [],
 }) => {
     const t = useTranslations("Order.List.card");
     const format = useFormatter();
@@ -304,6 +310,8 @@ export const KanbanOrderCard: React.FC<KanbanOrderCardProps> = ({
                 onClose={() => setIsPaymentModalOpen(false)}
                 onPaymentComplete={handlePaymentComplete}
                 isLoading={isProcessingPayment}
+                couponOptions={couponOptions}
+                promotionOptions={promotionOptions}
             />
 
             <PrintOrderModal

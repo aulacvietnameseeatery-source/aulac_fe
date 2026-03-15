@@ -25,6 +25,10 @@ import { Permissions } from "@/types/const";
 import { OrderHistory } from "@/features/staff/order-management/types/order-history.types";
 import { OrderStatusCode } from "@/types/status-codes";
 import { orderHistoryService } from "@/features/staff/order-management/services/order-history.service";
+import { staffCouponService } from "@/features/staff/coupon-management/coupon-list/services/coupon-service";
+import { CouponDTO } from "@/features/staff/coupon-management/coupon-list/types/coupon.types";
+import { staffPromotionService } from "@/features/staff/promotion-management/promotion-list/services/promotion-service";
+import { PromotionListDTO } from "@/features/staff/promotion-management/promotion-list/types/promotion-types";
 import { toast } from "sonner";
 
 interface KanbanColumnConfig {
@@ -59,6 +63,10 @@ function OrdersContent() {
     const [pageSize, setPageSize] = useState(10);
     const [viewMode, setViewMode] = useState<"grid" | "kanban">("grid");
     const [isRefreshing, setIsRefreshing] = useState(false);
+    const [paymentCoupons, setPaymentCoupons] = useState<CouponDTO[]>([]);
+    const [paymentPromotions, setPaymentPromotions] = useState<PromotionListDTO[]>([]);
+    const hasLoadedCouponsRef = useRef(false);
+    const hasLoadedPromotionsRef = useRef(false);
 
     // ── Date range filter ──────────────────────────────────────────────────
     type DatePreset = "today" | "yesterday" | "last7" | "last30" | "thisMonth" | "lastMonth" | "custom";
@@ -128,6 +136,45 @@ function OrdersContent() {
 
     // Fetch counts once on mount (and after each manual refresh)
     useEffect(() => { fetchCounts(); }, [fetchCounts]);
+
+    // Fetch payment promotions once when entering Orders page.
+    useEffect(() => {
+        if (hasLoadedCouponsRef.current) return;
+        hasLoadedCouponsRef.current = true;
+
+        const fetchPaymentCoupons = async () => {
+            try {
+                const data = await staffCouponService.getCoupons();
+                setPaymentCoupons(data ?? []);
+            } catch (error) {
+                console.error("Failed to fetch payment coupons:", error);
+                setPaymentCoupons([]);
+            }
+        };
+
+        void fetchPaymentCoupons();
+    }, []);
+
+    useEffect(() => {
+        if (hasLoadedPromotionsRef.current) return;
+        hasLoadedPromotionsRef.current = true;
+
+        const fetchPaymentPromotions = async () => {
+            try {
+                const data = await staffPromotionService.getPromotions({
+                    pageIndex: 1,
+                    pageSize: 100,
+                    promotionStatus: "ACTIVE",
+                });
+                setPaymentPromotions(data.pageData ?? []);
+            } catch (error) {
+                console.error("Failed to fetch payment promotions:", error);
+                setPaymentPromotions([]);
+            }
+        };
+
+        void fetchPaymentPromotions();
+    }, []);
 
     // Tabs config — label + badge count từ API
     const TABS = useMemo(() => [
@@ -200,11 +247,11 @@ function OrdersContent() {
 
         try {
             await orderHistoryService.updateOrderStatus(orderId, targetStatus);
-            toast.success("Order status updated");
+            toast.success(t("statusUpdateSuccess"));
             await handleRefresh();
         } catch (error) {
             console.error("Failed to update order status:", error);
-            toast.error("Failed to update order status");
+            toast.error(t("statusUpdateError"));
         }
     }, [handleRefresh]);
 
@@ -371,14 +418,14 @@ function OrdersContent() {
                                 <div className="h-8 inline-flex items-center border border-[#D5BA98]/60 rounded-lg bg-[#FDFBF9] p-0.5 gap-0.5">
                                     <button
                                         onClick={() => handleViewMode("grid")}
-                                        title="Grid"
+                                        title={t("viewMode.grid")}
                                         className={`h-full px-2 rounded-md transition-colors ${viewMode === "grid" ? "bg-[#1A3A52] text-white shadow-sm" : "text-[#1A3A52]/50 hover:bg-[#D5BA98]/15"}`}
                                     >
                                         <LayoutGrid className="w-4 h-4" />
                                     </button>
                                     <button
                                         onClick={() => handleViewMode("kanban")}
-                                        title="Kanban"
+                                        title={t("viewMode.kanban")}
                                         className={`h-full px-2 rounded-md transition-colors ${viewMode === "kanban" ? "bg-[#1A3A52] text-white shadow-sm" : "text-[#1A3A52]/50 hover:bg-[#D5BA98]/15"}`}
                                     >
                                         <SquareKanban className="w-4 h-4" />
@@ -434,6 +481,8 @@ function OrdersContent() {
                                                                         void handleOrderAction(id, action);
                                                                     }
                                                                 }}
+                                                                couponOptions={paymentCoupons}
+                                                                promotionOptions={paymentPromotions}
                                                             />
                                                         ))
                                                     )}
@@ -455,23 +504,27 @@ function OrdersContent() {
                                         <p className="text-sm mt-1">{t("empty.hint")}</p>
                                     </div>
                                 ) : (
-                                    <div className="flex flex-col min-h-full">
-                                        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-4 mb-4 flex-1">
-                                            {orders.map((order) => (
-                                                <OrderCard
-                                                    key={order.orderId}
-                                                    order={order}
-                                                    onStatusChange={handleRefresh}
-                                                    onAction={(id, action) => {
-                                                        console.log("Action:", action, "on order:", id);
-                                                        if (action === "view" || action === "edit") {
-                                                            router.push(`/dashboard/orders/${id}/edit`);
-                                                        } else if (action !== 'pay') {
-                                                            void handleOrderAction(id, action);
-                                                        }
-                                                    }}
-                                                />
-                                            ))}
+                                    <div className="flex flex-col flex-1 min-h-0">
+                                        <div className="flex-1 min-h-0 overflow-auto custom-scrollbar pr-1">
+                                            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-4 mb-4">
+                                                {orders.map((order) => (
+                                                    <OrderCard
+                                                        key={order.orderId}
+                                                        order={order}
+                                                        onStatusChange={handleRefresh}
+                                                        couponOptions={paymentCoupons}
+                                                        promotionOptions={paymentPromotions}
+                                                        onAction={(id, action) => {
+                                                            console.log("Action:", action, "on order:", id);
+                                                            if (action === "view" || action === "edit") {
+                                                                router.push(`/dashboard/orders/${id}/edit`);
+                                                            } else if (action !== 'pay') {
+                                                                void handleOrderAction(id, action);
+                                                            }
+                                                        }}
+                                                    />
+                                                ))}
+                                            </div>
                                         </div>
                                         <div className="shrink-0 border-t rounded-xl border-[#D5BA98]/40 bg-[#FDFBF9]">
                                             <TablePagination
