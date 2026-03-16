@@ -1353,6 +1353,12 @@
         "delete": "Delete",
         "cancel": "Cancel"
       },
+      "viewMode": {
+        "grid": "Grid view",
+        "kanban": "Kanban view"
+      },
+      "statusUpdateSuccess": "Order status updated",
+      "statusUpdateError": "Failed to update order status",
       "empty": {
         "title": "No orders found",
         "hint": "Try adjusting your filters or search query"
@@ -1511,7 +1517,7 @@
       "cash": "Cash",
       "card": "Card",
       "scan": "Scan",
-      "discount": "Discount",
+      "promotion": "Promotion",
       "coupon": "Coupon",
       "tip": "Tip",
       "givenAmount": "Given Amount",
@@ -1522,7 +1528,7 @@
       "payAndComplete": "Pay & Complete Order",
       "paying": "Processing...",
       "enterTip": "Enter tip amount",
-      "selectDiscount": "Select or enter discount",
+      "selectPromotion": "Select promotion",
       "selectCoupon": "Select coupon",
       "promotions": "Promotions"
     }
@@ -2172,5 +2178,34 @@
     "downloadPdf": "Download PDF",
     "printInvoice": "Print Invoice",
     "defaultStaff": "Staff"
+  },
+  "Customer": {
+    "List": {
+      "title": "Customer Management",
+      "description": "Manage and view customer information, order history, and loyalty points.",
+      "searchPlaceholder": "Search by name, phone, or email...",
+      "addNew": "Add New Customer",
+      "table": {
+        "no": "No.",
+        "customerName": "Customer",
+        "email": "Email",
+        "type": "Type",
+        "orders": "Orders",
+        "points": "Points",
+        "lastOrder": "Last Order"
+      },
+      "filters": {
+        "member": "Member",
+        "guest": "Guest"
+      },
+      "labels": {
+        "member": "Member",
+        "guest": "Guest"
+      },
+      "actions": {
+        "view": "View Details",
+        "edit": "Edit Customer"
+      }
+    }
   }
 }

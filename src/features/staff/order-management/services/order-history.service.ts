@@ -1,6 +1,7 @@
 import { api } from '@/lib/http';
 import { ApiResponse, PagedResult } from '@/types/api-response.types';
 import { OrderHistory, OrderHistoryFilters, OrderStatusCount } from '../types/order-history.types';
+import { OrderStatusCode } from '@/types/status-codes';
 
 export const orderHistoryService = {
     getOrderHistory: async (filters: OrderHistoryFilters): Promise<PagedResult<OrderHistory>> => {
@@ -9,8 +10,8 @@ export const orderHistoryService = {
         params.append('PageIndex', filters.pageIndex.toString());
         params.append('PageSize', filters.pageSize.toString());
 
-        if (filters.orderStatusLvId !== undefined) {
-            params.append('OrderStatusLvId', filters.orderStatusLvId.toString());
+        if (filters.orderStatusCode !== undefined) {
+            params.append('OrderStatusCode', filters.orderStatusCode);
         }
         if (filters.fromDate) {
             params.append('FromDate', filters.fromDate);
@@ -36,5 +37,9 @@ export const orderHistoryService = {
 
     processPayment: async (data: { orderId: number; receivedAmount: number; paymentMethod: string; note?: string; tipAmount?: number; discountAmount?: number }): Promise<void> => {
         await api.post('/api/payments', data);
+    },
+
+    updateOrderStatus: async (orderId: number, status: OrderStatusCode): Promise<void> => {
+        await api.patch(`/api/orders/${orderId}/status`, { status });
     },
 };
