@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { CheckCircle } from "lucide-react";
@@ -127,7 +127,15 @@ export default function MenuListingClient({ initialMenuData, tableFromUrl, token
         }
     }, [tableNumber]);
 
-    const localizedMenu = initialMenuData;
+    const localizedMenu = React.useMemo(() => {
+        if (!initialMenuData) return [];
+
+        return [...initialMenuData].sort((a, b) => {
+            const orderA = a.displayOrder ?? 999;
+            const orderB = b.displayOrder ?? 999;
+            return orderA - orderB;
+        });
+    }, [initialMenuData]);
 
     // Thêm vào giỏ hàng
     const addToCart = (itemsToAdd: MenuItemData[]) => {
