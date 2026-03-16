@@ -8,6 +8,9 @@ import { MenuCategory } from "@/features/customer/menu-listing-new/data/mock-men
 import MenuListingClient from "./MenuListingClient";
 import MenuListingLoading from "./loading";
 
+// Bỏ qua lỗi SSL khi gọi API nội bộ trên Localhost (SSR Fetch)
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://localhost:7083";
 
 export default async function MenuListingPage({
@@ -17,7 +20,6 @@ export default async function MenuListingPage({
     params: Promise<{ locale: string }>;
     searchParams: Promise<{ table?: string; token?: string }>;
 }) {
-    // Parallel-await cả hai Promise để không block lẫn nhau
     const [{ locale }, { table, token }] = await Promise.all([params, searchParams]);
     const loc = locale as 'vi' | 'en' | 'fr';
 
@@ -25,31 +27,58 @@ export default async function MenuListingPage({
 
     console.log("=========================================");
     console.log("[DEBUG SSR] API_BASE đang dùng:", API_BASE);
-    const fetchUrl = `${API_BASE}/api/dishes/menu?pageIndex=1&pageSize=500`;
-    console.log("[DEBUG SSR] URL Gọi API:", fetchUrl);
+
+    const menuFetchUrl = `${API_BASE}/api/dishes/menu?pageIndex=1&pageSize=500`;
+    const categoryFetchUrl = `${API_BASE}/api/dishes/all-categories`;
 
     try {
-        const response = await fetch(
-            fetchUrl,
-            { next: { revalidate: 300 } } // ISR: revalidate mỗi 5 phút
-        );
+        const [menuRes, catRes] = await Promise.all([
+            fetch(menuFetchUrl, { cache: 'no-store' }),
+            fetch(categoryFetchUrl, { cache: 'no-store' })
+        ]);
 
-        console.log(`[DEBUG SSR] HTTP Status Code: ${response.status} ${response.statusText}`);
-
-        if (!response.ok) {
-            const errorText = await response.text();
-            console.error("[DEBUG SSR] API trả về lỗi! Nội dung:", errorText);
+        if (!menuRes.ok) {
+            console.error("[DEBUG SSR] Lỗi API Menu:", await menuRes.text());
         } else {
             try {
-                const json: ApiResponse<PagedResult<DishDisplayDto>> = await response.json();
+                const menuJson = await menuRes.json();
 
-                if (!json.success) {
-                    console.warn("[DEBUG SSR]  Backend trả mã 200 nhưng Success = false. Message:", json.userMessage);
+                // 1. ÉP KIỂU MẢNG CATEGORY (Chống lỗi TypeError & Bao trọn Object)
+                let orderedCategories: string[] = [];
+                if (catRes.ok) {
+                    const catJson = await catRes.json();
+                    const rawCatList = Array.isArray(catJson) ? catJson : (catJson.data || []);
+
+                    orderedCategories = rawCatList.map((c: any) =>
+                        // Ép mọi thứ thành chuỗi JSON viết thường để không trượt phát nào
+                        typeof c === 'object' ? JSON.stringify(c).toLowerCase() : String(c).toLowerCase()
+                    );
+                    console.log("[DEBUG SSR] Khung API Category (Đã làm phẳng):", orderedCategories);
                 }
 
-                const rawMenu = formatMenuData(json.data?.pageData || []);
-                console.log(`[DEBUG SSR] Lấy thành công ${rawMenu.length} danh mục món ăn.`);
+                const rawMenu = formatMenuData(menuJson.data?.pageData || []);
 
+                // 2. THUẬT TOÁN SORT QUÉT ĐA NGÔN NGỮ
+                if (orderedCategories.length > 0) {
+                    rawMenu.sort((a, b) => {
+                        // Lấy mọi ngôn ngữ có trong a.name (vd: ["khai vị", "starters"])
+                        const namesA = Object.values(a.name || {}).map(n => String(n).toLowerCase().trim());
+                        const namesB = Object.values(b.name || {}).map(n => String(n).toLowerCase().trim());
+
+                        // Tìm xem có tên nào khớp với chuỗi của API /all-categories không
+                        let indexA = orderedCategories.findIndex(catStr => namesA.some(n => n !== "" && catStr.includes(n)));
+                        let indexB = orderedCategories.findIndex(catStr => namesB.some(n => n !== "" && catStr.includes(n)));
+
+                        if (indexA === -1) indexA = 999;
+                        if (indexB === -1) indexB = 999;
+
+                        return indexA - indexB;
+                    });
+                }
+
+                console.log(`[DEBUG SSR] Đã gom và sắp xếp thành công ${rawMenu.length} danh mục món ăn.`);
+
+                // 3. Map xuống Client
                 menuData = rawMenu.map(cat => ({
                     id: cat.id,
                     name: cat.name[loc] || cat.name.en,
@@ -62,15 +91,12 @@ export default async function MenuListingPage({
                     })),
                 }));
             } catch (parseError) {
-                console.error("[DEBUG SSR] Lỗi khi Parse JSON từ Backend:", parseError);
+                console.error("[DEBUG SSR] Lỗi khi Parse JSON:", parseError);
             }
         }
     } catch (error: any) {
         console.error("=========================================");
-        console.error("[DEBUG SSR] LỖI MẠNG (FETCH FAILED) TRÊN SERVER:");
-        console.error("- Message:", error.message);
-        console.error("- Cause (Nguyên nhân gốc):", error.cause?.message || "Không rõ");
-        console.error("- Mã lỗi (Code):", error.cause?.code || error.code || "Không rõ");
+        console.error("[DEBUG SSR] LỖI MẠNG TRÊN SERVER:", error.message);
         console.error("=========================================");
     }
 

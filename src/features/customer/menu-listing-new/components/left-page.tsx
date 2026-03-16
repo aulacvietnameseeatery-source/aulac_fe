@@ -74,6 +74,17 @@ const DICT: Record<string, any> = {
     }
 };
 
+// =====================================================================
+// 4. BẢNG MÀU TRẦM (DEEP TONE) CHO TỪNG NGUYÊN TỐ
+// =====================================================================
+const THEME_COLORS: Record<string, string> = {
+    'TAG_WATER': '#0f172a', // Xanh nước biển sâu / Navy trầm
+    'TAG_WOOD':  '#253529', // Xanh lá cây trầm / Rêu sâu
+    'TAG_FIRE':  '#3b1717', // Đỏ tía trầm / Đỏ đô sẫm (Không bị rực)
+    'TAG_EARTH': '#33251c', // Nâu đất / Vàng đất trầm
+    'TAG_METAL': '#2d3136', // Xám ánh kim trầm
+};
+
 export const LeftPage = ({ categories, activeCategoryId, tags = [] }: PageProps) => {
     const params = useParams();
     const currentLocale = (params?.locale as 'vi' | 'en' | 'fr') || 'fr';
@@ -97,7 +108,10 @@ export const LeftPage = ({ categories, activeCategoryId, tags = [] }: PageProps)
     };
 
     const tagCode = getTagCode();
-    // Lấy Tag trực tiếp từ props truyền vào
+
+    // 🔥 LẤY MÀU NỀN TƯƠNG ỨNG (Mặc định là màu Thủy nếu không tìm thấy)
+    const spineBgColor = THEME_COLORS[tagCode] || THEME_COLORS['TAG_WATER'];
+
     const apiTag = tags.find(t => t.valueCode === tagCode);
     const fallback = DICT[tagCode] || DICT['TAG_WATER'];
 
@@ -161,8 +175,11 @@ export const LeftPage = ({ categories, activeCategoryId, tags = [] }: PageProps)
                 style={{ backgroundImage: 'url(/images/menu-listing/layer2B.2.1.png)' }}
             />
 
-            {/* DẢI GÁY SÁCH - Chữ ngắn, bao nét, hết nhòe */}
-            <div className="w-[12%] md:w-[15%] h-full bg-[#0f172a] shadow-[4px_0_15px_rgba(0,0,0,0.15)] flex flex-col items-center justify-center pt-[30%] md:pt-[35%] z-20 relative border-r border-[#C5A059]/20 shrink-0">
+            {/* DẢI GÁY SÁCH - Đã đổi bg-[#0f172a] thành style={{ backgroundColor: spineBgColor }} và thêm transition */}
+            <div
+                className="w-[12%] md:w-[15%] h-full shadow-[4px_0_15px_rgba(0,0,0,0.15)] flex flex-col items-center justify-center pt-[30%] md:pt-[35%] z-20 relative border-r border-[#C5A059]/20 shrink-0 transition-colors duration-700 ease-in-out"
+                style={{ backgroundColor: spineBgColor }}
+            >
                 <h2 className="text-[#C5A059] font-display font-bold uppercase whitespace-nowrap -rotate-90 text-[14px] md:text-[16px] lg:text-[18px] tracking-[0.2em] flex items-center gap-[10%] md:gap-[15%]" style={{ WebkitFontSmoothing: 'antialiased' }}>
                     <span>{spineNameVi}</span>
                     <span className="text-[#C5A059]/40 text-[9px]">♦</span>

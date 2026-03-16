@@ -7,7 +7,6 @@ export function IntroHero() {
     const t = useTranslations("Introduction.Hero");
 
     return (
-        // Sử dụng 100dvh để full màn hình thật sự trên mobile (trừ thanh address bar)
         <section className="relative w-full h-[100dvh] flex flex-col items-center justify-center overflow-hidden">
 
             {/* 1. BACKGROUND IMAGE - Parallax / Scale Effect */}
@@ -29,18 +28,6 @@ export function IntroHero() {
 
             {/* 2. CONTENT */}
             <div className="relative z-10 flex flex-col items-center justify-center px-6 max-w-[896px] text-center space-y-4 md:space-y-6">
-
-                {/* Est. 1994 */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-                >
-                    <span className="font-display text-[#C9A961] text-xs md:text-[14px] font-normal uppercase tracking-[0.25em] md:tracking-[5.6px] leading-5">
-                        {t("est")}
-                    </span>
-                </motion.div>
 
                 {/* Main Title - Responsive Text Size */}
                 <motion.div
