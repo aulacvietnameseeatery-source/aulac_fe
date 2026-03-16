@@ -9,13 +9,32 @@ export interface TableAvailabilityDto {
 }
 
 export interface CreateReservationRequest {
-    tableId: number;
     customerName: string;
     phone: string;
     email?: string;
-    tableIds?: number[];
     partySize: number;
     reservedTime: string; // ISO string
+    notes?: string;
+}
+
+export interface ReservationFitCheckRequest {
+    partySize: number;
+    reservedTime: string;
+}
+
+export interface ReservationFitCheckResponse {
+    canBookOnline: boolean;
+    message?: string;
+}
+
+export interface PublicCustomerDto {
+    customerId: number;
+    fullName?: string | null;
+    phone: string;
+    email?: string | null;
+    isMember?: boolean | null;
+    loyaltyPoints?: number | null;
+    createdAt?: string | null;
 }
 
 export interface ReservationResponseDto {

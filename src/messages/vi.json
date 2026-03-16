@@ -307,6 +307,68 @@
       "error": "Không thể xác nhận đặt bàn. Vui lòng thử lại.",
       "lockSuccess": "Đã giữ bàn thành công. Vui lòng hoàn tất đặt bàn.",
       "lockError": "Không thể giữ bàn. Bàn có thể đã được đặt."
+    },
+    "PublicForm": {
+      "title": "Đặt bàn",
+      "chooseCustomerType": "Chọn loại khách",
+      "existingCustomer": "Khách cũ",
+      "newCustomer": "Khách mới",
+      "existingCustomerHint": "Nhập SĐT để tự động điền thông tin",
+      "newCustomerHint": "Nhập thông tin cơ bản để gửi yêu cầu đặt bàn",
+      "existingModeNote": "Khách cũ: Nhập SĐT trước, hệ thống sẽ tự điền thông tin nếu tìm thấy.",
+      "newModeNote": "Khách mới: Vui lòng nhập đầy đủ thông tin cơ bản.",
+      "noFitTitle": "Không có bàn online phù hợp cho khung giờ này.",
+      "callRestaurant": "Gọi nhà hàng",
+      "goBack": "Quay lại",
+      "yourInfo": "Thông tin của bạn",
+      "phone": "Số điện thoại",
+      "yourName": "Tên của bạn",
+      "email": "Email",
+      "loadingCustomerName": "Đang tải tên khách...",
+      "loadingCustomerEmail": "Đang tải email...",
+      "existingCustomerName": "Tên khách cũ",
+      "existingCustomerEmail": "Email khách cũ",
+      "bookingInfo": "Thông tin đặt bàn",
+      "partySize": "Số lượng khách",
+      "reservationDate": "Ngày đặt",
+      "selectDate": "Chọn ngày",
+      "arrivalTime": "Giờ đến",
+      "selectTime": "Chọn giờ",
+      "notes": "Ghi chú",
+      "close": "Đóng",
+      "closeAriaLabel": "Đóng hộp thoại đặt bàn",
+      "submit": "ĐẶT BÀN NGAY",
+      "checkingTables": "Đang kiểm tra bàn...",
+      "processing": "Đang xử lý...",
+      "lookup": {
+        "notFound": "Không tìm thấy khách cũ với số điện thoại này."
+      },
+      "validation": {
+        "selectCustomerType": "Vui lòng chọn loại khách.",
+        "phoneRequired": "Vui lòng nhập Số điện thoại.",
+        "nameRequired": "Vui lòng nhập Họ tên.",
+        "existingCustomerNotFound": "Không tìm thấy thông tin khách cũ. Vui lòng kiểm tra lại số điện thoại.",
+        "dateRequired": "Vui lòng chọn ngày đặt.",
+        "timeRequired": "Vui lòng chọn giờ đến.",
+        "partySizeRequired": "Vui lòng chọn số lượng khách."
+      },
+      "toast": {
+        "created": "Đã tạo yêu cầu đặt bàn thành công!",
+        "createFailed": "Không thể đặt bàn.",
+        "unexpected": "Có lỗi xảy ra khi đặt bàn."
+      }
+    },
+    "PublicTicket": {
+      "title": "Phiếu đặt bàn",
+      "customer": "Khách hàng",
+      "guests": "Số khách",
+      "date": "Ngày",
+      "time": "Giờ",
+      "table": "Bàn",
+      "zone": "Khu vực",
+      "pendingAssign": "Chờ xếp bàn",
+      "downloadTicket": "Tải vé",
+      "close": "Đóng"
     }
   },
   "OrderSuccess": {
@@ -1519,7 +1581,6 @@
       "scan": "Chuyển khoản / Quét mã",
       "promotion": "Khuyến mãi",
       "coupon": "Mã giảm giá",
-      "tip": "Tiền tip",
       "givenAmount": "Số tiền khách đưa",
       "balance": "Tiền thừa",
       "note": "Ghi chú",

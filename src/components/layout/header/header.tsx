@@ -15,6 +15,7 @@ import { NavLink } from "@/components/layout/header/nav-link";
 import { FR, GB, VN } from 'country-flag-icons/react/3x2';
 import { useStoreSettings } from "@/hooks/use-store-settings";
 import { useAuth } from "@/components/providers/auth-provider";
+import PublicBookingModal from "@/features/reservation-2/components/public-booking-modal";
 
 // IMPORT COMPONENT QUÉT QR ĐỘC LẬP
 import { QrScannerModal } from "@/components/ui/qr-scanner-modal";
@@ -32,6 +33,7 @@ const FLAG_MAP: Record<string, React.ElementType> = {
 
 export function Header({ isScrolled, locale }: HeaderProps) {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const [isReservationModalOpen, setIsReservationModalOpen] = useState(false);
 
     // STATE RIÊNG BIỆT QUẢN LÝ BẬT TẮT CAMERA
     const [isQrScannerOpen, setIsQrScannerOpen] = useState(false);
@@ -45,13 +47,13 @@ export function Header({ isScrolled, locale }: HeaderProps) {
     const searchParams = useSearchParams();
 
     useEffect(() => {
-        if (isMobileMenuOpen) {
+        if (isMobileMenuOpen || isReservationModalOpen) {
             document.body.style.overflow = 'hidden';
         } else {
             document.body.style.overflow = 'unset';
         }
         return () => { document.body.style.overflow = 'unset'; };
-    }, [isMobileMenuOpen]);
+    }, [isMobileMenuOpen, isReservationModalOpen]);
 
     const switchLocale = (newLocale: string) => {
         if (newLocale === locale) return;
@@ -163,6 +165,11 @@ export function Header({ isScrolled, locale }: HeaderProps) {
                 onClose={() => setIsQrScannerOpen(false)}
             />
 
+            <PublicBookingModal
+                isOpen={isReservationModalOpen}
+                onClose={() => setIsReservationModalOpen(false)}
+            />
+
             <header className={cn(
                 "fixed top-0 left-0 right-0 z-[100] transition-all duration-500 w-full",
                 "max-lg:bg-[#152e42] max-lg:py-3 max-lg:border-b max-lg:border-[#C5A059]/20",
@@ -231,11 +238,13 @@ export function Header({ isScrolled, locale }: HeaderProps) {
                             </button>
 
                             <div className="hidden lg:flex items-center gap-6 pl-2">
-                                <Link href={getLink("/reservation")}>
-                                    <button className="bg-[#C5A059] text-[#0f172a] px-6 py-2.5 text-xs font-bold uppercase tracking-[0.15em] hover:bg-[#D4AF6A] transition-colors rounded-sm shadow-md">
-                                        RESERVE
-                                    </button>
-                                </Link>
+                                <button
+                                    type="button"
+                                    onClick={() => setIsReservationModalOpen(true)}
+                                    className="bg-[#C5A059] text-[#0f172a] px-6 py-2.5 text-xs font-bold uppercase tracking-[0.15em] hover:bg-[#D4AF6A] transition-colors rounded-sm shadow-md"
+                                >
+                                    RESERVE
+                                </button>
 
                                 <Link href={getStaffLoginLink()} className="text-white hover:text-[#C5A059] transition-colors" title={isAuthenticated ? "Go to Dashboard" : "Login as Staff"}>
                                     <User size={20} />
@@ -318,11 +327,16 @@ export function Header({ isScrolled, locale }: HeaderProps) {
                         </nav>
 
                         <div className="mt-12 flex flex-col gap-4">
-                            <Link href={getLink("/reservation")} onClick={() => setIsMobileMenuOpen(false)}>
-                                <button className="w-full bg-[#C5A059] text-[#0f172a] py-4 text-sm font-bold uppercase tracking-widest hover:bg-[#D4AF6A] transition-colors rounded-sm shadow-lg">
-                                    RESERVE
-                                </button>
-                            </Link>
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    setIsMobileMenuOpen(false);
+                                    setIsReservationModalOpen(true);
+                                }}
+                                className="w-full bg-[#C5A059] text-[#0f172a] py-4 text-sm font-bold uppercase tracking-widest hover:bg-[#D4AF6A] transition-colors rounded-sm shadow-lg"
+                            >
+                                RESERVE
+                            </button>
                             <Link
                                 href={getStaffLoginLink()}
                                 onClick={() => setIsMobileMenuOpen(false)}

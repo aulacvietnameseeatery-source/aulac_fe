@@ -31,8 +31,8 @@ export default function CallRestaurantPopup({ isOpen, onClose }: CallRestaurantP
     };
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-            <div className="relative bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 animate-in fade-in zoom-in duration-200">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-sm">
+            <div className="relative bg-white rounded-2xl shadow-2xl max-w-md w-full p-5 sm:p-8 animate-in fade-in zoom-in duration-200 max-h-[92vh] overflow-auto">
                 {/* Close Button */}
                 <button
                     onClick={onClose}
@@ -49,12 +49,12 @@ export default function CallRestaurantPopup({ isOpen, onClose }: CallRestaurantP
                 </div>
 
                 {/* Title */}
-                <h2 className="text-2xl font-bold text-center text-slate-800 mb-2">
+                <h2 className="text-xl sm:text-2xl leading-tight font-bold text-center text-slate-800 mb-2 break-words">
                     {t('title')}
                 </h2>
 
                 {/* Subtitle */}
-                <p className="text-center text-slate-600 mb-6">
+                <p className="text-center text-slate-600 mb-6 text-sm sm:text-base leading-relaxed break-words">
                     {t('description')}
                 </p>
 
@@ -71,7 +71,7 @@ export default function CallRestaurantPopup({ isOpen, onClose }: CallRestaurantP
                     <p className="text-sm text-slate-500 text-center mb-2">{t('phoneLabel')}</p>
                     <a
                         href={`tel:${phoneNumber}`}
-                        className="block text-3xl font-bold text-emerald-600 text-center hover:text-emerald-700 transition-colors mb-4"
+                        className="block text-2xl sm:text-3xl leading-tight font-bold text-emerald-600 text-center hover:text-emerald-700 transition-colors mb-4 break-all"
                     >
                         {isLoading ? "..." : phoneDisplay}
                     </a>
@@ -89,9 +89,9 @@ export default function CallRestaurantPopup({ isOpen, onClose }: CallRestaurantP
                 </div>
 
                 {/* Operating Hours */}
-                <div className="flex items-center justify-center gap-2 text-sm text-slate-600 mb-6 font-medium">
+                <div className="flex items-start justify-center gap-2 text-sm text-slate-600 mb-6 font-medium text-center">
                     <Clock size={16} className="text-emerald-600" />
-                    <span>{isLoading ? "..." : (storeSettings?.openingHours || t('hours'))}</span>
+                    <span className="break-words leading-snug">{isLoading ? "..." : (storeSettings?.openingHours || t('hours'))}</span>
                 </div>
 
                 {/* Call Now Button */}
