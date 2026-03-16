@@ -307,6 +307,68 @@
       "error": "Failed to confirm reservation. Please try again.",
       "lockSuccess": "Table locked successfully. Please complete your reservation.",
       "lockError": "Failed to lock table. It might be occupied."
+    },
+    "PublicForm": {
+      "title": "Reserve Table",
+      "chooseCustomerType": "Choose customer type",
+      "existingCustomer": "Returning customer",
+      "newCustomer": "New customer",
+      "existingCustomerHint": "Enter phone number to auto-fill details",
+      "newCustomerHint": "Enter basic information to send reservation request",
+      "existingModeNote": "Returning customer: Enter phone number first, we will auto-fill your details if found.",
+      "newModeNote": "New customer: Please provide the required basic information.",
+      "noFitTitle": "No suitable table is available online for this time slot.",
+      "callRestaurant": "Call restaurant",
+      "goBack": "Go back",
+      "yourInfo": "Your information",
+      "phone": "Phone number",
+      "yourName": "Your name",
+      "email": "Email",
+      "loadingCustomerName": "Loading customer name...",
+      "loadingCustomerEmail": "Loading email...",
+      "existingCustomerName": "Returning customer name",
+      "existingCustomerEmail": "Returning customer email",
+      "bookingInfo": "Reservation details",
+      "partySize": "Party size",
+      "reservationDate": "Reservation date",
+      "selectDate": "Select date",
+      "arrivalTime": "Arrival time",
+      "selectTime": "Select time",
+      "notes": "Notes",
+      "close": "Close",
+      "closeAriaLabel": "Close booking modal",
+      "submit": "BOOK NOW",
+      "checkingTables": "Checking table availability...",
+      "processing": "Processing...",
+      "lookup": {
+        "notFound": "No returning customer found with this phone number."
+      },
+      "validation": {
+        "selectCustomerType": "Please choose a customer type.",
+        "phoneRequired": "Please enter a phone number.",
+        "nameRequired": "Please enter your name.",
+        "existingCustomerNotFound": "Returning customer info not found. Please check the phone number.",
+        "dateRequired": "Please select a reservation date.",
+        "timeRequired": "Please select an arrival time.",
+        "partySizeRequired": "Please select party size."
+      },
+      "toast": {
+        "created": "Reservation request created successfully!",
+        "createFailed": "Unable to create reservation.",
+        "unexpected": "An error occurred while creating reservation."
+      }
+    },
+    "PublicTicket": {
+      "title": "Reservation Ticket",
+      "customer": "Customer",
+      "guests": "Guests",
+      "date": "Date",
+      "time": "Time",
+      "table": "Table",
+      "zone": "Zone",
+      "pendingAssign": "Pending assign",
+      "downloadTicket": "Download Ticket",
+      "close": "Close"
     }
   },
   "OrderSuccess": {
@@ -1519,7 +1581,6 @@
       "scan": "Scan",
       "promotion": "Promotion",
       "coupon": "Coupon",
-      "tip": "Tip",
       "givenAmount": "Given Amount",
       "balance": "Balance",
       "note": "Note",
