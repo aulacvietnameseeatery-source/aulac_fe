@@ -5,16 +5,18 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { createLookupService } from "../services/lookup.service";
 import type {
+  LookupTypeId,
   LookupValueDto,
   CreateLookupValueRequest,
   UpdateLookupValueRequest,
 } from "../types/lookup.types";
+import { isLookupTypeConfigurable } from "../types/lookup.types";
 
 // ──────────────────────────────────────────────────────────
 
 export interface LookupCrudConfig {
-  /** API base URL, e.g. "/api/tables/zones" */
-  baseUrl: string;
+  /** Lookup type ID used by /api/lookups/{typeId} */
+  typeId: LookupTypeId;
   /**
    * Stable React Query key array.
    * Must uniquely identify this resource across the app.
@@ -23,6 +25,10 @@ export interface LookupCrudConfig {
   queryKey: readonly string[];
   /** Human-readable singular label used in toast messages, e.g. "Zone" */
   entityLabel: string;
+  /** Optional type label sent to DELETE endpoint for clearer backend messages */
+  typeLabel?: string;
+  /** Override default configurability for this lookup type */
+  isConfigurable?: boolean;
   /** How long fetched data is considered fresh. Defaults to 5 minutes. */
   staleTime?: number;
 }
@@ -37,9 +43,10 @@ export interface LookupCrudConfig {
  *
  * @example
  *   const zoneLookup = useLookupCrud({
- *     baseUrl:     "/api/tables/zones",
- *     queryKey:    ["tables", "zones"],
+ *     typeId:      LOOKUP_TYPE.TableZone,
+ *     queryKey:    ["lookups", "table-zone"],
  *     entityLabel: "Zone",
+ *     typeLabel:   "Zone",
  *   });
  *
  *   // Quick-create (ALCombobox):
@@ -58,13 +65,20 @@ export interface LookupCrudConfig {
  *   />
  */
 export function useLookupCrud({
-  baseUrl,
+  typeId,
   queryKey,
   entityLabel,
+  typeLabel,
+  isConfigurable,
   staleTime = 5 * 60_000,
 }: LookupCrudConfig) {
   const queryClient = useQueryClient();
-  const service = useMemo(() => createLookupService(baseUrl), [baseUrl]);
+  const resolvedIsConfigurable =
+    isConfigurable ?? isLookupTypeConfigurable(typeId);
+  const service = useMemo(
+    () => createLookupService(typeId, { typeLabel }),
+    [typeId, typeLabel]
+  );
 
   // ── Query ──────────────────────────────────────────────
   const query = useQuery<LookupValueDto[]>({
@@ -127,6 +141,7 @@ export function useLookupCrud({
   return {
     // ── LookupManagerModal props (spread-ready) ──
     entityLabel,
+    isConfigurable: resolvedIsConfigurable,
     items:     query.data ?? [],
     isLoading: query.isLoading,
     onSave:   (data: CreateLookupValueRequest)             => createMutation.mutateAsync(data),

@@ -68,10 +68,10 @@ export const ZoneSection: React.FC<ZoneSectionProps> = ({
   const allOnline = stats.online === tables.length;
 
   return (
-    <Card className="py-0 gap-0">
+    <Card className="gap-0 border-slate-200 bg-white py-0 shadow-sm">
       <CardHeader
         className={cn(
-          "px-5 pt-4 pb-3 border-b border-gray-100 cursor-pointer select-none transition-colors hover:bg-gray-50/50",
+          "cursor-pointer select-none border-b border-slate-200 px-5 pb-3 pt-4 transition-colors hover:bg-slate-50",
           collapsed && "border-b-0"
         )}
         onClick={() => onToggleCollapse?.(zone)}
@@ -79,13 +79,13 @@ export const ZoneSection: React.FC<ZoneSectionProps> = ({
         <div className="flex items-center gap-3 min-w-0">
           {/* Zone icon */}
           <div className="min-w-0">
-            <CardTitle className="text-lg font-semibold text-gray-800 flex items-center gap-2">
+            <CardTitle className="flex items-center gap-2 text-lg font-semibold text-[#1A3A52]">
               {zone}
-              <span className="text-xs font-normal text-gray-400 bg-gray-100 rounded-full px-2 py-0.5">
+              <span className="rounded-full bg-[#D5BA98]/25 px-2 py-0.5 text-xs font-normal text-[#1A3A52]/60">
                 {tables.length}
               </span>
             </CardTitle>
-            <p className="text-[11px] text-gray-400 mt-0.5">
+            <p className="mt-0.5 text-[11px] text-[#1A3A52]/55">
               {ZONE_SUBTITLES[zone] ?? zone}
             </p>
           </div>
@@ -97,28 +97,28 @@ export const ZoneSection: React.FC<ZoneSectionProps> = ({
             onClick={(e) => e.stopPropagation()}
           >
             {/* Zone stats pills */}
-            <div className="hidden sm:flex items-center gap-2 text-[11px] text-gray-500">
+            <div className="hidden items-center gap-2 text-[11px] text-[#1A3A52]/65 sm:flex">
               <span className="flex items-center gap-1">
                 <span className={cn("w-1.5 h-1.5 rounded-full", TABLE_STATUS_CONFIG.AVAILABLE.dotColor)} />
                 {stats.available} avail
               </span>
-              <span className="text-gray-300">|</span>
+              <span className="text-[#D5BA98]">|</span>
               <span className="flex items-center gap-1">
                 <Users size={11} />
                 {stats.totalCapacity} seats
               </span>
               {stats.activeOrders > 0 && (
                 <>
-                  <span className="text-gray-300">|</span>
-                  <span className="flex items-center gap-1 text-blue-600">
+                  <span className="text-[#D5BA98]">|</span>
+                  <span className="flex items-center gap-1 text-[#1A3A52]">
                     {stats.activeOrders} order{stats.activeOrders !== 1 ? "s" : ""}
                   </span>
                 </>
               )}
               {stats.errors > 0 && (
                 <>
-                  <span className="text-gray-300">|</span>
-                  <span className="flex items-center gap-1 text-orange-500">
+                  <span className="text-[#D5BA98]">|</span>
+                  <span className="flex items-center gap-1 text-[#8C3A3A]">
                     {stats.errors} error{stats.errors !== 1 ? "s" : ""}
                   </span>
                 </>
@@ -132,9 +132,10 @@ export const ZoneSection: React.FC<ZoneSectionProps> = ({
                 size="icon"
                 className={cn(
                   "size-7",
-                  allOnline ? "text-emerald-600" : "text-gray-400"
+                  allOnline ? "text-[#4A5D4E]" : "text-[#1A3A52]/55"
                 )}
-                title={allOnline ? "Set zone offline" : "Set zone online"}
+                data-tooltip-content={allOnline ? "Set zone offline" : "Set zone online"}
+                data-tooltip-id="my-tooltip"
                 onClick={() => onToggleZoneOnline(tables[0]?.zoneId ?? 0, !allOnline)}
               >
                 {allOnline ? <Wifi size={14} /> : <WifiOff size={14} />}
@@ -145,7 +146,7 @@ export const ZoneSection: React.FC<ZoneSectionProps> = ({
             <Button
               variant="ghost"
               size="icon"
-              className="size-7 text-gray-400"
+              className="size-7 text-[#1A3A52]/55"
               onClick={() => onToggleCollapse?.(zone)}
             >
               {collapsed ? (
@@ -163,7 +164,7 @@ export const ZoneSection: React.FC<ZoneSectionProps> = ({
         <CardContent className="p-5">
           {/* Inline mini status bar for zone */}
           <div className="flex items-center gap-3 mb-4">
-            <div className="flex h-1.5 flex-1 rounded-full overflow-hidden bg-gray-100">
+            <div className="flex h-1.5 flex-1 overflow-hidden rounded-full bg-[#D5BA98]/25">
               {([
                 { count: stats.available, color: TABLE_STATUS_CONFIG.AVAILABLE.dotColor },
                 { count: stats.occupied, color: TABLE_STATUS_CONFIG.OCCUPIED.dotColor },
@@ -179,7 +180,7 @@ export const ZoneSection: React.FC<ZoneSectionProps> = ({
                   />
                 ))}
             </div>
-            <span className="text-[10px] text-gray-400 shrink-0 whitespace-nowrap">
+            <span className="shrink-0 whitespace-nowrap text-[10px] text-[#1A3A52]/55">
               {stats.available}/{tables.length} available
             </span>
           </div>

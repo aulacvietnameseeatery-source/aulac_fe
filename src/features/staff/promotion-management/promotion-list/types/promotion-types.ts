@@ -23,3 +23,14 @@ export interface PromotionListDTO {
     type: PromotionType;
     promotionStatus: PromotionStatusCode;
 }
+
+export interface AvailablePromotionDTO {
+    promotionId: number;
+    promoCode: string;
+    promoName: string;
+    promotionType: string;
+    hasTarget: boolean;
+    discountValue: number;
+    estimatedDiscount: number;
+    finalAmount: number;
+}

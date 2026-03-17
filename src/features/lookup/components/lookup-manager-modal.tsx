@@ -33,6 +33,8 @@ export interface LookupManagerModalProps {
   items: LookupValueDto[];
   /** Whether the parent query is loading */
   isLoading?: boolean;
+  /** Whether add/delete is allowed for this lookup type */
+  isConfigurable?: boolean;
   /** Create a new lookup value. Must return the created item (for auto-select). */
   onSave: (data: CreateLookupValueRequest) => Promise<LookupValueDto>;
   /** Update an existing lookup value. */
@@ -65,6 +67,7 @@ const LookupManagerModal: React.FC<LookupManagerModalProps> = ({
   entityLabel,
   items,
   isLoading = false,
+  isConfigurable = true,
   onSave,
   onUpdate,
   onDelete,
@@ -183,8 +186,9 @@ const LookupManagerModal: React.FC<LookupManagerModalProps> = ({
   };
 
   const handleDeleteClick = useCallback((item: LookupValueDto) => {
+    if (!isConfigurable) return;
     setDeleteTarget(item);
-  }, []);
+  }, [isConfigurable]);
 
   const handleConfirmDelete = async () => {
     if (!deleteTarget) return;
@@ -232,7 +236,8 @@ const LookupManagerModal: React.FC<LookupManagerModalProps> = ({
         return (
           <span
             key={key}
-            title={`${flag} name: ${item.i18n?.[key] || "—"}\ndescription: ${item.descriptionI18n?.[key] || "—"}`}
+            data-tooltip-content={`${flag} name: ${item.i18n?.[key] || "—"} | description: ${item.descriptionI18n?.[key] || "—"}`}
+            data-tooltip-id="my-tooltip"
             className={cn(
               "text-[10px] px-1 py-0 rounded leading-4 border select-none",
               hasName
@@ -279,7 +284,7 @@ const LookupManagerModal: React.FC<LookupManagerModalProps> = ({
               <span className="text-sm font-semibold text-gray-700">
                 {items.length} {entityLabel}{items.length !== 1 ? "s" : ""}
               </span>
-              {formMode === "idle" && (
+              {formMode === "idle" && isConfigurable && (
                 <Button
                   type="button"
                   variant="outline"
@@ -321,15 +326,17 @@ const LookupManagerModal: React.FC<LookupManagerModalProps> = ({
                 <div className="flex flex-col items-center justify-center h-full gap-2 text-gray-400 py-8">
                   <TagIcon size={28} className="opacity-30" />
                   <p className="text-sm">No {entityLabel.toLowerCase()}s yet.</p>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={handleStartAdd}
-                  >
-                    <Plus size={13} className="mr-1" />
-                    Add first {entityLabel}
-                  </Button>
+                  {isConfigurable && (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={handleStartAdd}
+                    >
+                      <Plus size={13} className="mr-1" />
+                      Add first {entityLabel}
+                    </Button>
+                  )}
                 </div>
               ) : (
                 <ul className="divide-y divide-gray-100">
@@ -385,20 +392,24 @@ const LookupManagerModal: React.FC<LookupManagerModalProps> = ({
                         >
                           <button
                             type="button"
-                            title={`Edit ${entityLabel}`}
+                            data-tooltip-content={`Edit ${entityLabel}`}
+                            data-tooltip-id="my-tooltip"
                             onClick={() => handleStartEdit(item)}
                             className="p-1.5 rounded hover:bg-white hover:shadow-sm text-gray-400 hover:text-indigo-600 transition-colors"
                           >
                             <Pencil size={13} />
                           </button>
-                          <button
-                            type="button"
-                            title={`Delete ${entityLabel}`}
-                            onClick={() => handleDeleteClick(item)}
-                            className="p-1.5 rounded hover:bg-red-50 text-gray-400 hover:text-red-500 transition-colors"
-                          >
-                            <Trash2 size={13} />
-                          </button>
+                          {isConfigurable && (
+                            <button
+                              type="button"
+                              data-tooltip-content={`Delete ${entityLabel}`}
+                              data-tooltip-id="my-tooltip"
+                              onClick={() => handleDeleteClick(item)}
+                              className="p-1.5 rounded hover:bg-red-50 text-gray-400 hover:text-red-500 transition-colors"
+                            >
+                              <Trash2 size={13} />
+                            </button>
+                          )}
                         </div>
                       </li>
                     );
@@ -576,16 +587,20 @@ const LookupManagerModal: React.FC<LookupManagerModalProps> = ({
                 <Pencil size={16} className="opacity-30" />
                 <span className="text-sm">Select an item to edit</span>
               </div>
-              <p className="text-xs text-gray-300">or</p>
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={handleStartAdd}
-              >
-                <Plus size={13} className="mr-1" />
-                Add {entityLabel}
-              </Button>
+              {isConfigurable && (
+                <>
+                  <p className="text-xs text-gray-300">or</p>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={handleStartAdd}
+                  >
+                    <Plus size={13} className="mr-1" />
+                    Add {entityLabel}
+                  </Button>
+                </>
+              )}
             </div>
           )}
         </div>

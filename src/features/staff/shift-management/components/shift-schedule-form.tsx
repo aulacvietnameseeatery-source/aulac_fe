@@ -3,8 +3,9 @@
 import { useEffect } from "react";
 import { Dialog } from "@/components/ui/dialog";
 import { ALInput } from "@/components/ui/al-input";
+import { ALDatePicker } from "@/components/ui/al-date-picker";
 import { Button } from "@/components/ui/button";
-import { useLookupCrud, LookupCombobox } from "@/features/lookup";
+import { LOOKUP_TYPE, useLookupCrud, LookupCombobox } from "@/features/lookup";
 import { useScheduleForm } from "../hooks/use-schedule-form";
 import {
   useCreateShiftScheduleMutation,
@@ -25,9 +26,10 @@ function toDatetimeLocal(iso: string): string {
 
 export function ShiftScheduleForm({ open, onClose, editTarget }: Props) {
   const shiftTypeLookup = useLookupCrud({
-    baseUrl: "/api/shifts/shift-types",
-    queryKey: ["shifts", "shift-types"],
+    typeId: LOOKUP_TYPE.ShiftType,
+    queryKey: ["lookups", "shift-type"],
     entityLabel: "Shift Type",
+    typeLabel: "Shift Type",
   });
 
   const {
@@ -127,13 +129,14 @@ export function ShiftScheduleForm({ open, onClose, editTarget }: Props) {
     >
       <form id="schedule-form" onSubmit={onSubmit} className="space-y-4 p-1">
         {/* Business Date */}
-        <ALInput
+        <ALDatePicker
           title="Business Date"
           required
-          type="date"
-          {...register("businessDate")}
+          value={watch("businessDate")}
+          onChange={(val) => setValue("businessDate", val, { shouldValidate: true })}
           error={errors.businessDate?.message}
           readOnly={isEdit}
+          placeholder="Select business date"
         />
 
         {/* Shift Type — LookupCombobox (read-only when editing) */}

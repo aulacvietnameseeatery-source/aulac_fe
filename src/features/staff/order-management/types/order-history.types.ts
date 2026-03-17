@@ -1,3 +1,5 @@
+import { OrderStatusCode } from '@/types/status-codes';
+
 // Map từ OrderItemDTO (backend)
 export interface OrderItem {
     orderItemId: number;
@@ -34,7 +36,7 @@ export interface OrderHistory {
 export interface OrderHistoryFilters {
     pageIndex: number;
     pageSize: number;
-    orderStatusLvId?: number;
+    orderStatusCode?: OrderStatusCode;
     fromDate?: string;
     toDate?: string;
     search?: string;

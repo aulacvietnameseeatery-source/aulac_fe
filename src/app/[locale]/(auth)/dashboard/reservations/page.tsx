@@ -85,17 +85,17 @@ const ReservationListContent = () => {
     };
 
     return (
-        <div className="w-full min-h-screen bg-[#f8f9fa] p-4 md:p-6 font-sans">
+        <div className="w-full h-full min-h-0 overflow-hidden bg-[#FDFBF9] px-4 py-4 md:px-0 md:py-0 font-sans flex flex-col">
 
             {/* --- PAGE HEADER --- */}
-            <div className="flex flex-col gap-4 md:gap-6 mb-6">
+            <div className="shrink-0 flex flex-col gap-4 md:gap-6 mb-4 md:mb-6 sticky top-0 z-20 bg-[#FDFBF9]/95 backdrop-blur-md border-b border-[#D5BA98]/30 pb-4 md:border-b-0 md:bg-transparent md:backdrop-blur-none md:pb-0">
 
                 {/* Hàng 1: Tiêu đề */}
                 <div className="flex items-center justify-between sm:justify-start gap-3">
-                    <h3 className="text-2xl font-bold text-gray-800 m-0">Reservations</h3>
+                    <h3 className="text-2xl font-bold text-[#1A3A52] m-0">Reservations</h3>
                     <button
                         onClick={actions.refresh}
-                        className="p-2 bg-white border border-gray-200 rounded-full text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-colors shadow-sm"
+                        className="p-2 bg-[#FDFBF9] border border-[#D5BA98]/60 rounded-full text-[#1A3A52]/70 hover:bg-[#D5BA98]/10 hover:text-[#1A3A52] transition-colors shadow-none"
                         title="Refresh"
                     >
                         <RefreshCcw className="w-4 h-4" />
@@ -109,24 +109,24 @@ const ReservationListContent = () => {
                     <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full xl:w-auto">
 
                         {/* Date Picker (Full width on Mobile) */}
-                        <div className="relative flex items-center bg-white border border-gray-300 rounded-lg overflow-hidden shadow-sm h-[40px] px-3 hover:border-blue-400 transition-colors w-full sm:w-auto shrink-0">
-                            <CalendarIcon className="w-4 h-4 text-gray-500 mr-2" />
+                        <div className="relative flex items-center bg-[#FDFBF9] border border-[#D5BA98]/60 rounded-lg overflow-hidden shadow-none h-10 px-3 hover:border-[#1A3A52]/35 transition-colors w-full sm:w-auto shrink-0">
+                            <CalendarIcon className="w-4 h-4 text-[#1A3A52]/55 mr-2" />
                             <input
                                 type="date"
                                 value={filters.date ? format(filters.date, "yyyy-MM-dd") : ""}
                                 onChange={(e) => actions.onDateChange(e.target.value ? new Date(e.target.value) : null)}
-                                className="w-full outline-none text-sm text-gray-700 bg-transparent cursor-pointer [&::-webkit-calendar-picker-indicator]:cursor-pointer"
+                                className="w-full outline-none text-sm text-[#1A3A52] bg-transparent cursor-pointer [&::-webkit-calendar-picker-indicator]:cursor-pointer"
                             />
                         </div>
 
                         {/* Tabs Filter (Scrollable ngang trên Mobile) */}
-                        <div className="flex bg-gray-100/80 p-1 rounded-lg border border-gray-200/60 overflow-x-auto hide-scrollbar w-full sm:w-auto max-w-full">
+                        <div className="flex bg-[#D5BA98]/12 p-1 rounded-lg border border-[#D5BA98]/40 overflow-x-auto hide-scrollbar w-full sm:w-auto max-w-full">
                             <button
                                 onClick={() => actions.onStatusChange(null)}
                                 className={`shrink-0 px-4 py-1.5 text-[13px] font-medium rounded-md transition-all whitespace-nowrap ${
                                     filters.statusId === null
-                                        ? 'bg-white text-gray-900 shadow-sm border border-gray-200'
-                                        : 'text-gray-500 hover:text-gray-700 hover:bg-gray-200/50'
+                                        ? 'bg-[#1A3A52] text-white shadow-sm border border-[#1A3A52]'
+                                        : 'text-[#1A3A52]/65 hover:text-[#1A3A52] hover:bg-[#D5BA98]/18'
                                 }`}
                             >
                                 All
@@ -137,8 +137,8 @@ const ReservationListContent = () => {
                                     onClick={() => actions.onStatusChange(status.statusId)}
                                     className={`shrink-0 px-4 py-1.5 text-[13px] font-medium rounded-md transition-all whitespace-nowrap ${
                                         filters.statusId === status.statusId
-                                            ? 'bg-white text-gray-900 shadow-sm border border-gray-200'
-                                            : 'text-gray-500 hover:text-gray-700 hover:bg-gray-200/50'
+                                            ? 'bg-[#1A3A52] text-white shadow-sm border border-[#1A3A52]'
+                                            : 'text-[#1A3A52]/65 hover:text-[#1A3A52] hover:bg-[#D5BA98]/18'
                                     }`}
                                 >
                                     {status.statusName}
@@ -151,16 +151,16 @@ const ReservationListContent = () => {
                     <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full xl:w-auto xl:ml-auto">
 
                         {/* Thanh Search */}
-                        <div className="relative flex items-center bg-white border border-gray-300 rounded-lg overflow-hidden shadow-sm h-[40px] w-full sm:w-auto">
-                            <div className="px-3 bg-gray-50 border-r border-gray-200 h-full flex items-center justify-center shrink-0">
-                                <Search className="w-4 h-4 text-gray-500" />
+                        <div className="relative flex items-center bg-[#FDFBF9] border border-[#D5BA98]/60 rounded-lg overflow-hidden shadow-none h-10 w-full sm:w-auto">
+                            <div className="px-3 bg-[#D5BA98]/10 border-r border-[#D5BA98]/35 h-full flex items-center justify-center shrink-0">
+                                <Search className="w-4 h-4 text-[#1A3A52]/55" />
                             </div>
                             <input
                                 type="text"
                                 placeholder="Search customer, phone..."
                                 value={filters.search || ""}
                                 onChange={(e) => actions.onSearchChange(e.target.value)}
-                                className="px-3 py-2 w-full sm:w-[220px] md:w-[260px] outline-none text-sm text-gray-700 placeholder:text-gray-400"
+                                className="px-3 py-2 w-full sm:w-55 md:w-65 outline-none text-sm text-[#1A3A52] bg-transparent placeholder:text-[#1A3A52]/40"
                             />
                         </div>
 
@@ -168,7 +168,7 @@ const ReservationListContent = () => {
                         <Button
                             onClick={handleCreate}
                             variant="outline"
-                            className="h-[40px] w-full sm:w-auto shrink-0"
+                            className="h-10 w-full sm:w-auto shrink-0 border-[#D5BA98]/60 bg-[#FDFBF9] text-[#1A3A52] hover:bg-[#D5BA98]/10"
                         >
                             <CirclePlus size={16} className="mr-2" />
                             Add Reservation
@@ -178,42 +178,44 @@ const ReservationListContent = () => {
             </div>
 
             {/* --- GRID AREA --- */}
-            <div className="flex-1">
+            <div className="flex-1 min-h-0 flex flex-col overflow-hidden">
                 {isLoading ? (
-                    <div className="flex justify-center items-center py-20">
-                        <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+                    <div className="flex justify-center items-center py-20 flex-1">
+                        <Loader2 className="w-8 h-8 animate-spin text-[#1A3A52]" />
                     </div>
                 ) : (
                     <>
                         {/* Lưới hiển thị Card (Responsive Grid) */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
-                            {reservations.map((item) => (
-                                <ReservationCard
-                                    key={item.reservationId}
-                                    reservation={item}
-                                    statuses={statuses}
-                                    onAssignTable={() => setAssignTableReservation(item)}
-                                    onEdit={(id) => setEditReservationId(id)}
-                                    onDelete={(id) => setDeleteReservationId(id)}
-                                    onCardClick={(id) => router.push(`/dashboard/reservations/${id}`)}
-                                    onStatusUpdate={handleStatusUpdate}
-                                />
-                            ))}
-                        </div>
-
-                        {reservations.length === 0 && (
-                            <div className="flex flex-col items-center justify-center py-16 bg-white rounded-xl border border-gray-200 border-dashed mt-4">
-                                <Armchair className="w-12 h-12 text-gray-300 mb-3" />
-                                <p className="text-gray-500 text-lg">No reservations found</p>
+                        <div className="flex-1 min-h-0 overflow-auto custom-scrollbar pr-1">
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6 pb-4">
+                                {reservations.map((item) => (
+                                    <ReservationCard
+                                        key={item.reservationId}
+                                        reservation={item}
+                                        statuses={statuses}
+                                        onAssignTable={() => setAssignTableReservation(item)}
+                                        onEdit={(id) => setEditReservationId(id)}
+                                        onDelete={(id) => setDeleteReservationId(id)}
+                                        onCardClick={(id) => router.push(`/dashboard/reservations/${id}`)}
+                                        onStatusUpdate={handleStatusUpdate}
+                                    />
+                                ))}
                             </div>
-                        )}
+
+                            {reservations.length === 0 && (
+                                <div className="flex flex-col items-center justify-center py-16 bg-[#FDFBF9] rounded-xl border border-[#D5BA98]/40 border-dashed mt-4 text-[#1A3A52]/60">
+                                    <Armchair className="w-12 h-12 text-[#D5BA98] mb-3" />
+                                    <p className="text-[#1A3A52] text-lg">No reservations found</p>
+                                </div>
+                            )}
+                        </div>
                     </>
                 )}
             </div>
 
             {/* --- NEW PAGINATION --- */}
             {reservations.length > 0 && !isLoading && (
-                <div className="mt-6 shadow-sm border border-gray-200 rounded-b-xl overflow-hidden bg-white overflow-x-auto">
+                <div className="mt-4 shrink-0 shadow-none border border-[#D5BA98]/50 rounded-xl overflow-hidden bg-[#FDFBF9] overflow-x-auto">
                     <TablePagination
                         totalCount={totalCount}
                         pageSize={pageSize}

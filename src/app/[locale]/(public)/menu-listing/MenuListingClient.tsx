@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { CheckCircle } from "lucide-react";
@@ -127,7 +127,15 @@ export default function MenuListingClient({ initialMenuData, tableFromUrl, token
         }
     }, [tableNumber]);
 
-    const localizedMenu = initialMenuData;
+    const localizedMenu = React.useMemo(() => {
+        if (!initialMenuData) return [];
+
+        return [...initialMenuData].sort((a, b) => {
+            const orderA = a.displayOrder ?? 999;
+            const orderB = b.displayOrder ?? 999;
+            return orderA - orderB;
+        });
+    }, [initialMenuData]);
 
     // Thêm vào giỏ hàng
     const addToCart = (itemsToAdd: MenuItemData[]) => {
@@ -241,6 +249,12 @@ export default function MenuListingClient({ initialMenuData, tableFromUrl, token
             storedOrderId = saved ? Number(saved) : null;
         }
 
+        // Get QR token from sessionStorage
+        let qrToken: string | null = null;
+        if (typeof window !== 'undefined') {
+            qrToken = sessionStorage.getItem(TOKEN_STORAGE_KEY);
+        }
+
         try {
             if (storedOrderId) {
                 try {
@@ -271,6 +285,7 @@ export default function MenuListingClient({ initialMenuData, tableFromUrl, token
 
             const response = await api.post<ApiResponse<{ orderId: number }>>('/api/orders', {
                 tableCode: tableNumber,
+                qrToken: qrToken || undefined, // Include QR token if available
                 items: itemsPayload,
             });
 
@@ -289,9 +304,33 @@ export default function MenuListingClient({ initialMenuData, tableFromUrl, token
             }
             setOrderConfirmCount(prev => prev + 1);
             setShowSuccessPopup(true);
-        } catch (err: unknown) {
-            const message = err instanceof Error ? err.message : "Vui lòng thử lại sau.";
-            toast.error(`Không thể tạo đơn hàng: ${message}`);
+        } catch (err: any) {
+            // Handle specific error cases
+            if (err.response?.status === 409) {
+                // Table is already occupied by another customer
+                toast.error("Bàn này đã có người đang sử dụng. Vui lòng chọn bàn khác.");
+                // Clear the session and redirect to menu without table
+                if (typeof window !== 'undefined') {
+                    sessionStorage.removeItem(TABLE_STORAGE_KEY);
+                    sessionStorage.removeItem(CART_STORAGE_KEY);
+                    sessionStorage.removeItem(CURRENT_ORDER_ID_KEY);
+                    sessionStorage.removeItem(TOKEN_STORAGE_KEY);
+                }
+                setTableNumber("");
+                setCartItems([]);
+                setCurrentOrderId(null);
+                router.push('/menu-listing');
+            } else if (err.response?.status === 400 && err.response?.data?.userMessage?.includes('QR')) {
+                // Invalid QR token
+                toast.error("Mã QR không hợp lệ. Vui lòng quét lại mã QR trên bàn.");
+                if (typeof window !== 'undefined') {
+                    sessionStorage.removeItem(TOKEN_STORAGE_KEY);
+                }
+            } else {
+                // Generic error
+                const message = err.response?.data?.userMessage || err.message || "Vui lòng thử lại sau.";
+                toast.error(`Không thể tạo đơn hàng: ${message}`);
+            }
         }
     }, [cartItems, tableNumber, currentOrderId]);
 

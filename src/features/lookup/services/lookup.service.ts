@@ -1,6 +1,7 @@
 import { api } from "@/lib/http";
 import type { ApiResponse } from "@/types/api-response.types";
 import type {
+  LookupTypeId,
   LookupValueI18nDto,
   LookupValueDto,
   CreateLookupValueRequest,
@@ -9,20 +10,23 @@ import type {
 import { mapLookupI18n } from "../types/lookup.types";
 
 /**
- * Creates a generic CRUD service for any BE lookup endpoint.
+ * Creates a generic CRUD service for lookup values by typeId.
  *
  * The endpoint must follow the standard RESTful pattern:
- *   GET    <baseUrl>        → list all values
- *   POST   <baseUrl>        → create a value
- *   PUT    <baseUrl>/{id}   → update a value
- *   DELETE <baseUrl>/{id}   → delete a value
+ *   GET    /api/lookups/{typeId}
+ *   POST   /api/lookups/{typeId}
+ *   PUT    /api/lookups/{typeId}/{valueId}
+ *   DELETE /api/lookups/{typeId}/{valueId}
  *
  * @example
- *   const zoneService   = createLookupService("/api/tables/zones");
- *   const tagService    = createLookupService("/api/dishes/tags");
- *   const statusService = createLookupService("/api/reservations/statuses");
+ *   const zoneService = createLookupService(LOOKUP_TYPE.TableZone, { typeLabel: "Zone" });
  */
-export function createLookupService(baseUrl: string) {
+export function createLookupService(
+  typeId: LookupTypeId,
+  options?: { typeLabel?: string }
+) {
+  const baseUrl = `/api/lookups/${typeId}`;
+
   return {
     async getAll(): Promise<LookupValueDto[]> {
       const res = await api.get<ApiResponse<LookupValueI18nDto[]>>(baseUrl);
@@ -40,7 +44,10 @@ export function createLookupService(baseUrl: string) {
     },
 
     async remove(id: number): Promise<void> {
-      await api.delete<ApiResponse<object>>(`${baseUrl}/${id}`);
+      const qs = options?.typeLabel
+        ? `?${new URLSearchParams({ typeLabel: options.typeLabel }).toString()}`
+        : "";
+      await api.delete<ApiResponse<object>>(`${baseUrl}/${id}${qs}`);
     },
   };
 }

@@ -98,6 +98,17 @@ export interface ALComboboxProps {
   /** Make the combobox read-only (can read but not change). */
   readOnly?: boolean;
 
+  // ── Multi-select display ─────────────────────────────────
+  /**
+   * How to display selected items when `multiple` is true.
+   * - `"collapse"` (default): show up to `maxTags` badges, then "+N more" with tooltip.
+   * - `"expand"`: expand the trigger height to show all badges.
+   * @default "collapse"
+   */
+  tagMode?: "collapse" | "expand";
+  /** Maximum visible badges before collapsing (only when tagMode="collapse"). @default 3 */
+  maxTags?: number;
+
   // ── Styling ─────────────────────────────────────────────
   /** Additional class names for the trigger button. */
   className?: string;

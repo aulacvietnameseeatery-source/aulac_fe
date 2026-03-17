@@ -95,16 +95,16 @@ export const FilterBar: React.FC<FilterBarProps> = ({
   };
 
   return (
-    <Card className="py-0 gap-0">
+    <Card className="gap-0 border-[#D5BA98]/50 bg-[#FDFBF9] py-0 shadow-none">
       <CardContent className="p-4 space-y-3">
         {/* Zone Tabs */}
         <Tabs value={filters.zone} onValueChange={handleZoneChange}>
-          <TabsList variant="line">
+          <TabsList variant="line" className="border-b border-[#D5BA98]/60 bg-transparent">
             {zoneTabs.map((tab) => (
               <TabsTrigger
                 key={tab.key}
                 value={tab.value}
-                className="text-sm"
+                className="text-sm text-[#1A3A52]/75 data-[state=active]:text-[#1A3A52]"
               >
                 {tab.label}
               </TabsTrigger>

@@ -68,14 +68,17 @@ Anytime a feature needs a **select/combobox that loads options from a BE LookupV
 |------|-----|
 | Combobox with inline create + manager modal | `<LookupCombobox lookup={...} ... />` from `@/features/lookup` |
 | Standalone CRUD modal for a lookup entity | `<LookupManagerModal {...lookup} ... />` from `@/features/lookup` |
-| Data + CRUD callbacks for a lookup entity | `useLookupCrud({ baseUrl, queryKey, entityLabel })` from `@/features/lookup` |
+| Data + CRUD callbacks for a lookup entity | `useLookupCrud({ typeId, queryKey, entityLabel, typeLabel? })` from `@/features/lookup` |
 
 ```ts
 // Pattern: one hook call wires up everything
+import { LOOKUP_TYPE, useLookupCrud } from "@/features/lookup";
+
 const zoneLookup = useLookupCrud({
-  baseUrl:     "/api/tables/zones",
-  queryKey:    ["tables", "zones"],
+  typeId:      LOOKUP_TYPE.TableZone,
+  queryKey:    ["lookups", "table-zone"],
   entityLabel: "Zone",
+  typeLabel:   "Zone", // optional; helps BE return clearer delete conflict messages
 });
 
 // Renders combobox + "Manage" button + full CRUD modal
@@ -135,11 +138,25 @@ Tailwind CSS v4 with CSS variables for theming (`src/styles/globals.css`). Some 
 |-------|-----|-------|
 | **Primary (Navy Blue)** | `#1A3A52` | Primary text, prominent UI elements, active states, active tab backgrounds, contrast sections |
 | **Secondary (Beige)** | `#D5BA98` | Accents, dividing lines, borders, secondary badges, subtle highlights |
-| **Light Beige** | `#D5BA98` at 10–30% opacity, or `#FDFBF9` | Main backgrounds, muted containers, hovered items |
-| **Semantic — Success** | `#D5BA98` or muted green `#4A5D4E` | Only when absolutely necessary |
-| **Semantic — Warning** | Muted red `#8C3A3A` | Never use harsh `#ff3636` |
+| **Light Beige** | `#D5BA98` at 10–30% opacity, or `#FDFBF9` | Page backgrounds, muted strips, soft hover layers |
+| **Surface White** | `#FFFFFF` | Cards/sections that must stand out from cream page background |
 
 Tailwind usage examples: `text-[#1A3A52]`, `bg-[#1A3A52]`, `border-[#D5BA98]`, `bg-[#D5BA98]/30`, `bg-[#FDFBF9]`, `text-[#1A3A52]/70`.
+
+### Status Color System (Use Tailwind Semantic Colors)
+
+For all status badges/chips/active pills, use Tailwind semantic colors and keep mapping consistent across features:
+
+- `pending` / `new`: `amber` (`bg-amber-600`, `text-white`, `border-amber-600`)
+- `in-progress` / `confirmed` / `in-kitchen`: `blue` (`bg-blue-600`, `text-white`, `border-blue-600`)
+- `completed` / `checked-in` / `paid`: `emerald` (`bg-emerald-600`, `text-white`, `border-emerald-600`)
+- `cancelled` / `rejected` / `unpaid` / `no-show`: `red` (`bg-red-600`, `text-white`, `border-red-600`)
+- `all` / fallback buckets: `slate` (`bg-slate-700`, `text-white`, `border-slate-700`)
+
+Important:
+
+- Prefer Tailwind semantic tokens (`amber-*`, `blue-*`, `emerald-*`, `red-*`, `slate-*`) for statuses.
+- Do **not** introduce new custom hex values for status semantics unless explicitly requested.
 
 ### Typography
 
@@ -152,11 +169,13 @@ Favor light font weights (`font-light`), relaxed letter spacing (`tracking-wide`
 
 ### General UI Rules
 
-1. **Borders** — Replace harsh grays (`#e2e8f0`) with soft beige (`border-[#D5BA98]/30` or `border-[#D5BA98]/50`).
+1. **Surface Hierarchy** — Use cream page background (`bg-[#FDFBF9]`) and place key content inside white cards/sections (`bg-white`) so content clearly stands out.
+2. **Borders** — For primary cards/sections, prefer neutral borders like `border-slate-200`; use beige borders for secondary accents and inline controls.
 2. **Text** — Avoid pure black (`#000`) or harsh dark grays (`#0f172a`). Use Navy Blue (`text-[#1A3A52]`) for primary text and Navy Blue with opacity (`text-[#1A3A52]/70`) for secondary text.
-3. **Backgrounds** — Avoid pure white (`#fff`) blocks on stark gray (`#f5f6fa`). Use a warm, soft progression from white to light beige (`bg-[#D5BA98]/10` → `bg-[#D5BA98]/30`).
-4. **Shadows** — Use very soft, diffused shadows or eliminate them in favor of subtle border definitions.
-5. **Vibe** — The UI should feel calm, unhurried, balanced, and serene.
+3. **Card Emphasis** — Use subtle elevation for readability (`shadow-sm`) and stronger hover affordance (`hover:shadow-md`, optional `hover:-translate-y-0.5`) on clickable cards.
+4. **Backgrounds** — Use beige tint layers (`bg-[#D5BA98]/10` to `/20`) for muted strips, filters, and informational areas; keep main data surfaces white.
+5. **Shadows** — Soft shadows are preferred for separation; avoid heavy/glassy shadows.
+6. **Vibe** — Calm and premium, but with clearer section separation for fast scanning by staff/customers.
 
 ## Conventions
 

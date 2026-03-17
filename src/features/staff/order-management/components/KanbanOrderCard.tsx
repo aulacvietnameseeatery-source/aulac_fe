@@ -16,6 +16,8 @@ import { PrintOrderModal } from "./PrintOrderModal";
 import { PaymentModal } from "./PaymentModal";
 import { orderHistoryService } from "../services/order-history.service";
 import { toast } from "sonner";
+import { CouponDTO } from "../../coupon-management/coupon-list/types/coupon.types";
+import { PromotionListDTO } from "../../promotion-management/promotion-list/types/promotion-types";
 
 const VISIBLE_ITEMS = 3;
 
@@ -26,16 +28,21 @@ interface KanbanOrderCardProps {
     /** Secondary action button label & handler */
     secondaryAction?: { label: string; onClick: () => void };
     onAction?: (orderId: number, action: string) => void;
+    couponOptions?: CouponDTO[];
+    promotionOptions?: PromotionListDTO[];
 }
 
 export const KanbanOrderCard: React.FC<KanbanOrderCardProps> = ({
     order,
     primaryAction,
-    secondaryAction,
+    secondaryAction: _secondaryAction_DEPRECATED,
     onAction,
+    couponOptions = [],
+    promotionOptions = [],
 }) => {
     const t = useTranslations("Order.List.card");
     const format = useFormatter();
+    void _secondaryAction_DEPRECATED;
     const [expanded, setExpanded] = useState(false);
     const [isPrintModalOpen, setIsPrintModalOpen] = useState(false);
     const [printType, setPrintType] = useState<'invoice' | 'receipt'>('receipt');
@@ -77,7 +84,7 @@ export const KanbanOrderCard: React.FC<KanbanOrderCardProps> = ({
 
     return (
         <div
-            className="bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-200 cursor-pointer"
+            className="bg-white rounded-xl shadow-sm border border-slate-200 hover:-translate-y-0.5 hover:shadow-md transition-all duration-200 cursor-pointer"
             onClick={() => onAction?.(order.orderId, 'view')}
         >
             <div className="p-4">
@@ -85,23 +92,23 @@ export const KanbanOrderCard: React.FC<KanbanOrderCardProps> = ({
                 <div className="flex items-start justify-between gap-3 mb-3">
                     <div className="flex items-center gap-3">
                         {/* Avatar */}
-                        <div className="w-11 h-11 rounded-full bg-blue-600 flex items-center justify-center flex-shrink-0">
+                        <div className="w-11 h-11 rounded-full bg-[#1A3A52] flex items-center justify-center shrink-0">
                             <ShoppingBag className="w-5 h-5 text-white" />
                         </div>
                         {/* Info */}
                         <div>
-                            <h6 className="font-semibold text-gray-900 text-sm leading-tight mb-0.5">
+                            <h6 className="font-semibold text-[#1A3A52] text-sm leading-tight mb-0.5">
                                 #{order.orderId}
                             </h6>
                             <div className="flex items-center gap-1.5 flex-wrap">
-                                <span className="flex items-center gap-1 text-xs text-gray-500">
+                                <span className="flex items-center gap-1 text-xs text-[#1A3A52]/55">
                                     {getSourceIcon(order.source)}
                                     {t(`source.${order.source}`)}
                                 </span>
                                 {order.source === "DINE_IN" && order.tableCode && (
                                     <>
-                                        <span className="text-gray-300 text-xs">|</span>
-                                        <span className="text-xs font-bold text-blue-700 bg-blue-50 px-1.5 py-0.5 rounded border border-blue-100 shadow-sm animate-in fade-in zoom-in duration-300">
+                                        <span className="text-[#D5BA98] text-xs">|</span>
+                                        <span className="text-xs font-bold text-[#1A3A52] bg-[#D5BA98]/18 px-1.5 py-0.5 rounded border border-[#D5BA98]/45 shadow-none animate-in fade-in zoom-in duration-300">
                                             {t('table')} {order.tableCode}
                                         </span>
                                     </>
@@ -111,11 +118,12 @@ export const KanbanOrderCard: React.FC<KanbanOrderCardProps> = ({
                     </div>
 
                     {/* Actions menu removed as per user request, but keeping payment status */}
-                    <div className="relative flex-shrink-0 flex items-center">
+                    <div className="relative shrink-0 flex items-center">
                         {order.orderStatus === 'Completed' && (
                             <div
-                                className={`flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded border ${order.isPaid ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-rose-50 text-rose-600 border-rose-100'}`}
-                                title={order.isPaid ? t('paymentStatus.paid') : t('paymentStatus.unpaid')}
+                                className={`flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded border shadow-sm ${order.isPaid ? 'bg-emerald-600 text-white border-emerald-600' : 'bg-red-600 text-white border-red-600'}`}
+                                data-tooltip-content={order.isPaid ? t('paymentStatus.paid') : t('paymentStatus.unpaid')}
+                                data-tooltip-id="my-tooltip"
                             >
                                 {order.isPaid ? t('paymentStatus.paid') : t('paymentStatus.unpaid')}
                             </div>
@@ -126,25 +134,25 @@ export const KanbanOrderCard: React.FC<KanbanOrderCardProps> = ({
                 {/* Meta */}
                 <div className="flex items-center justify-between mb-3">
                     <div className="min-w-0">
-                        <p className="text-xs text-gray-500">
-                            <span className="font-medium text-gray-700 block truncate">
+                        <p className="text-xs text-[#1A3A52]/55">
+                            <span className="font-medium text-[#1A3A52] block truncate">
                                 {order.customerName ?? order.staffName ?? t('guest')}
                             </span>
                             {order.tableCode && (
-                                <span className="text-[11px] text-blue-700 font-semibold block mt-0.5">
+                                <span className="text-[11px] text-[#1A3A52]/75 font-semibold block mt-0.5">
                                     {t('table')} {order.tableCode}
                                 </span>
                             )}
                         </p>
                     </div>
-                    <div className="flex items-center gap-1 text-xs text-gray-500">
+                    <div className="flex items-center gap-1 text-xs text-[#1A3A52]/55">
                         <Clock className="w-3 h-3" />
                         {order.createdAt ? format.dateTime(new Date(order.createdAt), { hour: '2-digit', minute: '2-digit' }) : "—"}
                     </div>
                 </div>
 
                 {/* Items list */}
-                <div className="border-t border-gray-100 pt-3 mb-3">
+                <div className="border-t border-[#D5BA98]/25 pt-3 mb-3">
                     <ul className="space-y-2">
                         {visibleItems.map((item) => (
                             <li
@@ -154,23 +162,23 @@ export const KanbanOrderCard: React.FC<KanbanOrderCardProps> = ({
                                 <div className="flex items-center justify-between text-xs">
                                     <div className="flex items-center gap-2 min-w-0">
                                         <span
-                                            className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${item.itemStatus?.toUpperCase() === "DONE"
-                                                ? "bg-green-400"
-                                                : "bg-gray-300"
+                                            className={`w-1.5 h-1.5 rounded-full shrink-0 ${item.itemStatus?.toUpperCase() === "DONE"
+                                                ? "bg-emerald-500"
+                                                : "bg-slate-300"
                                                 }`}
                                         />
-                                        <span className="text-gray-700 truncate">
+                                        <span className="text-[#1A3A52]/85 truncate">
                                             {item.dishName}
                                         </span>
                                     </div>
-                                    <span className="text-gray-500 flex-shrink-0 ml-2">
+                                    <span className="text-[#1A3A52]/55 shrink-0 ml-2">
                                         ×{item.quantity}
                                     </span>
                                 </div>
                                 {item.note && (
-                                    <div className="flex items-start gap-1 p-1 bg-gray-50/50 rounded-md border border-gray-100 mt-1">
-                                        <p className="text-[10px] font-bold text-gray-600 line-clamp-2">
-                                            <span className="font-bold text-[9px] mr-1 text-gray-400 uppercase">
+                                    <div className="flex items-start gap-1 p-1 bg-[#D5BA98]/10 rounded-md border border-[#D5BA98]/30 mt-1">
+                                        <p className="text-[10px] font-bold text-[#1A3A52]/75 line-clamp-2">
+                                            <span className="font-bold text-[9px] mr-1 text-[#1A3A52]/45 uppercase">
                                                 {t('note')}:
                                             </span>
                                             {item.note}
@@ -178,9 +186,9 @@ export const KanbanOrderCard: React.FC<KanbanOrderCardProps> = ({
                                     </div>
                                 )}
                                 {item.rejectReason && (
-                                    <div className="flex items-start gap-1 p-1 bg-red-50/50 rounded-md border border-red-100 mt-1">
-                                        <p className="text-[10px] text-red-600 line-clamp-2 font-medium">
-                                            <span className="font-bold text-[9px] mr-1 text-red-400 uppercase">
+                                    <div className="flex items-start gap-1 p-1 bg-[#8C3A3A]/8 rounded-md border border-[#8C3A3A]/20 mt-1">
+                                        <p className="text-[10px] text-[#8C3A3A] line-clamp-2 font-medium">
+                                            <span className="font-bold text-[9px] mr-1 text-[#8C3A3A]/70 uppercase">
                                                 {t('rejectReason')}:
                                             </span>
                                             {item.rejectReason}
@@ -194,7 +202,7 @@ export const KanbanOrderCard: React.FC<KanbanOrderCardProps> = ({
                     {order.orderItems.length > VISIBLE_ITEMS && (
                         <button
                             onClick={(e) => { e.stopPropagation(); setExpanded((v) => !v); }}
-                            className="mt-2 flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-700 transition-colors"
+                            className="mt-2 flex items-center gap-1 text-xs font-semibold text-[#1A3A52] hover:text-[#1A3A52]/80 transition-colors"
                         >
                             {expanded ? (
                                 <>
@@ -210,11 +218,11 @@ export const KanbanOrderCard: React.FC<KanbanOrderCardProps> = ({
                 </div>
 
                 {/* Footer total */}
-                <div className="flex items-center justify-between border-t border-gray-100 pt-3 mb-3">
-                    <span className="text-sm font-bold text-gray-900">
+                <div className="flex items-center justify-between border-t border-[#D5BA98]/25 pt-3 mb-3">
+                    <span className="text-sm font-bold text-[#1A3A52]">
                         {format.number(order.totalAmount, { style: 'currency', currency: 'CHF' })}
                     </span>
-                    <span className="text-xs text-gray-500">{order.itemCount} {t('items')}</span>
+                    <span className="text-xs text-[#1A3A52]/55">{order.itemCount} {t('items')}</span>
                 </div>
 
                 {/* Action buttons */}
@@ -224,13 +232,13 @@ export const KanbanOrderCard: React.FC<KanbanOrderCardProps> = ({
                         <>
                             <button
                                 onClick={(e) => { e.stopPropagation(); onAction?.(order.orderId, 'view'); }}
-                                className="flex-1 py-1.5 rounded-lg border border-gray-200 text-xs font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors"
+                                className="flex-1 py-1.5 rounded-lg border border-[#D5BA98]/55 text-xs font-medium text-[#1A3A52] bg-[#FDFBF9] hover:bg-[#D5BA98]/10 transition-colors"
                             >
                                 {t('action.view')}
                             </button>
                             <button
                                 onClick={(e) => { e.stopPropagation(); onAction?.(order.orderId, 'cancel'); }}
-                                className="flex-1 py-1.5 rounded-lg border border-red-200 text-xs font-medium text-red-600 bg-white hover:bg-red-50 transition-colors"
+                                className="flex-1 py-1.5 rounded-lg border border-[#8C3A3A]/20 text-xs font-medium text-[#8C3A3A] bg-[#FDFBF9] hover:bg-[#8C3A3A]/8 transition-colors"
                             >
                                 {t('action.cancel')}
                             </button>
@@ -240,13 +248,13 @@ export const KanbanOrderCard: React.FC<KanbanOrderCardProps> = ({
                             <>
                                 <button
                                     onClick={(e) => { e.stopPropagation(); onAction?.(order.orderId, 'view'); }}
-                                    className="flex-1 py-1.5 rounded-lg border border-gray-200 text-xs font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors"
+                                    className="flex-1 py-1.5 rounded-lg border border-[#D5BA98]/55 text-xs font-medium text-[#1A3A52] bg-[#FDFBF9] hover:bg-[#D5BA98]/10 transition-colors"
                                 >
                                     {t('action.view')}
                                 </button>
                                 <button
                                     onClick={(e) => { e.stopPropagation(); setPrintType('receipt'); setIsPrintModalOpen(true); }}
-                                    className="flex-1 py-1.5 rounded-lg border border-gray-200 text-xs font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors"
+                                    className="flex-1 py-1.5 rounded-lg border border-[#D5BA98]/55 text-xs font-medium text-[#1A3A52] bg-[#FDFBF9] hover:bg-[#D5BA98]/10 transition-colors"
                                 >
                                     {t('action.printReceipt')}
                                 </button>
@@ -255,20 +263,21 @@ export const KanbanOrderCard: React.FC<KanbanOrderCardProps> = ({
                             <>
                                 <button
                                     onClick={(e) => { e.stopPropagation(); onAction?.(order.orderId, 'view'); }}
-                                    className="flex-1 py-1.5 rounded-lg border border-gray-200 text-xs font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors"
-                                    title={t('action.view')}
+                                    className="flex-1 py-1.5 rounded-lg border border-[#D5BA98]/55 text-xs font-medium text-[#1A3A52] bg-[#FDFBF9] hover:bg-[#D5BA98]/10 transition-colors"
+                                    data-tooltip-content={t('action.view')}
+                                    data-tooltip-id="my-tooltip"
                                 >
                                     {t('action.view')}
                                 </button>
                                 <button
                                     onClick={(e) => { e.stopPropagation(); setIsPaymentModalOpen(true); }}
-                                    className="flex-1 py-1.5 rounded-lg border border-blue-200 text-xs font-medium text-blue-700 bg-blue-50 hover:bg-blue-100 transition-colors"
+                                    className="flex-1 py-1.5 rounded-lg border border-[#D5BA98]/55 text-xs font-medium text-[#4A5D4E] bg-[#D5BA98]/18 hover:bg-[#D5BA98]/28 transition-colors"
                                 >
                                     {t('action.pay')}
                                 </button>
                                 <button
                                     onClick={(e) => { e.stopPropagation(); setPrintType('invoice'); setIsPrintModalOpen(true); }}
-                                    className="flex-1 py-1.5 rounded-lg border border-gray-200 text-xs font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors"
+                                    className="flex-1 py-1.5 rounded-lg border border-[#D5BA98]/55 text-xs font-medium text-[#1A3A52] bg-[#FDFBF9] hover:bg-[#D5BA98]/10 transition-colors"
                                 >
                                     {t('action.print')}
                                 </button>
@@ -278,14 +287,14 @@ export const KanbanOrderCard: React.FC<KanbanOrderCardProps> = ({
                         <>
                             <button
                                 onClick={(e) => { e.stopPropagation(); onAction?.(order.orderId, 'view'); }}
-                                className="flex-1 py-1.5 rounded-lg border border-gray-200 text-xs font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors"
+                                className="flex-1 py-1.5 rounded-lg border border-[#D5BA98]/55 text-xs font-medium text-[#1A3A52] bg-[#FDFBF9] hover:bg-[#D5BA98]/10 transition-colors"
                             >
                                 {t('action.view')}
                             </button>
                             {primaryAction && (
                                 <button
                                     onClick={(e) => { e.stopPropagation(); primaryAction.onClick(); }}
-                                    className="flex-1 py-1.5 rounded-lg border border-gray-200 text-xs font-medium text-gray-700 bg-gray-50 hover:bg-gray-100 transition-colors"
+                                    className="flex-1 py-1.5 rounded-lg border border-[#D5BA98]/55 text-xs font-medium text-[#1A3A52] bg-[#D5BA98]/12 hover:bg-[#D5BA98]/20 transition-colors"
                                 >
                                     {primaryAction.label}
                                 </button>
@@ -301,6 +310,8 @@ export const KanbanOrderCard: React.FC<KanbanOrderCardProps> = ({
                 onClose={() => setIsPaymentModalOpen(false)}
                 onPaymentComplete={handlePaymentComplete}
                 isLoading={isProcessingPayment}
+                couponOptions={couponOptions}
+                promotionOptions={promotionOptions}
             />
 
             <PrintOrderModal

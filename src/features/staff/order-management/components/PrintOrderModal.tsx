@@ -1,4 +1,5 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { useTranslations, useFormatter } from 'next-intl';
 import { X, Printer } from 'lucide-react';
 import { OrderHistory } from '../types/order-history.types';
@@ -23,8 +24,33 @@ export const PrintOrderModal: React.FC<PrintOrderModalProps> = ({ order, isOpen,
     const rt = useTranslations('OrderReceipt');
     const format = useFormatter();
     const printRef = useRef<HTMLDivElement>(null);
+    const [mounted, setMounted] = useState(false);
 
-    if (!isOpen) return null;
+    const handleClose = (event?: React.MouseEvent) => {
+        event?.stopPropagation();
+        document.body.style.overflow = 'unset';
+        onClose();
+    };
+
+    useEffect(() => {
+        setMounted(true);
+        return () => setMounted(false);
+    }, []);
+
+    useEffect(() => {
+        if (!isOpen) {
+            return;
+        }
+
+        const previousOverflow = document.body.style.overflow;
+        document.body.style.overflow = 'hidden';
+
+        return () => {
+            document.body.style.overflow = previousOverflow;
+        };
+    }, [isOpen]);
+
+    if (!isOpen || !mounted) return null;
 
     // Map OrderHistory to OrderReceipt
     const mappedOrder: OrderReceipt = {
@@ -83,14 +109,26 @@ export const PrintOrderModal: React.FC<PrintOrderModalProps> = ({ order, isOpen,
         printWindow.document.close();
     };
 
-    return (
+    return createPortal(
         <div
             className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
-            onClick={(e) => e.stopPropagation()}
+            onClick={(e) => handleClose(e)}
+            onMouseDown={(e) => e.stopPropagation()}
+            onPointerDown={(e) => e.stopPropagation()}
         >
-            <div className="bg-white rounded-2xl shadow-2xl w-full max-w-xl max-h-[90vh] flex flex-col overflow-hidden animate-in fade-in zoom-in duration-200">
+            <div
+                className="bg-white rounded-2xl shadow-2xl w-full max-w-xl max-h-[90vh] flex flex-col overflow-hidden animate-in fade-in zoom-in duration-200"
+                onClick={(e) => e.stopPropagation()}
+                onMouseDown={(e) => e.stopPropagation()}
+                onPointerDown={(e) => e.stopPropagation()}
+            >
                 {/* Header */}
-                <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
+                <div
+                    className="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-gray-50/50"
+                    onClick={(e) => e.stopPropagation()}
+                    onMouseDown={(e) => e.stopPropagation()}
+                    onPointerDown={(e) => e.stopPropagation()}
+                >
                     <div className="flex items-center gap-3">
                         <div className="p-2 bg-blue-100 rounded-lg text-blue-600">
                             <Printer className="w-5 h-5" />
@@ -103,7 +141,7 @@ export const PrintOrderModal: React.FC<PrintOrderModalProps> = ({ order, isOpen,
                         </div>
                     </div>
                     <button
-                        onClick={onClose}
+                        onClick={(e) => handleClose(e)}
                         className="p-2 hover:bg-gray-200 rounded-full transition-colors text-gray-400 hover:text-gray-600"
                     >
                         <X className="w-5 h-5" />
@@ -111,7 +149,12 @@ export const PrintOrderModal: React.FC<PrintOrderModalProps> = ({ order, isOpen,
                 </div>
 
                 {/* Preview Area */}
-                <div className="flex-1 overflow-auto p-8 bg-gray-100/50 flex justify-center custom-scrollbar">
+                <div
+                    className="flex-1 overflow-auto p-8 bg-gray-100/50 flex justify-center custom-scrollbar"
+                    onClick={(e) => e.stopPropagation()}
+                    onMouseDown={(e) => e.stopPropagation()}
+                    onPointerDown={(e) => e.stopPropagation()}
+                >
                     <div
                         ref={printRef}
                         id="receipt-print-area"
@@ -129,9 +172,14 @@ export const PrintOrderModal: React.FC<PrintOrderModalProps> = ({ order, isOpen,
                 </div>
 
                 {/* Footer */}
-                <div className="px-6 py-4 border-t border-gray-100 flex items-center justify-end gap-3 bg-gray-50/50">
+                <div
+                    className="px-6 py-4 border-t border-gray-100 flex items-center justify-end gap-3 bg-gray-50/50"
+                    onClick={(e) => e.stopPropagation()}
+                    onMouseDown={(e) => e.stopPropagation()}
+                    onPointerDown={(e) => e.stopPropagation()}
+                >
                     <button
-                        onClick={onClose}
+                        onClick={(e) => handleClose(e)}
                         className="px-4 py-2 text-sm font-semibold text-gray-600 hover:text-gray-800 transition-colors"
                     >
                         {rt('BackLink.label')}
@@ -145,6 +193,7 @@ export const PrintOrderModal: React.FC<PrintOrderModalProps> = ({ order, isOpen,
                     </button>
                 </div>
             </div>
-        </div>
+        </div>,
+        document.body
     );
 };

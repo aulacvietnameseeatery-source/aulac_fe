@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
 
 import type { IngredientDto, SaveIngredientRequest, SupplierBasicDto } from "../types/ingredient-types";
-import { useLookupCrud, LookupCombobox } from "@/features/lookup";
+import { LOOKUP_TYPE, useLookupCrud, LookupCombobox } from "@/features/lookup";
 
 interface IngredientModalProps {
     isOpen: boolean;
@@ -61,9 +61,10 @@ const IngredientModal: React.FC<IngredientModalProps> = ({
     const [removedImageIds, setRemovedImageIds] = useState<number[]>([]);
 
     const typeLookup = useLookupCrud({
-        baseUrl: "/api/ingredients/types",
-        queryKey: ["ingredients", "types"],
+        typeId: LOOKUP_TYPE.IngredientType,
+        queryKey: ["lookups", "ingredient-type"],
         entityLabel: "Ingredient Type",
+        typeLabel: "Ingredient Type",
     });
 
     useEffect(() => {

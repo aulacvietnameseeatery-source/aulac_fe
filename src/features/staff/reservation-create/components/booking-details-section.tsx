@@ -1,6 +1,7 @@
 import React from 'react';
 import { AlertCircle, Calendar as CalIcon, Clock, Users } from 'lucide-react';
 import { useTranslations } from "next-intl";
+import { ALDatePicker } from "@/components/ui/al-date-picker";
 import { ALInput } from '@/components/ui/al-input';
 
 interface Props {
@@ -36,11 +37,11 @@ export const BookingDetailsSection: React.FC<Props> = ({
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div>
           <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">{t("date")}<span className="text-red-500">*</span></label>
-          <ALInput 
-            type="date" 
-            min={todayString} 
-            value={date} 
-            onChange={(e: any) => onDateChange(e.target.value)} 
+          <ALDatePicker
+            value={date}
+            onChange={onDateChange}
+            minDate={todayString}
+            placeholder={t("date")}
           />
         </div>
         <div>
