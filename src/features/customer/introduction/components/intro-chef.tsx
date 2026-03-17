@@ -13,7 +13,8 @@ export function IntroChef() {
     ];
 
     return (
-        <section className="w-full flex flex-col lg:flex-row overflow-hidden">
+        <section className="w-full py-20 md:py-28 px-6 md:px-8 lg:px-20">
+            <div className="mx-auto grid w-full max-w-[1440px] overflow-hidden rounded-3xl border border-[#C9A961]/25 bg-[#F7F2E8]/70 backdrop-blur-sm lg:grid-cols-[0.92fr_1.08fr]">
 
             {/* --- LEFT: IMAGE SECTION --- */}
             {/* Mobile: Chiều cao 50% màn hình. Desktop: Full chiều cao section */}
@@ -22,18 +23,23 @@ export function IntroChef() {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.8, ease: "easeOut" }}
-                className="relative w-full lg:w-1/2 h-[50vh] lg:h-auto lg:min-h-screen"
+                className="relative w-full border-b border-[#C9A961]/20 bg-[#12283A] px-6 py-8 md:px-10 lg:border-b-0 lg:border-r lg:px-12 lg:py-14"
             >
-                <img
-                    src="/images/introduction-page/intro-chef/intro-chef.png"
-                    alt="Au Lac Craftsmen"
-                    className="w-full h-full object-cover absolute inset-0"
-                />
-                <div className="absolute inset-0 bg-[#193752]/20" />
+                <div className="relative mx-auto w-full max-w-[420px] aspect-[9/16] overflow-hidden rounded-2xl border border-white/20 bg-black shadow-[0_22px_60px_rgba(0,0,0,0.45)]">
+                    <video
+                        src="/video/nha-bep.mp4"
+                        autoPlay
+                        muted
+                        loop
+                        playsInline
+                        className="w-full h-full object-contain"
+                    />
+                    <div className="absolute inset-0 bg-[#193752]/10 pointer-events-none" />
+                </div>
             </motion.div>
 
             {/* --- RIGHT: CONTENT SECTION --- */}
-            <div className="w-full lg:w-1/2 bg-[#F6F4EF] flex flex-col justify-center px-6 py-12 md:px-16 lg:px-24 xl:px-32">
+            <div className="w-full bg-transparent px-6 py-10 md:px-12 md:py-14 lg:px-20 lg:py-16 xl:px-24">
 
                 {/* Header */}
                 <motion.div
@@ -43,10 +49,10 @@ export function IntroChef() {
                     transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
                     className="mb-8 md:mb-10 space-y-3 md:space-y-4"
                 >
-                    <span className="font-display text-[#C9A961] text-[10px] md:text-xs font-bold uppercase tracking-[0.3em] md:tracking-[0.5em] block">
+                    <span className="font-display text-[#8D6A2A] text-[10px] md:text-xs font-bold uppercase tracking-[0.3em] md:tracking-[0.5em] block">
                         {t("label")}
                     </span>
-                    <h2 className="font-display text-[#193752] text-[32px] md:text-5xl lg:text-[60px] font-black leading-tight whitespace-pre-line">
+                    <h2 className="font-display text-[#12283A] text-[32px] md:text-5xl lg:text-[58px] font-black leading-tight whitespace-pre-line">
                         {t("title")}
                     </h2>
                 </motion.div>
@@ -60,16 +66,16 @@ export function IntroChef() {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ duration: 0.6, delay: 0.4 + (index * 0.2) }}
-                            className="flex flex-col gap-3 md:gap-4 group"
+                            className="flex flex-col gap-3 md:gap-4"
                         >
                             {index > 0 && (
-                                <div className="w-full h-[1px] bg-[#193752]/10 mb-6 md:mb-8" />
+                                <div className="w-full h-[1px] bg-[#12283A]/12 mb-6 md:mb-8" />
                             )}
 
-                            <h3 className="font-display text-[#C9A961] text-xs md:text-sm font-bold uppercase tracking-widest">
+                            <h3 className="font-display text-[#8D6A2A] text-xs md:text-sm font-bold uppercase tracking-widest">
                                 {chef.name}
                             </h3>
-                            <p className="font-display text-[#193752]/80 text-[16px] md:text-lg font-light leading-relaxed italic">
+                            <p className="font-display text-[#12283A]/80 text-[16px] md:text-lg font-light leading-relaxed italic">
                                 {chef.quote}
                             </p>
                         </motion.div>
@@ -85,7 +91,7 @@ export function IntroChef() {
                     className="mt-12 md:mt-16"
                 >
                     <Link href="/about/team" className="inline-flex flex-col items-start group">
-                        <span className="font-display text-[#193752] text-sm md:text-base font-bold uppercase tracking-[0.1em] pb-2 border-b-2 border-[#C9A961] transition-all group-hover:text-[#C9A961] group-hover:border-[#193752]">
+                        <span className="font-display text-[#12283A] text-sm md:text-base font-bold uppercase tracking-[0.1em] pb-2 border-b-2 border-[#C9A961] transition-all group-hover:text-[#8D6A2A] group-hover:border-[#12283A]">
                             {t("cta")}
                         </span>
                     </Link>
@@ -93,6 +99,7 @@ export function IntroChef() {
 
             </div>
 
+            </div>
         </section>
     );
 }

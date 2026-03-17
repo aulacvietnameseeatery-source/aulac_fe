@@ -7,20 +7,28 @@ import {
 
 export default function IntroductionPage() {
     return (
-        <div className="w-full flex flex-col">
+        <div className="relative w-full flex flex-col overflow-hidden bg-[#EEE8DC]">
+            <div className="pointer-events-none absolute inset-0 opacity-70">
+                <div className="absolute -top-40 -left-40 h-[420px] w-[420px] rounded-full bg-[#D7C4A0]/50 blur-3xl" />
+                <div className="absolute top-[32%] right-[-120px] h-[360px] w-[360px] rounded-full bg-[#9FB0BE]/30 blur-3xl" />
+                <div className="absolute bottom-[-160px] left-[12%] h-[340px] w-[340px] rounded-full bg-[#1E3C52]/20 blur-3xl" />
+            </div>
 
-            {/* 1. HERO SECTION */}
-            <IntroHero/>
+            <div className="relative z-10">
+                <IntroHero />
 
-            {/* 2. COLLECTION SECTION */}
-            <IntroCollection/>
+                <div className="mx-auto h-px w-[min(92%,1280px)] bg-gradient-to-r from-transparent via-[#C9A961]/70 to-transparent" />
 
-            {/* 3. CHEF SECTION */}
-            <IntroChef/>
+                <IntroCollection />
 
-            {/* 4. VIRTUAL TOUR */}
-            <IntroVirtualTour/>
+                <div className="mx-auto h-px w-[min(92%,1280px)] bg-gradient-to-r from-transparent via-[#193752]/30 to-transparent" />
 
+                <IntroChef />
+
+                <div className="mx-auto h-px w-[min(92%,1280px)] bg-gradient-to-r from-transparent via-[#C9A961]/70 to-transparent" />
+
+                <IntroVirtualTour />
+            </div>
         </div>
     );
 }
