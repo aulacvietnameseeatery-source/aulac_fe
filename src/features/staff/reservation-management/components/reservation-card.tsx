@@ -70,6 +70,10 @@ export const ReservationCard = ({ reservation, statuses, onAssignTable, onEdit, 
                     <span className="text-[#1A3A52]/55">Created on</span>
                     <span className="text-[#1A3A52] font-medium">{reservation.createdAt ? format(new Date(reservation.createdAt), "dd MMM, HH:mm") : "N/A"}</span>
                 </div>
+                <div className="flex items-center justify-between gap-2 mb-3 text-[14px]">
+                    <span className="text-[#1A3A52]/55">Reservation time</span>
+                    <span className="text-[#1A3A52] font-medium">{format(new Date(reservation.reservedTime), "dd MMM, HH:mm")}</span>
+                </div>
                 <div className="flex items-center justify-between gap-2 text-[14px]">
                     <span className="text-[#1A3A52]/55">Status</span>
                     <div onClick={(e) => e.stopPropagation()}>

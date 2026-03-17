@@ -259,7 +259,7 @@ const ALDatePicker = React.forwardRef<HTMLButtonElement, ALDatePickerProps>(
             </button>
           </PopoverTrigger>
 
-          <PopoverContent className="w-[320px] p-0 border-[#D5BA98]/50" align="start">
+          <PopoverContent className="z-[320] w-[320px] p-0 border-[#D5BA98]/50" align="start">
             <div className="grid grid-cols-2 gap-2 p-3 border-b border-[#D5BA98]/30">
               <ALCombobox
                 options={monthOptions}
