@@ -1787,6 +1787,219 @@
           "minutesAffected": "Phút",
           "reviewer": "Người Duyệt"
         }
+      },
+      "refresh": "Làm mới",
+      "exportCsv": "Xuất CSV",
+      "selectDateRange": "Chọn khoảng thời gian để tải báo cáo",
+      "highAbsenceRate": "Tỷ lệ vắng mặt cao",
+      "presets": {
+        "today": "Hôm nay",
+        "thisWeek": "Tuần này",
+        "last7Days": "7 ngày qua",
+        "thisMonth": "Tháng này",
+        "lastMonth": "Tháng trước"
+      },
+      "health": {
+        "attendanceRate": "Tỷ Lệ Chấm Công",
+        "hoursCompliance": "Tuân Thủ Giờ Làm",
+        "exceptions": "Ngoại Lệ",
+        "shiftsPresent": "{present} / {total} ca",
+        "hoursWorked": "{worked}h đã làm / {scheduled}h",
+        "noAttendanceData": "Chưa có dữ liệu chấm công",
+        "noHoursData": "Chưa có dữ liệu giờ làm",
+        "issuesFlagged": "{count, plural, =0 {Không có vấn đề} =1 {1 vấn đề} other {# vấn đề được ghi nhận}}"
+      },
+      "attendanceTab": {
+        "inner": {
+          "overview": "Tổng Quan",
+          "staffSummary": "Theo Nhân Viên",
+          "details": "Chi Tiết"
+        },
+        "searchLabel": "Tìm Nhân Viên",
+        "searchPlaceholder": "Nhập tên nhân viên...",
+        "filterByStaff": "Lọc theo nhân viên",
+        "allStaff": "Tất cả nhân viên",
+        "clearSearch": "Xóa",
+        "kpi": {
+          "totalAssignments": "Tổng phân công",
+          "checkInRate": "Tỷ lệ chấm công",
+          "lateArrivals": "Đi trễ",
+          "absences": "Vắng mặt"
+        },
+        "chart": {
+          "dailyBreakdown": "Chấm Công Theo Ngày",
+          "onTime": "Đúng Giờ",
+          "late": "Trễ",
+          "absent": "Vắng"
+        },
+        "topAbsences": "Vắng Nhiều Nhất",
+        "topLate": "Trễ Nhiều Nhất",
+        "recordsOf": "trong tổng số",
+        "scorePrefix": "Điểm:",
+        "insightsLabel": "Nhận Xét",
+        "showInsights": "Hiện Nhận Xét",
+        "hideInsights": "Ẩn Nhận Xét",
+        "insights": {
+          "highAbsence": "Tỷ lệ vắng mặt cao: {absentRate}% ca ({absent} lượt vắng). Hãy rà soát phân ca.",
+          "highLate": "Tỷ lệ đi trễ cao: {lateRate}%. Cân nhắc điều chỉnh giờ bắt đầu ca.",
+          "frequentAbsence": "Có {count} nhân viên vắng từ 3 lần trở lên trong giai đoạn này.",
+          "perfectAttendance": "Chấm công hoàn hảo! Tất cả ca đều có check-in trong giai đoạn đã chọn.",
+          "zeroLateAbsent": "Rất tốt! Không có ca vắng và không có ca đi trễ trong giai đoạn đã chọn."
+        },
+        "statusCards": {
+          "onTime": "Đúng Giờ",
+          "late": "Trễ",
+          "absent": "Vắng",
+          "present": "Có Mặt"
+        },
+        "badges": {
+          "total": "Tổng: {value}",
+          "present": "Có mặt: {value}",
+          "onTime": "Đúng giờ: {value}",
+          "late": "Trễ: {value}",
+          "absent": "Vắng: {value}"
+        },
+        "manualAdjusted": "Điều chỉnh thủ công",
+        "summaryTable": {
+          "staff": "Nhân Viên",
+          "total": "Tổng",
+          "present": "Có Mặt",
+          "onTime": "Đúng Giờ",
+          "late": "Trễ",
+          "absent": "Vắng",
+          "checkInRate": "Tỷ Lệ",
+          "reliability": "Độ Tin Cậy"
+        },
+        "detailTable": {
+          "date": "Ngày",
+          "staff": "Nhân Viên",
+          "shift": "Ca",
+          "planned": "Kế Hoạch",
+          "status": "Trạng Thái",
+          "checkIn": "Vào",
+          "checkOut": "Ra",
+          "late": "Trễ",
+          "earlyLeave": "Về Sớm"
+        }
+      },
+      "workedHoursTab": {
+        "inner": {
+          "summary": "Tổng Quan",
+          "details": "Chi Tiết"
+        },
+        "searchLabel": "Tìm Nhân Viên",
+        "searchPlaceholder": "Nhập tên nhân viên...",
+        "clearSearch": "Xóa",
+        "kpi": {
+          "totalScheduled": "Tổng giờ kế hoạch",
+          "totalWorked": "Tổng giờ làm",
+          "variance": "Chênh lệch",
+          "avgEfficiency": "Hiệu suất TB",
+          "incomplete": "thiếu dữ liệu"
+        },
+        "overSchedule": "vượt kế hoạch",
+        "underSchedule": "thiếu kế hoạch",
+        "cards": {
+          "staffTracked": "Nhân Viên",
+          "totalWorked": "Tổng Giờ Làm",
+          "scheduled": "Kế Hoạch",
+          "overtime": "Tăng Ca"
+        },
+        "chartTitle": "Giờ Làm vs Kế Hoạch — Top Nhân Viên",
+        "chartScheduled": "Kế Hoạch",
+        "chartWorked": "Thực Tế",
+        "overtimeAlert": "{count, plural, =1 {1 nhân viên làm thêm 30+ phút so với kế hoạch.} other {# nhân viên làm thêm 30+ phút so với kế hoạch.}}",
+        "table": {
+          "staff": "Nhân Viên",
+          "scheduled": "Kế Hoạch",
+          "worked": "Thực Tế",
+          "variance": "Chênh Lệch",
+          "efficiency": "Hiệu Suất",
+          "overtime": "Tăng Ca",
+          "incomplete": "Thiếu DL"
+        }
+      },
+      "exceptionsTab": {
+        "inner": {
+          "summary": "Tổng Quan",
+          "byStaff": "Theo NV",
+          "allRecords": "Tất Cả"
+        },
+        "searchLabel": "Tìm Nhân Viên",
+        "searchPlaceholder": "Nhập tên nhân viên...",
+        "clearSearch": "Xóa",
+        "kpi": {
+          "lateIncidents": "Đến trễ",
+          "absences": "Vắng mặt",
+          "earlyDepartures": "Về sớm",
+          "manualAdjustments": "Điều chỉnh thủ công",
+          "totalMinutes": "Tổng phút bị ảnh hưởng"
+        },
+        "cards": {
+          "lateArrivals": "Đến Trễ",
+          "absences": "Vắng Mặt",
+          "earlyLeave": "Về Sớm",
+          "manual": "Thủ Công",
+          "adjusted": "Điều Chỉnh"
+        },
+        "adjustedLabel": "✦ Đã Điều Chỉnh",
+        "noStaffFound": "Không có nhân viên nào có ngoại lệ.",
+        "table": {
+          "date": "Ngày",
+          "staff": "Nhân Viên",
+          "shift": "Ca",
+          "exceptionType": "Loại Ngoại Lệ",
+          "minutes": "Phút",
+          "reviewer": "Người Duyệt"
+        }
+      }
+    },
+    "ScheduleList": {
+      "title": "Phân Ca Nhân Viên",
+      "description": "Phân công nhân viên theo mẫu ca và theo dõi chấm công.",
+      "searchPlaceholder": "Tìm phân công",
+      "newAssignment": "Tạo phân công",
+      "confirmCancel": "Hủy phân công này?",
+      "activeCount": "Đang hiệu lực: {count}",
+      "cancelledCount": "Đã hủy: {count}",
+      "filters": {
+        "fromDate": "Từ ngày",
+        "toDate": "Đến ngày",
+        "fromDatePlaceholder": "Chọn ngày bắt đầu",
+        "toDatePlaceholder": "Chọn ngày kết thúc",
+        "refresh": "Làm mới"
+      },
+      "table": {
+        "no": "STT",
+        "date": "Ngày",
+        "template": "Mẫu ca",
+        "staff": "Nhân viên",
+        "plannedTime": "Giờ kế hoạch",
+        "status": "Trạng thái"
+      },
+      "noData": "Không có phân công nào. Hãy đổi bộ lọc ngày hoặc tạo phân công mới."
+    },
+    "AssignmentForm": {
+      "createTitle": "Tạo Phân Công Ca",
+      "editTitle": "Chỉnh Sửa Phân Công",
+      "cancel": "Hủy",
+      "saveChanges": "Lưu thay đổi",
+      "assignStaff": "Phân công",
+      "plannedHint": "Để trống giờ kế hoạch nếu muốn dùng giờ mặc định của mẫu ca.",
+      "fields": {
+        "shiftTemplate": "Mẫu Ca",
+        "staffMember": "Nhân Viên",
+        "workDate": "Ngày Làm Việc",
+        "plannedStart": "Giờ Bắt Đầu",
+        "plannedEnd": "Giờ Kết Thúc",
+        "notes": "Ghi Chú"
+      },
+      "placeholders": {
+        "shiftTemplate": "Chọn mẫu ca...",
+        "staffMember": "Chọn nhân viên...",
+        "loadingStaff": "Đang tải nhân viên...",
+        "workDate": "Chọn ngày",
+        "notes": "Ghi chú (không bắt buộc)..."
       }
     }
   },

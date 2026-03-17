@@ -84,7 +84,7 @@ const navigation = [
     icon: Clock,
     items: [
       { key: "shiftsTemplates", href: "/dashboard/shifts/templates", icon: FolderOpen, permission: Permissions.ManageShiftTemplate },
-      { key: "shifts", href: "/dashboard/shifts", icon: Clock, permission: Permissions.ViewShift },
+      { key: "shifts", href: "/dashboard/shifts/schedule", icon: Clock, permission: Permissions.ViewShift },
       { key: "shiftsLive", href: "/dashboard/shifts/live", icon: Radio, permission: Permissions.ViewShift },
       { key: "shiftsReports", href: "/dashboard/shifts/reports", icon: BarChart3, permission: Permissions.ViewShiftReport },
       { key: "myShifts", href: "/dashboard/my-shifts", icon: UserCheck }, // All staff can see their shifts

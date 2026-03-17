@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Edit, Trash2, Eye } from "lucide-react";
+
 import { Supplier } from "../types";
 
 interface SupplierActionsProps {
@@ -11,52 +11,18 @@ interface SupplierActionsProps {
   onDelete: (supplier: Supplier) => void;
 }
 
+import { TableActionColumn, TableAction } from "@/components/ui/table/table-action-column";
+
 export const SupplierActions = ({ 
   supplier, 
   onView,
   onEdit,
   onDelete, 
 }: SupplierActionsProps) => {
-  // Helper to prevent click events from spreading to rows.
-  const handleAction = (
-    e: React.MouseEvent, 
-    action: (item: Supplier) => void
-  ) => {
-    e.stopPropagation();
-    action(supplier);
-  };
-
-  return (
-    <div className="flex justify-end items-center gap-3">
-      {/* View Button */}
-      <button 
-        onClick={(e) => handleAction(e, onView)}
-        className="text-gray-400 hover:text-green-600 transition-colors cursor-pointer p-1"
-        data-tooltip-content="View Details"
-        data-tooltip-id="my-tooltip"
-      >
-        <Eye size={18} />
-      </button>
-
-      {/* Edit Button */}
-      <button 
-        onClick={(e) => handleAction(e, onEdit)}
-        className="text-gray-400 hover:text-blue-600 transition-colors cursor-pointer p-1"
-        data-tooltip-content="Edit Supplier"
-        data-tooltip-id="my-tooltip"
-      >
-        <Edit size={18} />
-      </button>
-
-      {/* Delete Button */}
-      <button 
-        onClick={(e) => handleAction(e, onDelete)}
-        className="text-gray-400 hover:text-red-600 transition-colors cursor-pointer p-1"
-        data-tooltip-content="Delete Supplier"
-        data-tooltip-id="my-tooltip"
-      >
-        <Trash2 size={18} />
-      </button>
-    </div>
-  );
+  const actions: TableAction<Supplier>[] = [
+    { action: "view", onClick: onView },
+    { action: "edit", onClick: onEdit },
+    { action: "delete", onClick: onDelete }
+  ];
+  return <TableActionColumn actions={actions} item={supplier} />;
 };

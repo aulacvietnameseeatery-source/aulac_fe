@@ -25,7 +25,7 @@ export default function DescriptionTextarea({
         placeholder={t('descriptionPlaceholder')}
         rows={5}
         className={`w-full px-4 py-3.5 bg-[#f8fafc] border rounded-lg text-slate-900 text-[15px] font-['Inter'] leading-relaxed placeholder:text-slate-400 outline-none focus:bg-white transition-all resize-none ${
-          error ? 'border-red-500 focus:border-red-500' : 'border-slate-200 focus:border-slate-400'
+          error ? 'border-red-500 focus:border-red-500' : 'border border-[#D5BA98]/60 focus:border-slate-400'
         }`}
       />
       {error && (

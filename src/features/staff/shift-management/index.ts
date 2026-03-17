@@ -1,4 +1,4 @@
-export { ShiftManagement } from "./shift-management";
+export { ShiftManagement } from "./shift-schedule/shift-management";
 export { ShiftTemplates } from "./shift-templates/shift-templates";
 export { ShiftReports } from "./shift-reports/shift-reports";
 export { ShiftLive } from "./shift-live/shift-live";

@@ -161,7 +161,7 @@ export const OrderCard: React.FC<OrderCardProps> = ({ order, onStatusChange, onA
 
     return (
         <div
-            className="bg-white rounded-xl shadow-sm border border-slate-200 flex flex-col hover:-translate-y-0.5 hover:shadow-md transition-all duration-200 cursor-pointer"
+            className="bg-white rounded-xl shadow-sm border border border-[#D5BA98]/60 flex flex-col hover:-translate-y-0.5 hover:shadow-md transition-all duration-200 cursor-pointer"
             onClick={() => onAction?.(order.orderId, 'view')}
         >
             <div className="p-4 flex flex-col flex-1">

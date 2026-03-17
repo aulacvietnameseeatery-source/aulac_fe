@@ -17,7 +17,7 @@ export const TableSelectionGrid: React.FC<Props> = ({
   const t = useTranslations("StaffReservation.table");
 
   return (
-    <div className="bg-slate-50 rounded-xl p-6 border-2 border-dashed border-slate-200 min-h-45 flex flex-col">
+    <div className="bg-slate-50 rounded-xl p-6 border-2 border-dashed border border-[#D5BA98]/60 min-h-45 flex flex-col">
       <div className="flex justify-between items-center mb-4">
         <h3 className="text-sm font-bold text-slate-700 uppercase flex items-center gap-2"><MapPin size={16} />{t("availability")}</h3>
         {isLoading ? <span className="text-sm text-blue-600 flex items-center gap-2 animate-pulse">{t("scanning")}</span> 
@@ -34,7 +34,7 @@ export const TableSelectionGrid: React.FC<Props> = ({
             {tables.map((table) => (
               <button key={table.tableId} onClick={() => onSelectTable(table.tableId)} 
                 className={`relative rounded-lg p-3 flex flex-col items-center justify-center gap-1 transition-all border-2 
-                  ${selectedTableId === table.tableId ? 'bg-blue-600 border-blue-600 text-white shadow-lg scale-105' : 'bg-white border-slate-200 text-slate-700 hover:border-blue-300'}`}>
+                  ${selectedTableId === table.tableId ? 'bg-blue-600 border-blue-600 text-white shadow-lg scale-105' : 'bg-white border border-[#D5BA98]/60 text-slate-700 hover:border-blue-300'}`}>
                 <span className="font-bold text-lg">{table.tableCode}</span>
                 <div className={`text-xs flex gap-2 ${selectedTableId === table.tableId ? 'text-blue-100' : 'text-slate-500'}`}>
                   <span><Users size={10} className="inline"/> {table.capacity}</span><span>•</span><span>{table.zone}</span>

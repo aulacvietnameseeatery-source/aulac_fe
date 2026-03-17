@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useTranslations } from "next-intl";
 import { Dialog } from "@/components/ui/dialog";
 import { ALCombobox } from "@/components/ui/al-combobox";
 import { ALInput } from "@/components/ui/al-input";
@@ -29,6 +30,7 @@ function toDatetimeLocal(iso: string): string {
 }
 
 export function ShiftAssignmentForm({ open, onClose, editTarget }: Props) {
+  const t = useTranslations("ShiftManagement.AssignmentForm");
   const isEdit = !!editTarget;
 
   const { data: templates = [] } = useShiftTemplatesQuery({ isActive: true });
@@ -112,98 +114,84 @@ export function ShiftAssignmentForm({ open, onClose, editTarget }: Props) {
     <Dialog
       open={open}
       onClose={onClose}
-      title={isEdit ? "Edit Assignment" : "New Shift Assignment"}
+      title={isEdit ? t("editTitle") : t("createTitle")}
       width="540px"
       footer={
         <div className="flex items-center gap-3 w-full">
           <Button type="button" variant="outline" className="w-full" onClick={onClose} disabled={isPending}>
-            Cancel
+            {t("cancel")}
           </Button>
           <Button type="submit" form="assignment-form" variant="primary" className="w-full" isLoading={isPending}>
-            {isEdit ? "Save Changes" : "Assign Staff"}
+            {isEdit ? t("saveChanges") : t("assignStaff")}
           </Button>
         </div>
       }
     >
       <form id="assignment-form" onSubmit={onSubmit} className="space-y-4 p-1">
         {/* Shift Template */}
-        <div className="space-y-1 rounded-lg border border-slate-200 bg-[#FDFBF9] p-3">
-          <ALCombobox
-            title="Shift Template"
-            required
-            placeholder="Select shift template…"
-            options={templateOptions}
-            value={shiftTemplateId > 0 ? shiftTemplateId : undefined}
-            onChange={(val) =>
-              setValue("shiftTemplateId", typeof val === "number" ? val : 0, { shouldValidate: true })
-            }
-            disabled={isEdit}
-          />
-          {errors.shiftTemplateId && (
-            <p className="text-xs text-destructive">{errors.shiftTemplateId.message}</p>
-          )}
-        </div>
+        <ALCombobox
+          title={t("fields.shiftTemplate")}
+          required
+          placeholder={t("placeholders.shiftTemplate")}
+          options={templateOptions}
+          value={shiftTemplateId > 0 ? shiftTemplateId : undefined}
+          onChange={(val) =>
+            setValue("shiftTemplateId", typeof val === "number" ? val : 0, { shouldValidate: true })
+          }
+          disabled={isEdit}
+          error={errors.shiftTemplateId?.message}
+        />
 
         {/* Staff */}
-        <div className="space-y-1 rounded-lg border border-slate-200 bg-[#FDFBF9] p-3">
-          <ALCombobox
-            title="Staff Member"
-            required
-            placeholder={staffLoading ? "Loading staff…" : "Select staff member…"}
-            options={staffOptions}
-            value={staffId > 0 ? staffId : undefined}
-            onChange={(val) =>
-              setValue("staffId", typeof val === "number" ? val : 0, { shouldValidate: true })
-            }
-            disabled={isEdit || staffLoading}
-          />
-          {errors.staffId && (
-            <p className="text-xs text-destructive">{errors.staffId.message}</p>
-          )}
-        </div>
+        <ALCombobox
+          title={t("fields.staffMember")}
+          required
+          placeholder={staffLoading ? t("placeholders.loadingStaff") : t("placeholders.staffMember")}
+          options={staffOptions}
+          value={staffId > 0 ? staffId : undefined}
+          onChange={(val) =>
+            setValue("staffId", typeof val === "number" ? val : 0, { shouldValidate: true })
+          }
+          disabled={isEdit || staffLoading}
+          error={errors.staffId?.message}
+        />
 
         {/* Work Date */}
-        <div className="rounded-lg border border-slate-200 bg-[#FDFBF9] p-3">
-          <ALDatePicker
-            title="Work Date"
-            required
-            value={watch("workDate")}
-            onChange={(val) => setValue("workDate", val, { shouldValidate: true })}
-            error={errors.workDate?.message}
-            readOnly={isEdit}
-            placeholder="Select date"
-          />
-        </div>
+        <ALDatePicker
+          title={t("fields.workDate")}
+          required
+          value={watch("workDate")}
+          onChange={(val) => setValue("workDate", val, { shouldValidate: true })}
+          error={errors.workDate?.message}
+          readOnly={isEdit}
+          placeholder={t("placeholders.workDate")}
+        />
 
         {/* Planned Start / End (optional override) */}
-        <div className="rounded-lg border border-slate-200 bg-[#FDFBF9] p-3">
-          <div className="grid grid-cols-2 gap-4">
-            <ALInput
-              title="Planned Start"
-              type="datetime-local"
-              {...register("plannedStartAt")}
-              error={errors.plannedStartAt?.message}
-            />
-            <ALInput
-              title="Planned End"
-              type="datetime-local"
-              {...register("plannedEndAt")}
-              error={errors.plannedEndAt?.message}
-            />
-          </div>
-          <p className="mt-2 text-xs text-[#1A3A52]/65">
-            Leave planned times empty to use the template defaults.
-          </p>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <ALInput
+            title={t("fields.plannedStart")}
+            type="datetime-local"
+            {...register("plannedStartAt")}
+            error={errors.plannedStartAt?.message}
+          />
+          <ALInput
+            title={t("fields.plannedEnd")}
+            type="datetime-local"
+            {...register("plannedEndAt")}
+            error={errors.plannedEndAt?.message}
+          />
         </div>
+        <p className="text-xs text-[#1A3A52]/65">{t("plannedHint")}</p>
 
         {/* Notes */}
-        <div className="space-y-1 rounded-lg border border-slate-200 bg-[#FDFBF9] p-3">
-          <label className="text-sm font-medium text-[#1A3A52]">Notes</label>
+        <div className="space-y-1">
+          <label className="text-sm font-medium text-[#1A3A52]">{t("fields.notes")}</label>
           <textarea
             {...register("notes")}
             rows={3}
             className="w-full resize-none rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-[#1A3A52] placeholder:text-[#1A3A52]/50 focus:outline-none focus:ring-2 focus:ring-[#1A3A52]/35"
-            placeholder="Optional notes…"
+            placeholder={t("placeholders.notes")}
           />
           {errors.notes && <p className="text-xs text-destructive">{errors.notes.message}</p>}
         </div>

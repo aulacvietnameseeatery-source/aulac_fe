@@ -69,7 +69,7 @@ export function ShiftLive() {
   return (
     <div className="space-y-6 rounded-2xl border border-[#D5BA98]/40 bg-[#FDFBF9] p-5 sm:p-6">
       {/* Header */}
-      <div className="flex items-start justify-between rounded-xl border border-slate-200 bg-white px-4 py-4 shadow-sm sm:px-5">
+      <div className="flex items-start justify-between rounded-xl border border border-[#D5BA98]/60 bg-white px-4 py-4 shadow-sm sm:px-5">
         <div>
           <div className="flex items-center gap-2">
             <h1 className="text-2xl font-semibold tracking-wide text-[#1A3A52]">Live On-Duty Board</h1>
@@ -95,7 +95,7 @@ export function ShiftLive() {
       </div>
 
       {/* Date picker */}
-      <div className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white p-3 shadow-sm">
+      <div className="flex items-center gap-2 rounded-xl border border border-[#D5BA98]/60 bg-white p-3 shadow-sm">
         <label className="text-sm text-[#1A3A52]/70">Date:</label>
         <ALDatePicker
           value={businessDate}
@@ -108,7 +108,7 @@ export function ShiftLive() {
       </div>
 
       {/* Filter bar */}
-      <div className="flex flex-wrap items-center gap-2 rounded-xl border border-slate-200 bg-white p-3 text-sm shadow-sm">
+      <div className="flex flex-wrap items-center gap-2 rounded-xl border border border-[#D5BA98]/60 bg-white p-3 text-sm shadow-sm">
         {["ALL", "ACTIVE", "CANCELLED"].map((code) => (
           <button
             key={code}
@@ -127,15 +127,15 @@ export function ShiftLive() {
 
       {/* Board table */}
       {isLoading ? (
-        <div className="flex items-center justify-center rounded-xl border border-slate-200 bg-white py-16 text-sm text-[#1A3A52]/70 shadow-sm">
+        <div className="flex items-center justify-center rounded-xl border border border-[#D5BA98]/60 bg-white py-16 text-sm text-[#1A3A52]/70 shadow-sm">
           Loading board…
         </div>
       ) : filtered.length === 0 ? (
-        <div className="flex items-center justify-center rounded-xl border border-slate-200 bg-white py-16 text-sm text-[#1A3A52]/70 shadow-sm">
+        <div className="flex items-center justify-center rounded-xl border border border-[#D5BA98]/60 bg-white py-16 text-sm text-[#1A3A52]/70 shadow-sm">
           No assignments found for this date.
         </div>
       ) : (
-        <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-sm">
+        <div className="overflow-x-auto rounded-xl border border border-[#D5BA98]/60 bg-white shadow-sm">
           <table className="w-full text-sm">
             <thead className="bg-[#D5BA98]/15">
               <tr>

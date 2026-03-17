@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useMemo, useCallback, type ReactNode } from "react";
-import { Plus, RefreshCcw, Pencil } from "lucide-react";
+import { useTranslations } from "next-intl";
+import { Plus, RefreshCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ALDatePicker } from "@/components/ui/al-date-picker";
 import { BaseTable } from "@/components/ui/table/base-table";
@@ -12,10 +13,12 @@ import type { TableDataChangeParams } from "@/types/table-data-change.types";
 import { useShiftAssignmentsQuery, useCancelAssignmentMutation } from "../hooks/use-shift-queries";
 import { ShiftStatusBadge } from "./shift-status-badge";
 import { ShiftAssignmentForm } from "./shift-assignment-form";
+import { TableActionColumn, TableAction } from "@/components/ui/table/table-action-column";
 import { AttendanceAdjustmentDialog } from "./attendance-adjustment-dialog";
 import type { ShiftAssignmentListDto, AttendanceRecordDto } from "../types/shift-management.types";
 
 export function ShiftScheduleList() {
+  const t = useTranslations("ShiftManagement.ScheduleList");
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
   const [tableParams, setTableParams] = useState<TableDataChangeParams>({ page: 1, pageSize: 10 });
@@ -51,7 +54,7 @@ export function ShiftScheduleList() {
   const handleCreate = () => { setEditTarget(null); setFormOpen(true); };
   const handleEdit = (a: ShiftAssignmentListDto) => { setEditTarget(a); setFormOpen(true); };
   const handleCancel = (id: number) => {
-    if (!confirm("Cancel this assignment?")) return;
+    if (!confirm(t("confirmCancel"))) return;
     cancelAssignment.mutate(id);
   };
 
@@ -63,23 +66,23 @@ export function ShiftScheduleList() {
   const columns = useMemo<TableColumn[]>(
     () => [
       {
-        field: "rowNo", header: "No", width: "72px", align: "center", sortable: false,
+        field: "rowNo", header: t("table.no"), width: "72px", align: "center", sortable: false,
         cellRender: ({ rowIndex }) =>
           ((tableParams.page ?? 1) - 1) * (tableParams.pageSize ?? 10) + rowIndex + 1,
       },
-      { field: "workDate", header: "Date", width: "140px", sortable: false },
+      { field: "workDate", header: t("table.date"), width: "140px", sortable: false },
       {
-        field: "templateName", header: "Template", sortable: false,
+        field: "templateName", header: t("table.template"), sortable: false,
         cellRender: ({ item }) => item.templateName,
       },
-      { field: "staffName", header: "Staff", sortable: false },
+      { field: "staffName", header: t("table.staff"), sortable: false },
       {
-        field: "timeRange", header: "Planned Time", sortable: false,
+        field: "timeRange", header: t("table.plannedTime"), sortable: false,
         cellRender: ({ item }) =>
           `${formatTime(item.plannedStartAt)} – ${formatTime(item.plannedEndAt)}`,
       },
       {
-        field: "isActive", header: "Status", width: "120px", sortable: false,
+        field: "isActive", header: t("table.status"), width: "120px", sortable: false,
         cellRender: ({ item }) => (
           <ShiftStatusBadge
             statusCode={item.isActive ? "active" : "cancelled"}
@@ -88,7 +91,17 @@ export function ShiftScheduleList() {
         ),
       },
     ],
-    [tableParams.page, tableParams.pageSize]
+    [tableParams.page, tableParams.pageSize, t]
+  );
+
+  const activeCount = useMemo(
+    () => assignments.filter((item) => item.isActive).length,
+    [assignments]
+  );
+
+  const cancelledCount = useMemo(
+    () => assignments.filter((item) => !item.isActive).length,
+    [assignments]
   );
 
   const handleGlobalRenderCell = (
@@ -100,7 +113,7 @@ export function ShiftScheduleList() {
   };
 
   return (
-    <div className="space-y-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
+    <div className="space-y-4 rounded-2xl border border-[#D5BA98]/60 bg-white p-4 shadow-sm sm:p-5">
       <BaseTable<ShiftAssignmentListDto>
         data={assignments}
         loading={isLoading}
@@ -109,61 +122,93 @@ export function ShiftScheduleList() {
         total={data?.totalCount ?? 0}
         onDataChange={handleTableDataChange}
         onRefresh={refetch}
-        searchPlaceholder="Search assignments"
+        searchPlaceholder={t("searchPlaceholder")}
         defaultRowsPerPage={10}
         rowsPerPageOptions={[10, 20, 50, 100]}
         renderTitle={() => (
-          <div className="w-full flex items-center justify-between gap-3">
-            <div>
-              <h1 className="text-2xl font-semibold tracking-wide text-[#1A3A52]">Shift Assignments</h1>
-              <p className="text-sm text-[#1A3A52]/70">
-                Assign staff to shift templates and track attendance.
-              </p>
+          <div className="w-full space-y-3">
+            <div className="flex flex-wrap items-start justify-between gap-3 rounded-xl border border-[#D5BA98]/50 bg-[#FDFBF9] px-4 py-3">
+              <div>
+                <h1 className="text-2xl font-semibold tracking-wide text-[#1A3A52]">{t("title")}</h1>
+                <p className="text-sm text-[#1A3A52]/70">
+                  {t("description")}
+                </p>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="rounded-full border border-blue-600 bg-blue-600 px-2 py-0.5 text-xs font-semibold text-white">
+                  {t("activeCount", { count: activeCount })}
+                </span>
+                <span className="rounded-full border border-slate-700 bg-slate-700 px-2 py-0.5 text-xs font-semibold text-white">
+                  {t("cancelledCount", { count: cancelledCount })}
+                </span>
+              </div>
             </div>
-            <PermissionGuard permission={Permissions.AssignShift}>
-              <Button onClick={handleCreate} className="gap-2 bg-[#1A3A52] text-[#FDFBF9] hover:bg-[#1A3A52]/90">
-                <Plus className="w-4 h-4" />
-                New Assignment
-              </Button>
-            </PermissionGuard>
+            <div className="flex justify-end">
+              <PermissionGuard permission={Permissions.AssignShift}>
+                <Button onClick={handleCreate} className="gap-2 bg-[#1A3A52] text-[#FDFBF9] hover:bg-[#1A3A52]/90">
+                  <Plus className="w-4 h-4" />
+                  {t("newAssignment")}
+                </Button>
+              </PermissionGuard>
+            </div>
           </div>
         )}
         renderToolbarAppend={() => (
-          <div className="flex flex-wrap items-center gap-2 rounded-xl border border-slate-200 bg-white p-2 shadow-sm">
-            <ALDatePicker value={fromDate} onChange={setFromDate} placeholder="From date" clearable inputSize="sm" wrapperClassName="w-38" />
+          <div className="flex flex-wrap items-end gap-2 rounded-xl border border-[#D5BA98]/60 bg-white p-3 shadow-sm">
+            <ALDatePicker
+              title={t("filters.fromDate")}
+              value={fromDate}
+              onChange={setFromDate}
+              placeholder={t("filters.fromDatePlaceholder")}
+              clearable
+              inputSize="sm"
+              wrapperClassName="w-42"
+            />
             <span className="text-sm text-[#1A3A52]/60">-</span>
-            <ALDatePicker value={toDate} onChange={setToDate} placeholder="To date" clearable inputSize="sm" wrapperClassName="w-38" />
-            <Button variant="outline" size="sm" onClick={() => refetch()} disabled={isLoading}
-              className="border-slate-300 bg-white text-[#1A3A52] hover:bg-slate-100">
+            <ALDatePicker
+              title={t("filters.toDate")}
+              value={toDate}
+              onChange={setToDate}
+              placeholder={t("filters.toDatePlaceholder")}
+              clearable
+              inputSize="sm"
+              wrapperClassName="w-42"
+            />
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => refetch()}
+              disabled={isLoading}
+              className="border-slate-300 bg-white text-[#1A3A52] hover:bg-slate-100"
+            >
               <RefreshCcw className="w-4 h-4" />
+              <span className="ml-1">{t("filters.refresh")}</span>
             </Button>
           </div>
         )}
         renderCell={handleGlobalRenderCell}
-        renderActionColumn={(a) => (
-          <div className="flex items-center justify-end gap-1.5">
-            <PermissionGuard permission={Permissions.AssignShift}>
-              <Button variant="outline" size="sm"
-                className="border-slate-300 bg-white text-[#1A3A52] hover:bg-slate-100"
-                onClick={() => handleEdit(a)}>
-                <Pencil className="w-4 h-4" />
-              </Button>
-            </PermissionGuard>
-            {a.isActive && (
-              <PermissionGuard permission={Permissions.AssignShift}>
-                <Button variant="outline" size="sm"
-                  className="border-destructive/40 text-destructive hover:bg-destructive/10"
-                  onClick={() => handleCancel(a.shiftAssignmentId)}
-                  disabled={cancelAssignment.isPending}>
-                  Cancel
-                </Button>
-              </PermissionGuard>
-            )}
-          </div>
-        )}
+        renderActionColumn={(a) => {
+          const actions: TableAction<ShiftAssignmentListDto>[] = [
+            {
+              action: "edit",
+              onClick: () => handleEdit(a),
+              permission: Permissions.AssignShift,
+            },
+          ];
+
+          if (a.isActive) {
+            actions.push({
+              action: "cancel",
+              onClick: () => handleCancel(a.shiftAssignmentId),
+              permission: Permissions.AssignShift,
+            });
+          }
+
+          return <TableActionColumn actions={actions} item={a} />;
+        }}
         renderNoData={() => (
-          <div className="flex items-center justify-center rounded-xl border border-slate-200 bg-[#FDFBF9] py-16 text-sm text-[#1A3A52]/70">
-            No assignments found. Adjust the date range or create a new assignment.
+          <div className="flex items-center justify-center rounded-xl border border-[#D5BA98]/60 bg-[#FDFBF9] py-16 text-sm text-[#1A3A52]/70">
+            {t("noData")}
           </div>
         )}
       />

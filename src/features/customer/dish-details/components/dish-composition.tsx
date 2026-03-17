@@ -18,7 +18,7 @@ export function DishComposition({ dish }: DishCompositionProps) {
   ];
 
   return (
-    <aside className="mt-8 border-t border-slate-200 pt-8 lg:mt-0 lg:border-l lg:border-t-0 lg:pl-8 lg:pt-0">
+    <aside className="mt-8 border-t border border-[#D5BA98]/60 pt-8 lg:mt-0 lg:border-l lg:border-t-0 lg:pl-8 lg:pt-0">
       <div className="font-body text-sm font-semibold text-blue-800 md:text-base">
         {t("label")}
       </div>

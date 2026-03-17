@@ -74,7 +74,7 @@ export function CheckInCard({ assignment }: Props) {
   const handleCheckOut = () => checkOut.mutate(assignment.shiftAssignmentId);
 
   return (
-    <Card className="overflow-hidden border-slate-200 bg-white shadow-sm">
+    <Card className="overflow-hidden border border-[#D5BA98]/60 bg-white shadow-sm">
       {/* Accent top bar */}
       <div
         className={`h-1 w-full ${
@@ -118,13 +118,13 @@ export function CheckInCard({ assignment }: Props) {
 
         {/* Attendance timestamps */}
         <div className="grid grid-cols-2 gap-3">
-          <div className="space-y-0.5 rounded-lg border border-slate-200 bg-[#FDFBF9] p-3">
+          <div className="space-y-0.5 rounded-lg border border border-[#D5BA98]/60 bg-[#FDFBF9] p-3">
             <p className="text-xs uppercase tracking-wide text-[#1A3A52]/60">Check-in</p>
             <p className="text-sm font-semibold text-[#1A3A52]">
               {hasCheckedIn ? fmtDatetime(att!.actualCheckInAt) : "—"}
             </p>
           </div>
-          <div className="space-y-0.5 rounded-lg border border-slate-200 bg-[#FDFBF9] p-3">
+          <div className="space-y-0.5 rounded-lg border border border-[#D5BA98]/60 bg-[#FDFBF9] p-3">
             <p className="text-xs uppercase tracking-wide text-[#1A3A52]/60">Check-out</p>
             <p className="text-sm font-semibold text-[#1A3A52]">
               {hasCheckedOut ? fmtDatetime(att!.actualCheckOutAt) : "—"}
@@ -164,7 +164,7 @@ export function CheckInCard({ assignment }: Props) {
                   ? "border-blue-200 bg-blue-50 text-blue-700 animate-pulse"
                   : locationVerified
                     ? "border-emerald-200 bg-emerald-50 text-emerald-700"
-                    : "border-slate-200 bg-[#FDFBF9] text-[#1A3A52]/60"
+                    : "border border-[#D5BA98]/60 bg-[#FDFBF9] text-[#1A3A52]/60"
               }`}>
                 {isVerifyingLocation ? (
                   <>

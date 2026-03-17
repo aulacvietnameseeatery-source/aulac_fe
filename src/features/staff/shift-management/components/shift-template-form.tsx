@@ -115,36 +115,32 @@ export function ShiftTemplateForm({ open, onClose, editTarget }: Props) {
         </div>
       }
     >
-      <form id="shift-template-form" onSubmit={onSubmit} className="space-y-4 p-1">
-        <div className="rounded-lg border border-slate-200 bg-[#FDFBF9] p-3">
+      <form id="shift-template-form" onSubmit={onSubmit} className="space-y-5 p-1">
+        <ALInput
+          title="Template Name"
+          required
+          {...register("templateName")}
+          error={errors.templateName?.message}
+        />
+
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <ALInput
-            title="Template Name"
+            title="Default Start"
             required
-            {...register("templateName")}
-            error={errors.templateName?.message}
+            type="time"
+            {...register("defaultStartTime")}
+            error={errors.defaultStartTime?.message}
+          />
+          <ALInput
+            title="Default End"
+            required
+            type="time"
+            {...register("defaultEndTime")}
+            error={errors.defaultEndTime?.message}
           />
         </div>
 
-        <div className="rounded-lg border border-slate-200 bg-[#FDFBF9] p-3">
-          <div className="grid grid-cols-2 gap-4">
-            <ALInput
-              title="Default Start"
-              required
-              type="time"
-              {...register("defaultStartTime")}
-              error={errors.defaultStartTime?.message}
-            />
-            <ALInput
-              title="Default End"
-              required
-              type="time"
-              {...register("defaultEndTime")}
-              error={errors.defaultEndTime?.message}
-            />
-          </div>
-        </div>
-
-        <div className="space-y-1 rounded-lg border border-slate-200 bg-[#FDFBF9] p-3">
+        <div className="space-y-1">
           <label className="text-sm font-medium text-[#1A3A52]">Description</label>
           <textarea
             {...register("description")}
@@ -157,7 +153,7 @@ export function ShiftTemplateForm({ open, onClose, editTarget }: Props) {
           )}
         </div>
 
-        <div className="flex items-center justify-between rounded-lg border border-slate-200 bg-[#FDFBF9] px-3 py-2">
+        <div className="flex items-center justify-between rounded-xl border border-[#D5BA98]/60 bg-[#FDFBF9] px-3 py-2.5">
           <div>
             <p className="text-sm font-medium text-[#1A3A52]">Active template</p>
             <p className="text-xs text-[#1A3A52]/70">Inactive templates cannot be selected for new schedules.</p>

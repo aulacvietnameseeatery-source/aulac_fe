@@ -47,7 +47,7 @@ export function ShiftAssignmentPanel({ open, onClose, assignment }: Props) {
     <>
       <Drawer open={open} onOpenChange={(v) => !v && onClose()}>
         <DrawerContent className="flex flex-col sm:max-w-xl">
-          <DrawerHeader className="border-b border-slate-200 bg-[#FDFBF9] pb-4">
+          <DrawerHeader className="border-b border border-[#D5BA98]/60 bg-[#FDFBF9] pb-4">
             <div className="flex items-start justify-between">
               <div>
                 <DrawerTitle className="text-[#1A3A52]">Shift Detail</DrawerTitle>
@@ -74,19 +74,19 @@ export function ShiftAssignmentPanel({ open, onClose, assignment }: Props) {
 
           <div className="flex-1 space-y-4 overflow-y-auto bg-white p-4">
             {/* Staff info */}
-            <div className="space-y-1 rounded-lg border border-slate-200 bg-[#FDFBF9] px-4 py-3">
+            <div className="space-y-1 rounded-lg border border-[#D5BA98]/60 bg-[#FDFBF9] px-4 py-3">
               <p className="text-sm font-medium text-[#1A3A52]">{assignment.staffName}</p>
               <p className="text-xs text-[#1A3A52]/70">
                 Assigned by {assignment.assignedByName} on {new Date(assignment.assignedAt).toLocaleDateString()}
               </p>
               {assignment.notes && (
-                <p className="text-xs italic text-[#1A3A52]/65">"{assignment.notes}"</p>
+                <p className="text-xs italic text-[#1A3A52]/65">&quot;{assignment.notes}&quot;</p>
               )}
             </div>
 
             {/* Attendance record */}
             {ar ? (
-              <div className="space-y-2 rounded-lg border border-slate-200 bg-[#FDFBF9] px-4 py-3">
+              <div className="space-y-2 rounded-lg border border-[#D5BA98]/60 bg-[#FDFBF9] px-4 py-3">
                 <div className="flex items-center justify-between">
                   <p className="text-sm font-medium text-[#1A3A52]">Attendance</p>
                   {attendanceStatusCfg && (
@@ -133,7 +133,7 @@ export function ShiftAssignmentPanel({ open, onClose, assignment }: Props) {
                 </div>
                 {ar.adjustmentReason && (
                   <p className="text-xs italic text-[#1A3A52]/65">
-                    Reason: "{ar.adjustmentReason}"
+                    Reason: &quot;{ar.adjustmentReason}&quot;
                   </p>
                 )}
               </div>
@@ -145,7 +145,7 @@ export function ShiftAssignmentPanel({ open, onClose, assignment }: Props) {
           </div>
 
           {/* Action footer */}
-          <div className="space-y-2 border-t border-slate-200 bg-[#FDFBF9] p-4">
+          <div className="space-y-2 border-t border border-[#D5BA98]/60 bg-[#FDFBF9] p-4">
             {/* Check-in / check-out buttons */}
             {assignment.isActive && (
               <div className="flex gap-2">

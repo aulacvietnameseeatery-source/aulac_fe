@@ -108,7 +108,7 @@ export default function MobileBookingSheet({
                                         placeholder={t("guest.name")}
                                         value={name}
                                         onChange={(e) => setName(e.target.value)}
-                                        className="w-full pl-9 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-[#1A3A52] focus:bg-white transition-colors"
+                                        className="w-full pl-9 pr-4 py-3 bg-slate-50 border border border-[#D5BA98]/60 rounded-lg text-sm focus:outline-none focus:border-[#1A3A52] focus:bg-white transition-colors"
                                     />
                                 </div>
                                 <div className="relative">
@@ -118,7 +118,7 @@ export default function MobileBookingSheet({
                                         placeholder={t("guest.phone")}
                                         value={phone}
                                         onChange={(e) => setPhone(e.target.value)}
-                                        className="w-full pl-9 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-[#1A3A52] focus:bg-white transition-colors"
+                                        className="w-full pl-9 pr-4 py-3 bg-slate-50 border border border-[#D5BA98]/60 rounded-lg text-sm focus:outline-none focus:border-[#1A3A52] focus:bg-white transition-colors"
                                     />
                                 </div>
                                 <div className="relative">
@@ -128,10 +128,10 @@ export default function MobileBookingSheet({
                                         placeholder={t("guest.email")}
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
-                                        className="w-full pl-9 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-[#1A3A52] focus:bg-white transition-colors"
+                                        className="w-full pl-9 pr-4 py-3 bg-slate-50 border border border-[#D5BA98]/60 rounded-lg text-sm focus:outline-none focus:border-[#1A3A52] focus:bg-white transition-colors"
                                     />
                                 </div>
-                                <div className="flex items-center justify-between bg-slate-50 p-3 rounded-lg border border-slate-200">
+                                <div className="flex items-center justify-between bg-slate-50 p-3 rounded-lg border border border-[#D5BA98]/60">
                                     <span className="text-sm font-semibold text-stone-500">Party Size</span>
                                     <input
                                         type="number"

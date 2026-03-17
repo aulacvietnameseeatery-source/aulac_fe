@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState, useCallback, type ReactNode } from "react";
-import { Plus, Pencil, Power } from "lucide-react";
+import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { BaseTable } from "@/components/ui/table/base-table";
@@ -14,6 +14,7 @@ import {
   useShiftTemplatesQuery,
 } from "../hooks/use-shift-queries";
 import { ShiftTemplateForm } from "./shift-template-form";
+import { TableActionColumn, TableAction } from "@/components/ui/table/table-action-column";
 import type { ShiftTemplateDto } from "../types/shift-management.types";
 
 function fmtTime(value: string) {
@@ -53,6 +54,16 @@ export function ShiftTemplateList() {
   const { data, isLoading, refetch } = useShiftTemplatesQuery(params);
   const deactivate = useDeactivateShiftTemplateMutation();
   const templates = data ?? [];
+
+  const activeCount = useMemo(
+    () => templates.filter((template) => template.isActive).length,
+    [templates]
+  );
+
+  const inactiveCount = useMemo(
+    () => templates.filter((template) => !template.isActive).length,
+    [templates]
+  );
 
   function openCreate() {
     setEditTarget(null);
@@ -133,7 +144,7 @@ export function ShiftTemplateList() {
   };
 
   return (
-    <div className="space-y-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
+    <div>
       <BaseTable<ShiftTemplateDto>
         data={templates}
         loading={isLoading}
@@ -146,55 +157,55 @@ export function ShiftTemplateList() {
         defaultRowsPerPage={10}
         rowsPerPageOptions={[10, 20, 50, 100]}
         renderTitle={() => (
-          <div className="w-full flex items-center justify-between gap-3">
-            <div>
-              <h1 className="text-2xl font-semibold text-[#1A3A52]">Shift Templates</h1>
-              <p className="text-sm text-[#1A3A52]/70">
-                Manage reusable shift templates and default time windows.
-              </p>
+          <div className="w-full space-y-3">
+            <div className="flex flex-wrap items-start justify-between gap-3 rounded-xl border border-[#D5BA98]/60 bg-white px-4 py-4 shadow-sm sm:px-5">
+              <div>
+                <h1 className="text-2xl font-semibold tracking-wide text-[#1A3A52]">Shift Templates</h1>
+                <p className="text-sm text-[#1A3A52]/70">
+                  Manage reusable shift templates and default time windows.
+                </p>
+              </div>
+              <PermissionGuard permission={Permissions.ManageShiftTemplate}>
+                <Button onClick={openCreate} className="gap-2 bg-[#1A3A52] text-[#FDFBF9] hover:bg-[#1A3A52]/90">
+                  <Plus className="h-4 w-4" />
+                  Create Template
+                </Button>
+              </PermissionGuard>
             </div>
-            <PermissionGuard permission={Permissions.ManageShiftTemplate}>
-              <Button onClick={openCreate} className="gap-2 bg-[#1A3A52] text-[#FDFBF9] hover:bg-[#1A3A52]/90">
-                <Plus className="h-4 w-4" />
-                Create Template
-              </Button>
-            </PermissionGuard>
+
+            <div className="flex flex-wrap items-center gap-2 rounded-xl border border-[#D5BA98]/60 bg-white p-3 text-sm shadow-sm">
+              <span className="rounded-full border border-emerald-600 bg-emerald-600 px-3 py-1 text-xs font-semibold text-white">
+                Active: {activeCount}
+              </span>
+              <span className="rounded-full border border-slate-700 bg-slate-700 px-3 py-1 text-xs font-semibold text-white">
+                Inactive: {inactiveCount}
+              </span>
+              <span className="ml-auto text-xs text-[#1A3A52]/60">
+                Total templates: {templates.length}
+              </span>
+            </div>
           </div>
         )}
         renderCell={handleGlobalRenderCell}
-        renderActionColumn={(template) => (
-          <div className="flex items-center justify-end gap-1.5">
-            <PermissionGuard permission={Permissions.ManageShiftTemplate}>
-              <Button
-                variant="outline"
-                size="sm"
-                className="border-slate-300 bg-white text-[#1A3A52] hover:bg-slate-100"
-                onClick={() => openEdit(template)}
-              >
-                <Pencil className="h-4 w-4" />
-              </Button>
-            </PermissionGuard>
+        renderActionColumn={(template) => {
+          const actions: TableAction<ShiftTemplateDto>[] = [
+            {
+              action: "edit",
+              onClick: () => openEdit(template),
+              permission: Permissions.ManageShiftTemplate,
+            },
+          ];
 
-            {template.isActive && (
-              <PermissionGuard permission={Permissions.ManageShiftTemplate}>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="border-red-200 bg-white text-red-600 hover:bg-red-50"
-                  onClick={() => handleDeactivate(template)}
-                  isLoading={deactivate.isPending}
-                >
-                  <Power className="h-4 w-4" />
-                </Button>
-              </PermissionGuard>
-            )}
-          </div>
-        )}
-        renderNoData={() => (
-          <div className="flex items-center justify-center rounded-xl border border-slate-200 bg-[#FDFBF9] py-16 text-sm text-[#1A3A52]/70">
-            No shift templates found.
-          </div>
-        )}
+          if (template.isActive) {
+            actions.push({
+              action: "deactivate",
+              onClick: () => handleDeactivate(template),
+              permission: Permissions.ManageShiftTemplate,
+            });
+          }
+
+          return <TableActionColumn actions={actions} item={template} />;
+        }}
       />
 
       <ShiftTemplateForm open={formOpen} onClose={() => setFormOpen(false)} editTarget={editTarget} />

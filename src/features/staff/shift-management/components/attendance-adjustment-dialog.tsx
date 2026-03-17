@@ -100,13 +100,13 @@ export function AttendanceAdjustmentDialog({ open, onClose, attendanceRecord, st
     >
       <form id="attendance-adj-form" onSubmit={onSubmit} className="space-y-4 p-1">
         {staffName && (
-          <div className="rounded-lg border border-slate-200 bg-[#FDFBF9] px-3 py-2 text-sm">
+          <div className="rounded-lg border border border-[#D5BA98]/60 bg-[#FDFBF9] px-3 py-2 text-sm">
             <span className="text-[#1A3A52]/70">Staff: </span>
             <span className="font-medium">{staffName}</span>
           </div>
         )}
 
-        <div className="rounded-lg border border-slate-200 bg-[#FDFBF9] p-3">
+        <div className="rounded-lg border border border-[#D5BA98]/60 bg-[#FDFBF9] p-3">
           <div className="grid grid-cols-2 gap-4">
             <ALInput
               title="Actual Check-in"
@@ -123,7 +123,7 @@ export function AttendanceAdjustmentDialog({ open, onClose, attendanceRecord, st
           </div>
         </div>
 
-        <div className="space-y-1 rounded-lg border border-slate-200 bg-[#FDFBF9] p-3">
+        <div className="space-y-1 rounded-lg border border border-[#D5BA98]/60 bg-[#FDFBF9] p-3">
           <label className="text-sm font-medium text-[#1A3A52]">
             Reason <span className="text-destructive">*</span>
           </label>

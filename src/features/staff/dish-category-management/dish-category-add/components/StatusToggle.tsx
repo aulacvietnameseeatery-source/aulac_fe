@@ -7,7 +7,7 @@ interface StatusToggleProps {
 
 export default function StatusToggle({ isActive, onToggle }: StatusToggleProps) {
   return (
-    <div className="pt-8 border-t border-slate-200">
+    <div className="pt-8 border-t border border-[#D5BA98]/60">
       <div className="flex items-center justify-between">
         <div className="flex-1">
           <label className="block text-[#1e293b] text-[13px] font-extrabold font-['Inter'] uppercase tracking-[0.5px] mb-3">

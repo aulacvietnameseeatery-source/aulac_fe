@@ -39,7 +39,7 @@ function dayStatusClass(status: DayStatus) {
   if (status === "LATE") return "border-amber-500 bg-amber-500 text-white";
   if (status === "OT") return "border-emerald-500 bg-emerald-500 text-white";
   if (status === "INCOMING") return "border-slate-600 bg-slate-600 text-white";
-  return "border-slate-200 bg-white text-slate-400";
+  return "border border-[#D5BA98]/60 bg-white text-slate-400";
 }
 
 function dayStatusLabel(status: DayStatus) {
@@ -89,7 +89,7 @@ function ShiftRow({ a }: { a: ShiftAssignmentListDto }) {
     <div
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className="flex items-center justify-between rounded-lg border border-slate-200 bg-white px-4 py-3 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md h-16"
+      className="flex items-center justify-between rounded-lg border border-[#D5BA98]/60 bg-white px-4 py-3 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md h-16"
     >
       <div className="space-y-0.5 min-w-0 flex-1">
         <p className="truncate text-sm font-medium text-[#1A3A52]">{a.templateName ?? `Assignment #${a.shiftAssignmentId}`}</p>
@@ -233,7 +233,7 @@ export function MyShifts() {
   return (
     <div className="space-y-6 rounded-2xl border border-[#D5BA98]/40 bg-[#FDFBF9] p-5 sm:p-6">
       {/* Header */}
-      <div className="flex items-start justify-between rounded-xl border border-slate-200 bg-white px-4 py-4 shadow-sm sm:px-5">
+      <div className="flex items-start justify-between rounded-xl border border border-[#D5BA98]/60 bg-white px-4 py-4 shadow-sm sm:px-5">
         <div>
           <h1 className="text-2xl font-semibold tracking-wide text-[#1A3A52]">My Shifts</h1>
           <p className="mt-1 text-sm text-[#1A3A52]/70">
@@ -252,11 +252,11 @@ export function MyShifts() {
       </div>
 
       {isLoading ? (
-        <div className="flex items-center justify-center rounded-xl border border-slate-200 bg-white py-20 text-sm text-[#1A3A52]/70 shadow-sm">
+        <div className="flex items-center justify-center rounded-xl border border border-[#D5BA98]/60 bg-white py-20 text-sm text-[#1A3A52]/70 shadow-sm">
           Loading shifts…
         </div>
       ) : all.length === 0 ? (
-        <div className="flex flex-col items-center justify-center gap-3 rounded-xl border border-slate-200 bg-white py-20 text-[#1A3A52]/70 shadow-sm">
+        <div className="flex flex-col items-center justify-center gap-3 rounded-xl border border border-[#D5BA98]/60 bg-white py-20 text-[#1A3A52]/70 shadow-sm">
           <CalendarDays className="w-10 h-10" />
           <p className="text-sm">No shifts assigned in the next 30 days.</p>
         </div>
@@ -264,7 +264,7 @@ export function MyShifts() {
         <div className="grid gap-6 lg:grid-cols-12 lg:items-start">
           {/* LEFT COLUMN: Summary & Calendar */}
           <div className="space-y-6 lg:col-span-5 xl:col-span-4 lg:sticky lg:top-6">
-            <section className="space-y-4 rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+            <section className="space-y-4 rounded-xl border border border-[#D5BA98]/60 bg-white p-4 shadow-sm">
               <div className="flex items-center justify-between">
                 <h2 className="text-base font-semibold text-[#1A3A52]">This Month Summary</h2>
                 <p className="text-xs text-[#1A3A52]/65">Attendance overview</p>
@@ -283,7 +283,7 @@ export function MyShifts() {
                   <p className="text-[10px] sm:text-xs text-emerald-700/80">OT</p>
                   <p className="text-lg font-semibold text-emerald-700">{monthlySummary.ot}</p>
                 </div>
-                <div className="rounded-lg border border-slate-200 bg-slate-50 p-2.5">
+                <div className="rounded-lg border border border-[#D5BA98]/60 bg-slate-50 p-2.5">
                   <p className="text-[10px] sm:text-xs text-slate-700/80">Incoming</p>
                   <p className="text-lg font-semibold text-slate-700">{monthlySummary.incoming}</p>
                 </div>
@@ -310,7 +310,7 @@ export function MyShifts() {
                     ) : (
                       <div
                         key={cell.key}
-                        className="flex flex-col items-center justify-center rounded-md border border-slate-200 bg-[#FDFBF9] py-1 shadow-sm transition-colors hover:bg-slate-100"
+                        className="flex flex-col items-center justify-center rounded-md border border border-[#D5BA98]/60 bg-[#FDFBF9] py-1 shadow-sm transition-colors hover:bg-slate-100"
                         title={`${cell.count} shift(s)`}
                       >
                         <span className="text-xs font-semibold text-[#1A3A52]">{cell.day}</span>
@@ -327,7 +327,7 @@ export function MyShifts() {
           <div className="space-y-6 lg:col-span-7 xl:col-span-8">
             {/* Today */}
             {todayShifts.length > 0 && (
-              <section className="space-y-3 rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+              <section className="space-y-3 rounded-xl border border border-[#D5BA98]/60 bg-white p-4 shadow-sm">
                 <h2 className="text-base font-semibold text-[#1A3A52]">Today</h2>
                 <div className="grid gap-4 sm:grid-cols-2">
                   {todayShifts.map((a) => (
@@ -339,7 +339,7 @@ export function MyShifts() {
 
             {/* Upcoming */}
             {upcoming.length > 0 && (
-              <section className="space-y-3 rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+              <section className="space-y-3 rounded-xl border border border-[#D5BA98]/60 bg-white p-4 shadow-sm">
                 <h2 className="text-base font-semibold text-[#1A3A52]">Upcoming ({upcoming.length})</h2>
                 <div className="space-y-2">
                   {upcoming.map((a) => (
@@ -351,7 +351,7 @@ export function MyShifts() {
 
             {/* Past */}
             {past.length > 0 && (
-              <section className="space-y-3 rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+              <section className="space-y-3 rounded-xl border border border-[#D5BA98]/60 bg-white p-4 shadow-sm">
                 <h2 className="text-base font-semibold text-[#1A3A52]/70">Past Shifts ({past.length})</h2>
                 <div className="space-y-2">
                   {past.map((a) => (
