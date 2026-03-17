@@ -68,10 +68,10 @@ export const ZoneSection: React.FC<ZoneSectionProps> = ({
   const allOnline = stats.online === tables.length;
 
   return (
-    <Card className="gap-0 border-slate-200 bg-white py-0 shadow-sm">
+    <Card className="gap-0 border border-[#D5BA98]/60 bg-white py-0 shadow-sm">
       <CardHeader
         className={cn(
-          "cursor-pointer select-none border-b border-slate-200 px-5 pb-3 pt-4 transition-colors hover:bg-slate-50",
+          "cursor-pointer select-none border-b border border-[#D5BA98]/60 px-5 pb-3 pt-4 transition-colors hover:bg-slate-50",
           collapsed && "border-b-0"
         )}
         onClick={() => onToggleCollapse?.(zone)}

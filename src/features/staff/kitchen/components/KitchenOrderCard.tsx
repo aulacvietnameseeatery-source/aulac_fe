@@ -117,7 +117,7 @@ export function KitchenOrderCard({ order, onUpdateStatus, onBatchUpdateStatus, i
     }, [order.items]);
 
     return (
-        <div className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden flex flex-col h-full hover:-translate-y-0.5 hover:shadow-md transition-all">
+        <div className="bg-white border border border-[#D5BA98]/60 rounded-2xl shadow-sm overflow-hidden flex flex-col h-full hover:-translate-y-0.5 hover:shadow-md transition-all">
             {/* Header */}
             <div className={`${config.headerBg} px-3 py-2.5 sm:px-4 sm:py-3.5`}>
                 <div className="flex items-center justify-between">
@@ -165,7 +165,7 @@ export function KitchenOrderCard({ order, onUpdateStatus, onBatchUpdateStatus, i
                         const itemUpdating = isItemUpdating(item.orderItemId);
 
                         return (
-                            <div key={item.orderItemId} className="group border border-slate-200 rounded-xl p-2.5 sm:p-3 bg-white">
+                            <div key={item.orderItemId} className="group border border border-[#D5BA98]/60 rounded-xl p-2.5 sm:p-3 bg-white">
                                 <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2.5">
                                     <div className="flex items-start flex-1 min-w-0">
                                         <div className={`w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full border-2 ${getItemStatusColor(item.itemStatus)} shrink-0 mt-1 mr-2.5 sm:mr-3 flex items-center justify-center`}>

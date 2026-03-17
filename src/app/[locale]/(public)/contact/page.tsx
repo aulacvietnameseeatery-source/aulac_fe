@@ -24,7 +24,7 @@ export default function ContactPage() {
         <ContactForm />
       </div>
 
-      <footer className="w-full border-t border-slate-200 bg-[#FBFAF7] py-12 flex flex-col items-center justify-center text-center">
+      <footer className="w-full border-t border border-[#D5BA98]/60 bg-[#FBFAF7] py-12 flex flex-col items-center justify-center text-center">
         <div className="flex flex-col items-center">
             <b className="text-[10px] text-slate-400 font-display uppercase tracking-[1px] leading-3.75">
              {t("copyright")}

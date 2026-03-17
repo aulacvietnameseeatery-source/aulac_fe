@@ -451,7 +451,7 @@ function OrdersContent() {
                                     {KANBAN_COLUMNS.map((col) => {
                                         const colOrders = getColumnOrders(col);
                                         return (
-                                            <div key={col.key} className="bg-white rounded-2xl border border-slate-200 shadow-sm">
+                                            <div key={col.key} className="bg-white rounded-2xl border border border-[#D5BA98]/60 shadow-sm">
                                                 <div className={`flex items-center justify-between ${col.headerColor} rounded-t-2xl px-4 py-3`}>
                                                     <span className="text-white font-semibold text-sm">{t(`kanban.${col.key}`)}</span>
                                                     <span className="text-white text-sm font-medium bg-white/20 rounded-full px-2 py-0.5">

@@ -50,9 +50,9 @@ export default function PromotionDetailPage() {
         <ArrowLeft size={16} /> {t("back")}
       </button>
 
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+      <div className="bg-white rounded-2xl border border border-[#D5BA98]/60 shadow-sm overflow-hidden">
         {/* Header */}
-        <div className="bg-slate-50 px-6 py-5 border-b border-slate-200 flex justify-between items-start">
+        <div className="bg-slate-50 px-6 py-5 border-b border border-[#D5BA98]/60 flex justify-between items-start">
           <div>
             <h1 className="text-2xl font-bold text-[#1A3A51]">{t("title", { id })}</h1>
             <p className="text-slate-500 mt-1">{detail.promoName}</p>

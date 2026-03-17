@@ -30,7 +30,7 @@ export function KitchenOrderGrid({
                 {[...Array(8)].map((_, i) => (
                     <div
                         key={i}
-                        className="bg-white rounded-2xl border border-slate-200 p-6 animate-pulse"
+                        className="bg-white rounded-2xl border border border-[#D5BA98]/60 p-6 animate-pulse"
                     >
                         <div className="h-16 bg-[#D5BA98]/18 rounded mb-4"></div>
                         <div className="space-y-3">

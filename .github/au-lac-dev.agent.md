@@ -80,6 +80,7 @@ Never build a custom combobox/modal for lookup data from scratch.
 
 - **Always search `src/components/ui/`** before creating a new component. If nothing fits, ask the user before building a new primitive.
 - Key components: `Button` (has `isLoading`), `Dialog` (custom portal, NOT Radix), `Drawer`, `ALInput`, `ALCombobox`, `KeywordSearch`, `FileUpload`.
+- **Table Actions:** Always use `TableActionColumn` for row actions. Pass the builtin action type (`view`, `edit`, `delete`, etc.). Do not pass custom icons/labels. If a new type is needed, add it to `BUILT_IN_ACTIONS` in `table-action-column.tsx`.
 - Icons: `lucide-react`. Utility: `cn()` from `@/lib/utils`.
 
 ---

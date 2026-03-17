@@ -48,6 +48,7 @@ export const Permissions = {
   AdjustAttendance: 'SHIFT:ADJUST_ATTENDANCE',
   ViewShiftReport: 'SHIFT:REPORT_READ',
   CloseShift: 'SHIFT:CLOSE',
+  ManageShiftTemplate: 'SHIFT:MANAGE_TEMPLATE',
 
   // Reservation
   ViewReservation: 'RESERVATION:READ',

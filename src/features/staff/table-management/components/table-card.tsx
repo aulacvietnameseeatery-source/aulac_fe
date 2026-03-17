@@ -63,7 +63,7 @@ const TableCard: React.FC<TableCardProps> = ({
   return (
     <div
       className={cn(
-        "group relative cursor-pointer overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm transition-all duration-200",
+        "group relative cursor-pointer overflow-hidden rounded-lg border border border-[#D5BA98]/60 bg-white shadow-sm transition-all duration-200",
         "hover:-translate-y-0.5 hover:shadow-md",
         isOffline && "opacity-55"
       )}

@@ -23,7 +23,7 @@ const CreateReservationPage = () => {
           </div>
         </div>
 
-        <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+        <div className="bg-white rounded-xl shadow-sm border border border-[#D5BA98]/60 overflow-hidden">
           
           {/* Customer Section */}
           <CustomerSection 
@@ -68,7 +68,7 @@ const CreateReservationPage = () => {
           </div>
 
           {/* Footer */}
-          <div className="bg-slate-50 p-6 border-t border-slate-200 flex justify-end gap-4">
+          <div className="bg-slate-50 p-6 border-t border border-[#D5BA98]/60 flex justify-end gap-4">
             <Button 
               type="button"
               variant="outline"
