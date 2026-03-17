@@ -1519,7 +1519,6 @@
       "scan": "Scan",
       "promotion": "Promotion",
       "coupon": "Coupon",
-      "tip": "Tip",
       "givenAmount": "Given Amount",
       "balance": "Balance",
       "note": "Note",
@@ -1531,6 +1530,38 @@
       "selectPromotion": "Select promotion",
       "selectCoupon": "Select coupon",
       "promotions": "Promotions"
+    }
+  },
+  "Invoice": {
+    "List": {
+      "title": "Sale Invoices",
+      "description": "Manage and track all sale invoices",
+      "searchPlaceholder": "Search by invoice code, customer, staff...",
+      "refresh": "Refresh",
+      "dateRange": {
+        "today": "Today",
+        "yesterday": "Yesterday",
+        "last7": "Last 7 Days",
+        "last30": "Last 30 Days",
+        "thisMonth": "This Month",
+        "lastMonth": "Last Month",
+        "custom": "Custom Range",
+        "from": "From",
+        "to": "To",
+        "selectDate": "Select Date"
+      },
+      "table": {
+        "no": "No",
+        "invoiceCode": "Invoice Code",
+        "createdAt": "Date & Time",
+        "tableCode": "Table",
+        "customerName": "Customer",
+        "staffName": "Staff",
+        "totalAmount": "Total Amount",
+        "tipAmount": "Tip Amount",
+        "paymentMethod": "Payment Method",
+        "orderStatus": "Order Status"
+      }
     }
   },
   "AdminSidebar": {
