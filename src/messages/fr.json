@@ -1590,6 +1590,38 @@
       "promotions": "Promotions"
     }
   },
+  "Invoice": {
+    "List": {
+      "title": "Factures de vente",
+      "description": "Gérer et suivre toutes les factures de vente",
+      "searchPlaceholder": "Rechercher par code de facture, client, personnel...",
+      "refresh": "Actualiser",
+      "dateRange": {
+        "today": "Aujourd'hui",
+        "yesterday": "Hier",
+        "last7": "7 derniers jours",
+        "last30": "30 derniers jours",
+        "thisMonth": "Ce mois-ci",
+        "lastMonth": "Le mois dernier",
+        "custom": "Personnalisé",
+        "from": "De",
+        "to": "À",
+        "selectDate": "Sélectionner la date"
+      },
+      "table": {
+        "no": "N°",
+        "invoiceCode": "Code de facture",
+        "createdAt": "Date et heure",
+        "tableCode": "Table",
+        "customerName": "Client",
+        "staffName": "Personnel",
+        "totalAmount": "Montant total",
+        "tipAmount": "Pourboire",
+        "paymentMethod": "Mode de paiement",
+        "orderStatus": "Statut de commande"
+      }
+    }
+  },
   "AdminSidebar": {
     "categories": {
       "main": "PRINCIPAL",

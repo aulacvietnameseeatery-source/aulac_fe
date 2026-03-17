@@ -1594,6 +1594,38 @@
       "promotions": "Khuyến mãi"
     }
   },
+  "Invoice": {
+    "List": {
+      "title": "Hóa đơn bán hàng",
+      "description": "Quản lý và theo dõi tất cả hóa đơn bán hàng",
+      "searchPlaceholder": "Tìm kiếm theo mã hóa đơn, khách hàng, nhân viên...",
+      "refresh": "Làm mới",
+      "dateRange": {
+        "today": "Hôm nay",
+        "yesterday": "Hôm qua",
+        "last7": "7 ngày qua",
+        "last30": "30 ngày qua",
+        "thisMonth": "Tháng này",
+        "lastMonth": "Tháng trước",
+        "custom": "Tùy chỉnh",
+        "from": "Từ",
+        "to": "Đến",
+        "selectDate": "Chọn ngày"
+      },
+      "table": {
+        "no": "STT",
+        "invoiceCode": "Mã hóa đơn",
+        "createdAt": "Ngày giờ",
+        "tableCode": "Bàn",
+        "customerName": "Khách hàng",
+        "staffName": "Nhân viên",
+        "totalAmount": "Tổng tiền",
+        "tipAmount": "Tiền boa",
+        "paymentMethod": "Phương thức thanh toán",
+        "orderStatus": "Trạng thái đơn"
+      }
+    }
+  },
   "AdminSidebar": {
     "categories": {
       "main": "CHÍNH",
