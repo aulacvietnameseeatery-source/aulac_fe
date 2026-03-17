@@ -1,11 +1,5 @@
-import { ShiftManagement } from "@/features/staff/shift-management";
-import { ProtectedRoute } from "@/components/protected-route";
-import { Permissions } from "@/types/const";
+import { redirect } from "next/navigation";
 
 export default function ShiftsPage() {
-  return (
-    <ProtectedRoute permission={Permissions.ViewShift}>
-      <ShiftManagement />
-    </ProtectedRoute>
-  );
+  redirect("/dashboard/shifts/reports");
 }

@@ -58,7 +58,7 @@ export function DishNarrative({ dish }: DishNarrativeProps) {
       )}
 
       {/* Stats */}
-      <div className="mt-8 border-t border-slate-200 pt-6 md:mt-12 md:pt-8">
+      <div className="mt-8 border-t border border-[#D5BA98]/60 pt-6 md:mt-12 md:pt-8">
         <div className="grid grid-cols-2 gap-4 md:gap-x-10 md:gap-y-6">
           {dish.prepTimeMinutes && (
             <div className="rounded-lg bg-slate-50 p-4 md:bg-transparent md:p-0">

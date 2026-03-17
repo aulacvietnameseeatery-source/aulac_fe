@@ -79,7 +79,7 @@ export default function CallRestaurantPopup({ isOpen, onClose }: CallRestaurantP
                     {/* Copy Button */}
                     <button
                         onClick={handleCopy}
-                        className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors"
+                        className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-white border border border-[#D5BA98]/60 rounded-lg hover:bg-slate-50 transition-colors"
                     >
                         <Copy size={16} className="text-slate-600" />
                         <span className="text-sm font-medium text-slate-700">

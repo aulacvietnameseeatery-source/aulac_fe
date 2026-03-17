@@ -49,7 +49,7 @@ export default function DateTimeSelect({
                     <select
                         value={time}
                         onChange={(e) => onDateTimeChange(date, e.target.value)}
-                        className="w-full bg-slate-50 border border-slate-200 rounded-lg py-2 pl-8 pr-2 text-sm font-bold text-[#1A3A52] focus:outline-none focus:border-[#1A3A52] appearance-none"
+                        className="w-full bg-slate-50 border border border-[#D5BA98]/60 rounded-lg py-2 pl-8 pr-2 text-sm font-bold text-[#1A3A52] focus:outline-none focus:border-[#1A3A52] appearance-none"
                     >
                         {Array.from({ length: 12 }, (_, i) => i + 11).flatMap(h =>
                             ['00', '30'].map(m => {

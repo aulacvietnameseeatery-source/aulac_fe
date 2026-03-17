@@ -8,7 +8,6 @@ import {
   Table,
   Users,
   UtensilsCrossed,
-  ShoppingBag,
   FileText,
   Mail,
   Settings,
@@ -41,6 +40,8 @@ import {
 
 import { useAuth } from "@/components/providers/auth-provider";
 import { useLogout } from "@/features/customer/auth/login/hooks";
+import { usePermissions } from "@/hooks/use-permissions";
+import { Permissions } from "@/types/const";
 import { ConfirmModal } from "@/components/layout/admin-sidebar/confirm-modal";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
@@ -82,10 +83,11 @@ const navigation = [
     status: "shifts",
     icon: Clock,
     items: [
-      { key: "shifts", href: "/dashboard/shifts", icon: Clock },
-      { key: "shiftsLive", href: "/dashboard/shifts/live", icon: Radio },
-      { key: "shiftsReports", href: "/dashboard/shifts/reports", icon: BarChart3 },
-      { key: "myShifts", href: "/dashboard/my-shifts", icon: UserCheck },
+      { key: "shiftsTemplates", href: "/dashboard/shifts/templates", icon: FolderOpen, permission: Permissions.ManageShiftTemplate },
+      { key: "shifts", href: "/dashboard/shifts/schedule", icon: Clock, permission: Permissions.ViewShift },
+      { key: "shiftsLive", href: "/dashboard/shifts/live", icon: Radio, permission: Permissions.ViewShift },
+      { key: "shiftsReports", href: "/dashboard/shifts/reports", icon: BarChart3, permission: Permissions.ViewShiftReport },
+      { key: "myShifts", href: "/dashboard/my-shifts", icon: UserCheck }, // All staff can see their shifts
     ]
   },
   {
@@ -119,9 +121,24 @@ export function AdminSidebar({ onClose }: AdminSidebarProps) {
   const params = useParams();
   const locale = params.locale as string || 'vi';
   const { userInfo } = useAuth();
+  const { can } = usePermissions();
   const { mutate: logout, isPending: isLoggingOut } = useLogout();
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const t = useTranslations("AdminSidebar");
+
+  const filteredNavigation = useMemo(() => {
+    return navigation.map((cat) => ({
+      ...cat,
+      items: cat.items.filter((item) => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        if (item.permission && !can(item.permission)) {
+          return false;
+        }
+        return true;
+      }),
+    })).filter(cat => cat.items.length > 0);
+  }, [can]);
 
   const pathWithoutLocale = useMemo(() => pathname?.replace(/^\/(en|fr|vi)/, '') || pathname, [pathname]);
 
@@ -134,10 +151,10 @@ export function AdminSidebar({ onClose }: AdminSidebarProps) {
 
   // Determine which category the current route belongs to
   const routeCategory = useMemo(() => {
-    return navigation.find(cat =>
+    return filteredNavigation.find(cat =>
       cat.items.some(item => isActive(item.href))
     )?.status || "main";
-  }, [pathWithoutLocale]);
+  }, [pathWithoutLocale, filteredNavigation]);
 
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [hoverCategory, setHoverCategory] = useState<string | null>(null);
@@ -164,8 +181,8 @@ export function AdminSidebar({ onClose }: AdminSidebarProps) {
   const displayedCategory = hoverCategory || selectedCategory || routeCategory;
 
   const currentCategoryItems = useMemo(() => {
-    return navigation.find(cat => cat.status === displayedCategory)?.items || [];
-  }, [displayedCategory]);
+    return filteredNavigation.find(cat => cat.status === displayedCategory)?.items || [];
+  }, [displayedCategory, filteredNavigation]);
 
   const handleLogoutClick = () => {
     setIsLogoutModalOpen(true);
@@ -193,7 +210,7 @@ export function AdminSidebar({ onClose }: AdminSidebarProps) {
           </Link>
 
           <div className="flex-1 flex flex-col gap-4 w-full px-2">
-            {navigation.map((cat) => {
+            {filteredNavigation.map((cat) => {
               const Icon = cat.icon;
               const isRouteActive = routeCategory === cat.status;
               const isSelected = selectedCategory === cat.status;

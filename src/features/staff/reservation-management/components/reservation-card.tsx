@@ -41,7 +41,7 @@ export const ReservationCard = ({ reservation, statuses, onAssignTable, onEdit, 
     };
 
     return (
-        <div onClick={() => onCardClick?.(reservation.reservationId)} className={`bg-white rounded-xl shadow-sm border border-slate-200 p-5 hover:-translate-y-0.5 hover:shadow-md transition-all relative ${onCardClick ? 'cursor-pointer' : ''}`}>
+        <div onClick={() => onCardClick?.(reservation.reservationId)} className={`bg-white rounded-xl shadow-sm border border border-[#D5BA98]/60 p-5 hover:-translate-y-0.5 hover:shadow-md transition-all relative ${onCardClick ? 'cursor-pointer' : ''}`}>
             <div className="flex items-start gap-4 mb-4">
                 <div className="bg-[#1A3A52] rounded-lg p-2.5 text-center shrink-0 min-w-17.5">
                     <p className="text-white font-semibold text-[15px] m-0 leading-tight">

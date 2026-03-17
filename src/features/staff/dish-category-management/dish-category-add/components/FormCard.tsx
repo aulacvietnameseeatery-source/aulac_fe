@@ -7,7 +7,7 @@ interface FormCardProps {
 
 export default function FormCard({ error, children }: FormCardProps) {
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
+    <div className="bg-white rounded-2xl shadow-sm border border border-[#D5BA98]/60 p-8">
       {error && (
         <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
           <p className="text-red-700 text-sm font-['Inter']">{error}</p>

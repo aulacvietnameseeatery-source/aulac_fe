@@ -126,3 +126,18 @@ export interface UpdateLookupValueRequest {
   /** Per-locale descriptions to update */
   descriptionI18n?: I18nMap;
 }
+
+export interface ReorderLookupItem {
+  valueId: number;
+  sortOrder: number;
+}
+
+export interface BatchReorderLookupRequest {
+  items: ReorderLookupItem[];
+}
+
+export interface BatchReorderLookupResponse {
+  typeId: number;
+  updatedCount: number;
+  version?: string;
+}

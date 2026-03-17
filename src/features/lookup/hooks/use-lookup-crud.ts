@@ -9,6 +9,8 @@ import type {
   LookupValueDto,
   CreateLookupValueRequest,
   UpdateLookupValueRequest,
+  BatchReorderLookupRequest,
+  BatchReorderLookupResponse,
 } from "../types/lookup.types";
 import { isLookupTypeConfigurable } from "../types/lookup.types";
 
@@ -137,6 +139,26 @@ export function useLookupCrud({
     },
   });
 
+  // ── Reorder (Batch) ───────────────────────────────────
+  const reorderMutation = useMutation<
+    BatchReorderLookupResponse,
+    Error,
+    BatchReorderLookupRequest
+  >({
+    mutationFn: (data) => service.reorder(data),
+    onSuccess: (data) => {
+      toast.success(`${entityLabel} order updated`, {
+        description: `${data.updatedCount} item(s) reordered.`,
+      });
+      queryClient.invalidateQueries({ queryKey });
+    },
+    onError: (error: any) => {
+      toast.error(`Failed to reorder ${entityLabel.toLowerCase()}s`, {
+        description: error?.response?.data?.userMessage || error.message,
+      });
+    },
+  });
+
   // ──────────────────────────────────────────────────────
   return {
     // ── LookupManagerModal props (spread-ready) ──
@@ -147,11 +169,13 @@ export function useLookupCrud({
     onSave:   (data: CreateLookupValueRequest)             => createMutation.mutateAsync(data),
     onUpdate: (id: number, data: UpdateLookupValueRequest) => updateMutation.mutateAsync({ id, data }),
     onDelete: (id: number)                                 => deleteMutation.mutateAsync(id),
+    onReorder: (data: BatchReorderLookupRequest)           => reorderMutation.mutateAsync(data),
 
     // ── Granular state (for loading indicators etc.) ──
     isCreating: createMutation.isPending,
     isUpdating: updateMutation.isPending,
     isDeleting: deleteMutation.isPending,
+    isReordering: reorderMutation.isPending,
   };
 }
 
