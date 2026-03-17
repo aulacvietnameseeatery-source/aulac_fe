@@ -7,8 +7,7 @@ export function IntroHero() {
     const t = useTranslations("Introduction.Hero");
 
     return (
-        // Sử dụng 100dvh để full màn hình thật sự trên mobile (trừ thanh address bar)
-        <section className="relative w-full h-[100dvh] flex flex-col items-center justify-center overflow-hidden">
+        <section className="relative w-full min-h-[92dvh] md:min-h-[100dvh] flex flex-col items-center justify-center overflow-hidden">
 
             {/* 1. BACKGROUND IMAGE - Parallax / Scale Effect */}
             <div className="absolute inset-0 w-full h-full overflow-hidden">
@@ -24,24 +23,11 @@ export function IntroHero() {
                         className="w-full h-full object-cover select-none"
                     />
                 </motion.div>
-                <div className="absolute inset-0 bg-black/40" />
+                <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(8,16,24,0.55),rgba(8,16,24,0.72))]" />
             </div>
 
             {/* 2. CONTENT */}
-            <div className="relative z-10 flex flex-col items-center justify-center px-6 max-w-[896px] text-center space-y-4 md:space-y-6">
-
-                {/* Est. 1994 */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-                >
-                    <span className="font-display text-[#C9A961] text-xs md:text-[14px] font-normal uppercase tracking-[0.25em] md:tracking-[5.6px] leading-5">
-                        {t("est")}
-                    </span>
-                </motion.div>
-
+            <div className="relative z-10 flex w-full max-w-[1120px] flex-col items-center justify-center px-6 text-center">
                 {/* Main Title - Responsive Text Size */}
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
@@ -49,7 +35,7 @@ export function IntroHero() {
                     viewport={{ once: true }}
                     transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
                 >
-                    <h1 className="font-display text-white text-[42px] sm:text-[60px] md:text-[96px] font-black leading-[1.1] md:leading-[96px] whitespace-pre-line drop-shadow-lg">
+                    <h1 className="font-display text-white text-[42px] sm:text-[62px] md:text-[96px] font-black leading-[1.06] whitespace-pre-line drop-shadow-[0_14px_44px_rgba(0,0,0,0.5)]">
                         {t("title")}
                     </h1>
                 </motion.div>
@@ -60,9 +46,9 @@ export function IntroHero() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.8, delay: 0.6, ease: "easeOut" }}
-                    className="pt-2 max-w-[90%] md:max-w-[672px]"
+                    className="pt-5 max-w-[92%] md:max-w-[760px]"
                 >
-                    <p className="font-display text-white/90 text-[15px] md:text-lg font-light leading-relaxed italic">
+                    <p className="font-display text-white/90 text-[15px] md:text-[20px] font-light leading-relaxed italic">
                         {t("quote")}
                     </p>
                 </motion.div>
@@ -84,6 +70,8 @@ export function IntroHero() {
                     style={{ height: 96 }} // Fallback / default
                 />
             </motion.div>
+
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-[#EEE8DC] to-transparent" />
 
         </section>
     );

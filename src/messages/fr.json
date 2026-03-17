@@ -29,8 +29,8 @@
   "Introduction": {
     "Hero": {
       "est": "Fondé en 1994",
-      "title": "Une symphonie de l’art\nVietnamien",
-      "quote": "\"Là où l’héritage du fleuve Rouge rencontre le raffinement de la haute gastronomie contemporaine.\""
+      "title": "Un espace culinaire\n vietnamien paisible",
+      "quote": "\"An Lạc est une invitation — à ralentir, goûter attentivement et se reconnecter à l’essentiel\""
     },
     "Chef": {
       "label": "Les Artisans",
@@ -308,6 +308,68 @@
       "error": "Échec de la confirmation de la réservation. Veuillez réessayer.",
       "lockSuccess": "Table verrouillée avec succès. Veuillez compléter votre réservation.",
       "lockError": "Échec du verrouillage de la table. Elle peut être occupée."
+    },
+    "PublicForm": {
+      "title": "Réserver une table",
+      "chooseCustomerType": "Choisir le type de client",
+      "existingCustomer": "Client existant",
+      "newCustomer": "Nouveau client",
+      "existingCustomerHint": "Entrez le numéro pour remplir automatiquement les informations",
+      "newCustomerHint": "Saisissez les informations de base pour envoyer la demande",
+      "existingModeNote": "Client existant : entrez d’abord le numéro de téléphone, nous remplirons les informations si elles existent.",
+      "newModeNote": "Nouveau client : veuillez renseigner les informations de base requises.",
+      "noFitTitle": "Aucune table en ligne ne correspond à ce créneau horaire.",
+      "callRestaurant": "Appeler le restaurant",
+      "goBack": "Retour",
+      "yourInfo": "Vos informations",
+      "phone": "Numéro de téléphone",
+      "yourName": "Votre nom",
+      "email": "E-mail",
+      "loadingCustomerName": "Chargement du nom...",
+      "loadingCustomerEmail": "Chargement de l’e-mail...",
+      "existingCustomerName": "Nom du client existant",
+      "existingCustomerEmail": "E-mail du client existant",
+      "bookingInfo": "Informations de réservation",
+      "partySize": "Nombre de personnes",
+      "reservationDate": "Date de réservation",
+      "selectDate": "Choisir la date",
+      "arrivalTime": "Heure d’arrivée",
+      "selectTime": "Choisir l’heure",
+      "notes": "Remarques",
+      "close": "Fermer",
+      "closeAriaLabel": "Fermer la boîte de réservation",
+      "submit": "RÉSERVER",
+      "checkingTables": "Vérification des tables...",
+      "processing": "Traitement en cours...",
+      "lookup": {
+        "notFound": "Aucun client existant trouvé avec ce numéro."
+      },
+      "validation": {
+        "selectCustomerType": "Veuillez choisir un type de client.",
+        "phoneRequired": "Veuillez saisir un numéro de téléphone.",
+        "nameRequired": "Veuillez saisir votre nom.",
+        "existingCustomerNotFound": "Informations du client existant introuvables. Veuillez vérifier le numéro de téléphone.",
+        "dateRequired": "Veuillez sélectionner une date de réservation.",
+        "timeRequired": "Veuillez sélectionner une heure d’arrivée.",
+        "partySizeRequired": "Veuillez sélectionner le nombre de personnes."
+      },
+      "toast": {
+        "created": "Demande de réservation créée avec succès !",
+        "createFailed": "Impossible de créer la réservation.",
+        "unexpected": "Une erreur est survenue lors de la réservation."
+      }
+    },
+    "PublicTicket": {
+      "title": "Billet de réservation",
+      "customer": "Client",
+      "guests": "Convives",
+      "date": "Date",
+      "time": "Heure",
+      "table": "Table",
+      "zone": "Zone",
+      "pendingAssign": "Attribution en attente",
+      "downloadTicket": "Télécharger le billet",
+      "close": "Fermer"
     }
   },
   "OrderSuccess": {

@@ -56,7 +56,7 @@ export function IntroCollection() {
     };
 
     return (
-        <section className="w-full bg-[#F6F4EF] py-16 md:py-24 px-6 md:px-8 lg:px-20 flex justify-center">
+        <section className="w-full bg-transparent py-20 md:py-28 px-6 md:px-8 lg:px-20 flex justify-center">
             <div className="w-full max-w-[1440px] flex flex-col gap-12 md:gap-20">
 
                 {/* --- HEADER --- */}
@@ -68,10 +68,10 @@ export function IntroCollection() {
                     className="flex flex-col items-center text-center space-y-3 md:space-y-4"
                 >
                     <div className="flex flex-col items-center gap-2">
-                        <span className="font-display text-[#C9A961] text-[10px] md:text-xs font-bold uppercase tracking-[0.4em] md:tracking-[0.5em]">
+                        <span className="font-display text-[#8D6A2A] text-[10px] md:text-xs font-bold uppercase tracking-[0.4em] md:tracking-[0.5em]">
                             {t("label")}
                         </span>
-                        <h2 className="font-display text-[#0A0A0A] text-[32px] md:text-5xl font-bold leading-tight">
+                        <h2 className="font-display text-[#12283A] text-[34px] md:text-5xl font-bold leading-tight">
                             {t("title")}
                         </h2>
                     </div>
@@ -85,17 +85,17 @@ export function IntroCollection() {
                     initial="hidden"
                     whileInView="visible"
                     viewport={{ once: true, margin: "-50px" }}
-                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 md:gap-8"
+                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-8"
                 >
                     {COLLECTION_ITEMS.map((item) => (
                         <motion.div
                             key={item.id}
                             variants={itemVariants}
-                            className="flex flex-col gap-4 md:gap-6 group cursor-pointer"
+                            className="group cursor-pointer rounded-2xl border border-[#C9A961]/25 bg-[#F7F1E5]/70 p-4 md:p-5 backdrop-blur-sm"
                         >
 
                             {/* IMAGE CARD */}
-                            <div className="relative w-full aspect-[3/4] overflow-hidden rounded-[2px] border border-[#C9A961]/20 bg-[#193752]/10">
+                            <div className="relative w-full aspect-[3/4] overflow-hidden rounded-xl border border-[#C9A961]/25 bg-[#193752]/10">
                                 <img
                                     src={item.image}
                                     alt={item.mainTitle}
@@ -103,7 +103,7 @@ export function IntroCollection() {
                                 />
 
                                 {/* Overlay: Mobile -> Tap to see, Desktop -> Hover */}
-                                <div className="absolute inset-0 bg-gradient-to-t from-[#193752]/95 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-6 md:p-8">
+                                <div className="absolute inset-0 bg-gradient-to-t from-[#12283A]/95 via-[#12283A]/65 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-6 md:p-8">
                                     <span className="font-display text-[#C9A961] text-[10px] md:text-xs uppercase tracking-widest mb-1 md:mb-2 translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-75">
                                         {item.hoverCategory}
                                     </span>
@@ -117,11 +117,11 @@ export function IntroCollection() {
                             </div>
 
                             {/* TEXT INFO */}
-                            <div className="flex flex-col items-center text-center space-y-1 md:space-y-2">
-                                <h4 className="font-display text-[#C9A961] text-[16px] md:text-lg font-medium">
+                            <div className="mt-4 flex flex-col items-center text-center space-y-1 md:space-y-2">
+                                <h4 className="font-display text-[#8D6A2A] text-[16px] md:text-lg font-semibold">
                                     {item.mainTitle}
                                 </h4>
-                                <span className="font-display text-[#0A0A0A] text-xs md:text-sm uppercase tracking-widest">
+                                <span className="font-display text-[#12283A] text-xs md:text-sm uppercase tracking-widest">
                                     {item.subTitle}
                                 </span>
                             </div>

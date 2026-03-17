@@ -17,5 +17,6 @@ export interface MenuItemData {
 export interface MenuCategory {
     id: string;
     name: string;
+    displayOrder?: number;
     items: MenuItemData[];
 }
