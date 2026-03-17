@@ -55,4 +55,9 @@ export const Permissions = {
   CreateReservation: 'RESERVATION:CREATE',
   UpdateReservation: 'RESERVATION:UPDATE',
   DeleteReservation: 'RESERVATION:DELETE',
+
+  ViewCustomer: 'CUSTOMER:READ',
+  CreateCustomer: 'CUSTOMER:CREATE',
+  UpdateCustomer: 'CUSTOMER:UPDATE',
+  DeleteCustomer: 'CUSTOMER:DELETE'
 } as const;

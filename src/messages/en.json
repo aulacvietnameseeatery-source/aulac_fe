@@ -2486,6 +2486,8 @@
     "defaultStaff": "Staff"
   },
   "Customer": {
+    "close": "Close",
+    "edit": "Edit",
     "List": {
       "title": "Customer Management",
       "description": "Manage and view customer information, order history, and loyalty points.",
@@ -2510,7 +2512,111 @@
       },
       "actions": {
         "view": "View Details",
-        "edit": "Edit Customer"
+        "edit": "Edit Customer",
+        "delete": "Delete Customer"
+      },
+      "notifications": {
+        "loadError": "Failed to load customer details",
+        "deleteSuccess": "Customer deleted successfully",
+        "deleteError": "Failed to delete customer"
+      },
+      "deleteModal": {
+        "title": "Delete Customer",
+        "message": "Are you sure you want to delete customer '{name}'? This action cannot be undone.",
+        "confirm": "Delete",
+        "cancel": "Cancel"
+      }
+    },
+    "Add": {
+      "title": "Add New Customer",
+      "saveButton": "Save",
+      "cancel": "Cancel",
+      "fields": {
+        "phone": "Phone Number",
+        "fullName": "Full Name",
+        "email": "Email",
+        "loyaltyPoints": "Loyalty Points",
+        "isMember": "Member Status",
+        "createdAt": "Created At"
+      },
+      "placeholders": {
+        "phone": "Enter phone number",
+        "fullName": "Enter full name",
+        "email": "Enter email address",
+        "loyaltyPoints": "Enter loyalty points"
+      },
+      "validation": {
+        "phoneRequired": "Phone number is required",
+        "phoneMaxLength": "Phone cannot exceed 20 characters",
+        "phoneInvalid": "Phone number must contain only digits",
+        "nameMaxLength": "Full name cannot exceed 100 characters",
+        "emailMaxLength": "Email cannot exceed 150 characters",
+        "emailInvalid": "Invalid email format",
+        "pointsNegative": "Loyalty points cannot be negative"
+      },
+      "notifications": {
+        "createSuccess": "Customer created successfully",
+        "createError": "Failed to create customer"
+      }
+    },
+    "Edit": {
+      "title": "Edit Customer",
+      "saveButton": "Save Changes",
+      "cancel": "Cancel",
+      "fields": {
+        "phone": "Phone Number",
+        "fullName": "Full Name",
+        "email": "Email",
+        "loyaltyPoints": "Loyalty Points",
+        "isMember": "Member Status",
+        "createdAt": "Created At"
+      },
+      "placeholders": {
+        "phone": "Enter phone number",
+        "fullName": "Enter full name",
+        "email": "Enter email address",
+        "loyaltyPoints": "Enter loyalty points"
+      },
+      "validation": {
+        "phoneRequired": "Phone number is required",
+        "phoneMaxLength": "Phone cannot exceed 20 characters",
+        "phoneInvalid": "Phone number must contain only digits",
+        "nameMaxLength": "Full name cannot exceed 100 characters",
+        "emailMaxLength": "Email cannot exceed 150 characters",
+        "emailInvalid": "Invalid email format",
+        "pointsNegative": "Loyalty points cannot be negative"
+      },
+      "notifications": {
+        "updateSuccess": "Customer updated successfully",
+        "updateError": "Failed to update customer"
+      }
+    },
+    "Detail": {
+      "title": "Customer Details",
+      "saveButton": "Close",
+      "cancel": "Close",
+      "fields": {
+        "phone": "Phone Number",
+        "fullName": "Full Name",
+        "email": "Email",
+        "loyaltyPoints": "Loyalty Points",
+        "isMember": "Member Status",
+        "createdAt": "Created At"
+      },
+      "placeholders": {
+        "phone": "",
+        "fullName": "",
+        "email": "",
+        "loyaltyPoints": ""
+      },
+      "validation": {
+        "phoneRequired": "",
+        "phoneMaxLength": "",
+        "phoneInvalid": "",
+        "nameMaxLength": "",
+        "emailMaxLength": "",
+        "emailInvalid": "",
+        "pointsNegative": ""
       }
     }
   }

@@ -2482,6 +2482,8 @@
     "defaultStaff": "Personnel"
   },
   "Customer": {
+    "close": "Fermer",
+    "edit": "Modifier",
     "List": {
       "title": "Gestion des clients",
       "description": "Gérez et consultez les informations des clients, l'historique des commandes et les points de fidélité.",
@@ -2506,7 +2508,111 @@
       },
       "actions": {
         "view": "Voir les détails",
-        "edit": "Modifier le client"
+        "edit": "Modifier le client",
+        "delete": "Supprimer le client"
+      },
+      "notifications": {
+        "loadError": "Échec du chargement des détails du client",
+        "deleteSuccess": "Client supprimé avec succès",
+        "deleteError": "Échec de la suppression du client"
+      },
+      "deleteModal": {
+        "title": "Supprimer le client",
+        "message": "Êtes-vous sûr de vouloir supprimer le client '{name}' ? Cette action est irréversible.",
+        "confirm": "Supprimer",
+        "cancel": "Annuler"
+      }
+    },
+    "Add": {
+      "title": "Ajouter un client",
+      "saveButton": "Enregistrer",
+      "cancel": "Annuler",
+      "fields": {
+        "phone": "Numéro de téléphone",
+        "fullName": "Nom complet",
+        "email": "Email",
+        "loyaltyPoints": "Points de fidélité",
+        "isMember": "Statut de membre",
+        "createdAt": "Créé le"
+      },
+      "placeholders": {
+        "phone": "Entrez le numéro de téléphone",
+        "fullName": "Entrez le nom complet",
+        "email": "Entrez l'adresse email",
+        "loyaltyPoints": "Entrez les points de fidélité"
+      },
+      "validation": {
+        "phoneRequired": "Le numéro de téléphone est requis",
+        "phoneMaxLength": "Le téléphone ne peut pas dépasser 20 caractères",
+        "phoneInvalid": "Le numéro de téléphone ne doit contenir que des chiffres",
+        "nameMaxLength": "Le nom complet ne peut pas dépasser 100 caractères",
+        "emailMaxLength": "L'email ne peut pas dépasser 150 caractères",
+        "emailInvalid": "Format d'email invalide",
+        "pointsNegative": "Les points de fidélité ne peuvent pas être négatifs"
+      },
+      "notifications": {
+        "createSuccess": "Client créé avec succès",
+        "createError": "Échec de la création du client"
+      }
+    },
+    "Edit": {
+      "title": "Modifier le client",
+      "saveButton": "Enregistrer les modifications",
+      "cancel": "Annuler",
+      "fields": {
+        "phone": "Numéro de téléphone",
+        "fullName": "Nom complet",
+        "email": "Email",
+        "loyaltyPoints": "Points de fidélité",
+        "isMember": "Statut de membre",
+        "createdAt": "Créé le"
+      },
+      "placeholders": {
+        "phone": "Entrez le numéro de téléphone",
+        "fullName": "Entrez le nom complet",
+        "email": "Entrez l'adresse email",
+        "loyaltyPoints": "Entrez les points de fidélité"
+      },
+      "validation": {
+        "phoneRequired": "Le numéro de téléphone est requis",
+        "phoneMaxLength": "Le téléphone ne peut pas dépasser 20 caractères",
+        "phoneInvalid": "Le numéro de téléphone ne doit contenir que des chiffres",
+        "nameMaxLength": "Le nom complet ne peut pas dépasser 100 caractères",
+        "emailMaxLength": "L'email ne peut pas dépasser 150 caractères",
+        "emailInvalid": "Format d'email invalide",
+        "pointsNegative": "Les points de fidélité ne peuvent pas être négatifs"
+      },
+      "notifications": {
+        "updateSuccess": "Client mis à jour avec succès",
+        "updateError": "Échec de la mise à jour du client"
+      }
+    },
+    "Detail": {
+      "title": "Détails du client",
+      "saveButton": "Fermer",
+      "cancel": "Fermer",
+      "fields": {
+        "phone": "Numéro de téléphone",
+        "fullName": "Nom complet",
+        "email": "Email",
+        "loyaltyPoints": "Points de fidélité",
+        "isMember": "Statut de membre",
+        "createdAt": "Créé le"
+      },
+      "placeholders": {
+        "phone": "",
+        "fullName": "",
+        "email": "",
+        "loyaltyPoints": ""
+      },
+      "validation": {
+        "phoneRequired": "",
+        "phoneMaxLength": "",
+        "phoneInvalid": "",
+        "nameMaxLength": "",
+        "emailMaxLength": "",
+        "emailInvalid": "",
+        "pointsNegative": ""
       }
     }
   }
