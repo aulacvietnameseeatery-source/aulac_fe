@@ -1,3 +1,5 @@
+"use client";
+
 import { useQuery } from '@tanstack/react-query';
 import { getPublicGroupSettings } from '@/features/staff/system-settings/services/system-setting.service';
 
