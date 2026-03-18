@@ -1597,6 +1597,38 @@
       "promotions": "Promotions"
     }
   },
+  "Invoice": {
+    "List": {
+      "title": "Sale Invoices",
+      "description": "Manage and track all sale invoices",
+      "searchPlaceholder": "Search by invoice code, customer, staff...",
+      "refresh": "Refresh",
+      "dateRange": {
+        "today": "Today",
+        "yesterday": "Yesterday",
+        "last7": "Last 7 Days",
+        "last30": "Last 30 Days",
+        "thisMonth": "This Month",
+        "lastMonth": "Last Month",
+        "custom": "Custom Range",
+        "from": "From",
+        "to": "To",
+        "selectDate": "Select Date"
+      },
+      "table": {
+        "no": "No",
+        "invoiceCode": "Invoice Code",
+        "createdAt": "Date & Time",
+        "tableCode": "Table",
+        "customerName": "Customer",
+        "staffName": "Staff",
+        "totalAmount": "Total Amount",
+        "tipAmount": "Tip Amount",
+        "paymentMethod": "Payment Method",
+        "orderStatus": "Order Status"
+      }
+    }
+  },
   "AdminSidebar": {
     "categories": {
       "main": "MAIN",
@@ -1634,6 +1666,7 @@
     "cancel": "Cancel",
     "expand": "Expand",
     "collapse": "Collapse",
+    "shiftsTemplates": "Templates",
     "shifts": "Schedules",
     "shiftsLive": "Live Board",
     "shiftsReports": "Shift Reports",
@@ -1789,6 +1822,219 @@
           "minutesAffected": "Minutes",
           "reviewer": "Reviewed By"
         }
+      },
+      "refresh": "Refresh",
+      "exportCsv": "Export CSV",
+      "selectDateRange": "Select a date range to load reports",
+      "highAbsenceRate": "High absence rate",
+      "presets": {
+        "today": "Today",
+        "thisWeek": "This Week",
+        "last7Days": "Last 7 Days",
+        "thisMonth": "This Month",
+        "lastMonth": "Last Month"
+      },
+      "health": {
+        "attendanceRate": "Attendance Rate",
+        "hoursCompliance": "Hours Compliance",
+        "exceptions": "Exceptions",
+        "shiftsPresent": "{present} of {total} shifts",
+        "hoursWorked": "{worked}h worked of {scheduled}h",
+        "noAttendanceData": "No attendance data",
+        "noHoursData": "No hours data yet",
+        "issuesFlagged": "{count, plural, =0 {No issues found} =1 {1 issue flagged} other {# issues flagged}}"
+      },
+      "attendanceTab": {
+        "inner": {
+          "overview": "Overview",
+          "staffSummary": "Staff Summary",
+          "details": "Details"
+        },
+        "searchLabel": "Search Staff",
+        "searchPlaceholder": "Type staff name...",
+        "filterByStaff": "Filter by staff",
+        "allStaff": "All staff",
+        "clearSearch": "Clear",
+        "kpi": {
+          "totalAssignments": "Total assignments",
+          "checkInRate": "Check-in rate",
+          "lateArrivals": "Late arrivals",
+          "absences": "Absences"
+        },
+        "chart": {
+          "dailyBreakdown": "Daily Attendance Breakdown",
+          "onTime": "On Time",
+          "late": "Late",
+          "absent": "Absent"
+        },
+        "topAbsences": "Most Absences",
+        "topLate": "Most Late Arrivals",
+        "recordsOf": "of records",
+        "scorePrefix": "Score:",
+        "insightsLabel": "Insights",
+        "showInsights": "Show Insights",
+        "hideInsights": "Hide Insights",
+        "insights": {
+          "highAbsence": "High absence rate: {absentRate}% of shifts ({absent} absences). Review staffing coverage.",
+          "highLate": "High late-arrival rate: {lateRate}%. Consider reviewing shift start times.",
+          "frequentAbsence": "{count} staff member(s) have 3+ absences in this period.",
+          "perfectAttendance": "Perfect attendance! All shifts have check-ins for the selected period.",
+          "zeroLateAbsent": "Outstanding! 0 absences and 0 late arrivals in the selected period."
+        },
+        "statusCards": {
+          "onTime": "On Time",
+          "late": "Late",
+          "absent": "Absent",
+          "present": "Present"
+        },
+        "badges": {
+          "total": "Total: {value}",
+          "present": "Present: {value}",
+          "onTime": "On Time: {value}",
+          "late": "Late: {value}",
+          "absent": "Absent: {value}"
+        },
+        "manualAdjusted": "Manually adjusted",
+        "summaryTable": {
+          "staff": "Staff",
+          "total": "Total",
+          "present": "Present",
+          "onTime": "On Time",
+          "late": "Late",
+          "absent": "Absent",
+          "checkInRate": "Check-in Rate",
+          "reliability": "Reliability"
+        },
+        "detailTable": {
+          "date": "Date",
+          "staff": "Staff",
+          "shift": "Shift",
+          "planned": "Planned",
+          "status": "Status",
+          "checkIn": "Check-in",
+          "checkOut": "Check-out",
+          "late": "Late",
+          "earlyLeave": "Early Leave"
+        }
+      },
+      "workedHoursTab": {
+        "inner": {
+          "summary": "Summary",
+          "details": "Staff Details"
+        },
+        "searchLabel": "Search Staff",
+        "searchPlaceholder": "Type staff name...",
+        "clearSearch": "Clear",
+        "kpi": {
+          "totalScheduled": "Total scheduled",
+          "totalWorked": "Total worked",
+          "variance": "Variance",
+          "avgEfficiency": "Avg. efficiency",
+          "incomplete": "incomplete"
+        },
+        "overSchedule": "over schedule",
+        "underSchedule": "under schedule",
+        "cards": {
+          "staffTracked": "Staff Tracked",
+          "totalWorked": "Total Worked",
+          "scheduled": "Scheduled",
+          "overtime": "Overtime"
+        },
+        "chartTitle": "Worked vs Scheduled Hours — Top Staff",
+        "chartScheduled": "Scheduled",
+        "chartWorked": "Worked",
+        "overtimeAlert": "{count, plural, =1 {1 staff member worked 30+ minutes over scheduled hours.} other {# staff members worked 30+ minutes over scheduled hours.}}",
+        "table": {
+          "staff": "Staff",
+          "scheduled": "Scheduled",
+          "worked": "Worked",
+          "variance": "Variance",
+          "efficiency": "Efficiency",
+          "overtime": "Overtime",
+          "incomplete": "Incomplete"
+        }
+      },
+      "exceptionsTab": {
+        "inner": {
+          "summary": "Summary",
+          "byStaff": "By Staff",
+          "allRecords": "All Records"
+        },
+        "searchLabel": "Search Staff",
+        "searchPlaceholder": "Type staff name...",
+        "clearSearch": "Clear",
+        "kpi": {
+          "lateIncidents": "Late incidents",
+          "absences": "Absences",
+          "earlyDepartures": "Early departures",
+          "manualAdjustments": "Manual adjustments",
+          "totalMinutes": "Total minutes affected"
+        },
+        "cards": {
+          "lateArrivals": "Late Arrivals",
+          "absences": "Absences",
+          "earlyLeave": "Early Leave",
+          "manual": "Manual",
+          "adjusted": "Adjusted"
+        },
+        "adjustedLabel": "✦ Adjusted",
+        "noStaffFound": "No staff with exceptions found.",
+        "table": {
+          "date": "Date",
+          "staff": "Staff",
+          "shift": "Shift",
+          "exceptionType": "Exception Type",
+          "minutes": "Minutes",
+          "reviewer": "Reviewer"
+        }
+      }
+    },
+    "ScheduleList": {
+      "title": "Shift Assignments",
+      "description": "Assign staff to shift templates and track attendance.",
+      "searchPlaceholder": "Search assignments",
+      "newAssignment": "New Assignment",
+      "confirmCancel": "Cancel this assignment?",
+      "activeCount": "Active: {count}",
+      "cancelledCount": "Cancelled: {count}",
+      "filters": {
+        "fromDate": "From Date",
+        "toDate": "To Date",
+        "fromDatePlaceholder": "From date",
+        "toDatePlaceholder": "To date",
+        "refresh": "Refresh"
+      },
+      "table": {
+        "no": "No",
+        "date": "Date",
+        "template": "Template",
+        "staff": "Staff",
+        "plannedTime": "Planned Time",
+        "status": "Status"
+      },
+      "noData": "No assignments found. Adjust the date range or create a new assignment."
+    },
+    "AssignmentForm": {
+      "createTitle": "New Shift Assignment",
+      "editTitle": "Edit Assignment",
+      "cancel": "Cancel",
+      "saveChanges": "Save Changes",
+      "assignStaff": "Assign Staff",
+      "plannedHint": "Leave planned times empty to use the template defaults.",
+      "fields": {
+        "shiftTemplate": "Shift Template",
+        "staffMember": "Staff Member",
+        "workDate": "Work Date",
+        "plannedStart": "Planned Start",
+        "plannedEnd": "Planned End",
+        "notes": "Notes"
+      },
+      "placeholders": {
+        "shiftTemplate": "Select shift template...",
+        "staffMember": "Select staff member...",
+        "loadingStaff": "Loading staff...",
+        "workDate": "Select date",
+        "notes": "Optional notes..."
       }
     }
   },
@@ -2243,6 +2489,8 @@
     "defaultStaff": "Staff"
   },
   "Customer": {
+    "close": "Close",
+    "edit": "Edit",
     "List": {
       "title": "Customer Management",
       "description": "Manage and view customer information, order history, and loyalty points.",
@@ -2267,7 +2515,111 @@
       },
       "actions": {
         "view": "View Details",
-        "edit": "Edit Customer"
+        "edit": "Edit Customer",
+        "delete": "Delete Customer"
+      },
+      "notifications": {
+        "loadError": "Failed to load customer details",
+        "deleteSuccess": "Customer deleted successfully",
+        "deleteError": "Failed to delete customer"
+      },
+      "deleteModal": {
+        "title": "Delete Customer",
+        "message": "Are you sure you want to delete customer '{name}'? This action cannot be undone.",
+        "confirm": "Delete",
+        "cancel": "Cancel"
+      }
+    },
+    "Add": {
+      "title": "Add New Customer",
+      "saveButton": "Save",
+      "cancel": "Cancel",
+      "fields": {
+        "phone": "Phone Number",
+        "fullName": "Full Name",
+        "email": "Email",
+        "loyaltyPoints": "Loyalty Points",
+        "isMember": "Member Status",
+        "createdAt": "Created At"
+      },
+      "placeholders": {
+        "phone": "Enter phone number",
+        "fullName": "Enter full name",
+        "email": "Enter email address",
+        "loyaltyPoints": "Enter loyalty points"
+      },
+      "validation": {
+        "phoneRequired": "Phone number is required",
+        "phoneMaxLength": "Phone cannot exceed 20 characters",
+        "phoneInvalid": "Phone number must contain only digits",
+        "nameMaxLength": "Full name cannot exceed 100 characters",
+        "emailMaxLength": "Email cannot exceed 150 characters",
+        "emailInvalid": "Invalid email format",
+        "pointsNegative": "Loyalty points cannot be negative"
+      },
+      "notifications": {
+        "createSuccess": "Customer created successfully",
+        "createError": "Failed to create customer"
+      }
+    },
+    "Edit": {
+      "title": "Edit Customer",
+      "saveButton": "Save Changes",
+      "cancel": "Cancel",
+      "fields": {
+        "phone": "Phone Number",
+        "fullName": "Full Name",
+        "email": "Email",
+        "loyaltyPoints": "Loyalty Points",
+        "isMember": "Member Status",
+        "createdAt": "Created At"
+      },
+      "placeholders": {
+        "phone": "Enter phone number",
+        "fullName": "Enter full name",
+        "email": "Enter email address",
+        "loyaltyPoints": "Enter loyalty points"
+      },
+      "validation": {
+        "phoneRequired": "Phone number is required",
+        "phoneMaxLength": "Phone cannot exceed 20 characters",
+        "phoneInvalid": "Phone number must contain only digits",
+        "nameMaxLength": "Full name cannot exceed 100 characters",
+        "emailMaxLength": "Email cannot exceed 150 characters",
+        "emailInvalid": "Invalid email format",
+        "pointsNegative": "Loyalty points cannot be negative"
+      },
+      "notifications": {
+        "updateSuccess": "Customer updated successfully",
+        "updateError": "Failed to update customer"
+      }
+    },
+    "Detail": {
+      "title": "Customer Details",
+      "saveButton": "Close",
+      "cancel": "Close",
+      "fields": {
+        "phone": "Phone Number",
+        "fullName": "Full Name",
+        "email": "Email",
+        "loyaltyPoints": "Loyalty Points",
+        "isMember": "Member Status",
+        "createdAt": "Created At"
+      },
+      "placeholders": {
+        "phone": "",
+        "fullName": "",
+        "email": "",
+        "loyaltyPoints": ""
+      },
+      "validation": {
+        "phoneRequired": "",
+        "phoneMaxLength": "",
+        "phoneInvalid": "",
+        "nameMaxLength": "",
+        "emailMaxLength": "",
+        "emailInvalid": "",
+        "pointsNegative": ""
       }
     }
   }

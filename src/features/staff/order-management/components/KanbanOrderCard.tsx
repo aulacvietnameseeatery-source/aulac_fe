@@ -84,7 +84,7 @@ export const KanbanOrderCard: React.FC<KanbanOrderCardProps> = ({
 
     return (
         <div
-            className="bg-white rounded-xl shadow-sm border border-slate-200 hover:-translate-y-0.5 hover:shadow-md transition-all duration-200 cursor-pointer"
+            className="bg-white rounded-xl shadow-sm border border border-[#D5BA98]/60 hover:-translate-y-0.5 hover:shadow-md transition-all duration-200 cursor-pointer"
             onClick={() => onAction?.(order.orderId, 'view')}
         >
             <div className="p-4">

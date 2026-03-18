@@ -116,6 +116,7 @@ shadcn/ui (new-york style) extended with project-specific components. Import fro
 | `ALInput`, `ALCombobox` | Project-specific form controls with labels (under `al-input/`, `al-combobox/`) |
 | `KeywordSearch` | Debounced search input (`keyword-search/`) |
 | `FileUpload` | Drag-and-drop with preview |
+| `TableActionColumn` | Unified table actions (`components/ui/table/table-action-column.tsx`). **No custom icons/labels allowed**. Add new action types to `BUILT_IN_ACTIONS` inside the component to maintain visual consistency. |
 | `Badge`, `Card`, `Tabs`, `Switch`, `Tooltip` | Standard shadcn |
 
 Icons: `lucide-react`. Utility: `cn()` from `@/lib/utils` (twMerge + clsx).
@@ -176,6 +177,34 @@ Favor light font weights (`font-light`), relaxed letter spacing (`tracking-wide`
 4. **Backgrounds** — Use beige tint layers (`bg-[#D5BA98]/10` to `/20`) for muted strips, filters, and informational areas; keep main data surfaces white.
 5. **Shadows** — Soft shadows are preferred for separation; avoid heavy/glassy shadows.
 6. **Vibe** — Calm and premium, but with clearer section separation for fast scanning by staff/customers.
+
+### Management Page Layout Pattern
+
+For staff management/list screens, use a **stacked card layout** rather than one flat container.
+
+Preferred structure:
+
+1. Header card — page title, short description, primary action button
+2. Secondary card — summary chips, filters, date pickers, quick controls
+3. Content card — table, board, chart, or primary data surface
+
+Tailwind direction:
+
+- Page shell: `space-y-4` or `space-y-6`, often with `bg-[#FDFBF9]`
+- Each section card: `rounded-xl border border-[#D5BA98]/60 bg-white shadow-sm`
+- Header cards: use `px-4 py-4 sm:px-5`
+- Secondary control cards: use `p-3` or `p-4`
+- Avoid collapsing all content into a single giant card when the page has clearly different functional areas
+
+### BaseTable Layout Rule
+
+`BaseTable` should be treated as the main content card of list pages.
+
+- The shared `BaseTable` shell should own the white bordered table card treatment
+- Feature pages should not add another redundant nested card around the table unless there is a specific visual reason
+- `renderTitle()` should be used for page-level header/summary sections above the table body
+- `renderToolbarAppend()` should provide compact inline controls that sit naturally inside the table toolbar area
+- When building new list pages, prefer: page header card(s) via `renderTitle()` + BaseTable default content card
 
 ## Conventions
 

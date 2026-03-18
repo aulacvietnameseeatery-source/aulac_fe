@@ -11,6 +11,32 @@ export interface CustomerListDto {
     lastOrderTime: string | null;
 }
 
+export interface CustomerDetailDto {
+    customerId: number;
+    fullName: string | null;
+    phone: string;
+    email: string | null;
+    isMember: boolean | null;
+    loyaltyPoints: number | null;
+    createdAt: string | null;
+}
+
+export interface CreateCustomerRequest {
+    phone: string;
+    fullName?: string;
+    email?: string;
+    isMember: boolean;
+    loyaltyPoints: number;
+}
+
+export interface UpdateCustomerRequest {
+    phone: string;
+    fullName?: string;
+    email?: string;
+    isMember: boolean;
+    loyaltyPoints: number;
+}
+
 export interface CustomerListQueryDto {
     pageIndex: number;
     pageSize: number;

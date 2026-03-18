@@ -1593,6 +1593,38 @@
       "promotions": "Promotions"
     }
   },
+  "Invoice": {
+    "List": {
+      "title": "Factures de vente",
+      "description": "Gérer et suivre toutes les factures de vente",
+      "searchPlaceholder": "Rechercher par code de facture, client, personnel...",
+      "refresh": "Actualiser",
+      "dateRange": {
+        "today": "Aujourd'hui",
+        "yesterday": "Hier",
+        "last7": "7 derniers jours",
+        "last30": "30 derniers jours",
+        "thisMonth": "Ce mois-ci",
+        "lastMonth": "Le mois dernier",
+        "custom": "Personnalisé",
+        "from": "De",
+        "to": "À",
+        "selectDate": "Sélectionner la date"
+      },
+      "table": {
+        "no": "N°",
+        "invoiceCode": "Code de facture",
+        "createdAt": "Date et heure",
+        "tableCode": "Table",
+        "customerName": "Client",
+        "staffName": "Personnel",
+        "totalAmount": "Montant total",
+        "tipAmount": "Pourboire",
+        "paymentMethod": "Mode de paiement",
+        "orderStatus": "Statut de commande"
+      }
+    }
+  },
   "AdminSidebar": {
     "categories": {
       "main": "PRINCIPAL",
@@ -1630,6 +1662,7 @@
     "cancel": "Annuler",
     "expand": "Agrandir",
     "collapse": "Réduire",
+    "shiftsTemplates": "Modèles",
     "shifts": "Plannings",
     "shiftsLive": "Tableau de Présence",
     "shiftsReports": "Rapports de Quart",
@@ -1785,6 +1818,219 @@
           "minutesAffected": "Minutes",
           "reviewer": "Révisé par"
         }
+      },
+      "refresh": "Actualiser",
+      "exportCsv": "Exporter CSV",
+      "selectDateRange": "Sélectionnez une plage de dates pour charger les rapports",
+      "highAbsenceRate": "Taux d'absence élevé",
+      "presets": {
+        "today": "Aujourd'hui",
+        "thisWeek": "Cette semaine",
+        "last7Days": "7 derniers jours",
+        "thisMonth": "Ce mois",
+        "lastMonth": "Mois dernier"
+      },
+      "health": {
+        "attendanceRate": "Taux de présence",
+        "hoursCompliance": "Conformité des heures",
+        "exceptions": "Exceptions",
+        "shiftsPresent": "{present} sur {total} quarts",
+        "hoursWorked": "{worked}h travaillées sur {scheduled}h",
+        "noAttendanceData": "Aucune donnée de présence",
+        "noHoursData": "Aucune donnée d'heures",
+        "issuesFlagged": "{count, plural, =0 {Aucun problème} =1 {1 problème signalé} other {# problèmes signalés}}"
+      },
+      "attendanceTab": {
+        "inner": {
+          "overview": "Vue d'ensemble",
+          "staffSummary": "Par agent",
+          "details": "Détails"
+        },
+        "searchLabel": "Rechercher un agent",
+        "searchPlaceholder": "Nom de l'agent...",
+        "filterByStaff": "Filtrer par agent",
+        "allStaff": "Tous les agents",
+        "clearSearch": "Effacer",
+        "kpi": {
+          "totalAssignments": "Total affecté",
+          "checkInRate": "Taux de pointage",
+          "lateArrivals": "Retards",
+          "absences": "Absences"
+        },
+        "chart": {
+          "dailyBreakdown": "Présence quotidienne",
+          "onTime": "À l'heure",
+          "late": "En retard",
+          "absent": "Absent"
+        },
+        "topAbsences": "Plus d'absences",
+        "topLate": "Plus de retards",
+        "recordsOf": "des enregistrements",
+        "scorePrefix": "Score :",
+        "insightsLabel": "Aperçus",
+        "showInsights": "Afficher les aperçus",
+        "hideInsights": "Masquer les aperçus",
+        "insights": {
+          "highAbsence": "Taux d'absence élevé : {absentRate}% des quarts ({absent} absences). Vérifiez la couverture du personnel.",
+          "highLate": "Taux de retard élevé : {lateRate}%. Pensez à revoir les heures de début de quart.",
+          "frequentAbsence": "{count} agent(s) ont 3 absences ou plus sur cette période.",
+          "perfectAttendance": "Présence parfaite ! Tous les quarts ont un pointage d'entrée sur la période sélectionnée.",
+          "zeroLateAbsent": "Excellent ! 0 absence et 0 retard sur la période sélectionnée."
+        },
+        "statusCards": {
+          "onTime": "À l'heure",
+          "late": "En retard",
+          "absent": "Absent",
+          "present": "Présent"
+        },
+        "badges": {
+          "total": "Total : {value}",
+          "present": "Présent : {value}",
+          "onTime": "À l'heure : {value}",
+          "late": "Retard : {value}",
+          "absent": "Absent : {value}"
+        },
+        "manualAdjusted": "Ajusté manuellement",
+        "summaryTable": {
+          "staff": "Agent",
+          "total": "Total",
+          "present": "Présent",
+          "onTime": "À l'heure",
+          "late": "En retard",
+          "absent": "Absent",
+          "checkInRate": "Taux",
+          "reliability": "Fiabilité"
+        },
+        "detailTable": {
+          "date": "Date",
+          "staff": "Agent",
+          "shift": "Quart",
+          "planned": "Prévu",
+          "status": "Statut",
+          "checkIn": "Entrée",
+          "checkOut": "Sortie",
+          "late": "Retard",
+          "earlyLeave": "Départ anticipé"
+        }
+      },
+      "workedHoursTab": {
+        "inner": {
+          "summary": "Résumé",
+          "details": "Détails"
+        },
+        "searchLabel": "Rechercher un agent",
+        "searchPlaceholder": "Nom de l'agent...",
+        "clearSearch": "Effacer",
+        "kpi": {
+          "totalScheduled": "Total planifié",
+          "totalWorked": "Total travaillé",
+          "variance": "Écart",
+          "avgEfficiency": "Efficacité moy.",
+          "incomplete": "incomplet"
+        },
+        "overSchedule": "au-dessus du plan",
+        "underSchedule": "en dessous du plan",
+        "cards": {
+          "staffTracked": "Agents",
+          "totalWorked": "Total travaillé",
+          "scheduled": "Planifié",
+          "overtime": "Heures sup."
+        },
+        "chartTitle": "Heures travaillées vs planifiées — Top agents",
+        "chartScheduled": "Planifié",
+        "chartWorked": "Travaillé",
+        "overtimeAlert": "{count, plural, =1 {1 agent a travaillé 30+ minutes de plus que prévu.} other {# agents ont travaillé 30+ minutes de plus que prévu.}}",
+        "table": {
+          "staff": "Agent",
+          "scheduled": "Planifié",
+          "worked": "Travaillé",
+          "variance": "Écart",
+          "efficiency": "Efficacité",
+          "overtime": "Heures sup.",
+          "incomplete": "Incomplet"
+        }
+      },
+      "exceptionsTab": {
+        "inner": {
+          "summary": "Résumé",
+          "byStaff": "Par agent",
+          "allRecords": "Tous"
+        },
+        "searchLabel": "Rechercher un agent",
+        "searchPlaceholder": "Nom de l'agent...",
+        "clearSearch": "Effacer",
+        "kpi": {
+          "lateIncidents": "Retards",
+          "absences": "Absences",
+          "earlyDepartures": "Départs anticipés",
+          "manualAdjustments": "Ajustements manuels",
+          "totalMinutes": "Total minutes affectées"
+        },
+        "cards": {
+          "lateArrivals": "Retards",
+          "absences": "Absences",
+          "earlyLeave": "Départs anticipés",
+          "manual": "Manuel",
+          "adjusted": "Ajusté"
+        },
+        "adjustedLabel": "✦ Ajusté",
+        "noStaffFound": "Aucun agent avec des exceptions.",
+        "table": {
+          "date": "Date",
+          "staff": "Agent",
+          "shift": "Quart",
+          "exceptionType": "Type d'exception",
+          "minutes": "Minutes",
+          "reviewer": "Révisé par"
+        }
+      }
+    },
+    "ScheduleList": {
+      "title": "Affectations de Quart",
+      "description": "Affectez le personnel aux modèles de quart et suivez la présence.",
+      "searchPlaceholder": "Rechercher des affectations",
+      "newAssignment": "Nouvelle affectation",
+      "confirmCancel": "Annuler cette affectation ?",
+      "activeCount": "Actif : {count}",
+      "cancelledCount": "Annulé : {count}",
+      "filters": {
+        "fromDate": "Date de début",
+        "toDate": "Date de fin",
+        "fromDatePlaceholder": "Choisir la date de début",
+        "toDatePlaceholder": "Choisir la date de fin",
+        "refresh": "Actualiser"
+      },
+      "table": {
+        "no": "N°",
+        "date": "Date",
+        "template": "Modèle",
+        "staff": "Agent",
+        "plannedTime": "Horaire prévu",
+        "status": "Statut"
+      },
+      "noData": "Aucune affectation trouvée. Ajustez la période ou créez une nouvelle affectation."
+    },
+    "AssignmentForm": {
+      "createTitle": "Nouvelle Affectation",
+      "editTitle": "Modifier l'Affectation",
+      "cancel": "Annuler",
+      "saveChanges": "Enregistrer",
+      "assignStaff": "Affecter",
+      "plannedHint": "Laissez les horaires vides pour utiliser les horaires par défaut du modèle.",
+      "fields": {
+        "shiftTemplate": "Modèle de Quart",
+        "staffMember": "Agent",
+        "workDate": "Date de Travail",
+        "plannedStart": "Début Prévu",
+        "plannedEnd": "Fin Prévue",
+        "notes": "Notes"
+      },
+      "placeholders": {
+        "shiftTemplate": "Sélectionner un modèle de quart...",
+        "staffMember": "Sélectionner un agent...",
+        "loadingStaff": "Chargement des agents...",
+        "workDate": "Sélectionner une date",
+        "notes": "Notes facultatives..."
       }
     }
   },
@@ -2239,6 +2485,8 @@
     "defaultStaff": "Personnel"
   },
   "Customer": {
+    "close": "Fermer",
+    "edit": "Modifier",
     "List": {
       "title": "Gestion des clients",
       "description": "Gérez et consultez les informations des clients, l'historique des commandes et les points de fidélité.",
@@ -2263,7 +2511,111 @@
       },
       "actions": {
         "view": "Voir les détails",
-        "edit": "Modifier le client"
+        "edit": "Modifier le client",
+        "delete": "Supprimer le client"
+      },
+      "notifications": {
+        "loadError": "Échec du chargement des détails du client",
+        "deleteSuccess": "Client supprimé avec succès",
+        "deleteError": "Échec de la suppression du client"
+      },
+      "deleteModal": {
+        "title": "Supprimer le client",
+        "message": "Êtes-vous sûr de vouloir supprimer le client '{name}' ? Cette action est irréversible.",
+        "confirm": "Supprimer",
+        "cancel": "Annuler"
+      }
+    },
+    "Add": {
+      "title": "Ajouter un client",
+      "saveButton": "Enregistrer",
+      "cancel": "Annuler",
+      "fields": {
+        "phone": "Numéro de téléphone",
+        "fullName": "Nom complet",
+        "email": "Email",
+        "loyaltyPoints": "Points de fidélité",
+        "isMember": "Statut de membre",
+        "createdAt": "Créé le"
+      },
+      "placeholders": {
+        "phone": "Entrez le numéro de téléphone",
+        "fullName": "Entrez le nom complet",
+        "email": "Entrez l'adresse email",
+        "loyaltyPoints": "Entrez les points de fidélité"
+      },
+      "validation": {
+        "phoneRequired": "Le numéro de téléphone est requis",
+        "phoneMaxLength": "Le téléphone ne peut pas dépasser 20 caractères",
+        "phoneInvalid": "Le numéro de téléphone ne doit contenir que des chiffres",
+        "nameMaxLength": "Le nom complet ne peut pas dépasser 100 caractères",
+        "emailMaxLength": "L'email ne peut pas dépasser 150 caractères",
+        "emailInvalid": "Format d'email invalide",
+        "pointsNegative": "Les points de fidélité ne peuvent pas être négatifs"
+      },
+      "notifications": {
+        "createSuccess": "Client créé avec succès",
+        "createError": "Échec de la création du client"
+      }
+    },
+    "Edit": {
+      "title": "Modifier le client",
+      "saveButton": "Enregistrer les modifications",
+      "cancel": "Annuler",
+      "fields": {
+        "phone": "Numéro de téléphone",
+        "fullName": "Nom complet",
+        "email": "Email",
+        "loyaltyPoints": "Points de fidélité",
+        "isMember": "Statut de membre",
+        "createdAt": "Créé le"
+      },
+      "placeholders": {
+        "phone": "Entrez le numéro de téléphone",
+        "fullName": "Entrez le nom complet",
+        "email": "Entrez l'adresse email",
+        "loyaltyPoints": "Entrez les points de fidélité"
+      },
+      "validation": {
+        "phoneRequired": "Le numéro de téléphone est requis",
+        "phoneMaxLength": "Le téléphone ne peut pas dépasser 20 caractères",
+        "phoneInvalid": "Le numéro de téléphone ne doit contenir que des chiffres",
+        "nameMaxLength": "Le nom complet ne peut pas dépasser 100 caractères",
+        "emailMaxLength": "L'email ne peut pas dépasser 150 caractères",
+        "emailInvalid": "Format d'email invalide",
+        "pointsNegative": "Les points de fidélité ne peuvent pas être négatifs"
+      },
+      "notifications": {
+        "updateSuccess": "Client mis à jour avec succès",
+        "updateError": "Échec de la mise à jour du client"
+      }
+    },
+    "Detail": {
+      "title": "Détails du client",
+      "saveButton": "Fermer",
+      "cancel": "Fermer",
+      "fields": {
+        "phone": "Numéro de téléphone",
+        "fullName": "Nom complet",
+        "email": "Email",
+        "loyaltyPoints": "Points de fidélité",
+        "isMember": "Statut de membre",
+        "createdAt": "Créé le"
+      },
+      "placeholders": {
+        "phone": "",
+        "fullName": "",
+        "email": "",
+        "loyaltyPoints": ""
+      },
+      "validation": {
+        "phoneRequired": "",
+        "phoneMaxLength": "",
+        "phoneInvalid": "",
+        "nameMaxLength": "",
+        "emailMaxLength": "",
+        "emailInvalid": "",
+        "pointsNegative": ""
       }
     }
   }

@@ -1,65 +1,56 @@
-import type {
-  ShiftTypeCode,
-  ShiftStatusCode,
-  ShiftAssignmentStatusCode,
-  AttendanceStatusCode,
-} from "@/types/status-codes";
+import type { AttendanceStatusCode } from "@/types/status-codes";
 
-// ─── Schedule ────────────────────────────────────────────────────────────────
+// ─── Template ─────────────────────────────────────────────────────────────────
 
-export interface ShiftScheduleListDto {
-  shiftScheduleId: number;
-  businessDate: string; // yyyy-MM-dd
-  shiftTypeLvId: number;
-  shiftTypeCode: ShiftTypeCode;
-  shiftTypeName: string;
-  statusLvId: number;
-  statusCode: ShiftStatusCode;
-  statusName: string;
-  plannedStartAt: string; // ISO 8601
-  plannedEndAt: string; // ISO 8601
-  notes: string | null;
-  assignmentCount: number;
+export interface ShiftTemplateListDto {
+  shiftTemplateId: number;
+  templateName: string;
+  defaultStartTime: string; // HH:mm:ss
+  defaultEndTime: string;   // HH:mm:ss
+  description?: string | null;
+  isActive: boolean;
   createdAt: string;
 }
 
-export interface ShiftScheduleDetailDto extends ShiftScheduleListDto {
+export interface ShiftTemplateDetailDto extends ShiftTemplateListDto {
   createdByName: string;
-  updatedByName: string | null;
+  updatedByName?: string | null;
   updatedAt: string;
-  assignments: ShiftAssignmentDto[];
 }
+
+// Keep backward-compatible alias
+export type ShiftTemplateDto = ShiftTemplateListDto;
 
 // ─── Assignment ───────────────────────────────────────────────────────────────
 
-export interface ShiftAssignmentDto {
+export interface ShiftAssignmentListDto {
   shiftAssignmentId: number;
-  shiftScheduleId: number;
+  shiftTemplateId: number;
+  templateName: string;
   staffId: number;
   staffName: string;
-  roleId: number;
-  roleName: string;
-  assignmentStatusLvId: number;
-  assignmentStatusCode: ShiftAssignmentStatusCode;
-  assignmentStatusName: string;
-  remarks: string | null;
+  workDate: string;         // yyyy-MM-dd
+  plannedStartAt: string;   // ISO 8601
+  plannedEndAt: string;     // ISO 8601
+  isActive: boolean;
+  notes?: string | null;
   assignedAt: string;
   assignedByName: string;
-  attendance: AttendanceRecordDto | null;
-  // Schedule context — included by BE on /assignments/my and enriched assignment endpoints
-  businessDate?: string;
-  shiftTypeName?: string;
-  plannedStartAt?: string;
-  plannedEndAt?: string;
 }
+
+export interface ShiftAssignmentDetailDto extends ShiftAssignmentListDto {
+  attendance: AttendanceRecordDto | null;
+}
+
+// Keep backward-compatible alias used across the module
+export type ShiftAssignmentDto = ShiftAssignmentDetailDto;
 
 // ─── Attendance ───────────────────────────────────────────────────────────────
 
 export interface AttendanceRecordDto {
   attendanceId: number;
   shiftAssignmentId: number;
-  attendanceStatusLvId: number;
-  attendanceStatusCode: AttendanceStatusCode;
+  attendanceStatusCode: string;
   attendanceStatusName: string;
   actualCheckInAt: string | null;
   actualCheckOutAt: string | null;
@@ -72,49 +63,23 @@ export interface AttendanceRecordDto {
   reviewedAt: string | null;
 }
 
-// ─── Live Board ───────────────────────────────────────────────────────────────
-
-export interface LiveBoardSummaryDto {
-  scheduled: number;
-  active: number;
-  late: number;
-  absent: number;
-  completed: number;
-}
-
-export interface LiveShiftBoardRowDto {
-  shiftAssignmentId: number;
-  staffId: number;
-  staffName: string;
-  roleName: string;
-  shiftTypeCode: ShiftTypeCode;
-  plannedStartAt: string;
-  plannedEndAt: string;
-  actualCheckInAt: string | null;
-  actualCheckOutAt: string | null;
-  attendanceStatusCode: AttendanceStatusCode;
-  lateMinutes: number;
-  attendanceId?: number;
-}
-
-export interface LiveShiftBoardDto {
-  businessDate: string;
-  summary: LiveBoardSummaryDto;
-  rows: LiveShiftBoardRowDto[];
-}
-
 // ─── Reports ──────────────────────────────────────────────────────────────────
 
 export interface AttendanceReportRowDto {
+  shiftAssignmentId: number;
   staffId: number;
   staffName: string;
-  roleName: string;
-  assignedShifts: number;
-  presentShifts: number;
-  lateShifts: number;
-  absentShifts: number;
+  workDate: string;
+  templateName: string;
+  plannedStartAt: string;
+  plannedEndAt: string;
+  attendanceStatusCode: string;
+  actualCheckInAt: string | null;
+  actualCheckOutAt: string | null;
+  lateMinutes: number;
+  earlyLeaveMinutes: number;
   workedMinutes: number;
-  averageLateMinutes: number;
+  isManualAdjustment: boolean;
 }
 
 export interface WorkedHoursReportRowDto {
@@ -129,9 +94,8 @@ export interface WorkedHoursReportRowDto {
 export interface AttendanceExceptionReportRowDto {
   staffId: number;
   staffName: string;
-  roleName: string;
-  businessDate: string;
-  shiftTypeCode: ShiftTypeCode;
+  workDate: string;
+  templateName: string;
   exceptionType: string;
   minutesAffected: number;
   isManualAdjustment: boolean;
@@ -140,25 +104,34 @@ export interface AttendanceExceptionReportRowDto {
 
 // ─── Request Bodies ───────────────────────────────────────────────────────────
 
-export interface CreateShiftScheduleRequest {
-  businessDate: string;
-  shiftTypeLvId: number;
-  plannedStartAt: string;
-  plannedEndAt: string;
+export interface CreateShiftTemplateRequest {
+  templateName: string;
+  defaultStartTime: string;
+  defaultEndTime: string;
+  description?: string | null;
+}
+
+export interface UpdateShiftTemplateRequest {
+  templateName?: string;
+  defaultStartTime?: string;
+  defaultEndTime?: string;
+  description?: string | null;
+  isActive?: boolean;
+}
+
+export interface CreateShiftAssignmentRequest {
+  shiftTemplateId: number;
+  staffId: number;
+  workDate: string;           // yyyy-MM-dd
+  plannedStartAt?: string | null;
+  plannedEndAt?: string | null;
   notes?: string | null;
 }
 
-export interface UpdateShiftScheduleRequest {
-  plannedStartAt?: string;
-  plannedEndAt?: string;
-  statusLvId?: number;
+export interface UpdateShiftAssignmentRequest {
+  plannedStartAt?: string | null;
+  plannedEndAt?: string | null;
   notes?: string | null;
-}
-
-export interface CreateAssignmentsRequest {
-  shiftScheduleId: number;
-  staffIds: number[];
-  remarks?: string | null;
 }
 
 export interface AdjustAttendanceRequest {
@@ -169,35 +142,35 @@ export interface AdjustAttendanceRequest {
 
 // ─── Query Params ─────────────────────────────────────────────────────────────
 
-export interface GetSchedulesParams {
-  fromDate?: string;
-  toDate?: string;
-  shiftTypeLvId?: number;
-  statusLvId?: number;
+export interface GetTemplatesParams {
+  isActive?: boolean;
   pageIndex?: number;
   pageSize?: number;
 }
 
 export interface GetAssignmentsParams {
-  shiftScheduleId?: number;
+  staffId?: number;
+  shiftTemplateId?: number;
   fromDate?: string;
   toDate?: string;
-  staffId?: number;
-  assignmentStatusLvId?: number;
+  isActive?: boolean;
   pageIndex?: number;
   pageSize?: number;
 }
 
-export interface GetLiveBoardParams {
-  businessDate?: string;
+export interface GetMyShiftsParams {
+  fromDate?: string;
+  toDate?: string;
+  pageIndex?: number;
+  pageSize?: number;
 }
 
 export interface GetAttendanceReportParams {
   fromDate?: string;
   toDate?: string;
   staffId?: number;
-  shiftTypeLvId?: number;
-  attendanceStatusLvId?: number;
+  shiftTemplateId?: number;
+  attendanceStatusCode?: string;
   pageIndex?: number;
   pageSize?: number;
 }
@@ -214,14 +187,7 @@ export interface GetExceptionsReportParams {
   staffId?: number;
 }
 
-export interface GetMyShiftsParams {
-  fromDate?: string;
-  toDate?: string;
-  pageIndex?: number;
-  pageSize?: number;
-}
-
-// ─── Staff Picker (for assignment form) ──────────────────────────────────────
+// ─── Staff Picker ─────────────────────────────────────────────────────────────
 
 export interface StaffBasicDto {
   accountId: number;
@@ -236,29 +202,28 @@ export const ATTENDANCE_STATUS_CONFIG: Record<
   { label: string; variant: "default" | "destructive" | "secondary" | "outline" }
 > = {
   SCHEDULED: { label: "Scheduled", variant: "secondary" },
-  ACTIVE: { label: "On Duty", variant: "default" },
-  LATE: { label: "Late", variant: "destructive" },
-  ABSENT: { label: "Absent", variant: "destructive" },
+  ACTIVE:    { label: "On Duty",   variant: "default" },
+  LATE:      { label: "Late",      variant: "destructive" },
+  ABSENT:    { label: "Absent",    variant: "destructive" },
   COMPLETED: { label: "Completed", variant: "outline" },
   EARLY_LEAVE: { label: "Early Leave", variant: "destructive" },
-  EXCUSED: { label: "Excused", variant: "secondary" },
+  EXCUSED:   { label: "Excused",   variant: "secondary" },
 };
 
-export const SCHEDULE_STATUS_CONFIG: Record<
-  string,
-  { label: string; variant: "default" | "destructive" | "secondary" | "outline" }
-> = {
-  DRAFT: { label: "Draft", variant: "secondary" },
-  PUBLISHED: { label: "Published", variant: "default" },
-  CLOSED: { label: "Closed", variant: "outline" },
-  CANCELLED: { label: "Cancelled", variant: "destructive" },
-};
-
+// Kept for any remaining consumers — now maps isActive
 export const ASSIGNMENT_STATUS_CONFIG: Record<
   string,
   { label: string; variant: "default" | "destructive" | "secondary" | "outline" }
 > = {
-  ASSIGNED: { label: "Assigned", variant: "secondary" },
-  CONFIRMED: { label: "Confirmed", variant: "default" },
-  CANCELLED: { label: "Cancelled", variant: "destructive" },
+  active:    { label: "Active",    variant: "default" },
+  cancelled: { label: "Cancelled", variant: "destructive" },
 };
+
+// ─── Removed / deprecated (kept as empty exports to avoid breaking imports) ───
+
+/** @deprecated ShiftSchedule is removed. Use ShiftAssignmentListDto instead. */
+export type ShiftScheduleListDto = ShiftAssignmentListDto;
+/** @deprecated ShiftSchedule is removed. Use ShiftAssignmentDetailDto instead. */
+export type ShiftScheduleDetailDto = ShiftAssignmentDetailDto;
+/** @deprecated No longer used. */
+export const SCHEDULE_STATUS_CONFIG = {} as Record<string, never>;

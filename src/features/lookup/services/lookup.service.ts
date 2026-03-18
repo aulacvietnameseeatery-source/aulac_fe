@@ -6,6 +6,8 @@ import type {
   LookupValueDto,
   CreateLookupValueRequest,
   UpdateLookupValueRequest,
+  BatchReorderLookupRequest,
+  BatchReorderLookupResponse,
 } from "../types/lookup.types";
 import { mapLookupI18n } from "../types/lookup.types";
 
@@ -48,6 +50,11 @@ export function createLookupService(
         ? `?${new URLSearchParams({ typeLabel: options.typeLabel }).toString()}`
         : "";
       await api.delete<ApiResponse<object>>(`${baseUrl}/${id}${qs}`);
+    },
+
+    async reorder(data: BatchReorderLookupRequest): Promise<BatchReorderLookupResponse> {
+      const res = await api.put<ApiResponse<BatchReorderLookupResponse>>(`${baseUrl}/reorder`, data);
+      return res.data;
     },
   };
 }
