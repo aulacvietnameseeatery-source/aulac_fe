@@ -2117,6 +2117,13 @@
   "Notifications": {
     "title": "Thông báo",
     "markAllRead": "Đánh dấu tất cả là đã đọc",
+    "markAllReadShort": "Đọc tất cả",
+    "loadMore": "Tải thêm",
+    "loading": "Đang tải...",
+    "acknowledge": "Xác nhận",
+    "acknowledged": "Đã xác nhận",
+    "connected": "Đã kết nối",
+    "disconnected": "Mất kết nối",
     "tabs": {
       "all": "Tất cả",
       "unread": "Chưa đọc",
@@ -2125,8 +2132,63 @@
       "orders": "Đơn hàng"
     },
     "empty": "Không có thông báo nào",
+    "emptyUnread": "Không có thông báo chưa đọc",
     "time": {
+      "justNow": "vừa xong",
+      "minutesAgo": "{count} phút trước",
+      "hoursAgo": "{count} giờ trước",
+      "daysAgo": "{count} ngày trước",
       "ago": "{time} trước"
+    },
+    "types": {
+      "NEW_ORDER": "Đơn hàng mới",
+      "ORDER_CANCELLED": "Đơn hàng bị hủy",
+      "ORDER_ITEM_READY": "Món ăn đã sẵn sàng",
+      "ORDER_ITEM_REJECTED": "Món ăn bị từ chối",
+      "ALL_ITEMS_READY": "Tất cả món đã sẵn sàng",
+      "PAYMENT_COMPLETED": "Thanh toán hoàn tất",
+      "RESERVATION_CREATED": "Đặt bàn mới",
+      "RESERVATION_STATUS_CHANGED": "Đặt bàn cập nhật",
+      "RESERVATION_REMINDER": "Nhắc nhở đặt bàn",
+      "TABLE_STATUS_CHANGED": "Trạng thái bàn thay đổi",
+      "LOW_STOCK_ALERT": "Cảnh báo tồn kho thấp",
+      "DISH_OUT_OF_STOCK": "Món ăn hết hàng",
+      "SHIFT_ASSIGNED": "Phân ca làm việc",
+      "ATTENDANCE_ALERT": "Cảnh báo chấm công",
+      "SYSTEM_ALERT": "Cảnh báo hệ thống",
+      "fallback": "Thông báo"
+    },
+    "priority": {
+      "Low": "Thấp",
+      "Normal": "Bình thường",
+      "High": "Cao",
+      "Critical": "Nghiêm trọng"
+    },
+    "categories": {
+      "Orders": "Đơn hàng",
+      "Reservations": "Đặt bàn",
+      "Tables": "Bàn",
+      "Inventory": "Kho",
+      "Shifts": "Ca làm",
+      "System": "Hệ thống",
+      "General": "Chung"
+    },
+    "messages": {
+      "NEW_ORDER": { "title": "Đơn hàng mới #{orderId}", "body": "Bàn {tableName} đã đặt đơn mới" },
+      "ORDER_CANCELLED": { "title": "Đơn #{orderId} đã hủy", "body": "Đơn hàng tại bàn {tableName} đã bị hủy" },
+      "ORDER_ITEM_READY": { "title": "{dishName} đã sẵn sàng", "body": "Đơn #{orderId} — sẵn sàng phục vụ" },
+      "ORDER_ITEM_REJECTED": { "title": "{dishName} bị từ chối", "body": "Đơn #{orderId} — món đã bị từ chối" },
+      "ALL_ITEMS_READY": { "title": "Đơn #{orderId} đã hoàn tất", "body": "Tất cả món cho bàn {tableName} đã sẵn sàng" },
+      "PAYMENT_COMPLETED": { "title": "Đã nhận thanh toán", "body": "Đơn #{orderId} — {amount} đã thanh toán" },
+      "RESERVATION_CREATED": { "title": "Đặt bàn mới", "body": "{guestName} — {guestCount} khách lúc {time}" },
+      "RESERVATION_STATUS_CHANGED": { "title": "Đặt bàn cập nhật", "body": "{guestName} — trạng thái đổi thành {status}" },
+      "RESERVATION_REMINDER": { "title": "Nhắc nhở đặt bàn", "body": "{guestName} — đến trong {minutes} phút" },
+      "TABLE_STATUS_CHANGED": { "title": "Bàn {tableName}", "body": "Trạng thái đổi thành {status}" },
+      "LOW_STOCK_ALERT": { "title": "Tồn kho thấp: {ingredientName}", "body": "Hiện tại: {current}, Tối thiểu: {minimum}" },
+      "DISH_OUT_OF_STOCK": { "title": "{dishName} hết hàng", "body": "Món này không còn phục vụ" },
+      "SHIFT_ASSIGNED": { "title": "Phân ca", "body": "Bạn được phân vào {shiftName} ngày {date}" },
+      "ATTENDANCE_ALERT": { "title": "Cảnh báo chấm công", "body": "{staffName} — {reason}" },
+      "SYSTEM_ALERT": { "title": "Cảnh báo hệ thống", "body": "{message}" }
     }
   },
   "Kitchen": {

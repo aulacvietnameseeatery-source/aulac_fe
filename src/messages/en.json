@@ -2117,6 +2117,13 @@
   "Notifications": {
     "title": "Notifications",
     "markAllRead": "Mark all as read",
+    "markAllReadShort": "Mark all read",
+    "loadMore": "Load more",
+    "loading": "Loading...",
+    "acknowledge": "Acknowledge",
+    "acknowledged": "Acknowledged",
+    "connected": "Connected",
+    "disconnected": "Disconnected",
     "tabs": {
       "all": "All",
       "unread": "Unread",
@@ -2125,8 +2132,63 @@
       "orders": "Orders"
     },
     "empty": "No notifications",
+    "emptyUnread": "No unread notifications",
     "time": {
+      "justNow": "just now",
+      "minutesAgo": "{count}m ago",
+      "hoursAgo": "{count}h ago",
+      "daysAgo": "{count}d ago",
       "ago": "{time} ago"
+    },
+    "types": {
+      "NEW_ORDER": "New Order",
+      "ORDER_CANCELLED": "Order Cancelled",
+      "ORDER_ITEM_READY": "Item Ready",
+      "ORDER_ITEM_REJECTED": "Item Rejected",
+      "ALL_ITEMS_READY": "All Items Ready",
+      "PAYMENT_COMPLETED": "Payment Completed",
+      "RESERVATION_CREATED": "New Reservation",
+      "RESERVATION_STATUS_CHANGED": "Reservation Updated",
+      "RESERVATION_REMINDER": "Reservation Reminder",
+      "TABLE_STATUS_CHANGED": "Table Status Changed",
+      "LOW_STOCK_ALERT": "Low Stock Alert",
+      "DISH_OUT_OF_STOCK": "Dish Out of Stock",
+      "SHIFT_ASSIGNED": "Shift Assigned",
+      "ATTENDANCE_ALERT": "Attendance Alert",
+      "SYSTEM_ALERT": "System Alert",
+      "fallback": "Notification"
+    },
+    "priority": {
+      "Low": "Low",
+      "Normal": "Normal",
+      "High": "High",
+      "Critical": "Critical"
+    },
+    "categories": {
+      "Orders": "Orders",
+      "Reservations": "Reservations",
+      "Tables": "Tables",
+      "Inventory": "Inventory",
+      "Shifts": "Shifts",
+      "System": "System",
+      "General": "General"
+    },
+    "messages": {
+      "NEW_ORDER": { "title": "New order #{orderId}", "body": "Table {tableName} placed a new order" },
+      "ORDER_CANCELLED": { "title": "Order #{orderId} cancelled", "body": "Order at table {tableName} has been cancelled" },
+      "ORDER_ITEM_READY": { "title": "{dishName} is ready", "body": "Order #{orderId} — ready to serve" },
+      "ORDER_ITEM_REJECTED": { "title": "{dishName} rejected", "body": "Order #{orderId} — item was rejected" },
+      "ALL_ITEMS_READY": { "title": "Order #{orderId} fully ready", "body": "All items for table {tableName} are ready" },
+      "PAYMENT_COMPLETED": { "title": "Payment received", "body": "Order #{orderId} — {amount} paid" },
+      "RESERVATION_CREATED": { "title": "New reservation", "body": "{guestName} — {guestCount} guests at {time}" },
+      "RESERVATION_STATUS_CHANGED": { "title": "Reservation updated", "body": "{guestName} — status changed to {status}" },
+      "RESERVATION_REMINDER": { "title": "Reservation reminder", "body": "{guestName} — arriving in {minutes} minutes" },
+      "TABLE_STATUS_CHANGED": { "title": "Table {tableName}", "body": "Status changed to {status}" },
+      "LOW_STOCK_ALERT": { "title": "Low stock: {ingredientName}", "body": "Current: {current}, Min: {minimum}" },
+      "DISH_OUT_OF_STOCK": { "title": "{dishName} out of stock", "body": "This dish is no longer available" },
+      "SHIFT_ASSIGNED": { "title": "Shift assigned", "body": "You have been assigned to {shiftName} on {date}" },
+      "ATTENDANCE_ALERT": { "title": "Attendance alert", "body": "{staffName} — {reason}" },
+      "SYSTEM_ALERT": { "title": "System alert", "body": "{message}" }
     }
   },
   "Kitchen": {
