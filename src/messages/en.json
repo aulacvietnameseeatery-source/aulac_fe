@@ -1296,6 +1296,17 @@
           "title": "Gallery Images",
           "subtitle": "Standard photos"
         },
+        "video": {
+          "title": "Dish Video",
+          "subtitle": "Upload a short introductory video (MP4, max 15s, 20MB)",
+          "uploadPrompt": "Click to upload video",
+          "uploadHint": "MP4 (Max 20MB, 15 seconds)",
+          "validation": {
+            "invalidFormat": "Only .mp4 video files are accepted",
+            "maxSize": "Video size cannot exceed 20MB",
+            "maxDuration": "Video duration cannot exceed 15 seconds"
+          }
+        },
         "badge": "360° VIEW",
         "drag": "Drag to rotate",
         "uploadTitle": "Upload 360° Sequence",
@@ -1307,7 +1318,13 @@
         "changeFiles": "Change Files",
         "existing": "Existing",
         "addImage": "Add Image",
-        "recommended": "Recommended: 800x800px (JPG, PNG)"
+        "recommended": "Recommended: 800x800px",
+        "recommended2": "Max 5 images, 5MB/image. Formats: JPG, PNG, GIF, WEBP",
+        "validation": {
+          "maxImages": "You can upload a maximum of 5 images.",
+          "invalidFormat": "Invalid image format",
+          "maxSize": "Image size exceeds 5MB"
+        }
       },
       "additional": {
         "title": "Additional Info",
@@ -1357,7 +1374,10 @@
         "galleryTitle": "Gallery",
         "staticUploaded": "{count} static images uploaded",
         "primary": "Primary",
-        "noGallery": "No gallery images"
+        "noGallery": "No gallery images",
+        "videoTitle": "Dish Video",
+        "videoSubtitle": "Introduction video",
+        "noVideo": "No video available"
       },
       "additional": {
         "title": "Additional Information",
@@ -2622,6 +2642,55 @@
         "emailMaxLength": "",
         "emailInvalid": "",
         "pointsNegative": ""
+      }
+    },
+    "Detail": {
+      "backToCustomers": "Back to Customers",
+      "customerNotFound": "Customer not found.",
+      "guestCustomer": "Guest Customer",
+      "member": "Member",
+      "guest": "Guest",
+      "noPhone": "No phone",
+      "joined": "Joined",
+      "orders": "Orders",
+      "totalSpent": "Total Spent",
+      "points": "Points",
+      "orderHistory": "Order History",
+      "from": "From",
+      "to": "To",
+      "allOrderTypes": "All Order Types",
+      "clear": "Clear",
+      "noOrdersFound": "No orders found.",
+      "totalAmount": "Total Amount",
+      "tip": "Tip",
+      "fetchDetailError": "Cannot load order details",
+      "orderTitle": "Order",
+      "generalInfo": "General Info",
+      "table": "Table",
+      "staff": "Staff",
+      "type": "Type",
+      "paymentDetails": "Payment Details",
+      "noPaymentRecorded": "No payment recorded",
+      "received": "Received",
+      "change": "Change",
+      "items": "Items",
+      "promotions": "Promotions",
+      "coupons": "Coupons",
+      "note": "Note",
+      "noPromotionsApplied": "No promotions applied",
+      "noCouponsApplied": "No coupons applied",
+      "of": "of",
+      "status": {
+        "PENDING": "Pending",
+        "IN_PROGRESS": "In Progress",
+        "COMPLETED": "Completed",
+        "CANCELLED": "Cancelled",
+        "CREATED": "Created",
+        "READY": "Ready",
+        "SERVED": "Served",
+        "REJECTED": "Rejected",
+        "DINE_IN": "Dine-in",
+        "TAKEAWAY": "Takeaway"
       }
     }
   }
