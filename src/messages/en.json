@@ -1050,7 +1050,7 @@
     }
   },
   "StaffReservation": {
-    "title": "Create Reservation Manually",
+    "title": "Create Reservation",
     "subtitle": "Enter details for walk-in or phone bookings",
     "cancel": "Cancel",
     "save": "Save Reservation",
@@ -1073,6 +1073,7 @@
       "email": "Email Address",
       "enterPhone": "Enter phone...",
       "enterName": "Customer Name",
+      "enterEmail": "name@example.com",
       "newCustomer": "New Customer",
       "member": "Member ({points} pts)"
     },
@@ -1087,6 +1088,8 @@
       "availability": "Table Availability",
       "scanning": "Scanning...",
       "found": "{count} tables found",
+      "tableCount": "{count} table(s)",
+      "bestFit": "Best fit",
       "emptyHint": "Enter Date, Time, and Size to find tables.",
       "noTable": "No tables available."
     },

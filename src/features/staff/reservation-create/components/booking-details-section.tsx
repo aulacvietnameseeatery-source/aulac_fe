@@ -14,7 +14,7 @@ interface Props {
   onSizeChange: (val: number | '') => void;
 }
 
-export const BookingDetailsSection: React.FC<Props> = ({
+const BookingDetailsSectionComponent: React.FC<Props> = ({
   date, time, partySize, validationError, onDateChange, onTimeChange, onSizeChange
 }) => {
   const t = useTranslations("StaffReservation.booking");
@@ -29,12 +29,12 @@ export const BookingDetailsSection: React.FC<Props> = ({
   const minTime = date === todayString ? currentTimeString : undefined;
   return (
     <>
-      <div className="flex items-center gap-2 text-slate-900 font-semibold text-lg border-b border-slate-100 pb-4">
+      <div className="flex items-center gap-2 text-slate-900 font-semibold text-lg">
         <CalIcon size={24} className="text-blue-600" />
         <h2>{t("sectionTitle")}</h2>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pb-0">
         <div>
           <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">{t("date")}<span className="text-red-500">*</span></label>
           <ALDatePicker
@@ -78,3 +78,5 @@ export const BookingDetailsSection: React.FC<Props> = ({
     </>
   );
 };
+
+export const BookingDetailsSection = React.memo(BookingDetailsSectionComponent);

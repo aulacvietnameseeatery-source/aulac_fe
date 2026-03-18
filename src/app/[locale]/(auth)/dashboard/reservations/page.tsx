@@ -16,6 +16,7 @@ import { reservationService } from "@/features/staff/reservation-management/serv
 import { toast } from "sonner";
 import { EditReservationModal } from "@/features/staff/reservation-management/components/edit-reservation-modal";
 import { ALConfirmDialog } from "@/components/ui/al-confirm-dialog";
+import { CreateReservationModal } from "@/features/staff/reservation-create";
 
 const ReservationListContent = () => {
     const router = useRouter();
@@ -50,8 +51,10 @@ const ReservationListContent = () => {
         }
     };
 
+    const [showCreateModal, setShowCreateModal] = useState(false);
+
     const handleCreate = () => {
-        router.push(`/dashboard/reservations/create`);
+        setShowCreateModal(true);
     };
 
     const [assignTableReservation, setAssignTableReservation] = useState<ReservationDto | null>(null);
@@ -246,6 +249,16 @@ const ReservationListContent = () => {
                     onClose={() => setEditReservationId(null)}
                     onSuccess={() => {
                         setEditReservationId(null);
+                        actions.refresh();
+                    }}
+                />
+            )}
+
+            {showCreateModal && (
+                <CreateReservationModal
+                    onClose={() => setShowCreateModal(false)}
+                    onSuccess={() => {
+                        setShowCreateModal(false);
                         actions.refresh();
                     }}
                 />

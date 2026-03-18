@@ -1,5 +1,5 @@
 import { ApiResponse } from '@/types/api-response.types';
-import { CustomerDto, TableAvailabilityDto, CreateReservationRequest, CreateReservationResponse } from '../types/types';
+import { CustomerDto, TableOptionDto, CreateReservationRequest, CreateReservationResponse } from '../types/types';
 import { api } from "@/lib/http";
 
 export const reservationService = {
@@ -21,7 +21,7 @@ export const reservationService = {
         reservedTime: reservedTime,
         partySize: size.toString() 
       });
-    const response = await api.get<ApiResponse<TableAvailabilityDto[]>>(`/api/manual/table/availability?${params}`);
+    const response = await api.get<ApiResponse<TableOptionDto[]>>(`/api/manual/table/availability?${params}`);
     return response.data;
   },
 

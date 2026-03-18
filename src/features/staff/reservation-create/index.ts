@@ -3,6 +3,7 @@ export { CustomerSection } from './components/customer-section';
 export { BookingDetailsSection } from './components/booking-details-section';
 export { TableSelectionGrid } from './components/table-selection-grid';
 export { StatusSection } from './components/status-section';
+export { CreateReservationModal } from './components/create-reservation-modal';
 
 // Hooks
 export { useReservationForm } from './hooks/useReservationForm';
