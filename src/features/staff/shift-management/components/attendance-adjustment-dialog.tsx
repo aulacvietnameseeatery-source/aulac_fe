@@ -123,7 +123,7 @@ export function AttendanceAdjustmentDialog({ open, onClose, attendanceRecord, st
           </div>
         </div>
 
-        <div className="space-y-1 rounded-lg border border border-[#D5BA98]/60 bg-[#FDFBF9] p-3">
+        <div className="space-y-1 rounded-lg border border-[#D5BA98]/60 bg-[#FDFBF9] p-3">
           <label className="text-sm font-medium text-[#1A3A52]">
             Reason <span className="text-destructive">*</span>
           </label>

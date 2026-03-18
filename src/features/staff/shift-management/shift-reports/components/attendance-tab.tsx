@@ -7,6 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { ALCard } from "@/components/ui/al-card";
 import { ALInput } from "@/components/ui/al-input";
 import { ALCombobox } from "@/components/ui/al-combobox";
 import {
@@ -161,10 +162,10 @@ export function AttendanceTab({ rows, loading }: Props) {
 
   return (
     <div className="space-y-4">
-      <div className="rounded-xl border border-[#D5BA98]/60 bg-white p-2.5 shadow-sm">
+      <ALCard className="p-2.5 bg-white">
         <div className="space-y-2.5">
-          <div className="rounded-lg border border-[#D5BA98]/40 bg-[#FDFBF9] p-2">
-            <div className="grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_190px_auto] gap-2 items-end">
+          <ALCard className="rounded-lg p-2">
+            <div className="grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_190px_auto] bg-white gap-2 items-end">
               <ALInput
                 value={staffQuery}
                 onChange={(e) => {
@@ -200,30 +201,30 @@ export function AttendanceTab({ rows, loading }: Props) {
                 {t("attendanceTab.clearSearch")}
               </Button>
             </div>
-          </div>
+          </ALCard>
 
           <div className="grid grid-cols-2 gap-2">
-            <div className="rounded-lg border border-[#D5BA98]/50 bg-[#FDFBF9] px-2.5 py-1.5">
+            <ALCard className="rounded-lg border-[#D5BA98]/50 bg-[#FDFBF9] px-2.5 py-1.5">
               <p className="text-[10px] uppercase tracking-wide text-[#1A3A52]/55">{t("attendanceTab.kpi.totalAssignments")}</p>
               <p className="text-base font-semibold text-[#1A3A52] leading-none mt-0.5 flex items-center gap-1">
                 <Users className="w-3.5 h-3.5" /> {total}
               </p>
-            </div>
-            <div className="rounded-lg border border-[#D5BA98]/50 bg-[#FDFBF9] px-2.5 py-1.5">
+            </ALCard>
+            <ALCard className="rounded-lg border-[#D5BA98]/50 bg-[#FDFBF9] px-2.5 py-1.5">
               <p className="text-[10px] uppercase tracking-wide text-[#1A3A52]/55">{t("attendanceTab.kpi.checkInRate")}</p>
               <p className="text-base font-semibold text-[#1A3A52] leading-none mt-0.5">{pct(present, total)}</p>
-            </div>
-            <div className="rounded-lg border border-[#D5BA98]/50 bg-[#FDFBF9] px-2.5 py-1.5">
+            </ALCard>
+            <ALCard className="rounded-lg border-[#D5BA98]/50 bg-[#FDFBF9] px-2.5 py-1.5">
               <p className="text-[10px] uppercase tracking-wide text-[#1A3A52]/55">{t("attendanceTab.kpi.lateArrivals")}</p>
               <p className="text-base font-semibold text-amber-700 leading-none mt-0.5">{late}</p>
-            </div>
-            <div className="rounded-lg border border-[#D5BA98]/50 bg-[#FDFBF9] px-2.5 py-1.5">
+            </ALCard>
+            <ALCard className="rounded-lg border-[#D5BA98]/50 bg-[#FDFBF9] px-2.5 py-1.5">
               <p className="text-[10px] uppercase tracking-wide text-[#1A3A52]/55">{t("attendanceTab.kpi.absences")}</p>
               <p className="text-base font-semibold text-red-700 leading-none mt-0.5">{absent}</p>
-            </div>
+            </ALCard>
           </div>
         </div>
-      </div>
+      </ALCard>
 
       <Tabs value={summaryTab} onValueChange={setSummaryTab}>
         <TabsList variant={"line"} className={INNER_TAB_LIST_CLASS}>

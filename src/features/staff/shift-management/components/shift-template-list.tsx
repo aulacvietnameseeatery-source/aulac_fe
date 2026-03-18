@@ -4,6 +4,7 @@ import { useMemo, useState, useCallback, type ReactNode } from "react";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { ALCard } from "@/components/ui/al-card";
 import { BaseTable } from "@/components/ui/table/base-table";
 import { PermissionGuard } from "@/components/permission-guard";
 import { Permissions } from "@/types/const";
@@ -158,7 +159,7 @@ export function ShiftTemplateList() {
         rowsPerPageOptions={[10, 20, 50, 100]}
         renderTitle={() => (
           <div className="w-full space-y-3">
-            <div className="flex flex-wrap items-start justify-between gap-3 rounded-xl border border-[#D5BA98]/60 bg-white px-4 py-4 shadow-sm sm:px-5">
+            <ALCard className="flex flex-wrap items-start justify-between gap-3 px-4 py-4 sm:px-5">
               <div>
                 <h1 className="text-2xl font-semibold tracking-wide text-[#1A3A52]">Shift Templates</h1>
                 <p className="text-sm text-[#1A3A52]/70">
@@ -171,9 +172,9 @@ export function ShiftTemplateList() {
                   Create Template
                 </Button>
               </PermissionGuard>
-            </div>
+            </ALCard>
 
-            <div className="flex flex-wrap items-center gap-2 rounded-xl border border-[#D5BA98]/60 bg-white p-3 text-sm shadow-sm">
+            <ALCard padding="sm" className="flex flex-wrap items-center gap-2 text-sm">
               <span className="rounded-full border border-emerald-600 bg-emerald-600 px-3 py-1 text-xs font-semibold text-white">
                 Active: {activeCount}
               </span>
@@ -183,7 +184,7 @@ export function ShiftTemplateList() {
               <span className="ml-auto text-xs text-[#1A3A52]/60">
                 Total templates: {templates.length}
               </span>
-            </div>
+            </ALCard>
           </div>
         )}
         renderCell={handleGlobalRenderCell}

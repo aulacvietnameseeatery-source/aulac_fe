@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Users, Clock, AlertTriangle } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { ALCard } from "@/components/ui/al-card";
 import {
   useAttendanceReportQuery,
   useWorkedHoursReportQuery,
@@ -142,56 +143,58 @@ export function ShiftReports() {
         <Tabs
           value={activeTab}
           onValueChange={setActiveTab}
-          className="flex-1 flex flex-col min-w-0 bg-white rounded-xl border border-[#D5BA98]/30 shadow-sm overflow-hidden"
+          className="flex-1 flex flex-col min-w-0 overflow-hidden"
         >
-          <TabsList className="flex flex-wrap items-center justify-start border-b border-[#D5BA98]/30 shrink-0 p-0 bg-[#FDFBF9] w-full h-auto rounded-none">
-            <TabsTrigger
-              value="attendance"
-              className={`${TAB_TRIGGER_CLASS} flex items-center gap-1.5`}
-            >
-              <Users className="w-3.5 h-3.5 shrink-0" />
-              <span>{t("tabs.attendance")}</span>
-              {attendanceAbsentRate >= 15 && (
-                <span
-                  className="inline-flex h-2 w-2 rounded-full bg-red-500 shrink-0"
-                  title={t("highAbsenceRate")}
-                />
-              )}
-            </TabsTrigger>
-            <TabsTrigger
-              value="workedHours"
-              className={`${TAB_TRIGGER_CLASS} flex items-center gap-1.5`}
-            >
-              <Clock className="w-3.5 h-3.5 shrink-0" />
-              <span>{t("tabs.workedHours")}</span>
-            </TabsTrigger>
-            <TabsTrigger
-              value="exceptions"
-              className={`${TAB_TRIGGER_CLASS} flex items-center gap-1.5`}
-            >
-              <AlertTriangle className="w-3.5 h-3.5 shrink-0" />
-              <span>{t("tabs.exceptions")}</span>
-              {exceptionCount > 0 && (
-                <span className="inline-flex items-center justify-center rounded-full bg-amber-500 text-white text-[10px] font-bold min-w-[16px] h-4 px-1 leading-none shrink-0">
-                  {exceptionCount > 9 ? "9+" : exceptionCount}
-                </span>
-              )}
-            </TabsTrigger>
-          </TabsList>
+          <ALCard className="flex-1 flex flex-col min-w-0 border-[#D5BA98]/30 overflow-hidden">
+            <TabsList className="flex flex-wrap items-center justify-start border-b border-[#D5BA98]/30 shrink-0 p-0 bg-[#FDFBF9] w-full h-auto rounded-none">
+              <TabsTrigger
+                value="attendance"
+                className={`${TAB_TRIGGER_CLASS} flex items-center gap-1.5`}
+              >
+                <Users className="w-3.5 h-3.5 shrink-0" />
+                <span>{t("tabs.attendance")}</span>
+                {attendanceAbsentRate >= 15 && (
+                  <span
+                    className="inline-flex h-2 w-2 rounded-full bg-red-500 shrink-0"
+                    title={t("highAbsenceRate")}
+                  />
+                )}
+              </TabsTrigger>
+              <TabsTrigger
+                value="workedHours"
+                className={`${TAB_TRIGGER_CLASS} flex items-center gap-1.5`}
+              >
+                <Clock className="w-3.5 h-3.5 shrink-0" />
+                <span>{t("tabs.workedHours")}</span>
+              </TabsTrigger>
+              <TabsTrigger
+                value="exceptions"
+                className={`${TAB_TRIGGER_CLASS} flex items-center gap-1.5`}
+              >
+                <AlertTriangle className="w-3.5 h-3.5 shrink-0" />
+                <span>{t("tabs.exceptions")}</span>
+                {exceptionCount > 0 && (
+                  <span className="inline-flex items-center justify-center rounded-full bg-amber-500 text-white text-[10px] font-bold min-w-[16px] h-4 px-1 leading-none shrink-0">
+                    {exceptionCount > 9 ? "9+" : exceptionCount}
+                  </span>
+                )}
+              </TabsTrigger>
+            </TabsList>
 
-          <div className="flex-1 overflow-y-auto p-4 sm:p-5">
-            <TabsContent value="attendance" className="m-0 border-none p-0 outline-none">
-              <AttendanceTab rows={attendanceRows} loading={attLoading} />
-            </TabsContent>
+            <div className="flex-1 overflow-y-auto p-4 sm:p-5">
+              <TabsContent value="attendance" className="m-0 border-none p-0 outline-none">
+                <AttendanceTab rows={attendanceRows} loading={attLoading} />
+              </TabsContent>
 
-            <TabsContent value="workedHours" className="m-0 border-none p-0 outline-none">
-              <WorkedHoursTab rows={workedHours} loading={whLoading} />
-            </TabsContent>
+              <TabsContent value="workedHours" className="m-0 border-none p-0 outline-none">
+                <WorkedHoursTab rows={workedHours} loading={whLoading} />
+              </TabsContent>
 
-            <TabsContent value="exceptions" className="m-0 border-none p-0 outline-none">
-              <ExceptionsTab rows={exceptions} loading={excLoading} />
-            </TabsContent>
-          </div>
+              <TabsContent value="exceptions" className="m-0 border-none p-0 outline-none">
+                <ExceptionsTab rows={exceptions} loading={excLoading} />
+              </TabsContent>
+            </div>
+          </ALCard>
         </Tabs>
       </div>
     </div>
