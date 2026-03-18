@@ -23,6 +23,7 @@ export default function PublicBookingForm({ onSuccess, onClose }: PublicBookingF
     const [name, setName] = useState('');
     const [phone, setPhone] = useState('');
     const [email, setEmail] = useState('');
+    const [customerId, setCustomerId] = useState<number | undefined>(undefined);
     const [pax, setPax] = useState<number | null>(null);
     const [date, setDate] = useState<string>('');
     const [time, setTime] = useState('');
@@ -43,12 +44,14 @@ export default function PublicBookingForm({ onSuccess, onClose }: PublicBookingF
 
         setName('');
         setEmail('');
+        setCustomerId(undefined);
         setLookingUpCustomer(true);
         try {
             const result = await reservationApi.getCustomerByPhone(normalized);
             if (result.success && result.data && result.data.phone) {
                 setName(result.data.fullName || '');
                 setEmail(result.data.email || '');
+                setCustomerId(result.data.customerId);
             } else {
                 toast.error(t('lookup.notFound'));
             }
@@ -132,6 +135,7 @@ export default function PublicBookingForm({ onSuccess, onClose }: PublicBookingF
         try {
             const reservedTime = new Date(`${date}T${time}`).toISOString();
             const request = {
+                customerId: customerId,
                 customerName: name,
                 phone: phone,
                 email: email || undefined,
@@ -149,6 +153,7 @@ export default function PublicBookingForm({ onSuccess, onClose }: PublicBookingF
                 setName('');
                 setPhone('');
                 setEmail('');
+                setCustomerId(undefined);
                 setNotes('');
                 setMode(null);
             } else {
@@ -194,6 +199,7 @@ export default function PublicBookingForm({ onSuccess, onClose }: PublicBookingF
                                         setMode('existing');
                                         setName('');
                                         setEmail('');
+                                        setCustomerId(undefined);
                                     }}
                                     className="rounded-xl border border-stone-200 bg-stone-50 px-4 py-4 text-left hover:border-amber-500 transition-all min-h-[110px]"
                                 >
@@ -206,6 +212,7 @@ export default function PublicBookingForm({ onSuccess, onClose }: PublicBookingF
                                         setMode('new');
                                         setName('');
                                         setEmail('');
+                                        setCustomerId(undefined);
                                     }}
                                     className="rounded-xl border border-stone-200 bg-stone-50 px-4 py-4 text-left hover:border-amber-500 transition-all min-h-[110px]"
                                 >
@@ -230,203 +237,203 @@ export default function PublicBookingForm({ onSuccess, onClose }: PublicBookingF
                     )}
 
                     {mode && (
-                    <>
-                    <div className="space-y-4">
-                        <h2 className="text-xs font-bold text-amber-600 uppercase tracking-widest flex items-center gap-2">
-                            <span className="w-1 h-3 bg-amber-500 rounded-full"></span>
-                            {t('yourInfo')}
-                        </h2>
+                        <>
+                            <div className="space-y-4">
+                                <h2 className="text-xs font-bold text-amber-600 uppercase tracking-widest flex items-center gap-2">
+                                    <span className="w-1 h-3 bg-amber-500 rounded-full"></span>
+                                    {t('yourInfo')}
+                                </h2>
 
-                        <div className="grid grid-cols-1 gap-4">
-                            <div className="relative group">
-                                <Phone className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400 group-focus-within:text-amber-600 transition-colors" size={18} />
-                                <input
-                                    type="tel"
-                                    placeholder={t('phone')}
-                                    value={phone}
-                                    onChange={(e) => setPhone(e.target.value)}
-                                    onBlur={(e) => void lookupExistingCustomer(e.target.value)}
-                                    className="w-full bg-stone-50 border border-stone-200 rounded-xl py-3.5 pl-12 pr-4 text-slate-800 placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all font-medium"
-                                    required
-                                />
-                            </div>
-
-                            {mode === 'new' && (
-                                <>
+                                <div className="grid grid-cols-1 gap-4">
                                     <div className="relative group">
-                                        <User className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400 group-focus-within:text-amber-600 transition-colors" size={18} />
+                                        <Phone className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400 group-focus-within:text-amber-600 transition-colors" size={18} />
                                         <input
-                                            type="text"
-                                            placeholder={t('yourName')}
-                                            value={name}
-                                            onChange={(e) => setName(e.target.value)}
+                                            type="tel"
+                                            placeholder={t('phone')}
+                                            value={phone}
+                                            onChange={(e) => setPhone(e.target.value)}
+                                            onBlur={(e) => void lookupExistingCustomer(e.target.value)}
                                             className="w-full bg-stone-50 border border-stone-200 rounded-xl py-3.5 pl-12 pr-4 text-slate-800 placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all font-medium"
                                             required
                                         />
                                     </div>
 
-                                    <div className="relative group">
-                                        <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400 group-focus-within:text-amber-600 transition-colors" size={18} />
-                                        <input
-                                            type="email"
-                                            placeholder={t('email')}
-                                            value={email}
-                                            onChange={(e) => setEmail(e.target.value)}
-                                            className="w-full bg-stone-50 border border-stone-200 rounded-xl py-3.5 pl-12 pr-4 text-slate-800 placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all font-medium"
-                                        />
+                                    {mode === 'new' && (
+                                        <>
+                                            <div className="relative group">
+                                                <User className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400 group-focus-within:text-amber-600 transition-colors" size={18} />
+                                                <input
+                                                    type="text"
+                                                    placeholder={t('yourName')}
+                                                    value={name}
+                                                    onChange={(e) => setName(e.target.value)}
+                                                    className="w-full bg-stone-50 border border-stone-200 rounded-xl py-3.5 pl-12 pr-4 text-slate-800 placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all font-medium"
+                                                    required
+                                                />
+                                            </div>
+
+                                            <div className="relative group">
+                                                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400 group-focus-within:text-amber-600 transition-colors" size={18} />
+                                                <input
+                                                    type="email"
+                                                    placeholder={t('email')}
+                                                    value={email}
+                                                    onChange={(e) => setEmail(e.target.value)}
+                                                    className="w-full bg-stone-50 border border-stone-200 rounded-xl py-3.5 pl-12 pr-4 text-slate-800 placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all font-medium"
+                                                />
+                                            </div>
+                                        </>
+                                    )}
+
+                                    {mode === 'existing' && (name || email || lookingUpCustomer) && (
+                                        <>
+                                            <div className="relative group">
+                                                <User className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400" size={18} />
+                                                <input
+                                                    type="text"
+                                                    placeholder={lookingUpCustomer ? t('loadingCustomerName') : t('existingCustomerName')}
+                                                    value={name}
+                                                    readOnly
+                                                    className="w-full bg-stone-100 border border-stone-200 rounded-xl py-3.5 pl-12 pr-4 text-slate-700 placeholder-stone-400 font-medium"
+                                                />
+                                            </div>
+
+                                            <div className="relative group">
+                                                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400" size={18} />
+                                                <input
+                                                    type="text"
+                                                    placeholder={lookingUpCustomer ? t('loadingCustomerEmail') : t('existingCustomerEmail')}
+                                                    value={email}
+                                                    readOnly
+                                                    className="w-full bg-stone-100 border border-stone-200 rounded-xl py-3.5 pl-12 pr-4 text-slate-700 placeholder-stone-400 font-medium"
+                                                />
+                                            </div>
+                                        </>
+                                    )}
+                                </div>
+                            </div>
+
+                            <div className="space-y-4 sm:space-y-5">
+                                <h2 className="text-xs font-bold text-amber-600 uppercase tracking-widest flex items-center gap-2">
+                                    <span className="w-1 h-3 bg-amber-500 rounded-full"></span>
+                                    {t('bookingInfo')}
+                                </h2>
+
+                                <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
+                                    <div className="col-span-1 md:col-span-2">
+                                        <label className="text-[10px] font-bold text-stone-400 uppercase tracking-widest block mb-2">
+                                            {t('reservationDate')}
+                                        </label>
+                                        <div className="relative">
+                                            <ALDatePicker
+                                                value={date}
+                                                onChange={setDate}
+                                                minDate={new Date().toISOString().split('T')[0]}
+                                                placeholder={t('selectDate')}
+                                                inputSize="sm"
+                                                groupClassName="!bg-stone-50 !border-stone-200 !rounded-xl !h-[54px]"
+                                                className="text-sm sm:text-base font-semibold"
+                                            />
+                                        </div>
                                     </div>
-                                </>
-                            )}
 
-                            {mode === 'existing' && (name || email || lookingUpCustomer) && (
-                                <>
-                                    <div className="relative group">
-                                        <User className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400" size={18} />
-                                        <input
-                                            type="text"
-                                            placeholder={lookingUpCustomer ? t('loadingCustomerName') : t('existingCustomerName')}
-                                            value={name}
-                                            readOnly
-                                            className="w-full bg-stone-100 border border-stone-200 rounded-xl py-3.5 pl-12 pr-4 text-slate-700 placeholder-stone-400 font-medium"
-                                        />
+                                    <div className="col-span-1 md:col-span-1">
+                                        <label className="text-[10px] font-bold text-stone-400 uppercase tracking-widest block mb-2">
+                                            {t('arrivalTime')}
+                                        </label>
+                                        <div className="relative group">
+                                            <select
+                                                value={time}
+                                                onChange={(e) => setTime(e.target.value)}
+                                                className="w-full h-[54px] bg-stone-50 border border-stone-200 rounded-xl px-4 pr-10 text-slate-800 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all font-semibold appearance-none"
+                                            >
+                                                <option value="" disabled>{t('selectTime')}</option>
+                                                {Array.from({ length: 14 }, (_, i) => i + 10).flatMap(h =>
+                                                    ['00', '30'].map(m => {
+                                                        const hour = h.toString().padStart(2, '0');
+                                                        return `${hour}:${m}`;
+                                                    })
+                                                ).map(slot => (
+                                                    <option key={slot} value={slot}>
+                                                        {slot}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                            <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-stone-400 pointer-events-none" size={18} />
+                                        </div>
                                     </div>
 
-                                    <div className="relative group">
-                                        <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400" size={18} />
-                                        <input
-                                            type="text"
-                                            placeholder={lookingUpCustomer ? t('loadingCustomerEmail') : t('existingCustomerEmail')}
-                                            value={email}
-                                            readOnly
-                                            className="w-full bg-stone-100 border border-stone-200 rounded-xl py-3.5 pl-12 pr-4 text-slate-700 placeholder-stone-400 font-medium"
-                                        />
+                                    <div className="col-span-2 md:col-span-1">
+                                        <label className="text-[10px] font-bold text-stone-400 uppercase tracking-widest block mb-2">
+                                            {t('partySize')}
+                                        </label>
+                                        <div className="flex items-center bg-stone-50 border border-stone-200 rounded-xl py-1 px-1">
+                                            <button
+                                                type="button"
+                                                onClick={() => setPax(Math.max(1, (pax ?? 1) - 1))}
+                                                className="p-3 text-stone-500 hover:text-amber-600 transition-colors"
+                                            >
+                                                <Minus size={16} strokeWidth={3} />
+                                            </button>
+                                            <div className="flex-1 text-center font-bold text-[#1A3A52] text-lg">
+                                                {pax ?? '-'}
+                                            </div>
+                                            <button
+                                                type="button"
+                                                onClick={() => setPax((pax ?? 0) + 1)}
+                                                className="p-3 text-stone-500 hover:text-amber-600 transition-colors"
+                                            >
+                                                <Plus size={16} strokeWidth={3} />
+                                            </button>
+                                        </div>
                                     </div>
-                                </>
-                            )}
-                        </div>
-                    </div>
+                                </div>
 
-                    <div className="space-y-4 sm:space-y-5">
-                        <h2 className="text-xs font-bold text-amber-600 uppercase tracking-widest flex items-center gap-2">
-                            <span className="w-1 h-3 bg-amber-500 rounded-full"></span>
-                            {t('bookingInfo')}
-                        </h2>
-
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
-                            <div className="col-span-1 md:col-span-2">
-                                <label className="text-[10px] font-bold text-stone-400 uppercase tracking-widest block mb-2">
-                                    {t('reservationDate')}
-                                </label>
-                                <div className="relative">
-                                    <ALDatePicker
-                                        value={date}
-                                        onChange={setDate}
-                                        minDate={new Date().toISOString().split('T')[0]}
-                                        placeholder={t('selectDate')}
-                                        inputSize="sm"
-                                        groupClassName="!bg-stone-50 !border-stone-200 !rounded-xl !h-[54px]"
-                                        className="text-sm sm:text-base font-semibold"
+                                <div className="relative group pb-1">
+                                    <StickyNote className="absolute left-4 top-4 text-stone-400 group-focus-within:text-amber-600 transition-colors" size={18} />
+                                    <textarea
+                                        placeholder={t('notes')}
+                                        value={notes}
+                                        onChange={(e) => setNotes(e.target.value)}
+                                        className="w-full bg-stone-50 border border-stone-200 rounded-xl py-3.5 pl-12 pr-4 text-slate-800 placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all font-medium min-h-[88px] sm:min-h-[110px]"
                                     />
                                 </div>
                             </div>
 
-                            <div className="col-span-1 md:col-span-1">
-                                <label className="text-[10px] font-bold text-stone-400 uppercase tracking-widest block mb-2">
-                                    {t('arrivalTime')}
-                                </label>
-                                <div className="relative group">
-                                    <select
-                                        value={time}
-                                        onChange={(e) => setTime(e.target.value)}
-                                        className="w-full h-[54px] bg-stone-50 border border-stone-200 rounded-xl px-4 pr-10 text-slate-800 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all font-semibold appearance-none"
-                                    >
-                                        <option value="" disabled>{t('selectTime')}</option>
-                                        {Array.from({ length: 14 }, (_, i) => i + 10).flatMap(h =>
-                                            ['00', '30'].map(m => {
-                                                const hour = h.toString().padStart(2, '0');
-                                                return `${hour}:${m}`;
-                                            })
-                                        ).map(slot => (
-                                            <option key={slot} value={slot}>
-                                                {slot}
-                                            </option>
-                                        ))}
-                                    </select>
-                                    <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-stone-400 pointer-events-none" size={18} />
-                                </div>
-                            </div>
-
-                            <div className="col-span-2 md:col-span-1">
-                                <label className="text-[10px] font-bold text-stone-400 uppercase tracking-widest block mb-2">
-                                    {t('partySize')}
-                                </label>
-                                <div className="flex items-center bg-stone-50 border border-stone-200 rounded-xl py-1 px-1">
-                                    <button
-                                        type="button"
-                                        onClick={() => setPax(Math.max(1, (pax ?? 1) - 1))}
-                                        className="p-3 text-stone-500 hover:text-amber-600 transition-colors"
-                                    >
-                                        <Minus size={16} strokeWidth={3} />
-                                    </button>
-                                    <div className="flex-1 text-center font-bold text-[#1A3A52] text-lg">
-                                        {pax ?? '-'}
-                                    </div>
-                                    <button
-                                        type="button"
-                                        onClick={() => setPax((pax ?? 0) + 1)}
-                                        className="p-3 text-stone-500 hover:text-amber-600 transition-colors"
-                                    >
-                                        <Plus size={16} strokeWidth={3} />
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="relative group pb-1">
-                            <StickyNote className="absolute left-4 top-4 text-stone-400 group-focus-within:text-amber-600 transition-colors" size={18} />
-                            <textarea
-                                placeholder={t('notes')}
-                                value={notes}
-                                onChange={(e) => setNotes(e.target.value)}
-                                className="w-full bg-stone-50 border border-stone-200 rounded-xl py-3.5 pl-12 pr-4 text-slate-800 placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all font-medium min-h-[88px] sm:min-h-[110px]"
-                            />
-                        </div>
-                    </div>
-
-                    <div className="pt-2 mt-1 border-t border-stone-200/80 bg-white flex flex-col-reverse sm:flex-row sm:items-center gap-3 sm:justify-between">
-                        <button
-                            type="button"
-                            onClick={() => {
-                                if (mode) {
-                                    setMode(null);
-                                    return;
-                                }
-                                onClose?.();
-                            }}
-                            className="w-full sm:w-auto text-center sm:text-left text-stone-400 font-bold hover:text-stone-600 transition-colors"
-                        >
-                            {t('close')}
-                        </button>
-                        <button
-                            type={canBookOnline ? "submit" : "button"}
-                            onClick={!canBookOnline ? handleCallRestaurant : undefined}
-                            disabled={loading || !mode || checkingFit || !date || !time || !pax}
-                            className={`
+                            <div className="pt-2 mt-1 border-t border-stone-200/80 bg-white flex flex-col-reverse sm:flex-row sm:items-center gap-3 sm:justify-between">
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        if (mode) {
+                                            setMode(null);
+                                            return;
+                                        }
+                                        onClose?.();
+                                    }}
+                                    className="w-full sm:w-auto text-center sm:text-left text-stone-400 font-bold hover:text-stone-600 transition-colors"
+                                >
+                                    {t('close')}
+                                </button>
+                                <button
+                                    type={canBookOnline ? "submit" : "button"}
+                                    onClick={!canBookOnline ? handleCallRestaurant : undefined}
+                                    disabled={loading || !mode || checkingFit || !date || !time || !pax}
+                                    className={`
                                 relative w-full sm:w-auto px-5 py-2.5 sm:px-7 sm:py-3 text-sm bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-2xl shadow-lg shadow-amber-500/30 transition-all hover:scale-[1.02] active:scale-[0.98] whitespace-normal leading-tight
                                 ${loading || !mode || checkingFit || !date || !time ? 'opacity-70 cursor-not-allowed' : ''}
                             `}
-                        >
-                            {loading || checkingFit ? (
-                                <div className="flex items-center gap-2">
-                                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                                    <span>{checkingFit ? t('checkingTables') : t('processing')}</span>
-                                </div>
-                            ) : (
-                                canBookOnline ? t('submit') : t('callRestaurant')
-                            )}
-                        </button>
-                    </div>
-                    </>
+                                >
+                                    {loading || checkingFit ? (
+                                        <div className="flex items-center gap-2">
+                                            <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                                            <span>{checkingFit ? t('checkingTables') : t('processing')}</span>
+                                        </div>
+                                    ) : (
+                                        canBookOnline ? t('submit') : t('callRestaurant')
+                                    )}
+                                </button>
+                            </div>
+                        </>
                     )}
                 </form>
             </div>

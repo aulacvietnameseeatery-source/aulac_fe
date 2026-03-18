@@ -1081,6 +1081,8 @@
       "sectionTitle": "Chi tiết đặt bàn",
       "date": "Ngày",
       "time": "Giờ",
+      "selectTime": "Chọn giờ",
+      "openingHours": "(11:00 Sáng – 10:00 Tối)",
       "partySize": "Số khách",
       "enterSize": "VD: 4"
     },

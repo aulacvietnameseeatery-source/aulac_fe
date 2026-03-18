@@ -1,7 +1,14 @@
 // features/staff/reservation/services/reservation-service.ts
 
 import { ApiResponse, PagedResult } from "@/types/api-response.types";
-import { ReservationDto, ReservationStatusDto, GetReservationsParams, ReservationDetailDto } from "../types/reservation-types";
+import {
+    ReservationDto,
+    ReservationStatusDto,
+    GetReservationsParams,
+    ReservationDetailDto,
+    ReservationTableOptionDto,
+    ReservationCustomerLookupDto,
+} from "../types/reservation-types";
 import { api } from "@/lib/http";
 
 export const reservationService = {
@@ -56,5 +63,35 @@ export const reservationService = {
     // 7. Xóa đặt bàn
     deleteReservation: async (reservationId: number): Promise<void> => {
         await api.delete(`/api/reservations/${reservationId}`);
+    },
+
+    // 8. Tìm khách theo số điện thoại
+    searchCustomerByPhone: async (phone: string): Promise<ReservationCustomerLookupDto | null> => {
+        try {
+            const response = await api.get<ApiResponse<ReservationCustomerLookupDto>>(`/api/customers/phone/${phone}`);
+            return response.data;
+        } catch (err: any) {
+            if (err.response?.status === 404) {
+                return null;
+            }
+            throw err;
+        }
+    },
+
+    // 9. Lấy table options cho manual flow theo workflow
+    getManualTableOptions: async (
+        date: string,
+        time: string,
+        partySize: number
+    ): Promise<ReservationTableOptionDto[]> => {
+        const reservedTime = new Date(`${date}T${time}`).toISOString();
+        const params = new URLSearchParams({
+            reservedTime,
+            partySize: partySize.toString(),
+        });
+        const response = await api.get<ApiResponse<ReservationTableOptionDto[]>>(
+            `/api/manual/table/availability?${params}`
+        );
+        return response.data;
     },
 };

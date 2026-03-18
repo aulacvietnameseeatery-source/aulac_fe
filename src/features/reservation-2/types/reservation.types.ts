@@ -9,6 +9,7 @@ export interface TableAvailabilityDto {
 }
 
 export interface CreateReservationRequest {
+    customerId?: number;
     customerName: string;
     phone: string;
     email?: string;

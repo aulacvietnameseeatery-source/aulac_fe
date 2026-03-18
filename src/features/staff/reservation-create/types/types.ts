@@ -23,6 +23,7 @@ export interface TableOptionDto {
 
 // Map from public class CreateManualReservationRequest
 export interface CreateReservationRequest {
+  customerId?: number;
   tableId?: number;
   tableIds?: number[];
   customerName: string;

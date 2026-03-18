@@ -1077,6 +1077,8 @@
       "sectionTitle": "Détails de la réservation",
       "date": "Date",
       "time": "Heure",
+      "selectTime": "Choisir l’heure",
+      "openingHours": "(11h00 – 22h00)",
       "partySize": "Nombre de personnes",
       "enterSize": "Ex : 4"
     },
