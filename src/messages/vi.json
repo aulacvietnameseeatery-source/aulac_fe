@@ -3,6 +3,17 @@
     "title": "An Lac - Nhà Hàng Việt Nam",
     "description": "Đỉnh cao của nghệ thuật ẩm thực Việt Nam ngay tại trung tâm thành phố."
   },
+  "NotFound": {
+    "title": "Rất tiếc! Không tìm thấy trang!",
+    "description": "Xin lỗi, trang bạn đang tìm kiếm không tồn tại, đã bị xóa, đổi tên hoặc tạm thời không khả dụng",
+    "backToHome": "Quay lại Trang chủ"
+  },
+  "Unauthorized": {
+    "title": "Truy cập bị từ chối",
+    "description": "Bạn không có quyền truy cập vào khu vực này. Vui lòng liên hệ với quản trị viên nếu bạn cho rằng đây là một sự nhầm lẫn.",
+    "returnHome": "Về Trang chủ",
+    "goBack": "Quay lại"
+  },
   "Header": {
     "home": "Trang chủ",
     "menu": "THỰC ĐƠN",

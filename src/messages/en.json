@@ -3,6 +3,17 @@
     "title": "An Lac - Vietnamese Eatery",
     "description": "The pinnacle of Vietnamese culinary art in the heart of the city."
   },
+  "NotFound": {
+    "title": "Oops! Page Not Found!",
+    "description": "Sorry but the page you are looking for does not exist, have been removed, name changed or is temporarily unavailable",
+    "backToHome": "Back to Home"
+  },
+  "Unauthorized": {
+    "title": "Access Denied",
+    "description": "You don't have the required permissions to access this exclusive section. Please contact management if you believe this is an error.",
+    "returnHome": "Return Home",
+    "goBack": "Go Back"
+  },
   "Header": {
     "home": "Home",
     "menu": "MENU",

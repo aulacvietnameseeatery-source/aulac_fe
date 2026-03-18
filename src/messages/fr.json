@@ -3,6 +3,17 @@
     "title": "An Lac - Table Vietnamienne",
     "description": "L’apogée de l’art culinaire vietnamien au cœur de la ville."
   },
+  "NotFound": {
+    "title": "Oups ! Page non trouvée !",
+    "description": "Désolé, la page que vous recherchez n'existe pas, a été supprimée, a changé de nom ou est temporairement indisponible",
+    "backToHome": "Retour à l’accueil"
+  },
+  "Unauthorized": {
+    "title": "Accès refusé",
+    "description": "Vous n'avez pas les permissions requises pour accéder à cette section exclusive. Veuillez contacter la direction si vous pensez qu'il s'agit d'une erreur.",
+    "returnHome": "Retour à l’accueil",
+    "goBack": "Retourner"
+  },
   "Header": {
     "home": "Accueil",
     "menu": "MENU",
