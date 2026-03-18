@@ -17,27 +17,18 @@ interface Props {
   onSearch: () => void;
 }
 
-export const CustomerSection: React.FC<Props> = ({
+const CustomerSectionComponent: React.FC<Props> = ({
   phone, fullName, email, customerType, loyaltyPoints, isSearching,
   onPhoneChange, onNameChange, onEmailChange, onSearch
 }) => {
   const t = useTranslations("StaffReservation.customer");
 
   return (
-    <div className="p-8 border-b border-slate-100 relative">
-      <div className="flex justify-between items-start mb-6">
+    <div className="border-b border-slate-100 relative">
+      <div className="mb-6">
         <div className="flex items-center gap-2 text-slate-900 font-semibold text-lg">
           <User size={24} className="text-blue-600" />
           <h2>{t("sectionTitle")}</h2>
-        </div>
-        <div className={`px-4 py-2 rounded-full border flex flex-col items-end ${
-            customerType === 'member' ? 'bg-amber-50 border-amber-200 text-amber-800' : 'bg-blue-50 border-blue-200 text-blue-800'
-        }`}>
-          <span className="font-bold text-sm">
-            {customerType === 'member'
-              ? t("member", { points: loyaltyPoints })
-              : t("newCustomer")}
-          </span>
         </div>
       </div>
 
@@ -64,7 +55,7 @@ export const CustomerSection: React.FC<Props> = ({
             type="text" 
             value={fullName} 
             onChange={(e: any) => onNameChange(e.target.value)} 
-            placeholder="Customer Name" 
+            placeholder={t("enterName")} 
           />
         </div>
         <div>
@@ -74,7 +65,7 @@ export const CustomerSection: React.FC<Props> = ({
               type="email" 
               value={email} 
               onChange={(e: any) => onEmailChange(e.target.value)} 
-              placeholder="name@example.com" 
+              placeholder={t("enterEmail")} 
               className="pl-10"
             />
           </div>
@@ -83,3 +74,5 @@ export const CustomerSection: React.FC<Props> = ({
     </div>
   );
 };
+
+export const CustomerSection = React.memo(CustomerSectionComponent);

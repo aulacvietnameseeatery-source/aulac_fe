@@ -6,8 +6,8 @@ import { ALDatePicker } from "@/components/ui/al-date-picker";
 import { reservationApi } from '../index';
 import { ReservationResponseDto } from '../types/reservation.types';
 import { toast } from 'sonner';
-import CallRestaurantPopup from './call-restaurant-popup';
 import { useTranslations } from 'next-intl';
+import { useStoreSettings } from '@/hooks/use-store-settings';
 
 interface PublicBookingFormProps {
     onSuccess?: (reservation: ReservationResponseDto) => void;
@@ -32,15 +32,9 @@ export default function PublicBookingForm({ onSuccess, onClose }: PublicBookingF
     const [checkingFit, setCheckingFit] = useState(false);
     const [canBookOnline, setCanBookOnline] = useState(true);
     const [fitMessage, setFitMessage] = useState<string>('');
-    const [showCallPopup, setShowCallPopup] = useState(false);
-
-    const resetBookingSelection = () => {
-        setDate('');
-        setTime('');
-        setPax(null);
-        setCanBookOnline(true);
-        setFitMessage('');
-    };
+    const { data: storeSettings } = useStoreSettings();
+    const phoneNumber = storeSettings?.phone || "+84 28 3822 5264";
+    const callHref = `tel:${phoneNumber.replace(/\s+/g, '')}`;
 
     const lookupExistingCustomer = async (targetPhone: string) => {
         if (mode !== 'existing') return;
@@ -74,7 +68,7 @@ export default function PublicBookingForm({ onSuccess, onClose }: PublicBookingF
         }
 
         const runFitCheck = async () => {
-            const reservedTime = `${date}T${time}:00`;
+            const reservedTime = new Date(`${date}T${time}`).toISOString();
             setCheckingFit(true);
             try {
                 const result = await reservationApi.fitCheck({
@@ -136,7 +130,7 @@ export default function PublicBookingForm({ onSuccess, onClose }: PublicBookingF
 
         setLoading(true);
         try {
-            const reservedTime = `${date}T${time}:00`;
+            const reservedTime = new Date(`${date}T${time}`).toISOString();
             const request = {
                 customerName: name,
                 phone: phone,
@@ -159,19 +153,17 @@ export default function PublicBookingForm({ onSuccess, onClose }: PublicBookingF
                 setMode(null);
             } else {
                 toast.error(response.userMessage || t('toast.createFailed'));
-                if (response.userMessage?.toLowerCase().includes("không") && response.userMessage?.toLowerCase().includes("bàn")) {
-                    setShowCallPopup(true);
-                }
             }
         } catch (error: any) {
             const errorMsg = error?.response?.data?.userMessage || t('toast.unexpected');
             toast.error(errorMsg);
-            if (errorMsg.toLowerCase().includes("không") && errorMsg.toLowerCase().includes("bàn")) {
-                setShowCallPopup(true);
-            }
         } finally {
             setLoading(false);
         }
+    };
+
+    const handleCallRestaurant = () => {
+        window.location.href = callHref;
     };
 
     return (
@@ -234,27 +226,10 @@ export default function PublicBookingForm({ onSuccess, onClose }: PublicBookingF
                         <div className="rounded-2xl border border-orange-200 bg-orange-50 p-4 text-center">
                             <div className="font-semibold text-orange-900">{t('noFitTitle')}</div>
                             {fitMessage && <p className="text-sm text-orange-700 mt-1">{fitMessage}</p>}
-                            <div className="mt-4 flex flex-col items-center gap-2">
-                                <button
-                                    type="button"
-                                    onClick={() => setShowCallPopup(true)}
-                                    className="inline-flex items-center justify-center gap-2 rounded-lg bg-orange-600 px-4 py-2 text-white font-semibold hover:bg-orange-700 w-full sm:w-auto sm:min-w-[180px]"
-                                >
-                                    <Phone size={16} />
-                                    <span>{t('callRestaurant')}</span>
-                                </button>
-                                <button
-                                    type="button"
-                                    onClick={resetBookingSelection}
-                                    className="inline-flex items-center justify-center rounded-lg border border-orange-300 bg-white px-4 py-2 text-orange-800 font-semibold hover:bg-orange-100 w-full sm:w-auto sm:min-w-[180px]"
-                                >
-                                    {t('goBack')}
-                                </button>
-                            </div>
                         </div>
                     )}
 
-                    {mode && canBookOnline && (
+                    {mode && (
                     <>
                     <div className="space-y-4">
                         <h2 className="text-xs font-bold text-amber-600 uppercase tracking-widest flex items-center gap-2">
@@ -433,7 +408,8 @@ export default function PublicBookingForm({ onSuccess, onClose }: PublicBookingF
                             {t('close')}
                         </button>
                         <button
-                            type="submit"
+                            type={canBookOnline ? "submit" : "button"}
+                            onClick={!canBookOnline ? handleCallRestaurant : undefined}
                             disabled={loading || !mode || checkingFit || !date || !time || !pax}
                             className={`
                                 relative w-full sm:w-auto px-5 py-2.5 sm:px-7 sm:py-3 text-sm bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-2xl shadow-lg shadow-amber-500/30 transition-all hover:scale-[1.02] active:scale-[0.98] whitespace-normal leading-tight
@@ -446,7 +422,7 @@ export default function PublicBookingForm({ onSuccess, onClose }: PublicBookingF
                                     <span>{checkingFit ? t('checkingTables') : t('processing')}</span>
                                 </div>
                             ) : (
-                                t('submit')
+                                canBookOnline ? t('submit') : t('callRestaurant')
                             )}
                         </button>
                     </div>
@@ -454,14 +430,6 @@ export default function PublicBookingForm({ onSuccess, onClose }: PublicBookingF
                     )}
                 </form>
             </div>
-
-            <CallRestaurantPopup
-                isOpen={showCallPopup}
-                onClose={() => {
-                    setShowCallPopup(false);
-                    resetBookingSelection();
-                }}
-            />
         </div>
     );
 }

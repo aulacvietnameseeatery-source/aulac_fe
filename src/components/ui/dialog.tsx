@@ -11,6 +11,7 @@ interface DialogProps {
     children: React.ReactNode;
     footer?: React.ReactNode;
     width?: string; // Tùy chỉnh độ rộng (VD: '600px', '80%')
+    bodyOverflowY?: React.CSSProperties['overflowY'];
 }
 
 export const Dialog = ({
@@ -19,7 +20,8 @@ export const Dialog = ({
                            title,
                            children,
                            footer,
-                           width = '500px'
+                           width = '500px',
+                           bodyOverflowY = 'auto'
                        }: DialogProps) => {
 
     // Khóa cuộn trang khi Dialog mở
@@ -66,7 +68,7 @@ export const Dialog = ({
                 </div>
 
                 {/* Body */}
-                <div className="admin-dialog-body">
+                <div className="admin-dialog-body" style={{ overflowY: bodyOverflowY }}>
                     {children}
                 </div>
 

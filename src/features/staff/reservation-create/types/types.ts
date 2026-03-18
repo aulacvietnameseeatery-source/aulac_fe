@@ -9,18 +9,22 @@ export interface CustomerDto {
   createdAt: string | null; // DateTime string
 }
 
-// Map from public class ManualTableAvailabilityDto
-export interface TableAvailabilityDto {
-  tableId: number;
-  tableCode: string;
-  capacity: number;
-  tableType: string;
+// Map from public class ManualTableOptionDto
+export interface TableOptionDto {
+  optionId: string;
+  tableIds: number[];
+  tableCodes: string;
   zone: string;
+  totalCapacity: number;
+  excessCapacity: number;
+  tableCount: number;
+  isBestFit: boolean;
 }
 
 // Map from public class CreateManualReservationRequest
 export interface CreateReservationRequest {
-  tableId: number;
+  tableId?: number;
+  tableIds?: number[];
   customerName: string;
   phone: string;
   email?: string | null;

@@ -2,9 +2,16 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { reservationService } from '../services/reservation.service';
-import { CustomerDto, TableAvailabilityDto, BookingSource, BookingStatus, CustomerType } from '../types/types';
+import { TableOptionDto, BookingSource, BookingStatus, CustomerType } from '../types/types';
 
-export const useReservationForm = (t: (key: string, values?: any) => string) => {
+interface UseReservationFormOptions {
+  onSuccess?: () => void;
+}
+
+export const useReservationForm = (
+  t: (key: string, values?: any) => string,
+  options?: UseReservationFormOptions
+) => {
   const router = useRouter();
   const [validationError, setValidationError] = useState<string | null>(null);
   // -- Customer State --
@@ -21,8 +28,8 @@ export const useReservationForm = (t: (key: string, values?: any) => string) => 
   const [partySize, setPartySize] = useState<number | ''>('');
 
   // -- Table State --
-  const [tables, setTables] = useState<TableAvailabilityDto[]>([]);
-  const [selectedTableId, setSelectedTableId] = useState<number | null>(null);
+  const [tableOptions, setTableOptions] = useState<TableOptionDto[]>([]);
+  const [selectedOptionId, setSelectedOptionId] = useState<string | null>(null);
   const [isLoadingTables, setIsLoadingTables] = useState(false);
   const [isTableChecked, setIsTableChecked] = useState(false);
 
@@ -81,20 +88,24 @@ export const useReservationForm = (t: (key: string, values?: any) => string) => 
   useEffect(() => {
     const fetchTables = async () => {
       if (!date || !time || !partySize) {
-        setTables([]);
+        setTableOptions([]);
         return;
       }
       const isValid = validateDateTime(date, time);
       if (!isValid) {
-        setTables([]);
+        setTableOptions([]);
         return;
       }
       setIsLoadingTables(true);
       setIsTableChecked(true);
-      setSelectedTableId(null);
+      setSelectedOptionId(null);
       try {
         const data = await reservationService.getAvailableTables(date, time, Number(partySize));
-        setTables(data);
+        setTableOptions(data);
+
+        if (data.length > 0) {
+          setSelectedOptionId(data[0].optionId);
+        }
       } catch (error) {
 
       } finally {
@@ -106,9 +117,17 @@ export const useReservationForm = (t: (key: string, values?: any) => string) => 
   }, [date, time, partySize]);
 
   const handleSubmit = async () => {
-    if (!phone || !date || !time || !partySize || !selectedTableId || !fullName) {
+    if (!phone || !date || !time || !partySize || !selectedOptionId || !fullName) {
       toast.error(t("errors.missingTitle"), {
         description: t("errors.missingDescription"),
+      });
+      return;
+    }
+
+    const selectedOption = tableOptions.find((x) => x.optionId === selectedOptionId);
+    if (!selectedOption || selectedOption.tableIds.length === 0) {
+      toast.error(t("errors.failTitle"), {
+        description: t("errors.systemError"),
       });
       return;
     }
@@ -124,13 +143,14 @@ export const useReservationForm = (t: (key: string, values?: any) => string) => 
     const reservedTime = new Date(`${date}T${time}`).toISOString();
     try {
       const payload = {
-        tableId: selectedTableId,
+        tableId: selectedOption.tableIds[0],
+        tableIds: selectedOption.tableIds,
         customerName: fullName,
         phone: phone,
         email: email || null,
         partySize: Number(partySize),
         reservedTime: reservedTime,
-        status: status,
+        status: 'confirmed',
         source: source
       };
 
@@ -143,9 +163,13 @@ export const useReservationForm = (t: (key: string, values?: any) => string) => 
         }),
       });
 
-      setTimeout(() => {
-        router.push('/dashboard/reservation');
-      }, 1500);
+      if (options?.onSuccess) {
+        options.onSuccess();
+      } else {
+        setTimeout(() => {
+          router.push('/dashboard/reservations');
+        }, 1500);
+      }
     } catch (error: any) {
       toast.error(t("errors.failTitle"), {
         description: error.message || t("errors.systemError"),
@@ -155,9 +179,9 @@ export const useReservationForm = (t: (key: string, values?: any) => string) => 
 
   return {
     formState: { phone, fullName, email, customerType, loyaltyPoints, date, time, partySize, source, status, validationError },
-    tableState: { tables, selectedTableId, isLoadingTables, isTableChecked },
+    tableState: { tableOptions, selectedOptionId, isLoadingTables, isTableChecked },
     loadingState: { isSearchingCustomer },
-    setters: { setPhone, setFullName, setEmail, setDate, setTime, setPartySize, setSelectedTableId, setStatus },
+    setters: { setPhone, setFullName, setEmail, setDate, setTime, setPartySize, setSelectedOptionId, setStatus },
     handlers: { handleCustomerSearch, handleSourceChange, handleSubmit }
   };
 };

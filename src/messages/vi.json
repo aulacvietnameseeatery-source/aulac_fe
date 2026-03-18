@@ -1050,7 +1050,7 @@
     }
   },
   "StaffReservation": {
-    "title": "Tạo đặt bàn thủ công",
+    "title": "Tạo đặt bàn",
     "subtitle": "Nhập thông tin cho khách walk-in hoặc đặt qua điện thoại",
     "cancel": "Hủy",
     "save": "Lưu đặt bàn",
@@ -1073,6 +1073,7 @@
       "email": "Email",
       "enterPhone": "Nhập số điện thoại...",
       "enterName": "Tên khách hàng",
+      "enterEmail": "ten@example.com",
       "newCustomer": "Khách mới",
       "member": "Thành viên ({points} điểm)"
     },
@@ -1087,6 +1088,8 @@
       "availability": "Bàn khả dụng",
       "scanning": "Đang kiểm tra...",
       "found": "Tìm thấy {count} bàn",
+      "tableCount": "{count} bàn",
+      "bestFit": "Tối ưu nhất",
       "emptyHint": "Nhập ngày, giờ và số khách để tìm bàn.",
       "noTable": "Không có bàn phù hợp."
     },
