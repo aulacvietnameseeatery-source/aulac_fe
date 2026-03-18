@@ -26,7 +26,7 @@ export type DishDetailResponse = {
   media: {
     mediaId: number;
     url: string;
-    mediaType: "IMAGE" | "IMAGE_360";
+    mediaType: "IMAGE" | "IMAGE_360"| "VIDEO";
     isPrimary: boolean;
   }[];
 };

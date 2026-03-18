@@ -2,13 +2,11 @@ import { ApiResponse } from "@/types/api-response.types";
 import { DishFormValues } from "../types/schema";
 import { api } from "@/lib/http";
 import { DishDetailResponse, CategoryDto, DishStatusDto, DishTagDto, DishDietDto, TranslateDishRequest, TranslateDishResponse } from "../types/dish-detail.types";
+import { DishImagesState } from "../hooks/useDishImages";
 
 export async function createDish(
   data: DishFormValues,
-  images: {
-    staticImages: File[];
-    images360: File[];
-  }
+  images: DishImagesState
 ) {
   const formData = new FormData();
 
@@ -48,6 +46,10 @@ export async function createDish(
     formData.append("images360", f)
   );
 
+  if (images.video) {
+    formData.append("video", images.video);
+  }
+
   const res =  api.post<ApiResponse<void>>("/api/dishes", formData);
 
   if (!(await res).success) throw new Error("Create dish failed");
@@ -81,10 +83,7 @@ export async function getAllDiets() {
 export async function editDish(
   dishId : number, 
   data: DishFormValues, 
-  images: {
-    staticImages: File[];
-    images360: File[];
-  },
+  images: DishImagesState,
   removedMediaIds: number[]
 ) {
   const formData = new FormData();
@@ -125,6 +124,10 @@ export async function editDish(
   images.images360.forEach(f =>
     formData.append("images360", f)
   );
+
+  if (images.video) {
+    formData.append("video", images.video);
+  }
 
   formData.append("removedMediaIds", JSON.stringify(removedMediaIds));
 
