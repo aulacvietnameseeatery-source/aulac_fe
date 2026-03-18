@@ -1,0 +1,28 @@
+{
+	"folders": [
+		{
+			"path": "../../../.."
+		},
+		{
+			"path": "../../../../../BE/Core"
+		}
+	],
+	"settings": {
+		"mcp": {
+			"servers": {
+				"io.github.ChromeDevTools/chrome-devtools-mcp": {
+					"type": "stdio",
+					"command": "npx",
+					"args": [
+						"--registry",
+						"https://registry.npmjs.org",
+						"chrome-devtools-mcp@0.20.2"
+					],
+					"gallery": "https://api.mcp.github.com",
+					"version": "0.20.2"
+				}
+			},
+			"inputs": []
+		}
+	}
+}
