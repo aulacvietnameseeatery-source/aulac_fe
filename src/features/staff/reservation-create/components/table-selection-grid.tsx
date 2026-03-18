@@ -17,7 +17,7 @@ export const TableSelectionGrid: React.FC<Props> = ({
 }) => {
   const t = useTranslations("StaffReservation.table");
   const heightClass = compact
-    ? "h-[170px] sm:h-[200px] lg:h-[220px]"
+    ? "h-[210px] sm:h-[240px] lg:h-[260px]"
     : "h-[220px] sm:h-[260px] lg:h-[300px]";
 
   return (

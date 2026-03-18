@@ -1081,6 +1081,8 @@
       "sectionTitle": "Booking Details",
       "date": "Date",
       "time": "Time",
+      "selectTime": "Select Time",
+      "openingHours": "(11:00 AM – 10:00 PM)",
       "partySize": "Party Size",
       "enterSize": "Ex: 4"
     },

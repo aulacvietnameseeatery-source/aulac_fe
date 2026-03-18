@@ -20,6 +20,7 @@ export const useReservationForm = (
   const [email, setEmail] = useState('');
   const [customerType, setCustomerType] = useState<CustomerType>('new');
   const [loyaltyPoints, setLoyaltyPoints] = useState(0);
+  const [customerId, setCustomerId] = useState<number | undefined>(undefined);
   const [isSearchingCustomer, setIsSearchingCustomer] = useState(false);
 
   // -- Booking Details State --
@@ -50,6 +51,7 @@ export const useReservationForm = (
     setIsSearchingCustomer(true);
     setFullName('');
     setEmail('');
+    setCustomerId(undefined);
     setCustomerType('new');
     setLoyaltyPoints(0);
     try {
@@ -57,6 +59,7 @@ export const useReservationForm = (
       if (data) {
         setFullName(data.fullName || '');
         setEmail(data.email || '');
+        setCustomerId(data.customerId);
         setCustomerType(data.isMember ? 'member' : 'new');
         setLoyaltyPoints(data.loyaltyPoints || 0);
       }
@@ -143,6 +146,7 @@ export const useReservationForm = (
     const reservedTime = new Date(`${date}T${time}`).toISOString();
     try {
       const payload = {
+        customerId: customerId,
         tableId: selectedOption.tableIds[0],
         tableIds: selectedOption.tableIds,
         customerName: fullName,

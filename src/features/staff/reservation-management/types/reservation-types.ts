@@ -57,6 +57,27 @@ export interface ReservationTableDto {
     zone: string;
 }
 
+export interface ReservationTableOptionDto {
+    optionId: string;
+    tableIds: number[];
+    tableCodes: string;
+    zone: string;
+    totalCapacity: number;
+    excessCapacity: number;
+    tableCount: number;
+    isBestFit: boolean;
+}
+
+export interface ReservationCustomerLookupDto {
+    customerId: number;
+    fullName: string | null;
+    phone: string;
+    email: string | null;
+    isMember: boolean | null;
+    loyaltyPoints: number | null;
+    createdAt: string | null;
+}
+
 export interface UpdateReservationRequest {
     customerName: string;
     phone: string;
