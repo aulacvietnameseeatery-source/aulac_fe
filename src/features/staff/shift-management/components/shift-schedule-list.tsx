@@ -4,6 +4,7 @@ import { useState, useMemo, useCallback, type ReactNode } from "react";
 import { useTranslations } from "next-intl";
 import { Plus, RefreshCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ALCard } from "@/components/ui/al-card";
 import { ALDatePicker } from "@/components/ui/al-date-picker";
 import { BaseTable } from "@/components/ui/table/base-table";
 import { PermissionGuard } from "@/components/permission-guard";
@@ -113,7 +114,7 @@ export function ShiftScheduleList() {
   };
 
   return (
-    <div className="space-y-4 rounded-2xl border border-[#D5BA98]/60 bg-white p-4 shadow-sm sm:p-5">
+    <div >
       <BaseTable<ShiftAssignmentListDto>
         data={assignments}
         loading={isLoading}
@@ -126,64 +127,64 @@ export function ShiftScheduleList() {
         defaultRowsPerPage={10}
         rowsPerPageOptions={[10, 20, 50, 100]}
         renderTitle={() => (
-          <div className="w-full space-y-3">
-            <div className="flex flex-wrap items-start justify-between gap-3 rounded-xl border border-[#D5BA98]/50 bg-[#FDFBF9] px-4 py-3">
+          <div className="w-full space-y-4 mb-4">
+            <ALCard className="flex flex-wrap items-center justify-between gap-4 px-5 py-4 border-[#D5BA98]/50">
               <div>
                 <h1 className="text-2xl font-semibold tracking-wide text-[#1A3A52]">{t("title")}</h1>
-                <p className="text-sm text-[#1A3A52]/70">
+                <p className="text-sm text-[#1A3A52]/70 mt-1">
                   {t("description")}
                 </p>
               </div>
-              <div className="flex items-center gap-2">
-                <span className="rounded-full border border-blue-600 bg-blue-600 px-2 py-0.5 text-xs font-semibold text-white">
-                  {t("activeCount", { count: activeCount })}
-                </span>
-                <span className="rounded-full border border-slate-700 bg-slate-700 px-2 py-0.5 text-xs font-semibold text-white">
-                  {t("cancelledCount", { count: cancelledCount })}
-                </span>
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2">
+                  <span className="rounded-full border border-blue-600 bg-blue-600 px-2 py-0.5 text-xs font-semibold text-white">
+                    {t("activeCount", { count: activeCount })}
+                  </span>
+                  <span className="rounded-full border border-slate-700 bg-slate-700 px-2 py-0.5 text-xs font-semibold text-white">
+                    {t("cancelledCount", { count: cancelledCount })}
+                  </span>
+                </div>
+                <PermissionGuard permission={Permissions.AssignShift}>
+                  <Button onClick={handleCreate} className="gap-2 bg-[#1A3A52] text-[#FDFBF9] hover:bg-[#1A3A52]/90">
+                    <Plus className="w-4 h-4" />
+                    {t("newAssignment")}
+                  </Button>
+                </PermissionGuard>
               </div>
-            </div>
-            <div className="flex justify-end">
-              <PermissionGuard permission={Permissions.AssignShift}>
-                <Button onClick={handleCreate} className="gap-2 bg-[#1A3A52] text-[#FDFBF9] hover:bg-[#1A3A52]/90">
-                  <Plus className="w-4 h-4" />
-                  {t("newAssignment")}
-                </Button>
-              </PermissionGuard>
-            </div>
-          </div>
-        )}
-        renderToolbarAppend={() => (
-          <div className="flex flex-wrap items-end gap-2 rounded-xl border border-[#D5BA98]/60 bg-white p-3 shadow-sm">
-            <ALDatePicker
-              title={t("filters.fromDate")}
-              value={fromDate}
-              onChange={setFromDate}
-              placeholder={t("filters.fromDatePlaceholder")}
-              clearable
-              inputSize="sm"
-              wrapperClassName="w-42"
-            />
-            <span className="text-sm text-[#1A3A52]/60">-</span>
-            <ALDatePicker
-              title={t("filters.toDate")}
-              value={toDate}
-              onChange={setToDate}
-              placeholder={t("filters.toDatePlaceholder")}
-              clearable
-              inputSize="sm"
-              wrapperClassName="w-42"
-            />
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => refetch()}
-              disabled={isLoading}
-              className="border-slate-300 bg-white text-[#1A3A52] hover:bg-slate-100"
-            >
-              <RefreshCcw className="w-4 h-4" />
-              <span className="ml-1">{t("filters.refresh")}</span>
-            </Button>
+            </ALCard>
+
+            <ALCard padding="md" className="flex flex-wrap items-end justify-between gap-4">
+              <div className="flex flex-wrap items-center gap-3">
+                <ALDatePicker
+                  title={t("filters.fromDate")}
+                  value={fromDate}
+                  onChange={setFromDate}
+                  placeholder={t("filters.fromDatePlaceholder")}
+                  clearable
+                  inputSize="sm"
+                  wrapperClassName="w-48"
+                />
+                <ALDatePicker
+                  title={t("filters.toDate")}
+                  value={toDate}
+                  onChange={setToDate}
+                  placeholder={t("filters.toDatePlaceholder")}
+                  clearable
+                  inputSize="sm"
+                  wrapperClassName="w-48"
+                />
+              </div>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => refetch()}
+                disabled={isLoading}
+                className="bg-white border-slate-300 text-[#1A3A52] hover:bg-slate-100"
+              >
+                <RefreshCcw className="w-4 h-4" />
+                <span className="ml-1">{t("filters.refresh")}</span>
+              </Button>
+            </ALCard>
           </div>
         )}
         renderCell={handleGlobalRenderCell}
@@ -207,9 +208,9 @@ export function ShiftScheduleList() {
           return <TableActionColumn actions={actions} item={a} />;
         }}
         renderNoData={() => (
-          <div className="flex items-center justify-center rounded-xl border border-[#D5BA98]/60 bg-[#FDFBF9] py-16 text-sm text-[#1A3A52]/70">
+          <ALCard className="flex items-center justify-center border-[#D5BA98]/60 bg-[#FDFBF9] py-16 text-sm text-[#1A3A52]/70">
             {t("noData")}
-          </div>
+          </ALCard>
         )}
       />
 

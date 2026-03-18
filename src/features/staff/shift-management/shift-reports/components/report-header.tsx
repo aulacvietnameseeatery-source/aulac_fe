@@ -5,6 +5,7 @@ import { BarChart2, RefreshCcw, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ALDatePicker } from "@/components/ui/al-date-picker";
 import { ALCombobox } from "@/components/ui/al-combobox";
+import { ALCard } from "@/components/ui/al-card";
 import { type FiltersState, thisMonthRange } from "./report-shared";
 
 interface ReportHeaderProps {
@@ -54,7 +55,7 @@ export function ReportHeader({ filters, isLoading, onChange, onRefetch, onExport
   const activeQuickTime = PRESETS.find((p) => isActive(p))?.key ?? "";
 
   return (
-    <div className="flex flex-col xl:flex-row items-start xl:items-center justify-between gap-4 rounded-xl border border-[#D5BA98]/60 bg-white px-4 py-3 shadow-sm">
+    <ALCard animation="slide-up" className="flex flex-col xl:flex-row items-start xl:items-center justify-between gap-4 px-4 py-3">
       <div className="flex items-center gap-3">
         <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#1A3A52]/8 shrink-0">
           <BarChart2 className="h-5 w-5 text-[#1A3A52]" />
@@ -127,6 +128,6 @@ export function ReportHeader({ filters, isLoading, onChange, onRefetch, onExport
           </Button>
         </div>
       </div>
-    </div>
+    </ALCard>
   );
 }

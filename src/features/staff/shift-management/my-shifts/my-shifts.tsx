@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useMemo } from "react";
 import { RefreshCcw, CalendarDays, ArrowRightLeft, CalendarX } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { ALCard } from "@/components/ui/al-card";
 import { useMyShiftsQuery } from "../hooks/use-shift-queries";
 import { CheckInCard } from "../components/check-in-card";
 import { ShiftStatusBadge } from "../components/shift-status-badge";
@@ -82,39 +83,44 @@ function getAssignmentStatus(a: ShiftAssignmentListDto, now: Date): DayStatus {
 // ── sub-components ──
 
 function ShiftRow({ a }: { a: ShiftAssignmentListDto }) {
-  const [isHovered, setIsHovered] = useState(false);
   const isIncoming = a.workDate && a.workDate >= todayIso();
 
   return (
-    <div
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      className="flex items-center justify-between rounded-lg border border-[#D5BA98]/60 bg-white px-4 py-3 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md h-16"
+    <ALCard
+      withHoverState
+      variant="soft"
+      hoverEffect="lift"
+      animation="fade"
+      className="flex h-16 items-center justify-between rounded-lg px-4 py-3"
     >
-      <div className="space-y-0.5 min-w-0 flex-1">
-        <p className="truncate text-sm font-medium text-[#1A3A52]">{a.templateName ?? `Assignment #${a.shiftAssignmentId}`}</p>
-        <p className="text-xs text-[#1A3A52]/70">
-          {a.workDate} · {fmt(a.plannedStartAt)} – {fmt(a.plannedEndAt)}
-        </p>
-      </div>
-
-      <div className="flex items-center gap-2 shrink-0 ml-3 h-full">
-        {isHovered && isIncoming && a.isActive ? (
-          <div className="flex gap-1 animate-in fade-in zoom-in duration-200">
-            <Button size="sm" variant="outline" className="h-8 gap-1 border-blue-200 bg-blue-50 text-blue-700 hover:bg-blue-100 hover:text-blue-800">
-              <ArrowRightLeft className="w-3.5 h-3.5" />
-              Swap
-            </Button>
-            <Button size="sm" variant="outline" className="h-8 gap-1 border-amber-200 bg-amber-50 text-amber-700 hover:bg-amber-100 hover:text-amber-800">
-              <CalendarX className="w-3.5 h-3.5" />
-              Leave
-            </Button>
+      {({ isHovered }) => (
+        <>
+          <div className="space-y-0.5 min-w-0 flex-1">
+            <p className="truncate text-sm font-medium text-[#1A3A52]">{a.templateName ?? `Assignment #${a.shiftAssignmentId}`}</p>
+            <p className="text-xs text-[#1A3A52]/70">
+              {a.workDate} · {fmt(a.plannedStartAt)} – {fmt(a.plannedEndAt)}
+            </p>
           </div>
-        ) : (
-          <ShiftStatusBadge statusCode={a.isActive ? "active" : "cancelled"} type="assignment" />
-        )}
-      </div>
-    </div>
+
+          <div className="flex items-center gap-2 shrink-0 ml-3 h-full">
+            {isHovered && isIncoming && a.isActive ? (
+              <div className="flex gap-1 animate-in fade-in zoom-in duration-200">
+                <Button size="sm" variant="outline" className="h-8 gap-1 border-blue-200 bg-blue-50 text-blue-700 hover:bg-blue-100 hover:text-blue-800">
+                  <ArrowRightLeft className="w-3.5 h-3.5" />
+                  Swap
+                </Button>
+                <Button size="sm" variant="outline" className="h-8 gap-1 border-amber-200 bg-amber-50 text-amber-700 hover:bg-amber-100 hover:text-amber-800">
+                  <CalendarX className="w-3.5 h-3.5" />
+                  Leave
+                </Button>
+              </div>
+            ) : (
+              <ShiftStatusBadge statusCode={a.isActive ? "active" : "cancelled"} type="assignment" />
+            )}
+          </div>
+        </>
+      )}
+    </ALCard>
   );
 }
 
@@ -233,7 +239,7 @@ export function MyShifts() {
   return (
     <div className="space-y-6 rounded-2xl border border-[#D5BA98]/40 bg-[#FDFBF9] p-5 sm:p-6">
       {/* Header */}
-      <div className="flex items-start justify-between rounded-xl border border border-[#D5BA98]/60 bg-white px-4 py-4 shadow-sm sm:px-5">
+      <ALCard animation="slide-up" className="flex items-start justify-between px-4 py-4 sm:px-5">
         <div>
           <h1 className="text-2xl font-semibold tracking-wide text-[#1A3A52]">My Shifts</h1>
           <p className="mt-1 text-sm text-[#1A3A52]/70">
@@ -249,22 +255,22 @@ export function MyShifts() {
         >
           <RefreshCcw className="w-4 h-4" />
         </Button>
-      </div>
+      </ALCard>
 
       {isLoading ? (
-        <div className="flex items-center justify-center rounded-xl border border border-[#D5BA98]/60 bg-white py-20 text-sm text-[#1A3A52]/70 shadow-sm">
+        <ALCard className="flex items-center justify-center py-20 text-sm text-[#1A3A52]/70">
           Loading shifts…
-        </div>
+        </ALCard>
       ) : all.length === 0 ? (
-        <div className="flex flex-col items-center justify-center gap-3 rounded-xl border border border-[#D5BA98]/60 bg-white py-20 text-[#1A3A52]/70 shadow-sm">
+        <ALCard className="flex flex-col items-center justify-center gap-3 py-20 text-[#1A3A52]/70">
           <CalendarDays className="w-10 h-10" />
           <p className="text-sm">No shifts assigned in the next 30 days.</p>
-        </div>
+        </ALCard>
       ) : (
         <div className="grid gap-6 lg:grid-cols-12 lg:items-start">
           {/* LEFT COLUMN: Summary & Calendar */}
           <div className="space-y-6 lg:col-span-5 xl:col-span-4 lg:sticky lg:top-6">
-            <section className="space-y-4 rounded-xl border border border-[#D5BA98]/60 bg-white p-4 shadow-sm">
+            <ALCard as="section" padding="md" animation="slide-up" className="space-y-4">
               <div className="flex items-center justify-between">
                 <h2 className="text-base font-semibold text-[#1A3A52]">This Month Summary</h2>
                 <p className="text-xs text-[#1A3A52]/65">Attendance overview</p>
@@ -308,57 +314,57 @@ export function MyShifts() {
                     cell.kind === "empty" ? (
                       <div key={cell.key} className="h-10 rounded-md border border-transparent" />
                     ) : (
-                      <div
+                      <ALCard
                         key={cell.key}
-                        className="flex flex-col items-center justify-center rounded-md border border border-[#D5BA98]/60 bg-[#FDFBF9] py-1 shadow-sm transition-colors hover:bg-slate-100"
+                        className="flex flex-col items-center justify-center rounded-md border-[#D5BA98]/60 bg-[#FDFBF9] py-1 shadow-sm transition-colors hover:bg-slate-100"
                         title={`${cell.count} shift(s)`}
                       >
                         <span className="text-xs font-semibold text-[#1A3A52]">{cell.day}</span>
                         <div className={`mt-0.5 h-1.5 w-1.5 rounded-full ${cell.status === "NONE" ? "bg-transparent" : dayStatusClass(cell.status).split(' ')[1]}`} />
-                      </div>
+                      </ALCard>
                     )
                   )}
                 </div>
               </div>
-            </section>
+            </ALCard>
           </div>
 
           {/* RIGHT COLUMN: Today, Upcoming, Past */}
           <div className="space-y-6 lg:col-span-7 xl:col-span-8">
             {/* Today */}
             {todayShifts.length > 0 && (
-              <section className="space-y-3 rounded-xl border border border-[#D5BA98]/60 bg-white p-4 shadow-sm">
+              <ALCard as="section" padding="md" animation="fade" className="space-y-3">
                 <h2 className="text-base font-semibold text-[#1A3A52]">Today</h2>
                 <div className="grid gap-4 sm:grid-cols-2">
                   {todayShifts.map((a) => (
                     <CheckInCard key={a.shiftAssignmentId} assignment={a as import("../types/shift-management.types").ShiftAssignmentDetailDto} />
                   ))}
                 </div>
-              </section>
+              </ALCard>
             )}
 
             {/* Upcoming */}
             {upcoming.length > 0 && (
-              <section className="space-y-3 rounded-xl border border border-[#D5BA98]/60 bg-white p-4 shadow-sm">
+              <ALCard as="section" padding="md" animation="fade" className="space-y-3">
                 <h2 className="text-base font-semibold text-[#1A3A52]">Upcoming ({upcoming.length})</h2>
                 <div className="space-y-2">
                   {upcoming.map((a) => (
                     <ShiftRow key={a.shiftAssignmentId} a={a} />
                   ))}
                 </div>
-              </section>
+              </ALCard>
             )}
 
             {/* Past */}
             {past.length > 0 && (
-              <section className="space-y-3 rounded-xl border border border-[#D5BA98]/60 bg-white p-4 shadow-sm">
+              <ALCard as="section" padding="md" animation="fade" className="space-y-3">
                 <h2 className="text-base font-semibold text-[#1A3A52]/70">Past Shifts ({past.length})</h2>
                 <div className="space-y-2">
                   {past.map((a) => (
                     <ShiftRow key={a.shiftAssignmentId} a={a} />
                   ))}
                 </div>
-              </section>
+              </ALCard>
             )}
           </div>
         </div>

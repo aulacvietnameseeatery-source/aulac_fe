@@ -91,7 +91,7 @@ export function WorkedHoursTab({ rows, loading }: Props) {
             value={staffQuery}
             onChange={(e) => setStaffQuery(e.target.value)}
             placeholder={t("workedHoursTab.searchPlaceholder")}
-            className="h-8 w-full rounded-lg border border border-[#D5BA98]/60 bg-[#FDFBF9] px-3 text-sm text-[#1A3A52] placeholder:text-[#1A3A52]/40 focus:outline-none focus:ring-2 focus:ring-[#1A3A52]/20"
+            className="h-8 w-full rounded-lg border border-[#D5BA98]/60 bg-[#FDFBF9] px-3 text-sm text-[#1A3A52] placeholder:text-[#1A3A52]/40 focus:outline-none focus:ring-2 focus:ring-[#1A3A52]/20"
           />
         </div>
         {staffQuery && (

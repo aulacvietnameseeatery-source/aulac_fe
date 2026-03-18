@@ -110,6 +110,7 @@ shadcn/ui (new-york style) extended with project-specific components. Import fro
 
 | Component | Notes |
 |-----------|-------|
+| `ALCard` | **Reusable card wrapper with presets:** variants (`default`, `soft`, `tinted`, `glass`, `outline`), elevation levels, animations, hover effects. **Self-contained hover state** via `withHoverState` + render-prop children. See [al-card-pattern guide](instructions/al-card-pattern.instructions.md). Replace raw `<div>` card styling with `<ALCard>`. |
 | `Button` | Has custom `isLoading` prop |
 | `Dialog` | **Custom portal implementation**, NOT Radix — styled via `src/styles/components/dialog.css` |
 | `Drawer` | Right-side panel |

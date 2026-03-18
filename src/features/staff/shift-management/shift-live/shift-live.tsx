@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { RefreshCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ALDatePicker } from "@/components/ui/al-date-picker";
+import { ALCard } from "@/components/ui/al-card";
 import { useShiftAssignmentsQuery } from "../hooks/use-shift-queries";
 import { ShiftStatusBadge } from "../components/shift-status-badge";
 import type { ShiftAssignmentListDto } from "../types/shift-management.types";
@@ -69,7 +70,7 @@ export function ShiftLive() {
   return (
     <div className="space-y-6 rounded-2xl border border-[#D5BA98]/40 bg-[#FDFBF9] p-5 sm:p-6">
       {/* Header */}
-      <div className="flex items-start justify-between rounded-xl border border border-[#D5BA98]/60 bg-white px-4 py-4 shadow-sm sm:px-5">
+      <ALCard animation="slide-up" className="flex items-start justify-between px-4 py-4 sm:px-5">
         <div>
           <div className="flex items-center gap-2">
             <h1 className="text-2xl font-semibold tracking-wide text-[#1A3A52]">Live On-Duty Board</h1>
@@ -92,10 +93,10 @@ export function ShiftLive() {
         >
           <RefreshCcw className="w-4 h-4" />
         </Button>
-      </div>
+      </ALCard>
 
       {/* Date picker */}
-      <div className="flex items-center gap-2 rounded-xl border border border-[#D5BA98]/60 bg-white p-3 shadow-sm">
+      <ALCard padding="sm" className="flex items-center gap-2">
         <label className="text-sm text-[#1A3A52]/70">Date:</label>
         <ALDatePicker
           value={businessDate}
@@ -105,10 +106,6 @@ export function ShiftLive() {
           inputSize="sm"
           wrapperClassName="w-38"
         />
-      </div>
-
-      {/* Filter bar */}
-      <div className="flex flex-wrap items-center gap-2 rounded-xl border border border-[#D5BA98]/60 bg-white p-3 text-sm shadow-sm">
         {["ALL", "ACTIVE", "CANCELLED"].map((code) => (
           <button
             key={code}
@@ -123,19 +120,19 @@ export function ShiftLive() {
             {code.charAt(0) + code.slice(1).toLowerCase()}
           </button>
         ))}
-      </div>
+      </ALCard>
 
       {/* Board table */}
       {isLoading ? (
-        <div className="flex items-center justify-center rounded-xl border border border-[#D5BA98]/60 bg-white py-16 text-sm text-[#1A3A52]/70 shadow-sm">
+        <ALCard className="flex items-center justify-center py-16 text-sm text-[#1A3A52]/70">
           Loading board…
-        </div>
+        </ALCard>
       ) : filtered.length === 0 ? (
-        <div className="flex items-center justify-center rounded-xl border border border-[#D5BA98]/60 bg-white py-16 text-sm text-[#1A3A52]/70 shadow-sm">
+        <ALCard className="flex items-center justify-center py-16 text-sm text-[#1A3A52]/70">
           No assignments found for this date.
-        </div>
+        </ALCard>
       ) : (
-        <div className="overflow-x-auto rounded-xl border border border-[#D5BA98]/60 bg-white shadow-sm">
+        <ALCard className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead className="bg-[#D5BA98]/15">
               <tr>
@@ -165,7 +162,7 @@ export function ShiftLive() {
               ))}
             </tbody>
           </table>
-        </div>
+        </ALCard>
       )}
     </div>
   );
