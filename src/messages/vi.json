@@ -2415,7 +2415,97 @@
       "createSuccess": "Tạo cài đặt mới thành công.",
       "saveError": "Lưu cài đặt thất bại."
     },
+    "Common": {
+      "saveChanges": "Lưu thay đổi",
+      "discardChanges": "Hủy thay đổi",
+      "upload": "Tải lên",
+      "change": "Thay đổi",
+      "removing": "Đang xóa...",
+      "uploading": "Đang tải...",
+      "maxSizeImage": "JPG/PNG tối đa 5MB",
+      "maxSizeVideo": "MP4/WEBM tối đa 100MB"
+    },
+    "Introduction": {
+      "title": "Trang Giới thiệu",
+      "description": "Quản lý nội dung và truyền thông cho trang chủ.",
+      "sections": {
+        "hero": {
+          "title": "Phần Hero",
+          "description": "Biểu ngữ chính ở đầu trang.",
+          "mainTitle": "Tiêu đề chính",
+          "brandQuote": "Câu trích dẫn"
+        },
+        "chef": {
+          "title": "Khám phá Đầu bếp",
+          "description": "Làm nổi bật các đầu bếp của bạn.",
+          "sectionLabel": "Nhãn phần",
+          "ctaAction": "Hành động CTA",
+          "discoveryHeader": "Tiêu đề khám phá",
+          "leadChef": "Bếp trưởng",
+          "executiveChef": "Đầu bếp điều hành",
+          "name": "Tên",
+          "quote": "Trích dẫn"
+        },
+        "ambiance": {
+          "title": "Tham quan Không gian",
+          "description": "Văn bản và tiêu đề cho chuyến tham quan ảo.",
+          "navLabel": "Nhãn điều hướng",
+          "sectionTitle": "Tiêu đề phần",
+          "summary": "Tóm tắt không khí"
+        },
+        "collection": {
+          "title": "Bộ sưu tập Món ăn",
+          "description": "Cấu hình chi tiết cho các món ăn đặc trưng.",
+          "galleryLabel": "Nhãn bộ sưu tập",
+          "mainTitle": "Tiêu đề chính",
+          "dishTitle": "Món ăn đặc trưng {index}",
+          "dishMainTitle": "Tiêu đề chính",
+          "dishSubTitle": "Tiêu đề phụ",
+          "hoverCategory": "Danh mục khi di chuột",
+          "hoverTitle": "Tiêu đề khi di chuột",
+          "hoverDescription": "Mô tả khi di chuột"
+        }
+      },
+      "sidebar": {
+        "mediaTitle": "Tài sản truyền thông",
+        "mediaDescription": "Nội dung hình ảnh dùng chung cho các ngôn ngữ.",
+        "heroBackground": "Ảnh nền Hero",
+        "chefVideo": "Video đầu bếp",
+        "ambianceVideo": "Video không gian",
+        "dishImage": "Ảnh món ăn {index}"
+      }
+    },
     "StoreProfile": {
+      "title": "Hồ sơ Cửa hàng",
+      "description": "Quản lý danh tính và thông tin liên hệ.",
+      "sections": {
+        "identity": {
+          "title": "Danh tính",
+          "description": "Thông tin cơ bản về nhà hàng."
+        },
+        "contact": {
+          "title": "Liên hệ & Địa điểm",
+          "description": "Thông tin để khách hàng tìm thấy bạn."
+        },
+        "hours": {
+          "title": "Giờ hoạt động",
+          "description": "Thiết lập lịch trình bán hàng."
+        },
+        "social": {
+          "title": "Mạng xã hội",
+          "description": "Các liên kết mạng xã hội chính thức."
+        }
+      },
+      "sidebar": {
+        "brandTitle": "Tài sản thương hiệu",
+        "brandDescription": "Hình ảnh thương hiệu chính thức.",
+        "logo": "Logo chính thức",
+        "promoVideo": "Video giới thiệu"
+      },
+      "actions": {
+        "sync": "Đồng bộ danh tính",
+        "discard": "Hủy bản nháp"
+      },
       "identity": "Danh tính Cửa hàng",
       "identityDesc": "Cập nhật logo và tên chính thức của cửa hàng.",
       "contactLocation": "Liên hệ & Vị trí",
@@ -2449,9 +2539,7 @@
       "instagramPlaceholder": "https://instagram.com/trangcuaban",
       "tiktokLink": "Liên kết TikTok",
       "tiktokPlaceholder": "https://tiktok.com/@trangcuaban",
-      "saveChanges": "Lưu thay đổi",
       "reset": "Khôi phục",
-      "saving": "Đang lưu...",
       "clickToUpload": "Logo",
       "uploadSuccess": "Logo tải lên thành công",
       "uploadError": "Tải lên logo thất bại",
@@ -2633,34 +2721,6 @@
       "notifications": {
         "updateSuccess": "Cập nhật khách hàng thành công",
         "updateError": "Không thể cập nhật khách hàng"
-      }
-    },
-    "Detail": {
-      "title": "Chi tiết khách hàng",
-      "saveButton": "Đóng",
-      "cancel": "Đóng",
-      "fields": {
-        "phone": "Số điện thoại",
-        "fullName": "Họ và tên",
-        "email": "Email",
-        "loyaltyPoints": "Điểm tích lũy",
-        "isMember": "Trạng thái thành viên",
-        "createdAt": "Ngày tạo"
-      },
-      "placeholders": {
-        "phone": "",
-        "fullName": "",
-        "email": "",
-        "loyaltyPoints": ""
-      },
-      "validation": {
-        "phoneRequired": "",
-        "phoneMaxLength": "",
-        "phoneInvalid": "",
-        "nameMaxLength": "",
-        "emailMaxLength": "",
-        "emailInvalid": "",
-        "pointsNegative": ""
       }
     },
     "Detail": {

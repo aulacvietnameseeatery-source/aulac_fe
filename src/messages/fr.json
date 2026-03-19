@@ -2411,7 +2411,97 @@
       "createSuccess": "Paramètre créé avec succès.",
       "saveError": "Échec de l'enregistrement des paramètres."
     },
+    "Common": {
+      "saveChanges": "Enregistrer les modifications",
+      "discardChanges": "Annuler les modifications",
+      "upload": "Télécharger",
+      "change": "Modifier",
+      "removing": "Suppression...",
+      "uploading": "Téléchargement...",
+      "maxSizeImage": "JPG/PNG jusqu'à 5 Mo",
+      "maxSizeVideo": "MP4/WEBM jusqu'à 100 Mo"
+    },
+    "Introduction": {
+      "title": "Page d'introduction",
+      "description": "Gérez le contenu et les médias de votre page d'accueil.",
+      "sections": {
+        "hero": {
+          "title": "Section Héros",
+          "description": "La bannière principale en haut de la page.",
+          "mainTitle": "Titre principal",
+          "brandQuote": "Citation de marque"
+        },
+        "chef": {
+          "title": "Découverte du Chef",
+          "description": "Mettez en avant vos chefs.",
+          "sectionLabel": "Étiquette de section",
+          "ctaAction": "Action CTA",
+          "discoveryHeader": "En-tête de découverte",
+          "leadChef": "Chef de cuisine",
+          "executiveChef": "Chef exécutif",
+          "name": "Nom",
+          "quote": "Citation"
+        },
+        "ambiance": {
+          "title": "Visite de l'ambiance",
+          "description": "Textes et en-têtes de la visite virtuelle.",
+          "navLabel": "Étiquette de navigation",
+          "sectionTitle": "Titre de la section",
+          "summary": "Résumé de l'atmosphère"
+        },
+        "collection": {
+          "title": "Collection d'articles signatures",
+          "description": "Configurations détaillées pour vos plats principaux.",
+          "galleryLabel": "Étiquette de la galerie",
+          "mainTitle": "Titre principal de la collection",
+          "dishTitle": "Plat Signature {index}",
+          "dishMainTitle": "Titre principal",
+          "dishSubTitle": "Sous-titre",
+          "hoverCategory": "Catégorie au survol",
+          "hoverTitle": "Titre au survol",
+          "hoverDescription": "Description au survol"
+        }
+      },
+      "sidebar": {
+        "mediaTitle": "Ressources médiatiques",
+        "mediaDescription": "Contenu visuel global partagé entre les langues.",
+        "heroBackground": "Arrière-plan du héros",
+        "chefVideo": "Vidéo promo du chef",
+        "ambianceVideo": "Vidéo d'ambiance",
+        "dishImage": "Image du plat signature {index}"
+      }
+    },
     "StoreProfile": {
+      "title": "Profil de la boutique",
+      "description": "Gérez l'identité publique et les informations de contact.",
+      "sections": {
+        "identity": {
+          "title": "Identité",
+          "description": "Informations de base sur votre établissement."
+        },
+        "contact": {
+          "title": "Contact & Emplacement",
+          "description": "Comment les clients peuvent vous trouver."
+        },
+        "hours": {
+          "title": "Horaires d'ouverture",
+          "description": "Définissez votre emploi du temps hebdomadaire."
+        },
+        "social": {
+          "title": "Empreinte sociale",
+          "description": "Liens de présence numérique officiels."
+        }
+      },
+      "sidebar": {
+        "brandTitle": "Ressources de marque",
+        "brandDescription": "Visuels officiels (Partagés entre les langues).",
+        "logo": "Logo officiel",
+        "promoVideo": "Vidéo promotionnelle"
+      },
+      "actions": {
+        "sync": "Synchroniser l'identité",
+        "discard": "Annuler le brouillon"
+      },
       "identity": "Identité du Magasin",
       "identityDesc": "Mettez à jour le logo et le nom officiel de votre magasin.",
       "contactLocation": "Contact et Emplacement",
@@ -2445,9 +2535,7 @@
       "instagramPlaceholder": "https://instagram.com/votreprofil",
       "tiktokLink": "Lien TikTok",
       "tiktokPlaceholder": "https://tiktok.com/@votreprofil",
-      "saveChanges": "Enregistrer les modifications",
       "reset": "Réinitialiser",
-      "saving": "Enregistrement...",
       "clickToUpload": "Logo",
       "uploadSuccess": "Logo téléchargé avec succès",
       "uploadError": "Échec du téléchargement du logo",
@@ -2629,34 +2717,6 @@
       "notifications": {
         "updateSuccess": "Client mis à jour avec succès",
         "updateError": "Échec de la mise à jour du client"
-      }
-    },
-    "Detail": {
-      "title": "Détails du client",
-      "saveButton": "Fermer",
-      "cancel": "Fermer",
-      "fields": {
-        "phone": "Numéro de téléphone",
-        "fullName": "Nom complet",
-        "email": "Email",
-        "loyaltyPoints": "Points de fidélité",
-        "isMember": "Statut de membre",
-        "createdAt": "Créé le"
-      },
-      "placeholders": {
-        "phone": "",
-        "fullName": "",
-        "email": "",
-        "loyaltyPoints": ""
-      },
-      "validation": {
-        "phoneRequired": "",
-        "phoneMaxLength": "",
-        "phoneInvalid": "",
-        "nameMaxLength": "",
-        "emailMaxLength": "",
-        "emailInvalid": "",
-        "pointsNegative": ""
       }
     },
     "Detail": {

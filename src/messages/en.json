@@ -2415,7 +2415,97 @@
       "createSuccess": "Setting created successfully.",
       "saveError": "Failed to save settings."
     },
+    "Common": {
+      "saveChanges": "Save Changes",
+      "discardChanges": "Discard Changes",
+      "upload": "Upload",
+      "change": "Change",
+      "removing": "Removing...",
+      "uploading": "Uploading...",
+      "maxSizeImage": "JPG/PNG up to 5MB",
+      "maxSizeVideo": "MP4/WEBM up to 100MB"
+    },
+    "Introduction": {
+      "title": "Introduction Page",
+      "description": "Manage the content and media for your landing page.",
+      "sections": {
+        "hero": {
+          "title": "Hero Section",
+          "description": "The main banner at the top of the page.",
+          "mainTitle": "Main Title",
+          "brandQuote": "Brand Quote"
+        },
+        "chef": {
+          "title": "Chef Discovery",
+          "description": "Highlight your executive and lead chefs.",
+          "sectionLabel": "Section Label",
+          "ctaAction": "CTA Action",
+          "discoveryHeader": "Discovery Header",
+          "leadChef": "Lead Chef",
+          "executiveChef": "Executive Chef",
+          "name": "Name",
+          "quote": "Quote"
+        },
+        "ambiance": {
+          "title": "Ambiance Tour",
+          "description": "Virtual tour texts and headings.",
+          "navLabel": "Nav Label",
+          "sectionTitle": "Section Title",
+          "summary": "Atmosphere Summary"
+        },
+        "collection": {
+          "title": "Signature Items Collection",
+          "description": "Detailed configurations for your top dishes.",
+          "galleryLabel": "Gallery Label",
+          "mainTitle": "Collection Main Title",
+          "dishTitle": "Signature Dish {index}",
+          "dishMainTitle": "Main Title",
+          "dishSubTitle": "Sub Title",
+          "hoverCategory": "Hover Category",
+          "hoverTitle": "Hover Title",
+          "hoverDescription": "Hover Description"
+        }
+      },
+      "sidebar": {
+        "mediaTitle": "Media Assets",
+        "mediaDescription": "Global visual content shared across locales.",
+        "heroBackground": "Hero Background",
+        "chefVideo": "Chef Promo Video",
+        "ambianceVideo": "Ambiance Video",
+        "dishImage": "Signature Dish {index} Image"
+      }
+    },
     "StoreProfile": {
+      "title": "Store Profile",
+      "description": "Manage your store's public identity and contact Information.",
+      "sections": {
+        "identity": {
+          "title": "Identity",
+          "description": "Basic information about your establishment."
+        },
+        "contact": {
+          "title": "Contact & Location",
+          "description": "How customers can find and reach you."
+        },
+        "hours": {
+          "title": "Operating Hours",
+          "description": "Set your weekly schedule."
+        },
+        "social": {
+          "title": "Social Footprint",
+          "description": "Official digital presence links (Global)."
+        }
+      },
+      "sidebar": {
+        "brandTitle": "Brand Assets",
+        "brandDescription": "Official visuals (Shared across languages).",
+        "logo": "Official Logo",
+        "promoVideo": "Promo Video"
+      },
+      "actions": {
+        "sync": "Sync Identity",
+        "discard": "Discard Draft"
+      },
       "identity": "Store Identity",
       "identityDesc": "Update your store logo and official name.",
       "contactLocation": "Contact & Location",
@@ -2449,9 +2539,7 @@
       "instagramPlaceholder": "https://instagram.com/yourprofile",
       "tiktokLink": "TikTok Link",
       "tiktokPlaceholder": "https://tiktok.com/@yourprofile",
-      "saveChanges": "Save Changes",
       "reset": "Reset",
-      "saving": "Saving...",
       "clickToUpload": "Logo",
       "uploadSuccess": "Logo uploaded successfully",
       "uploadError": "Failed to upload logo",
@@ -2633,34 +2721,6 @@
       "notifications": {
         "updateSuccess": "Customer updated successfully",
         "updateError": "Failed to update customer"
-      }
-    },
-    "Detail": {
-      "title": "Customer Details",
-      "saveButton": "Close",
-      "cancel": "Close",
-      "fields": {
-        "phone": "Phone Number",
-        "fullName": "Full Name",
-        "email": "Email",
-        "loyaltyPoints": "Loyalty Points",
-        "isMember": "Member Status",
-        "createdAt": "Created At"
-      },
-      "placeholders": {
-        "phone": "",
-        "fullName": "",
-        "email": "",
-        "loyaltyPoints": ""
-      },
-      "validation": {
-        "phoneRequired": "",
-        "phoneMaxLength": "",
-        "phoneInvalid": "",
-        "nameMaxLength": "",
-        "emailMaxLength": "",
-        "emailInvalid": "",
-        "pointsNegative": ""
       }
     },
     "Detail": {
