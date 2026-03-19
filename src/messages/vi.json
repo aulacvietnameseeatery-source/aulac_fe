@@ -2514,12 +2514,16 @@
     "term1": "1. Cảm ơn quý khách đã dùng bữa.",
     "term2": "2. Vui lòng giữ lại biên lai này để đối chiếu.",
     "paymentVerified": "Lưu ý: Thanh toán đã được xác nhận bởi {staffName}.",
+    "paymentMethod": "P.Thức TToán",
     "subtotal": "Tạm tính",
     "discount": "Giảm giá",
-    "total": "Tổng cộng ($)",
+    "tip": "Tiền thưởng (Tip)",
+    "total": "Tổng cộng",
     "downloadPdf": "Tải PDF",
     "printInvoice": "In hóa đơn",
-    "defaultStaff": "Nhân viên"
+    "defaultStaff": "Nhân viên",
+    "thankYouBusiness": "Cảm ơn quý khách đã ủng hộ!",
+    "currency": "VND"
   },
   "Customer": {
     "close": "Đóng",

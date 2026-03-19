@@ -2510,12 +2510,16 @@
     "term1": "1. Merci d'avoir dîné avec nous.",
     "term2": "2. Veuillez conserver ce reçu pour vos dossiers.",
     "paymentVerified": "Note : Le paiement a été vérifié par {staffName}.",
+    "paymentMethod": "Méthode de paiement",
     "subtotal": "Sous-total",
     "discount": "Remise",
-    "total": "Total ($)",
+    "tip": "Pourboire",
+    "total": "Total",
     "downloadPdf": "Télécharger en PDF",
     "printInvoice": "Imprimer la facture",
-    "defaultStaff": "Personnel"
+    "defaultStaff": "Personnel",
+    "thankYouBusiness": "Merci pour votre visite !",
+    "currency": "EUR"
   },
   "Customer": {
     "close": "Fermer",

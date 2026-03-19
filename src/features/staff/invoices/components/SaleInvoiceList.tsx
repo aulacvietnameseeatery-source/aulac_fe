@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useCallback, useMemo, useState, useEffect, useRef } from 'react';
-import { useRouter } from 'next/navigation';
 import { useTranslations } from "next-intl";
 import { Eye, CalendarDays, RefreshCw, X, ChevronDown } from 'lucide-react';
 import { Button } from "@/components/ui/button";
@@ -11,16 +10,19 @@ import { useSaleInvoiceList } from '../hooks/useSaleInvoiceList';
 import { SaleInvoiceListItem } from '../types/invoice.types';
 import { ProtectedRoute } from "@/components/protected-route";
 import { Permissions } from "@/types/const";
+import { InvoiceDetailDialog } from './InvoiceDetailDialog';
 
 type DatePreset = "today" | "yesterday" | "last7" | "last30" | "thisMonth" | "lastMonth" | "custom";
 
 function SaleInvoiceListContent() {
   const t = useTranslations("Invoice.List");
-  const router = useRouter();
   const { invoices, isLoading, totalCount, paginationInfo, onDataChange, refresh, latestParamsRef } = useSaleInvoiceList();
 
+  const [selectedOrderId, setSelectedOrderId] = useState<number | null>(null);
+  const [dialogOpen, setDialogOpen] = useState(false);
+
   const [isRefreshing, setIsRefreshing] = useState(false);
-  
+
   // Date filter state
   const [datePreset, setDatePreset] = useState<DatePreset | null>(null);
   const [customFrom, setCustomFrom] = useState("");
@@ -50,42 +52,42 @@ function SaleInvoiceListContent() {
   ], [t]);
 
   const getPresetDates = (preset: DatePreset): { from: Date | null; to: Date | null } => {
-    const today = new Date(); 
+    const today = new Date();
     today.setHours(0, 0, 0, 0);
-    const eod = new Date(); 
+    const eod = new Date();
     eod.setHours(23, 59, 59, 999);
-    
+
     switch (preset) {
-      case "today": 
+      case "today":
         return { from: today, to: eod };
       case "yesterday": {
-        const y = new Date(today); 
+        const y = new Date(today);
         y.setDate(y.getDate() - 1);
-        const ye = new Date(y); 
+        const ye = new Date(y);
         ye.setHours(23, 59, 59, 999);
         return { from: y, to: ye };
       }
-      case "last7": { 
-        const f = new Date(today); 
-        f.setDate(f.getDate() - 6); 
-        return { from: f, to: eod }; 
+      case "last7": {
+        const f = new Date(today);
+        f.setDate(f.getDate() - 6);
+        return { from: f, to: eod };
       }
-      case "last30": { 
-        const f = new Date(today); 
-        f.setDate(f.getDate() - 29); 
-        return { from: f, to: eod }; 
+      case "last30": {
+        const f = new Date(today);
+        f.setDate(f.getDate() - 29);
+        return { from: f, to: eod };
       }
-      case "thisMonth": { 
-        const f = new Date(today.getFullYear(), today.getMonth(), 1); 
-        return { from: f, to: eod }; 
+      case "thisMonth": {
+        const f = new Date(today.getFullYear(), today.getMonth(), 1);
+        return { from: f, to: eod };
       }
       case "lastMonth": {
         const f = new Date(today.getFullYear(), today.getMonth() - 1, 1);
-        const t = new Date(today.getFullYear(), today.getMonth(), 0); 
+        const t = new Date(today.getFullYear(), today.getMonth(), 0);
         t.setHours(23, 59, 59, 999);
         return { from: f, to: t };
       }
-      default: 
+      default:
         return { from: null, to: null };
     }
   };
@@ -100,8 +102,8 @@ function SaleInvoiceListContent() {
 
   const clearDateFilter = (e: React.MouseEvent) => {
     e.stopPropagation();
-    setDatePreset(null); 
-    setCustomFrom(""); 
+    setDatePreset(null);
+    setCustomFrom("");
     setCustomTo("");
   };
 
@@ -112,7 +114,8 @@ function SaleInvoiceListContent() {
   }, [refresh]);
 
   const handleViewDetails = (invoice: SaleInvoiceListItem) => {
-    router.push(`/dashboard/invoices/${invoice.orderId}`);
+    setSelectedOrderId(invoice.orderId);
+    setDialogOpen(true);
   };
 
   // Refs for current date values — updated synchronously during render so handlers always see fresh values
@@ -158,7 +161,7 @@ function SaleInvoiceListContent() {
       return;
     }
     onDataChange({ ...latestParamsRef.current, page: 1, fromDate: fromDateRef.current, toDate: toDateRef.current });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [datePreset, customFrom, customTo, onDataChange]);
 
   // Format currency without comma, CHF after number
@@ -170,9 +173,9 @@ function SaleInvoiceListContent() {
   const formatDate = (dateString: string) => {
     if (!dateString) return '-';
     const date = new Date(dateString);
-    return date.toLocaleDateString('vi-VN', { 
-      year: 'numeric', 
-      month: '2-digit', 
+    return date.toLocaleDateString('vi-VN', {
+      year: 'numeric',
+      month: '2-digit',
       day: '2-digit',
       hour: '2-digit',
       minute: '2-digit'
@@ -255,8 +258,8 @@ function SaleInvoiceListContent() {
   ], [paginationInfo.page, paginationInfo.pageSize, t]);
 
   const handleGlobalRenderCell = useCallback((value: any, item: SaleInvoiceListItem, column: TableColumn, rowIndex: number) => {
-    const content = column.cellRender 
-      ? column.cellRender({ value, item, column, rowIndex }) 
+    const content = column.cellRender
+      ? column.cellRender({ value, item, column, rowIndex })
       : value;
 
     if (column.align) {
@@ -267,6 +270,11 @@ function SaleInvoiceListContent() {
 
   return (
     <div className="w-full h-full flex flex-col overflow-hidden">
+      <InvoiceDetailDialog
+        open={dialogOpen}
+        onClose={() => setDialogOpen(false)}
+        orderId={selectedOrderId}
+      />
       <BaseTable<SaleInvoiceListItem>
         data={invoices}
         loading={isLoading}
@@ -288,10 +296,10 @@ function SaleInvoiceListContent() {
                 </h1>
                 <p className="text-xs text-[#1A3A52]/60 mt-1">{t("description")}</p>
               </div>
-              <Button 
-                onClick={handleRefresh} 
-                variant="outline" 
-                size="sm" 
+              <Button
+                onClick={handleRefresh}
+                variant="outline"
+                size="sm"
                 disabled={isRefreshing}
                 className="h-9 px-3.5 text-sm font-semibold bg-[#FDFBF9] border-[#D5BA98]/60 text-[#1A3A52] hover:bg-[#D5BA98]/10"
               >
@@ -307,15 +315,14 @@ function SaleInvoiceListContent() {
                   variant="outline"
                   size="sm"
                   onClick={() => setDatePickerOpen(!datePickerOpen)}
-                  className={`h-9 px-3 text-sm font-medium ${
-                    activeDateLabel ? 'bg-[#1A3A52] text-white border-[#1A3A52]' : 'bg-white border-[#D5BA98]/60'
-                  }`}
+                  className={`h-9 px-3 text-sm font-medium ${activeDateLabel ? 'bg-[#1A3A52] text-white border-[#1A3A52]' : 'bg-white border-[#D5BA98]/60'
+                    }`}
                 >
                   <CalendarDays className="mr-2 h-4 w-4" />
                   {activeDateLabel || t("dateRange.selectDate")}
                   {activeDateLabel && (
-                    <X 
-                      className="ml-2 h-3 w-3" 
+                    <X
+                      className="ml-2 h-3 w-3"
                       onClick={clearDateFilter}
                     />
                   )}
@@ -333,9 +340,8 @@ function SaleInvoiceListContent() {
                             setDatePickerOpen(false);
                           }
                         }}
-                        className={`w-full text-left px-4 py-2 text-sm hover:bg-[#D5BA98]/10 ${
-                          datePreset === preset.key ? 'bg-[#D5BA98]/20 font-medium' : ''
-                        }`}
+                        className={`w-full text-left px-4 py-2 text-sm hover:bg-[#D5BA98]/10 ${datePreset === preset.key ? 'bg-[#D5BA98]/20 font-medium' : ''
+                          }`}
                       >
                         {preset.label}
                       </button>
