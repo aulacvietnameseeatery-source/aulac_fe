@@ -1,18 +1,27 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import { useDynamicSettings } from "../../shared/hooks/useDynamicSettings";
 
 export default function AboutPhilosophy() {
   const t = useTranslations("AboutUs.Philosophy");
+  const { getSetting } = useDynamicSettings();
+
+  const label = getSetting("about.philosophy.label", t("label"));
+  const title = getSetting("about.philosophy.title", t("title"));
+  const value_1_title = getSetting("about.philosophy.value_1_title", t("value_1_title"));
+  const value_1_desc = getSetting("about.philosophy.value_1_desc", t("value_1_desc"));
+  const value_2_title = getSetting("about.philosophy.value_2_title", t("value_2_title"));
+  const value_2_desc = getSetting("about.philosophy.value_2_desc", t("value_2_desc"));
 
   return (
     <section className="w-full max-w-[1152px] px-6 pt-8">
       <div className="flex flex-col items-center">
         <div className="text-center text-orange-300 text-xs font-bold uppercase tracking-[3.30px]">
-          {t("label")}
+          {label}
         </div>
         <div className="mt-3 text-center text-blue-950 text-4xl font-bold leading-10">
-          {t("title")}
+          {title}
         </div>
       </div>
 
@@ -22,10 +31,10 @@ export default function AboutPhilosophy() {
             <div className="h-10 w-10 rounded bg-blue-950/80" />
           </div>
           <div className="mt-10 text-center text-blue-950 text-2xl font-bold leading-8">
-            {t("value_1_title")}
+            {value_1_title}
           </div>
           <p className="mt-4 text-center text-blue-950/60 text-base leading-6">
-            {t("value_1_desc")}
+            {value_1_desc}
           </p>
         </div>
 
@@ -34,10 +43,10 @@ export default function AboutPhilosophy() {
             <div className="h-10 w-10 rounded bg-blue-950/80" />
           </div>
           <div className="mt-10 text-center text-blue-950 text-2xl font-bold leading-8">
-            {t("value_2_title")}
+            {value_2_title}
           </div>
           <p className="mt-4 text-center text-blue-950/60 text-base leading-6">
-            {t("value_2_desc")}
+            {value_2_desc}
           </p>
         </div>
       </div>

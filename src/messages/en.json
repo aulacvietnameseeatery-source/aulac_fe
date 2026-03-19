@@ -1065,6 +1065,10 @@
     "subtitle": "Enter details for walk-in or phone bookings",
     "cancel": "Cancel",
     "save": "Save Reservation",
+    "editTitle": "Edit Reservation",
+    "saveChanges": "Save Changes",
+    "notes": "Notes",
+    "notesPlaceholder": "e.g. Birthday, quiet area preferred...",
     "errors": {
       "missingTitle": "Missing information",
       "missingDescription": "Please fill in phone, name, date, time and select a table.",

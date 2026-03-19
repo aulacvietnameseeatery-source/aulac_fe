@@ -2,10 +2,12 @@ import React, { useEffect, useState, useRef } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
-import { ImagePlus, Trash2, Save, Loader2, Upload, Facebook, Instagram, Music2 as Tiktok } from 'lucide-react';
+import { ImagePlus, Trash2, Save, Loader2, Upload, Facebook, Instagram, Music2 as Tiktok, X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { getGroupSettings, updateGroupSettings, uploadLogo } from '../services/system-setting.service';
 import { BulkUpdateSettingItemDto } from '../types/system-setting.types';
+import { BASE_URL } from '@/lib/http';
+import { cn } from '@/lib/utils';
 
 export const StoreProfileForm = () => {
     const t = useTranslations('SystemSettings.StoreProfile');
@@ -28,7 +30,10 @@ export const StoreProfileForm = () => {
         facebookLink: '',
         instagramLink: '',
         tiktokLink: '',
+        promoVideoUrl: '',
     });
+
+    const [localPreviews, setLocalPreviews] = useState<Record<string, string>>({});
 
     useEffect(() => {
         loadSettings();
@@ -67,6 +72,10 @@ export const StoreProfileForm = () => {
             return;
         }
 
+        // --- LOCAL PREVIEW ---
+        const localUrl = URL.createObjectURL(file);
+        setLocalPreviews(prev => ({ ...prev, logoUrl: localUrl }));
+
         setIsUploading(true);
         try {
             const publicUrl = await uploadLogo(file);
@@ -74,6 +83,9 @@ export const StoreProfileForm = () => {
             toast.success(t('uploadSuccess'));
         } catch (error) {
             toast.error(t('uploadError'));
+            if (!formData.logoUrl) {
+                setLocalPreviews(prev => ({ ...prev, logoUrl: '' }));
+            }
         } finally {
             setIsUploading(false);
             if (fileInputRef.current) fileInputRef.current.value = '';
@@ -95,7 +107,8 @@ export const StoreProfileForm = () => {
                 openingHours: 'Opening Hours',
                 facebookLink: 'Facebook Link',
                 instagramLink: 'Instagram Link',
-                tiktokLink: 'TikTok Link'
+                tiktokLink: 'TikTok Link',
+                promoVideoUrl: 'Promotional Video'
             };
 
             const items: BulkUpdateSettingItemDto[] = Object.entries(formData).map(([key, value]) => ({
@@ -134,9 +147,13 @@ export const StoreProfileForm = () => {
                     <div className="flex flex-col md:flex-row gap-10">
                         <div className="flex-shrink-0">
                             <div className="w-40 h-40 bg-gray-50 border-2 border-dashed border-gray-200 rounded-2xl flex items-center justify-center relative overflow-hidden group transition-all hover:border-primary/50 shadow-sm mx-auto md:mx-0">
-                                {formData.logoUrl ? (
+                                {formData.logoUrl || localPreviews.logoUrl ? (
                                     <>
-                                        <img src={formData.logoUrl} alt="Store Logo" className="w-full h-full object-contain p-3" />
+                                        <img
+                                            src={localPreviews.logoUrl || ((formData.logoUrl?.startsWith('http://') || formData.logoUrl?.startsWith('https://')) ? formData.logoUrl : `${BASE_URL}${formData.logoUrl}`)}
+                                            alt="Store Logo"
+                                            className="w-full h-full object-contain p-3"
+                                        />
                                         <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity gap-2">
                                             <Button
                                                 size="icon"
@@ -309,7 +326,7 @@ export const StoreProfileForm = () => {
                     <h3 className="text-lg font-bold text-gray-900">{t('operating')}</h3>
                     <p className="text-sm text-gray-500 mt-0.5">{t('operatingDesc')}</p>
                 </div>
-                <div className="p-6">
+                <div className="p-6 space-y-6">
                     <div>
                         <label className="block text-sm font-bold text-gray-700 mb-2 uppercase tracking-wide">
                             {t('openingHours')} <span className="text-red-500">*</span>
@@ -320,6 +337,75 @@ export const StoreProfileForm = () => {
                             onChange={(e) => handleChange('openingHours', e.target.value)}
                             className="h-12 text-base"
                         />
+                    </div>
+
+                    <div className="pt-4">
+                        <label className="block text-sm font-bold text-gray-700 mb-4 uppercase tracking-wide">
+                            Promotional Video
+                        </label>
+                        <div
+                            className={cn(
+                                "relative flex flex-col items-center justify-center border-2 border-dashed rounded-xl transition-all overflow-hidden bg-gray-50/50 min-h-[200px]",
+                                (formData.promoVideoUrl || localPreviews.promoVideoUrl) ? "border-solid border-gray-200" : "border-gray-300 hover:border-primary/50"
+                            )}
+                        >
+                            {formData.promoVideoUrl || localPreviews.promoVideoUrl ? (
+                                <div className="relative w-full aspect-video">
+                                    <video
+                                        src={localPreviews.promoVideoUrl || (formData.promoVideoUrl.startsWith('http') ? formData.promoVideoUrl : `${BASE_URL}${formData.promoVideoUrl}`)}
+                                        className="w-full h-full object-cover"
+                                        controls
+                                    />
+                                    <Button
+                                        size="icon"
+                                        variant="danger"
+                                        className="absolute top-2 right-2 h-8 w-8 rounded-full shadow-lg"
+                                        onClick={() => handleChange('promoVideoUrl', '')}
+                                    >
+                                        <X className="h-4 w-4" />
+                                    </Button>
+                                </div>
+                            ) : (
+                                <div
+                                    className="flex flex-col items-center justify-center p-8 cursor-pointer w-full h-full"
+                                    onClick={() => {
+                                        const input = document.createElement('input');
+                                        input.type = 'file';
+                                        input.accept = 'video/mp4,video/webm';
+                                        input.onchange = async (e: any) => {
+                                            const file = e.target.files?.[0];
+                                            if (!file) return;
+                                            if (file.size > 100 * 1024 * 1024) {
+                                                toast.error("Video too large (max 100MB)");
+                                                return;
+                                            }
+                                            setIsUploading(true);
+                                            // --- LOCAL PREVIEW ---
+                                            const localUrl = URL.createObjectURL(file);
+                                            setLocalPreviews(prev => ({ ...prev, promoVideoUrl: localUrl }));
+
+                                            try {
+                                                const publicUrl = await uploadLogo(file); // Reusing uploadLogo which uses general file storage service logic
+                                                handleChange('promoVideoUrl', publicUrl);
+                                                toast.success(t('uploadSuccess'));
+                                            } catch (error) {
+                                                toast.error(t('uploadError'));
+                                                if (!formData.promoVideoUrl) {
+                                                    setLocalPreviews(prev => ({ ...prev, promoVideoUrl: '' }));
+                                                }
+                                            } finally {
+                                                setIsUploading(false);
+                                            }
+                                        };
+                                        input.click();
+                                    }}
+                                >
+                                    <Upload className="h-8 w-8 text-gray-400 mb-2" />
+                                    <p className="text-sm font-bold text-gray-700 uppercase">Upload Video</p>
+                                    <p className="text-xs text-gray-400 mt-1 uppercase tracking-tighter">MP4, WEBM (Max 100MB)</p>
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
             </div>

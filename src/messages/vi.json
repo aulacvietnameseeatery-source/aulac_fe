@@ -1065,6 +1065,10 @@
     "subtitle": "Nhập thông tin cho khách walk-in hoặc đặt qua điện thoại",
     "cancel": "Hủy",
     "save": "Lưu đặt bàn",
+    "editTitle": "Sửa đặt bàn",
+    "saveChanges": "Lưu thay đổi",
+    "notes": "Ghi chú",
+    "notesPlaceholder": "VD: Sinh nhật, ưu tiên khu vực yên tĩnh...",
     "errors": {
       "missingTitle": "Thiếu thông tin",
       "missingDescription": "Vui lòng điền SĐT, Tên, Ngày, Giờ và chọn Bàn.",

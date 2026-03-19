@@ -27,7 +27,7 @@ export function Footer({ locale = "en" }: FooterProps) {
                     <div className="footer-brand-col flex flex-col gap-[20px] md:gap-[28px]">
                         <div className="flex items-center gap-3">
                             <Image
-                                src="/images/logo.png"
+                                src={storeSettings?.logoUrl || "/images/logo.png"}
                                 alt="An Lac Logo"
                                 width={80}
                                 height={80}
@@ -65,6 +65,16 @@ export function Footer({ locale = "en" }: FooterProps) {
                             {storeSettings?.tiktokLink && (
                                 <Link href={storeSettings.tiktokLink} target="_blank" className="social-btn group">
                                     <Tiktok size={18} className="social-icon" />
+                                </Link>
+                            )}
+                            {storeSettings?.promoVideoUrl && (
+                                <Link
+                                    href={storeSettings.promoVideoUrl}
+                                    target="_blank"
+                                    className="px-4 py-1.5 rounded-full border border-primary/30 text-[10px] uppercase font-bold text-primary hover:bg-primary hover:text-white transition-all flex items-center gap-2 h-[34px]"
+                                >
+                                    <div className="w-2 h-2 rounded-full bg-primary group-hover:bg-white animate-pulse" />
+                                    Watch Video
                                 </Link>
                             )}
                         </div>

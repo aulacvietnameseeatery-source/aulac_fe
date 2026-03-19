@@ -46,6 +46,7 @@ import { ConfirmModal } from "@/components/layout/admin-sidebar/confirm-modal";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { NotificationPanel } from "./notification-panel";
+import { useStoreSettings } from "@/hooks/use-store-settings";
 
 const navigation = [
   {
@@ -123,6 +124,7 @@ export function AdminSidebar({ onClose }: AdminSidebarProps) {
   const { userInfo } = useAuth();
   const { can } = usePermissions();
   const { mutate: logout, isPending: isLoggingOut } = useLogout();
+  const { data: storeSettings } = useStoreSettings();
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const t = useTranslations("AdminSidebar");
 
@@ -203,7 +205,7 @@ export function AdminSidebar({ onClose }: AdminSidebarProps) {
             <Image
               width={40}
               height={40}
-              src="/images/logo.png"
+              src={storeSettings?.logoUrl || "/images/logo.png"}
               alt="An Lac"
               className="w-10 h-10 object-contain drop-shadow-lg"
             />

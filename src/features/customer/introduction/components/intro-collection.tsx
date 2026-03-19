@@ -2,37 +2,43 @@
 
 import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
+import { useDynamicSettings } from "../../shared/hooks/useDynamicSettings";
+import { BASE_URL } from "@/lib/http";
 
 export function IntroCollection() {
     const t = useTranslations("Introduction.Collection");
+    const { getSetting } = useDynamicSettings();
+
+    const label = getSetting("intro.collection.label", t("label"));
+    const title = getSetting("intro.collection.title", t("title"));
 
     const COLLECTION_ITEMS = [
         {
             id: 1,
-            image: "/images/introduction-page/intro-collection/intro-collection-dish1.png",
-            hoverCategory: t("dish_1_category"),
-            hoverTitle: t("dish_1_title"),
-            hoverDesc: t("dish_1_desc"),
-            mainTitle: t("dish_1_main"),
-            subTitle: t("dish_1_sub"),
+            image: getSetting("intro.collection.dish1.image", "/images/introduction-page/intro-collection/intro-collection-dish1.png"),
+            hoverCategory: getSetting("intro.collection.dish1.hoverCategory", t("dish_1_category")),
+            hoverTitle: getSetting("intro.collection.dish1.hoverTitle", t("dish_1_title")),
+            hoverDesc: getSetting("intro.collection.dish1.hoverDesc", t("dish_1_desc")),
+            mainTitle: getSetting("intro.collection.dish1.mainTitle", t("dish_1_main")),
+            subTitle: getSetting("intro.collection.dish1.subTitle", t("dish_1_sub")),
         },
         {
             id: 2,
-            image: "/images/introduction-page/intro-collection/intro-collection-dish2.png",
-            hoverCategory: t("dish_2_category"),
-            hoverTitle: t("dish_2_title"),
-            hoverDesc: t("dish_2_desc"),
-            mainTitle: t("dish_2_main"),
-            subTitle: t("dish_2_sub"),
+            image: getSetting("intro.collection.dish2.image", "/images/introduction-page/intro-collection/intro-collection-dish2.png"),
+            hoverCategory: getSetting("intro.collection.dish2.hoverCategory", t("dish_2_category")),
+            hoverTitle: getSetting("intro.collection.dish2.hoverTitle", t("dish_2_title")),
+            hoverDesc: getSetting("intro.collection.dish2.hoverDesc", t("dish_2_desc")),
+            mainTitle: getSetting("intro.collection.dish2.mainTitle", t("dish_2_main")),
+            subTitle: getSetting("intro.collection.dish2.subTitle", t("dish_2_sub")),
         },
         {
             id: 3,
-            image: "/images/introduction-page/intro-collection/intro-collection-dish3.png",
-            hoverCategory: t("dish_3_category"),
-            hoverTitle: t("dish_3_title"),
-            hoverDesc: t("dish_3_desc"),
-            mainTitle: t("dish_3_main"),
-            subTitle: t("dish_3_sub"),
+            image: getSetting("intro.collection.dish3.image", "/images/introduction-page/intro-collection/intro-collection-dish3.png"),
+            hoverCategory: getSetting("intro.collection.dish3.hoverCategory", t("dish_3_category")),
+            hoverTitle: getSetting("intro.collection.dish3.hoverTitle", t("dish_3_title")),
+            hoverDesc: getSetting("intro.collection.dish3.hoverDesc", t("dish_3_desc")),
+            mainTitle: getSetting("intro.collection.dish3.mainTitle", t("dish_3_main")),
+            subTitle: getSetting("intro.collection.dish3.subTitle", t("dish_3_sub")),
         },
     ];
 
@@ -69,10 +75,10 @@ export function IntroCollection() {
                 >
                     <div className="flex flex-col items-center gap-2">
                         <span className="font-display text-[#8D6A2A] text-[10px] md:text-xs font-bold uppercase tracking-[0.4em] md:tracking-[0.5em]">
-                            {t("label")}
+                            {label}
                         </span>
                         <h2 className="font-display text-[#12283A] text-[34px] md:text-5xl font-bold leading-tight">
-                            {t("title")}
+                            {title}
                         </h2>
                     </div>
                     {/* Decorative Spacer */}
@@ -97,7 +103,7 @@ export function IntroCollection() {
                             {/* IMAGE CARD */}
                             <div className="relative w-full aspect-[3/4] overflow-hidden rounded-xl border border-[#C9A961]/25 bg-[#193752]/10">
                                 <img
-                                    src={item.image}
+                                    src={(item.image?.startsWith('http://') || item.image?.startsWith('https://')) ? item.image : `${BASE_URL}${item.image}`}
                                     alt={item.mainTitle}
                                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                                 />

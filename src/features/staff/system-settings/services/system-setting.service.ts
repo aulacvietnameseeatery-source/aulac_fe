@@ -63,12 +63,20 @@ export const uploadLogo = async (file: File): Promise<string> => {
     formData.append('file', file);
     const response = await api.post<ApiResponse<{ publicUrl: string }>>(
         '/api/system-settings/upload-logo',
-        formData,
-        {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            },
-        }
+        formData
+    );
+    return response.data.publicUrl;
+};
+
+/**
+ * Uploads a generic file (video/image) for system settings.
+ */
+export const uploadFile = async (file: File): Promise<string> => {
+    const formData = new FormData();
+    formData.append('file', file);
+    const response = await api.post<ApiResponse<{ publicUrl: string }>>(
+        '/api/system-settings/upload-file',
+        formData
     );
     return response.data.publicUrl;
 };

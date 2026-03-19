@@ -2,9 +2,19 @@
 
 import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
+import { useDynamicSettings } from "../../shared/hooks/useDynamicSettings";
+import { BASE_URL } from "@/lib/http";
 
 export function IntroHero() {
     const t = useTranslations("Introduction.Hero");
+    const { getSetting } = useDynamicSettings();
+
+    const title = getSetting("intro.hero.title", t("title"));
+    const quote = getSetting("intro.hero.quote", t("quote"));
+    const heroImage = getSetting("intro.hero.image", "");
+    const fullImageUrl = heroImage
+        ? ((heroImage.startsWith('http://') || heroImage.startsWith('https://')) ? heroImage : `${BASE_URL}${heroImage}`)
+        : "/images/hero-bg.jpg";
 
     return (
         <section className="relative w-full min-h-[92dvh] md:min-h-[100dvh] flex flex-col items-center justify-center overflow-hidden">
@@ -18,7 +28,7 @@ export function IntroHero() {
                     className="w-full h-full"
                 >
                     <img
-                        src="/images/introduction-page/intro-hero/intro-hero-image.png"
+                        src={fullImageUrl}
                         alt="Au Lac Introduction"
                         className="w-full h-full object-cover select-none"
                     />
@@ -36,7 +46,7 @@ export function IntroHero() {
                     transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
                 >
                     <h1 className="font-display text-white text-[42px] sm:text-[62px] md:text-[96px] font-black leading-[1.06] whitespace-pre-line drop-shadow-[0_14px_44px_rgba(0,0,0,0.5)]">
-                        {t("title")}
+                        {title}
                     </h1>
                 </motion.div>
 
@@ -49,7 +59,7 @@ export function IntroHero() {
                     className="pt-5 max-w-[92%] md:max-w-[760px]"
                 >
                     <p className="font-display text-white/90 text-[15px] md:text-[20px] font-light leading-relaxed italic">
-                        {t("quote")}
+                        {quote}
                     </p>
                 </motion.div>
             </div>
