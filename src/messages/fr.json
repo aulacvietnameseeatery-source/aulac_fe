@@ -1303,6 +1303,17 @@
           "title": "Galerie d'Images",
           "subtitle": "Photos standards"
         },
+        "video": {
+          "title": "Vidéo du plat",
+          "subtitle": "Téléchargez une courte vidéo de présentation (MP4, max 15s, 20 Mo)",
+          "uploadPrompt": "Cliquez pour télécharger une vidéo",
+          "uploadHint": "MP4 (Max 20 Mo, 15 secondes)",
+          "validation": {
+            "invalidFormat": "Seuls les fichiers vidéo .mp4 sont acceptés",
+            "maxSize": "La taille de la vidéo ne peut pas dépasser 20 Mo",
+            "maxDuration": "La durée de la vidéo ne peut pas dépasser 15 secondes"
+          }
+        },
         "badge": "VUE 360°",
         "drag": "Glisser pour faire pivoter",
         "uploadTitle": "Télécharger séquence 360°",
@@ -1314,7 +1325,13 @@
         "changeFiles": "Changer fichiers",
         "existing": "Existant",
         "addImage": "Ajouter image",
-        "recommended": "Recommandé : 800x800px (JPG, PNG)"
+        "recommended": "Recommandé : 800x800px",
+        "recommended2": "Max 5 images, 5 Mo/image. Formats : JPG, PNG, GIF, WEBP",
+        "validation": {
+          "maxImages": "Vous pouvez télécharger un maximum de 5 images.",
+          "invalidFormat": "Format d'image invalide",
+          "maxSize": "La taille de l'image dépasse 5 Mo"
+        }
       },
       "additional": {
         "title": "Informations supplémentaires",
@@ -1364,7 +1381,10 @@
         "galleryTitle": "Galerie",
         "staticUploaded": "{count} images statiques téléchargées",
         "primary": "Principal",
-        "noGallery": "Aucune image dans la galerie"
+        "noGallery": "Aucune image dans la galerie",
+        "videoTitle": "Vidéo du plat",
+        "videoSubtitle": "Vidéo de présentation",
+        "noVideo": "Aucune vidéo disponible"
       },
       "additional": {
         "title": "Informations supplémentaires",
@@ -2629,6 +2649,55 @@
         "emailMaxLength": "",
         "emailInvalid": "",
         "pointsNegative": ""
+      }
+    },
+    "Detail": {
+      "backToCustomers": "Retour aux clients",
+    "customerNotFound": "Client introuvable.",
+    "guestCustomer": "Client invité",
+    "member": "Membre",
+    "guest": "Invité",
+    "noPhone": "Pas de téléphone",
+    "joined": "Inscrit",
+    "orders": "Commandes",
+    "totalSpent": "Total Dépensé",
+    "points": "Points",
+    "orderHistory": "Historique des commandes",
+    "from": "De",
+    "to": "À",
+    "allOrderTypes": "Tous les types",
+    "clear": "Effacer",
+    "noOrdersFound": "Aucune commande trouvée.",
+    "totalAmount": "Montant Total",
+    "tip": "Pourboire",
+    "fetchDetailError": "Impossible de charger les détails de la commande",
+    "orderTitle": "Commande",
+    "generalInfo": "Infos générales",
+    "table": "Table",
+    "staff": "Personnel",
+    "type": "Type",
+    "paymentDetails": "Détails de paiement",
+    "noPaymentRecorded": "Aucun paiement enregistré",
+    "received": "Reçu",
+    "change": "Monnaie",
+    "items": "Articles",
+    "promotions": "Promotions",
+    "coupons": "Coupons",
+    "note": "Note",
+    "noPromotionsApplied": "Aucune promotion appliquée",
+    "noCouponsApplied": "Aucun coupon appliqué",
+    "of": "sur",
+      "status": {
+        "PENDING": "En attente",
+    "IN_PROGRESS": "En cours",
+    "COMPLETED": "Terminée",
+    "CANCELLED": "Annulée",
+    "CREATED": "Créée",
+    "READY": "Prête",
+    "SERVED": "Servie",
+    "REJECTED": "Rejetée",
+    "DINE_IN": "Sur place",
+    "TAKEAWAY": "À emporter"
       }
     }
   }

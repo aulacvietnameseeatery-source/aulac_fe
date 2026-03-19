@@ -9,6 +9,7 @@ export type ExistingMedia = {
 
 export function useDishEditMedia() {
   const [existingImages, setExistingImages] = useState<ExistingMedia[]>([]);
+  const [existingVideo, setExistingVideo] = useState<ExistingMedia | null>(null);
   const [removedMediaIds, setRemovedMediaIds] = useState<number[]>([]);
 
   const removeExistingImage = (mediaId: number) => {
@@ -16,10 +17,18 @@ export function useDishEditMedia() {
     setRemovedMediaIds(prev => [...prev, mediaId]);
   };
 
+  const removeExistingVideo = (mediaId: number) => { 
+    setExistingVideo(null);
+    setRemovedMediaIds(prev => [...prev, mediaId]);
+  };
+
   return {
     existingImages,
     setExistingImages,
+    existingVideo,
+    setExistingVideo,
     removedMediaIds,
     removeExistingImage,
+    removeExistingVideo,
   };
 }

@@ -107,7 +107,7 @@ export const ThreeSixtySection: React.FC<{
         /* === TRẠNG THÁI 0: EMPTY STATE (Upload Zone) === */
         <label className="block w-full cursor-pointer group">
             <input type="file" multiple accept="image/*" onChange={handleUpload} className="hidden" />
-            <div className="relative border-2 border-dashed border-gray-300 rounded-xl bg-gray-50 p-8 flex flex-col items-center justify-center text-center transition-all group-hover:bg-purple-50/50 group-hover:border-purple-300">
+            <div className="relative min-h-[230px] border-2 border-dashed border-gray-300 rounded-xl bg-gray-50 p-8 flex flex-col items-center justify-center text-center transition-all group-hover:bg-purple-50/50 group-hover:border-purple-300">
                 <div className="w-12 h-12 bg-white rounded-full shadow-sm flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
                     <RefreshCw className="w-6 h-6 text-purple-500" />
                 </div>

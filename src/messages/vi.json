@@ -1307,6 +1307,17 @@
           "title": "Thư Viện Ảnh",
           "subtitle": "Hình ảnh tiêu chuẩn"
         },
+        "video": {
+          "title": "Video món ăn",
+          "subtitle": "Tải lên 1 video giới thiệu ngắn gọn (MP4, tối đa 15s, 20MB)",
+          "uploadPrompt": "Nhấn để tải video lên",
+          "uploadHint": "MP4 (Tối đa 20MB, 15 giây)",
+          "validation": {
+            "invalidFormat": "Chỉ chấp nhận file video định dạng .mp4",
+            "maxSize": "Dung lượng video không được vượt quá 20MB",
+            "maxDuration": "Thời lượng video không được vượt quá 15 giây"
+          }
+        },
         "badge": "XEM 360°",
         "drag": "Kéo để xoay",
         "uploadTitle": "Tải chuỗi ảnh 360°",
@@ -1318,7 +1329,13 @@
         "changeFiles": "Đổi ảnh",
         "existing": "Ảnh cũ",
         "addImage": "Thêm ảnh",
-        "recommended": "Khuyến nghị: 800x800px (JPG, PNG)"
+        "recommended": "Khuyến nghị: 800x800px",
+        "recommended2": "Tối đa 5 ảnh, 5MB/ảnh. Định dạng: JPG, PNG, GIF, WEBP",
+        "validation": {
+          "maxImages": "Bạn chỉ được tải lên tối đa 5 ảnh.",
+          "invalidFormat": "Định dạng ảnh không hợp lệ",
+          "maxSize": "Dung lượng ảnh vượt quá 5MB"
+        }
       },
       "additional": {
         "title": "Thông tin bổ sung",
@@ -1368,7 +1385,10 @@
         "galleryTitle": "Thư viện ảnh",
         "staticUploaded": "Đã tải lên {count} ảnh tĩnh",
         "primary": "Ảnh chính",
-        "noGallery": "Không có ảnh nào trong thư viện"
+        "noGallery": "Không có ảnh nào trong thư viện",
+        "videoTitle": "Video món ăn",
+        "videoSubtitle": "Video giới thiệu",
+        "noVideo": "Chưa có video"
       },
       "additional": {
         "title": "Thông tin bổ sung",
@@ -2633,6 +2653,55 @@
         "emailMaxLength": "",
         "emailInvalid": "",
         "pointsNegative": ""
+      }
+    },
+    "Detail": {
+      "backToCustomers": "Quay lại danh sách",
+      "customerNotFound": "Không tìm thấy khách hàng.",
+      "guestCustomer": "Khách vãng lai",
+      "member": "Thành viên",
+      "guest": "Khách",
+      "noPhone": "Không có SĐT",
+      "joined": "Tham gia",
+      "orders": "Số đơn",
+      "totalSpent": "Tổng chi tiêu",
+      "points": "Điểm",
+      "orderHistory": "Lịch sử mua hàng",
+      "from": "Từ ngày",
+      "to": "Đến ngày",
+      "allOrderTypes": "Tất cả loại đơn",
+      "clear": "Xóa bộ lọc",
+      "noOrdersFound": "Không tìm thấy đơn hàng nào.",
+      "totalAmount": "Tổng tiền",
+      "tip": "Tiền Tip",
+      "fetchDetailError": "Không thể tải chi tiết đơn hàng",
+      "orderTitle": "Đơn hàng",
+      "generalInfo": "Thông tin chung",
+      "table": "Bàn",
+      "staff": "Nhân viên",
+      "type": "Loại đơn",
+      "paymentDetails": "Chi tiết thanh toán",
+      "noPaymentRecorded": "Chưa có dữ liệu thanh toán",
+      "received": "Đã nhận",
+      "change": "Tiền thừa",
+      "items": "Món ăn",
+      "promotions": "Khuyến mãi",
+      "coupons": "Mã giảm giá",
+      "note": "Ghi chú",
+      "noPromotionsApplied": "Không có khuyến mãi",
+      "noCouponsApplied": "Không có mã giảm giá",
+      "of": "trên",
+      "status": {
+        "PENDING": "Chờ xử lý",
+        "IN_PROGRESS": "Đang thực hiện",
+        "COMPLETED": "Đã hoàn thành",
+        "CANCELLED": "Đã hủy",
+        "CREATED": "Đã tạo",
+        "READY": "Đã sẵn sàng",
+        "SERVED": "Đã phục vụ",
+        "REJECTED": "Bị từ chối",
+        "DINE_IN": "Tại quán",
+        "TAKEAWAY": "Mang đi"
       }
     }
   }

@@ -2,6 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { Users, Clock, AlertTriangle } from "lucide-react";
+import { ALCard } from "@/components/ui/al-card";
 import type {
   AttendanceReportRowDto,
   WorkedHoursReportRowDto,
@@ -103,9 +104,12 @@ export function ReportHealthBanner({ attendanceRows, workedHoursRows, exceptionR
   return (
     <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
       {metrics.map((m) => (
-        <div
+        <ALCard
           key={m.label}
-          className="rounded-2xl border border border-[#D5BA98]/60 bg-white px-4 py-3 shadow-sm space-y-2"
+          radius="2xl"
+          hoverEffect="glow"
+          animation="fade"
+          className="px-4 py-3 space-y-2"
         >
           <div className="flex items-center justify-between">
             <span className="text-[10px] font-semibold uppercase tracking-wider text-[#1A3A52]/50">
@@ -125,7 +129,7 @@ export function ReportHealthBanner({ attendanceRows, workedHoursRows, exceptionR
               style={{ width: `${m.pctValue}%` }}
             />
           </div>
-        </div>
+        </ALCard>
       ))}
     </div>
   );

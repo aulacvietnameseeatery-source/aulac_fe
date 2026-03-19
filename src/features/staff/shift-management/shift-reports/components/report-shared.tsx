@@ -3,6 +3,7 @@
 import { AlertTriangle, CheckCircle2, Clock, TrendingDown, TrendingUp } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { ALCard } from "@/components/ui/al-card";
 import type { AttendanceReportRowDto } from "../../types/shift-management.types";
 
 // ── Constants ──────────────────────────────────────────────────────────────────
@@ -170,7 +171,7 @@ interface KpiProps {
 
 export function Kpi({ label, value, sub, icon, trend }: KpiProps) {
     return (
-        <Card className="border border-[#D5BA98]/60 bg-white py-2.5 shadow-sm hover:shadow-md transition-shadow">
+        <ALCard hoverable className="py-2.5">
             <CardContent className="px-3">
                 <div className="flex items-start justify-between">
                     <div className="flex-1 min-w-0">
@@ -192,7 +193,7 @@ export function Kpi({ label, value, sub, icon, trend }: KpiProps) {
                 </div>
 
             </CardContent>
-        </Card>
+        </ALCard>
     );
 }
 

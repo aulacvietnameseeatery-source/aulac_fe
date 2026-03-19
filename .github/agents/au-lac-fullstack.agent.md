@@ -13,6 +13,7 @@ instructions:
   - .github/instructions/feature-scaffold.instructions.md
   - .github/instructions/lookup-table-ui.instructions.md
   - .github/instructions/form-patterns.instructions.md
+  - .github/instructions/al-card-pattern.instructions.md
   - .github/copilot-instructions.md
 ---
 
