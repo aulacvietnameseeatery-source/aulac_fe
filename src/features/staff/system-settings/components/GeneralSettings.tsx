@@ -70,7 +70,7 @@ export const GeneralSettings: React.FC = () => {
                             groupName={groupName}
                             settings={grouped[groupName]}
                             isSaving={savingGroups[groupName] || false}
-                            onSave={(items) => saveGroup(groupName, items, t('saveSuccess'))}
+                            onSave={(items) => saveGroup(groupName, items, t('notifications.saveSuccess', { group: groupName }))}
                         />
                     ))}
                 </div>

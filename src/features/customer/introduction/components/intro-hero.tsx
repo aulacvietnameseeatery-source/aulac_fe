@@ -51,6 +51,7 @@ export function IntroHero({ overrides }: { overrides?: Record<string, string> })
                     </h1>
                 </motion.div>
 
+                {/* Title Only */}
                 {/* Quote / Description */}
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}

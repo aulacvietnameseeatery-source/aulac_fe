@@ -22,27 +22,21 @@ export function IntroCollection({ overrides }: { overrides?: Record<string, stri
             image: getMediaSetting("intro.collection.dish1.image", "/images/introduction-page/intro-collection/intro-collection-dish1.png"),
             cardCategory: getSetting("intro.collection.dish1.cardCategory", t("cardCategory")),
             cardTitle: getSetting("intro.collection.dish1.cardTitle", t("cardTitle")),
-            cardDescription: getSetting("intro.collection.dish1.cardDescription", t("cardDescription")),
             mainTitle: getSetting("intro.collection.dish1.mainTitle", t("dishMainTitle")),
-            subTitle: getSetting("intro.collection.dish1.subTitle", t("dishSubTitle")),
         },
         {
             id: 2,
             image: getMediaSetting("intro.collection.dish2.image", "/images/introduction-page/intro-collection/intro-collection-dish2.png"),
             cardCategory: getSetting("intro.collection.dish2.cardCategory", t("cardCategory")),
             cardTitle: getSetting("intro.collection.dish2.cardTitle", t("cardTitle")),
-            cardDescription: getSetting("intro.collection.dish2.cardDescription", t("cardDescription")),
             mainTitle: getSetting("intro.collection.dish2.mainTitle", t("dishMainTitle")),
-            subTitle: getSetting("intro.collection.dish2.subTitle", t("dishSubTitle")),
         },
         {
             id: 3,
             image: getMediaSetting("intro.collection.dish3.image", "/images/introduction-page/intro-collection/intro-collection-dish3.png"),
             cardCategory: getSetting("intro.collection.dish3.cardCategory", t("cardCategory")),
             cardTitle: getSetting("intro.collection.dish3.cardTitle", t("cardTitle")),
-            cardDescription: getSetting("intro.collection.dish3.cardDescription", t("cardDescription")),
             mainTitle: getSetting("intro.collection.dish3.mainTitle", t("dishMainTitle")),
-            subTitle: getSetting("intro.collection.dish3.subTitle", t("dishSubTitle")),
         },
     ];
 
@@ -120,9 +114,6 @@ export function IntroCollection({ overrides }: { overrides?: Record<string, stri
                                     <h3 className="font-display text-white text-xl md:text-2xl font-bold mb-1 md:mb-2 translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-100">
                                         {item.cardTitle}
                                     </h3>
-                                    <p className="font-display text-white/80 text-xs md:text-sm leading-relaxed translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-150 line-clamp-3">
-                                        {item.cardDescription}
-                                    </p>
                                 </div>
                             </div>
 
@@ -131,9 +122,6 @@ export function IntroCollection({ overrides }: { overrides?: Record<string, stri
                                 <h4 className="font-display text-[#8D6A2A] text-[16px] md:text-lg font-semibold">
                                     {item.mainTitle}
                                 </h4>
-                                <span className="font-display text-[#12283A] text-xs md:text-sm uppercase tracking-widest">
-                                    {item.subTitle}
-                                </span>
                             </div>
 
                         </motion.div>

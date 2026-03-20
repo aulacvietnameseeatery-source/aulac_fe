@@ -2426,7 +2426,11 @@
       "removing": "Removing...",
       "uploading": "Uploading...",
       "maxSizeImage": "JPG/PNG up to 5MB",
-      "maxSizeVideo": "MP4/WEBM up to 100MB"
+      "maxSizeVideo": "MP4/WEBM up to 100MB",
+      "selectFromMenu": "Select from Menu",
+      "autoTranslate": "Auto Translate",
+      "search": "Search",
+      "cancel": "Cancel"
     },
     "Introduction": {
       "title": "Introduction Page",
@@ -2436,7 +2440,11 @@
           "title": "Hero Section",
           "description": "The main banner at the top of the page.",
           "mainTitle": "Main Title",
-          "brandQuote": "Brand Quote"
+          "brandQuote": "Brand Quote",
+          "placeholders": {
+            "mainTitle": "e.g. Authentic Vietnamese Dining",
+            "brandQuote": "Where Tradition Meets Taste"
+          }
         },
         "chef": {
           "title": "Chef Discovery",
@@ -2477,6 +2485,12 @@
         "ambianceVideo": "Ambiance Video",
         "dishImage": "Signature Dish {index} Image"
       }
+    },
+    "DishModal": {
+      "noCategory": "No Category",
+      "dishLabel": "DISH",
+      "dishPlaceholder": "Dish #{id}",
+      "selectError": "Failed to select dish: {error}"
     },
     "StoreProfile": {
       "title": "Store Profile",
@@ -2547,6 +2561,20 @@
       "uploadSuccess": "Logo uploaded successfully",
       "uploadError": "Failed to upload logo",
       "fileSizeError": "File size must be less than 5MB",
+      "visualBranding": "Visual Branding",
+      "visualBrandingDesc": "Logo and promotional media",
+      "officialLogo": "Official Logo",
+      "storeVideo": "Store Video",
+      "syncNotice": "Sync Notice",
+      "syncNoticeDesc": "Saving will update global fields across all languages instantly.",
+      "placeholders": {
+        "facebook": "Facebook URL",
+        "instagram": "Instagram URL",
+        "tiktok": "TikTok URL"
+      },
+      "translationFailed": "Translation failed.",
+      "translatedSuccessfully": "Translated successfully!",
+      "nothingToTranslate": "Nothing to translate.",
       "updateSuccess": "Store profile updated successfully",
       "updateError": "Failed to save store profile"
     },
@@ -2564,7 +2592,16 @@
           "quote": "Quote Statement",
           "quoteAuthor": "Attribution Name",
           "featuredQuote": "Featured Quote",
-          "image": "Founders Image"
+          "image": "Founders Image",
+          "quoteHeader": "Founders' Inspirational Quote",
+          "fields": {
+            "label": "Section Label",
+            "header": "Main Header",
+            "paragraph1": "First Bio Paragraph",
+            "paragraph2": "Second Bio Paragraph",
+            "quote": "Quote Statement",
+            "author": "Author Credit"
+          }
         },
         "journey": {
           "title": "Historic Journey",
@@ -2573,7 +2610,14 @@
           "paragraph1": "Opening Chapter",
           "paragraph2": "Strategic Evolution",
           "quote": "Journey Highlight",
-          "paragraph3": "Current Era"
+          "paragraph3": "Current Era",
+          "fields": {
+            "title": "Section Title",
+            "paragraph1": "The Beginning",
+            "paragraph2": "Growth & Evolution",
+            "paragraph3": "Present Day"
+          },
+          "quoteLabel": "Mid-Journey Highlight"
         },
         "philosophy": {
           "title": "Philosophy & Values",
@@ -2582,7 +2626,14 @@
           "header": "Core Mission",
           "principle": "Principle {index}",
           "principleTitle": "Title",
-          "principleDesc": "Description"
+          "principleDesc": "Description",
+          "fields": {
+            "label": "Section Label",
+            "header": "Philosophy Core Header",
+            "valueTitle": "Value Title",
+            "valueDesc": "Value Description"
+          },
+          "valueLabel": "Core Value {index}"
         },
         "legacy": {
           "title": "Culinary Legacy",
@@ -2590,7 +2641,12 @@
           "header": "Legacy Title",
           "subtitle": "Strategic Subtitle",
           "paragraph": "Legacy Chapter {index}",
-          "image": "Legacy Image"
+          "image": "Legacy Image",
+          "fields": {
+            "header": "Legacy Headline",
+            "subtitle": "Section Subtitle"
+          },
+          "chapterLabel": "Chapter {index}"
         }
       },
       "actions": {
@@ -2617,7 +2673,10 @@
       "description": "Description (Optional)",
       "descriptionPlaceholder": "What is this setting for?",
       "sensitive": "Sensitive Data",
-      "sensitiveDesc": "Hide value by default (e.g. passwords, API keys)"
+      "sensitiveDesc": "Hide value by default (e.g. passwords, API keys)",
+      "addTitle": "Add New Setting",
+      "true": "True",
+      "false": "False"
     },
     "Field": {
       "sensitiveHidden": "Sensitive – value hidden",

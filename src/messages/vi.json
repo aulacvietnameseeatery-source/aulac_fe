@@ -2322,7 +2322,11 @@
       "removing": "Đang xóa...",
       "uploading": "Đang tải...",
       "maxSizeImage": "JPG/PNG tối đa 5MB",
-      "maxSizeVideo": "MP4/WEBM tối đa 100MB"
+      "maxSizeVideo": "MP4/WEBM tối đa 100MB",
+      "selectFromMenu": "Chọn từ thực đơn",
+      "autoTranslate": "Tự động dịch",
+      "search": "Tìm kiếm",
+      "cancel": "Hủy"
     },
     "Introduction": {
       "title": "Trang Giới thiệu",
@@ -2332,7 +2336,11 @@
           "title": "Phần Hero",
           "description": "Biểu ngữ chính ở đầu trang.",
           "mainTitle": "Tiêu đề chính",
-          "brandQuote": "Câu trích dẫn"
+          "brandQuote": "Câu trích dẫn",
+          "placeholders": {
+            "mainTitle": "vd: Ẩm thực Việt Nam thuần túy",
+            "brandQuote": "Nơi truyền thống gặp gỡ hương vị"
+          }
         },
         "chef": {
           "title": "Khám phá Đầu bếp",
@@ -2374,6 +2382,12 @@
         "dishImage": "Ảnh món ăn {index}"
       }
     },
+    "DishModal": {
+      "noCategory": "Chưa có danh mục",
+      "dishLabel": "MÓN",
+      "dishPlaceholder": "Món #{id}",
+      "selectError": "Lỗi khi chọn món: {error}"
+    },
     "StoreProfile": {
       "title": "Hồ sơ Cửa hàng",
       "description": "Quản lý danh tính và thông tin liên hệ.",
@@ -2406,6 +2420,20 @@
       "facebookLink": "Liên kết Facebook",
       "instagramLink": "Liên kết Instagram",
       "tiktokLink": "Liên kết TikTok",
+      "visualBranding": "Nhận diện hình ảnh",
+      "visualBrandingDesc": "Logo và phương tiện quảng bá",
+      "officialLogo": "Logo chính thức",
+      "storeVideo": "Video cửa hàng",
+      "syncNotice": "Thông báo đồng bộ",
+      "syncNoticeDesc": "Khi lưu sẽ cập nhật các trường chung trên tất cả các ngôn ngữ ngay lập tức.",
+      "placeholders": {
+        "facebook": "URL Facebook",
+        "instagram": "URL Instagram",
+        "tiktok": "URL TikTok"
+      },
+      "translationFailed": "Dịch thất bại.",
+      "translatedSuccessfully": "Dịch thành công!",
+      "nothingToTranslate": "Không có gì để dịch.",
       "updateSuccess": "Cập nhật hồ sơ cửa hàng thành công",
       "updateError": "Lưu hồ sơ cửa hàng thất bại"
     },
@@ -2414,42 +2442,70 @@
       "description": "Quản lý câu chuyện thương hiệu và các giá trị cốt lõi.",
       "sections": {
         "founders": {
-          "title": "Tầm nhìn Nhà sáng lập",
+          "title": "Tầm nhìn của Người sáng lập",
           "description": "Câu chuyện nguồn gốc và cảm hứng cốt lõi.",
-          "label": "Nhãn mục",
+          "label": "Nhãn phần",
           "header": "Tiêu đề chính",
           "paragraph1": "Đoạn văn tự sự 1",
           "paragraph2": "Đoạn văn tự sự 2",
-          "quote": "Nội dung trích dẫn",
+          "quote": "Tuyên bố trích dẫn",
           "quoteAuthor": "Tên tác giả",
-          "featuredQuote": "Trích dẫn nổi bật",
-          "image": "Ảnh Nhà sáng lập"
+          "featuredQuote": "Trích dẫn tiêu biểu",
+          "image": "Ảnh người sáng lập",
+          "quoteHeader": "Câu trích dẫn đầy cảm hứng của người sáng lập",
+          "fields": {
+            "label": "Nhãn mục",
+            "header": "Tiêu đề chính",
+            "paragraph1": "Đoạn tiểu sử thứ nhất",
+            "paragraph2": "Đoạn tiểu sử thứ hai",
+            "quote": "Nội dung trích dẫn",
+            "author": "Ghi nhận tác giả"
+          }
         },
         "journey": {
-          "title": "Hành trình Lịch sử",
-          "description": "Dòng thời gian và các cột mốc quan trọng.",
-          "header": "Tiêu đề Hành trình",
+          "title": "Hành trình lịch sử",
+          "description": "Dòng thời gian và các mốc quan trọng.",
+          "header": "Tiêu đề hành trình",
           "paragraph1": "Chương mở đầu",
-          "paragraph2": "Sự tiến hóa chiến lược",
+          "paragraph2": "Sự phát triển chiến lược",
           "quote": "Điểm nhấn hành trình",
-          "paragraph3": "Kỷ nguyên hiện tại"
+          "paragraph3": "Thời kỳ hiện tại",
+          "fields": {
+            "title": "Tiêu đề phần",
+            "paragraph1": "Sự khởi đầu",
+            "paragraph2": "Tăng trưởng & Phát triển",
+            "paragraph3": "Ngày nay"
+          },
+          "quoteLabel": "Điểm nhấn giữa hành trình"
         },
         "philosophy": {
           "title": "Triết lý & Giá trị",
           "description": "Niềm tin cốt lõi và các nguyên tắc hướng dẫn.",
-          "label": "Nhãn Triết lý",
-          "header": "Sứ mệnh cốt lõi",
+          "label": "Nhãn triết lý",
+          "header": "Nhiệm vụ cốt lõi",
           "principle": "Nguyên tắc {index}",
           "principleTitle": "Tiêu đề",
-          "principleDesc": "Mô tả"
+          "principleDesc": "Mô tả",
+          "fields": {
+            "label": "Nhãn mục",
+            "header": "Tiêu đề cốt lõi của triết lý",
+            "valueTitle": "Tiêu đề giá trị",
+            "valueDesc": "Mô tả giá trị"
+          },
+          "valueLabel": "Giá trị cốt lõi {index}"
         },
         "legacy": {
-          "title": "Di sản Ẩm thực",
+          "title": "Di sản ẩm thực",
           "description": "Tầm nhìn tương lai và sự xuất sắc bền vững.",
-          "header": "Tiêu đề Di sản",
+          "header": "Tiêu đề di sản",
           "subtitle": "Phụ đề chiến lược",
           "paragraph": "Chương di sản {index}",
-          "image": "Ảnh Di sản"
+          "image": "Ảnh di sản",
+          "fields": {
+            "header": "Tiêu đề di sản",
+            "subtitle": "Phụ đề phần"
+          },
+          "chapterLabel": "Chương {index}"
         }
       },
       "actions": {
@@ -2476,7 +2532,10 @@
       "description": "Mô tả (Tùy chọn)",
       "descriptionPlaceholder": "Cài đặt này dùng để làm gì?",
       "sensitive": "Dữ liệu nhạy cảm",
-      "sensitiveDesc": "Ẩn giá trị theo mặc định (vd: mật khẩu, khóa API)"
+      "sensitiveDesc": "Ẩn giá trị theo mặc định (vd: mật khẩu, khóa API)",
+      "addTitle": "Thêm cài đặt mới",
+      "true": "Đúng",
+      "false": "Sai"
     },
     "Field": {
       "sensitiveHidden": "Nhạy cảm – giá trị bị ẩn",
@@ -2685,4 +2744,4 @@
       }
     }
   }
-}
+}

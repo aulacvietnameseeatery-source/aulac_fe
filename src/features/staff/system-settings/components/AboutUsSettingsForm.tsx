@@ -65,10 +65,10 @@ export const AboutUsSettingsForm = () => {
                 });
                 return newData;
             });
-            toast.success("Translated successfully!");
+            toast.success(t('StoreProfile.translatedSuccessfully'));
         },
         onError: () => {
-            toast.error("Translation failed.");
+            toast.error(t('StoreProfile.translationFailed'));
         }
     });
 
@@ -80,7 +80,7 @@ export const AboutUsSettingsForm = () => {
         });
 
         if (Object.keys(dataToTranslate).length === 0) {
-            toast.warning("Nothing to translate.");
+            toast.warning(t('StoreProfile.nothingToTranslate'));
             return;
         }
 
@@ -189,12 +189,12 @@ export const AboutUsSettingsForm = () => {
 
         return (
             <div className="flex flex-col space-y-2">
-                {title && <label className="text-sm font-medium leading-none">{title}</label>}
-                <div className="flex items-center gap-4 mt-1">
+                {title && <label className="text-sm font-medium leading-none mb-1">{title}</label>}
+                <div className="flex flex-col gap-3 mt-1">
                     <div
                         className={cn(
-                            "relative rounded-lg border bg-gray-50 flex items-center justify-center overflow-hidden group border-dashed flex-shrink-0 transition-all cursor-pointer hover:border-primary/50",
-                            "w-24 h-24",
+                            "relative rounded-lg border bg-gray-50 flex items-center justify-center overflow-hidden group border-dashed transition-all cursor-pointer hover:border-primary/50",
+                            fieldKey.includes('image') && fieldKey.includes('legacy') ? "w-80 aspect-video" : "w-32 aspect-square",
                             fullUrl && "border-solid shadow-sm"
                         )}
                         onClick={() => {
@@ -221,7 +221,7 @@ export const AboutUsSettingsForm = () => {
                         )}
                     </div>
 
-                    <div className="flex flex-col gap-1.5 flex-1 max-w-[150px]">
+                    <div className="flex items-center gap-3">
                         <div className="flex items-center gap-2">
                             <Button type="button" variant="outline" size="sm" onClick={() => inputRef.current?.click()} className="h-8 text-xs px-3">
                                 <Upload className="w-3.5 h-3.5 mr-1.5" />
@@ -244,7 +244,7 @@ export const AboutUsSettingsForm = () => {
     };
 
     return (
-        <div className="flex flex-col gap-6 max-w-7xl mx-auto pb-12 w-full">
+        <div className="flex flex-col gap-6 w-full pb-12">
             {/* --- HEADER ACTIONS --- */}
             <div className="flex flex-wrap items-center justify-between gap-4 bg-white p-4 rounded-xl border border-border shadow-sm sticky top-0 z-50">
                 <div className="flex items-center gap-6">
@@ -265,27 +265,21 @@ export const AboutUsSettingsForm = () => {
                         ))}
                     </div>
 
-                    <div className="h-6 w-px bg-gray-200 hidden sm:block" />
-
-                    <div className="hidden sm:flex items-center gap-2 text-sm font-medium text-gray-500">
-                        <Building2 className="w-4 h-4" />
-                        About Us Page
-                    </div>
                 </div>
 
                 <div className="flex items-center gap-3">
-                    <Button 
-                        variant="outline" 
-                        size="sm" 
-                        className="h-9 gap-2 text-blue-600 border-blue-200 hover:bg-blue-50"
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        className="h-9 gap-2 text-purple-600 border-purple-200 hover:bg-purple-50 hover:border-purple-300 font-semibold px-4 transition-all"
                         onClick={handleAutoTranslate}
                         disabled={translateMutation.isPending}
                     >
                         {translateMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Languages className="w-4 h-4" />}
-                        <span className="hidden sm:inline">Auto Translate</span>
+                        <span className="hidden sm:inline">{t('Common.autoTranslate')}</span>
                     </Button>
-                    <Button 
-                        size="sm" 
+                    <Button
+                        size="sm"
                         className="h-9 gap-2 bg-[#1E3C52] hover:bg-[#12283A] text-white shadow-md shadow-blue-900/10"
                         onClick={handleSave}
                         disabled={isSaving}
@@ -300,217 +294,207 @@ export const AboutUsSettingsForm = () => {
                 {/* --- FORM COLUMN --- */}
                 <div className="space-y-8 min-w-0">
                     <div className="space-y-6 animate-in fade-in duration-500">
-                        {/* Page Header */}
-                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 px-1">
-                            <div>
-                                <h2 className="text-xl font-bold tracking-tight text-gray-900">{t('AboutUs.title') || "About Us Settings"}</h2>
-                                <p className="text-sm text-muted-foreground">{t('AboutUs.description') || "Manage your restaurant history, vision, and team details"}</p>
-                            </div>
-
-
-                        </div>
 
                         <div className="grid grid-cols-1 gap-8 items-start">
                             {/* Founders Section */}
-                            <Card className="overflow-hidden border-none shadow-md">
-                                <CardHeader className="border-b bg-slate-50/50 pb-4">
-                                    <div className="flex items-center gap-3">
-                                        <div className="bg-primary/10 p-2.5 rounded-xl">
-                                            <Star className="w-5 h-5 text-primary" />
+                            {/* --- FOUNDERS SECTION --- */}
+                            <div className="p-10 border border-slate-200 rounded-3xl bg-white/50 shadow-sm animate-in fade-in slide-in-from-bottom-4 duration-700">
+                                <div className="space-y-10">
+                                    <div className="pb-4 border-b border-slate-100">
+                                        <div className="mb-1">
+                                            <h3 className="text-xl font-bold text-slate-800">{t("AboutUs.sections.founders.title")}</h3>
                                         </div>
-                                        <div>
-                                            <CardTitle className="text-base font-bold">{t("AboutUs.sections.founders.title") || "Founders Section"}</CardTitle>
-                                            <CardDescription className="text-xs">{t("AboutUs.sections.founders.description") || "Introduction of the restaurant's founders"}</CardDescription>
-                                        </div>
-                                    </div>
-                                </CardHeader>
-                                <CardContent className="p-4 sm:p-6 space-y-8">
-                                    <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
-                                        <div className="md:col-span-8 space-y-6">
-                                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                                                <div className="space-y-2">
-                                                    <label className="text-sm font-bold text-gray-700">Section Label</label>
-                                                    <Input value={getValue("about.founders.label")} onChange={(e) => handleChange("about.founders.label", e.target.value)} className="h-10" />
-                                                </div>
-                                                <div className="space-y-2">
-                                                    <label className="text-sm font-bold text-gray-700">Main Header</label>
-                                                    <Input value={getValue("about.founders.title")} onChange={(e) => handleChange("about.founders.title", e.target.value)} className="h-10" />
-                                                </div>
-                                            </div>
-                                            <div className="space-y-5">
-                                                <div className="space-y-2">
-                                                    <label className="text-sm font-bold text-gray-700">First Bio Paragraph</label>
-                                                    <Textarea value={getValue("about.founders.paragraph_1")} onChange={(e) => handleChange("about.founders.paragraph_1", e.target.value)} className="min-h-[100px] leading-relaxed" />
-                                                </div>
-                                                <div className="space-y-2">
-                                                    <label className="text-sm font-bold text-gray-700">Second Bio Paragraph</label>
-                                                    <Textarea value={getValue("about.founders.paragraph_2")} onChange={(e) => handleChange("about.founders.paragraph_2", e.target.value)} className="min-h-[100px] leading-relaxed" />
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="md:col-span-4 flex flex-col items-center justify-start md:border-l md:pl-8 pt-4 md:pt-0">
-                                            <MediaUploadUI fieldKey="about.founders.image" title={t("AboutUs.sections.founders.image") || "Founder Image"} />
-                                        </div>
+                                        <p className="text-sm text-slate-500 font-medium">{t("AboutUs.sections.founders.description")}</p>
                                     </div>
 
-                                    <div className="p-6 rounded-2xl border border-amber-100 bg-amber-50/20 space-y-4">
-                                        <h4 className="text-[11px] font-bold uppercase tracking-wider text-amber-600 flex items-center gap-2">
-                                            <div className="w-1.5 h-1.5 rounded-full bg-amber-400" />
-                                            Founders' Inspirational Quote
-                                        </h4>
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                            <div className="space-y-2">
-                                                <label className="text-xs font-bold text-amber-700">Quote Statement</label>
-                                                <Textarea value={getValue("about.founders.quote")} onChange={(e) => handleChange("about.founders.quote", e.target.value)} className="min-h-[80px] bg-white italic border-amber-200/50" />
+                                    <div className="space-y-12">
+                                        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+                                            <div className="md:col-span-8 space-y-8">
+                                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                                                    <div className="space-y-2">
+                                                        <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">{t('AboutUs.sections.founders.fields.label')}</label>
+                                                        <Input className="h-11 border-slate-200 bg-white/50" value={getValue("about.founders.label")} onChange={(e) => handleChange("about.founders.label", e.target.value)} />
+                                                    </div>
+                                                    <div className="space-y-2">
+                                                        <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">{t('AboutUs.sections.founders.fields.header')}</label>
+                                                        <Input className="h-11 border-slate-200 bg-white/50" value={getValue("about.founders.title")} onChange={(e) => handleChange("about.founders.title", e.target.value)} />
+                                                    </div>
+                                                </div>
+                                                <div className="space-y-6">
+                                                    <div className="space-y-2">
+                                                        <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">{t('AboutUs.sections.founders.fields.paragraph1')}</label>
+                                                        <Textarea className="min-h-[120px] border-slate-200 bg-white/50 leading-relaxed" value={getValue("about.founders.paragraph_1")} onChange={(e) => handleChange("about.founders.paragraph_1", e.target.value)} />
+                                                    </div>
+                                                    <div className="space-y-2">
+                                                        <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">{t('AboutUs.sections.founders.fields.paragraph2')}</label>
+                                                        <Textarea className="min-h-[120px] border-slate-200 bg-white/50 leading-relaxed" value={getValue("about.founders.paragraph_2")} onChange={(e) => handleChange("about.founders.paragraph_2", e.target.value)} />
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div className="space-y-2">
-                                                <label className="text-xs font-bold text-amber-700">Author Credit</label>
-                                                <Input value={getValue("about.founders.quote_author")} onChange={(e) => handleChange("about.founders.quote_author", e.target.value)} className="h-10 bg-white border-amber-200/50" />
+                                            <div className="md:col-span-4 border-l border-slate-50 md:pl-8 pt-4 md:pt-0">
+                                                <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-3 block">{t("AboutUs.sections.founders.image")}</label>
+                                                <MediaUploadUI fieldKey="about.founders.image" />
                                             </div>
                                         </div>
-                                    </div>
-                                </CardContent>
-                            </Card>
 
-                            {/* Journey Section */}
-                            <Card className="overflow-hidden border-none shadow-md">
-                                <CardHeader className="border-b bg-slate-50/50 pb-4">
-                                    <div className="flex items-center gap-3">
-                                        <div className="bg-primary/10 p-2.5 rounded-xl">
-                                            <History className="w-5 h-5 text-primary" />
-                                        </div>
-                                        <div>
-                                            <CardTitle className="text-base font-bold">{t("AboutUs.sections.journey.title") || "Our Journey"}</CardTitle>
-                                            <CardDescription className="text-xs">{t("AboutUs.sections.journey.description") || "Key milestones and the path we've traveled"}</CardDescription>
-                                        </div>
-                                    </div>
-                                </CardHeader>
-                                <CardContent className="p-4 sm:p-6 space-y-6">
-                                    <div className="space-y-2 pb-4 border-b">
-                                        <label className="text-sm font-bold text-gray-700">Section Title</label>
-                                        <Input value={getValue("about.journey.title")} onChange={(e) => handleChange("about.journey.title", e.target.value)} className="h-10" />
-                                    </div>
-                                    <div className="grid grid-cols-1 gap-6 pt-2">
-                                        <div className="space-y-2">
-                                            <label className="text-sm font-bold text-gray-700">The Beginning</label>
-                                            <Textarea value={getValue("about.journey.paragraph_1")} onChange={(e) => handleChange("about.journey.paragraph_1", e.target.value)} className="min-h-[100px] leading-relaxed" />
-                                        </div>
-                                        <div className="space-y-2">
-                                            <label className="text-sm font-bold text-gray-700">Growth & Evolution</label>
-                                            <Textarea value={getValue("about.journey.paragraph_2")} onChange={(e) => handleChange("about.journey.paragraph_2", e.target.value)} className="min-h-[100px] leading-relaxed" />
-                                        </div>
-                                        <div className="p-5 rounded-xl bg-blue-50/20 border border-blue-100 flex flex-col gap-3">
-                                            <label className="text-[10px] font-bold uppercase text-blue-500 tracking-wider">Mid-Journey Highlight</label>
-                                            <Textarea value={getValue("about.journey.quote")} onChange={(e) => handleChange("about.journey.quote", e.target.value)} className="min-h-[60px] bg-transparent border-none p-0 focus-visible:ring-0 shadow-none resize-none text-sm font-medium italic text-blue-900" />
-                                        </div>
-                                        <div className="space-y-2">
-                                            <label className="text-sm font-bold text-gray-700">Present Day</label>
-                                            <Textarea value={getValue("about.journey.paragraph_3")} onChange={(e) => handleChange("about.journey.paragraph_3", e.target.value)} className="min-h-[100px] leading-relaxed" />
-                                        </div>
-                                    </div>
-                                </CardContent>
-                            </Card>
-
-                            {/* Philosophy Section */}
-                            <Card className="overflow-hidden border-none shadow-md">
-                                <CardHeader className="border-b bg-slate-50/50 pb-4">
-                                    <div className="flex items-center gap-3">
-                                        <div className="bg-primary/10 p-2.5 rounded-xl">
-                                            <Target className="w-5 h-5 text-primary" />
-                                        </div>
-                                        <div>
-                                            <CardTitle className="text-base font-bold">{t("AboutUs.sections.philosophy.title") || "Our Philosophy"}</CardTitle>
-                                            <CardDescription className="text-xs">{t("AboutUs.sections.philosophy.description") || "Core values and mission statement"}</CardDescription>
-                                        </div>
-                                    </div>
-                                </CardHeader>
-                                <CardContent className="p-4 sm:p-6 space-y-8">
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pb-6 border-b">
-                                        <div className="space-y-2">
-                                            <label className="text-sm font-bold text-gray-700">Section Label</label>
-                                            <Input value={getValue("about.philosophy.label")} onChange={(e) => handleChange("about.philosophy.label", e.target.value)} className="h-10" />
-                                        </div>
-                                        <div className="space-y-2">
-                                            <label className="text-sm font-bold text-gray-700">Philosophy Core Header</label>
-                                            <Input value={getValue("about.philosophy.title")} onChange={(e) => handleChange("about.philosophy.title", e.target.value)} className="h-10" />
-                                        </div>
-                                    </div>
-                                    
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                        <div className="space-y-4 p-5 rounded-2xl border bg-emerald-50/10 border-emerald-100/50">
-                                            <h4 className="text-[11px] font-bold uppercase tracking-wider text-emerald-600 flex items-center gap-2">
-                                                <div className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-                                                Core Value 01
-                                            </h4>
-                                            <div className="space-y-2">
-                                                <label className="text-xs font-bold text-gray-600">Value Title</label>
-                                                <Input value={getValue("about.philosophy.value_1_title")} onChange={(e) => handleChange("about.philosophy.value_1_title", e.target.value)} className="h-9 text-sm bg-white" />
+                                        <div className="p-8 rounded-3xl bg-slate-50/40 border border-slate-100/50 space-y-6">
+                                            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-50 text-[10px] font-bold uppercase tracking-widest text-amber-600">
+                                                {t('AboutUs.sections.founders.quoteHeader')}
                                             </div>
-                                            <div className="space-y-2">
-                                                <label className="text-xs font-bold text-gray-600">Value Description</label>
-                                                <Textarea value={getValue("about.philosophy.value_1_desc")} onChange={(e) => handleChange("about.philosophy.value_1_desc", e.target.value)} className="min-h-[80px] text-sm bg-white" />
-                                            </div>
-                                        </div>
-                                        <div className="space-y-4 p-5 rounded-2xl border bg-emerald-50/10 border-emerald-100/50">
-                                            <h4 className="text-[11px] font-bold uppercase tracking-wider text-emerald-600 flex items-center gap-2">
-                                                <div className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-                                                Core Value 02
-                                            </h4>
-                                            <div className="space-y-2">
-                                                <label className="text-xs font-bold text-gray-600">Value Title</label>
-                                                <Input value={getValue("about.philosophy.value_2_title")} onChange={(e) => handleChange("about.philosophy.value_2_title", e.target.value)} className="h-9 text-sm bg-white" />
-                                            </div>
-                                            <div className="space-y-2">
-                                                <label className="text-xs font-bold text-gray-600">Value Description</label>
-                                                <Textarea value={getValue("about.philosophy.value_2_desc")} onChange={(e) => handleChange("about.philosophy.value_2_desc", e.target.value)} className="min-h-[80px] text-sm bg-white" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </CardContent>
-                            </Card>
-
-                            {/* Legacy Section */}
-                            <Card className="overflow-hidden border-none shadow-md">
-                                <CardHeader className="border-b bg-slate-50/50 pb-4">
-                                    <div className="flex items-center gap-3">
-                                        <div className="bg-primary/10 p-2.5 rounded-xl">
-                                            <BookOpen className="w-5 h-5 text-primary" />
-                                        </div>
-                                        <div>
-                                            <CardTitle className="text-base font-bold">{t("AboutUs.sections.legacy.title") || "Our Legacy"}</CardTitle>
-                                            <CardDescription className="text-xs">{t("AboutUs.sections.legacy.description") || "Continuing the tradition and future vision"}</CardDescription>
-                                        </div>
-                                    </div>
-                                </CardHeader>
-                                <CardContent className="p-4 sm:p-6 space-y-8">
-                                    <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
-                                        <div className="md:col-span-8 space-y-6">
-                                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                                 <div className="space-y-2">
-                                                    <label className="text-sm font-bold text-gray-700">Legacy Headline</label>
-                                                    <Input value={getValue("about.legacy.title")} onChange={(e) => handleChange("about.legacy.title", e.target.value)} className="h-10" />
+                                                    <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">{t('AboutUs.sections.founders.fields.quote')}</label>
+                                                    <Textarea className="min-h-[100px] border-slate-200 bg-white italic leading-relaxed" value={getValue("about.founders.quote")} onChange={(e) => handleChange("about.founders.quote", e.target.value)} />
                                                 </div>
                                                 <div className="space-y-2">
-                                                    <label className="text-sm font-bold text-gray-700">Section Subtitle</label>
-                                                    <Input value={getValue("about.legacy.subtitle")} onChange={(e) => handleChange("about.legacy.subtitle", e.target.value)} className="h-10" />
+                                                    <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">{t('AboutUs.sections.founders.fields.author')}</label>
+                                                    <Input className="h-11 border-slate-200 bg-white" value={getValue("about.founders.quote_author")} onChange={(e) => handleChange("about.founders.quote_author", e.target.value)} />
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="md:col-span-4 flex flex-col items-center justify-start md:border-l md:pl-8 pt-4 md:pt-0">
-                                            <MediaUploadUI fieldKey="about.legacy.image" title={t("AboutUs.sections.legacy.image") || "Legacy Image"} />
+                                    </div>
+                                </div>
+                            </div>
+                            {/* --- JOURNEY SECTION --- */}
+                            <div className="p-10 border border-slate-200 rounded-3xl bg-white/50 shadow-sm animate-in fade-in slide-in-from-bottom-4 duration-700 delay-100">
+                                <div className="space-y-8">
+                                    <div className="pb-4 border-b border-slate-100">
+                                        <div className="mb-1">
+                                            <h3 className="text-xl font-bold text-slate-800">{t("AboutUs.sections.journey.title")}</h3>
+                                        </div>
+                                        <p className="text-sm text-slate-500 font-medium">{t("AboutUs.sections.journey.description")}</p>
+                                    </div>
+
+                                    <div className="space-y-8 min-w-0">
+                                        <div className="space-y-2">
+                                            <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">{t('AboutUs.sections.journey.fields.title')}</label>
+                                            <Input className="h-11 border-slate-200 bg-white/50" value={getValue("about.journey.title")} onChange={(e) => handleChange("about.journey.title", e.target.value)} />
+                                        </div>
+                                        <div className="grid grid-cols-1 gap-8">
+                                            <div className="space-y-2">
+                                                <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">{t('AboutUs.sections.journey.fields.paragraph1')}</label>
+                                                <Textarea className="min-h-[120px] border-slate-200 bg-white/50 leading-relaxed" value={getValue("about.journey.paragraph_1")} onChange={(e) => handleChange("about.journey.paragraph_1", e.target.value)} />
+                                            </div>
+                                            <div className="space-y-2">
+                                                <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">{t('AboutUs.sections.journey.fields.paragraph2')}</label>
+                                                <Textarea className="min-h-[120px] border-slate-200 bg-white/50 leading-relaxed" value={getValue("about.journey.paragraph_2")} onChange={(e) => handleChange("about.journey.paragraph_2", e.target.value)} />
+                                            </div>
+                                            <div className="p-8 rounded-3xl bg-blue-50/30 border border-blue-100/50 space-y-4">
+                                                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-100/50 text-[10px] font-bold uppercase tracking-widest text-blue-600">
+                                                    {t('AboutUs.sections.journey.quoteLabel')}
+                                                </div>
+                                                <Textarea className="min-h-[80px] bg-transparent border-none p-0 focus-visible:ring-0 shadow-none resize-none text-base font-medium italic text-blue-900 leading-relaxed" value={getValue("about.journey.quote")} onChange={(e) => handleChange("about.journey.quote", e.target.value)} />
+                                            </div>
+                                            <div className="space-y-2">
+                                                <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">{t('AboutUs.sections.journey.fields.paragraph3')}</label>
+                                                <Textarea className="min-h-[120px] border-slate-200 bg-white/50 leading-relaxed" value={getValue("about.journey.paragraph_3")} onChange={(e) => handleChange("about.journey.paragraph_3", e.target.value)} />
+                                            </div>
                                         </div>
                                     </div>
-                                    
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-2">
-                                        {[1, 2, 3, 4].map(idx => (
-                                            <div key={idx} className="space-y-3 p-5 rounded-2xl bg-gray-50/50 border border-dashed border-gray-200">
-                                                <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Chapter {idx}</label>
-                                                <Textarea value={getValue(`about.legacy.paragraph_${idx}`)} onChange={(e) => handleChange(`about.legacy.paragraph_${idx}`, e.target.value)} className="min-h-[100px] leading-relaxed bg-white text-sm" />
-                                            </div>
-                                        ))}
+                                </div>
+                            </div>
+                            {/* --- PHILOSOPHY SECTION --- */}
+                            <div className="p-10 border border-slate-200 rounded-3xl bg-white/50 shadow-sm animate-in fade-in slide-in-from-bottom-4 duration-700 delay-200">
+                                <div className="space-y-10">
+                                    <div className="pb-4 border-b border-slate-100">
+                                        <div className="mb-1">
+                                            <h3 className="text-xl font-bold text-slate-800">{t("AboutUs.sections.philosophy.title")}</h3>
+                                        </div>
+                                        <p className="text-sm text-slate-500 font-medium">{t("AboutUs.sections.philosophy.description")}</p>
                                     </div>
-                                </CardContent>
-                            </Card>
+
+                                    <div className="space-y-10">
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+                                            <div className="space-y-2">
+                                                <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">{t('AboutUs.sections.philosophy.fields.label')}</label>
+                                                <Input className="h-11 border-slate-200 bg-white/50" value={getValue("about.philosophy.label")} onChange={(e) => handleChange("about.philosophy.label", e.target.value)} />
+                                            </div>
+                                            <div className="space-y-2">
+                                                <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">{t('AboutUs.sections.philosophy.fields.header')}</label>
+                                                <Input className="h-11 border-slate-200 bg-white/50" value={getValue("about.philosophy.title")} onChange={(e) => handleChange("about.philosophy.title", e.target.value)} />
+                                            </div>
+                                        </div>
+
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                            <div className="space-y-6 p-8 rounded-3xl bg-emerald-50/20 border border-emerald-100/50">
+                                                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 text-[10px] font-bold uppercase tracking-widest text-emerald-600">
+                                                    {t('AboutUs.sections.philosophy.valueLabel', { index: '01' })}
+                                                </div>
+                                                <div className="space-y-4">
+                                                    <div className="space-y-2">
+                                                        <label className="text-[11px] font-bold text-emerald-800/40 uppercase tracking-widest">{t('AboutUs.sections.philosophy.fields.valueTitle')}</label>
+                                                        <Input className="h-10 text-sm border-slate-200 bg-white" value={getValue("about.philosophy.value_1_title")} onChange={(e) => handleChange("about.philosophy.value_1_title", e.target.value)} />
+                                                    </div>
+                                                    <div className="space-y-2">
+                                                        <label className="text-[11px] font-bold text-emerald-800/40 uppercase tracking-widest">{t('AboutUs.sections.philosophy.fields.valueDesc')}</label>
+                                                        <Textarea className="min-h-[100px] border-slate-200 bg-white leading-relaxed text-sm" value={getValue("about.philosophy.value_1_desc")} onChange={(e) => handleChange("about.philosophy.value_1_desc", e.target.value)} />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="space-y-6 p-8 rounded-3xl bg-emerald-50/20 border border-emerald-100/50">
+                                                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 text-[10px] font-bold uppercase tracking-widest text-emerald-600">
+                                                    {t('AboutUs.sections.philosophy.valueLabel', { index: '02' })}
+                                                </div>
+                                                <div className="space-y-4">
+                                                    <div className="space-y-2">
+                                                        <label className="text-[11px] font-bold text-emerald-800/40 uppercase tracking-widest">{t('AboutUs.sections.philosophy.fields.valueTitle')}</label>
+                                                        <Input className="h-10 text-sm border-slate-200 bg-white" value={getValue("about.philosophy.value_2_title")} onChange={(e) => handleChange("about.philosophy.value_2_title", e.target.value)} />
+                                                    </div>
+                                                    <div className="space-y-2">
+                                                        <label className="text-[11px] font-bold text-emerald-800/40 uppercase tracking-widest">{t('AboutUs.sections.philosophy.fields.valueDesc')}</label>
+                                                        <Textarea className="min-h-[100px] border-slate-200 bg-white leading-relaxed text-sm" value={getValue("about.philosophy.value_2_desc")} onChange={(e) => handleChange("about.philosophy.value_2_desc", e.target.value)} />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {/* --- LEGACY SECTION --- */}
+                            <div className="p-10 border border-slate-200 rounded-3xl bg-white/50 shadow-sm animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300">
+                                <div className="space-y-10">
+                                    <div className="pb-4 border-b border-slate-100">
+                                        <div className="mb-1">
+                                            <h3 className="text-xl font-bold text-slate-800">{t("AboutUs.sections.legacy.title")}</h3>
+                                        </div>
+                                        <p className="text-sm text-slate-500 font-medium">{t("AboutUs.sections.legacy.description")}</p>
+                                    </div>
+
+                                    <div className="space-y-10">
+                                        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+                                            <div className="md:col-span-8 space-y-8">
+                                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                                                    <div className="space-y-2">
+                                                        <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">{t('AboutUs.sections.legacy.fields.header')}</label>
+                                                        <Input className="h-11 border-slate-200 bg-white/50" value={getValue("about.legacy.title")} onChange={(e) => handleChange("about.legacy.title", e.target.value)} />
+                                                    </div>
+                                                    <div className="space-y-2">
+                                                        <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">{t('AboutUs.sections.legacy.fields.subtitle')}</label>
+                                                        <Input className="h-11 border-slate-200 bg-white/50" value={getValue("about.legacy.subtitle")} onChange={(e) => handleChange("about.legacy.subtitle", e.target.value)} />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="md:col-span-4 border-l border-slate-50 md:pl-8 pt-4 md:pt-0">
+                                                <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-3 block">{t("AboutUs.sections.legacy.image")}</label>
+                                                <MediaUploadUI fieldKey="about.legacy.image" />
+                                            </div>
+                                        </div>
+
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 pt-4">
+                                            {[1, 2, 3, 4].map(idx => (
+                                                <div key={idx} className="space-y-4 p-8 rounded-3xl bg-slate-50/40 border border-slate-100/50">
+                                                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 text-[10px] font-bold uppercase tracking-widest text-slate-500">
+                                                        {t('AboutUs.sections.legacy.chapterLabel', { index: idx })}
+                                                    </div>
+                                                    <div className="space-y-2">
+                                                        <Textarea className="min-h-[140px] border-slate-200 bg-white leading-relaxed text-sm" value={getValue(`about.legacy.paragraph_${idx}`)} onChange={(e) => handleChange(`about.legacy.paragraph_${idx}`, e.target.value)} />
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -523,6 +507,6 @@ export const AboutUsSettingsForm = () => {
                 title={previewData?.title || "Preview"}
                 type={previewData?.type || 'image'}
             />
-        </div>
+        </div >
     );
 };

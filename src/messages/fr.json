@@ -2421,8 +2421,12 @@
       "change": "Modifier",
       "removing": "Suppression...",
       "uploading": "Téléchargement...",
-      "maxSizeImage": "JPG/PNG jusqu'à 5 Mo",
-      "maxSizeVideo": "MP4/WEBM jusqu'à 100 Mo"
+      "maxSizeImage": "JPG/PNG max 5 Mo",
+      "maxSizeVideo": "MP4/WEBM max 100 Mo",
+      "selectFromMenu": "Choisir dans le menu",
+      "autoTranslate": "Traduction automatique",
+      "search": "Rechercher",
+      "cancel": "Annuler"
     },
     "Introduction": {
       "title": "Page d'introduction",
@@ -2432,7 +2436,11 @@
           "title": "Section Héros",
           "description": "La bannière principale en haut de la page.",
           "mainTitle": "Titre principal",
-          "brandQuote": "Citation de marque"
+          "brandQuote": "Citation de marque",
+          "placeholders": {
+            "mainTitle": "ex. Cuisine vietnamienne authentique",
+            "brandQuote": "Où la tradition rencontre le goût"
+          }
         },
         "chef": {
           "title": "Découverte du Chef",
@@ -2473,6 +2481,12 @@
         "ambianceVideo": "Vidéo d'ambiance",
         "dishImage": "Image du plat signature {index}"
       }
+    },
+    "DishModal": {
+      "noCategory": "Pas de catégorie",
+      "dishLabel": "PLAT",
+      "dishPlaceholder": "Plat #{id}",
+      "selectError": "Échec de la sélection du plat : {error}"
     },
     "StoreProfile": {
       "title": "Profil de la boutique",
@@ -2541,6 +2555,20 @@
       "reset": "Réinitialiser",
       "clickToUpload": "Logo",
       "uploadSuccess": "Logo téléchargé avec succès",
+      "visualBranding": "Identité visuelle",
+      "visualBrandingDesc": "Logo et médias promotionnels",
+      "officialLogo": "Logo officiel",
+      "storeVideo": "Vidéo du magasin",
+      "syncNotice": "Avis de synchronisation",
+      "syncNoticeDesc": "L'enregistrement mettra à jour instantanément les champs globaux dans toutes les langues.",
+      "placeholders": {
+        "facebook": "URL Facebook",
+        "instagram": "URL Instagram",
+        "tiktok": "URL TikTok"
+      },
+      "translationFailed": "Échec de la traduction.",
+      "translatedSuccessfully": "Traduit avec succès !",
+      "nothingToTranslate": "Rien à traduire.",
       "uploadError": "Échec du téléchargement du logo",
       "fileSizeError": "La taille du fichier doit être inférieure à 5 Mo",
       "updateSuccess": "Profil du magasin mis à jour avec succès",
@@ -2552,19 +2580,69 @@
       "sections": {
         "founders": {
           "title": "Vision des fondateurs",
-          "description": "Histoire d'origine et inspiration principale."
+          "description": "Histoire d'origine et inspiration principale.",
+          "label": "Étiquette de section",
+          "header": "En-tête principal",
+          "paragraph1": "Paragraphe narratif 1",
+          "paragraph2": "Paragraphe narratif 2",
+          "quote": "Déclaration de citation",
+          "quoteAuthor": "Nom d'attribution",
+          "featuredQuote": "Citation en vedette",
+          "image": "Image des fondateurs",
+          "quoteHeader": "Citation inspirante des fondateurs",
+          "fields": {
+            "label": "Étiquette de section",
+            "header": "En-tête principal",
+            "paragraph1": "Premier paragraphe bio",
+            "paragraph2": "Deuxième paragraphe bio",
+            "quote": "Déclaration de citation",
+            "author": "Crédit d'auteur"
+          }
         },
         "journey": {
           "title": "Parcours historique",
-          "description": "Chronologie et jalons clés."
+          "description": "Chronologie et jalons clés.",
+          "header": "Titre du parcours",
+          "paragraph1": "Chapitre d'ouverture",
+          "paragraph2": "Évolution stratégique",
+          "quote": "Point fort du parcours",
+          "paragraph3": "Ère actuelle",
+          "fields": {
+            "title": "Titre de section",
+            "paragraph1": "Le début",
+            "paragraph2": "Croissance et évolution",
+            "paragraph3": "Aujourd'hui"
+          },
+          "quoteLabel": "Point fort à mi-parcours"
         },
         "philosophy": {
           "title": "Philosophie et valeurs",
-          "description": "Croyances fondamentales et principes directeurs."
+          "description": "Croyances fondamentales et principes directeurs.",
+          "label": "Étiquette de philosophie",
+          "header": "Mission principale",
+          "principle": "Principe {index}",
+          "principleTitle": "Titre",
+          "principleDesc": "Description",
+          "fields": {
+            "label": "Étiquette de section",
+            "header": "En-tête de base de la philosophie",
+            "valueTitle": "Titre de la valeur",
+            "valueDesc": "Description de la valeur"
+          },
+          "valueLabel": "Valeur fondamentale {index}"
         },
         "legacy": {
           "title": "Héritage culinaire",
-          "description": "Vision future et excellence durable."
+          "description": "Vision future et excellence durable.",
+          "header": "Titre de l'héritage",
+          "subtitle": "Sous-titre stratégique",
+          "paragraph": "Chapitre de l'héritage {index}",
+          "image": "Image de l'héritage",
+          "fields": {
+            "header": "Titre de l'héritage",
+            "subtitle": "Sous-titre de section"
+          },
+          "chapterLabel": "Chapitre {index}"
         }
       },
       "actions": {
@@ -2591,7 +2669,10 @@
       "description": "Description (optionnelle)",
       "descriptionPlaceholder": "À quoi sert ce paramètre ?",
       "sensitive": "Données sensibles",
-      "sensitiveDesc": "Masquer la valeur par défaut (ex : mots de passe, clés API)"
+      "sensitiveDesc": "Masquer la valeur par défaut (ex : mots de passe, clés API)",
+      "addTitle": "Ajouter un nouveau paramètre",
+      "true": "Vrai",
+      "false": "Faux"
     },
     "Field": {
       "sensitiveHidden": "Sensible – valeur masquée",

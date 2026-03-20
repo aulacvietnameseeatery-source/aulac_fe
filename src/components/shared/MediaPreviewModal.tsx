@@ -25,19 +25,21 @@ export const MediaPreviewModal = ({
             title={title}
             width="900px"
         >
-            <div className="relative w-full flex items-center justify-center bg-black/5 rounded-lg overflow-hidden min-h-[300px]">
+            <div className="relative w-full flex items-center justify-center bg-slate-900 rounded-lg overflow-hidden min-h-[400px]">
                 {type === 'video' ? (
-                    <video
-                        src={url}
-                        className="max-h-[70vh] w-full rounded-lg shadow-sm"
-                        controls
-                        autoPlay
-                    />
+                    <div className="w-full aspect-video">
+                        <video
+                            src={url}
+                            className="w-full h-full object-contain"
+                            controls
+                            autoPlay
+                        />
+                    </div>
                 ) : (
                     <img
                         src={url}
                         alt={title}
-                        className="max-h-[70vh] w-auto max-w-full object-contain rounded-lg shadow-sm"
+                        className="max-h-[80vh] w-auto max-w-full object-contain shadow-2xl"
                     />
                 )}
             </div>

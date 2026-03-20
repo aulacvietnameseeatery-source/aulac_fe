@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
-import { ImagePlus, Trash2, Save, Loader2, Upload, Facebook, Instagram, Music2 as Tiktok, X, Eye, MapPin, Phone, Mail, Clock, Building2, Globe, UploadCloud, Languages } from 'lucide-react';
+import { ImagePlus, Trash2, Save, Loader2, Upload, Facebook, Instagram, Music2 as Tiktok, X, Eye, MapPin, Phone, Mail, Clock, Building2, Globe, UploadCloud, Languages, Sparkles, Camera, PlayCircle } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { getGroupSettings, updateGroupSettings, uploadLogo, translateSystemSettings } from '../services/system-setting.service';
 import { BulkUpdateSettingItemDto } from '../types/system-setting.types';
@@ -54,10 +54,10 @@ export const StoreProfileForm = () => {
                 });
                 return newData;
             });
-            toast.success(t('StoreProfile.updateSuccess') || "Translated successfully!");
+            toast.success(t('StoreProfile.translatedSuccessfully'));
         },
         onError: () => {
-            toast.error("Translation failed.");
+            toast.error(t('StoreProfile.translationFailed'));
         }
     });
 
@@ -69,7 +69,7 @@ export const StoreProfileForm = () => {
         });
 
         if (Object.keys(dataToTranslate).length === 0) {
-            toast.warning("Nothing to translate.");
+            toast.warning(t('StoreProfile.nothingToTranslate'));
             return;
         }
 
@@ -182,13 +182,13 @@ export const StoreProfileForm = () => {
         const url = getFullUrl(fieldKey);
 
         return (
-            <div className="flex flex-col space-y-2">
+            <div className="flex flex-col space-y-3">
                 <label className="text-sm font-semibold text-gray-700">{title}</label>
-                <div className="flex items-center gap-4">
+                <div className="flex flex-col gap-4">
                     <div
                         className={cn(
-                            "relative rounded-lg border bg-gray-50 flex items-center justify-center overflow-hidden group border-dashed flex-shrink-0 cursor-pointer hover:border-primary/50",
-                            isVideo ? "w-32 h-20" : "w-20 h-20",
+                            "relative rounded-lg border bg-gray-50 flex items-center justify-center overflow-hidden group border-dashed cursor-pointer hover:border-primary/50 transition-all",
+                            isVideo ? "w-80 aspect-video" : "w-32 aspect-square",
                             url && "border-solid shadow-sm"
                         )}
                         onClick={() => {
@@ -224,19 +224,19 @@ export const StoreProfileForm = () => {
                         )}
                     </div>
 
-                    <div className="flex-1 space-y-2">
+                    <div className="flex items-center gap-3">
                         <div className="flex items-center gap-2">
-                            <Button type="button" variant="outline" size="sm" onClick={() => inputRef.current?.click()} className="h-8">
-                                <Upload className="w-3.5 h-3.5 mr-2" />
+                            <Button type="button" variant="outline" size="sm" onClick={() => inputRef.current?.click()} className="h-9 px-4">
+                                <Upload className="w-4 h-4 mr-2" />
                                 {url ? t('Common.change') : t('Common.upload')}
                             </Button>
                             {url && (
-                                <Button type="button" variant="outline" size="sm" onClick={() => handleChange(fieldKey, "", true)} className="h-8 text-red-500 hover:text-red-600 border-red-100 hover:bg-red-50">
-                                    <Trash2 className="w-3.5 h-3.5" />
+                                <Button type="button" variant="outline" size="sm" onClick={() => handleChange(fieldKey, "", true)} className="h-9 w-9 p-0 text-red-500 hover:text-red-600 border-red-100 hover:bg-red-50">
+                                    <Trash2 className="w-4 h-4" />
                                 </Button>
                             )}
                         </div>
-                        <p className="text-[11px] text-gray-500 italic">
+                        <p className="text-xs text-gray-500 italic">
                             {isVideo ? t('Common.maxSizeVideo') : t('Common.maxSizeImage')}
                         </p>
                     </div>
@@ -255,7 +255,7 @@ export const StoreProfileForm = () => {
     }
 
     return (
-        <div className="flex flex-col gap-6 max-w-7xl mx-auto pb-12 w-full">
+        <div className="flex flex-col gap-6 w-full pb-12">
             {/* --- HEADER ACTIONS --- */}
             <div className="flex flex-wrap items-center justify-between gap-4 bg-white/80 backdrop-blur-md p-4 rounded-xl border border-border shadow-sm sticky top-0 z-50 transition-all duration-300">
                 <div className="flex items-center gap-6">
@@ -267,8 +267,8 @@ export const StoreProfileForm = () => {
                                 size="sm"
                                 className={cn(
                                     "px-4 py-1.5 h-8 text-xs font-bold uppercase transition-all duration-200 rounded-md",
-                                    activeLocale === loc 
-                                        ? "bg-white shadow-sm text-blue-600 hover:bg-white hover:text-blue-600" 
+                                    activeLocale === loc
+                                        ? "bg-white shadow-sm text-blue-600 hover:bg-white hover:text-blue-600"
                                         : "text-gray-500 hover:text-blue-600 hover:bg-white/50"
                                 )}
                                 onClick={() => setActiveLocale(loc)}
@@ -278,245 +278,199 @@ export const StoreProfileForm = () => {
                         ))}
                     </div>
 
-                    <div className="h-6 w-px bg-gray-200 hidden md:block" />
-
-                    <div className="hidden md:flex items-center gap-2 text-sm font-bold text-slate-400 uppercase tracking-widest">
-                        <Building2 className="w-4 h-4" />
-                        <span>{t('StoreProfile.title') || "Store Profile"}</span>
-                    </div>
                 </div>
 
                 <div className="flex items-center gap-3">
-                    <Button 
-                        variant="outline" 
-                        size="sm" 
+                    <Button
+                        variant="outline"
+                        size="sm"
                         className="h-9 gap-2 text-purple-600 border-purple-200 hover:bg-purple-50 hover:border-purple-300 font-semibold px-4 transition-all"
                         onClick={handleAutoTranslate}
                         disabled={translateMutation.isPending}
                     >
                         {translateMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Languages className="w-4 h-4" />}
-                        <span className="hidden sm:inline">Auto Translate</span>
+                        <span className="hidden sm:inline">{t('Common.autoTranslate')}</span>
                     </Button>
-                    <Button 
-                        size="sm" 
+                    <Button
+                        size="sm"
                         className="h-9 gap-2 bg-[#1E3C52] hover:bg-[#12283A] text-white shadow-lg shadow-blue-900/20 font-semibold px-4 transition-all"
                         onClick={handleSave}
                         disabled={isSaving}
                     >
                         {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-                        {t("Common.saveChanges") || "Save Changes"}
+                        {t("Common.saveChanges")}
                     </Button>
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-                {/* --- FORM COLUMN --- */}
-                <div className="lg:col-span-8 space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
-                    {/* Header Intro */}
-                    <div className="flex flex-col gap-1 px-1">
-                        <h2 className="text-2xl font-black tracking-tight text-slate-900 flex items-center gap-2">
-                            {t('StoreProfile.title') || "Store Profile Settings"}
-                            <span className="h-2 w-2 rounded-full bg-blue-500 animate-pulse" />
-                        </h2>
-                        <p className="text-sm font-medium text-slate-500">
-                            {t('StoreProfile.description') || "Manage your restaurant's identity, contact info and presence across all languages."}
-                        </p>
-                    </div>
-
-                    {/* Identity Card */}
-                    <Card className="border-none shadow-sm shadow-blue-950/5 overflow-hidden">
-                        <CardHeader className="border-b bg-slate-50/50 pb-4">
-                            <div className="flex items-center gap-3">
-                                <Building2 className="w-5 h-5 text-blue-600" />
-                                <CardTitle className="text-lg font-bold">{t("StoreProfile.sections.identity.title")}</CardTitle>
+            <div className="flex flex-col gap-12 w-full pb-24 max-w-5xl mx-auto">
+                {/* --- IDENTITY SECTION --- */}
+                <div className="p-8 border border-slate-200 rounded-3xl bg-white/50 shadow-sm animate-in fade-in slide-in-from-bottom-4 duration-700">
+                    <div className="space-y-8">
+                        <div className="pb-4 border-b border-slate-100">
+                            <div className="mb-1">
+                                <h3 className="text-xl font-bold text-slate-800">{t("StoreProfile.sections.identity.title")}</h3>
                             </div>
-                            <CardDescription>{t("StoreProfile.sections.identity.description")}</CardDescription>
-                        </CardHeader>
-                        <CardContent className="p-4 sm:p-6 space-y-6">
+                            <p className="text-sm text-slate-500 font-medium">{t("StoreProfile.sections.identity.description")}</p>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                             <div className="space-y-2">
-                                <label className="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-2">
-                                    <Globe className="w-3 h-3" />
+                                <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
                                     {t("StoreProfile.storeName")} ({activeLocale})
                                 </label>
                                 <Input
                                     value={getValue('name')}
                                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange('name', e.target.value)}
                                     placeholder="e.g. Au Lac Restaurant"
-                                    className="h-12 border-slate-200 focus:border-blue-400 focus:ring-blue-100 transition-all text-base"
+                                    className="h-11 border-slate-200 focus:border-blue-400 focus:ring-blue-100 transition-all text-base bg-white/50"
                                 />
                             </div>
-                        </CardContent>
-                    </Card>
-
-                    {/* Contact & Location Card */}
-                    <Card className="border-none shadow-sm shadow-blue-950/5 overflow-hidden">
-                        <CardHeader className="border-b bg-slate-50/50 pb-4">
-                            <div className="flex items-center gap-3">
-                                <MapPin className="w-5 h-5 text-blue-600" />
-                                <CardTitle className="text-lg font-bold">{t("StoreProfile.sections.contact.title")}</CardTitle>
-                            </div>
-                            <CardDescription>{t("StoreProfile.sections.contact.description")}</CardDescription>
-                        </CardHeader>
-                        <CardContent className="p-4 sm:p-6 space-y-6">
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div className="space-y-2">
-                                    <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">{t("StoreProfile.streetAddress")} ({activeLocale})</label>
-                                    <Input
-                                        value={getValue('streetAddress')}
-                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange('streetAddress', e.target.value)}
-                                        placeholder="123 Gastronomy St"
-                                        className="h-12 border-slate-200 focus:border-blue-400"
-                                    />
-                                </div>
-                                <div className="space-y-2">
-                                    <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">{t("StoreProfile.city")} ({activeLocale})</label>
-                                    <Input
-                                        value={getValue('city')}
-                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange('city', e.target.value)}
-                                        placeholder="Geneva"
-                                        className="h-12 border-slate-200 focus:border-blue-400"
-                                    />
-                                </div>
-                                <div className="space-y-2">
-                                    <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">{t("StoreProfile.country")} ({activeLocale})</label>
-                                    <Input
-                                        value={getValue('country')}
-                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange('country', e.target.value)}
-                                        placeholder="Switzerland"
-                                        className="h-12 border-slate-200 focus:border-blue-400"
-                                    />
-                                </div>
-                                <div className="space-y-2">
-                                    <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">{t("StoreProfile.postalCode")}</label>
-                                    <Input
-                                        value={getValue('postalCode', true)}
-                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange('postalCode', e.target.value, true)}
-                                        placeholder="1201"
-                                        className="h-12 border-slate-200 focus:border-blue-400"
-                                    />
-                                </div>
-                            </div>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6 border-t border-slate-100">
-                                <div className="space-y-2">
-                                    <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">{t("StoreProfile.email")}</label>
-                                    <div className="relative group">
-                                        <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 transition-colors group-focus-within:text-blue-500" />
-                                        <Input
-                                            type="email"
-                                            value={getValue('email', true)}
-                                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange('email', e.target.value, true)}
-                                            placeholder="contact@aulac.ch"
-                                            className="h-12 pl-12 border-slate-200 focus:border-blue-400"
-                                        />
-                                    </div>
-                                </div>
-                                <div className="space-y-2">
-                                    <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">{t("StoreProfile.phone")}</label>
-                                    <div className="relative group">
-                                        <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 transition-colors group-focus-within:text-blue-500" />
-                                        <Input
-                                            value={getValue('phone', true)}
-                                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange('phone', e.target.value, true)}
-                                            placeholder="+41 22 123 4567"
-                                            className="h-12 pl-12 border-slate-200 focus:border-blue-400"
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-                        </CardContent>
-                    </Card>
-
-                    {/* Operations Card */}
-                    <Card className="border-none shadow-sm shadow-blue-950/5 overflow-hidden">
-                        <CardHeader className="border-b bg-slate-50/50 pb-4">
-                            <div className="flex items-center gap-3">
-                                <Clock className="w-5 h-5 text-blue-600" />
-                                <CardTitle className="text-lg font-bold">{t("StoreProfile.sections.hours.title")}</CardTitle>
-                            </div>
-                            <CardDescription>{t("StoreProfile.sections.hours.description")}</CardDescription>
-                        </CardHeader>
-                        <CardContent className="p-4 sm:p-6 space-y-6">
                             <div className="space-y-2">
-                                <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">{t("StoreProfile.openingHours")} ({activeLocale})</label>
+                                <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">{t("StoreProfile.openingHours")} ({activeLocale})</label>
                                 <Input
                                     value={getValue('openingHours')}
                                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange('openingHours', e.target.value)}
-                                    placeholder="Mon - Sun: 09:00 - 22:00"
-                                    className="h-12 border-slate-200 focus:border-blue-400"
+                                    placeholder="Mon-Sun: 10:00 - 22:00"
+                                    className="h-11 border-slate-200 focus:border-blue-400 bg-white/50"
                                 />
                             </div>
-                        </CardContent>
-                    </Card>
+                        </div>
+                    </div>
                 </div>
 
-                {/* --- SIDEBAR COLUMN --- */}
-                <div className="lg:col-span-4 space-y-6 lg:sticky lg:top-24 animate-in fade-in slide-in-from-right-4 duration-700">
-                    {/* Media Card */}
-                    <Card className="border-none shadow-sm shadow-blue-950/5 overflow-hidden">
-                        <CardHeader className="bg-slate-50/50 pb-4">
-                            <CardTitle className="text-lg font-bold">Visual Branding</CardTitle>
-                            <CardDescription>Logo and promotional media</CardDescription>
-                        </CardHeader>
-                        <CardContent className="space-y-6 py-6">
-                            <MediaUploadUI fieldKey="logoUrl" title="Official Logo" />
-                            <div className="h-px bg-slate-100" />
-                            <MediaUploadUI fieldKey="promoVideoUrl" title="Store Video" isVideo />
-                        </CardContent>
-                    </Card>
-
-                    {/* Socials Card */}
-                    <Card className="border-none shadow-sm shadow-blue-950/5 overflow-hidden">
-                        <CardHeader className="bg-slate-50/50 pb-4">
-                            <CardTitle className="text-lg font-bold">{t("StoreProfile.sections.social.title")}</CardTitle>
-                            <CardDescription>{t("StoreProfile.sections.social.description")}</CardDescription>
-                        </CardHeader>
-                        <CardContent className="space-y-4 py-6">
-                            <div className="flex items-center gap-3 bg-gray-50 p-2 rounded-lg border border-gray-100 group transition-all focus-within:border-blue-200 focus-within:bg-white">
-                                <div className="h-9 w-9 flex items-center justify-center bg-white rounded-md shadow-sm border border-gray-100">
-                                    <Facebook className="w-5 h-5 text-[#1877F2]" />
-                                </div>
-                                <Input
-                                    value={getValue('facebookLink', true)}
-                                    onChange={(e) => handleChange('facebookLink', e.target.value, true)}
-                                    placeholder="Facebook URL"
-                                    className="border-none bg-transparent shadow-none focus-visible:ring-0 text-sm h-9"
-                                />
+                {/* --- VISUAL BRANDING SECTION --- */}
+                <div className="p-8 border border-slate-200 rounded-3xl bg-white/50 shadow-sm animate-in fade-in slide-in-from-bottom-4 duration-700 delay-100">
+                    <div className="space-y-8">
+                        <div className="pb-4 border-b border-slate-100">
+                            <div className="mb-1">
+                                <h3 className="text-xl font-bold text-slate-800">{t("StoreProfile.visualBranding")}</h3>
                             </div>
-                            <div className="flex items-center gap-3 bg-gray-50 p-2 rounded-lg border border-gray-100 group transition-all focus-within:border-pink-200 focus-within:bg-white">
-                                <div className="h-9 w-9 flex items-center justify-center bg-white rounded-md shadow-sm border border-gray-100">
-                                    <Instagram className="w-5 h-5 text-[#E4405F]" />
-                                </div>
-                                <Input
-                                    value={getValue('instagramLink', true)}
-                                    onChange={(e) => handleChange('instagramLink', e.target.value, true)}
-                                    placeholder="Instagram URL"
-                                    className="border-none bg-transparent shadow-none focus-visible:ring-0 text-sm h-9"
-                                />
-                            </div>
-                            <div className="flex items-center gap-3 bg-gray-50 p-2 rounded-lg border border-gray-100 group transition-all focus-within:border-gray-300 focus-within:bg-white">
-                                <div className="h-9 w-9 flex items-center justify-center bg-white rounded-md shadow-sm border border-gray-100">
-                                    <Tiktok className="w-5 h-5 text-gray-900" />
-                                </div>
-                                <Input
-                                    value={getValue('tiktokLink', true)}
-                                    onChange={(e) => handleChange('tiktokLink', e.target.value, true)}
-                                    placeholder="TikTok URL"
-                                    className="border-none bg-transparent shadow-none focus-visible:ring-0 text-sm h-9"
-                                />
-                            </div>
-                        </CardContent>
-                    </Card>
-
-                    {/* Sync Info */}
-                    <div className="p-4 bg-blue-50/50 rounded-xl border border-blue-100 flex items-start gap-4">
-                        <div className="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
-                            <Globe className="h-4 w-4 text-blue-600" />
+                            <p className="text-sm text-slate-500 font-medium">{t("StoreProfile.visualBrandingDesc")}</p>
                         </div>
-                        <div className="space-y-1">
-                            <p className="text-[11px] font-black text-blue-900 uppercase tracking-tight">Sync Notice</p>
-                            <p className="text-[11px] font-medium text-blue-700/70 leading-normal">
-                                Saving will update global fields across all languages instantly.
-                            </p>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                            <div className="space-y-4">
+                                <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
+                                    {t("StoreProfile.officialLogo")}
+                                </label>
+                                <MediaUploadUI
+                                    fieldKey="logoUrl"
+                                    title={t("StoreProfile.officialLogo")}
+                                />
+                            </div>
+                            <div className="space-y-4">
+                                <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
+                                    {t("StoreProfile.storeVideo")}
+                                </label>
+                                <MediaUploadUI
+                                    fieldKey="promoVideoUrl"
+                                    title={t("StoreProfile.storeVideo")}
+                                    isVideo
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* --- CONTACT & LOCATION SECTION --- */}
+                <div className="p-8 border border-slate-200 rounded-3xl bg-white/50 shadow-sm animate-in fade-in slide-in-from-bottom-4 duration-700 delay-200">
+                    <div className="space-y-8">
+                        <div className="pb-4 border-b border-slate-100">
+                            <div className="mb-1">
+                                <h3 className="text-xl font-bold text-slate-800">{t("StoreProfile.sections.contact.title")}</h3>
+                            </div>
+                            <p className="text-sm text-slate-500 font-medium">{t("StoreProfile.sections.contact.description")}</p>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div className="space-y-2">
+                                <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">{t("StoreProfile.streetAddress")} ({activeLocale})</label>
+                                <Input
+                                    value={getValue('streetAddress')}
+                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange('streetAddress', e.target.value)}
+                                    placeholder="123 Gastronomy St"
+                                    className="h-11 border-slate-200 focus:border-blue-400 bg-white/50"
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">{t("StoreProfile.city")} ({activeLocale})</label>
+                                <Input
+                                    value={getValue('city')}
+                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange('city', e.target.value)}
+                                    placeholder="Geneva"
+                                    className="h-11 border-slate-200 focus:border-blue-400 bg-white/50"
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">{t("StoreProfile.country")} ({activeLocale})</label>
+                                <Input
+                                    value={getValue('country')}
+                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange('country', e.target.value)}
+                                    placeholder="Switzerland"
+                                    className="h-11 border-slate-200 focus:border-blue-400 bg-white/50"
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">{t("StoreProfile.phone")}</label>
+                                <Input
+                                    value={getValue('phone', true)}
+                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange('phone', e.target.value, true)}
+                                    placeholder="+41 22 123 4567"
+                                    className="h-11 border-slate-200 focus:border-blue-400 bg-white/50"
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">{t("StoreProfile.email")}</label>
+                                <Input
+                                    value={getValue('email', true)}
+                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange('email', e.target.value, true)}
+                                    placeholder="contact@aulac.com"
+                                    className="h-11 border-slate-200 focus:border-blue-400 bg-white/50"
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* --- SOCIAL MEDIA SECTION --- */}
+                <div className="p-8 border border-slate-200 rounded-3xl bg-white/50 shadow-sm animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300">
+                    <div className="space-y-8">
+                        <div className="pb-4 border-b border-slate-100">
+                            <div className="mb-1">
+                                <h3 className="text-xl font-bold text-slate-800">{t("StoreProfile.sections.social.title")}</h3>
+                            </div>
+                            <p className="text-sm text-slate-500 font-medium">{t("StoreProfile.sections.social.description")}</p>
+                        </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div className="flex items-center gap-3 bg-white p-2 rounded-xl border border-slate-100 shadow-sm focus-within:ring-2 focus-within:ring-blue-100 focus-within:border-blue-400 transition-all">
+                            <div className="pl-2 pr-1 text-xs font-bold text-slate-400 uppercase tracking-wider">{t('Common.facebook') || 'FB'}</div>
+                            <Input
+                                value={getValue('facebookLink', true)}
+                                onChange={(e) => handleChange('facebookLink', e.target.value, true)}
+                                placeholder="Facebook URL"
+                                className="border-none bg-transparent shadow-none focus-visible:ring-0 text-sm h-8 p-0"
+                            />
+                        </div>
+                        <div className="flex items-center gap-3 bg-white p-2 rounded-xl border border-slate-100 shadow-sm focus-within:ring-2 focus-within:ring-pink-50 focus-within:border-pink-400 transition-all">
+                            <div className="pl-2 pr-1 text-xs font-bold text-slate-400 uppercase tracking-wider">{t('Common.instagram') || 'IG'}</div>
+                            <Input
+                                value={getValue('instagramLink', true)}
+                                onChange={(e) => handleChange('instagramLink', e.target.value, true)}
+                                placeholder="Instagram URL"
+                                className="border-none bg-transparent shadow-none focus-visible:ring-0 text-sm h-8 p-0"
+                            />
+                        </div>
+                        <div className="flex items-center gap-3 bg-white p-2 rounded-xl border border-slate-100 shadow-sm focus-within:ring-2 focus-within:ring-slate-100 focus-within:border-slate-400 transition-all">
+                            <div className="pl-2 pr-1 text-xs font-bold text-slate-400 uppercase tracking-wider">{t('Common.tiktok') || 'TK'}</div>
+                            <Input
+                                value={getValue('tiktokLink', true)}
+                                onChange={(e) => handleChange('tiktokLink', e.target.value, true)}
+                                placeholder="TikTok URL"
+                                className="border-none bg-transparent shadow-none focus-visible:ring-0 text-sm h-8 p-0"
+                            />
                         </div>
                     </div>
                 </div>
