@@ -259,7 +259,8 @@
         "saveFirst": "Save Changes First"
       },
       "validation": {
-        "missingInfo": "* Please enter Name & Phone to book"
+        "missingInfo": "* Please enter Name & Phone to book",
+        "timePast": "Cannot select time in the past."
       },
       "legal": "By booking, you agree to our Terms & Conditions and Cancellation Policy."
     },
@@ -361,7 +362,8 @@
         "existingCustomerNotFound": "Returning customer info not found. Please check the phone number.",
         "dateRequired": "Please select a reservation date.",
         "timeRequired": "Please select an arrival time.",
-        "partySizeRequired": "Please select party size."
+        "partySizeRequired": "Please select party size.",
+        "timePast": "Cannot select time in the past."
       },
       "toast": {
         "created": "Reservation request created successfully!",

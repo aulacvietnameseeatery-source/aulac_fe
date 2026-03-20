@@ -259,7 +259,8 @@
         "saveFirst": "Lưu thay đổi trước"
       },
       "validation": {
-        "missingInfo": "* Vui lòng nhập Tên & Số điện thoại để đặt bàn"
+        "missingInfo": "* Vui lòng nhập Tên & Số điện thoại để đặt bàn",
+        "timePast": "Không thể chọn thời gian trong quá khứ."
       },
       "legal": "Bằng cách đặt bàn, bạn đồng ý với Điều khoản & Điều kiện và Chính sách Hủy của chúng tôi."
     },
@@ -361,7 +362,8 @@
         "existingCustomerNotFound": "Không tìm thấy thông tin khách cũ. Vui lòng kiểm tra lại số điện thoại.",
         "dateRequired": "Vui lòng chọn ngày đặt.",
         "timeRequired": "Vui lòng chọn giờ đến.",
-        "partySizeRequired": "Vui lòng chọn số lượng khách."
+        "partySizeRequired": "Vui lòng chọn số lượng khách.",
+        "timePast": "Không thể chọn thời gian trong quá khứ."
       },
       "toast": {
         "created": "Đã tạo yêu cầu đặt bàn thành công!",
