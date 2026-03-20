@@ -80,6 +80,7 @@ interface BaseTableProps<T> {
     renderActionColumn?: (item: T, rowIndex: number) => React.ReactNode;
     renderNoData?: () => React.ReactNode;
     renderPaginationAppend?: () => React.ReactNode;
+    noBorder?: boolean;
 }
 
 export function BaseTable<T>({
@@ -108,6 +109,7 @@ export function BaseTable<T>({
     renderActionColumn,
     renderNoData,
     renderPaginationAppend,
+    noBorder = false,
 }: BaseTableProps<T>) {
     const t = useTranslations('common.table');
 
@@ -458,7 +460,10 @@ export function BaseTable<T>({
                     {renderTitle()}
                 </div>
             )}
-            <div className="body-layout-list rounded-xl border border-[#D5BA98]/60 bg-white shadow-sm overflow-hidden">
+            <div className={cn(
+                "body-layout-list rounded-xl shadow-sm overflow-hidden",
+                !noBorder && "border border-[#D5BA98]/60 bg-white"
+            )}>
                 <div className="body-list bg-transparent">
                     <div className="form-list flex flex-column border-b border-slate-200 bg-white">
                         <div className="flex flex-column w-full">

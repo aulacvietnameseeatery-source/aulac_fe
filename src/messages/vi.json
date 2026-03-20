@@ -2743,5 +2743,47 @@
         "TAKEAWAY": "Mang đi"
       }
     }
+  },
+  "EmailTemplates": {
+    "title": "Quản lý Email Template",
+    "description": "Quản lý các mẫu email gửi cho khách hàng và nhân viên.",
+    "listTitle": "Danh sách Template",
+    "table": {
+      "name": "Tên Template",
+      "code": "Mã",
+      "subject": "Tiêu đề",
+      "edit": "Sửa"
+    },
+    "actions": {
+      "add": "Thêm Template",
+      "view": "Xem chi tiết",
+      "edit": "Chỉnh sửa",
+      "delete": "Xóa"
+    },
+    "dialog": {
+      "createTitle": "Tạo Template Mới",
+      "editTitle": "Chỉnh sửa Template",
+      "viewTitle": "Chi tiết Template",
+      "code": "Mã template",
+      "codePlaceholder": "Tự động tạo từ tên",
+      "name": "Tên template",
+      "namePlaceholder": "VD: Xác nhận đặt bàn",
+      "subject": "Tiêu đề Email",
+      "subjectPlaceholder": "VD: Xác nhận đặt bàn tại An Lạc",
+      "description": "Mô tả",
+      "descriptionPlaceholder": "Mô tả ngắn gọn về mục đích của template",
+      "body": "Nội dung HTML",
+      "bodyPlaceholder": "Nhập mã HTML tại đây...",
+      "tabEditor": "Soạn thảo",
+      "tabPreview": "Xem trước",
+      "placeholderHint": "* Sử dụng các placeholder như {{CustomerName}}, {{ReservedTime}}... tùy thuộc vào từng template.",
+      "close": "Đóng",
+      "save": "Lưu thay đổi",
+      "create": "Tạo mới"
+    },
+    "deleteDialog": {
+      "title": "Xóa Template",
+      "description": "Bạn có chắc chắn muốn xóa template này không? Hành động này không thể hoàn tác."
+    }
   }
 }

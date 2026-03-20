@@ -2884,5 +2884,47 @@
         "TAKEAWAY": "Takeaway"
       }
     }
+  },
+  "EmailTemplates": {
+    "title": "Email Template Management",
+    "description": "Manage email templates sent to customers and staff.",
+    "listTitle": "Template List",
+    "table": {
+      "name": "Template Name",
+      "code": "Code",
+      "subject": "Subject",
+      "edit": "Edit"
+    },
+    "actions": {
+      "add": "Add Template",
+      "view": "View details",
+      "edit": "Edit",
+      "delete": "Delete"
+    },
+    "dialog": {
+      "createTitle": "Create New Template",
+      "editTitle": "Edit Template",
+      "viewTitle": "Template Details",
+      "code": "Template Code",
+      "codePlaceholder": "Auto-generated from name",
+      "name": "Template Name",
+      "namePlaceholder": "e.g., Reservation Confirmation",
+      "subject": "Email Subject",
+      "subjectPlaceholder": "e.g., Confirmation of your reservation at An Lac",
+      "description": "Description",
+      "descriptionPlaceholder": "Brief description of the template purpose",
+      "body": "HTML Content",
+      "bodyPlaceholder": "Enter HTML code here...",
+      "tabEditor": "Editor",
+      "tabPreview": "Preview",
+      "placeholderHint": "* Use placeholders like {{CustomerName}}, {{ReservedTime}}... depending on the template.",
+      "close": "Close",
+      "save": "Save Changes",
+      "create": "Create New"
+    },
+    "deleteDialog": {
+      "title": "Delete Template",
+      "description": "Are you sure you want to delete this template? This action cannot be undone."
+    }
   }
 }
