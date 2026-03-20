@@ -17,9 +17,11 @@ import { CustomerActions } from "@/features/staff/customer-management/components
 import { CustomerModal, CustomerFormData } from "@/features/staff/customer-management/components/customer-modal";
 import { staffCustomerService } from "@/features/staff/customer-management/services/customer-service";
 import { ConfirmModal } from "@/components/layout/admin-sidebar/confirm-modal";
+import { useRouter } from "next/navigation";
 
 const CustomerListContent = () => {
     const t = useTranslations("Customer.List");
+    const router = useRouter();
     const tAdd = useTranslations("Customer.Add");
     const tEdit = useTranslations("Customer.Edit");
 
@@ -39,17 +41,7 @@ const CustomerListContent = () => {
 
     // Handlers
     const handleView = async (customer: CustomerListDto) => {
-        setIsLoadingDetail(true);
-        try {
-            const detail = await staffCustomerService.getById(customer.customerId);
-            setSelectedCustomer(detail);
-            setModalMode("view");
-            setModalOpen(true);
-        } catch (error: any) {
-            toast.error(error.response?.data?.userMessage || t("notifications.loadError"));
-        } finally {
-            setIsLoadingDetail(false);
-        }
+        router.push(`/dashboard/customers/${customer.customerId}/detail`);
     };
 
     const handleEdit = async (customer: CustomerListDto) => {
