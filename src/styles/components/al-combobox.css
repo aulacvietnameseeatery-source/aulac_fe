@@ -215,6 +215,7 @@
     0 0 0 1px rgba(var(--al-cb-beige-rgb), 0.2);
   overflow: hidden;
   outline: none;
+  z-index: 9999;
 }
 
 /* ── Search input inside dropdown ──────────────────────────── */
