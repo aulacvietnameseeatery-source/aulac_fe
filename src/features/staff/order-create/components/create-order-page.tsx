@@ -71,6 +71,15 @@ export const CreateOrderPage = () => {
     setSelectedDish(null);
   };
 
+  const handleQuickAdd = (dish: DishDto) => {
+    const existing = cart.find(item => item.dishId === dish.dishId);
+    if (!existing) {
+      addToCart(dish); 
+    } else {
+      updateQuantity(dish.dishId, 1); 
+    }
+  };
+
   if (isLoading) {
     return (
       <div className="w-full h-screen flex items-center justify-center bg-[#FDFBF9]">
@@ -152,6 +161,7 @@ export const CreateOrderPage = () => {
             getLocalizedDishName={getLocalizedDishName} 
             getLocalizedCategoryName={getLocalizedCategoryName}
             onDishClick={(dish) => setSelectedDish(dish)}
+            onQuickAdd={handleQuickAdd}
           />
         </section>
 
