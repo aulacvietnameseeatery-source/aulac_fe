@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { createOrderService } from '../services/create-edit-order.service';
-import { useCreateOrder } from '../hooks/useCreateOrder'; 
+import { useCreateOrder } from '../hooks/useCreateOrder';
 import { MenuCatalog } from './menu-catalog';
 import { EditTicket } from './edit-ticket';
 import { RecentOrders } from './recent-orders';
@@ -26,17 +26,17 @@ export const EditOrderPage = ({ orderId }: { orderId: number }) => {
 
   const [isPrintModalOpen, setIsPrintModalOpen] = useState(false);
   const [showCustomerPopup, setShowCustomerPopup] = useState(false);
-  
+
   const [selectedDish, setSelectedDish] = useState<DishDto | null>(null);
   const [showMobileTicket, setShowMobileTicket] = useState(false);
 
   const [customer, setCustomer] = useState<Partial<CustomerDto> | null>(null);
   const [initialCustomer, setInitialCustomer] = useState<Partial<CustomerDto> | null>(null);
 
-  const { 
-    locale, isLoading: isMenuLoading, dishes, categories, cart: newCart, 
-    getLocalizedDishName, getLocalizedCategoryName, 
-    addToCart, updateQuantity, updateNote, removeFromCart, clearCart 
+  const {
+    locale, isLoading: isMenuLoading, dishes, categories, cart: newCart,
+    getLocalizedDishName, getLocalizedCategoryName,
+    addToCart, updateQuantity, updateNote, removeFromCart, clearCart
   } = useCreateOrder();
 
   // Fetch Order by ID
@@ -50,7 +50,7 @@ export const EditOrderPage = ({ orderId }: { orderId: number }) => {
           if (data.customerId !== 68) {
             try {
               const fullCustomerData = await createOrderService.getCustomerById(data.customerId);
-              setCustomer(fullCustomerData); 
+              setCustomer(fullCustomerData);
               setInitialCustomer(fullCustomerData);
             } catch (customerError) {
               const fallbackCustomer = { customerId: data.customerId, fullName: data.customerName };
@@ -74,7 +74,7 @@ export const EditOrderPage = ({ orderId }: { orderId: number }) => {
 
   const handleSubmitAttempt = () => {
     if (!orderInfo) return;
-    
+
     if (orderInfo.orderStatus === 'Completed' && !orderInfo.isPaid && newCartTotal > 0) {
       setShowConfirmModal(true);
     } else {
@@ -103,14 +103,14 @@ export const EditOrderPage = ({ orderId }: { orderId: number }) => {
         setOrderInfo(updatedOrder);
         clearCart();
         setShowConfirmModal(false);
-        setShowMobileTicket(false); 
+        setShowMobileTicket(false);
       });
       toast.promise(addItemsPromise, {
         loading: t('saving'),
         success: t('successMessage'),
         error: t('errorMessage'),
       });
-      
+
     } catch (error) {
       console.error(error);
       toast.error(t('errorMessage'));
@@ -123,12 +123,21 @@ export const EditOrderPage = ({ orderId }: { orderId: number }) => {
   const handleAddDishWithQuantity = (dish: DishDto, quantity: number) => {
     const existing = newCart.find(item => item.dishId === dish.dishId);
     if (!existing) {
-      addToCart(dish); 
-      if (quantity > 1) updateQuantity(dish.dishId, quantity - 1); 
+      addToCart(dish);
+      if (quantity > 1) updateQuantity(dish.dishId, quantity - 1);
     } else {
-      updateQuantity(dish.dishId, quantity); 
+      updateQuantity(dish.dishId, quantity);
     }
     setSelectedDish(null);
+  };
+
+  const handleQuickAdd = (dish: DishDto) => {
+    const existing = newCart.find(item => item.dishId === dish.dishId);
+    if (!existing) {
+      addToCart(dish);
+    } else {
+      updateQuantity(dish.dishId, 1);
+    }
   };
 
   const isCancelled = orderInfo?.orderStatus === 'Cancelled';
@@ -172,7 +181,7 @@ export const EditOrderPage = ({ orderId }: { orderId: number }) => {
       dishName: item.localName,
       quantity: item.quantity,
       price: item.price,
-      itemStatus: 'New', 
+      itemStatus: 'New',
       note: item.note || undefined
     }))
   ];
@@ -199,7 +208,7 @@ export const EditOrderPage = ({ orderId }: { orderId: number }) => {
     itemCount: totalItemCount
   };
 
-  const isCustomerChanged = 
+  const isCustomerChanged =
     customer?.customerId !== initialCustomer?.customerId ||
     customer?.fullName !== initialCustomer?.fullName ||
     customer?.phone !== initialCustomer?.phone ||
@@ -207,10 +216,10 @@ export const EditOrderPage = ({ orderId }: { orderId: number }) => {
 
   return (
     <div className="flex flex-col lg:flex-row h-[100dvh] lg:h-full w-full font-sans overflow-hidden">
-      
+
       {/* ── Nút mở Ticket trên Mobile ── */}
       {!showMobileTicket && (
-        <button 
+        <button
           onClick={() => setShowMobileTicket(true)}
           className="lg:hidden fixed bottom-4 right-4 z-50 bg-[#1A3A52] text-[#D5BA98] p-4 rounded-full shadow-2xl flex items-center justify-center animate-in fade-in zoom-in duration-300"
         >
@@ -225,22 +234,23 @@ export const EditOrderPage = ({ orderId }: { orderId: number }) => {
 
       {/* ── Cột trái: Nội dung chính ── */}
       <div className="flex-1 flex flex-col overflow-hidden lg:pr-5 gap-4">
-        
+
         <section className="shrink-0 bg-white rounded-xl border border-[#D5BA98]/30 shadow-sm p-4">
           <RecentOrders />
         </section>
 
         <section className="flex-1 min-h-0 bg-white rounded-xl border border-[#D5BA98]/30 shadow-sm p-4 flex flex-col">
-          <MenuCatalog 
+          <MenuCatalog
             title={t('menuTitle')}
             subtitle={menuSubtitle}
             isReadOnly={isReadOnly}
-            dishes={dishes} 
+            dishes={dishes}
             categories={categories}
-            locale={locale} 
-            getLocalizedDishName={getLocalizedDishName} 
+            locale={locale}
+            getLocalizedDishName={getLocalizedDishName}
             getLocalizedCategoryName={getLocalizedCategoryName}
-            onDishClick={(dish) => !isReadOnly && setSelectedDish(dish)} 
+            onDishClick={(dish) => !isReadOnly && setSelectedDish(dish)}
+            onQuickAdd={handleQuickAdd}
           />
         </section>
 
@@ -252,7 +262,7 @@ export const EditOrderPage = ({ orderId }: { orderId: number }) => {
         lg:relative lg:translate-x-0 lg:shadow-none lg:border-l rounded-xl border lg:border-[#D5BA98]/30 overflow-hidden
         ${showMobileTicket ? 'translate-x-0' : 'translate-x-full'}
       `}>
-        <EditTicket 
+        <EditTicket
           orderInfo={orderInfo}
           newCart={newCart}
           customer={customer}
@@ -274,20 +284,20 @@ export const EditOrderPage = ({ orderId }: { orderId: number }) => {
       )}
 
       {/* ── Modals ── */}
-      <DishDetailModal 
-        dish={selectedDish} 
-        isOpen={!!selectedDish} 
+      <DishDetailModal
+        dish={selectedDish}
+        isOpen={!!selectedDish}
         onClose={() => setSelectedDish(null)}
         onAdd={handleAddDishWithQuantity}
         locale={locale}
         getLocalizedDishName={getLocalizedDishName}
       />
 
-      <CustomerSearchModal 
-        isOpen={showCustomerPopup} 
-        onClose={() => setShowCustomerPopup(false)} 
-        currentCustomer={customer} 
-        onSelectCustomer={setCustomer} 
+      <CustomerSearchModal
+        isOpen={showCustomerPopup}
+        onClose={() => setShowCustomerPopup(false)}
+        currentCustomer={customer}
+        onSelectCustomer={setCustomer}
       />
 
       <PrintOrderModal
@@ -297,9 +307,9 @@ export const EditOrderPage = ({ orderId }: { orderId: number }) => {
         type={printType}
       />
 
-      <Dialog 
-        open={showConfirmModal} 
-        onClose={() => setShowConfirmModal(false)} 
+      <Dialog
+        open={showConfirmModal}
+        onClose={() => setShowConfirmModal(false)}
         title={t('warningTitle')}
         footer={
           <div className="flex justify-end gap-3 w-full">
