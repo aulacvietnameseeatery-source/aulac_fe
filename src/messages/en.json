@@ -1694,6 +1694,9 @@
     "reservations": "Reservations",
     "promotions": "Promotions",
     "storeSettings": "Store Settings",
+    "storeProfile": "Store Profile",
+    "storeIntroduction": "Introduction Page",
+    "storeAboutUs": "About Us Page",
     "systemSettings": "System Settings",
     "notifications": "Notifications",
     "logout": "Logout",
@@ -2461,9 +2464,9 @@
           "dishTitle": "Signature Dish {index}",
           "dishMainTitle": "Main Title",
           "dishSubTitle": "Sub Title",
-          "hoverCategory": "Hover Category",
-          "hoverTitle": "Hover Title",
-          "hoverDescription": "Hover Description"
+          "cardCategory": "Category",
+          "cardTitle": "Title",
+          "cardDescription": "Description"
         }
       },
       "sidebar": {
@@ -2546,6 +2549,56 @@
       "fileSizeError": "File size must be less than 5MB",
       "updateSuccess": "Store profile updated successfully",
       "updateError": "Failed to save store profile"
+    },
+    "AboutUs": {
+      "title": "About Us",
+      "description": "Manage your brand story and core values.",
+      "sections": {
+        "founders": {
+          "title": "Founders' Vision",
+          "description": "Origin story and core inspiration.",
+          "label": "Section Label",
+          "header": "Main Header",
+          "paragraph1": "Narrative Paragraph 1",
+          "paragraph2": "Narrative Paragraph 2",
+          "quote": "Quote Statement",
+          "quoteAuthor": "Attribution Name",
+          "featuredQuote": "Featured Quote",
+          "image": "Founders Image"
+        },
+        "journey": {
+          "title": "Historic Journey",
+          "description": "Timeline and key milestones.",
+          "header": "Journey Title",
+          "paragraph1": "Opening Chapter",
+          "paragraph2": "Strategic Evolution",
+          "quote": "Journey Highlight",
+          "paragraph3": "Current Era"
+        },
+        "philosophy": {
+          "title": "Philosophy & Values",
+          "description": "Core beliefs and guiding principles.",
+          "label": "Philosophy Label",
+          "header": "Core Mission",
+          "principle": "Principle {index}",
+          "principleTitle": "Title",
+          "principleDesc": "Description"
+        },
+        "legacy": {
+          "title": "Culinary Legacy",
+          "description": "Future vision and sustained excellence.",
+          "header": "Legacy Title",
+          "subtitle": "Strategic Subtitle",
+          "paragraph": "Legacy Chapter {index}",
+          "image": "Legacy Image"
+        }
+      },
+      "actions": {
+        "sync": "Sync Story",
+        "syncDesc": "Persist your narrative data",
+        "syncButton": "Sync About Story",
+        "discard": "Discard Changes"
+      }
     },
     "General": {
       "title": "System Parameters",

@@ -4,11 +4,15 @@ import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
 import { useDynamicSettings } from "../../shared/hooks/useDynamicSettings";
-import { BASE_URL } from "@/lib/http";
 
-export function IntroChef() {
+export function IntroChef({ overrides }: { overrides?: Record<string, string> }) {
     const t = useTranslations("Introduction.Chef");
-    const { getSetting } = useDynamicSettings();
+    const { getSetting: originalGetSetting, getMediaSetting } = useDynamicSettings();
+
+    const getSetting = (key: string, fallback: string) => {
+        if (overrides?.[key]) return overrides[key];
+        return originalGetSetting(key, fallback);
+    };
 
     const CHEFS = [
         { name: getSetting("intro.chef.1.name", t("chef_1_name")), quote: getSetting("intro.chef.1.quote", t("chef_1_quote")) },
@@ -18,10 +22,7 @@ export function IntroChef() {
     const label = getSetting("intro.chef.label", t("label"));
     const title = getSetting("intro.chef.title", t("title"));
     const cta = getSetting("intro.chef.cta", t("cta"));
-    const chefVideo = getSetting("intro.chef.videoUrl", "");
-    const fullVideoUrl = chefVideo
-        ? (chefVideo.startsWith('http') ? chefVideo : `${BASE_URL}${chefVideo}`)
-        : "/video/nha-bep.mp4";
+    const chefVideo = getMediaSetting("intro.chef.videoUrl", "/video/nha-bep.mp4");
 
     return (
         <section className="w-full py-20 md:py-28 px-6 md:px-8 lg:px-20">
@@ -38,7 +39,7 @@ export function IntroChef() {
                 >
                     <div className="relative mx-auto w-full max-w-[420px] aspect-[9/16] overflow-hidden rounded-2xl border border-white/20 bg-black shadow-[0_22px_60px_rgba(0,0,0,0.45)]">
                         <video
-                            src={fullVideoUrl}
+                            src={chefVideo}
                             autoPlay
                             muted
                             loop

@@ -3,9 +3,14 @@
 import { useTranslations } from "next-intl";
 import { useDynamicSettings } from "../../shared/hooks/useDynamicSettings";
 
-export default function AboutJourney() {
+export default function AboutJourney({ overrides }: { overrides?: Record<string, string> }) {
   const t = useTranslations("AboutUs.Journey");
-  const { getSetting } = useDynamicSettings();
+  const { getSetting: originalGetSetting } = useDynamicSettings();
+
+  const getSetting = (key: string, fallback: string) => {
+    if (overrides?.[key]) return overrides[key];
+    return originalGetSetting(key, fallback);
+  };
 
   const title = getSetting("about.journey.title", t("title"));
   // Assuming paragraph_1 can contain HTML for next-intl compatibility, so we use string replacement logic if needed,

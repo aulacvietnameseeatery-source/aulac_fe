@@ -1690,6 +1690,9 @@
     "reservations": "Réservations",
     "promotions": "Promotions",
     "storeSettings": "Paramètres du magasin",
+    "storeProfile": "Profil du magasin",
+    "storeIntroduction": "Page d'introduction",
+    "storeAboutUs": "Page À propos",
     "systemSettings": "Paramètres système",
     "notifications": "Notifications",
     "logout": "Déconnexion",
@@ -2457,9 +2460,9 @@
           "dishTitle": "Plat Signature {index}",
           "dishMainTitle": "Titre principal",
           "dishSubTitle": "Sous-titre",
-          "hoverCategory": "Catégorie au survol",
-          "hoverTitle": "Titre au survol",
-          "hoverDescription": "Description au survol"
+          "cardCategory": "Catégorie",
+          "cardTitle": "Titre",
+          "cardDescription": "Description"
         }
       },
       "sidebar": {
@@ -2542,6 +2545,34 @@
       "fileSizeError": "La taille du fichier doit être inférieure à 5 Mo",
       "updateSuccess": "Profil du magasin mis à jour avec succès",
       "updateError": "Échec de l'enregistrement du profil du magasin"
+    },
+    "AboutUs": {
+      "title": "À propos de nous",
+      "description": "Gérez l'histoire de votre marque et vos valeurs fondamentales.",
+      "sections": {
+        "founders": {
+          "title": "Vision des fondateurs",
+          "description": "Histoire d'origine et inspiration principale."
+        },
+        "journey": {
+          "title": "Parcours historique",
+          "description": "Chronologie et jalons clés."
+        },
+        "philosophy": {
+          "title": "Philosophie et valeurs",
+          "description": "Croyances fondamentales et principes directeurs."
+        },
+        "legacy": {
+          "title": "Héritage culinaire",
+          "description": "Vision future et excellence durable."
+        }
+      },
+      "actions": {
+        "sync": "Synchroniser l'histoire",
+        "syncDesc": "Persister vos données narratives",
+        "syncButton": "Synchroniser l'histoire",
+        "discard": "Annuler les modifications"
+      }
     },
     "General": {
       "title": "Paramètres système",

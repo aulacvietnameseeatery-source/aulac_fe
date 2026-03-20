@@ -3,11 +3,15 @@
 import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
 import { useDynamicSettings } from "../../shared/hooks/useDynamicSettings";
-import { BASE_URL } from "@/lib/http";
 
-export function IntroCollection() {
+export function IntroCollection({ overrides }: { overrides?: Record<string, string> }) {
     const t = useTranslations("Introduction.Collection");
-    const { getSetting } = useDynamicSettings();
+    const { getSetting: originalGetSetting, getMediaSetting } = useDynamicSettings();
+
+    const getSetting = (key: string, fallback: string) => {
+        if (overrides?.[key]) return overrides[key];
+        return originalGetSetting(key, fallback);
+    };
 
     const label = getSetting("intro.collection.label", t("label"));
     const title = getSetting("intro.collection.title", t("title"));
@@ -15,30 +19,30 @@ export function IntroCollection() {
     const COLLECTION_ITEMS = [
         {
             id: 1,
-            image: getSetting("intro.collection.dish1.image", "/images/introduction-page/intro-collection/intro-collection-dish1.png"),
-            hoverCategory: getSetting("intro.collection.dish1.hoverCategory", t("dish_1_category")),
-            hoverTitle: getSetting("intro.collection.dish1.hoverTitle", t("dish_1_title")),
-            hoverDesc: getSetting("intro.collection.dish1.hoverDesc", t("dish_1_desc")),
-            mainTitle: getSetting("intro.collection.dish1.mainTitle", t("dish_1_main")),
-            subTitle: getSetting("intro.collection.dish1.subTitle", t("dish_1_sub")),
+            image: getMediaSetting("intro.collection.dish1.image", "/images/introduction-page/intro-collection/intro-collection-dish1.png"),
+            cardCategory: getSetting("intro.collection.dish1.cardCategory", t("cardCategory")),
+            cardTitle: getSetting("intro.collection.dish1.cardTitle", t("cardTitle")),
+            cardDescription: getSetting("intro.collection.dish1.cardDescription", t("cardDescription")),
+            mainTitle: getSetting("intro.collection.dish1.mainTitle", t("dishMainTitle")),
+            subTitle: getSetting("intro.collection.dish1.subTitle", t("dishSubTitle")),
         },
         {
             id: 2,
-            image: getSetting("intro.collection.dish2.image", "/images/introduction-page/intro-collection/intro-collection-dish2.png"),
-            hoverCategory: getSetting("intro.collection.dish2.hoverCategory", t("dish_2_category")),
-            hoverTitle: getSetting("intro.collection.dish2.hoverTitle", t("dish_2_title")),
-            hoverDesc: getSetting("intro.collection.dish2.hoverDesc", t("dish_2_desc")),
-            mainTitle: getSetting("intro.collection.dish2.mainTitle", t("dish_2_main")),
-            subTitle: getSetting("intro.collection.dish2.subTitle", t("dish_2_sub")),
+            image: getMediaSetting("intro.collection.dish2.image", "/images/introduction-page/intro-collection/intro-collection-dish2.png"),
+            cardCategory: getSetting("intro.collection.dish2.cardCategory", t("cardCategory")),
+            cardTitle: getSetting("intro.collection.dish2.cardTitle", t("cardTitle")),
+            cardDescription: getSetting("intro.collection.dish2.cardDescription", t("cardDescription")),
+            mainTitle: getSetting("intro.collection.dish2.mainTitle", t("dishMainTitle")),
+            subTitle: getSetting("intro.collection.dish2.subTitle", t("dishSubTitle")),
         },
         {
             id: 3,
-            image: getSetting("intro.collection.dish3.image", "/images/introduction-page/intro-collection/intro-collection-dish3.png"),
-            hoverCategory: getSetting("intro.collection.dish3.hoverCategory", t("dish_3_category")),
-            hoverTitle: getSetting("intro.collection.dish3.hoverTitle", t("dish_3_title")),
-            hoverDesc: getSetting("intro.collection.dish3.hoverDesc", t("dish_3_desc")),
-            mainTitle: getSetting("intro.collection.dish3.mainTitle", t("dish_3_main")),
-            subTitle: getSetting("intro.collection.dish3.subTitle", t("dish_3_sub")),
+            image: getMediaSetting("intro.collection.dish3.image", "/images/introduction-page/intro-collection/intro-collection-dish3.png"),
+            cardCategory: getSetting("intro.collection.dish3.cardCategory", t("cardCategory")),
+            cardTitle: getSetting("intro.collection.dish3.cardTitle", t("cardTitle")),
+            cardDescription: getSetting("intro.collection.dish3.cardDescription", t("cardDescription")),
+            mainTitle: getSetting("intro.collection.dish3.mainTitle", t("dishMainTitle")),
+            subTitle: getSetting("intro.collection.dish3.subTitle", t("dishSubTitle")),
         },
     ];
 
@@ -103,7 +107,7 @@ export function IntroCollection() {
                             {/* IMAGE CARD */}
                             <div className="relative w-full aspect-[3/4] overflow-hidden rounded-xl border border-[#C9A961]/25 bg-[#193752]/10">
                                 <img
-                                    src={(item.image?.startsWith('http://') || item.image?.startsWith('https://')) ? item.image : `${BASE_URL}${item.image}`}
+                                    src={item.image}
                                     alt={item.mainTitle}
                                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                                 />
@@ -111,13 +115,13 @@ export function IntroCollection() {
                                 {/* Overlay: Mobile -> Tap to see, Desktop -> Hover */}
                                 <div className="absolute inset-0 bg-gradient-to-t from-[#12283A]/95 via-[#12283A]/65 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-6 md:p-8">
                                     <span className="font-display text-[#C9A961] text-[10px] md:text-xs uppercase tracking-widest mb-1 md:mb-2 translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-75">
-                                        {item.hoverCategory}
+                                        {item.cardCategory}
                                     </span>
                                     <h3 className="font-display text-white text-xl md:text-2xl font-bold mb-1 md:mb-2 translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-100">
-                                        {item.hoverTitle}
+                                        {item.cardTitle}
                                     </h3>
                                     <p className="font-display text-white/80 text-xs md:text-sm leading-relaxed translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-150 line-clamp-3">
-                                        {item.hoverDesc}
+                                        {item.cardDescription}
                                     </p>
                                 </div>
                             </div>

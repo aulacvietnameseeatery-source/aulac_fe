@@ -3,16 +3,20 @@
 import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
 import { useDynamicSettings } from "../../shared/hooks/useDynamicSettings";
-import { BASE_URL } from "@/lib/http";
 
-export function IntroVirtualTour() {
+export function IntroVirtualTour({ overrides }: { overrides?: Record<string, string> }) {
     const t = useTranslations("Introduction.VirtualTour");
-    const { getSetting } = useDynamicSettings();
+    const { getSetting: originalGetSetting, getMediaSetting } = useDynamicSettings();
+
+    const getSetting = (key: string, fallback: string) => {
+        if (overrides?.[key]) return overrides[key];
+        return originalGetSetting(key, fallback);
+    };
 
     const label = getSetting("intro.virtualTour.label", t("label"));
     const title = getSetting("intro.virtualTour.title", t("title"));
     const desc = getSetting("intro.virtualTour.desc", t("desc"));
-    const videoUrl = getSetting("intro.virtualTour.videoUrl", "/video/nha-hang.mp4");
+    const videoUrl = getMediaSetting("intro.virtualTour.videoUrl", "/video/nha-hang.mp4");
 
     return (
         <section className="w-full bg-transparent py-20 md:py-28 px-6 md:px-8 lg:px-20 flex justify-center">
@@ -46,7 +50,7 @@ export function IntroVirtualTour() {
                     >
                         <div className="relative inline-flex overflow-hidden rounded-2xl border border-white/20">
                             <video
-                                src={(videoUrl?.startsWith('http://') || videoUrl?.startsWith('https://')) ? videoUrl : `${BASE_URL}${videoUrl}`}
+                                src={videoUrl}
                                 autoPlay
                                 muted
                                 loop

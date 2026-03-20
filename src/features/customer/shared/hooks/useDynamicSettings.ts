@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useLocale } from 'next-intl';
-import { api } from '@/lib/http';
+import { api, BASE_URL } from '@/lib/http';
 import { ApiResponse } from '@/types/api-response.types';
 
 type SettingItem = {
@@ -55,5 +55,13 @@ export function useDynamicSettings() {
         return baseValue && baseValue.trim() !== '' ? baseValue : fallback;
     };
 
-    return { settings, getSetting, isLoading };
+    // Helper for media settings (images/videos)
+    const getMediaSetting = (key: string, fallback: string) => {
+        const val = settings[key];
+        if (!val || val.trim() === '') return fallback;
+        if (val.startsWith('http')) return val;
+        return `${BASE_URL}${val}`;
+    };
+
+    return { settings, getSetting, getMediaSetting, isLoading };
 }

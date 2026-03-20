@@ -3,18 +3,19 @@
 import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
 import { useDynamicSettings } from "../../shared/hooks/useDynamicSettings";
-import { BASE_URL } from "@/lib/http";
 
-export function IntroHero() {
+export function IntroHero({ overrides }: { overrides?: Record<string, string> }) {
     const t = useTranslations("Introduction.Hero");
-    const { getSetting } = useDynamicSettings();
+    const { getSetting: originalGetSetting, getMediaSetting } = useDynamicSettings();
+
+    const getSetting = (key: string, fallback: string) => {
+        if (overrides?.[key]) return overrides[key];
+        return originalGetSetting(key, fallback);
+    };
 
     const title = getSetting("intro.hero.title", t("title"));
     const quote = getSetting("intro.hero.quote", t("quote"));
-    const heroImage = getSetting("intro.hero.image", "");
-    const fullImageUrl = heroImage
-        ? ((heroImage.startsWith('http://') || heroImage.startsWith('https://')) ? heroImage : `${BASE_URL}${heroImage}`)
-        : "/images/hero-bg.jpg";
+    const heroImage = getMediaSetting("intro.hero.image", "/images/hero-bg.jpg");
 
     return (
         <section className="relative w-full min-h-[92dvh] md:min-h-[100dvh] flex flex-col items-center justify-center overflow-hidden">
@@ -28,7 +29,7 @@ export function IntroHero() {
                     className="w-full h-full"
                 >
                     <img
-                        src={fullImageUrl}
+                        src={heroImage}
                         alt="Au Lac Introduction"
                         className="w-full h-full object-cover select-none"
                     />

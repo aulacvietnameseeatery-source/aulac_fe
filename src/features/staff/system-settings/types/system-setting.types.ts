@@ -38,3 +38,12 @@ export interface CreateSystemSettingDto {
 
 /** The grouped response: a dictionary of groupName -> list of settings */
 export type GroupedSettingsMap = Record<string, SystemSettingDetailDto[]>;
+
+export interface TranslateSystemSettingsRequest {
+  sourceLang: string;
+  data: Record<string, string>;
+}
+
+export interface TranslateSystemSettingsResponse {
+  translations: Record<string, Record<string, string>>;
+}

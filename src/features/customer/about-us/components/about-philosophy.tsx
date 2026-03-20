@@ -3,9 +3,14 @@
 import { useTranslations } from "next-intl";
 import { useDynamicSettings } from "../../shared/hooks/useDynamicSettings";
 
-export default function AboutPhilosophy() {
+export default function AboutPhilosophy({ overrides }: { overrides?: Record<string, string> }) {
   const t = useTranslations("AboutUs.Philosophy");
-  const { getSetting } = useDynamicSettings();
+  const { getSetting: originalGetSetting } = useDynamicSettings();
+
+  const getSetting = (key: string, fallback: string) => {
+    if (overrides?.[key]) return overrides[key];
+    return originalGetSetting(key, fallback);
+  };
 
   const label = getSetting("about.philosophy.label", t("label"));
   const title = getSetting("about.philosophy.title", t("title"));
@@ -26,7 +31,7 @@ export default function AboutPhilosophy() {
       </div>
 
       <div className="mt-16 grid grid-cols-1 gap-10 md:grid-cols-2">
-        <div className="relative rounded-sm bg-blue-950/5 p-10 outline outline-2 outline-offset-[-2px] outline-black/0">
+        <div className="relative rounded-sm bg-blue-950/5 p-6 md:p-10 outline outline-2 outline-offset-[-2px] outline-black/0">
           <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-white shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)]">
             <div className="h-10 w-10 rounded bg-blue-950/80" />
           </div>
@@ -38,7 +43,7 @@ export default function AboutPhilosophy() {
           </p>
         </div>
 
-        <div className="relative rounded-sm bg-blue-950/5 p-10 outline outline-2 outline-offset-[-2px] outline-black/0">
+        <div className="relative rounded-sm bg-blue-950/5 p-6 md:p-10 outline outline-2 outline-offset-[-2px] outline-black/0">
           <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-white shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)]">
             <div className="h-10 w-10 rounded bg-blue-950/80" />
           </div>

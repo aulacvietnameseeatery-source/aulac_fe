@@ -3,9 +3,14 @@
 import { useTranslations } from "next-intl";
 import { useDynamicSettings } from "../../shared/hooks/useDynamicSettings";
 
-export default function AboutLegacy() {
+export default function AboutLegacy({ overrides }: { overrides?: Record<string, string> }) {
   const t = useTranslations("AboutUs.Legacy");
-  const { getSetting } = useDynamicSettings();
+  const { getSetting: originalGetSetting, getMediaSetting } = useDynamicSettings();
+
+  const getSetting = (key: string, fallback: string) => {
+    if (overrides?.[key]) return overrides[key];
+    return originalGetSetting(key, fallback);
+  };
 
   const title = getSetting("about.legacy.title", t("title"));
   const subtitle = getSetting("about.legacy.subtitle", t("subtitle"));
@@ -14,12 +19,14 @@ export default function AboutLegacy() {
   const paragraph_3 = getSetting("about.legacy.paragraph_3", t("paragraph_3"));
   const paragraph_4 = getSetting("about.legacy.paragraph_4", t("paragraph_4"));
 
+  const image = getMediaSetting("about.legacy.image", "/images/about-us/our-legacy/our-legacy.png");
+
   return (
-    <section className="w-full max-w-[1152px] px-6">
-      <h3 className="text-blue-950 text-[32px] font-bold leading-tight">
+    <section className="w-full max-w-[1152px] mx-auto px-6">
+      <h3 className="text-blue-950 text-2xl md:text-[32px] font-bold leading-tight">
         {title}
       </h3>
-      <p className="mt-2 text-blue-950 text-2xl font-normal leading-8">
+      <p className="mt-2 text-blue-950 text-xl md:text-2xl font-normal leading-8">
         {subtitle}
       </p>
 
@@ -36,7 +43,7 @@ export default function AboutLegacy() {
       <div className="mt-12 overflow-hidden rounded-sm shadow-2xl">
         <div className="relative h-[260px] md:h-[473px]">
           <img
-            src="/images/about-us/our-legacy/our-legacy.png"
+            src={image}
             alt="Au Lac Interior"
             className="h-full w-full object-cover"
           />

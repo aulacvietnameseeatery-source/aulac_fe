@@ -80,3 +80,16 @@ export const uploadFile = async (file: File): Promise<string> => {
     );
     return response.data.publicUrl;
 };
+
+/**
+ * Automatically translates system settings.
+ */
+export const translateSystemSettings = async (
+    payload: import('../types/system-setting.types').TranslateSystemSettingsRequest
+): Promise<import('../types/system-setting.types').TranslateSystemSettingsResponse> => {
+    const response = await api.post<import('@/types/api-response.types').ApiResponse<import('../types/system-setting.types').TranslateSystemSettingsResponse>>(
+        '/api/translate/system-settings',
+        payload
+    );
+    return response.data;
+};
