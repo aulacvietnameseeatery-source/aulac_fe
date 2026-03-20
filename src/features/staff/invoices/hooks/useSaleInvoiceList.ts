@@ -14,9 +14,9 @@ export const useSaleInvoiceList = () => {
     const [paginationInfo, setPaginationInfo] = useState({ page: 1, pageSize: 10 });
 
     // Dedup + latest-request tracking
-    const latestParamsRef = useRef<TableDataChangeParams & { 
-        orderStatusCode?: OrderStatusCode; 
-        fromDate?: Date; 
+    const latestParamsRef = useRef<TableDataChangeParams & {
+        orderStatusCode?: OrderStatusCode;
+        fromDate?: Date;
         toDate?: Date;
     }>({});
     const lastFetchHashRef = useRef('');
@@ -24,9 +24,9 @@ export const useSaleInvoiceList = () => {
 
     /** Called by onDataChange or manual trigger */
     const onDataChange = useCallback(async (
-        params: TableDataChangeParams & { 
-            orderStatusCode?: OrderStatusCode; 
-            fromDate?: Date; 
+        params: TableDataChangeParams & {
+            orderStatusCode?: OrderStatusCode;
+            fromDate?: Date;
             toDate?: Date;
         }
     ) => {
@@ -47,7 +47,7 @@ export const useSaleInvoiceList = () => {
                 pageIndex: page,
                 pageSize,
                 search: params.search,
-                orderStatusCode: params.orderStatusCode,
+                orderStatusCode: params.orderStatusCode || OrderStatusCode.COMPLETED,
                 fromDate: params.fromDate?.toISOString(),
                 toDate: params.toDate?.toISOString(),
             });

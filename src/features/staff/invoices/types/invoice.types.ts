@@ -27,8 +27,10 @@ export interface SaleInvoiceDto {
 
     subTotal: number;
     discountAmount: number;
+    tipAmount: number;
     totalAmount: number;
     isPaid: boolean;
+    paymentMethod: string;
 
     items: SaleInvoiceItemDto[];
 }

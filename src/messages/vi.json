@@ -3,6 +3,17 @@
     "title": "An Lac - Nhà Hàng Việt Nam",
     "description": "Đỉnh cao của nghệ thuật ẩm thực Việt Nam ngay tại trung tâm thành phố."
   },
+  "NotFound": {
+    "title": "Rất tiếc! Không tìm thấy trang!",
+    "description": "Xin lỗi, trang bạn đang tìm kiếm không tồn tại, đã bị xóa, đổi tên hoặc tạm thời không khả dụng",
+    "backToHome": "Quay lại Trang chủ"
+  },
+  "Unauthorized": {
+    "title": "Truy cập bị từ chối",
+    "description": "Bạn không có quyền truy cập vào khu vực này. Vui lòng liên hệ với quản trị viên nếu bạn cho rằng đây là một sự nhầm lẫn.",
+    "returnHome": "Về Trang chủ",
+    "goBack": "Quay lại"
+  },
   "Header": {
     "home": "Trang chủ",
     "menu": "THỰC ĐƠN",
@@ -1054,6 +1065,10 @@
     "subtitle": "Nhập thông tin cho khách walk-in hoặc đặt qua điện thoại",
     "cancel": "Hủy",
     "save": "Lưu đặt bàn",
+    "editTitle": "Sửa đặt bàn",
+    "saveChanges": "Lưu thay đổi",
+    "notes": "Ghi chú",
+    "notesPlaceholder": "VD: Sinh nhật, ưu tiên khu vực yên tĩnh...",
     "errors": {
       "missingTitle": "Thiếu thông tin",
       "missingDescription": "Vui lòng điền SĐT, Tên, Ngày, Giờ và chọn Bàn.",
@@ -1679,6 +1694,9 @@
     "reservations": "Đặt bàn",
     "promotions": "Khuyến mãi",
     "storeSettings": "Cài đặt cửa hàng",
+    "storeProfile": "Hồ sơ Cửa hàng",
+    "storeIntroduction": "Trang Giới thiệu",
+    "storeAboutUs": "Về Chúng tôi",
     "systemSettings": "Cài đặt hệ thống",
     "notifications": "Thông báo",
     "logout": "Đăng xuất",
@@ -2278,110 +2296,6 @@
       }
     }
   },
-  "Promotion": {
-    "List": {
-      "title": "Danh sách Khuyến mãi",
-      "description": "Quản lý các chương trình khuyến mãi và mã giảm giá của nhà hàng.",
-      "addNew": "Thêm mới",
-      "searchPlaceholder": "Tìm kiếm theo mã hoặc tên khuyến mãi...",
-      "table": {
-        "no": "STT",
-        "promoCode": "Mã KM",
-        "discount": "Giảm giá",
-        "startTime": "Bắt đầu",
-        "endTime": "Kết thúc",
-        "usage": "Sử dụng",
-        "status": "Trạng thái"
-      },
-      "filters": {
-        "allStatuses": "Tất cả trạng thái",
-        "allTypes": "Tất cả loại"
-      },
-      "actions": {
-        "view": "Xem chi tiết",
-        "edit": "Chỉnh sửa"
-      },
-      "notifications": {
-        "statusUpdated": "Cập nhật trạng thái thành công",
-        "statusUpdateError": "Đã xảy ra lỗi khi cập nhật trạng thái"
-      }
-    },
-    "createTitle": "Tạo Khuyến Mãi Mới",
-    "createSubTitle": "Hệ thống sẽ tự động chuyển trạng thái theo thời gian áp dụng.",
-    "editTitle": "Chi tiết Khuyến Mãi #{id}",
-    "noData": "Không tìm thấy dữ liệu",
-    "Form": {
-      "basicInfo": "1. Thông tin cơ bản",
-      "promoCode": "Mã Khuyến Mãi",
-      "promoCodePlaceholder": "Ví dụ: SUMMER24",
-      "promoName": "Tên Chương Trình",
-      "promoNamePlaceholder": "Nhập tên chương trình...",
-      "desc": "Mô tả",
-      "descPlaceholder": "Nhập mô tả chi tiết...",
-      "start": "Thời gian bắt đầu",
-      "end": "Thời gian kết thúc",
-      "discountConfig": "2. Cấu hình Giảm giá",
-      "discountType": "Loại Giảm",
-      "typePercent": "Phần Trăm (%)",
-      "typeFixed": "Số Tiền",
-      "discountValue": "Giá trị giảm",
-      "discountValuePlaceholder": "Nhập giá trị...",
-      "maxUsage": "Giới hạn số lần (Tùy chọn)",
-      "unlimited": "Không giới hạn",
-      "rules": "3. Điều kiện (Rules)",
-      "ruleDesc": "Đơn hàng cần đạt tối thiểu ${minOrder} và {minQty} sản phẩm. Đồng thời phải chứa món ăn/danh mục yêu cầu (nếu có chọn).",
-      "minOrder": "Giá trị ĐH tối thiểu",
-      "minOrderPlaceholder": "0",
-      "minQty": "Số lượng tối thiểu",
-      "minQtyPlaceholder": "0",
-      "reqDish": "Bắt buộc có Món (Tùy chọn)",
-      "reqDishPlaceholder": "Chọn món yêu cầu...",
-      "reqCate": "Bắt buộc có Danh mục (Tùy chọn)",
-      "reqCatePlaceholder": "Chọn danh mục yêu cầu...",
-      "targets": "4. Đối tượng (Targets)",
-      "targetDescAll": "Khuyến mãi sẽ áp dụng lên: Toàn bộ đơn hàng",
-      "targetDescFiltered": "Khuyến mãi sẽ áp dụng lên: Chỉ các món/danh mục được chọn bên dưới",
-      "targetDish": "Áp dụng cho Món cụ thể",
-      "targetDishPlaceholder": "Để trống để bỏ qua...",
-      "targetCate": "Áp dụng cho Danh mục cụ thể",
-      "targetCatePlaceholder": "Để trống để bỏ qua...",
-      "btnDisable": "Vô hiệu hóa (Disable)",
-      "btnCancel": "Hủy",
-      "btnSave": "Lưu Khuyến Mãi",
-      "btnSaving": "Đang lưu...",
-      "statusLockWarning": "Trạng thái hiện tại là {status}. Các điều kiện cấu hình đã bị khóa.",
-      "confirmDisable": "Vô hiệu hóa Khuyến Mãi này? Không thể hoàn tác.",
-      "successCreate": "Tạo thành công",
-      "successUpdate": "Cập nhật thành công",
-      "successDisable": "Đã vô hiệu hóa",
-      "errorSave": "Có lỗi xảy ra khi lưu"
-    },
-    "Detail": {
-      "title": "Chi tiết Khuyến Mãi #{id}",
-      "status": "Trạng thái",
-      "usedCount": "Đã sử dụng: {count} lần",
-      "rulesInfo": "Quy tắc áp dụng",
-      "noRule": "Không có điều kiện",
-      "targetsInfo": "Đối tượng áp dụng",
-      "hasTarget": "Áp dụng cho các sản phẩm/danh mục được chỉ định.",
-      "back": "Quay lại"
-    },
-    "Status": {
-      "SCHEDULED": "Sắp diễn ra",
-      "ACTIVE": "Đang diễn ra",
-      "EXPIRED": "Đã kết thúc",
-      "DISABLED": "Bị vô hiệu"
-    },
-    "Validation": {
-      "promoCodeMin": "Mã KM phải từ 3 ký tự",
-      "startTimeRequired": "Vui lòng chọn thời gian bắt đầu",
-      "endTimeRequired": "Vui lòng chọn thời gian kết thúc",
-      "discountMinPercent": "Tối thiểu 1%",
-      "discountMaxPercent": "Tối đa 100%",
-      "discountPositive": "Phải lớn hơn 0",
-      "endTimeAfterStartTime": "Kết thúc phải sau bắt đầu"
-    }
-  },
   "SystemSettings": {
     "title": "Cài đặt hệ thống",
     "description": "Quản lý các tham số và cấu hình hệ thống.",
@@ -2400,49 +2314,206 @@
       "createSuccess": "Tạo cài đặt mới thành công.",
       "saveError": "Lưu cài đặt thất bại."
     },
-    "StoreProfile": {
-      "identity": "Danh tính Cửa hàng",
-      "identityDesc": "Cập nhật logo và tên chính thức của cửa hàng.",
-      "contactLocation": "Liên hệ & Vị trí",
-      "contactLocationDesc": "Thông tin địa chỉ và các phương thức liên lạc của cửa hàng.",
-      "operating": "Hoạt động",
-      "operatingDesc": "Thời gian phục vụ và các thông tin vận hành khác.",
-      "socialMedia": "Mạng xã hội",
-      "socialMediaDesc": "Sự hiện diện của cửa hàng trên mạng xã hội.",
-      "changeLogo": "Đổi Logo",
-      "uploadLogo": "Tải Logo lên",
-      "remove": "Gỡ bỏ",
-      "storeName": "Tên cửa hàng",
-      "storeNamePlaceholder": "Nhập tên nhà hàng/cửa hàng",
-      "streetAddress": "Địa chỉ đường",
-      "streetAddressPlaceholder": "Ví dụ: Số 9, Ngõ 123, Đường Jacques Dalcroze",
-      "postalCode": "Mã bưu chính",
-      "postalCodePlaceholder": "1000",
-      "city": "Thành phố",
-      "cityPlaceholder": "Hà Nội",
-      "country": "Quốc gia",
-      "countryPlaceholder": "Việt Nam",
-      "email": "Địa chỉ Email",
-      "emailPlaceholder": "contact@restaurant.com",
-      "phone": "Số điện thoại",
-      "phonePlaceholder": "+84 123 456 789",
-      "openingHours": "Giờ mở cửa",
-      "openingHoursPlaceholder": "Ví dụ: Thứ 2 - Chủ Nhật: 08:00 - 22:00",
-      "facebookLink": "Liên kết Facebook",
-      "facebookPlaceholder": "https://facebook.com/trangcuaban",
-      "instagramLink": "Liên kết Instagram",
-      "instagramPlaceholder": "https://instagram.com/trangcuaban",
-      "tiktokLink": "Liên kết TikTok",
-      "tiktokPlaceholder": "https://tiktok.com/@trangcuaban",
+    "Common": {
       "saveChanges": "Lưu thay đổi",
-      "reset": "Khôi phục",
-      "saving": "Đang lưu...",
-      "clickToUpload": "Logo",
-      "uploadSuccess": "Logo tải lên thành công",
-      "uploadError": "Tải lên logo thất bại",
-      "fileSizeError": "Kích thước tệp phải nhỏ hơn 5MB",
+      "discardChanges": "Hủy thay đổi",
+      "upload": "Tải lên",
+      "change": "Thay đổi",
+      "removing": "Đang xóa...",
+      "uploading": "Đang tải...",
+      "maxSizeImage": "JPG/PNG tối đa 5MB",
+      "maxSizeVideo": "MP4/WEBM tối đa 100MB",
+      "selectFromMenu": "Chọn từ thực đơn",
+      "autoTranslate": "Tự động dịch",
+      "search": "Tìm kiếm",
+      "cancel": "Hủy"
+    },
+    "Introduction": {
+      "title": "Trang Giới thiệu",
+      "description": "Quản lý nội dung và truyền thông cho trang chủ.",
+      "sections": {
+        "hero": {
+          "title": "Phần Hero",
+          "description": "Biểu ngữ chính ở đầu trang.",
+          "mainTitle": "Tiêu đề chính",
+          "brandQuote": "Câu trích dẫn",
+          "placeholders": {
+            "mainTitle": "vd: Ẩm thực Việt Nam thuần túy",
+            "brandQuote": "Nơi truyền thống gặp gỡ hương vị"
+          }
+        },
+        "chef": {
+          "title": "Khám phá Đầu bếp",
+          "description": "Làm nổi bật các đầu bếp của bạn.",
+          "sectionLabel": "Nhãn phần",
+          "ctaAction": "Hành động CTA",
+          "discoveryHeader": "Tiêu đề khám phá",
+          "leadChef": "Bếp trưởng",
+          "executiveChef": "Đầu bếp điều hành",
+          "name": "Tên",
+          "quote": "Trích dẫn"
+        },
+        "ambiance": {
+          "title": "Tham quan Không gian",
+          "description": "Văn bản và tiêu đề cho chuyến tham quan ảo.",
+          "navLabel": "Nhãn điều hướng",
+          "sectionTitle": "Tiêu đề phần",
+          "summary": "Tóm tắt không khí"
+        },
+        "collection": {
+          "title": "Bộ sưu tập Món ăn",
+          "description": "Cấu hình chi tiết cho các món ăn đặc trưng.",
+          "galleryLabel": "Nhãn bộ sưu tập",
+          "mainTitle": "Tiêu đề chính",
+          "dishTitle": "Món ăn đặc trưng {index}",
+          "dishMainTitle": "Tiêu đề chính",
+          "dishSubTitle": "Tiêu đề phụ",
+          "cardCategory": "Danh mục",
+          "cardTitle": "Tiêu đề",
+          "cardDescription": "Mô tả"
+        }
+      },
+      "sidebar": {
+        "mediaTitle": "Tài sản truyền thông",
+        "mediaDescription": "Nội dung hình ảnh dùng chung cho các ngôn ngữ.",
+        "heroBackground": "Ảnh nền Hero",
+        "chefVideo": "Video đầu bếp",
+        "ambianceVideo": "Video không gian",
+        "dishImage": "Ảnh món ăn {index}"
+      }
+    },
+    "DishModal": {
+      "noCategory": "Chưa có danh mục",
+      "dishLabel": "MÓN",
+      "dishPlaceholder": "Món #{id}",
+      "selectError": "Lỗi khi chọn món: {error}"
+    },
+    "StoreProfile": {
+      "title": "Hồ sơ Cửa hàng",
+      "description": "Quản lý danh tính và thông tin liên hệ.",
+      "sections": {
+        "identity": {
+          "title": "Danh tính",
+          "description": "Thông tin cơ bản về nhà hàng."
+        },
+        "contact": {
+          "title": "Liên hệ & Địa điểm",
+          "description": "Thông tin để khách hàng tìm thấy bạn."
+        },
+        "hours": {
+          "title": "Giờ hoạt động",
+          "description": "Thiết lập lịch trình bán hàng."
+        },
+        "social": {
+          "title": "Mạng xã hội",
+          "description": "Các liên kết mạng xã hội chính thức."
+        }
+      },
+      "storeName": "Tên cửa hàng",
+      "streetAddress": "Địa chỉ đường",
+      "postalCode": "Mã bưu chính",
+      "city": "Thành phố",
+      "country": "Quốc gia",
+      "email": "Địa chỉ Email",
+      "phone": "Số điện thoại",
+      "openingHours": "Giờ mở cửa",
+      "facebookLink": "Liên kết Facebook",
+      "instagramLink": "Liên kết Instagram",
+      "tiktokLink": "Liên kết TikTok",
+      "visualBranding": "Nhận diện hình ảnh",
+      "visualBrandingDesc": "Logo và phương tiện quảng bá",
+      "officialLogo": "Logo chính thức",
+      "storeVideo": "Video cửa hàng",
+      "syncNotice": "Thông báo đồng bộ",
+      "syncNoticeDesc": "Khi lưu sẽ cập nhật các trường chung trên tất cả các ngôn ngữ ngay lập tức.",
+      "placeholders": {
+        "facebook": "URL Facebook",
+        "instagram": "URL Instagram",
+        "tiktok": "URL TikTok"
+      },
+      "translationFailed": "Dịch thất bại.",
+      "translatedSuccessfully": "Dịch thành công!",
+      "nothingToTranslate": "Không có gì để dịch.",
       "updateSuccess": "Cập nhật hồ sơ cửa hàng thành công",
       "updateError": "Lưu hồ sơ cửa hàng thất bại"
+    },
+    "AboutUs": {
+      "title": "Về Chúng tôi",
+      "description": "Quản lý câu chuyện thương hiệu và các giá trị cốt lõi.",
+      "sections": {
+        "founders": {
+          "title": "Tầm nhìn của Người sáng lập",
+          "description": "Câu chuyện nguồn gốc và cảm hứng cốt lõi.",
+          "label": "Nhãn phần",
+          "header": "Tiêu đề chính",
+          "paragraph1": "Đoạn văn tự sự 1",
+          "paragraph2": "Đoạn văn tự sự 2",
+          "quote": "Tuyên bố trích dẫn",
+          "quoteAuthor": "Tên tác giả",
+          "featuredQuote": "Trích dẫn tiêu biểu",
+          "image": "Ảnh người sáng lập",
+          "quoteHeader": "Câu trích dẫn đầy cảm hứng của người sáng lập",
+          "fields": {
+            "label": "Nhãn mục",
+            "header": "Tiêu đề chính",
+            "paragraph1": "Đoạn tiểu sử thứ nhất",
+            "paragraph2": "Đoạn tiểu sử thứ hai",
+            "quote": "Nội dung trích dẫn",
+            "author": "Ghi nhận tác giả"
+          }
+        },
+        "journey": {
+          "title": "Hành trình lịch sử",
+          "description": "Dòng thời gian và các mốc quan trọng.",
+          "header": "Tiêu đề hành trình",
+          "paragraph1": "Chương mở đầu",
+          "paragraph2": "Sự phát triển chiến lược",
+          "quote": "Điểm nhấn hành trình",
+          "paragraph3": "Thời kỳ hiện tại",
+          "fields": {
+            "title": "Tiêu đề phần",
+            "paragraph1": "Sự khởi đầu",
+            "paragraph2": "Tăng trưởng & Phát triển",
+            "paragraph3": "Ngày nay"
+          },
+          "quoteLabel": "Điểm nhấn giữa hành trình"
+        },
+        "philosophy": {
+          "title": "Triết lý & Giá trị",
+          "description": "Niềm tin cốt lõi và các nguyên tắc hướng dẫn.",
+          "label": "Nhãn triết lý",
+          "header": "Nhiệm vụ cốt lõi",
+          "principle": "Nguyên tắc {index}",
+          "principleTitle": "Tiêu đề",
+          "principleDesc": "Mô tả",
+          "fields": {
+            "label": "Nhãn mục",
+            "header": "Tiêu đề cốt lõi của triết lý",
+            "valueTitle": "Tiêu đề giá trị",
+            "valueDesc": "Mô tả giá trị"
+          },
+          "valueLabel": "Giá trị cốt lõi {index}"
+        },
+        "legacy": {
+          "title": "Di sản ẩm thực",
+          "description": "Tầm nhìn tương lai và sự xuất sắc bền vững.",
+          "header": "Tiêu đề di sản",
+          "subtitle": "Phụ đề chiến lược",
+          "paragraph": "Chương di sản {index}",
+          "image": "Ảnh di sản",
+          "fields": {
+            "header": "Tiêu đề di sản",
+            "subtitle": "Phụ đề phần"
+          },
+          "chapterLabel": "Chương {index}"
+        }
+      },
+      "actions": {
+        "sync": "Đồng bộ Câu chuyện",
+        "syncDesc": "Lưu dữ liệu câu chuyện của bạn",
+        "syncButton": "Đồng bộ Câu chuyện",
+        "discard": "Hủy thay đổi"
+      }
     },
     "General": {
       "title": "Tham số hệ thống",
@@ -2461,7 +2532,10 @@
       "description": "Mô tả (Tùy chọn)",
       "descriptionPlaceholder": "Cài đặt này dùng để làm gì?",
       "sensitive": "Dữ liệu nhạy cảm",
-      "sensitiveDesc": "Ẩn giá trị theo mặc định (vd: mật khẩu, khóa API)"
+      "sensitiveDesc": "Ẩn giá trị theo mặc định (vd: mật khẩu, khóa API)",
+      "addTitle": "Thêm cài đặt mới",
+      "true": "Đúng",
+      "false": "Sai"
     },
     "Field": {
       "sensitiveHidden": "Nhạy cảm – giá trị bị ẩn",
@@ -2503,12 +2577,16 @@
     "term1": "1. Cảm ơn quý khách đã dùng bữa.",
     "term2": "2. Vui lòng giữ lại biên lai này để đối chiếu.",
     "paymentVerified": "Lưu ý: Thanh toán đã được xác nhận bởi {staffName}.",
+    "paymentMethod": "P.Thức TToán",
     "subtotal": "Tạm tính",
     "discount": "Giảm giá",
-    "total": "Tổng cộng ($)",
+    "tip": "Tiền thưởng (Tip)",
+    "total": "Tổng cộng",
     "downloadPdf": "Tải PDF",
     "printInvoice": "In hóa đơn",
-    "defaultStaff": "Nhân viên"
+    "defaultStaff": "Nhân viên",
+    "thankYouBusiness": "Cảm ơn quý khách đã ủng hộ!",
+    "currency": "VND"
   },
   "Customer": {
     "close": "Đóng",
@@ -2614,34 +2692,6 @@
       "notifications": {
         "updateSuccess": "Cập nhật khách hàng thành công",
         "updateError": "Không thể cập nhật khách hàng"
-      }
-    },
-    "Detail": {
-      "title": "Chi tiết khách hàng",
-      "saveButton": "Đóng",
-      "cancel": "Đóng",
-      "fields": {
-        "phone": "Số điện thoại",
-        "fullName": "Họ và tên",
-        "email": "Email",
-        "loyaltyPoints": "Điểm tích lũy",
-        "isMember": "Trạng thái thành viên",
-        "createdAt": "Ngày tạo"
-      },
-      "placeholders": {
-        "phone": "",
-        "fullName": "",
-        "email": "",
-        "loyaltyPoints": ""
-      },
-      "validation": {
-        "phoneRequired": "",
-        "phoneMaxLength": "",
-        "phoneInvalid": "",
-        "nameMaxLength": "",
-        "emailMaxLength": "",
-        "emailInvalid": "",
-        "pointsNegative": ""
       }
     },
     "Detail": {
