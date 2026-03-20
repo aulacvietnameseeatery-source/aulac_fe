@@ -10,9 +10,10 @@ interface Props {
   title: string; subtitle: string; dishes: DishDto[]; categories: CategoryDto[]; locale: string;
   getLocalizedDishName: (dish: DishDto) => string; getLocalizedCategoryName: (cat: CategoryDto) => string;
   onDishClick: (dish: DishDto) => void;
+  onQuickAdd: (dish: DishDto) => void;
 }
 
-export const MenuCatalog: React.FC<Props> = ({ isReadOnly, title, subtitle, dishes, categories, locale, getLocalizedDishName, getLocalizedCategoryName, onDishClick }) => {
+export const MenuCatalog: React.FC<Props> = ({ isReadOnly, title, subtitle, dishes, categories, locale, getLocalizedDishName, getLocalizedCategoryName, onDishClick, onQuickAdd }) => {
   const t = useTranslations("Order.Create");
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | 'ALL'>('ALL');
@@ -45,9 +46,9 @@ export const MenuCatalog: React.FC<Props> = ({ isReadOnly, title, subtitle, dish
           />
         </div>
       </div>
-
+<div className="relative group">
       {/* Category Tabs (Cố định, cuộn ngang) */}
-      <div {...scrollProps} className="shrink-0 flex gap-2 overflow-x-auto pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden border-b border-[#D5BA98]/20">
+      <div {...scrollProps} className="shrink-0 flex gap-2 overflow-x-auto pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden border-b border-[#D5BA98]/20 cursor-grab active:cursor-grabbing">
         <button
           onClick={() => setSelectedCategoryId('ALL')}
           className={`flex items-center px-4 py-2 rounded-lg border shrink-0 transition-all font-medium text-sm ${
@@ -66,6 +67,8 @@ export const MenuCatalog: React.FC<Props> = ({ isReadOnly, title, subtitle, dish
             {getLocalizedCategoryName(cat)}
           </button>
         ))}
+      </div>
+      <div className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-[#FDFBF9] to-transparent pointer-events-none" />
       </div>
 
       {/* Menu Grid (Phần này sẽ tự động cuộn dọc) */}
@@ -101,9 +104,16 @@ export const MenuCatalog: React.FC<Props> = ({ isReadOnly, title, subtitle, dish
                   <div className="flex items-center justify-between mt-auto">
                     <span className="text-[#1A3A52] font-bold text-base">CHF {dish.price.toFixed(2)}</span>
                     {!isReadOnly && (
-                      <div className="w-6 h-6 rounded-full border border-[#1A3A52] flex items-center justify-center text-[#1A3A52] group-hover:bg-[#1A3A52] group-hover:text-[#D5BA98] transition-colors">
+                      <button 
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation(); 
+                          onQuickAdd(dish);
+                        }}
+                        className="w-6 h-6 rounded-full border border-[#1A3A52] flex items-center justify-center text-[#1A3A52] group-hover:bg-[#1A3A52] group-hover:text-[#D5BA98] hover:scale-110 transition-all"
+                      >
                         +
-                      </div>
+                      </button>
                     )}
                   </div>
                 </div>

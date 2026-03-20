@@ -4,6 +4,8 @@ import { createOrderService } from '../services/create-edit-order.service';
 import { RecentOrderDto } from '../types/create-order.types';
 import { useTranslations } from 'next-intl';
 import { useDraggableScroll } from '@/hooks/use-draggable-scroll';
+import { useRouter } from 'next/navigation';
+import { useOrdersSignalR } from '../hooks/useOrdersSignalR';
 
 const getStatusColor = (status: string) => {
   switch (status) {
@@ -28,7 +30,7 @@ const formatDateTime = (utcDateString: string) => {
 
 export const RecentOrders = () => {
   const t = useTranslations("Order.RecentOrders");
-
+  const router = useRouter();
   const [filter, setFilter] = useState<'ALL' | 'DINE_IN' | 'TAKEAWAY'>('ALL');
   const [orders, setOrders] = useState<RecentOrderDto[]>([]);
   const [loading, setLoading] = useState(true);
@@ -50,6 +52,21 @@ export const RecentOrders = () => {
   useEffect(() => {
     fetchOrders();
   }, []);
+
+  const { isConnected } = useOrdersSignalR({
+    onOrderCreated: (data) => {
+      fetchOrders();
+    },
+    onOrderUpdated: (data) => {
+      setOrders(prevOrders => 
+        prevOrders.map(order => 
+          order.orderId === data.orderId 
+            ? { ...order, status: data.status as 'PENDING' | 'IN_PROGRESS' | 'COMPLETED' | 'CANCELLED'} 
+            : order
+        )
+      );
+    }
+  });
 
   const filteredOrders = orders.filter(o => filter === 'ALL' || o.source === filter);
 
@@ -74,8 +91,8 @@ export const RecentOrders = () => {
           <button onClick={() => setFilter('TAKEAWAY')} className={`text-xs px-3 py-1 rounded font-semibold transition ${filter === 'TAKEAWAY' ? 'bg-[#1A3A52] text-[#D5BA98]' : 'text-[#1A3A52]/70 hover:bg-[#D5BA98]/20'}`}>{t('takeAway')}</button>
         </div>
       </div>
-
-      <div {...scrollProps} className="flex gap-3 overflow-x-auto pb-2 [scrollbar-width:none]">
+<div className="relative group">
+      <div {...scrollProps} className="flex gap-3 overflow-x-auto pb-2 [scrollbar-width:none] cursor-grab active:cursor-grabbing">
         {loading && orders.length === 0 ? (
           <div className="text-[#1A3A52]/50 text-xs py-4 flex items-center gap-2">
              <RefreshCw className="w-4 h-4 animate-spin" /> {t('loading')}
@@ -84,7 +101,10 @@ export const RecentOrders = () => {
           <p className="text-[#1A3A52]/50 text-xs py-4 italic">{t('noOrdersFound')}</p>
         ) : (
           filteredOrders.map((order) => (
-            <div key={order.orderId} className="bg-white border border-[#D5BA98]/30 rounded-lg p-3 w-[250px] shrink-0 hover:border-[#1A3A52] hover:shadow-md transition-all">
+            <div 
+              key={order.orderId} 
+              onClick={() => router.push(`/dashboard/orders/${order.orderId}/edit`)}
+              className="bg-white border border-[#D5BA98]/30 rounded-lg p-3 w-[250px] shrink-0 hover:border-[#1A3A52] hover:shadow-md transition-all">
               
               <div className="flex justify-between items-start mb-2 border-b border-[#D5BA98]/20 pb-2">
                 <span className="text-xs text-[#1A3A52] font-bold">#{order.orderId}</span>
@@ -113,6 +133,8 @@ export const RecentOrders = () => {
             </div>
           ))
         )}
+      </div>
+      <div className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-[#FDFBF9] to-transparent pointer-events-none" />
       </div>
     </div>
   );
