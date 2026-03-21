@@ -60,6 +60,9 @@
       "dish_1_desc": "Présentée avec élégance, sublimée par une feuille d’or comestible et une réduction de vinaigre vietnamien vieilli.",
       "dish_1_main": "Le Lotus Impérial",
       "dish_1_sub": "Fraîcheur Sculptée",
+      "cardCategory": "Catégorie",
+      "cardTitle": "Chef-d’œuvre culinaire",
+      "dishMainTitle": "Plat Signature du Chef",
       "dish_2_category": "Cuisson Lente",
       "dish_2_title": "Poisson en Marmite de Terre",
       "dish_2_desc": "Vivaneau rouge mijoté pendant 6 heures dans un récipient en céramique traditionnelle, au poivre noir et sucre de palme.",
@@ -201,7 +204,12 @@
     "description_2": "An Lạc est guidé par l’équilibre, la mémoire et la sérénité. Son nom signifie bonheur paisible, inspiré par le parcours de la fondatrice — une mère de trois enfants — créant un espace reflétant le soin, la stabilité et la philosophie de An cư Lạc nghiệp.",
     "description_3": "Chez An Lạc, nous ne cherchons pas à transformer la cuisine vietnamienne, mais à l’honorer. Patience, harmonie et finesse façonnent chaque plat : mijotage lent d’un bouillon, équilibre précis des herbes, profondeur discrète de la fermentation et humilité du riz.",
     "description_4": "Des techniques familières comme kho, hấp et nướng sont exprimées avec précision et minimalisme. Les saveurs sont mesurées, équilibrées et subtiles.",
-    "description_5": "An Lạc est une invitation — à ralentir, goûter attentivement et se reconnecter à l’essentiel."
+    "description_5": "An Lạc est une invitation — à ralentir, goûter attentivement et se reconnecter à l’essentiel.",
+    "about_subtitle": "An Lạc n'est pas un lieu de spectacle. C'est un lieu de calme.",
+    "about_paragraph_1": "An Lạc est guidé par l'équilibre, la mémoire et la sérénité. Son nom signifie bonheur paisible, inspiré par le parcours de la fondatrice — une mère de trois enfants — créant un espace reflétant le soin, la stabilité et la philosophie de An cư Lạc nghiệp.",
+    "about_paragraph_2": "Chez An Lạc, nous ne cherchons pas à transformer la cuisine vietnamienne, mais à l'honorer. Patience, harmonie et finesse façonnent chaque plat : mijotage lent d'un bouillon, équilibre précis des herbes, profondeur discrète de la fermentation et humilité du riz.",
+    "about_paragraph_3": "Des techniques familières comme kho, hấp et nướng sont exprimées avec précision et minimalisme. Les saveurs sont mesurées, équilibrées et subtiles.",
+    "about_closing_quote": "An Lạc est une invitation — à ralentir, goûter attentivement et se reconnecter à l'essentiel."
   },
   "Reservation": {
     "Header": {
@@ -410,7 +418,7 @@
     },
     "Location": {
       "label": "Point de retrait",
-      "address": "Quai du Mont-Blanc 13, Genève"
+      "address": ""
     },
     "Actions": {
       "viewReceipt": "Voir le reçu",
@@ -451,15 +459,15 @@
   "Contact": {
     "Hero": {
       "title": "Contactez-nous",
-      "description": "Découvrez l’essence du luxe vietnamien sur les rives du lac Léman.\nNous sommes à votre disposition pour toute demande, événement privé ou requête spéciale."
+      "description": "Découvrez l’essence du luxe vietnamien.\nNous sommes à votre disposition pour toute demande, événement privé ou requête spéciale."
     },
     "Info": {
       "addressLabel": "Notre adresse",
-      "address": "Quai du Mont-Blanc 13\n1201 Genève, Suisse",
+      "address": "",
       "phoneLabel": "Nous appeler",
-      "phone": "+41 22 123 45 67",
+      "phone": "",
       "emailLabel": "Demandes",
-      "email": "geneva@aulac.ch",
+      "email": "",
       "hoursLabel": "Horaires",
       "hours": "Lun - Dim : 11h30 - 23h00"
     },
@@ -489,7 +497,7 @@
       }
     },
     "Footer": {
-      "copyright": "© 2024 An Lac Vietnamese Eatery - Genève. Tous droits réservés."
+      "copyright": "© {year} An Lac Vietnamese Eatery. Tous droits réservés."
     }
   },
   "MenuListing": {
@@ -2125,7 +2133,7 @@
     "cancelItem": "Annuler l'article",
     "cancelling": "Annulation...",
     "cancelError": "Impossible d'annuler l'article",
-    "cancelNotAllowed": "\u201c{dishName}\u201d a déjà été traité par le personnel et ne peut plus être annulé.",
+    "cancelNotAllowed": "“{dishName}” a déjà été traité par le personnel et ne peut plus être annulé.",
     "cancelPopup": {
       "title": "Annuler cet article ?",
       "message": "Êtes-vous sûr de vouloir annuler \"{dishName}\" ? Cette action est irréversible.",
@@ -2218,24 +2226,78 @@
       "General": "Général"
     },
     "messages": {
-      "NEW_ORDER": { "title": "Nouvelle commande #{orderId}", "body": "Table {tableName} a passé une nouvelle commande" },
-      "ORDER_CANCELLED": { "title": "Commande #{orderId} annulée", "body": "La commande #{orderId} a été annulée" },
-      "ORDER_ITEM_READY": { "title": "Élément de commande prêt", "body": "Un élément de la commande est prêt à être servi" },
-      "ORDER_ITEM_REJECTED": { "title": "Élément de commande rejeté", "body": "Un élément de la commande a été rejeté" },
-      "ALL_ITEMS_READY": { "title": "Commande #{orderId} complète", "body": "Tous les plats pour table {tableName} sont prêts" },
-      "PAYMENT_COMPLETED": { "title": "Paiement reçu", "body": "Commande #{orderId} — {amount} payé" },
-      "RESERVATION_CREATED": { "title": "Nouvelle réservation", "body": "{guestName} — {guestCount} personnes à {time}" },
-      "RESERVATION_STATUS_CHANGED": { "title": "Réservation mise à jour", "body": "Réservation #{reservationId} — statut changé en {status}" },
-      "RESERVATION_REMINDER": { "title": "Rappel de réservation", "body": "{guestName} — arrive dans {minutes} minutes" },
-      "TABLE_STATUS_CHANGED": { "title": "Table {tableName}", "body": "{oldStatus} → {status}" },
-      "LOW_STOCK_ALERT": { "title": "Stock bas : {ingredientName}", "body": "Actuel : {current}, Minimum : {minimum}" },
-      "DISH_OUT_OF_STOCK": { "title": "{dishName} en rupture", "body": "Ce plat n'est plus disponible" },
-      "SHIFT_ASSIGNED": { "title": "Quart assigné", "body": "Vous avez été assigné à {shiftName} le {date}" },
-      "ATTENDANCE_ALERT": { "title": "Alerte de présence", "body": "{staffName} — {reason}" },
-      "SYSTEM_ALERT": { "title": "Alerte système", "body": "{message}" },
-      "ORDER_STATUS_CHANGED": { "title": "Commande #{orderId} mise à jour", "body": "Commande #{orderId} — statut changé en {status}" },
-      "PAYMENT_REQUEST": { "title": "Paiement demandé — {tableName}", "body": "Commande #{orderId} — paiement de {amount} demandé" },
-      "fallback": { "title": "Notification", "body": "Vous avez une nouvelle notification." }
+      "NEW_ORDER": {
+        "title": "Nouvelle commande #{orderId}",
+        "body": "Table {tableName} a passé une nouvelle commande"
+      },
+      "ORDER_CANCELLED": {
+        "title": "Commande #{orderId} annulée",
+        "body": "La commande #{orderId} a été annulée"
+      },
+      "ORDER_ITEM_READY": {
+        "title": "Élément de commande prêt",
+        "body": "Un élément de la commande est prêt à être servi"
+      },
+      "ORDER_ITEM_REJECTED": {
+        "title": "Élément de commande rejeté",
+        "body": "Un élément de la commande a été rejeté"
+      },
+      "ALL_ITEMS_READY": {
+        "title": "Commande #{orderId} complète",
+        "body": "Tous les plats pour table {tableName} sont prêts"
+      },
+      "PAYMENT_COMPLETED": {
+        "title": "Paiement reçu",
+        "body": "Commande #{orderId} — {amount} payé"
+      },
+      "RESERVATION_CREATED": {
+        "title": "Nouvelle réservation",
+        "body": "{guestName} — {guestCount} personnes à {time}"
+      },
+      "RESERVATION_STATUS_CHANGED": {
+        "title": "Réservation mise à jour",
+        "body": "Réservation #{reservationId} — statut changé en {status}"
+      },
+      "RESERVATION_REMINDER": {
+        "title": "Rappel de réservation",
+        "body": "{guestName} — arrive dans {minutes} minutes"
+      },
+      "TABLE_STATUS_CHANGED": {
+        "title": "Table {tableName}",
+        "body": "{oldStatus} → {status}"
+      },
+      "LOW_STOCK_ALERT": {
+        "title": "Stock bas : {ingredientName}",
+        "body": "Actuel : {current}, Minimum : {minimum}"
+      },
+      "DISH_OUT_OF_STOCK": {
+        "title": "{dishName} en rupture",
+        "body": "Ce plat n'est plus disponible"
+      },
+      "SHIFT_ASSIGNED": {
+        "title": "Quart assigné",
+        "body": "Vous avez été assigné à {shiftName} le {date}"
+      },
+      "ATTENDANCE_ALERT": {
+        "title": "Alerte de présence",
+        "body": "{staffName} — {reason}"
+      },
+      "SYSTEM_ALERT": {
+        "title": "Alerte système",
+        "body": "{message}"
+      },
+      "ORDER_STATUS_CHANGED": {
+        "title": "Commande #{orderId} mise à jour",
+        "body": "Commande #{orderId} — statut changé en {status}"
+      },
+      "PAYMENT_REQUEST": {
+        "title": "Paiement demandé — {tableName}",
+        "body": "Commande #{orderId} — paiement de {amount} demandé"
+      },
+      "fallback": {
+        "title": "Notification",
+        "body": "Vous avez une nouvelle notification."
+      }
     },
     "metadata": {
       "defaults": {
@@ -2558,7 +2620,7 @@
     },
     "Introduction": {
       "title": "Page d'introduction",
-      "description": "Gérez le contenu et les médias de votre page d'accueil.",
+      "description": "Description",
       "sections": {
         "hero": {
           "title": "Section Héros",
@@ -2608,7 +2670,20 @@
         "chefVideo": "Vidéo promo du chef",
         "ambianceVideo": "Vidéo d'ambiance",
         "dishImage": "Image du plat signature {index}"
-      }
+      },
+      "heroTitle": "Titre du Héros",
+      "heroQuote": "Citation du Héros",
+      "heroImage": "Image de Fond du Héros",
+      "heroSection": "Section Héros",
+      "virtualTour": "Section Visite Virtuelle",
+      "tourVideo": "Vidéo de la Visite",
+      "collection": "Section Collection",
+      "featuredDish": "Plat en Vedette",
+      "selectFromSystem": "Sélectionner du Système",
+      "dishImage": "Image du Plat",
+      "mainTitle": "Titre Principal (Au survol)",
+      "cardTitle": "Titre de la Carte",
+      "cardCategory": "Catégorie de Plat"
     },
     "DishModal": {
       "noCategory": "Pas de catégorie",
@@ -2701,7 +2776,7 @@
       "updateError": "Échec de l'enregistrement du profil du magasin"
     },
     "AboutUs": {
-      "title": "À propos de nous",
+      "title": "Titre",
       "description": "Gérez l'histoire de votre marque et vos valeurs fondamentales.",
       "sections": {
         "founders": {
@@ -2776,7 +2851,28 @@
         "syncDesc": "Persister vos données narratives",
         "syncButton": "Synchroniser l'histoire",
         "discard": "Annuler les modifications"
-      }
+      },
+      "sectionLabel": "Étiquette de Section",
+      "subtitle": "Sous-titre",
+      "paragraph": "Paragraphe",
+      "quote": "Citation",
+      "quoteAuthor": "Auteur de la citation",
+      "valueTitle": "Titre de la Valeur",
+      "valueDescription": "Description de la Valeur",
+      "foundersImage": "Image des Fondateurs",
+      "legacyImage": "Image d'Héritage",
+      "ourFounders": "Nos Fondateurs",
+      "ourFoundersDesc": "Gérer le contenu pour la section des fondateurs.",
+      "ourJourney": "Notre Parcours",
+      "ourPhilosophy": "Notre Philosophie",
+      "legacy": "Héritage et Avenir",
+      "contentEditorTitle": "Éditeur de Contenu",
+      "contentEditorDesc": "Gérez le contenu minimaliste axé sur la typographie de la page À propos de nous.",
+      "subtitleLabel": "Sous-titre (Section Héros)",
+      "paragraphLabel": "Paragraphe",
+      "closingQuoteLabel": "Citation Finale",
+      "aboutConfigTitle": "Configuration À propos de nous",
+      "aboutConfigDesc": "Gérez le contenu minimaliste axé sur la typographie de la page À propos de nous."
     },
     "General": {
       "title": "Paramètres système",

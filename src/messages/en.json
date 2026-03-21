@@ -60,6 +60,9 @@
       "dish_1_desc": "Artfully plated with edible gold leaf and a reduction of aged Vietnamese vinegar.",
       "dish_1_main": "The Imperial Lotus",
       "dish_1_sub": "Sculpted Freshness",
+      "cardCategory": "Category",
+      "cardTitle": "Culinary Masterpiece",
+      "dishMainTitle": "Chef's Signature Dish",
       "dish_2_category": "Slow-Cooked",
       "dish_2_title": "Claypot Fish",
       "dish_2_desc": "Red Snapper simmered for 6 hours in a traditional ceramic vessel with black pepper and palm sugar.",
@@ -201,7 +204,12 @@
     "description_2": "An Lạc is guided by balance, memory, and serenity. Its name means peaceful happiness, inspired by the founder’s journey — a mother of three children — creating a space reflecting care, stability, and the essence of An cư Lạc nghiệp.",
     "description_3": "At An Lạc, we do not seek to change Vietnamese cuisine, but to honor it. Patience, harmony, and precision shape every dish: the slow simmer of a broth, the careful balance of herbs, the quiet depth of fermentation, and the humility of rice.",
     "description_4": "Familiar techniques such as kho, hấp, and nướng are expressed with precision and minimalism. Flavors are measured, balanced, and subtle.",
-    "description_5": "An Lạc is an invitation — to slow down, taste attentively, and reconnect with the essential."
+    "description_5": "An Lạc is an invitation — to slow down, taste attentively, and reconnect with the essential.",
+    "about_subtitle": "An Lạc is not a place of spectacle. It is a place of calm.",
+    "about_paragraph_1": "An Lạc is guided by balance, memory, and serenity. Its name means peaceful happiness, inspired by the founder's journey — a mother of three children — creating a space reflecting care, stability, and the essence of An cư Lạc nghiệp.",
+    "about_paragraph_2": "At An Lạc, we do not seek to change Vietnamese cuisine, but to honor it. Patience, harmony, and precision shape every dish: the slow simmer of a broth, the careful balance of herbs, the quiet depth of fermentation, and the humility of rice.",
+    "about_paragraph_3": "Familiar techniques such as kho, hấp, and nướng are expressed with precision and minimalism. Flavors are measured, balanced, and subtle.",
+    "about_closing_quote": "An Lạc is an invitation — to slow down, taste attentively, and reconnect with the essential."
   },
   "Reservation": {
     "Header": {
@@ -411,7 +419,7 @@
     },
     "Location": {
       "label": "Collection Point",
-      "address": "Quai du Mont-Blanc 13, Geneva"
+      "address": ""
     },
     "Actions": {
       "viewReceipt": "View Receipt",
@@ -451,16 +459,15 @@
   },
   "Contact": {
     "Hero": {
-      "title": "Connect With Us",
-      "description": "Experience the essence of Vietnamese luxury on the shores of Lake Geneva.\nWe are here to assist with your inquiries, private event bookings, and special requests."
+      "description": "Experience the essence of Vietnamese luxury.\nWe are here to assist with your inquiries, private event bookings, and special requests."
     },
     "Info": {
       "addressLabel": "Our Home",
-      "address": "Quai du Mont-Blanc 13\n1201 Geneva, Switzerland",
+      "address": "",
       "phoneLabel": "Speak With Us",
-      "phone": "+41 22 123 45 67",
+      "phone": "",
       "emailLabel": "Inquiries",
-      "email": "geneva@aulac.ch",
+      "email": "",
       "hoursLabel": "Hours",
       "hours": "Mon - Sun: 11:30 AM - 11:00 PM"
     },
@@ -490,7 +497,7 @@
       }
     },
     "Footer": {
-      "copyright": "© 2024 An Lac Vietnamese Eatery - Geneva. All Rights Reserved."
+      "copyright": "© {year} An Lac Vietnamese Eatery. All Rights Reserved."
     }
   },
   "MenuListing": {
@@ -1630,7 +1637,8 @@
       "orderType": "Order Type",
       "orderedMenus": "Ordered Menus",
       "subTotal": "Sub Total",
-      "tax": "Tax",
+      "tax": "Tax 2.6% (TVA)",
+      "totalTax": "Total Tax",
       "serviceCharge": "Service Charge",
       "tip": "Tip",
       "paymentType": "Payment Type",
@@ -2131,7 +2139,7 @@
     "cancelItem": "Cancel Item",
     "cancelling": "Cancelling...",
     "cancelError": "Cannot cancel item",
-    "cancelNotAllowed": "\u201c{dishName}\u201d has already been processed by staff and can no longer be cancelled.",
+    "cancelNotAllowed": "“{dishName}” has already been processed by staff and can no longer be cancelled.",
     "cancelPopup": {
       "title": "Cancel This Item?",
       "message": "Are you sure you want to cancel \"{dishName}\"? This action cannot be undone.",
@@ -2224,24 +2232,78 @@
       "General": "General"
     },
     "messages": {
-      "NEW_ORDER": { "title": "New order #{orderId}", "body": "Table {tableName} placed a new order" },
-      "ORDER_CANCELLED": { "title": "Order #{orderId} cancelled", "body": "Order #{orderId} has been cancelled" },
-      "ORDER_ITEM_READY": { "title": "Order item ready", "body": "An item in the order is ready to serve" },
-      "ORDER_ITEM_REJECTED": { "title": "Order item rejected", "body": "An item in the order was rejected" },
-      "ALL_ITEMS_READY": { "title": "Order #{orderId} fully ready", "body": "All items for table {tableName} are ready" },
-      "PAYMENT_COMPLETED": { "title": "Payment received", "body": "Order #{orderId} — {amount} paid" },
-      "RESERVATION_CREATED": { "title": "New reservation", "body": "{guestName} — {guestCount} guests at {time}" },
-      "RESERVATION_STATUS_CHANGED": { "title": "Reservation updated", "body": "Reservation #{reservationId} — status changed to {status}" },
-      "RESERVATION_REMINDER": { "title": "Reservation reminder", "body": "{guestName} — arriving in {minutes} minutes" },
-      "TABLE_STATUS_CHANGED": { "title": "Table {tableName}", "body": "{oldStatus} → {status}" },
-      "LOW_STOCK_ALERT": { "title": "Low stock: {ingredientName}", "body": "Current: {current}, Min: {minimum}" },
-      "DISH_OUT_OF_STOCK": { "title": "{dishName} out of stock", "body": "This dish is no longer available" },
-      "SHIFT_ASSIGNED": { "title": "Shift assigned", "body": "You have been assigned to {shiftName} on {date}" },
-      "ATTENDANCE_ALERT": { "title": "Attendance alert", "body": "{staffName} — {reason}" },
-      "SYSTEM_ALERT": { "title": "System alert", "body": "{message}" },
-      "ORDER_STATUS_CHANGED": { "title": "Order #{orderId} updated", "body": "Order #{orderId} status changed to {status}" },
-      "PAYMENT_REQUEST": { "title": "Payment requested — {tableName}", "body": "Order #{orderId} — {amount} payment requested" },
-      "fallback": { "title": "Notification", "body": "You have a new notification." }
+      "NEW_ORDER": {
+        "title": "New order #{orderId}",
+        "body": "Table {tableName} placed a new order"
+      },
+      "ORDER_CANCELLED": {
+        "title": "Order #{orderId} cancelled",
+        "body": "Order #{orderId} has been cancelled"
+      },
+      "ORDER_ITEM_READY": {
+        "title": "Order item ready",
+        "body": "An item in the order is ready to serve"
+      },
+      "ORDER_ITEM_REJECTED": {
+        "title": "Order item rejected",
+        "body": "An item in the order was rejected"
+      },
+      "ALL_ITEMS_READY": {
+        "title": "Order #{orderId} fully ready",
+        "body": "All items for table {tableName} are ready"
+      },
+      "PAYMENT_COMPLETED": {
+        "title": "Payment received",
+        "body": "Order #{orderId} — {amount} paid"
+      },
+      "RESERVATION_CREATED": {
+        "title": "New reservation",
+        "body": "{guestName} — {guestCount} guests at {time}"
+      },
+      "RESERVATION_STATUS_CHANGED": {
+        "title": "Reservation updated",
+        "body": "Reservation #{reservationId} — status changed to {status}"
+      },
+      "RESERVATION_REMINDER": {
+        "title": "Reservation reminder",
+        "body": "{guestName} — arriving in {minutes} minutes"
+      },
+      "TABLE_STATUS_CHANGED": {
+        "title": "Table {tableName}",
+        "body": "{oldStatus} → {status}"
+      },
+      "LOW_STOCK_ALERT": {
+        "title": "Low stock: {ingredientName}",
+        "body": "Current: {current}, Min: {minimum}"
+      },
+      "DISH_OUT_OF_STOCK": {
+        "title": "{dishName} out of stock",
+        "body": "This dish is no longer available"
+      },
+      "SHIFT_ASSIGNED": {
+        "title": "Shift assigned",
+        "body": "You have been assigned to {shiftName} on {date}"
+      },
+      "ATTENDANCE_ALERT": {
+        "title": "Attendance alert",
+        "body": "{staffName} — {reason}"
+      },
+      "SYSTEM_ALERT": {
+        "title": "System alert",
+        "body": "{message}"
+      },
+      "ORDER_STATUS_CHANGED": {
+        "title": "Order #{orderId} updated",
+        "body": "Order #{orderId} status changed to {status}"
+      },
+      "PAYMENT_REQUEST": {
+        "title": "Payment requested — {tableName}",
+        "body": "Order #{orderId} — {amount} payment requested"
+      },
+      "fallback": {
+        "title": "Notification",
+        "body": "You have a new notification."
+      }
     },
     "metadata": {
       "defaults": {
@@ -2564,7 +2626,7 @@
     },
     "Introduction": {
       "title": "Introduction Page",
-      "description": "Manage the content and media for your landing page.",
+      "description": "Description",
       "sections": {
         "hero": {
           "title": "Hero Section",
@@ -2614,7 +2676,20 @@
         "chefVideo": "Chef Promo Video",
         "ambianceVideo": "Ambiance Video",
         "dishImage": "Signature Dish {index} Image"
-      }
+      },
+      "heroTitle": "Hero Title",
+      "heroQuote": "Hero Quote",
+      "heroImage": "Hero Background Image",
+      "heroSection": "Hero Section",
+      "virtualTour": "Virtual Tour Section",
+      "tourVideo": "Tour Video",
+      "collection": "Collection Section",
+      "featuredDish": "Featured Dish",
+      "selectFromSystem": "Select from System",
+      "dishImage": "Dish Image",
+      "mainTitle": "Main Title (Hover Name)",
+      "cardTitle": "Card Title",
+      "cardCategory": "Card Category"
     },
     "DishModal": {
       "noCategory": "No Category",
@@ -2707,7 +2782,7 @@
       "updateError": "Failed to save store profile"
     },
     "AboutUs": {
-      "title": "About Us",
+      "title": "Title",
       "description": "Manage your brand story and core values.",
       "sections": {
         "founders": {
@@ -2782,7 +2857,28 @@
         "syncDesc": "Persist your narrative data",
         "syncButton": "Sync About Story",
         "discard": "Discard Changes"
-      }
+      },
+      "sectionLabel": "Section Label",
+      "subtitle": "Subtitle",
+      "paragraph": "Paragraph",
+      "quote": "Quote",
+      "quoteAuthor": "Quote Author",
+      "valueTitle": "Value Title",
+      "valueDescription": "Value Description",
+      "foundersImage": "Founders Image",
+      "legacyImage": "Legacy Image",
+      "ourFounders": "Our Founders",
+      "ourFoundersDesc": "Manage the content for the founders section.",
+      "ourJourney": "Our Journey",
+      "ourPhilosophy": "Our Philosophy",
+      "legacy": "Legacy & Future",
+      "contentEditorTitle": "Content Editor",
+      "contentEditorDesc": "Manage the minimalist typography-focused content of the About Us page.",
+      "subtitleLabel": "Subtitle (Hero Section)",
+      "paragraphLabel": "Paragraph",
+      "closingQuoteLabel": "Closing Quote",
+      "aboutConfigTitle": "About Us Configuration",
+      "aboutConfigDesc": "Manage the minimalist typography-focused content of the About Us page."
     },
     "General": {
       "title": "System Parameters",

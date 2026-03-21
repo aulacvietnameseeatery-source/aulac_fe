@@ -60,7 +60,9 @@ export const PrintOrderModal: React.FC<PrintOrderModalProps> = ({ order, isOpen,
         status: type === 'invoice' ? t('paymentStatus.unpaid') : (order.isPaid ? t('paymentStatus.paid') : t('paymentStatus.unpaid')),
         paymentMethod: (type === 'receipt' && order.isPaid) ? t('paymentStatus.paid') : '',
         tips: type === 'invoice' ? 0 : (order.tipAmount ?? 0),
-        items: order.orderItems.map((item): ReceiptItem => ({
+        items: order.orderItems
+            .filter(item => item.itemStatus !== 'REJECTED' && item.itemStatus !== 'CANCELLED')
+            .map((item): ReceiptItem => ({
             name: item.dishName,
             qty: item.quantity,
             price: item.price,

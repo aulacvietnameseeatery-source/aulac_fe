@@ -1,84 +1,35 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
-import { ImagePlus, Trash2, Save, Loader2, Upload, Facebook, Instagram, Music2 as Tiktok, X, Eye, MapPin, Phone, Mail, Clock, Building2, Globe, UploadCloud, Languages, Sparkles, Camera, PlayCircle } from 'lucide-react';
+import { Trash2, Save, Loader2, Upload, Facebook, Instagram, Music2 as Tiktok, Eye, Phone, Mail, Languages, Maximize2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { getGroupSettings, updateGroupSettings, uploadLogo, translateSystemSettings } from '../services/system-setting.service';
-import { BulkUpdateSettingItemDto } from '../types/system-setting.types';
-import { useMutation } from '@tanstack/react-query';
+import { getGroupSettings, uploadLogo } from '../services/system-setting.service';
 import { BASE_URL } from '@/lib/http';
 import { cn } from '@/lib/utils';
 import { MediaPreviewModal } from '@/components/shared/MediaPreviewModal';
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
-
-const LOCALES = ["en", "vi", "fr"];
-
-const TRANSLATABLE_KEYS = [
-    'name', 'streetAddress', 'city', 'country', 'openingHours'
-];
-
-const GLOBAL_KEYS = [
-    'logoUrl', 'postalCode', 'email', 'phone', 'facebookLink', 'instagramLink', 'tiktokLink'
-];
-
-const getInitialData = () => {
-    const data: Record<string, string> = {};
-    TRANSLATABLE_KEYS.forEach(k => LOCALES.forEach(l => data[`${k}_${l}`] = ""));
-    GLOBAL_KEYS.forEach(k => data[k] = "");
-    return data;
-};
+import { ALCard } from '@/components/ui/al-card';
+import { ALInput } from '@/components/ui/al-input';
+import { useStoreProfileForm } from '../hooks/useStoreProfileForm';
+import { mapStoreSettingsToFormValues, mapFormValuesToStoreSettings, LOCALES, SupportedLocale, StoreProfileFormValues } from '../types/schema';
+import { useUpdateStoreSettingsMutation, useTranslateSettingsMutation } from '../hooks/useSystemSettingsMutation';
 
 export const StoreProfileForm = () => {
     const t = useTranslations('SystemSettings');
     const [isLoading, setIsLoading] = useState(true);
-    const [isSaving, setIsSaving] = useState(false);
     const [isUploading, setIsUploading] = useState<string | null>(null);
-    const [activeLocale, setActiveLocale] = useState("en");
+    const [activeLocale, setActiveLocale] = useState<SupportedLocale>('en');
 
-    const [formData, setFormData] = useState(getInitialData());
+    const form = useStoreProfileForm();
+    const { register, handleSubmit, formState: { errors }, reset, setValue, watch, getValues } = form;
+
+    const translateMutation = useTranslateSettingsMutation();
+    const updateMutation = useUpdateStoreSettingsMutation();
 
     const [previewData, setPreviewData] = useState<{ url: string; title: string, type: 'image' | 'video' } | null>(null);
     const [localPreviews, setLocalPreviews] = useState<Record<string, string>>({});
     const logoInputRef = useRef<HTMLInputElement>(null);
 
-    // --- Translation Mutation ---
-    const translateMutation = useMutation({
-        mutationFn: translateSystemSettings,
-        onSuccess: (data) => {
-            setFormData((prev) => {
-                const newData = { ...prev };
-                Object.entries(data.translations).forEach(([lang, translations]) => {
-                    Object.entries(translations).forEach(([key, value]) => {
-                        newData[`${key}_${lang}`] = value;
-                    });
-                });
-                return newData;
-            });
-            toast.success(t('StoreProfile.translatedSuccessfully'));
-        },
-        onError: () => {
-            toast.error(t('StoreProfile.translationFailed'));
-        }
-    });
-
-    const handleAutoTranslate = () => {
-        const dataToTranslate: Record<string, string> = {};
-        TRANSLATABLE_KEYS.forEach(key => {
-            const val = formData[`${key}_${activeLocale}`];
-            if (val) dataToTranslate[key] = val;
-        });
-
-        if (Object.keys(dataToTranslate).length === 0) {
-            toast.warning(t('StoreProfile.nothingToTranslate'));
-            return;
-        }
-
-        translateMutation.mutate({
-            sourceLang: activeLocale,
-            data: dataToTranslate
-        });
-    };
+    const logoUrlValue = watch('logoUrl');
 
     useEffect(() => {
         loadSettings();
@@ -88,14 +39,13 @@ export const StoreProfileForm = () => {
         setIsLoading(true);
         try {
             const settings = await getGroupSettings('store');
-            const data = getInitialData();
+            const kv: Record<string, string> = {};
             settings.forEach(s => {
                 const key = s.settingKey.replace('store.', '');
-                if (key in data || TRANSLATABLE_KEYS.some(tk => key.startsWith(tk))) {
-                    data[key] = s.value?.toString() || '';
-                }
+                kv[key] = s.value?.toString() || '';
             });
-            setFormData(data);
+            const formattedData = mapStoreSettingsToFormValues(kv);
+            reset(formattedData);
         } catch (error) {
             console.error('Failed to load store settings:', error);
         } finally {
@@ -103,39 +53,63 @@ export const StoreProfileForm = () => {
         }
     };
 
-    const handleChange = (field: string, value: string, isGlobal = false) => {
-        const key = isGlobal ? field : `${field}_${activeLocale}`;
-        setFormData(prev => ({ ...prev, [key]: value }));
+    const handleAutoTranslate = () => {
+        const currentData = getValues();
+        const activeI18n = currentData.i18n[activeLocale];
+        
+        const dataToTranslate = Object.entries(activeI18n).reduce((acc, [k, v]) => {
+            if (v) acc[k] = v as string;
+            return acc;
+        }, {} as Record<string, string>);
+
+        if (Object.keys(dataToTranslate).length === 0) {
+            toast.warning(t('StoreProfile.nothingToTranslate'));
+            return;
+        }
+
+        translateMutation.mutate({
+            sourceLang: activeLocale,
+            data: dataToTranslate
+        }, {
+            onSuccess: (data) => {
+                const newValues = { ...currentData };
+                Object.entries(data.translations).forEach(([lang, translations]) => {
+                    const l = lang as SupportedLocale;
+                    Object.entries(translations).forEach(([key, value]) => {
+                        // @ts-ignore
+                        newValues.i18n[l][key] = value;
+                    });
+                });
+                reset(newValues);
+                toast.success(t('StoreProfile.translatedSuccessfully'));
+            },
+            onError: () => {
+                toast.error(t('StoreProfile.translationFailed'));
+            }
+        });
     };
 
-    const getValue = (field: string, isGlobal = false) => {
-        const key = isGlobal ? field : `${field}_${activeLocale}`;
-        return formData[key] || "";
-    };
-
-    const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>, fieldKey: 'logoUrl') => {
+    const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
 
-        const maxSize = 5 * 1024 * 1024;
-
-        if (file.size > maxSize) {
+        if (file.size > 5 * 1024 * 1024) {
             toast.error(t('StoreProfile.fileSizeError'));
             return;
         }
 
         const localUrl = URL.createObjectURL(file);
-        setLocalPreviews(prev => ({ ...prev, [fieldKey]: localUrl }));
+        setLocalPreviews(prev => ({ ...prev, logoUrl: localUrl }));
+        setIsUploading('logoUrl');
 
-        setIsUploading(fieldKey);
         try {
             const publicUrl = await uploadLogo(file);
-            handleChange(fieldKey, publicUrl, true);
+            setValue('logoUrl', publicUrl, { shouldDirty: true, shouldValidate: true });
             toast.success(t('StoreProfile.uploadSuccess'));
         } catch (error) {
             toast.error(t('StoreProfile.uploadError'));
-            if (!getValue(fieldKey, true)) {
-                setLocalPreviews(prev => { delete prev[fieldKey]; return { ...prev }; });
+            if (!logoUrlValue) {
+                setLocalPreviews(prev => { delete prev['logoUrl']; return { ...prev }; });
             }
         } finally {
             setIsUploading(null);
@@ -143,40 +117,32 @@ export const StoreProfileForm = () => {
         }
     };
 
-    const handleSave = async () => {
-        setIsSaving(true);
-        try {
-            const items: BulkUpdateSettingItemDto[] = Object.entries(formData).map(([key, value]) => ({
-                key: `store.${key}`,
-                settingName: `Store ${key}`,
-                value: value,
-                description: `Store ${key}`
-            }));
-            await updateGroupSettings('store', { items });
-            toast.success(t('StoreProfile.updateSuccess'));
-        } catch (error: any) {
-            toast.error(error?.response?.data?.userMessage || t('StoreProfile.updateError'));
-        } finally {
-            setIsSaving(false);
-        }
+    const onSubmit = (values: StoreProfileFormValues) => {
+        const mappedSettings = mapFormValuesToStoreSettings(values);
+        const items = Object.entries(mappedSettings).map(([key, value]) => ({
+            key: `store.${key}`,
+            settingName: `Store ${key}`,
+            value: value,
+            description: `Store ${key}`
+        }));
+
+        updateMutation.mutate({ items }, {
+            onSuccess: () => {
+                toast.success(t('StoreProfile.updateSuccess'));
+                loadSettings();
+            },
+            onError: (err: any) => {
+                toast.error(err?.response?.data?.userMessage || t('StoreProfile.updateError'));
+            }
+        });
     };
 
-    const getFullUrl = (field: 'logoUrl') => {
-        const url = getValue(field, true);
-        const previewUrl = localPreviews[field];
+    const getFullUrl = () => {
+        const previewUrl = localPreviews['logoUrl'];
         if (previewUrl) return previewUrl;
-        if (!url) return '';
-        return (url.startsWith('http')) ? url : `${BASE_URL}${url}`;
+        if (!logoUrlValue) return '';
+        return (logoUrlValue.startsWith('http')) ? logoUrlValue : `${BASE_URL}${logoUrlValue}`;
     };
-
-    if (isLoading) {
-        return (
-            <div className="flex justify-center items-center p-24">
-                <Loader2 className="h-6 w-6 animate-spin text-primary" />
-            </div>
-        );
-    }
-
 
     if (isLoading) {
         return (
@@ -187,14 +153,15 @@ export const StoreProfileForm = () => {
     }
 
     return (
-        <div className="flex flex-col gap-6 w-full pb-12">
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6 w-full pb-12">
             {/* --- HEADER ACTIONS --- */}
-            <div className="flex flex-wrap items-center justify-between gap-4 bg-[#FDFBF9]/80 backdrop-blur-md p-4 rounded-xl border border-amber-200/30 shadow-sm transition-all duration-300">
+            <ALCard variant="glass" elevation="sm" padding="md" radius="xl" className="flex flex-wrap items-center justify-between gap-4 border-amber-200/30">
                 <div className="flex items-center gap-6">
                     <div className="flex bg-gray-100 p-1 rounded-lg border border-gray-200">
                         {LOCALES.map((loc) => (
                             <Button
                                 key={loc}
+                                type="button"
                                 variant={activeLocale === loc ? "default" : "ghost"}
                                 size="sm"
                                 className={cn(
@@ -209,44 +176,42 @@ export const StoreProfileForm = () => {
                             </Button>
                         ))}
                     </div>
-
                 </div>
 
                 <div className="flex items-center gap-3">
                     <Button
+                        type="button"
                         variant="outline"
                         size="sm"
                         className="h-9 gap-2 text-purple-600 border-purple-200 hover:bg-purple-50 hover:border-purple-300 font-semibold px-4 transition-all"
                         onClick={handleAutoTranslate}
-                        disabled={translateMutation.isPending}
+                        isLoading={translateMutation.isPending}
                     >
-                        {translateMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Languages className="w-4 h-4" />}
+                        <Languages className="w-4 h-4" />
                         <span className="hidden sm:inline">{t('Common.autoTranslate')}</span>
                     </Button>
                     <Button
+                        type="submit"
                         size="sm"
                         className="h-9 gap-2 bg-[#1E3C52] hover:bg-[#12283A] text-white shadow-lg shadow-blue-900/20 font-semibold px-4 transition-all"
-                        onClick={handleSave}
-                        disabled={isSaving}
+                        isLoading={updateMutation.isPending}
                     >
-                        {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+                        <Save className="w-4 h-4" />
                         {t("Common.saveChanges")}
                     </Button>
                 </div>
-            </div>
+            </ALCard>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 pb-6">
                 {/* --- LEFT COLUMN --- */}
                 <div className="space-y-8">
                     {/* --- IDENTITY SECTION --- */}
-                    <div className="bg-[#FDFBF9]/40 backdrop-blur-sm rounded-2xl border border-amber-200/50 shadow-sm overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-700">
+                    <ALCard variant="soft" padding="none" radius="2xl" elevation="sm" className="border-amber-200/50 shadow-sm overflow-hidden" animation="slide-up">
                         <div className="p-6 md:p-8 border-b border-[#D5BA98]/20">
-                            <div className="flex items-center gap-3 mb-2">
-                                <h2 className="text-xl font-bold text-gray-900 tracking-tight">
-                                    {t("StoreProfile.sections.identity.title")}
-                                </h2>
-                            </div>
-                            <p className="font-[Inter] text-sm text-[#1A3A52]/60 ml-13">
+                            <h2 className="text-xl font-bold text-gray-900 tracking-tight mb-2">
+                                {t("StoreProfile.sections.identity.title")}
+                            </h2>
+                            <p className="font-[Inter] text-sm text-[#1A3A52]/60 ml-0 md:ml-13">
                                 {t("StoreProfile.sections.identity.description")}
                             </p>
                         </div>
@@ -254,7 +219,7 @@ export const StoreProfileForm = () => {
                         <div className="p-6 md:p-8 space-y-6">
                             {/* Logo Upload */}
                             <div className="space-y-3">
-                                <label className="font-[Inter] text-xs font-bold text-[#1A3A52]/50 uppercase tracking-widest">
+                                <label className="font-[Inter] text-xs font-bold text-[#1A3A52]/50 uppercase tracking-widest block">
                                     {t("StoreProfile.logo")}
                                 </label>
                                 <div className="flex items-center gap-6">
@@ -262,13 +227,13 @@ export const StoreProfileForm = () => {
                                         <div
                                             className={cn(
                                                 "w-24 h-24 rounded-2xl border-2 border-dashed border-amber-200/60 bg-white/40 flex items-center justify-center overflow-hidden transition-all cursor-pointer hover:border-amber-300 hover:bg-white/60",
-                                                getValue('logoUrl', true) && "border-solid bg-white shadow-sm"
+                                                getFullUrl() && "border-solid bg-white shadow-sm"
                                             )}
                                             onClick={() => logoInputRef.current?.click()}
                                         >
-                                            {getValue('logoUrl', true) ? (
+                                            {getFullUrl() ? (
                                                 <img
-                                                    src={getValue('logoUrl', true).startsWith('http') ? getValue('logoUrl', true) : `${BASE_URL}${getValue('logoUrl', true)}`}
+                                                    src={getFullUrl()}
                                                     className="w-full h-full object-cover"
                                                     alt="Logo"
                                                 />
@@ -294,16 +259,28 @@ export const StoreProfileForm = () => {
                                                 <Upload className="w-4 h-4" />
                                                 {t("StoreProfile.upload")}
                                             </Button>
-                                            {getValue('logoUrl', true) && (
+                                            {logoUrlValue && (
                                                 <Button
                                                     type="button"
                                                     variant="outline"
                                                     size="sm"
                                                     className="h-9 border-red-100 text-red-500 hover:bg-red-50 font-[Inter] gap-2"
-                                                    onClick={() => handleChange('logoUrl', '', true)}
+                                                    onClick={() => setValue('logoUrl', '', { shouldDirty: true })}
                                                 >
                                                     <Trash2 className="w-4 h-4" />
                                                     {t("StoreProfile.remove")}
+                                                </Button>
+                                            )}
+                                            {getFullUrl() && (
+                                                <Button
+                                                    type="button"
+                                                    variant="outline"
+                                                    size="sm"
+                                                    className="h-9 border-blue-100 text-blue-600 hover:bg-blue-50 font-[Inter] gap-2"
+                                                    onClick={() => setPreviewData({ url: getFullUrl(), title: "Store Logo", type: 'image' })}
+                                                >
+                                                    <Maximize2 className="w-4 h-4" />
+                                                    Preview
                                                 </Button>
                                             )}
                                         </div>
@@ -316,7 +293,7 @@ export const StoreProfileForm = () => {
                                         ref={logoInputRef}
                                         className="hidden"
                                         accept="image/*"
-                                        onChange={(e) => handleFileChange(e, 'logoUrl')}
+                                        onChange={handleFileChange}
                                     />
                                 </div>
                             </div>
@@ -324,183 +301,132 @@ export const StoreProfileForm = () => {
                             <div className="h-[1px] w-full bg-[#D5BA98]/20" />
 
                             <div className="space-y-6">
-                                <div className="space-y-2">
-                                    <label className="text-[11px] font-bold text-[#1A3A52]/50 uppercase tracking-widest">
-                                        {t("StoreProfile.storeName")}
-                                    </label>
-                                    <Input
-                                        className="h-11 border-amber-200/40 bg-white/60 focus:border-[#1A3A52] font-[Inter]"
-                                        value={getValue('name')}
-                                        onChange={(e) => handleChange('name', e.target.value)}
-                                        placeholder={t("StoreProfile.placeholders.storeName")}
-                                    />
-                                </div>
-
-                                <div className="space-y-2">
-                                    <label className="text-[11px] font-bold text-[#1A3A52]/50 uppercase tracking-widest">
-                                        {t("StoreProfile.openingHours")}
-                                    </label>
-                                    <Input
-                                        className="h-11 border-amber-200/40 bg-white/60 focus:border-[#1A3A52] font-[Inter]"
-                                        value={getValue('openingHours')}
-                                        onChange={(e) => handleChange('openingHours', e.target.value)}
-                                        placeholder={t("StoreProfile.placeholders.openingHours")}
-                                    />
-                                </div>
+                                <ALInput
+                                    title={t("StoreProfile.storeName")}
+                                    placeholder={t("StoreProfile.placeholders.storeName")}
+                                    wrapperClassName="bg-white/60"
+                                    error={errors.i18n?.[activeLocale]?.name?.message}
+                                    {...register(`i18n.${activeLocale}.name` as const)}
+                                />
+                                <ALInput
+                                    title={t("StoreProfile.openingHours")}
+                                    placeholder={t("StoreProfile.placeholders.openingHours")}
+                                    wrapperClassName="bg-white/60"
+                                    error={errors.i18n?.[activeLocale]?.openingHours?.message}
+                                    {...register(`i18n.${activeLocale}.openingHours` as const)}
+                                />
                             </div>
                         </div>
-                    </div>
+                    </ALCard>
 
                     {/* --- SOCIAL FOOTPRINT SECTION --- */}
-                    <div className="bg-[#FDFBF9]/40 backdrop-blur-sm rounded-2xl border border-amber-200/50 shadow-sm overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300">
+                    <ALCard variant="soft" padding="none" radius="2xl" elevation="sm" className="border-amber-200/50 shadow-sm overflow-hidden" animation="fade">
                         <div className="p-6 md:p-8 border-b border-[#D5BA98]/20">
-                            <div className="flex items-center gap-3 mb-2">
-                                <h2 className="text-xl font-bold text-gray-900 tracking-tight">
-                                    {t("StoreProfile.sections.social.title")}
-                                </h2>
-                            </div>
-                            <p className="font-[Inter] text-sm text-[#1A3A52]/60 ml-13">
+                            <h2 className="text-xl font-bold text-gray-900 tracking-tight mb-2">
+                                {t("StoreProfile.sections.social.title")}
+                            </h2>
+                            <p className="font-[Inter] text-sm text-[#1A3A52]/60 ml-0 md:ml-13">
                                 {t("StoreProfile.sections.social.description")}
                             </p>
                         </div>
-
                         <div className="p-6 md:p-8 space-y-6">
-                            <div className="space-y-2">
-                                <label className="text-[11px] font-bold text-[#1A3A52]/50 uppercase tracking-widest flex items-center gap-2">
-                                    <Facebook className="w-4 h-4 text-[#1A3A52]/70" />
-                                    {t("Common.facebook") || "Facebook Profile"}
-                                </label>
-                                <Input
-                                    value={getValue('facebookLink', true)}
-                                    onChange={(e) => handleChange('facebookLink', e.target.value, true)}
-                                    placeholder={t("StoreProfile.placeholders.facebook")}
-                                    className="h-11 border-amber-200/40 focus:border-[#1A3A52] font-[Inter] bg-white/60"
-                                />
-                            </div>
-
-                            <div className="space-y-2">
-                                <label className="text-[11px] font-bold text-[#1A3A52]/50 uppercase tracking-widest flex items-center gap-2">
-                                    <Instagram className="w-4 h-4 text-[#1A3A52]/70" />
-                                    {t("Common.instagram") || "Instagram Page"}
-                                </label>
-                                <Input
-                                    value={getValue('instagramLink', true)}
-                                    onChange={(e) => handleChange('instagramLink', e.target.value, true)}
-                                    placeholder={t("StoreProfile.placeholders.instagram")}
-                                    className="h-11 border-amber-200/40 focus:border-[#1A3A52] font-[Inter] bg-white/60"
-                                />
-                            </div>
-
-                            <div className="space-y-2">
-                                <label className="text-[11px] font-bold text-[#1A3A52]/50 uppercase tracking-widest flex items-center gap-2">
-                                    <Tiktok className="w-4 h-4 text-[#1A3A52]/70" />
-                                    {t("Common.tiktok") || "TikTok Page"}
-                                </label>
-                                <Input
-                                    value={getValue('tiktokLink', true)}
-                                    onChange={(e) => handleChange('tiktokLink', e.target.value, true)}
-                                    placeholder={t("StoreProfile.placeholders.tiktok")}
-                                    className="h-11 border-amber-200/40 focus:border-[#1A3A52] font-[Inter] bg-white/60"
-                                />
-                            </div>
+                            <ALInput
+                                title={t("Common.facebook") || "Facebook Profile"}
+                                iconStart={<Facebook className="w-4 h-4 text-[#1A3A52]/70" />}
+                                placeholder={t("StoreProfile.placeholders.facebook")}
+                                wrapperClassName="bg-white/60"
+                                error={errors.facebookLink?.message}
+                                {...register('facebookLink')}
+                            />
+                            <ALInput
+                                title={t("Common.instagram") || "Instagram Page"}
+                                iconStart={<Instagram className="w-4 h-4 text-[#1A3A52]/70" />}
+                                placeholder={t("StoreProfile.placeholders.instagram")}
+                                wrapperClassName="bg-white/60"
+                                error={errors.instagramLink?.message}
+                                {...register('instagramLink')}
+                            />
+                            <ALInput
+                                title={t("Common.tiktok") || "TikTok Page"}
+                                iconStart={<Tiktok className="w-4 h-4 text-[#1A3A52]/70" />}
+                                placeholder={t("StoreProfile.placeholders.tiktok")}
+                                wrapperClassName="bg-white/60"
+                                error={errors.tiktokLink?.message}
+                                {...register('tiktokLink')}
+                            />
                         </div>
-                    </div>
+                    </ALCard>
                 </div>
 
                 {/* --- RIGHT COLUMN --- */}
                 <div className="space-y-8 h-full">
-                    {/* --- CONTACT & LOCATION SECTION --- */}
-                    <div className="bg-[#FDFBF9]/40 backdrop-blur-sm rounded-2xl border border-amber-200/50 shadow-sm overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-700 delay-200 h-full">
+                    <ALCard variant="soft" padding="none" radius="2xl" elevation="sm" className="border-amber-200/50 shadow-sm flex flex-col h-full" animation="slide-up">
                         <div className="p-6 md:p-8 border-b border-[#D5BA98]/20">
-                            <div className="flex items-center gap-3 mb-2">
-                                <h2 className="text-xl font-bold text-gray-900 tracking-tight">
-                                    {t("StoreProfile.sections.contact.title")}
-                                </h2>
-                            </div>
-                            <p className="font-[Inter] text-sm text-[#1A3A52]/60 ml-13">
+                            <h2 className="text-xl font-bold text-gray-900 tracking-tight mb-2">
+                                {t("StoreProfile.sections.contact.title")}
+                            </h2>
+                            <p className="font-[Inter] text-sm text-[#1A3A52]/60 ml-0 md:ml-13">
                                 {t("StoreProfile.sections.contact.description")}
                             </p>
                         </div>
 
-                        <div className="p-6 md:p-8 space-y-8">
-                            <div className="space-y-2">
-                                <label className="text-[11px] font-bold text-[#1A3A52]/50 uppercase tracking-widest">
-                                    {t("StoreProfile.street")}
-                                </label>
-                                <Input
-                                    className="h-11 border-amber-200/40 bg-white/60 focus:border-[#1A3A52] font-[Inter]"
-                                    value={getValue('streetAddress')}
-                                    onChange={(e) => handleChange('streetAddress', e.target.value)}
-                                    placeholder={t("StoreProfile.placeholders.street")}
-                                />
-                            </div>
+                        <div className="p-6 md:p-8 space-y-8 flex-1">
+                            <ALInput
+                                title={t("StoreProfile.street")}
+                                placeholder={t("StoreProfile.placeholders.street")}
+                                wrapperClassName="bg-white/60"
+                                error={errors.i18n?.[activeLocale]?.streetAddress?.message}
+                                {...register(`i18n.${activeLocale}.streetAddress` as const)}
+                            />
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div className="space-y-2">
-                                    <label className="text-[11px] font-bold text-[#1A3A52]/50 uppercase tracking-widest">
-                                        {t("StoreProfile.city")}
-                                    </label>
-                                    <Input
-                                        className="h-11 border-amber-200/40 bg-white/60 focus:border-[#1A3A52] font-[Inter]"
-                                        value={getValue('city')}
-                                        onChange={(e) => handleChange('city', e.target.value)}
-                                        placeholder={t("StoreProfile.placeholders.city")}
-                                    />
-                                </div>
-
-                                <div className="space-y-2">
-                                    <label className="text-[11px] font-bold text-[#1A3A52]/50 uppercase tracking-widest">
-                                        {t("StoreProfile.country")}
-                                    </label>
-                                    <Input
-                                        className="h-11 border-amber-200/40 bg-white/60 focus:border-[#1A3A52] font-[Inter]"
-                                        value={getValue('country')}
-                                        onChange={(e) => handleChange('country', e.target.value)}
-                                        placeholder={t("StoreProfile.placeholders.country")}
-                                    />
-                                </div>
+                                <ALInput
+                                    title={t("StoreProfile.city")}
+                                    placeholder={t("StoreProfile.placeholders.city")}
+                                    wrapperClassName="bg-white/60"
+                                    error={errors.i18n?.[activeLocale]?.city?.message}
+                                    {...register(`i18n.${activeLocale}.city` as const)}
+                                />
+                                <ALInput
+                                    title={t("StoreProfile.country")}
+                                    placeholder={t("StoreProfile.placeholders.country")}
+                                    wrapperClassName="bg-white/60"
+                                    error={errors.i18n?.[activeLocale]?.country?.message}
+                                    {...register(`i18n.${activeLocale}.country` as const)}
+                                />
                             </div>
 
                             <div className="h-[1px] w-full bg-[#D5BA98]/20" />
 
                             <div className="grid grid-cols-1 gap-8">
-                                <div className="space-y-2">
-                                    <label className="text-[11px] font-bold text-[#1A3A52]/50 uppercase tracking-widest flex items-center gap-2">
-                                        <Phone className="w-4 h-4" />
-                                        {t("StoreProfile.phone")}
-                                    </label>
-                                    <Input
-                                        className="h-11 border-amber-200/40 bg-white/60 focus:border-[#1A3A52] font-[Inter]"
-                                        value={getValue('phone', true)}
-                                        onChange={(e) => handleChange('phone', e.target.value, true)}
-                                        placeholder={t("StoreProfile.placeholders.phone")}
-                                    />
-                                </div>
-
-                                <div className="space-y-2">
-                                    <label className="text-[11px] font-bold text-[#1A3A52]/50 uppercase tracking-widest flex items-center gap-2">
-                                        <Mail className="w-4 h-4" />
-                                        {t("StoreProfile.email")}
-                                    </label>
-                                    <Input
-                                        className="h-11 border-amber-200/40 bg-white/60 focus:border-[#1A3A52] font-[Inter]"
-                                        value={getValue('email', true)}
-                                        onChange={(e) => handleChange('email', e.target.value, true)}
-                                        placeholder={t("StoreProfile.placeholders.email")}
-                                    />
-                                </div>
+                                <ALInput
+                                    title={t("StoreProfile.phone")}
+                                    iconStart={<Phone className="w-4 h-4 text-[#1A3A52]/70" />}
+                                    placeholder={t("StoreProfile.placeholders.phone")}
+                                    wrapperClassName="bg-white/60"
+                                    error={errors.phone?.message}
+                                    {...register('phone')}
+                                />
+                                <ALInput
+                                    title={t("StoreProfile.email")}
+                                    iconStart={<Mail className="w-4 h-4 text-[#1A3A52]/70" />}
+                                    placeholder={t("StoreProfile.placeholders.email")}
+                                    wrapperClassName="bg-white/60"
+                                    error={errors.email?.message}
+                                    {...register('email')}
+                                />
                             </div>
                         </div>
-                    </div>
+                    </ALCard>
                 </div>
             </div>
 
             {/* Bottom Save Button (Mobile) */}
             <div className="pb-6 lg:hidden">
                 <Button
+                    type="submit"
                     className="w-full bg-[#1A3A52] hover:bg-[#1A3A52]/90 text-white shadow-lg h-12 font-[Inter] gap-2"
-                    onClick={handleSave}
-                    disabled={isSaving}
+                    isLoading={updateMutation.isPending}
                 >
                     <Save className="w-4 h-4" />
                     {t("Common.saveChanges") || "Save All Changes"}
@@ -516,6 +442,6 @@ export const StoreProfileForm = () => {
                     type={previewData.type}
                 />
             )}
-        </div>
+        </form>
     );
 };

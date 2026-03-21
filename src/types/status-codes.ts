@@ -52,6 +52,7 @@ export enum OrderItemStatusCode {
     READY = "READY",
     SERVED = "SERVED",
     REJECTED = "REJECTED",
+    CANCELLED = "CANCELLED",
 }
 
 export enum DishStatusCode {

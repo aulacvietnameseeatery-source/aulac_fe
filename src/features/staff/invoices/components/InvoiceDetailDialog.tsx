@@ -206,12 +206,12 @@ export function InvoiceDetailDialog({ open, onClose, orderId }: InvoiceDetailDia
                                         </div>
                                     )}
                                 </div>
-                                <div className="flex justify-between items-end pt-6">
+                                <div className="flex justify-between items-end pt-6 bg-[#1A3A52]/5 p-6 rounded-2xl border border-[#1A3A52]/10 shadow-inner">
                                     <div className="flex flex-col">
-                                        <span className="text-gray-400 text-[10px] font-bold uppercase tracking-widest mb-1.5">{t('total')}</span>
-                                        <span className="text-sm font-bold text-gray-400">{t('currency')}</span>
+                                        <span className="text-[#1A3A52]/60 text-[10px] font-bold uppercase tracking-widest mb-1.5">{t('total')}</span>
+                                        <span className="text-sm font-bold text-[#1A3A52]/40">{t('currency')}</span>
                                     </div>
-                                    <h6 className="text-[40px] leading-none font-black text-[#1A3A52] tracking-tight">${invoice.totalAmount.toFixed(2)}</h6>
+                                    <h6 className="text-[48px] leading-none font-black text-[#1A3A52] tracking-tight drop-shadow-sm">${invoice.totalAmount.toFixed(2)}</h6>
                                 </div>
                             </div>
 

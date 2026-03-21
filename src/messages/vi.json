@@ -60,6 +60,9 @@
       "dish_1_desc": "Trình bày nghệ thuật với lá vàng ăn được và nước sốt giấm Việt Nam lâu năm.",
       "dish_1_main": "Sen Hoàng Gia",
       "dish_1_sub": "Sự Tươi Mới Được Điêu Khắc",
+      "cardCategory": "Thể loại",
+      "cardTitle": "Kiệt tác ẩm thực",
+      "dishMainTitle": "Món ăn đặc trưng",
       "dish_2_category": "Nấu Chậm",
       "dish_2_title": "Cá Kho Tộ",
       "dish_2_desc": "Cá hồng om trong 6 giờ trong nồi gốm truyền thống với tiêu đen và đường thốt nốt.",
@@ -201,7 +204,12 @@
     "description_2": "An Lạc được dẫn dắt bởi cân bằng, ký ức và tĩnh lặng. Tên gọi mang ý nghĩa hạnh phúc bình yên, lấy cảm hứng từ hành trình của người sáng lập — một người mẹ của ba đứa con — tạo nên một không gian phản chiếu sự chăm sóc, ổn định và triết lý An cư Lạc nghiệp.",
     "description_3": "Tại An Lạc, chúng tôi không tìm cách thay đổi ẩm thực Việt, mà tôn vinh nó. Kiên nhẫn, hài hòa và tinh tế tạo nên từng món ăn: ninh nhừ từ từ một nồi nước dùng, cân bằng tinh tế của thảo mộc, chiều sâu kín đáo của lên men và sự khiêm nhường của hạt gạo.",
     "description_4": "Các kỹ thuật quen thuộc như kho, hấp và nướng được thể hiện với sự chính xác và tinh giản. Hương vị cân bằng, đo lường và tinh tế.",
-    "description_5": "An Lạc là lời mời — hãy chậm lại, thưởng thức cẩn trọng và kết nối lại với điều cốt lõi."
+    "description_5": "An Lạc là lời mời — hãy chậm lại, thưởng thức cẩn trọng và kết nối lại với điều cốt lõi.",
+    "about_subtitle": "An Lạc không phải là nơi phô trương. Đó là nơi của sự bình yên.",
+    "about_paragraph_1": "An Lạc được dẫn dắt bởi cân bằng, ký ức và tĩnh lặng. Tên gọi mang ý nghĩa hạnh phúc bình yên, lấy cảm hứng từ hành trình của người sáng lập — một người mẹ của ba đứa con — tạo nên một không gian phản chiếu sự chăm sóc, ổn định và triết lý An cư Lạc nghiệp.",
+    "about_paragraph_2": "Tại An Lạc, chúng tôi không tìm cách thay đổi ẩm thực Việt, mà tôn vinh nó. Kiên nhẫn, hài hòa và tinh tế tạo nên từng món ăn: ninh nhừ từ từ một nồi nước dùng, cân bằng tinh tế của thảo mộc, chiều sâu kín đáo của lên men và sự khiêm nhường của hạt gạo.",
+    "about_paragraph_3": "Các kỹ thuật quen thuộc như kho, hấp và nướng được thể hiện với sự chính xác và tinh giản. Hương vị cân bằng, đo lường và tinh tế.",
+    "about_closing_quote": "An Lạc là lời mời — hãy chậm lại, thưởng thức cẩn trọng và kết nối lại với điều cốt lõi."
   },
   "Reservation": {
     "Header": {
@@ -411,7 +419,7 @@
     },
     "Location": {
       "label": "Điểm Lấy Hàng",
-      "address": "Quai du Mont-Blanc 13, Geneva"
+      "address": ""
     },
     "Actions": {
       "viewReceipt": "Xem biên lai",
@@ -452,15 +460,15 @@
   "Contact": {
     "Hero": {
       "title": "Kết Nối Với Chúng Tôi",
-      "description": "Trải nghiệm tinh túy của sang trọng Việt Nam trên bờ Hồ Geneva.\nChúng tôi ở đây để hỗ trợ các câu hỏi của bạn, đặt sự kiện riêng tư và yêu cầu đặc biệt."
+      "description": "Trải nghiệm tinh túy của sang trọng Việt Nam.\nChúng tôi ở đây để hỗ trợ các câu hỏi của bạn, đặt sự kiện riêng tư và yêu cầu đặc biệt."
     },
     "Info": {
       "addressLabel": "Địa Chỉ",
-      "address": "Quai du Mont-Blanc 13\n1201 Geneva, Switzerland",
+      "address": "",
       "phoneLabel": "Điện Thoại",
-      "phone": "+41 22 123 45 67",
+      "phone": "",
       "emailLabel": "Email",
-      "email": "geneva@aulac.ch",
+      "email": "",
       "hoursLabel": "Giờ Mở Cửa",
       "hours": "Thứ Hai - Chủ Nhật: 11:30 Sáng - 11:00 Tối"
     },
@@ -490,7 +498,7 @@
       }
     },
     "Footer": {
-      "copyright": "© 2024 An Lac Nhà Hàng Việt Nam - Geneva. Bản quyền đã được bảo hộ."
+      "copyright": "© {year} An Lac Nhà Hàng Việt Nam. Bản quyền đã được bảo hộ."
     }
   },
   "MenuListing": {
@@ -1630,7 +1638,8 @@
       "orderType": "Loại đơn hàng",
       "orderedMenus": "Món đã gọi",
       "subTotal": "Tạm tính",
-      "tax": "Thuế",
+      "tax": "Thuế GTGT 2.6% (TVA)",
+      "totalTax": "Tổng thuế GTGT",
       "serviceCharge": "Phí phục vụ",
       "tip": "Tiền tip",
       "paymentType": "Phương thức thanh toán",
@@ -2131,7 +2140,7 @@
     "cancelItem": "Hủy món",
     "cancelling": "Đang hủy...",
     "cancelError": "Không thể hủy món",
-    "cancelNotAllowed": "\u201c{dishName}\u201d đã được nhân viên xử lý và không thể hủy nữa.",
+    "cancelNotAllowed": "“{dishName}” đã được nhân viên xử lý và không thể hủy nữa.",
     "cancelPopup": {
       "title": "Hủy món này?",
       "message": "Bạn có chắc chắn muốn hủy \"{dishName}\" không? Hành động này không thể hoàn tác.",
@@ -2224,24 +2233,78 @@
       "General": "Chung"
     },
     "messages": {
-      "NEW_ORDER": { "title": "Đơn hàng mới #{orderId}", "body": "Bàn {tableName} đã đặt đơn mới" },
-      "ORDER_CANCELLED": { "title": "Đơn #{orderId} đã hủy", "body": "Đơn #{orderId} đã bị hủy" },
-      "ORDER_ITEM_READY": { "title": "Món trong đơn đã sẵn sàng", "body": "Một món trong đơn đã sẵn sàng để phục vụ" },
-      "ORDER_ITEM_REJECTED": { "title": "Món trong đơn bị từ chối", "body": "Một món trong đơn đã bị từ chối" },
-      "ALL_ITEMS_READY": { "title": "Đơn #{orderId} đã hoàn tất", "body": "Tất cả món cho bàn {tableName} đã sẵn sàng" },
-      "PAYMENT_COMPLETED": { "title": "Đã nhận thanh toán", "body": "Đơn #{orderId} — {amount} đã thanh toán" },
-      "RESERVATION_CREATED": { "title": "Đặt bàn mới", "body": "{guestName} — {guestCount} khách lúc {time}" },
-      "RESERVATION_STATUS_CHANGED": { "title": "Đặt bàn cập nhật", "body": "Đơn đặt bàn #{reservationId} — trạng thái đổi thành {status}" },
-      "RESERVATION_REMINDER": { "title": "Nhắc nhở đặt bàn", "body": "{guestName} — đến trong {minutes} phút" },
-      "TABLE_STATUS_CHANGED": { "title": "Bàn {tableName}", "body": "{oldStatus} → {status}" },
-      "LOW_STOCK_ALERT": { "title": "Tồn kho thấp: {ingredientName}", "body": "Hiện tại: {current}, Tối thiểu: {minimum}" },
-      "DISH_OUT_OF_STOCK": { "title": "{dishName} hết hàng", "body": "Món này không còn phục vụ" },
-      "SHIFT_ASSIGNED": { "title": "Phân ca", "body": "Bạn được phân vào {shiftName} ngày {date}" },
-      "ATTENDANCE_ALERT": { "title": "Cảnh báo chấm công", "body": "{staffName} — {reason}" },
-      "SYSTEM_ALERT": { "title": "Cảnh báo hệ thống", "body": "{message}" },
-      "ORDER_STATUS_CHANGED": { "title": "Đơn #{orderId} cập nhật", "body": "Đơn #{orderId} — trạng thái đổi thành {status}" },
-      "PAYMENT_REQUEST": { "title": "Yêu cầu thanh toán — {tableName}", "body": "Đơn #{orderId} — thanh toán {amount} được yêu cầu" },
-      "fallback": { "title": "Thông báo", "body": "Bạn có một thông báo mới." }
+      "NEW_ORDER": {
+        "title": "Đơn hàng mới #{orderId}",
+        "body": "Bàn {tableName} đã đặt đơn mới"
+      },
+      "ORDER_CANCELLED": {
+        "title": "Đơn #{orderId} đã hủy",
+        "body": "Đơn #{orderId} đã bị hủy"
+      },
+      "ORDER_ITEM_READY": {
+        "title": "Món trong đơn đã sẵn sàng",
+        "body": "Một món trong đơn đã sẵn sàng để phục vụ"
+      },
+      "ORDER_ITEM_REJECTED": {
+        "title": "Món trong đơn bị từ chối",
+        "body": "Một món trong đơn đã bị từ chối"
+      },
+      "ALL_ITEMS_READY": {
+        "title": "Đơn #{orderId} đã hoàn tất",
+        "body": "Tất cả món cho bàn {tableName} đã sẵn sàng"
+      },
+      "PAYMENT_COMPLETED": {
+        "title": "Đã nhận thanh toán",
+        "body": "Đơn #{orderId} — {amount} đã thanh toán"
+      },
+      "RESERVATION_CREATED": {
+        "title": "Đặt bàn mới",
+        "body": "{guestName} — {guestCount} khách lúc {time}"
+      },
+      "RESERVATION_STATUS_CHANGED": {
+        "title": "Đặt bàn cập nhật",
+        "body": "Đơn đặt bàn #{reservationId} — trạng thái đổi thành {status}"
+      },
+      "RESERVATION_REMINDER": {
+        "title": "Nhắc nhở đặt bàn",
+        "body": "{guestName} — đến trong {minutes} phút"
+      },
+      "TABLE_STATUS_CHANGED": {
+        "title": "Bàn {tableName}",
+        "body": "{oldStatus} → {status}"
+      },
+      "LOW_STOCK_ALERT": {
+        "title": "Tồn kho thấp: {ingredientName}",
+        "body": "Hiện tại: {current}, Tối thiểu: {minimum}"
+      },
+      "DISH_OUT_OF_STOCK": {
+        "title": "{dishName} hết hàng",
+        "body": "Món này không còn phục vụ"
+      },
+      "SHIFT_ASSIGNED": {
+        "title": "Phân ca",
+        "body": "Bạn được phân vào {shiftName} ngày {date}"
+      },
+      "ATTENDANCE_ALERT": {
+        "title": "Cảnh báo chấm công",
+        "body": "{staffName} — {reason}"
+      },
+      "SYSTEM_ALERT": {
+        "title": "Cảnh báo hệ thống",
+        "body": "{message}"
+      },
+      "ORDER_STATUS_CHANGED": {
+        "title": "Đơn #{orderId} cập nhật",
+        "body": "Đơn #{orderId} — trạng thái đổi thành {status}"
+      },
+      "PAYMENT_REQUEST": {
+        "title": "Yêu cầu thanh toán — {tableName}",
+        "body": "Đơn #{orderId} — thanh toán {amount} được yêu cầu"
+      },
+      "fallback": {
+        "title": "Thông báo",
+        "body": "Bạn có một thông báo mới."
+      }
     },
     "metadata": {
       "defaults": {
@@ -2460,7 +2523,7 @@
     },
     "Introduction": {
       "title": "Trang Giới thiệu",
-      "description": "Quản lý nội dung và truyền thông cho trang chủ.",
+      "description": "Mô tả chi tiết",
       "sections": {
         "hero": {
           "title": "Phần Hero",
@@ -2510,7 +2573,20 @@
         "chefVideo": "Video đầu bếp",
         "ambianceVideo": "Video không gian",
         "dishImage": "Ảnh món ăn {index}"
-      }
+      },
+      "heroTitle": "Tiêu đề Hero",
+      "heroQuote": "Câu trích dẫn Hero",
+      "heroImage": "Ảnh Nền Hero (Banner)",
+      "heroSection": "Khu vực Hero (Đầu trang)",
+      "virtualTour": "Khu vực Virtual Tour",
+      "tourVideo": "Video Virtual Tour",
+      "collection": "Khu vực Bộ Sưu Tập",
+      "featuredDish": "Món ăn nổi bật",
+      "selectFromSystem": "Chọn từ Hệ Thống",
+      "dishImage": "Ảnh món ăn",
+      "mainTitle": "Tiêu đề chính (Khi di chuột)",
+      "cardTitle": "Tiêu đề Thẻ",
+      "cardCategory": "Danh mục Món"
     },
     "DishModal": {
       "noCategory": "Chưa có danh mục",
@@ -2577,7 +2653,7 @@
       "updateError": "Lưu hồ sơ cửa hàng thất bại"
     },
     "AboutUs": {
-      "title": "Về Chúng tôi",
+      "title": "Tiêu đề",
       "description": "Quản lý câu chuyện thương hiệu và các giá trị cốt lõi.",
       "sections": {
         "founders": {
@@ -2652,7 +2728,28 @@
         "syncDesc": "Lưu dữ liệu câu chuyện của bạn",
         "syncButton": "Đồng bộ Câu chuyện",
         "discard": "Hủy thay đổi"
-      }
+      },
+      "sectionLabel": "Tên Mục",
+      "subtitle": "Mô tả phụ",
+      "paragraph": "Đoạn văn",
+      "quote": "Câu trích dẫn",
+      "quoteAuthor": "Tác giả trích dẫn",
+      "valueTitle": "Tiêu đề Giá trị",
+      "valueDescription": "Mô tả Giá trị",
+      "foundersImage": "Ảnh Nhà Sáng Lập",
+      "legacyImage": "Ảnh Di Sản",
+      "ourFounders": "Nhà Sáng Lập",
+      "ourFoundersDesc": "Quản lý nội dung phần nhà sáng lập.",
+      "ourJourney": "Hành Trình Gây Dựng",
+      "ourPhilosophy": "Triết Lý Kinh Doanh",
+      "legacy": "Di Sản & Tương Lai",
+      "contentEditorTitle": "Trình Chỉnh Sửa Nội Dung",
+      "contentEditorDesc": "Quản lý nội dung tối giản, tập trung vào kiểu chữ của trang About Us.",
+      "subtitleLabel": "Tiêu đề phụ (Phần Hero/Banner)",
+      "paragraphLabel": "Đoạn văn",
+      "closingQuoteLabel": "Câu Trích Dẫn Cuối",
+      "aboutConfigTitle": "Cấu hình About Us",
+      "aboutConfigDesc": "Quản lý nội dung tối giản, tập trung vào kiểu chữ của trang About Us."
     },
     "General": {
       "title": "Tham số hệ thống",
