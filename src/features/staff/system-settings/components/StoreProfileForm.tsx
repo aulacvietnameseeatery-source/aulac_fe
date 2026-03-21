@@ -19,7 +19,7 @@ const TRANSLATABLE_KEYS = [
 ];
 
 const GLOBAL_KEYS = [
-    'logoUrl', 'postalCode', 'email', 'phone', 'facebookLink', 'instagramLink', 'tiktokLink', 'promoVideoUrl'
+    'logoUrl', 'postalCode', 'email', 'phone', 'facebookLink', 'instagramLink', 'tiktokLink'
 ];
 
 const getInitialData = () => {
@@ -112,15 +112,14 @@ export const StoreProfileForm = () => {
         return formData[key] || "";
     };
 
-    const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>, fieldKey: 'logoUrl' | 'promoVideoUrl') => {
+    const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>, fieldKey: 'logoUrl') => {
         const file = e.target.files?.[0];
         if (!file) return;
 
-        const isVideo = fieldKey === 'promoVideoUrl';
-        const maxSize = isVideo ? 100 * 1024 * 1024 : 5 * 1024 * 1024;
+        const maxSize = 5 * 1024 * 1024;
 
         if (file.size > maxSize) {
-            toast.error(isVideo ? t('Common.maxSizeVideo') : t('StoreProfile.fileSizeError'));
+            toast.error(t('StoreProfile.fileSizeError'));
             return;
         }
 
@@ -161,7 +160,7 @@ export const StoreProfileForm = () => {
         }
     };
 
-    const getFullUrl = (field: 'logoUrl' | 'promoVideoUrl') => {
+    const getFullUrl = (field: 'logoUrl') => {
         const url = getValue(field, true);
         const previewUrl = localPreviews[field];
         if (previewUrl) return previewUrl;
@@ -177,7 +176,7 @@ export const StoreProfileForm = () => {
         );
     }
 
-    const MediaUploadUI = ({ fieldKey, title, isVideo = false }: { fieldKey: 'logoUrl' | 'promoVideoUrl', title: string, isVideo?: boolean }) => {
+    const MediaUploadUI = ({ fieldKey, title, isVideo = false }: { fieldKey: 'logoUrl', title: string, isVideo?: boolean }) => {
         const inputRef = useRef<HTMLInputElement>(null);
         const url = getFullUrl(fieldKey);
 
@@ -303,7 +302,7 @@ export const StoreProfileForm = () => {
                 </div>
             </div>
 
-            <div className="flex flex-col gap-12 w-full pb-24 max-w-5xl mx-auto">
+            <div className="flex flex-col gap-12 w-full pb-24">
                 {/* --- IDENTITY SECTION --- */}
                 <div className="p-8 border border-slate-200 rounded-3xl bg-white/50 shadow-sm animate-in fade-in slide-in-from-bottom-4 duration-700">
                     <div className="space-y-8">
@@ -314,44 +313,10 @@ export const StoreProfileForm = () => {
                             <p className="text-sm text-slate-500 font-medium">{t("StoreProfile.sections.identity.description")}</p>
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                            <div className="space-y-2">
-                                <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
-                                    {t("StoreProfile.storeName")} ({activeLocale})
-                                </label>
-                                <Input
-                                    value={getValue('name')}
-                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange('name', e.target.value)}
-                                    placeholder="e.g. Au Lac Restaurant"
-                                    className="h-11 border-slate-200 focus:border-blue-400 focus:ring-blue-100 transition-all text-base bg-white/50"
-                                />
-                            </div>
-                            <div className="space-y-2">
-                                <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">{t("StoreProfile.openingHours")} ({activeLocale})</label>
-                                <Input
-                                    value={getValue('openingHours')}
-                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange('openingHours', e.target.value)}
-                                    placeholder="Mon-Sun: 10:00 - 22:00"
-                                    className="h-11 border-slate-200 focus:border-blue-400 bg-white/50"
-                                />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                {/* --- VISUAL BRANDING SECTION --- */}
-                <div className="p-8 border border-slate-200 rounded-3xl bg-white/50 shadow-sm animate-in fade-in slide-in-from-bottom-4 duration-700 delay-100">
-                    <div className="space-y-8">
-                        <div className="pb-4 border-b border-slate-100">
-                            <div className="mb-1">
-                                <h3 className="text-xl font-bold text-slate-800">{t("StoreProfile.visualBranding")}</h3>
-                            </div>
-                            <p className="text-sm text-slate-500 font-medium">{t("StoreProfile.visualBrandingDesc")}</p>
-                        </div>
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-                            <div className="space-y-4">
-                                <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
+                        <div className="flex flex-col md:flex-row gap-10 items-start">
+                            {/* Logo on the left */}
+                            <div className="flex-shrink-0">
+                                <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-3 block">
                                     {t("StoreProfile.officialLogo")}
                                 </label>
                                 <MediaUploadUI
@@ -359,19 +324,35 @@ export const StoreProfileForm = () => {
                                     title={t("StoreProfile.officialLogo")}
                                 />
                             </div>
-                            <div className="space-y-4">
-                                <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
-                                    {t("StoreProfile.storeVideo")}
-                                </label>
-                                <MediaUploadUI
-                                    fieldKey="promoVideoUrl"
-                                    title={t("StoreProfile.storeVideo")}
-                                    isVideo
-                                />
+
+                            {/* Info on the right */}
+                            <div className="flex-grow space-y-6 w-full">
+                                <div className="space-y-2">
+                                    <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
+                                        {t("StoreProfile.storeName")} ({activeLocale})
+                                    </label>
+                                    <Input
+                                        value={getValue('name')}
+                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange('name', e.target.value)}
+                                        placeholder="e.g. Au Lac Restaurant"
+                                        className="h-11 border-slate-200 focus:border-blue-400 focus:ring-blue-100 transition-all text-base bg-white/50"
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">{t("StoreProfile.openingHours")} ({activeLocale})</label>
+                                    <Input
+                                        value={getValue('openingHours')}
+                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange('openingHours', e.target.value)}
+                                        placeholder="Mon-Sun: 10:00 - 22:00"
+                                        className="h-11 border-slate-200 focus:border-blue-400 bg-white/50"
+                                    />
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
+
+
 
                 {/* --- CONTACT & LOCATION SECTION --- */}
                 <div className="p-8 border border-slate-200 rounded-3xl bg-white/50 shadow-sm animate-in fade-in slide-in-from-bottom-4 duration-700 delay-200">

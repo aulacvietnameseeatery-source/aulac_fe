@@ -18,7 +18,7 @@ const SystemSettingsContent = () => {
 
     return (
         <div className="w-full h-full flex flex-col overflow-hidden">
-            <div className="flex justify-between items-center w-full max-w-screen-2xl mx-auto mb-8">
+            <div className="flex justify-between items-center w-full mb-6">
                 <div>
                     <h1 className="text-3xl font-bold text-gray-900 tracking-tight">
                         {t('storeSettings')}
@@ -32,7 +32,7 @@ const SystemSettingsContent = () => {
             </div>
 
             <main className="flex-1 overflow-y-auto custom-scrollbar">
-                <div className="max-w-screen-2xl mx-auto space-y-8 pb-20">
+                <div className="w-full space-y-8 pb-20">
                     {activeTab === 'profile' && <StoreProfileForm />}
                     {activeTab === 'introduction' && <IntroductionSettingsForm />}
                     {activeTab === 'about' && <AboutUsSettingsForm />}

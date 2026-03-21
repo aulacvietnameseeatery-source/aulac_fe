@@ -73,8 +73,8 @@
     },
     "VirtualTour": {
       "label": "Experience",
-      "title": "The Immersive View",
-      "desc": "Explore our space from every angle before you arrive.",
+      "title": "Immersive Vision",
+      "desc": "This is a description of the test.",
       "tour_label": "Virtual Tour",
       "tour_title": "A 360° Walkthrough"
     }

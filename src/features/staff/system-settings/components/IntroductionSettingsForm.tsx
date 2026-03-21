@@ -20,8 +20,6 @@ const LOCALES = ["en", "vi", "fr"];
 const TEXT_KEYS = [
     "intro.hero.title", "intro.hero.quote",
     "intro.virtualTour.label", "intro.virtualTour.title", "intro.virtualTour.desc",
-    "intro.chef.label", "intro.chef.title", "intro.chef.cta",
-    "intro.chef.1.name", "intro.chef.1.quote", "intro.chef.2.name", "intro.chef.2.quote",
     "intro.collection.label", "intro.collection.title",
     ...[1, 2, 3].flatMap(i => [
         `intro.collection.dish${i}.mainTitle`,
@@ -33,7 +31,6 @@ const TEXT_KEYS = [
 const MEDIA_KEYS = [
     "intro.hero.image",
     "intro.virtualTour.videoUrl",
-    "intro.chef.videoUrl",
     "intro.collection.dish1.image",
     "intro.collection.dish2.image",
     "intro.collection.dish3.image",
@@ -364,76 +361,6 @@ export const IntroductionSettingsForm = () => {
                                             <div className="md:col-span-4 border-l border-slate-100 md:pl-8 pt-4 md:pt-0">
                                                 <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-3 block">{t('Introduction.sidebar.heroBackground')}</label>
                                                 <MediaUploadUI fieldKey="intro.hero.image" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {/* --- CHEF SECTION --- */}
-                                <div className="p-10 border border-slate-200 rounded-3xl bg-white/50 shadow-sm animate-in fade-in slide-in-from-bottom-4 duration-700 delay-100">
-                                    <div className="space-y-8">
-                                        <div className="pb-4 border-b border-slate-100">
-                                            <div className="mb-1">
-                                                <h3 className="text-xl font-bold text-slate-800">{t('Introduction.sections.chef.title')}</h3>
-                                            </div>
-                                            <p className="text-sm text-slate-500 font-medium">{t('Introduction.sections.chef.description')}</p>
-                                        </div>
-
-                                        <div className="space-y-10">
-                                            <div className="grid grid-cols-1 md:grid-cols-12 gap-12">
-                                                <div className="md:col-span-8 space-y-6">
-                                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                                                        <div className="space-y-2">
-                                                            <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">{t('Introduction.sections.chef.sectionLabel')}</label>
-                                                            <Input className="h-11 border-slate-200 bg-white/50" value={getValue("intro.chef.label")} onChange={(e) => handleChange("intro.chef.label", e.target.value)} />
-                                                        </div>
-                                                        <div className="space-y-2">
-                                                            <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">{t('Introduction.sections.chef.ctaAction')}</label>
-                                                            <Input className="h-11 border-slate-200 bg-white/50" value={getValue("intro.chef.cta")} onChange={(e) => handleChange("intro.chef.cta", e.target.value)} />
-                                                        </div>
-                                                    </div>
-                                                    <div className="space-y-2">
-                                                        <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">{t('Introduction.sections.chef.discoveryHeader')}</label>
-                                                        <Input className="h-11 border-slate-200 bg-white/50" value={getValue("intro.chef.title")} onChange={(e) => handleChange("intro.chef.title", e.target.value)} />
-                                                    </div>
-                                                </div>
-                                                <div className="md:col-span-4 border-l border-slate-100 md:pl-8 pt-4 md:pt-0">
-                                                    <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-3 block">{t('Introduction.sidebar.chefVideo')}</label>
-                                                    <MediaUploadUI fieldKey="intro.chef.videoUrl" isVideo />
-                                                </div>
-                                            </div>
-
-                                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 pt-8 border-t border-slate-50">
-                                                <div className="space-y-6 p-6 rounded-2xl bg-slate-50/40 border border-slate-100/50">
-                                                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-[10px] font-bold uppercase tracking-widest text-blue-600">
-                                                        {t('Introduction.sections.chef.leadChef')}
-                                                    </div>
-                                                    <div className="space-y-4">
-                                                        <div className="space-y-2">
-                                                            <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">{t('Introduction.sections.chef.name')}</label>
-                                                            <Input className="h-10 text-sm border-slate-200" value={getValue("intro.chef.1.name")} onChange={(e) => handleChange("intro.chef.1.name", e.target.value)} />
-                                                        </div>
-                                                        <div className="space-y-2">
-                                                            <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">{t('Introduction.sections.chef.quote')}</label>
-                                                            <Input className="h-10 text-sm border-slate-200" value={getValue("intro.chef.1.quote")} onChange={(e) => handleChange("intro.chef.1.quote", e.target.value)} />
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div className="space-y-6 p-6 rounded-2xl bg-slate-50/40 border border-slate-100/50">
-                                                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-[10px] font-bold uppercase tracking-widest text-blue-600">
-                                                        {t('Introduction.sections.chef.executiveChef')}
-                                                    </div>
-                                                    <div className="space-y-4">
-                                                        <div className="space-y-2">
-                                                            <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">{t('Introduction.sections.chef.name')}</label>
-                                                            <Input className="h-10 text-sm border-slate-200" value={getValue("intro.chef.2.name")} onChange={(e) => handleChange("intro.chef.2.name", e.target.value)} />
-                                                        </div>
-                                                        <div className="space-y-2">
-                                                            <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">{t('Introduction.sections.chef.quote')}</label>
-                                                            <Input className="h-10 text-sm border-slate-200" value={getValue("intro.chef.2.quote")} onChange={(e) => handleChange("intro.chef.2.quote", e.target.value)} />
-                                                        </div>
-                                                    </div>
-                                                </div>
                                             </div>
                                         </div>
                                     </div>

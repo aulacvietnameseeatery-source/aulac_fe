@@ -11,7 +11,7 @@ const SystemSettingsContent = () => {
 
     return (
         <div className="flex flex-col h-full bg-gray-50 overflow-auto">
-            <header className="w-full max-w-screen-2xl mx-auto space-y-6 mt-6">
+            <header className="w-full space-y-6">
                 <div className="flex flex-col gap-2">
                     <h1 className="text-3xl font-bold text-gray-900 tracking-tight">
                         {st("title")}
@@ -20,7 +20,7 @@ const SystemSettingsContent = () => {
                 </div>
             </header>
 
-            <main className="w-full max-w-screen-2xl mx-auto pb-16 space-y-6 mt-6">
+            <main className="w-full pb-16 space-y-6 mt-6">
                 <GeneralSettings />
             </main>
         </div>

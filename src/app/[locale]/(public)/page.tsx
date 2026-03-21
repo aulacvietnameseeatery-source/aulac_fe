@@ -1,7 +1,6 @@
 import {
     IntroHero,
     IntroCollection,
-    IntroChef,
     IntroVirtualTour
 } from "@/features/customer/introduction";
 
@@ -20,10 +19,6 @@ export default function IntroductionPage() {
                 <div className="mx-auto h-px w-[min(92%,1280px)] bg-gradient-to-r from-transparent via-[#C9A961]/70 to-transparent" />
 
                 <IntroCollection />
-
-                <div className="mx-auto h-px w-[min(92%,1280px)] bg-gradient-to-r from-transparent via-[#193752]/30 to-transparent" />
-
-                <IntroChef />
 
                 <div className="mx-auto h-px w-[min(92%,1280px)] bg-gradient-to-r from-transparent via-[#C9A961]/70 to-transparent" />
 
