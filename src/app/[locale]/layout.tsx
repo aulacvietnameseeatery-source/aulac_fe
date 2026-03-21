@@ -9,6 +9,7 @@ import { AuthProvider } from "@/components/providers/auth-provider";
 import { inter, playfair, lexend } from "@/lib/fonts";
 
 import "@/styles/globals.css";
+import { NotificationToaster } from "@/features/staff/notifications";
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -62,6 +63,7 @@ export default async function LocaleLayout(
             <NextIntlClientProvider locale={locale} messages={messages}>
               {children}
               <Toaster />
+            <NotificationToaster />
             </NextIntlClientProvider>
           </AuthProvider>
         </QueryProvider>

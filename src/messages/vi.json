@@ -1060,6 +1060,22 @@
         "next": "Trang sau",
         "last": "Trang cuối"
       }
+    },
+    "apiErrors": {
+      "sessionExpired": "Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.",
+      "tokenRefreshFailed": "Không thể làm mới phiên đăng nhập. Vui lòng đăng nhập lại.",
+      "noAccessToken": "Bạn cần đăng nhập trước khi tiếp tục.",
+      "unauthorized": "Bạn chưa được xác thực. Vui lòng đăng nhập và thử lại.",
+      "forbidden": "Bạn không có quyền thực hiện thao tác này.",
+      "notFound": "Không tìm thấy dữ liệu yêu cầu.",
+      "validation": "Một số giá trị đầu vào không hợp lệ. Vui lòng kiểm tra lại.",
+      "conflict": "Thao tác này xung đột với dữ liệu hiện có.",
+      "unprocessable": "Không thể hoàn tất thao tác với dữ liệu hiện tại.",
+      "timeout": "Yêu cầu xử lý quá lâu. Vui lòng thử lại.",
+      "network": "Không thể kết nối đến máy chủ. Vui lòng kiểm tra mạng.",
+      "http": "Yêu cầu thất bại. Vui lòng thử lại.",
+      "httpStatus": "Yêu cầu thất bại với mã trạng thái {status}.",
+      "unexpected": "Đã xảy ra lỗi không mong muốn. Vui lòng thử lại sau."
     }
   },
   "StaffReservation": {
@@ -2137,6 +2153,25 @@
   "Notifications": {
     "title": "Thông báo",
     "markAllRead": "Đánh dấu tất cả là đã đọc",
+    "markAllReadShort": "Đọc tất cả",
+    "loadMore": "Tải thêm",
+    "loading": "Đang tải...",
+    "batchSummary": "thông báo khác",
+    "acknowledge": "Xác nhận",
+    "acknowledged": "Đã xác nhận",
+    "view": "Xem",
+    "connected": "Đã kết nối",
+    "disconnected": "Mất kết nối",
+    "preferences": {
+      "title": "Cài đặt thông báo",
+      "save": "Lưu",
+      "saveSuccess": "Đã lưu cài đặt",
+      "saveError": "Lưu cài đặt thất bại",
+      "soundOn": "Bật âm thanh",
+      "soundOff": "Tắt âm thanh",
+      "enabled": "Đã bật",
+      "disabled": "Đã tắt"
+    },
     "tabs": {
       "all": "Tất cả",
       "unread": "Chưa đọc",
@@ -2145,8 +2180,97 @@
       "orders": "Đơn hàng"
     },
     "empty": "Không có thông báo nào",
+    "emptyUnread": "Không có thông báo chưa đọc",
     "time": {
+      "justNow": "vừa xong",
+      "minutesAgo": "{count} phút trước",
+      "hoursAgo": "{count} giờ trước",
+      "daysAgo": "{count} ngày trước",
       "ago": "{time} trước"
+    },
+    "types": {
+      "NEW_ORDER": "Đơn hàng mới",
+      "ORDER_CANCELLED": "Đơn hàng bị hủy",
+      "ORDER_ITEM_READY": "Món ăn đã sẵn sàng",
+      "ORDER_ITEM_REJECTED": "Món ăn bị từ chối",
+      "ALL_ITEMS_READY": "Tất cả món đã sẵn sàng",
+      "PAYMENT_COMPLETED": "Thanh toán hoàn tất",
+      "RESERVATION_CREATED": "Đặt bàn mới",
+      "RESERVATION_STATUS_CHANGED": "Đặt bàn cập nhật",
+      "RESERVATION_REMINDER": "Nhắc nhở đặt bàn",
+      "TABLE_STATUS_CHANGED": "Trạng thái bàn thay đổi",
+      "LOW_STOCK_ALERT": "Cảnh báo tồn kho thấp",
+      "DISH_OUT_OF_STOCK": "Món ăn hết hàng",
+      "SHIFT_ASSIGNED": "Phân ca làm việc",
+      "ATTENDANCE_ALERT": "Cảnh báo chấm công",
+      "SYSTEM_ALERT": "Cảnh báo hệ thống",
+      "ORDER_STATUS_CHANGED": "Đơn hàng cập nhật",
+      "PAYMENT_REQUEST": "Yêu cầu thanh toán",
+      "fallback": "Thông báo"
+    },
+    "priority": {
+      "Low": "Thấp",
+      "Normal": "Bình thường",
+      "High": "Cao",
+      "Critical": "Nghiêm trọng"
+    },
+    "categories": {
+      "Orders": "Đơn hàng",
+      "Reservations": "Đặt bàn",
+      "Tables": "Bàn",
+      "Inventory": "Kho",
+      "Shifts": "Ca làm",
+      "System": "Hệ thống",
+      "General": "Chung"
+    },
+    "messages": {
+      "NEW_ORDER": { "title": "Đơn hàng mới #{orderId}", "body": "Bàn {tableName} đã đặt đơn mới" },
+      "ORDER_CANCELLED": { "title": "Đơn #{orderId} đã hủy", "body": "Đơn #{orderId} đã bị hủy" },
+      "ORDER_ITEM_READY": { "title": "Món trong đơn đã sẵn sàng", "body": "Một món trong đơn đã sẵn sàng để phục vụ" },
+      "ORDER_ITEM_REJECTED": { "title": "Món trong đơn bị từ chối", "body": "Một món trong đơn đã bị từ chối" },
+      "ALL_ITEMS_READY": { "title": "Đơn #{orderId} đã hoàn tất", "body": "Tất cả món cho bàn {tableName} đã sẵn sàng" },
+      "PAYMENT_COMPLETED": { "title": "Đã nhận thanh toán", "body": "Đơn #{orderId} — {amount} đã thanh toán" },
+      "RESERVATION_CREATED": { "title": "Đặt bàn mới", "body": "{guestName} — {guestCount} khách lúc {time}" },
+      "RESERVATION_STATUS_CHANGED": { "title": "Đặt bàn cập nhật", "body": "Đơn đặt bàn #{reservationId} — trạng thái đổi thành {status}" },
+      "RESERVATION_REMINDER": { "title": "Nhắc nhở đặt bàn", "body": "{guestName} — đến trong {minutes} phút" },
+      "TABLE_STATUS_CHANGED": { "title": "Bàn {tableName}", "body": "{oldStatus} → {status}" },
+      "LOW_STOCK_ALERT": { "title": "Tồn kho thấp: {ingredientName}", "body": "Hiện tại: {current}, Tối thiểu: {minimum}" },
+      "DISH_OUT_OF_STOCK": { "title": "{dishName} hết hàng", "body": "Món này không còn phục vụ" },
+      "SHIFT_ASSIGNED": { "title": "Phân ca", "body": "Bạn được phân vào {shiftName} ngày {date}" },
+      "ATTENDANCE_ALERT": { "title": "Cảnh báo chấm công", "body": "{staffName} — {reason}" },
+      "SYSTEM_ALERT": { "title": "Cảnh báo hệ thống", "body": "{message}" },
+      "ORDER_STATUS_CHANGED": { "title": "Đơn #{orderId} cập nhật", "body": "Đơn #{orderId} — trạng thái đổi thành {status}" },
+      "PAYMENT_REQUEST": { "title": "Yêu cầu thanh toán — {tableName}", "body": "Đơn #{orderId} — thanh toán {amount} được yêu cầu" },
+      "fallback": { "title": "Thông báo", "body": "Bạn có một thông báo mới." }
+    },
+    "metadata": {
+      "defaults": {
+        "table": "Bàn",
+        "staff": "Nhân viên",
+        "guest": "Khách"
+      },
+      "statuses": {
+        "LOCKED": "Đã khóa",
+        "AVAILABLE": "Trống",
+        "RESERVED": "Đã đặt",
+        "OCCUPIED": "Đang sử dụng",
+        "CONFIRMED": "Đã xác nhận",
+        "CHECKED_IN": "Đã nhận bàn",
+        "CANCELLED": "Đã hủy",
+        "NO_SHOW": "Không đến",
+        "PENDING": "Chờ xử lý",
+        "COMPLETED": "Hoàn tất",
+        "IN_PROGRESS": "Đang xử lý",
+        "UNKNOWN": "Không xác định",
+        "CREATED": "Đã tạo",
+        "READY": "Sẵn sàng",
+        "SERVED": "Đã phục vụ",
+        "REJECTED": "Bị từ chối"
+      },
+      "attendanceReasons": {
+        "LATE_CHECKIN": "đã chấm công muộn {minutes} phút",
+        "EARLY_LEAVE": "đã về sớm {minutes} phút"
+      }
     }
   },
   "Kitchen": {
@@ -2697,6 +2821,32 @@
       }
     },
     "Detail": {
+      "title": "Chi tiết khách hàng",
+      "saveButton": "Đóng",
+      "cancel": "Đóng",
+      "fields": {
+        "phone": "Số điện thoại",
+        "fullName": "Họ và tên",
+        "email": "Email",
+        "loyaltyPoints": "Điểm tích lũy",
+        "isMember": "Trạng thái thành viên",
+        "createdAt": "Ngày tạo"
+      },
+      "placeholders": {
+        "phone": "",
+        "fullName": "",
+        "email": "",
+        "loyaltyPoints": ""
+      },
+      "validation": {
+        "phoneRequired": "",
+        "phoneMaxLength": "",
+        "phoneInvalid": "",
+        "nameMaxLength": "",
+        "emailMaxLength": "",
+        "emailInvalid": "",
+        "pointsNegative": ""
+      },
       "backToCustomers": "Quay lại danh sách",
       "customerNotFound": "Không tìm thấy khách hàng.",
       "guestCustomer": "Khách vãng lai",

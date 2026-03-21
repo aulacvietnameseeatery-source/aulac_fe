@@ -41,3 +41,4 @@ yarn-error.log*
 next-env.d.ts
 /.agent/
 /html/
+src/components/ui/table/aulac-workspace.code-workspace

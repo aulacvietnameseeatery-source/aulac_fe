@@ -1054,6 +1054,22 @@
         "next": "Page suivante",
         "last": "Dernière page"
       }
+    },
+    "apiErrors": {
+      "sessionExpired": "Votre session a expiré. Veuillez vous reconnecter.",
+      "tokenRefreshFailed": "Impossible d'actualiser votre session. Veuillez vous reconnecter.",
+      "noAccessToken": "Vous devez vous connecter avant de continuer.",
+      "unauthorized": "Vous n'êtes pas authentifié. Veuillez vous connecter puis réessayer.",
+      "forbidden": "Vous n'avez pas l'autorisation d'effectuer cette action.",
+      "notFound": "La ressource demandée est introuvable.",
+      "validation": "Certaines valeurs saisies sont invalides. Veuillez vérifier puis réessayer.",
+      "conflict": "Cette action est en conflit avec les données existantes.",
+      "unprocessable": "Cette action ne peut pas être exécutée avec les données actuelles.",
+      "timeout": "Le traitement de la requête a pris trop de temps. Veuillez réessayer.",
+      "network": "Impossible de joindre le serveur. Veuillez vérifier votre connexion.",
+      "http": "La requête a échoué. Veuillez réessayer.",
+      "httpStatus": "La requête a échoué avec le statut {status}.",
+      "unexpected": "Une erreur inattendue s'est produite. Veuillez réessayer plus tard."
     }
   },
   "StaffReservation": {
@@ -2131,6 +2147,25 @@
   "Notifications": {
     "title": "Notifications",
     "markAllRead": "Tout marquer comme lu",
+    "markAllReadShort": "Tout marquer lu",
+    "loadMore": "Charger plus",
+    "loading": "Chargement...",
+    "batchSummary": "autres notifications",
+    "acknowledge": "Confirmer",
+    "acknowledged": "Confirmé",
+    "view": "Voir",
+    "connected": "Connecté",
+    "disconnected": "Déconnecté",
+    "preferences": {
+      "title": "Préférences de notification",
+      "save": "Enregistrer",
+      "saveSuccess": "Préférences enregistrées",
+      "saveError": "Échec de l'enregistrement",
+      "soundOn": "Son activé",
+      "soundOff": "Son désactivé",
+      "enabled": "Activé",
+      "disabled": "Désactivé"
+    },
     "tabs": {
       "all": "Tout",
       "unread": "Non lu",
@@ -2139,8 +2174,97 @@
       "orders": "Commandes"
     },
     "empty": "Aucune notification",
+    "emptyUnread": "Aucune notification non lue",
     "time": {
+      "justNow": "à l'instant",
+      "minutesAgo": "il y a {count} min",
+      "hoursAgo": "il y a {count}h",
+      "daysAgo": "il y a {count}j",
       "ago": "Il y a {time}"
+    },
+    "types": {
+      "NEW_ORDER": "Nouvelle commande",
+      "ORDER_CANCELLED": "Commande annulée",
+      "ORDER_ITEM_READY": "Plat prêt",
+      "ORDER_ITEM_REJECTED": "Plat rejeté",
+      "ALL_ITEMS_READY": "Tous les plats prêts",
+      "PAYMENT_COMPLETED": "Paiement effectué",
+      "RESERVATION_CREATED": "Nouvelle réservation",
+      "RESERVATION_STATUS_CHANGED": "Réservation mise à jour",
+      "RESERVATION_REMINDER": "Rappel de réservation",
+      "TABLE_STATUS_CHANGED": "Statut de table modifié",
+      "LOW_STOCK_ALERT": "Alerte stock bas",
+      "DISH_OUT_OF_STOCK": "Plat en rupture",
+      "SHIFT_ASSIGNED": "Quart assigné",
+      "ATTENDANCE_ALERT": "Alerte de présence",
+      "SYSTEM_ALERT": "Alerte système",
+      "ORDER_STATUS_CHANGED": "Commande mise à jour",
+      "PAYMENT_REQUEST": "Demande de paiement",
+      "fallback": "Notification"
+    },
+    "priority": {
+      "Low": "Basse",
+      "Normal": "Normale",
+      "High": "Haute",
+      "Critical": "Critique"
+    },
+    "categories": {
+      "Orders": "Commandes",
+      "Reservations": "Réservations",
+      "Tables": "Tables",
+      "Inventory": "Inventaire",
+      "Shifts": "Quarts",
+      "System": "Système",
+      "General": "Général"
+    },
+    "messages": {
+      "NEW_ORDER": { "title": "Nouvelle commande #{orderId}", "body": "Table {tableName} a passé une nouvelle commande" },
+      "ORDER_CANCELLED": { "title": "Commande #{orderId} annulée", "body": "La commande #{orderId} a été annulée" },
+      "ORDER_ITEM_READY": { "title": "Élément de commande prêt", "body": "Un élément de la commande est prêt à être servi" },
+      "ORDER_ITEM_REJECTED": { "title": "Élément de commande rejeté", "body": "Un élément de la commande a été rejeté" },
+      "ALL_ITEMS_READY": { "title": "Commande #{orderId} complète", "body": "Tous les plats pour table {tableName} sont prêts" },
+      "PAYMENT_COMPLETED": { "title": "Paiement reçu", "body": "Commande #{orderId} — {amount} payé" },
+      "RESERVATION_CREATED": { "title": "Nouvelle réservation", "body": "{guestName} — {guestCount} personnes à {time}" },
+      "RESERVATION_STATUS_CHANGED": { "title": "Réservation mise à jour", "body": "Réservation #{reservationId} — statut changé en {status}" },
+      "RESERVATION_REMINDER": { "title": "Rappel de réservation", "body": "{guestName} — arrive dans {minutes} minutes" },
+      "TABLE_STATUS_CHANGED": { "title": "Table {tableName}", "body": "{oldStatus} → {status}" },
+      "LOW_STOCK_ALERT": { "title": "Stock bas : {ingredientName}", "body": "Actuel : {current}, Minimum : {minimum}" },
+      "DISH_OUT_OF_STOCK": { "title": "{dishName} en rupture", "body": "Ce plat n'est plus disponible" },
+      "SHIFT_ASSIGNED": { "title": "Quart assigné", "body": "Vous avez été assigné à {shiftName} le {date}" },
+      "ATTENDANCE_ALERT": { "title": "Alerte de présence", "body": "{staffName} — {reason}" },
+      "SYSTEM_ALERT": { "title": "Alerte système", "body": "{message}" },
+      "ORDER_STATUS_CHANGED": { "title": "Commande #{orderId} mise à jour", "body": "Commande #{orderId} — statut changé en {status}" },
+      "PAYMENT_REQUEST": { "title": "Paiement demandé — {tableName}", "body": "Commande #{orderId} — paiement de {amount} demandé" },
+      "fallback": { "title": "Notification", "body": "Vous avez une nouvelle notification." }
+    },
+    "metadata": {
+      "defaults": {
+        "table": "Table",
+        "staff": "Employé",
+        "guest": "Client"
+      },
+      "statuses": {
+        "LOCKED": "Verrouillée",
+        "AVAILABLE": "Disponible",
+        "RESERVED": "Réservée",
+        "OCCUPIED": "Occupée",
+        "CONFIRMED": "Confirmée",
+        "CHECKED_IN": "Enregistrée",
+        "CANCELLED": "Annulée",
+        "NO_SHOW": "Absent",
+        "PENDING": "En attente",
+        "COMPLETED": "Terminée",
+        "IN_PROGRESS": "En cours",
+        "UNKNOWN": "Inconnu",
+        "CREATED": "Créé",
+        "READY": "Prêt",
+        "SERVED": "Servi",
+        "REJECTED": "Rejeté"
+      },
+      "attendanceReasons": {
+        "LATE_CHECKIN": "a pointé avec {minutes} minutes de retard",
+        "EARLY_LEAVE": "est parti {minutes} minutes plus tôt"
+      }
     }
   },
   "Kitchen": {
@@ -2832,6 +2956,32 @@
       }
     },
     "Detail": {
+      "title": "Détails du client",
+      "saveButton": "Fermer",
+      "cancel": "Fermer",
+      "fields": {
+        "phone": "Numéro de téléphone",
+        "fullName": "Nom complet",
+        "email": "Email",
+        "loyaltyPoints": "Points de fidélité",
+        "isMember": "Statut de membre",
+        "createdAt": "Créé le"
+      },
+      "placeholders": {
+        "phone": "",
+        "fullName": "",
+        "email": "",
+        "loyaltyPoints": ""
+      },
+      "validation": {
+        "phoneRequired": "",
+        "phoneMaxLength": "",
+        "phoneInvalid": "",
+        "nameMaxLength": "",
+        "emailMaxLength": "",
+        "emailInvalid": "",
+        "pointsNegative": ""
+      },
       "backToCustomers": "Retour aux clients",
       "customerNotFound": "Client introuvable.",
       "guestCustomer": "Client invité",
