@@ -45,7 +45,8 @@ import { Permissions } from "@/types/const";
 import { ConfirmModal } from "@/components/layout/admin-sidebar/confirm-modal";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
-import { NotificationPanel } from "./notification-panel";
+// _OLD: import { NotificationPanel as NotificationPanel_DEPRECATED } from "./notification-panel";
+import { NotificationCenter, useNotificationStore } from "@/features/staff/notifications";
 
 const navigation = [
   {
@@ -160,6 +161,7 @@ export function AdminSidebar({ onClose }: AdminSidebarProps) {
   const [hoverCategory, setHoverCategory] = useState<string | null>(null);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+  const unreadCount = useNotificationStore((s) => s.unreadCount);
 
   // Close notifications when clicking outside the sidebar
   useEffect(() => {
@@ -256,12 +258,18 @@ export function AdminSidebar({ onClose }: AdminSidebarProps) {
               `}
             >
               <Bell size={20} />
-              <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-red-500 rounded-full border-2 border-[#1A3A51]" />
+              {unreadCount > 0 && (
+                <span className="absolute -top-0.5 -right-0.5 flex items-center justify-center min-w-4.5 h-4.5 px-1 text-[10px] font-semibold text-white bg-red-500 rounded-full leading-none">
+                  {unreadCount > 99 ? "99+" : unreadCount}
+                </span>
+              )}
             </button>
 
-            {isNotificationsOpen && (
-              <NotificationPanel onClose={() => setIsNotificationsOpen(false)} />
-            )}
+            {/* _OLD: {isNotificationsOpen && (<NotificationPanel_DEPRECATED onClose={() => setIsNotificationsOpen(false)} />)} */}
+            <NotificationCenter
+              open={isNotificationsOpen}
+              onClose={() => setIsNotificationsOpen(false)}
+            />
 
             <button
               onClick={handleLogoutClick}

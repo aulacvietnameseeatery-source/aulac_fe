@@ -1047,6 +1047,22 @@
         "next": "Next page",
         "last": "Last page"
       }
+    },
+    "apiErrors": {
+      "sessionExpired": "Your session has expired. Please sign in again.",
+      "tokenRefreshFailed": "Your session could not be refreshed. Please sign in again.",
+      "noAccessToken": "You need to sign in before continuing.",
+      "unauthorized": "You are not authorized. Please sign in and try again.",
+      "forbidden": "You do not have permission to perform this action.",
+      "notFound": "The requested resource was not found.",
+      "validation": "Some input values are invalid. Please review and try again.",
+      "conflict": "This action conflicts with existing data.",
+      "unprocessable": "This action cannot be completed with the current data.",
+      "timeout": "The request took too long. Please try again.",
+      "network": "Unable to connect to the server. Please check your connection.",
+      "http": "The request failed. Please try again.",
+      "httpStatus": "The request failed with status {status}.",
+      "unexpected": "An unexpected error occurred. Please try again later."
     }
   },
   "StaffReservation": {
@@ -2120,10 +2136,22 @@
     "markAllReadShort": "Mark all read",
     "loadMore": "Load more",
     "loading": "Loading...",
+    "batchSummary": "more notifications",
     "acknowledge": "Acknowledge",
     "acknowledged": "Acknowledged",
+    "view": "View",
     "connected": "Connected",
     "disconnected": "Disconnected",
+    "preferences": {
+      "title": "Notification Preferences",
+      "save": "Save",
+      "saveSuccess": "Preferences saved",
+      "saveError": "Failed to save preferences",
+      "soundOn": "Sound on",
+      "soundOff": "Sound off",
+      "enabled": "Enabled",
+      "disabled": "Disabled"
+    },
     "tabs": {
       "all": "All",
       "unread": "Unread",
@@ -2156,6 +2184,8 @@
       "SHIFT_ASSIGNED": "Shift Assigned",
       "ATTENDANCE_ALERT": "Attendance Alert",
       "SYSTEM_ALERT": "System Alert",
+      "ORDER_STATUS_CHANGED": "Order Updated",
+      "PAYMENT_REQUEST": "Payment Request",
       "fallback": "Notification"
     },
     "priority": {
@@ -2175,20 +2205,52 @@
     },
     "messages": {
       "NEW_ORDER": { "title": "New order #{orderId}", "body": "Table {tableName} placed a new order" },
-      "ORDER_CANCELLED": { "title": "Order #{orderId} cancelled", "body": "Order at table {tableName} has been cancelled" },
-      "ORDER_ITEM_READY": { "title": "{dishName} is ready", "body": "Order #{orderId} — ready to serve" },
-      "ORDER_ITEM_REJECTED": { "title": "{dishName} rejected", "body": "Order #{orderId} — item was rejected" },
+      "ORDER_CANCELLED": { "title": "Order #{orderId} cancelled", "body": "Order #{orderId} has been cancelled" },
+      "ORDER_ITEM_READY": { "title": "Order item ready", "body": "An item in the order is ready to serve" },
+      "ORDER_ITEM_REJECTED": { "title": "Order item rejected", "body": "An item in the order was rejected" },
       "ALL_ITEMS_READY": { "title": "Order #{orderId} fully ready", "body": "All items for table {tableName} are ready" },
       "PAYMENT_COMPLETED": { "title": "Payment received", "body": "Order #{orderId} — {amount} paid" },
       "RESERVATION_CREATED": { "title": "New reservation", "body": "{guestName} — {guestCount} guests at {time}" },
-      "RESERVATION_STATUS_CHANGED": { "title": "Reservation updated", "body": "{guestName} — status changed to {status}" },
+      "RESERVATION_STATUS_CHANGED": { "title": "Reservation updated", "body": "Reservation #{reservationId} — status changed to {status}" },
       "RESERVATION_REMINDER": { "title": "Reservation reminder", "body": "{guestName} — arriving in {minutes} minutes" },
-      "TABLE_STATUS_CHANGED": { "title": "Table {tableName}", "body": "Status changed to {status}" },
+      "TABLE_STATUS_CHANGED": { "title": "Table {tableName}", "body": "{oldStatus} → {status}" },
       "LOW_STOCK_ALERT": { "title": "Low stock: {ingredientName}", "body": "Current: {current}, Min: {minimum}" },
       "DISH_OUT_OF_STOCK": { "title": "{dishName} out of stock", "body": "This dish is no longer available" },
       "SHIFT_ASSIGNED": { "title": "Shift assigned", "body": "You have been assigned to {shiftName} on {date}" },
       "ATTENDANCE_ALERT": { "title": "Attendance alert", "body": "{staffName} — {reason}" },
-      "SYSTEM_ALERT": { "title": "System alert", "body": "{message}" }
+      "SYSTEM_ALERT": { "title": "System alert", "body": "{message}" },
+      "ORDER_STATUS_CHANGED": { "title": "Order #{orderId} updated", "body": "Order #{orderId} status changed to {status}" },
+      "PAYMENT_REQUEST": { "title": "Payment requested — {tableName}", "body": "Order #{orderId} — {amount} payment requested" },
+      "fallback": { "title": "Notification", "body": "You have a new notification." }
+    },
+    "metadata": {
+      "defaults": {
+        "table": "Table",
+        "staff": "Staff",
+        "guest": "Guest"
+      },
+      "statuses": {
+        "LOCKED": "Locked",
+        "AVAILABLE": "Available",
+        "RESERVED": "Reserved",
+        "OCCUPIED": "Occupied",
+        "CONFIRMED": "Confirmed",
+        "CHECKED_IN": "Checked in",
+        "CANCELLED": "Cancelled",
+        "NO_SHOW": "No-show",
+        "PENDING": "Pending",
+        "COMPLETED": "Completed",
+        "IN_PROGRESS": "In progress",
+        "UNKNOWN": "Unknown",
+        "CREATED": "Created",
+        "READY": "Ready",
+        "SERVED": "Served",
+        "REJECTED": "Rejected"
+      },
+      "attendanceReasons": {
+        "LATE_CHECKIN": "checked in {minutes} minutes late",
+        "EARLY_LEAVE": "left {minutes} minutes early"
+      }
     }
   },
   "Kitchen": {
@@ -2704,9 +2766,7 @@
         "emailMaxLength": "",
         "emailInvalid": "",
         "pointsNegative": ""
-      }
-    },
-    "Detail": {
+      },
       "backToCustomers": "Back to Customers",
       "customerNotFound": "Customer not found.",
       "guestCustomer": "Guest Customer",

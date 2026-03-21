@@ -1,12 +1,14 @@
 import { create } from "zustand";
 import { MAX_STORE_ITEMS } from "../constants/notification.constants";
-import type { NotificationDto, NotificationListItem } from "../types/notification.types";
+import type { NotificationDto, NotificationListItem, NotificationPreferenceDto } from "../types/notification.types";
 
 interface NotificationState {
   items: NotificationListItem[];
   unreadCount: number;
   connected: boolean;
   lastReceivedAt: string | null;
+  /** Per-type notification preferences (loaded from API) */
+  preferences: NotificationPreferenceDto[];
 }
 
 interface NotificationActions {
@@ -19,6 +21,7 @@ interface NotificationActions {
   acknowledge: (notificationId: number) => void;
   setUnreadCount: (count: number) => void;
   setConnected: (connected: boolean) => void;
+  setPreferences: (preferences: NotificationPreferenceDto[]) => void;
 }
 
 export const useNotificationStore = create<NotificationState & NotificationActions>(
@@ -28,6 +31,7 @@ export const useNotificationStore = create<NotificationState & NotificationActio
     unreadCount: 0,
     connected: false,
     lastReceivedAt: null,
+    preferences: [],
 
     // Actions
     addNotification: (notification) =>
@@ -110,5 +114,7 @@ export const useNotificationStore = create<NotificationState & NotificationActio
     setUnreadCount: (count) => set({ unreadCount: count }),
 
     setConnected: (connected) => set({ connected }),
+
+    setPreferences: (preferences) => set({ preferences }),
   })
 );

@@ -1,6 +1,11 @@
 import { api } from "@/lib/http";
 import type { ApiResponse } from "@/types/api-response.types";
-import type { NotificationListItem, NotificationQueryParams } from "../types/notification.types";
+import type {
+  NotificationListItem,
+  NotificationQueryParams,
+  NotificationPreferenceDto,
+  UpdateNotificationPreferencesRequest,
+} from "../types/notification.types";
 
 export const notificationService = {
   async getNotifications(
@@ -41,5 +46,21 @@ export const notificationService = {
 
   async acknowledge(id: number): Promise<void> {
     await api.post<ApiResponse<object>, null>(`/api/notifications/${id}/ack`, null);
+  },
+
+  // --- Notification Preferences ---
+
+  async getPreferences(): Promise<NotificationPreferenceDto[]> {
+    const res = await api.get<ApiResponse<NotificationPreferenceDto[]>>(
+      "/api/notifications/preferences"
+    );
+    return res.data ?? [];
+  },
+
+  async updatePreferences(request: UpdateNotificationPreferencesRequest): Promise<void> {
+    await api.put<ApiResponse<object>, UpdateNotificationPreferencesRequest>(
+      "/api/notifications/preferences",
+      request
+    );
   },
 };

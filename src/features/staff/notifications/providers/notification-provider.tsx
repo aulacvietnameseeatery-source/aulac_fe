@@ -23,18 +23,22 @@ export const useNotificationConnection = () => useContext(NotificationContext);
 export function NotificationProvider({ children }: { children: React.ReactNode }) {
   const { token } = useAuth();
   const connectionRef = useRef<signalR.HubConnection | null>(null);
-  const { addNotification, mergeMissed, setConnected, setUnreadCount } =
+  const { addNotification, mergeMissed, setConnected, setUnreadCount, setPreferences } =
     useNotificationStore();
 
-  // Lấy unread count từ REST khi provider mount
-  const fetchInitialUnreadCount = useCallback(async () => {
+  // Lấy unread count và preferences từ REST khi provider mount
+  const fetchInitialData = useCallback(async () => {
     try {
-      const count = await notificationService.getUnreadCount();
+      const [count, prefs] = await Promise.all([
+        notificationService.getUnreadCount(),
+        notificationService.getPreferences(),
+      ]);
       setUnreadCount(count);
+      setPreferences(prefs);
     } catch (err) {
-      console.warn("[NotificationProvider] Failed to fetch unread count:", err);
+      console.warn("[NotificationProvider] Failed to fetch initial data:", err);
     }
-  }, [setUnreadCount]);
+  }, [setUnreadCount, setPreferences]);
 
   // Khôi phục thông báo bị lỡ khi reconnect
   const recoverMissed = useCallback(async () => {
@@ -88,7 +92,7 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
       .start()
       .then(() => {
         setConnected(true);
-        fetchInitialUnreadCount();
+        fetchInitialData();
       })
       .catch((err) => {
         console.error("[NotificationProvider] Connection failed:", err);

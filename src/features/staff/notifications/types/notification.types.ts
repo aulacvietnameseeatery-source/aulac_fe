@@ -15,6 +15,8 @@ export enum NotificationType {
   SHIFT_ASSIGNED = "SHIFT_ASSIGNED",
   ATTENDANCE_ALERT = "ATTENDANCE_ALERT",
   SYSTEM_ALERT = "SYSTEM_ALERT",
+  ORDER_STATUS_CHANGED = "ORDER_STATUS_CHANGED",
+  PAYMENT_REQUEST = "PAYMENT_REQUEST",
 }
 
 // Mirrors BE Core.Enum.NotificationPriority
@@ -54,4 +56,22 @@ export interface NotificationQueryParams {
   take?: number;
   type?: string;
   unreadOnly?: boolean;
+}
+
+// --- Notification Preferences ---
+
+export interface NotificationPreferenceDto {
+  notificationType: string;
+  isEnabled: boolean;
+  soundEnabled: boolean;
+}
+
+export interface UpdateNotificationPreferencesRequest {
+  preferences: NotificationPreferenceItemRequest[];
+}
+
+export interface NotificationPreferenceItemRequest {
+  notificationType: string;
+  isEnabled: boolean;
+  soundEnabled: boolean;
 }

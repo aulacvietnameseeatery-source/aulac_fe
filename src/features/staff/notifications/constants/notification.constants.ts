@@ -14,6 +14,8 @@ import {
   UserCheck,
   Clock,
   ShieldAlert,
+  RefreshCw,
+  Receipt,
 } from "lucide-react";
 import { NotificationPriority, NotificationType } from "../types/notification.types";
 
@@ -71,6 +73,8 @@ export const TYPE_CONFIG: Record<
   [NotificationType.SHIFT_ASSIGNED]: { icon: UserCheck, label: "SHIFT_ASSIGNED", category: "Shifts" },
   [NotificationType.ATTENDANCE_ALERT]: { icon: Clock, label: "ATTENDANCE_ALERT", category: "Shifts" },
   [NotificationType.SYSTEM_ALERT]: { icon: ShieldAlert, label: "SYSTEM_ALERT", category: "System" },
+  [NotificationType.ORDER_STATUS_CHANGED]: { icon: RefreshCw, label: "ORDER_STATUS_CHANGED", category: "Orders" },
+  [NotificationType.PAYMENT_REQUEST]: { icon: Receipt, label: "PAYMENT_REQUEST", category: "Orders" },
 };
 
 // Fallback config when type not found
@@ -81,3 +85,17 @@ export const MAX_STORE_ITEMS = 200;
 
 // SignalR event name
 export const SIGNALR_EVENT_RECEIVE = "ReceiveNotification";
+
+// --- Anti-spam toast settings ---
+
+/** Max notification toasts visible at once */
+export const MAX_VISIBLE_TOASTS = 3;
+
+/** Minimum gap between toasts of the same type+entity (ms) */
+export const TOAST_DEDUP_WINDOW_MS = 10_000;
+
+/** Global cooldown between any notification toast (ms) */
+export const TOAST_GLOBAL_COOLDOWN_MS = 1_500;
+
+/** When more than MAX_VISIBLE_TOASTS arrive in quick succession, batch them into a summary toast after this delay (ms) */
+export const TOAST_BATCH_DELAY_MS = 800;

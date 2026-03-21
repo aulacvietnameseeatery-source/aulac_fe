@@ -1,14 +1,42 @@
 "use client";
 
-import { CheckCheck } from "lucide-react";
+import { CheckCheck, Clock } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useTranslations } from "next-intl";
 import {
-  PRIORITY_CONFIG,
   TYPE_CONFIG,
   DEFAULT_TYPE_CONFIG,
 } from "../constants/notification.constants";
 import type { NotificationListItem } from "../types/notification.types";
+import { resolveLocalizedNotification } from "../utils/resolve-localized-notification";
+
+// --- Dark-theme icon color mapping (matches sidebar notification-panel style) ---
+const ICON_COLORS: Record<string, string> = {
+  Orders: "bg-orange-500/10 text-orange-400 border-orange-500/20",
+  Reservations: "bg-indigo-500/10 text-indigo-400 border-indigo-500/20",
+  Tables: "bg-green-500/10 text-green-400 border-green-500/20",
+  Inventory: "bg-red-500/10 text-red-400 border-red-500/20",
+  Shifts: "bg-cyan-500/10 text-cyan-400 border-cyan-500/20",
+  System: "bg-gray-100/10 text-gray-400 border-gray-500/20",
+};
+const DEFAULT_ICON_COLORS = "bg-blue-500/10 text-blue-400 border-blue-500/20";
+
+type ItemRenderConfig = {
+  showBody: boolean;
+  showTypeLabel: boolean;
+};
+
+const DEFAULT_ITEM_RENDER_CONFIG: ItemRenderConfig = {
+  showBody: true,
+  showTypeLabel: true,
+};
+
+// Configure per-type item rendering here.
+const ITEM_RENDER_BY_TYPE: Partial<Record<string, ItemRenderConfig>> = {
+  SYSTEM_ALERT: { showBody: true, showTypeLabel: false },
+  ORDER_ITEM_READY: { showBody: false, showTypeLabel: true },
+  ORDER_ITEM_REJECTED: { showBody: false, showTypeLabel: true },
+};
 
 interface NotificationItemProps {
   notification: NotificationListItem;
@@ -25,20 +53,14 @@ export function NotificationItem({
 }: NotificationItemProps) {
   const t = useTranslations("Notifications");
   const typeConfig = TYPE_CONFIG[notification.type] ?? DEFAULT_TYPE_CONFIG;
-  const priorityConfig = PRIORITY_CONFIG[notification.priority] ?? PRIORITY_CONFIG.Normal;
   const Icon = typeConfig.icon;
+  const iconColors = ICON_COLORS[typeConfig.category] ?? DEFAULT_ICON_COLORS;
+  const renderConfig = ITEM_RENDER_BY_TYPE[notification.type] ?? DEFAULT_ITEM_RENDER_CONFIG;
 
-  // Resolve localized title/body: try message template with metadata, fall back to raw
-  const metadata = notification.metadata ?? {};
-  const typeKey = notification.type as string;
-  const localizedTitle = t.has(`messages.${typeKey}.title`)
-    ? t(`messages.${typeKey}.title` as Parameters<typeof t>[0], metadata)
-    : notification.title;
-  const localizedBody = notification.body
-    ? t.has(`messages.${typeKey}.body`)
-      ? t(`messages.${typeKey}.body` as Parameters<typeof t>[0], metadata)
-      : notification.body
-    : undefined;
+  const { title: localizedTitle, body: localizedBody } = resolveLocalizedNotification(
+    notification,
+    t
+  );
 
   const handleClick = () => {
     if (!notification.isRead) {
@@ -55,78 +77,73 @@ export function NotificationItem({
   return (
     <div
       onClick={handleClick}
-      className={cn(
-        "flex gap-3 px-4 py-3 border-l-3 cursor-pointer transition-colors duration-150",
-        priorityConfig.borderColor,
-        notification.isRead
-          ? "bg-white hover:bg-gray-50"
-          : "bg-[#D5BA98]/5 hover:bg-[#D5BA98]/10"
-      )}
+      className="group p-3 rounded-xl hover:bg-white/5 transition-all relative cursor-pointer"
     >
-      {/* Icon */}
-      <div
-        className={cn(
-          "shrink-0 w-9 h-9 rounded-full flex items-center justify-center mt-0.5",
-          priorityConfig.bgColor
-        )}
-      >
-        <Icon className={cn("w-4 h-4", priorityConfig.color)} />
-      </div>
-
-      {/* Content */}
-      <div className="flex-1 min-w-0">
-        <div className="flex items-start justify-between gap-2">
-          <p
-            className={cn(
-              "text-sm leading-snug",
-              notification.isRead
-                ? "text-[#1A3A52]/70 font-normal"
-                : "text-[#1A3A52] font-semibold"
-            )}
-          >
-            {localizedTitle}
-          </p>
-          {/* Unread dot */}
-          {!notification.isRead && (
-            <span className="shrink-0 mt-1.5 w-2 h-2 rounded-full bg-blue-500" />
+      <div className="flex gap-3">
+        {/* Icon */}
+        <div
+          className={cn(
+            "w-9 h-9 rounded-lg border flex items-center justify-center shrink-0",
+            iconColors
           )}
+        >
+          <Icon className="w-4 h-4" />
         </div>
 
-        {localizedBody && (
-          <p className="text-xs text-[#1A3A52]/50 mt-0.5 line-clamp-2">
-            {localizedBody}
-          </p>
-        )}
-
-        <div className="flex items-center gap-2 mt-1.5">
-          <span className="text-[10px] text-[#1A3A52]/40">{timeAgo}</span>
-          <span className="text-[10px] text-[#1A3A52]/30">·</span>
-          <span className="text-[10px] text-[#1A3A52]/40">
-            {t(`types.${typeConfig.label}` as Parameters<typeof t>[0])}
-          </span>
-
-          {/* Acknowledge button for requireAck notifications */}
-          {notification.requireAck && !notification.isAcknowledged && (
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                onAcknowledge(notification.id);
-              }}
-              className="ml-auto flex items-center gap-1 px-2 py-0.5 text-[10px] font-medium text-amber-700 bg-amber-50 border border-amber-200 rounded-full hover:bg-amber-100 transition-colors"
-            >
-              <CheckCheck className="w-3 h-3" />
-              {t("acknowledge")}
-            </button>
-          )}
-
-          {notification.isAcknowledged && (
-            <span className="ml-auto flex items-center gap-1 text-[10px] text-emerald-600">
-              <CheckCheck className="w-3 h-3" />
-              {t("acknowledged")}
+        {/* Content */}
+        <div className="flex-1 min-w-0">
+          <p className="text-white/70 text-[13px] leading-relaxed">
+            <span className={cn(
+              notification.isRead ? "font-normal" : "text-white font-medium"
+            )}>
+              {localizedTitle}
             </span>
+          </p>
+
+          {renderConfig.showBody && localizedBody && (
+            <p className="text-white/50 text-[12px] mt-0.5 line-clamp-2 leading-relaxed">
+              {localizedBody}
+            </p>
           )}
+
+          <div className="flex items-center gap-1.5 mt-2 text-white/40 text-[11px]">
+            <Clock size={12} />
+            <span>{timeAgo}</span>
+            <span>·</span>
+            {renderConfig.showTypeLabel && (
+              <span>
+                {t(`types.${typeConfig.label}` as Parameters<typeof t>[0])}
+              </span>
+            )}
+
+            {/* Acknowledge button for requireAck notifications */}
+            {notification.requireAck && !notification.isAcknowledged && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onAcknowledge(notification.id);
+                }}
+                className="ml-auto flex items-center gap-1 px-2 py-0.5 text-[10px] font-bold text-[#1A3A52] bg-[#FFAB2D] rounded-md hover:bg-[#FFB952] transition-colors"
+              >
+                <CheckCheck className="w-3 h-3" />
+                {t("acknowledge")}
+              </button>
+            )}
+
+            {notification.isAcknowledged && (
+              <span className="ml-auto flex items-center gap-1 text-[10px] text-emerald-400">
+                <CheckCheck className="w-3 h-3" />
+                {t("acknowledged")}
+              </span>
+            )}
+          </div>
         </div>
       </div>
+
+      {/* Unread dot */}
+      {!notification.isRead && (
+        <div className="absolute right-3 top-1/2 -translate-y-1/2 w-2 h-2 bg-green-500 rounded-full" />
+      )}
     </div>
   );
 }

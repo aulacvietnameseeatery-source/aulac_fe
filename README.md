@@ -158,3 +158,14 @@ Ví dụ:
 ---
 
 > *Feature nào – code nằm trọn trong feature đó.*
+
+---
+
+## Notification UX Notes
+
+- Notification panel uses a tall Facebook-style dropdown: width 420px and max-height `min(calc(100vh-72px),720px)`.
+- Category tabs do not use a horizontal scrollbar; use previous/next tab buttons to navigate tab groups.
+- Notification preferences panel is scrollable inside the fixed-height dropdown using `flex-1 min-h-0 overflow-y-auto`.
+- Use dedicated Sonner routing for notification toasts to avoid duplicate toasts:
+    - `notification-toaster.tsx`: set `toasterId="notification"`
+    - `notification-toast-renderer.tsx`: call `toast.custom(..., { toasterId: "notification" })`
