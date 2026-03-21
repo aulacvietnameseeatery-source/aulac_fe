@@ -13,6 +13,11 @@ import type {
   CreateShiftAssignmentRequest,
   UpdateShiftAssignmentRequest,
   AdjustAttendanceRequest,
+  BulkCreateAssignmentRequest,
+  PublishAssignmentsRequest,
+  CopyWeekRequest,
+  ReassignRequest,
+  TeamScheduleParams,
 } from "../types/shift-management.types";
 
 // ─── Query Keys ───────────────────────────────────────────────────────────────
@@ -33,6 +38,7 @@ export const SHIFT_QUERY_KEYS = {
   exceptionsReport: (params: object) =>
     [...SHIFT_QUERY_KEYS.reports(), "exceptions", params] as const,
   myShifts: (params: object) => [...SHIFT_QUERY_KEYS.all, "my-shifts", params] as const,
+  teamSchedule: (params: object) => [...SHIFT_QUERY_KEYS.all, "team-schedule", params] as const,
 };
 
 // ─── Template Queries ─────────────────────────────────────────────────────────
@@ -226,6 +232,86 @@ export function useMyShiftsQuery(params: GetMyShiftsParams = {}) {
   return useQuery({
     queryKey: SHIFT_QUERY_KEYS.myShifts(params),
     queryFn: () => shiftManagementService.getMyShifts(params),
+  });
+}
+
+// ─── Team Schedule ────────────────────────────────────────────────────────────
+
+export function useTeamScheduleQuery(params: TeamScheduleParams, enabled = true) {
+  return useQuery({
+    queryKey: SHIFT_QUERY_KEYS.teamSchedule(params),
+    queryFn: () => shiftManagementService.getTeamSchedule(params),
+    enabled: enabled && !!params.weekStart && !!params.weekEnd,
+  });
+}
+
+// ─── Bulk / Publish / Copy / Reassign / Confirm ──────────────────────────────
+
+export function useBulkCreateAssignmentsMutation() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (body: BulkCreateAssignmentRequest) =>
+      shiftManagementService.bulkCreateAssignments(body),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: SHIFT_QUERY_KEYS.assignments() });
+      toast.success("Assignments created");
+    },
+    onError: () => toast.error("Failed to create assignments"),
+  });
+}
+
+export function usePublishAssignmentsMutation() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (body: PublishAssignmentsRequest) =>
+      shiftManagementService.publishAssignments(body),
+    onSuccess: (_data, _vars) => {
+      qc.invalidateQueries({ queryKey: SHIFT_QUERY_KEYS.assignments() });
+      qc.invalidateQueries({ queryKey: SHIFT_QUERY_KEYS.all });
+      toast.success("Shifts published — staff notified");
+    },
+    onError: () => toast.error("Failed to publish shifts"),
+  });
+}
+
+export function useCopyWeekMutation() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (body: CopyWeekRequest) =>
+      shiftManagementService.copyWeek(body),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: SHIFT_QUERY_KEYS.assignments() });
+      toast.success("Week copied successfully");
+    },
+    onError: () => toast.error("Failed to copy week"),
+  });
+}
+
+export function useReassignAssignmentMutation() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, body }: { id: number; body: ReassignRequest }) =>
+      shiftManagementService.reassignAssignment(id, body),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: SHIFT_QUERY_KEYS.assignments() });
+      qc.invalidateQueries({ queryKey: SHIFT_QUERY_KEYS.all });
+      toast.success("Assignment reassigned");
+    },
+    onError: () => toast.error("Failed to reassign"),
+  });
+}
+
+export function useConfirmAssignmentMutation() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (id: number) =>
+      shiftManagementService.confirmAssignment(id),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: SHIFT_QUERY_KEYS.assignments() });
+      qc.invalidateQueries({ queryKey: SHIFT_QUERY_KEYS.myShifts({}) });
+      toast.success("Shift confirmed");
+    },
+    onError: () => toast.error("Failed to confirm shift"),
   });
 }
 

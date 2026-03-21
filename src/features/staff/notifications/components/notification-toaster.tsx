@@ -15,7 +15,7 @@ import { Toaster } from "sonner";
 export function NotificationToaster() {
   return (
     <Toaster
-      toasterId="notification"
+      id="notification"
       position="top-left"
       // Separate visual stacking from the default app toaster
       className="notification-toaster"
