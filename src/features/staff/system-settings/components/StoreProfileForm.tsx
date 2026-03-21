@@ -19,7 +19,7 @@ const TRANSLATABLE_KEYS = [
 ];
 
 const GLOBAL_KEYS = [
-    'logoUrl', 'postalCode', 'email', 'phone', 'facebookLink', 'instagramLink', 'tiktokLink', 'promoVideoUrl'
+    'logoUrl', 'postalCode', 'email', 'phone', 'facebookLink', 'instagramLink', 'tiktokLink'
 ];
 
 const getInitialData = () => {
@@ -40,6 +40,7 @@ export const StoreProfileForm = () => {
 
     const [previewData, setPreviewData] = useState<{ url: string; title: string, type: 'image' | 'video' } | null>(null);
     const [localPreviews, setLocalPreviews] = useState<Record<string, string>>({});
+    const logoInputRef = useRef<HTMLInputElement>(null);
 
     // --- Translation Mutation ---
     const translateMutation = useMutation({
@@ -112,15 +113,14 @@ export const StoreProfileForm = () => {
         return formData[key] || "";
     };
 
-    const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>, fieldKey: 'logoUrl' | 'promoVideoUrl') => {
+    const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>, fieldKey: 'logoUrl') => {
         const file = e.target.files?.[0];
         if (!file) return;
 
-        const isVideo = fieldKey === 'promoVideoUrl';
-        const maxSize = isVideo ? 100 * 1024 * 1024 : 5 * 1024 * 1024;
+        const maxSize = 5 * 1024 * 1024;
 
         if (file.size > maxSize) {
-            toast.error(isVideo ? t('Common.maxSizeVideo') : t('StoreProfile.fileSizeError'));
+            toast.error(t('StoreProfile.fileSizeError'));
             return;
         }
 
@@ -161,7 +161,7 @@ export const StoreProfileForm = () => {
         }
     };
 
-    const getFullUrl = (field: 'logoUrl' | 'promoVideoUrl') => {
+    const getFullUrl = (field: 'logoUrl') => {
         const url = getValue(field, true);
         const previewUrl = localPreviews[field];
         if (previewUrl) return previewUrl;
@@ -177,74 +177,6 @@ export const StoreProfileForm = () => {
         );
     }
 
-    const MediaUploadUI = ({ fieldKey, title, isVideo = false }: { fieldKey: 'logoUrl' | 'promoVideoUrl', title: string, isVideo?: boolean }) => {
-        const inputRef = useRef<HTMLInputElement>(null);
-        const url = getFullUrl(fieldKey);
-
-        return (
-            <div className="flex flex-col space-y-3">
-                <label className="text-sm font-semibold text-gray-700">{title}</label>
-                <div className="flex flex-col gap-4">
-                    <div
-                        className={cn(
-                            "relative rounded-lg border bg-gray-50 flex items-center justify-center overflow-hidden group border-dashed cursor-pointer hover:border-primary/50 transition-all",
-                            isVideo ? "w-80 aspect-video" : "w-32 aspect-square",
-                            url && "border-solid shadow-sm"
-                        )}
-                        onClick={() => {
-                            if (url) setPreviewData({ url, title, type: isVideo ? 'video' : 'image' });
-                            else inputRef.current?.click();
-                        }}
-                    >
-                        {url ? (
-                            isVideo ? (
-                                <div className="w-full h-full bg-slate-900 flex items-center justify-center relative">
-                                    <video src={url} className="absolute inset-0 w-full h-full object-cover opacity-50" />
-                                    <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center z-10">
-                                        <Eye className="w-5 h-5 text-white" />
-                                    </div>
-                                </div>
-                            ) : (
-                                <>
-                                    <img src={url} className="w-full h-full object-contain p-2" alt="" />
-                                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                                        <Eye className="w-5 h-5 text-white" />
-                                    </div>
-                                </>
-                            )
-                        ) : (
-                            <div className="text-gray-400 group-hover:text-primary">
-                                {isVideo ? <UploadCloud className="w-6 h-6" /> : <ImagePlus className="w-6 h-6" />}
-                            </div>
-                        )}
-                        {isUploading === fieldKey && (
-                            <div className="absolute inset-0 bg-white/80 flex items-center justify-center">
-                                <Loader2 className="w-4 h-4 animate-spin text-primary" />
-                            </div>
-                        )}
-                    </div>
-
-                    <div className="flex items-center gap-3">
-                        <div className="flex items-center gap-2">
-                            <Button type="button" variant="outline" size="sm" onClick={() => inputRef.current?.click()} className="h-9 px-4">
-                                <Upload className="w-4 h-4 mr-2" />
-                                {url ? t('Common.change') : t('Common.upload')}
-                            </Button>
-                            {url && (
-                                <Button type="button" variant="outline" size="sm" onClick={() => handleChange(fieldKey, "", true)} className="h-9 w-9 p-0 text-red-500 hover:text-red-600 border-red-100 hover:bg-red-50">
-                                    <Trash2 className="w-4 h-4" />
-                                </Button>
-                            )}
-                        </div>
-                        <p className="text-xs text-gray-500 italic">
-                            {isVideo ? t('Common.maxSizeVideo') : t('Common.maxSizeImage')}
-                        </p>
-                    </div>
-                    <input type="file" ref={inputRef} className="hidden" accept={isVideo ? "video/*" : "image/*"} onChange={(e) => handleFileChange(e, fieldKey)} />
-                </div>
-            </div>
-        );
-    };
 
     if (isLoading) {
         return (
@@ -257,7 +189,7 @@ export const StoreProfileForm = () => {
     return (
         <div className="flex flex-col gap-6 w-full pb-12">
             {/* --- HEADER ACTIONS --- */}
-            <div className="flex flex-wrap items-center justify-between gap-4 bg-white/80 backdrop-blur-md p-4 rounded-xl border border-border shadow-sm sticky top-0 z-50 transition-all duration-300">
+            <div className="flex flex-wrap items-center justify-between gap-4 bg-[#FDFBF9]/80 backdrop-blur-md p-4 rounded-xl border border-amber-200/30 shadow-sm transition-all duration-300">
                 <div className="flex items-center gap-6">
                     <div className="flex bg-gray-100 p-1 rounded-lg border border-gray-200">
                         {LOCALES.map((loc) => (
@@ -303,177 +235,276 @@ export const StoreProfileForm = () => {
                 </div>
             </div>
 
-            <div className="flex flex-col gap-12 w-full pb-24 max-w-5xl mx-auto">
-                {/* --- IDENTITY SECTION --- */}
-                <div className="p-8 border border-slate-200 rounded-3xl bg-white/50 shadow-sm animate-in fade-in slide-in-from-bottom-4 duration-700">
-                    <div className="space-y-8">
-                        <div className="pb-4 border-b border-slate-100">
-                            <div className="mb-1">
-                                <h3 className="text-xl font-bold text-slate-800">{t("StoreProfile.sections.identity.title")}</h3>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 pb-6">
+                {/* --- LEFT COLUMN --- */}
+                <div className="space-y-8">
+                    {/* --- IDENTITY SECTION --- */}
+                    <div className="bg-[#FDFBF9]/40 backdrop-blur-sm rounded-2xl border border-amber-200/50 shadow-sm overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-700">
+                        <div className="p-6 md:p-8 border-b border-[#D5BA98]/20">
+                            <div className="flex items-center gap-3 mb-2">
+                                <h2 className="text-xl font-bold text-gray-900 tracking-tight">
+                                    {t("StoreProfile.sections.identity.title")}
+                                </h2>
                             </div>
-                            <p className="text-sm text-slate-500 font-medium">{t("StoreProfile.sections.identity.description")}</p>
+                            <p className="font-[Inter] text-sm text-[#1A3A52]/60 ml-13">
+                                {t("StoreProfile.sections.identity.description")}
+                            </p>
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div className="p-6 md:p-8 space-y-6">
+                            {/* Logo Upload */}
+                            <div className="space-y-3">
+                                <label className="font-[Inter] text-xs font-bold text-[#1A3A52]/50 uppercase tracking-widest">
+                                    {t("StoreProfile.logo")}
+                                </label>
+                                <div className="flex items-center gap-6">
+                                    <div className="relative group">
+                                        <div
+                                            className={cn(
+                                                "w-24 h-24 rounded-2xl border-2 border-dashed border-amber-200/60 bg-white/40 flex items-center justify-center overflow-hidden transition-all cursor-pointer hover:border-amber-300 hover:bg-white/60",
+                                                getValue('logoUrl', true) && "border-solid bg-white shadow-sm"
+                                            )}
+                                            onClick={() => logoInputRef.current?.click()}
+                                        >
+                                            {getValue('logoUrl', true) ? (
+                                                <img
+                                                    src={getValue('logoUrl', true).startsWith('http') ? getValue('logoUrl', true) : `${BASE_URL}${getValue('logoUrl', true)}`}
+                                                    className="w-full h-full object-cover"
+                                                    alt="Logo"
+                                                />
+                                            ) : (
+                                                <Upload className="w-7 h-7 text-[#D5BA98]/60" />
+                                            )}
+                                            {isUploading === 'logoUrl' && (
+                                                <div className="absolute inset-0 bg-white/80 flex items-center justify-center">
+                                                    <Loader2 className="w-5 h-5 animate-spin text-[#1A3A52]" />
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                    <div className="flex-1">
+                                        <div className="flex flex-wrap gap-3 mb-2">
+                                            <Button
+                                                type="button"
+                                                variant="outline"
+                                                size="sm"
+                                                className="h-9 border-[#D5BA98]/40 text-[#1A3A52] hover:bg-[#D5BA98]/10 font-[Inter] gap-2"
+                                                onClick={() => logoInputRef.current?.click()}
+                                            >
+                                                <Upload className="w-4 h-4" />
+                                                {t("StoreProfile.upload")}
+                                            </Button>
+                                            {getValue('logoUrl', true) && (
+                                                <Button
+                                                    type="button"
+                                                    variant="outline"
+                                                    size="sm"
+                                                    className="h-9 border-red-100 text-red-500 hover:bg-red-50 font-[Inter] gap-2"
+                                                    onClick={() => handleChange('logoUrl', '', true)}
+                                                >
+                                                    <Trash2 className="w-4 h-4" />
+                                                    {t("StoreProfile.remove")}
+                                                </Button>
+                                            )}
+                                        </div>
+                                        <p className="text-[11px] text-[#1A3A52]/40 font-[Inter]">
+                                            JPG, PNG &lt; 5MB
+                                        </p>
+                                    </div>
+                                    <input
+                                        type="file"
+                                        ref={logoInputRef}
+                                        className="hidden"
+                                        accept="image/*"
+                                        onChange={(e) => handleFileChange(e, 'logoUrl')}
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="h-[1px] w-full bg-[#D5BA98]/20" />
+
+                            <div className="space-y-6">
+                                <div className="space-y-2">
+                                    <label className="text-[11px] font-bold text-[#1A3A52]/50 uppercase tracking-widest">
+                                        {t("StoreProfile.storeName")}
+                                    </label>
+                                    <Input
+                                        className="h-11 border-amber-200/40 bg-white/60 focus:border-[#1A3A52] font-[Inter]"
+                                        value={getValue('name')}
+                                        onChange={(e) => handleChange('name', e.target.value)}
+                                        placeholder={t("StoreProfile.placeholders.storeName")}
+                                    />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <label className="text-[11px] font-bold text-[#1A3A52]/50 uppercase tracking-widest">
+                                        {t("StoreProfile.openingHours")}
+                                    </label>
+                                    <Input
+                                        className="h-11 border-amber-200/40 bg-white/60 focus:border-[#1A3A52] font-[Inter]"
+                                        value={getValue('openingHours')}
+                                        onChange={(e) => handleChange('openingHours', e.target.value)}
+                                        placeholder={t("StoreProfile.placeholders.openingHours")}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* --- SOCIAL FOOTPRINT SECTION --- */}
+                    <div className="bg-[#FDFBF9]/40 backdrop-blur-sm rounded-2xl border border-amber-200/50 shadow-sm overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300">
+                        <div className="p-6 md:p-8 border-b border-[#D5BA98]/20">
+                            <div className="flex items-center gap-3 mb-2">
+                                <h2 className="text-xl font-bold text-gray-900 tracking-tight">
+                                    {t("StoreProfile.sections.social.title")}
+                                </h2>
+                            </div>
+                            <p className="font-[Inter] text-sm text-[#1A3A52]/60 ml-13">
+                                {t("StoreProfile.sections.social.description")}
+                            </p>
+                        </div>
+
+                        <div className="p-6 md:p-8 space-y-6">
                             <div className="space-y-2">
-                                <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
-                                    {t("StoreProfile.storeName")} ({activeLocale})
+                                <label className="text-[11px] font-bold text-[#1A3A52]/50 uppercase tracking-widest flex items-center gap-2">
+                                    <Facebook className="w-4 h-4 text-[#1A3A52]/70" />
+                                    {t("Common.facebook") || "Facebook Profile"}
                                 </label>
                                 <Input
-                                    value={getValue('name')}
-                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange('name', e.target.value)}
-                                    placeholder="e.g. Au Lac Restaurant"
-                                    className="h-11 border-slate-200 focus:border-blue-400 focus:ring-blue-100 transition-all text-base bg-white/50"
+                                    value={getValue('facebookLink', true)}
+                                    onChange={(e) => handleChange('facebookLink', e.target.value, true)}
+                                    placeholder={t("StoreProfile.placeholders.facebook")}
+                                    className="h-11 border-amber-200/40 focus:border-[#1A3A52] font-[Inter] bg-white/60"
                                 />
                             </div>
+
                             <div className="space-y-2">
-                                <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">{t("StoreProfile.openingHours")} ({activeLocale})</label>
+                                <label className="text-[11px] font-bold text-[#1A3A52]/50 uppercase tracking-widest flex items-center gap-2">
+                                    <Instagram className="w-4 h-4 text-[#1A3A52]/70" />
+                                    {t("Common.instagram") || "Instagram Page"}
+                                </label>
                                 <Input
-                                    value={getValue('openingHours')}
-                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange('openingHours', e.target.value)}
-                                    placeholder="Mon-Sun: 10:00 - 22:00"
-                                    className="h-11 border-slate-200 focus:border-blue-400 bg-white/50"
+                                    value={getValue('instagramLink', true)}
+                                    onChange={(e) => handleChange('instagramLink', e.target.value, true)}
+                                    placeholder={t("StoreProfile.placeholders.instagram")}
+                                    className="h-11 border-amber-200/40 focus:border-[#1A3A52] font-[Inter] bg-white/60"
+                                />
+                            </div>
+
+                            <div className="space-y-2">
+                                <label className="text-[11px] font-bold text-[#1A3A52]/50 uppercase tracking-widest flex items-center gap-2">
+                                    <Tiktok className="w-4 h-4 text-[#1A3A52]/70" />
+                                    {t("Common.tiktok") || "TikTok Page"}
+                                </label>
+                                <Input
+                                    value={getValue('tiktokLink', true)}
+                                    onChange={(e) => handleChange('tiktokLink', e.target.value, true)}
+                                    placeholder={t("StoreProfile.placeholders.tiktok")}
+                                    className="h-11 border-amber-200/40 focus:border-[#1A3A52] font-[Inter] bg-white/60"
                                 />
                             </div>
                         </div>
                     </div>
                 </div>
 
-                {/* --- VISUAL BRANDING SECTION --- */}
-                <div className="p-8 border border-slate-200 rounded-3xl bg-white/50 shadow-sm animate-in fade-in slide-in-from-bottom-4 duration-700 delay-100">
-                    <div className="space-y-8">
-                        <div className="pb-4 border-b border-slate-100">
-                            <div className="mb-1">
-                                <h3 className="text-xl font-bold text-slate-800">{t("StoreProfile.visualBranding")}</h3>
+                {/* --- RIGHT COLUMN --- */}
+                <div className="space-y-8 h-full">
+                    {/* --- CONTACT & LOCATION SECTION --- */}
+                    <div className="bg-[#FDFBF9]/40 backdrop-blur-sm rounded-2xl border border-amber-200/50 shadow-sm overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-700 delay-200 h-full">
+                        <div className="p-6 md:p-8 border-b border-[#D5BA98]/20">
+                            <div className="flex items-center gap-3 mb-2">
+                                <h2 className="text-xl font-bold text-gray-900 tracking-tight">
+                                    {t("StoreProfile.sections.contact.title")}
+                                </h2>
                             </div>
-                            <p className="text-sm text-slate-500 font-medium">{t("StoreProfile.visualBrandingDesc")}</p>
+                            <p className="font-[Inter] text-sm text-[#1A3A52]/60 ml-13">
+                                {t("StoreProfile.sections.contact.description")}
+                            </p>
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-                            <div className="space-y-4">
-                                <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
-                                    {t("StoreProfile.officialLogo")}
-                                </label>
-                                <MediaUploadUI
-                                    fieldKey="logoUrl"
-                                    title={t("StoreProfile.officialLogo")}
-                                />
-                            </div>
-                            <div className="space-y-4">
-                                <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
-                                    {t("StoreProfile.storeVideo")}
-                                </label>
-                                <MediaUploadUI
-                                    fieldKey="promoVideoUrl"
-                                    title={t("StoreProfile.storeVideo")}
-                                    isVideo
-                                />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                {/* --- CONTACT & LOCATION SECTION --- */}
-                <div className="p-8 border border-slate-200 rounded-3xl bg-white/50 shadow-sm animate-in fade-in slide-in-from-bottom-4 duration-700 delay-200">
-                    <div className="space-y-8">
-                        <div className="pb-4 border-b border-slate-100">
-                            <div className="mb-1">
-                                <h3 className="text-xl font-bold text-slate-800">{t("StoreProfile.sections.contact.title")}</h3>
-                            </div>
-                            <p className="text-sm text-slate-500 font-medium">{t("StoreProfile.sections.contact.description")}</p>
-                        </div>
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div className="p-6 md:p-8 space-y-8">
                             <div className="space-y-2">
-                                <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">{t("StoreProfile.streetAddress")} ({activeLocale})</label>
+                                <label className="text-[11px] font-bold text-[#1A3A52]/50 uppercase tracking-widest">
+                                    {t("StoreProfile.street")}
+                                </label>
                                 <Input
+                                    className="h-11 border-amber-200/40 bg-white/60 focus:border-[#1A3A52] font-[Inter]"
                                     value={getValue('streetAddress')}
-                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange('streetAddress', e.target.value)}
-                                    placeholder="123 Gastronomy St"
-                                    className="h-11 border-slate-200 focus:border-blue-400 bg-white/50"
+                                    onChange={(e) => handleChange('streetAddress', e.target.value)}
+                                    placeholder={t("StoreProfile.placeholders.street")}
                                 />
                             </div>
-                            <div className="space-y-2">
-                                <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">{t("StoreProfile.city")} ({activeLocale})</label>
-                                <Input
-                                    value={getValue('city')}
-                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange('city', e.target.value)}
-                                    placeholder="Geneva"
-                                    className="h-11 border-slate-200 focus:border-blue-400 bg-white/50"
-                                />
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div className="space-y-2">
+                                    <label className="text-[11px] font-bold text-[#1A3A52]/50 uppercase tracking-widest">
+                                        {t("StoreProfile.city")}
+                                    </label>
+                                    <Input
+                                        className="h-11 border-amber-200/40 bg-white/60 focus:border-[#1A3A52] font-[Inter]"
+                                        value={getValue('city')}
+                                        onChange={(e) => handleChange('city', e.target.value)}
+                                        placeholder={t("StoreProfile.placeholders.city")}
+                                    />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <label className="text-[11px] font-bold text-[#1A3A52]/50 uppercase tracking-widest">
+                                        {t("StoreProfile.country")}
+                                    </label>
+                                    <Input
+                                        className="h-11 border-amber-200/40 bg-white/60 focus:border-[#1A3A52] font-[Inter]"
+                                        value={getValue('country')}
+                                        onChange={(e) => handleChange('country', e.target.value)}
+                                        placeholder={t("StoreProfile.placeholders.country")}
+                                    />
+                                </div>
                             </div>
-                            <div className="space-y-2">
-                                <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">{t("StoreProfile.country")} ({activeLocale})</label>
-                                <Input
-                                    value={getValue('country')}
-                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange('country', e.target.value)}
-                                    placeholder="Switzerland"
-                                    className="h-11 border-slate-200 focus:border-blue-400 bg-white/50"
-                                />
-                            </div>
-                            <div className="space-y-2">
-                                <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">{t("StoreProfile.phone")}</label>
-                                <Input
-                                    value={getValue('phone', true)}
-                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange('phone', e.target.value, true)}
-                                    placeholder="+41 22 123 4567"
-                                    className="h-11 border-slate-200 focus:border-blue-400 bg-white/50"
-                                />
-                            </div>
-                            <div className="space-y-2">
-                                <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">{t("StoreProfile.email")}</label>
-                                <Input
-                                    value={getValue('email', true)}
-                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange('email', e.target.value, true)}
-                                    placeholder="contact@aulac.com"
-                                    className="h-11 border-slate-200 focus:border-blue-400 bg-white/50"
-                                />
+
+                            <div className="h-[1px] w-full bg-[#D5BA98]/20" />
+
+                            <div className="grid grid-cols-1 gap-8">
+                                <div className="space-y-2">
+                                    <label className="text-[11px] font-bold text-[#1A3A52]/50 uppercase tracking-widest flex items-center gap-2">
+                                        <Phone className="w-4 h-4" />
+                                        {t("StoreProfile.phone")}
+                                    </label>
+                                    <Input
+                                        className="h-11 border-amber-200/40 bg-white/60 focus:border-[#1A3A52] font-[Inter]"
+                                        value={getValue('phone', true)}
+                                        onChange={(e) => handleChange('phone', e.target.value, true)}
+                                        placeholder={t("StoreProfile.placeholders.phone")}
+                                    />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <label className="text-[11px] font-bold text-[#1A3A52]/50 uppercase tracking-widest flex items-center gap-2">
+                                        <Mail className="w-4 h-4" />
+                                        {t("StoreProfile.email")}
+                                    </label>
+                                    <Input
+                                        className="h-11 border-amber-200/40 bg-white/60 focus:border-[#1A3A52] font-[Inter]"
+                                        value={getValue('email', true)}
+                                        onChange={(e) => handleChange('email', e.target.value, true)}
+                                        placeholder={t("StoreProfile.placeholders.email")}
+                                    />
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                {/* --- SOCIAL MEDIA SECTION --- */}
-                <div className="p-8 border border-slate-200 rounded-3xl bg-white/50 shadow-sm animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300">
-                    <div className="space-y-8">
-                        <div className="pb-4 border-b border-slate-100">
-                            <div className="mb-1">
-                                <h3 className="text-xl font-bold text-slate-800">{t("StoreProfile.sections.social.title")}</h3>
-                            </div>
-                            <p className="text-sm text-slate-500 font-medium">{t("StoreProfile.sections.social.description")}</p>
-                        </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <div className="flex items-center gap-3 bg-white p-2 rounded-xl border border-slate-100 shadow-sm focus-within:ring-2 focus-within:ring-blue-100 focus-within:border-blue-400 transition-all">
-                            <div className="pl-2 pr-1 text-xs font-bold text-slate-400 uppercase tracking-wider">{t('Common.facebook') || 'FB'}</div>
-                            <Input
-                                value={getValue('facebookLink', true)}
-                                onChange={(e) => handleChange('facebookLink', e.target.value, true)}
-                                placeholder="Facebook URL"
-                                className="border-none bg-transparent shadow-none focus-visible:ring-0 text-sm h-8 p-0"
-                            />
-                        </div>
-                        <div className="flex items-center gap-3 bg-white p-2 rounded-xl border border-slate-100 shadow-sm focus-within:ring-2 focus-within:ring-pink-50 focus-within:border-pink-400 transition-all">
-                            <div className="pl-2 pr-1 text-xs font-bold text-slate-400 uppercase tracking-wider">{t('Common.instagram') || 'IG'}</div>
-                            <Input
-                                value={getValue('instagramLink', true)}
-                                onChange={(e) => handleChange('instagramLink', e.target.value, true)}
-                                placeholder="Instagram URL"
-                                className="border-none bg-transparent shadow-none focus-visible:ring-0 text-sm h-8 p-0"
-                            />
-                        </div>
-                        <div className="flex items-center gap-3 bg-white p-2 rounded-xl border border-slate-100 shadow-sm focus-within:ring-2 focus-within:ring-slate-100 focus-within:border-slate-400 transition-all">
-                            <div className="pl-2 pr-1 text-xs font-bold text-slate-400 uppercase tracking-wider">{t('Common.tiktok') || 'TK'}</div>
-                            <Input
-                                value={getValue('tiktokLink', true)}
-                                onChange={(e) => handleChange('tiktokLink', e.target.value, true)}
-                                placeholder="TikTok URL"
-                                className="border-none bg-transparent shadow-none focus-visible:ring-0 text-sm h-8 p-0"
-                            />
-                        </div>
-                    </div>
-                </div>
+            {/* Bottom Save Button (Mobile) */}
+            <div className="pb-6 lg:hidden">
+                <Button
+                    className="w-full bg-[#1A3A52] hover:bg-[#1A3A52]/90 text-white shadow-lg h-12 font-[Inter] gap-2"
+                    onClick={handleSave}
+                    disabled={isSaving}
+                >
+                    <Save className="w-4 h-4" />
+                    {t("Common.saveChanges") || "Save All Changes"}
+                </Button>
             </div>
 
             {previewData && (
