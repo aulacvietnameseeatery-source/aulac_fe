@@ -32,7 +32,10 @@ export interface ShiftAssignmentListDto {
   workDate: string;         // yyyy-MM-dd
   plannedStartAt: string;   // ISO 8601
   plannedEndAt: string;     // ISO 8601
+  assignmentStatusCode: string;
+  assignmentStatusName: string;
   isActive: boolean;
+  tags?: string | null;
   notes?: string | null;
   assignedAt: string;
   assignedByName: string;
@@ -44,6 +47,17 @@ export interface ShiftAssignmentDetailDto extends ShiftAssignmentListDto {
 
 // Keep backward-compatible alias used across the module
 export type ShiftAssignmentDto = ShiftAssignmentDetailDto;
+
+// ─── Time Log (Split Shift) ──────────────────────────────────────────────────
+
+export interface TimeLogDto {
+  timeLogId: number;
+  punchInTime: string;        // ISO 8601
+  punchOutTime: string | null;
+  validationStatus: string;   // Valid | Late | Early_Leave | Missing_Punch
+  punchDurationMinutes: number;
+  createdAt: string;
+}
 
 // ─── Attendance ───────────────────────────────────────────────────────────────
 
@@ -61,6 +75,7 @@ export interface AttendanceRecordDto {
   adjustmentReason: string | null;
   reviewedByName: string | null;
   reviewedAt: string | null;
+  timeLogs: TimeLogDto[];
 }
 
 // ─── Reports ──────────────────────────────────────────────────────────────────
@@ -126,18 +141,63 @@ export interface CreateShiftAssignmentRequest {
   plannedStartAt?: string | null;
   plannedEndAt?: string | null;
   notes?: string | null;
+  tags?: string | null;
+  isDraft?: boolean;
 }
 
 export interface UpdateShiftAssignmentRequest {
   plannedStartAt?: string | null;
   plannedEndAt?: string | null;
   notes?: string | null;
+  tags?: string | null;
 }
 
 export interface AdjustAttendanceRequest {
   actualCheckInAt?: string | null;
   actualCheckOutAt?: string | null;
   adjustmentReason: string;
+}
+
+// ─── New Requests (Phase 3) ──────────────────────────────────────────────────
+
+export interface BulkCreateAssignmentRequest {
+  shiftTemplateId: number;
+  staffIds: number[];
+  workDate: string;           // yyyy-MM-dd
+  plannedStartAt?: string | null;
+  plannedEndAt?: string | null;
+  notes?: string | null;
+  tags?: string | null;
+  isDraft?: boolean;
+}
+
+export interface PublishAssignmentsRequest {
+  assignmentIds?: number[] | null;
+  fromDate?: string | null;   // yyyy-MM-dd
+  toDate?: string | null;     // yyyy-MM-dd
+}
+
+export interface CopyWeekRequest {
+  sourceWeekStart: string;    // yyyy-MM-dd (must be Monday)
+  targetWeekStart: string;    // yyyy-MM-dd (must be Monday)
+  asDraft?: boolean;
+}
+
+export interface ReassignRequest {
+  newStaffId: number;
+  reason?: string | null;
+}
+
+export interface TeamScheduleParams {
+  weekStart: string;
+  weekEnd: string;
+}
+
+export interface TeamScheduleStaffRow {
+  staffId: number;
+  staffName: string;
+  roleName: string;
+  assignments: ShiftAssignmentListDto[];
 }
 
 // ─── Query Params ─────────────────────────────────────────────────────────────
@@ -210,11 +270,16 @@ export const ATTENDANCE_STATUS_CONFIG: Record<
   EXCUSED:   { label: "Excused",   variant: "secondary" },
 };
 
-// Kept for any remaining consumers — now maps isActive
+// Kept for any remaining consumers — maps assignmentStatusCode
 export const ASSIGNMENT_STATUS_CONFIG: Record<
   string,
   { label: string; variant: "default" | "destructive" | "secondary" | "outline" }
 > = {
+  DRAFT:     { label: "Draft",     variant: "secondary" },
+  ASSIGNED:  { label: "Assigned",  variant: "default" },
+  CONFIRMED: { label: "Confirmed", variant: "outline" },
+  CANCELLED: { label: "Cancelled", variant: "destructive" },
+  // Legacy isActive-based keys
   active:    { label: "Active",    variant: "default" },
   cancelled: { label: "Cancelled", variant: "destructive" },
 };

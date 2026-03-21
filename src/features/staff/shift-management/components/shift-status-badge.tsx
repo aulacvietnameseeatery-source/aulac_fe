@@ -15,8 +15,12 @@ function badgeClassByCode(statusCode: string, type: "attendance" | "schedule" | 
   const code = statusCode.toUpperCase();
 
   if (type === "assignment") {
-    if (code === "ACTIVE") return "border-emerald-500 bg-emerald-500 text-white shadow-sm";
+    if (code === "DRAFT") return "border-amber-500 bg-amber-500 text-white shadow-sm";
+    if (code === "ASSIGNED") return "border-blue-500 bg-blue-500 text-white shadow-sm";
+    if (code === "CONFIRMED") return "border-emerald-500 bg-emerald-500 text-white shadow-sm";
     if (code === "CANCELLED") return "border-red-500 bg-red-500 text-white shadow-sm";
+    // Legacy
+    if (code === "ACTIVE") return "border-emerald-500 bg-emerald-500 text-white shadow-sm";
     return "border-slate-600 bg-slate-600 text-white shadow-sm";
   }
 

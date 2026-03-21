@@ -6,6 +6,7 @@
  */
 
 import { authStorage } from "./auth-storage";
+import { createApiClientError, getCurrentLocale, getLocalizedLoginPath } from "./api-error";
 // import { CSRFProtection } from "./csrf"; // Đảm bảo bạn đã import đúng nếu cần
 
 // URL của backend API.
@@ -36,6 +37,16 @@ const processQueue = (error: Error | null, token: string | null = null) => {
     });
     failedQueue = [];
 };
+
+function redirectToLoginIfNeeded() {
+    if (typeof window === "undefined" || window.location.pathname.includes('/login')) {
+        return;
+    }
+
+    const locale = getCurrentLocale();
+    console.warn('[HTTP] Redirecting to login');
+    window.location.href = getLocalizedLoginPath(locale);
+}
 
 /**
  * Base HTTP client with auth token injection and automatic token refresh
@@ -90,7 +101,18 @@ async function http<T>(path: string, options?: FetchOptions): Promise<T> {
                         ...config.headers,
                         Authorization: `Bearer ${newToken}`,
                     };
-                    return fetch(url, { ...config, headers: newHeaders }).then(r => r.json());
+                    return fetch(url, { ...config, headers: newHeaders }).then(async (retryResponse) => {
+                        if (!retryResponse.ok) {
+                            const errorBody = await retryResponse.json().catch(() => ({}));
+                            throw createApiClientError(errorBody, retryResponse.status);
+                        }
+
+                        if (retryResponse.status === 204 || retryResponse.headers.get('content-length') === '0') {
+                            return undefined as T;
+                        }
+
+                        return retryResponse.json() as Promise<T>;
+                    });
                 });
             }
 
@@ -98,15 +120,11 @@ async function http<T>(path: string, options?: FetchOptions): Promise<T> {
             const currentAccessToken = token;
 
             if (!currentAccessToken) {
-                processQueue(new Error("No access token"), null);
+                processQueue(createApiClientError({ message: "No access token" }, 401), null);
                 isRefreshing = false;
                 authStorage.clearAuth();
-
-                if (typeof window !== "undefined" && !window.location.pathname.includes('/login')) {
-                    console.warn('[HTTP] No access token, redirecting to login');
-                    window.location.href = "/login";
-                }
-                throw new Error("Session expired");
+                redirectToLoginIfNeeded();
+                throw createApiClientError({ message: "Session expired" }, 401);
             }
 
             try {
@@ -120,7 +138,7 @@ async function http<T>(path: string, options?: FetchOptions): Promise<T> {
                 });
 
                 if (!refreshResponse.ok) {
-                    throw new Error('Token refresh failed');
+                    throw createApiClientError({ message: 'Token refresh failed' }, refreshResponse.status || 401);
                 }
 
                 const refreshData = await refreshResponse.json();
@@ -142,7 +160,7 @@ async function http<T>(path: string, options?: FetchOptions): Promise<T> {
 
                 if (!retryResponse.ok) {
                     const errorBody = await retryResponse.json().catch(() => ({}));
-                    throw new Error(errorBody.userMessage || errorBody.message || `HTTP Error: ${retryResponse.status}`);
+                    throw createApiClientError(errorBody, retryResponse.status);
                 }
 
                 // Check if response has content (e.g., 204 No Content)
@@ -151,33 +169,23 @@ async function http<T>(path: string, options?: FetchOptions): Promise<T> {
                 }
 
                 return (await retryResponse.json()) as T;
-            } catch (refreshError) {
-                processQueue(new Error("Token refresh failed"), null);
+            } catch {
+                processQueue(createApiClientError({ message: "Token refresh failed" }, 401), null);
                 isRefreshing = false;
                 authStorage.clearAuth();
-
-                if (typeof window !== "undefined" && !window.location.pathname.includes('/login')) {
-                    console.warn('[HTTP] Token refresh failed, redirecting to login');
-                    window.location.href = "/login";
-                }
-                throw new Error("Session expired");
+                redirectToLoginIfNeeded();
+                throw createApiClientError({ message: "Session expired" }, 401);
             }
         }
 
         if (!response.ok) {
             const errorBody = await response.json().catch(() => ({}));
-            const errorMessage = errorBody.userMessage || errorBody.message || `HTTP Error: ${response.status}`;
 
             if (response.status === 403 && typeof window !== "undefined") {
                 console.warn('[HTTP] Access forbidden, insufficient permissions');
             }
 
-            const error = new Error(errorMessage) as any;
-            error.response = {
-                data: errorBody,
-                status: response.status
-            };
-            throw error;
+            throw createApiClientError(errorBody, response.status);
         }
 
         // Check if response has content (e.g., 204 No Content)
@@ -187,6 +195,10 @@ async function http<T>(path: string, options?: FetchOptions): Promise<T> {
 
         return (await response.json()) as T;
     } catch (error) {
+        if (error instanceof TypeError) {
+            throw createApiClientError({ message: error.message }, 0);
+        }
+
         throw error;
     }
 }

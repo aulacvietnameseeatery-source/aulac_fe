@@ -8,6 +8,10 @@ import "../../../styles/adminLayout.css"
 import { Tooltip } from "react-tooltip";
 import { LanguageSwitcher } from "@/components/ui/language-switcher";
 import { DashboardTopNav } from "@/components/ui/dashboard-top-nav";
+import { NotificationProvider } from "@/features/staff/notifications/providers/notification-provider";
+import { NotificationToastRenderer } from "@/features/staff/notifications/components/notification-toast-renderer";
+import { NotificationBell } from "@/features/staff/notifications/components/notification-bell";
+import { NotificationCenter } from "@/features/staff/notifications/components/notification-center";
 
 export default function DashboardLayout({
   children,
@@ -17,6 +21,7 @@ export default function DashboardLayout({
   const router = useRouter();
   const { isAuthenticated, isInitialized } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isNotificationOpen, setIsNotificationOpen] = useState(false);
 
   useEffect(() => {
     // Only check authentication after auth state is initialized
@@ -39,6 +44,8 @@ export default function DashboardLayout({
   }
 
   return (
+    <NotificationProvider>
+    <NotificationToastRenderer />
     <div className="main-container relative min-h-screen bg-[#F8F9FA]">
       {/* Mobile Header for Toggle */}
       <div className="md:hidden fixed top-0 left-0 right-0 z-40 bg-white border-b border-gray-200 px-4 py-2 flex items-center justify-between shadow-sm">
@@ -87,6 +94,13 @@ export default function DashboardLayout({
 
             {/* Right Side Actions */}
             <div className="flex items-center gap-4">
+              <div className="relative">
+                <NotificationBell onClick={() => setIsNotificationOpen((v) => !v)} />
+                <NotificationCenter
+                  open={isNotificationOpen}
+                  onClose={() => setIsNotificationOpen(false)}
+                />
+              </div>
               <LanguageSwitcher variant="admin" />
             </div>
           </header>
@@ -99,7 +113,6 @@ export default function DashboardLayout({
       </div>
       <Tooltip id="my-tooltip" style={{ zIndex: 10000 }} />
     </div>
-
-
+    </NotificationProvider>
   );
 }

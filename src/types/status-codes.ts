@@ -92,6 +92,7 @@ export enum ShiftStatusCode {
 }
 
 export enum ShiftAssignmentStatusCode {
+    DRAFT = "DRAFT",
     ASSIGNED = "ASSIGNED",
     CONFIRMED = "CONFIRMED",
     CANCELLED = "CANCELLED",

@@ -66,6 +66,7 @@ export const Permissions = {
   AdjustAttendance: 'SHIFT:ADJUST_ATTENDANCE',
   ViewShiftReport: 'SHIFT:REPORT_READ',
   CloseShift: 'SHIFT:CLOSE',
+  PublishShift: 'SHIFT:PUBLISH',
   ManageShiftTemplate: 'SHIFT:MANAGE_TEMPLATE',
 
   // Reservation
@@ -78,5 +79,9 @@ export const Permissions = {
   ViewCustomer: 'CUSTOMER:READ',
   CreateCustomer: 'CUSTOMER:CREATE',
   UpdateCustomer: 'CUSTOMER:UPDATE',
-  DeleteCustomer: 'CUSTOMER:DELETE'
+  DeleteCustomer: 'CUSTOMER:DELETE',
+
+  // Notification
+  ViewNotification: 'NOTIFICATION:READ',
+  AcknowledgeNotification: 'NOTIFICATION:ACK',
 } as const;
