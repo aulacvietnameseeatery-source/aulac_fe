@@ -39,7 +39,8 @@ export function ShiftMatrixRow({
 }: ShiftMatrixRowProps) {
   // Index assignments by workDate for O(1) lookup
   const byDate = new Map<string, ShiftAssignmentListDto[]>();
-  for (const a of staff.assignments) {
+  const assignments = staff?.assignments ?? [];
+  for (const a of assignments) {
     const key = a.workDate.slice(0, 10);
     const arr = byDate.get(key);
     if (arr) arr.push(a);

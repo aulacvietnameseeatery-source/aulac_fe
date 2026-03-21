@@ -158,7 +158,7 @@ export function ShiftMatrixCalendar({
       staffRows.reduce(
         (sum, row) =>
           sum +
-          row.assignments.filter(
+          (row?.assignments ?? []).filter(
             (a) => a.assignmentStatusCode?.toUpperCase() === "DRAFT"
           ).length,
         0
