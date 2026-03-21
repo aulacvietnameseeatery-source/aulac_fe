@@ -1,8 +1,9 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { User, Phone, StickyNote, ChevronDown, Minus, Plus, Mail, X } from 'lucide-react';
+import React, { useState, useEffect, useMemo } from 'react';
+import { User, Phone, StickyNote, Mail, X, Minus, Plus } from 'lucide-react';
 import { ALDatePicker } from "@/components/ui/al-date-picker";
+import { ALCombobox } from '@/components/ui/al-combobox';
 import { reservationApi } from '../index';
 import { ReservationResponseDto } from '../types/reservation.types';
 import { toast } from 'sonner';
@@ -33,9 +34,35 @@ export default function PublicBookingForm({ onSuccess, onClose }: PublicBookingF
     const [checkingFit, setCheckingFit] = useState(false);
     const [canBookOnline, setCanBookOnline] = useState(true);
     const [fitMessage, setFitMessage] = useState<string>('');
+    const [timeError, setTimeError] = useState<string | null>(null);
     const { data: storeSettings } = useStoreSettings();
     const phoneNumber = storeSettings?.phone || "+84 28 3822 5264";
     const callHref = `tel:${phoneNumber.replace(/\s+/g, '')}`;
+
+    const timeOptions = useMemo(() => {
+        const slots: string[] = [];
+        // Lunch: 11:30 - 14:30
+        for (let h = 11; h <= 14; h++) {
+            for (let m = 0; m < 60; m += 30) {
+                if (h === 11 && m < 30) continue;
+                if (h === 14 && m > 30) break;
+                slots.push(`${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`);
+            }
+        }
+        // Dinner: 18:30 - 22:30
+        for (let h = 18; h <= 22; h++) {
+            for (let m = 0; m < 60; m += 30) {
+                if (h === 18 && m < 30) continue;
+                if (h === 22 && m > 30) break;
+                slots.push(`${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`);
+            }
+        }
+        return slots.map(slot => ({
+            value: slot,
+            label: slot
+        }));
+    }, []);
+
 
     const lookupExistingCustomer = async (targetPhone: string) => {
         if (mode !== 'existing') return;
@@ -93,11 +120,30 @@ export default function PublicBookingForm({ onSuccess, onClose }: PublicBookingF
         void runFitCheck();
     }, [date, time, pax, mode]);
 
+    useEffect(() => {
+        if (!date || !time) {
+            setTimeError(null);
+            return;
+        }
+        const now = new Date();
+        const selected = new Date(`${date}T${time}`);
+        if (selected.getTime() < now.getTime()) {
+            setTimeError(t('validation.timePast'));
+        } else {
+            setTimeError(null);
+        }
+    }, [date, time, t]);
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
         if (!mode) {
             toast.error(t('validation.selectCustomerType'));
+            return;
+        }
+
+        if (timeError) {
+            toast.error(timeError);
             return;
         }
 
@@ -330,6 +376,7 @@ export default function PublicBookingForm({ onSuccess, onClose }: PublicBookingF
                                                 onChange={setDate}
                                                 minDate={new Date().toISOString().split('T')[0]}
                                                 placeholder={t('selectDate')}
+                                                displayFormat="dd/MM/yyyy"
                                                 inputSize="sm"
                                                 groupClassName="!bg-stone-50 !border-stone-200 !rounded-xl !h-[54px]"
                                                 className="text-sm sm:text-base font-semibold"
@@ -342,24 +389,19 @@ export default function PublicBookingForm({ onSuccess, onClose }: PublicBookingF
                                             {t('arrivalTime')}
                                         </label>
                                         <div className="relative group">
-                                            <select
+                                            <ALCombobox
+                                                options={timeOptions}
                                                 value={time}
-                                                onChange={(e) => setTime(e.target.value)}
-                                                className="w-full h-[54px] bg-stone-50 border border-stone-200 rounded-xl px-4 pr-10 text-slate-800 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all font-semibold appearance-none"
-                                            >
-                                                <option value="" disabled>{t('selectTime')}</option>
-                                                {Array.from({ length: 14 }, (_, i) => i + 10).flatMap(h =>
-                                                    ['00', '30'].map(m => {
-                                                        const hour = h.toString().padStart(2, '0');
-                                                        return `${hour}:${m}`;
-                                                    })
-                                                ).map(slot => (
-                                                    <option key={slot} value={slot}>
-                                                        {slot}
-                                                    </option>
-                                                ))}
-                                            </select>
-                                            <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-stone-400 pointer-events-none" size={18} />
+                                                onChange={(val) => setTime(val as string)}
+                                                placeholder={t('selectTime')}
+                                                className="!h-[54px] !rounded-xl !bg-stone-50 !border-stone-200 font-semibold"
+                                            />
+                                            {timeError && (
+                                                <div className="mt-1.5 flex items-center gap-1 text-red-500 text-[10px] font-bold animate-pulse">
+                                                    <div className="w-1 h-1 bg-red-500 rounded-full"></div>
+                                                    {timeError}
+                                                </div>
+                                            )}
                                         </div>
                                     </div>
 
@@ -417,7 +459,7 @@ export default function PublicBookingForm({ onSuccess, onClose }: PublicBookingF
                                 <button
                                     type={canBookOnline ? "submit" : "button"}
                                     onClick={!canBookOnline ? handleCallRestaurant : undefined}
-                                    disabled={loading || !mode || checkingFit || !date || !time || !pax}
+                                    disabled={loading || !mode || checkingFit || !date || !time || !pax || !!timeError}
                                     className={`
                                 relative w-full sm:w-auto px-5 py-2.5 sm:px-7 sm:py-3 text-sm bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-2xl shadow-lg shadow-amber-500/30 transition-all hover:scale-[1.02] active:scale-[0.98] whitespace-normal leading-tight
                                 ${loading || !mode || checkingFit || !date || !time ? 'opacity-70 cursor-not-allowed' : ''}

@@ -73,8 +73,8 @@
     },
     "VirtualTour": {
       "label": "Experience",
-      "title": "The Immersive View",
-      "desc": "Explore our space from every angle before you arrive.",
+      "title": "Immersive Vision",
+      "desc": "This is a description of the test.",
       "tour_label": "Virtual Tour",
       "tour_title": "A 360° Walkthrough"
     }
@@ -259,7 +259,8 @@
         "saveFirst": "Save Changes First"
       },
       "validation": {
-        "missingInfo": "* Please enter Name & Phone to book"
+        "missingInfo": "* Please enter Name & Phone to book",
+        "timePast": "Cannot select time in the past."
       },
       "legal": "By booking, you agree to our Terms & Conditions and Cancellation Policy."
     },
@@ -361,7 +362,8 @@
         "existingCustomerNotFound": "Returning customer info not found. Please check the phone number.",
         "dateRequired": "Please select a reservation date.",
         "timeRequired": "Please select an arrival time.",
-        "partySizeRequired": "Please select party size."
+        "partySizeRequired": "Please select party size.",
+        "timePast": "Cannot select time in the past."
       },
       "toast": {
         "created": "Reservation request created successfully!",
@@ -1220,6 +1222,22 @@
         "next": "Next page",
         "last": "Last page"
       }
+    },
+    "apiErrors": {
+      "sessionExpired": "Your session has expired. Please sign in again.",
+      "tokenRefreshFailed": "Your session could not be refreshed. Please sign in again.",
+      "noAccessToken": "You need to sign in before continuing.",
+      "unauthorized": "You are not authorized. Please sign in and try again.",
+      "forbidden": "You do not have permission to perform this action.",
+      "notFound": "The requested resource was not found.",
+      "validation": "Some input values are invalid. Please review and try again.",
+      "conflict": "This action conflicts with existing data.",
+      "unprocessable": "This action cannot be completed with the current data.",
+      "timeout": "The request took too long. Please try again.",
+      "network": "Unable to connect to the server. Please check your connection.",
+      "http": "The request failed. Please try again.",
+      "httpStatus": "The request failed with status {status}.",
+      "unexpected": "An unexpected error occurred. Please try again later."
     }
   },
   "StaffReservation": {
@@ -2297,6 +2315,25 @@
   "Notifications": {
     "title": "Notifications",
     "markAllRead": "Mark all as read",
+    "markAllReadShort": "Mark all read",
+    "loadMore": "Load more",
+    "loading": "Loading...",
+    "batchSummary": "more notifications",
+    "acknowledge": "Acknowledge",
+    "acknowledged": "Acknowledged",
+    "view": "View",
+    "connected": "Connected",
+    "disconnected": "Disconnected",
+    "preferences": {
+      "title": "Notification Preferences",
+      "save": "Save",
+      "saveSuccess": "Preferences saved",
+      "saveError": "Failed to save preferences",
+      "soundOn": "Sound on",
+      "soundOff": "Sound off",
+      "enabled": "Enabled",
+      "disabled": "Disabled"
+    },
     "tabs": {
       "all": "All",
       "unread": "Unread",
@@ -2305,8 +2342,97 @@
       "orders": "Orders"
     },
     "empty": "No notifications",
+    "emptyUnread": "No unread notifications",
     "time": {
+      "justNow": "just now",
+      "minutesAgo": "{count}m ago",
+      "hoursAgo": "{count}h ago",
+      "daysAgo": "{count}d ago",
       "ago": "{time} ago"
+    },
+    "types": {
+      "NEW_ORDER": "New Order",
+      "ORDER_CANCELLED": "Order Cancelled",
+      "ORDER_ITEM_READY": "Item Ready",
+      "ORDER_ITEM_REJECTED": "Item Rejected",
+      "ALL_ITEMS_READY": "All Items Ready",
+      "PAYMENT_COMPLETED": "Payment Completed",
+      "RESERVATION_CREATED": "New Reservation",
+      "RESERVATION_STATUS_CHANGED": "Reservation Updated",
+      "RESERVATION_REMINDER": "Reservation Reminder",
+      "TABLE_STATUS_CHANGED": "Table Status Changed",
+      "LOW_STOCK_ALERT": "Low Stock Alert",
+      "DISH_OUT_OF_STOCK": "Dish Out of Stock",
+      "SHIFT_ASSIGNED": "Shift Assigned",
+      "ATTENDANCE_ALERT": "Attendance Alert",
+      "SYSTEM_ALERT": "System Alert",
+      "ORDER_STATUS_CHANGED": "Order Updated",
+      "PAYMENT_REQUEST": "Payment Request",
+      "fallback": "Notification"
+    },
+    "priority": {
+      "Low": "Low",
+      "Normal": "Normal",
+      "High": "High",
+      "Critical": "Critical"
+    },
+    "categories": {
+      "Orders": "Orders",
+      "Reservations": "Reservations",
+      "Tables": "Tables",
+      "Inventory": "Inventory",
+      "Shifts": "Shifts",
+      "System": "System",
+      "General": "General"
+    },
+    "messages": {
+      "NEW_ORDER": { "title": "New order #{orderId}", "body": "Table {tableName} placed a new order" },
+      "ORDER_CANCELLED": { "title": "Order #{orderId} cancelled", "body": "Order #{orderId} has been cancelled" },
+      "ORDER_ITEM_READY": { "title": "Order item ready", "body": "An item in the order is ready to serve" },
+      "ORDER_ITEM_REJECTED": { "title": "Order item rejected", "body": "An item in the order was rejected" },
+      "ALL_ITEMS_READY": { "title": "Order #{orderId} fully ready", "body": "All items for table {tableName} are ready" },
+      "PAYMENT_COMPLETED": { "title": "Payment received", "body": "Order #{orderId} — {amount} paid" },
+      "RESERVATION_CREATED": { "title": "New reservation", "body": "{guestName} — {guestCount} guests at {time}" },
+      "RESERVATION_STATUS_CHANGED": { "title": "Reservation updated", "body": "Reservation #{reservationId} — status changed to {status}" },
+      "RESERVATION_REMINDER": { "title": "Reservation reminder", "body": "{guestName} — arriving in {minutes} minutes" },
+      "TABLE_STATUS_CHANGED": { "title": "Table {tableName}", "body": "{oldStatus} → {status}" },
+      "LOW_STOCK_ALERT": { "title": "Low stock: {ingredientName}", "body": "Current: {current}, Min: {minimum}" },
+      "DISH_OUT_OF_STOCK": { "title": "{dishName} out of stock", "body": "This dish is no longer available" },
+      "SHIFT_ASSIGNED": { "title": "Shift assigned", "body": "You have been assigned to {shiftName} on {date}" },
+      "ATTENDANCE_ALERT": { "title": "Attendance alert", "body": "{staffName} — {reason}" },
+      "SYSTEM_ALERT": { "title": "System alert", "body": "{message}" },
+      "ORDER_STATUS_CHANGED": { "title": "Order #{orderId} updated", "body": "Order #{orderId} status changed to {status}" },
+      "PAYMENT_REQUEST": { "title": "Payment requested — {tableName}", "body": "Order #{orderId} — {amount} payment requested" },
+      "fallback": { "title": "Notification", "body": "You have a new notification." }
+    },
+    "metadata": {
+      "defaults": {
+        "table": "Table",
+        "staff": "Staff",
+        "guest": "Guest"
+      },
+      "statuses": {
+        "LOCKED": "Locked",
+        "AVAILABLE": "Available",
+        "RESERVED": "Reserved",
+        "OCCUPIED": "Occupied",
+        "CONFIRMED": "Confirmed",
+        "CHECKED_IN": "Checked in",
+        "CANCELLED": "Cancelled",
+        "NO_SHOW": "No-show",
+        "PENDING": "Pending",
+        "COMPLETED": "Completed",
+        "IN_PROGRESS": "In progress",
+        "UNKNOWN": "Unknown",
+        "CREATED": "Created",
+        "READY": "Ready",
+        "SERVED": "Served",
+        "REJECTED": "Rejected"
+      },
+      "attendanceReasons": {
+        "LATE_CHECKIN": "checked in {minutes} minutes late",
+        "EARLY_LEAVE": "left {minutes} minutes early"
+      }
     }
   },
   "Kitchen": {
@@ -2592,7 +2718,11 @@
       "selectFromMenu": "Select from Menu",
       "autoTranslate": "Auto Translate",
       "search": "Search",
-      "cancel": "Cancel"
+      "cancel": "Cancel",
+      "facebook": "Facebook",
+      "instagram": "Instagram",
+      "tiktok": "TikTok",
+      "website": "Website"
     },
     "Introduction": {
       "title": "Introduction Page",
@@ -2693,31 +2823,34 @@
       "operatingDesc": "Business hours and other operational details.",
       "socialMedia": "Social Media",
       "socialMediaDesc": "Your store's social media presence.",
+      "upload": "Upload",
       "changeLogo": "Change Logo",
       "uploadLogo": "Upload Logo",
       "remove": "Remove",
       "storeName": "Store Name",
-      "storeNamePlaceholder": "Enter restaurant/store name",
-      "streetAddress": "Street Address",
-      "streetAddressPlaceholder": "E.g. Avenue Jacques Dalcroze 9",
+      "street": "Street Address",
       "postalCode": "Postal Code",
-      "postalCodePlaceholder": "1000",
       "city": "City",
-      "cityPlaceholder": "City Name",
       "country": "Country / Region",
-      "countryPlaceholder": "Country Name",
       "email": "Email Address",
-      "emailPlaceholder": "contact@restaurant.com",
       "phone": "Phone Number",
-      "phonePlaceholder": "+84 123 456 789",
       "openingHours": "Opening Hours",
-      "openingHoursPlaceholder": "E.g. Mon - Sun: 08:00 AM - 10:00 PM",
-      "facebookLink": "Facebook Link",
-      "facebookPlaceholder": "https://facebook.com/yourpage",
-      "instagramLink": "Instagram Link",
-      "instagramPlaceholder": "https://instagram.com/yourprofile",
-      "tiktokLink": "TikTok Link",
-      "tiktokPlaceholder": "https://tiktok.com/@yourprofile",
+      "facebook": "Facebook Link",
+      "instagram": "Instagram Link",
+      "tiktok": "TikTok Link",
+      "placeholders": {
+        "storeName": "Enter restaurant/store name",
+        "street": "E.g. Avenue Jacques Dalcroze 9",
+        "postalCode": "1000",
+        "city": "City Name",
+        "country": "Country Name",
+        "email": "contact@restaurant.com",
+        "phone": "+84 123 456 789",
+        "openingHours": "E.g. Mon - Sun: 08:00 AM - 10:00 PM",
+        "facebook": "https://facebook.com/yourpage",
+        "instagram": "https://instagram.com/yourprofile",
+        "tiktok": "https://tiktok.com/@yourprofile"
+      },
       "reset": "Reset",
       "clickToUpload": "Logo",
       "uploadSuccess": "Logo uploaded successfully",
@@ -2729,11 +2862,6 @@
       "storeVideo": "Store Video",
       "syncNotice": "Sync Notice",
       "syncNoticeDesc": "Saving will update global fields across all languages instantly.",
-      "placeholders": {
-        "facebook": "Facebook URL",
-        "instagram": "Instagram URL",
-        "tiktok": "TikTok URL"
-      },
       "translationFailed": "Translation failed.",
       "translatedSuccessfully": "Translated successfully!",
       "nothingToTranslate": "Nothing to translate.",
@@ -2998,6 +3126,32 @@
       }
     },
     "Detail": {
+      "title": "Customer Details",
+      "saveButton": "Close",
+      "cancel": "Close",
+      "fields": {
+        "phone": "Phone Number",
+        "fullName": "Full Name",
+        "email": "Email",
+        "loyaltyPoints": "Loyalty Points",
+        "isMember": "Member Status",
+        "createdAt": "Created At"
+      },
+      "placeholders": {
+        "phone": "",
+        "fullName": "",
+        "email": "",
+        "loyaltyPoints": ""
+      },
+      "validation": {
+        "phoneRequired": "",
+        "phoneMaxLength": "",
+        "phoneInvalid": "",
+        "nameMaxLength": "",
+        "emailMaxLength": "",
+        "emailInvalid": "",
+        "pointsNegative": ""
+      },
       "backToCustomers": "Back to Customers",
       "customerNotFound": "Customer not found.",
       "guestCustomer": "Guest Customer",
@@ -3045,6 +3199,48 @@
         "DINE_IN": "Dine-in",
         "TAKEAWAY": "Takeaway"
       }
+    }
+  },
+  "EmailTemplates": {
+    "title": "Email Template Management",
+    "description": "Manage email templates sent to customers and staff.",
+    "listTitle": "Template List",
+    "table": {
+      "name": "Template Name",
+      "code": "Code",
+      "subject": "Subject",
+      "edit": "Edit"
+    },
+    "actions": {
+      "add": "Add Template",
+      "view": "View details",
+      "edit": "Edit",
+      "delete": "Delete"
+    },
+    "dialog": {
+      "createTitle": "Create New Template",
+      "editTitle": "Edit Template",
+      "viewTitle": "Template Details",
+      "code": "Template Code",
+      "codePlaceholder": "Auto-generated from name",
+      "name": "Template Name",
+      "namePlaceholder": "e.g., Reservation Confirmation",
+      "subject": "Email Subject",
+      "subjectPlaceholder": "e.g., Confirmation of your reservation at An Lac",
+      "description": "Description",
+      "descriptionPlaceholder": "Brief description of the template purpose",
+      "body": "HTML Content",
+      "bodyPlaceholder": "Enter HTML code here...",
+      "tabEditor": "Editor",
+      "tabPreview": "Preview",
+      "placeholderHint": "* Use placeholders like {{CustomerName}}, {{ReservedTime}}... depending on the template.",
+      "close": "Close",
+      "save": "Save Changes",
+      "create": "Create New"
+    },
+    "deleteDialog": {
+      "title": "Delete Template",
+      "description": "Are you sure you want to delete this template? This action cannot be undone."
     }
   }
 }

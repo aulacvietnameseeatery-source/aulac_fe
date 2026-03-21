@@ -6,6 +6,10 @@ export { MyShifts } from "./my-shifts/my-shifts";
 export { AttendanceAdjustmentDialog } from "./components/attendance-adjustment-dialog";
 export { ShiftStatusBadge } from "./components/shift-status-badge";
 export { ShiftAssignmentForm } from "./components/shift-assignment-form";
+export { ShiftCard } from "./components/shift-card";
+export { CopyWeekDialog } from "./components/copy-week-dialog";
+export { PublishToolbar } from "./components/publish-toolbar";
+export { ShiftMatrixCalendar } from "./shift-schedule/components/shift-matrix-calendar";
 export {
   ATTENDANCE_STATUS_CONFIG,
   ASSIGNMENT_STATUS_CONFIG,
@@ -20,9 +24,15 @@ export type {
   ShiftAssignmentDetailDto,
   ShiftAssignmentDto,         // deprecated alias
   AttendanceRecordDto,
+  TimeLogDto,
   WorkedHoursReportRowDto,
   AttendanceReportRowDto,
   AttendanceExceptionReportRowDto,
+  TeamScheduleStaffRow,
+  BulkCreateAssignmentRequest,
+  PublishAssignmentsRequest,
+  CopyWeekRequest,
+  ReassignRequest,
   // deprecated aliases
   ShiftScheduleListDto,
   ShiftScheduleDetailDto,
@@ -42,6 +52,14 @@ export {
   useUpdateAssignmentMutation,
   useCancelAssignmentMutation,
   useStaffForAssignmentQuery,
+  // Bulk / Publish / Copy / Reassign / Confirm
+  useBulkCreateAssignmentsMutation,
+  usePublishAssignmentsMutation,
+  useCopyWeekMutation,
+  useReassignAssignmentMutation,
+  useConfirmAssignmentMutation,
+  // Team Schedule
+  useTeamScheduleQuery,
   // Attendance
   useCheckInMutation,
   useCheckOutMutation,

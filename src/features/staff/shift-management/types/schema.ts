@@ -27,6 +27,8 @@ export const assignmentFormSchema = z
     plannedStartAt: z.string().optional().nullable(),
     plannedEndAt: z.string().optional().nullable(),
     notes: z.string().max(500, "Notes cannot exceed 500 characters").optional().nullable(),
+    tags: z.string().max(200, "Tags cannot exceed 200 characters").optional().nullable(),
+    isDraft: z.boolean().optional().default(false),
   })
   .refine(
     (data) => {
@@ -96,3 +98,28 @@ export type AttendanceAdjustmentFormValues = z.input<typeof attendanceAdjustment
 export const scheduleFormSchema = assignmentFormSchema;
 /** @deprecated */
 export type ScheduleFormValues = AssignmentFormValues;
+
+// ─── Copy Week Form ───────────────────────────────────────────────────────────
+
+export const copyWeekFormSchema = z.object({
+  sourceWeekStart: z.string().min(1, "Source week start is required"),
+  targetWeekStart: z.string().min(1, "Target week start is required"),
+  asDraft: z.boolean().optional().default(true),
+});
+
+export type CopyWeekFormValues = z.input<typeof copyWeekFormSchema>;
+
+// ─── Bulk Create Form ─────────────────────────────────────────────────────────
+
+export const bulkCreateFormSchema = z.object({
+  shiftTemplateId: z.number({ message: "Shift template is required" }).min(1, "Shift template is required"),
+  staffIds: z.array(z.number()).min(1, "Select at least one staff member"),
+  workDate: z.string().min(1, "Work date is required"),
+  plannedStartAt: z.string().optional().nullable(),
+  plannedEndAt: z.string().optional().nullable(),
+  notes: z.string().max(500).optional().nullable(),
+  tags: z.string().max(200).optional().nullable(),
+  isDraft: z.boolean().optional().default(true),
+});
+
+export type BulkCreateFormValues = z.input<typeof bulkCreateFormSchema>;

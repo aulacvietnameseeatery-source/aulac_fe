@@ -246,22 +246,24 @@ export const AboutUsSettingsForm = () => {
     return (
         <div className="flex flex-col gap-6 w-full pb-12">
             {/* --- HEADER ACTIONS --- */}
-            <div className="flex flex-wrap items-center justify-between gap-4 bg-white p-4 rounded-xl border border-border shadow-sm sticky top-0 z-50">
+            <div className="flex flex-wrap items-center justify-between gap-4 bg-[#FDFBF9]/80 backdrop-blur-md p-4 rounded-xl border border-amber-200/30 shadow-sm transition-all duration-300">
                 <div className="flex items-center gap-6">
                     <div className="flex bg-gray-100 p-1 rounded-lg">
                         {LOCALES.map((loc) => (
-                            <Button
-                                key={loc}
-                                variant={activeLocale === loc ? "default" : "ghost"}
-                                size="sm"
-                                className={cn(
-                                    "px-4 py-1.5 h-8 text-xs font-medium uppercase transition-all duration-200",
-                                    activeLocale === loc && "bg-white shadow-sm text-blue-600 hover:text-blue-600"
-                                )}
-                                onClick={() => setActiveLocale(loc)}
-                            >
-                                {loc}
-                            </Button>
+                                <Button
+                                    key={loc}
+                                    variant={activeLocale === loc ? "default" : "ghost"}
+                                    size="sm"
+                                    className={cn(
+                                        "px-4 py-1.5 h-8 text-xs font-bold uppercase transition-all duration-200 rounded-md",
+                                        activeLocale === loc
+                                            ? "bg-white shadow-sm text-blue-600 hover:bg-white hover:text-blue-600"
+                                            : "text-gray-500 hover:text-blue-600 hover:bg-white/50"
+                                    )}
+                                    onClick={() => setActiveLocale(loc)}
+                                >
+                                    {loc}
+                                </Button>
                         ))}
                     </div>
 
@@ -280,7 +282,7 @@ export const AboutUsSettingsForm = () => {
                     </Button>
                     <Button
                         size="sm"
-                        className="h-9 gap-2 bg-[#1E3C52] hover:bg-[#12283A] text-white shadow-md shadow-blue-900/10"
+                        className="h-9 gap-2 bg-[#1E3C52] hover:bg-[#12283A] text-white shadow-lg shadow-blue-900/20 font-semibold px-4 transition-all"
                         onClick={handleSave}
                         disabled={isSaving}
                     >
@@ -298,13 +300,15 @@ export const AboutUsSettingsForm = () => {
                         <div className="grid grid-cols-1 gap-8 items-start">
                             {/* Founders Section */}
                             {/* --- FOUNDERS SECTION --- */}
-                            <div className="p-10 border border-slate-200 rounded-3xl bg-white/50 shadow-sm animate-in fade-in slide-in-from-bottom-4 duration-700">
+                            <div className="p-10 border border-amber-200/50 rounded-3xl bg-[#FDFBF9]/40 backdrop-blur-sm shadow-sm animate-in fade-in slide-in-from-bottom-4 duration-700">
                                 <div className="space-y-10">
-                                    <div className="pb-4 border-b border-slate-100">
-                                        <div className="mb-1">
-                                            <h3 className="text-xl font-bold text-slate-800">{t("AboutUs.sections.founders.title")}</h3>
+                                    <div className="pb-4 border-b border-amber-200/20">
+                                        <div className="flex items-center gap-3 mb-1">
+                                            <h2 className="text-xl font-bold text-gray-900 tracking-tight">
+                                                {t("AboutUs.sections.founders.title")}
+                                            </h2>
                                         </div>
-                                        <p className="text-sm text-slate-500 font-medium">{t("AboutUs.sections.founders.description")}</p>
+                                        <p className="font-[Inter] text-sm text-[#1A3A52]/60 ml-0 md:ml-13">{t("AboutUs.sections.founders.description")}</p>
                                     </div>
 
                                     <div className="space-y-12">
@@ -312,22 +316,22 @@ export const AboutUsSettingsForm = () => {
                                             <div className="md:col-span-8 space-y-8">
                                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
                                                     <div className="space-y-2">
-                                                        <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">{t('AboutUs.sections.founders.fields.label')}</label>
-                                                        <Input className="h-11 border-slate-200 bg-white/50" value={getValue("about.founders.label")} onChange={(e) => handleChange("about.founders.label", e.target.value)} />
+                                                        <label className="text-[11px] font-bold text-[#1A3A52]/50 uppercase tracking-widest">{t('AboutUs.sections.founders.fields.label')}</label>
+                                                        <Input className="h-11 border-amber-200/40 bg-white/60 focus:border-[#1A3A52] font-[Inter]" value={getValue("about.founders.label")} onChange={(e) => handleChange("about.founders.label", e.target.value)} />
                                                     </div>
                                                     <div className="space-y-2">
-                                                        <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">{t('AboutUs.sections.founders.fields.header')}</label>
-                                                        <Input className="h-11 border-slate-200 bg-white/50" value={getValue("about.founders.title")} onChange={(e) => handleChange("about.founders.title", e.target.value)} />
+                                                        <label className="text-[11px] font-bold text-[#1A3A52]/50 uppercase tracking-widest">{t('AboutUs.sections.founders.fields.header')}</label>
+                                                        <Input className="h-11 border-amber-200/40 bg-white/60 focus:border-[#1A3A52] font-[Inter]" value={getValue("about.founders.title")} onChange={(e) => handleChange("about.founders.title", e.target.value)} />
                                                     </div>
                                                 </div>
                                                 <div className="space-y-6">
                                                     <div className="space-y-2">
-                                                        <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">{t('AboutUs.sections.founders.fields.paragraph1')}</label>
-                                                        <Textarea className="min-h-[120px] border-slate-200 bg-white/50 leading-relaxed" value={getValue("about.founders.paragraph_1")} onChange={(e) => handleChange("about.founders.paragraph_1", e.target.value)} />
+                                                        <label className="text-[11px] font-bold text-[#1A3A52]/50 uppercase tracking-widest">{t('AboutUs.sections.founders.fields.paragraph1')}</label>
+                                                        <Textarea className="min-h-[120px] border-amber-200/40 bg-white/60 focus:border-[#1A3A52] font-[Inter] leading-relaxed" value={getValue("about.founders.paragraph_1")} onChange={(e) => handleChange("about.founders.paragraph_1", e.target.value)} />
                                                     </div>
                                                     <div className="space-y-2">
-                                                        <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">{t('AboutUs.sections.founders.fields.paragraph2')}</label>
-                                                        <Textarea className="min-h-[120px] border-slate-200 bg-white/50 leading-relaxed" value={getValue("about.founders.paragraph_2")} onChange={(e) => handleChange("about.founders.paragraph_2", e.target.value)} />
+                                                        <label className="text-[11px] font-bold text-[#1A3A52]/50 uppercase tracking-widest">{t('AboutUs.sections.founders.fields.paragraph2')}</label>
+                                                        <Textarea className="min-h-[120px] border-amber-200/40 bg-white/60 focus:border-[#1A3A52] font-[Inter] leading-relaxed" value={getValue("about.founders.paragraph_2")} onChange={(e) => handleChange("about.founders.paragraph_2", e.target.value)} />
                                                     </div>
                                                 </div>
                                             </div>
@@ -343,12 +347,12 @@ export const AboutUsSettingsForm = () => {
                                             </div>
                                             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                                 <div className="space-y-2">
-                                                    <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">{t('AboutUs.sections.founders.fields.quote')}</label>
-                                                    <Textarea className="min-h-[100px] border-slate-200 bg-white italic leading-relaxed" value={getValue("about.founders.quote")} onChange={(e) => handleChange("about.founders.quote", e.target.value)} />
+                                                    <label className="text-[11px] font-bold text-[#1A3A52]/50 uppercase tracking-widest">{t('AboutUs.sections.founders.fields.quote')}</label>
+                                                    <Textarea className="min-h-[100px] border-[#D5BA98]/20 bg-white focus:border-[#1A3A52] font-[Inter] italic leading-relaxed" value={getValue("about.founders.quote")} onChange={(e) => handleChange("about.founders.quote", e.target.value)} />
                                                 </div>
                                                 <div className="space-y-2">
-                                                    <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">{t('AboutUs.sections.founders.fields.author')}</label>
-                                                    <Input className="h-11 border-slate-200 bg-white" value={getValue("about.founders.quote_author")} onChange={(e) => handleChange("about.founders.quote_author", e.target.value)} />
+                                                    <label className="text-[11px] font-bold text-[#1A3A52]/50 uppercase tracking-widest">{t('AboutUs.sections.founders.fields.author')}</label>
+                                                    <Input className="h-11 border-[#D5BA98]/20 bg-white focus:border-[#1A3A52] font-[Inter]" value={getValue("about.founders.quote_author")} onChange={(e) => handleChange("about.founders.quote_author", e.target.value)} />
                                                 </div>
                                             </div>
                                         </div>
@@ -356,28 +360,30 @@ export const AboutUsSettingsForm = () => {
                                 </div>
                             </div>
                             {/* --- JOURNEY SECTION --- */}
-                            <div className="p-10 border border-slate-200 rounded-3xl bg-white/50 shadow-sm animate-in fade-in slide-in-from-bottom-4 duration-700 delay-100">
+                            <div className="p-10 border border-amber-200/50 rounded-3xl bg-[#FDFBF9]/40 backdrop-blur-sm shadow-sm animate-in fade-in slide-in-from-bottom-4 duration-700 delay-100">
                                 <div className="space-y-8">
-                                    <div className="pb-4 border-b border-slate-100">
-                                        <div className="mb-1">
-                                            <h3 className="text-xl font-bold text-slate-800">{t("AboutUs.sections.journey.title")}</h3>
+                                    <div className="pb-4 border-b border-amber-200/20">
+                                        <div className="flex items-center gap-3 mb-1">
+                                            <h2 className="text-xl font-bold text-gray-900 tracking-tight">
+                                                {t("AboutUs.sections.journey.title")}
+                                            </h2>
                                         </div>
-                                        <p className="text-sm text-slate-500 font-medium">{t("AboutUs.sections.journey.description")}</p>
+                                        <p className="font-[Inter] text-sm text-[#1A3A52]/60 ml-0 md:ml-13">{t("AboutUs.sections.journey.description")}</p>
                                     </div>
 
                                     <div className="space-y-8 min-w-0">
                                         <div className="space-y-2">
-                                            <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">{t('AboutUs.sections.journey.fields.title')}</label>
-                                            <Input className="h-11 border-slate-200 bg-white/50" value={getValue("about.journey.title")} onChange={(e) => handleChange("about.journey.title", e.target.value)} />
+                                            <label className="text-[11px] font-bold text-[#1A3A52]/50 uppercase tracking-widest">{t('AboutUs.sections.journey.fields.title')}</label>
+                                            <Input className="h-11 border-amber-200/40 bg-white/60 focus:border-[#1A3A52] font-[Inter]" value={getValue("about.journey.title")} onChange={(e) => handleChange("about.journey.title", e.target.value)} />
                                         </div>
                                         <div className="grid grid-cols-1 gap-8">
                                             <div className="space-y-2">
-                                                <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">{t('AboutUs.sections.journey.fields.paragraph1')}</label>
-                                                <Textarea className="min-h-[120px] border-slate-200 bg-white/50 leading-relaxed" value={getValue("about.journey.paragraph_1")} onChange={(e) => handleChange("about.journey.paragraph_1", e.target.value)} />
+                                                <label className="text-[11px] font-bold text-[#1A3A52]/50 uppercase tracking-widest">{t('AboutUs.sections.journey.fields.paragraph1')}</label>
+                                                <Textarea className="min-h-[120px] border-amber-200/40 bg-white/60 focus:border-[#1A3A52] font-[Inter] leading-relaxed" value={getValue("about.journey.paragraph_1")} onChange={(e) => handleChange("about.journey.paragraph_1", e.target.value)} />
                                             </div>
                                             <div className="space-y-2">
-                                                <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">{t('AboutUs.sections.journey.fields.paragraph2')}</label>
-                                                <Textarea className="min-h-[120px] border-slate-200 bg-white/50 leading-relaxed" value={getValue("about.journey.paragraph_2")} onChange={(e) => handleChange("about.journey.paragraph_2", e.target.value)} />
+                                                <label className="text-[11px] font-bold text-[#1A3A52]/50 uppercase tracking-widest">{t('AboutUs.sections.journey.fields.paragraph2')}</label>
+                                                <Textarea className="min-h-[120px] border-amber-200/40 bg-white/60 focus:border-[#1A3A52] font-[Inter] leading-relaxed" value={getValue("about.journey.paragraph_2")} onChange={(e) => handleChange("about.journey.paragraph_2", e.target.value)} />
                                             </div>
                                             <div className="p-8 rounded-3xl bg-blue-50/30 border border-blue-100/50 space-y-4">
                                                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-100/50 text-[10px] font-bold uppercase tracking-widest text-blue-600">
@@ -394,24 +400,26 @@ export const AboutUsSettingsForm = () => {
                                 </div>
                             </div>
                             {/* --- PHILOSOPHY SECTION --- */}
-                            <div className="p-10 border border-slate-200 rounded-3xl bg-white/50 shadow-sm animate-in fade-in slide-in-from-bottom-4 duration-700 delay-200">
+                            <div className="p-10 border border-amber-200/50 rounded-3xl bg-[#FDFBF9]/40 backdrop-blur-sm shadow-sm animate-in fade-in slide-in-from-bottom-4 duration-700 delay-200">
                                 <div className="space-y-10">
-                                    <div className="pb-4 border-b border-slate-100">
-                                        <div className="mb-1">
-                                            <h3 className="text-xl font-bold text-slate-800">{t("AboutUs.sections.philosophy.title")}</h3>
+                                    <div className="pb-4 border-b border-amber-200/20">
+                                        <div className="flex items-center gap-3 mb-1">
+                                            <h2 className="text-xl font-bold text-gray-900 tracking-tight">
+                                                {t("AboutUs.sections.philosophy.title")}
+                                            </h2>
                                         </div>
-                                        <p className="text-sm text-slate-500 font-medium">{t("AboutUs.sections.philosophy.description")}</p>
+                                        <p className="font-[Inter] text-sm text-[#1A3A52]/60 ml-0 md:ml-13">{t("AboutUs.sections.philosophy.description")}</p>
                                     </div>
 
                                     <div className="space-y-10">
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
                                             <div className="space-y-2">
-                                                <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">{t('AboutUs.sections.philosophy.fields.label')}</label>
-                                                <Input className="h-11 border-slate-200 bg-white/50" value={getValue("about.philosophy.label")} onChange={(e) => handleChange("about.philosophy.label", e.target.value)} />
+                                                <label className="text-[11px] font-bold text-[#1A3A52]/50 uppercase tracking-widest">{t('AboutUs.sections.philosophy.fields.label')}</label>
+                                                <Input className="h-11 border-amber-200/40 bg-white/60 focus:border-[#1A3A52] font-[Inter]" value={getValue("about.philosophy.label")} onChange={(e) => handleChange("about.philosophy.label", e.target.value)} />
                                             </div>
                                             <div className="space-y-2">
-                                                <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">{t('AboutUs.sections.philosophy.fields.header')}</label>
-                                                <Input className="h-11 border-slate-200 bg-white/50" value={getValue("about.philosophy.title")} onChange={(e) => handleChange("about.philosophy.title", e.target.value)} />
+                                                <label className="text-[11px] font-bold text-[#1A3A52]/50 uppercase tracking-widest">{t('AboutUs.sections.philosophy.fields.header')}</label>
+                                                <Input className="h-11 border-amber-200/40 bg-white/60 focus:border-[#1A3A52] font-[Inter]" value={getValue("about.philosophy.title")} onChange={(e) => handleChange("about.philosophy.title", e.target.value)} />
                                             </div>
                                         </div>
 
@@ -451,13 +459,15 @@ export const AboutUsSettingsForm = () => {
                                 </div>
                             </div>
                             {/* --- LEGACY SECTION --- */}
-                            <div className="p-10 border border-slate-200 rounded-3xl bg-white/50 shadow-sm animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300">
+                            <div className="p-10 border border-amber-200/50 rounded-3xl bg-[#FDFBF9]/40 backdrop-blur-sm shadow-sm animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300">
                                 <div className="space-y-10">
-                                    <div className="pb-4 border-b border-slate-100">
-                                        <div className="mb-1">
-                                            <h3 className="text-xl font-bold text-slate-800">{t("AboutUs.sections.legacy.title")}</h3>
+                                    <div className="pb-4 border-b border-amber-200/20">
+                                        <div className="flex items-center gap-3 mb-1">
+                                            <h2 className="text-xl font-bold text-gray-900 tracking-tight">
+                                                {t("AboutUs.sections.legacy.title")}
+                                            </h2>
                                         </div>
-                                        <p className="text-sm text-slate-500 font-medium">{t("AboutUs.sections.legacy.description")}</p>
+                                        <p className="font-[Inter] text-sm text-[#1A3A52]/60 ml-0 md:ml-13">{t("AboutUs.sections.legacy.description")}</p>
                                     </div>
 
                                     <div className="space-y-10">
@@ -465,12 +475,12 @@ export const AboutUsSettingsForm = () => {
                                             <div className="md:col-span-8 space-y-8">
                                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
                                                     <div className="space-y-2">
-                                                        <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">{t('AboutUs.sections.legacy.fields.header')}</label>
-                                                        <Input className="h-11 border-slate-200 bg-white/50" value={getValue("about.legacy.title")} onChange={(e) => handleChange("about.legacy.title", e.target.value)} />
+                                                        <label className="text-[11px] font-bold text-[#1A3A52]/50 uppercase tracking-widest">{t('AboutUs.sections.legacy.fields.header')}</label>
+                                                        <Input className="h-11 border-amber-200/40 bg-white/60 focus:border-[#1A3A52] font-[Inter]" value={getValue("about.legacy.title")} onChange={(e) => handleChange("about.legacy.title", e.target.value)} />
                                                     </div>
                                                     <div className="space-y-2">
-                                                        <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">{t('AboutUs.sections.legacy.fields.subtitle')}</label>
-                                                        <Input className="h-11 border-slate-200 bg-white/50" value={getValue("about.legacy.subtitle")} onChange={(e) => handleChange("about.legacy.subtitle", e.target.value)} />
+                                                        <label className="text-[11px] font-bold text-[#1A3A52]/50 uppercase tracking-widest">{t('AboutUs.sections.legacy.fields.subtitle')}</label>
+                                                        <Input className="h-11 border-amber-200/40 bg-white/60 focus:border-[#1A3A52] font-[Inter]" value={getValue("about.legacy.subtitle")} onChange={(e) => handleChange("about.legacy.subtitle", e.target.value)} />
                                                     </div>
                                                 </div>
                                             </div>
@@ -482,12 +492,12 @@ export const AboutUsSettingsForm = () => {
 
                                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 pt-4">
                                             {[1, 2, 3, 4].map(idx => (
-                                                <div key={idx} className="space-y-4 p-8 rounded-3xl bg-slate-50/40 border border-slate-100/50">
-                                                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 text-[10px] font-bold uppercase tracking-widest text-slate-500">
+                                                <div key={idx} className="space-y-4 p-8 rounded-3xl bg-[#D5BA98]/5 border border-[#D5BA98]/10">
+                                                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#D5BA98]/20 text-[10px] font-bold uppercase tracking-widest text-[#1A3A52]">
                                                         {t('AboutUs.sections.legacy.chapterLabel', { index: idx })}
                                                     </div>
                                                     <div className="space-y-2">
-                                                        <Textarea className="min-h-[140px] border-slate-200 bg-white leading-relaxed text-sm" value={getValue(`about.legacy.paragraph_${idx}`)} onChange={(e) => handleChange(`about.legacy.paragraph_${idx}`, e.target.value)} />
+                                                        <Textarea className="min-h-[140px] border-[#D5BA98]/20 bg-white focus:border-[#1A3A52] font-[Inter] leading-relaxed text-sm" value={getValue(`about.legacy.paragraph_${idx}`)} onChange={(e) => handleChange(`about.legacy.paragraph_${idx}`, e.target.value)} />
                                                     </div>
                                                 </div>
                                             ))}

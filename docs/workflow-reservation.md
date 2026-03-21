@@ -247,11 +247,23 @@
 - Admin `POST /api/manual/reservations`
   - Tạo reservation từ màn hình quản trị.
   - Nhận `tableIds` (ưu tiên), vẫn tương thích `tableId` cho flow cũ.
+  - **Mới:** Tự động gửi email xác nhận cho khách nếu có địa chỉ email.
+  - **Mới:** Nếu số điện thoại đã tồn tại trong hệ thống, tự động cập nhật tên và email mới nhất của khách hàng vào hồ sơ.
 - Admin edit reservation endpoint
   - Cập nhật thông tin reservation và danh sách bàn.
   - Revalidate conflict nếu thay đổi thời gian, số khách hoặc bàn.
 - Admin `PATCH /api/manual/reservations/{id}/status`
   - Cập nhật status vận hành của reservation trong manual flow.
+
+## Quy tắc đồng bộ thông tin khách hàng
+- Hệ thống sử dụng `Số điện thoại` làm định danh duy nhất (Unique Key) cho khách hàng.
+- Khi tạo reservation (cả Public và Admin):
+  - Nếu số điện thoại chưa có: Tạo khách hàng mới.
+  - Nếu số điện thoại đã có: Sử dụng khách hàng cũ, đồng thời cập nhật `Tên` và `Email` mới nhất từ form đặt bàn vào hồ sơ khách hàng để đảm bảo dữ liệu luôn được cập nhật.
+
+## Quy tắc gửi Email
+- Khi tạo reservation thành công ở bất kỳ luồng nào (Public/Admin):
+  - Hệ thống tự động gửi email xác nhận (`RESERVATION_CONFIRM`) nếu khách hàng có cung cấp email.
 
 ## Ghi chú
 - Nếu lưu lượng cao, nên cân nhắc tăng mức đảm bảo concurrency bằng transaction isolation hoặc locking phù hợp quanh bước chọn bàn và tạo reservation.

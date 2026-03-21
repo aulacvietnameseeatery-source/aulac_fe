@@ -15,6 +15,12 @@ import type {
   CreateShiftAssignmentRequest,
   UpdateShiftAssignmentRequest,
   AdjustAttendanceRequest,
+  BulkCreateAssignmentRequest,
+  PublishAssignmentsRequest,
+  CopyWeekRequest,
+  ReassignRequest,
+  TeamScheduleStaffRow,
+  TeamScheduleParams,
   GetTemplatesParams,
   GetAssignmentsParams,
   GetMyShiftsParams,
@@ -99,6 +105,58 @@ export const shiftManagementService = {
 
   async cancelAssignment(id: number): Promise<void> {
     await api.delete(`${BASE}/assignments/${id}`);
+  },
+
+  // ─── Bulk / Publish / Copy / Reassign / Confirm ───────────────────────────
+
+  async bulkCreateAssignments(body: BulkCreateAssignmentRequest): Promise<ShiftAssignmentListDto[]> {
+    const res = await api.post<ApiResponse<ShiftAssignmentListDto[]>>(
+      `${BASE}/assignments/bulk`,
+      body
+    );
+    return res.data ?? [];
+  },
+
+  async publishAssignments(body: PublishAssignmentsRequest): Promise<ShiftAssignmentListDto[]> {
+    const res = await api.post<ApiResponse<ShiftAssignmentListDto[]>>(
+      `${BASE}/assignments/publish`,
+      body
+    );
+    return res.data ?? [];
+  },
+
+  async copyWeek(body: CopyWeekRequest): Promise<ShiftAssignmentListDto[]> {
+    const res = await api.post<ApiResponse<ShiftAssignmentListDto[]>>(
+      `${BASE}/assignments/copy-week`,
+      body
+    );
+    return res.data ?? [];
+  },
+
+  async reassignAssignment(id: number, body: ReassignRequest): Promise<ShiftAssignmentDetailDto> {
+    const res = await api.put<ApiResponse<ShiftAssignmentDetailDto>>(
+      `${BASE}/assignments/${id}/reassign`,
+      body
+    );
+    return res.data;
+  },
+
+  async confirmAssignment(id: number): Promise<ShiftAssignmentDetailDto> {
+    const res = await api.post<ApiResponse<ShiftAssignmentDetailDto>>(
+      `${BASE}/assignments/${id}/confirm`,
+      {}
+    );
+    return res.data;
+  },
+
+  // ─── Team Schedule ────────────────────────────────────────────────────────
+
+  async getTeamSchedule(params: TeamScheduleParams): Promise<TeamScheduleStaffRow[]> {
+    const query = toQuery({ weekStart: params.weekStart, weekEnd: params.weekEnd });
+    const res = await api.get<ApiResponse<TeamScheduleStaffRow[]>>(
+      `${BASE}/team-schedule${query}`
+    );
+    return res.data ?? [];
   },
 
   // ─── Attendance ───────────────────────────────────────────────────────────
