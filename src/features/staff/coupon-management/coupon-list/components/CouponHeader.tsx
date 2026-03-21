@@ -7,14 +7,14 @@ import { Button } from "@/components/ui/button";
 import { PermissionGuard } from "@/components/permission-guard";
 import { Permissions } from "@/types/const";
 
-interface SupplierHeaderProps {
+interface CouponHeaderProps {
   onCreateClick: () => void;
 }
 
-export const SupplierHeader = ({ 
+export const CouponHeader = ({ 
   onCreateClick,
-}: SupplierHeaderProps) => {
-  const t = useTranslations("Supplier.List");
+}: CouponHeaderProps) => {
+  const t = useTranslations("Coupon.List");
   
   return (
     <div className="flex justify-between items-center w-full">
@@ -26,7 +26,7 @@ export const SupplierHeader = ({
           {t("description")}
         </p>
       </div>
-      <PermissionGuard permission={Permissions.CreateSupplier}>
+      <PermissionGuard permission={Permissions.CreateCoupon}>
         <Button 
           onClick={onCreateClick}
           variant="outline" 

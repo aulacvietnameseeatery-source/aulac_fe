@@ -3,6 +3,8 @@
 import React, { Suspense } from "react";
 import { Loader2 } from "lucide-react";
 import { SupplierList } from '@/features/staff/supplier-management/supplier-list';
+import { ProtectedRoute } from '@/components/protected-route';
+import { Permissions } from '@/types/const';
 
 const SupplierListContent = () => {
   return <SupplierList />;
@@ -10,12 +12,14 @@ const SupplierListContent = () => {
 
 export default function SupplierPage() {
   return (
-    <Suspense fallback={
-      <div className="flex h-screen items-center justify-center">
-        <Loader2 className="animate-spin text-gray-400" />
-      </div>
-    }>
-      <SupplierListContent />
-    </Suspense>
+    <ProtectedRoute permission={Permissions.ViewSupplier}>
+      <Suspense fallback={
+        <div className="flex h-screen items-center justify-center">
+          <Loader2 className="animate-spin text-gray-400" />
+        </div>
+      }>
+        <SupplierListContent />
+      </Suspense>
+    </ProtectedRoute>
   );
 }

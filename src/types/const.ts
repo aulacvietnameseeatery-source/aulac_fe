@@ -56,6 +56,12 @@ export const Permissions = {
   CreatePromotion: 'PROMOTION:CREATE',
   UpdatePromotion: 'PROMOTION:UPDATE',
 
+  // Coupon
+  ViewCoupon: 'COUPON:READ',
+  CreateCoupon: 'COUPON:CREATE',
+  EditCoupon: 'COUPON:EDIT',
+  DeleteCoupon: 'COUPON:DELETE',
+
   // Shift Management
   ViewShift: 'SHIFT:READ',
   ViewOwnShift: 'SHIFT:READ_OWN',
