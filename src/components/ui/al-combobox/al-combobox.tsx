@@ -462,7 +462,7 @@ const ALCombobox: React.FC<ALComboboxProps> = ({
           <PopoverPrimitive.Content
             align="start"
             sideOffset={4}
-            className={cn("al-cb-popover z-101", popoverClassName)}
+            className={cn("al-cb-popover", popoverClassName)}
             style={{ width: "var(--radix-popover-trigger-width)" }}
             onKeyDown={handleKeyDown}
           >

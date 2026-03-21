@@ -36,6 +36,9 @@ import {
   Radio,
   BarChart3,
   UserCheck,
+  Building2,
+  Presentation,
+  Users as UsersIcon,
 } from "lucide-react";
 
 import { useAuth } from "@/components/providers/auth-provider";
@@ -47,8 +50,24 @@ import Image from "next/image";
 import { useTranslations } from "next-intl";
 // _OLD: import { NotificationPanel as NotificationPanel_DEPRECATED } from "./notification-panel";
 import { NotificationCenter, useNotificationStore } from "@/features/staff/notifications";
+import { useStoreSettings } from "@/hooks/use-store-settings";
+import { LucideIcon } from "lucide-react";
 
-const navigation = [
+interface NavItem {
+  key: string;
+  href: string;
+  icon: LucideIcon;
+  permission?: string;
+  children?: NavItem[];
+}
+
+interface NavCategory {
+  status: string;
+  icon: LucideIcon;
+  items: NavItem[];
+}
+
+const navigation: NavCategory[] = [
   {
     status: "main",
     icon: LayoutDashboard,
@@ -104,7 +123,16 @@ const navigation = [
     status: "settings",
     icon: Settings,
     items: [
-      { key: "storeSettings", href: "/dashboard/store-settings", icon: Warehouse },
+      { 
+        key: "storeSettings", 
+        href: "/dashboard/store-settings", 
+        icon: Warehouse,
+        children: [
+          { key: "storeProfile", href: "/dashboard/store-settings?tab=profile", icon: Building2 },
+          { key: "storeIntroduction", href: "/dashboard/store-settings?tab=introduction", icon: Presentation },
+          { key: "storeAboutUs", href: "/dashboard/store-settings?tab=about", icon: UsersIcon },
+        ]
+      },
       { key: "systemSettings", href: "/dashboard/system-settings", icon: Settings2 },
       { key: "notifications", href: "/dashboard/notifications", icon: Bell },
       { key: "promotions", href: "/dashboard/promotions", icon: Tags },
@@ -124,6 +152,7 @@ export function AdminSidebar({ onClose }: AdminSidebarProps) {
   const { userInfo } = useAuth();
   const { can } = usePermissions();
   const { mutate: logout, isPending: isLoggingOut } = useLogout();
+  const { data: storeSettings } = useStoreSettings();
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const t = useTranslations("AdminSidebar");
 
@@ -205,7 +234,7 @@ export function AdminSidebar({ onClose }: AdminSidebarProps) {
             <Image
               width={40}
               height={40}
-              src="/images/logo.png"
+              src={storeSettings?.logoUrl || "/images/logo.png"}
               alt="An Lac"
               className="w-10 h-10 object-contain drop-shadow-lg"
             />
@@ -318,28 +347,62 @@ export function AdminSidebar({ onClose }: AdminSidebarProps) {
                 const Icon = item.icon;
                 const active = isActive(item.href);
                 const label = t(item.key);
+                const hasChildren = item.children && item.children.length > 0;
+                const isExpanded = hasChildren && (active || item.children?.some(child => isActive(child.href)));
 
                 return (
-                  <li key={item.key}>
+                  <li key={item.key} className="space-y-1">
                     <Link
                       href={item.href}
                       onClick={onClose}
                       className={`
                         group flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300
-                        ${active
+                        ${active && !hasChildren
                           ? "bg-white/5 text-[#FFAB2D] shadow-inner"
                           : "text-white/60 hover:text-white hover:bg-white/5"
                         }
+                        ${isExpanded ? "text-white bg-white/5" : ""}
                       `}
                     >
                       <Icon size={18} className={`transition-transform duration-300 ${active ? "scale-110" : "group-hover:translate-x-1"}`} />
                       <span className="text-[13px] font-medium">{label}</span>
-                      {active && (
+                      {hasChildren ? (
+                        <div className="ml-auto">
+                           <ChevronRight size={14} className={`transition-transform duration-300 opacity-50 ${isExpanded ? "rotate-90" : ""}`} />
+                        </div>
+                      ) : active && (
                         <div className="ml-auto">
                           <ChevronRight size={14} className="opacity-50" />
                         </div>
                       )}
                     </Link>
+
+                    {hasChildren && isExpanded && (
+                      <ul className="ml-4 pl-4 border-l border-white/5 mt-1 space-y-1 animate-in fade-in slide-in-from-top-1 duration-300">
+                        {item.children?.map((child) => {
+                          const ChildIcon = child.icon;
+                          const childActive = isActive(child.href);
+                          return (
+                            <li key={child.key}>
+                              <Link
+                                href={child.href}
+                                onClick={onClose}
+                                className={`
+                                  group flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all
+                                  ${childActive 
+                                    ? "text-[#FFAB2D] bg-white/5" 
+                                    : "text-white/40 hover:text-white hover:bg-white/5"
+                                  }
+                                `}
+                              >
+                                <ChildIcon size={16} className={`transition-transform ${childActive ? "scale-110" : "group-hover:translate-x-0.5"}`} />
+                                <span className="text-[12px] font-medium">{t(child.key)}</span>
+                              </Link>
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    )}
                   </li>
                 );
               })}

@@ -109,49 +109,63 @@ export function Header({ isScrolled, locale }: HeaderProps) {
                 <button
                     onClick={() => setIsOpen(!isOpen)}
                     className={cn(
-                        "flex items-center gap-2 border border-[#C5A059]/30 rounded-sm hover:bg-[#C5A059]/20 transition-colors",
-                        isMobile ? "bg-[#C5A059]/10 px-2 py-1.5" : "px-3 py-1.5 bg-[#152e42]/80 backdrop-blur-sm"
+                        "flex items-center gap-2 border border-[#C5A059]/30 rounded-full hover:bg-[#C5A059]/10 transition-all duration-300",
+                        isMobile ? "bg-[#C5A059]/5 px-2.5 py-1.5" : "px-4 py-2 bg-navy-light/40 backdrop-blur-md shadow-inner"
                     )}
                 >
-                    <CurrentFlag className={cn("rounded-[1px] shadow-sm", isMobile ? "w-5 h-3.5" : "w-6 h-4")} />
+                    <CurrentFlag className={cn("rounded-sm shadow-sm transition-transform duration-300", isOpen && "scale-110", isMobile ? "w-5 h-3.5" : "w-6 h-4")} />
                     {!isMobile && (
-                        <span className="text-[#C5A059] text-xs font-bold uppercase tracking-wider">
-                            {locale}
+                        <span className="text-[#C5A059] text-[10px] font-bold uppercase tracking-[0.2em] ml-1">
+                            {locale === 'vi' ? 'VN' : locale.toUpperCase()}
                         </span>
                     )}
-                    <ChevronDown size={14} className={cn("text-[#C5A059] transition-transform duration-200", isOpen && "rotate-180")} />
+                    <ChevronDown size={14} className={cn("text-[#C5A059] transition-transform duration-300 ease-out opacity-70", isOpen && "rotate-180 opacity-100")} />
                 </button>
 
                 {/* Hộp Dropdown (Content) */}
                 {isOpen && (
-                    <div className={cn(
-                        "absolute top-full mt-2 bg-[#0A111A] border border-[#C5A059]/40 shadow-xl rounded overflow-hidden flex flex-col min-w-[120px] origin-top-right animate-in fade-in zoom-in-95",
-                        "right-0" // Luôn neo về góc phải
-                    )}>
-                        {['fr', 'en', 'vi'].map(l => {
-                            const DropdownFlag = FLAG_MAP[l];
-                            return (
-                                <button
-                                    key={l}
-                                    disabled={isPending}
-                                    onClick={() => handleSelect(l)}
-                                    className={cn(
-                                        "px-4 py-3 transition-colors hover:bg-white/10 flex items-center gap-3 w-full text-left",
-                                        locale === l && "bg-white/5",
-                                        isPending && "opacity-50 cursor-wait"
-                                    )}
-                                >
-                                    <DropdownFlag className="w-6 h-4 rounded-[2px] shadow-sm shrink-0" />
-                                    <span className={cn(
-                                        "text-xs font-bold uppercase tracking-wider",
-                                        locale === l ? "text-[#C5A059]" : "text-white/70"
-                                    )}>
-                                        {l === 'vi' ? 'Tiếng Việt' : l === 'en' ? 'English' : 'Français'}
-                                    </span>
-                                </button>
-                            );
-                        })}
-                    </div>
+                    <>
+                        <div
+                            className="fixed inset-0 z-[-1] bg-black/5 backdrop-blur-[1px]"
+                            onClick={() => setIsOpen(false)}
+                        />
+                        <div className={cn(
+                            "absolute top-full mt-3 bg-[#0A111A]/95 backdrop-blur-xl border border-[#C5A059]/30 shadow-2xl rounded-xl overflow-hidden flex flex-col min-w-[160px] origin-top-right animate-in fade-in zoom-in-95 slide-in-from-top-2 duration-300",
+                            "right-0 lg:right-0"
+                        )}>
+                            <div className="p-2 flex flex-col gap-1">
+                                {['fr', 'en', 'vi'].map(l => {
+                                    const DropdownFlag = FLAG_MAP[l];
+                                    const isActive = locale === l;
+                                    return (
+                                        <button
+                                            key={l}
+                                            disabled={isPending}
+                                            onClick={() => handleSelect(l)}
+                                            className={cn(
+                                                "px-4 py-2.5 rounded-lg transition-all duration-200 flex items-center justify-between group",
+                                                isActive ? "bg-[#C5A059]/10" : "hover:bg-white/5",
+                                                isPending && "opacity-50 cursor-wait"
+                                            )}
+                                        >
+                                            <div className="flex items-center gap-3">
+                                                <DropdownFlag className={cn("w-5 h-3.5 rounded-sm shadow-sm transition-transform duration-300", !isActive && "grayscale-[0.5] group-hover:grayscale-0")} />
+                                                <span className={cn(
+                                                    "text-[11px] font-bold uppercase tracking-wider transition-colors",
+                                                    isActive ? "text-[#C5A059]" : "text-white/60 group-hover:text-white"
+                                                )}>
+                                                    {l === 'vi' ? 'Tiếng Việt' : l === 'en' ? 'English' : 'Français'}
+                                                </span>
+                                            </div>
+                                            {isActive && (
+                                                <div className="w-1.5 h-1.5 rounded-full bg-[#C5A059] shadow-[0_0_8px_#C5A059]" />
+                                            )}
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    </>
                 )}
             </div>
         );
@@ -182,7 +196,7 @@ export function Header({ isScrolled, locale }: HeaderProps) {
                         {/* 1. LOGO */}
                         <Link href={getLink("/")} className="flex items-center gap-4 z-50" onClick={() => setIsMobileMenuOpen(false)}>
                             <Image
-                                src="/images/logo.png"
+                                src={storeSettings?.logoUrl || "/images/logo.png"}
                                 alt="An Lac Logo"
                                 width={1080}
                                 height={1080}

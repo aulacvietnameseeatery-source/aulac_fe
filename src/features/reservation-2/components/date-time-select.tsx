@@ -36,6 +36,7 @@ export default function DateTimeSelect({
                     onChange={handleDateChange}
                     minDate={new Date().toISOString().split('T')[0]}
                     placeholder={t('datetime.selectDate')}
+                    displayFormat="dd/MM/yyyy"
                     inputSize="sm"
                 />
             </div>
@@ -51,13 +52,25 @@ export default function DateTimeSelect({
                         onChange={(e) => onDateTimeChange(date, e.target.value)}
                         className="w-full bg-slate-50 border border border-[#D5BA98]/60 rounded-lg py-2 pl-8 pr-2 text-sm font-bold text-[#1A3A52] focus:outline-none focus:border-[#1A3A52] appearance-none"
                     >
-                        {Array.from({ length: 12 }, (_, i) => i + 11).flatMap(h =>
-                            ['00', '30'].map(m => {
-                                const hour = h.toString().padStart(2, '0');
-                                return `${hour}:${m}`;
-                            })
-                        ).map(slot => (
-                            <option key={slot} value={slot}>
+                        {[
+                            ...Array.from({ length: 4 }, (_, i) => i + 11).flatMap(h =>
+                                ['00', '30'].map(m => {
+                                    if (h === 11 && m === '00') return null;
+                                    if (h === 14 && m === '30') return `${h}:${m}`;
+                                    if (h === 14 && m > '30') return null;
+                                    return `${h.toString().padStart(2, '0')}:${m}`;
+                                })
+                            ),
+                            ...Array.from({ length: 5 }, (_, i) => i + 18).flatMap(h =>
+                                ['00', '30'].map(m => {
+                                    if (h === 18 && m === '00') return null;
+                                    if (h === 22 && m === '30') return `${h}:${m}`;
+                                    if (h === 22 && m > '30') return null;
+                                    return `${h.toString().padStart(2, '0')}:${m}`;
+                                })
+                            )
+                        ].filter(Boolean).map(slot => (
+                            <option key={slot as string} value={slot as string}>
                                 {slot}
                             </option>
                         ))}

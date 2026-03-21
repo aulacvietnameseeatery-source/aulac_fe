@@ -17,6 +17,18 @@ export const Permissions = {
   EditDish: 'DISH:EDIT',
   DeleteDish: 'DISH:DELETE',
 
+  // Dish Category
+  ViewDishCategory: 'DISH_CATEGORY:READ',
+  CreateDishCategory: 'DISH_CATEGORY:CREATE',
+  EditDishCategory: 'DISH_CATEGORY:EDIT',
+  DeleteDishCategory: 'DISH_CATEGORY:DELETE',
+
+  // Supplier
+  ViewSupplier: 'SUPPLIER:READ',
+  CreateSupplier: 'SUPPLIER:CREATE',
+  EditSupplier: 'SUPPLIER:EDIT',
+  DeleteSupplier: 'SUPPLIER:DELETE',
+
   // Role
   ViewRole: 'ROLE:READ',
   CreateRole: 'ROLE:CREATE',
@@ -25,7 +37,9 @@ export const Permissions = {
 
   // Order
   ViewOrder: 'ORDER:READ',
+  EditOrder: 'ORDER:EDIT',
   UpdateOrderItemStatus: 'ORDER:UPDATE_ITEM_STATUS',
+  ProcessPayment: 'ORDER:PROCESS_PAYMENT',
 
   // Table
   ViewTable: 'TABLE:READ',
@@ -33,6 +47,9 @@ export const Permissions = {
   EditTable: 'TABLE:EDIT',
   DeleteTable: 'TABLE:DELETE',
   UpdateTableStatus: 'TABLE:UPDATE_STATUS',
+  ManageTableZone: 'TABLE:MANAGE_ZONE',
+  ManageTableType: 'TABLE:MANAGE_TYPE',
+  ManageTableMedia: 'TABLE:MANAGE_MEDIA',
 
   // Promotion
   ViewPromotion: 'PROMOTION:READ',
@@ -41,6 +58,7 @@ export const Permissions = {
 
   // Shift Management
   ViewShift: 'SHIFT:READ',
+  ViewOwnShift: 'SHIFT:READ_OWN',
   ScheduleShift: 'SHIFT:SCHEDULE',
   AssignShift: 'SHIFT:ASSIGN',
   CheckInShift: 'SHIFT:CHECK_IN',
@@ -56,6 +74,7 @@ export const Permissions = {
   UpdateReservation: 'RESERVATION:UPDATE',
   DeleteReservation: 'RESERVATION:DELETE',
 
+  // Customer
   ViewCustomer: 'CUSTOMER:READ',
   CreateCustomer: 'CUSTOMER:CREATE',
   UpdateCustomer: 'CUSTOMER:UPDATE',

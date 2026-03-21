@@ -3,6 +3,17 @@
     "title": "An Lac - Vietnamese Eatery",
     "description": "The pinnacle of Vietnamese culinary art in the heart of the city."
   },
+  "NotFound": {
+    "title": "Oops! Page Not Found!",
+    "description": "Sorry but the page you are looking for does not exist, have been removed, name changed or is temporarily unavailable",
+    "backToHome": "Back to Home"
+  },
+  "Unauthorized": {
+    "title": "Access Denied",
+    "description": "You don't have the required permissions to access this exclusive section. Please contact management if you believe this is an error.",
+    "returnHome": "Return Home",
+    "goBack": "Go Back"
+  },
   "Header": {
     "home": "Home",
     "menu": "MENU",
@@ -248,7 +259,8 @@
         "saveFirst": "Save Changes First"
       },
       "validation": {
-        "missingInfo": "* Please enter Name & Phone to book"
+        "missingInfo": "* Please enter Name & Phone to book",
+        "timePast": "Cannot select time in the past."
       },
       "legal": "By booking, you agree to our Terms & Conditions and Cancellation Policy."
     },
@@ -350,7 +362,8 @@
         "existingCustomerNotFound": "Returning customer info not found. Please check the phone number.",
         "dateRequired": "Please select a reservation date.",
         "timeRequired": "Please select an arrival time.",
-        "partySizeRequired": "Please select party size."
+        "partySizeRequired": "Please select party size.",
+        "timePast": "Cannot select time in the past."
       },
       "toast": {
         "created": "Reservation request created successfully!",
@@ -1070,6 +1083,10 @@
     "subtitle": "Enter details for walk-in or phone bookings",
     "cancel": "Cancel",
     "save": "Save Reservation",
+    "editTitle": "Edit Reservation",
+    "saveChanges": "Save Changes",
+    "notes": "Notes",
+    "notesPlaceholder": "e.g. Birthday, quiet area preferred...",
     "errors": {
       "missingTitle": "Missing information",
       "missingDescription": "Please fill in phone, name, date, time and select a table.",
@@ -1570,7 +1587,7 @@
       "saving": "Saving...",
       "successMessage": "Changes saved successfully!",
       "errorMessage": "An error occurred!",
-      "loading":"Loading...",
+      "loading": "Loading...",
       "takeAway": "Take Away",
       "guest": "Guest",
       "notePlaceholder": "Item note...",
@@ -1695,6 +1712,9 @@
     "reservations": "Reservations",
     "promotions": "Promotions",
     "storeSettings": "Store Settings",
+    "storeProfile": "Store Profile",
+    "storeIntroduction": "Introduction Page",
+    "storeAboutUs": "About Us Page",
     "systemSettings": "System Settings",
     "notifications": "Notifications",
     "logout": "Logout",
@@ -2524,7 +2544,111 @@
       "createSuccess": "Setting created successfully.",
       "saveError": "Failed to save settings."
     },
+    "Common": {
+      "saveChanges": "Save Changes",
+      "discardChanges": "Discard Changes",
+      "upload": "Upload",
+      "change": "Change",
+      "removing": "Removing...",
+      "uploading": "Uploading...",
+      "maxSizeImage": "JPG/PNG up to 5MB",
+      "maxSizeVideo": "MP4/WEBM up to 100MB",
+      "selectFromMenu": "Select from Menu",
+      "autoTranslate": "Auto Translate",
+      "search": "Search",
+      "cancel": "Cancel"
+    },
+    "Introduction": {
+      "title": "Introduction Page",
+      "description": "Manage the content and media for your landing page.",
+      "sections": {
+        "hero": {
+          "title": "Hero Section",
+          "description": "The main banner at the top of the page.",
+          "mainTitle": "Main Title",
+          "brandQuote": "Brand Quote",
+          "placeholders": {
+            "mainTitle": "e.g. Authentic Vietnamese Dining",
+            "brandQuote": "Where Tradition Meets Taste"
+          }
+        },
+        "chef": {
+          "title": "Chef Discovery",
+          "description": "Highlight your executive and lead chefs.",
+          "sectionLabel": "Section Label",
+          "ctaAction": "CTA Action",
+          "discoveryHeader": "Discovery Header",
+          "leadChef": "Lead Chef",
+          "executiveChef": "Executive Chef",
+          "name": "Name",
+          "quote": "Quote"
+        },
+        "ambiance": {
+          "title": "Ambiance Tour",
+          "description": "Virtual tour texts and headings.",
+          "navLabel": "Nav Label",
+          "sectionTitle": "Section Title",
+          "summary": "Atmosphere Summary"
+        },
+        "collection": {
+          "title": "Signature Items Collection",
+          "description": "Detailed configurations for your top dishes.",
+          "galleryLabel": "Gallery Label",
+          "mainTitle": "Collection Main Title",
+          "dishTitle": "Signature Dish {index}",
+          "dishMainTitle": "Main Title",
+          "dishSubTitle": "Sub Title",
+          "cardCategory": "Category",
+          "cardTitle": "Title",
+          "cardDescription": "Description"
+        }
+      },
+      "sidebar": {
+        "mediaTitle": "Media Assets",
+        "mediaDescription": "Global visual content shared across locales.",
+        "heroBackground": "Hero Background",
+        "chefVideo": "Chef Promo Video",
+        "ambianceVideo": "Ambiance Video",
+        "dishImage": "Signature Dish {index} Image"
+      }
+    },
+    "DishModal": {
+      "noCategory": "No Category",
+      "dishLabel": "DISH",
+      "dishPlaceholder": "Dish #{id}",
+      "selectError": "Failed to select dish: {error}"
+    },
     "StoreProfile": {
+      "title": "Store Profile",
+      "description": "Manage your store's public identity and contact Information.",
+      "sections": {
+        "identity": {
+          "title": "Identity",
+          "description": "Basic information about your establishment."
+        },
+        "contact": {
+          "title": "Contact & Location",
+          "description": "How customers can find and reach you."
+        },
+        "hours": {
+          "title": "Operating Hours",
+          "description": "Set your weekly schedule."
+        },
+        "social": {
+          "title": "Social Footprint",
+          "description": "Official digital presence links (Global)."
+        }
+      },
+      "sidebar": {
+        "brandTitle": "Brand Assets",
+        "brandDescription": "Official visuals (Shared across languages).",
+        "logo": "Official Logo",
+        "promoVideo": "Promo Video"
+      },
+      "actions": {
+        "sync": "Sync Identity",
+        "discard": "Discard Draft"
+      },
       "identity": "Store Identity",
       "identityDesc": "Update your store logo and official name.",
       "contactLocation": "Contact & Location",
@@ -2558,15 +2682,105 @@
       "instagramPlaceholder": "https://instagram.com/yourprofile",
       "tiktokLink": "TikTok Link",
       "tiktokPlaceholder": "https://tiktok.com/@yourprofile",
-      "saveChanges": "Save Changes",
       "reset": "Reset",
-      "saving": "Saving...",
       "clickToUpload": "Logo",
       "uploadSuccess": "Logo uploaded successfully",
       "uploadError": "Failed to upload logo",
       "fileSizeError": "File size must be less than 5MB",
+      "visualBranding": "Visual Branding",
+      "visualBrandingDesc": "Logo and promotional media",
+      "officialLogo": "Official Logo",
+      "storeVideo": "Store Video",
+      "syncNotice": "Sync Notice",
+      "syncNoticeDesc": "Saving will update global fields across all languages instantly.",
+      "placeholders": {
+        "facebook": "Facebook URL",
+        "instagram": "Instagram URL",
+        "tiktok": "TikTok URL"
+      },
+      "translationFailed": "Translation failed.",
+      "translatedSuccessfully": "Translated successfully!",
+      "nothingToTranslate": "Nothing to translate.",
       "updateSuccess": "Store profile updated successfully",
       "updateError": "Failed to save store profile"
+    },
+    "AboutUs": {
+      "title": "About Us",
+      "description": "Manage your brand story and core values.",
+      "sections": {
+        "founders": {
+          "title": "Founders' Vision",
+          "description": "Origin story and core inspiration.",
+          "label": "Section Label",
+          "header": "Main Header",
+          "paragraph1": "Narrative Paragraph 1",
+          "paragraph2": "Narrative Paragraph 2",
+          "quote": "Quote Statement",
+          "quoteAuthor": "Attribution Name",
+          "featuredQuote": "Featured Quote",
+          "image": "Founders Image",
+          "quoteHeader": "Founders' Inspirational Quote",
+          "fields": {
+            "label": "Section Label",
+            "header": "Main Header",
+            "paragraph1": "First Bio Paragraph",
+            "paragraph2": "Second Bio Paragraph",
+            "quote": "Quote Statement",
+            "author": "Author Credit"
+          }
+        },
+        "journey": {
+          "title": "Historic Journey",
+          "description": "Timeline and key milestones.",
+          "header": "Journey Title",
+          "paragraph1": "Opening Chapter",
+          "paragraph2": "Strategic Evolution",
+          "quote": "Journey Highlight",
+          "paragraph3": "Current Era",
+          "fields": {
+            "title": "Section Title",
+            "paragraph1": "The Beginning",
+            "paragraph2": "Growth & Evolution",
+            "paragraph3": "Present Day"
+          },
+          "quoteLabel": "Mid-Journey Highlight"
+        },
+        "philosophy": {
+          "title": "Philosophy & Values",
+          "description": "Core beliefs and guiding principles.",
+          "label": "Philosophy Label",
+          "header": "Core Mission",
+          "principle": "Principle {index}",
+          "principleTitle": "Title",
+          "principleDesc": "Description",
+          "fields": {
+            "label": "Section Label",
+            "header": "Philosophy Core Header",
+            "valueTitle": "Value Title",
+            "valueDesc": "Value Description"
+          },
+          "valueLabel": "Core Value {index}"
+        },
+        "legacy": {
+          "title": "Culinary Legacy",
+          "description": "Future vision and sustained excellence.",
+          "header": "Legacy Title",
+          "subtitle": "Strategic Subtitle",
+          "paragraph": "Legacy Chapter {index}",
+          "image": "Legacy Image",
+          "fields": {
+            "header": "Legacy Headline",
+            "subtitle": "Section Subtitle"
+          },
+          "chapterLabel": "Chapter {index}"
+        }
+      },
+      "actions": {
+        "sync": "Sync Story",
+        "syncDesc": "Persist your narrative data",
+        "syncButton": "Sync About Story",
+        "discard": "Discard Changes"
+      }
     },
     "General": {
       "title": "System Parameters",
@@ -2585,7 +2799,10 @@
       "description": "Description (Optional)",
       "descriptionPlaceholder": "What is this setting for?",
       "sensitive": "Sensitive Data",
-      "sensitiveDesc": "Hide value by default (e.g. passwords, API keys)"
+      "sensitiveDesc": "Hide value by default (e.g. passwords, API keys)",
+      "addTitle": "Add New Setting",
+      "true": "True",
+      "false": "False"
     },
     "Field": {
       "sensitiveHidden": "Sensitive – value hidden",
@@ -2627,12 +2844,16 @@
     "term1": "1. Thank you for dining with us.",
     "term2": "2. Please keep this receipt for your records.",
     "paymentVerified": "Note: Payment was verified by {staffName}.",
+    "paymentMethod": "Payment Method",
     "subtotal": "Subtotal",
     "discount": "Discount",
-    "total": "Total ($)",
+    "tip": "Tip",
+    "total": "Total",
     "downloadPdf": "Download PDF",
     "printInvoice": "Print Invoice",
-    "defaultStaff": "Staff"
+    "defaultStaff": "Staff",
+    "thankYouBusiness": "Thank you for your business!",
+    "currency": "USD"
   },
   "Customer": {
     "close": "Close",
@@ -2814,6 +3035,48 @@
         "DINE_IN": "Dine-in",
         "TAKEAWAY": "Takeaway"
       }
+    }
+  },
+  "EmailTemplates": {
+    "title": "Email Template Management",
+    "description": "Manage email templates sent to customers and staff.",
+    "listTitle": "Template List",
+    "table": {
+      "name": "Template Name",
+      "code": "Code",
+      "subject": "Subject",
+      "edit": "Edit"
+    },
+    "actions": {
+      "add": "Add Template",
+      "view": "View details",
+      "edit": "Edit",
+      "delete": "Delete"
+    },
+    "dialog": {
+      "createTitle": "Create New Template",
+      "editTitle": "Edit Template",
+      "viewTitle": "Template Details",
+      "code": "Template Code",
+      "codePlaceholder": "Auto-generated from name",
+      "name": "Template Name",
+      "namePlaceholder": "e.g., Reservation Confirmation",
+      "subject": "Email Subject",
+      "subjectPlaceholder": "e.g., Confirmation of your reservation at An Lac",
+      "description": "Description",
+      "descriptionPlaceholder": "Brief description of the template purpose",
+      "body": "HTML Content",
+      "bodyPlaceholder": "Enter HTML code here...",
+      "tabEditor": "Editor",
+      "tabPreview": "Preview",
+      "placeholderHint": "* Use placeholders like {{CustomerName}}, {{ReservedTime}}... depending on the template.",
+      "close": "Close",
+      "save": "Save Changes",
+      "create": "Create New"
+    },
+    "deleteDialog": {
+      "title": "Delete Template",
+      "description": "Are you sure you want to delete this template? This action cannot be undone."
     }
   }
 }

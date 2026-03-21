@@ -32,51 +32,50 @@ export const CreateReservationModal = ({
       onClose={onClose}
       title={t("title")}
       width="min(960px, 96vw)"
-      bodyOverflowY="hidden"
-    >
-      <div className="flex h-[min(76dvh,700px)] flex-col">
-        <div className="flex-1 min-h-0 p-3 sm:p-5 space-y-4 sm:space-y-5 overflow-hidden">
-          <CustomerSection
-            phone={formState.phone}
-            fullName={formState.fullName}
-            email={formState.email}
-            customerType={formState.customerType}
-            loyaltyPoints={formState.loyaltyPoints}
-            isSearching={loadingState.isSearchingCustomer}
-            onPhoneChange={setters.setPhone}
-            onNameChange={setters.setFullName}
-            onEmailChange={setters.setEmail}
-            onSearch={handlers.handleCustomerSearch}
-          />
-
-          <BookingDetailsSection
-            date={formState.date}
-            time={formState.time}
-            partySize={formState.partySize}
-            validationError={formState.validationError}
-            onDateChange={setters.setDate}
-            onTimeChange={setters.setTime}
-            onSizeChange={setters.setPartySize}
-          />
-
-          <TableSelectionGrid
-            options={tableState.tableOptions}
-            selectedOptionId={tableState.selectedOptionId}
-            isLoading={tableState.isLoadingTables}
-            isChecked={tableState.isTableChecked}
-            onSelectOption={setters.setSelectedOptionId}
-            compact
-          />
-        </div>
-
-        <div className="shrink-0 bg-slate-50 border-t border-slate-200 px-3 sm:px-5 py-3 flex flex-col-reverse sm:flex-row sm:justify-end gap-2">
-          <Button type="button" variant="outline" onClick={onClose}>
+      bodyOverflowY="auto"
+      footer={
+        <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-2 w-full">
+          <Button variant="outline" type="button" onClick={onClose} className="sm:w-32">
             {t("cancel")}
           </Button>
-          <Button type="button" onClick={handlers.handleSubmit}>
+          <Button type="button" onClick={handlers.handleSubmit} className="sm:w-32">
             {t("save")}
           </Button>
         </div>
+      }
+    >
+      <div className="p-4 sm:p-6 space-y-6 pb-2">
+        <CustomerSection
+          phone={formState.phone}
+          fullName={formState.fullName}
+          email={formState.email}
+          customerType={formState.customerType}
+          loyaltyPoints={formState.loyaltyPoints}
+          isSearching={loadingState.isSearchingCustomer}
+          onPhoneChange={setters.setPhone}
+          onNameChange={setters.setFullName}
+          onEmailChange={setters.setEmail}
+          onSearch={handlers.handleCustomerSearch}
+        />
+
+        <BookingDetailsSection
+          date={formState.date}
+          time={formState.time}
+          partySize={formState.partySize}
+          validationError={formState.validationError}
+          onDateChange={setters.setDate}
+          onTimeChange={setters.setTime}
+          onSizeChange={setters.setPartySize}
+        />
+
+        <TableSelectionGrid
+          options={tableState.tableOptions}
+          selectedOptionId={tableState.selectedOptionId}
+          isLoading={tableState.isLoadingTables}
+          isChecked={tableState.isTableChecked}
+          onSelectOption={setters.setSelectedOptionId}
+          compact
+        />
       </div>
     </Dialog>
   );

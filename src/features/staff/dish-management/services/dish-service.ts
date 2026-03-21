@@ -21,9 +21,18 @@ export const staffDishService = {
         if (params.status && params.status !== "All") query.append("status", params.status.toString());
         if (params.sortBy) query.append("sortBy", params.sortBy);
         if (params.isDescending !== undefined) query.append("isDescending", params.isDescending.toString());
+        if (params.locale) query.append("locale", params.locale);
 
         // Sử dụng api.get. Return type của api.get đã là parsed JSON nên ta cast thẳng sang ApiResponse
-        const response = await api.get<ApiResponse<PagedResult<DishManagementDto>>>(`/api/dishes/management?${query.toString()}`);
+        const response = await api.get<ApiResponse<PagedResult<DishManagementDto>>>(
+            `/api/dishes/management?${query.toString()}`,
+            {
+                headers: {
+                    'Accept-Language': params.locale || 'en',
+                    'x-locale': params.locale || 'en'
+                }
+            }
+        );
 
         return response.data;
     },

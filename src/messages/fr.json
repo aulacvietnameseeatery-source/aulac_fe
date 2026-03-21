@@ -3,6 +3,17 @@
     "title": "An Lac - Table Vietnamienne",
     "description": "L’apogée de l’art culinaire vietnamien au cœur de la ville."
   },
+  "NotFound": {
+    "title": "Oups ! Page non trouvée !",
+    "description": "Désolé, la page que vous recherchez n'existe pas, a été supprimée, a changé de nom ou est temporairement indisponible",
+    "backToHome": "Retour à l’accueil"
+  },
+  "Unauthorized": {
+    "title": "Accès refusé",
+    "description": "Vous n'avez pas les permissions requises pour accéder à cette section exclusive. Veuillez contacter la direction si vous pensez qu'il s'agit d'une erreur.",
+    "returnHome": "Retour à l’accueil",
+    "goBack": "Retourner"
+  },
   "Header": {
     "home": "Accueil",
     "menu": "MENU",
@@ -1066,6 +1077,10 @@
     "subtitle": "Saisissez les informations pour les clients walk-in ou par téléphone",
     "cancel": "Annuler",
     "save": "Enregistrer",
+    "editTitle": "Modifier la réservation",
+    "saveChanges": "Enregistrer les modifications",
+    "notes": "Notes",
+    "notesPlaceholder": "ex. Anniversaire, zone calme préférée...",
     "errors": {
       "missingTitle": "Informations manquantes",
       "missingDescription": "Veuillez remplir téléphone, nom, date, heure et choisir une table.",
@@ -1691,6 +1706,9 @@
     "reservations": "Réservations",
     "promotions": "Promotions",
     "storeSettings": "Paramètres du magasin",
+    "storeProfile": "Profil du magasin",
+    "storeIntroduction": "Page d'introduction",
+    "storeAboutUs": "Page À propos",
     "systemSettings": "Paramètres système",
     "notifications": "Notifications",
     "logout": "Déconnexion",
@@ -2520,7 +2538,111 @@
       "createSuccess": "Paramètre créé avec succès.",
       "saveError": "Échec de l'enregistrement des paramètres."
     },
+    "Common": {
+      "saveChanges": "Enregistrer les modifications",
+      "discardChanges": "Annuler les modifications",
+      "upload": "Télécharger",
+      "change": "Modifier",
+      "removing": "Suppression...",
+      "uploading": "Téléchargement...",
+      "maxSizeImage": "JPG/PNG max 5 Mo",
+      "maxSizeVideo": "MP4/WEBM max 100 Mo",
+      "selectFromMenu": "Choisir dans le menu",
+      "autoTranslate": "Traduction automatique",
+      "search": "Rechercher",
+      "cancel": "Annuler"
+    },
+    "Introduction": {
+      "title": "Page d'introduction",
+      "description": "Gérez le contenu et les médias de votre page d'accueil.",
+      "sections": {
+        "hero": {
+          "title": "Section Héros",
+          "description": "La bannière principale en haut de la page.",
+          "mainTitle": "Titre principal",
+          "brandQuote": "Citation de marque",
+          "placeholders": {
+            "mainTitle": "ex. Cuisine vietnamienne authentique",
+            "brandQuote": "Où la tradition rencontre le goût"
+          }
+        },
+        "chef": {
+          "title": "Découverte du Chef",
+          "description": "Mettez en avant vos chefs.",
+          "sectionLabel": "Étiquette de section",
+          "ctaAction": "Action CTA",
+          "discoveryHeader": "En-tête de découverte",
+          "leadChef": "Chef de cuisine",
+          "executiveChef": "Chef exécutif",
+          "name": "Nom",
+          "quote": "Citation"
+        },
+        "ambiance": {
+          "title": "Visite de l'ambiance",
+          "description": "Textes et en-têtes de la visite virtuelle.",
+          "navLabel": "Étiquette de navigation",
+          "sectionTitle": "Titre de la section",
+          "summary": "Résumé de l'atmosphère"
+        },
+        "collection": {
+          "title": "Collection d'articles signatures",
+          "description": "Configurations détaillées pour vos plats principaux.",
+          "galleryLabel": "Étiquette de la galerie",
+          "mainTitle": "Titre principal de la collection",
+          "dishTitle": "Plat Signature {index}",
+          "dishMainTitle": "Titre principal",
+          "dishSubTitle": "Sous-titre",
+          "cardCategory": "Catégorie",
+          "cardTitle": "Titre",
+          "cardDescription": "Description"
+        }
+      },
+      "sidebar": {
+        "mediaTitle": "Ressources médiatiques",
+        "mediaDescription": "Contenu visuel global partagé entre les langues.",
+        "heroBackground": "Arrière-plan du héros",
+        "chefVideo": "Vidéo promo du chef",
+        "ambianceVideo": "Vidéo d'ambiance",
+        "dishImage": "Image du plat signature {index}"
+      }
+    },
+    "DishModal": {
+      "noCategory": "Pas de catégorie",
+      "dishLabel": "PLAT",
+      "dishPlaceholder": "Plat #{id}",
+      "selectError": "Échec de la sélection du plat : {error}"
+    },
     "StoreProfile": {
+      "title": "Profil de la boutique",
+      "description": "Gérez l'identité publique et les informations de contact.",
+      "sections": {
+        "identity": {
+          "title": "Identité",
+          "description": "Informations de base sur votre établissement."
+        },
+        "contact": {
+          "title": "Contact & Emplacement",
+          "description": "Comment les clients peuvent vous trouver."
+        },
+        "hours": {
+          "title": "Horaires d'ouverture",
+          "description": "Définissez votre emploi du temps hebdomadaire."
+        },
+        "social": {
+          "title": "Empreinte sociale",
+          "description": "Liens de présence numérique officiels."
+        }
+      },
+      "sidebar": {
+        "brandTitle": "Ressources de marque",
+        "brandDescription": "Visuels officiels (Partagés entre les langues).",
+        "logo": "Logo officiel",
+        "promoVideo": "Vidéo promotionnelle"
+      },
+      "actions": {
+        "sync": "Synchroniser l'identité",
+        "discard": "Annuler le brouillon"
+      },
       "identity": "Identité du Magasin",
       "identityDesc": "Mettez à jour le logo et le nom officiel de votre magasin.",
       "contactLocation": "Contact et Emplacement",
@@ -2554,15 +2676,105 @@
       "instagramPlaceholder": "https://instagram.com/votreprofil",
       "tiktokLink": "Lien TikTok",
       "tiktokPlaceholder": "https://tiktok.com/@votreprofil",
-      "saveChanges": "Enregistrer les modifications",
       "reset": "Réinitialiser",
-      "saving": "Enregistrement...",
       "clickToUpload": "Logo",
       "uploadSuccess": "Logo téléchargé avec succès",
+      "visualBranding": "Identité visuelle",
+      "visualBrandingDesc": "Logo et médias promotionnels",
+      "officialLogo": "Logo officiel",
+      "storeVideo": "Vidéo du magasin",
+      "syncNotice": "Avis de synchronisation",
+      "syncNoticeDesc": "L'enregistrement mettra à jour instantanément les champs globaux dans toutes les langues.",
+      "placeholders": {
+        "facebook": "URL Facebook",
+        "instagram": "URL Instagram",
+        "tiktok": "URL TikTok"
+      },
+      "translationFailed": "Échec de la traduction.",
+      "translatedSuccessfully": "Traduit avec succès !",
+      "nothingToTranslate": "Rien à traduire.",
       "uploadError": "Échec du téléchargement du logo",
       "fileSizeError": "La taille du fichier doit être inférieure à 5 Mo",
       "updateSuccess": "Profil du magasin mis à jour avec succès",
       "updateError": "Échec de l'enregistrement du profil du magasin"
+    },
+    "AboutUs": {
+      "title": "À propos de nous",
+      "description": "Gérez l'histoire de votre marque et vos valeurs fondamentales.",
+      "sections": {
+        "founders": {
+          "title": "Vision des fondateurs",
+          "description": "Histoire d'origine et inspiration principale.",
+          "label": "Étiquette de section",
+          "header": "En-tête principal",
+          "paragraph1": "Paragraphe narratif 1",
+          "paragraph2": "Paragraphe narratif 2",
+          "quote": "Déclaration de citation",
+          "quoteAuthor": "Nom d'attribution",
+          "featuredQuote": "Citation en vedette",
+          "image": "Image des fondateurs",
+          "quoteHeader": "Citation inspirante des fondateurs",
+          "fields": {
+            "label": "Étiquette de section",
+            "header": "En-tête principal",
+            "paragraph1": "Premier paragraphe bio",
+            "paragraph2": "Deuxième paragraphe bio",
+            "quote": "Déclaration de citation",
+            "author": "Crédit d'auteur"
+          }
+        },
+        "journey": {
+          "title": "Parcours historique",
+          "description": "Chronologie et jalons clés.",
+          "header": "Titre du parcours",
+          "paragraph1": "Chapitre d'ouverture",
+          "paragraph2": "Évolution stratégique",
+          "quote": "Point fort du parcours",
+          "paragraph3": "Ère actuelle",
+          "fields": {
+            "title": "Titre de section",
+            "paragraph1": "Le début",
+            "paragraph2": "Croissance et évolution",
+            "paragraph3": "Aujourd'hui"
+          },
+          "quoteLabel": "Point fort à mi-parcours"
+        },
+        "philosophy": {
+          "title": "Philosophie et valeurs",
+          "description": "Croyances fondamentales et principes directeurs.",
+          "label": "Étiquette de philosophie",
+          "header": "Mission principale",
+          "principle": "Principe {index}",
+          "principleTitle": "Titre",
+          "principleDesc": "Description",
+          "fields": {
+            "label": "Étiquette de section",
+            "header": "En-tête de base de la philosophie",
+            "valueTitle": "Titre de la valeur",
+            "valueDesc": "Description de la valeur"
+          },
+          "valueLabel": "Valeur fondamentale {index}"
+        },
+        "legacy": {
+          "title": "Héritage culinaire",
+          "description": "Vision future et excellence durable.",
+          "header": "Titre de l'héritage",
+          "subtitle": "Sous-titre stratégique",
+          "paragraph": "Chapitre de l'héritage {index}",
+          "image": "Image de l'héritage",
+          "fields": {
+            "header": "Titre de l'héritage",
+            "subtitle": "Sous-titre de section"
+          },
+          "chapterLabel": "Chapitre {index}"
+        }
+      },
+      "actions": {
+        "sync": "Synchroniser l'histoire",
+        "syncDesc": "Persister vos données narratives",
+        "syncButton": "Synchroniser l'histoire",
+        "discard": "Annuler les modifications"
+      }
     },
     "General": {
       "title": "Paramètres système",
@@ -2581,7 +2793,10 @@
       "description": "Description (optionnelle)",
       "descriptionPlaceholder": "À quoi sert ce paramètre ?",
       "sensitive": "Données sensibles",
-      "sensitiveDesc": "Masquer la valeur par défaut (ex : mots de passe, clés API)"
+      "sensitiveDesc": "Masquer la valeur par défaut (ex : mots de passe, clés API)",
+      "addTitle": "Ajouter un nouveau paramètre",
+      "true": "Vrai",
+      "false": "Faux"
     },
     "Field": {
       "sensitiveHidden": "Sensible – valeur masquée",
@@ -2623,12 +2838,16 @@
     "term1": "1. Merci d'avoir dîné avec nous.",
     "term2": "2. Veuillez conserver ce reçu pour vos dossiers.",
     "paymentVerified": "Note : Le paiement a été vérifié par {staffName}.",
+    "paymentMethod": "Méthode de paiement",
     "subtotal": "Sous-total",
     "discount": "Remise",
-    "total": "Total ($)",
+    "tip": "Pourboire",
+    "total": "Total",
     "downloadPdf": "Télécharger en PDF",
     "printInvoice": "Imprimer la facture",
-    "defaultStaff": "Personnel"
+    "defaultStaff": "Personnel",
+    "thankYouBusiness": "Merci pour votre visite !",
+    "currency": "EUR"
   },
   "Customer": {
     "close": "Fermer",
@@ -2737,6 +2956,7 @@
       }
     },
     "Detail": {
+    "Detail": {
       "title": "Détails du client",
       "saveButton": "Fermer",
       "cancel": "Fermer",
@@ -2764,51 +2984,51 @@
         "pointsNegative": ""
       },
       "backToCustomers": "Retour aux clients",
-      "customerNotFound": "Client introuvable.",
-      "guestCustomer": "Client invité",
-      "member": "Membre",
-      "guest": "Invité",
-      "noPhone": "Pas de téléphone",
-      "joined": "Inscrit",
-      "orders": "Commandes",
-      "totalSpent": "Total Dépensé",
-      "points": "Points",
-      "orderHistory": "Historique des commandes",
-      "from": "De",
-      "to": "À",
-      "allOrderTypes": "Tous les types",
-      "clear": "Effacer",
-      "noOrdersFound": "Aucune commande trouvée.",
-      "totalAmount": "Montant Total",
-      "tip": "Pourboire",
-      "fetchDetailError": "Impossible de charger les détails de la commande",
-      "orderTitle": "Commande",
-      "generalInfo": "Infos générales",
-      "table": "Table",
-      "staff": "Personnel",
-      "type": "Type",
-      "paymentDetails": "Détails de paiement",
-      "noPaymentRecorded": "Aucun paiement enregistré",
-      "received": "Reçu",
-      "change": "Monnaie",
-      "items": "Articles",
-      "promotions": "Promotions",
-      "coupons": "Coupons",
-      "note": "Note",
-      "noPromotionsApplied": "Aucune promotion appliquée",
-      "noCouponsApplied": "Aucun coupon appliqué",
-      "of": "sur",
+        "customerNotFound": "Client introuvable.",
+        "guestCustomer": "Client invité",
+        "member": "Membre",
+        "guest": "Invité",
+        "noPhone": "Pas de téléphone",
+        "joined": "Inscrit",
+        "orders": "Commandes",
+        "totalSpent": "Total Dépensé",
+        "points": "Points",
+        "orderHistory": "Historique des commandes",
+        "from": "De",
+        "to": "À",
+        "allOrderTypes": "Tous les types",
+        "clear": "Effacer",
+        "noOrdersFound": "Aucune commande trouvée.",
+        "totalAmount": "Montant Total",
+        "tip": "Pourboire",
+        "fetchDetailError": "Impossible de charger les détails de la commande",
+        "orderTitle": "Commande",
+        "generalInfo": "Infos générales",
+        "table": "Table",
+        "staff": "Personnel",
+        "type": "Type",
+        "paymentDetails": "Détails de paiement",
+        "noPaymentRecorded": "Aucun paiement enregistré",
+        "received": "Reçu",
+        "change": "Monnaie",
+        "items": "Articles",
+        "promotions": "Promotions",
+        "coupons": "Coupons",
+        "note": "Note",
+        "noPromotionsApplied": "Aucune promotion appliquée",
+        "noCouponsApplied": "Aucun coupon appliqué",
+        "of": "sur",
       "status": {
         "PENDING": "En attente",
-        "IN_PROGRESS": "En cours",
-        "COMPLETED": "Terminée",
-        "CANCELLED": "Annulée",
-        "CREATED": "Créée",
-        "READY": "Prête",
-        "SERVED": "Servie",
-        "REJECTED": "Rejetée",
-        "DINE_IN": "Sur place",
-        "TAKEAWAY": "À emporter"
+            "IN_PROGRESS": "En cours",
+            "COMPLETED": "Terminée",
+            "CANCELLED": "Annulée",
+            "CREATED": "Créée",
+            "READY": "Prête",
+            "SERVED": "Servie",
+            "REJECTED": "Rejetée",
+            "DINE_IN": "Sur place",
+            "TAKEAWAY": "À emporter"
       }
     }
   }

@@ -13,6 +13,7 @@ export interface GetDishesParams {
     status?: DishStatusCode | string; // Chấp nhận cả Enum hoặc "All"
     sortBy?: string;
     isDescending?: boolean;
+    locale?: string;
 }
 
 export interface DishManagementDto {
