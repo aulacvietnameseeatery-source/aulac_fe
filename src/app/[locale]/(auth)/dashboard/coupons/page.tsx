@@ -2,23 +2,23 @@
 
 import React, { Suspense } from "react";
 import { Loader2 } from "lucide-react";
-import { DishCategoryList } from '@/features/staff/dish-category-management/dish-category-list';
+import { CouponList } from '@/features/staff/coupon-management/coupon-list';
 import { ProtectedRoute } from '@/components/protected-route';
 import { Permissions } from '@/types/const';
 
-const DishCategoryListContent = () => {
-  return <DishCategoryList />;
+const CouponListContent = () => {
+  return <CouponList />;
 };
 
-export default function DishCategoryPage() {
+export default function CouponPage() {
   return (
-    <ProtectedRoute permission={Permissions.ViewDishCategory}>
+    <ProtectedRoute permission={Permissions.ViewCoupon}>
       <Suspense fallback={
         <div className="flex h-screen items-center justify-center">
           <Loader2 className="animate-spin text-gray-400" />
         </div>
       }>
-        <DishCategoryListContent />
+        <CouponListContent />
       </Suspense>
     </ProtectedRoute>
   );
