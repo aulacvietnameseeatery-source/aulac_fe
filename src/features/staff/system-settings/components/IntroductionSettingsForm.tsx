@@ -289,22 +289,24 @@ export const IntroductionSettingsForm = () => {
     return (
         <div className="flex flex-col gap-6 w-full">
             {/* --- HEADER ACTIONS --- */}
-            <div className="flex flex-wrap items-center justify-between gap-4 bg-white p-4 rounded-xl border border-border shadow-sm sticky top-0 z-50">
+            <div className="flex flex-wrap items-center justify-between gap-4 bg-[#FDFBF9]/80 backdrop-blur-md p-4 rounded-xl border border-amber-200/30 shadow-sm transition-all duration-300">
                 <div className="flex items-center gap-6">
                     <div className="flex bg-gray-100 p-1 rounded-lg">
                         {LOCALES.map((loc) => (
-                            <Button
-                                key={loc}
-                                variant={activeLocale === loc ? "default" : "ghost"}
-                                size="sm"
-                                className={cn(
-                                    "px-4 py-1.5 h-8 text-xs font-medium uppercase transition-all duration-200",
-                                    activeLocale === loc && "bg-white shadow-sm text-blue-600"
-                                )}
-                                onClick={() => setActiveLocale(loc)}
-                            >
-                                {loc}
-                            </Button>
+                                <Button
+                                    key={loc}
+                                    variant={activeLocale === loc ? "default" : "ghost"}
+                                    size="sm"
+                                    className={cn(
+                                        "px-4 py-1.5 h-8 text-xs font-bold uppercase transition-all duration-200 rounded-md",
+                                        activeLocale === loc
+                                            ? "bg-white shadow-sm text-blue-600 hover:bg-white hover:text-blue-600"
+                                            : "text-gray-500 hover:text-blue-600 hover:bg-white/50"
+                                    )}
+                                    onClick={() => setActiveLocale(loc)}
+                                >
+                                    {loc}
+                                </Button>
                         ))}
                     </div>
 
@@ -315,12 +317,12 @@ export const IntroductionSettingsForm = () => {
                         {translateMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Languages className="w-4 h-4" />}
                         <span className="hidden sm:inline">{t('Common.autoTranslate')}</span>
                     </Button>
-                    <Button
-                        size="sm"
-                        className="h-9 gap-2 bg-[#1E3C52] hover:bg-[#12283A] text-white shadow-md shadow-blue-900/10"
-                        onClick={handleSave}
-                        disabled={isSaving}
-                    >
+                        <Button
+                            size="sm"
+                            className="h-9 gap-2 bg-[#1E3C52] hover:bg-[#12283A] text-white shadow-lg shadow-blue-900/20 font-semibold px-4 transition-all"
+                            onClick={handleSave}
+                            disabled={isSaving}
+                        >
                         {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
                         {t("Common.saveChanges") || "Save Changes"}
                     </Button>
@@ -336,30 +338,32 @@ export const IntroductionSettingsForm = () => {
                             <div className="flex flex-col gap-6">
 
                                 {/* --- HERO SECTION --- */}
-                                <div className="p-10 border border-slate-200 rounded-3xl bg-white/50 shadow-sm animate-in fade-in slide-in-from-bottom-4 duration-700">
+                                <div className="p-10 border border-amber-200/50 rounded-3xl bg-[#FDFBF9]/40 backdrop-blur-sm shadow-sm animate-in fade-in slide-in-from-bottom-4 duration-700">
                                     <div className="space-y-8">
-                                        <div className="pb-4 border-b border-slate-100">
-                                            <div className="mb-1">
-                                                <h3 className="text-xl font-bold text-slate-800">{t('Introduction.sections.hero.title')}</h3>
+                                        <div className="pb-4 border-b border-amber-200/20">
+                                            <div className="flex items-center gap-3 mb-1">
+                                                <h2 className="text-xl font-bold text-gray-900 tracking-tight">
+                                                    {t('Introduction.sections.hero.title')}
+                                                </h2>
                                             </div>
-                                            <p className="text-sm text-slate-500 font-medium">{t('Introduction.sections.hero.description')}</p>
+                                            <p className="font-[Inter] text-sm text-[#1A3A52]/60 ml-0 md:ml-13">{t('Introduction.sections.hero.description')}</p>
                                         </div>
 
                                         <div className="grid grid-cols-1 md:grid-cols-12 gap-12">
                                             <div className="md:col-span-8 space-y-6">
                                                 <div className="space-y-6">
                                                     <div className="space-y-4">
-                                                        <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">{t('Introduction.sections.hero.mainTitle')}</label>
-                                                        <Input className="h-11 border-slate-200 bg-white/50" value={getValue("intro.hero.title")} onChange={(e) => handleChange("intro.hero.title", e.target.value)} placeholder={t('Introduction.sections.hero.placeholders.mainTitle')} />
+                                                        <label className="text-[11px] font-bold text-[#1A3A52]/50 uppercase tracking-widest">{t('Introduction.sections.hero.mainTitle')}</label>
+                                                        <Input className="h-11 border-amber-200/40 bg-white/60 focus:border-[#1A3A52] font-[Inter]" value={getValue("intro.hero.title")} onChange={(e) => handleChange("intro.hero.title", e.target.value)} placeholder={t('Introduction.sections.hero.placeholders.mainTitle')} />
                                                     </div>
                                                     <div className="space-y-4">
-                                                        <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">{t('Introduction.sections.hero.brandQuote')}</label>
-                                                        <Input className="h-11 border-slate-200 bg-white/50" value={getValue("intro.hero.quote")} onChange={(e) => handleChange("intro.hero.quote", e.target.value)} placeholder={t('Introduction.sections.hero.placeholders.brandQuote')} />
+                                                        <label className="text-[11px] font-bold text-[#1A3A52]/50 uppercase tracking-widest">{t('Introduction.sections.hero.brandQuote')}</label>
+                                                        <Input className="h-11 border-amber-200/40 bg-white/60 focus:border-[#1A3A52] font-[Inter] italic" value={getValue("intro.hero.quote")} onChange={(e) => handleChange("intro.hero.quote", e.target.value)} placeholder={t('Introduction.sections.hero.placeholders.brandQuote')} />
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div className="md:col-span-4 border-l border-slate-100 md:pl-8 pt-4 md:pt-0">
-                                                <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-3 block">{t('Introduction.sidebar.heroBackground')}</label>
+                                            <div className="md:col-span-4 border-l border-[#D5BA98]/10 md:pl-8 pt-4 md:pt-0">
+                                                <label className="text-[11px] font-bold text-[#1A3A52]/50 uppercase tracking-widest mb-3 block">{t('Introduction.sidebar.heroBackground')}</label>
                                                 <MediaUploadUI fieldKey="intro.hero.image" />
                                             </div>
                                         </div>
@@ -367,34 +371,36 @@ export const IntroductionSettingsForm = () => {
                                 </div>
 
                                 {/* --- AMBIANCE SECTION --- */}
-                                <div className="p-10 border border-slate-200 rounded-3xl bg-white/50 shadow-sm animate-in fade-in slide-in-from-bottom-4 duration-700 delay-200">
+                                <div className="p-10 border border-amber-200/50 rounded-3xl bg-[#FDFBF9]/40 backdrop-blur-sm shadow-sm animate-in fade-in slide-in-from-bottom-4 duration-700 delay-200">
                                     <div className="space-y-8">
-                                        <div className="pb-4 border-b border-slate-100">
-                                            <div className="mb-1">
-                                                <h3 className="text-xl font-bold text-slate-800">{t('Introduction.sections.ambiance.title')}</h3>
+                                        <div className="pb-4 border-b border-amber-200/20">
+                                            <div className="flex items-center gap-3 mb-1">
+                                                <h2 className="text-xl font-bold text-gray-900 tracking-tight">
+                                                    {t('Introduction.sections.ambiance.title')}
+                                                </h2>
                                             </div>
-                                            <p className="text-sm text-slate-500 font-medium">{t('Introduction.sections.ambiance.description')}</p>
+                                            <p className="font-[Inter] text-sm text-[#1A3A52]/60 ml-0 md:ml-13">{t('Introduction.sections.ambiance.description')}</p>
                                         </div>
 
                                         <div className="grid grid-cols-1 md:grid-cols-12 gap-12">
                                             <div className="md:col-span-8 space-y-6">
                                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                                                     <div className="space-y-2">
-                                                        <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">{t('Introduction.sections.ambiance.navLabel')}</label>
-                                                        <Input className="h-11 border-slate-200 bg-white/50" value={getValue("intro.virtualTour.label")} onChange={(e) => handleChange("intro.virtualTour.label", e.target.value)} />
+                                                        <label className="text-[11px] font-bold text-[#1A3A52]/50 uppercase tracking-widest">{t('Introduction.sections.ambiance.navLabel')}</label>
+                                                        <Input className="h-11 border-amber-200/40 bg-white/60 focus:border-[#1A3A52] font-[Inter]" value={getValue("intro.virtualTour.label")} onChange={(e) => handleChange("intro.virtualTour.label", e.target.value)} />
                                                     </div>
                                                     <div className="space-y-2">
-                                                        <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">{t('Introduction.sections.ambiance.sectionTitle')}</label>
-                                                        <Input className="h-11 border-slate-200 bg-white/50" value={getValue("intro.virtualTour.title")} onChange={(e) => handleChange("intro.virtualTour.title", e.target.value)} />
+                                                        <label className="text-[11px] font-bold text-[#1A3A52]/50 uppercase tracking-widest">{t('Introduction.sections.ambiance.sectionTitle')}</label>
+                                                        <Input className="h-11 border-amber-200/40 bg-white/60 focus:border-[#1A3A52] font-[Inter]" value={getValue("intro.virtualTour.title")} onChange={(e) => handleChange("intro.virtualTour.title", e.target.value)} />
                                                     </div>
                                                 </div>
                                                 <div className="space-y-2">
-                                                    <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">{t('Introduction.sections.ambiance.summary')}</label>
-                                                    <Input className="h-11 border-slate-200 bg-white/50" value={getValue("intro.virtualTour.desc")} onChange={(e) => handleChange("intro.virtualTour.desc", e.target.value)} />
+                                                    <label className="text-[11px] font-bold text-[#1A3A52]/50 uppercase tracking-widest">{t('Introduction.sections.ambiance.summary')}</label>
+                                                    <Input className="h-11 border-amber-200/40 bg-white/60 focus:border-[#1A3A52] font-[Inter]" value={getValue("intro.virtualTour.desc")} onChange={(e) => handleChange("intro.virtualTour.desc", e.target.value)} />
                                                 </div>
                                             </div>
-                                            <div className="md:col-span-4 border-l border-slate-100 md:pl-8 pt-4 md:pt-0">
-                                                <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-3 block">{t('Introduction.sidebar.ambianceVideo')}</label>
+                                            <div className="md:col-span-4 border-l border-[#D5BA98]/10 md:pl-8 pt-4 md:pt-0">
+                                                <label className="text-[11px] font-bold text-[#1A3A52]/50 uppercase tracking-widest mb-3 block">{t('Introduction.sidebar.ambianceVideo')}</label>
                                                 <MediaUploadUI fieldKey="intro.virtualTour.videoUrl" isVideo />
                                             </div>
                                         </div>
@@ -402,24 +408,26 @@ export const IntroductionSettingsForm = () => {
                                 </div>
 
                                 {/* --- COLLECTION SECTION --- */}
-                                <div className="p-10 border border-slate-200 rounded-3xl bg-white/50 shadow-sm animate-in fade-in slide-in-from-bottom-4 duration-700">
+                                <div className="p-10 border border-amber-200/50 rounded-3xl bg-[#FDFBF9]/40 backdrop-blur-sm shadow-sm animate-in fade-in slide-in-from-bottom-4 duration-700">
                                     <div className="space-y-10">
-                                        <div className="pb-4 border-b border-slate-100">
-                                            <div className="mb-1">
-                                                <h3 className="text-xl font-bold text-slate-800">{t('Introduction.sections.collection.title')}</h3>
+                                        <div className="pb-4 border-b border-amber-200/20">
+                                            <div className="flex items-center gap-3 mb-1">
+                                                <h2 className="text-xl font-bold text-gray-900 tracking-tight">
+                                                    {t('Introduction.sections.collection.title')}
+                                                </h2>
                                             </div>
-                                            <p className="text-sm text-slate-500 font-medium">{t('Introduction.sections.collection.description')}</p>
+                                            <p className="font-[Inter] text-sm text-[#1A3A52]/60 ml-0 md:ml-13">{t('Introduction.sections.collection.description')}</p>
                                         </div>
 
                                         <div className="space-y-12">
-                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pb-8 border-b border-slate-50">
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pb-8 border-b border-[#D5BA98]/10">
                                                 <div className="space-y-2">
-                                                    <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">{t('Introduction.sections.collection.galleryLabel')}</label>
-                                                    <Input className="h-11 border-slate-200 bg-white/50" value={getValue("intro.collection.label")} onChange={(e) => handleChange("intro.collection.label", e.target.value)} />
+                                                    <label className="text-[11px] font-bold text-[#1A3A52]/50 uppercase tracking-widest">{t('Introduction.sections.collection.galleryLabel')}</label>
+                                                    <Input className="h-11 border-[#D5BA98]/20 bg-white/50 focus:border-[#1A3A52] font-[Inter]" value={getValue("intro.collection.label")} onChange={(e) => handleChange("intro.collection.label", e.target.value)} />
                                                 </div>
                                                 <div className="space-y-2">
-                                                    <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">{t('Introduction.sections.collection.mainTitle')}</label>
-                                                    <Input className="h-11 border-slate-200 bg-white/50" value={getValue("intro.collection.title")} onChange={(e) => handleChange("intro.collection.title", e.target.value)} />
+                                                    <label className="text-[11px] font-bold text-[#1A3A52]/50 uppercase tracking-widest">{t('Introduction.sections.collection.mainTitle')}</label>
+                                                    <Input className="h-11 border-[#D5BA98]/20 bg-white/50 focus:border-[#1A3A52] font-[Inter]" value={getValue("intro.collection.title")} onChange={(e) => handleChange("intro.collection.title", e.target.value)} />
                                                 </div>
                                             </div>
 
@@ -427,7 +435,7 @@ export const IntroductionSettingsForm = () => {
                                                 {[1, 2, 3].map(i => {
                                                     const p = `intro.collection.dish${i}`;
                                                     return (
-                                                        <div key={p} className="p-6 md:p-8 rounded-2xl border bg-slate-50/30 flex flex-col md:flex-row gap-8 relative group border-dashed hover:border-primary/20 transition-all duration-300">
+                                                        <div key={p} className="p-6 md:p-8 rounded-2xl border border-[#D5BA98]/20 bg-[#D5BA98]/5 flex flex-col md:flex-row gap-8 relative group hover:border-[#D5BA98]/40 transition-all duration-300">
                                                             <div className="flex-shrink-0">
                                                                 <MediaUploadUI
                                                                     fieldKey={`${p}.image`}
@@ -438,7 +446,7 @@ export const IntroductionSettingsForm = () => {
                                                                     type="button"
                                                                     variant="outline"
                                                                     size="sm"
-                                                                    className="w-full mt-2 h-7 text-[10px] gap-1.5 border-dashed border-primary/30 hover:border-primary text-primary hover:bg-primary/5 transition-all"
+                                                                    className="w-full mt-2 h-8 text-[11px] gap-1.5 border-[#D5BA98]/40 text-[#1A3A52] hover:bg-white hover:border-[#1A3A52]/30 shadow-sm"
                                                                     onClick={() => {
                                                                         setSelectingDishIndex(i);
                                                                         setIsDishModalOpen(true);
@@ -449,17 +457,17 @@ export const IntroductionSettingsForm = () => {
                                                             </div>
                                                             <div className="flex-1 space-y-6">
                                                                 <div className="space-y-2">
-                                                                    <label className="text-[12px] font-bold text-gray-400 uppercase tracking-widest">{t('Introduction.sections.collection.dishMainTitle')}</label>
-                                                                    <Input className="h-12 text-lg font-bold border-slate-200 focus:border-primary focus:ring-primary/10 transition-all bg-white" value={getValue(`${p}.mainTitle`)} onChange={(e) => handleChange(`${p}.mainTitle`, e.target.value)} />
+                                                                    <label className="text-[11px] font-bold text-[#1A3A52]/50 uppercase tracking-widest">{t('Introduction.sections.collection.dishMainTitle')}</label>
+                                                                    <Input className="h-12 text-lg font-bold border-[#D5BA98]/20 focus:border-[#1A3A52] bg-white rounded-xl font-[Inter]" value={getValue(`${p}.mainTitle`)} onChange={(e) => handleChange(`${p}.mainTitle`, e.target.value)} />
                                                                 </div>
                                                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                                                                     <div className="space-y-2">
-                                                                        <label className="text-[12px] font-bold text-gray-400 uppercase tracking-widest">{t('Introduction.sections.collection.cardTitle')}</label>
-                                                                        <Input className="h-11 text-sm border-slate-200 focus:border-primary/30 bg-white" value={getValue(`${p}.cardTitle`)} onChange={(e) => handleChange(`${p}.cardTitle`, e.target.value)} />
+                                                                        <label className="text-[11px] font-bold text-[#1A3A52]/50 uppercase tracking-widest">{t('Introduction.sections.collection.cardTitle')}</label>
+                                                                        <Input className="h-11 text-sm border-[#D5BA98]/20 focus:border-[#1A3A52] bg-white rounded-xl font-[Inter]" value={getValue(`${p}.cardTitle`)} onChange={(e) => handleChange(`${p}.cardTitle`, e.target.value)} />
                                                                     </div>
                                                                     <div className="space-y-2">
-                                                                        <label className="text-[12px] font-bold text-gray-400 uppercase tracking-widest">{t('Introduction.sections.collection.cardCategory')}</label>
-                                                                        <Input className="h-11 text-sm border-slate-200 focus:border-primary/30 bg-white" value={getValue(`${p}.cardCategory`)} onChange={(e) => handleChange(`${p}.cardCategory`, e.target.value)} />
+                                                                        <label className="text-[11px] font-bold text-[#1A3A52]/50 uppercase tracking-widest">{t('Introduction.sections.collection.cardCategory')}</label>
+                                                                        <Input className="h-11 text-sm border-[#D5BA98]/20 focus:border-[#1A3A52] bg-white rounded-xl font-[Inter]" value={getValue(`${p}.cardCategory`)} onChange={(e) => handleChange(`${p}.cardCategory`, e.target.value)} />
                                                                     </div>
                                                                 </div>
                                                             </div>

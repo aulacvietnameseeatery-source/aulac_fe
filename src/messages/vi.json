@@ -2452,7 +2452,11 @@
       "selectFromMenu": "Chọn từ thực đơn",
       "autoTranslate": "Tự động dịch",
       "search": "Tìm kiếm",
-      "cancel": "Hủy"
+      "cancel": "Hủy",
+      "facebook": "Facebook",
+      "instagram": "Instagram",
+      "tiktok": "TikTok",
+      "website": "Trang web"
     },
     "Introduction": {
       "title": "Trang Giới thiệu",
@@ -2517,6 +2521,7 @@
     "StoreProfile": {
       "title": "Hồ sơ Cửa hàng",
       "description": "Quản lý danh tính và thông tin liên hệ.",
+      "upload": "Tải lên",
       "sections": {
         "identity": {
           "title": "Danh tính",
@@ -2536,27 +2541,35 @@
         }
       },
       "storeName": "Tên cửa hàng",
-      "streetAddress": "Địa chỉ đường",
+      "street": "Địa chỉ đường",
       "postalCode": "Mã bưu chính",
       "city": "Thành phố",
       "country": "Quốc gia",
       "email": "Địa chỉ Email",
       "phone": "Số điện thoại",
       "openingHours": "Giờ mở cửa",
-      "facebookLink": "Liên kết Facebook",
-      "instagramLink": "Liên kết Instagram",
-      "tiktokLink": "Liên kết TikTok",
+      "facebook": "Liên kết Facebook",
+      "instagram": "Liên kết Instagram",
+      "tiktok": "Liên kết TikTok",
+      "placeholders": {
+        "storeName": "Nhập tên nhà hàng/cửa hàng",
+        "street": "vd: Avenue Jacques Dalcroze 9",
+        "postalCode": "1000",
+        "city": "Tên thành phố",
+        "country": "Tên quốc gia",
+        "email": "contact@restaurant.com",
+        "phone": "+84 123 456 789",
+        "openingHours": "vd: Thứ 2 - Chủ nhật: 08:00 - 22:00",
+        "facebook": "https://facebook.com/trangcua-ban",
+        "instagram": "https://instagram.com/profilecua-ban",
+        "tiktok": "https://tiktok.com/@profilecua-ban"
+      },
       "visualBranding": "Nhận diện hình ảnh",
       "visualBrandingDesc": "Logo và phương tiện quảng bá",
       "officialLogo": "Logo chính thức",
       "storeVideo": "Video cửa hàng",
       "syncNotice": "Thông báo đồng bộ",
       "syncNoticeDesc": "Khi lưu sẽ cập nhật các trường chung trên tất cả các ngôn ngữ ngay lập tức.",
-      "placeholders": {
-        "facebook": "URL Facebook",
-        "instagram": "URL Instagram",
-        "tiktok": "URL TikTok"
-      },
       "translationFailed": "Dịch thất bại.",
       "translatedSuccessfully": "Dịch thành công!",
       "nothingToTranslate": "Không có gì để dịch.",

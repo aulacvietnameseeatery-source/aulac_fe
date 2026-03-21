@@ -18,17 +18,15 @@ const SystemSettingsContent = () => {
 
     return (
         <div className="w-full h-full flex flex-col overflow-hidden">
-            <div className="flex justify-between items-center w-full mb-6">
-                <div>
-                    <h1 className="text-3xl font-bold text-gray-900 tracking-tight">
-                        {t('storeSettings')}
-                    </h1>
-                    <p className="text-sm text-gray-500 mt-1">
-                        {activeTab === 'profile' && t('storeProfile')}
-                        {activeTab === 'introduction' && t('storeIntroduction')}
-                        {activeTab === 'about' && t('storeAboutUs')}
-                    </p>
-                </div>
+            <div className="mb-6 md:mb-8">
+                <h1 className="text-3xl font-bold text-gray-900 tracking-tight mb-1">
+                    {t('storeSettings')}
+                </h1>
+                <p className="text-sm text-gray-500 tracking-wide">
+                    {activeTab === 'profile' && t('storeProfile')}
+                    {activeTab === 'introduction' && t('storeIntroduction')}
+                    {activeTab === 'about' && t('storeAboutUs')}
+                </p>
             </div>
 
             <main className="flex-1 overflow-y-auto custom-scrollbar">
