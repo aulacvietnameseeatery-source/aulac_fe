@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useMemo } from "react";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Card, CardContent } from "@/components/ui/card";
@@ -35,9 +36,10 @@ interface StatusSegment {
   label: string;
 }
 
-const StatusBar: React.FC<{ segments: StatusSegment[]; total: number }> = ({
+const StatusBar: React.FC<{ segments: StatusSegment[]; total: number; t: ReturnType<typeof useTranslations> }> = ({
   segments,
   total,
+  t,
 }) => (
   <div className="space-y-2">
     {/* Bar */}
@@ -66,7 +68,7 @@ const StatusBar: React.FC<{ segments: StatusSegment[]; total: number }> = ({
         </div>
       ))}
       {total > 0 && (
-        <span className="ml-auto text-[11px] text-[#1A3A52]/55">{total} total</span>
+        <span className="ml-auto text-[11px] text-[#1A3A52]/55">{t("dashboard.totalCount", { count: total })}</span>
       )}
     </div>
   </div>
@@ -169,6 +171,7 @@ function formatTime(iso: string): string {
 }
 
 const ReservationCard: React.FC<{ r: IncomingReservation }> = ({ r }) => {
+  const t = useTranslations("tableManagement");
   const isConfirmed = r.status === "CONFIRMED";
   return (
     <div className="flex w-44 shrink-0 flex-col justify-between rounded-lg border border border-[#D5BA98]/60 bg-white p-3 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md">
@@ -197,7 +200,7 @@ const ReservationCard: React.FC<{ r: IncomingReservation }> = ({ r }) => {
               : "bg-[#D5BA98]/20 text-[#1A3A52]/70"
           )}
         >
-          {isConfirmed ? "Confirmed" : "Pending"}
+          {isConfirmed ? t("status.confirmed") : t("status.pending")}
         </span>
       </div>
 
@@ -211,7 +214,7 @@ const ReservationCard: React.FC<{ r: IncomingReservation }> = ({ r }) => {
 
       {/* Pax + Table */}
       <div className="mb-1 flex items-center gap-1 text-[10px] text-[#1A3A52]/55">
-        <span>{r.pax} pax</span>
+        <span>{t("detail.paxCount", { count: r.pax })}</span>
         <span>·</span>
         <MapPin size={10} className="shrink-0" />
         <span className="truncate">
@@ -234,6 +237,7 @@ const ReservationCard: React.FC<{ r: IncomingReservation }> = ({ r }) => {
 export const DashboardSummary: React.FC<DashboardSummaryProps> = ({
   tables,
 }) => {
+  const t = useTranslations("tableManagement");
   const total = tables.length;
 
   const [isCollapsed, setIsCollapsed] = React.useState(() => {
@@ -290,16 +294,16 @@ export const DashboardSummary: React.FC<DashboardSummaryProps> = ({
       <CardContent className="p-5 space-y-4">
         {/* Title row */}
         <div className="flex items-center justify-between">
-          <h4 className="text-lg font-semibold text-[#1A3A52]">Overview</h4>
+          <h4 className="text-lg font-semibold text-[#1A3A52]">{t("dashboard.overview")}</h4>
           <div className="flex items-center gap-2">
             <span className="text-xs text-[#1A3A52]/60">
-              {total} tables &middot; {stats.totalCapacity} seats
+              {t("dashboard.tablesAndSeats", { tables: total, seats: stats.totalCapacity })}
             </span>
             <button
               type="button"
               onClick={handleToggle}
               className="rounded p-1 text-[#1A3A52]/55 transition-colors hover:bg-[#D5BA98]/25 hover:text-[#1A3A52]"
-              aria-label={isCollapsed ? "Expand overview" : "Collapse overview"}
+              aria-label={isCollapsed ? t("dashboard.expandOverview") : t("dashboard.collapseOverview")}
             >
               {isCollapsed ? <ChevronDown size={16} /> : <ChevronUp size={16} />}
             </button>
@@ -310,19 +314,19 @@ export const DashboardSummary: React.FC<DashboardSummaryProps> = ({
         {!isCollapsed && (
           <>
             {/* Compact status bar */}
-            <StatusBar segments={statusSegments} total={total} />
+            <StatusBar segments={statusSegments} total={total} t={t} />
 
             {/* KPI Stats row */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               <StatCard
                 icon={<Users size={16} />}
-                label="Total Capacity"
+                label={t("dashboard.totalCapacity")}
                 value={stats.totalCapacity}
-                sub={`Avg ${total > 0 ? Math.round(stats.totalCapacity / total) : 0} seats/table`}
+                sub={t("dashboard.avgSeatsPerTable", { count: total > 0 ? Math.round(stats.totalCapacity / total) : 0 })}
               />
               <StatCard
                 icon={<Wifi size={16} />}
-                label="Online"
+                label={t("filters.online")}
                 value={
                   <span className="flex items-baseline gap-1.5">
                     {stats.online}
@@ -337,16 +341,16 @@ export const DashboardSummary: React.FC<DashboardSummaryProps> = ({
               />
               <StatCard
                 icon={<ShoppingBag size={16} />}
-                label="Active Orders"
+                label={t("detail.activeOrders")}
                 value={stats.activeOrders}
                 accent={stats.activeOrders > 0 ? "text-[#1A3A52]" : "text-[#1A3A52]"}
               />
               <StatCard
                 icon={<AlertTriangle size={16} />}
-                label="Errors"
+                label={t("detail.errors")}
                 value={stats.withErrors}
                 accent={stats.withErrors > 0 ? "text-[#8C3A3A]" : "text-[#1A3A52]"}
-                sub={stats.withErrors > 0 ? "Needs attention" : "All clear"}
+                sub={stats.withErrors > 0 ? t("dashboard.needsAttention") : t("dashboard.allClear")}
               />
             </div>
 
@@ -355,7 +359,7 @@ export const DashboardSummary: React.FC<DashboardSummaryProps> = ({
               <div className="flex items-center justify-between">
                 <h5 className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-[#1A3A52]/60">
                   <CalendarClock size={13} />
-                  Incoming Reservations
+                  {t("dashboard.incomingReservations")}
                   <span className="text-[11px] font-normal normal-case tracking-normal text-[#1A3A52]/55">
                     ({MOCK_RESERVATIONS.length})
                   </span>
@@ -364,13 +368,13 @@ export const DashboardSummary: React.FC<DashboardSummaryProps> = ({
                   href="/dashboard/reservation"
                   className="text-xs text-[#1A3A52] underline underline-offset-2 transition-colors hover:text-[#1A3A52]/75"
                 >
-                  See all
+                  {t("dashboard.seeAll")}
                 </Link>
               </div>
 
               {MOCK_RESERVATIONS.length === 0 ? (
                 <p className="py-3 text-center text-xs text-[#1A3A52]/55">
-                  No upcoming reservations
+                  {t("dashboard.noUpcomingReservations")}
                 </p>
               ) : (
                 <div className="flex gap-2 overflow-x-auto pb-1 -mx-1 px-1">

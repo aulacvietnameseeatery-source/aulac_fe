@@ -3,6 +3,7 @@
 import * as React from "react";
 import { Popover as PopoverPrimitive } from "radix-ui";
 import { Check, ChevronDown, Loader2, Search, X, Plus } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import "@/styles/components/al-combobox.css";
 
@@ -64,10 +65,13 @@ const ALCombobox: React.FC<ALComboboxProps> = ({
   options,
   value,
   onChange,
-  placeholder = "Select...",
+  placeholder,
   multiple = false,
   searchable = true,
   clearable = false,
+  showSelectAll = false,
+  selectAllLabel,
+  clearAllLabel,
   allowCreate = false,
   onCreateOption,
   title,
@@ -80,8 +84,8 @@ const ALCombobox: React.FC<ALComboboxProps> = ({
   renderOption,
   renderValue,
   isLoading = false,
-  emptyMessage = "No options found.",
-  searchPlaceholder = "Search...",
+  emptyMessage,
+  searchPlaceholder,
   grouped = false,
   disabled = false,
   readOnly = false,
@@ -94,6 +98,7 @@ const ALCombobox: React.FC<ALComboboxProps> = ({
   name,
   titleAction,
 }) => {
+  const t = useTranslations("combobox");
   const [open, setOpen] = React.useState(false);
   const [search, setSearch] = React.useState("");
   const [focusIndex, setFocusIndex] = React.useState(-1);
@@ -101,6 +106,15 @@ const ALCombobox: React.FC<ALComboboxProps> = ({
   const listRef = React.useRef<HTMLDivElement>(null);
 
   const selected = toArray(value);
+  const resolvedPlaceholder = placeholder ?? t("placeholder");
+  const resolvedEmptyMessage = emptyMessage ?? t("emptyMessage");
+  const resolvedSearchPlaceholder = searchPlaceholder ?? t("searchPlaceholder");
+  const resolvedSelectAllLabel = selectAllLabel ?? t("selectAll");
+  const resolvedClearAllLabel = clearAllLabel ?? t("clearAll");
+  const resolvedLoadingText = t("loading");
+  const resolvedClearSelectionLabel = t("clearSelection");
+  const resolvedCreateLabel = t("create");
+  const resolvedRemoveLabel = t("remove");
 
   // ── Filtered options ──────────────────────────────────────
   const filtered = React.useMemo(() => {
@@ -116,6 +130,13 @@ const ALCombobox: React.FC<ALComboboxProps> = ({
 
   // ── Selection logic ───────────────────────────────────────
   const isSelected = (val: string | number) => selected.includes(val);
+  const selectableFiltered = React.useMemo(
+    () => filtered.filter((o) => !o.disabled),
+    [filtered]
+  );
+  const allFilteredSelected =
+    selectableFiltered.length > 0 &&
+    selectableFiltered.every((opt) => isSelected(opt.value));
 
   const handleSelect = (opt: ALComboboxOption) => {
     if (opt.disabled || readOnly) return;
@@ -135,6 +156,18 @@ const ALCombobox: React.FC<ALComboboxProps> = ({
     e.stopPropagation();
     if (readOnly) return;
     onChange?.(multiple ? [] : "" as unknown as string | number);
+  };
+
+  const handleSelectAll = () => {
+    if (!multiple || readOnly || selectableFiltered.length === 0) return;
+    const next = new Set(selected);
+    selectableFiltered.forEach((opt) => next.add(opt.value));
+    onChange?.(Array.from(next));
+  };
+
+  const handleClearAll = () => {
+    if (!multiple || readOnly) return;
+    onChange?.([]);
   };
 
   const handleRemoveBadge = (val: string | number, e: React.MouseEvent) => {
@@ -249,7 +282,7 @@ const ALCombobox: React.FC<ALComboboxProps> = ({
                   className="al-cb-badge__remove"
                   onClick={(e) => handleRemoveBadge(val, e)}
                   onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); handleRemoveBadge(val, e as any); } }}
-                  aria-label={`Remove ${opt?.label ?? val}`}
+                  aria-label={`${resolvedRemoveLabel} ${opt?.label ?? val}`}
                 >
                   <X size={8} />
                 </span>
@@ -281,7 +314,7 @@ const ALCombobox: React.FC<ALComboboxProps> = ({
     }
 
     return (
-      <span className="al-cb-trigger__placeholder">{placeholder}</span>
+      <span className="al-cb-trigger__placeholder">{resolvedPlaceholder}</span>
     );
   };
 
@@ -291,13 +324,13 @@ const ALCombobox: React.FC<ALComboboxProps> = ({
       return (
         <div className="al-cb-loading">
           <Loader2 size={16} className="al-cb-loading__spinner animate-spin" />
-          <span>Loading...</span>
+          <span>{resolvedLoadingText}</span>
         </div>
       );
     }
 
     if (filtered.length === 0 && !showCreate) {
-      return <div className="al-cb-empty">{emptyMessage}</div>;
+      return <div className="al-cb-empty">{resolvedEmptyMessage}</div>;
     }
 
     if (grouped) {
@@ -449,7 +482,7 @@ const ALCombobox: React.FC<ALComboboxProps> = ({
                 className="al-cb-trigger__clear"
                 onClick={handleClear}
                 role="button"
-                aria-label="Clear selection"
+                aria-label={resolvedClearSelectionLabel}
               >
                 <X size={10} />
               </span>
@@ -473,7 +506,7 @@ const ALCombobox: React.FC<ALComboboxProps> = ({
                 <input
                   ref={searchRef}
                   className="al-cb-search__input"
-                  placeholder={searchPlaceholder}
+                  placeholder={resolvedSearchPlaceholder}
                   value={search}
                   onChange={(e) => {
                     setSearch(e.target.value);
@@ -481,6 +514,27 @@ const ALCombobox: React.FC<ALComboboxProps> = ({
                   }}
                   autoComplete="off"
                 />
+              </div>
+            )}
+
+            {multiple && showSelectAll && selectableFiltered.length > 0 && (
+              <div className="flex items-center justify-between border-b border-slate-200 px-3 py-2 text-xs">
+                <button
+                  type="button"
+                  className="font-medium text-[#1A3A52] disabled:cursor-not-allowed disabled:opacity-40"
+                  onClick={handleSelectAll}
+                  disabled={allFilteredSelected || disabled || readOnly}
+                >
+                  {resolvedSelectAllLabel}
+                </button>
+                <button
+                  type="button"
+                  className="text-[#1A3A52]/70 disabled:cursor-not-allowed disabled:opacity-40"
+                  onClick={handleClearAll}
+                  disabled={selected.length === 0 || disabled || readOnly}
+                >
+                  {resolvedClearAllLabel}
+                </button>
               </div>
             )}
 
@@ -504,7 +558,7 @@ const ALCombobox: React.FC<ALComboboxProps> = ({
                 >
                   <Plus size={14} />
                   <span>
-                    Create &quot;<strong>{search.trim()}</strong>&quot;
+                    {resolvedCreateLabel} &quot;<strong>{search.trim()}</strong>&quot;
                   </span>
                 </button>
               )}

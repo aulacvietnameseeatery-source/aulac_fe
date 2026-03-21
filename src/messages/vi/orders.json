@@ -1,0 +1,316 @@
+{
+  "Order": {
+    "List": {
+      "title": "Đơn hàng",
+      "description": "Quản lý và theo dõi tất cả đơn hàng",
+      "searchPlaceholder": "Tìm theo mã đơn, khách hàng, nhân viên...",
+      "refresh": "Làm mới",
+      "addNewOrder": "Thêm đơn hàng",
+      "kanbanLabel": "Kanban — Tất cả trạng thái",
+      "dateRange": {
+        "today": "Hôm nay",
+        "yesterday": "Hôm qua",
+        "last7": "7 ngày qua",
+        "last30": "30 ngày qua",
+        "thisMonth": "Tháng này",
+        "lastMonth": "Tháng trước",
+        "custom": "Tùy chỉnh",
+        "from": "Từ",
+        "to": "Đến",
+        "apply": "Áp dụng",
+        "label": "Thời gian"
+      },
+      "tabs": {
+        "all": "Tất cả",
+        "pending": "Chờ xử lý",
+        "inProgress": "Đang làm",
+        "completed": "Hoàn thành",
+        "cancelled": "Đã huỷ"
+      },
+      "statusCards": {
+        "all": "Tất cả",
+        "pending": "Chờ xử lý",
+        "inProgress": "Đang làm",
+        "completed": "Hoàn thành",
+        "cancelled": "Đã huỷ"
+      },
+      "kanban": {
+        "pending": "Chờ xử lý",
+        "inProgress": "Đang làm",
+        "completed": "Hoàn thành",
+        "cancelled": "Đã huỷ",
+        "empty": "Không có đơn hàng",
+        "start": "Bắt đầu",
+        "finish": "Hoàn thành",
+        "complete": "Hoàn tất",
+        "printInvoice": "In hoá đơn",
+        "reset": "Đặt lại",
+        "delete": "Xoá",
+        "cancel": "Huỷ"
+      },
+      "viewMode": {
+        "grid": "Chế độ lưới",
+        "kanban": "Chế độ kanban"
+      },
+      "statusUpdateSuccess": "Đã cập nhật trạng thái đơn hàng",
+      "statusUpdateError": "Không thể cập nhật trạng thái đơn hàng",
+      "empty": {
+        "title": "Không có đơn hàng nào",
+        "hint": "Thử thay đổi bộ lọc hoặc tìm kiếm khác"
+      },
+      "card": {
+        "table": "Bàn",
+        "tip": "Tip",
+        "items": "món",
+        "moreItems": "món nữa",
+        "collapse": "Thu gọn",
+        "actions": "Hành động",
+        "note": "Ghi chú",
+        "rejectReason": "Lý do",
+        "guest": "Khách vãng lai",
+        "source": {
+          "DINE_IN": "Tại bàn",
+          "TAKE_AWAY": "Mang về",
+          "TAKEAWAY": "Mang về",
+          "DELIVERY": "Giao hàng",
+          "Takeaway": "Mang về",
+          "Dine-in": "Tại bàn",
+          "Delivery": "Giao hàng"
+        },
+        "status": {
+          "Pending": "Chờ xử lý",
+          "In progress": "Đang làm",
+          "Completed": "Hoàn thành",
+          "Cancelled": "Đã huỷ"
+        },
+        "paymentStatus": {
+          "paid": "Đã thanh toán",
+          "unpaid": "Chưa thanh toán"
+        },
+        "action": {
+          "view": "Xem chi tiết",
+          "edit": "Sửa đơn",
+          "start": "Bắt đầu",
+          "complete": "Hoàn thành",
+          "cancel": "Huỷ đơn",
+          "reset": "Khôi phục",
+          "print": "In hoá đơn",
+          "pay": "Thanh toán",
+          "printReceipt": "In biên lai"
+        },
+        "paymentSuccess": "Thanh toán thành công",
+        "paymentError": "Thanh toán thất bại"
+      }
+    },
+    "Create": {
+      "title": "Tạo đơn hàng mới",
+      "subtitle": "Chọn món ăn và thức uống để bắt đầu phục vụ khách hàng.",
+      "menuCatalog": "Thực Đơn",
+      "searchDish": "Tìm món ăn...",
+      "dineIn": "Tại bàn",
+      "takeAway": "Mang đi",
+      "currentTicket": "Phiếu Hiện Tại",
+      "clear": "Xóa",
+      "emptyTicket": "Phiếu đang trống",
+      "diningTable": "Bàn Ăn",
+      "customer": "Khách Hàng",
+      "select": "Chọn",
+      "change": "Đổi",
+      "add": "Thêm",
+      "note": "Thêm ghi chú (ít cay, không hành...)",
+      "subtotal": "Tạm tính",
+      "tax": "Thuế (10%)",
+      "total": "Tổng cộng",
+      "placeOrder": "Đặt Món",
+      "createInvoice": "Tạo Hóa Đơn",
+      "noTableSelected": "Chưa chọn bàn",
+      "anonymous": "Khách vãng lai",
+      "selectFilterAll": "Tất cả",
+      "confirmSelection": "Xác nhận chọn",
+      "cancel": "Hủy",
+      "confirm": "Xác nhận",
+      "customerDetails": "Thông tin khách hàng",
+      "phoneNumber": "Số điện thoại",
+      "fullName": "Họ và tên",
+      "email": "Email",
+      "saveDetails": "Lưu thông tin"
+    },
+    "Edit": {
+      "menuTitle": "Chi tiết đơn hàng",
+      "menuSubtitleEdit": "Chọn món để thêm vào đơn hàng hiện tại.",
+      "menuSubtitleView": "Đơn hàng đã thanh toán. Đang ở chế độ chỉ xem.",
+      "menuSubtitleCancelled": "Đơn hàng đã bị hủy. Đang ở chế độ chỉ xem.",
+      "clear": "Xóa",
+      "cancel": "Huỷ",
+      "editOrderTitle": "Chỉnh sửa đơn hàng #{id}",
+      "viewOrderTitle": "Xem đơn hàng #{id}",
+      "totalAmount": "Tổng tiền",
+      "orderedItems": "Món đã gọi",
+      "newItems": "Món thêm mới",
+      "addMoreItemsHint": "Chọn món từ thực đơn bên trái để thêm",
+      "paidOrderWarning": "Đơn hàng đã thanh toán. Vui lòng tạo đơn hàng mới.",
+      "cancelledOrderWarning": "Đơn hàng đã bị hủy. Không thể chỉnh sửa hoặc in hóa đơn.",
+      "change": "Đổi",
+      "table": "Bàn",
+      "addItemsButton": "Thêm món vào đơn hàng",
+      "createInvoice": "Tạo Hóa Đơn",
+      "createReceipt": "Tạo biên lai",
+      "newTotal": "Tổng dự kiến",
+      "warningTitle": "Xác nhận thêm món",
+      "completedOrderWarning": "Đơn hàng này đã hoàn tất nhưng chưa thanh toán. Thêm món mới sẽ chuyển đơn hàng về trạng thái Đang phục vụ (In Progress). Bạn có chắc chắn?",
+      "confirmChangeStatus": "Đồng ý thêm",
+      "saving": "Đang lưu...",
+      "successMessage": "Lưu thay đổi thành công!",
+      "errorMessage": "Có lỗi xảy ra!",
+      "loading": "Đang tải...",
+      "takeAway": "Mang đi",
+      "guest": "Khách lẻ",
+      "notePlaceholder": "Ghi chú món...",
+      "status": {
+        "Pending": "Chờ xử lý",
+        "In progress": "Đang làm",
+        "Completed": "Hoàn thành",
+        "Cancelled": "Đã huỷ"
+      },
+      "tableLabel": "Bàn",
+      "customerLabel": "Khách hàng"
+    },
+    "RecentOrders": {
+      "title": "Đơn hàng gần đây",
+      "refresh": "Làm mới",
+      "filterAll": "Tất cả",
+      "dineIn": "Tại bàn",
+      "takeAway": "Mang đi",
+      "loading": "Đang tải đơn hàng...",
+      "noOrdersFound": "Chưa có đơn hàng nào.",
+      "table": "Bàn",
+      "status": {
+        "PENDING": "Đang chờ",
+        "IN_PROGRESS": "Đang thực hiện",
+        "COMPLETED": "Hoàn thành",
+        "CANCELLED": "Đã hủy"
+      }
+    },
+    "DishDetail": {
+      "noDescription": "Chưa có mô tả.",
+      "price": "Giá",
+      "addToOrder": "Thêm vào đơn"
+    },
+    "PaymentModal": {
+      "title": "Thanh toán & Hoàn tất đơn hàng",
+      "finalTotal": "Tổng cộng cuối cùng",
+      "orderInfo": "Thông tin đơn hàng",
+      "orderNo": "Mã đơn hàng",
+      "noOfItems": "Số lượng món",
+      "orderType": "Loại đơn hàng",
+      "orderedMenus": "Món đã gọi",
+      "subTotal": "Tạm tính",
+      "tax": "Thuế",
+      "serviceCharge": "Phí phục vụ",
+      "tip": "Tiền tip",
+      "paymentType": "Phương thức thanh toán",
+      "cash": "Tiền mặt",
+      "card": "Thẻ",
+      "scan": "Chuyển khoản / Quét mã",
+      "promotion": "Khuyến mãi",
+      "coupon": "Mã giảm giá",
+      "givenAmount": "Số tiền khách đưa",
+      "balance": "Tiền thừa",
+      "note": "Ghi chú",
+      "notePlaceholder": "Nhập ghi chú thanh toán...",
+      "close": "Đóng",
+      "payAndComplete": "Thanh toán & Hoàn tất",
+      "paying": "Đang thanh toán...",
+      "enterTip": "Nhập số tiền tip",
+      "selectPromotion": "Chọn khuyến mãi",
+      "selectCoupon": "Chọn mã giảm giá",
+      "promotions": "Khuyến mãi"
+    }
+  },
+  "Invoice": {
+    "List": {
+      "title": "Hóa đơn bán hàng",
+      "description": "Quản lý và theo dõi tất cả hóa đơn bán hàng",
+      "searchPlaceholder": "Tìm kiếm theo mã hóa đơn, khách hàng, nhân viên...",
+      "refresh": "Làm mới",
+      "dateRange": {
+        "today": "Hôm nay",
+        "yesterday": "Hôm qua",
+        "last7": "7 ngày qua",
+        "last30": "30 ngày qua",
+        "thisMonth": "Tháng này",
+        "lastMonth": "Tháng trước",
+        "custom": "Tùy chỉnh",
+        "from": "Từ",
+        "to": "Đến",
+        "selectDate": "Chọn ngày"
+      },
+      "table": {
+        "no": "STT",
+        "invoiceCode": "Mã hóa đơn",
+        "createdAt": "Ngày giờ",
+        "tableCode": "Bàn",
+        "customerName": "Khách hàng",
+        "staffName": "Nhân viên",
+        "totalAmount": "Tổng tiền",
+        "tipAmount": "Tiền boa",
+        "paymentMethod": "Phương thức thanh toán",
+        "orderStatus": "Trạng thái đơn"
+      }
+    }
+  },
+  "OrderHistory": {
+    "title": "Lịch Sử Đặt Món",
+    "fabLabel": "HISTORY",
+    "fabAriaLabel": "Xem lịch sử đặt món",
+    "tableLabel": "Bàn",
+    "itemsCount": "{count} món",
+    "refresh": "Tải lại",
+    "refreshAriaLabel": "Tải lại",
+    "close": "Đóng",
+    "closeAriaLabel": "Đóng",
+    "headers": {
+      "dish": "Món",
+      "quantity": "SL",
+      "price": "Giá",
+      "status": "Trạng thái"
+    },
+    "status": {
+      "created": "Đang chờ",
+      "inProgress": "Đang làm",
+      "ready": "Sẵn sàng",
+      "served": "Đã phục vụ",
+      "rejected": "Từ chối",
+      "cancelled": "Đã hủy"
+    },
+    "emptyState": {
+      "title": "Chưa có món nào được đặt.",
+      "subtitle": "Lịch sử sẽ hiện ở đây sau khi bạn đặt món."
+    },
+    "chefNote": "Ghi chú từ bếp:",
+    "estimatedTotal": "Tổng ước tính",
+    "requestPayment": "Yêu cầu thanh toán",
+    "error": "Không thể tải dữ liệu",
+    "cancelItem": "Hủy món",
+    "cancelling": "Đang hủy...",
+    "cancelError": "Không thể hủy món",
+    "cancelNotAllowed": "“{dishName}” đã được nhân viên xử lý và không thể hủy nữa.",
+    "cancelPopup": {
+      "title": "Hủy món này?",
+      "message": "Bạn có chắc chắn muốn hủy \"{dishName}\" không? Hành động này không thể hoàn tác.",
+      "yes": "Có, Hủy",
+      "no": "Không, Giữ lại"
+    },
+    "paymentPopup": {
+      "title": "Yêu cầu thanh toán?",
+      "message": "Nhân viên sẽ mang hóa đơn đến {tableLabel} {tableNumber} của bạn ngay. Bạn có muốn tiếp tục?",
+      "estimatedTotalLabel": "TỔNG ƯỚC TÍNH",
+      "confirm": "XÁC NHẬN",
+      "closeAriaLabel": "Đóng hộp thoại thanh toán"
+    },
+    "successPopup": {
+      "title": "Cảm ơn bạn!",
+      "message": "Yêu cầu thanh toán cho {tableLabel} {tableNumber} đã được tiếp nhận. Nhân viên sẽ đến ngay."
+    }
+  }
+}

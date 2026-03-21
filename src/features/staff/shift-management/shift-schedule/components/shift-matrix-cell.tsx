@@ -3,6 +3,7 @@
 import { useDroppable } from "@dnd-kit/core";
 import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { Plus } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import { ShiftCard } from "../../components/shift-card";
 import type { ShiftAssignmentListDto } from "../../types/shift-management.types";
@@ -25,6 +26,7 @@ export function ShiftMatrixCell({
   onCardClick,
   onAddClick,
 }: ShiftMatrixCellProps) {
+  const t = useTranslations("shift.schedule.matrix");
   const { isOver, setNodeRef } = useDroppable({ id: cellId });
 
   const sortableIds = assignments.map(
@@ -59,12 +61,12 @@ export function ShiftMatrixCell({
           type="button"
           onClick={onAddClick}
           className={cn(
-            "absolute inset-x-1 bottom-1 flex items-center justify-center gap-1 rounded border border-dashed border-[#D5BA98]/40 py-0.5 text-[10px] text-[#1A3A52]/40 transition-opacity",
+            "flex items-center w-full mt-2 justify-center gap-1 rounded border border-dashed border-[#D5BA98]/40 py-0.5 text-[10px] text-[#1A3A52]/40 transition-opacity",
             "opacity-0 group-hover/cell:opacity-100 hover:border-[#1A3A52]/40 hover:text-[#1A3A52]/70"
           )}
         >
           <Plus className="h-3 w-3" />
-          Add
+          {t("add")}
         </button>
       )}
     </div>

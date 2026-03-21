@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { useTranslations } from "next-intl";
 import { Dialog } from "@/components/ui/dialog";
 import { ALInput } from "@/components/ui/al-input";
 import { Button } from "@/components/ui/button";
@@ -29,6 +30,7 @@ function toApiTime(value: string): string {
 }
 
 export function ShiftTemplateForm({ open, onClose, editTarget }: Props) {
+  const t = useTranslations("shift.schedule.templateForm");
   const create = useCreateShiftTemplateMutation();
   const update = useUpdateShiftTemplateMutation();
   const isEdit = !!editTarget;
@@ -90,7 +92,7 @@ export function ShiftTemplateForm({ open, onClose, editTarget }: Props) {
     <Dialog
       open={open}
       onClose={onClose}
-      title={isEdit ? "Edit Shift Template" : "Create Shift Template"}
+      title={isEdit ? t("editTitle") : t("createTitle")}
       width="520px"
       footer={
         <div className="flex items-center gap-3 w-full">
@@ -101,7 +103,7 @@ export function ShiftTemplateForm({ open, onClose, editTarget }: Props) {
             onClick={onClose}
             disabled={isPending}
           >
-            Cancel
+            {t("cancel")}
           </Button>
           <Button
             type="submit"
@@ -110,14 +112,14 @@ export function ShiftTemplateForm({ open, onClose, editTarget }: Props) {
             className="w-full"
             isLoading={isPending}
           >
-            {isEdit ? "Save Changes" : "Create Template"}
+            {isEdit ? t("saveChanges") : t("create")}
           </Button>
         </div>
       }
     >
-      <form id="shift-template-form" onSubmit={onSubmit} className="space-y-5 p-1">
+      <form id="shift-template-form" onSubmit={onSubmit} className="space-y-5 p-5">
         <ALInput
-          title="Template Name"
+          title={t("templateName")}
           required
           {...register("templateName")}
           error={errors.templateName?.message}
@@ -125,14 +127,14 @@ export function ShiftTemplateForm({ open, onClose, editTarget }: Props) {
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <ALInput
-            title="Default Start"
+            title={t("defaultStart")}
             required
             type="time"
             {...register("defaultStartTime")}
             error={errors.defaultStartTime?.message}
           />
           <ALInput
-            title="Default End"
+            title={t("defaultEnd")}
             required
             type="time"
             {...register("defaultEndTime")}
@@ -141,12 +143,12 @@ export function ShiftTemplateForm({ open, onClose, editTarget }: Props) {
         </div>
 
         <div className="space-y-1">
-          <label className="text-sm font-medium text-[#1A3A52]">Description</label>
+          <label className="text-sm font-medium text-[#1A3A52]">{t("description")}</label>
           <textarea
             {...register("description")}
             rows={3}
             className="w-full resize-none rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-[#1A3A52] placeholder:text-[#1A3A52]/50 focus:outline-none focus:ring-2 focus:ring-[#1A3A52]/35"
-            placeholder="Optional description..."
+            placeholder={t("descriptionPlaceholder")}
           />
           {errors.description && (
             <p className="text-xs text-destructive">{errors.description.message}</p>
@@ -155,8 +157,8 @@ export function ShiftTemplateForm({ open, onClose, editTarget }: Props) {
 
         <div className="flex items-center justify-between rounded-xl border border-[#D5BA98]/60 bg-[#FDFBF9] px-3 py-2.5">
           <div>
-            <p className="text-sm font-medium text-[#1A3A52]">Active template</p>
-            <p className="text-xs text-[#1A3A52]/70">Inactive templates cannot be selected for new schedules.</p>
+            <p className="text-sm font-medium text-[#1A3A52]">{t("activeTemplate")}</p>
+            <p className="text-xs text-[#1A3A52]/70">{t("activeTemplateHint")}</p>
           </div>
           <Switch
             checked={!!watch("isActive")}

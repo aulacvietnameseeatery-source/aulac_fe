@@ -2,6 +2,7 @@
 
 import React, { useState, useMemo, useCallback, useEffect } from "react";
 import { CirclePlus, RefreshCcw, Loader2, MapPin, Search, Clock } from "lucide-react"; // Thêm icon Clock
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { ALDatePicker } from "@/components/ui/al-date-picker";
 import { PermissionGuard } from "@/components/permission-guard";
@@ -48,6 +49,7 @@ const DEFAULT_FILTERS: TableFilters = {
 };
 
 export const TableManagementContent: React.FC = () => {
+  const t = useTranslations("tableManagement");
   const [filters, setFilters] = useState<TableFilters>(DEFAULT_FILTERS);
   const queryClient = useQueryClient();
 
@@ -115,8 +117,8 @@ export const TableManagementContent: React.FC = () => {
   const zoneLookup = useLookupCrud({
     typeId: LOOKUP_TYPE.TableZone,
     queryKey: ["lookups", "table-zone", "table-management"],
-    entityLabel: "Zone",
-    typeLabel: "Zone",
+    entityLabel: t("zone.label"),
+    typeLabel: t("zone.label"),
     isConfigurable: true,
   });
 
@@ -173,12 +175,12 @@ export const TableManagementContent: React.FC = () => {
           {/* Title Info */}
           <div className="shrink-0">
             <h3 className="m-0 text-[28px] font-bold tracking-wide text-[#1A3A52]">
-              Table Management
+              {t("title")}
             </h3>
             <p className="mt-1 text-sm text-[#1A3A52]/70">
-              {tables.length} table{tables.length !== 1 ? "s" : ""}
-              {filters.zone !== "ALL" && ` in ${filters.zone}`}
-              {" "}&middot; <span className="font-medium text-[#4A5D4E]">{availableCount} available</span>
+              {t("header.tablesCount", { count: tables.length })}
+              {filters.zone !== "ALL" && ` ${t("header.inZone", { zone: filters.zone })}`}
+              {" "}&middot; <span className="font-medium text-[#4A5D4E]">{t("header.availableCount", { count: availableCount })}</span>
             </p>
           </div>
 
@@ -190,7 +192,7 @@ export const TableManagementContent: React.FC = () => {
               <ALDatePicker
                 value={filters.targetTime}
                 onChange={(val) => setFilters((prev) => ({ ...prev, targetTime: val }))}
-                placeholder="Pick target date"
+                placeholder={t("filters.targetDatePlaceholder")}
                 clearable
                 inputSize="sm"
                 wrapperClassName="w-full"
@@ -205,7 +207,7 @@ export const TableManagementContent: React.FC = () => {
               </div>
               <input
                   type="text"
-                  placeholder="Search table code..."
+                  placeholder={t("filters.searchPlaceholder")}
                   value={searchInput}
                   onChange={(e) => setSearchInput(e.target.value)}
                   className="h-full w-full px-3 py-1.5 text-[13px] text-[#1A3A52] placeholder:text-[#1A3A52]/45 outline-none"
@@ -216,14 +218,14 @@ export const TableManagementContent: React.FC = () => {
             <div className="flex items-center justify-end gap-2 w-full sm:w-auto">
               <Button variant="outline" size="sm" onClick={handleRefresh} disabled={isLoading} className="h-9.5 border-[#D5BA98]/70 bg-[#FDFBF9] px-3 text-[13px] text-[#1A3A52] hover:bg-[#D5BA98]/20">
                 {isLoading ? <Loader2 size={14} className="mr-1.5 animate-spin" /> : <RefreshCcw size={14} className="mr-1.5 text-[#1A3A52]/70" />}
-                Refresh
+                {t("actions.refresh")}
               </Button>
               <PermissionGuard permission={Permissions.CreateTable}>
                 <Button variant="outline" size="sm" onClick={() => setIsAddZoneModalOpen(true)} className="h-9.5 border-[#D5BA98]/70 bg-[#FDFBF9] px-3 text-[13px] text-[#1A3A52] hover:bg-[#D5BA98]/20">
-                  <MapPin size={14} className="mr-1.5 text-[#1A3A52]/70" /> Add Zone
+                  <MapPin size={14} className="mr-1.5 text-[#1A3A52]/70" /> {t("actions.addZone")}
                 </Button>
                 <Button variant="default" size="sm" onClick={() => setIsAddModalOpen(true)} className="h-9.5 bg-[#1A3A52] px-3 text-[13px] text-[#FDFBF9] hover:bg-[#1A3A52]/90">
-                  <CirclePlus size={14} className="mr-1.5" /> Add Table
+                  <CirclePlus size={14} className="mr-1.5" /> {t("actions.addTable")}
                 </Button>
               </PermissionGuard>
             </div>
@@ -234,7 +236,7 @@ export const TableManagementContent: React.FC = () => {
         {filters.targetTime && (
             <div className="flex items-center gap-2 rounded-lg border border-[#D5BA98]/70 bg-[#D5BA98]/20 px-4 py-2 text-sm text-[#1A3A52]">
               <Clock size={16} />
-              Đang hiển thị các bàn <strong>TRỐNG</strong> vào ngày: {format(new Date(filters.targetTime), "dd/MM/yyyy")}
+              {t("filters.targetDateInfo")} <strong>{t("filters.availableEmphasis")}</strong> {t("filters.targetDateOn")} {format(new Date(filters.targetTime), "dd/MM/yyyy")}
             </div>
         )}
 
@@ -244,7 +246,7 @@ export const TableManagementContent: React.FC = () => {
         {isLoading && tables.length === 0 && (
             <div className="flex items-center justify-center py-16">
               <Loader2 size={24} className="mr-2 animate-spin text-[#1A3A52]/60" />
-              <span className="text-[#1A3A52]/60">Loading tables...</span>
+              <span className="text-[#1A3A52]/60">{t("states.loading")}</span>
             </div>
         )}
 
@@ -269,8 +271,8 @@ export const TableManagementContent: React.FC = () => {
         ) : (
             !isLoading && (
                 <div className="flex flex-col items-center justify-center py-16 text-[#1A3A52]/65">
-                  <p className="text-base font-medium text-[#1A3A52]">No tables found</p>
-                  <p className="text-sm mt-1">Try adjusting your filters or add a new table.</p>
+                  <p className="text-base font-medium text-[#1A3A52]">{t("states.emptyTitle")}</p>
+                  <p className="text-sm mt-1">{t("states.emptyDescription")}</p>
                 </div>
             )
         )}

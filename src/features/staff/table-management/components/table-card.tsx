@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useRef, useEffect, useState, useCallback } from "react";
+import { useTranslations } from "next-intl";
 import { createPortal } from "react-dom";
 import { cn } from "@/lib/utils";
 import { MoreVertical, Pencil, Trash2, Eye } from "lucide-react";
@@ -27,6 +28,7 @@ const TableCard: React.FC<TableCardProps> = ({
   onSelect,
   onStatusChange,
 }) => {
+  const t = useTranslations("tableManagement");
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const btnRef = useRef<HTMLButtonElement>(null);
@@ -80,12 +82,12 @@ const TableCard: React.FC<TableCardProps> = ({
             <StatusBadge status={table.status} size="sm" />
             {isOffline && (
               <span className="rounded bg-[#D5BA98]/20 px-1.5 py-0.5 text-[9px] font-medium uppercase tracking-wide text-[#1A3A52]/60">
-                Offline
+                {t("filters.offline")}
               </span>
             )}
             {table.hasErrors && (
               <span className="rounded bg-[#8C3A3A]/12 px-1.5 py-0.5 text-[9px] font-medium uppercase tracking-wide text-[#8C3A3A]">
-                Error
+                {t("states.error")}
               </span>
             )}
           </div>
@@ -120,7 +122,7 @@ const TableCard: React.FC<TableCardProps> = ({
                   }}
                 >
                   <Eye size={14} className="mr-2 text-[#1A3A52]/55" />
-                  View Details
+                  {t("actions.viewDetails")}
                 </button>
                 <PermissionGuard permission={Permissions.EditTable}>
                   <button
@@ -131,7 +133,7 @@ const TableCard: React.FC<TableCardProps> = ({
                     }}
                   >
                     <Pencil size={14} className="mr-2 text-[#1A3A52]/55" />
-                    Edit
+                    {t("actions.edit")}
                   </button>
                 </PermissionGuard>
                 {onStatusChange && (
@@ -160,7 +162,7 @@ const TableCard: React.FC<TableCardProps> = ({
                                   actionConf.dotColor
                                 )}
                               />
-                              Set {actionConf.label}
+                              {t("actions.setStatus", { status: t(`status.${status.toLowerCase()}`) })}
                             </button>
                           );
                         })}
@@ -177,7 +179,7 @@ const TableCard: React.FC<TableCardProps> = ({
                     }}
                   >
                     <Trash2 size={14} className="mr-2" />
-                    Delete
+                    {t("actions.delete")}
                   </button>
                 </PermissionGuard>
               </div>,
@@ -188,7 +190,7 @@ const TableCard: React.FC<TableCardProps> = ({
 
       {/* Bottom meta row */}
       <div className="flex items-center justify-between border-t border-[#D5BA98]/35 pt-2 text-[11px] text-[#1A3A52]/60">
-        <span>{table.capacity} seats</span>
+        <span>{t("zone.seatsCount", { count: table.capacity })}</span>
         <span
           className={cn(
             "font-medium",
@@ -202,7 +204,7 @@ const TableCard: React.FC<TableCardProps> = ({
       {/* Active orders line */}
       {table.activeOrders > 0 && (
         <p className="mt-1.5 text-[10px] text-[#1A3A52]/65">
-          {table.activeOrders} active order{table.activeOrders > 1 ? "s" : ""}
+          {t("detail.activeOrdersCount", { count: table.activeOrders })}
         </p>
       )}
       </div>{/* end p-3.5 wrapper */}

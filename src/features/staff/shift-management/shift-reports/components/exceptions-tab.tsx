@@ -67,7 +67,7 @@ function buildStaffGroups(rows: AttendanceExceptionReportRowDto[]): StaffExcepti
 }
 
 function StaffExceptionAccordion({ group }: { group: StaffExceptionGroup }) {
-  const t = useTranslations("ShiftManagement.Reports");
+  const t = useTranslations("shift.reports");
   const [open, setOpen] = useState(false);
 
   return (
@@ -163,7 +163,7 @@ function StaffExceptionAccordion({ group }: { group: StaffExceptionGroup }) {
 }
 
 export function ExceptionsTab({ rows, loading }: Props) {
-  const t = useTranslations("ShiftManagement.Reports");
+  const t = useTranslations("shift.reports");
   const [innerTab, setInnerTab] = useState("summary");
   const [staffQuery, setStaffQuery] = useState("");
   const [page, setPage] = useState(1);

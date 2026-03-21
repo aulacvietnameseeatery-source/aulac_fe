@@ -1,6 +1,7 @@
 ﻿"use client";
 
 import React, { useState, useEffect, useCallback } from "react";
+import { useTranslations } from "next-intl";
 import { Dialog } from "@/components/ui/dialog";
 import { ALInput } from "@/components/ui/al-input";
 import { ALCombobox } from "@/components/ui/al-combobox"; // used for static Status field (not a lookup entity)
@@ -50,6 +51,7 @@ const TableModal: React.FC<TableModalProps> = ({
   onSubmit,
   isSubmitting = false,
 }) => {
+  const t = useTranslations("tableManagement");
   const [formData, setFormData] = useState<TableFormData>(initialFormData);
   const [formErrors, setFormErrors] = useState<
     Partial<Record<"tableCode" | "capacity" | "zoneLvId" | "typeLvId" | "statusLvId", string>>
@@ -67,13 +69,20 @@ const TableModal: React.FC<TableModalProps> = ({
   const typeLookup = useLookupCrud({
     typeId:      LOOKUP_TYPE.TableType,
     queryKey:    ["lookups", "table-type"],
-    entityLabel: "Table Type",
-    typeLabel:   "Table Type",
+    entityLabel: t("fields.type"),
+    typeLabel:   t("fields.type"),
   });
+
+  const statusLabelMap: Record<TableStatus, string> = {
+    AVAILABLE: t("status.available"),
+    OCCUPIED: t("status.occupied"),
+    RESERVED: t("status.reserved"),
+    LOCKED: t("status.locked"),
+  };
 
   // ── Static status options — statuses are fixed; value = numeric statusLvId ──
   const STATIC_STATUS_OPTIONS = (Object.keys(TABLE_STATUS_CONFIG) as TableStatus[]).map((s) => ({
-    label: TABLE_STATUS_CONFIG[s].label,
+    label: statusLabelMap[s],
     value: String(TABLE_STATUS_LV_IDS[s]),
   }));
 
@@ -128,19 +137,19 @@ const TableModal: React.FC<TableModalProps> = ({
     const nextErrors: typeof formErrors = {};
 
     if (!String(formData.tableCode ?? "").trim()) {
-      nextErrors.tableCode = "Table code is required";
+      nextErrors.tableCode = t("validation.tableCodeRequired");
     }
     if (!Number(formData.capacity) || Number(formData.capacity) < 1) {
-      nextErrors.capacity = "Capacity must be at least 1";
+      nextErrors.capacity = t("validation.capacityMin");
     }
     if (!formData.zoneLvId) {
-      nextErrors.zoneLvId = "Zone is required";
+      nextErrors.zoneLvId = t("validation.zoneRequired");
     }
     if (!formData.typeLvId) {
-      nextErrors.typeLvId = "Type is required";
+      nextErrors.typeLvId = t("validation.typeRequired");
     }
     if (!formData.statusLvId) {
-      nextErrors.statusLvId = "Status is required";
+      nextErrors.statusLvId = t("validation.statusRequired");
     }
 
     setFormErrors(nextErrors);
@@ -151,7 +160,7 @@ const TableModal: React.FC<TableModalProps> = ({
     e.preventDefault();
 
     if (!validateForm()) {
-      toast.error("Please fix the highlighted fields before saving");
+      toast.error(t("validation.fixHighlighted"));
       return;
     }
 
@@ -188,7 +197,7 @@ const TableModal: React.FC<TableModalProps> = ({
     <Dialog
       open={isOpen}
       onClose={onClose}
-      title={mode === "add" ? "Add New Table" : "Edit Table"}
+      title={mode === "add" ? t("modal.addTitle") : t("modal.editTitle")}
       width="660px"
       footer={
         <div className="flex items-center gap-3 w-full">
@@ -199,7 +208,7 @@ const TableModal: React.FC<TableModalProps> = ({
             onClick={onClose}
             disabled={isSubmitting}
           >
-            Cancel
+            {t("actions.cancel")}
           </Button>
           <Button
             type="submit"
@@ -209,7 +218,7 @@ const TableModal: React.FC<TableModalProps> = ({
             disabled={isSubmitting}
             isLoading={isSubmitting}
           >
-            {mode === "add" ? "Add Table" : "Save Changes"}
+            {mode === "add" ? t("actions.addTable") : t("actions.saveChanges")}
           </Button>
         </div>
       }
@@ -219,15 +228,15 @@ const TableModal: React.FC<TableModalProps> = ({
           {/* Table Code + Capacity row */}
           <div className="grid grid-cols-2 gap-4">
             <ALInput
-              title="Table Code"
+              title={t("fields.tableCode")}
               required
-              placeholder="e.g. T-01"
+              placeholder={t("fields.tableCodePlaceholder")}
               value={formData.tableCode}
               error={formErrors.tableCode}
               onChange={(e) => handleChange("tableCode", e.target.value)}
             />
             <ALInput
-              title="Capacity"
+              title={t("fields.capacity")}
               required
               type="number"
               min={1}
@@ -244,9 +253,9 @@ const TableModal: React.FC<TableModalProps> = ({
           <div className="grid grid-cols-2 gap-4">
             <LookupCombobox
               lookup={zoneLookup}
-              title="Zone"
+              title={t("fields.zone")}
               required
-              placeholder="Select zone"
+              placeholder={t("fields.selectZone")}
               value={formData.zoneLvId}
               error={formErrors.zoneLvId}
               onChange={(val) =>
@@ -255,9 +264,9 @@ const TableModal: React.FC<TableModalProps> = ({
             />
             <LookupCombobox
               lookup={typeLookup}
-              title="Type"
+              title={t("fields.type")}
               required
-              placeholder="Select type"
+              placeholder={t("fields.selectType")}
               value={formData.typeLvId}
               error={formErrors.typeLvId}
               onChange={(val) =>
@@ -268,12 +277,12 @@ const TableModal: React.FC<TableModalProps> = ({
 
           {/* Status */}
           <ALCombobox
-            title="Status"
+            title={t("fields.status")}
             required
             options={STATIC_STATUS_OPTIONS}
             value={formData.statusLvId ? String(formData.statusLvId) : undefined}
             onChange={(val) => handleChange("statusLvId", val ? Number(val as string) : "")}
-            placeholder="Select status"
+            placeholder={t("fields.selectStatus")}
             error={formErrors.statusLvId}
             searchable={false}
           />
@@ -281,9 +290,9 @@ const TableModal: React.FC<TableModalProps> = ({
           {/* Online toggle */}
           <div className="flex items-center justify-between bg-gray-50 rounded-lg p-3">
             <div>
-              <p className="text-base font-medium text-gray-700">Online Status</p>
+              <p className="text-base font-medium text-gray-700">{t("fields.onlineStatus")}</p>
               <p className="text-xs text-gray-500">
-                Table is visible to guests when online
+                {t("fields.onlineStatusHint")}
               </p>
             </div>
             <Switch
@@ -296,7 +305,7 @@ const TableModal: React.FC<TableModalProps> = ({
           <div className="space-y-3">
             <div className="flex items-center gap-2">
               <h5 className="text-sm font-semibold text-gray-500 uppercase tracking-wider">
-                QR Code
+                {t("qr.title")}
               </h5>
               <div className="grow border-t border-gray-100" />
             </div>
@@ -316,16 +325,16 @@ const TableModal: React.FC<TableModalProps> = ({
                     <div className="space-y-1 min-w-0">
                       <p className="text-xs font-medium text-gray-600">Preview QR Code</p>
                       <p className="text-[10px] text-gray-400 break-all">
-                        Encodes: /menu-listing?table={formData.tableCode.trim()}
+                        {t("qr.encodes")} /menu-listing?table={formData.tableCode.trim()}
                       </p>
                       <p className="text-[10px] text-gray-400">
-                        The server will add a secure token when the table is saved.
+                        {t("qr.serverTokenHint")}
                       </p>
                     </div>
                   </div>
                 ) : (
                   <p className="text-xs text-gray-400">
-                    Enter a table code above to preview the QR code.
+                    {t("qr.enterTableCode")}
                   </p>
                 )}
               </div>
@@ -339,7 +348,7 @@ const TableModal: React.FC<TableModalProps> = ({
                     disabled={regenerateQrMutation.isPending}
                   >
                     <RefreshCcw size={13} className={regenerateQrMutation.isPending ? "animate-spin" : ""} />
-                    Regenerate QR
+                    {t("qr.regenerate")}
                   </button>
                   {formData.qrCodeGenerated && (
                     <>
@@ -350,7 +359,7 @@ const TableModal: React.FC<TableModalProps> = ({
                         onClick={handleDownloadQR}
                       >
                         <Download size={13} className="mr-1" />
-                        Download
+                        {t("qr.download")}
                       </Button>
                       <Button
                         type="button"
@@ -359,9 +368,9 @@ const TableModal: React.FC<TableModalProps> = ({
                         onClick={() => setQrPreview((v) => !v)}
                       >
                         {qrPreview ? (
-                          <><EyeOff size={13} className="mr-1" />Hide</>
+                          <><EyeOff size={13} className="mr-1" />{t("qr.hide")}</>
                         ) : (
-                          <><Eye size={13} className="mr-1" />Preview</>
+                          <><Eye size={13} className="mr-1" />{t("qr.preview")}</>
                         )}
                       </Button>
                     </>
@@ -384,11 +393,11 @@ const TableModal: React.FC<TableModalProps> = ({
                     )}
                     <div className="space-y-1 min-w-0">
                       <p className="text-xs text-gray-500">
-                        <span className="font-medium text-gray-600">Status:</span>{" "}
-                        Active
+                        <span className="font-medium text-gray-600">{t("fields.status")}:</span>{" "}
+                        {t("qr.active")}
                       </p>
                       <p className="text-xs text-gray-500 break-all">
-                        <span className="font-medium text-gray-600">Token:</span>{" "}
+                        <span className="font-medium text-gray-600">{t("qr.token")}:</span>{" "}
                         {formData.qrCodeUrl || "—"}
                       </p>
                     </div>
@@ -397,7 +406,7 @@ const TableModal: React.FC<TableModalProps> = ({
 
                 {!formData.qrCodeGenerated && (
                   <p className="text-xs text-gray-400">
-                    No QR code yet. Click “Regenerate QR” to create one.
+                    {t("qr.noCodeYet")}
                   </p>
                 )}
               </>
@@ -408,7 +417,7 @@ const TableModal: React.FC<TableModalProps> = ({
           <div className="space-y-3">
             <div className="flex items-center gap-2">
               <h5 className="text-sm font-semibold text-gray-500 uppercase tracking-wider">
-                Media
+                {t("media.title")}
               </h5>
               <div className="grow border-t border-gray-100" />
             </div>

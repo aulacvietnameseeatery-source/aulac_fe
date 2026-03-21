@@ -3,6 +3,7 @@
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { GripVertical, AlertCircle } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import type { ShiftAssignmentListDto } from "../types/shift-management.types";
 
@@ -69,6 +70,7 @@ export function ShiftCard({
   hasConflict = false,
   onClick,
 }: ShiftCardProps) {
+  const t = useTranslations("shift.schedule.matrix");
   const {
     attributes,
     listeners,
@@ -111,7 +113,7 @@ export function ShiftCard({
           {...attributes}
           {...listeners}
           className="mt-0.5 flex shrink-0 cursor-grab items-center text-[#1A3A52]/30 hover:text-[#1A3A52]/60 active:cursor-grabbing"
-          aria-label="Drag to reassign"
+          aria-label={t("dragToReassign")}
         >
           <GripVertical className="h-3.5 w-3.5" />
         </span>

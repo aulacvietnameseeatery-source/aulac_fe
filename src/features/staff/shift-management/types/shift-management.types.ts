@@ -45,6 +45,55 @@ export interface ShiftAssignmentDetailDto extends ShiftAssignmentListDto {
   attendance: AttendanceRecordDto | null;
 }
 
+export interface ShiftLiveBoardItemDto {
+  shiftAssignmentId: number;
+  shiftTemplateId: number;
+  templateName: string;
+  staffId: number;
+  staffName: string;
+  staffRoleCode: string;
+  staffRoleName: string;
+  workDate: string;
+  plannedStartAt: string;
+  plannedEndAt: string;
+  assignmentStatusCode: string;
+  assignmentStatusName: string;
+  isActive: boolean;
+  tags?: string | null;
+  notes?: string | null;
+  assignedAt: string;
+  assignedByName: string;
+  attendanceStatusCode?: string | null;
+  attendanceStatusName?: string | null;
+  actualCheckInAt?: string | null;
+  actualCheckOutAt?: string | null;
+  lateMinutes: number;
+  earlyLeaveMinutes: number;
+  workedMinutes: number;
+  isManualAdjustment: boolean;
+  liveStatusCode: string;
+  liveStatusName: string;
+  hasAlert: boolean;
+  currentTaskLabel?: string | null;
+  currentLocationLabel?: string | null;
+  ordersHandledCount?: number | null;
+  paidBillsCount?: number | null;
+  currentRevenue?: number | null;
+  itemsCompletedCount?: number | null;
+  pendingTicketsCount?: number | null;
+  issueCount: number;
+  latestIssueText?: string | null;
+}
+
+export interface ShiftLiveRealtimeEventDto {
+  eventType: string;
+  workDate?: string | null;
+  shiftAssignmentId?: number | null;
+  staffId?: number | null;
+  orderId?: number | null;
+  occurredAt: string;
+}
+
 // Keep backward-compatible alias used across the module
 export type ShiftAssignmentDto = ShiftAssignmentDetailDto;
 
@@ -185,6 +234,7 @@ export interface CopyWeekRequest {
 
 export interface ReassignRequest {
   newStaffId: number;
+  newWorkDate?: string | null;
   reason?: string | null;
 }
 

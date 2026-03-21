@@ -1,6 +1,8 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { shiftManagementService } from "../services/shift-management.service";
+import { getLocalizedApiErrorMessage } from "@/lib/api-error";
 import type {
   GetTemplatesParams,
   GetAssignmentsParams,
@@ -18,6 +20,7 @@ import type {
   CopyWeekRequest,
   ReassignRequest,
   TeamScheduleParams,
+  TeamScheduleStaffRow,
 } from "../types/shift-management.types";
 
 // ─── Query Keys ───────────────────────────────────────────────────────────────
@@ -30,6 +33,7 @@ export const SHIFT_QUERY_KEYS = {
   assignments: () => [...SHIFT_QUERY_KEYS.all, "assignments"] as const,
   assignmentList: (params: object) => [...SHIFT_QUERY_KEYS.assignments(), params] as const,
   assignmentById: (id: number) => [...SHIFT_QUERY_KEYS.assignments(), "detail", id] as const,
+  liveBoard: (params: object) => [...SHIFT_QUERY_KEYS.all, "live-board", params] as const,
   reports: () => [...SHIFT_QUERY_KEYS.all, "reports"] as const,
   attendanceReport: (params: object) =>
     [...SHIFT_QUERY_KEYS.reports(), "attendance", params] as const,
@@ -39,7 +43,63 @@ export const SHIFT_QUERY_KEYS = {
     [...SHIFT_QUERY_KEYS.reports(), "exceptions", params] as const,
   myShifts: (params: object) => [...SHIFT_QUERY_KEYS.all, "my-shifts", params] as const,
   teamSchedule: (params: object) => [...SHIFT_QUERY_KEYS.all, "team-schedule", params] as const,
+  teamScheduleMonth: (anchorWeekStart: string) =>
+    [...SHIFT_QUERY_KEYS.all, "team-schedule-month", anchorWeekStart] as const,
 };
+
+function parseIsoDate(dateStr: string): Date {
+  const [y, m, d] = dateStr.split("-").map(Number);
+  return new Date(y, (m ?? 1) - 1, d ?? 1);
+}
+
+function getMonday(d: Date): Date {
+  const date = new Date(d);
+  const day = date.getDay();
+  const diff = day === 0 ? -6 : 1 - day;
+  date.setDate(date.getDate() + diff);
+  date.setHours(0, 0, 0, 0);
+  return date;
+}
+
+function addDays(d: Date, n: number): Date {
+  const r = new Date(d);
+  r.setDate(r.getDate() + n);
+  return r;
+}
+
+function fmtDate(d: Date): string {
+  return d.toISOString().slice(0, 10);
+}
+
+function buildMonthWindow(anchorWeekStart: string): {
+  monthKey: string;
+  rangeStart: string;
+  rangeEnd: string;
+  weekStarts: string[];
+} {
+  const anchor = parseIsoDate(anchorWeekStart);
+  const firstOfMonth = new Date(anchor.getFullYear(), anchor.getMonth(), 1);
+  const lastOfMonth = new Date(anchor.getFullYear(), anchor.getMonth() + 1, 0);
+  const startMonday = getMonday(firstOfMonth);
+  const endMonday = getMonday(lastOfMonth);
+  const weekStarts: string[] = [];
+
+  for (let cur = new Date(startMonday); cur <= endMonday; cur = addDays(cur, 7)) {
+    weekStarts.push(fmtDate(cur));
+  }
+
+  return {
+    monthKey: `${anchor.getFullYear()}-${String(anchor.getMonth() + 1).padStart(2, "0")}`,
+    rangeStart: fmtDate(startMonday),
+    rangeEnd: fmtDate(addDays(endMonday, 6)),
+    weekStarts,
+  };
+}
+
+function getWeekStartFromDate(dateStr: string): string {
+  const date = parseIsoDate(dateStr);
+  return fmtDate(getMonday(date));
+}
 
 // ─── Template Queries ─────────────────────────────────────────────────────────
 
@@ -86,13 +146,40 @@ export function useUpdateShiftTemplateMutation() {
 
 export function useDeactivateShiftTemplateMutation() {
   const qc = useQueryClient();
+  const t = useTranslations("shift.schedule.template.messages");
   return useMutation({
     mutationFn: (id: number) => shiftManagementService.deactivateTemplate(id),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: SHIFT_QUERY_KEYS.templates() });
-      toast.success("Shift template deactivated");
+      toast.success(t("deactivateSuccess"));
     },
-    onError: () => toast.error("Failed to deactivate template"),
+    onError: (error) => {
+      const apiError = error as {
+        response?: {
+          status?: number;
+          data?: {
+            userMessage?: string;
+            systemMessage?: string | null;
+          };
+        };
+      };
+      const userMessage = apiError.response?.data?.userMessage?.toLowerCase() ?? "";
+      const systemMessage = apiError.response?.data?.systemMessage?.toLowerCase() ?? "";
+      const isActiveAssignmentConflict =
+        apiError.response?.status === 409 &&
+        (systemMessage === "conflict" || userMessage.includes("cannot deactivate a template"));
+
+      if (isActiveAssignmentConflict) {
+        toast.error(t("deactivateConflictTitle"), {
+          description: t("deactivateConflictDescription"),
+        });
+        return;
+      }
+
+      toast.error(t("deactivateErrorTitle"), {
+        description: getLocalizedApiErrorMessage(error, t("deactivateErrorDescription")),
+      });
+    },
   });
 }
 
@@ -110,6 +197,15 @@ export function useShiftAssignmentDetailQuery(id: number, enabled = true) {
     queryKey: SHIFT_QUERY_KEYS.assignmentById(id),
     queryFn: () => shiftManagementService.getAssignmentById(id),
     enabled: enabled && id > 0,
+  });
+}
+
+export function useShiftLiveBoardQuery(params: GetAssignmentsParams = {}) {
+  return useQuery({
+    queryKey: SHIFT_QUERY_KEYS.liveBoard(params),
+    queryFn: () => shiftManagementService.getLiveBoard(params),
+    refetchInterval: 30_000,
+    refetchIntervalInBackground: true,
   });
 }
 
@@ -242,6 +338,63 @@ export function useTeamScheduleQuery(params: TeamScheduleParams, enabled = true)
     queryKey: SHIFT_QUERY_KEYS.teamSchedule(params),
     queryFn: () => shiftManagementService.getTeamSchedule(params),
     enabled: enabled && !!params.weekStart && !!params.weekEnd,
+  });
+}
+
+export function useTeamScheduleMonthQuery(anchorWeekStart: string, enabled = true) {
+  const monthWindow = buildMonthWindow(anchorWeekStart);
+  return useQuery({
+    queryKey: SHIFT_QUERY_KEYS.teamScheduleMonth(monthWindow.monthKey),
+    enabled: enabled && !!anchorWeekStart,
+    queryFn: async () => {
+      const monthRows = await shiftManagementService.getTeamSchedule({
+        weekStart: monthWindow.rangeStart,
+        weekEnd: monthWindow.rangeEnd,
+      });
+
+      const byWeek: Record<string, TeamScheduleStaffRow[]> = {};
+      monthWindow.weekStarts.forEach((ws) => {
+        byWeek[ws] = [];
+      });
+
+      // Split month payload into week buckets while preserving staff grouping per week
+      for (const row of monthRows) {
+        for (const assignment of row.assignments ?? []) {
+          const weekStart = getWeekStartFromDate(assignment.workDate);
+          if (!byWeek[weekStart]) continue;
+
+          let targetRow = byWeek[weekStart].find((r) => r.staffId === row.staffId);
+          if (!targetRow) {
+            targetRow = {
+              staffId: row.staffId,
+              staffName: row.staffName,
+              roleName: row.roleName,
+              assignments: [],
+            };
+            byWeek[weekStart].push(targetRow);
+          }
+          targetRow.assignments.push(assignment);
+        }
+      }
+
+      monthWindow.weekStarts.forEach((ws) => {
+        byWeek[ws] = (byWeek[ws] ?? []).sort((a, b) => a.staffName.localeCompare(b.staffName));
+      });
+
+      return {
+        weekStarts: monthWindow.weekStarts,
+        byWeek,
+      };
+    },
+  });
+}
+
+// ─── Staff List (for picker / filter) ────────────────────────────────────────
+
+export function useStaffListQuery() {
+  return useQuery({
+    queryKey: [...SHIFT_QUERY_KEYS.all, "staff-list"] as const,
+    queryFn: () => shiftManagementService.getStaffList(),
   });
 }
 

@@ -1,0 +1,47 @@
+{
+  "Kitchen": {
+    "title": "Kitchen Display",
+    "description": "Monitor incoming orders and update item statuses in real-time",
+    "refresh": "Refresh",
+    "searchPlaceholder": "Search by table, order ID, dish...",
+    "liveUpdates": "Live updates",
+    "tokenNo": "Token No:",
+    "note": "Note",
+    "orderType": "Dine-in",
+    "tabs": {
+      "all": "All Orders",
+      "new": "New",
+      "inProgress": "In Progress"
+    },
+    "empty": {
+      "title": "No active orders",
+      "hint": "New orders will appear here automatically"
+    },
+    "status": {
+      "all": "All",
+      "new": "New",
+      "inKitchen": "In Kitchen",
+      "rejected": "Rejected",
+      "completed": "Completed",
+      "CREATED": "New",
+      "IN_PROGRESS": "Preparing",
+      "READY": "Ready",
+      "SERVED": "Served",
+      "REJECTED": "Rejected"
+    },
+    "actions": {
+      "print": "Print Order",
+      "markDone": "Mark Done",
+      "start": "Start",
+      "serve": "Serve",
+      "reject": "Reject",
+      "cancel": "Cancel"
+    },
+    "rejectReason": {
+      "label": "Reason",
+      "placeholder": "Enter reason...",
+      "confirm": "Confirm",
+      "cancel": "Cancel"
+    }
+  }
+}

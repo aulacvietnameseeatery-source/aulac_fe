@@ -41,7 +41,7 @@ const PRESETS = [
 ];
 
 export function ReportHeader({ filters, isLoading, onChange, onRefetch, onExportCsv }: ReportHeaderProps) {
-  const t = useTranslations("ShiftManagement.Reports");
+  const t = useTranslations("shift.reports");
   
   function isActive(preset: (typeof PRESETS)[number]) {
     const { from, to } = preset.get();
@@ -67,7 +67,7 @@ export function ReportHeader({ filters, isLoading, onChange, onRefetch, onExport
           >
             {t("title")}
           </h1>
-          <p className="text-xs text-[#1A3A52]/55 mt-0.5">Summary, compliance, and tracked hours.</p>
+          <p className="text-xs text-[#1A3A52]/55 mt-0.5">{t("description")}</p>
         </div>
       </div>
 

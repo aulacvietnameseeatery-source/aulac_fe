@@ -1,10 +1,12 @@
 "use client";
 
 import { useMemo, useState, useCallback, type ReactNode } from "react";
+import { useTranslations } from "next-intl";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ALCard } from "@/components/ui/al-card";
+import { ALConfirmDialog } from "@/components/ui/al-confirm-dialog";
 import { BaseTable } from "@/components/ui/table/base-table";
 import { PermissionGuard } from "@/components/permission-guard";
 import { Permissions } from "@/types/const";
@@ -23,6 +25,8 @@ function fmtTime(value: string) {
 }
 
 export function ShiftTemplateList() {
+  const t = useTranslations("shift.schedule.template");
+  const dialogT = useTranslations("shift.schedule.template.confirmDialog");
   const [tableParams, setTableParams] = useState<TableDataChangeParams>({
     page: 1,
     pageSize: 10,
@@ -42,6 +46,7 @@ export function ShiftTemplateList() {
   }, []);
   const [formOpen, setFormOpen] = useState(false);
   const [editTarget, setEditTarget] = useState<ShiftTemplateDto | null>(null);
+  const [deactivateTarget, setDeactivateTarget] = useState<ShiftTemplateDto | null>(null);
 
   const params = useMemo(
     () => ({
@@ -78,8 +83,7 @@ export function ShiftTemplateList() {
 
   function handleDeactivate(template: ShiftTemplateDto) {
     if (!template.isActive) return;
-    if (!confirm(`Deactivate template \"${template.templateName}\"?`)) return;
-    deactivate.mutate(template.shiftTemplateId);
+    setDeactivateTarget(template);
   }
 
   const columns = useMemo<TableColumn[]>(
@@ -154,35 +158,35 @@ export function ShiftTemplateList() {
         total={data?.length ?? 0}
         onDataChange={handleTableDataChange}
         onRefresh={refetch}
-        searchPlaceholder="Search template"
+        searchPlaceholder={t("searchPlaceholder")}
         defaultRowsPerPage={10}
         rowsPerPageOptions={[10, 20, 50, 100]}
         renderTitle={() => (
           <div className="w-full space-y-3">
             <ALCard className="flex flex-wrap items-start justify-between gap-3 px-4 py-4 sm:px-5">
               <div>
-                <h1 className="text-2xl font-semibold tracking-wide text-[#1A3A52]">Shift Templates</h1>
+                <h1 className="text-2xl font-semibold tracking-wide text-[#1A3A52]">{t("title")}</h1>
                 <p className="text-sm text-[#1A3A52]/70">
-                  Manage reusable shift templates and default time windows.
+                  {t("description")}
                 </p>
               </div>
               <PermissionGuard permission={Permissions.ManageShiftTemplate}>
                 <Button onClick={openCreate} className="gap-2 bg-[#1A3A52] text-[#FDFBF9] hover:bg-[#1A3A52]/90">
                   <Plus className="h-4 w-4" />
-                  Create Template
+                  {t("create")}
                 </Button>
               </PermissionGuard>
             </ALCard>
 
             <ALCard padding="sm" className="flex flex-wrap items-center gap-2 text-sm">
               <span className="rounded-full border border-emerald-600 bg-emerald-600 px-3 py-1 text-xs font-semibold text-white">
-                Active: {activeCount}
+                {t("activeCount", { count: activeCount })}
               </span>
               <span className="rounded-full border border-slate-700 bg-slate-700 px-3 py-1 text-xs font-semibold text-white">
-                Inactive: {inactiveCount}
+                {t("inactiveCount", { count: inactiveCount })}
               </span>
               <span className="ml-auto text-xs text-[#1A3A52]/60">
-                Total templates: {templates.length}
+                {t("totalCount", { count: templates.length })}
               </span>
             </ALCard>
           </div>
@@ -210,6 +214,23 @@ export function ShiftTemplateList() {
       />
 
       <ShiftTemplateForm open={formOpen} onClose={() => setFormOpen(false)} editTarget={editTarget} />
+
+      <ALConfirmDialog
+        isOpen={!!deactivateTarget}
+        onClose={() => setDeactivateTarget(null)}
+        onConfirm={() => {
+          if (!deactivateTarget) return;
+          deactivate.mutate(deactivateTarget.shiftTemplateId, {
+            onSettled: () => setDeactivateTarget(null),
+          });
+        }}
+        title={dialogT("title")}
+        message={dialogT("message", { name: deactivateTarget?.templateName ?? "" })}
+        cancelText={dialogT("cancel")}
+        confirmText={dialogT("confirm")}
+        isLoading={deactivate.isPending}
+        variant="warning"
+      />
     </div>
   );
 }

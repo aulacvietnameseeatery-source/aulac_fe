@@ -30,7 +30,7 @@ function toDatetimeLocal(iso: string): string {
 }
 
 export function ShiftAssignmentForm({ open, onClose, editTarget }: Props) {
-  const t = useTranslations("ShiftManagement.AssignmentForm");
+  const t = useTranslations("shift.assignmentForm");
   const isEdit = !!editTarget;
 
   const { data: templates = [] } = useShiftTemplatesQuery({ isActive: true });
@@ -127,7 +127,7 @@ export function ShiftAssignmentForm({ open, onClose, editTarget }: Props) {
         </div>
       }
     >
-      <form id="assignment-form" onSubmit={onSubmit} className="space-y-4 p-1">
+      <form id="assignment-form" onSubmit={onSubmit} className="space-y-4 p-5">
         {/* Shift Template */}
         <ALCombobox
           title={t("fields.shiftTemplate")}

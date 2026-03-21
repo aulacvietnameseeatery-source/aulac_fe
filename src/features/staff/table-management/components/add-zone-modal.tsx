@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { useTranslations } from "next-intl";
 import { Dialog } from "@/components/ui/dialog";
 import { ALInput } from "@/components/ui/al-input";
 import { Button } from "@/components/ui/button";
@@ -21,6 +22,7 @@ export const AddZoneModal: React.FC<AddZoneModalProps> = ({
   defaultName = "",
   onCreated,
 }) => {
+  const t = useTranslations("tableManagement");
   const [zoneName, setZoneName] = useState(defaultName);
 
   useEffect(() => {
@@ -44,7 +46,7 @@ export const AddZoneModal: React.FC<AddZoneModalProps> = ({
     <Dialog
       open={isOpen}
       onClose={onClose}
-      title="Add New Zone"
+      title={t("zone.addTitle")}
       width="400px"
       footer={
         <div className="flex items-center gap-3 w-full">
@@ -55,7 +57,7 @@ export const AddZoneModal: React.FC<AddZoneModalProps> = ({
             onClick={onClose}
             disabled={createMutation.isPending}
           >
-            Cancel
+            {t("actions.cancel")}
           </Button>
           <Button
             type="submit"
@@ -65,7 +67,7 @@ export const AddZoneModal: React.FC<AddZoneModalProps> = ({
             disabled={!zoneName.trim() || createMutation.isPending}
             isLoading={createMutation.isPending}
           >
-            Create Zone
+            {t("actions.createZone")}
           </Button>
         </div>
       }
@@ -73,15 +75,15 @@ export const AddZoneModal: React.FC<AddZoneModalProps> = ({
       <form id="add-zone-form" onSubmit={handleSubmit}>
         <div className="p-5 space-y-4">
           <ALInput
-            title="Zone Name"
+            title={t("zone.name")}
             required
-            placeholder="e.g. Garden, Terrace, Balcony"
+            placeholder={t("zone.namePlaceholder")}
             value={zoneName}
             onChange={(e) => setZoneName(e.target.value)}
             autoFocus
           />
           <p className="text-xs text-gray-400">
-            The zone will be available immediately for assigning tables.
+            {t("zone.createHint")}
           </p>
         </div>
       </form>

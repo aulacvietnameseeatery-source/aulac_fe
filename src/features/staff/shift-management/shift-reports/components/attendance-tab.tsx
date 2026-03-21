@@ -48,7 +48,7 @@ function ReliabilityBadge({ score }: { score: number }) {
 }
 
 export function AttendanceTab({ rows, loading }: Props) {
-  const t = useTranslations("ShiftManagement.Reports");
+  const t = useTranslations("shift.reports");
   const [summaryTab, setSummaryTab] = useState("overview");
   const [staffQuery, setStaffQuery] = useState("");
   const [selectedStaffId, setSelectedStaffId] = useState("all");

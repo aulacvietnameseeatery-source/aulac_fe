@@ -1,0 +1,577 @@
+{
+  "shift": {
+    "common": {
+      "shiftType": "Shift Type",
+      "businessDate": "Business Date",
+      "plannedStart": "Planned Start",
+      "plannedEnd": "Planned End",
+      "status": "Status",
+      "notes": "Notes",
+      "assignedStaff": "Assigned Staff",
+      "role": "Role",
+      "checkIn": "Check In",
+      "checkOut": "Check Out",
+      "late": "Late",
+      "absent": "Absent",
+      "onDuty": "On Duty",
+      "completed": "Completed",
+      "scheduled": "Scheduled",
+      "workedHours": "Worked Hours",
+      "lateMinutes": "Late by {minutes} min",
+      "earlyLeaveMinutes": "Left {minutes} min early",
+      "reason": "Reason",
+      "adjustmentReason": "Adjustment Reason"
+    },
+    "schedule": {
+      "title": "Shift Schedules",
+      "description": "Create, publish, and manage shift schedules and staff assignments.",
+      "managerHint": "Drag cards between staff rows to reassign. Click a card to view details.",
+      "newAssignment": "New Assignment",
+      "addNew": "Create Schedule",
+      "createTitle": "Create Shift Schedule",
+      "editTitle": "Edit Shift Schedule",
+      "publishConfirm": "Publish this schedule? Staff will be able to see it.",
+      "cancelConfirm": "Cancel this schedule? This cannot be undone.",
+      "noSchedules": "No schedules found.",
+      "assignStaff": "Assign Staff",
+      "cancelAssignment": "Cancel Assignment",
+      "cancelAssignmentConfirm": "Cancel this assignment?",
+      "table": {
+        "date": "Date",
+        "shiftType": "Shift Type",
+        "timeRange": "Time Range",
+        "status": "Status",
+        "assigned": "Assigned",
+        "actions": "Actions"
+      },
+      "actions": {
+        "publish": "Publish",
+        "close": "Close",
+        "cancel": "Cancel",
+        "edit": "Edit",
+        "viewAssignments": "View Assignments"
+      },
+      "matrix": {
+        "staff": "Staff",
+        "add": "Add",
+        "today": "Today",
+        "filterStaff": "Filter employees...",
+        "showNoShiftEmployees": "Show employees without shifts",
+        "weekPage": "Week {current}/{total}",
+        "draftCount": "{count} draft(s)",
+        "loading": "Loading schedule...",
+        "empty": "No schedule data for this week",
+        "dragToReassign": "Drag to reassign",
+        "days": {
+          "mon": "Mon",
+          "tue": "Tue",
+          "wed": "Wed",
+          "thu": "Thu",
+          "fri": "Fri",
+          "sat": "Sat",
+          "sun": "Sun"
+        }
+      },
+      "publishToolbar": {
+        "unpublishedDraft": "{count} unpublished draft(s)",
+        "hint": "Publish to notify assigned staff about their upcoming shifts",
+        "publishAll": "Publish All",
+        "dialogTitle": "Publish Shifts",
+        "cancel": "Cancel",
+        "confirmPublish": "Confirm Publish",
+        "dialogDescription": "This will publish {count} draft shift(s) and send notifications to all assigned staff."
+      },
+      "copyWeekDialog": {
+        "open": "Copy Week",
+        "title": "Copy Week Schedule",
+        "cancel": "Cancel",
+        "submit": "Copy Schedule",
+        "description": "Duplicate all shift assignments from a source week to a target week.",
+        "sourceTitle": "Source Week (Monday)",
+        "sourcePlaceholder": "Pick source Monday",
+        "targetTitle": "Target Week (Monday)",
+        "targetPlaceholder": "Pick target Monday",
+        "asDraft": "Create as drafts",
+        "asDraftHint": "Copied shifts will need to be published before staff are notified"
+      },
+      "attendanceAdjustmentDialog": {
+        "title": "Adjust Attendance",
+        "cancel": "Cancel",
+        "save": "Save Adjustment",
+        "staff": "Staff",
+        "actualCheckIn": "Actual Check-in",
+        "actualCheckOut": "Actual Check-out",
+        "reason": "Reason",
+        "reasonPlaceholder": "Explain why this attendance record is being adjusted...",
+        "alreadyAdjusted": "This record has already been manually adjusted.",
+        "previousReviewer": "Previous reviewer: {name}."
+      },
+      "template": {
+        "title": "Shift Templates",
+        "description": "Manage reusable shift templates and default time windows.",
+        "create": "Create Template",
+        "searchPlaceholder": "Search template",
+        "deactivateConfirm": "Deactivate template \"{name}\"?",
+        "activeCount": "Active: {count}",
+        "inactiveCount": "Inactive: {count}",
+        "totalCount": "Total templates: {count}",
+        "confirmDialog": {
+          "title": "Deactivate Shift Template",
+          "message": "Deactivate template \"{name}\"? It will no longer be available for new schedules.",
+          "cancel": "Cancel",
+          "confirm": "Deactivate"
+        },
+        "messages": {
+          "deactivateSuccess": "Shift template deactivated",
+          "deactivateErrorTitle": "Failed to deactivate template",
+          "deactivateErrorDescription": "The template could not be deactivated. Please try again.",
+          "deactivateConflictTitle": "Template cannot be deactivated",
+          "deactivateConflictDescription": "This template still has active shift assignments. Cancel those assignments first."
+        }
+      },
+      "templateForm": {
+        "createTitle": "Create Shift Template",
+        "editTitle": "Edit Shift Template",
+        "cancel": "Cancel",
+        "saveChanges": "Save Changes",
+        "create": "Create Template",
+        "templateName": "Template Name",
+        "defaultStart": "Default Start",
+        "defaultEnd": "Default End",
+        "description": "Description",
+        "descriptionPlaceholder": "Optional description...",
+        "activeTemplate": "Active template",
+        "activeTemplateHint": "Inactive templates cannot be selected for new schedules."
+      },
+      "assignmentPanel": {
+        "title": "Shift Detail",
+        "closePanel": "Close panel",
+        "assignedByOn": "Assigned by {name} on {date}",
+        "attendance": "Attendance",
+        "checkIn": "Check-in",
+        "checkOut": "Check-out",
+        "lateMinutes": "{minutes}m late",
+        "earlyLeaveMinutes": "{minutes}m early",
+        "worked": "Worked",
+        "workedDuration": "{hours}h {minutes}m",
+        "adjustedBy": "Adjusted by",
+        "reason": "Reason",
+        "noAttendance": "No attendance recorded yet.",
+        "checkInAction": "Check In",
+        "checkOutAction": "Check Out",
+        "adjustAttendance": "Adjust Attendance",
+        "cancelAssignmentConfirm": "Cancel this assignment?",
+        "cancelAssignment": "Cancel Assignment"
+      }
+    },
+    "live": {
+      "title": "Live On-Duty Board",
+      "description": "Real-time view of today's shift attendance.",
+      "updating": "Updating",
+      "live": "Live",
+      "connection": {
+        "realtime": "SignalR connected",
+        "polling": "Polling fallback"
+      },
+      "autoRefresh": "Auto refresh every 30 seconds",
+      "lastUpdated": "Last updated at: {time}",
+      "businessDate": "Business Date",
+      "selectDate": "Select date",
+      "quickFilters": "Quick filters",
+      "kpiHint": "POS KPI and issue fields are ready. Once POS integration is complete, cards will show role-based orders, bills, revenue, and issues automatically.",
+      "loading": "Loading live board...",
+      "empty": "No staff are currently on shift.",
+      "alert": "Alert",
+      "filters": {
+        "all": "All",
+        "urgent": "Needs Attention",
+        "onDuty": "On Duty",
+        "waiting": "Waiting",
+        "completed": "Completed"
+      },
+      "summary": {
+        "scheduled": "Scheduled",
+        "active": "Active",
+        "late": "Late",
+        "absent": "Absent",
+        "completed": "Completed",
+        "urgent": "Needs Attention",
+        "onDuty": "On Duty",
+        "waiting": "Waiting"
+      },
+      "sections": {
+        "scheduledShift": "Scheduled Shift",
+        "elapsedTime": "Elapsed Time",
+        "statusLocation": "Status / Location",
+        "performance": "Performance KPI",
+        "issues": "Issues / Errors"
+      },
+      "activity": {
+        "waiting": "Checked in and waiting for shift start",
+        "completed": "Shift completed",
+        "notCheckedIn": "Check-in status requires attention",
+        "cashierFallback": "At POS counter",
+        "barFallback": "At bar counter",
+        "serverFallback": "Serving on floor",
+        "defaultFallback": "On shift, waiting for POS sync"
+      },
+      "performance": {
+        "currentRevenue": "Current revenue: {amount}",
+        "paidBills": "Paid bills: {count}",
+        "waitingSync": "POS revenue waiting for sync",
+        "barStats": "Completed {completed} items • Pending {pending} items",
+        "barWaitingSync": "Bar output waiting for sync",
+        "ordersHandled": "Handled orders: {count}",
+        "defaultWaitingSync": "Performance KPI waiting for POS sync"
+      },
+      "warning": {
+        "late": "Late check-in by {minutes}m",
+        "earlyLeave": "Left early by {minutes}m",
+        "notCheckedIn": "No on-time check-in recorded",
+        "checkedInAt": "Checked in at {time}"
+      },
+      "issues": {
+        "pending": "{count} issues pending",
+        "none": "No issues recorded"
+      },
+      "manualAdjusted": "This record was manually adjusted.",
+      "table": {
+        "staff": "Staff",
+        "role": "Role",
+        "shiftType": "Shift Type",
+        "plannedTime": "Planned Time",
+        "checkIn": "Check-In",
+        "checkOut": "Check-Out",
+        "status": "Status",
+        "lateMinutes": "Late (min)"
+      }
+    },
+    "myShift": {
+      "title": "My Shifts",
+      "description": "View your assigned shifts and check in or check out.",
+      "loading": "Loading shifts...",
+      "empty": "No shifts assigned in the next 30 days.",
+      "today": "Today",
+      "upcoming": "Upcoming ({count})",
+      "past": "Past Shifts ({count})",
+      "actions": {
+        "swap": "Swap",
+        "leave": "Leave"
+      },
+      "summary": {
+        "title": "This Month Summary",
+        "subtitle": "Attendance overview",
+        "onTime": "On Time",
+        "late": "Late",
+        "ot": "OT",
+        "incoming": "Incoming",
+        "estimatedEarnings": "Est. Earnings",
+        "shiftCount": "{count} shift(s)"
+      },
+      "checkInCard": {
+        "todayShiftFallback": "Today's Shift",
+        "scheduled": "Scheduled",
+        "checkIn": "Check-in",
+        "checkOut": "Check-out",
+        "arrivedLate": "Arrived {minutes} min late",
+        "leftEarly": "Left {minutes} min early",
+        "workedDuration": "Worked {hours}h {minutes}m",
+        "verifyingNetwork": "Verifying store network...",
+        "networkConnected": "Connected to store network",
+        "locationUnverified": "Location unverified",
+        "checkInAction": "Check In",
+        "checkOutAction": "Check Out"
+      },
+      "todayShift": "Today's Shift",
+      "upcomingShifts": "Upcoming Shifts",
+      "pastShifts": "Past Shifts",
+      "noShifts": "No shifts assigned.",
+      "checkInBtn": "Check In",
+      "checkOutBtn": "Check Out",
+      "checkedInAt": "Checked in at {time}",
+      "checkedOutAt": "Checked out at {time}"
+    },
+    "reports": {
+      "title": "Shift Reports",
+      "description": "Attendance summary, worked hours, and exception reports.",
+      "tabs": {
+        "attendance": "Attendance",
+        "workedHours": "Worked Hours",
+        "exceptions": "Exceptions"
+      },
+      "filters": {
+        "fromDate": "From Date",
+        "toDate": "To Date",
+        "staff": "Staff Member",
+        "shiftType": "Shift Type",
+        "attendanceStatus": "Attendance Status",
+        "applyFilters": "Apply",
+        "clearFilters": "Clear"
+      },
+      "attendance": {
+        "totalAssigned": "Total Assigned",
+        "attendanceRate": "Attendance Rate",
+        "lateCount": "Late",
+        "absentCount": "Absent",
+        "table": {
+          "staff": "Staff",
+          "role": "Role",
+          "assigned": "Assigned",
+          "present": "Present",
+          "late": "Late",
+          "absent": "Absent",
+          "rate": "Rate"
+        }
+      },
+      "workedHours": {
+        "totalScheduled": "Total Scheduled",
+        "totalWorked": "Total Worked",
+        "variance": "Variance",
+        "table": {
+          "staff": "Staff",
+          "role": "Role",
+          "scheduledMin": "Scheduled (min)",
+          "workedMin": "Worked (min)",
+          "varianceMin": "Variance (min)",
+          "incomplete": "Incomplete"
+        }
+      },
+      "exceptions": {
+        "lateCount": "Late Arrivals",
+        "absentCount": "Absences",
+        "earlyLeaveCount": "Early Departures",
+        "adjustmentCount": "Manual Adjustments",
+        "table": {
+          "date": "Date",
+          "staff": "Staff",
+          "role": "Role",
+          "shiftType": "Shift Type",
+          "exceptionType": "Exception",
+          "minutesAffected": "Minutes",
+          "reviewer": "Reviewed By"
+        }
+      },
+      "refresh": "Refresh",
+      "exportCsv": "Export CSV",
+      "selectDateRange": "Select a date range to load reports",
+      "highAbsenceRate": "High absence rate",
+      "presets": {
+        "today": "Today",
+        "thisWeek": "This Week",
+        "last7Days": "Last 7 Days",
+        "thisMonth": "This Month",
+        "lastMonth": "Last Month"
+      },
+      "health": {
+        "attendanceRate": "Attendance Rate",
+        "hoursCompliance": "Hours Compliance",
+        "exceptions": "Exceptions",
+        "shiftsPresent": "{present} of {total} shifts",
+        "hoursWorked": "{worked}h worked of {scheduled}h",
+        "noAttendanceData": "No attendance data",
+        "noHoursData": "No hours data yet",
+        "issuesFlagged": "{count, plural, =0 {No issues found} =1 {1 issue flagged} other {# issues flagged}}"
+      },
+      "shared": {
+        "loading": "Loading data...",
+        "empty": "No data for the selected range.",
+        "show": "Show",
+        "records": "records",
+        "prev": "Prev",
+        "next": "Next"
+      },
+      "attendanceTab": {
+        "inner": {
+          "overview": "Overview",
+          "staffSummary": "Staff Summary",
+          "details": "Details"
+        },
+        "searchLabel": "Search Staff",
+        "searchPlaceholder": "Type staff name...",
+        "filterByStaff": "Filter by staff",
+        "allStaff": "All staff",
+        "clearSearch": "Clear",
+        "kpi": {
+          "totalAssignments": "Total assignments",
+          "checkInRate": "Check-in rate",
+          "lateArrivals": "Late arrivals",
+          "absences": "Absences"
+        },
+        "chart": {
+          "dailyBreakdown": "Daily Attendance Breakdown",
+          "onTime": "On Time",
+          "late": "Late",
+          "absent": "Absent"
+        },
+        "topAbsences": "Most Absences",
+        "topLate": "Most Late Arrivals",
+        "recordsOf": "of records",
+        "scorePrefix": "Score:",
+        "insightsLabel": "Insights",
+        "showInsights": "Show Insights",
+        "hideInsights": "Hide Insights",
+        "insights": {
+          "highAbsence": "High absence rate: {absentRate}% of shifts ({absent} absences). Review staffing coverage.",
+          "highLate": "High late-arrival rate: {lateRate}%. Consider reviewing shift start times.",
+          "frequentAbsence": "{count} staff member(s) have 3+ absences in this period.",
+          "perfectAttendance": "Perfect attendance! All shifts have check-ins for the selected period.",
+          "zeroLateAbsent": "Outstanding! 0 absences and 0 late arrivals in the selected period."
+        },
+        "statusCards": {
+          "onTime": "On Time",
+          "late": "Late",
+          "absent": "Absent",
+          "present": "Present"
+        },
+        "badges": {
+          "total": "Total: {value}",
+          "present": "Present: {value}",
+          "onTime": "On Time: {value}",
+          "late": "Late: {value}",
+          "absent": "Absent: {value}"
+        },
+        "manualAdjusted": "Manually adjusted",
+        "summaryTable": {
+          "staff": "Staff",
+          "total": "Total",
+          "present": "Present",
+          "onTime": "On Time",
+          "late": "Late",
+          "absent": "Absent",
+          "checkInRate": "Check-in Rate",
+          "reliability": "Reliability"
+        },
+        "detailTable": {
+          "date": "Date",
+          "staff": "Staff",
+          "shift": "Shift",
+          "planned": "Planned",
+          "status": "Status",
+          "checkIn": "Check-in",
+          "checkOut": "Check-out",
+          "late": "Late",
+          "earlyLeave": "Early Leave"
+        }
+      },
+      "workedHoursTab": {
+        "inner": {
+          "summary": "Summary",
+          "details": "Staff Details"
+        },
+        "searchLabel": "Search Staff",
+        "searchPlaceholder": "Type staff name...",
+        "clearSearch": "Clear",
+        "kpi": {
+          "totalScheduled": "Total scheduled",
+          "totalWorked": "Total worked",
+          "variance": "Variance",
+          "avgEfficiency": "Avg. efficiency",
+          "incomplete": "incomplete"
+        },
+        "overSchedule": "over schedule",
+        "underSchedule": "under schedule",
+        "cards": {
+          "staffTracked": "Staff Tracked",
+          "totalWorked": "Total Worked",
+          "scheduled": "Scheduled",
+          "overtime": "Overtime"
+        },
+        "chartTitle": "Worked vs Scheduled Hours — Top Staff",
+        "chartScheduled": "Scheduled",
+        "chartWorked": "Worked",
+        "overtimeAlert": "{count, plural, =1 {1 staff member worked 30+ minutes over scheduled hours.} other {# staff members worked 30+ minutes over scheduled hours.}}",
+        "table": {
+          "staff": "Staff",
+          "scheduled": "Scheduled",
+          "worked": "Worked",
+          "variance": "Variance",
+          "efficiency": "Efficiency",
+          "overtime": "Overtime",
+          "incomplete": "Incomplete"
+        }
+      },
+      "exceptionsTab": {
+        "inner": {
+          "summary": "Summary",
+          "byStaff": "By Staff",
+          "allRecords": "All Records"
+        },
+        "searchLabel": "Search Staff",
+        "searchPlaceholder": "Type staff name...",
+        "clearSearch": "Clear",
+        "kpi": {
+          "lateIncidents": "Late incidents",
+          "absences": "Absences",
+          "earlyDepartures": "Early departures",
+          "manualAdjustments": "Manual adjustments",
+          "totalMinutes": "Total minutes affected"
+        },
+        "cards": {
+          "lateArrivals": "Late Arrivals",
+          "absences": "Absences",
+          "earlyLeave": "Early Leave",
+          "manual": "Manual",
+          "adjusted": "Adjusted"
+        },
+        "adjustedLabel": "✦ Adjusted",
+        "noStaffFound": "No staff with exceptions found.",
+        "table": {
+          "date": "Date",
+          "staff": "Staff",
+          "shift": "Shift",
+          "exceptionType": "Exception Type",
+          "minutes": "Minutes",
+          "reviewer": "Reviewer"
+        }
+      }
+    },
+    "scheduleList": {
+      "title": "Shift Assignments",
+      "description": "Assign staff to shift templates and track attendance.",
+      "searchPlaceholder": "Search assignments",
+      "newAssignment": "New Assignment",
+      "confirmCancel": "Cancel this assignment?",
+      "activeCount": "Active: {count}",
+      "cancelledCount": "Cancelled: {count}",
+      "filters": {
+        "fromDate": "From Date",
+        "toDate": "To Date",
+        "fromDatePlaceholder": "From date",
+        "toDatePlaceholder": "To date",
+        "refresh": "Refresh"
+      },
+      "table": {
+        "no": "No",
+        "date": "Date",
+        "template": "Template",
+        "staff": "Staff",
+        "plannedTime": "Planned Time",
+        "status": "Status"
+      },
+      "noData": "No assignments found. Adjust the date range or create a new assignment."
+    },
+    "assignmentForm": {
+      "createTitle": "New Shift Assignment",
+      "editTitle": "Edit Assignment",
+      "cancel": "Cancel",
+      "saveChanges": "Save Changes",
+      "assignStaff": "Assign Staff",
+      "plannedHint": "Leave planned times empty to use the template defaults.",
+      "fields": {
+        "shiftTemplate": "Shift Template",
+        "staffMember": "Staff Member",
+        "workDate": "Work Date",
+        "plannedStart": "Planned Start",
+        "plannedEnd": "Planned End",
+        "notes": "Notes"
+      },
+      "placeholders": {
+        "shiftTemplate": "Select shift template...",
+        "staffMember": "Select staff member...",
+        "loadingStaff": "Loading staff...",
+        "workDate": "Select date",
+        "notes": "Optional notes..."
+      }
+    }
+  }
+}

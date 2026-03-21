@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { X } from "lucide-react";
 import {
   Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerDescription,
@@ -26,6 +27,7 @@ interface Props {
 }
 
 export function ShiftAssignmentPanel({ open, onClose, assignment }: Props) {
+  const t = useTranslations("shift.schedule.assignmentPanel");
   const [adjustTarget, setAdjustTarget] = useState<AttendanceRecordDto | null>(null);
 
   const cancelAssignment = useCancelAssignmentMutation();
@@ -50,7 +52,7 @@ export function ShiftAssignmentPanel({ open, onClose, assignment }: Props) {
           <DrawerHeader className="border-b border border-[#D5BA98]/60 bg-[#FDFBF9] pb-4">
             <div className="flex items-start justify-between">
               <div>
-                <DrawerTitle className="text-[#1A3A52]">Shift Detail</DrawerTitle>
+                <DrawerTitle className="text-[#1A3A52]">{t("title")}</DrawerTitle>
                 <DrawerDescription className="mt-1 text-[#1A3A52]/70">
                   {assignment.workDate} · {assignment.templateName} ·{" "}
                   {formatTime(assignment.plannedStartAt)} – {formatTime(assignment.plannedEndAt)}
@@ -64,7 +66,7 @@ export function ShiftAssignmentPanel({ open, onClose, assignment }: Props) {
                 <button
                   onClick={onClose}
                   className="text-[#1A3A52]/60 transition-colors hover:text-[#1A3A52]"
-                  aria-label="Close panel"
+                  aria-label={t("closePanel")}
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -77,7 +79,10 @@ export function ShiftAssignmentPanel({ open, onClose, assignment }: Props) {
             <div className="space-y-1 rounded-lg border border-[#D5BA98]/60 bg-[#FDFBF9] px-4 py-3">
               <p className="text-sm font-medium text-[#1A3A52]">{assignment.staffName}</p>
               <p className="text-xs text-[#1A3A52]/70">
-                Assigned by {assignment.assignedByName} on {new Date(assignment.assignedAt).toLocaleDateString()}
+                {t("assignedByOn", {
+                  name: assignment.assignedByName,
+                  date: new Date(assignment.assignedAt).toLocaleDateString(),
+                })}
               </p>
               {assignment.notes && (
                 <p className="text-xs italic text-[#1A3A52]/65">&quot;{assignment.notes}&quot;</p>
@@ -88,7 +93,7 @@ export function ShiftAssignmentPanel({ open, onClose, assignment }: Props) {
             {ar ? (
               <div className="space-y-2 rounded-lg border border-[#D5BA98]/60 bg-[#FDFBF9] px-4 py-3">
                 <div className="flex items-center justify-between">
-                  <p className="text-sm font-medium text-[#1A3A52]">Attendance</p>
+                  <p className="text-sm font-medium text-[#1A3A52]">{t("attendance")}</p>
                   {attendanceStatusCfg && (
                     <span className={`text-xs font-medium px-2 py-0.5 rounded-full border ${
                       attendanceStatusCfg.variant === "destructive"
@@ -105,41 +110,41 @@ export function ShiftAssignmentPanel({ open, onClose, assignment }: Props) {
                 </div>
                 <div className="grid grid-cols-2 gap-2 text-xs text-[#1A3A52]/70">
                   <div>
-                    <p className="font-medium text-[#1A3A52]">Check-in</p>
+                    <p className="font-medium text-[#1A3A52]">{t("checkIn")}</p>
                     <p>{ar.actualCheckInAt ? formatTime(ar.actualCheckInAt) : "—"}</p>
                     {ar.lateMinutes > 0 && (
-                      <p className="text-amber-700">{ar.lateMinutes}m late</p>
+                      <p className="text-amber-700">{t("lateMinutes", { minutes: ar.lateMinutes })}</p>
                     )}
                   </div>
                   <div>
-                    <p className="font-medium text-[#1A3A52]">Check-out</p>
+                    <p className="font-medium text-[#1A3A52]">{t("checkOut")}</p>
                     <p>{ar.actualCheckOutAt ? formatTime(ar.actualCheckOutAt) : "—"}</p>
                     {ar.earlyLeaveMinutes > 0 && (
-                      <p className="text-amber-700">{ar.earlyLeaveMinutes}m early</p>
+                      <p className="text-amber-700">{t("earlyLeaveMinutes", { minutes: ar.earlyLeaveMinutes })}</p>
                     )}
                   </div>
                   {ar.workedMinutes > 0 && (
                     <div>
-                      <p className="font-medium text-[#1A3A52]">Worked</p>
-                      <p>{Math.floor(ar.workedMinutes / 60)}h {ar.workedMinutes % 60}m</p>
+                      <p className="font-medium text-[#1A3A52]">{t("worked")}</p>
+                      <p>{t("workedDuration", { hours: Math.floor(ar.workedMinutes / 60), minutes: ar.workedMinutes % 60 })}</p>
                     </div>
                   )}
                   {ar.isManualAdjustment && ar.reviewedByName && (
                     <div>
-                      <p className="font-medium text-[#1A3A52]">Adjusted by</p>
+                      <p className="font-medium text-[#1A3A52]">{t("adjustedBy")}</p>
                       <p>{ar.reviewedByName}</p>
                     </div>
                   )}
                 </div>
                 {ar.adjustmentReason && (
                   <p className="text-xs italic text-[#1A3A52]/65">
-                    Reason: &quot;{ar.adjustmentReason}&quot;
+                    {t("reason")}: &quot;{ar.adjustmentReason}&quot;
                   </p>
                 )}
               </div>
             ) : (
               <div className="rounded-lg border border-dashed border-slate-300 bg-[#FDFBF9] px-4 py-6 text-center text-sm text-[#1A3A52]/70">
-                No attendance recorded yet.
+                {t("noAttendance")}
               </div>
             )}
           </div>
@@ -156,7 +161,7 @@ export function ShiftAssignmentPanel({ open, onClose, assignment }: Props) {
                       onClick={() => checkIn.mutate(assignment.shiftAssignmentId)}
                       isLoading={checkIn.isPending}
                     >
-                      Check In
+                      {t("checkInAction")}
                     </Button>
                   </PermissionGuard>
                 )}
@@ -167,7 +172,7 @@ export function ShiftAssignmentPanel({ open, onClose, assignment }: Props) {
                       onClick={() => checkOut.mutate(assignment.shiftAssignmentId)}
                       isLoading={checkOut.isPending}
                     >
-                      Check Out
+                      {t("checkOutAction")}
                     </Button>
                   </PermissionGuard>
                 )}
@@ -179,7 +184,7 @@ export function ShiftAssignmentPanel({ open, onClose, assignment }: Props) {
               {ar && (
                 <PermissionGuard permission={Permissions.AdjustAttendance}>
                   <Button variant="outline" size="sm" className="flex-1 border-slate-300 bg-white text-[#1A3A52] hover:bg-slate-100" onClick={() => setAdjustTarget(ar)}>
-                    Adjust Attendance
+                    {t("adjustAttendance")}
                   </Button>
                 </PermissionGuard>
               )}
@@ -189,12 +194,12 @@ export function ShiftAssignmentPanel({ open, onClose, assignment }: Props) {
                     variant="outline" size="sm"
                     className="flex-1 border-destructive/40 text-destructive hover:bg-destructive/10"
                     onClick={() => {
-                      if (!confirm("Cancel this assignment?")) return;
+                      if (!confirm(t("cancelAssignmentConfirm"))) return;
                       cancelAssignment.mutate(assignment.shiftAssignmentId, { onSuccess: onClose });
                     }}
                     disabled={cancelAssignment.isPending}
                   >
-                    Cancel Assignment
+                    {t("cancelAssignment")}
                   </Button>
                 </PermissionGuard>
               )}

@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useMemo } from "react";
+import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import {
   Card,
@@ -52,6 +53,7 @@ export const ZoneSection: React.FC<ZoneSectionProps> = ({
   onSelect,
   onStatusChange,
 }) => {
+  const t = useTranslations("tableManagement");
   const stats = useMemo(() => {
     const available = tables.filter((t) => t.status === "AVAILABLE").length;
     const occupied = tables.filter((t) => t.status === "OCCUPIED").length;
@@ -100,18 +102,18 @@ export const ZoneSection: React.FC<ZoneSectionProps> = ({
             <div className="hidden items-center gap-2 text-[11px] text-[#1A3A52]/65 sm:flex">
               <span className="flex items-center gap-1">
                 <span className={cn("w-1.5 h-1.5 rounded-full", TABLE_STATUS_CONFIG.AVAILABLE.dotColor)} />
-                {stats.available} avail
+                {t("zone.availCount", { count: stats.available })}
               </span>
               <span className="text-[#D5BA98]">|</span>
               <span className="flex items-center gap-1">
                 <Users size={11} />
-                {stats.totalCapacity} seats
+                {t("zone.seatsCount", { count: stats.totalCapacity })}
               </span>
               {stats.activeOrders > 0 && (
                 <>
                   <span className="text-[#D5BA98]">|</span>
                   <span className="flex items-center gap-1 text-[#1A3A52]">
-                    {stats.activeOrders} order{stats.activeOrders !== 1 ? "s" : ""}
+                    {t("zone.ordersCount", { count: stats.activeOrders })}
                   </span>
                 </>
               )}
@@ -119,7 +121,7 @@ export const ZoneSection: React.FC<ZoneSectionProps> = ({
                 <>
                   <span className="text-[#D5BA98]">|</span>
                   <span className="flex items-center gap-1 text-[#8C3A3A]">
-                    {stats.errors} error{stats.errors !== 1 ? "s" : ""}
+                    {t("zone.errorsCount", { count: stats.errors })}
                   </span>
                 </>
               )}
@@ -134,7 +136,7 @@ export const ZoneSection: React.FC<ZoneSectionProps> = ({
                   "size-7",
                   allOnline ? "text-[#4A5D4E]" : "text-[#1A3A52]/55"
                 )}
-                data-tooltip-content={allOnline ? "Set zone offline" : "Set zone online"}
+                data-tooltip-content={allOnline ? t("zone.setOffline") : t("zone.setOnline")}
                 data-tooltip-id="my-tooltip"
                 onClick={() => onToggleZoneOnline(tables[0]?.zoneId ?? 0, !allOnline)}
               >
@@ -181,7 +183,7 @@ export const ZoneSection: React.FC<ZoneSectionProps> = ({
                 ))}
             </div>
             <span className="shrink-0 whitespace-nowrap text-[10px] text-[#1A3A52]/55">
-              {stats.available}/{tables.length} available
+              {t("zone.availableSummary", { available: stats.available, total: tables.length })}
             </span>
           </div>
 

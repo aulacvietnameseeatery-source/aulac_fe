@@ -39,7 +39,7 @@ function efficiencyColor(pctVal: number) {
 }
 
 export function WorkedHoursTab({ rows, loading }: Props) {
-  const t = useTranslations("ShiftManagement.Reports");
+  const t = useTranslations("shift.reports");
   const [innerTab, setInnerTab] = useState("summary");
   const [staffQuery, setStaffQuery] = useState("");
   const [page, setPage] = useState(1);

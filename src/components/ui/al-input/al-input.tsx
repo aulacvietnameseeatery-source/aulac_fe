@@ -8,6 +8,7 @@ import type {
   ALInputDropdownConfig,
   ALInputButtonConfig,
 } from "./al-input.types";
+import { TimePickerInput } from "./time-picker-input";
 
 // ─── Helpers ────────────────────────────────────────────────
 
@@ -186,9 +187,26 @@ const ALInput = React.forwardRef<HTMLInputElement, ALInputProps>(
       wrapperClassName,
       groupClassName,
       className,
+      timeUse12Hour = true,
+      timeMinuteStep,
 
       // Native input
       disabled,
+      type,
+      onChange,
+      onBlur,
+      value,
+      defaultValue,
+      step,
+      name,
+      required,
+      readOnly,
+      placeholder,
+      autoComplete,
+      autoCorrect,
+      spellCheck,
+      onFocus,
+      onKeyDown,
       ...inputProps
     },
     ref
@@ -197,6 +215,7 @@ const ALInput = React.forwardRef<HTMLInputElement, ALInputProps>(
     const hasStart = !!(iconStart || textStart || dropdownStart || buttonStart);
     const hasEnd = !!(iconEnd || textEnd || dropdownEnd || buttonEnd);
 
+    const isTimeInput = type === "time";
     return (
       <div className={cn("w-full", wrapperClassName)}>
         {/* ── Title / Label ───────────────────────────── */}
@@ -235,18 +254,58 @@ const ALInput = React.forwardRef<HTMLInputElement, ALInputProps>(
           )}
 
           {/* ── The actual input field ──────────────── */}
-          <input
-            ref={ref}
-            disabled={disabled}
-            className={cn(
-              "al-input-field",
-              // Remove left padding when there's a start addon icon
-              hasStart && "pl-0",
-              hasEnd && "pr-0",
-              className
-            )}
-            {...inputProps}
-          />
+          {isTimeInput ? (
+            <TimePickerInput
+              {...inputProps}
+              ref={ref}
+              className={cn(
+                "al-input-field al-input-time-trigger",
+                hasStart && "pl-0",
+                hasEnd && "pr-0",
+                className
+              )}
+              disabled={disabled}
+              readOnly={readOnly}
+              placeholder={placeholder}
+              title={title}
+              value={value as string | undefined}
+              defaultValue={defaultValue as string | undefined}
+              onChange={onChange}
+              onBlur={onBlur}
+              onFocus={onFocus}
+              onKeyDown={onKeyDown}
+              name={name}
+              required={required}
+              step={step}
+              autoComplete={autoComplete}
+              autoCorrect={autoCorrect}
+              spellCheck={spellCheck}
+              timeUse12Hour={timeUse12Hour}
+              timeMinuteStep={timeMinuteStep}
+            />
+          ) : (
+            <input
+              {...inputProps}
+              ref={ref}
+              type={type}
+              name={name}
+              required={required}
+              readOnly={readOnly}
+              disabled={disabled}
+              value={value}
+              defaultValue={defaultValue}
+              onChange={onChange}
+              onBlur={onBlur}
+              step={step}
+              className={cn(
+                "al-input-field",
+                // Remove left padding when there's a start addon icon
+                hasStart && "pl-0",
+                hasEnd && "pr-0",
+                className
+              )}
+            />
+          )}
 
           {/* End addons — rendered in order of priority */}
           {iconEnd && (

@@ -58,6 +58,57 @@ function parseDate(value: string | undefined): Date | undefined {
   return isValid(d) ? d : undefined;
 }
 
+function parseDateTime(value: string | undefined): Date | undefined {
+  if (!value) return undefined;
+
+  const withSeconds = parse(value, "yyyy-MM-dd'T'HH:mm:ss", new Date());
+  if (isValid(withSeconds)) return withSeconds;
+
+  const withoutSeconds = parse(value, "yyyy-MM-dd'T'HH:mm", new Date());
+  if (isValid(withoutSeconds)) return withoutSeconds;
+
+  const fallback = new Date(value);
+  return isValid(fallback) ? fallback : undefined;
+}
+
+function formatOutputDate(date: Date, variant: "date" | "datetime"): string {
+  if (variant === "datetime") {
+    return format(date, "yyyy-MM-dd'T'HH:mm:ss");
+  }
+
+  return format(date, "yyyy-MM-dd");
+}
+
+function to24Hour(hour12: number, period: "AM" | "PM"): number {
+  if (period === "AM") return hour12 === 12 ? 0 : hour12;
+  return hour12 === 12 ? 12 : hour12 + 12;
+}
+
+function to12HourParts(date: Date) {
+  const hour24 = date.getHours();
+  const hour12 = hour24 % 12 === 0 ? 12 : hour24 % 12;
+  const period: "AM" | "PM" = hour24 >= 12 ? "PM" : "AM";
+
+  return {
+    hour: String(hour12).padStart(2, "0"),
+    minute: String(date.getMinutes()).padStart(2, "0"),
+    period,
+  };
+}
+
+function applyTimeToDate(
+  date: Date,
+  hour12Text: string,
+  minuteText: string,
+  period: "AM" | "PM"
+): Date {
+  const next = new Date(date);
+  const hour12 = Math.min(12, Math.max(1, Number(hour12Text) || 12));
+  const minute = Math.min(59, Math.max(0, Number(minuteText) || 0));
+  next.setHours(to24Hour(hour12, period), minute, 0, 0);
+  return next;
+}
+
 // ─── Main component ─────────────────────────────────────────
 
 const ALDatePicker = React.forwardRef<HTMLButtonElement, ALDatePickerProps>(
@@ -74,10 +125,12 @@ const ALDatePicker = React.forwardRef<HTMLButtonElement, ALDatePickerProps>(
       state,
 
       // Value
+      variant = "date",
       value,
       onChange,
-      placeholder = "Pick a date",
-      displayFormat = "dd/MM/yyyy",
+      placeholder,
+      displayFormat,
+      timeStepMinutes = 5,
 
       // Calendar props
       minDate,
@@ -100,11 +153,22 @@ const ALDatePicker = React.forwardRef<HTMLButtonElement, ALDatePickerProps>(
     ref
   ) => {
     const [open, setOpen] = React.useState(false);
+    const isDateTime = variant === "datetime";
+    const resolvedPlaceholder =
+      placeholder ?? (isDateTime ? "Pick date and time" : "Pick a date");
+    const resolvedDisplayFormat =
+      displayFormat ?? (isDateTime ? "dd/MM/yyyy HH:mm" : "dd/MM/yyyy");
 
-    const selectedDate = React.useMemo(() => parseDate(value), [value]);
+    const selectedDate = React.useMemo(
+      () => (isDateTime ? parseDateTime(value) : parseDate(value)),
+      [value, isDateTime]
+    );
     const [visibleMonth, setVisibleMonth] = React.useState<Date>(
       selectedDate ?? new Date()
     );
+    const [timeHour, setTimeHour] = React.useState("09");
+    const [timeMinute, setTimeMinute] = React.useState("00");
+    const [timePeriod, setTimePeriod] = React.useState<"AM" | "PM">("AM");
 
     React.useEffect(() => {
       if (selectedDate) {
@@ -116,6 +180,14 @@ const ALDatePicker = React.forwardRef<HTMLButtonElement, ALDatePickerProps>(
         });
       }
     }, [selectedDate]);
+
+    React.useEffect(() => {
+      if (!isDateTime || !selectedDate) return;
+      const next = to12HourParts(selectedDate);
+      setTimeHour(next.hour);
+      setTimeMinute(next.minute);
+      setTimePeriod(next.period);
+    }, [isDateTime, selectedDate]);
 
     const minParsed = parseDate(minDate);
     const maxParsed = parseDate(maxDate);
@@ -162,10 +234,16 @@ const ALDatePicker = React.forwardRef<HTMLButtonElement, ALDatePickerProps>(
     const handleSelect = (date: Date | undefined) => {
       if (readOnly) return;
       if (date) {
-        const formatted = format(date, "yyyy-MM-dd");
+        const withTime = isDateTime
+          ? applyTimeToDate(date, timeHour, timeMinute, timePeriod)
+          : date;
+        const formatted = formatOutputDate(withTime, variant);
         onChange?.(formatted);
+
+        if (!isDateTime) {
+          setOpen(false);
+        }
       }
-      setOpen(false);
     };
 
     const handleClear = (e: React.MouseEvent) => {
@@ -190,6 +268,30 @@ const ALDatePicker = React.forwardRef<HTMLButtonElement, ALDatePickerProps>(
         if (parsed) disabledMatcher.push(parsed);
       });
     }
+
+    const minuteStep = Math.min(30, Math.max(1, Math.round(timeStepMinutes)));
+    const minuteOptions = React.useMemo(() => {
+      const values: string[] = [];
+      for (let minute = 0; minute < 60; minute += minuteStep) {
+        values.push(String(minute).padStart(2, "0"));
+      }
+      if (!values.includes(timeMinute)) {
+        values.push(timeMinute);
+        values.sort((a, b) => Number(a) - Number(b));
+      }
+      return values;
+    }, [minuteStep, timeMinute]);
+
+    const hourOptions = React.useMemo(
+      () => Array.from({ length: 12 }, (_, i) => String(i + 1).padStart(2, "0")),
+      []
+    );
+
+    const emitDateTimeChange = (nextHour: string, nextMinute: string, nextPeriod: "AM" | "PM") => {
+      if (!selectedDate) return;
+      const nextDate = applyTimeToDate(selectedDate, nextHour, nextMinute, nextPeriod);
+      onChange?.(formatOutputDate(nextDate, "datetime"));
+    };
 
     return (
       <div className={cn("w-full", wrapperClassName)}>
@@ -236,8 +338,8 @@ const ALDatePicker = React.forwardRef<HTMLButtonElement, ALDatePickerProps>(
                 )}
               >
                 {selectedDate
-                  ? format(selectedDate, displayFormat)
-                  : placeholder}
+                  ? format(selectedDate, resolvedDisplayFormat)
+                  : resolvedPlaceholder}
               </span>
 
               {clearable && selectedDate && !disabled && !readOnly && (
@@ -259,7 +361,7 @@ const ALDatePicker = React.forwardRef<HTMLButtonElement, ALDatePickerProps>(
             </button>
           </PopoverTrigger>
 
-          <PopoverContent className="z-[320] w-[320px] p-0 border-[#D5BA98]/50" align="start">
+          <PopoverContent className="z-320 w-[320px] p-0 border-[#D5BA98]/50" align="start">
             <div className="grid grid-cols-2 gap-2 p-3 border-b border-[#D5BA98]/30">
               <ALCombobox
                 options={monthOptions}
@@ -290,6 +392,64 @@ const ALDatePicker = React.forwardRef<HTMLButtonElement, ALDatePickerProps>(
               fromYear={fromYear}
               toYear={toYear}
             />
+
+            {isDateTime && (
+              <div className="border-t border-[#D5BA98]/30 p-3">
+                <p className="mb-1.5 text-xs font-medium text-[#1A3A52]/75">Time</p>
+                <div className="al-time-grid h-10 rounded-md border border-[#D5BA98]/50">
+                  <select
+                    className="al-time-select"
+                    value={timeHour}
+                    onChange={(e) => {
+                      const next = e.target.value;
+                      setTimeHour(next);
+                      emitDateTimeChange(next, timeMinute, timePeriod);
+                    }}
+                    disabled={disabled || readOnly}
+                    aria-label="Hour"
+                  >
+                    {hourOptions.map((hour) => (
+                      <option key={hour} value={hour}>
+                        {Number(hour)}
+                      </option>
+                    ))}
+                  </select>
+
+                  <select
+                    className="al-time-select"
+                    value={timeMinute}
+                    onChange={(e) => {
+                      const next = e.target.value;
+                      setTimeMinute(next);
+                      emitDateTimeChange(timeHour, next, timePeriod);
+                    }}
+                    disabled={disabled || readOnly}
+                    aria-label="Minute"
+                  >
+                    {minuteOptions.map((minute) => (
+                      <option key={minute} value={minute}>
+                        {minute}
+                      </option>
+                    ))}
+                  </select>
+
+                  <select
+                    className="al-time-select"
+                    value={timePeriod}
+                    onChange={(e) => {
+                      const next = e.target.value as "AM" | "PM";
+                      setTimePeriod(next);
+                      emitDateTimeChange(timeHour, timeMinute, next);
+                    }}
+                    disabled={disabled || readOnly}
+                    aria-label="Period"
+                  >
+                    <option value="AM">AM</option>
+                    <option value="PM">PM</option>
+                  </select>
+                </div>
+              </div>
+            )}
           </PopoverContent>
         </Popover>
 
