@@ -1,6 +1,7 @@
 "use client";
 
 import { Clock, LogIn, LogOut, CheckCircle2, AlertCircle, Timer } from "lucide-react";
+import { useTranslations } from "next-intl";
 import {
   Card,
   CardContent,
@@ -44,6 +45,7 @@ function fmtDatetime(iso: string | null | undefined, fallback = "—") {
 }
 
 export function CheckInCard({ assignment }: Props) {
+  const t = useTranslations("shift.myShift.checkInCard");
   const checkIn = useCheckInMutation();
   const checkOut = useCheckOutMutation();
 
@@ -94,7 +96,7 @@ export function CheckInCard({ assignment }: Props) {
         <div className="flex items-start justify-between">
           <div>
             <CardTitle className="text-lg text-[#1A3A52]">
-              {assignment.templateName ?? "Today's Shift"}
+              {assignment.templateName ?? t("todayShiftFallback")}
             </CardTitle>
             <CardDescription className="text-[#1A3A52]/70">
               {assignment.workDate ?? "—"}
@@ -109,7 +111,7 @@ export function CheckInCard({ assignment }: Props) {
         <div className="flex items-center gap-3 rounded-lg border border-[#D5BA98]/45 bg-[#FDFBF9] px-3 py-2 text-sm text-[#1A3A52]/70">
           <Clock className="w-4 h-4 shrink-0" />
           <span>
-            Scheduled{" "}
+            {t("scheduled")} {" "}
             <span className="font-medium text-[#1A3A52]">
               {fmt(assignment.plannedStartAt)} – {fmt(assignment.plannedEndAt)}
             </span>
@@ -119,13 +121,13 @@ export function CheckInCard({ assignment }: Props) {
         {/* Attendance timestamps */}
         <div className="grid grid-cols-2 gap-3">
           <div className="space-y-0.5 rounded-lg border border border-[#D5BA98]/60 bg-[#FDFBF9] p-3">
-            <p className="text-xs uppercase tracking-wide text-[#1A3A52]/60">Check-in</p>
+            <p className="text-xs uppercase tracking-wide text-[#1A3A52]/60">{t("checkIn")}</p>
             <p className="text-sm font-semibold text-[#1A3A52]">
               {hasCheckedIn ? fmtDatetime(att!.actualCheckInAt) : "—"}
             </p>
           </div>
           <div className="space-y-0.5 rounded-lg border border border-[#D5BA98]/60 bg-[#FDFBF9] p-3">
-            <p className="text-xs uppercase tracking-wide text-[#1A3A52]/60">Check-out</p>
+            <p className="text-xs uppercase tracking-wide text-[#1A3A52]/60">{t("checkOut")}</p>
             <p className="text-sm font-semibold text-[#1A3A52]">
               {hasCheckedOut ? fmtDatetime(att!.actualCheckOutAt) : "—"}
             </p>
@@ -136,14 +138,14 @@ export function CheckInCard({ assignment }: Props) {
         {isLate && att && att.lateMinutes > 0 && (
           <div className="flex items-center gap-2 rounded-lg border border-amber-600 bg-amber-600 px-3 py-2 text-sm text-white">
             <AlertCircle className="w-4 h-4 shrink-0" />
-            Arrived {att.lateMinutes} min late
+            {t("arrivedLate", { minutes: att.lateMinutes })}
           </div>
         )}
 
         {att && att.earlyLeaveMinutes > 0 && (
           <div className="flex items-center gap-2 rounded-lg border border-amber-600 bg-amber-600 px-3 py-2 text-sm text-white">
             <Timer className="w-4 h-4 shrink-0" />
-            Left {att.earlyLeaveMinutes} min early
+            {t("leftEarly", { minutes: att.earlyLeaveMinutes })}
           </div>
         )}
 
@@ -151,7 +153,10 @@ export function CheckInCard({ assignment }: Props) {
         {isCompleted && att && att.workedMinutes > 0 && (
           <div className="flex items-center gap-2 rounded-lg border border-emerald-600 bg-emerald-600 px-3 py-2 text-sm text-white">
             <CheckCircle2 className="w-4 h-4 shrink-0" />
-            Worked {Math.floor(att.workedMinutes / 60)}h {att.workedMinutes % 60}m
+            {t("workedDuration", {
+              hours: Math.floor(att.workedMinutes / 60),
+              minutes: att.workedMinutes % 60,
+            })}
           </div>
         )}
 
@@ -169,17 +174,17 @@ export function CheckInCard({ assignment }: Props) {
                 {isVerifyingLocation ? (
                   <>
                     <div className="h-3 w-3 rounded-full border-2 border-blue-600 border-t-transparent animate-spin" />
-                    Verifying store network...
+                    {t("verifyingNetwork")}
                   </>
                 ) : locationVerified ? (
                   <>
                     <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                    Connected to store network
+                    {t("networkConnected")}
                   </>
                 ) : (
                   <>
                     <AlertCircle className="w-3.5 h-3.5" />
-                    Location unverified
+                    {t("locationUnverified")}
                   </>
                 )}
               </div>
@@ -194,7 +199,7 @@ export function CheckInCard({ assignment }: Props) {
                   isLoading={checkIn.isPending}
                 >
                   <LogIn className="w-4 h-4" />
-                  Check In
+                  {t("checkInAction")}
                 </Button>
               </PermissionGuard>
               <PermissionGuard permission={Permissions.CheckOutShift}>
@@ -206,7 +211,7 @@ export function CheckInCard({ assignment }: Props) {
                   isLoading={checkOut.isPending}
                 >
                   <LogOut className="w-4 h-4" />
-                  Check Out
+                  {t("checkOutAction")}
                 </Button>
               </PermissionGuard>
             </div>

@@ -98,4 +98,17 @@ export interface ALInputProps
   wrapperClassName?: string;
   /** Additional class names for the input-group row. */
   groupClassName?: string;
+
+  // ── Time input behavior ────────────────────────────────────
+  /**
+   * When `type="time"`, controls whether the UI renders as 12-hour (AM/PM) columns.
+   * @default true
+   */
+  timeUse12Hour?: boolean;
+  /**
+   * Minute increment for `type="time"` custom UI.
+   * Falls back to native `step` (seconds) when possible.
+   * @default 1
+   */
+  timeMinuteStep?: number;
 }

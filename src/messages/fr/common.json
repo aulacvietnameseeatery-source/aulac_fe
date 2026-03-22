@@ -1,0 +1,1084 @@
+{
+  "Metadata": {
+    "title": "An Lac - Table Vietnamienne",
+    "description": "L’apogée de l’art culinaire vietnamien au cœur de la ville."
+  },
+  "NotFound": {
+    "title": "Oups ! Page non trouvée !",
+    "description": "Désolé, la page que vous recherchez n'existe pas, a été supprimée, a changé de nom ou est temporairement indisponible",
+    "backToHome": "Retour à l’accueil"
+  },
+  "Unauthorized": {
+    "title": "Accès refusé",
+    "description": "Vous n'avez pas les permissions requises pour accéder à cette section exclusive. Veuillez contacter la direction si vous pensez qu'il s'agit d'une erreur.",
+    "returnHome": "Retour à l’accueil",
+    "goBack": "Retourner"
+  },
+  "Header": {
+    "home": "Accueil",
+    "menu": "MENU",
+    "about": "À PROPOS",
+    "contact": "CONTACT",
+    "qr_scan": "SCAN QR",
+    "reserve": "RÉSERVER",
+    "slogan_1": "Table Vietnamienne",
+    "slogan_2": "Saveurs du Vietnam, esprit convivial"
+  },
+  "Footer": {
+    "description": "Défini par l’excellence, porté par l’héritage.\nL’apogée de l’art culinaire vietnamien au\ncœur de la ville.",
+    "reservations": "Réservations",
+    "location": "Adresse",
+    "open_maps": "Ouvrir dans Maps",
+    "newsletter": "Newsletter",
+    "newsletter_desc": "Rejoignez notre cercle pour des événements exclusifs et\ndes avant-premières de créations saisonnières.",
+    "email_placeholder": "Adresse e-mail",
+    "copyright": "© 2026 An Lac Table Vietnamienne. Tous droits réservés.",
+    "privacy": "Confidentialité",
+    "terms": "Conditions",
+    "sitemap": "Plan du site"
+  },
+  "Introduction": {
+    "Hero": {
+      "est": "Fondé en 1994",
+      "title": "Un espace culinaire\n vietnamien paisible",
+      "quote": "\"An Lạc est une invitation — à ralentir, goûter attentivement et se reconnecter à l’essentiel\""
+    },
+    "Chef": {
+      "label": "Les Artisans",
+      "title": "Maîtriser l’âme du goût",
+      "chef_1_name": "Chef Exécutif Minh",
+      "chef_1_quote": "\"La cuisine est un pont entre l’histoire et les sens. Chez An Lac, nous ne cuisinons pas seulement ; nous façonnons des souvenirs à travers des épices ancestrales et des textures modernes.\"",
+      "chef_2_name": "Sous-cheffe Linh",
+      "chef_2_quote": "\"L’équilibre est notre boussole. Le contraste entre chaud et froid, croquant et fondant, sucré et salé définit l’identité vietnamienne.\"",
+      "cta": "Découvrir leur histoire"
+    },
+    "Collection": {
+      "label": "Collection",
+      "title": "Chefs-d’œuvre Signature",
+      "dish_1_category": "Sélection Patrimoniale",
+      "dish_1_title": "Salade de Racine de Lotus",
+      "dish_1_desc": "Présentée avec élégance, sublimée par une feuille d’or comestible et une réduction de vinaigre vietnamien vieilli.",
+      "dish_1_main": "Le Lotus Impérial",
+      "dish_1_sub": "Fraîcheur Sculptée",
+      "dish_2_category": "Cuisson Lente",
+      "dish_2_title": "Poisson en Marmite de Terre",
+      "dish_2_desc": "Vivaneau rouge mijoté pendant 6 heures dans un récipient en céramique traditionnelle, au poivre noir et sucre de palme.",
+      "dish_2_main": "Umami de l’Océan",
+      "dish_2_sub": "Infusion 24 Heures",
+      "dish_3_category": "Signature",
+      "dish_3_title": "Pho Patrimonial",
+      "dish_3_desc": "Une symphonie de bouillon d’os infusé pendant 24 heures, relevé d’anis étoilé et de pièces rares de wagyu.",
+      "dish_3_main": "Le Bouillon Doré",
+      "dish_3_sub": "L’Âme de Hanoï"
+    },
+    "VirtualTour": {
+      "label": "Expérience",
+      "title": "La Vue Immersive",
+      "desc": "Explorez notre espace sous tous les angles avant votre arrivée.",
+      "tour_label": "Visite Virtuelle",
+      "tour_title": "Parcours à 360°"
+    }
+  },
+  "Breadcrumb": {
+    "home": "Accueil",
+    "menu": "Menu",
+    "about": "À Propos",
+    "dish_details": "Détails_du_Plat"
+  },
+  "OrderPopup": {
+    "success_label": "Succès",
+    "success_message": "Article ajouté à votre sélection",
+    "dish_name": "Soupe Impériale de Hue aux Nouilles de Boeuf",
+    "price": "18,50 $",
+    "quantity_label": "Quantité",
+    "view_selection": "Voir la Sélection & Commander",
+    "continue_browsing": "Continuer à Parcourir",
+    "footer_text": "Cuisine Vietnamienne Artisanale"
+  },
+  "combobox": {
+    "placeholder": "Sélectionner...",
+    "searchPlaceholder": "Rechercher...",
+    "emptyMessage": "Aucune option trouvée.",
+    "loading": "Chargement...",
+    "selectAll": "Tout sélectionner",
+    "clearAll": "Tout effacer",
+    "clearSelection": "Effacer la sélection",
+    "create": "Créer",
+    "remove": "Retirer"
+  },
+  "DishDetails": {
+    "Hero": {
+      "tag": "Chef-d'œuvre du Chef",
+      "title_line_1": "Soupe Impériale de Hue",
+      "title_line_2": "aux Nouilles de Boeuf",
+      "subtitle": "Un voyage culinaire vers la Cité Impériale de Hue, équilibrant audace et raffinement dans un seul bol.",
+      "reserve": "Réserver l'Expérience",
+      "share": "Partager",
+      "order_now": "Commander",
+      "photo": "Photo",
+      "view_360": "Vue 360°",
+      "video": "Vidéo"
+    },
+    "Narrative": {
+      "label": "Le Récit",
+      "title": "Où la tradition impériale rencontre le raffinement moderne.",
+      "paragraph_1": "Dérivée de la cuisine de la cour royale de la dynastie Nguyen, ce plat—connu sous le nom de Bun Bo Hue—est un mélange harmonieux d'épicé, aigre, salé et sucré. Il témoigne de la complexité culinaire du Centre Vietnam, offrant un profil bien plus robuste que son homologue du nord, le Pho.",
+      "paragraph_2": "L'âme du plat réside dans son bouillon. Nous faisons mijoter des jarrets de bœuf premium et des jarrets de porc pendant douze heures avec des tiges de citronnelle écrasées et une touche de pâte de crevettes fermentée. Ce processus méticuleux extrait de profondes notes umami tout en maintenant une clarté caractéristique de la gastronomie vietnamienne haut de gamme.",
+      "paragraph_3": "Servi avec des vermicelles de riz épais et cylindriques et fini avec notre saté au piment fait maison, chaque bol est un hommage aux matins brumeux de la Rivière des Parfums. Ce n'est pas seulement une soupe ; c'est l'histoire versée dans la porcelaine.",
+      "pairing_label": "Accord du Sommelier",
+      "pairing_title": "Riesling Grand Cru 2018",
+      "pairing_desc": "\"L'acidité vive et les notes minérales de ce Riesling alsacien traversent le bouillon riche et épicé, nettoyant le palais tout en complétant les arômes de citronnelle.\"",
+      "add_to_order": "Ajouter à la commande"
+    },
+    "Composition": {
+      "label": "La Composition",
+      "no_composition": "Aucune information de composition disponible",
+      "item_1_title": "Vermicelles de Riz",
+      "item_1_sub": "Style Hue",
+      "item_1_desc": "Nouilles de riz épaisses et cylindriques avec une mastication satisfaisante, traditionnelles du Centre Vietnam.",
+      "item_2_title": "Citronnelle Impériale",
+      "item_2_sub": "Delta du Mékong",
+      "item_2_desc": "Tiges fraîchement récoltées qui confèrent l'arôme signature citrus-floral au bouillon.",
+      "item_3_title": "Mam Ruoc",
+      "item_3_sub": "Pâte de Crevettes Fermentée",
+      "item_3_desc": "Un condiment traditionnel qui fournit la fondation umami essentielle du plat.",
+      "stat_prep": "Préparation",
+      "stat_prep_val": "12 Heures",
+      "stat_cal": "Calories",
+      "stat_cal_val": "580 kcal",
+      "stat_allergen": "Allergènes",
+      "stat_allergen_val": "Crustacés",
+      "stat_spice": "Niveau d'Épice",
+      "stat_spice_val": "Moyen-Élevé"
+    }
+  },
+  "DishDetailsV2": {
+    "Hero": {
+      "label": "Expérience Interactive 01",
+      "title": "Gastronomie Dimensionnelle",
+      "hold_rotate": "Maintenir et Faire Pivoter la Vue",
+      "order_now": "Commander"
+    },
+    "Narrative": {
+      "tag": "Sélection Signature du Chef",
+      "title": "Soupe Impériale de Hue aux Nouilles de Boeuf",
+      "est": "Fondé en 1802 Dynastie Nguyen",
+      "paragraph_1": "Dérivée de la cuisine de la cour royale de la dynastie Nguyen, ce plat—connu sous le nom de Bun Bo Hue—est un mélange harmonieux d'épicé, aigre, salé et sucré. Il témoigne de la complexité culinaire du Centre Vietnam, offrant un profil bien plus robuste que son homologue du nord, le Pho.",
+      "paragraph_2": "L'âme du plat réside dans son bouillon. Nous faisons mijoter des jarrets de bœuf premium et des jarrets de porc pendant douze heures avec des tiges de citronnelle écrasées et une touche de pâte de crevettes fermentée. Ce processus méticuleux extrait de profondes notes umami tout en maintenant une clarté caractéristique de la gastronomie vietnamienne haut de gamme.",
+      "paragraph_3": "Servi avec des vermicelles de riz épais et cylindriques et fini avec notre saté au piment fait maison, chaque bol est un hommage aux matins brumeux de la Rivière des Parfums. Ce n'est pas seulement une soupe ; c'est l'histoire versée dans la porcelaine."
+    },
+    "Composition": {
+      "label": "Fondation",
+      "title": "La Composition",
+      "item_1_title": "Vermicelles de Riz",
+      "item_1_tag": "Tradition de Hue",
+      "item_1_desc": "Nouilles de riz épaisses et cylindriques avec une mastication satisfaisante, fabriquées sur mesure pour porter le poids robuste de notre bouillon impérial.",
+      "item_2_title": "Citronnelle du Mékong",
+      "item_2_tag": "Base Aromatique",
+      "item_2_desc": "Tiges fraîchement récoltées qui confèrent l'arôme signature citrus-floral, meurtries à la main pour libérer les huiles essentielles dans la mijotée.",
+      "item_3_title": "Mam Ruoc",
+      "item_3_tag": "Umami Profond",
+      "item_3_desc": "Une pâte de crevettes fermentée rare provenant de la côte de Hue, fournissant la fondation essentielle et profondément stratifiée du plat.",
+      "stat_curing": "Temps de Maturation",
+      "stat_curing_val": "12 Heures",
+      "stat_cal": "Valeur Calorique",
+      "stat_cal_val": "580 kcal",
+      "stat_spice": "Quotient d'Épice",
+      "stat_spice_val": "Haute Intensité",
+      "stat_allergen": "Allergènes",
+      "stat_allergen_val": "Crustacés"
+    },
+    "CTA": {
+      "reserve": "Réservez Votre Expérience"
+    },
+    "Cinematic": {
+      "label": "Perspective 02",
+      "title": "L'Art du Bouillon",
+      "description": "Une étude visuelle de l'essence de citronnelle mijotée pendant douze heures, capturée au moment de l'extraction maximale de saveur."
+    },
+    "Video": {
+      "title": "La Préparation Culinaire",
+      "subtitle": "Un Film par An Lac",
+      "duration_label": "Durée",
+      "duration_value": "02:45 MIN",
+      "resolution_label": "Résolution",
+      "resolution_value": "CINÉMATIQUE 4K"
+    }
+  },
+  "AboutUs": {
+    "title": "An Lạc – Vietnamese Eatery",
+    "subtitle": "Un espace culinaire vietnamien paisible",
+    "description_1": "An Lạc n’est pas un lieu de spectacle.\nC’est un lieu de calme.",
+    "description_2": "An Lạc est guidé par l’équilibre, la mémoire et la sérénité. Son nom signifie bonheur paisible, inspiré par le parcours de la fondatrice — une mère de trois enfants — créant un espace reflétant le soin, la stabilité et la philosophie de An cư Lạc nghiệp.",
+    "description_3": "Chez An Lạc, nous ne cherchons pas à transformer la cuisine vietnamienne, mais à l’honorer. Patience, harmonie et finesse façonnent chaque plat : mijotage lent d’un bouillon, équilibre précis des herbes, profondeur discrète de la fermentation et humilité du riz.",
+    "description_4": "Des techniques familières comme kho, hấp et nướng sont exprimées avec précision et minimalisme. Les saveurs sont mesurées, équilibrées et subtiles.",
+    "description_5": "An Lạc est une invitation — à ralentir, goûter attentivement et se reconnecter à l’essentiel."
+  },
+  "OrderSuccess": {
+    "Loading": {
+      "title": "Traitement en cours...",
+      "subtitle": "Récupération des détails de votre commande"
+    },
+    "NotFound": {
+      "title": "Commande introuvable",
+      "description": "Nous n’avons pas pu retrouver les détails de la commande demandée. Elle a peut-être été supprimée ou l’identifiant est incorrect.",
+      "cta": "Retour à l’accueil"
+    },
+    "Header": {
+      "title": "Merci",
+      "subtitle": "Votre commande a été confirmée avec succès"
+    },
+    "Summary": {
+      "orderNumber": "Numéro de commande",
+      "totalAmount": "Montant total",
+      "diningOption": "Option de restauration",
+      "quote": "Votre voyage culinaire commence...",
+      "readyIn": "Prêt dans {minutes} minutes"
+    },
+    "DiningOption": {
+      "DINE_IN": "Sur place",
+      "TAKE_AWAY": "À emporter"
+    },
+    "Location": {
+      "label": "Point de retrait",
+      "address": "Quai du Mont-Blanc 13, Genève"
+    },
+    "Actions": {
+      "viewReceipt": "Voir le reçu",
+      "backHome": "Retour à l’accueil"
+    }
+  },
+  "OrderReceipt": {
+    "Header": {
+      "title": "Reçu",
+      "subtitle": "Merci pour votre commande"
+    },
+    "InfoStrip": {
+      "orderNumber": "Commande",
+      "date": "Date",
+      "time": "Heure",
+      "status": "Statut"
+    },
+    "Items": {
+      "title": "Détails de la commande",
+      "quantity": "Qté"
+    },
+    "Summary": {
+      "subtotal": "Sous-total",
+      "tips": "Pourboire",
+      "total": "Montant total"
+    },
+    "Payment": {
+      "label": "Payé via"
+    },
+    "Actions": {
+      "download": "Télécharger le PDF",
+      "print": "Imprimer"
+    },
+    "BackLink": {
+      "label": "Retour au tableau de bord"
+    }
+  },
+  "Contact": {
+    "Hero": {
+      "title": "Contactez-nous",
+      "description": "Découvrez l’essence du luxe vietnamien sur les rives du lac Léman.\nNous sommes à votre disposition pour toute demande, événement privé ou requête spéciale."
+    },
+    "Info": {
+      "addressLabel": "Notre adresse",
+      "address": "Quai du Mont-Blanc 13\n1201 Genève, Suisse",
+      "phoneLabel": "Nous appeler",
+      "phone": "+41 22 123 45 67",
+      "emailLabel": "Demandes",
+      "email": "geneva@aulac.ch",
+      "hoursLabel": "Horaires",
+      "hours": "Lun - Dim : 11h30 - 23h00"
+    },
+    "Map": {
+      "title": "Nous trouver",
+      "hint": "Cliquer pour interagir"
+    },
+    "Socials": {
+      "title": "Suivez l’aventure",
+      "instagram": "Instagram",
+      "facebook": "Facebook",
+      "linkedin": "LinkedIn"
+    },
+    "Form": {
+      "title": "Envoyer une demande",
+      "fullName": "Nom complet",
+      "fullNamePlaceholder": "Votre nom",
+      "email": "Adresse e-mail",
+      "subject": "Sujet",
+      "message": "Votre message",
+      "messagePlaceholder": "Comment pouvons-nous vous aider ?",
+      "submit": "Envoyer le message",
+      "subjects": {
+        "general": "Demande générale",
+        "events": "Événements privés",
+        "reservation": "Réservations"
+      }
+    },
+    "Footer": {
+      "copyright": "© 2024 An Lac Vietnamese Eatery - Genève. Tous droits réservés."
+    }
+  },
+  "MenuListing": {
+    "FilterBar": {
+      "all": "Tous",
+      "premium": "Premium",
+      "seafood": "Fruits de mer",
+      "signature": "Signature",
+      "italian": "Italien",
+      "desserts": "Desserts",
+      "beverages": "Boissons",
+      "appetizers": "Entrées",
+      "main course": "Plats Principaux",
+      "search_placeholder": "Rechercher des plats exquis...",
+      "metal": "Métal",
+      "wood": "Bois",
+      "water": "Eau",
+      "fire": "Feu",
+      "earth": "Terre",
+      "vegetarian": "Végétarien"
+    },
+    "MenuGrid": {
+      "title": "Menu Gastronomique",
+      "subtitle": "Découvrez une cuisine exquise préparée par des chefs de renommée mondiale, mêlant saveurs vietnamiennes traditionnelles et techniques culinaires modernes.",
+      "book_link": "Indécis ? Réservez d'abord votre table",
+      "items": {
+        "1_name": "Bœuf Wagyu Grillé Premium",
+        "1_desc": "Bœuf Wagyu A5 japonais grillé au charbon de bois, servi avec légumes de saison et sauce aux truffes.",
+        "2_name": "Homard Thermidor",
+        "2_desc": "Homard frais préparé à la française classique, nappé d'une sauce dorée crémeuse et d'herbes fines.",
+        "3_name": "Canard Laqué",
+        "3_desc": "Canard doré croustillant servi avec crêpes chaudes, oignons verts et notre sauce maison signature.",
+        "4_name": "Risotto aux Champignons et Truffe",
+        "4_desc": "Riz Arborio crémeux mijoté avec du Gruyère, du vin blanc et des copeaux de truffe noire.",
+        "5_name": "Saumon Fumé",
+        "5_desc": "Saumon fumé maison servi avec crème fraîche, micro-pousses fraîches et seigle grillé.",
+        "6_name": "Tiramisu",
+        "6_desc": "Dessert italien classique au mascarpone, biscuits à la cuillère imbibés d'espresso et cacao.",
+        "7_name": "Bœuf Grillé Coréen",
+        "7_desc": "Fines tranches de bœuf grillées à table sur charbon de bois, servies avec légumes frais et sauce gochujang.",
+        "8_name": "Krug Clos d'Ambonnay",
+        "8_desc": "Champagne de luxe aux arômes complexes et notes de dégustation raffinées, parfait pour célébrer."
+      },
+      "order_btn": "Commander"
+    },
+    "CartSummary": {
+      "title": "Résumé",
+      "items_count": "{count} Articles Distincts",
+      "confirm_btn": "Confirmer"
+    }
+  },
+  "QrScan": {
+    "HeroSection": {
+      "label": "Atmosphère",
+      "quote": "\"Un voyage culinaire commence par une simple étincelle numérique.\""
+    },
+    "ScanContent": {
+      "title": "Découvrez Notre\nSélection",
+      "subtitle": "Scannez pour explorer toute notre histoire culinaire sur votre appareil",
+      "step_scan": "Scanner",
+      "step_explore": "Explorer",
+      "step_order": "Commander"
+    }
+  },
+  "FillInforCustomer": {
+    "title": "Bienvenue chez An Lac",
+    "subtitle": "Veuillez fournir vos informations pour commencer votre voyage culinaire",
+    "form": {
+      "fullName": "Nom Complet",
+      "fullNamePlaceholder": "Entrez votre nom complet",
+      "phoneNumber": "Numéro de Téléphone",
+      "phoneNumberPlaceholder": "Entrez votre numéro de téléphone",
+      "emailAddress": "Adresse E-mail",
+      "emailAddressPlaceholder": "Entrez votre adresse e-mail",
+      "tableNumber": "Numéro de Table",
+      "submitting": "En cours...",
+      "startDining": "Commencer à Dîner",
+      "skipToMenu": "Ignorer, voir le menu",
+      "errors": {
+        "phoneRequired": "Le numéro de téléphone est requis",
+        "emailInvalid": "Adresse e-mail invalide",
+        "tableOccupied": "Cette table est déjà occupée",
+        "tableOccupiedDesc": "Cette table est utilisée par un autre client. Veuillez choisir une autre table.",
+        "updateFailed": "Échec de la mise à jour du statut de la table. Veuillez réessayer."
+      }
+    },
+    "footer": "Cuisine Vietnamienne Artisanale"
+  },
+  "ConfirmOrder": {
+    "OrderItem": {
+      "add_note": "Ajouter une note",
+      "edit_note": "Modifier",
+      "note_placeholder": "ex : Pas épicé, sauce supplémentaire...",
+      "note_saved": "Note enregistrée"
+    },
+    "DiningOption": {
+      "eyebrow": "Comment souhaitez-vous déguster ?",
+      "title": "Option de Repas",
+      "dine_in_label": "L'Expérience",
+      "dine_in_title": "Sur Place",
+      "dine_in_desc": "Plongez dans notre atmosphère tranquille avec un service complet.",
+      "take_away_label": "Rapide & Frais",
+      "take_away_title": "À Emporter",
+      "take_away_desc": "Savourez nos saveurs exquises dans le confort de votre maison.",
+      "helper_dine_in": "Procédez à la sélection de votre table préférée.",
+      "helper_take_away": "Procédez à la planification de l'heure de retrait.",
+      "btn_select_table": "Choisir une Table",
+      "btn_checkout": "Passer à la Caisse"
+    },
+    "OrderSummary": {
+      "title": "Vérifiez Votre Commande",
+      "section_title": "Plats Sélectionnés",
+      "quantity_label": "Quantité",
+      "subtotal": "Sous-total",
+      "tax": "Service & Taxes",
+      "total": "Montant Total",
+      "items": {
+        "1_name": "Salade Impériale de Racine de Lotus",
+        "1_category": "Sélection Patrimoniale",
+        "2_name": "Pho Wagyu Héritage",
+        "2_category": "Signature"
+      }
+    }
+  },
+  "common": {
+    "table": {
+      "searchPlaceholder": "Rechercher",
+      "selected": "Sélectionné",
+      "unselect": "Désélectionner",
+      "clearFilter": "Supprimer le filtre",
+      "refresh": "Rafraîchir",
+      "pin": "Épingler la colonne",
+      "unpin": "Désépingler la colonne",
+      "sort": {
+        "none": "Aucun tri",
+        "asc": "Croissant",
+        "desc": "Décroissant"
+      },
+      "operator": {
+        "contains": "Contient",
+        "notContains": "Ne contient pas",
+        "equals": "Égal",
+        "notequal": "Différent",
+        "different": "Différent",
+        "startsWith": "Commence par",
+        "endsWith": "Se termine par",
+        "greater": "Supérieur à",
+        "less": "Inférieur à",
+        "greaterOrEqual": "Supérieur ou égal",
+        "lessOrEqual": "Inférieur ou égal",
+        "isNull": "Vide",
+        "notNull": "Non vide",
+        "selected": "Sélectionné"
+      },
+      "noData": "Aucune donnée",
+      "pagination": {
+        "total": "Total",
+        "pageSize": "Lignes par page",
+        "first": "Première page",
+        "prev": "Page précédente",
+        "next": "Page suivante",
+        "last": "Dernière page"
+      }
+    },
+    "apiErrors": {
+      "sessionExpired": "Votre session a expiré. Veuillez vous reconnecter.",
+      "tokenRefreshFailed": "Impossible d'actualiser votre session. Veuillez vous reconnecter.",
+      "noAccessToken": "Vous devez vous connecter avant de continuer.",
+      "unauthorized": "Vous n'êtes pas authentifié. Veuillez vous connecter puis réessayer.",
+      "forbidden": "Vous n'avez pas l'autorisation d'effectuer cette action.",
+      "notFound": "La ressource demandée est introuvable.",
+      "validation": "Certaines valeurs saisies sont invalides. Veuillez vérifier puis réessayer.",
+      "conflict": "Cette action est en conflit avec les données existantes.",
+      "unprocessable": "Cette action ne peut pas être exécutée avec les données actuelles.",
+      "timeout": "Le traitement de la requête a pris trop de temps. Veuillez réessayer.",
+      "network": "Impossible de joindre le serveur. Veuillez vérifier votre connexion.",
+      "http": "La requête a échoué. Veuillez réessayer.",
+      "httpStatus": "La requête a échoué avec le statut {status}.",
+      "unexpected": "Une erreur inattendue s'est produite. Veuillez réessayer plus tard."
+    }
+  },
+  "ShiftManagement": {
+    "Common": {
+      "shiftType": "Type de quart",
+      "businessDate": "Date de travail",
+      "plannedStart": "Début prévu",
+      "plannedEnd": "Fin prévue",
+      "status": "Statut",
+      "notes": "Notes",
+      "assignedStaff": "Personnel assigné",
+      "role": "Rôle",
+      "checkIn": "Pointage entrée",
+      "checkOut": "Pointage sortie",
+      "late": "En retard",
+      "absent": "Absent",
+      "onDuty": "En service",
+      "completed": "Terminé",
+      "scheduled": "Planifié",
+      "workedHours": "Heures travaillées",
+      "lateMinutes": "Retard de {minutes} min",
+      "earlyLeaveMinutes": "Parti {minutes} min avant",
+      "reason": "Raison",
+      "adjustmentReason": "Motif d'ajustement"
+    },
+    "Schedule": {
+      "title": "Plannings de Quart",
+      "description": "Créez, publiez et gérez les plannings et affectations du personnel.",
+      "addNew": "Créer un quart",
+      "createTitle": "Créer un planning",
+      "editTitle": "Modifier le planning",
+      "publishConfirm": "Publier ce planning ? Le personnel pourra le consulter.",
+      "cancelConfirm": "Annuler ce planning ? Cette action est irréversible.",
+      "noSchedules": "Aucun planning trouvé.",
+      "assignStaff": "Affecter le personnel",
+      "cancelAssignment": "Annuler l'affectation",
+      "cancelAssignmentConfirm": "Annuler cette affectation ?",
+      "table": {
+        "date": "Date",
+        "shiftType": "Type de quart",
+        "timeRange": "Horaire",
+        "status": "Statut",
+        "assigned": "Affecté",
+        "actions": "Actions"
+      },
+      "actions": {
+        "publish": "Publier",
+        "close": "Fermer",
+        "cancel": "Annuler",
+        "edit": "Modifier",
+        "viewAssignments": "Voir les affectations"
+      }
+    },
+    "Live": {
+      "title": "Tableau de Présence en Direct",
+      "description": "Vue en temps réel de la présence du quart du jour.",
+      "summary": {
+        "scheduled": "Planifié",
+        "active": "En service",
+        "late": "En retard",
+        "absent": "Absent",
+        "completed": "Terminé"
+      },
+      "table": {
+        "staff": "Personnel",
+        "role": "Rôle",
+        "shiftType": "Type de quart",
+        "plannedTime": "Horaire prévu",
+        "checkIn": "Entrée",
+        "checkOut": "Sortie",
+        "status": "Statut",
+        "lateMinutes": "Retard (min)"
+      }
+    },
+    "MyShift": {
+      "title": "Mes Quarts",
+      "description": "Consultez vos quarts assignés et pointez votre entrée/sortie.",
+      "todayShift": "Quart du jour",
+      "upcomingShifts": "Prochains quarts",
+      "pastShifts": "Quarts passés",
+      "noShifts": "Aucun quart assigné.",
+      "checkInBtn": "Pointer Entrée",
+      "checkOutBtn": "Pointer Sortie",
+      "checkedInAt": "Entrée à {time}",
+      "checkedOutAt": "Sortie à {time}"
+    },
+    "Reports": {
+      "title": "Rapports de Quart",
+      "description": "Résumé des présences, heures travaillées et exceptions.",
+      "tabs": {
+        "attendance": "Présences",
+        "workedHours": "Heures travaillées",
+        "exceptions": "Exceptions"
+      },
+      "filters": {
+        "fromDate": "Date de début",
+        "toDate": "Date de fin",
+        "staff": "Membre du personnel",
+        "shiftType": "Type de quart",
+        "attendanceStatus": "Statut de présence",
+        "applyFilters": "Appliquer",
+        "clearFilters": "Effacer"
+      },
+      "attendance": {
+        "totalAssigned": "Total affecté",
+        "attendanceRate": "Taux de présence",
+        "lateCount": "Retards",
+        "absentCount": "Absences",
+        "table": {
+          "staff": "Personnel",
+          "role": "Rôle",
+          "assigned": "Affecté",
+          "present": "Présent",
+          "late": "En retard",
+          "absent": "Absent",
+          "rate": "Taux"
+        }
+      },
+      "workedHours": {
+        "totalScheduled": "Heures planifiées",
+        "totalWorked": "Heures travaillées",
+        "variance": "Écart",
+        "table": {
+          "staff": "Personnel",
+          "role": "Rôle",
+          "scheduledMin": "Planifié (min)",
+          "workedMin": "Travaillé (min)",
+          "varianceMin": "Écart (min)",
+          "incomplete": "Incomplet"
+        }
+      },
+      "exceptions": {
+        "lateCount": "Retards",
+        "absentCount": "Absences",
+        "earlyLeaveCount": "Départs anticipés",
+        "adjustmentCount": "Ajustements manuels",
+        "table": {
+          "date": "Date",
+          "staff": "Personnel",
+          "role": "Rôle",
+          "shiftType": "Type de quart",
+          "exceptionType": "Exception",
+          "minutesAffected": "Minutes",
+          "reviewer": "Révisé par"
+        }
+      },
+      "refresh": "Actualiser",
+      "exportCsv": "Exporter CSV",
+      "selectDateRange": "Sélectionnez une plage de dates pour charger les rapports",
+      "highAbsenceRate": "Taux d'absence élevé",
+      "presets": {
+        "today": "Aujourd'hui",
+        "thisWeek": "Cette semaine",
+        "last7Days": "7 derniers jours",
+        "thisMonth": "Ce mois",
+        "lastMonth": "Mois dernier"
+      },
+      "health": {
+        "attendanceRate": "Taux de présence",
+        "hoursCompliance": "Conformité des heures",
+        "exceptions": "Exceptions",
+        "shiftsPresent": "{present} sur {total} quarts",
+        "hoursWorked": "{worked}h travaillées sur {scheduled}h",
+        "noAttendanceData": "Aucune donnée de présence",
+        "noHoursData": "Aucune donnée d'heures",
+        "issuesFlagged": "{count, plural, =0 {Aucun problème} =1 {1 problème signalé} other {# problèmes signalés}}"
+      },
+      "attendanceTab": {
+        "inner": {
+          "overview": "Vue d'ensemble",
+          "staffSummary": "Par agent",
+          "details": "Détails"
+        },
+        "searchLabel": "Rechercher un agent",
+        "searchPlaceholder": "Nom de l'agent...",
+        "filterByStaff": "Filtrer par agent",
+        "allStaff": "Tous les agents",
+        "clearSearch": "Effacer",
+        "kpi": {
+          "totalAssignments": "Total affecté",
+          "checkInRate": "Taux de pointage",
+          "lateArrivals": "Retards",
+          "absences": "Absences"
+        },
+        "chart": {
+          "dailyBreakdown": "Présence quotidienne",
+          "onTime": "À l'heure",
+          "late": "En retard",
+          "absent": "Absent"
+        },
+        "topAbsences": "Plus d'absences",
+        "topLate": "Plus de retards",
+        "recordsOf": "des enregistrements",
+        "scorePrefix": "Score :",
+        "insightsLabel": "Aperçus",
+        "showInsights": "Afficher les aperçus",
+        "hideInsights": "Masquer les aperçus",
+        "insights": {
+          "highAbsence": "Taux d'absence élevé : {absentRate}% des quarts ({absent} absences). Vérifiez la couverture du personnel.",
+          "highLate": "Taux de retard élevé : {lateRate}%. Pensez à revoir les heures de début de quart.",
+          "frequentAbsence": "{count} agent(s) ont 3 absences ou plus sur cette période.",
+          "perfectAttendance": "Présence parfaite ! Tous les quarts ont un pointage d'entrée sur la période sélectionnée.",
+          "zeroLateAbsent": "Excellent ! 0 absence et 0 retard sur la période sélectionnée."
+        },
+        "statusCards": {
+          "onTime": "À l'heure",
+          "late": "En retard",
+          "absent": "Absent",
+          "present": "Présent"
+        },
+        "badges": {
+          "total": "Total : {value}",
+          "present": "Présent : {value}",
+          "onTime": "À l'heure : {value}",
+          "late": "Retard : {value}",
+          "absent": "Absent : {value}"
+        },
+        "manualAdjusted": "Ajusté manuellement",
+        "summaryTable": {
+          "staff": "Agent",
+          "total": "Total",
+          "present": "Présent",
+          "onTime": "À l'heure",
+          "late": "En retard",
+          "absent": "Absent",
+          "checkInRate": "Taux",
+          "reliability": "Fiabilité"
+        },
+        "detailTable": {
+          "date": "Date",
+          "staff": "Agent",
+          "shift": "Quart",
+          "planned": "Prévu",
+          "status": "Statut",
+          "checkIn": "Entrée",
+          "checkOut": "Sortie",
+          "late": "Retard",
+          "earlyLeave": "Départ anticipé"
+        }
+      },
+      "workedHoursTab": {
+        "inner": {
+          "summary": "Résumé",
+          "details": "Détails"
+        },
+        "searchLabel": "Rechercher un agent",
+        "searchPlaceholder": "Nom de l'agent...",
+        "clearSearch": "Effacer",
+        "kpi": {
+          "totalScheduled": "Total planifié",
+          "totalWorked": "Total travaillé",
+          "variance": "Écart",
+          "avgEfficiency": "Efficacité moy.",
+          "incomplete": "incomplet"
+        },
+        "overSchedule": "au-dessus du plan",
+        "underSchedule": "en dessous du plan",
+        "cards": {
+          "staffTracked": "Agents",
+          "totalWorked": "Total travaillé",
+          "scheduled": "Planifié",
+          "overtime": "Heures sup."
+        },
+        "chartTitle": "Heures travaillées vs planifiées — Top agents",
+        "chartScheduled": "Planifié",
+        "chartWorked": "Travaillé",
+        "overtimeAlert": "{count, plural, =1 {1 agent a travaillé 30+ minutes de plus que prévu.} other {# agents ont travaillé 30+ minutes de plus que prévu.}}",
+        "table": {
+          "staff": "Agent",
+          "scheduled": "Planifié",
+          "worked": "Travaillé",
+          "variance": "Écart",
+          "efficiency": "Efficacité",
+          "overtime": "Heures sup.",
+          "incomplete": "Incomplet"
+        }
+      },
+      "exceptionsTab": {
+        "inner": {
+          "summary": "Résumé",
+          "byStaff": "Par agent",
+          "allRecords": "Tous"
+        },
+        "searchLabel": "Rechercher un agent",
+        "searchPlaceholder": "Nom de l'agent...",
+        "clearSearch": "Effacer",
+        "kpi": {
+          "lateIncidents": "Retards",
+          "absences": "Absences",
+          "earlyDepartures": "Départs anticipés",
+          "manualAdjustments": "Ajustements manuels",
+          "totalMinutes": "Total minutes affectées"
+        },
+        "cards": {
+          "lateArrivals": "Retards",
+          "absences": "Absences",
+          "earlyLeave": "Départs anticipés",
+          "manual": "Manuel",
+          "adjusted": "Ajusté"
+        },
+        "adjustedLabel": "✦ Ajusté",
+        "noStaffFound": "Aucun agent avec des exceptions.",
+        "table": {
+          "date": "Date",
+          "staff": "Agent",
+          "shift": "Quart",
+          "exceptionType": "Type d'exception",
+          "minutes": "Minutes",
+          "reviewer": "Révisé par"
+        }
+      }
+    },
+    "ScheduleList": {
+      "title": "Affectations de Quart",
+      "description": "Affectez le personnel aux modèles de quart et suivez la présence.",
+      "searchPlaceholder": "Rechercher des affectations",
+      "newAssignment": "Nouvelle affectation",
+      "confirmCancel": "Annuler cette affectation ?",
+      "activeCount": "Actif : {count}",
+      "cancelledCount": "Annulé : {count}",
+      "filters": {
+        "fromDate": "Date de début",
+        "toDate": "Date de fin",
+        "fromDatePlaceholder": "Choisir la date de début",
+        "toDatePlaceholder": "Choisir la date de fin",
+        "refresh": "Actualiser"
+      },
+      "table": {
+        "no": "N°",
+        "date": "Date",
+        "template": "Modèle",
+        "staff": "Agent",
+        "plannedTime": "Horaire prévu",
+        "status": "Statut"
+      },
+      "noData": "Aucune affectation trouvée. Ajustez la période ou créez une nouvelle affectation."
+    },
+    "AssignmentForm": {
+      "createTitle": "Nouvelle Affectation",
+      "editTitle": "Modifier l'Affectation",
+      "cancel": "Annuler",
+      "saveChanges": "Enregistrer",
+      "assignStaff": "Affecter",
+      "plannedHint": "Laissez les horaires vides pour utiliser les horaires par défaut du modèle.",
+      "fields": {
+        "shiftTemplate": "Modèle de Quart",
+        "staffMember": "Agent",
+        "workDate": "Date de Travail",
+        "plannedStart": "Début Prévu",
+        "plannedEnd": "Fin Prévue",
+        "notes": "Notes"
+      },
+      "placeholders": {
+        "shiftTemplate": "Sélectionner un modèle de quart...",
+        "staffMember": "Sélectionner un agent...",
+        "loadingStaff": "Chargement des agents...",
+        "workDate": "Sélectionner une date",
+        "notes": "Notes facultatives..."
+      }
+    }
+  },
+  "InvoiceDetail": {
+    "title": "Détails de la facture",
+    "loading": "Chargement de la facture...",
+    "errorLoad": "Échec du chargement de la facture",
+    "notFound": "Facture introuvable.",
+    "exportPrint": "Exporter / Imprimer",
+    "back": "Retour",
+    "status": {
+      "paid": "Payée"
+    },
+    "from": "Facture de",
+    "phone": "Téléphone",
+    "to": "Facturé à",
+    "walkInCustomer": "Client de passage",
+    "date": "Date",
+    "type": "Type",
+    "table": "Table",
+    "items": "Détails des articles",
+    "no": "N°",
+    "itemDetails": "Détails de l'article",
+    "qty": "Qté",
+    "rate": "Prix",
+    "amount": "Montant",
+    "terms": "Termes et Conditions",
+    "term1": "1. Merci d'avoir dîné avec nous.",
+    "term2": "2. Veuillez conserver ce reçu pour vos dossiers.",
+    "paymentVerified": "Note : Le paiement a été vérifié par {staffName}.",
+    "paymentMethod": "Méthode de paiement",
+    "subtotal": "Sous-total",
+    "discount": "Remise",
+    "tip": "Pourboire",
+    "total": "Total",
+    "downloadPdf": "Télécharger en PDF",
+    "printInvoice": "Imprimer la facture",
+    "defaultStaff": "Personnel",
+    "thankYouBusiness": "Merci pour votre visite !",
+    "currency": "EUR"
+  },
+  "Customer": {
+    "close": "Fermer",
+    "edit": "Modifier",
+    "List": {
+      "title": "Gestion des clients",
+      "description": "Gérez et consultez les informations des clients, l'historique des commandes et les points de fidélité.",
+      "searchPlaceholder": "Rechercher par nom, téléphone ou email...",
+      "addNew": "Ajouter un client",
+      "table": {
+        "no": "N°",
+        "customerName": "Client",
+        "email": "Email",
+        "type": "Type",
+        "orders": "Commandes",
+        "points": "Points",
+        "lastOrder": "Dernière commande"
+      },
+      "filters": {
+        "member": "Membre",
+        "guest": "Invité"
+      },
+      "labels": {
+        "member": "Membre",
+        "guest": "Invité"
+      },
+      "actions": {
+        "view": "Voir les détails",
+        "edit": "Modifier le client",
+        "delete": "Supprimer le client"
+      },
+      "notifications": {
+        "loadError": "Échec du chargement des détails du client",
+        "deleteSuccess": "Client supprimé avec succès",
+        "deleteError": "Échec de la suppression du client"
+      },
+      "deleteModal": {
+        "title": "Supprimer le client",
+        "message": "Êtes-vous sûr de vouloir supprimer le client '{name}' ? Cette action est irréversible.",
+        "confirm": "Supprimer",
+        "cancel": "Annuler"
+      }
+    },
+    "Add": {
+      "title": "Ajouter un client",
+      "saveButton": "Enregistrer",
+      "cancel": "Annuler",
+      "fields": {
+        "phone": "Numéro de téléphone",
+        "fullName": "Nom complet",
+        "email": "Email",
+        "loyaltyPoints": "Points de fidélité",
+        "isMember": "Statut de membre",
+        "createdAt": "Créé le"
+      },
+      "placeholders": {
+        "phone": "Entrez le numéro de téléphone",
+        "fullName": "Entrez le nom complet",
+        "email": "Entrez l'adresse email",
+        "loyaltyPoints": "Entrez les points de fidélité"
+      },
+      "validation": {
+        "phoneRequired": "Le numéro de téléphone est requis",
+        "phoneMaxLength": "Le téléphone ne peut pas dépasser 20 caractères",
+        "phoneInvalid": "Le numéro de téléphone ne doit contenir que des chiffres",
+        "nameMaxLength": "Le nom complet ne peut pas dépasser 100 caractères",
+        "emailMaxLength": "L'email ne peut pas dépasser 150 caractères",
+        "emailInvalid": "Format d'email invalide",
+        "pointsNegative": "Les points de fidélité ne peuvent pas être négatifs"
+      },
+      "notifications": {
+        "createSuccess": "Client créé avec succès",
+        "createError": "Échec de la création du client"
+      }
+    },
+    "Edit": {
+      "title": "Modifier le client",
+      "saveButton": "Enregistrer les modifications",
+      "cancel": "Annuler",
+      "fields": {
+        "phone": "Numéro de téléphone",
+        "fullName": "Nom complet",
+        "email": "Email",
+        "loyaltyPoints": "Points de fidélité",
+        "isMember": "Statut de membre",
+        "createdAt": "Créé le"
+      },
+      "placeholders": {
+        "phone": "Entrez le numéro de téléphone",
+        "fullName": "Entrez le nom complet",
+        "email": "Entrez l'adresse email",
+        "loyaltyPoints": "Entrez les points de fidélité"
+      },
+      "validation": {
+        "phoneRequired": "Le numéro de téléphone est requis",
+        "phoneMaxLength": "Le téléphone ne peut pas dépasser 20 caractères",
+        "phoneInvalid": "Le numéro de téléphone ne doit contenir que des chiffres",
+        "nameMaxLength": "Le nom complet ne peut pas dépasser 100 caractères",
+        "emailMaxLength": "L'email ne peut pas dépasser 150 caractères",
+        "emailInvalid": "Format d'email invalide",
+        "pointsNegative": "Les points de fidélité ne peuvent pas être négatifs"
+      },
+      "notifications": {
+        "updateSuccess": "Client mis à jour avec succès",
+        "updateError": "Échec de la mise à jour du client"
+      }
+    },
+    "Detail": {
+      "title": "Détails du client",
+      "saveButton": "Fermer",
+      "cancel": "Fermer",
+      "fields": {
+        "phone": "Numéro de téléphone",
+        "fullName": "Nom complet",
+        "email": "Email",
+        "loyaltyPoints": "Points de fidélité",
+        "isMember": "Statut de membre",
+        "createdAt": "Créé le"
+      },
+      "placeholders": {
+        "phone": "",
+        "fullName": "",
+        "email": "",
+        "loyaltyPoints": ""
+      },
+      "validation": {
+        "phoneRequired": "",
+        "phoneMaxLength": "",
+        "phoneInvalid": "",
+        "nameMaxLength": "",
+        "emailMaxLength": "",
+        "emailInvalid": "",
+        "pointsNegative": ""
+      },
+      "backToCustomers": "Retour aux clients",
+      "customerNotFound": "Client introuvable.",
+      "guestCustomer": "Client invité",
+      "member": "Membre",
+      "guest": "Invité",
+      "noPhone": "Pas de téléphone",
+      "joined": "Inscrit",
+      "orders": "Commandes",
+      "totalSpent": "Total Dépensé",
+      "points": "Points",
+      "orderHistory": "Historique des commandes",
+      "from": "De",
+      "to": "À",
+      "allOrderTypes": "Tous les types",
+      "clear": "Effacer",
+      "noOrdersFound": "Aucune commande trouvée.",
+      "totalAmount": "Montant Total",
+      "tip": "Pourboire",
+      "fetchDetailError": "Impossible de charger les détails de la commande",
+      "orderTitle": "Commande",
+      "generalInfo": "Infos générales",
+      "table": "Table",
+      "staff": "Personnel",
+      "type": "Type",
+      "paymentDetails": "Détails de paiement",
+      "noPaymentRecorded": "Aucun paiement enregistré",
+      "received": "Reçu",
+      "change": "Monnaie",
+      "items": "Articles",
+      "promotions": "Promotions",
+      "coupons": "Coupons",
+      "note": "Note",
+      "noPromotionsApplied": "Aucune promotion appliquée",
+      "noCouponsApplied": "Aucun coupon appliqué",
+      "of": "sur",
+      "status": {
+        "PENDING": "En attente",
+        "IN_PROGRESS": "En cours",
+        "COMPLETED": "Terminée",
+        "CANCELLED": "Annulée",
+        "CREATED": "Créée",
+        "READY": "Prête",
+        "SERVED": "Servie",
+        "REJECTED": "Rejetée",
+        "DINE_IN": "Sur place",
+        "TAKEAWAY": "À emporter"
+      }
+    }
+  }
+}

@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import type { TableStatus } from "../types";
@@ -27,6 +28,7 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({
   showDot = true,
   className,
 }) => {
+  const t = useTranslations("tableManagement");
   const config = TABLE_STATUS_CONFIG[status];
   const variant = STATUS_VARIANT[status] ?? "secondary";
 
@@ -56,7 +58,7 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({
           )}
         />
       )}
-      {config.label}
+      {t(`status.${status.toLowerCase()}`)}
     </Badge>
   );
 };

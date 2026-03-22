@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { Copy } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ALDatePicker } from "@/components/ui/al-date-picker";
@@ -46,6 +47,7 @@ interface CopyWeekDialogProps {
 // ─── Component ──────────────────────────────────────────────────────────────
 
 export function CopyWeekDialog({ defaultSource }: CopyWeekDialogProps) {
+  const t = useTranslations("shift.schedule.copyWeekDialog");
   const [open, setOpen] = useState(false);
 
   const defaultMon = defaultSource ?? fmtDate(getMonday(new Date()));
@@ -71,39 +73,39 @@ export function CopyWeekDialog({ defaultSource }: CopyWeekDialogProps) {
     <>
       <Button variant="outline" size="sm" className="gap-1.5" onClick={() => setOpen(true)}>
         <Copy className="h-3.5 w-3.5" />
-        Copy Week
+        {t("open")}
       </Button>
 
       <Dialog
         open={open}
         onClose={() => setOpen(false)}
-        title="Copy Week Schedule"
+        title={t("title")}
         width="480px"
         footer={
           <div className="flex justify-end gap-2">
             <Button variant="outline" onClick={() => setOpen(false)}>
-              Cancel
+              {t("cancel")}
             </Button>
             <Button
               onClick={handleSubmit}
               disabled={!source || !target || copy.isPending}
               isLoading={copy.isPending}
             >
-              Copy Schedule
+              {t("submit")}
             </Button>
           </div>
         }
       >
-        <div className="space-y-4 py-2">
+        <div className="space-y-4 p-5">
           <p className="text-sm text-[#1A3A52]/60">
-            Duplicate all shift assignments from a source week to a target week.
+            {t("description")}
           </p>
 
           <ALDatePicker
-            title="Source Week (Monday)"
+            title={t("sourceTitle")}
             value={source}
             onChange={(v) => setSource(v)}
-            placeholder="Pick source Monday"
+            placeholder={t("sourcePlaceholder")}
             required
           />
           {source && (
@@ -113,10 +115,10 @@ export function CopyWeekDialog({ defaultSource }: CopyWeekDialogProps) {
           )}
 
           <ALDatePicker
-            title="Target Week (Monday)"
+            title={t("targetTitle")}
             value={target}
             onChange={(v) => setTarget(v)}
-            placeholder="Pick target Monday"
+            placeholder={t("targetPlaceholder")}
             required
           />
           {target && (
@@ -131,9 +133,9 @@ export function CopyWeekDialog({ defaultSource }: CopyWeekDialogProps) {
               onChange={setAsDraft}
             />
             <div className="text-sm cursor-pointer">
-              Create as drafts
+              {t("asDraft")}
               <span className="block text-xs text-[#1A3A52]/50 font-normal">
-                Copied shifts will need to be published before staff are notified
+                {t("asDraftHint")}
               </span>
             </div>
           </div>

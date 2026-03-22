@@ -911,6 +911,7 @@
       "loading": "Đang tải dữ liệu vai trò...",
       "loadError": "Không thể tải dữ liệu vai trò. Vui lòng thử lại.",
       "success": "Cập nhật vai trò thành công",
+      "successWithReloginNote": "Người dùng có vai trò này cần đăng nhập lại để áp dụng quyền mới.",
       "error": "Không thể cập nhật vai trò. Vui lòng thử lại.",
       "validation": {
         "roleCodeRequired": "Mã vai trò là bắt buộc",
@@ -1028,6 +1029,167 @@
       "loading": "Đang tải dữ liệu nhà cung cấp...",
       "errorTitle": "Không thể tải nhà cung cấp"
     }
+  },
+  "Coupon": {
+    "List": {
+      "title": "Quản lý Mã giảm giá",
+      "description": "Quản lý và tổ chức mã giảm giá hiệu quả.",
+      "searchPlaceholder": "Tìm kiếm theo mã hoặc tên...",
+      "addNew": "Thêm mã giảm giá mới",
+      "table": {
+        "no": "STT",
+        "code": "Mã giảm giá",
+        "name": "Tên mã",
+        "type": "Loại",
+        "discountValue": "Giá trị giảm",
+        "startTime": "Ngày bắt đầu",
+        "endTime": "Ngày kết thúc",
+        "usage": "Lượt sử dụng",
+        "status": "Trạng thái"
+      },
+      "status": {
+        "active": "Đang hoạt động",
+        "disabled": "Vô hiệu hóa",
+        "scheduled": "Đã lên lịch",
+        "expired": "Đã hết hạn"
+      },
+      "type": {
+        "fixedAmount": "Số tiền cố định",
+        "percent": "Phần trăm"
+      },
+      "deleteModal": {
+        "title": "Xóa mã giảm giá",
+        "message": "Bạn có chắc chắn muốn xóa mã giảm giá \"{name}\"? Hành động này không thể hoàn tác.",
+        "confirm": "Xóa",
+        "cancel": "Hủy"
+      },
+      "notifications": {
+        "deleteSuccess": "Xóa mã giảm giá thành công",
+        "deleteError": "Không thể xóa mã giảm giá"
+      }
+    },
+    "Add": {
+      "title": "Thêm mã giảm giá mới",
+      "couponCode": "Mã giảm giá",
+      "couponCodePlaceholder": "Nhập mã giảm giá",
+      "couponName": "Tên mã",
+      "couponNamePlaceholder": "Nhập tên mã",
+      "description": "Mô tả",
+      "descriptionPlaceholder": "Nhập mô tả mã giảm giá",
+      "discountValue": "Giá trị giảm",
+      "discountValuePlaceholder": "Nhập giá trị giảm",
+      "startTime": "Ngày & giờ bắt đầu",
+      "endTime": "Ngày & giờ kết thúc",
+      "maxUsage": "Số lượt sử dụng tối đa",
+      "maxUsagePlaceholder": "Để trống nếu không giới hạn",
+      "usedCount": "Số lượt đã sử dụng",
+      "createdAt": "Ngày tạo",
+      "type": {
+        "label": "Loại giảm giá",
+        "fixedAmount": "Số tiền cố định",
+        "percent": "Phần trăm"
+      },
+      "status": {
+        "label": "Trạng thái",
+        "active": "Đang hoạt động",
+        "disabled": "Vô hiệu hóa",
+        "scheduled": "Đã lên lịch",
+        "expired": "Đã hết hạn"
+      },
+      "validation": {
+        "codeRequired": "Mã giảm giá không được để trống",
+        "codeMaxLength": "Mã giảm giá không được vượt quá 50 ký tự",
+        "nameRequired": "Tên mã không được để trống",
+        "nameMaxLength": "Tên mã không được vượt quá 200 ký tự",
+        "descriptionMaxLength": "Mô tả không được vượt quá 500 ký tự",
+        "startTimeRequired": "Ngày & giờ bắt đầu không được để trống",
+        "endTimeRequired": "Ngày & giờ kết thúc không được để trống",
+        "endTimeAfterStart": "Ngày kết thúc phải sau ngày bắt đầu",
+        "discountValueRequired": "Giá trị giảm phải lớn hơn 0",
+        "percentMax": "Giảm giá theo phần trăm không được vượt quá 100",
+        "maxUsageMin": "Số lượt sử dụng tối đa phải lớn hơn 0"
+      },
+      "saveButton": "Tạo mã giảm giá",
+      "cancel": "Hủy",
+      "notifications": {
+        "createSuccess": "Tạo mã giảm giá thành công",
+        "createError": "Không thể tạo mã giảm giá"
+      }
+    },
+    "Edit": {
+      "title": "Chỉnh sửa mã giảm giá",
+      "couponCode": "Mã giảm giá",
+      "couponCodePlaceholder": "Nhập mã giảm giá",
+      "couponName": "Tên mã",
+      "couponNamePlaceholder": "Nhập tên mã",
+      "description": "Mô tả",
+      "descriptionPlaceholder": "Nhập mô tả mã giảm giá",
+      "discountValue": "Giá trị giảm",
+      "discountValuePlaceholder": "Nhập giá trị giảm",
+      "startTime": "Ngày & giờ bắt đầu",
+      "endTime": "Ngày & giờ kết thúc",
+      "maxUsage": "Số lượt sử dụng tối đa",
+      "maxUsagePlaceholder": "Để trống nếu không giới hạn",
+      "usedCount": "Số lượt đã sử dụng",
+      "createdAt": "Ngày tạo",
+      "type": {
+        "label": "Loại giảm giá",
+        "fixedAmount": "Số tiền cố định",
+        "percent": "Phần trăm"
+      },
+      "status": {
+        "label": "Trạng thái",
+        "active": "Đang hoạt động",
+        "disabled": "Vô hiệu hóa",
+        "scheduled": "Đã lên lịch",
+        "expired": "Đã hết hạn"
+      },
+      "validation": {
+        "codeRequired": "Mã giảm giá không được để trống",
+        "codeMaxLength": "Mã giảm giá không được vượt quá 50 ký tự",
+        "nameRequired": "Tên mã không được để trống",
+        "nameMaxLength": "Tên mã không được vượt quá 200 ký tự",
+        "descriptionMaxLength": "Mô tả không được vượt quá 500 ký tự",
+        "startTimeRequired": "Ngày & giờ bắt đầu không được để trống",
+        "endTimeRequired": "Ngày & giờ kết thúc không được để trống",
+        "endTimeAfterStart": "Ngày kết thúc phải sau ngày bắt đầu",
+        "discountValueRequired": "Giá trị giảm phải lớn hơn 0",
+        "percentMax": "Giảm giá theo phần trăm không được vượt quá 100",
+        "maxUsageMin": "Số lượt sử dụng tối đa phải lớn hơn 0"
+      },
+      "saveButton": "Cập nhật mã giảm giá",
+      "cancel": "Hủy",
+      "notifications": {
+        "updateSuccess": "Cập nhật mã giảm giá thành công",
+        "updateError": "Không thể cập nhật mã giảm giá"
+      }
+    },
+    "Detail": {
+      "title": "Chi tiết mã giảm giá",
+      "couponCode": "Mã giảm giá",
+      "couponName": "Tên mã",
+      "description": "Mô tả",
+      "discountValue": "Giá trị giảm",
+      "startTime": "Ngày & giờ bắt đầu",
+      "endTime": "Ngày & giờ kết thúc",
+      "maxUsage": "Số lượt sử dụng tối đa",
+      "usedCount": "Số lượt đã sử dụng",
+      "createdAt": "Ngày tạo",
+      "type": {
+        "label": "Loại giảm giá",
+        "fixedAmount": "Số tiền cố định",
+        "percent": "Phần trăm"
+      },
+      "status": {
+        "label": "Trạng thái",
+        "active": "Đang hoạt động",
+        "disabled": "Vô hiệu hóa",
+        "scheduled": "Đã lên lịch",
+        "expired": "Đã hết hạn"
+      }
+    },
+    "close": "Đóng",
+    "edit": "Chỉnh sửa"
   },
   "common": {
     "table": {

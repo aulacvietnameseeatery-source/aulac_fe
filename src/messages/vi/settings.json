@@ -1,0 +1,269 @@
+{
+  "SystemSettings": {
+    "title": "Cài đặt hệ thống",
+    "description": "Quản lý các tham số và cấu hình hệ thống.",
+    "refresh": "Làm mới",
+    "loading": "Đang tải cài đặt...",
+    "noSettings": "Không tìm thấy cài đặt.",
+    "settingCount": "{count} cài đặt",
+    "sensitiveHidden": "ẩn nhạy cảm",
+    "addSetting": "Thêm cài đặt mới",
+    "add": "Thêm cài đặt",
+    "cancel": "Hủy",
+    "save": "Lưu",
+    "saving": "Đang lưu...",
+    "notifications": {
+      "saveSuccess": "Đã lưu cài đặt nhóm '{group}' thành công.",
+      "createSuccess": "Tạo cài đặt mới thành công.",
+      "saveError": "Lưu cài đặt thất bại."
+    },
+    "Common": {
+      "saveChanges": "Lưu thay đổi",
+      "discardChanges": "Hủy thay đổi",
+      "upload": "Tải lên",
+      "change": "Thay đổi",
+      "removing": "Đang xóa...",
+      "uploading": "Đang tải...",
+      "maxSizeImage": "JPG/PNG tối đa 5MB",
+      "maxSizeVideo": "MP4/WEBM tối đa 100MB",
+      "selectFromMenu": "Chọn từ thực đơn",
+      "autoTranslate": "Tự động dịch",
+      "search": "Tìm kiếm",
+      "cancel": "Hủy",
+      "facebook": "Facebook",
+      "instagram": "Instagram",
+      "tiktok": "TikTok",
+      "website": "Trang web"
+    },
+    "Introduction": {
+      "title": "Trang Giới thiệu",
+      "description": "Quản lý nội dung và truyền thông cho trang chủ.",
+      "sections": {
+        "hero": {
+          "title": "Phần Hero",
+          "description": "Biểu ngữ chính ở đầu trang.",
+          "mainTitle": "Tiêu đề chính",
+          "brandQuote": "Câu trích dẫn",
+          "placeholders": {
+            "mainTitle": "vd: Ẩm thực Việt Nam thuần túy",
+            "brandQuote": "Nơi truyền thống gặp gỡ hương vị"
+          }
+        },
+        "chef": {
+          "title": "Khám phá Đầu bếp",
+          "description": "Làm nổi bật các đầu bếp của bạn.",
+          "sectionLabel": "Nhãn phần",
+          "ctaAction": "Hành động CTA",
+          "discoveryHeader": "Tiêu đề khám phá",
+          "leadChef": "Bếp trưởng",
+          "executiveChef": "Đầu bếp điều hành",
+          "name": "Tên",
+          "quote": "Trích dẫn"
+        },
+        "ambiance": {
+          "title": "Tham quan Không gian",
+          "description": "Văn bản và tiêu đề cho chuyến tham quan ảo.",
+          "navLabel": "Nhãn điều hướng",
+          "sectionTitle": "Tiêu đề phần",
+          "summary": "Tóm tắt không khí"
+        },
+        "collection": {
+          "title": "Bộ sưu tập Món ăn",
+          "description": "Cấu hình chi tiết cho các món ăn đặc trưng.",
+          "galleryLabel": "Nhãn bộ sưu tập",
+          "mainTitle": "Tiêu đề chính",
+          "dishTitle": "Món ăn đặc trưng {index}",
+          "dishMainTitle": "Tiêu đề chính",
+          "dishSubTitle": "Tiêu đề phụ",
+          "cardCategory": "Danh mục",
+          "cardTitle": "Tiêu đề",
+          "cardDescription": "Mô tả"
+        }
+      },
+      "sidebar": {
+        "mediaTitle": "Tài sản truyền thông",
+        "mediaDescription": "Nội dung hình ảnh dùng chung cho các ngôn ngữ.",
+        "heroBackground": "Ảnh nền Hero",
+        "chefVideo": "Video đầu bếp",
+        "ambianceVideo": "Video không gian",
+        "dishImage": "Ảnh món ăn {index}"
+      }
+    },
+    "DishModal": {
+      "noCategory": "Chưa có danh mục",
+      "dishLabel": "MÓN",
+      "dishPlaceholder": "Món #{id}",
+      "selectError": "Lỗi khi chọn món: {error}"
+    },
+    "StoreProfile": {
+      "title": "Hồ sơ Cửa hàng",
+      "description": "Quản lý danh tính và thông tin liên hệ.",
+      "upload": "Tải lên",
+      "sections": {
+        "identity": {
+          "title": "Danh tính",
+          "description": "Thông tin cơ bản về nhà hàng."
+        },
+        "contact": {
+          "title": "Liên hệ & Địa điểm",
+          "description": "Thông tin để khách hàng tìm thấy bạn."
+        },
+        "hours": {
+          "title": "Giờ hoạt động",
+          "description": "Thiết lập lịch trình bán hàng."
+        },
+        "social": {
+          "title": "Mạng xã hội",
+          "description": "Các liên kết mạng xã hội chính thức."
+        }
+      },
+      "storeName": "Tên cửa hàng",
+      "street": "Địa chỉ đường",
+      "postalCode": "Mã bưu chính",
+      "city": "Thành phố",
+      "country": "Quốc gia",
+      "email": "Địa chỉ Email",
+      "phone": "Số điện thoại",
+      "openingHours": "Giờ mở cửa",
+      "facebook": "Liên kết Facebook",
+      "instagram": "Liên kết Instagram",
+      "tiktok": "Liên kết TikTok",
+      "placeholders": {
+        "storeName": "Nhập tên nhà hàng/cửa hàng",
+        "street": "vd: Avenue Jacques Dalcroze 9",
+        "postalCode": "1000",
+        "city": "Tên thành phố",
+        "country": "Tên quốc gia",
+        "email": "contact@restaurant.com",
+        "phone": "+84 123 456 789",
+        "openingHours": "vd: Thứ 2 - Chủ nhật: 08:00 - 22:00",
+        "facebook": "https://facebook.com/trangcua-ban",
+        "instagram": "https://instagram.com/profilecua-ban",
+        "tiktok": "https://tiktok.com/@profilecua-ban"
+      },
+      "visualBranding": "Nhận diện hình ảnh",
+      "visualBrandingDesc": "Logo và phương tiện quảng bá",
+      "officialLogo": "Logo chính thức",
+      "storeVideo": "Video cửa hàng",
+      "syncNotice": "Thông báo đồng bộ",
+      "syncNoticeDesc": "Khi lưu sẽ cập nhật các trường chung trên tất cả các ngôn ngữ ngay lập tức.",
+      "translationFailed": "Dịch thất bại.",
+      "translatedSuccessfully": "Dịch thành công!",
+      "nothingToTranslate": "Không có gì để dịch.",
+      "updateSuccess": "Cập nhật hồ sơ cửa hàng thành công",
+      "updateError": "Lưu hồ sơ cửa hàng thất bại"
+    },
+    "AboutUs": {
+      "title": "Về Chúng tôi",
+      "description": "Quản lý câu chuyện thương hiệu và các giá trị cốt lõi.",
+      "sections": {
+        "founders": {
+          "title": "Tầm nhìn của Người sáng lập",
+          "description": "Câu chuyện nguồn gốc và cảm hứng cốt lõi.",
+          "label": "Nhãn phần",
+          "header": "Tiêu đề chính",
+          "paragraph1": "Đoạn văn tự sự 1",
+          "paragraph2": "Đoạn văn tự sự 2",
+          "quote": "Tuyên bố trích dẫn",
+          "quoteAuthor": "Tên tác giả",
+          "featuredQuote": "Trích dẫn tiêu biểu",
+          "image": "Ảnh người sáng lập",
+          "quoteHeader": "Câu trích dẫn đầy cảm hứng của người sáng lập",
+          "fields": {
+            "label": "Nhãn mục",
+            "header": "Tiêu đề chính",
+            "paragraph1": "Đoạn tiểu sử thứ nhất",
+            "paragraph2": "Đoạn tiểu sử thứ hai",
+            "quote": "Nội dung trích dẫn",
+            "author": "Ghi nhận tác giả"
+          }
+        },
+        "journey": {
+          "title": "Hành trình lịch sử",
+          "description": "Dòng thời gian và các mốc quan trọng.",
+          "header": "Tiêu đề hành trình",
+          "paragraph1": "Chương mở đầu",
+          "paragraph2": "Sự phát triển chiến lược",
+          "quote": "Điểm nhấn hành trình",
+          "paragraph3": "Thời kỳ hiện tại",
+          "fields": {
+            "title": "Tiêu đề phần",
+            "paragraph1": "Sự khởi đầu",
+            "paragraph2": "Tăng trưởng & Phát triển",
+            "paragraph3": "Ngày nay"
+          },
+          "quoteLabel": "Điểm nhấn giữa hành trình"
+        },
+        "philosophy": {
+          "title": "Triết lý & Giá trị",
+          "description": "Niềm tin cốt lõi và các nguyên tắc hướng dẫn.",
+          "label": "Nhãn triết lý",
+          "header": "Nhiệm vụ cốt lõi",
+          "principle": "Nguyên tắc {index}",
+          "principleTitle": "Tiêu đề",
+          "principleDesc": "Mô tả",
+          "fields": {
+            "label": "Nhãn mục",
+            "header": "Tiêu đề cốt lõi của triết lý",
+            "valueTitle": "Tiêu đề giá trị",
+            "valueDesc": "Mô tả giá trị"
+          },
+          "valueLabel": "Giá trị cốt lõi {index}"
+        },
+        "legacy": {
+          "title": "Di sản ẩm thực",
+          "description": "Tầm nhìn tương lai và sự xuất sắc bền vững.",
+          "header": "Tiêu đề di sản",
+          "subtitle": "Phụ đề chiến lược",
+          "paragraph": "Chương di sản {index}",
+          "image": "Ảnh di sản",
+          "fields": {
+            "header": "Tiêu đề di sản",
+            "subtitle": "Phụ đề phần"
+          },
+          "chapterLabel": "Chương {index}"
+        }
+      },
+      "actions": {
+        "sync": "Đồng bộ Câu chuyện",
+        "syncDesc": "Lưu dữ liệu câu chuyện của bạn",
+        "syncButton": "Đồng bộ Câu chuyện",
+        "discard": "Hủy thay đổi"
+      }
+    },
+    "General": {
+      "title": "Tham số hệ thống",
+      "addNew": "Thêm cài đặt mới",
+      "empty": "Không tìm thấy cài đặt chung",
+      "emptyDesc": "Sử dụng nút \"Thêm cài đặt mới\" ở trên để tạo một nhóm như \"reservation\"."
+    },
+    "AddModal": {
+      "key": "Khóa cài đặt",
+      "keyPlaceholder": "vd: default_password, password.min_length",
+      "name": "Tên cài đặt (Tùy chọn)",
+      "namePlaceholder": "Một tên dễ đọc cho cài đặt này",
+      "type": "Loại giá trị",
+      "value": "Giá trị",
+      "valuePlaceholder": "Giá trị cài đặt...",
+      "description": "Mô tả (Tùy chọn)",
+      "descriptionPlaceholder": "Cài đặt này dùng để làm gì?",
+      "sensitive": "Dữ liệu nhạy cảm",
+      "sensitiveDesc": "Ẩn giá trị theo mặc định (vd: mật khẩu, khóa API)",
+      "addTitle": "Thêm cài đặt mới",
+      "true": "Đúng",
+      "false": "Sai"
+    },
+    "Field": {
+      "sensitiveHidden": "Nhạy cảm – giá trị bị ẩn",
+      "jsonPlaceholder": "Giá trị JSON...",
+      "sensitive": "Nhạy cảm",
+      "types": {
+        "STRING": "Văn bản",
+        "INT": "Số nguyên",
+        "DECIMAL": "Số thập phân",
+        "BOOL": "Boolean",
+        "JSON": "JSON"
+      }
+    }
+  }
+}

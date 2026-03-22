@@ -1,15 +1,14 @@
 "use client";
 
 import React from "react";
-
 import { DishCategory } from "../types";
+import { TableActionColumn, TableAction } from "@/components/ui/table/table-action-column";
+import { Permissions } from "@/types/const";
 
 interface CategoryActionsProps {
   category: DishCategory;
   onEdit: (category: DishCategory) => void;
 }
-
-import { TableActionColumn, TableAction } from "@/components/ui/table/table-action-column";
 
 export const CategoryActions = ({ 
   category, 
@@ -19,6 +18,7 @@ export const CategoryActions = ({
     {
       action: "edit",
       onClick: onEdit,
+      permission: Permissions.EditDishCategory,
     }
   ];
 

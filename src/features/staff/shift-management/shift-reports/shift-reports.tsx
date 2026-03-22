@@ -18,7 +18,7 @@ import { WorkedHoursTab } from "./components/worked-hours-tab";
 import { ExceptionsTab } from "./components/exceptions-tab";
 
 export function ShiftReports() {
-  const t = useTranslations("ShiftManagement.Reports");
+  const t = useTranslations("shift.reports");
   const defaultRange = thisMonthRange();
   const [filters, setFilters] = useState<FiltersState>({
     fromDate: defaultRange.from,

@@ -49,6 +49,12 @@ export interface ALComboboxProps {
   searchable?: boolean;
   /** Show a clear button to reset selection. @default false */
   clearable?: boolean;
+  /** Show a select-all action row when `multiple` is true. @default false */
+  showSelectAll?: boolean;
+  /** Label for the select-all action. */
+  selectAllLabel?: string;
+  /** Label for the clear-all action. */
+  clearAllLabel?: string;
   /** Allow user to create a new option from typed text. @default false */
   allowCreate?: boolean;
   /** Callback when user creates a new option. */

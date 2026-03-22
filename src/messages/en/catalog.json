@@ -1,0 +1,528 @@
+{
+  "Dish": {
+    "List": {
+      "title": "Dish Management",
+      "description": "Manage your menu items, pricing, categories and availability status.",
+      "searchPlaceholder": "Search by dish name, category...",
+      "addNew": "Add New Dish",
+      "table": {
+        "no": "No.",
+        "dishName": "Dish Name",
+        "category": "Category",
+        "price": "Price",
+        "status": "Status",
+        "online": "Online",
+        "action": "Action",
+        "empty": "No dishes found."
+      },
+      "pagination": {
+        "pageSize": "Page size:",
+        "previous": "Previous",
+        "next": "Next"
+      },
+      "actions": {
+        "view": "View Details",
+        "edit": "Edit Dish",
+        "delete": "Delete Dish"
+      },
+      "status": {
+        "available": "Available",
+        "outOfStock": "Out of Stock",
+        "hidden": "Hidden"
+      },
+      "loading": "Loading dish data...",
+      "filters": {
+        "category": "Category",
+        "status": "Status",
+        "allCategories": "All Categories",
+        "allStatuses": "All Statuses"
+      },
+      "deleteModal": {
+        "title": "Delete Dish",
+        "message": "Are you sure you want to delete \"{name}\"? This action cannot be undone.",
+        "confirm": "Delete",
+        "cancel": "Cancel"
+      },
+      "notifications": {
+        "deleteSuccess": "Dish deleted successfully",
+        "deleteError": "An error occurred while deleting the dish",
+        "statusUpdated": "Dish status updated successfully",
+        "statusUpdateError": "Failed to update dish status",
+        "batchMakeAvailableSuccess": "Made {count} dish(es) available",
+        "batchMakeHiddenSuccess": "Hidden {count} dish(es)",
+        "batchUpdateError": "An error occurred during batch status update"
+      },
+      "batchActions": {
+        "makeAvailable": "Make Available",
+        "makeHidden": "Make Hidden"
+      }
+    },
+    "Validation": {
+      "dishName": {
+        "required": "Dish name is required",
+        "minLength": "Dish name must be at least 2 characters",
+        "maxLength": "Dish name cannot exceed 150 characters"
+      },
+      "price": {
+        "required": "Price is required",
+        "min": "Price must be greater than or equal to 0"
+      },
+      "category": {
+        "required": "Category is required"
+      }
+    },
+    "Form": {
+      "header": {
+        "createTitle": "Create New Dish",
+        "editTitle": "Edit Dish",
+        "createDescription": "Fill in the details below to add a new item to the menu.",
+        "editDescription": "Update the information of this dish."
+      },
+      "actions": {
+        "cancel": "Cancel",
+        "createDish": "Create Dish",
+        "createing": "Creating...",
+        "saveChanges": "Save Changes",
+        "saving": "Saving..."
+      },
+      "toast": {
+        "created": "Dish created successfully",
+        "updated": "Dish updated successfully",
+        "error": "Something went wrong"
+      },
+      "core": {
+        "title": "Core Information",
+        "subtitle": "Classification & Pricing",
+        "category": "Category",
+        "selectCategory": "Select Category...",
+        "tags": "Dish Tags",
+        "price": "Base Price (CHF)",
+        "status": "Status",
+        "availableOnline": "Available Online"
+      },
+      "multilingual": {
+        "title": "Multilingual Content",
+        "subtitle": "Manage names and descriptions for menu display."
+      },
+      "media": {
+        "media360": {
+          "title": "360° Interaction",
+          "subtitle": "Spinner sequence"
+        },
+        "gallery": {
+          "title": "Gallery Images",
+          "subtitle": "Standard photos"
+        },
+        "video": {
+          "title": "Dish Video",
+          "subtitle": "Upload a short introductory video (MP4, max 15s, 20MB)",
+          "uploadPrompt": "Click to upload video",
+          "uploadHint": "MP4 (Max 20MB, 15 seconds)",
+          "validation": {
+            "invalidFormat": "Only .mp4 video files are accepted",
+            "maxSize": "Video size cannot exceed 20MB",
+            "maxDuration": "Video duration cannot exceed 15 seconds"
+          }
+        },
+        "badge": "360° VIEW",
+        "drag": "Drag to rotate",
+        "uploadTitle": "Upload 360° Sequence",
+        "uploadDesc": "Select 24-36 images sorted by name for interactive rotation.",
+        "chooseFiles": "Choose Files",
+        "sequenceLoaded": "Sequence Loaded",
+        "frame": "Frame",
+        "delete": "Delete Sequence",
+        "changeFiles": "Change Files",
+        "existing": "Existing",
+        "addImage": "Add Image",
+        "recommended": "Recommended: 800x800px",
+        "recommended2": "Max 5 images, 5MB/image. Formats: JPG, PNG, GIF, WEBP",
+        "validation": {
+          "maxImages": "You can upload a maximum of 5 images.",
+          "invalidFormat": "Invalid image format",
+          "maxSize": "Image size exceeds 5MB"
+        }
+      },
+      "additional": {
+        "title": "Additional Info",
+        "subtitle": "Nutritional info & timing",
+        "displayOrder": "Display Order",
+        "calories": "Calories (kcal)",
+        "prep": "Prep (min)",
+        "cook": "Cook (min)",
+        "chefRecommended": "Chef's Recommended"
+      }
+    },
+    "Detail": {
+      "header": {
+        "titleFallback": "Dish Details",
+        "subtitle": "Viewing dish information in read-only mode",
+        "back": "Back",
+        "edit": "Edit Dish",
+        "loading": "Loading dish details..."
+      },
+      "core": {
+        "title": "Core Information",
+        "subtitle": "Basic dish settings and categorization",
+        "category": "Category",
+        "basePrice": "Base Price",
+        "status": "Status",
+        "visibility": "Visibility",
+        "online": "Available Online",
+        "offline": "Offline",
+        "tags": "Tags",
+        "noTags": "No tags selected"
+      },
+      "multilingual": {
+        "title": "Multilingual Content",
+        "subtitle": "Content translations for the dish",
+        "dishName": "Dish Name",
+        "description": "Description",
+        "noDescription": "No description...",
+        "shortDescription": "Short Description",
+        "slogan": "Slogan",
+        "internalNote": "Internal Note"
+      },
+      "media": {
+        "360Title": "360° Media",
+        "framesUploaded": "{count} frames uploaded",
+        "images360": "{count} Images (360° View)",
+        "no360": "No 360° media uploaded",
+        "galleryTitle": "Gallery",
+        "staticUploaded": "{count} static images uploaded",
+        "primary": "Primary",
+        "noGallery": "No gallery images",
+        "videoTitle": "Dish Video",
+        "videoSubtitle": "Introduction video",
+        "noVideo": "No video available"
+      },
+      "additional": {
+        "title": "Additional Information",
+        "subtitle": "Nutritional and operational details",
+        "displayOrder": "Display Order",
+        "calories": "Calories",
+        "prepTime": "Prep Time",
+        "cookTime": "Cook Time",
+        "chefRecommended": "Recommended by Chef",
+        "notChefRecommended": "Not marked as Chef Recommended"
+      }
+    }
+  },
+  "DishCategory": {
+    "List": {
+      "title": "Dish Category Management",
+      "description": "Manage and organize your restaurant menu categories efficiently.",
+      "searchPlaceholder": "Search by category name...",
+      "addNew": "Add New Category",
+      "cancel": "Cancel",
+      "table": {
+        "no": "No.",
+        "name": "Name",
+        "description": "Description",
+        "status": "Status"
+      },
+      "status": {
+        "active": "Active",
+        "inactive": "Inactive"
+      },
+      "notifications": {
+        "activated": "Category activated successfully",
+        "deactivated": "Category deactivated successfully",
+        "updateError": "Failed to update category status",
+        "createSuccess": "Category created successfully",
+        "updateSuccess": "Category updated successfully",
+        "actionError": "An error occurred while processing the request",
+        "batchActivateSuccess": "Successfully activated {count} categories",
+        "batchDeactivateSuccess": "Successfully deactivated {count} categories",
+        "batchUpdateError": "An error occurred while updating batch status"
+      },
+      "filters": {
+        "allStatuses": "All Statuses",
+        "active": "Active",
+        "inactive": "Inactive"
+      },
+      "batchActions": {
+        "activate": "Activate",
+        "deactivate": "Deactivate"
+      }
+    },
+    "Add": {
+      "title": "Add New Dish Category",
+      "subtitle": "Create a new category to organize your menu items",
+      "saveButton": "Create Category",
+      "cancel": "Cancel",
+      "categoryName": "Category Name",
+      "categoryNamePlaceholder": "e.g., Appetizers, Main Course, Desserts",
+      "description": "Description",
+      "descriptionPlaceholder": "Provide a brief description of this category and what types of dishes it includes...",
+      "validation": {
+        "nameRequired": "Category name is required",
+        "nameMaxLength": "Category name cannot exceed 100 characters",
+        "descriptionMaxLength": "Description cannot exceed 100 characters",
+        "fixErrors": "Please fix the validation errors"
+      }
+    },
+    "Edit": {
+      "title": "Edit Dish Category",
+      "subtitle": "Update category information and settings",
+      "saveButton": "Save Changes",
+      "cancel": "Cancel",
+      "categoryName": "Category Name",
+      "categoryNamePlaceholder": "e.g., Appetizers, Main Course, Desserts",
+      "description": "Description",
+      "descriptionPlaceholder": "Provide a brief description of this category and what types of dishes it includes...",
+      "status": "Category Status",
+      "statusDescription": "Toggle to activate or hide this category",
+      "statusActive": "This category is active and visible in the menu",
+      "statusInactive": "This category is inactive and hidden from customers",
+      "validation": {
+        "nameRequired": "Category name is required",
+        "nameMaxLength": "Category name cannot exceed 100 characters",
+        "descriptionMaxLength": "Description cannot exceed 100 characters",
+        "fixErrors": "Please fix the validation errors"
+      },
+      "loading": "Loading...",
+      "backToList": "Back to List"
+    }
+  },
+  "Ingredient": {
+    "List": {
+      "title": "Ingredients",
+      "description": "Manage inventory, recipe items, and stock levels.",
+      "searchPlaceholder": "Search ingredients...",
+      "addNew": "Add Ingredient",
+      "export": "Export",
+      "import": "Import",
+      "importing": "Importing...",
+      "table": {
+        "ingredientName": "Ingredient Name",
+        "unit": "Unit",
+        "category": "Category",
+        "uncategorized": "Uncategorized",
+        "suppliers": "Suppliers",
+        "inStock": "In Stock",
+        "lowStock": "Low Stock"
+      },
+      "notifications": {
+        "deleteConfirm": "Are you sure you want to delete {name}?",
+        "deleteSuccess": "Ingredient deleted successfully.",
+        "deleteError": "Failed to delete ingredient.",
+        "createSuccess": "Ingredient created successfully!",
+        "updateSuccess": "Ingredient updated successfully!",
+        "actionError": "Operation failed.",
+        "noDataExport": "No data to export.",
+        "exportSuccess": "Exported successfully!",
+        "invalidExcel": "No valid ingredients found in the Excel file.",
+        "importSuccess": "Successfully imported {success}/{total} ingredients.",
+        "readExcelError": "Failed to read Excel file. Please check the format."
+      }
+    }
+  },
+  "Supplier": {
+    "close": "Close",
+    "edit": "Edit",
+    "List": {
+      "title": "Supplier Management",
+      "description": "Manage and organize your suppliers efficiently.",
+      "searchPlaceholder": "Search by name, phone, or email...",
+      "addNew": "Add New Supplier",
+      "table": {
+        "no": "No.",
+        "name": "Supplier Name",
+        "phone": "Phone",
+        "email": "Email"
+      },
+      "deleteModal": {
+        "title": "Delete Supplier",
+        "message": "Are you sure you want to delete \"{name}\"? This action cannot be undone.",
+        "confirm": "Delete",
+        "cancel": "Cancel"
+      },
+      "notifications": {
+        "deleteSuccess": "Supplier deleted successfully",
+        "deleteError": "Failed to delete supplier"
+      }
+    },
+    "Add": {
+      "title": "Add New Supplier",
+      "subtitle": "Create a new supplier record with their contact information.",
+      "supplierName": "Supplier Name",
+      "supplierNamePlaceholder": "Enter supplier name",
+      "phone": "Phone Number",
+      "phonePlaceholder": "Enter phone number (optional)",
+      "email": "Email",
+      "emailPlaceholder": "Enter email address (optional)",
+      "ingredients": "Supplied Ingredients",
+      "ingredientsPlaceholder": "Select ingredients this supplier provides",
+      "cancel": "Cancel",
+      "saveButton": "Add Supplier",
+      "validation": {
+        "nameRequired": "Supplier name is required",
+        "nameMaxLength": "Supplier name cannot exceed 200 characters",
+        "phoneInvalid": "Phone number must contain only digits",
+        "phoneMaxLength": "Phone number cannot exceed 50 characters",
+        "emailInvalid": "Please enter a valid email address",
+        "emailMaxLength": "Email cannot exceed 150 characters",
+        "fixErrors": "Please fix the errors before submitting"
+      },
+      "notifications": {
+        "createSuccess": "Supplier added successfully",
+        "createError": "Failed to add supplier"
+      }
+    },
+    "Edit": {
+      "title": "Edit Supplier",
+      "subtitle": "Update supplier information and contact details.",
+      "supplierName": "Supplier Name",
+      "supplierNamePlaceholder": "Enter supplier name",
+      "phone": "Phone Number",
+      "phonePlaceholder": "Enter phone number (optional)",
+      "email": "Email",
+      "emailPlaceholder": "Enter email address (optional)",
+      "ingredients": "Supplied Ingredients",
+      "ingredientsPlaceholder": "Select ingredients this supplier provides",
+      "cancel": "Cancel",
+      "saveButton": "Save Changes",
+      "loading": "Loading supplier data...",
+      "errorTitle": "Unable to load supplier",
+      "backToList": "Back to List",
+      "validation": {
+        "nameRequired": "Supplier name is required",
+        "nameMaxLength": "Supplier name cannot exceed 200 characters",
+        "phoneInvalid": "Phone number must contain only digits",
+        "phoneMaxLength": "Phone number cannot exceed 50 characters",
+        "emailInvalid": "Please enter a valid email address",
+        "emailMaxLength": "Email cannot exceed 150 characters",
+        "fixErrors": "Please fix the errors before submitting"
+      },
+      "notifications": {
+        "updateSuccess": "Supplier updated successfully",
+        "updateError": "Failed to update supplier",
+        "loadError": "Failed to load supplier data"
+      }
+    },
+    "Detail": {
+      "title": "Supplier Details",
+      "subtitle": "View supplier information and contact details.",
+      "back": "Back",
+      "edit": "Edit",
+      "information": "Supplier Information",
+      "supplierName": "Supplier Name",
+      "name": "Name",
+      "phone": "Phone",
+      "email": "Email",
+      "ingredients": "Supplied Ingredients",
+      "ingredientName": "Ingredient Name",
+      "unit": "Unit",
+      "noIngredients": "This supplier does not supply any ingredients yet.",
+      "notFound": "Supplier not found",
+      "backToList": "Back to List",
+      "loading": "Loading supplier data...",
+      "errorTitle": "Unable to load supplier"
+    }
+  },
+  "Promotion": {
+    "List": {
+      "title": "Promotion List",
+      "description": "Manage restaurant promotions and discount campaigns.",
+      "addNew": "Add New",
+      "searchPlaceholder": "Search by promo code or name...",
+      "table": {
+        "no": "No.",
+        "promoCode": "Promo Code",
+        "discount": "Discount",
+        "startTime": "Start Time",
+        "endTime": "End Time",
+        "usage": "Usage",
+        "status": "Status"
+      },
+      "filters": {
+        "allStatuses": "All Statuses",
+        "allTypes": "All Types"
+      },
+      "actions": {
+        "view": "View Details",
+        "edit": "Edit"
+      },
+      "notifications": {
+        "statusUpdated": "Status updated successfully",
+        "statusUpdateError": "An error occurred while updating the status"
+      }
+    },
+    "createTitle": "Create New Promotion",
+    "createSubTitle": "The system will automatically change its state according to the applied time.",
+    "editTitle": "Promotion Details #{id}",
+    "noData": "No data found",
+    "Form": {
+      "basicInfo": "1. Basic Information",
+      "promoCode": "Promo Code",
+      "promoCodePlaceholder": "e.g., SUMMER24",
+      "promoName": "Promotion Name",
+      "promoNamePlaceholder": "Enter promotion name...",
+      "desc": "Description",
+      "descPlaceholder": "Enter detailed description...",
+      "start": "Start Time",
+      "end": "End Time",
+      "discountConfig": "2. Discount Configuration",
+      "discountType": "Discount Type",
+      "typePercent": "Percentage (%)",
+      "typeFixed": "Fixed Amount",
+      "discountValue": "Discount Value",
+      "discountValuePlaceholder": "Enter value...",
+      "maxUsage": "Max Usage (Optional)",
+      "unlimited": "Unlimited",
+      "rules": "3. Conditions (Rules)",
+      "ruleDesc": "Order must reach a minimum of ${minOrder} and {minQty} items. Must also contain required dish/category (if selected).",
+      "minOrder": "Min Order Value",
+      "minOrderPlaceholder": "0",
+      "minQty": "Min Quantity",
+      "minQtyPlaceholder": "0",
+      "reqDish": "Required Dish (Optional)",
+      "reqDishPlaceholder": "Select required dishes...",
+      "reqCate": "Required Category (Optional)",
+      "reqCatePlaceholder": "Select required categories...",
+      "targets": "4. Targets",
+      "targetDescAll": "Promotion applies to: Entire order",
+      "targetDescFiltered": "Promotion applies to: Only selected dishes/categories below",
+      "targetDish": "Apply to specific Dish",
+      "targetDishPlaceholder": "Leave blank to skip...",
+      "targetCate": "Apply to specific Category",
+      "targetCatePlaceholder": "Leave blank to skip...",
+      "btnDisable": "Disable",
+      "btnCancel": "Cancel",
+      "btnSave": "Save Promotion",
+      "btnSaving": "Saving...",
+      "statusLockWarning": "Current status is {status}. Configuration conditions are locked.",
+      "confirmDisable": "Disable this promotion? This action cannot be undone.",
+      "successCreate": "Created successfully",
+      "successUpdate": "Updated successfully",
+      "successDisable": "Disabled successfully",
+      "errorSave": "An error occurred while saving"
+    },
+    "Detail": {
+      "title": "Promotion Details #{id}",
+      "status": "Status",
+      "usedCount": "Used: {count} times",
+      "rulesInfo": "Applied Rules",
+      "noRule": "No conditions",
+      "hasTarget": "Applies to specified products/categories.",
+      "targetsInfo": "Applied Targets",
+      "back": "Back"
+    },
+    "Status": {
+      "SCHEDULED": "Scheduled",
+      "ACTIVE": "Active",
+      "EXPIRED": "Expired",
+      "DISABLED": "Disabled"
+    },
+    "Validation": {
+      "promoCodeMin": "Promo code must be at least 3 characters",
+      "startTimeRequired": "Please select a start time",
+      "endTimeRequired": "Please select an end time",
+      "discountMinPercent": "Minimum 1%",
+      "discountMaxPercent": "Maximum 100%",
+      "discountPositive": "Must be greater than 0",
+      "endTimeAfterStartTime": "End time must be after start time"
+    }
+  }
+}

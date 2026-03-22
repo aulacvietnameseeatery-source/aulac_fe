@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useMemo } from "react";
+import { useTranslations } from "next-intl";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ALCombobox } from "@/components/ui/al-combobox";
 import { KeywordSearch } from "@/components/ui/keyword-search/keyword-search";
@@ -22,27 +23,44 @@ const ALL_STATUSES = Object.keys(TABLE_STATUS_CONFIG) as Array<
   keyof typeof TABLE_STATUS_CONFIG
 >;
 
-const STATIC_STATUS_OPTIONS = [
-  { label: "All Statuses", value: "ALL" },
-  ...ALL_STATUSES.map((s) => ({
-    label: TABLE_STATUS_CONFIG[s].label,
-    value: s as string,
-  })),
-];
-
-const ONLINE_OPTIONS = [
-  { label: "All", value: "ALL" },
-  { label: "Online", value: "ONLINE" },
-  { label: "Offline", value: "OFFLINE" },
-];
-
 export const FilterBar: React.FC<FilterBarProps> = ({
   filters,
   onFiltersChange,
 }) => {
+  const t = useTranslations("tableManagement");
   // ── Fetch lookup data ──
   const { data: zones = [] } = useZonesQuery();
   const { data: tableTypes = [] } = useTableTypesQuery();
+
+  const statusLabelMap = useMemo(
+    () => ({
+      AVAILABLE: t("status.available"),
+      OCCUPIED: t("status.occupied"),
+      RESERVED: t("status.reserved"),
+      LOCKED: t("status.locked"),
+    }),
+    [t]
+  );
+
+  const statusOptions = useMemo(
+    () => [
+      { label: t("filters.allStatuses"), value: "ALL" },
+      ...ALL_STATUSES.map((s) => ({
+        label: statusLabelMap[s],
+        value: s as string,
+      })),
+    ],
+    [statusLabelMap, t]
+  );
+
+  const onlineOptions = useMemo(
+    () => [
+      { label: t("filters.all"), value: "ALL" },
+      { label: t("filters.online"), value: "ONLINE" },
+      { label: t("filters.offline"), value: "OFFLINE" },
+    ],
+    [t]
+  );
 
   // ── Zone tabs (dynamic from API) ──
   const zoneTabs = useMemo(() => {
@@ -52,8 +70,8 @@ export const FilterBar: React.FC<FilterBarProps> = ({
       label: z.valueName,
       zoneId: z.valueId,
     }));
-    return [{ key: "all", value: "ALL", label: "All Zones", zoneId: null as number | null }, ...dynamic];
-  }, [zones]);
+    return [{ key: "all", value: "ALL", label: t("filters.allZones"), zoneId: null as number | null }, ...dynamic];
+  }, [zones, t]);
 
   // ── Type options (dynamic from API) ──
   const typeOptions = useMemo(() => {
@@ -62,11 +80,8 @@ export const FilterBar: React.FC<FilterBarProps> = ({
       value: t.valueName,
       typeId: t.valueId,
     }));
-    return [{ label: "All Types", value: "ALL", typeId: null as number | null }, ...dynamic];
-  }, [tableTypes]);
-
-  // ── Status options (dynamic from API, fallback to static config) ──
-  const statusOptions = STATIC_STATUS_OPTIONS;
+    return [{ label: t("filters.allTypes"), value: "ALL", typeId: null as number | null }, ...dynamic];
+  }, [tableTypes, t]);
 
   const handleZoneChange = (val: string) => {
     const tab = zoneTabs.find((t) => t.value === val);
@@ -116,7 +131,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
         <div className="flex flex-wrap items-center gap-3">
           <KeywordSearch
             value={filters.search}
-            placeholder="Search table code ..."
+            placeholder={t("filters.searchPlaceholder")}
             onChange={(val) =>
               onFiltersChange({ ...filters, search: val })
             }
@@ -127,7 +142,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
             options={typeOptions}
             value={filters.type}
             onChange={(val) => handleTypeChange(String(val))}
-            placeholder="Type"
+            placeholder={t("filters.type")}
             searchable={false}
             clearable
             inputSize="sm"
@@ -138,7 +153,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
             options={statusOptions}
             value={filters.status}
             onChange={(val) => handleStatusChange(String(val))}
-            placeholder="Status"
+            placeholder={t("filters.status")}
             searchable={false}
             clearable
             inputSize="sm"
@@ -146,7 +161,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
           />
 
           <ALCombobox
-            options={ONLINE_OPTIONS}
+            options={onlineOptions}
             value={filters.isOnline}
             onChange={(val) =>
               onFiltersChange({
@@ -154,7 +169,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
                 isOnline: val as TableFilters["isOnline"],
               })
             }
-            placeholder="Connection"
+            placeholder={t("filters.connection")}
             searchable={false}
             clearable
             inputSize="sm"

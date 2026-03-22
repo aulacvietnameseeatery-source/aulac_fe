@@ -19,7 +19,7 @@ import { AttendanceAdjustmentDialog } from "./attendance-adjustment-dialog";
 import type { ShiftAssignmentListDto, AttendanceRecordDto } from "../types/shift-management.types";
 
 export function ShiftScheduleList() {
-  const t = useTranslations("ShiftManagement.ScheduleList");
+  const t = useTranslations("shift.scheduleList");
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
   const [tableParams, setTableParams] = useState<TableDataChangeParams>({ page: 1, pageSize: 10 });

@@ -1,6 +1,7 @@
 "use client";
 
 import { AlertTriangle, CheckCircle2, Clock, TrendingDown, TrendingUp } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ALCard } from "@/components/ui/al-card";
@@ -198,17 +199,18 @@ export function Kpi({ label, value, sub, icon, trend }: KpiProps) {
 }
 
 export function TableState({ loading }: { loading: boolean }) {
+    const t = useTranslations("shift.reports.shared");
     return (
         <div className="flex flex-col items-center justify-center py-16 gap-3 text-sm text-[#1A3A52]/70">
             {loading ? (
                 <>
                     <div className="w-6 h-6 border-2 border-[#1A3A52]/30 border-t-[#1A3A52] rounded-full animate-spin" />
-                    <span>Loading data…</span>
+                    <span>{t("loading")}</span>
                 </>
             ) : (
                 <>
                     <AlertTriangle className="w-8 h-8 text-[#1A3A52]/25" />
-                    <span>No data for the selected range.</span>
+                    <span>{t("empty")}</span>
                 </>
             )}
         </div>
@@ -255,12 +257,13 @@ export function PaginationControls({
     setPage: (p: number) => void;
     setPageSize: (s: number) => void;
 }) {
+    const t = useTranslations("shift.reports.shared");
     const totalPages = Math.ceil(total / pageSize);
     if (total === 0) return null;
     return (
         <div className="flex items-center justify-between px-4 py-3 border-t border-slate-100 bg-slate-50/50">
             <div className="flex items-center gap-2 text-xs text-[#1A3A52]/60">
-                <span>Show</span>
+                <span>{t("show")}</span>
                 <select
                     value={pageSize}
                     onChange={(e) => {
@@ -273,7 +276,7 @@ export function PaginationControls({
                     <option value={50}>50</option>
                     <option value={100}>100</option>
                 </select>
-                <span>records</span>
+                <span>{t("records")}</span>
             </div>
             <div className="flex items-center gap-4 text-xs">
                 <span className="text-[#1A3A52]/60">
@@ -287,7 +290,7 @@ export function PaginationControls({
                         disabled={page === 1}
                         onClick={() => setPage(page - 1)}
                     >
-                        Prev
+                        {t("prev")}
                     </Button>
                     <span className="mx-2 font-medium text-[#1A3A52]">
                         {page} / {totalPages}
@@ -299,7 +302,7 @@ export function PaginationControls({
                         disabled={page >= totalPages}
                         onClick={() => setPage(page + 1)}
                     >
-                        Next
+                        {t("next")}
                     </Button>
                 </div>
             </div>

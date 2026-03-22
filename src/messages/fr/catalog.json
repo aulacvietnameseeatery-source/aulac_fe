@@ -1,0 +1,528 @@
+{
+  "Dish": {
+    "List": {
+      "title": "Gestion des plats",
+      "description": "Gérez vos éléments de menu, les prix, các danh mục và trạng thái có sẵn.",
+      "searchPlaceholder": "Rechercher par nom de plat, catégorie...",
+      "addNew": "Ajouter un plat",
+      "table": {
+        "no": "N°",
+        "dishName": "Nom du plat",
+        "category": "Catégorie",
+        "price": "Prix",
+        "status": "Statut",
+        "online": "En ligne",
+        "action": "Action",
+        "empty": "Aucun plat trouvé."
+      },
+      "pagination": {
+        "pageSize": "Taille de page :",
+        "previous": "Précédent",
+        "next": "Suivant"
+      },
+      "actions": {
+        "view": "Voir les détails",
+        "edit": "Modifier le plat",
+        "delete": "Supprimer le plat"
+      },
+      "status": {
+        "available": "Disponible",
+        "outOfStock": "Rupture de stock",
+        "hidden": "Masqué"
+      },
+      "loading": "Chargement des plats...",
+      "filters": {
+        "category": "Catégorie",
+        "status": "Statut",
+        "allCategories": "Toutes les catégories",
+        "allStatuses": "Tous các statuts"
+      },
+      "deleteModal": {
+        "title": "Supprimer le plat",
+        "message": "Êtes-vous sûr de vouloir supprimer \"{name}\" ? Cette action est irréversible.",
+        "confirm": "Supprimer",
+        "cancel": "Annuler"
+      },
+      "notifications": {
+        "deleteSuccess": "Plat supprimé avec succès",
+        "deleteError": "Une erreur est survenue lors de la suppression du plat",
+        "statusUpdated": "Statut du plat mis à jour",
+        "statusUpdateError": "Impossible de mettre à jour le statut du plat",
+        "batchMakeAvailableSuccess": "{count} plat(s) rendu(s) disponible(s)",
+        "batchMakeHiddenSuccess": "{count} plat(s) masqué(s)",
+        "batchUpdateError": "Une erreur s'est produite lors de la mise à jour par lot"
+      },
+      "batchActions": {
+        "makeAvailable": "Rendre disponible",
+        "makeHidden": "Masquer"
+      }
+    },
+    "Validation": {
+      "dishName": {
+        "required": "Le nom du plat est requis",
+        "minLength": "Le nom doit contenir ít nhất 2 caractères",
+        "maxLength": "Le nom ne peut pas dépasser 150 caractères"
+      },
+      "price": {
+        "required": "Le prix est requis",
+        "min": "Le prix doit être supérieur hoặc égal à 0"
+      },
+      "category": {
+        "required": "La catégorie est requise"
+      }
+    },
+    "Form": {
+      "header": {
+        "createTitle": "Créer un nouveau plat",
+        "editTitle": "Modifier le plat",
+        "createDescription": "Remplissez les informations pour ajouter un plat au menu.",
+        "editDescription": "Mettre à jour les informations du plat."
+      },
+      "actions": {
+        "cancel": "Cancelar",
+        "createDish": "Créer le plat",
+        "creating": "Création...",
+        "saveChanges": "Enregistrer",
+        "saving": "Enregistrement..."
+      },
+      "toast": {
+        "created": "Plat créé avec succès",
+        "updated": "Plat mis à jour",
+        "error": "Une erreur est survenue"
+      },
+      "core": {
+        "title": "Informations Principales",
+        "subtitle": "Classification & Tarification",
+        "category": "Catégorie",
+        "selectCategory": "Sélectionner une catégorie...",
+        "tags": "Tags du plat",
+        "price": "Prix de base (CHF)",
+        "status": "Statut",
+        "availableOnline": "Disponible en ligne"
+      },
+      "multilingual": {
+        "title": "Contenu Multilingue",
+        "subtitle": "Gérer les noms et descriptions pour l'affichage du menu."
+      },
+      "media": {
+        "media360": {
+          "title": "Interaction 360°",
+          "subtitle": "Séquence d'images rotatives"
+        },
+        "gallery": {
+          "title": "Galerie d'Images",
+          "subtitle": "Photos standards"
+        },
+        "video": {
+          "title": "Vidéo du plat",
+          "subtitle": "Téléchargez une courte vidéo de présentation (MP4, max 15s, 20 Mo)",
+          "uploadPrompt": "Cliquez pour télécharger une vidéo",
+          "uploadHint": "MP4 (Max 20 Mo, 15 secondes)",
+          "validation": {
+            "invalidFormat": "Seuls les fichiers vidéo .mp4 sont acceptés",
+            "maxSize": "La taille de la vidéo ne peut pas dépasser 20 Mo",
+            "maxDuration": "La durée de la vidéo ne peut pas dépasser 15 secondes"
+          }
+        },
+        "badge": "VUE 360°",
+        "drag": "Glisser pour faire pivoter",
+        "uploadTitle": "Télécharger séquence 360°",
+        "uploadDesc": "Sélectionnez 24-36 images triées par nom.",
+        "chooseFiles": "Choisir des fichiers",
+        "sequenceLoaded": "Séquence chargée",
+        "frame": "Image",
+        "delete": "Supprimer séquence",
+        "changeFiles": "Changer fichiers",
+        "existing": "Existant",
+        "addImage": "Ajouter image",
+        "recommended": "Recommandé : 800x800px",
+        "recommended2": "Max 5 images, 5 Mo/image. Formats : JPG, PNG, GIF, WEBP",
+        "validation": {
+          "maxImages": "Vous pouvez télécharger un maximum de 5 images.",
+          "invalidFormat": "Format d'image invalide",
+          "maxSize": "La taille de l'image dépasse 5 Mo"
+        }
+      },
+      "additional": {
+        "title": "Informations supplémentaires",
+        "subtitle": "Nutrition & temps",
+        "displayOrder": "Ordre d'affichage",
+        "calories": "Calories (kcal)",
+        "prep": "Préparation (min)",
+        "cook": "Cuisson (min)",
+        "chefRecommended": "Recommandé par le chef"
+      }
+    },
+    "Detail": {
+      "header": {
+        "titleFallback": "Détails du plat",
+        "subtitle": "Consultation des informations du plat en mode lecture seule",
+        "back": "Retour",
+        "edit": "Modifier",
+        "loading": "Chargement des détails..."
+      },
+      "core": {
+        "title": "Informations de base",
+        "subtitle": "Paramètres de base et catégorisation",
+        "category": "Catégorie",
+        "basePrice": "Prix de base",
+        "status": "Statut",
+        "visibility": "Visibilité",
+        "online": "Disponible en ligne",
+        "offline": "Hors ligne",
+        "tags": "Étiquettes",
+        "noTags": "Aucune étiquette"
+      },
+      "multilingual": {
+        "title": "Contenu multilingue",
+        "subtitle": "Traductions du contenu du plat",
+        "dishName": "Nom du plat",
+        "description": "Description",
+        "noDescription": "Aucune description...",
+        "shortDescription": "Description courte",
+        "slogan": "Slogan",
+        "internalNote": "Note interne"
+      },
+      "media": {
+        "360Title": "Médias 360°",
+        "framesUploaded": "{count} images téléchargées",
+        "images360": "{count} Images (Vue 360°)",
+        "no360": "Aucun média 360°",
+        "galleryTitle": "Galerie",
+        "staticUploaded": "{count} images statiques téléchargées",
+        "primary": "Principal",
+        "noGallery": "Aucune image dans la galerie",
+        "videoTitle": "Vidéo du plat",
+        "videoSubtitle": "Vidéo de présentation",
+        "noVideo": "Aucune vidéo disponible"
+      },
+      "additional": {
+        "title": "Informations supplémentaires",
+        "subtitle": "Détails nutritionnels et opérationnels",
+        "displayOrder": "Ordre d'affichage",
+        "calories": "Calories",
+        "prepTime": "Temps de prép.",
+        "cookTime": "Temps de cuisson",
+        "chefRecommended": "Recommandé par le chef",
+        "notChefRecommended": "Non recommandé par le chef"
+      }
+    }
+  },
+  "DishCategory": {
+    "List": {
+      "title": "Gestion des catégories de plats",
+      "description": "Gérez et organisez vos catégories de menu de restaurant de manière efficace.",
+      "searchPlaceholder": "Rechercher par nom de catégorie...",
+      "addNew": "Ajouter une nouvelle catégorie",
+      "cancel": "Annuler",
+      "table": {
+        "no": "N°",
+        "name": "Nom",
+        "description": "Description",
+        "status": "Statut"
+      },
+      "status": {
+        "active": "Actif",
+        "inactive": "Inactif"
+      },
+      "notifications": {
+        "activated": "Catégorie activée avec succès",
+        "deactivated": "Catégorie désactivée avec succès",
+        "updateError": "Échec de la mise à jour du statut de la catégorie",
+        "createSuccess": "Catégorie créée avec succès",
+        "updateSuccess": "Catégorie mise à jour avec succès",
+        "actionError": "Une erreur s'est produite lors du traitement de la demande",
+        "batchActivateSuccess": "{count} catégorie(s) activée(s) avec succès",
+        "batchDeactivateSuccess": "{count} catégorie(s) désactivée(s) avec succès",
+        "batchUpdateError": "Une erreur s'est produite lors de la mise à jour par lot"
+      },
+      "filters": {
+        "allStatuses": "Tous les statuts",
+        "active": "Actif",
+        "inactive": "Inactif"
+      },
+      "batchActions": {
+        "activate": "Activer",
+        "deactivate": "Désactiver"
+      }
+    },
+    "Add": {
+      "title": "Ajouter une nouvelle catégorie de plats",
+      "subtitle": "Créez une nouvelle catégorie pour organiser vos éléments de menu",
+      "saveButton": "Créer une catégorie",
+      "cancel": "Annuler",
+      "categoryName": "Nom de la catégorie",
+      "categoryNamePlaceholder": "ex : Entrées, Plat principal, Desserts",
+      "description": "Description",
+      "descriptionPlaceholder": "Fournissez une brève description de cette catégorie et des types de plats qu'elle comprend...",
+      "validation": {
+        "nameRequired": "Le nom de la catégorie est requis",
+        "nameMaxLength": "Le nom de la catégorie ne peut pas dépasser 100 caractères",
+        "descriptionMaxLength": "La description ne peut pas dépasser 100 caractères",
+        "fixErrors": "Veuillez corriger les erreurs de validation"
+      }
+    },
+    "Edit": {
+      "title": "Modifier la catégorie de plats",
+      "subtitle": "Mettre à jour les informations et les paramètres de la catégorie",
+      "saveButton": "Enregistrer les modifications",
+      "cancel": "Annuler",
+      "categoryName": "Nom de la catégorie",
+      "categoryNamePlaceholder": "ex : Entrées, Plat principal, Desserts",
+      "description": "Description",
+      "descriptionPlaceholder": "Fournissez une brève description de cette catégorie et des types de plats qu'elle comprend...",
+      "status": "Statut de la catégorie",
+      "statusDescription": "Basculer pour activer ou masquer cette catégorie",
+      "statusActive": "Cette catégorie est active et visible dans le menu",
+      "statusInactive": "Cette catégorie est inactive et masquée aux clients",
+      "validation": {
+        "nameRequired": "Le nom de la catégorie est requis",
+        "nameMaxLength": "Le nom de la catégorie ne peut pas dépasser 100 caractères",
+        "descriptionMaxLength": "La description ne peut pas dépasser 100 caractères",
+        "fixErrors": "Veuillez corriger les erreurs de validation"
+      },
+      "loading": "Chargement...",
+      "backToList": "Retour à la liste"
+    }
+  },
+  "Ingredient": {
+    "List": {
+      "title": "Ingrédients",
+      "description": "Gérer l'inventaire, les articles de recette et les niveaux de stock.",
+      "searchPlaceholder": "Rechercher des ingrédients...",
+      "addNew": "Ajouter un ingrédient",
+      "export": "Exporter",
+      "import": "Importer",
+      "importing": "Importation...",
+      "table": {
+        "ingredientName": "Nom de l'ingrédient",
+        "unit": "Unité",
+        "category": "Catégorie",
+        "uncategorized": "Non catégorisé",
+        "suppliers": "Fournisseurs",
+        "inStock": "En stock",
+        "lowStock": "Stock faible"
+      },
+      "notifications": {
+        "deleteConfirm": "Êtes-vous sûr de vouloir supprimer {name} ?",
+        "deleteSuccess": "Ingrédient supprimé avec succès.",
+        "deleteError": "Échec de la suppression de l'ingrédient.",
+        "createSuccess": "Ingrédient créé avec succès !",
+        "updateSuccess": "Ingrédient mis à jour avec succès !",
+        "actionError": "L'opération a échoué.",
+        "noDataExport": "Aucune donnée à exporter.",
+        "exportSuccess": "Exporté avec succès !",
+        "invalidExcel": "Aucun ingrédient valide trouvé dans le fichier Excel.",
+        "importSuccess": "{success}/{total} ingrédients importés avec succès.",
+        "readExcelError": "Échec de la lecture du fichier Excel. Veuillez vérifier le format."
+      }
+    }
+  },
+  "Supplier": {
+    "close": "Fermer",
+    "edit": "Modifier",
+    "List": {
+      "title": "Gestion des Fournisseurs",
+      "description": "Gérer et organiser vos fournisseurs efficacement.",
+      "searchPlaceholder": "Rechercher par nom, téléphone ou email...",
+      "addNew": "Ajouter un Fournisseur",
+      "table": {
+        "no": "N°",
+        "name": "Nom du Fournisseur",
+        "phone": "Téléphone",
+        "email": "Email"
+      },
+      "deleteModal": {
+        "title": "Supprimer le Fournisseur",
+        "message": "Êtes-vous sûr de vouloir supprimer \"{name}\" ? Cette action est irréversible.",
+        "confirm": "Supprimer",
+        "cancel": "Annuler"
+      },
+      "notifications": {
+        "deleteSuccess": "Fournisseur supprimé avec succès",
+        "deleteError": "Échec de la suppression du fournisseur"
+      }
+    },
+    "Add": {
+      "title": "Ajouter un Nouveau Fournisseur",
+      "subtitle": "Créer un nouvel enregistrement de fournisseur avec ses coordonnées.",
+      "supplierName": "Nom du Fournisseur",
+      "supplierNamePlaceholder": "Saisir le nom du fournisseur",
+      "phone": "Numéro de Téléphone",
+      "phonePlaceholder": "Saisir le numéro de téléphone (optionnel)",
+      "email": "Email",
+      "emailPlaceholder": "Saisir l'adresse e-mail (optionnel)",
+      "ingredients": "Ingrédients fournis",
+      "ingredientsPlaceholder": "Sélectionner les ingrédients que ce fournisseur fournit",
+      "cancel": "Annuler",
+      "saveButton": "Ajouter le Fournisseur",
+      "validation": {
+        "nameRequired": "Le nom du fournisseur est obligatoire",
+        "nameMaxLength": "Le nom du fournisseur ne peut pas dépasser 200 caractères",
+        "phoneInvalid": "Le numéro de téléphone ne doit contenir que des chiffres",
+        "phoneMaxLength": "Le numéro de téléphone ne peut pas dépasser 50 caractères",
+        "emailInvalid": "Veuillez saisir une adresse e-mail valide",
+        "emailMaxLength": "L'e-mail ne peut pas dépasser 150 caractères",
+        "fixErrors": "Veuillez corriger les erreurs avant de soumettre"
+      },
+      "notifications": {
+        "createSuccess": "Fournisseur ajouté avec succès",
+        "createError": "Échec de l'ajout du fournisseur"
+      }
+    },
+    "Edit": {
+      "title": "Modifier le Fournisseur",
+      "subtitle": "Mettre à jour les informations et coordonnées du fournisseur.",
+      "supplierName": "Nom du Fournisseur",
+      "supplierNamePlaceholder": "Saisir le nom du fournisseur",
+      "phone": "Numéro de Téléphone",
+      "phonePlaceholder": "Saisir le numéro de téléphone (optionnel)",
+      "email": "Email",
+      "emailPlaceholder": "Saisir l'adresse e-mail (optionnel)",
+      "ingredients": "Ingrédients fournis",
+      "ingredientsPlaceholder": "Sélectionner les ingrédients que ce fournisseur fournit",
+      "cancel": "Annuler",
+      "saveButton": "Enregistrer les Modifications",
+      "loading": "Chargement des données du fournisseur...",
+      "errorTitle": "Impossible de charger le fournisseur",
+      "backToList": "Retour à la Liste",
+      "validation": {
+        "nameRequired": "Le nom du fournisseur est obligatoire",
+        "nameMaxLength": "Le nom du fournisseur ne peut pas dépasser 200 caractères",
+        "phoneInvalid": "Le numéro de téléphone ne doit contenir que des chiffres",
+        "phoneMaxLength": "Le numéro de téléphone ne peut pas dépasser 50 caractères",
+        "emailInvalid": "Veuillez saisir une adresse e-mail valide",
+        "emailMaxLength": "L'e-mail ne peut pas dépasser 150 caractères",
+        "fixErrors": "Veuillez corriger les erreurs avant de soumettre"
+      },
+      "notifications": {
+        "updateSuccess": "Fournisseur mis à jour avec succès",
+        "updateError": "Échec de la mise à jour du fournisseur",
+        "loadError": "Échec du chargement des données du fournisseur"
+      }
+    },
+    "Detail": {
+      "title": "Détails du fournisseur",
+      "subtitle": "Voir les informations et coordonnées du fournisseur.",
+      "back": "Retour",
+      "edit": "Modifier",
+      "information": "Informations du fournisseur",
+      "supplierName": "Nom du Fournisseur",
+      "name": "Nom",
+      "phone": "Téléphone",
+      "email": "Email",
+      "ingredients": "Ingrédients fournis",
+      "ingredientName": "Nom de l'ingrédient",
+      "unit": "Unité",
+      "noIngredients": "Ce fournisseur ne fournit encore aucun ingrédient.",
+      "notFound": "Fournisseur introuvable",
+      "backToList": "Retour à la liste",
+      "loading": "Chargement des données du fournisseur...",
+      "errorTitle": "Impossible de charger le fournisseur"
+    }
+  },
+  "Promotion": {
+    "List": {
+      "title": "Liste des promotions",
+      "description": "Gérez les promotions et les campagnes de réduction du restaurant.",
+      "addNew": "Ajouter",
+      "searchPlaceholder": "Rechercher par code promo ou nom...",
+      "table": {
+        "no": "N°",
+        "promoCode": "Code Promo",
+        "discount": "Réduction",
+        "startTime": "Date de début",
+        "endTime": "Date de fin",
+        "usage": "Utilisation",
+        "status": "Statut"
+      },
+      "filters": {
+        "allStatuses": "Tous les statuts",
+        "allTypes": "Tous les types"
+      },
+      "actions": {
+        "view": "Voir les détails",
+        "edit": "Modifier"
+      },
+      "notifications": {
+        "statusUpdated": "Statut mis à jour avec succès",
+        "statusUpdateError": "Une erreur est survenue lors de la mise à jour du statut"
+      }
+    },
+    "createTitle": "Créer une nouvelle promotion",
+    "createSubTitle": "Le système changera automatiquement le statut selon la période d'application.",
+    "editTitle": "Détails de la promotion #{id}",
+    "noData": "Aucune donnée trouvée",
+    "Form": {
+      "basicInfo": "1. Informations de base",
+      "promoCode": "Code promotionnel",
+      "promoCodePlaceholder": "Exemple : SUMMER24",
+      "promoName": "Nom de la promotion",
+      "promoNamePlaceholder": "Entrez le nom de la promotion...",
+      "desc": "Description",
+      "descPlaceholder": "Entrez une description détaillée...",
+      "start": "Heure de début",
+      "end": "Heure de fin",
+      "discountConfig": "2. Configuration de la réduction",
+      "discountType": "Type de réduction",
+      "typePercent": "Pourcentage (%)",
+      "typeFixed": "Montant fixe",
+      "discountValue": "Valeur de la réduction",
+      "discountValuePlaceholder": "Entrez la valeur...",
+      "maxUsage": "Limite d'utilisation (optionnel)",
+      "unlimited": "Illimité",
+      "rules": "3. Conditions (Rules)",
+      "ruleDesc": "La commande doit atteindre au moins ${minOrder} et {minQty} articles. Elle doit également contenir le plat/la catégorie requis (si sélectionné).",
+      "minOrder": "Valeur minimale de commande",
+      "minOrderPlaceholder": "0",
+      "minQty": "Quantité minimale",
+      "minQtyPlaceholder": "0",
+      "reqDish": "Plat requis (optionnel)",
+      "reqDishPlaceholder": "Sélectionnez un plat requis...",
+      "reqCate": "Catégorie requise (optionnel)",
+      "reqCatePlaceholder": "Sélectionnez une catégorie requise...",
+      "targets": "4. Cibles (Targets)",
+      "targetDescAll": "La promotion s'appliquera à : toute la commande",
+      "targetDescFiltered": "La promotion s'appliquera à : uniquement aux plats/catégories sélectionnés ci-dessous",
+      "targetDish": "Appliquer à un plat spécifique",
+      "targetDishPlaceholder": "Laisser vide pour ignorer...",
+      "targetCate": "Appliquer à une catégorie spécifique",
+      "targetCatePlaceholder": "Laisser vide pour ignorer...",
+      "btnDisable": "Désactiver",
+      "btnCancel": "Annuler",
+      "btnSave": "Enregistrer la promotion",
+      "btnSaving": "Enregistrement...",
+      "statusLockWarning": "Le statut actuel est {status}. Les conditions de configuration sont verrouillées.",
+      "confirmDisable": "Désactiver cette promotion ? Cette action est irréversible.",
+      "successCreate": "Création réussie",
+      "successUpdate": "Mise à jour réussie",
+      "successDisable": "Désactivée avec succès",
+      "errorSave": "Une erreur est survenue lors de l'enregistrement"
+    },
+    "Detail": {
+      "title": "Détails de la promotion #{id}",
+      "status": "Statut",
+      "usedCount": "Utilisée : {count} fois",
+      "rulesInfo": "Règles d'application",
+      "noRule": "Aucune condition",
+      "targetsInfo": "Cibles d'application",
+      "hasTarget": "Appliquée uniquement aux produits/catégories spécifiés.",
+      "back": "Retour"
+    },
+    "Status": {
+      "SCHEDULED": "Planifiée",
+      "ACTIVE": "Active",
+      "EXPIRED": "Expirée",
+      "DISABLED": "Désactivée"
+    },
+    "Validation": {
+      "promoCodeMin": "Le code promo doit contenir au moins 3 caractères",
+      "startTimeRequired": "Veuillez sélectionner l'heure de début",
+      "endTimeRequired": "Veuillez sélectionner l'heure de fin",
+      "discountMinPercent": "Minimum 1 %",
+      "discountMaxPercent": "Maximum 100 %",
+      "discountPositive": "Doit être supérieur à 0",
+      "endTimeAfterStartTime": "La fin doit être après le début"
+    }
+  }
+}

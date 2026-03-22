@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { Pencil, Trash2, QrCode, CalendarClock, User } from "lucide-react";
@@ -44,6 +45,7 @@ export const TableDetailPanel: React.FC<TableDetailPanelProps> = ({
   onDelete,
   onStatusChange,
 }) => {
+  const t = useTranslations("tableManagement");
   // Fetch full detail when panel is open
   const { data: detailData } = useTableDetailQuery(
     isOpen && table ? table.tableId : null
@@ -79,13 +81,13 @@ export const TableDetailPanel: React.FC<TableDetailPanelProps> = ({
                     : "bg-gray-100 text-gray-400"
                 )}
               >
-                {table.isOnline ? "Online" : "Offline"}
+                {table.isOnline ? t("filters.online") : t("filters.offline")}
               </span>
             </div>
             <DrawerClose className="p-1.5 rounded-lg hover:bg-gray-100 transition-colors text-gray-400 hover:text-gray-600" />
           </div>
           <DrawerDescription className="sr-only">
-            Details for table {table.tableCode}
+            {t("detail.ariaDescription", { tableCode: table.tableCode })}
           </DrawerDescription>
           <div className="mt-2">
             <StatusBadge status={table.status} size="md" />
@@ -110,15 +112,15 @@ export const TableDetailPanel: React.FC<TableDetailPanelProps> = ({
           {/* Details section */}
           <div className="space-y-3">
             <h5 className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
-              Details
+              {t("detail.title")}
             </h5>
             <div className="grid grid-cols-2 gap-4">
-              <InfoRow label="Zone" value={table.zoneName} />
-              <InfoRow label="Type" value={table.typeName} />
-              <InfoRow label="Capacity" value={`${table.capacity} seats`} />
+              <InfoRow label={t("fields.zone")} value={table.zoneName} />
+              <InfoRow label={t("fields.type")} value={table.typeName} />
+              <InfoRow label={t("fields.capacity")} value={t("zone.seatsCount", { count: table.capacity })} />
               <InfoRow
-                label="Connection"
-                value={table.isOnline ? "Online" : "Offline"}
+                label={t("filters.connection")}
+                value={table.isOnline ? t("filters.online") : t("filters.offline")}
                 valueClassName={
                   table.isOnline ? "text-emerald-600" : "text-gray-400"
                 }
@@ -129,15 +131,14 @@ export const TableDetailPanel: React.FC<TableDetailPanelProps> = ({
           {/* Active Orders */}
           <div className="space-y-2">
             <h5 className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
-              Active Orders
+              {t("detail.activeOrders")}
             </h5>
             {activeOrdersCount > 0 ? (
               <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 text-sm text-amber-700">
-                {activeOrdersCount} active order
-                {activeOrdersCount > 1 ? "s" : ""} on this table
+                {t("detail.activeOrdersOnTable", { count: activeOrdersCount })}
               </div>
             ) : (
-              <p className="text-sm text-gray-400">No active orders</p>
+              <p className="text-sm text-gray-400">{t("detail.noActiveOrders")}</p>
             )}
           </div>
 
@@ -145,10 +146,10 @@ export const TableDetailPanel: React.FC<TableDetailPanelProps> = ({
           {hasErrors && (
             <div className="space-y-2">
               <h5 className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
-                Errors
+                {t("detail.errors")}
               </h5>
               <div className="bg-red-50 border border-red-200 rounded-lg p-3 text-sm text-red-700">
-                This table has reported errors that need attention.
+                {t("detail.errorsHint")}
               </div>
             </div>
           )}
@@ -158,7 +159,7 @@ export const TableDetailPanel: React.FC<TableDetailPanelProps> = ({
             <div className="space-y-2">
               <h5 className="text-xs font-semibold text-gray-400 uppercase tracking-wider flex items-center gap-1.5">
                 <CalendarClock size={13} />
-                Upcoming Reservations ({upcomingReservations.length})
+                {t("detail.upcomingReservations", { count: upcomingReservations.length })}
               </h5>
               <div className="space-y-2">
                 {upcomingReservations.map((r) => (
@@ -173,7 +174,7 @@ export const TableDetailPanel: React.FC<TableDetailPanelProps> = ({
                           {r.guestName}
                         </p>
                         <p className="text-[10px] text-gray-400">
-                          {r.pax} pax &middot;{" "}
+                          {t("detail.paxCount", { count: r.pax })} &middot;{" "}
                           {new Date(r.reservedTime).toLocaleString([], {
                             month: "short",
                             day: "numeric",
@@ -191,7 +192,7 @@ export const TableDetailPanel: React.FC<TableDetailPanelProps> = ({
                           : "bg-gray-100 text-gray-500"
                       )}
                     >
-                      {r.statusCode === "CONFIRMED" ? "Confirmed" : "Pending"}
+                      {r.statusCode === "CONFIRMED" ? t("status.confirmed") : t("status.pending")}
                     </span>
                   </div>
                 ))}
@@ -203,13 +204,13 @@ export const TableDetailPanel: React.FC<TableDetailPanelProps> = ({
           {(qrCodeUrl || qrCodeImageUrl) && (
             <div className="space-y-2">
               <h5 className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
-                QR Code
+                {t("qr.title")}
               </h5>
               <div className="bg-gray-50 rounded-lg p-4 flex flex-col items-center gap-2">
                 {qrCodeImageUrl ? (
                   <Image
                     src={qrCodeImageUrl}
-                    alt="QR Code"
+                    alt={t("qr.title")}
                     width={96}
                     height={96}
                     className="rounded"
@@ -231,7 +232,7 @@ export const TableDetailPanel: React.FC<TableDetailPanelProps> = ({
             <PermissionGuard permission={Permissions.UpdateTableStatus}>
               <div className="space-y-2">
                 <h5 className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
-                  Quick Status Change
+                  {t("detail.quickStatusChange")}
                 </h5>
                 <div className="flex flex-wrap gap-2">
                   {ALL_STATUSES.map((status) => {
@@ -269,7 +270,7 @@ export const TableDetailPanel: React.FC<TableDetailPanelProps> = ({
                             actionConf.dotColor
                           )}
                         />
-                        {actionConf.label}
+                        {t(`status.${status.toLowerCase()}`)}
                       </button>
                     );
                   })}
@@ -293,7 +294,7 @@ export const TableDetailPanel: React.FC<TableDetailPanelProps> = ({
               })}
             >
               <Pencil size={14} className="mr-1.5" />
-              Edit
+              {t("actions.edit")}
             </Button>
           </PermissionGuard>
           <PermissionGuard permission={Permissions.DeleteTable}>
@@ -303,7 +304,7 @@ export const TableDetailPanel: React.FC<TableDetailPanelProps> = ({
               onClick={() => onDelete(table)}
             >
               <Trash2 size={14} className="mr-1.5" />
-              Delete
+              {t("actions.delete")}
             </Button>
           </PermissionGuard>
         </DrawerFooter>

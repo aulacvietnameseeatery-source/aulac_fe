@@ -910,6 +910,7 @@
       "loading": "Loading role data...",
       "loadError": "Failed to load role data. Please try again.",
       "success": "Role updated successfully",
+      "successWithReloginNote": "Users with this role need to log in again to apply new permissions.",
       "error": "Failed to update role. Please try again.",
       "validation": {
         "roleCodeRequired": "Role code is required",
@@ -1027,6 +1028,167 @@
       "loading": "Loading supplier data...",
       "errorTitle": "Unable to load supplier"
     }
+  },
+  "Coupon": {
+    "List": {
+      "title": "Coupon Management",
+      "description": "Manage and organize your coupons efficiently.",
+      "searchPlaceholder": "Search by code or name...",
+      "addNew": "Add New Coupon",
+      "table": {
+        "no": "No.",
+        "code": "Coupon Code",
+        "name": "Coupon Name",
+        "type": "Type",
+        "discountValue": "Discount Value",
+        "startTime": "Start Date",
+        "endTime": "End Date",
+        "usage": "Usage",
+        "status": "Status"
+      },
+      "status": {
+        "active": "Active",
+        "disabled": "Disabled",
+        "scheduled": "Scheduled",
+        "expired": "Expired"
+      },
+      "type": {
+        "fixedAmount": "Fixed Amount",
+        "percent": "Percent"
+      },
+      "deleteModal": {
+        "title": "Delete Coupon",
+        "message": "Are you sure you want to delete coupon \"{name}\"? This action cannot be undone.",
+        "confirm": "Delete",
+        "cancel": "Cancel"
+      },
+      "notifications": {
+        "deleteSuccess": "Coupon deleted successfully",
+        "deleteError": "Failed to delete coupon"
+      }
+    },
+    "Add": {
+      "title": "Add New Coupon",
+      "couponCode": "Coupon Code",
+      "couponCodePlaceholder": "Enter coupon code",
+      "couponName": "Coupon Name",
+      "couponNamePlaceholder": "Enter coupon name",
+      "description": "Description",
+      "descriptionPlaceholder": "Enter coupon description",
+      "discountValue": "Discount Value",
+      "discountValuePlaceholder": "Enter discount value",
+      "startTime": "Start Date & Time",
+      "endTime": "End Date & Time",
+      "maxUsage": "Max Usage",
+      "maxUsagePlaceholder": "Leave empty for unlimited",
+      "usedCount": "Used Count",
+      "createdAt": "Created At",
+      "type": {
+        "label": "Discount Type",
+        "fixedAmount": "Fixed Amount",
+        "percent": "Percent"
+      },
+      "status": {
+        "label": "Status",
+        "active": "Active",
+        "disabled": "Disabled",
+        "scheduled": "Scheduled",
+        "expired": "Expired"
+      },
+      "validation": {
+        "codeRequired": "Coupon code is required",
+        "codeMaxLength": "Coupon code must not exceed 50 characters",
+        "nameRequired": "Coupon name is required",
+        "nameMaxLength": "Coupon name must not exceed 200 characters",
+        "descriptionMaxLength": "Description must not exceed 500 characters",
+        "startTimeRequired": "Start date & time is required",
+        "endTimeRequired": "End date & time is required",
+        "endTimeAfterStart": "End date must be after start date",
+        "discountValueRequired": "Discount value is required",
+        "percentMax": "Percentage discount cannot exceed 100",
+        "maxUsageMin": "Max usage must be greater than 0"
+      },
+      "saveButton": "Create Coupon",
+      "cancel": "Cancel",
+      "notifications": {
+        "createSuccess": "Coupon created successfully",
+        "createError": "Failed to create coupon"
+      }
+    },
+    "Edit": {
+      "title": "Edit Coupon",
+      "couponCode": "Coupon Code",
+      "couponCodePlaceholder": "Enter coupon code",
+      "couponName": "Coupon Name",
+      "couponNamePlaceholder": "Enter coupon name",
+      "description": "Description",
+      "descriptionPlaceholder": "Enter coupon description",
+      "discountValue": "Discount Value",
+      "discountValuePlaceholder": "Enter discount value",
+      "startTime": "Start Date & Time",
+      "endTime": "End Date & Time",
+      "maxUsage": "Max Usage",
+      "maxUsagePlaceholder": "Leave empty for unlimited",
+      "usedCount": "Used Count",
+      "createdAt": "Created At",
+      "type": {
+        "label": "Discount Type",
+        "fixedAmount": "Fixed Amount",
+        "percent": "Percent"
+      },
+      "status": {
+        "label": "Status",
+        "active": "Active",
+        "disabled": "Disabled",
+        "scheduled": "Scheduled",
+        "expired": "Expired"
+      },
+      "validation": {
+        "codeRequired": "Coupon code is required",
+        "codeMaxLength": "Coupon code must not exceed 50 characters",
+        "nameRequired": "Coupon name is required",
+        "nameMaxLength": "Coupon name must not exceed 200 characters",
+        "descriptionMaxLength": "Description must not exceed 500 characters",
+        "startTimeRequired": "Start date & time is required",
+        "endTimeRequired": "End date & time is required",
+        "endTimeAfterStart": "End date must be after start date",
+        "discountValueRequired": "Discount value is required",
+        "percentMax": "Percentage discount cannot exceed 100",
+        "maxUsageMin": "Max usage must be greater than 0"
+      },
+      "saveButton": "Update Coupon",
+      "cancel": "Cancel",
+      "notifications": {
+        "updateSuccess": "Coupon updated successfully",
+        "updateError": "Failed to update coupon"
+      }
+    },
+    "Detail": {
+      "title": "Coupon Details",
+      "couponCode": "Coupon Code",
+      "couponName": "Coupon Name",
+      "description": "Description",
+      "discountValue": "Discount Value",
+      "startTime": "Start Date & Time",
+      "endTime": "End Date & Time",
+      "maxUsage": "Max Usage",
+      "usedCount": "Used Count",
+      "createdAt": "Created At",
+      "type": {
+        "label": "Discount Type",
+        "fixedAmount": "Fixed Amount",
+        "percent": "Percent"
+      },
+      "status": {
+        "label": "Status",
+        "active": "Active",
+        "disabled": "Disabled",
+        "scheduled": "Scheduled",
+        "expired": "Expired"
+      }
+    },
+    "close": "Close",
+    "edit": "Edit"
   },
   "common": {
     "table": {

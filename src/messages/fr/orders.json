@@ -1,0 +1,316 @@
+{
+  "Order": {
+    "List": {
+      "title": "Commandes",
+      "description": "Gérer et suivre toutes les commandes",
+      "searchPlaceholder": "Rechercher par numéro, client, personnel...",
+      "refresh": "Actualiser",
+      "addNewOrder": "Nouvelle commande",
+      "kanbanLabel": "Kanban — Tous les statuts",
+      "dateRange": {
+        "today": "Aujourd'hui",
+        "yesterday": "Hier",
+        "last7": "7 derniers jours",
+        "last30": "30 derniers jours",
+        "thisMonth": "Ce mois",
+        "lastMonth": "Mois dernier",
+        "custom": "Personnalisé",
+        "from": "De",
+        "to": "À",
+        "apply": "Appliquer",
+        "label": "Période"
+      },
+      "tabs": {
+        "all": "Tout",
+        "pending": "En attente",
+        "inProgress": "En cours",
+        "completed": "Terminée",
+        "cancelled": "Annulée"
+      },
+      "statusCards": {
+        "all": "Tout",
+        "pending": "En attente",
+        "inProgress": "En cours",
+        "completed": "Terminée",
+        "cancelled": "Annulée"
+      },
+      "kanban": {
+        "pending": "En attente",
+        "inProgress": "En cours",
+        "completed": "Terminée",
+        "cancelled": "Annulée",
+        "empty": "Aucune commande",
+        "start": "Démarrer",
+        "finish": "Terminer",
+        "complete": "Finaliser",
+        "printInvoice": "Imprimer la facture",
+        "reset": "Réinitialiser",
+        "delete": "Supprimer",
+        "cancel": "Annuler"
+      },
+      "viewMode": {
+        "grid": "Vue grille",
+        "kanban": "Vue kanban"
+      },
+      "statusUpdateSuccess": "Le statut de la commande a été mis à jour",
+      "statusUpdateError": "Impossible de mettre à jour le statut de la commande",
+      "empty": {
+        "title": "Aucune commande trouvée",
+        "hint": "Essayez de modifier vos filtres ou votre recherche"
+      },
+      "card": {
+        "table": "Table",
+        "tip": "Pourboire",
+        "items": "articles",
+        "moreItems": "de plus",
+        "collapse": "Réduire",
+        "actions": "Actions",
+        "note": "Note",
+        "rejectReason": "Raison du rejet",
+        "guest": "Invité",
+        "source": {
+          "DINE_IN": "Sur place",
+          "TAKE_AWAY": "À emporter",
+          "TAKEAWAY": "À emporter",
+          "DELIVERY": "Livraison",
+          "Takeaway": "À emporter",
+          "Dine-in": "Sur place",
+          "Delivery": "Livraison"
+        },
+        "status": {
+          "Pending": "En attente",
+          "In progress": "En cours",
+          "Completed": "Terminée",
+          "Cancelled": "Annulée"
+        },
+        "paymentStatus": {
+          "paid": "Payé",
+          "unpaid": "Non payé"
+        },
+        "action": {
+          "view": "Détails",
+          "edit": "Modifier",
+          "start": "Démarrer",
+          "complete": "Terminer",
+          "cancel": "Annuler",
+          "reset": "Réinitialiser",
+          "print": "Imprimer la facture",
+          "pay": "Payer & Terminer",
+          "printReceipt": "Imprimer le reçu"
+        },
+        "paymentSuccess": "Paiement effectué avec succès",
+        "paymentError": "Échec du traitement du paiement"
+      }
+    },
+    "Create": {
+      "title": "Créer une nouvelle commande",
+      "subtitle": "Sélectionnez des plats et boissons pour commencer à servir le client.",
+      "menuCatalog": "Menu",
+      "searchDish": "Rechercher un plat...",
+      "dineIn": "Sur place",
+      "takeAway": "À emporter",
+      "currentTicket": "Ticket en cours",
+      "clear": "Effacer",
+      "emptyTicket": "Ticket vide",
+      "diningTable": "Table",
+      "customer": "Client",
+      "select": "Sélectionner",
+      "change": "Modifier",
+      "add": "Ajouter",
+      "note": "Ajoutez une note (moins épicé, sans oignons, etc.)",
+      "subtotal": "Sous-total",
+      "tax": "Taxe (10%)",
+      "total": "Total",
+      "placeOrder": "Passer la commande",
+      "createInvoice": "Créer la facture",
+      "noTableSelected": "Aucune table sélectionnée",
+      "anonymous": "Client anonyme",
+      "selectFilterAll": "Tous",
+      "confirmSelection": "Confirmer la sélection",
+      "cancel": "Annuler",
+      "confirm": "Confirmer",
+      "customerDetails": "Informations du client",
+      "phoneNumber": "Numéro de téléphone",
+      "fullName": "Nom complet",
+      "email": "Email",
+      "saveDetails": "Enregistrer les informations"
+    },
+    "Edit": {
+      "menuTitle": "Détails de la commande",
+      "menuSubtitleEdit": "Sélectionnez des articles à ajouter à la commande actuelle.",
+      "menuSubtitleView": "Cette commande a été payée. Mode lecture seule.",
+      "menuSubtitleCancelled": "Cette commande a été annulée. Mode lecture seule.",
+      "clear": "Effacer",
+      "cancel": "Annuler",
+      "editOrderTitle": "Modifier la commande #{id}",
+      "viewOrderTitle": "Voir la commande #{id}",
+      "totalAmount": "Montant total",
+      "orderedItems": "Articles commandés",
+      "newItems": "Nouveaux articles",
+      "addMoreItemsHint": "Sélectionnez des articles dans le menu à gauche pour les ajouter",
+      "paidOrderWarning": "Cette commande a été payée. Veuillez créer une nouvelle commande.",
+      "cancelledOrderWarning": "La commande a été annulée. Il est impossible de modifier ou d'imprimer la facture.",
+      "change": "Modifier",
+      "table": "Table",
+      "addItemsButton": "Ajouter des articles à la commande",
+      "createInvoice": "Créer la facture",
+      "createReceipt": "Créer un reçu",
+      "newTotal": "Total estimé",
+      "warningTitle": "Confirmer l'ajout",
+      "completedOrderWarning": "Cette commande est terminée mais non payée. Ajouter de nouveaux articles remettra la commande au statut En cours. Êtes-vous sûr ?",
+      "confirmChangeStatus": "Confirmer l'ajout",
+      "saving": "Enregistrement...",
+      "successMessage": "Modifications enregistrées avec succès !",
+      "errorMessage": "Une erreur est survenue !",
+      "loading": "Chargement...",
+      "takeAway": "À emporter",
+      "guest": "Client",
+      "notePlaceholder": "Note sur l'article...",
+      "status": {
+        "Pending": "En attente",
+        "In progress": "En cours",
+        "Completed": "Terminé",
+        "Cancelled": "Annulé"
+      },
+      "tableLabel": "Table",
+      "customerLabel": "Client"
+    },
+    "RecentOrders": {
+      "title": "Commandes récentes",
+      "refresh": "Actualiser",
+      "filterAll": "Toutes",
+      "dineIn": "Sur place",
+      "takeAway": "À emporter",
+      "loading": "Chargement des commandes...",
+      "noOrdersFound": "Aucune commande trouvée.",
+      "table": "Table",
+      "status": {
+        "PENDING": "En attente",
+        "IN_PROGRESS": "En cours",
+        "COMPLETED": "Terminée",
+        "CANCELLED": "Annulée"
+      }
+    },
+    "DishDetail": {
+      "noDescription": "Aucune description disponible.",
+      "price": "Prix",
+      "addToOrder": "Ajouter à la commande"
+    },
+    "PaymentModal": {
+      "title": "Payer & Terminer la commande",
+      "finalTotal": "Total final",
+      "orderInfo": "Infos commande",
+      "orderNo": "N° de commande",
+      "noOfItems": "Nombre d'articles",
+      "orderType": "Type de commande",
+      "orderedMenus": "Menus commandés",
+      "subTotal": "Sous-total",
+      "tax": "Taxe",
+      "serviceCharge": "Frais de service",
+      "tip": "Pourboire",
+      "paymentType": "Type de paiement",
+      "cash": "Espèces",
+      "card": "Carte",
+      "scan": "Scanner",
+      "promotion": "Promotion",
+      "coupon": "Coupon",
+      "givenAmount": "Montant donné",
+      "balance": "Reliquat",
+      "note": "Note",
+      "notePlaceholder": "Saisir une note de paiement...",
+      "close": "Fermer",
+      "payAndComplete": "Payer & Terminer la commande",
+      "paying": "Traitement...",
+      "enterTip": "Saisir le montant du pourboire",
+      "selectPromotion": "Sélectionner une promotion",
+      "selectCoupon": "Sélectionner un coupon",
+      "promotions": "Promotions"
+    }
+  },
+  "Invoice": {
+    "List": {
+      "title": "Factures de vente",
+      "description": "Gérer et suivre toutes les factures de vente",
+      "searchPlaceholder": "Rechercher par code de facture, client, personnel...",
+      "refresh": "Actualiser",
+      "dateRange": {
+        "today": "Aujourd'hui",
+        "yesterday": "Hier",
+        "last7": "7 derniers jours",
+        "last30": "30 derniers jours",
+        "thisMonth": "Ce mois-ci",
+        "lastMonth": "Le mois dernier",
+        "custom": "Personnalisé",
+        "from": "De",
+        "to": "À",
+        "selectDate": "Sélectionner la date"
+      },
+      "table": {
+        "no": "N°",
+        "invoiceCode": "Code de facture",
+        "createdAt": "Date et heure",
+        "tableCode": "Table",
+        "customerName": "Client",
+        "staffName": "Personnel",
+        "totalAmount": "Montant total",
+        "tipAmount": "Pourboire",
+        "paymentMethod": "Mode de paiement",
+        "orderStatus": "Statut de commande"
+      }
+    }
+  },
+  "OrderHistory": {
+    "title": "Historique des Commandes",
+    "fabLabel": "HISTORY",
+    "fabAriaLabel": "Voir l'historique des commandes",
+    "tableLabel": "Table",
+    "itemsCount": "{count} plats",
+    "refresh": "Actualiser",
+    "refreshAriaLabel": "Recharger",
+    "close": "Fermer",
+    "closeAriaLabel": "Fermer",
+    "headers": {
+      "dish": "Plat",
+      "quantity": "QTÉ",
+      "price": "Prix",
+      "status": "Statut"
+    },
+    "status": {
+      "created": "En attente",
+      "inProgress": "En cours",
+      "ready": "Prêt",
+      "served": "Servi",
+      "rejected": "Refusé",
+      "cancelled": "Annulé"
+    },
+    "emptyState": {
+      "title": "Aucun plat commandé pour le moment.",
+      "subtitle": "L'historique apparaîtra ici après avoir passé une commande."
+    },
+    "chefNote": "Note du chef :",
+    "estimatedTotal": "Total estimé",
+    "requestPayment": "Demander le paiement",
+    "error": "Impossible de charger les données",
+    "cancelItem": "Annuler l'article",
+    "cancelling": "Annulation...",
+    "cancelError": "Impossible d'annuler l'article",
+    "cancelNotAllowed": "“{dishName}” a déjà été traité par le personnel et ne peut plus être annulé.",
+    "cancelPopup": {
+      "title": "Annuler cet article ?",
+      "message": "Êtes-vous sûr de vouloir annuler \"{dishName}\" ? Cette action est irréversible.",
+      "yes": "Oui, Annuler",
+      "no": "Non, Garder"
+    },
+    "paymentPopup": {
+      "title": "Demander le paiement ?",
+      "message": "Un serveur viendra à votre {tableLabel} {tableNumber} sous peu avec l'addition. Voulez-vous continuer ?",
+      "estimatedTotalLabel": "TOTAL ESTIMÉ",
+      "confirm": "CONFIRMER",
+      "closeAriaLabel": "Fermer la boîte de dialogue de paiement"
+    },
+    "successPopup": {
+      "title": "Merci !",
+      "message": "Votre demande de paiement pour {tableLabel} {tableNumber} a été reçue. Notre serveur sera avec vous sous peu."
+    }
+  }
+}

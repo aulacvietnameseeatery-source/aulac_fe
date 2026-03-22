@@ -2,6 +2,7 @@
 
 import { useState, useMemo, useCallback } from "react";
 import { CalendarDays, List, Plus } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { PermissionGuard } from "@/components/permission-guard";
 import { Permissions } from "@/types/const";
@@ -37,6 +38,7 @@ function fmtDate(d: Date) {
 
 // Orchestrator for /dashboard/shifts — manager schedule view
 export function ShiftManagement() {
+  const t = useTranslations("shift.schedule");
   // ── Week state ──────────────────────────────────────────────
   const [monday] = useState(() => getMonday(new Date()));
   const weekStart = fmtDate(monday);
@@ -98,10 +100,10 @@ export function ShiftManagement() {
       <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-[#D5BA98]/60 bg-white px-4 py-3 shadow-sm">
         <div>
           <h1 className="font-['Cormorant_Garamond'] text-xl font-semibold text-[#1A3A52]">
-            Shift Schedule
+            {t("title")}
           </h1>
           <p className="text-xs text-[#1A3A52]/50">
-            Drag cards between staff rows to reassign. Click a card to view details.
+            {t("managerHint")}
           </p>
         </div>
 
@@ -114,7 +116,7 @@ export function ShiftManagement() {
               onClick={handleCreateNew}
             >
               <Plus className="h-3.5 w-3.5" />
-              New Assignment
+              {t("newAssignment")}
             </Button>
           </PermissionGuard>
         </div>

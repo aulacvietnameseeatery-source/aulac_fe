@@ -1,0 +1,140 @@
+{
+  "tableManagement": {
+    "title": "Table Management",
+    "header": {
+      "tablesCount": "{count, plural, one {# table} other {# tables}}",
+      "inZone": "in {zone}",
+      "availableCount": "{count, plural, one {# available} other {# available}}"
+    },
+    "actions": {
+      "refresh": "Refresh",
+      "addZone": "Add Zone",
+      "addTable": "Add Table",
+      "cancel": "Cancel",
+      "saveChanges": "Save Changes",
+      "createZone": "Create Zone",
+      "viewDetails": "View Details",
+      "edit": "Edit",
+      "delete": "Delete",
+      "setStatus": "Set {status}"
+    },
+    "filters": {
+      "targetDatePlaceholder": "Pick target date",
+      "searchPlaceholder": "Search table code...",
+      "targetDateInfo": "Showing",
+      "availableEmphasis": "AVAILABLE",
+      "targetDateOn": "tables on:",
+      "all": "All",
+      "allZones": "All Zones",
+      "allTypes": "All Types",
+      "allStatuses": "All Statuses",
+      "type": "Type",
+      "status": "Status",
+      "connection": "Connection",
+      "online": "Online",
+      "offline": "Offline"
+    },
+    "states": {
+      "loading": "Loading tables...",
+      "emptyTitle": "No tables found",
+      "emptyDescription": "Try adjusting your filters or add a new table.",
+      "error": "Error"
+    },
+    "status": {
+      "available": "Available",
+      "occupied": "Occupied",
+      "reserved": "Reserved",
+      "locked": "Locked",
+      "confirmed": "Confirmed",
+      "pending": "Pending"
+    },
+    "zone": {
+      "label": "Zone",
+      "availCount": "{count} avail",
+      "seatsCount": "{count, plural, one {# seat} other {# seats}}",
+      "ordersCount": "{count, plural, one {# order} other {# orders}}",
+      "errorsCount": "{count, plural, one {# error} other {# errors}}",
+      "setOffline": "Set zone offline",
+      "setOnline": "Set zone online",
+      "availableSummary": "{available}/{total} available",
+      "addTitle": "Add New Zone",
+      "name": "Zone Name",
+      "namePlaceholder": "e.g. Garden, Terrace, Balcony",
+      "createHint": "The zone will be available immediately for assigning tables."
+    },
+    "validation": {
+      "tableCodeRequired": "Table code is required",
+      "capacityMin": "Capacity must be at least 1",
+      "zoneRequired": "Zone is required",
+      "typeRequired": "Type is required",
+      "statusRequired": "Status is required",
+      "fixHighlighted": "Please fix the highlighted fields before saving"
+    },
+    "modal": {
+      "addTitle": "Add New Table",
+      "editTitle": "Edit Table"
+    },
+    "fields": {
+      "tableCode": "Table Code",
+      "tableCodePlaceholder": "e.g. T-01",
+      "capacity": "Capacity",
+      "zone": "Zone",
+      "type": "Type",
+      "status": "Status",
+      "selectZone": "Select zone",
+      "selectType": "Select type",
+      "selectStatus": "Select status",
+      "onlineStatus": "Online Status",
+      "onlineStatusHint": "Table is visible to guests when online"
+    },
+    "qr": {
+      "title": "QR Code",
+      "encodes": "Encodes:",
+      "serverTokenHint": "The server will add a secure token when the table is saved.",
+      "enterTableCode": "Enter a table code above to preview the QR code.",
+      "regenerate": "Regenerate QR",
+      "download": "Download",
+      "hide": "Hide",
+      "preview": "Preview",
+      "active": "Active",
+      "token": "Token",
+      "noCodeYet": "No QR code yet. Click \"Regenerate QR\" to create one."
+    },
+    "media": {
+      "title": "Media"
+    },
+    "delete": {
+      "title": "Delete Confirmation",
+      "confirmWithCode": "Are you sure you want to delete table \"{tableCode}\"?",
+      "confirm": "Are you sure you want to delete?",
+      "activeOrdersWarning": "This table has {count, plural, one {# active order} other {# active orders}}. Deletion may be blocked."
+    },
+    "detail": {
+      "ariaDescription": "Details for table {tableCode}",
+      "title": "Details",
+      "activeOrders": "Active Orders",
+      "activeOrdersOnTable": "{count, plural, one {# active order on this table} other {# active orders on this table}}",
+      "activeOrdersCount": "{count, plural, one {# active order} other {# active orders}}",
+      "noActiveOrders": "No active orders",
+      "errors": "Errors",
+      "errorsHint": "This table has reported errors that need attention.",
+      "upcomingReservations": "Upcoming Reservations ({count})",
+      "paxCount": "{count} pax",
+      "quickStatusChange": "Quick Status Change"
+    },
+    "dashboard": {
+      "overview": "Overview",
+      "totalCount": "{count} total",
+      "tablesAndSeats": "{tables} tables · {seats} seats",
+      "expandOverview": "Expand overview",
+      "collapseOverview": "Collapse overview",
+      "totalCapacity": "Total Capacity",
+      "avgSeatsPerTable": "Avg {count} seats/table",
+      "needsAttention": "Needs attention",
+      "allClear": "All clear",
+      "incomingReservations": "Incoming Reservations",
+      "seeAll": "See all",
+      "noUpcomingReservations": "No upcoming reservations"
+    }
+  }
+}

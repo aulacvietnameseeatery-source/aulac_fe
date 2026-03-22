@@ -1,12 +1,11 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 
 interface ShiftMatrixHeaderProps {
   weekDates: Date[];
 }
-
-const DAY_LABELS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
 function isToday(d: Date) {
   const now = new Date();
@@ -22,12 +21,23 @@ function fmtShort(d: Date) {
 }
 
 export function ShiftMatrixHeader({ weekDates }: ShiftMatrixHeaderProps) {
+  const t = useTranslations("shift.schedule.matrix");
+  const dayLabels = [
+    t("days.mon"),
+    t("days.tue"),
+    t("days.wed"),
+    t("days.thu"),
+    t("days.fri"),
+    t("days.sat"),
+    t("days.sun"),
+  ];
+
   return (
-    <div className="grid grid-cols-[180px_repeat(7,1fr)] border-b border-[#D5BA98]/40">
+    <div className="grid grid-cols-[180px_repeat(7,1fr)] border-b border-[#D5BA98]/40 sticky top-0 z-10 bg-white">
       {/* Staff column label */}
       <div className="flex items-end px-3 py-2">
         <span className="text-xs font-medium text-[#1A3A52]/60 uppercase tracking-wider">
-          Staff
+          {t("staff")}
         </span>
       </div>
 
@@ -41,7 +51,7 @@ export function ShiftMatrixHeader({ weekDates }: ShiftMatrixHeaderProps) {
           )}
         >
           <span className="text-[10px] font-semibold uppercase tracking-wider text-[#1A3A52]/50">
-            {DAY_LABELS[i]}
+            {dayLabels[i]}
           </span>
           <span
             className={cn(

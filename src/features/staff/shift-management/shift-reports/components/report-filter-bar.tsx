@@ -59,7 +59,7 @@ const PRESETS = [
 ];
 
 export function ReportFilterBar({ filters, onChange }: FilterBarProps) {
-  const t = useTranslations("ShiftManagement.Reports");
+  const t = useTranslations("shift.reports");
   function isActive(preset: (typeof PRESETS)[number]) {
     const { from, to } = preset.get();
     return filters.fromDate === from && filters.toDate === to;

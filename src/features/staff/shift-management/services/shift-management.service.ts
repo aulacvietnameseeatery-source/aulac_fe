@@ -5,6 +5,7 @@ import type {
   ShiftTemplateDetailDto,
   ShiftAssignmentListDto,
   ShiftAssignmentDetailDto,
+  ShiftLiveBoardItemDto,
   AttendanceRecordDto,
   AttendanceReportRowDto,
   WorkedHoursReportRowDto,
@@ -93,6 +94,19 @@ export const shiftManagementService = {
     return res.data;
   },
 
+  async getLiveBoard(params: GetAssignmentsParams = {}): Promise<ShiftLiveBoardItemDto[]> {
+    const query = toQuery({
+      staffId: params.staffId,
+      shiftTemplateId: params.shiftTemplateId,
+      fromDate: params.fromDate,
+      toDate: params.toDate,
+      isActive: params.isActive,
+      pageSize: params.pageSize ?? 200,
+    });
+    const res = await api.get<ApiResponse<ShiftLiveBoardItemDto[]>>(`${BASE}/live-board${query}`);
+    return res.data ?? [];
+  },
+
   async createAssignment(body: CreateShiftAssignmentRequest): Promise<ShiftAssignmentDetailDto> {
     const res = await api.post<ApiResponse<ShiftAssignmentDetailDto>>(`${BASE}/assignments`, body);
     return res.data;
@@ -153,10 +167,26 @@ export const shiftManagementService = {
 
   async getTeamSchedule(params: TeamScheduleParams): Promise<TeamScheduleStaffRow[]> {
     const query = toQuery({ weekStart: params.weekStart, weekEnd: params.weekEnd });
-    const res = await api.get<ApiResponse<TeamScheduleStaffRow[]>>(
+    // BE returns a flat List<ShiftAssignmentListDto> — group by staff on the FE side
+    const res = await api.get<ApiResponse<ShiftAssignmentListDto[]>>(
       `${BASE}/team-schedule${query}`
     );
-    return res.data ?? [];
+    const flatAssignments = res.data ?? [];
+    const staffMap = new Map<number, TeamScheduleStaffRow>();
+    for (const a of flatAssignments) {
+      let row = staffMap.get(a.staffId);
+      if (!row) {
+        row = {
+          staffId: a.staffId,
+          staffName: a.staffName,
+          roleName: "", // flat DTO doesn't carry roleName; filled by staff picker if needed
+          assignments: [],
+        };
+        staffMap.set(a.staffId, row);
+      }
+      row.assignments.push(a);
+    }
+    return Array.from(staffMap.values());
   },
 
   // ─── Attendance ───────────────────────────────────────────────────────────

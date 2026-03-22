@@ -26,7 +26,7 @@ interface HealthMetric {
 }
 
 export function ReportHealthBanner({ attendanceRows, workedHoursRows, exceptionRows }: Props) {
-  const t = useTranslations("ShiftManagement.Reports");
+  const t = useTranslations("shift.reports");
   const total = attendanceRows.length;
   const present = attendanceRows.filter((r) => r.actualCheckInAt).length;
   const attendanceRate = total > 0 ? Math.round((present / total) * 100) : 0;

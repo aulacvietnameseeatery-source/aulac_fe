@@ -213,7 +213,10 @@ Tailwind direction:
 - **File naming:** `kebab-case` for all files (`table-modal.tsx`, `dish.service.ts`, `table.types.ts`)
 - **Exports:** PascalCase named exports for components. Barrel `index.ts` in each feature
 - **Imports:** Use `@/*` path alias (maps to `src/*`)
-- **i18n:** Locale strings in `src/messages/{en,fr,vi}.json`. Access via `useTranslations()` from `next-intl`
+- **i18n:** Use modular locale files under `src/messages/{locale}/` (for example `common.json`, `auth.json`, `orders.json`, `kitchen.json`, `reservations.json`, `shift.json`).
+- **Namespaces:** Prefer namespaced access like `useTranslations("shift.reports")` or `useTranslations("common.table")`.
+- **Loader behavior:** `src/i18n.ts` dynamically loads and deep-merges locale modules; keep module keys nested and collision-safe.
+- **Migration reference:** Follow `docs/i18n-migration-from-monolith.md` when moving old keys from monolithic locale files.
 - **Comments:** Vietnamese is common in code comments — this is expected
 - **Type check:** `npx tsc --noEmit` — run before committing
 - **Dev server:** `npm run dev` (uses Turbopack)

@@ -2,6 +2,7 @@
 
 import { useMemo } from "react";
 import { RefreshCcw, CalendarDays, ArrowRightLeft, CalendarX } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ALCard } from "@/components/ui/al-card";
@@ -83,6 +84,7 @@ function getAssignmentStatus(a: ShiftAssignmentListDto, now: Date): DayStatus {
 // ── sub-components ──
 
 function ShiftRow({ a }: { a: ShiftAssignmentListDto }) {
+  const t = useTranslations("shift.myShift");
   const isIncoming = a.workDate && a.workDate >= todayIso();
 
   return (
@@ -107,11 +109,11 @@ function ShiftRow({ a }: { a: ShiftAssignmentListDto }) {
               <div className="flex gap-1 animate-in fade-in zoom-in duration-200">
                 <Button size="sm" variant="outline" className="h-8 gap-1 border-blue-200 bg-blue-50 text-blue-700 hover:bg-blue-100 hover:text-blue-800">
                   <ArrowRightLeft className="w-3.5 h-3.5" />
-                  Swap
+                  {t("actions.swap")}
                 </Button>
                 <Button size="sm" variant="outline" className="h-8 gap-1 border-amber-200 bg-amber-50 text-amber-700 hover:bg-amber-100 hover:text-amber-800">
                   <CalendarX className="w-3.5 h-3.5" />
-                  Leave
+                  {t("actions.leave")}
                 </Button>
               </div>
             ) : (
@@ -127,6 +129,7 @@ function ShiftRow({ a }: { a: ShiftAssignmentListDto }) {
 // ── main component ──
 
 export function MyShifts() {
+  const t = useTranslations("shift.myShift");
   const today = todayIso();
   const now = useMemo(() => new Date(), []);
 
@@ -241,9 +244,9 @@ export function MyShifts() {
       {/* Header */}
       <ALCard animation="slide-up" className="flex items-start justify-between px-4 py-4 sm:px-5">
         <div>
-          <h1 className="text-2xl font-semibold tracking-wide text-[#1A3A52]">My Shifts</h1>
+          <h1 className="text-2xl font-semibold tracking-wide text-[#1A3A52]">{t("title")}</h1>
           <p className="mt-1 text-sm text-[#1A3A52]/70">
-            View your assigned shifts and check in or check out.
+            {t("description")}
           </p>
         </div>
         <Button
@@ -259,12 +262,12 @@ export function MyShifts() {
 
       {isLoading ? (
         <ALCard className="flex items-center justify-center py-20 text-sm text-[#1A3A52]/70">
-          Loading shifts…
+          {t("loading")}
         </ALCard>
       ) : all.length === 0 ? (
         <ALCard className="flex flex-col items-center justify-center gap-3 py-20 text-[#1A3A52]/70">
           <CalendarDays className="w-10 h-10" />
-          <p className="text-sm">No shifts assigned in the next 30 days.</p>
+          <p className="text-sm">{t("empty")}</p>
         </ALCard>
       ) : (
         <div className="grid gap-6 lg:grid-cols-12 lg:items-start">
@@ -272,29 +275,29 @@ export function MyShifts() {
           <div className="space-y-6 lg:col-span-5 xl:col-span-4 lg:sticky lg:top-6">
             <ALCard as="section" padding="md" animation="slide-up" className="space-y-4">
               <div className="flex items-center justify-between">
-                <h2 className="text-base font-semibold text-[#1A3A52]">This Month Summary</h2>
-                <p className="text-xs text-[#1A3A52]/65">Attendance overview</p>
+                <h2 className="text-base font-semibold text-[#1A3A52]">{t("summary.title")}</h2>
+                <p className="text-xs text-[#1A3A52]/65">{t("summary.subtitle")}</p>
               </div>
 
               <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
                 <div className="rounded-lg border border-blue-200 bg-blue-50 p-2.5">
-                  <p className="text-[10px] sm:text-xs text-blue-700/80">On Time</p>
+                  <p className="text-[10px] sm:text-xs text-blue-700/80">{t("summary.onTime")}</p>
                   <p className="text-lg font-semibold text-blue-700">{monthlySummary.onTime}</p>
                 </div>
                 <div className="rounded-lg border border-amber-200 bg-amber-50 p-2.5">
-                  <p className="text-[10px] sm:text-xs text-amber-700/80">Late</p>
+                  <p className="text-[10px] sm:text-xs text-amber-700/80">{t("summary.late")}</p>
                   <p className="text-lg font-semibold text-amber-700">{monthlySummary.late}</p>
                 </div>
                 <div className="rounded-lg border border-emerald-200 bg-emerald-50 p-2.5">
-                  <p className="text-[10px] sm:text-xs text-emerald-700/80">OT</p>
+                  <p className="text-[10px] sm:text-xs text-emerald-700/80">{t("summary.ot")}</p>
                   <p className="text-lg font-semibold text-emerald-700">{monthlySummary.ot}</p>
                 </div>
                 <div className="rounded-lg border border border-[#D5BA98]/60 bg-slate-50 p-2.5">
-                  <p className="text-[10px] sm:text-xs text-slate-700/80">Incoming</p>
+                  <p className="text-[10px] sm:text-xs text-slate-700/80">{t("summary.incoming")}</p>
                   <p className="text-lg font-semibold text-slate-700">{monthlySummary.incoming}</p>
                 </div>
                 <div className="col-span-2 sm:col-span-4 flex items-center justify-between rounded-lg border border-emerald-500/30 bg-emerald-500/10 p-3 pt-2 pb-2">
-                  <p className="text-xs font-medium text-emerald-800">Est. Earnings</p>
+                  <p className="text-xs font-medium text-emerald-800">{t("summary.estimatedEarnings")}</p>
                   <p className="text-base font-bold text-emerald-700">~{monthlySummary.estimatedEarnings.toLocaleString()} đ</p>
                 </div>
               </div>
@@ -303,10 +306,10 @@ export function MyShifts() {
 
               <div className="space-y-3">
                 <div className="flex flex-wrap items-center gap-1.5">
-                  <Badge variant="outline" className="border-blue-500 bg-blue-500 text-white text-[9px] px-1.5 py-0">On time</Badge>
-                  <Badge variant="outline" className="border-amber-500 bg-amber-500 text-white text-[9px] px-1.5 py-0">Late</Badge>
-                  <Badge variant="outline" className="border-emerald-500 bg-emerald-500 text-white text-[9px] px-1.5 py-0">OT</Badge>
-                  <Badge variant="outline" className="border-slate-600 bg-slate-600 text-white text-[9px] px-1.5 py-0">Incoming</Badge>
+                  <Badge variant="outline" className="border-blue-500 bg-blue-500 text-white text-[9px] px-1.5 py-0">{t("summary.onTime")}</Badge>
+                  <Badge variant="outline" className="border-amber-500 bg-amber-500 text-white text-[9px] px-1.5 py-0">{t("summary.late")}</Badge>
+                  <Badge variant="outline" className="border-emerald-500 bg-emerald-500 text-white text-[9px] px-1.5 py-0">{t("summary.ot")}</Badge>
+                  <Badge variant="outline" className="border-slate-600 bg-slate-600 text-white text-[9px] px-1.5 py-0">{t("summary.incoming")}</Badge>
                 </div>
 
                 <div className="grid grid-cols-7 gap-1">
@@ -317,7 +320,7 @@ export function MyShifts() {
                       <ALCard
                         key={cell.key}
                         className="flex flex-col items-center justify-center rounded-md border-[#D5BA98]/60 bg-[#FDFBF9] py-1 shadow-sm transition-colors hover:bg-slate-100"
-                        title={`${cell.count} shift(s)`}
+                        title={t("summary.shiftCount", { count: cell.count })}
                       >
                         <span className="text-xs font-semibold text-[#1A3A52]">{cell.day}</span>
                         <div className={`mt-0.5 h-1.5 w-1.5 rounded-full ${cell.status === "NONE" ? "bg-transparent" : dayStatusClass(cell.status).split(' ')[1]}`} />
@@ -334,7 +337,7 @@ export function MyShifts() {
             {/* Today */}
             {todayShifts.length > 0 && (
               <ALCard as="section" padding="md" animation="fade" className="space-y-3">
-                <h2 className="text-base font-semibold text-[#1A3A52]">Today</h2>
+                <h2 className="text-base font-semibold text-[#1A3A52]">{t("today")}</h2>
                 <div className="grid gap-4 sm:grid-cols-2">
                   {todayShifts.map((a) => (
                     <CheckInCard key={a.shiftAssignmentId} assignment={a as import("../types/shift-management.types").ShiftAssignmentDetailDto} />
@@ -346,7 +349,7 @@ export function MyShifts() {
             {/* Upcoming */}
             {upcoming.length > 0 && (
               <ALCard as="section" padding="md" animation="fade" className="space-y-3">
-                <h2 className="text-base font-semibold text-[#1A3A52]">Upcoming ({upcoming.length})</h2>
+                <h2 className="text-base font-semibold text-[#1A3A52]">{t("upcoming", { count: upcoming.length })}</h2>
                 <div className="space-y-2">
                   {upcoming.map((a) => (
                     <ShiftRow key={a.shiftAssignmentId} a={a} />
@@ -358,7 +361,7 @@ export function MyShifts() {
             {/* Past */}
             {past.length > 0 && (
               <ALCard as="section" padding="md" animation="fade" className="space-y-3">
-                <h2 className="text-base font-semibold text-[#1A3A52]/70">Past Shifts ({past.length})</h2>
+                <h2 className="text-base font-semibold text-[#1A3A52]/70">{t("past", { count: past.length })}</h2>
                 <div className="space-y-2">
                   {past.map((a) => (
                     <ShiftRow key={a.shiftAssignmentId} a={a} />

@@ -1,0 +1,577 @@
+{
+  "shift": {
+    "common": {
+      "shiftType": "Type de quart",
+      "businessDate": "Date de travail",
+      "plannedStart": "Début prévu",
+      "plannedEnd": "Fin prévue",
+      "status": "Statut",
+      "notes": "Notes",
+      "assignedStaff": "Personnel assigné",
+      "role": "Rôle",
+      "checkIn": "Pointage entrée",
+      "checkOut": "Pointage sortie",
+      "late": "En retard",
+      "absent": "Absent",
+      "onDuty": "En service",
+      "completed": "Terminé",
+      "scheduled": "Planifié",
+      "workedHours": "Heures travaillées",
+      "lateMinutes": "Retard de {minutes} min",
+      "earlyLeaveMinutes": "Parti {minutes} min avant",
+      "reason": "Raison",
+      "adjustmentReason": "Motif d'ajustement"
+    },
+    "schedule": {
+      "title": "Plannings de Quart",
+      "description": "Créez, publiez et gérez les plannings et affectations du personnel.",
+      "managerHint": "Glissez les cartes entre les lignes du personnel pour réaffecter. Cliquez sur une carte pour voir les détails.",
+      "newAssignment": "Nouvelle affectation",
+      "addNew": "Créer un quart",
+      "createTitle": "Créer un planning",
+      "editTitle": "Modifier le planning",
+      "publishConfirm": "Publier ce planning ? Le personnel pourra le consulter.",
+      "cancelConfirm": "Annuler ce planning ? Cette action est irréversible.",
+      "noSchedules": "Aucun planning trouvé.",
+      "assignStaff": "Affecter le personnel",
+      "cancelAssignment": "Annuler l'affectation",
+      "cancelAssignmentConfirm": "Annuler cette affectation ?",
+      "table": {
+        "date": "Date",
+        "shiftType": "Type de quart",
+        "timeRange": "Horaire",
+        "status": "Statut",
+        "assigned": "Affecté",
+        "actions": "Actions"
+      },
+      "actions": {
+        "publish": "Publier",
+        "close": "Fermer",
+        "cancel": "Annuler",
+        "edit": "Modifier",
+        "viewAssignments": "Voir les affectations"
+      },
+      "matrix": {
+        "staff": "Personnel",
+        "add": "Ajouter",
+        "today": "Aujourd'hui",
+        "filterStaff": "Filtrer les employés...",
+        "showNoShiftEmployees": "Afficher les employés sans quart",
+        "weekPage": "Semaine {current}/{total}",
+        "draftCount": "{count} brouillon(s)",
+        "loading": "Chargement du planning...",
+        "empty": "Aucune donnée de planning pour cette semaine",
+        "dragToReassign": "Glisser pour réaffecter",
+        "days": {
+          "mon": "Lun",
+          "tue": "Mar",
+          "wed": "Mer",
+          "thu": "Jeu",
+          "fri": "Ven",
+          "sat": "Sam",
+          "sun": "Dim"
+        }
+      },
+      "publishToolbar": {
+        "unpublishedDraft": "{count} brouillon(s) non publié(s)",
+        "hint": "Publiez pour notifier le personnel assigné de ses prochains quarts",
+        "publishAll": "Publier tout",
+        "dialogTitle": "Publier les quarts",
+        "cancel": "Annuler",
+        "confirmPublish": "Confirmer la publication",
+        "dialogDescription": "Cela publiera {count} quart(s) brouillon et enverra des notifications à tout le personnel assigné."
+      },
+      "copyWeekDialog": {
+        "open": "Copier la semaine",
+        "title": "Copier le planning hebdomadaire",
+        "cancel": "Annuler",
+        "submit": "Copier le planning",
+        "description": "Dupliquez toutes les affectations de quart d'une semaine source vers une semaine cible.",
+        "sourceTitle": "Semaine source (Lundi)",
+        "sourcePlaceholder": "Choisir le lundi source",
+        "targetTitle": "Semaine cible (Lundi)",
+        "targetPlaceholder": "Choisir le lundi cible",
+        "asDraft": "Créer en brouillon",
+        "asDraftHint": "Les quarts copiés devront être publiés avant de notifier le personnel"
+      },
+      "attendanceAdjustmentDialog": {
+        "title": "Ajuster la présence",
+        "cancel": "Annuler",
+        "save": "Enregistrer l'ajustement",
+        "staff": "Personnel",
+        "actualCheckIn": "Entrée réelle",
+        "actualCheckOut": "Sortie réelle",
+        "reason": "Raison",
+        "reasonPlaceholder": "Expliquez pourquoi cet enregistrement de présence est ajusté...",
+        "alreadyAdjusted": "Cet enregistrement a déjà été ajusté manuellement.",
+        "previousReviewer": "Réviseur précédent : {name}."
+      },
+      "template": {
+        "title": "Modèles de quart",
+        "description": "Gérez les modèles de quart réutilisables et les horaires par défaut.",
+        "create": "Créer un modèle",
+        "searchPlaceholder": "Rechercher un modèle",
+        "deactivateConfirm": "Désactiver le modèle \"{name}\" ?",
+        "activeCount": "Actif : {count}",
+        "inactiveCount": "Inactif : {count}",
+        "totalCount": "Total des modèles : {count}",
+        "confirmDialog": {
+          "title": "Désactiver le modèle de quart",
+          "message": "Désactiver le modèle \"{name}\" ? Il ne sera plus disponible pour les nouveaux plannings.",
+          "cancel": "Annuler",
+          "confirm": "Désactiver"
+        },
+        "messages": {
+          "deactivateSuccess": "Modèle de quart désactivé",
+          "deactivateErrorTitle": "Échec de la désactivation du modèle",
+          "deactivateErrorDescription": "Le modèle n'a pas pu être désactivé. Veuillez réessayer.",
+          "deactivateConflictTitle": "Le modèle ne peut pas être désactivé",
+          "deactivateConflictDescription": "Ce modèle possède encore des affectations de quart actives. Annulez-les d'abord."
+        }
+      },
+      "templateForm": {
+        "createTitle": "Créer un modèle de quart",
+        "editTitle": "Modifier le modèle de quart",
+        "cancel": "Annuler",
+        "saveChanges": "Enregistrer les modifications",
+        "create": "Créer un modèle",
+        "templateName": "Nom du modèle",
+        "defaultStart": "Début par défaut",
+        "defaultEnd": "Fin par défaut",
+        "description": "Description",
+        "descriptionPlaceholder": "Description optionnelle...",
+        "activeTemplate": "Modèle actif",
+        "activeTemplateHint": "Les modèles inactifs ne peuvent pas être sélectionnés pour de nouveaux plannings."
+      },
+      "assignmentPanel": {
+        "title": "Détail du quart",
+        "closePanel": "Fermer le panneau",
+        "assignedByOn": "Assigné par {name} le {date}",
+        "attendance": "Présence",
+        "checkIn": "Entrée",
+        "checkOut": "Sortie",
+        "lateMinutes": "Retard de {minutes}m",
+        "earlyLeaveMinutes": "Départ anticipé de {minutes}m",
+        "worked": "Travaillé",
+        "workedDuration": "{hours}h {minutes}m",
+        "adjustedBy": "Ajusté par",
+        "reason": "Raison",
+        "noAttendance": "Aucune présence enregistrée pour le moment.",
+        "checkInAction": "Pointer Entrée",
+        "checkOutAction": "Pointer Sortie",
+        "adjustAttendance": "Ajuster la présence",
+        "cancelAssignmentConfirm": "Annuler cette affectation ?",
+        "cancelAssignment": "Annuler l'affectation"
+      }
+    },
+    "live": {
+      "title": "Tableau de Présence en Direct",
+      "description": "Vue en temps réel de la présence du quart du jour.",
+      "updating": "Mise à jour",
+      "live": "Live",
+      "connection": {
+        "realtime": "SignalR connecté",
+        "polling": "Polling de secours"
+      },
+      "autoRefresh": "Actualisation automatique toutes les 30 secondes",
+      "lastUpdated": "Dernière mise à jour à : {time}",
+      "businessDate": "Date de travail",
+      "selectDate": "Sélectionner une date",
+      "quickFilters": "Filtres rapides",
+      "kpiHint": "Les KPI et incidents POS sont prêts. Une fois l'intégration POS terminée, les cartes afficheront automatiquement commandes, tickets, revenus et incidents par rôle.",
+      "loading": "Chargement du live board...",
+      "empty": "Aucun employé n'est actuellement en service.",
+      "alert": "Alerte",
+      "filters": {
+        "all": "Tous",
+        "urgent": "Intervention requise",
+        "onDuty": "En service",
+        "waiting": "En attente",
+        "completed": "Terminé"
+      },
+      "summary": {
+        "scheduled": "Planifié",
+        "active": "En service",
+        "late": "En retard",
+        "absent": "Absent",
+        "completed": "Terminé",
+        "urgent": "Intervention requise",
+        "onDuty": "En service",
+        "waiting": "En attente"
+      },
+      "sections": {
+        "scheduledShift": "Quart planifié",
+        "elapsedTime": "Temps écoulé",
+        "statusLocation": "Statut / Position",
+        "performance": "KPI de performance",
+        "issues": "Incidents / Erreurs"
+      },
+      "activity": {
+        "waiting": "Présent et en attente du début de quart",
+        "completed": "Quart terminé",
+        "notCheckedIn": "Le statut de pointage doit être vérifié",
+        "cashierFallback": "Au comptoir POS",
+        "barFallback": "Au comptoir bar",
+        "serverFallback": "En service en salle",
+        "defaultFallback": "En service, en attente de synchro POS"
+      },
+      "performance": {
+        "currentRevenue": "Revenu actuel : {amount}",
+        "paidBills": "Tickets payés : {count}",
+        "waitingSync": "Revenu POS en attente de synchronisation",
+        "barStats": "{completed} articles terminés • {pending} en attente",
+        "barWaitingSync": "Production bar en attente de synchronisation",
+        "ordersHandled": "Commandes prises : {count}",
+        "defaultWaitingSync": "Indicateur de performance en attente de synchro POS"
+      },
+      "warning": {
+        "late": "Pointage en retard de {minutes} min",
+        "earlyLeave": "Départ anticipé de {minutes} min",
+        "notCheckedIn": "Aucun pointage à l'heure enregistré",
+        "checkedInAt": "Pointé à {time}"
+      },
+      "issues": {
+        "pending": "{count} incident(s) en attente",
+        "none": "Aucun incident enregistré"
+      },
+      "manualAdjusted": "Cet enregistrement a été ajusté manuellement.",
+      "table": {
+        "staff": "Personnel",
+        "role": "Rôle",
+        "shiftType": "Type de quart",
+        "plannedTime": "Horaire prévu",
+        "checkIn": "Entrée",
+        "checkOut": "Sortie",
+        "status": "Statut",
+        "lateMinutes": "Retard (min)"
+      }
+    },
+    "myShift": {
+      "title": "Mes Quarts",
+      "description": "Consultez vos quarts assignés et pointez votre entrée/sortie.",
+      "loading": "Chargement des quarts...",
+      "empty": "Aucun quart assigné pour les 30 prochains jours.",
+      "today": "Aujourd'hui",
+      "upcoming": "À venir ({count})",
+      "past": "Quarts passés ({count})",
+      "actions": {
+        "swap": "Échanger",
+        "leave": "Congé"
+      },
+      "summary": {
+        "title": "Résumé du mois",
+        "subtitle": "Vue d'ensemble de la présence",
+        "onTime": "À l'heure",
+        "late": "En retard",
+        "ot": "HS",
+        "incoming": "À venir",
+        "estimatedEarnings": "Gain estimé",
+        "shiftCount": "{count} quart(s)"
+      },
+      "checkInCard": {
+        "todayShiftFallback": "Quart du jour",
+        "scheduled": "Planifié",
+        "checkIn": "Entrée",
+        "checkOut": "Sortie",
+        "arrivedLate": "Arrivé avec {minutes} min de retard",
+        "leftEarly": "Parti {minutes} min plus tôt",
+        "workedDuration": "Travaillé {hours}h {minutes}m",
+        "verifyingNetwork": "Vérification du réseau magasin...",
+        "networkConnected": "Connecté au réseau magasin",
+        "locationUnverified": "Position non vérifiée",
+        "checkInAction": "Pointer Entrée",
+        "checkOutAction": "Pointer Sortie"
+      },
+      "todayShift": "Quart du jour",
+      "upcomingShifts": "Prochains quarts",
+      "pastShifts": "Quarts passés",
+      "noShifts": "Aucun quart assigné.",
+      "checkInBtn": "Pointer Entrée",
+      "checkOutBtn": "Pointer Sortie",
+      "checkedInAt": "Entrée à {time}",
+      "checkedOutAt": "Sortie à {time}"
+    },
+    "reports": {
+      "title": "Rapports de Quart",
+      "description": "Résumé des présences, heures travaillées et exceptions.",
+      "tabs": {
+        "attendance": "Présences",
+        "workedHours": "Heures travaillées",
+        "exceptions": "Exceptions"
+      },
+      "filters": {
+        "fromDate": "Date de début",
+        "toDate": "Date de fin",
+        "staff": "Membre du personnel",
+        "shiftType": "Type de quart",
+        "attendanceStatus": "Statut de présence",
+        "applyFilters": "Appliquer",
+        "clearFilters": "Effacer"
+      },
+      "attendance": {
+        "totalAssigned": "Total affecté",
+        "attendanceRate": "Taux de présence",
+        "lateCount": "Retards",
+        "absentCount": "Absences",
+        "table": {
+          "staff": "Personnel",
+          "role": "Rôle",
+          "assigned": "Affecté",
+          "present": "Présent",
+          "late": "En retard",
+          "absent": "Absent",
+          "rate": "Taux"
+        }
+      },
+      "workedHours": {
+        "totalScheduled": "Heures planifiées",
+        "totalWorked": "Heures travaillées",
+        "variance": "Écart",
+        "table": {
+          "staff": "Personnel",
+          "role": "Rôle",
+          "scheduledMin": "Planifié (min)",
+          "workedMin": "Travaillé (min)",
+          "varianceMin": "Écart (min)",
+          "incomplete": "Incomplet"
+        }
+      },
+      "exceptions": {
+        "lateCount": "Retards",
+        "absentCount": "Absences",
+        "earlyLeaveCount": "Départs anticipés",
+        "adjustmentCount": "Ajustements manuels",
+        "table": {
+          "date": "Date",
+          "staff": "Personnel",
+          "role": "Rôle",
+          "shiftType": "Type de quart",
+          "exceptionType": "Exception",
+          "minutesAffected": "Minutes",
+          "reviewer": "Révisé par"
+        }
+      },
+      "refresh": "Actualiser",
+      "exportCsv": "Exporter CSV",
+      "selectDateRange": "Sélectionnez une plage de dates pour charger les rapports",
+      "highAbsenceRate": "Taux d'absence élevé",
+      "presets": {
+        "today": "Aujourd'hui",
+        "thisWeek": "Cette semaine",
+        "last7Days": "7 derniers jours",
+        "thisMonth": "Ce mois",
+        "lastMonth": "Mois dernier"
+      },
+      "health": {
+        "attendanceRate": "Taux de présence",
+        "hoursCompliance": "Conformité des heures",
+        "exceptions": "Exceptions",
+        "shiftsPresent": "{present} sur {total} quarts",
+        "hoursWorked": "{worked}h travaillées sur {scheduled}h",
+        "noAttendanceData": "Aucune donnée de présence",
+        "noHoursData": "Aucune donnée d'heures",
+        "issuesFlagged": "{count, plural, =0 {Aucun problème} =1 {1 problème signalé} other {# problèmes signalés}}"
+      },
+      "shared": {
+        "loading": "Chargement des données...",
+        "empty": "Aucune donnée pour la période sélectionnée.",
+        "show": "Afficher",
+        "records": "enregistrements",
+        "prev": "Préc.",
+        "next": "Suiv."
+      },
+      "attendanceTab": {
+        "inner": {
+          "overview": "Vue d'ensemble",
+          "staffSummary": "Par agent",
+          "details": "Détails"
+        },
+        "searchLabel": "Rechercher un agent",
+        "searchPlaceholder": "Nom de l'agent...",
+        "filterByStaff": "Filtrer par agent",
+        "allStaff": "Tous les agents",
+        "clearSearch": "Effacer",
+        "kpi": {
+          "totalAssignments": "Total affecté",
+          "checkInRate": "Taux de pointage",
+          "lateArrivals": "Retards",
+          "absences": "Absences"
+        },
+        "chart": {
+          "dailyBreakdown": "Présence quotidienne",
+          "onTime": "À l'heure",
+          "late": "En retard",
+          "absent": "Absent"
+        },
+        "topAbsences": "Plus d'absences",
+        "topLate": "Plus de retards",
+        "recordsOf": "des enregistrements",
+        "scorePrefix": "Score :",
+        "insightsLabel": "Aperçus",
+        "showInsights": "Afficher les aperçus",
+        "hideInsights": "Masquer les aperçus",
+        "insights": {
+          "highAbsence": "Taux d'absence élevé : {absentRate}% des quarts ({absent} absences). Vérifiez la couverture du personnel.",
+          "highLate": "Taux de retard élevé : {lateRate}%. Pensez à revoir les heures de début de quart.",
+          "frequentAbsence": "{count} agent(s) ont 3 absences ou plus sur cette période.",
+          "perfectAttendance": "Présence parfaite ! Tous les quarts ont un pointage d'entrée sur la période sélectionnée.",
+          "zeroLateAbsent": "Excellent ! 0 absence et 0 retard sur la période sélectionnée."
+        },
+        "statusCards": {
+          "onTime": "À l'heure",
+          "late": "En retard",
+          "absent": "Absent",
+          "present": "Présent"
+        },
+        "badges": {
+          "total": "Total : {value}",
+          "present": "Présent : {value}",
+          "onTime": "À l'heure : {value}",
+          "late": "Retard : {value}",
+          "absent": "Absent : {value}"
+        },
+        "manualAdjusted": "Ajusté manuellement",
+        "summaryTable": {
+          "staff": "Agent",
+          "total": "Total",
+          "present": "Présent",
+          "onTime": "À l'heure",
+          "late": "En retard",
+          "absent": "Absent",
+          "checkInRate": "Taux",
+          "reliability": "Fiabilité"
+        },
+        "detailTable": {
+          "date": "Date",
+          "staff": "Agent",
+          "shift": "Quart",
+          "planned": "Prévu",
+          "status": "Statut",
+          "checkIn": "Entrée",
+          "checkOut": "Sortie",
+          "late": "Retard",
+          "earlyLeave": "Départ anticipé"
+        }
+      },
+      "workedHoursTab": {
+        "inner": {
+          "summary": "Résumé",
+          "details": "Détails"
+        },
+        "searchLabel": "Rechercher un agent",
+        "searchPlaceholder": "Nom de l'agent...",
+        "clearSearch": "Effacer",
+        "kpi": {
+          "totalScheduled": "Total planifié",
+          "totalWorked": "Total travaillé",
+          "variance": "Écart",
+          "avgEfficiency": "Efficacité moy.",
+          "incomplete": "incomplet"
+        },
+        "overSchedule": "au-dessus du plan",
+        "underSchedule": "en dessous du plan",
+        "cards": {
+          "staffTracked": "Agents",
+          "totalWorked": "Total travaillé",
+          "scheduled": "Planifié",
+          "overtime": "Heures sup."
+        },
+        "chartTitle": "Heures travaillées vs planifiées — Top agents",
+        "chartScheduled": "Planifié",
+        "chartWorked": "Travaillé",
+        "overtimeAlert": "{count, plural, =1 {1 agent a travaillé 30+ minutes de plus que prévu.} other {# agents ont travaillé 30+ minutes de plus que prévu.}}",
+        "table": {
+          "staff": "Agent",
+          "scheduled": "Planifié",
+          "worked": "Travaillé",
+          "variance": "Écart",
+          "efficiency": "Efficacité",
+          "overtime": "Heures sup.",
+          "incomplete": "Incomplet"
+        }
+      },
+      "exceptionsTab": {
+        "inner": {
+          "summary": "Résumé",
+          "byStaff": "Par agent",
+          "allRecords": "Tous"
+        },
+        "searchLabel": "Rechercher un agent",
+        "searchPlaceholder": "Nom de l'agent...",
+        "clearSearch": "Effacer",
+        "kpi": {
+          "lateIncidents": "Retards",
+          "absences": "Absences",
+          "earlyDepartures": "Départs anticipés",
+          "manualAdjustments": "Ajustements manuels",
+          "totalMinutes": "Total minutes affectées"
+        },
+        "cards": {
+          "lateArrivals": "Retards",
+          "absences": "Absences",
+          "earlyLeave": "Départs anticipés",
+          "manual": "Manuel",
+          "adjusted": "Ajusté"
+        },
+        "adjustedLabel": "✦ Ajusté",
+        "noStaffFound": "Aucun agent avec des exceptions.",
+        "table": {
+          "date": "Date",
+          "staff": "Agent",
+          "shift": "Quart",
+          "exceptionType": "Type d'exception",
+          "minutes": "Minutes",
+          "reviewer": "Révisé par"
+        }
+      }
+    },
+    "scheduleList": {
+      "title": "Affectations de Quart",
+      "description": "Affectez le personnel aux modèles de quart et suivez la présence.",
+      "searchPlaceholder": "Rechercher des affectations",
+      "newAssignment": "Nouvelle affectation",
+      "confirmCancel": "Annuler cette affectation ?",
+      "activeCount": "Actif : {count}",
+      "cancelledCount": "Annulé : {count}",
+      "filters": {
+        "fromDate": "Date de début",
+        "toDate": "Date de fin",
+        "fromDatePlaceholder": "Choisir la date de début",
+        "toDatePlaceholder": "Choisir la date de fin",
+        "refresh": "Actualiser"
+      },
+      "table": {
+        "no": "N°",
+        "date": "Date",
+        "template": "Modèle",
+        "staff": "Agent",
+        "plannedTime": "Horaire prévu",
+        "status": "Statut"
+      },
+      "noData": "Aucune affectation trouvée. Ajustez la période ou créez une nouvelle affectation."
+    },
+    "assignmentForm": {
+      "createTitle": "Nouvelle Affectation",
+      "editTitle": "Modifier l'Affectation",
+      "cancel": "Annuler",
+      "saveChanges": "Enregistrer",
+      "assignStaff": "Affecter",
+      "plannedHint": "Laissez les horaires vides pour utiliser les horaires par défaut du modèle.",
+      "fields": {
+        "shiftTemplate": "Modèle de Quart",
+        "staffMember": "Agent",
+        "workDate": "Date de Travail",
+        "plannedStart": "Début Prévu",
+        "plannedEnd": "Fin Prévue",
+        "notes": "Notes"
+      },
+      "placeholders": {
+        "shiftTemplate": "Sélectionner un modèle de quart...",
+        "staffMember": "Sélectionner un agent...",
+        "loadingStaff": "Chargement des agents...",
+        "workDate": "Sélectionner une date",
+        "notes": "Notes facultatives..."
+      }
+    }
+  }
+}
