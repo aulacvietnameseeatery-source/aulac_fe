@@ -7,6 +7,8 @@ interface NotificationState {
   unreadCount: number;
   connected: boolean;
   lastReceivedAt: string | null;
+  lastChangeSource: "idle" | "realtime" | "missed" | "list-sync";
+  lastAddedIds: number[];
   /** Per-type notification preferences (loaded from API) */
   preferences: NotificationPreferenceDto[];
 }
@@ -31,13 +33,21 @@ export const useNotificationStore = create<NotificationState & NotificationActio
     unreadCount: 0,
     connected: false,
     lastReceivedAt: null,
+    lastChangeSource: "idle",
+    lastAddedIds: [],
     preferences: [],
 
     // Actions
     addNotification: (notification) =>
       set((state) => {
         // Dedup
-        if (state.items.some((n) => n.id === notification.id)) return state;
+        if (state.items.some((n) => n.id === notification.id)) {
+          return {
+            ...state,
+            lastChangeSource: "idle",
+            lastAddedIds: [],
+          };
+        }
 
         const newItem: NotificationListItem = {
           ...notification,
@@ -52,6 +62,8 @@ export const useNotificationStore = create<NotificationState & NotificationActio
           items,
           unreadCount: state.unreadCount + 1,
           lastReceivedAt: notification.createdAt,
+          lastChangeSource: "realtime",
+          lastAddedIds: [notification.id],
         };
       }),
 
@@ -60,7 +72,13 @@ export const useNotificationStore = create<NotificationState & NotificationActio
         const existingIds = new Set(state.items.map((n) => n.id));
         const newItems = notifications.filter((n) => !existingIds.has(n.id));
 
-        if (newItems.length === 0) return state;
+        if (newItems.length === 0) {
+          return {
+            ...state,
+            lastChangeSource: "idle",
+            lastAddedIds: [],
+          };
+        }
 
         const merged = [...newItems, ...state.items]
           .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
@@ -68,20 +86,31 @@ export const useNotificationStore = create<NotificationState & NotificationActio
 
         const unreadCount = merged.filter((n) => !n.isRead).length;
 
-        return { items: merged, unreadCount };
+        return {
+          items: merged,
+          unreadCount,
+          lastChangeSource: "missed",
+          lastAddedIds: newItems.map((n) => n.id),
+        };
       }),
 
     setItems: (items) =>
       set(() => ({
         items,
         unreadCount: items.filter((n) => !n.isRead).length,
+        lastChangeSource: "list-sync",
+        lastAddedIds: [],
       })),
 
     appendItems: (newItems) =>
       set((state) => {
         const existingIds = new Set(state.items.map((n) => n.id));
         const unique = newItems.filter((n) => !existingIds.has(n.id));
-        return { items: [...state.items, ...unique] };
+        return {
+          items: [...state.items, ...unique],
+          lastChangeSource: "list-sync",
+          lastAddedIds: [],
+        };
       }),
 
     markRead: (notificationId) =>

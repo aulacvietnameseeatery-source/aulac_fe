@@ -5,6 +5,10 @@ import { getMessages } from "next-intl/server";
 import QueryProvider from "@/components/providers/query-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { AuthProvider } from "@/components/providers/auth-provider";
+import {
+  NotificationProvider,
+  NotificationToastRenderer,
+} from "@/features/staff/notifications";
 
 import { inter, playfair, lexend } from "@/lib/fonts";
 
@@ -60,11 +64,14 @@ export default async function LocaleLayout(
       <body className={`${inter.variable} ${playfair.variable} ${lexend.variable} antialiased`}>
         <QueryProvider>
           <AuthProvider>
-            <NextIntlClientProvider locale={locale} messages={messages}>
-              {children}
-              <Toaster />
-            <NotificationToaster />
-            </NextIntlClientProvider>
+            <NotificationProvider>
+              <NextIntlClientProvider locale={locale} messages={messages}>
+                {children}
+                <Toaster />
+                <NotificationToaster />
+                <NotificationToastRenderer />
+              </NextIntlClientProvider>
+            </NotificationProvider>
           </AuthProvider>
         </QueryProvider>
       </body>
