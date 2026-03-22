@@ -1238,7 +1238,8 @@
     "shifts": "Schedules",
     "shiftsLive": "Live Board",
     "shiftsReports": "Shift Reports",
-    "myShifts": "My Shifts"
+    "myShifts": "My Shifts",
+    "stock": "Stock"
   },
   "DashboardTopNav": {
     "pos": "POS",

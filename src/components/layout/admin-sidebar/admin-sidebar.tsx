@@ -87,6 +87,7 @@ const navigation: NavCategory[] = [
       { key: "ingredients", href: "/dashboard/ingredients", icon: Package },
       { key: "suppliers", href: "/dashboard/suppliers", icon: Truck },
       { key: "coupons", href: "/dashboard/coupons", icon: TicketPercent },
+      { key: "stock", href: "/dashboard/stock", icon: Layers  },
     ]
   },
   {

@@ -1,5 +1,3 @@
-import { PagedResult } from "@/types/api-response.types";
-
 export interface SupplierBasicDto {
     supplierId: number;
     supplierName: string;
@@ -10,7 +8,10 @@ export interface SupplierBasicDto {
 export interface IngredientDto {
     ingredientId: number;
     ingredientName: string;
-    unit: string;
+
+    unitLvId: number;
+    unitName?: string;
+
     typeLvId?: number;
     typeName?: string;
     imageId?: number;
@@ -34,7 +35,9 @@ export interface IngredientFilterParams {
 
 export interface SaveIngredientRequest {
     ingredientName: string;
-    unit: string;
+
+    unitLvId: number;
+
     typeLvId?: number;
     imageId?: number | null;
     minStockLevel: number;

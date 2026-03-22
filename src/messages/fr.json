@@ -1245,7 +1245,8 @@
     "shifts": "Plannings",
     "shiftsLive": "Tableau de Présence",
     "shiftsReports": "Rapports de Quart",
-    "myShifts": "Mes Quarts"
+    "myShifts": "Mes Quarts",
+    "stock": "Stock"
   },
   "DashboardTopNav": {
     "pos": "Caisse (POS)",

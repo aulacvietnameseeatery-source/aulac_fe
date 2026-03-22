@@ -1248,7 +1248,8 @@
     "shifts": "Lịch Ca",
     "shiftsLive": "Bảng Trực Ca",
     "shiftsReports": "Báo Cáo Ca",
-    "myShifts": "Ca Của Tôi"
+    "myShifts": "Ca Của Tôi",
+    "stock": "Kho hàng"
   },
   "DashboardTopNav": {
     "pos": "Bán hàng (POS)",
