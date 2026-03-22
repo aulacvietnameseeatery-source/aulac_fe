@@ -56,7 +56,7 @@ export const StoreProfileForm = () => {
     const handleAutoTranslate = () => {
         const currentData = getValues();
         const activeI18n = currentData.i18n[activeLocale];
-        
+
         const dataToTranslate = Object.entries(activeI18n).reduce((acc, [k, v]) => {
             if (v) acc[k] = v as string;
             return acc;
@@ -76,7 +76,7 @@ export const StoreProfileForm = () => {
                 Object.entries(data.translations).forEach(([lang, translations]) => {
                     const l = lang as SupportedLocale;
                     Object.entries(translations).forEach(([key, value]) => {
-                        // @ts-ignore
+                        // @ts-expect-error: dynamic key access for translated values i18n
                         newValues.i18n[l][key] = value;
                     });
                 });

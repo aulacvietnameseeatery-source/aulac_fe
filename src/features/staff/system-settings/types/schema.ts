@@ -109,10 +109,10 @@ export function mapAboutUsSettingsToFormValues(settings: Record<string, string>)
 export function mapFormValuesToAboutUsSettings(values: AboutUsFormValues): Record<string, string> {
   const settings: Record<string, string> = {};
   LOCALES.forEach(loc => {
+    const localeValues = values.i18n[loc] as Record<string, string | undefined>;
     ABOUT_US_TEXT_KEYS.forEach(k => {
       const backendKey = k.replace(/_/g, '.');
-      // @ts-ignore
-      settings[`${backendKey}_${loc}`] = values.i18n[loc][k] || "";
+      settings[`${backendKey}_${loc}`] = localeValues[k] || "";
     });
   });
   return settings;
@@ -182,16 +182,16 @@ export function mapIntroSettingsToFormValues(settings: Record<string, string>): 
 export function mapFormValuesToIntroSettings(values: IntroFormValues): Record<string, string> {
   const settings: Record<string, string> = {};
   LOCALES.forEach(loc => {
+    const localeValues = values.i18n[loc] as Record<string, string | undefined>;
     INTRO_TEXT_KEYS.forEach(k => {
       const backendKey = k.replace(/_/g, '.');
-      // @ts-ignore
-      settings[`${backendKey}_${loc}`] = values.i18n[loc][k] || "";
+      settings[`${backendKey}_${loc}`] = localeValues[k] || "";
     });
   });
+  const mediaValues = values as unknown as Record<string, string | undefined>;
   INTRO_MEDIA_KEYS.forEach(k => {
     const backendKey = k.replace(/_/g, '.');
-    // @ts-ignore
-    settings[backendKey] = values[k] || "";
+    settings[backendKey] = mediaValues[k] || "";
   });
   return settings;
 }

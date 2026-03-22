@@ -80,7 +80,7 @@ export const AboutUsSettingsForm = () => {
                 Object.entries(data.translations).forEach(([lang, translations]) => {
                     const l = lang as SupportedLocale;
                     Object.entries(translations).forEach(([key, value]) => {
-                        // @ts-ignore
+                        // @ts-expect-error: dynamic key access for translated values i18n
                         newValues.i18n[l][key] = value;
                     });
                 });
