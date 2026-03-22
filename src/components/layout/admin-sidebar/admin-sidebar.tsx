@@ -39,6 +39,7 @@ import {
   Building2,
   Presentation,
   Users as UsersIcon,
+  BadgePercent,
 } from "lucide-react";
 
 import { useAuth } from "@/components/providers/auth-provider";
@@ -123,17 +124,17 @@ const navigation: NavCategory[] = [
     status: "settings",
     icon: Settings,
     items: [
-      { 
-        key: "storeSettings", 
-        href: "/dashboard/store-settings", 
+      {
+        key: "storeSettings",
+        href: "/dashboard/store-settings",
         icon: Warehouse,
         children: [
           { key: "storeProfile", href: "/dashboard/store-settings?tab=profile", icon: Building2 },
           { key: "storeIntroduction", href: "/dashboard/store-settings?tab=introduction", icon: Presentation },
           { key: "storeAboutUs", href: "/dashboard/store-settings?tab=about", icon: UsersIcon },
+          { key: "taxSettings", href: "/dashboard/store-settings?tab=tax", icon: BadgePercent },
         ]
       },
-      { key: "systemSettings", href: "/dashboard/system-settings", icon: Settings2 },
       { key: "notifications", href: "/dashboard/notifications", icon: Bell },
       { key: "promotions", href: "/dashboard/promotions", icon: Tags },
       { key: "emails", href: "/dashboard/emails", icon: Mail },
@@ -368,7 +369,7 @@ export function AdminSidebar({ onClose }: AdminSidebarProps) {
                       <span className="text-[13px] font-medium">{label}</span>
                       {hasChildren ? (
                         <div className="ml-auto">
-                           <ChevronRight size={14} className={`transition-transform duration-300 opacity-50 ${isExpanded ? "rotate-90" : ""}`} />
+                          <ChevronRight size={14} className={`transition-transform duration-300 opacity-50 ${isExpanded ? "rotate-90" : ""}`} />
                         </div>
                       ) : active && (
                         <div className="ml-auto">
@@ -389,8 +390,8 @@ export function AdminSidebar({ onClose }: AdminSidebarProps) {
                                 onClick={onClose}
                                 className={`
                                   group flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all
-                                  ${childActive 
-                                    ? "text-[#FFAB2D] bg-white/5" 
+                                  ${childActive
+                                    ? "text-[#FFAB2D] bg-white/5"
                                     : "text-white/40 hover:text-white hover:bg-white/5"
                                   }
                                 `}

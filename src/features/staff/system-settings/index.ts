@@ -1,6 +1,7 @@
 // Components
 export { SettingField } from './components/SettingField';
 export { SettingGroupCard } from './components/SettingGroupCard';
+export { TaxSettingsForm } from './components/TaxSettingsForm';
 
 // Hooks
 export { useSystemSettings } from './hooks/useSystemSettings';
