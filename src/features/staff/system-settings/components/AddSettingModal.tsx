@@ -16,7 +16,7 @@ interface Props {
 }
 
 export const AddSettingModal = ({ open, onClose, onSuccess }: Props) => {
-    const t = useTranslations('SystemSettings');
+    const t = useTranslations('settings');
     const { addSetting } = useSystemSettings();
     const [isSubmitting, setIsSubmitting] = useState(false);
 

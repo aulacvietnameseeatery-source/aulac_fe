@@ -8,8 +8,8 @@ interface TableInfoSectionProps {
 }
 
 export const TableInfoSection = ({ reservation }: TableInfoSectionProps) => {
-    const t = useTranslations("ReservationManagement.Detail.Table");
-    
+    const t = useTranslations("reservations.management.Detail.Table");
+
     return (
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
             <div className="flex items-center gap-2 text-gray-900 font-semibold text-lg mb-5 border-b border-gray-100 pb-4">
@@ -25,7 +25,7 @@ export const TableInfoSection = ({ reservation }: TableInfoSectionProps) => {
             ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     {reservation.tables.map((table) => (
-                        <div 
+                        <div
                             key={table.tableId}
                             className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg p-4 border border-blue-200 hover:shadow-md transition-shadow"
                         >

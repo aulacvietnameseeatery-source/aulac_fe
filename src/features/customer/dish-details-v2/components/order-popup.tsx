@@ -9,7 +9,7 @@ type Props = {
 };
 
 export function OrderPopup({ open, onClose }: Props) {
-  const t = useTranslations("OrderPopup");
+  const t = useTranslations("orders.popup");
   const [qty, setQty] = useState(1);
 
   // reset quantity mỗi lần mở popup (tuỳ bạn)

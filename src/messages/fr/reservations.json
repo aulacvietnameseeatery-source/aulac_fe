@@ -1,313 +1,315 @@
 {
-  "Reservation": {
-    "Header": {
-      "title": "Choisissez votre table",
-      "subtitle": "Vivez l’excellence de la gastronomie. Sélectionnez votre zone et votre table préférée ci-dessous."
-    },
-    "Controls": {
-      "single": "Simple",
-      "multiple": "Sélection Multiple",
-      "bookSelected": "Réserver la Sélection ({count})",
-      "selectMode": "Mode de sélection"
-    },
-    "Legend": {
-      "available": "DISPONIBLE",
-      "reserved": "RÉSERVÉE",
-      "selected": "SÉLECTIONNÉE"
-    },
-    "TableGrid": {
-      "empty": "Aucune table disponible dans cette zone."
-    },
-    "TableCard": {
-      "available": "Disponible",
-      "reserved": "Réservée",
-      "selected": "Sélectionnée",
-      "guests": "{count} Convives"
-    },
-    "Sidebar": {
-      "header": {
-        "title": "Récapitulatif de réservation",
-        "subtitle": "Veuillez vérifier votre sélection"
+  "reservations": {
+    "public": {
+      "Header": {
+        "title": "Choisissez votre table",
+        "subtitle": "Vivez l’excellence de la gastronomie. Sélectionnez votre zone et votre table préférée ci-dessous."
       },
-      "datetime": {
-        "label": "Date et heure",
-        "edit": "Modifier",
-        "save": "Enregistrer",
+      "Controls": {
+        "single": "Simple",
+        "multiple": "Sélection Multiple",
+        "bookSelected": "Réserver la Sélection ({count})",
+        "selectMode": "Mode de sélection"
+      },
+      "Legend": {
+        "available": "DISPONIBLE",
+        "reserved": "RÉSERVÉE",
+        "selected": "SÉLECTIONNÉE"
+      },
+      "TableGrid": {
+        "empty": "Aucune table disponible dans cette zone."
+      },
+      "TableCard": {
+        "available": "Disponible",
+        "reserved": "Réservée",
+        "selected": "Sélectionnée",
+        "guests": "{count} Convives"
+      },
+      "Sidebar": {
+        "header": {
+          "title": "Récapitulatif de réservation",
+          "subtitle": "Veuillez vérifier votre sélection"
+        },
+        "datetime": {
+          "label": "Date et heure",
+          "edit": "Modifier",
+          "save": "Enregistrer",
+          "cancel": "Annuler",
+          "selectDate": "Choisir la date",
+          "selectTime": "Choisir l’heure",
+          "openingHours": "(11h00 – 22h00)"
+        },
+        "table": {
+          "label": "Table sélectionnée",
+          "zone": "Zone standard",
+          "guests": "{count} convives",
+          "empty": "Veuillez sélectionner une table"
+        },
+        "guest": {
+          "label": "Vos informations",
+          "name": "Nom complet",
+          "phone": "Numéro de téléphone *",
+          "email": "Adresse e-mail (facultatif)"
+        },
+        "action": {
+          "book": "Réserver la table",
+          "saveFirst": "Enregistrez d’abord les modifications"
+        },
+        "validation": {
+          "missingInfo": "* Veuillez renseigner le nom et le téléphone"
+        },
+        "legal": "En réservant, vous acceptez nos conditions générales et notre politique d’annulation."
+      },
+      "BookingModal": {
+        "selectedTable": "Table sélectionnée",
+        "title": "Confirmer la réservation",
+        "restaurantName": "An Lac – Cuisine Vietnamienne",
+        "date": "Date",
+        "time": "Heure",
+        "guests": "Convives",
+        "guestsCount": "{count} personnes",
+        "guestInfo": "Informations du client",
+        "policy": "Les tables sont conservées pendant 15 minutes après l’heure de réservation. Merci de nous prévenir en cas de retard.",
+        "confirm": "Confirmer la réservation",
+        "changeSelection": "Modifier la sélection",
+        "fullName": "Nom complet *",
+        "phoneNumber": "Numéro de téléphone *",
+        "emailAddress": "E-mail (facultatif)",
+        "partySize": "Nombre de convives *",
         "cancel": "Annuler",
+        "confirmBooking": "Confirmer la réservation",
+        "confirmed": "Confirmé !",
+        "tableReserved": "Votre table est réservée",
+        "restaurant": "Restaurant",
+        "guestName": "Nom du client",
+        "zone": "Zone",
+        "seeYouSoon": "À bientôt !",
+        "downloadTicket": "Télécharger le billet",
+        "close": "Fermer",
+        "alerts": {
+          "ticketNotFound": "Billet introuvable. Veuillez réessayer.",
+          "downloadError": "Impossible de télécharger. Veuillez faire une capture d'écran."
+        }
+      },
+      "CallButton": {
+        "title": "Appeler le restaurant",
+        "subtitle": "Aucune table disponible en ligne",
+        "description": "Veuillez appeler directement pour réserver ou vous renseigner",
+        "restaurant": "Restaurant",
+        "phoneLabel": "Numéro de téléphone",
+        "callNow": "Appeler maintenant",
+        "copyNumber": "Copier le numéro",
+        "copied": "Copié !",
+        "hours": "11h00 – 22h00",
+        "buttonText": "Appeler pour réserver",
+        "dialing": "Ouverture de l'application téléphonique..."
+      },
+      "Zone": {
+        "label": "Zone",
+        "All": "Tous",
+        "Indoor": "Intérieur",
+        "Outdoor": "Terrasse",
+        "Rooftop": "Toit-terrasse"
+      },
+      "Toast": {
+        "success": "Réservation confirmée avec succès !",
+        "error": "Échec de la confirmation de la réservation. Veuillez réessayer.",
+        "lockSuccess": "Table verrouillée avec succès. Veuillez compléter votre réservation.",
+        "lockError": "Échec du verrouillage de la table. Elle peut être occupée."
+      },
+      "PublicForm": {
+        "title": "Réserver une table",
+        "chooseCustomerType": "Choisir le type de client",
+        "existingCustomer": "Client existant",
+        "newCustomer": "Nouveau client",
+        "existingCustomerHint": "Entrez le numéro pour remplir automatiquement les informations",
+        "newCustomerHint": "Saisissez les informations de base pour envoyer la demande",
+        "existingModeNote": "Client existant : entrez d’abord le numéro de téléphone, nous remplirons les informations si elles existent.",
+        "newModeNote": "Nouveau client : veuillez renseigner les informations de base requises.",
+        "noFitTitle": "Aucune table en ligne ne correspond à ce créneau horaire.",
+        "callRestaurant": "Appeler le restaurant",
+        "goBack": "Retour",
+        "yourInfo": "Vos informations",
+        "phone": "Numéro de téléphone",
+        "yourName": "Votre nom",
+        "email": "E-mail",
+        "loadingCustomerName": "Chargement du nom...",
+        "loadingCustomerEmail": "Chargement de l’e-mail...",
+        "existingCustomerName": "Nom du client existant",
+        "existingCustomerEmail": "E-mail du client existant",
+        "bookingInfo": "Informations de réservation",
+        "partySize": "Nombre de personnes",
+        "reservationDate": "Date de réservation",
         "selectDate": "Choisir la date",
+        "arrivalTime": "Heure d’arrivée",
         "selectTime": "Choisir l’heure",
-        "openingHours": "(11h00 – 22h00)"
+        "notes": "Remarques",
+        "close": "Fermer",
+        "closeAriaLabel": "Fermer la boîte de réservation",
+        "submit": "RÉSERVER",
+        "checkingTables": "Vérification des tables...",
+        "processing": "Traitement en cours...",
+        "lookup": {
+          "notFound": "Aucun client existant trouvé avec ce numéro."
+        },
+        "validation": {
+          "selectCustomerType": "Veuillez choisir un type de client.",
+          "phoneRequired": "Veuillez saisir un numéro de téléphone.",
+          "nameRequired": "Veuillez saisir votre nom.",
+          "existingCustomerNotFound": "Informations du client existant introuvables. Veuillez vérifier le numéro de téléphone.",
+          "dateRequired": "Veuillez sélectionner une date de réservation.",
+          "timeRequired": "Veuillez sélectionner une heure d’arrivée.",
+          "partySizeRequired": "Veuillez sélectionner le nombre de personnes."
+        },
+        "toast": {
+          "created": "Demande de réservation créée avec succès !",
+          "createFailed": "Impossible de créer la réservation.",
+          "unexpected": "Une erreur est survenue lors de la réservation."
+        }
+      },
+      "PublicTicket": {
+        "title": "Billet de réservation",
+        "customer": "Client",
+        "guests": "Convives",
+        "date": "Date",
+        "time": "Heure",
+        "table": "Table",
+        "zone": "Zone",
+        "pendingAssign": "Attribution en attente",
+        "downloadTicket": "Télécharger le billet",
+        "close": "Fermer"
+      }
+    },
+    "management": {
+      "List": {
+        "title": "Réservations",
+        "searchPlaceholder": "Rechercher un client, un téléphone...",
+        "addNew": "Nouveau",
+        "all": "Tout",
+        "empty": "Aucune réservation trouvée"
+      },
+      "Card": {
+        "table": "Table",
+        "guests": "Invités",
+        "createdOn": "Créé le",
+        "status": "Statut",
+        "late": "En retard",
+        "viewNote": "Voir la note",
+        "customerNotes": "Notes du client :",
+        "noNotes": "Aucune demande spéciale ou précommande pour cette réservation.",
+        "checkIn": "Enregistrer",
+        "na": "N/D"
+      },
+      "Detail": {
+        "title": "Détails de la réservation",
+        "back": "Retour",
+        "backToList": "Retour aux réservations",
+        "edit": "Modifier",
+        "delete": "Supprimer",
+        "reservationId": "ID de réservation",
+        "loading": "Chargement des détails de la réservation...",
+        "notFound": "Réservation introuvable",
+        "Customer": {
+          "title": "Informations client",
+          "fullName": "Nom complet",
+          "phoneNumber": "Numéro de téléphone",
+          "emailAddress": "Adresse e-mail",
+          "partySize": "Nombre de convives",
+          "guest": "invité",
+          "guests": "invités"
+        },
+        "Booking": {
+          "title": "Informations de réservation",
+          "reservedDate": "Date réservée",
+          "reservedTime": "Heure réservée",
+          "status": "Statut",
+          "bookingSource": "Source de réservation",
+          "createdOn": "Créé le"
+        },
+        "Table": {
+          "title": "Informations sur la table",
+          "noTables": "Aucune table assignée",
+          "capacity": "Capacité",
+          "totalTables": "Total des tables assignées"
+        }
+      },
+      "CheckInModal": {
+        "title": "Enregistrement du client",
+        "arrivalMsg": "{name} est arrivé(e) pour sa réservation de {time} ({pax} invités).",
+        "assignTable": "Attribuer une table",
+        "selectPlaceholder": "-- Sélectionnez une table disponible --",
+        "noTablesAvailable": "Aucune table disponible",
+        "tableOption": "{code} ({zone} - Capacité : {capacity})",
+        "capacityHint": "Astuce : Essayez d'attribuer une table avec une capacité ≥ {pax}",
+        "cancel": "Annuler",
+        "confirm": "Confirmer",
+        "loading": "Chargement des tables..."
+      },
+      "Messages": {
+        "checkInSuccess": "Client enregistré avec succès !",
+        "checkInFail": "Échec de l'enregistrement de la réservation",
+        "loadTablesFail": "Échec du chargement des tables disponibles."
+      }
+    },
+    "staff": {
+      "title": "Créer une réservation",
+      "subtitle": "Saisissez les informations pour les clients walk-in ou par téléphone",
+      "cancel": "Annuler",
+      "save": "Enregistrer",
+      "editTitle": "Modifier la réservation",
+      "saveChanges": "Enregistrer les modifications",
+      "notes": "Notes",
+      "notesPlaceholder": "ex. Anniversaire, zone calme préférée...",
+      "errors": {
+        "missingTitle": "Informations manquantes",
+        "missingDescription": "Veuillez remplir téléphone, nom, date, heure et choisir une table.",
+        "timeErrorTitle": "Heure invalide",
+        "timePast": "Impossible de sélectionner une heure passée.",
+        "failTitle": "Échec de la réservation",
+        "systemError": "Erreur système. Veuillez réessayer."
+      },
+      "success": {
+        "title": "Réservation réussie !",
+        "description": "Client : {name} - Réservation #{id}"
+      },
+      "customer": {
+        "sectionTitle": "Identification du client",
+        "phone": "Numéro de téléphone",
+        "fullName": "Nom complet",
+        "email": "Adresse e-mail",
+        "enterPhone": "Entrez le téléphone...",
+        "enterName": "Nom du client",
+        "enterEmail": "nom@example.com",
+        "newCustomer": "Nouveau client",
+        "member": "Membre ({points} pts)"
+      },
+      "booking": {
+        "sectionTitle": "Détails de la réservation",
+        "date": "Date",
+        "time": "Heure",
+        "selectTime": "Choisir l’heure",
+        "openingHours": "(11h00 – 22h00)",
+        "partySize": "Nombre de personnes",
+        "enterSize": "Ex : 4"
       },
       "table": {
-        "label": "Table sélectionnée",
-        "zone": "Zone standard",
-        "guests": "{count} convives",
-        "empty": "Veuillez sélectionner une table"
+        "availability": "Tables disponibles",
+        "scanning": "Recherche...",
+        "found": "{count} tables trouvées",
+        "tableCount": "{count} table(s)",
+        "bestFit": "Meilleur choix",
+        "emptyHint": "Entrez la date, l'heure et le nombre de personnes.",
+        "noTable": "Aucune table disponible."
       },
-      "guest": {
-        "label": "Vos informations",
-        "name": "Nom complet",
-        "phone": "Numéro de téléphone *",
-        "email": "Adresse e-mail (facultatif)"
-      },
-      "action": {
-        "book": "Réserver la table",
-        "saveFirst": "Enregistrez d’abord les modifications"
-      },
-      "validation": {
-        "missingInfo": "* Veuillez renseigner le nom et le téléphone"
-      },
-      "legal": "En réservant, vous acceptez nos conditions générales et notre politique d’annulation."
-    },
-    "BookingModal": {
-      "selectedTable": "Table sélectionnée",
-      "title": "Confirmer la réservation",
-      "restaurantName": "An Lac – Cuisine Vietnamienne",
-      "date": "Date",
-      "time": "Heure",
-      "guests": "Convives",
-      "guestsCount": "{count} personnes",
-      "guestInfo": "Informations du client",
-      "policy": "Les tables sont conservées pendant 15 minutes après l’heure de réservation. Merci de nous prévenir en cas de retard.",
-      "confirm": "Confirmer la réservation",
-      "changeSelection": "Modifier la sélection",
-      "fullName": "Nom complet *",
-      "phoneNumber": "Numéro de téléphone *",
-      "emailAddress": "E-mail (facultatif)",
-      "partySize": "Nombre de convives *",
-      "cancel": "Annuler",
-      "confirmBooking": "Confirmer la réservation",
-      "confirmed": "Confirmé !",
-      "tableReserved": "Votre table est réservée",
-      "restaurant": "Restaurant",
-      "guestName": "Nom du client",
-      "zone": "Zone",
-      "seeYouSoon": "À bientôt !",
-      "downloadTicket": "Télécharger le billet",
-      "close": "Fermer",
-      "alerts": {
-        "ticketNotFound": "Billet introuvable. Veuillez réessayer.",
-        "downloadError": "Impossible de télécharger. Veuillez faire une capture d'écran."
-      }
-    },
-    "CallButton": {
-      "title": "Appeler le restaurant",
-      "subtitle": "Aucune table disponible en ligne",
-      "description": "Veuillez appeler directement pour réserver ou vous renseigner",
-      "restaurant": "Restaurant",
-      "phoneLabel": "Numéro de téléphone",
-      "callNow": "Appeler maintenant",
-      "copyNumber": "Copier le numéro",
-      "copied": "Copié !",
-      "hours": "11h00 – 22h00",
-      "buttonText": "Appeler pour réserver",
-      "dialing": "Ouverture de l'application téléphonique..."
-    },
-    "Zone": {
-      "label": "Zone",
-      "All": "Tous",
-      "Indoor": "Intérieur",
-      "Outdoor": "Terrasse",
-      "Rooftop": "Toit-terrasse"
-    },
-    "Toast": {
-      "success": "Réservation confirmée avec succès !",
-      "error": "Échec de la confirmation de la réservation. Veuillez réessayer.",
-      "lockSuccess": "Table verrouillée avec succès. Veuillez compléter votre réservation.",
-      "lockError": "Échec du verrouillage de la table. Elle peut être occupée."
-    },
-    "PublicForm": {
-      "title": "Réserver une table",
-      "chooseCustomerType": "Choisir le type de client",
-      "existingCustomer": "Client existant",
-      "newCustomer": "Nouveau client",
-      "existingCustomerHint": "Entrez le numéro pour remplir automatiquement les informations",
-      "newCustomerHint": "Saisissez les informations de base pour envoyer la demande",
-      "existingModeNote": "Client existant : entrez d’abord le numéro de téléphone, nous remplirons les informations si elles existent.",
-      "newModeNote": "Nouveau client : veuillez renseigner les informations de base requises.",
-      "noFitTitle": "Aucune table en ligne ne correspond à ce créneau horaire.",
-      "callRestaurant": "Appeler le restaurant",
-      "goBack": "Retour",
-      "yourInfo": "Vos informations",
-      "phone": "Numéro de téléphone",
-      "yourName": "Votre nom",
-      "email": "E-mail",
-      "loadingCustomerName": "Chargement du nom...",
-      "loadingCustomerEmail": "Chargement de l’e-mail...",
-      "existingCustomerName": "Nom du client existant",
-      "existingCustomerEmail": "E-mail du client existant",
-      "bookingInfo": "Informations de réservation",
-      "partySize": "Nombre de personnes",
-      "reservationDate": "Date de réservation",
-      "selectDate": "Choisir la date",
-      "arrivalTime": "Heure d’arrivée",
-      "selectTime": "Choisir l’heure",
-      "notes": "Remarques",
-      "close": "Fermer",
-      "closeAriaLabel": "Fermer la boîte de réservation",
-      "submit": "RÉSERVER",
-      "checkingTables": "Vérification des tables...",
-      "processing": "Traitement en cours...",
-      "lookup": {
-        "notFound": "Aucun client existant trouvé avec ce numéro."
-      },
-      "validation": {
-        "selectCustomerType": "Veuillez choisir un type de client.",
-        "phoneRequired": "Veuillez saisir un numéro de téléphone.",
-        "nameRequired": "Veuillez saisir votre nom.",
-        "existingCustomerNotFound": "Informations du client existant introuvables. Veuillez vérifier le numéro de téléphone.",
-        "dateRequired": "Veuillez sélectionner une date de réservation.",
-        "timeRequired": "Veuillez sélectionner une heure d’arrivée.",
-        "partySizeRequired": "Veuillez sélectionner le nombre de personnes."
-      },
-      "toast": {
-        "created": "Demande de réservation créée avec succès !",
-        "createFailed": "Impossible de créer la réservation.",
-        "unexpected": "Une erreur est survenue lors de la réservation."
-      }
-    },
-    "PublicTicket": {
-      "title": "Billet de réservation",
-      "customer": "Client",
-      "guests": "Convives",
-      "date": "Date",
-      "time": "Heure",
-      "table": "Table",
-      "zone": "Zone",
-      "pendingAssign": "Attribution en attente",
-      "downloadTicket": "Télécharger le billet",
-      "close": "Fermer"
-    }
-  },
-  "ReservationManagement": {
-    "List": {
-      "title": "Réservations",
-      "searchPlaceholder": "Rechercher un client, un téléphone...",
-      "addNew": "Nouveau",
-      "all": "Tout",
-      "empty": "Aucune réservation trouvée"
-    },
-    "Card": {
-      "table": "Table",
-      "guests": "Invités",
-      "createdOn": "Créé le",
-      "status": "Statut",
-      "late": "En retard",
-      "viewNote": "Voir la note",
-      "customerNotes": "Notes du client :",
-      "noNotes": "Aucune demande spéciale ou précommande pour cette réservation.",
-      "checkIn": "Enregistrer",
-      "na": "N/D"
-    },
-    "Detail": {
-      "title": "Détails de la réservation",
-      "back": "Retour",
-      "backToList": "Retour aux réservations",
-      "edit": "Modifier",
-      "delete": "Supprimer",
-      "reservationId": "ID de réservation",
-      "loading": "Chargement des détails de la réservation...",
-      "notFound": "Réservation introuvable",
-      "Customer": {
-        "title": "Informations client",
-        "fullName": "Nom complet",
-        "phoneNumber": "Numéro de téléphone",
-        "emailAddress": "Adresse e-mail",
-        "partySize": "Nombre de convives",
-        "guest": "invité",
-        "guests": "invités"
-      },
-      "Booking": {
-        "title": "Informations de réservation",
-        "reservedDate": "Date réservée",
-        "reservedTime": "Heure réservée",
+      "status": {
+        "source": "Source de réservation",
+        "phone": "Téléphone",
+        "walkIn": "Sur place",
         "status": "Statut",
-        "bookingSource": "Source de réservation",
-        "createdOn": "Créé le"
-      },
-      "Table": {
-        "title": "Informations sur la table",
-        "noTables": "Aucune table assignée",
-        "capacity": "Capacité",
-        "totalTables": "Total des tables assignées"
+        "confirmed": "Confirmée",
+        "checkedIn": "Installé",
+        "phoneHint": "*Les réservations téléphoniques sont confirmées par défaut."
       }
-    },
-    "CheckInModal": {
-      "title": "Enregistrement du client",
-      "arrivalMsg": "{name} est arrivé(e) pour sa réservation de {time} ({pax} invités).",
-      "assignTable": "Attribuer une table",
-      "selectPlaceholder": "-- Sélectionnez une table disponible --",
-      "noTablesAvailable": "Aucune table disponible",
-      "tableOption": "{code} ({zone} - Capacité : {capacity})",
-      "capacityHint": "Astuce : Essayez d'attribuer une table avec une capacité ≥ {pax}",
-      "cancel": "Annuler",
-      "confirm": "Confirmer",
-      "loading": "Chargement des tables..."
-    },
-    "Messages": {
-      "checkInSuccess": "Client enregistré avec succès !",
-      "checkInFail": "Échec de l'enregistrement de la réservation",
-      "loadTablesFail": "Échec du chargement des tables disponibles."
-    }
-  },
-  "StaffReservation": {
-    "title": "Créer une réservation",
-    "subtitle": "Saisissez les informations pour les clients walk-in ou par téléphone",
-    "cancel": "Annuler",
-    "save": "Enregistrer",
-    "editTitle": "Modifier la réservation",
-    "saveChanges": "Enregistrer les modifications",
-    "notes": "Notes",
-    "notesPlaceholder": "ex. Anniversaire, zone calme préférée...",
-    "errors": {
-      "missingTitle": "Informations manquantes",
-      "missingDescription": "Veuillez remplir téléphone, nom, date, heure et choisir une table.",
-      "timeErrorTitle": "Heure invalide",
-      "timePast": "Impossible de sélectionner une heure passée.",
-      "failTitle": "Échec de la réservation",
-      "systemError": "Erreur système. Veuillez réessayer."
-    },
-    "success": {
-      "title": "Réservation réussie !",
-      "description": "Client : {name} - Réservation #{id}"
-    },
-    "customer": {
-      "sectionTitle": "Identification du client",
-      "phone": "Numéro de téléphone",
-      "fullName": "Nom complet",
-      "email": "Adresse e-mail",
-      "enterPhone": "Entrez le téléphone...",
-      "enterName": "Nom du client",
-      "enterEmail": "nom@example.com",
-      "newCustomer": "Nouveau client",
-      "member": "Membre ({points} pts)"
-    },
-    "booking": {
-      "sectionTitle": "Détails de la réservation",
-      "date": "Date",
-      "time": "Heure",
-      "selectTime": "Choisir l’heure",
-      "openingHours": "(11h00 – 22h00)",
-      "partySize": "Nombre de personnes",
-      "enterSize": "Ex : 4"
-    },
-    "table": {
-      "availability": "Tables disponibles",
-      "scanning": "Recherche...",
-      "found": "{count} tables trouvées",
-      "tableCount": "{count} table(s)",
-      "bestFit": "Meilleur choix",
-      "emptyHint": "Entrez la date, l'heure et le nombre de personnes.",
-      "noTable": "Aucune table disponible."
-    },
-    "status": {
-      "source": "Source de réservation",
-      "phone": "Téléphone",
-      "walkIn": "Sur place",
-      "status": "Statut",
-      "confirmed": "Confirmée",
-      "checkedIn": "Installé",
-      "phoneHint": "*Les réservations téléphoniques sont confirmées par défaut."
     }
   }
 }

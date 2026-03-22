@@ -19,7 +19,7 @@ export default function TableCard({
     status,
     onClick,
 }: TableCardProps) {
-    const t = useTranslations("Reservation.TableCard");
+    const t = useTranslations("reservations.public.TableCard");
     const isDisabled = status === "reserved";
 
     return (
@@ -40,7 +40,7 @@ export default function TableCard({
                     height={1080}
                     src={imageUrl || "/images/table-selection/ground-floor/t-01.png"}
                     alt={tableCode}
-                   // fill
+                    // fill
                     className={`table-image ${isDisabled ? "table-image-disabled" : ""}`}
                 />
 

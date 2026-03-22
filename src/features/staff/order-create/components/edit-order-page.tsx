@@ -18,7 +18,7 @@ import { OrderHistory, OrderItem } from '../../order-management/types/order-hist
 import { PrintOrderModal } from '../../order-management/components/PrintOrderModal';
 
 export const EditOrderPage = ({ orderId }: { orderId: number }) => {
-  const t = useTranslations("Order.Edit");
+  const t = useTranslations("orders.management.Edit");
   const [orderInfo, setOrderInfo] = useState<OrderDetailDto | null>(null);
   const [isOrderLoading, setIsOrderLoading] = useState(true);
   const [showConfirmModal, setShowConfirmModal] = useState(false);

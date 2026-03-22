@@ -60,6 +60,9 @@
       "dish_1_desc": "Présentée avec élégance, sublimée par une feuille d’or comestible et une réduction de vinaigre vietnamien vieilli.",
       "dish_1_main": "Le Lotus Impérial",
       "dish_1_sub": "Fraîcheur Sculptée",
+      "cardCategory": "Catégorie",
+      "cardTitle": "Chef-d’œuvre culinaire",
+      "dishMainTitle": "Plat Signature du Chef",
       "dish_2_category": "Cuisson Lente",
       "dish_2_title": "Poisson en Marmite de Terre",
       "dish_2_desc": "Vivaneau rouge mijoté pendant 6 heures dans un récipient en céramique traditionnelle, au poivre noir et sucre de palme.",
@@ -84,16 +87,6 @@
     "menu": "Menu",
     "about": "À Propos",
     "dish_details": "Détails_du_Plat"
-  },
-  "OrderPopup": {
-    "success_label": "Succès",
-    "success_message": "Article ajouté à votre sélection",
-    "dish_name": "Soupe Impériale de Hue aux Nouilles de Boeuf",
-    "price": "18,50 $",
-    "quantity_label": "Quantité",
-    "view_selection": "Voir la Sélection & Commander",
-    "continue_browsing": "Continuer à Parcourir",
-    "footer_text": "Cuisine Vietnamienne Artisanale"
   },
   "DishDetails": {
     "Hero": {
@@ -194,272 +187,18 @@
       "resolution_value": "CINÉMATIQUE 4K"
     }
   },
-  "AboutUs": {
-    "title": "An Lạc – Vietnamese Eatery",
-    "subtitle": "Un espace culinaire vietnamien paisible",
-    "description_1": "An Lạc n’est pas un lieu de spectacle.\nC’est un lieu de calme.",
-    "description_2": "An Lạc est guidé par l’équilibre, la mémoire et la sérénité. Son nom signifie bonheur paisible, inspiré par le parcours de la fondatrice — une mère de trois enfants — créant un espace reflétant le soin, la stabilité et la philosophie de An cư Lạc nghiệp.",
-    "description_3": "Chez An Lạc, nous ne cherchons pas à transformer la cuisine vietnamienne, mais à l’honorer. Patience, harmonie et finesse façonnent chaque plat : mijotage lent d’un bouillon, équilibre précis des herbes, profondeur discrète de la fermentation et humilité du riz.",
-    "description_4": "Des techniques familières comme kho, hấp et nướng sont exprimées avec précision et minimalisme. Les saveurs sont mesurées, équilibrées et subtiles.",
-    "description_5": "An Lạc est une invitation — à ralentir, goûter attentivement et se reconnecter à l’essentiel."
-  },
-  "Reservation": {
-    "Header": {
-      "title": "Choisissez votre table",
-      "subtitle": "Vivez l’excellence de la gastronomie. Sélectionnez votre zone et votre table préférée ci-dessous."
-    },
-    "Controls": {
-      "single": "Simple",
-      "multiple": "Sélection Multiple",
-      "bookSelected": "Réserver la Sélection ({count})",
-      "selectMode": "Mode de sélection"
-    },
-    "Legend": {
-      "available": "DISPONIBLE",
-      "reserved": "RÉSERVÉE",
-      "selected": "SÉLECTIONNÉE"
-    },
-    "TableGrid": {
-      "empty": "Aucune table disponible dans cette zone."
-    },
-    "TableCard": {
-      "available": "Disponible",
-      "reserved": "Réservée",
-      "selected": "Sélectionnée",
-      "guests": "{count} Convives"
-    },
-    "Sidebar": {
-      "header": {
-        "title": "Récapitulatif de réservation",
-        "subtitle": "Veuillez vérifier votre sélection"
-      },
-      "datetime": {
-        "label": "Date et heure",
-        "edit": "Modifier",
-        "save": "Enregistrer",
-        "cancel": "Annuler",
-        "selectDate": "Choisir la date",
-        "selectTime": "Choisir l’heure",
-        "openingHours": "(11h00 – 22h00)"
-      },
-      "table": {
-        "label": "Table sélectionnée",
-        "zone": "Zone standard",
-        "guests": "{count} convives",
-        "empty": "Veuillez sélectionner une table"
-      },
-      "guest": {
-        "label": "Vos informations",
-        "name": "Nom complet",
-        "phone": "Numéro de téléphone *",
-        "email": "Adresse e-mail (facultatif)"
-      },
-      "action": {
-        "book": "Réserver la table",
-        "saveFirst": "Enregistrez d’abord les modifications"
-      },
-      "validation": {
-        "missingInfo": "* Veuillez renseigner le nom et le téléphone"
-      },
-      "legal": "En réservant, vous acceptez nos conditions générales et notre politique d’annulation."
-    },
-    "BookingModal": {
-      "selectedTable": "Table sélectionnée",
-      "title": "Confirmer la réservation",
-      "restaurantName": "An Lac – Cuisine Vietnamienne",
-      "date": "Date",
-      "time": "Heure",
-      "guests": "Convives",
-      "guestsCount": "{count} personnes",
-      "guestInfo": "Informations du client",
-      "policy": "Les tables sont conservées pendant 15 minutes après l’heure de réservation. Merci de nous prévenir en cas de retard.",
-      "confirm": "Confirmer la réservation",
-      "changeSelection": "Modifier la sélection",
-      "fullName": "Nom complet *",
-      "phoneNumber": "Numéro de téléphone *",
-      "emailAddress": "E-mail (facultatif)",
-      "partySize": "Nombre de convives *",
-      "cancel": "Annuler",
-      "confirmBooking": "Confirmer la réservation",
-      "confirmed": "Confirmé !",
-      "tableReserved": "Votre table est réservée",
-      "restaurant": "Restaurant",
-      "guestName": "Nom du client",
-      "zone": "Zone",
-      "seeYouSoon": "À bientôt !",
-      "downloadTicket": "Télécharger le billet",
-      "close": "Fermer",
-      "alerts": {
-        "ticketNotFound": "Billet introuvable. Veuillez réessayer.",
-        "downloadError": "Impossible de télécharger. Veuillez faire une capture d'écran."
-      }
-    },
-    "CallButton": {
-      "title": "Appeler le restaurant",
-      "subtitle": "Aucune table disponible en ligne",
-      "description": "Veuillez appeler directement pour réserver ou vous renseigner",
-      "restaurant": "Restaurant",
-      "phoneLabel": "Numéro de téléphone",
-      "callNow": "Appeler maintenant",
-      "copyNumber": "Copier le numéro",
-      "copied": "Copié !",
-      "hours": "11h00 – 22h00",
-      "buttonText": "Appeler pour réserver",
-      "dialing": "Ouverture de l'application téléphonique..."
-    },
-    "Zone": {
-      "label": "Zone",
-      "All": "Tous",
-      "Indoor": "Intérieur",
-      "Outdoor": "Terrasse",
-      "Rooftop": "Toit-terrasse"
-    },
-    "Toast": {
-      "success": "Réservation confirmée avec succès !",
-      "error": "Échec de la confirmation de la réservation. Veuillez réessayer.",
-      "lockSuccess": "Table verrouillée avec succès. Veuillez compléter votre réservation.",
-      "lockError": "Échec du verrouillage de la table. Elle peut être occupée."
-    },
-    "PublicForm": {
-      "title": "Réserver une table",
-      "chooseCustomerType": "Choisir le type de client",
-      "existingCustomer": "Client existant",
-      "newCustomer": "Nouveau client",
-      "existingCustomerHint": "Entrez le numéro pour remplir automatiquement les informations",
-      "newCustomerHint": "Saisissez les informations de base pour envoyer la demande",
-      "existingModeNote": "Client existant : entrez d’abord le numéro de téléphone, nous remplirons les informations si elles existent.",
-      "newModeNote": "Nouveau client : veuillez renseigner les informations de base requises.",
-      "noFitTitle": "Aucune table en ligne ne correspond à ce créneau horaire.",
-      "callRestaurant": "Appeler le restaurant",
-      "goBack": "Retour",
-      "yourInfo": "Vos informations",
-      "phone": "Numéro de téléphone",
-      "yourName": "Votre nom",
-      "email": "E-mail",
-      "loadingCustomerName": "Chargement du nom...",
-      "loadingCustomerEmail": "Chargement de l’e-mail...",
-      "existingCustomerName": "Nom du client existant",
-      "existingCustomerEmail": "E-mail du client existant",
-      "bookingInfo": "Informations de réservation",
-      "partySize": "Nombre de personnes",
-      "reservationDate": "Date de réservation",
-      "selectDate": "Choisir la date",
-      "arrivalTime": "Heure d’arrivée",
-      "selectTime": "Choisir l’heure",
-      "notes": "Remarques",
-      "close": "Fermer",
-      "closeAriaLabel": "Fermer la boîte de réservation",
-      "submit": "RÉSERVER",
-      "checkingTables": "Vérification des tables...",
-      "processing": "Traitement en cours...",
-      "lookup": {
-        "notFound": "Aucun client existant trouvé avec ce numéro."
-      },
-      "validation": {
-        "selectCustomerType": "Veuillez choisir un type de client.",
-        "phoneRequired": "Veuillez saisir un numéro de téléphone.",
-        "nameRequired": "Veuillez saisir votre nom.",
-        "existingCustomerNotFound": "Informations du client existant introuvables. Veuillez vérifier le numéro de téléphone.",
-        "dateRequired": "Veuillez sélectionner une date de réservation.",
-        "timeRequired": "Veuillez sélectionner une heure d’arrivée.",
-        "partySizeRequired": "Veuillez sélectionner le nombre de personnes."
-      },
-      "toast": {
-        "created": "Demande de réservation créée avec succès !",
-        "createFailed": "Impossible de créer la réservation.",
-        "unexpected": "Une erreur est survenue lors de la réservation."
-      }
-    },
-    "PublicTicket": {
-      "title": "Billet de réservation",
-      "customer": "Client",
-      "guests": "Convives",
-      "date": "Date",
-      "time": "Heure",
-      "table": "Table",
-      "zone": "Zone",
-      "pendingAssign": "Attribution en attente",
-      "downloadTicket": "Télécharger le billet",
-      "close": "Fermer"
-    }
-  },
-  "OrderSuccess": {
-    "Loading": {
-      "title": "Traitement en cours...",
-      "subtitle": "Récupération des détails de votre commande"
-    },
-    "NotFound": {
-      "title": "Commande introuvable",
-      "description": "Nous n’avons pas pu retrouver les détails de la commande demandée. Elle a peut-être été supprimée ou l’identifiant est incorrect.",
-      "cta": "Retour à l’accueil"
-    },
-    "Header": {
-      "title": "Merci",
-      "subtitle": "Votre commande a été confirmée avec succès"
-    },
-    "Summary": {
-      "orderNumber": "Numéro de commande",
-      "totalAmount": "Montant total",
-      "diningOption": "Option de restauration",
-      "quote": "Votre voyage culinaire commence...",
-      "readyIn": "Prêt dans {minutes} minutes"
-    },
-    "DiningOption": {
-      "DINE_IN": "Sur place",
-      "TAKE_AWAY": "À emporter"
-    },
-    "Location": {
-      "label": "Point de retrait",
-      "address": "Quai du Mont-Blanc 13, Genève"
-    },
-    "Actions": {
-      "viewReceipt": "Voir le reçu",
-      "backHome": "Retour à l’accueil"
-    }
-  },
-  "OrderReceipt": {
-    "Header": {
-      "title": "Reçu",
-      "subtitle": "Merci pour votre commande"
-    },
-    "InfoStrip": {
-      "orderNumber": "Commande",
-      "date": "Date",
-      "time": "Heure",
-      "status": "Statut"
-    },
-    "Items": {
-      "title": "Détails de la commande",
-      "quantity": "Qté"
-    },
-    "Summary": {
-      "subtotal": "Sous-total",
-      "tips": "Pourboire",
-      "total": "Montant total"
-    },
-    "Payment": {
-      "label": "Payé via"
-    },
-    "Actions": {
-      "download": "Télécharger le PDF",
-      "print": "Imprimer"
-    },
-    "BackLink": {
-      "label": "Retour au tableau de bord"
-    }
-  },
   "Contact": {
     "Hero": {
       "title": "Contactez-nous",
-      "description": "Découvrez l’essence du luxe vietnamien sur les rives du lac Léman.\nNous sommes à votre disposition pour toute demande, événement privé ou requête spéciale."
+      "description": "Découvrez l’essence du luxe vietnamien.\nNous sommes à votre disposition pour toute demande, événement privé ou requête spéciale."
     },
     "Info": {
       "addressLabel": "Notre adresse",
-      "address": "Quai du Mont-Blanc 13\n1201 Genève, Suisse",
+      "address": "",
       "phoneLabel": "Nous appeler",
-      "phone": "+41 22 123 45 67",
+      "phone": "",
       "emailLabel": "Demandes",
-      "email": "geneva@aulac.ch",
+      "email": "",
       "hoursLabel": "Horaires",
       "hours": "Lun - Dim : 11h30 - 23h00"
     },
@@ -489,7 +228,7 @@
       }
     },
     "Footer": {
-      "copyright": "© 2024 An Lac Vietnamese Eatery - Genève. Tous droits réservés."
+      "copyright": "© {year} An Lac Vietnamese Eatery. Tous droits réservés."
     }
   },
   "MenuListing": {
@@ -552,66 +291,6 @@
       "step_scan": "Scanner",
       "step_explore": "Explorer",
       "step_order": "Commander"
-    }
-  },
-  "FillInforCustomer": {
-    "title": "Bienvenue chez An Lac",
-    "subtitle": "Veuillez fournir vos informations pour commencer votre voyage culinaire",
-    "form": {
-      "fullName": "Nom Complet",
-      "fullNamePlaceholder": "Entrez votre nom complet",
-      "phoneNumber": "Numéro de Téléphone",
-      "phoneNumberPlaceholder": "Entrez votre numéro de téléphone",
-      "emailAddress": "Adresse E-mail",
-      "emailAddressPlaceholder": "Entrez votre adresse e-mail",
-      "tableNumber": "Numéro de Table",
-      "submitting": "En cours...",
-      "startDining": "Commencer à Dîner",
-      "skipToMenu": "Ignorer, voir le menu",
-      "errors": {
-        "phoneRequired": "Le numéro de téléphone est requis",
-        "emailInvalid": "Adresse e-mail invalide",
-        "tableOccupied": "Cette table est déjà occupée",
-        "tableOccupiedDesc": "Cette table est utilisée par un autre client. Veuillez choisir une autre table.",
-        "updateFailed": "Échec de la mise à jour du statut de la table. Veuillez réessayer."
-      }
-    },
-    "footer": "Cuisine Vietnamienne Artisanale"
-  },
-  "ConfirmOrder": {
-    "OrderItem": {
-      "add_note": "Ajouter une note",
-      "edit_note": "Modifier",
-      "note_placeholder": "ex : Pas épicé, sauce supplémentaire...",
-      "note_saved": "Note enregistrée"
-    },
-    "DiningOption": {
-      "eyebrow": "Comment souhaitez-vous déguster ?",
-      "title": "Option de Repas",
-      "dine_in_label": "L'Expérience",
-      "dine_in_title": "Sur Place",
-      "dine_in_desc": "Plongez dans notre atmosphère tranquille avec un service complet.",
-      "take_away_label": "Rapide & Frais",
-      "take_away_title": "À Emporter",
-      "take_away_desc": "Savourez nos saveurs exquises dans le confort de votre maison.",
-      "helper_dine_in": "Procédez à la sélection de votre table préférée.",
-      "helper_take_away": "Procédez à la planification de l'heure de retrait.",
-      "btn_select_table": "Choisir une Table",
-      "btn_checkout": "Passer à la Caisse"
-    },
-    "OrderSummary": {
-      "title": "Vérifiez Votre Commande",
-      "section_title": "Plats Sélectionnés",
-      "quantity_label": "Quantité",
-      "subtotal": "Sous-total",
-      "tax": "Service & Taxes",
-      "total": "Montant Total",
-      "items": {
-        "1_name": "Salade Impériale de Racine de Lotus",
-        "1_category": "Sélection Patrimoniale",
-        "2_name": "Pho Wagyu Héritage",
-        "2_category": "Signature"
-      }
     }
   },
   "Account": {
@@ -1236,66 +915,6 @@
       "unexpected": "Une erreur inattendue s'est produite. Veuillez réessayer plus tard."
     }
   },
-  "StaffReservation": {
-    "title": "Créer une réservation",
-    "subtitle": "Saisissez les informations pour les clients walk-in ou par téléphone",
-    "cancel": "Annuler",
-    "save": "Enregistrer",
-    "editTitle": "Modifier la réservation",
-    "saveChanges": "Enregistrer les modifications",
-    "notes": "Notes",
-    "notesPlaceholder": "ex. Anniversaire, zone calme préférée...",
-    "errors": {
-      "missingTitle": "Informations manquantes",
-      "missingDescription": "Veuillez remplir téléphone, nom, date, heure et choisir une table.",
-      "timeErrorTitle": "Heure invalide",
-      "timePast": "Impossible de sélectionner une heure passée.",
-      "failTitle": "Échec de la réservation",
-      "systemError": "Erreur système. Veuillez réessayer."
-    },
-    "success": {
-      "title": "Réservation réussie !",
-      "description": "Client : {name} - Réservation #{id}"
-    },
-    "customer": {
-      "sectionTitle": "Identification du client",
-      "phone": "Numéro de téléphone",
-      "fullName": "Nom complet",
-      "email": "Adresse e-mail",
-      "enterPhone": "Entrez le téléphone...",
-      "enterName": "Nom du client",
-      "enterEmail": "nom@example.com",
-      "newCustomer": "Nouveau client",
-      "member": "Membre ({points} pts)"
-    },
-    "booking": {
-      "sectionTitle": "Détails de la réservation",
-      "date": "Date",
-      "time": "Heure",
-      "selectTime": "Choisir l’heure",
-      "openingHours": "(11h00 – 22h00)",
-      "partySize": "Nombre de personnes",
-      "enterSize": "Ex : 4"
-    },
-    "table": {
-      "availability": "Tables disponibles",
-      "scanning": "Recherche...",
-      "found": "{count} tables trouvées",
-      "tableCount": "{count} table(s)",
-      "bestFit": "Meilleur choix",
-      "emptyHint": "Entrez la date, l'heure et le nombre de personnes.",
-      "noTable": "Aucune table disponible."
-    },
-    "status": {
-      "source": "Source de réservation",
-      "phone": "Téléphone",
-      "walkIn": "Sur place",
-      "status": "Statut",
-      "confirmed": "Confirmée",
-      "checkedIn": "Installé",
-      "phoneHint": "*Les réservations téléphoniques sont confirmées par défaut."
-    }
-  },
   "DishCategory": {
     "List": {
       "title": "Gestion des catégories de plats",
@@ -1376,7 +995,7 @@
   "Dish": {
     "List": {
       "title": "Gestion des plats",
-      "description": "Gérez vos éléments de menu, les prix, các danh mục và trạng thái có sẵn.",
+      "description": "Gérez vos éléments de menu, les prix, các danh mục et les statuts disponibles.",
       "searchPlaceholder": "Rechercher par nom de plat, catégorie...",
       "addNew": "Ajouter un plat",
       "table": {
@@ -1409,7 +1028,7 @@
         "category": "Catégorie",
         "status": "Statut",
         "allCategories": "Toutes les catégories",
-        "allStatuses": "Tous các statuts"
+        "allStatuses": "Tous les statuts"
       },
       "deleteModal": {
         "title": "Supprimer le plat",
@@ -1434,12 +1053,12 @@
     "Validation": {
       "dishName": {
         "required": "Le nom du plat est requis",
-        "minLength": "Le nom doit contenir ít nhất 2 caractères",
+        "minLength": "Le nom doit contenir au moins 2 caractères",
         "maxLength": "Le nom ne peut pas dépasser 150 caractères"
       },
       "price": {
         "required": "Le prix est requis",
-        "min": "Le prix doit être supérieur hoặc égal à 0"
+        "min": "Le prix doit être supérieur ou égal à 0"
       },
       "category": {
         "required": "La catégorie est requise"
@@ -1453,7 +1072,7 @@
         "editDescription": "Mettre à jour les informations du plat."
       },
       "actions": {
-        "cancel": "Cancelar",
+        "cancel": "Annuler",
         "createDish": "Créer le plat",
         "creating": "Création...",
         "saveChanges": "Enregistrer",
@@ -1579,266 +1198,6 @@
         "cookTime": "Temps de cuisson",
         "chefRecommended": "Recommandé par le chef",
         "notChefRecommended": "Non recommandé par le chef"
-      }
-    }
-  },
-  "Order": {
-    "List": {
-      "title": "Commandes",
-      "description": "Gérer et suivre toutes les commandes",
-      "searchPlaceholder": "Rechercher par numéro, client, personnel...",
-      "refresh": "Actualiser",
-      "addNewOrder": "Nouvelle commande",
-      "kanbanLabel": "Kanban — Tous les statuts",
-      "dateRange": {
-        "today": "Aujourd'hui",
-        "yesterday": "Hier",
-        "last7": "7 derniers jours",
-        "last30": "30 derniers jours",
-        "thisMonth": "Ce mois",
-        "lastMonth": "Mois dernier",
-        "custom": "Personnalisé",
-        "from": "De",
-        "to": "À",
-        "apply": "Appliquer",
-        "label": "Période"
-      },
-      "tabs": {
-        "all": "Tout",
-        "pending": "En attente",
-        "inProgress": "En cours",
-        "completed": "Terminée",
-        "cancelled": "Annulée"
-      },
-      "statusCards": {
-        "all": "Tout",
-        "pending": "En attente",
-        "inProgress": "En cours",
-        "completed": "Terminée",
-        "cancelled": "Annulée"
-      },
-      "kanban": {
-        "pending": "En attente",
-        "inProgress": "En cours",
-        "completed": "Terminée",
-        "cancelled": "Annulée",
-        "empty": "Aucune commande",
-        "start": "Démarrer",
-        "finish": "Terminer",
-        "complete": "Finaliser",
-        "printInvoice": "Imprimer la facture",
-        "reset": "Réinitialiser",
-        "delete": "Supprimer",
-        "cancel": "Annuler"
-      },
-      "viewMode": {
-        "grid": "Vue grille",
-        "kanban": "Vue kanban"
-      },
-      "statusUpdateSuccess": "Le statut de la commande a été mis à jour",
-      "statusUpdateError": "Impossible de mettre à jour le statut de la commande",
-      "empty": {
-        "title": "Aucune commande trouvée",
-        "hint": "Essayez de modifier vos filtres ou votre recherche"
-      },
-      "card": {
-        "table": "Table",
-        "tip": "Pourboire",
-        "items": "articles",
-        "moreItems": "de plus",
-        "collapse": "Réduire",
-        "actions": "Actions",
-        "note": "Note",
-        "rejectReason": "Raison du rejet",
-        "guest": "Invité",
-        "source": {
-          "DINE_IN": "Sur place",
-          "TAKE_AWAY": "À emporter",
-          "TAKEAWAY": "À emporter",
-          "DELIVERY": "Livraison",
-          "Takeaway": "À emporter",
-          "Dine-in": "Sur place",
-          "Delivery": "Livraison"
-        },
-        "status": {
-          "Pending": "En attente",
-          "In progress": "En cours",
-          "Completed": "Terminée",
-          "Cancelled": "Annulée"
-        },
-        "paymentStatus": {
-          "paid": "Payé",
-          "unpaid": "Non payé"
-        },
-        "action": {
-          "view": "Détails",
-          "edit": "Modifier",
-          "start": "Démarrer",
-          "complete": "Terminer",
-          "cancel": "Annuler",
-          "reset": "Réinitialiser",
-          "print": "Imprimer la facture",
-          "pay": "Payer & Terminer",
-          "printReceipt": "Imprimer le reçu"
-        },
-        "paymentSuccess": "Paiement effectué avec succès",
-        "paymentError": "Échec du traitement du paiement"
-      }
-    },
-    "Create": {
-      "title": "Créer une nouvelle commande",
-      "subtitle": "Sélectionnez des plats et boissons pour commencer à servir le client.",
-      "menuCatalog": "Menu",
-      "searchDish": "Rechercher un plat...",
-      "dineIn": "Sur place",
-      "takeAway": "À emporter",
-      "currentTicket": "Ticket en cours",
-      "clear": "Effacer",
-      "emptyTicket": "Ticket vide",
-      "diningTable": "Table",
-      "customer": "Client",
-      "select": "Sélectionner",
-      "change": "Modifier",
-      "add": "Ajouter",
-      "note": "Ajoutez une note (moins épicé, sans oignons, etc.)",
-      "subtotal": "Sous-total",
-      "tax": "Taxe (10%)",
-      "total": "Total",
-      "placeOrder": "Passer la commande",
-      "createInvoice": "Créer la facture",
-      "noTableSelected": "Aucune table sélectionnée",
-      "anonymous": "Client anonyme",
-      "selectFilterAll": "Tous",
-      "confirmSelection": "Confirmer la sélection",
-      "cancel": "Annuler",
-      "confirm": "Confirmer",
-      "customerDetails": "Informations du client",
-      "phoneNumber": "Numéro de téléphone",
-      "fullName": "Nom complet",
-      "email": "Email",
-      "saveDetails": "Enregistrer les informations"
-    },
-    "Edit": {
-      "menuTitle": "Détails de la commande",
-      "menuSubtitleEdit": "Sélectionnez des articles à ajouter à la commande actuelle.",
-      "menuSubtitleView": "Cette commande a été payée. Mode lecture seule.",
-      "menuSubtitleCancelled": "Cette commande a été annulée. Mode lecture seule.",
-      "clear": "Effacer",
-      "cancel": "Annuler",
-      "editOrderTitle": "Modifier la commande #{id}",
-      "viewOrderTitle": "Voir la commande #{id}",
-      "totalAmount": "Montant total",
-      "orderedItems": "Articles commandés",
-      "newItems": "Nouveaux articles",
-      "addMoreItemsHint": "Sélectionnez des articles dans le menu à gauche pour les ajouter",
-      "paidOrderWarning": "Cette commande a été payée. Veuillez créer une nouvelle commande.",
-      "cancelledOrderWarning": "La commande a été annulée. Il est impossible de modifier ou d'imprimer la facture.",
-      "change": "Modifier",
-      "table": "Table",
-      "addItemsButton": "Ajouter des articles à la commande",
-      "createInvoice": "Créer la facture",
-      "createReceipt": "Créer un reçu",
-      "newTotal": "Total estimé",
-      "warningTitle": "Confirmer l'ajout",
-      "completedOrderWarning": "Cette commande est terminée mais non payée. Ajouter de nouveaux articles remettra la commande au statut En cours. Êtes-vous sûr ?",
-      "confirmChangeStatus": "Confirmer l'ajout",
-      "saving": "Enregistrement...",
-      "successMessage": "Modifications enregistrées avec succès !",
-      "errorMessage": "Une erreur est survenue !",
-      "loading": "Chargement...",
-      "takeAway": "À emporter",
-      "guest": "Client",
-      "notePlaceholder": "Note sur l'article...",
-      "status": {
-        "Pending": "En attente",
-        "In progress": "En cours",
-        "Completed": "Terminé",
-        "Cancelled": "Annulé"
-      },
-      "tableLabel": "Table",
-      "customerLabel": "Client"
-    },
-    "RecentOrders": {
-      "title": "Commandes récentes",
-      "refresh": "Actualiser",
-      "filterAll": "Toutes",
-      "dineIn": "Sur place",
-      "takeAway": "À emporter",
-      "loading": "Chargement des commandes...",
-      "noOrdersFound": "Aucune commande trouvée.",
-      "table": "Table",
-      "status": {
-        "PENDING": "En attente",
-        "IN_PROGRESS": "En cours",
-        "COMPLETED": "Terminée",
-        "CANCELLED": "Annulée"
-      }
-    },
-    "DishDetail": {
-      "noDescription": "Aucune description disponible.",
-      "price": "Prix",
-      "addToOrder": "Ajouter à la commande"
-    },
-    "PaymentModal": {
-      "title": "Payer & Terminer la commande",
-      "finalTotal": "Total final",
-      "orderInfo": "Infos commande",
-      "orderNo": "N° de commande",
-      "noOfItems": "Nombre d'articles",
-      "orderType": "Type de commande",
-      "orderedMenus": "Menus commandés",
-      "subTotal": "Sous-total",
-      "tax": "Taxe",
-      "serviceCharge": "Frais de service",
-      "tip": "Pourboire",
-      "paymentType": "Type de paiement",
-      "cash": "Espèces",
-      "card": "Carte",
-      "scan": "Scanner",
-      "promotion": "Promotion",
-      "coupon": "Coupon",
-      "givenAmount": "Montant donné",
-      "balance": "Reliquat",
-      "note": "Note",
-      "notePlaceholder": "Saisir une note de paiement...",
-      "close": "Fermer",
-      "payAndComplete": "Payer & Terminer la commande",
-      "paying": "Traitement...",
-      "enterTip": "Saisir le montant du pourboire",
-      "selectPromotion": "Sélectionner une promotion",
-      "selectCoupon": "Sélectionner un coupon",
-      "promotions": "Promotions"
-    }
-  },
-  "Invoice": {
-    "List": {
-      "title": "Factures de vente",
-      "description": "Gérer et suivre toutes les factures de vente",
-      "searchPlaceholder": "Rechercher par code de facture, client, personnel...",
-      "refresh": "Actualiser",
-      "dateRange": {
-        "today": "Aujourd'hui",
-        "yesterday": "Hier",
-        "last7": "7 derniers jours",
-        "last30": "30 derniers jours",
-        "thisMonth": "Ce mois-ci",
-        "lastMonth": "Le mois dernier",
-        "custom": "Personnalisé",
-        "from": "De",
-        "to": "À",
-        "selectDate": "Sélectionner la date"
-      },
-      "table": {
-        "no": "N°",
-        "invoiceCode": "Code de facture",
-        "createdAt": "Date et heure",
-        "tableCode": "Table",
-        "customerName": "Client",
-        "staffName": "Personnel",
-        "totalAmount": "Montant total",
-        "tipAmount": "Pourboire",
-        "paymentMethod": "Mode de paiement",
-        "orderStatus": "Statut de commande"
       }
     }
   },
@@ -2205,995 +1564,550 @@
         }
       }
     },
-    "ScheduleList": {
-      "title": "Affectations de Quart",
-      "description": "Affectez le personnel aux modèles de quart et suivez la présence.",
-      "searchPlaceholder": "Rechercher des affectations",
-      "newAssignment": "Nouvelle affectation",
-      "confirmCancel": "Annuler cette affectation ?",
-      "activeCount": "Actif : {count}",
-      "cancelledCount": "Annulé : {count}",
-      "filters": {
-        "fromDate": "Date de début",
-        "toDate": "Date de fin",
-        "fromDatePlaceholder": "Choisir la date de début",
-        "toDatePlaceholder": "Choisir la date de fin",
-        "refresh": "Actualiser"
-      },
-      "table": {
-        "no": "N°",
-        "date": "Date",
-        "template": "Modèle",
-        "staff": "Agent",
-        "plannedTime": "Horaire prévu",
-        "status": "Statut"
-      },
-      "noData": "Aucune affectation trouvée. Ajustez la période ou créez une nouvelle affectation."
-    },
-    "AssignmentForm": {
-      "createTitle": "Nouvelle Affectation",
-      "editTitle": "Modifier l'Affectation",
-      "cancel": "Annuler",
-      "saveChanges": "Enregistrer",
-      "assignStaff": "Affecter",
-      "plannedHint": "Laissez les horaires vides pour utiliser les horaires par défaut du modèle.",
-      "fields": {
-        "shiftTemplate": "Modèle de Quart",
-        "staffMember": "Agent",
-        "workDate": "Date de Travail",
-        "plannedStart": "Début Prévu",
-        "plannedEnd": "Fin Prévue",
-        "notes": "Notes"
-      },
-      "placeholders": {
-        "shiftTemplate": "Sélectionner un modèle de quart...",
-        "staffMember": "Sélectionner un agent...",
-        "loadingStaff": "Chargement des agents...",
-        "workDate": "Sélectionner une date",
-        "notes": "Notes facultatives..."
-      }
-    }
-  },
-  "OrderHistory": {
-    "title": "Historique des Commandes",
-    "fabLabel": "HISTORY",
-    "fabAriaLabel": "Voir l'historique des commandes",
-    "tableLabel": "Table",
-    "itemsCount": "{count} plats",
-    "refresh": "Actualiser",
-    "refreshAriaLabel": "Recharger",
-    "close": "Fermer",
-    "closeAriaLabel": "Fermer",
-    "headers": {
-      "dish": "Plat",
-      "quantity": "QTÉ",
-      "price": "Prix",
-      "status": "Statut"
-    },
-    "status": {
-      "created": "En attente",
-      "inProgress": "En cours",
-      "ready": "Prêt",
-      "served": "Servi",
-      "rejected": "Refusé",
-      "cancelled": "Annulé"
-    },
-    "emptyState": {
-      "title": "Aucun plat commandé pour le moment.",
-      "subtitle": "L'historique apparaîtra ici après avoir passé une commande."
-    },
-    "chefNote": "Note du chef :",
-    "estimatedTotal": "Total estimé",
-    "requestPayment": "Demander le paiement",
-    "error": "Impossible de charger les données",
-    "cancelItem": "Annuler l'article",
-    "cancelling": "Annulation...",
-    "cancelError": "Impossible d'annuler l'article",
-    "cancelNotAllowed": "\u201c{dishName}\u201d a déjà été traité par le personnel et ne peut plus être annulé.",
-    "cancelPopup": {
-      "title": "Annuler cet article ?",
-      "message": "Êtes-vous sûr de vouloir annuler \"{dishName}\" ? Cette action est irréversible.",
-      "yes": "Oui, Annuler",
-      "no": "Non, Garder"
-    },
-    "paymentPopup": {
-      "title": "Demander le paiement ?",
-      "message": "Un serveur viendra à votre {tableLabel} {tableNumber} sous peu avec l'addition. Voulez-vous continuer ?",
-      "estimatedTotalLabel": "TOTAL ESTIMÉ",
-      "confirm": "CONFIRMER",
-      "closeAriaLabel": "Fermer la boîte de dialogue de paiement"
-    },
-    "successPopup": {
-      "title": "Merci !",
-      "message": "Votre demande de paiement pour {tableLabel} {tableNumber} a été reçue. Notre serveur sera avec vous sous peu."
-    }
-  },
-  "Notifications": {
-    "title": "Notifications",
-    "markAllRead": "Tout marquer comme lu",
-    "markAllReadShort": "Tout marquer lu",
-    "loadMore": "Charger plus",
-    "loading": "Chargement...",
-    "batchSummary": "autres notifications",
-    "acknowledge": "Confirmer",
-    "acknowledged": "Confirmé",
-    "view": "Voir",
-    "connected": "Connecté",
-    "disconnected": "Déconnecté",
-    "preferences": {
-      "title": "Préférences de notification",
-      "save": "Enregistrer",
-      "saveSuccess": "Préférences enregistrées",
-      "saveError": "Échec de l'enregistrement",
-      "soundOn": "Son activé",
-      "soundOff": "Son désactivé",
-      "enabled": "Activé",
-      "disabled": "Désactivé"
-    },
-    "tabs": {
-      "all": "Tout",
-      "unread": "Non lu",
-      "inbox": "Boîte de réception",
-      "kitchen": "Cuisine",
-      "orders": "Commandes"
-    },
-    "empty": "Aucune notification",
-    "emptyUnread": "Aucune notification non lue",
-    "time": {
-      "justNow": "à l'instant",
-      "minutesAgo": "il y a {count} min",
-      "hoursAgo": "il y a {count}h",
-      "daysAgo": "il y a {count}j",
-      "ago": "Il y a {time}"
-    },
-    "types": {
-      "NEW_ORDER": "Nouvelle commande",
-      "ORDER_CANCELLED": "Commande annulée",
-      "ORDER_ITEM_READY": "Plat prêt",
-      "ORDER_ITEM_REJECTED": "Plat rejeté",
-      "ALL_ITEMS_READY": "Tous les plats prêts",
-      "PAYMENT_COMPLETED": "Paiement effectué",
-      "RESERVATION_CREATED": "Nouvelle réservation",
-      "RESERVATION_STATUS_CHANGED": "Réservation mise à jour",
-      "RESERVATION_REMINDER": "Rappel de réservation",
-      "TABLE_STATUS_CHANGED": "Statut de table modifié",
-      "LOW_STOCK_ALERT": "Alerte stock bas",
-      "DISH_OUT_OF_STOCK": "Plat en rupture",
-      "SHIFT_ASSIGNED": "Quart assigné",
-      "ATTENDANCE_ALERT": "Alerte de présence",
-      "SYSTEM_ALERT": "Alerte système",
-      "ORDER_STATUS_CHANGED": "Commande mise à jour",
-      "PAYMENT_REQUEST": "Demande de paiement",
-      "fallback": "Notification"
-    },
-    "priority": {
-      "Low": "Basse",
-      "Normal": "Normale",
-      "High": "Haute",
-      "Critical": "Critique"
-    },
-    "categories": {
-      "Orders": "Commandes",
-      "Reservations": "Réservations",
-      "Tables": "Tables",
-      "Inventory": "Inventaire",
-      "Shifts": "Quarts",
-      "System": "Système",
-      "General": "Général"
-    },
-    "messages": {
-      "NEW_ORDER": { "title": "Nouvelle commande #{orderId}", "body": "Table {tableName} a passé une nouvelle commande" },
-      "ORDER_CANCELLED": { "title": "Commande #{orderId} annulée", "body": "La commande #{orderId} a été annulée" },
-      "ORDER_ITEM_READY": { "title": "Élément de commande prêt", "body": "Un élément de la commande est prêt à être servi" },
-      "ORDER_ITEM_REJECTED": { "title": "Élément de commande rejeté", "body": "Un élément de la commande a été rejeté" },
-      "ALL_ITEMS_READY": { "title": "Commande #{orderId} complète", "body": "Tous les plats pour table {tableName} sont prêts" },
-      "PAYMENT_COMPLETED": { "title": "Paiement reçu", "body": "Commande #{orderId} — {amount} payé" },
-      "RESERVATION_CREATED": { "title": "Nouvelle réservation", "body": "{guestName} — {guestCount} personnes à {time}" },
-      "RESERVATION_STATUS_CHANGED": { "title": "Réservation mise à jour", "body": "Réservation #{reservationId} — statut changé en {status}" },
-      "RESERVATION_REMINDER": { "title": "Rappel de réservation", "body": "{guestName} — arrive dans {minutes} minutes" },
-      "TABLE_STATUS_CHANGED": { "title": "Table {tableName}", "body": "{oldStatus} → {status}" },
-      "LOW_STOCK_ALERT": { "title": "Stock bas : {ingredientName}", "body": "Actuel : {current}, Minimum : {minimum}" },
-      "DISH_OUT_OF_STOCK": { "title": "{dishName} en rupture", "body": "Ce plat n'est plus disponible" },
-      "SHIFT_ASSIGNED": { "title": "Quart assigné", "body": "Vous avez été assigné à {shiftName} le {date}" },
-      "ATTENDANCE_ALERT": { "title": "Alerte de présence", "body": "{staffName} — {reason}" },
-      "SYSTEM_ALERT": { "title": "Alerte système", "body": "{message}" },
-      "ORDER_STATUS_CHANGED": { "title": "Commande #{orderId} mise à jour", "body": "Commande #{orderId} — statut changé en {status}" },
-      "PAYMENT_REQUEST": { "title": "Paiement demandé — {tableName}", "body": "Commande #{orderId} — paiement de {amount} demandé" },
-      "fallback": { "title": "Notification", "body": "Vous avez une nouvelle notification." }
-    },
-    "metadata": {
-      "defaults": {
-        "table": "Table",
-        "staff": "Employé",
-        "guest": "Client"
-      },
-      "statuses": {
-        "LOCKED": "Verrouillée",
-        "AVAILABLE": "Disponible",
-        "RESERVED": "Réservée",
-        "OCCUPIED": "Occupée",
-        "CONFIRMED": "Confirmée",
-        "CHECKED_IN": "Enregistrée",
-        "CANCELLED": "Annulée",
-        "NO_SHOW": "Absent",
-        "PENDING": "En attente",
-        "COMPLETED": "Terminée",
-        "IN_PROGRESS": "En cours",
-        "UNKNOWN": "Inconnu",
-        "CREATED": "Créé",
-        "READY": "Prêt",
-        "SERVED": "Servi",
-        "REJECTED": "Rejeté"
-      },
-      "attendanceReasons": {
-        "LATE_CHECKIN": "a pointé avec {minutes} minutes de retard",
-        "EARLY_LEAVE": "est parti {minutes} minutes plus tôt"
-      }
-    }
-  },
-  "Kitchen": {
-    "title": "Affichage Cuisine",
-    "description": "Suivre les commandes entrantes et mettre à jour les statuts en temps réel",
-    "refresh": "Actualiser",
-    "searchPlaceholder": "Rechercher une table, une commande, un plat...",
-    "liveUpdates": "Mises à jour en direct",
-    "tokenNo": "N° de jeton:",
-    "note": "Note",
-    "orderType": "Sur place",
-    "tabs": {
-      "all": "Toutes",
-      "new": "Nouveaux",
-      "inProgress": "En cours"
-    },
-    "empty": {
-      "title": "Aucune commande active",
-      "hint": "Les nouvelles commandes apparaîtront automatiquement ici"
-    },
-    "status": {
-      "all": "Tout",
-      "new": "Nouveau",
-      "inKitchen": "En cuisine",
-      "rejected": "Rejeté",
-      "completed": "Terminé",
-      "CREATED": "Nouveau",
-      "IN_PROGRESS": "En préparation",
-      "READY": "Prêt",
-      "SERVED": "Servi",
-      "REJECTED": "Rejeté"
-    },
-    "actions": {
-      "print": "Imprimer la commande",
-      "markDone": "Terminer",
-      "start": "Commencer",
-      "serve": "Servir",
-      "reject": "Rejeter",
-      "cancel": "Annuler"
-    },
-    "rejectReason": {
-      "label": "Raison",
-      "placeholder": "Entrez la raison...",
-      "confirm": "Confirmer",
-      "cancel": "Annuler"
-    }
-  },
-  "ReservationManagement": {
-    "List": {
-      "title": "Réservations",
-      "searchPlaceholder": "Rechercher un client, un téléphone...",
-      "addNew": "Nouveau",
-      "all": "Tout",
-      "empty": "Aucune réservation trouvée"
-    },
-    "Card": {
-      "table": "Table",
-      "guests": "Invités",
-      "createdOn": "Créé le",
-      "status": "Statut",
-      "late": "En retard",
-      "viewNote": "Voir la note",
-      "customerNotes": "Notes du client :",
-      "noNotes": "Aucune demande spéciale ou précommande pour cette réservation.",
-      "checkIn": "Enregistrer",
-      "na": "N/D"
-    },
-    "Detail": {
-      "title": "Détails de la réservation",
-      "back": "Retour",
-      "backToList": "Retour aux réservations",
-      "edit": "Modifier",
-      "delete": "Supprimer",
-      "reservationId": "ID de réservation",
-      "loading": "Chargement des détails de la réservation...",
-      "notFound": "Réservation introuvable",
-      "Customer": {
-        "title": "Informations client",
-        "fullName": "Nom complet",
-        "phoneNumber": "Numéro de téléphone",
-        "emailAddress": "Adresse e-mail",
-        "partySize": "Nombre de convives",
-        "guest": "invité",
-        "guests": "invités"
-      },
-      "Booking": {
-        "title": "Informations de réservation",
-        "reservedDate": "Date réservée",
-        "reservedTime": "Heure réservée",
-        "status": "Statut",
-        "bookingSource": "Source de réservation",
-        "createdOn": "Créé le"
-      },
-      "Table": {
-        "title": "Informations sur la table",
-        "noTables": "Aucune table assignée",
-        "capacity": "Capacité",
-        "totalTables": "Total des tables assignées"
-      }
-    },
-    "CheckInModal": {
-      "title": "Enregistrement du client",
-      "arrivalMsg": "{name} est arrivé(e) pour sa réservation de {time} ({pax} invités).",
-      "assignTable": "Attribuer une table",
-      "selectPlaceholder": "-- Sélectionnez une table disponible --",
-      "noTablesAvailable": "Aucune table disponible",
-      "tableOption": "{code} ({zone} - Capacité : {capacity})",
-      "capacityHint": "Astuce : Essayez d'attribuer une table avec une capacité ≥ {pax}",
-      "cancel": "Annuler",
-      "confirm": "Confirmer",
-      "loading": "Chargement des tables..."
-    },
-    "Messages": {
-      "checkInSuccess": "Client enregistré avec succès !",
-      "checkInFail": "Échec de l'enregistrement de la réservation",
-      "loadTablesFail": "Échec du chargement des tables disponibles."
-    }
-  },
-  "Ingredient": {
-    "List": {
-      "title": "Ingrédients",
-      "description": "Gérer l'inventaire, les articles de recette et les niveaux de stock.",
-      "searchPlaceholder": "Rechercher des ingrédients...",
-      "addNew": "Ajouter un ingrédient",
-      "export": "Exporter",
-      "import": "Importer",
-      "importing": "Importation...",
-      "table": {
-        "ingredientName": "Nom de l'ingrédient",
-        "unit": "Unité",
-        "category": "Catégorie",
-        "uncategorized": "Non catégorisé",
-        "suppliers": "Fournisseurs",
-        "inStock": "En stock",
-        "lowStock": "Stock faible"
-      },
-      "notifications": {
-        "deleteConfirm": "Êtes-vous sûr de vouloir supprimer {name} ?",
-        "deleteSuccess": "Ingrédient supprimé avec succès.",
-        "deleteError": "Échec de la suppression de l'ingrédient.",
-        "createSuccess": "Ingrédient créé avec succès !",
-        "updateSuccess": "Ingrédient mis à jour avec succès !",
-        "actionError": "L'opération a échoué.",
-        "noDataExport": "Aucune donnée à exporter.",
-        "exportSuccess": "Exporté avec succès !",
-        "invalidExcel": "Aucun ingrédient valide trouvé dans le fichier Excel.",
-        "importSuccess": "{success}/{total} ingrédients importés avec succès.",
-        "readExcelError": "Échec de la lecture du fichier Excel. Veuillez vérifier le format."
-      }
-    }
-  },
-  "Promotion": {
-    "List": {
-      "title": "Liste des promotions",
-      "description": "Gérez les promotions et les campagnes de réduction du restaurant.",
-      "addNew": "Ajouter",
-      "searchPlaceholder": "Rechercher par code promo ou nom...",
-      "table": {
-        "no": "N°",
-        "promoCode": "Code Promo",
-        "discount": "Réduction",
-        "startTime": "Date de début",
-        "endTime": "Date de fin",
-        "usage": "Utilisation",
-        "status": "Statut"
-      },
-      "filters": {
-        "allStatuses": "Tous les statuts",
-        "allTypes": "Tous les types"
-      },
-      "actions": {
-        "view": "Voir les détails",
-        "edit": "Modifier"
-      },
-      "notifications": {
-        "statusUpdated": "Statut mis à jour avec succès",
-        "statusUpdateError": "Une erreur est survenue lors de la mise à jour du statut"
-      }
-    },
-    "createTitle": "Créer une nouvelle promotion",
-    "createSubTitle": "Le système changera automatiquement le statut selon la période d'application.",
-    "editTitle": "Détails de la promotion #{id}",
-    "noData": "Aucune donnée trouvée",
-    "Form": {
-      "basicInfo": "1. Informations de base",
-      "promoCode": "Code promotionnel",
-      "promoCodePlaceholder": "Exemple : SUMMER24",
-      "promoName": "Nom de la promotion",
-      "promoNamePlaceholder": "Entrez le nom de la promotion...",
-      "desc": "Description",
-      "descPlaceholder": "Entrez une description détaillée...",
-      "start": "Heure de début",
-      "end": "Heure de fin",
-      "discountConfig": "2. Configuration de la réduction",
-      "discountType": "Type de réduction",
-      "typePercent": "Pourcentage (%)",
-      "typeFixed": "Montant fixe",
-      "discountValue": "Valeur de la réduction",
-      "discountValuePlaceholder": "Entrez la valeur...",
-      "maxUsage": "Limite d'utilisation (optionnel)",
-      "unlimited": "Illimité",
-      "rules": "3. Conditions (Rules)",
-      "ruleDesc": "La commande doit atteindre au moins ${minOrder} et {minQty} articles. Elle doit également contenir le plat/la catégorie requis (si sélectionné).",
-      "minOrder": "Valeur minimale de commande",
-      "minOrderPlaceholder": "0",
-      "minQty": "Quantité minimale",
-      "minQtyPlaceholder": "0",
-      "reqDish": "Plat requis (optionnel)",
-      "reqDishPlaceholder": "Sélectionnez un plat requis...",
-      "reqCate": "Catégorie requise (optionnel)",
-      "reqCatePlaceholder": "Sélectionnez une catégorie requise...",
-      "targets": "4. Cibles (Targets)",
-      "targetDescAll": "La promotion s'appliquera à : toute la commande",
-      "targetDescFiltered": "La promotion s'appliquera à : uniquement aux plats/catégories sélectionnés ci-dessous",
-      "targetDish": "Appliquer à un plat spécifique",
-      "targetDishPlaceholder": "Laisser vide pour ignorer...",
-      "targetCate": "Appliquer à une catégorie spécifique",
-      "targetCatePlaceholder": "Laisser vide pour ignorer...",
-      "btnDisable": "Désactiver",
-      "btnCancel": "Annuler",
-      "btnSave": "Enregistrer la promotion",
-      "btnSaving": "Enregistrement...",
-      "statusLockWarning": "Le statut actuel est {status}. Les conditions de configuration sont verrouillées.",
-      "confirmDisable": "Désactiver cette promotion ? Cette action est irréversible.",
-      "successCreate": "Création réussie",
-      "successUpdate": "Mise à jour réussie",
-      "successDisable": "Désactivée avec succès",
-      "errorSave": "Une erreur est survenue lors de l'enregistrement"
-    },
-    "Detail": {
-      "title": "Détails de la promotion #{id}",
-      "status": "Statut",
-      "usedCount": "Utilisée : {count} fois",
-      "rulesInfo": "Règles d'application",
-      "noRule": "Aucune condition",
-      "targetsInfo": "Cibles d'application",
-      "hasTarget": "Appliquée uniquement aux produits/catégories spécifiés.",
-      "back": "Retour"
-    },
-    "Status": {
-      "SCHEDULED": "Planifiée",
-      "ACTIVE": "Active",
-      "EXPIRED": "Expirée",
-      "DISABLED": "Désactivée"
-    },
-    "Validation": {
-      "promoCodeMin": "Le code promo doit contenir au moins 3 caractères",
-      "startTimeRequired": "Veuillez sélectionner l'heure de début",
-      "endTimeRequired": "Veuillez sélectionner l'heure de fin",
-      "discountMinPercent": "Minimum 1 %",
-      "discountMaxPercent": "Maximum 100 %",
-      "discountPositive": "Doit être supérieur à 0",
-      "endTimeAfterStartTime": "La fin doit être après le début"
-    }
-  },
-  "SystemSettings": {
-    "title": "Paramètres système",
-    "description": "Gérez les paramètres et les configurations du système.",
-    "refresh": "Actualiser",
-    "loading": "Chargement des paramètres...",
-    "noSettings": "Aucun paramètre trouvé.",
-    "settingCount": "{count, plural, one {# paramètre} other {# paramètres}}",
-    "sensitiveHidden": "sensibles masqués",
-    "addSetting": "Ajouter un nouveau paramètre",
-    "add": "Ajouter le paramètre",
-    "cancel": "Annuler",
-    "save": "Enregistrer",
-    "saving": "Enregistrement...",
-    "notifications": {
-      "saveSuccess": "Paramètres du groupe '{group}' enregistrés avec succès.",
-      "createSuccess": "Paramètre créé avec succès.",
-      "saveError": "Échec de l'enregistrement des paramètres."
-    },
-    "Common": {
-      "saveChanges": "Enregistrer les modifications",
-      "discardChanges": "Annuler les modifications",
-      "upload": "Télécharger",
-      "change": "Modifier",
-      "removing": "Suppression...",
-      "uploading": "Téléchargement...",
-      "maxSizeImage": "JPG/PNG max 5 Mo",
-      "maxSizeVideo": "MP4/WEBM max 100 Mo",
-      "selectFromMenu": "Choisir dans le menu",
-      "autoTranslate": "Traduction automatique",
-      "search": "Rechercher",
-      "cancel": "Annuler",
-      "facebook": "Facebook",
-      "instagram": "Instagram",
-      "tiktok": "TikTok",
-      "website": "Site web"
-    },
-    "Introduction": {
-      "title": "Page d'introduction",
-      "description": "Gérez le contenu et les médias de votre page d'accueil.",
-      "sections": {
-        "hero": {
-          "title": "Section Héros",
-          "description": "La bannière principale en haut de la page.",
-          "mainTitle": "Titre principal",
-          "brandQuote": "Citation de marque",
-          "placeholders": {
-            "mainTitle": "ex. Cuisine vietnamienne authentique",
-            "brandQuote": "Où la tradition rencontre le goût"
-          }
+    "Shift": {
+      "ScheduleList": {
+        "title": "Affectations de Quart",
+        "description": "Affectez le personnel aux modèles de quart et suivez la présence.",
+        "searchPlaceholder": "Rechercher des affectations",
+        "newAssignment": "Nouvelle affectation",
+        "confirmCancel": "Annuler cette affectation ?",
+        "activeCount": "Actif : {count}",
+        "cancelledCount": "Annulé : {count}",
+        "filters": {
+          "fromDate": "Date de début",
+          "toDate": "Date de fin",
+          "fromDatePlaceholder": "Choisir la date de début",
+          "toDatePlaceholder": "Choisir la date de fin",
+          "refresh": "Actualiser"
         },
-        "chef": {
-          "title": "Découverte du Chef",
-          "description": "Mettez en avant vos chefs.",
-          "sectionLabel": "Étiquette de section",
-          "ctaAction": "Action CTA",
-          "discoveryHeader": "En-tête de découverte",
-          "leadChef": "Chef de cuisine",
-          "executiveChef": "Chef exécutif",
-          "name": "Nom",
-          "quote": "Citation"
+        "table": {
+          "no": "N°",
+          "date": "Date",
+          "template": "Modèle",
+          "staff": "Agent",
+          "plannedTime": "Horaire prévu",
+          "status": "Statut"
         },
-        "ambiance": {
-          "title": "Visite de l'ambiance",
-          "description": "Textes et en-têtes de la visite virtuelle.",
-          "navLabel": "Étiquette de navigation",
-          "sectionTitle": "Titre de la section",
-          "summary": "Résumé de l'atmosphère"
+        "noData": "Aucune affectation trouvée. Ajustez la période ou créez une nouvelle affectation."
+      },
+      "AssignmentForm": {
+        "createTitle": "Nouvelle Affectation",
+        "editTitle": "Modifier l'Affectation",
+        "cancel": "Annuler",
+        "saveChanges": "Enregistrer",
+        "assignStaff": "Affecter",
+        "plannedHint": "Laissez les horaires vides pour utiliser les horaires par défaut du modèle.",
+        "fields": {
+          "shiftTemplate": "Modèle de Quart",
+          "staffMember": "Agent",
+          "workDate": "Date de Travail",
+          "plannedStart": "Début Prévu",
+          "plannedEnd": "Fin Prévue",
+          "notes": "Notes"
         },
-        "collection": {
-          "title": "Collection d'articles signatures",
-          "description": "Configurations détaillées pour vos plats principaux.",
-          "galleryLabel": "Étiquette de la galerie",
-          "mainTitle": "Titre principal de la collection",
-          "dishTitle": "Plat Signature {index}",
-          "dishMainTitle": "Titre principal",
-          "dishSubTitle": "Sous-titre",
-          "cardCategory": "Catégorie",
-          "cardTitle": "Titre",
-          "cardDescription": "Description"
+        "placeholders": {
+          "shiftTemplate": "Sélectionner un modèle de quart...",
+          "staffMember": "Sélectionner un agent...",
+          "loadingStaff": "Chargement des agents...",
+          "workDate": "Sélectionner une date",
+          "notes": "Notes facultatives..."
         }
-      },
-      "sidebar": {
-        "mediaTitle": "Ressources médiatiques",
-        "mediaDescription": "Contenu visuel global partagé entre les langues.",
-        "heroBackground": "Arrière-plan du héros",
-        "chefVideo": "Vidéo promo du chef",
-        "ambianceVideo": "Vidéo d'ambiance",
-        "dishImage": "Image du plat signature {index}"
       }
     },
-    "DishModal": {
-      "noCategory": "Pas de catégorie",
-      "dishLabel": "PLAT",
-      "dishPlaceholder": "Plat #{id}",
-      "selectError": "Échec de la sélection du plat : {error}"
-    },
-    "StoreProfile": {
-      "title": "Profil de la boutique",
-      "description": "Gérez l'identité publique et les informations de contact.",
-      "sections": {
-        "identity": {
-          "title": "Identité",
-          "description": "Informations de base sur votre établissement."
-        },
-        "contact": {
-          "title": "Contact & Emplacement",
-          "description": "Comment les clients peuvent vous trouver."
-        },
-        "hours": {
-          "title": "Horaires d'ouverture",
-          "description": "Définissez votre emploi du temps hebdomadaire."
-        },
-        "social": {
-          "title": "Empreinte sociale",
-          "description": "Liens de présence numérique officiels."
-        }
+    "Notifications": {
+      "title": "Notifications",
+      "markAllRead": "Tout marquer comme lu",
+      "markAllReadShort": "Tout marquer lu",
+      "loadMore": "Charger plus",
+      "loading": "Chargement...",
+      "batchSummary": "autres notifications",
+      "acknowledge": "Confirmer",
+      "acknowledged": "Confirmé",
+      "view": "Voir",
+      "connected": "Connecté",
+      "disconnected": "Déconnecté",
+      "preferences": {
+        "title": "Préférences de notification",
+        "save": "Enregistrer",
+        "saveSuccess": "Préférences enregistrées",
+        "saveError": "Échec de l'enregistrement",
+        "soundOn": "Son activé",
+        "soundOff": "Son désactivé",
+        "enabled": "Activé",
+        "disabled": "Désactivé"
       },
-      "sidebar": {
-        "brandTitle": "Ressources de marque",
-        "brandDescription": "Visuels officiels (Partagés entre les langues).",
-        "logo": "Logo officiel",
-        "promoVideo": "Vidéo promotionnelle"
+      "tabs": {
+        "all": "Tout",
+        "unread": "Non lu",
+        "inbox": "Boîte de réception",
+        "kitchen": "Cuisine",
+        "orders": "Commandes"
       },
-      "actions": {
-        "sync": "Synchroniser l'identité",
-        "discard": "Annuler le brouillon"
+      "empty": "Aucune notification",
+      "emptyUnread": "Aucune notification non lue",
+      "time": {
+        "justNow": "à l'instant",
+        "minutesAgo": "il y a {count} min",
+        "hoursAgo": "il y a {count}h",
+        "daysAgo": "il y a {count}j",
+        "ago": "Il y a {time}"
       },
-      "identity": "Identité du Magasin",
-      "identityDesc": "Mettez à jour le logo et le nom officiel de votre magasin.",
-      "upload": "Télécharger",
-      "contactLocation": "Contact et Emplacement",
-      "contactLocationDesc": "Détails de l'adresse et coordonnées du magasin.",
-      "operating": "Opérations",
-      "operatingDesc": "Heures d'ouverture et autres détails opérationnels.",
-      "socialMedia": "Réseaux Sociaux",
-      "socialMediaDesc": "La présence de votre magasin sur les réseaux sociaux.",
-      "changeLogo": "Changer le logo",
-      "uploadLogo": "Télécharger le logo",
-      "remove": "Supprimer",
-      "storeName": "Nom du magasin",
-      "street": "Adresse",
-      "postalCode": "Code postal",
-      "city": "Ville",
-      "country": "Pays / Région",
-      "email": "Adresse e-mail",
-      "phone": "Numéro de téléphone",
-      "openingHours": "Heures d'ouverture",
-      "facebook": "Lien Facebook",
-      "instagram": "Lien Instagram",
-      "tiktok": "Lien TikTok",
-      "placeholders": {
-        "storeName": "Entrez le nom du restaurant/magasin",
-        "street": "Par exemple : Avenue Jacques Dalcroze 9",
-        "postalCode": "1000",
-        "city": "Nom de la ville",
-        "country": "Nom du pays",
-        "email": "contact@restaurant.com",
-        "phone": "+33 1 23 45 67 89",
-        "openingHours": "Ex : lun - dim : 08h00 - 22h00",
-        "facebook": "https://facebook.com/votrepage",
-        "instagram": "https://instagram.com/votreprofil",
-        "tiktok": "https://tiktok.com/@votreprofil"
-      },
-      "reset": "Réinitialiser",
-      "clickToUpload": "Logo",
-      "uploadSuccess": "Logo téléchargé avec succès",
-      "visualBranding": "Identité visuelle",
-      "visualBrandingDesc": "Logo et médias promotionnels",
-      "officialLogo": "Logo officiel",
-      "storeVideo": "Vidéo du magasin",
-      "syncNotice": "Avis de synchronisation",
-      "syncNoticeDesc": "L'enregistrement mettra à jour instantanément les champs globaux dans toutes les langues.",
-      "translationFailed": "Échec de la traduction.",
-      "translatedSuccessfully": "Traduit avec succès !",
-      "nothingToTranslate": "Rien à traduire.",
-      "uploadError": "Échec du téléchargement du logo",
-      "fileSizeError": "La taille du fichier doit être inférieure à 5 Mo",
-      "updateSuccess": "Profil du magasin mis à jour avec succès",
-      "updateError": "Échec de l'enregistrement du profil du magasin"
-    },
-    "AboutUs": {
-      "title": "À propos de nous",
-      "description": "Gérez l'histoire de votre marque et vos valeurs fondamentales.",
-      "sections": {
-        "founders": {
-          "title": "Vision des fondateurs",
-          "description": "Histoire d'origine et inspiration principale.",
-          "label": "Étiquette de section",
-          "header": "En-tête principal",
-          "paragraph1": "Paragraphe narratif 1",
-          "paragraph2": "Paragraphe narratif 2",
-          "quote": "Déclaration de citation",
-          "quoteAuthor": "Nom d'attribution",
-          "featuredQuote": "Citation en vedette",
-          "image": "Image des fondateurs",
-          "quoteHeader": "Citation inspirante des fondateurs",
-          "fields": {
-            "label": "Étiquette de section",
-            "header": "En-tête principal",
-            "paragraph1": "Premier paragraphe bio",
-            "paragraph2": "Deuxième paragraphe bio",
-            "quote": "Déclaration de citation",
-            "author": "Crédit d'auteur"
-          }
-        },
-        "journey": {
-          "title": "Parcours historique",
-          "description": "Chronologie et jalons clés.",
-          "header": "Titre du parcours",
-          "paragraph1": "Chapitre d'ouverture",
-          "paragraph2": "Évolution stratégique",
-          "quote": "Point fort du parcours",
-          "paragraph3": "Ère actuelle",
-          "fields": {
-            "title": "Titre de section",
-            "paragraph1": "Le début",
-            "paragraph2": "Croissance et évolution",
-            "paragraph3": "Aujourd'hui"
-          },
-          "quoteLabel": "Point fort à mi-parcours"
-        },
-        "philosophy": {
-          "title": "Philosophie et valeurs",
-          "description": "Croyances fondamentales et principes directeurs.",
-          "label": "Étiquette de philosophie",
-          "header": "Mission principale",
-          "principle": "Principe {index}",
-          "principleTitle": "Titre",
-          "principleDesc": "Description",
-          "fields": {
-            "label": "Étiquette de section",
-            "header": "En-tête de base de la philosophie",
-            "valueTitle": "Titre de la valeur",
-            "valueDesc": "Description de la valeur"
-          },
-          "valueLabel": "Valeur fondamentale {index}"
-        },
-        "legacy": {
-          "title": "Héritage culinaire",
-          "description": "Vision future et excellence durable.",
-          "header": "Titre de l'héritage",
-          "subtitle": "Sous-titre stratégique",
-          "paragraph": "Chapitre de l'héritage {index}",
-          "image": "Image de l'héritage",
-          "fields": {
-            "header": "Titre de l'héritage",
-            "subtitle": "Sous-titre de section"
-          },
-          "chapterLabel": "Chapitre {index}"
-        }
-      },
-      "actions": {
-        "sync": "Synchroniser l'histoire",
-        "syncDesc": "Persister vos données narratives",
-        "syncButton": "Synchroniser l'histoire",
-        "discard": "Annuler les modifications"
-      }
-    },
-    "General": {
-      "title": "Paramètres système",
-      "addNew": "Ajouter un paramètre",
-      "empty": "Aucun paramètre général trouvé",
-      "emptyDesc": "Utilisez le bouton \"Ajouter un paramètre\" ci-dessus pour créer un groupe comme \"reservation\"."
-    },
-    "AddModal": {
-      "key": "Clé du paramètre",
-      "keyPlaceholder": "Ex : default_password, password.min_length",
-      "name": "Nom du paramètre (optionnel)",
-      "namePlaceholder": "Un nom lisible pour ce paramètre",
-      "type": "Type de valeur",
-      "value": "Valeur",
-      "valuePlaceholder": "Valeur du paramètre...",
-      "description": "Description (optionnelle)",
-      "descriptionPlaceholder": "À quoi sert ce paramètre ?",
-      "sensitive": "Données sensibles",
-      "sensitiveDesc": "Masquer la valeur par défaut (ex : mots de passe, clés API)",
-      "addTitle": "Ajouter un nouveau paramètre",
-      "true": "Vrai",
-      "false": "Faux"
-    },
-    "Field": {
-      "sensitiveHidden": "Sensible – valeur masquée",
-      "jsonPlaceholder": "Valeur JSON...",
-      "sensitive": "Sensible",
       "types": {
-        "STRING": "Texte",
-        "INT": "Entier",
-        "DECIMAL": "Décimal",
-        "BOOL": "Booléen",
-        "JSON": "JSON"
+        "NEW_ORDER": "Nouvelle commande",
+        "ORDER_CANCELLED": "Commande annulée",
+        "ORDER_ITEM_READY": "Plat prêt",
+        "ORDER_ITEM_REJECTED": "Plat rejeté",
+        "ALL_ITEMS_READY": "Tous les plats prêts",
+        "PAYMENT_COMPLETED": "Paiement effectué",
+        "RESERVATION_CREATED": "Nouvelle réservation",
+        "RESERVATION_STATUS_CHANGED": "Réservation mise à jour",
+        "RESERVATION_REMINDER": "Rappel de réservation",
+        "TABLE_STATUS_CHANGED": "Statut de table modifié",
+        "LOW_STOCK_ALERT": "Alerte stock bas",
+        "DISH_OUT_OF_STOCK": "Plat en rupture",
+        "SHIFT_ASSIGNED": "Quart assigné",
+        "ATTENDANCE_ALERT": "Alerte de présence",
+        "SYSTEM_ALERT": "Alerte système",
+        "ORDER_STATUS_CHANGED": "Commande mise à jour",
+        "PAYMENT_REQUEST": "Demande de paiement",
+        "fallback": "Notification"
+      },
+      "priority": {
+        "Low": "Basse",
+        "Normal": "Normale",
+        "High": "Haute",
+        "Critical": "Critique"
+      },
+      "categories": {
+        "Orders": "Commandes",
+        "Reservations": "Réservations",
+        "Tables": "Tables",
+        "Inventory": "Inventaire",
+        "Shifts": "Quarts",
+        "System": "Système",
+        "General": "Général"
+      },
+      "messages": {
+        "NEW_ORDER": {
+          "title": "Nouvelle commande #{orderId}",
+          "body": "Table {tableName} a passé une nouvelle commande"
+        },
+        "ORDER_CANCELLED": {
+          "title": "Commande #{orderId} annulée",
+          "body": "La commande #{orderId} a été annulée"
+        },
+        "ORDER_ITEM_READY": {
+          "title": "Élément de commande prêt",
+          "body": "Un élément de la commande est prêt à être servi"
+        },
+        "ORDER_ITEM_REJECTED": {
+          "title": "Élément de commande rejeté",
+          "body": "Un élément de la commande a été rejeté"
+        },
+        "ALL_ITEMS_READY": {
+          "title": "Commande #{orderId} complète",
+          "body": "Tous les plats pour table {tableName} sont prêts"
+        },
+        "PAYMENT_COMPLETED": {
+          "title": "Paiement reçu",
+          "body": "Commande #{orderId} — {amount} payé"
+        },
+        "RESERVATION_CREATED": {
+          "title": "Nouvelle réservation",
+          "body": "{guestName} — {guestCount} personnes à {time}"
+        },
+        "RESERVATION_STATUS_CHANGED": {
+          "title": "Réservation mise à jour",
+          "body": "Réservation #{reservationId} — statut changé en {status}"
+        },
+        "RESERVATION_REMINDER": {
+          "title": "Rappel de réservation",
+          "body": "{guestName} — arrive dans {minutes} minutes"
+        },
+        "TABLE_STATUS_CHANGED": {
+          "title": "Table {tableName}",
+          "body": "{oldStatus} → {status}"
+        },
+        "LOW_STOCK_ALERT": {
+          "title": "Stock bas : {ingredientName}",
+          "body": "Actuel : {current}, Minimum : {minimum}"
+        },
+        "DISH_OUT_OF_STOCK": {
+          "title": "{dishName} en rupture",
+          "body": "Ce plat n'est plus disponible"
+        },
+        "SHIFT_ASSIGNED": {
+          "title": "Quart assigné",
+          "body": "Vous avez été assigné à {shiftName} le {date}"
+        },
+        "ATTENDANCE_ALERT": {
+          "title": "Alerte de présence",
+          "body": "{staffName} — {reason}"
+        },
+        "SYSTEM_ALERT": {
+          "title": "Alerte système",
+          "body": "{message}"
+        },
+        "ORDER_STATUS_CHANGED": {
+          "title": "Commande #{orderId} mise à jour",
+          "body": "Commande #{orderId} — statut changé en {status}"
+        },
+        "PAYMENT_REQUEST": {
+          "title": "Paiement demandé — {tableName}",
+          "body": "Commande #{orderId} — paiement de {amount} demandé"
+        },
+        "fallback": {
+          "title": "Notification",
+          "body": "Vous avez une nouvelle notification."
+        }
+      },
+      "metadata": {
+        "defaults": {
+          "table": "Table",
+          "staff": "Employé",
+          "guest": "Client"
+        },
+        "statuses": {
+          "LOCKED": "Verrouillée",
+          "AVAILABLE": "Disponible",
+          "RESERVED": "Réservée",
+          "OCCUPIED": "Occupée",
+          "CONFIRMED": "Confirmée",
+          "CHECKED_IN": "Enregistrée",
+          "CANCELLED": "Annulée",
+          "NO_SHOW": "Absent",
+          "PENDING": "En attente",
+          "COMPLETED": "Terminée",
+          "IN_PROGRESS": "En cours",
+          "UNKNOWN": "Inconnu",
+          "CREATED": "Créé",
+          "READY": "Prêt",
+          "SERVED": "Servi",
+          "REJECTED": "Rejeté"
+        },
+        "attendanceReasons": {
+          "LATE_CHECKIN": "a pointé avec {minutes} minutes de retard",
+          "EARLY_LEAVE": "est parti {minutes} minutes plus tôt"
+        }
       }
-    }
-  },
-  "InvoiceDetail": {
-    "title": "Détails de la facture",
-    "loading": "Chargement de la facture...",
-    "errorLoad": "Échec du chargement de la facture",
-    "notFound": "Facture introuvable.",
-    "exportPrint": "Exporter / Imprimer",
-    "back": "Retour",
-    "status": {
-      "paid": "Payée"
     },
-    "from": "Facture de",
-    "phone": "Téléphone",
-    "to": "Facturé à",
-    "walkInCustomer": "Client de passage",
-    "date": "Date",
-    "type": "Type",
-    "table": "Table",
-    "items": "Détails des articles",
-    "no": "N°",
-    "itemDetails": "Détails de l'article",
-    "qty": "Qté",
-    "rate": "Prix",
-    "amount": "Montant",
-    "terms": "Termes et Conditions",
-    "term1": "1. Merci d'avoir dîné avec nous.",
-    "term2": "2. Veuillez conserver ce reçu pour vos dossiers.",
-    "paymentVerified": "Note : Le paiement a été vérifié par {staffName}.",
-    "paymentMethod": "Méthode de paiement",
-    "subtotal": "Sous-total",
-    "discount": "Remise",
-    "tip": "Pourboire",
-    "total": "Total",
-    "downloadPdf": "Télécharger en PDF",
-    "printInvoice": "Imprimer la facture",
-    "defaultStaff": "Personnel",
-    "thankYouBusiness": "Merci pour votre visite !",
-    "currency": "EUR"
-  },
-  "Customer": {
-    "close": "Fermer",
-    "edit": "Modifier",
-    "List": {
-      "title": "Gestion des clients",
-      "description": "Gérez et consultez les informations des clients, l'historique des commandes et les points de fidélité.",
-      "searchPlaceholder": "Rechercher par nom, téléphone ou email...",
-      "addNew": "Ajouter un client",
-      "table": {
-        "no": "N°",
-        "customerName": "Client",
-        "email": "Email",
-        "type": "Type",
+    "Ingredient": {
+      "List": {
+        "title": "Ingrédients",
+        "description": "Gérer l'inventaire, les articles de recette et les niveaux de stock.",
+        "searchPlaceholder": "Rechercher des ingrédients...",
+        "addNew": "Ajouter un ingrédient",
+        "export": "Exporter",
+        "import": "Importer",
+        "importing": "Importation...",
+        "table": {
+          "ingredientName": "Nom de l'ingrédient",
+          "unit": "Unité",
+          "category": "Catégorie",
+          "uncategorized": "Non catégorisé",
+          "suppliers": "Fournisseurs",
+          "inStock": "En stock",
+          "lowStock": "Stock faible"
+        },
+        "notifications": {
+          "deleteConfirm": "Êtes-vous sûr de vouloir supprimer {name} ?",
+          "deleteSuccess": "Ingrédient supprimé avec succès.",
+          "deleteError": "Échec de la suppression de l'ingrédient.",
+          "createSuccess": "Ingrédient créé avec succès !",
+          "updateSuccess": "Ingrédient mis à jour avec succès !",
+          "actionError": "L'opération a échoué.",
+          "noDataExport": "Aucune donnée à exporter.",
+          "exportSuccess": "Exporté avec succès !",
+          "invalidExcel": "Aucun ingrédient valide trouvé dans le fichier Excel.",
+          "importSuccess": "{success}/{total} ingrédients importés avec succès.",
+          "readExcelError": "Échec de la lecture du fichier Excel. Veuillez vérifier le format."
+        }
+      }
+    },
+    "Promotion": {
+      "List": {
+        "title": "Liste des promotions",
+        "description": "Gérez les promotions et les campagnes de réduction du restaurant.",
+        "addNew": "Ajouter",
+        "searchPlaceholder": "Rechercher par code promo ou nom...",
+        "table": {
+          "no": "N°",
+          "promoCode": "Code Promo",
+          "discount": "Réduction",
+          "startTime": "Date de début",
+          "endTime": "Date de fin",
+          "usage": "Utilisation",
+          "status": "Statut"
+        },
+        "filters": {
+          "allStatuses": "Tous les statuts",
+          "allTypes": "Tous les types"
+        },
+        "actions": {
+          "view": "Voir les détails",
+          "edit": "Modifier"
+        },
+        "notifications": {
+          "statusUpdated": "Statut mi à jour avec succès",
+          "statusUpdateError": "Une erreur est survenue lors de la mise à jour du statut"
+        }
+      },
+      "createTitle": "Créer une nouvelle promotion",
+      "createSubTitle": "Le système changera automatiquement le statut selon la période d'application.",
+      "editTitle": "Détails de la promotion #{id}",
+      "noData": "Aucune donnée trouvée",
+      "Form": {
+        "basicInfo": "1. Informations de base",
+        "promoCode": "Code promotionnel",
+        "promoCodePlaceholder": "Exemple : SUMMER24",
+        "promoName": "Nom de la promotion",
+        "promoNamePlaceholder": "Entrez le nom de la promotion...",
+        "desc": "Description",
+        "descPlaceholder": "Entrez une description détaillée...",
+        "start": "Heure de début",
+        "end": "Heure de fin",
+        "discountConfig": "2. Configuration de la réduction",
+        "discountType": "Type de réduction",
+        "typePercent": "Pourcentage (%)",
+        "typeFixed": "Montant fixe",
+        "discountValue": "Valeur de la réduction",
+        "discountValuePlaceholder": "Entrez la valeur...",
+        "maxUsage": "Limite d'utilisation (optionnel)",
+        "unlimited": "Illimité",
+        "rules": "3. Conditions (Rules)",
+        "ruleDesc": "La commande doit atteindre au moins ${minOrder} et {minQty} articles. Elle doit également contenir le plat/la catégorie requis (si sélectionné).",
+        "minOrder": "Valeur minimale de commande",
+        "minOrderPlaceholder": "0",
+        "minQty": "Quantité minimale",
+        "minQtyPlaceholder": "0",
+        "reqDish": "Plat requis (optionnel)",
+        "reqDishPlaceholder": "Sélectionnez un plat requis...",
+        "reqCate": "Catégorie requise (optionnel)",
+        "reqCatePlaceholder": "Sélectionnez une catégorie requise...",
+        "targets": "4. Cibles (Targets)",
+        "targetDescAll": "La promotion s'appliquera à : toute la commande",
+        "targetDescFiltered": "La promotion s'appliquera à : uniquement aux plats/catégories sélectionnés ci-dessous",
+        "targetDish": "Appliquer à un plat spécifique",
+        "targetDishPlaceholder": "Laisser vide pour ignorer...",
+        "targetCate": "Appliquer à une catégorie spécifique",
+        "targetCatePlaceholder": "Laisser vide pour ignorer...",
+        "btnDisable": "Désactiver",
+        "btnCancel": "Annuler",
+        "btnSave": "Enregistrer la promotion",
+        "btnSaving": "Enregistrement...",
+        "statusLockWarning": "Le statut actuel est {status}. Les conditions de configuration sont verrouillées.",
+        "confirmDisable": "Désactiver cette promotion ? Cette action est irréversible.",
+        "successCreate": "Création réussie",
+        "successUpdate": "Mise à jour réussie",
+        "successDisable": "Désactivée avec succès",
+        "errorSave": "Une erreur est survenue lors de l'enregistrement"
+      },
+      "Detail": {
+        "title": "Détails de la promotion #{id}",
+        "status": "Statut",
+        "usedCount": "Utilisée : {count} fois",
+        "rulesInfo": "Règles d'application",
+        "noRule": "Aucune condition",
+        "targetsInfo": "Cibles d'application",
+        "hasTarget": "Appliquée uniquement aux produits/catégories spécifiés.",
+        "back": "Retour"
+      },
+      "Status": {
+        "SCHEDULED": "Planifiée",
+        "ACTIVE": "Active",
+        "EXPIRED": "Expirée",
+        "DISABLED": "Désactivée"
+      },
+      "Validation": {
+        "promoCodeMin": "Le code promo doit contenir au moins 3 caractères",
+        "startTimeRequired": "Veuillez sélectionner l'heure de début",
+        "endTimeRequired": "Veuillez sélectionner l'heure de fin",
+        "discountMinPercent": "Minimum 1 %",
+        "discountMaxPercent": "Maximum 100 %",
+        "discountPositive": "Doit être supérieur à 0",
+        "endTimeAfterStartTime": "La fin doit être après le début"
+      }
+    },
+    "Customer": {
+      "close": "Fermer",
+      "edit": "Modifier",
+      "List": {
+        "title": "Gestion des clients",
+        "description": "Gérez et consultez les informations des clients, l'historique des commandes et les points de fidélité.",
+        "searchPlaceholder": "Rechercher par nom, téléphone ou email...",
+        "addNew": "Ajouter un client",
+        "table": {
+          "no": "N°",
+          "customerName": "Client",
+          "email": "Email",
+          "type": "Type",
+          "orders": "Commandes",
+          "points": "Points",
+          "lastOrder": "Dernière commande"
+        },
+        "filters": {
+          "member": "Membre",
+          "guest": "Invité"
+        },
+        "labels": {
+          "member": "Membre",
+          "guest": "Invité"
+        },
+        "actions": {
+          "view": "Voir les détails",
+          "edit": "Modifier le client",
+          "delete": "Supprimer le client"
+        },
+        "notifications": {
+          "loadError": "Échec du chargement des détails du client",
+          "deleteSuccess": "Client supprimé avec succès",
+          "deleteError": "Échec de la suppression du client"
+        },
+        "deleteModal": {
+          "title": "Supprimer le client",
+          "message": "Êtes-vous sûr de vouloir supprimer le client '{name}' ? Cette action est irréversible.",
+          "confirm": "Supprimer",
+          "cancel": "Annuler"
+        }
+      },
+      "Add": {
+        "title": "Ajouter un client",
+        "saveButton": "Enregistrer",
+        "cancel": "Annuler",
+        "fields": {
+          "phone": "Numéro de téléphone",
+          "fullName": "Nom complet",
+          "email": "Email",
+          "loyaltyPoints": "Points de fidélité",
+          "isMember": "Statut de membre",
+          "createdAt": "Créé le"
+        },
+        "placeholders": {
+          "phone": "Entrez le numéro de téléphone",
+          "fullName": "Entrez le nom complet",
+          "email": "Entrez l'adresse email",
+          "loyaltyPoints": "Entrez les points de fidélité"
+        },
+        "validation": {
+          "phoneRequired": "Le numéro de téléphone est requis",
+          "phoneMaxLength": "Le téléphone ne peut pas dépasser 20 caractères",
+          "phoneInvalid": "Le numéro de téléphone ne doit contenir que des chiffres",
+          "nameMaxLength": "Le nom complet ne peut pas dépasser 100 caractères",
+          "emailMaxLength": "L'email ne peut pas dépasser 150 caractères",
+          "emailInvalid": "Format d'email invalide",
+          "pointsNegative": "Les points de fidélité ne peuvent pas être négatifs"
+        },
+        "notifications": {
+          "createSuccess": "Client créé avec succès",
+          "createError": "Échec de la création du client"
+        }
+      },
+      "Edit": {
+        "title": "Modifier le client",
+        "saveButton": "Enregistrer les modifications",
+        "cancel": "Annuler",
+        "fields": {
+          "phone": "Numéro de téléphone",
+          "fullName": "Nom complet",
+          "email": "Email",
+          "loyaltyPoints": "Points de fidélité",
+          "isMember": "Statut de membre",
+          "createdAt": "Créé le"
+        },
+        "placeholders": {
+          "phone": "Entrez le numéro de téléphone",
+          "fullName": "Entrez le nom complet",
+          "email": "Entrez l'adresse email",
+          "loyaltyPoints": "Entrez les points de fidélité"
+        },
+        "validation": {
+          "phoneRequired": "Le numéro de téléphone est requis",
+          "phoneMaxLength": "Le téléphone ne peut pas dépasser 20 caractères",
+          "phoneInvalid": "Le numéro de téléphone ne doit contenir que des chiffres",
+          "nameMaxLength": "Le nom complet ne peut pas dépasser 100 caractères",
+          "emailMaxLength": "L'email ne peut pas dépasser 150 caractères",
+          "emailInvalid": "Format d'email invalide",
+          "pointsNegative": "Les points de fidélité ne peuvent pas être négatifs"
+        },
+        "notifications": {
+          "updateSuccess": "Client mis à jour avec succès",
+          "updateError": "Échec de la mise à jour du client"
+        }
+      },
+      "Detail": {
+        "title": "Détails du client",
+        "saveButton": "Fermer",
+        "cancel": "Fermer",
+        "fields": {
+          "phone": "Numéro de téléphone",
+          "fullName": "Nom complet",
+          "email": "Email",
+          "loyaltyPoints": "Points de fidélité",
+          "isMember": "Statut de membre",
+          "createdAt": "Créé le"
+        },
+        "placeholders": {
+          "phone": "",
+          "fullName": "",
+          "email": "",
+          "loyaltyPoints": ""
+        },
+        "validation": {
+          "phoneRequired": "",
+          "phoneMaxLength": "",
+          "phoneInvalid": "",
+          "nameMaxLength": "",
+          "emailMaxLength": "",
+          "emailInvalid": "",
+          "pointsNegative": ""
+        },
+        "backToCustomers": "Retour aux clients",
+        "customerNotFound": "Client introuvable.",
+        "guestCustomer": "Client invité",
+        "member": "Membre",
+        "guest": "Invité",
+        "noPhone": "Pas de téléphone",
+        "joined": "Inscrit",
         "orders": "Commandes",
+        "totalSpent": "Total Dépensé",
         "points": "Points",
-        "lastOrder": "Dernière commande"
-      },
-      "filters": {
-        "member": "Membre",
-        "guest": "Invité"
-      },
-      "labels": {
-        "member": "Membre",
-        "guest": "Invité"
-      },
-      "actions": {
-        "view": "Voir les détails",
-        "edit": "Modifier le client",
-        "delete": "Supprimer le client"
-      },
-      "notifications": {
-        "loadError": "Échec du chargement des détails du client",
-        "deleteSuccess": "Client supprimé avec succès",
-        "deleteError": "Échec de la suppression du client"
-      },
-      "deleteModal": {
-        "title": "Supprimer le client",
-        "message": "Êtes-vous sûr de vouloir supprimer le client '{name}' ? Cette action est irréversible.",
-        "confirm": "Supprimer",
-        "cancel": "Annuler"
-      }
-    },
-    "Add": {
-      "title": "Ajouter un client",
-      "saveButton": "Enregistrer",
-      "cancel": "Annuler",
-      "fields": {
-        "phone": "Numéro de téléphone",
-        "fullName": "Nom complet",
-        "email": "Email",
-        "loyaltyPoints": "Points de fidélité",
-        "isMember": "Statut de membre",
-        "createdAt": "Créé le"
-      },
-      "placeholders": {
-        "phone": "Entrez le numéro de téléphone",
-        "fullName": "Entrez le nom complet",
-        "email": "Entrez l'adresse email",
-        "loyaltyPoints": "Entrez les points de fidélité"
-      },
-      "validation": {
-        "phoneRequired": "Le numéro de téléphone est requis",
-        "phoneMaxLength": "Le téléphone ne peut pas dépasser 20 caractères",
-        "phoneInvalid": "Le numéro de téléphone ne doit contenir que des chiffres",
-        "nameMaxLength": "Le nom complet ne peut pas dépasser 100 caractères",
-        "emailMaxLength": "L'email ne peut pas dépasser 150 caractères",
-        "emailInvalid": "Format d'email invalide",
-        "pointsNegative": "Les points de fidélité ne peuvent pas être négatifs"
-      },
-      "notifications": {
-        "createSuccess": "Client créé avec succès",
-        "createError": "Échec de la création du client"
-      }
-    },
-    "Edit": {
-      "title": "Modifier le client",
-      "saveButton": "Enregistrer les modifications",
-      "cancel": "Annuler",
-      "fields": {
-        "phone": "Numéro de téléphone",
-        "fullName": "Nom complet",
-        "email": "Email",
-        "loyaltyPoints": "Points de fidélité",
-        "isMember": "Statut de membre",
-        "createdAt": "Créé le"
-      },
-      "placeholders": {
-        "phone": "Entrez le numéro de téléphone",
-        "fullName": "Entrez le nom complet",
-        "email": "Entrez l'adresse email",
-        "loyaltyPoints": "Entrez les points de fidélité"
-      },
-      "validation": {
-        "phoneRequired": "Le numéro de téléphone est requis",
-        "phoneMaxLength": "Le téléphone ne peut pas dépasser 20 caractères",
-        "phoneInvalid": "Le numéro de téléphone ne doit contenir que des chiffres",
-        "nameMaxLength": "Le nom complet ne peut pas dépasser 100 caractères",
-        "emailMaxLength": "L'email ne peut pas dépasser 150 caractères",
-        "emailInvalid": "Format d'email invalide",
-        "pointsNegative": "Les points de fidélité ne peuvent pas être négatifs"
-      },
-      "notifications": {
-        "updateSuccess": "Client mis à jour avec succès",
-        "updateError": "Échec de la mise à jour du client"
-      }
-    },
-    "Detail": {
-      "title": "Détails du client",
-      "saveButton": "Fermer",
-      "cancel": "Fermer",
-      "fields": {
-        "phone": "Numéro de téléphone",
-        "fullName": "Nom complet",
-        "email": "Email",
-        "loyaltyPoints": "Points de fidélité",
-        "isMember": "Statut de membre",
-        "createdAt": "Créé le"
-      },
-      "placeholders": {
-        "phone": "",
-        "fullName": "",
-        "email": "",
-        "loyaltyPoints": ""
-      },
-      "validation": {
-        "phoneRequired": "",
-        "phoneMaxLength": "",
-        "phoneInvalid": "",
-        "nameMaxLength": "",
-        "emailMaxLength": "",
-        "emailInvalid": "",
-        "pointsNegative": ""
-      },
-      "backToCustomers": "Retour aux clients",
-      "customerNotFound": "Client introuvable.",
-      "guestCustomer": "Client invité",
-      "member": "Membre",
-      "guest": "Invité",
-      "noPhone": "Pas de téléphone",
-      "joined": "Inscrit",
-      "orders": "Commandes",
-      "totalSpent": "Total Dépensé",
-      "points": "Points",
-      "orderHistory": "Historique des commandes",
-      "from": "De",
-      "to": "À",
-      "allOrderTypes": "Tous les types",
-      "clear": "Effacer",
-      "noOrdersFound": "Aucune commande trouvée.",
-      "totalAmount": "Montant Total",
-      "tip": "Pourboire",
-      "fetchDetailError": "Impossible de charger les détails de la commande",
-      "orderTitle": "Commande",
-      "generalInfo": "Infos générales",
-      "table": "Table",
-      "staff": "Personnel",
-      "type": "Type",
-      "paymentDetails": "Détails de paiement",
-      "noPaymentRecorded": "Aucun paiement enregistré",
-      "received": "Reçu",
-      "change": "Monnaie",
-      "items": "Articles",
-      "promotions": "Promotions",
-      "coupons": "Coupons",
-      "note": "Note",
-      "noPromotionsApplied": "Aucune promotion appliquée",
-      "noCouponsApplied": "Aucun coupon appliqué",
-      "of": "sur",
-      "status": {
-        "PENDING": "En attente",
-        "IN_PROGRESS": "En cours",
-        "COMPLETED": "Terminée",
-        "CANCELLED": "Annulée",
-        "CREATED": "Créée",
-        "READY": "Prête",
-        "SERVED": "Servie",
-        "REJECTED": "Rejetée",
-        "DINE_IN": "Sur place",
-        "TAKEAWAY": "À emporter"
+        "orderHistory": "Historique des commandes",
+        "from": "De",
+        "to": "À",
+        "allOrderTypes": "Tous les types",
+        "clear": "Effacer",
+        "noOrdersFound": "Aucune commande trouvée.",
+        "totalAmount": "Montant Total",
+        "tip": "Pourboire",
+        "fetchDetailError": "Impossible de charger les détails de la commande",
+        "orderTitle": "Commande",
+        "generalInfo": "Infos générales",
+        "table": "Table",
+        "staff": "Personnel",
+        "type": "Type",
+        "paymentDetails": "Détails de paiement",
+        "noPaymentRecorded": "Aucun paiement enregistré",
+        "received": "Reçu",
+        "change": "Monnaie",
+        "items": "Articles",
+        "promotions": "Promotions",
+        "coupons": "Coupons",
+        "note": "Note",
+        "noPromotionsApplied": "Aucune promotion appliquée",
+        "noCouponsApplied": "Aucun coupon appliqué",
+        "of": "sur",
+        "status": {
+          "PENDING": "En attente",
+          "IN_PROGRESS": "En cours",
+          "COMPLETED": "Terminée",
+          "CANCELLED": "Annulée",
+          "CREATED": "Créée",
+          "READY": "Prête",
+          "SERVED": "Servie",
+          "REJECTED": "Rejetée",
+          "DINE_IN": "Sur place",
+          "TAKEAWAY": "À emporter"
+        }
       }
     }
   }

@@ -3,7 +3,7 @@ import { useTranslations } from "next-intl";
 import "../styles/index.css";
 
 export default function OrderSuccessHeader() {
-  const t = useTranslations("OrderSuccess.Header");
+  const t = useTranslations("orders.success.Header");
 
   return (
     <div className="order-success-wrapper">

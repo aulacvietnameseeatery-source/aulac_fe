@@ -12,7 +12,7 @@ interface Props {
 }
 
 export const CustomerSearchModal: React.FC<Props> = ({ isOpen, onClose, currentCustomer, onSelectCustomer }) => {
-  const t = useTranslations("Order.Create");
+  const t = useTranslations("orders.management.Create");
   const [phone, setPhone] = useState('');
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
@@ -31,7 +31,7 @@ export const CustomerSearchModal: React.FC<Props> = ({ isOpen, onClose, currentC
       setFullName(currentCustomer?.fullName || '');
       setEmail(currentCustomer?.email || '');
       setCustomerId(currentCustomer?.customerId || null);
-      
+
       // Nếu customer có ID thì lưu làm originalData để hiện thẻ VIP
       if (currentCustomer?.customerId && currentCustomer.customerId != 68) {
         setOriginalCustomerData(currentCustomer as CustomerDto);
@@ -53,7 +53,7 @@ export const CustomerSearchModal: React.FC<Props> = ({ isOpen, onClose, currentC
     if (!phone.trim()) return;
     setLoading(true);
     setMessage({ text: '', type: '' });
-    
+
     try {
       const result = await createOrderService.getCustomerByPhone(phone);
       if (result && result.customerId) {
@@ -105,18 +105,18 @@ export const CustomerSearchModal: React.FC<Props> = ({ isOpen, onClose, currentC
           <h3 className="font-bold text-gray-900 text-lg">{t('customerDetails')}</h3>
           <button onClick={onClose} className="cursor-pointer bg-gray-100 p-1.5 rounded-full"><X className="w-4 h-4" /></button>
         </div>
-        
+
         <div className="space-y-4">
           <div>
             <label className="text-xs font-semibold text-gray-500 uppercase mb-1.5 block">{t('phoneNumber')}</label>
             <div className="relative flex gap-2">
-              <input 
-                type="text" 
-                placeholder="090..." 
-                value={phone} 
-                onChange={(e) => setPhone(e.target.value)} 
+              <input
+                type="text"
+                placeholder="090..."
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-                className="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-[#1A3A51]" 
+                className="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-[#1A3A51]"
               />
               <button onClick={handleSearch} disabled={loading} className="cursor-pointer flex-shrink-0 bg-[#1A3A51] text-white px-4 rounded-xl flex items-center justify-center">
                 {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Search className="w-4 h-4" />}
@@ -129,28 +129,28 @@ export const CustomerSearchModal: React.FC<Props> = ({ isOpen, onClose, currentC
             )}
           </div>
 
-            <div className="p-3 bg-blue-50/50 border border-blue-100 rounded-xl space-y-3">
-              <div>
+          <div className="p-3 bg-blue-50/50 border border-blue-100 rounded-xl space-y-3">
+            <div>
               <label className="text-xs font-semibold text-[#1A3A52]/50 block mb-1 uppercase tracking-wide">{t('fullName', { fallback: 'Full Name' })} *</label>
-              <input 
+              <input
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
                 placeholder="Enter customer name"
-                className="w-full bg-white border border-[#D5BA98]/40 rounded-lg px-3 py-2 text-sm text-[#1A3A52] font-bold outline-none focus:border-[#1A3A52] transition-colors" 
+                className="w-full bg-white border border-[#D5BA98]/40 rounded-lg px-3 py-2 text-sm text-[#1A3A52] font-bold outline-none focus:border-[#1A3A52] transition-colors"
               />
             </div>
             <div>
               <label className="text-xs font-semibold text-[#1A3A52]/50 block mb-1 uppercase tracking-wide">{t('email', { fallback: 'Email' })}</label>
-              <input 
+              <input
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="email@example.com"
-                className="w-full bg-white border border-[#D5BA98]/40 rounded-lg px-3 py-2 text-sm text-[#1A3A52] outline-none focus:border-[#1A3A52] transition-colors" 
+                className="w-full bg-white border border-[#D5BA98]/40 rounded-lg px-3 py-2 text-sm text-[#1A3A52] outline-none focus:border-[#1A3A52] transition-colors"
               />
             </div>
-            </div>
+          </div>
 
-            {originalCustomerData && customerId && (
+          {originalCustomerData && customerId && (
             <div className="grid grid-cols-2 gap-3">
               <div className="bg-[#1A3A52]/5 border border-[#1A3A52]/10 rounded-lg p-2.5 flex flex-col justify-center">
                 <span className="text-[10px] font-bold text-[#1A3A52]/60 uppercase flex items-center gap-1 mb-1">
@@ -173,9 +173,9 @@ export const CustomerSearchModal: React.FC<Props> = ({ isOpen, onClose, currentC
           )}
 
           <div className="pt-2 flex gap-3">
-             <button onClick={handleClear} className="cursor-pointer flex-1 py-2.5 font-medium bg-red-50 text-red-600 rounded-xl text-sm">
-                Clear Customer
-             </button>
+            <button onClick={handleClear} className="cursor-pointer flex-1 py-2.5 font-medium bg-red-50 text-red-600 rounded-xl text-sm">
+              Clear Customer
+            </button>
             <button onClick={handleSave} disabled={!canSave} className="cursor-pointer flex-1 py-2.5 font-medium bg-[#1A3A51] text-white rounded-xl text-sm disabled:opacity-50">
               {t('saveDetails')}
             </button>

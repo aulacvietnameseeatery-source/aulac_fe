@@ -10,8 +10,8 @@ interface BookingInfoSectionProps {
 }
 
 export const BookingInfoSection = ({ reservation }: BookingInfoSectionProps) => {
-    const t = useTranslations("ReservationManagement.Detail.Booking");
-    
+    const t = useTranslations("reservations.management.Detail.Booking");
+
     const getBadgeVariant = (statusId: number): any => {
         switch (statusId) {
             case 21: return "soft-secondary"; // PENDING

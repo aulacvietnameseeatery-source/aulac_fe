@@ -18,7 +18,7 @@ interface DishSelectionModalProps {
 }
 
 export const DishSelectionModal = ({ isOpen, onClose, onSelect, targetLocale }: DishSelectionModalProps) => {
-    const t = useTranslations('SystemSettings');
+    const t = useTranslations('settings');
     const locale = useLocale();
     const activeLang = targetLocale || locale;
     const [search, setSearch] = useState("");

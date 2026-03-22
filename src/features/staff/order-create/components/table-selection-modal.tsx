@@ -13,7 +13,7 @@ interface Props {
 }
 
 export const TableSelectionModal: React.FC<Props> = ({ isOpen, onClose, tables, selectedTable, onSelectTable }) => {
-  const t = useTranslations("Order.Create");
+  const t = useTranslations("orders.management.Create");
   const [activeZoneId, setActiveZoneId] = useState<number | 'ALL'>('ALL');
   const [confirmDialog, setConfirmDialog] = useState<{ isOpen: boolean; type: string | null; table: TableDto | null }>({ isOpen: false, type: null, table: null });
 
@@ -88,7 +88,7 @@ export const TableSelectionModal: React.FC<Props> = ({ isOpen, onClose, tables, 
                     {isSelected && <div className="absolute top-2 right-2 bg-[#1A3A51] text-white rounded-full p-0.5"><Check className="w-3 h-3" /></div>}
                     <span className={`font-bold text-xl mb-1 ${isOccupied ? 'text-red-700' : isReserved ? 'text-orange-700' : 'text-gray-900'}`}>{table.tableCode}</span>
                     <div className="text-xs font-medium text-gray-500 mb-1">{table.capacity} Seats</div>
-                    
+
                     {!isOccupied && !isReserved && !isLocked && <span className="text-[10px] uppercase font-bold text-green-600 bg-green-100 px-2 py-0.5 rounded-full mt-auto">Available</span>}
                     {isOccupied && <span className="text-[10px] uppercase font-bold text-red-600 bg-red-100 px-2 py-0.5 rounded-full mt-auto">Occupied</span>}
                     {isReserved && <span className="text-[10px] uppercase font-bold text-orange-600 bg-orange-100 px-2 py-0.5 rounded-full mt-auto"><AlertTriangle className="w-3 h-3 inline mr-1" /> Reserved</span>}

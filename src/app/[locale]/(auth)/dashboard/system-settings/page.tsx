@@ -7,7 +7,7 @@ import { Permissions } from "@/types/const";
 
 const SystemSettingsContent = () => {
     const t = useTranslations("AdminSidebar");
-    const st = useTranslations("SystemSettings");
+    const st = useTranslations("settings");
 
     return (
         <div className="flex flex-col h-full bg-gray-50 overflow-auto">

@@ -18,7 +18,7 @@ interface PublicBookingFormProps {
 type CustomerMode = 'existing' | 'new';
 
 export default function PublicBookingForm({ onSuccess, onClose }: PublicBookingFormProps) {
-    const t = useTranslations('Reservation.PublicForm');
+    const t = useTranslations('reservations.public.PublicForm');
     const [mode, setMode] = useState<CustomerMode | null>(null);
 
     const [name, setName] = useState('');

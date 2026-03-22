@@ -93,7 +93,11 @@ export function Footer({ locale = "en" }: FooterProps) {
                             ) : null}
                         </p>
                         <Link
-                            href="https://maps.app.goo.gl/Gwv79RLFKAHeVMQv8"
+                            href={
+                                storeSettings?.streetAddress 
+                                    ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${storeSettings.streetAddress}, ${storeSettings.city}`)}`
+                                    : "https://www.google.com/maps"
+                            }
                             target="_blank"
                             className="footer-heading border-b border-gray-700 pb-1 hover:text-white transition-colors w-fit mt-1 text-[10px] md:text-[12px]"
                         >

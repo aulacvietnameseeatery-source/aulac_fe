@@ -10,7 +10,7 @@ export default function ReceiptSummary({
   tips: number;
   total: number;
 }) {
-  const t = useTranslations("OrderReceipt.Summary");
+  const t = useTranslations("orders.receipt.Summary");
 
   return (
     <div className="receipt-summary-container">

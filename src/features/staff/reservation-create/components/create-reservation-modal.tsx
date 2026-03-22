@@ -20,7 +20,7 @@ export const CreateReservationModal = ({
   onClose,
   onSuccess,
 }: CreateReservationModalProps) => {
-  const t = useTranslations("StaffReservation");
+  const t = useTranslations("reservations.staff");
   const { formState, tableState, loadingState, setters, handlers } =
     useReservationForm(t, {
       onSuccess,

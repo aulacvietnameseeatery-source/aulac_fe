@@ -17,7 +17,7 @@ import { OrderHistory, OrderItem } from '../../order-management/types/order-hist
 import { PrintOrderModal } from '../../order-management/components/PrintOrderModal';
 
 export const CreateOrderPage = () => {
-  const t = useTranslations("Order.Create");
+  const t = useTranslations("orders.management.Create");
   const {
     locale, isLoading, dishes, categories, tables, cart, orderType, setOrderType,
     selectedTable, setSelectedTable, customer, setCustomer,
@@ -41,10 +41,10 @@ export const CreateOrderPage = () => {
           email: customer.email
         } : undefined,
         source: orderType,
-        items: cart.map(item => ({ 
-          dishId: item.dishId, 
+        items: cart.map(item => ({
+          dishId: item.dishId,
           quantity: item.quantity,
-          note: item.note || undefined 
+          note: item.note || undefined
         }))
       });
       toast.success('Order placed successfully!');
@@ -61,12 +61,12 @@ export const CreateOrderPage = () => {
   const handleAddDishWithQuantity = (dish: DishDto, quantity: number) => {
     const existing = cart.find(item => item.dishId === dish.dishId);
     if (!existing) {
-      addToCart(dish); 
+      addToCart(dish);
       if (quantity > 1) {
-        updateQuantity(dish.dishId, quantity - 1); 
+        updateQuantity(dish.dishId, quantity - 1);
       }
     } else {
-      updateQuantity(dish.dishId, quantity); 
+      updateQuantity(dish.dishId, quantity);
     }
     setSelectedDish(null);
   };
@@ -74,9 +74,9 @@ export const CreateOrderPage = () => {
   const handleQuickAdd = (dish: DishDto) => {
     const existing = cart.find(item => item.dishId === dish.dishId);
     if (!existing) {
-      addToCart(dish); 
+      addToCart(dish);
     } else {
-      updateQuantity(dish.dishId, 1); 
+      updateQuantity(dish.dishId, 1);
     }
   };
 
@@ -100,7 +100,7 @@ export const CreateOrderPage = () => {
     dishName: item.localName,
     quantity: item.quantity,
     price: item.price,
-    itemStatus: 'New', 
+    itemStatus: 'New',
     note: item.note || undefined
   }));
 
@@ -109,11 +109,11 @@ export const CreateOrderPage = () => {
 
   // create mock OrderHistory
   const mappedOrderHistory: OrderHistory = {
-    orderId: 0, 
+    orderId: 0,
     tableId: selectedTable?.tableId || 0,
     tableCode: selectedTable?.tableCode || '',
     staffId: 0,
-    staffName: '', 
+    staffName: '',
     customerId: customer?.customerId || 0,
     customerName: customer?.fullName || '',
     totalAmount: cartTotal,
@@ -127,10 +127,10 @@ export const CreateOrderPage = () => {
 
   return (
     <div className="flex flex-col lg:flex-row h-[100dvh] lg:h-full w-full font-sans overflow-hidden">
-      
+
       {/* ── Ticket opening button on Mobile ── */}
       {!showMobileTicket && (
-        <button 
+        <button
           onClick={() => setShowMobileTicket(true)}
           className="lg:hidden fixed bottom-4 right-4 z-50 bg-[#1A3A52] text-[#D5BA98] p-4 rounded-full shadow-2xl flex items-center justify-center animate-in fade-in zoom-in duration-300"
         >
@@ -144,7 +144,7 @@ export const CreateOrderPage = () => {
       )}
 
       <div className="flex-1 flex flex-col overflow-hidden lg:pr-5 gap-4">
-        
+
         {/* Recent Orders Section */}
         <section className="shrink-0 bg-white rounded-xl border border-[#D5BA98]/30 shadow-sm p-4">
           <RecentOrders />
@@ -152,13 +152,13 @@ export const CreateOrderPage = () => {
 
         {/* Menu Categories Section */}
         <section className="flex-1 min-h-0 bg-white rounded-xl border border-[#D5BA98]/30 shadow-sm p-4 flex flex-col">
-          <MenuCatalog 
+          <MenuCatalog
             title={t('title')}
             subtitle={t('subtitle')}
-            dishes={dishes} 
+            dishes={dishes}
             categories={categories}
-            locale={locale} 
-            getLocalizedDishName={getLocalizedDishName} 
+            locale={locale}
+            getLocalizedDishName={getLocalizedDishName}
             getLocalizedCategoryName={getLocalizedCategoryName}
             onDishClick={(dish) => setSelectedDish(dish)}
             onQuickAdd={handleQuickAdd}
@@ -173,7 +173,7 @@ export const CreateOrderPage = () => {
         lg:relative lg:translate-x-0 lg:shadow-none lg:border-l rounded-xl border lg:border-[#D5BA98]/30 overflow-hidden
         ${showMobileTicket ? 'translate-x-0' : 'translate-x-full'}
       `}>
-        <CurrentTicket 
+        <CurrentTicket
           cart={cart}
           orderType={orderType}
           selectedTable={selectedTable}
@@ -193,16 +193,16 @@ export const CreateOrderPage = () => {
 
       {/* ── Background Overlay for Mobile ── */}
       {showMobileTicket && (
-        <div 
-          className="fixed inset-0 bg-[#1A3A52]/50 z-30 lg:hidden backdrop-blur-sm" 
-          onClick={() => setShowMobileTicket(false)} 
+        <div
+          className="fixed inset-0 bg-[#1A3A52]/50 z-30 lg:hidden backdrop-blur-sm"
+          onClick={() => setShowMobileTicket(false)}
         />
       )}
 
       {/* ── Modals ── */}
-      <DishDetailModal 
-        dish={selectedDish} 
-        isOpen={!!selectedDish} 
+      <DishDetailModal
+        dish={selectedDish}
+        isOpen={!!selectedDish}
         onClose={() => setSelectedDish(null)}
         onAdd={handleAddDishWithQuantity}
         locale={locale}
@@ -215,7 +215,7 @@ export const CreateOrderPage = () => {
         order={mappedOrderHistory}
         isOpen={isPrintModalOpen}
         onClose={() => setIsPrintModalOpen(false)}
-        type="receipt" 
+        type="receipt"
       />
     </div>
   );

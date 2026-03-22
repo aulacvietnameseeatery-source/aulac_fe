@@ -24,7 +24,7 @@ interface BookingModalProps {
 }
 
 export default function BookingModal({ isOpen, onClose, onConfirm, tableData, guestInfo }: BookingModalProps) {
-  const t = useTranslations('Reservation.BookingModal');
+  const t = useTranslations('reservations.public.BookingModal');
 
   if (!isOpen || !tableData) return null;
 

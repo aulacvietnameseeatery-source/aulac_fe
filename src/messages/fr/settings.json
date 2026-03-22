@@ -1,5 +1,5 @@
 {
-  "SystemSettings": {
+  "settings": {
     "title": "Paramètres système",
     "description": "Gérez les paramètres et les configurations du système.",
     "refresh": "Actualiser",
@@ -38,6 +38,19 @@
     "Introduction": {
       "title": "Page d'introduction",
       "description": "Gérez le contenu et les médias de votre page d'accueil.",
+      "heroTitle": "Titre Hero",
+      "heroQuote": "Citation Hero",
+      "heroImage": "Image Hero (Bannière)",
+      "heroSection": "Section Hero (En-tête)",
+      "virtualTour": "Section Visite Virtuelle",
+      "tourVideo": "Vidéo Visite Virtuelle",
+      "collection": "Section Collection",
+      "featuredDish": "Plat en Vedette",
+      "selectFromSystem": "Sélectionner dans le Système",
+      "dishImage": "Image du plat",
+      "mainTitle": "Titre Principal (Au survol)",
+      "cardTitle": "Titre de la Carte",
+      "cardCategory": "Catégorie du Plat",
       "sections": {
         "hero": {
           "title": "Section Héros",
@@ -180,8 +193,15 @@
       "updateError": "Échec de l'enregistrement du profil du magasin"
     },
     "AboutUs": {
-      "title": "À propos de nous",
+      "title": "À Propos",
       "description": "Gérez l'histoire de votre marque et vos valeurs fondamentales.",
+      "public": {
+        "subtitle": "Une expression tranquille de la cuisine vietnamienne",
+        "paragraph_1": "An Lạc est guidé par l'équilibre, la mémoire et la sérénité. Son nom signifie bonheur paisible, inspiré du parcours de la fondatrice — mère de trois enfants — créant un espace reflétant le soin, la stabilité et l'essence de An cư Lạc nghiệp.",
+        "paragraph_2": "Chez An Lạc, nous ne cherchons pas à changer la cuisine vietnamienne, mais à l'honorer. Patience, harmonie et précision façonnent chaque plat : le lent mijotage d'un bouillon, l'équilibre soigné des herbes, la profondeur silencieuse de la fermentation et l'humilité du riz.",
+        "paragraph_3": "Les techniques familières telles que le kho, le hấp et le nướng sont exprimées avec précision et minimalisme. Les saveurs sont mesurées, équilibrées et subtiles.",
+        "closing_quote": "An Lạc est une invitation — à ralentir, goûter attentivement et se reconnecter à l'essentiel."
+      },
       "sections": {
         "founders": {
           "title": "Vision des fondateurs",
@@ -255,7 +275,28 @@
         "syncDesc": "Persister vos données narratives",
         "syncButton": "Synchroniser l'histoire",
         "discard": "Annuler les modifications"
-      }
+      },
+      "sectionLabel": "Étiquette de Section",
+      "subtitle": "Sous-titre",
+      "paragraph": "Paragraphe",
+      "quote": "Citation",
+      "quoteAuthor": "Auteur de la citation",
+      "valueTitle": "Titre de la Valeur",
+      "valueDescription": "Description de la Valeur",
+      "foundersImage": "Image des Fondateurs",
+      "legacyImage": "Image de l'Héritage",
+      "ourFounders": "Nos Fondateurs",
+      "ourFoundersDesc": "Gérer le contenu des fondateurs.",
+      "ourJourney": "Notre Parcours",
+      "ourPhilosophy": "Notre Philosophie",
+      "legacy": "Héritage et Avenir",
+      "contentEditorTitle": "Éditeur de Contenu",
+      "contentEditorDesc": "Gestion de contenu minimaliste, axée sur la typographie pour la page À propos.",
+      "subtitleLabel": "Sous-titre (Section Hero/Bannière)",
+      "paragraphLabel": "Paragraphe",
+      "closingQuoteLabel": "Citation de Clôture",
+      "aboutConfigTitle": "Configuration À Propos",
+      "aboutConfigDesc": "Gestion de contenu minimaliste, axée sur la typographie pour la page À propos."
     },
     "General": {
       "title": "Paramètres système",

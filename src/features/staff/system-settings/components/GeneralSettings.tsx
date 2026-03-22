@@ -11,7 +11,7 @@ import { PermissionGuard } from '@/components/permission-guard';
 import { Permissions } from '@/types/const';
 
 export const GeneralSettings: React.FC = () => {
-    const t = useTranslations('SystemSettings');
+    const t = useTranslations('settings');
     const { grouped, isLoading, savingGroups, load, saveGroup, addSetting } = useSystemSettings();
     const [isAddModalOpen, setIsAddModalOpen] = React.useState(false);
 

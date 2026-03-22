@@ -1,5 +1,5 @@
 {
-  "SystemSettings": {
+  "settings": {
     "title": "Cài đặt hệ thống",
     "description": "Quản lý các tham số và cấu hình hệ thống.",
     "refresh": "Làm mới",
@@ -37,7 +37,20 @@
     },
     "Introduction": {
       "title": "Trang Giới thiệu",
-      "description": "Quản lý nội dung và truyền thông cho trang chủ.",
+      "description": "Mô tả chi tiết",
+      "heroTitle": "Tiêu đề Hero",
+      "heroQuote": "Câu trích dẫn Hero",
+      "heroImage": "Ảnh Nền Hero (Banner)",
+      "heroSection": "Khu vực Hero (Đầu trang)",
+      "virtualTour": "Khu vực Virtual Tour",
+      "tourVideo": "Video Virtual Tour",
+      "collection": "Khu vực Bộ Sưu Tập",
+      "featuredDish": "Món ăn nổi bật",
+      "selectFromSystem": "Chọn từ Hệ Thống",
+      "dishImage": "Ảnh món ăn",
+      "mainTitle": "Tiêu đề chính (Khi di chuột)",
+      "cardTitle": "Tiêu đề Thẻ",
+      "cardCategory": "Danh mục Món",
       "sections": {
         "hero": {
           "title": "Phần Hero",
@@ -156,6 +169,13 @@
     "AboutUs": {
       "title": "Về Chúng tôi",
       "description": "Quản lý câu chuyện thương hiệu và các giá trị cốt lõi.",
+      "public": {
+        "subtitle": "Một không gian ẩm thực Việt bình yên",
+        "paragraph_1": "An Lạc được dẫn dắt bởi sự cân bằng, ký ức và sự thanh thản. Tên gọi mang ý nghĩa hạnh phúc bình yên, lấy cảm hứng từ hành trình của người sáng lập — một người mẹ của ba đứa con — tạo ra một không gian phản chiếu sự chăm sóc, ổn định và tinh thần của An cư Lạc nghiệp.",
+        "paragraph_2": "Tại An Lạc, chúng tôi không tìm cách thay đổi ẩm thực Việt Nam, mà là tôn vinh nó. Sự kiên nhẫn, hài hòa và chính xác định hình mỗi món ăn: từ việc ninh chậm một nồi nước dùng, sự cân bằng tỉ mỉ của các loại thảo mộc, chiều sâu tĩnh lặng của quá trình lên men, đến sự khiêm nhường của hạt gạo.",
+        "paragraph_3": "Các kỹ thuật quen thuộc như kho, hấp và nướng được thể hiện với sự chính xác và tối giản. Hương vị được đong đếm, cân bằng và tinh tế.",
+        "closing_quote": "An Lạc là lời mời — hãy chậm lại, thưởng thức cẩn trọng và kết nối lại với điều cốt lõi."
+      },
       "sections": {
         "founders": {
           "title": "Tầm nhìn của Người sáng lập",
@@ -229,7 +249,28 @@
         "syncDesc": "Lưu dữ liệu câu chuyện của bạn",
         "syncButton": "Đồng bộ Câu chuyện",
         "discard": "Hủy thay đổi"
-      }
+      },
+      "sectionLabel": "Tên Mục",
+      "subtitle": "Mô tả phụ",
+      "paragraph": "Đoạn văn",
+      "quote": "Câu trích dẫn",
+      "quoteAuthor": "Tác giả trích dẫn",
+      "valueTitle": "Tiêu đề Giá trị",
+      "valueDescription": "Mô tả Giá trị",
+      "foundersImage": "Ảnh Nhà Sáng Lập",
+      "legacyImage": "Ảnh Di Sản",
+      "ourFounders": "Nhà Sáng Lập",
+      "ourFoundersDesc": "Quản lý nội dung phần nhà sáng lập.",
+      "ourJourney": "Hành Trình Gây Dựng",
+      "ourPhilosophy": "Triết Lý Kinh Doanh",
+      "legacy": "Di Sản & Tương Lai",
+      "contentEditorTitle": "Trình Chỉnh Sửa Nội Dung",
+      "contentEditorDesc": "Quản lý nội dung tối giản, tập trung vào kiểu chữ của trang About Us.",
+      "subtitleLabel": "Tiêu đề phụ (Phần Hero/Banner)",
+      "paragraphLabel": "Đoạn văn",
+      "closingQuoteLabel": "Câu Trích Dẫn Cuối",
+      "aboutConfigTitle": "Cấu hình About Us",
+      "aboutConfigDesc": "Quản lý nội dung tối giản, tập trung vào kiểu chữ của trang About Us."
     },
     "General": {
       "title": "Tham số hệ thống",

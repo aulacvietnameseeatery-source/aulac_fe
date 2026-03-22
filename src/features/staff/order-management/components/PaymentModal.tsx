@@ -36,8 +36,8 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
     couponOptions = [],
     promotionOptions = [],
 }) => {
-    const t = useTranslations('Order.PaymentModal');
-    const tCommon = useTranslations('Order.List.card');
+    const t = useTranslations('orders.management.PaymentModal');
+    const tCommon = useTranslations('orders.management.List.card');
     const format = useFormatter();
 
     const [paymentType, setPaymentType] = useState<'cash' | 'card' | 'scan'>('cash');
@@ -46,9 +46,11 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
     const [selectedPromotionId, setSelectedPromotionId] = useState<string>('');
     const [selectedCouponId, setSelectedCouponId] = useState<string>('');
 
-    const subTotal = order.orderItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
-    const tax = subTotal * 0.1; // Example 10%
-    const serviceCharge = 15; // Example fixed
+    const subTotal = order.orderItems
+        .filter(item => item.itemStatus !== 'REJECTED' && item.itemStatus !== 'CANCELLED')
+        .reduce((sum, item) => sum + item.price * item.quantity, 0);
+    const tax = subTotal * 0.026; // 2.6% TVA
+    const serviceCharge = 0;
 
     const selectedPromotion = React.useMemo(
         () => promotionOptions.find((p) => p.promotionId.toString() === selectedPromotionId),
@@ -87,7 +89,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
         return amount;
     }, [selectedPromotion, selectedPromotionId, promotionAmount, selectedCoupon, selectedCouponId, couponAmount]);
 
-    const total = Math.max(0, subTotal + tax + serviceCharge + tipAmount - totalDiscount);
+    const total = Math.max(0, subTotal + tax + tipAmount - totalDiscount);
 
     const [givenAmount, setGivenAmount] = useState<number>(total);
     const balance = Math.max(0, givenAmount - total);
@@ -173,15 +175,17 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
                             <section>
                                 <h3 className="text-sm font-bold text-[#1A3A52] mb-4 uppercase tracking-wider">{t('orderedMenus')}</h3>
                                 <div className="max-h-48 overflow-y-auto pr-1 sm:pr-2 space-y-3 custom-scrollbar">
-                                    {order.orderItems.map((item, idx) => (
-                                        <div key={idx} className="flex items-start justify-between gap-3 text-sm">
-                                            <span className="text-[#1A3A52]/85 flex-1 break-words">{item.dishName} ×{item.quantity}</span>
-                                            <div className="hidden sm:flex items-center gap-2 min-w-[120px]">
-                                                <span className="font-mono text-[#1A3A52]/75">{format.number(item.price * item.quantity, { style: 'currency', currency: 'CHF' })}</span>
+                                    {order.orderItems
+                                        .filter(item => item.itemStatus !== 'REJECTED' && item.itemStatus !== 'CANCELLED')
+                                        .map((item, idx) => (
+                                            <div key={idx} className="flex items-start justify-between gap-3 text-sm">
+                                                <span className="text-[#1A3A52]/85 flex-1 break-words">{item.dishName} ×{item.quantity}</span>
+                                                <div className="hidden sm:flex items-center gap-2 min-w-[120px]">
+                                                    <span className="font-mono text-[#1A3A52]/75">{format.number(item.price * item.quantity, { style: 'currency', currency: 'CHF' })}</span>
+                                                </div>
+                                                <span className="sm:hidden font-mono text-[#1A3A52]/75 shrink-0">{format.number(item.price * item.quantity, { style: 'currency', currency: 'CHF' })}</span>
                                             </div>
-                                            <span className="sm:hidden font-mono text-[#1A3A52]/75 shrink-0">{format.number(item.price * item.quantity, { style: 'currency', currency: 'CHF' })}</span>
-                                        </div>
-                                    ))}
+                                        ))}
                                 </div>
                             </section>
 
@@ -191,12 +195,12 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
                                     <span>{format.number(subTotal, { style: 'currency', currency: 'CHF' })}</span>
                                 </div>
                                 <div className="flex items-start justify-between gap-3 text-[#1A3A52]/70">
-                                    <span>{t('tax')} (10%)</span>
+                                    <span>{t('tax')}</span>
                                     <span>{format.number(tax, { style: 'currency', currency: 'CHF' })}</span>
                                 </div>
                                 <div className="flex items-start justify-between gap-3 text-[#1A3A52]/70 font-medium">
-                                    <span>{t('serviceCharge')}</span>
-                                    <span>{format.number(serviceCharge, { style: 'currency', currency: 'CHF' })}</span>
+                                    <span>{t('totalTax')}</span>
+                                    <span>{format.number(tax, { style: 'currency', currency: 'CHF' })}</span>
                                 </div>
                                 {promotionAmount > 0 && (
                                     <div className="flex items-start justify-between gap-3 text-red-600 font-medium">

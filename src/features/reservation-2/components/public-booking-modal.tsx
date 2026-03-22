@@ -13,7 +13,7 @@ interface PublicBookingModalProps {
 }
 
 export default function PublicBookingModal({ isOpen, onClose }: PublicBookingModalProps) {
-	const t = useTranslations('Reservation.PublicTicket');
+	const t = useTranslations('reservations.public.PublicTicket');
 	const [ticketData, setTicketData] = useState<ReservationResponseDto | null>(null);
 	const ticketRef = useRef<HTMLDivElement>(null);
 

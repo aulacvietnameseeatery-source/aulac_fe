@@ -3,7 +3,7 @@ import { useTranslations } from "next-intl";
 import "../styles/index.css";
 
 export default function ReceiptItemList({ items }: { items: ReceiptItem[] }) {
-  const t = useTranslations("OrderReceipt.Items");
+  const t = useTranslations("orders.receipt.Items");
 
   return (
     <div className="receipt-item-list">
