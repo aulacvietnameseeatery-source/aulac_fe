@@ -20,8 +20,8 @@ interface PrintOrderModalProps {
 }
 
 export const PrintOrderModal: React.FC<PrintOrderModalProps> = ({ order, isOpen, onClose, type }) => {
-    const t = useTranslations('Order.List.card');
-    const rt = useTranslations('OrderReceipt');
+    const t = useTranslations('orders.management.List.card');
+    const rt = useTranslations('orders.receipt');
     const format = useFormatter();
     const printRef = useRef<HTMLDivElement>(null);
     const [mounted, setMounted] = useState(false);
@@ -63,11 +63,11 @@ export const PrintOrderModal: React.FC<PrintOrderModalProps> = ({ order, isOpen,
         items: order.orderItems
             .filter(item => item.itemStatus !== 'REJECTED' && item.itemStatus !== 'CANCELLED')
             .map((item): ReceiptItem => ({
-            name: item.dishName,
-            qty: item.quantity,
-            price: item.price,
-            total: item.quantity * item.price,
-        })),
+                name: item.dishName,
+                qty: item.quantity,
+                price: item.price,
+                total: item.quantity * item.price,
+            })),
     };
 
     const subtotal = mappedOrder.items.reduce((acc, item) => acc + item.total, 0);

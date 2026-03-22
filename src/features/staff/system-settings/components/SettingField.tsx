@@ -21,7 +21,7 @@ export const SettingField: React.FC<SettingFieldProps> = ({
     onChange,
     disabled = false,
 }) => {
-    const t = useTranslations('SystemSettings.Field');
+    const t = useTranslations('settings.Field');
     const { settingKey, settingName, valueType, description, isSensitive } = setting;
 
     // Type labels mapped from translations

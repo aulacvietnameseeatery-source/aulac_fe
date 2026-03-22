@@ -50,7 +50,7 @@ const SEARCH_DEBOUNCE_MS = 400;
 const KANBAN_PAGE_SIZE = 50;
 
 function OrdersContent() {
-    const t = useTranslations("Order.List");
+    const t = useTranslations("orders.management.List");
     const router = useRouter();
 
     const { orders, isLoading, totalCount, onDataChange, refresh: refreshList } = useOrderHistory();

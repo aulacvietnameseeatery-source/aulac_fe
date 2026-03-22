@@ -4,7 +4,7 @@ import "../styles/index.css";
 import { useStoreSettings } from "@/hooks/use-store-settings";
 
 export default function ReceiptHeader() {
-  const t = useTranslations("OrderReceipt.Header");
+  const t = useTranslations("orders.receipt.Header");
   const { data: storeSettings } = useStoreSettings();
 
   return (

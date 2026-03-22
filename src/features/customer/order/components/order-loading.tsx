@@ -3,7 +3,7 @@ import { useTranslations } from "next-intl";
 import "../styles/index.css";
 
 export default function OrderLoading() {
-  const t = useTranslations("OrderSuccess.Loading");
+  const t = useTranslations("orders.success.Loading");
 
   return (
     <div className="order-loading-wrapper fade-in animate-in">

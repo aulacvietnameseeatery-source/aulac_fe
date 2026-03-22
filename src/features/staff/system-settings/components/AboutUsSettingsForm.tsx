@@ -25,7 +25,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, React.TextareaHTMLAttribu
 Textarea.displayName = "Textarea";
 
 export const AboutUsSettingsForm = () => {
-    const t = useTranslations("SystemSettings");
+    const t = useTranslations("settings");
     const [isLoading, setIsLoading] = useState(true);
     const [activeLocale, setActiveLocale] = useState<SupportedLocale>("en");
 

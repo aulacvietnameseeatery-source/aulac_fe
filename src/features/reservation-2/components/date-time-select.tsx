@@ -18,8 +18,8 @@ export default function DateTimeSelect({
     isMultiSelect,
     onMultiSelectChange
 }: DateTimeSelectProps) {
-    const t = useTranslations('Reservation.Sidebar');
-    const tControls = useTranslations('Reservation.Controls');
+    const t = useTranslations('reservations.public.Sidebar');
+    const tControls = useTranslations('reservations.public.Controls');
 
     const handleDateChange = (val: string) => {
         onDateTimeChange(val, time);

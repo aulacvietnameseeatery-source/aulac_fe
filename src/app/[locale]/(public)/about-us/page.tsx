@@ -25,7 +25,7 @@ const itemVariant = {
 };
 
 export default function AboutUsUI() {
-  const t = useTranslations("AboutUs");
+  const t = useTranslations("settings.AboutUs.public");
   const locale = useLocale();
 
   const { data: storeSettings, isLoading } = useQuery({
@@ -42,7 +42,7 @@ export default function AboutUsUI() {
     }
     // Safe fallback
     try {
-      return t(`about_${key}`);
+      return t(key);
     } catch {
       return "";
     }

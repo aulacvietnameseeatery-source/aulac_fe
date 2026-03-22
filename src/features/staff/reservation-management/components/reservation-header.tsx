@@ -1,8 +1,7 @@
-// features/staff/reservation/components/reservation-header.tsx
-
 import React from "react";
 import { Search, Calendar as CalendarIcon } from "lucide-react";
 import { format, addDays, isSameDay } from "date-fns";
+import { useTranslations } from "next-intl";
 import { Input } from "@/components/ui/input";
 import { ReservationStatusDto } from "../types/reservation-types";
 
@@ -17,14 +16,15 @@ interface ReservationHeaderProps {
 }
 
 export const ReservationHeader = ({
-                                      searchTerm,
-                                      onSearchChange,
-                                      currentDate,
-                                      onDateChange,
-                                      currentStatusId,
-                                      onStatusChange,
-                                      statuses
-                                  }: ReservationHeaderProps) => {
+    searchTerm,
+    onSearchChange,
+    currentDate,
+    onDateChange,
+    currentStatusId,
+    onStatusChange,
+    statuses
+}: ReservationHeaderProps) => {
+    const t = useTranslations("reservations.management.List");
 
     const getStatusTabClasses = (statusId: number | null): string => {
         if (statusId === null) return "bg-slate-700 border-slate-700 text-white shadow-sm";
@@ -52,7 +52,7 @@ export const ReservationHeader = ({
         <div className="flex flex-col gap-6 w-full mb-4">
             {/* Title */}
             <div>
-                <h1 className="text-3xl font-bold text-gray-900">Reservation List</h1>
+                <h1 className="text-3xl font-bold text-gray-900">{t("title")}</h1>
             </div>
 
             {/* Toolbar Container */}
@@ -64,7 +64,7 @@ export const ReservationHeader = ({
                     <div className="relative w-full md:w-80">
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                         <Input
-                            placeholder="Search customer, phone..."
+                            placeholder={t("searchPlaceholder")}
                             className="pl-9 bg-gray-50 border-gray-200 focus-visible:ring-blue-500"
                             value={searchTerm}
                             onChange={(e) => onSearchChange(e.target.value)}
@@ -75,23 +75,21 @@ export const ReservationHeader = ({
                     <div className="flex bg-gray-100 p-1 rounded-lg shrink-0 items-center">
                         <button
                             onClick={() => onDateChange(new Date())}
-                            className={`px-4 py-1.5 text-sm font-medium rounded-md transition-all ${
-                                isToday
-                                    ? 'bg-white text-gray-900 shadow-sm border border-gray-200'
-                                    : 'text-gray-500 hover:bg-gray-200 hover:text-gray-700'
-                            }`}
+                            className={`px-4 py-1.5 text-sm font-medium rounded-md transition-all ${isToday
+                                ? 'bg-white text-gray-900 shadow-sm border border-gray-200'
+                                : 'text-gray-500 hover:bg-gray-200 hover:text-gray-700'
+                                }`}
                         >
-                            Today
+                            {t("today") || "Today"}
                         </button>
                         <button
                             onClick={() => onDateChange(addDays(new Date(), 1))}
-                            className={`px-4 py-1.5 text-sm font-medium rounded-md transition-all ${
-                                isTomorrow
-                                    ? 'bg-white text-gray-900 shadow-sm border border-gray-200'
-                                    : 'text-gray-500 hover:bg-gray-200 hover:text-gray-700'
-                            }`}
+                            className={`px-4 py-1.5 text-sm font-medium rounded-md transition-all ${isTomorrow
+                                ? 'bg-white text-gray-900 shadow-sm border border-gray-200'
+                                : 'text-gray-500 hover:bg-gray-200 hover:text-gray-700'
+                                }`}
                         >
-                            Tomorrow
+                            {t("tomorrow") || "Tomorrow"}
                         </button>
 
                         {/* Date Display (Giả lập DatePicker như Figma) */}
@@ -110,11 +108,11 @@ export const ReservationHeader = ({
                         className={`
                             px-4 py-1.5 text-sm font-medium rounded-lg border transition-all
                             ${currentStatusId === null
-                            ? getStatusTabClasses(null)
-                            : 'bg-white border-gray-200 text-gray-600 hover:bg-gray-50'}
+                                ? getStatusTabClasses(null)
+                                : 'bg-white border-gray-200 text-gray-600 hover:bg-gray-50'}
                         `}
                     >
-                        All
+                        {t("all")}
                     </button>
 
                     {/* Dynamic Tabs from API */}
@@ -125,8 +123,8 @@ export const ReservationHeader = ({
                             className={`
                                 px-4 py-1.5 text-sm font-medium rounded-lg border transition-all
                                 ${currentStatusId === status.statusId
-                                ? getStatusTabClasses(status.statusId)
-                                : 'bg-white border-gray-200 text-gray-600 hover:bg-gray-50'}
+                                    ? getStatusTabClasses(status.statusId)
+                                    : 'bg-white border-gray-200 text-gray-600 hover:bg-gray-50'}
                             `}
                         >
                             {status.statusName}

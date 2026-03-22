@@ -4,7 +4,7 @@ import "../styles/index.css";
 import { useStoreSettings } from "@/hooks/use-store-settings";
 
 export default function OrderLocation() {
-  const t = useTranslations("OrderSuccess.Location");
+  const t = useTranslations("orders.success.Location");
   const { data: storeSettings } = useStoreSettings();
 
   const address = storeSettings?.streetAddress && storeSettings?.city

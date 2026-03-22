@@ -40,7 +40,7 @@ export const KanbanOrderCard: React.FC<KanbanOrderCardProps> = ({
     couponOptions = [],
     promotionOptions = [],
 }) => {
-    const t = useTranslations("Order.List.card");
+    const t = useTranslations("orders.management.List.card");
     const format = useFormatter();
     void _secondaryAction_DEPRECATED;
     const [expanded, setExpanded] = useState(false);

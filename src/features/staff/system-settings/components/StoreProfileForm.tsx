@@ -14,7 +14,7 @@ import { mapStoreSettingsToFormValues, mapFormValuesToStoreSettings, LOCALES, Su
 import { useUpdateStoreSettingsMutation, useTranslateSettingsMutation } from '../hooks/useSystemSettingsMutation';
 
 export const StoreProfileForm = () => {
-    const t = useTranslations('SystemSettings');
+    const t = useTranslations('settings');
     const [isLoading, setIsLoading] = useState(true);
     const [isUploading, setIsUploading] = useState<string | null>(null);
     const [activeLocale, setActiveLocale] = useState<SupportedLocale>('en');

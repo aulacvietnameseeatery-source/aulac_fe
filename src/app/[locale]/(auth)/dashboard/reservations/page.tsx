@@ -3,6 +3,7 @@
 import React, { Suspense, useState } from "react";
 import { Loader2, RefreshCcw, Search, Armchair, Calendar as CalendarIcon, CirclePlus } from "lucide-react";
 import { format } from "date-fns";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { useReservationList } from "@/features/staff/reservation-management/hooks/use-reservation-list";
 import { ReservationCard } from "@/features/staff/reservation-management/components/reservation-card";
@@ -19,6 +20,8 @@ import { ALConfirmDialog } from "@/components/ui/al-confirm-dialog";
 import { CreateReservationModal } from "@/features/staff/reservation-create";
 
 const ReservationListContent = () => {
+    const t = useTranslations("reservations.management.List");
+    const tm = useTranslations("reservations.management.Messages");
     const router = useRouter();
     const {
         reservations,
@@ -65,10 +68,10 @@ const ReservationListContent = () => {
     const handleStatusUpdate = async (reservationId: number, statusCode: string) => {
         try {
             await reservationService.updateReservationStatus(reservationId, statusCode);
-            toast.success("Trạng thái đã được cập nhật thành công!");
+            toast.success(tm("checkInSuccess"));
             actions.refresh();
         } catch (error: any) {
-            toast.error(error.message || "Lỗi khi cập nhật trạng thái");
+            toast.error(error.message || tm("checkInFail"));
         }
     };
 
@@ -77,10 +80,10 @@ const ReservationListContent = () => {
         setIsDeleting(true);
         try {
             await reservationService.deleteReservation(deleteReservationId);
-            toast.success("Xóa đơn đặt bàn thành công!");
+            toast.success(t("deleteSuccess") || "Xóa đơn đặt bàn thành công!");
             actions.refresh();
         } catch (error: any) {
-            toast.error(error.message || "Lỗi khi xóa đơn đặt bàn");
+            toast.error(error.message || t("deleteFail") || "Lỗi khi xóa đơn đặt bàn");
         } finally {
             setIsDeleting(false);
             setDeleteReservationId(null);
@@ -95,11 +98,11 @@ const ReservationListContent = () => {
 
                 {/* Hàng 1: Tiêu đề */}
                 <div className="flex items-center justify-between sm:justify-start gap-3">
-                    <h3 className="text-2xl font-bold text-[#1A3A52] m-0">Reservations</h3>
+                    <h3 className="text-2xl font-bold text-[#1A3A52] m-0">{t("title")}</h3>
                     <button
                         onClick={actions.refresh}
                         className="p-2 bg-[#FDFBF9] border border-[#D5BA98]/60 rounded-full text-[#1A3A52]/70 hover:bg-[#D5BA98]/10 hover:text-[#1A3A52] transition-colors shadow-none"
-                        title="Refresh"
+                        title={t("refresh") || "Refresh"}
                     >
                         <RefreshCcw className="w-4 h-4" />
                     </button>
@@ -126,23 +129,21 @@ const ReservationListContent = () => {
                         <div className="flex bg-[#D5BA98]/12 p-1 rounded-lg border border-[#D5BA98]/40 overflow-x-auto hide-scrollbar w-full sm:w-auto max-w-full">
                             <button
                                 onClick={() => actions.onStatusChange(null)}
-                                className={`shrink-0 px-4 py-1.5 text-[13px] font-medium rounded-md transition-all whitespace-nowrap ${
-                                    filters.statusId === null
-                                        ? 'bg-[#1A3A52] text-white shadow-sm border border-[#1A3A52]'
-                                        : 'text-[#1A3A52]/65 hover:text-[#1A3A52] hover:bg-[#D5BA98]/18'
-                                }`}
+                                className={`shrink-0 px-4 py-1.5 text-[13px] font-medium rounded-md transition-all whitespace-nowrap ${filters.statusId === null
+                                    ? 'bg-[#1A3A52] text-white shadow-sm border border-[#1A3A52]'
+                                    : 'text-[#1A3A52]/65 hover:text-[#1A3A52] hover:bg-[#D5BA98]/18'
+                                    }`}
                             >
-                                All
+                                {t("all")}
                             </button>
                             {statuses.map(status => (
                                 <button
                                     key={status.statusId}
                                     onClick={() => actions.onStatusChange(status.statusId)}
-                                    className={`shrink-0 px-4 py-1.5 text-[13px] font-medium rounded-md transition-all whitespace-nowrap ${
-                                        filters.statusId === status.statusId
-                                            ? 'bg-[#1A3A52] text-white shadow-sm border border-[#1A3A52]'
-                                            : 'text-[#1A3A52]/65 hover:text-[#1A3A52] hover:bg-[#D5BA98]/18'
-                                    }`}
+                                    className={`shrink-0 px-4 py-1.5 text-[13px] font-medium rounded-md transition-all whitespace-nowrap ${filters.statusId === status.statusId
+                                        ? 'bg-[#1A3A52] text-white shadow-sm border border-[#1A3A52]'
+                                        : 'text-[#1A3A52]/65 hover:text-[#1A3A52] hover:bg-[#D5BA98]/18'
+                                        }`}
                                 >
                                     {status.statusName}
                                 </button>
@@ -160,7 +161,7 @@ const ReservationListContent = () => {
                             </div>
                             <input
                                 type="text"
-                                placeholder="Search customer, phone..."
+                                placeholder={t("searchPlaceholder")}
                                 value={filters.search || ""}
                                 onChange={(e) => actions.onSearchChange(e.target.value)}
                                 className="px-3 py-2 w-full sm:w-55 md:w-65 outline-none text-sm text-[#1A3A52] bg-transparent placeholder:text-[#1A3A52]/40"
@@ -174,7 +175,7 @@ const ReservationListContent = () => {
                             className="h-10 w-full sm:w-auto shrink-0 border-[#D5BA98]/60 bg-[#FDFBF9] text-[#1A3A52] hover:bg-[#D5BA98]/10"
                         >
                             <CirclePlus size={16} className="mr-2" />
-                            Add Reservation
+                            {t("addNew")}
                         </Button>
                     </div>
                 </div>
@@ -208,7 +209,7 @@ const ReservationListContent = () => {
                             {reservations.length === 0 && (
                                 <div className="flex flex-col items-center justify-center py-16 bg-[#FDFBF9] rounded-xl border border-[#D5BA98]/40 border-dashed mt-4 text-[#1A3A52]/60">
                                     <Armchair className="w-12 h-12 text-[#D5BA98] mb-3" />
-                                    <p className="text-[#1A3A52] text-lg">No reservations found</p>
+                                    <p className="text-[#1A3A52] text-lg">{t("empty")}</p>
                                 </div>
                             )}
                         </div>
@@ -242,7 +243,7 @@ const ReservationListContent = () => {
                     }}
                 />
             )}
-            
+
             {editReservationId && (
                 <EditReservationModal
                     reservationId={editReservationId}
@@ -269,11 +270,11 @@ const ReservationListContent = () => {
                 onClose={() => setDeleteReservationId(null)}
                 onConfirm={handleDelete}
                 variant="delete"
-                title="Xóa đơn đặt bàn"
-                message="Bạn có chắc chắn muốn xóa đơn đặt bàn này? Hành động này không thể hoàn tác và sẽ giải phóng các bàn đã gán (nếu có)."
+                title={t("deleteTitle") || "Xóa đơn đặt bàn"}
+                message={t("deleteMessage") || "Bạn có chắc chắn muốn xóa đơn đặt bàn này? Hành động này không thể hoàn tác và sẽ giải phóng các bàn đã gán (nếu có)."}
                 isLoading={isDeleting}
-                confirmText="Xác nhận xóa"
-                cancelText="Hủy"
+                confirmText={t("confirmDelete") || "Xác nhận xóa"}
+                cancelText={t("cancel") || "Hủy"}
             />
         </div>
     );

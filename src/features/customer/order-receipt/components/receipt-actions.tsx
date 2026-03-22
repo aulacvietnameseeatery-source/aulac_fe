@@ -13,8 +13,8 @@ interface ReceiptActionsProps {
 export default function ReceiptActions({
   onDownload,
   onPrint,
-} : ReceiptActionsProps) {
-  const t = useTranslations("OrderReceipt.Actions");
+}: ReceiptActionsProps) {
+  const t = useTranslations("orders.receipt.Actions");
 
   return (
     <div className="receipt-actions-wrapper">

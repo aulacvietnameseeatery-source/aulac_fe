@@ -1,5 +1,5 @@
 {
-  "SystemSettings": {
+  "settings": {
     "title": "System Settings",
     "description": "Manage system parameters and configurations.",
     "refresh": "Refresh",
@@ -38,6 +38,19 @@
     "Introduction": {
       "title": "Introduction Page",
       "description": "Manage the content and media for your landing page.",
+      "heroTitle": "Hero Title",
+      "heroQuote": "Hero Quote",
+      "heroImage": "Hero Image (Banner)",
+      "heroSection": "Hero Section (Header)",
+      "virtualTour": "Virtual Tour Section",
+      "tourVideo": "Virtual Tour Video",
+      "collection": "Collection Section",
+      "featuredDish": "Featured Dish",
+      "selectFromSystem": "Select from System",
+      "dishImage": "Dish Image",
+      "mainTitle": "Main Title (On Hover)",
+      "cardTitle": "Card Title",
+      "cardCategory": "Dish Category",
       "sections": {
         "hero": {
           "title": "Hero Section",
@@ -182,6 +195,13 @@
     "AboutUs": {
       "title": "About Us",
       "description": "Manage your brand story and core values.",
+      "public": {
+        "subtitle": "A Quiet Expression of Vietnamese Cuisine",
+        "paragraph_1": "An Lạc is guided by balance, memory, and serenity. Its name means peaceful happiness, inspired by the founder's journey — a mother of three children — creating a space reflecting care, stability, and the essence of An cư Lạc nghiệp.",
+        "paragraph_2": "At An Lạc, we do not seek to change Vietnamese cuisine, but to honor it. Patience, harmony, and precision shape every dish: the slow simmer of a broth, the careful balance of herbs, the quiet depth of fermentation, and the humility of rice.",
+        "paragraph_3": "Familiar techniques such as kho, hấp, and nướng are expressed with precision and minimalism. Flavors are measured, balanced, and subtle.",
+        "closing_quote": "An Lạc is an invitation — to slow down, taste attentively, and reconnect with the essential."
+      },
       "sections": {
         "founders": {
           "title": "Founders' Vision",
@@ -255,7 +275,28 @@
         "syncDesc": "Persist your narrative data",
         "syncButton": "Sync About Story",
         "discard": "Discard Changes"
-      }
+      },
+      "sectionLabel": "Section Label",
+      "subtitle": "Subtitle",
+      "paragraph": "Paragraph",
+      "quote": "Quote",
+      "quoteAuthor": "Quote Author",
+      "valueTitle": "Value Title",
+      "valueDescription": "Value Description",
+      "foundersImage": "Founders Image",
+      "legacyImage": "Legacy Image",
+      "ourFounders": "Our Founders",
+      "ourFoundersDesc": "Manage founders' content.",
+      "ourJourney": "Our Journey",
+      "ourPhilosophy": "Our Philosophy",
+      "legacy": "Legacy & Future",
+      "contentEditorTitle": "Content Editor",
+      "contentEditorDesc": "Minimalist content management, focusing on typography for the About Us page.",
+      "subtitleLabel": "Subtitle (Hero/Banner Section)",
+      "paragraphLabel": "Paragraph",
+      "closingQuoteLabel": "Closing Quote",
+      "aboutConfigTitle": "About Us Configuration",
+      "aboutConfigDesc": "Minimalist content management, focusing on typography for the About Us page."
     },
     "General": {
       "title": "System Parameters",

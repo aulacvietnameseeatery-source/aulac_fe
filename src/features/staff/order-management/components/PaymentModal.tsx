@@ -36,8 +36,8 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
     couponOptions = [],
     promotionOptions = [],
 }) => {
-    const t = useTranslations('Order.PaymentModal');
-    const tCommon = useTranslations('Order.List.card');
+    const t = useTranslations('orders.management.PaymentModal');
+    const tCommon = useTranslations('orders.management.List.card');
     const format = useFormatter();
 
     const [paymentType, setPaymentType] = useState<'cash' | 'card' | 'scan'>('cash');
@@ -178,14 +178,14 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
                                     {order.orderItems
                                         .filter(item => item.itemStatus !== 'REJECTED' && item.itemStatus !== 'CANCELLED')
                                         .map((item, idx) => (
-                                        <div key={idx} className="flex items-start justify-between gap-3 text-sm">
-                                            <span className="text-[#1A3A52]/85 flex-1 break-words">{item.dishName} ×{item.quantity}</span>
-                                            <div className="hidden sm:flex items-center gap-2 min-w-[120px]">
-                                                <span className="font-mono text-[#1A3A52]/75">{format.number(item.price * item.quantity, { style: 'currency', currency: 'CHF' })}</span>
+                                            <div key={idx} className="flex items-start justify-between gap-3 text-sm">
+                                                <span className="text-[#1A3A52]/85 flex-1 break-words">{item.dishName} ×{item.quantity}</span>
+                                                <div className="hidden sm:flex items-center gap-2 min-w-[120px]">
+                                                    <span className="font-mono text-[#1A3A52]/75">{format.number(item.price * item.quantity, { style: 'currency', currency: 'CHF' })}</span>
+                                                </div>
+                                                <span className="sm:hidden font-mono text-[#1A3A52]/75 shrink-0">{format.number(item.price * item.quantity, { style: 'currency', currency: 'CHF' })}</span>
                                             </div>
-                                            <span className="sm:hidden font-mono text-[#1A3A52]/75 shrink-0">{format.number(item.price * item.quantity, { style: 'currency', currency: 'CHF' })}</span>
-                                        </div>
-                                    ))}
+                                        ))}
                                 </div>
                             </section>
 

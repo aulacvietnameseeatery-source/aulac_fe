@@ -122,7 +122,7 @@ export interface OrderHistoryFABProps {
 }
 
 export function OrderHistoryFAB({ tableCode, tableNumber, dishNameMap = {}, refreshTrigger = 0, forceClose = false, forceOpen = false, onOpenChange }: OrderHistoryFABProps) {
-  const t = useTranslations("OrderHistory");
+  const t = useTranslations("orders.history");
   const router = useRouter();
   const effectiveTable = tableCode || tableNumber || "";
   const [isOpen, setIsOpen] = useState(false);
@@ -138,10 +138,10 @@ export function OrderHistoryFAB({ tableCode, tableNumber, dishNameMap = {}, refr
   // Derive the dish name of the item pending cancel confirmation
   const cancelConfirmItemDishName = cancelConfirmItemId !== null
     ? (() => {
-        const item = history?.items.find(i => i.orderItemId === cancelConfirmItemId);
-        if (!item) return "";
-        return dishNameMap[item.dishId] || item.dishName;
-      })()
+      const item = history?.items.find(i => i.orderItemId === cancelConfirmItemId);
+      if (!item) return "";
+      return dishNameMap[item.dishId] || item.dishName;
+    })()
     : "";
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const redirectTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -380,270 +380,270 @@ export function OrderHistoryFAB({ tableCode, tableNumber, dishNameMap = {}, refr
               </motion.div>
             ) : (
               /* ── Expanded panel content ── */
-            <motion.div
-              key="panel-content"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0, transition: { duration: 0.1 } }}
-              className="flex flex-col w-full h-full"
-            >
-              {/* ── Header ── */}
-              <div
-                className="flex items-center justify-between px-5 py-4 border-b flex-shrink-0"
-                style={{ borderColor: "rgba(201,168,76,0.25)" }}
+              <motion.div
+                key="panel-content"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0, transition: { duration: 0.1 } }}
+                className="flex flex-col w-full h-full"
               >
-                <div className="flex items-center gap-3">
-                  <div
-                    className="w-9 h-9 rounded-full flex items-center justify-center"
-                    style={{ background: "rgba(201,168,76,0.15)", border: "1px solid rgba(201,168,76,0.4)" }}
-                  >
-                    <ScrollText size={18} strokeWidth={1.6} className="text-[#e8c97a]" />
-                  </div>
-                  <div>
-                    <h3 className="text-[#e8c97a] font-bold text-base tracking-wide">{t("title")}</h3>
-                    <p className="text-[#8ba3c7] text-xs">
-                      {effectiveTable && (
-                        <>{t("tableLabel")} <span className="text-[#c9a84c] font-semibold">{effectiveTable}</span> · </>
-                      )}
-                      {t("itemsCount", { count: totalItems })}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={load}
-                    disabled={loading}
-                    className="w-8 h-8 rounded-full flex items-center justify-center disabled:opacity-40"
-                    style={{ background: "rgba(255,255,255,0.06)" }}
-                    aria-label={t("refreshAriaLabel")}
-                  >
-                    <RefreshCw size={14} className={`text-[#8ba3c7] ${loading ? "animate-spin" : ""}`} />
-                  </button>
-                  <button
-                    onClick={() => {
-                      setIsOpen(false);
-                      onOpenChange?.(false);
-                    }}
-                    className="w-8 h-8 rounded-full flex items-center justify-center"
-                    style={{ background: "rgba(255,255,255,0.06)" }}
-                    aria-label={t("closeAriaLabel")}
-                  >
-                    <X size={16} className="text-[#8ba3c7]" />
-                  </button>
-                </div>
-              </div>
-
-              {/* ── Body (scrollable) ── */}
-              <div className="overflow-y-auto flex-1 px-4 py-3">
-                {/* Error */}
-                {cancelNotAllowedDishName !== null && (
-                  <div
-                    className="flex items-start gap-2 px-3 py-2 rounded-xl mb-3 text-xs"
-                    style={{
-                      background: "rgba(220,60,60,0.12)",
-                      border: "1px solid rgba(220,60,60,0.3)",
-                      color: "#f87171",
-                    }}
-                  >
-                    <AlertTriangle size={13} strokeWidth={2} className="shrink-0 mt-0.5" />
-                    <span className="flex-1">
-                      {t("cancelNotAllowed", { dishName: cancelNotAllowedDishName })}
-                    </span>
-                    <button
-                      onClick={() => setCancelNotAllowedDishName(null)}
-                      className="shrink-0 ml-1 opacity-60 hover:opacity-100 transition-opacity"
-                      aria-label="close"
-                    >
-                      <X size={13} strokeWidth={2.5} />
-                    </button>
-                  </div>
-                )}
-
-                {error && (
-                  <div
-                    className="flex items-center gap-2 px-3 py-2 rounded-xl mb-3 text-xs"
-                    style={{
-                      background: "rgba(220,60,60,0.12)",
-                      border: "1px solid rgba(220,60,60,0.3)",
-                      color: "#f87171",
-                    }}
-                  >
-                    <AlertTriangle size={13} strokeWidth={2} />
-                    <span className="flex-1">{error}</span>
-                    <button
-                      onClick={() => setError(null)}
-                      className="shrink-0 ml-1 opacity-60 hover:opacity-100 transition-opacity"
-                      aria-label="close"
-                    >
-                      <X size={13} strokeWidth={2.5} />
-                    </button>
-                  </div>
-                )}
-
-                {/* Column headers */}
-                {allItems.length > 0 && (
-                  <div
-                    className="grid gap-x-2 px-2 pb-3 text-xs font-bold tracking-widest uppercase"
-                    style={{ gridTemplateColumns: "1fr 32px 68px 90px", color: "rgba(139,163,199,0.7)", background: "transparent" }}
-                  >
-                    <span>{t("headers.dish")}</span>
-                    <span className="text-center">{t("headers.quantity")}</span>
-                    <span className="text-right">{t("headers.price")}</span>
-                    <span className="text-right">{t("headers.status")}</span>
-                  </div>
-                )}
-
-                {/* Empty state */}
-                {allItems.length === 0 && !loading ? (
-                  <div className="flex flex-col items-center justify-center py-14 gap-4">
-                    <div
-                      className="w-20 h-20 rounded-full flex items-center justify-center"
-                      style={{ background: "rgba(201,168,76,0.08)", border: "1px dashed rgba(201,168,76,0.3)" }}
-                    >
-                      <ScrollText size={36} strokeWidth={1.2} className="text-[#c9a84c] opacity-40" />
-                    </div>
-                    <p className="text-[#6b84a8] text-sm text-center leading-relaxed">
-                      {t("emptyState.title")}
-                      <br />
-                      {t("emptyState.subtitle")}
-                    </p>
-                  </div>
-                ) : (
-                  <div className="flex flex-col gap-1.5">
-                    {allItems.map((item, idx) => {
-                      const statusKey = item.itemStatus.toUpperCase() as OrderItemStatus;
-                      const Icon = getItemStatusIcon(statusKey);
-                      const styles = getItemStatusStyles(statusKey);
-                      const statusLabel = getStatusLabel(statusKey);
-                      const isRejected = statusKey === "REJECTED";
-                      const isCancelled = statusKey === "CANCELLED";
-                      const canCancel = statusKey === "CREATED";
-                      const isCancelling = cancellingItems.has(item.orderItemId);
-
-                      const localizedName = dishNameMap[item.dishId] || item.dishName;
-
-                      return (
-                        <div key={`${item.orderItemId}-${idx}`}>
-                          <div
-                            className="grid items-start gap-x-2 rounded-xl px-2 py-2"
-                            style={{
-                              gridTemplateColumns: "1fr 32px 68px 90px",
-                              background: isRejected || isCancelled ? "rgba(220,60,60,0.06)" : "rgba(255,255,255,0.04)",
-                              border: `1px solid ${isRejected || isCancelled ? "rgba(220,60,60,0.2)" : "rgba(201,168,76,0.12)"}`,
-                            }}
-                          >
-                            {/* Name + note */}
-                            <div className="min-w-0">
-                              <p className={`text-[13px] font-semibold leading-snug truncate ${isRejected || isCancelled ? "line-through text-[#6b84a8]" : "text-[#e8d9b0]"}`}>
-                                {localizedName}
-                              </p>
-                              {item.note && (
-                                <p className="text-[#6b84a8] text-[10px] italic truncate mt-0.5">{item.note}</p>
-                              )}
-                            </div>
-                            {/* Qty */}
-                            <p className="text-[#8ba3c7] text-xs text-center leading-tight pt-0.5">{item.quantity}×</p>
-                            {/* Price */}
-                            <p className="text-[#c9a84c] text-xs text-right font-medium leading-tight pt-0.5">
-                              {(item.price * item.quantity).toFixed(2)} <span className="text-[10px]">CHF</span>
-                            </p>
-                            {/* Status badge */}
-                            <div
-                              className="flex items-center justify-end gap-1 px-1.5 py-0.5 rounded-full text-[10px] font-semibold self-start"
-                              style={{ background: styles.bg, border: `1px solid ${styles.border}`, color: styles.text }}
-                            >
-                              <Icon size={10} strokeWidth={2} />
-                              <span>{statusLabel}</span>
-                            </div>
-                          </div>
-
-                          {/* Cancel button for CREATED items */}
-                          {canCancel && (
-                            <div className="mt-1 mx-0.5 flex justify-end">
-                              <button
-                                onClick={() => setCancelConfirmItemId(item.orderItemId)}
-                                disabled={isCancelling}
-                                className="px-3 py-1 rounded-lg text-[10px] font-semibold uppercase tracking-wider transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
-                                style={{
-                                  background: "rgba(220,60,60,0.12)",
-                                  border: "1px solid rgba(220,60,60,0.3)",
-                                  color: "#f87171",
-                                }}
-                              >
-                                {isCancelling ? t("cancelling") : t("cancelItem")}
-                              </button>
-                            </div>
-                          )}
-
-                          {/* Chef note for rejected items */}
-                          {isRejected && item.rejectReason && (
-                            <div
-                              className="mt-1 mx-0.5 px-3 py-2 rounded-xl text-[11px] leading-relaxed"
-                              style={{
-                                background: "rgba(255,120,80,0.08)",
-                                border: "1px solid rgba(255,120,80,0.25)",
-                                color: "#fca5a5",
-                              }}
-                            >
-                              <span className="font-bold uppercase tracking-wider text-[10px]" style={{ color: "#f87171" }}>
-                                {t("chefNote")}
-                              </span>
-                              <br />
-                              <span className="italic">&ldquo;{item.rejectReason}&rdquo;</span>
-                            </div>
-                          )}
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
-              </div>
-
-              {/* ── Footer ── */}
-              {allItems.length > 0 && (
+                {/* ── Header ── */}
                 <div
-                  className="flex-shrink-0 border-t px-5 py-4 flex flex-col gap-3"
+                  className="flex items-center justify-between px-5 py-4 border-b flex-shrink-0"
                   style={{ borderColor: "rgba(201,168,76,0.25)" }}
                 >
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-semibold uppercase tracking-widest" style={{ color: "rgba(139,163,199,0.7)" }}>
-                      {t("estimatedTotal")}
-                    </span>
-                    <span className="text-[#e8c97a] text-xl font-bold">
-                      {estimatedTotal.toLocaleString("vi-VN")}{" "}
-                      <span className="text-sm font-semibold">CHF</span>
-                    </span>
+                  <div className="flex items-center gap-3">
+                    <div
+                      className="w-9 h-9 rounded-full flex items-center justify-center"
+                      style={{ background: "rgba(201,168,76,0.15)", border: "1px solid rgba(201,168,76,0.4)" }}
+                    >
+                      <ScrollText size={18} strokeWidth={1.6} className="text-[#e8c97a]" />
+                    </div>
+                    <div>
+                      <h3 className="text-[#e8c97a] font-bold text-base tracking-wide">{t("title")}</h3>
+                      <p className="text-[#8ba3c7] text-xs">
+                        {effectiveTable && (
+                          <>{t("tableLabel")} <span className="text-[#c9a84c] font-semibold">{effectiveTable}</span> · </>
+                        )}
+                        {t("itemsCount", { count: totalItems })}
+                      </p>
+                    </div>
                   </div>
 
-                  <button
-                    onClick={() => setIsPaymentPopupOpen(true)}
-                    className="w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl font-bold text-sm tracking-widest uppercase transition-opacity active:opacity-80"
-                    style={{
-                      background: "linear-gradient(135deg, #f5d77a, #c9a84c)",
-                      color: "#0f1f3d",
-                      boxShadow: "0 4px 16px rgba(201,168,76,0.35)",
-                    }}
-                  >
-                    <CreditCard size={16} strokeWidth={2} />
-                    {t("requestPayment")}
-                  </button>
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={load}
+                      disabled={loading}
+                      className="w-8 h-8 rounded-full flex items-center justify-center disabled:opacity-40"
+                      style={{ background: "rgba(255,255,255,0.06)" }}
+                      aria-label={t("refreshAriaLabel")}
+                    >
+                      <RefreshCw size={14} className={`text-[#8ba3c7] ${loading ? "animate-spin" : ""}`} />
+                    </button>
+                    <button
+                      onClick={() => {
+                        setIsOpen(false);
+                        onOpenChange?.(false);
+                      }}
+                      className="w-8 h-8 rounded-full flex items-center justify-center"
+                      style={{ background: "rgba(255,255,255,0.06)" }}
+                      aria-label={t("closeAriaLabel")}
+                    >
+                      <X size={16} className="text-[#8ba3c7]" />
+                    </button>
+                  </div>
                 </div>
-              )}
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </motion.div>
 
-      {/* Label below the circle (only when collapsed) */}
-      {!isOpen && (
-        <span
-          className="text-[10px] font-semibold tracking-widest uppercase"
-          style={{ color: "#c9a84c", textShadow: "0 1px 4px rgba(0,0,0,0.6)" }}
-        >
-          {t("fabLabel")}
-        </span>
-      )}
+                {/* ── Body (scrollable) ── */}
+                <div className="overflow-y-auto flex-1 px-4 py-3">
+                  {/* Error */}
+                  {cancelNotAllowedDishName !== null && (
+                    <div
+                      className="flex items-start gap-2 px-3 py-2 rounded-xl mb-3 text-xs"
+                      style={{
+                        background: "rgba(220,60,60,0.12)",
+                        border: "1px solid rgba(220,60,60,0.3)",
+                        color: "#f87171",
+                      }}
+                    >
+                      <AlertTriangle size={13} strokeWidth={2} className="shrink-0 mt-0.5" />
+                      <span className="flex-1">
+                        {t("cancelNotAllowed", { dishName: cancelNotAllowedDishName })}
+                      </span>
+                      <button
+                        onClick={() => setCancelNotAllowedDishName(null)}
+                        className="shrink-0 ml-1 opacity-60 hover:opacity-100 transition-opacity"
+                        aria-label="close"
+                      >
+                        <X size={13} strokeWidth={2.5} />
+                      </button>
+                    </div>
+                  )}
+
+                  {error && (
+                    <div
+                      className="flex items-center gap-2 px-3 py-2 rounded-xl mb-3 text-xs"
+                      style={{
+                        background: "rgba(220,60,60,0.12)",
+                        border: "1px solid rgba(220,60,60,0.3)",
+                        color: "#f87171",
+                      }}
+                    >
+                      <AlertTriangle size={13} strokeWidth={2} />
+                      <span className="flex-1">{error}</span>
+                      <button
+                        onClick={() => setError(null)}
+                        className="shrink-0 ml-1 opacity-60 hover:opacity-100 transition-opacity"
+                        aria-label="close"
+                      >
+                        <X size={13} strokeWidth={2.5} />
+                      </button>
+                    </div>
+                  )}
+
+                  {/* Column headers */}
+                  {allItems.length > 0 && (
+                    <div
+                      className="grid gap-x-2 px-2 pb-3 text-xs font-bold tracking-widest uppercase"
+                      style={{ gridTemplateColumns: "1fr 32px 68px 90px", color: "rgba(139,163,199,0.7)", background: "transparent" }}
+                    >
+                      <span>{t("headers.dish")}</span>
+                      <span className="text-center">{t("headers.quantity")}</span>
+                      <span className="text-right">{t("headers.price")}</span>
+                      <span className="text-right">{t("headers.status")}</span>
+                    </div>
+                  )}
+
+                  {/* Empty state */}
+                  {allItems.length === 0 && !loading ? (
+                    <div className="flex flex-col items-center justify-center py-14 gap-4">
+                      <div
+                        className="w-20 h-20 rounded-full flex items-center justify-center"
+                        style={{ background: "rgba(201,168,76,0.08)", border: "1px dashed rgba(201,168,76,0.3)" }}
+                      >
+                        <ScrollText size={36} strokeWidth={1.2} className="text-[#c9a84c] opacity-40" />
+                      </div>
+                      <p className="text-[#6b84a8] text-sm text-center leading-relaxed">
+                        {t("emptyState.title")}
+                        <br />
+                        {t("emptyState.subtitle")}
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="flex flex-col gap-1.5">
+                      {allItems.map((item, idx) => {
+                        const statusKey = item.itemStatus.toUpperCase() as OrderItemStatus;
+                        const Icon = getItemStatusIcon(statusKey);
+                        const styles = getItemStatusStyles(statusKey);
+                        const statusLabel = getStatusLabel(statusKey);
+                        const isRejected = statusKey === "REJECTED";
+                        const isCancelled = statusKey === "CANCELLED";
+                        const canCancel = statusKey === "CREATED";
+                        const isCancelling = cancellingItems.has(item.orderItemId);
+
+                        const localizedName = dishNameMap[item.dishId] || item.dishName;
+
+                        return (
+                          <div key={`${item.orderItemId}-${idx}`}>
+                            <div
+                              className="grid items-start gap-x-2 rounded-xl px-2 py-2"
+                              style={{
+                                gridTemplateColumns: "1fr 32px 68px 90px",
+                                background: isRejected || isCancelled ? "rgba(220,60,60,0.06)" : "rgba(255,255,255,0.04)",
+                                border: `1px solid ${isRejected || isCancelled ? "rgba(220,60,60,0.2)" : "rgba(201,168,76,0.12)"}`,
+                              }}
+                            >
+                              {/* Name + note */}
+                              <div className="min-w-0">
+                                <p className={`text-[13px] font-semibold leading-snug truncate ${isRejected || isCancelled ? "line-through text-[#6b84a8]" : "text-[#e8d9b0]"}`}>
+                                  {localizedName}
+                                </p>
+                                {item.note && (
+                                  <p className="text-[#6b84a8] text-[10px] italic truncate mt-0.5">{item.note}</p>
+                                )}
+                              </div>
+                              {/* Qty */}
+                              <p className="text-[#8ba3c7] text-xs text-center leading-tight pt-0.5">{item.quantity}×</p>
+                              {/* Price */}
+                              <p className="text-[#c9a84c] text-xs text-right font-medium leading-tight pt-0.5">
+                                {(item.price * item.quantity).toFixed(2)} <span className="text-[10px]">CHF</span>
+                              </p>
+                              {/* Status badge */}
+                              <div
+                                className="flex items-center justify-end gap-1 px-1.5 py-0.5 rounded-full text-[10px] font-semibold self-start"
+                                style={{ background: styles.bg, border: `1px solid ${styles.border}`, color: styles.text }}
+                              >
+                                <Icon size={10} strokeWidth={2} />
+                                <span>{statusLabel}</span>
+                              </div>
+                            </div>
+
+                            {/* Cancel button for CREATED items */}
+                            {canCancel && (
+                              <div className="mt-1 mx-0.5 flex justify-end">
+                                <button
+                                  onClick={() => setCancelConfirmItemId(item.orderItemId)}
+                                  disabled={isCancelling}
+                                  className="px-3 py-1 rounded-lg text-[10px] font-semibold uppercase tracking-wider transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+                                  style={{
+                                    background: "rgba(220,60,60,0.12)",
+                                    border: "1px solid rgba(220,60,60,0.3)",
+                                    color: "#f87171",
+                                  }}
+                                >
+                                  {isCancelling ? t("cancelling") : t("cancelItem")}
+                                </button>
+                              </div>
+                            )}
+
+                            {/* Chef note for rejected items */}
+                            {isRejected && item.rejectReason && (
+                              <div
+                                className="mt-1 mx-0.5 px-3 py-2 rounded-xl text-[11px] leading-relaxed"
+                                style={{
+                                  background: "rgba(255,120,80,0.08)",
+                                  border: "1px solid rgba(255,120,80,0.25)",
+                                  color: "#fca5a5",
+                                }}
+                              >
+                                <span className="font-bold uppercase tracking-wider text-[10px]" style={{ color: "#f87171" }}>
+                                  {t("chefNote")}
+                                </span>
+                                <br />
+                                <span className="italic">&ldquo;{item.rejectReason}&rdquo;</span>
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+
+                {/* ── Footer ── */}
+                {allItems.length > 0 && (
+                  <div
+                    className="flex-shrink-0 border-t px-5 py-4 flex flex-col gap-3"
+                    style={{ borderColor: "rgba(201,168,76,0.25)" }}
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-semibold uppercase tracking-widest" style={{ color: "rgba(139,163,199,0.7)" }}>
+                        {t("estimatedTotal")}
+                      </span>
+                      <span className="text-[#e8c97a] text-xl font-bold">
+                        {estimatedTotal.toLocaleString("vi-VN")}{" "}
+                        <span className="text-sm font-semibold">CHF</span>
+                      </span>
+                    </div>
+
+                    <button
+                      onClick={() => setIsPaymentPopupOpen(true)}
+                      className="w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl font-bold text-sm tracking-widest uppercase transition-opacity active:opacity-80"
+                      style={{
+                        background: "linear-gradient(135deg, #f5d77a, #c9a84c)",
+                        color: "#0f1f3d",
+                        boxShadow: "0 4px 16px rgba(201,168,76,0.35)",
+                      }}
+                    >
+                      <CreditCard size={16} strokeWidth={2} />
+                      {t("requestPayment")}
+                    </button>
+                  </div>
+                )}
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </motion.div>
+
+        {/* Label below the circle (only when collapsed) */}
+        {!isOpen && (
+          <span
+            className="text-[10px] font-semibold tracking-widest uppercase"
+            style={{ color: "#c9a84c", textShadow: "0 1px 4px rgba(0,0,0,0.6)" }}
+          >
+            {t("fabLabel")}
+          </span>
+        )}
       </div>
 
       {/* ── Cancel Item Confirmation Popup ── */}
@@ -748,7 +748,7 @@ export function OrderHistoryFAB({ tableCode, tableNumber, dishNameMap = {}, refr
                     // TODO: Implement payment request API call
                     setIsPaymentPopupOpen(false);
                     setIsSuccessPopupOpen(true);
-                    
+
                     // After 3 seconds, complete payment process
                     redirectTimeoutRef.current = setTimeout(() => {
                       handlePaymentComplete();

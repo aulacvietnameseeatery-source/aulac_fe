@@ -24,7 +24,7 @@ export const SettingGroupCard: React.FC<SettingGroupCardProps> = ({
     isSaving,
     onSave,
 }) => {
-    const t = useTranslations('SystemSettings');
+    const t = useTranslations('settings');
     const [values, setValues] = useState<Record<string, string>>({});
     const [collapsed, setCollapsed] = useState(false);
 

@@ -16,7 +16,7 @@ interface TableCardProps {
 }
 
 export default function TableCard({ id, name, guests, image, status, onClick }: TableCardProps) {
-  const t = useTranslations('Reservation.TableCard');
+  const t = useTranslations('reservations.public.TableCard');
   const isDisabled = status === 'reserved';
 
   return (
@@ -58,8 +58,8 @@ export default function TableCard({ id, name, guests, image, status, onClick }: 
         <div className="table-info-wrapper">
           <h3
             className={`table-name ${status === "selected"
-                ? "table-name-selected"
-                : "table-name-default"
+              ? "table-name-selected"
+              : "table-name-default"
               }`}
           >
             {name}

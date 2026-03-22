@@ -3,7 +3,7 @@ import { useTranslations } from "next-intl";
 import "../styles/index.css";
 
 export default function ReceiptInfoStrip({ order, showStatus = true }: { order: OrderReceipt, showStatus?: boolean }) {
-  const t = useTranslations("OrderReceipt.InfoStrip");
+  const t = useTranslations("orders.receipt.InfoStrip");
 
   return (
     <div className="receipt-info-strip">

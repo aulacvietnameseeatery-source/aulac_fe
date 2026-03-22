@@ -7,7 +7,7 @@ import { OrderDetailDto } from '../types/edit-order.types';
 interface Props {
   orderInfo: OrderDetailDto;
   newCart: CartItem[];
-  customer: Partial<CustomerDto> | null; 
+  customer: Partial<CustomerDto> | null;
   onOpenCustomerModal: () => void;
   onUpdateQuantity: (id: number, delta: number) => void;
   onUpdateNote: (id: number, note: string) => void;
@@ -22,8 +22,8 @@ interface Props {
 export const EditTicket: React.FC<Props> = ({
   orderInfo, newCart, customer, onOpenCustomerModal, onUpdateQuantity, onUpdateNote, onRemoveFromCart, onClearCart, onSubmitItems, onCreateInvoice, onCloseMobile, isCustomerChanged
 }) => {
-  const t = useTranslations("Order.Edit");
-  const tCommon = useTranslations("Order.List.card");
+  const t = useTranslations("orders.management.Edit");
+  const tCommon = useTranslations("orders.management.List.card");
 
   const newSubtotal = newCart.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const finalTotal = orderInfo.totalAmount + newSubtotal;
@@ -75,21 +75,20 @@ export const EditTicket: React.FC<Props> = ({
             <span className="text-[10px] text-[#1A3A52]/50 block uppercase tracking-wide font-bold mb-0.5">{t('table')}</span>
             <span className="font-bold text-[#1A3A52]">{orderInfo.tableCode || t('takeAway')}</span>
           </div>
-          <button 
-            onClick={onOpenCustomerModal} 
+          <button
+            onClick={onOpenCustomerModal}
             disabled={isReadOnly}
-            className={`w-full col-span-2 group px-3 py-2.5 rounded-xl border shadow-sm text-left flex items-center justify-between transition-all bg-white border-[#D5BA98]/60 ${
-              !isReadOnly 
+            className={`w-full col-span-2 group px-3 py-2.5 rounded-xl border shadow-sm text-left flex items-center justify-between transition-all bg-white border-[#D5BA98]/60 ${!isReadOnly
                 ? 'hover:border-[#1A3A52] hover:shadow-md' : ''
-            }`}
+              }`}
           >
             <span className="font-bold text-[#1A3A52] truncate block mt-0.5">
               {customer ? customer.fullName : t('guest', { fallback: 'Guest' })}
             </span>
-            {!isReadOnly && 
-            <span className="text-[10px] font-bold text-[#1A3A52]/50 uppercase bg-[#D5BA98]/20 px-2 py-1 rounded group-hover:bg-[#1A3A52] group-hover:text-[#D5BA98] transition">
-            {t('change')}
-          </span>}
+            {!isReadOnly &&
+              <span className="text-[10px] font-bold text-[#1A3A52]/50 uppercase bg-[#D5BA98]/20 px-2 py-1 rounded group-hover:bg-[#1A3A52] group-hover:text-[#D5BA98] transition">
+                {t('change')}
+              </span>}
           </button>
         </div>
       </div>

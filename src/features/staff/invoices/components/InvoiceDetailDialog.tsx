@@ -17,7 +17,7 @@ interface InvoiceDetailDialogProps {
 }
 
 export function InvoiceDetailDialog({ open, onClose, orderId }: InvoiceDetailDialogProps) {
-    const t = useTranslations("InvoiceDetail");
+    const t = useTranslations("orders.management.InvoiceDetail");
     const [invoice, setInvoice] = useState<SaleInvoiceDto | null>(null);
     const [loading, setLoading] = useState(false);
 

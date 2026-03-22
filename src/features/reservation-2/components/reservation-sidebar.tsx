@@ -83,7 +83,7 @@ export default function ReservationSidebar({
     onDateTimeChange,
     onBook,
 }: ReservationSidebarProps) {
-    const t = useTranslations("Reservation.Sidebar");
+    const t = useTranslations("reservations.public.Sidebar");
     const [isEditing, setIsEditing] = useState(false);
 
     // Temp State

@@ -15,7 +15,7 @@ import { InvoiceDetailDialog } from './InvoiceDetailDialog';
 type DatePreset = "today" | "yesterday" | "last7" | "last30" | "thisMonth" | "lastMonth" | "custom";
 
 function SaleInvoiceListContent() {
-  const t = useTranslations("Invoice.List");
+  const t = useTranslations("orders.invoices.List");
   const { invoices, isLoading, totalCount, paginationInfo, onDataChange, refresh, latestParamsRef } = useSaleInvoiceList();
 
   const [selectedOrderId, setSelectedOrderId] = useState<number | null>(null);

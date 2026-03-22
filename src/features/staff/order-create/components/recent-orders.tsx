@@ -20,16 +20,16 @@ const getStatusColor = (status: string) => {
 const formatDateTime = (utcDateString: string) => {
   const dateStringWithZ = utcDateString.endsWith('Z') ? utcDateString : `${utcDateString}Z`;
   const date = new Date(dateStringWithZ);
-  
+
   // Convert to Local Time format: DD/MM/YYYY, HH:mm
-  return date.toLocaleString(undefined, { 
+  return date.toLocaleString(undefined, {
     day: '2-digit', month: '2-digit', year: 'numeric',
-    hour: '2-digit', minute: '2-digit' 
+    hour: '2-digit', minute: '2-digit'
   });
 };
 
 export const RecentOrders = () => {
-  const t = useTranslations("Order.RecentOrders");
+  const t = useTranslations("orders.management.RecentOrders");
   const router = useRouter();
   const [filter, setFilter] = useState<'ALL' | 'DINE_IN' | 'TAKEAWAY'>('ALL');
   const [orders, setOrders] = useState<RecentOrderDto[]>([]);
@@ -58,10 +58,10 @@ export const RecentOrders = () => {
       fetchOrders();
     },
     onOrderUpdated: (data) => {
-      setOrders(prevOrders => 
-        prevOrders.map(order => 
-          order.orderId === data.orderId 
-            ? { ...order, status: data.status as 'PENDING' | 'IN_PROGRESS' | 'COMPLETED' | 'CANCELLED'} 
+      setOrders(prevOrders =>
+        prevOrders.map(order =>
+          order.orderId === data.orderId
+            ? { ...order, status: data.status as 'PENDING' | 'IN_PROGRESS' | 'COMPLETED' | 'CANCELLED' }
             : order
         )
       );
@@ -75,15 +75,15 @@ export const RecentOrders = () => {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <h2 className="text-[#1A3A52] text-lg font-semibold tracking-wide">{t('title')}</h2>
-          <button 
-            onClick={fetchOrders} 
+          <button
+            onClick={fetchOrders}
             className="p-1.5 text-[#1A3A52]/50 hover:text-[#1A3A52] hover:bg-[#D5BA98]/20 rounded-md transition"
             title={t('refresh')}
           >
             <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
           </button>
         </div>
-        
+
         {/* Filter */}
         <div className="flex gap-1.5 p-1 bg-[#FDFBF9] border border-[#D5BA98]/40 rounded-lg shrink-0">
           <button onClick={() => setFilter('ALL')} className={`text-xs px-3 py-1 rounded font-semibold transition ${filter === 'ALL' ? 'bg-[#1A3A52] text-[#D5BA98]' : 'text-[#1A3A52]/70 hover:bg-[#D5BA98]/20'}`}>{t('filterAll')}</button>
@@ -91,50 +91,50 @@ export const RecentOrders = () => {
           <button onClick={() => setFilter('TAKEAWAY')} className={`text-xs px-3 py-1 rounded font-semibold transition ${filter === 'TAKEAWAY' ? 'bg-[#1A3A52] text-[#D5BA98]' : 'text-[#1A3A52]/70 hover:bg-[#D5BA98]/20'}`}>{t('takeAway')}</button>
         </div>
       </div>
-<div className="relative group">
-      <div {...scrollProps} className="flex gap-3 overflow-x-auto pb-2 [scrollbar-width:none] cursor-grab active:cursor-grabbing">
-        {loading && orders.length === 0 ? (
-          <div className="text-[#1A3A52]/50 text-xs py-4 flex items-center gap-2">
-             <RefreshCw className="w-4 h-4 animate-spin" /> {t('loading')}
-          </div>
-        ) : filteredOrders.length === 0 ? (
-          <p className="text-[#1A3A52]/50 text-xs py-4 italic">{t('noOrdersFound')}</p>
-        ) : (
-          filteredOrders.map((order) => (
-            <div 
-              key={order.orderId} 
-              onClick={() => router.push(`/dashboard/orders/${order.orderId}/edit`)}
-              className="bg-white border border-[#D5BA98]/30 rounded-lg p-3 w-[250px] shrink-0 hover:border-[#1A3A52] hover:shadow-md transition-all">
-              
-              <div className="flex justify-between items-start mb-2 border-b border-[#D5BA98]/20 pb-2">
-                <span className="text-xs text-[#1A3A52] font-bold">#{order.orderId}</span>
-                <span className={`text-[10px] font-bold px-2 py-0.5 rounded border ${getStatusColor(order.status)}`}>
-                  {t(`status.${order.status}`)}
-                </span>
-              </div>
-              
-              <p className="text-sm font-bold text-[#1A3A52] truncate mb-2">{order.customerName}</p>
-
-              <div className="flex items-center gap-3 text-xs text-[#1A3A52]/70 font-medium">
-                <div className="flex items-center gap-1">
-                  <Clock className="w-3 h-3 text-[#D5BA98]" /> {formatDateTime(order.createdAt)}
-                </div>
-                <div className="flex items-center gap-1">
-                  {order.source === 'DINE_IN' ? <Utensils className="w-3 h-3 text-[#D5BA98]" /> : <ShoppingBag className="w-3 h-3 text-[#D5BA98]" />}
-                  {order.source === 'DINE_IN' ? t('dineIn') : t('takeAway')}
-                </div>
-              </div>
-
-              {order.source === 'DINE_IN' && order.tableCode && (
-                <div className="mt-2 flex items-center gap-1.5 text-xs font-bold text-[#1A3A52] bg-[#D5BA98]/10 w-max px-2 py-1 rounded">
-                  <LayoutGrid className="w-3 h-3" /> {t('table')}: {order.tableCode}
-                </div>
-              )}
+      <div className="relative group">
+        <div {...scrollProps} className="flex gap-3 overflow-x-auto pb-2 [scrollbar-width:none] cursor-grab active:cursor-grabbing">
+          {loading && orders.length === 0 ? (
+            <div className="text-[#1A3A52]/50 text-xs py-4 flex items-center gap-2">
+              <RefreshCw className="w-4 h-4 animate-spin" /> {t('loading')}
             </div>
-          ))
-        )}
-      </div>
-      <div className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-[#FDFBF9] to-transparent pointer-events-none" />
+          ) : filteredOrders.length === 0 ? (
+            <p className="text-[#1A3A52]/50 text-xs py-4 italic">{t('noOrdersFound')}</p>
+          ) : (
+            filteredOrders.map((order) => (
+              <div
+                key={order.orderId}
+                onClick={() => router.push(`/dashboard/orders/${order.orderId}/edit`)}
+                className="bg-white border border-[#D5BA98]/30 rounded-lg p-3 w-[250px] shrink-0 hover:border-[#1A3A52] hover:shadow-md transition-all">
+
+                <div className="flex justify-between items-start mb-2 border-b border-[#D5BA98]/20 pb-2">
+                  <span className="text-xs text-[#1A3A52] font-bold">#{order.orderId}</span>
+                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded border ${getStatusColor(order.status)}`}>
+                    {t(`status.${order.status}`)}
+                  </span>
+                </div>
+
+                <p className="text-sm font-bold text-[#1A3A52] truncate mb-2">{order.customerName}</p>
+
+                <div className="flex items-center gap-3 text-xs text-[#1A3A52]/70 font-medium">
+                  <div className="flex items-center gap-1">
+                    <Clock className="w-3 h-3 text-[#D5BA98]" /> {formatDateTime(order.createdAt)}
+                  </div>
+                  <div className="flex items-center gap-1">
+                    {order.source === 'DINE_IN' ? <Utensils className="w-3 h-3 text-[#D5BA98]" /> : <ShoppingBag className="w-3 h-3 text-[#D5BA98]" />}
+                    {order.source === 'DINE_IN' ? t('dineIn') : t('takeAway')}
+                  </div>
+                </div>
+
+                {order.source === 'DINE_IN' && order.tableCode && (
+                  <div className="mt-2 flex items-center gap-1.5 text-xs font-bold text-[#1A3A52] bg-[#D5BA98]/10 w-max px-2 py-1 rounded">
+                    <LayoutGrid className="w-3 h-3" /> {t('table')}: {order.tableCode}
+                  </div>
+                )}
+              </div>
+            ))
+          )}
+        </div>
+        <div className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-[#FDFBF9] to-transparent pointer-events-none" />
       </div>
     </div>
   );

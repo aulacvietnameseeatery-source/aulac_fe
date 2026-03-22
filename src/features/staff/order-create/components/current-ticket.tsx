@@ -25,19 +25,19 @@ export const CurrentTicket: React.FC<Props> = ({
   onSetOrderType, onClearCart, onUpdateQuantity, onRemoveFromCart, onUpdateNote,
   onOpenTableModal, onOpenCustomerModal, onPlaceOrder, onCreateInvoice, onCloseMobile
 }) => {
-  const t = useTranslations("Order.Create");
+  const t = useTranslations("orders.management.Create");
 
   const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const isPlaceOrderDisabled = cart.length === 0 || (orderType === 'DINE_IN' && !selectedTable);
 
   return (
     <div className="flex flex-col h-full bg-white font-sans w-full">
-      
+
       {/* ── Header: Nút X (chỉ hiện mobile) & Tiêu đề ── */}
       <div className="px-5 py-4 border-b border-[#D5BA98]/30 flex items-center justify-between shrink-0 bg-[#FDFBF9]">
         <div className="flex items-center gap-3">
           <button onClick={onCloseMobile} className="lg:hidden p-1 bg-[#D5BA98]/20 text-[#1A3A52] rounded-md">
-             <X className="w-5 h-5" />
+            <X className="w-5 h-5" />
           </button>
           <h3 className="text-[#1A3A52] font-bold text-lg tracking-wide">{t('currentTicket')}</h3>
         </div>
@@ -49,23 +49,21 @@ export const CurrentTicket: React.FC<Props> = ({
       {/* ── Tabs Dine-In / Take-Away ── */}
       <div className="px-5 py-3 border-b border-[#D5BA98]/30 shrink-0 bg-[#FDFBF9]">
         <div className="flex gap-2">
-          <button 
-            onClick={() => onSetOrderType('DINE_IN')} 
-            className={`flex items-center justify-center gap-2 py-2 rounded-lg text-xs transition-all flex-1 font-bold ${
-              orderType === 'DINE_IN' 
-                ? "bg-[#1A3A52] text-[#D5BA98] shadow-md" 
+          <button
+            onClick={() => onSetOrderType('DINE_IN')}
+            className={`flex items-center justify-center gap-2 py-2 rounded-lg text-xs transition-all flex-1 font-bold ${orderType === 'DINE_IN'
+                ? "bg-[#1A3A52] text-[#D5BA98] shadow-md"
                 : "bg-white text-[#1A3A52]/70 border border-[#D5BA98]/40 hover:bg-[#D5BA98]/10"
-            }`}
+              }`}
           >
             <Utensils className="w-4 h-4" /> {t('dineIn')}
           </button>
-          <button 
-            onClick={() => onSetOrderType('TAKEAWAY')} 
-            className={`flex items-center justify-center gap-2 py-2 rounded-lg text-xs transition-all flex-1 font-bold ${
-              orderType === 'TAKEAWAY' 
-                ? "bg-[#1A3A52] text-[#D5BA98] shadow-md" 
+          <button
+            onClick={() => onSetOrderType('TAKEAWAY')}
+            className={`flex items-center justify-center gap-2 py-2 rounded-lg text-xs transition-all flex-1 font-bold ${orderType === 'TAKEAWAY'
+                ? "bg-[#1A3A52] text-[#D5BA98] shadow-md"
                 : "bg-white text-[#1A3A52]/70 border border-[#D5BA98]/40 hover:bg-[#D5BA98]/10"
-            }`}
+              }`}
           >
             <ShoppingBag className="w-4 h-4" /> {t('takeAway')}
           </button>
@@ -105,7 +103,7 @@ export const CurrentTicket: React.FC<Props> = ({
       <div className="flex-1 overflow-y-auto px-5 py-4 space-y-3 min-h-0 bg-[#FDFBF9]/50">
         {cart.map((item) => (
           <div key={item.dishId} className="border border-[#D5BA98]/40 rounded-xl p-3 bg-white shadow-sm hover:border-[#D5BA98] transition-colors">
-            
+
             <div className="flex justify-between items-start gap-2 mb-2">
               <div className="min-w-0 pr-2">
                 <p className="text-[#1A3A52] text-sm font-bold leading-tight truncate">
@@ -113,7 +111,7 @@ export const CurrentTicket: React.FC<Props> = ({
                 </p>
                 <div className="text-[#1A3A52]/70 font-semibold text-xs mt-1">CHF {(item.price * item.quantity).toFixed(2)}</div>
               </div>
-              <button 
+              <button
                 onClick={() => onRemoveFromCart(item.dishId)}
                 className="text-[#1A3A52]/40 hover:text-[#8C3A3A] hover:bg-[#8C3A3A]/10 p-1.5 rounded-md transition-colors shrink-0"
               >
@@ -164,18 +162,18 @@ export const CurrentTicket: React.FC<Props> = ({
           <span className="font-bold text-[#1A3A52]/70 text-sm uppercase tracking-wide">{t('total')}</span>
           <span className="font-bold text-[#1A3A52] text-2xl">CHF {total.toFixed(2)}</span>
         </div>
-        
+
         <div className="grid grid-cols-3 gap-2">
-          <button 
-            onClick={onCreateInvoice} 
-            disabled={cart.length === 0} 
+          <button
+            onClick={onCreateInvoice}
+            disabled={cart.length === 0}
             className="col-span-1 bg-white border-2 border-[#1A3A52] text-[#1A3A52] font-bold py-3 rounded-xl flex items-center justify-center gap-2 disabled:opacity-50 disabled:border-[#D5BA98] text-sm hover:bg-[#FDFBF9] transition"
           >
             <FileText className="w-4 h-4" /> Invoice
           </button>
-          <button 
-            onClick={onPlaceOrder} 
-            disabled={isPlaceOrderDisabled} 
+          <button
+            onClick={onPlaceOrder}
+            disabled={isPlaceOrderDisabled}
             className="col-span-2 bg-[#1A3A52] text-[#D5BA98] font-bold py-3 rounded-xl flex items-center justify-center gap-2 disabled:opacity-50 text-sm hover:bg-[#1A3A52]/90 transition shadow-lg shadow-[#1A3A52]/20"
           >
             {t('placeOrder')}

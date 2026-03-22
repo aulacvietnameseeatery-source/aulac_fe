@@ -21,7 +21,7 @@ export default function MobileBookingSheet({
     isOpen,
     onClose,
 }: MobileBookingSheetProps) {
-    const t = useTranslations("Reservation.Sidebar");
+    const t = useTranslations("reservations.public.Sidebar");
     const [isExpanded, setIsExpanded] = useState(false);
 
     // Form State
@@ -151,8 +151,8 @@ export default function MobileBookingSheet({
                         onClick={handleMainAction}
                         disabled={isExpanded && !isFormValid}
                         className={`w-full py-4 rounded-xl font-bold text-base shadow-lg transition-all active:scale-[0.98] ${isExpanded && !isFormValid
-                                ? "bg-slate-200 text-slate-400 cursor-not-allowed"
-                                : "bg-[#1A3A52] text-white shadow-[#1A3A52]/20 hover:shadow-xl hover:shadow-[#1A3A52]/30"
+                            ? "bg-slate-200 text-slate-400 cursor-not-allowed"
+                            : "bg-[#1A3A52] text-white shadow-[#1A3A52]/20 hover:shadow-xl hover:shadow-[#1A3A52]/30"
                             }`}
                     >
                         {isExpanded ? t("action.book") : `Book ${selectedTable.tableCode}`}
