@@ -21,6 +21,7 @@ export type OrderDetailDto = {
   customerId?: number;
   customerName?: string;
   totalAmount: number;
+  taxAmount: number;
   tipAmount: number;
   orderStatus: OrderStatus;
   source: string; // 'Dine-in' | 'Takeaway'
