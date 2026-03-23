@@ -111,9 +111,10 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
             orderId: order.orderId,
             receivedAmount: givenAmount,
             paymentMethod: methodMap[paymentType],
+            couponId: selectedCouponId ? Number(selectedCouponId) : undefined,
+            promotionId: selectedPromotionId ? Number(selectedPromotionId) : undefined,
             note: note || undefined,
-            tipAmount: tipAmount || undefined,
-            discountAmount: totalDiscount || undefined
+            tipAmount: tipAmount || undefined
         });
     };
 

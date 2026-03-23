@@ -6,9 +6,7 @@ import {
     ChevronDown,
     RefreshCw,
     Loader2,
-    LayoutGrid,
     Plus,
-    SquareKanban,
     Search,
     X,
 } from "lucide-react";
@@ -19,10 +17,8 @@ import { TablePagination } from "@/components/ui/table/table-pagination";
 import { useOrderHistory } from "@/features/staff/order-management/hooks/useOrderHistory";
 import { useOrderStatusCounts } from "@/features/staff/order-management/hooks/useOrderStatusCounts";
 import { OrderCard } from "@/features/staff/order-management/components/OrderCard";
-import { KanbanOrderCard } from "@/features/staff/order-management/components/KanbanOrderCard";
 import { ProtectedRoute } from "@/components/protected-route";
 import { Permissions } from "@/types/const";
-import { OrderHistory } from "@/features/staff/order-management/types/order-history.types";
 import { OrderStatusCode } from "@/types/status-codes";
 import { orderHistoryService } from "@/features/staff/order-management/services/order-history.service";
 import { staffCouponService } from "@/features/staff/coupon-management/coupon-list/services/coupon-service";
@@ -31,23 +27,7 @@ import { staffPromotionService } from "@/features/staff/promotion-management/pro
 import { PromotionListDTO } from "@/features/staff/promotion-management/promotion-list/types/promotion-types";
 import { toast } from "sonner";
 
-interface KanbanColumnConfig {
-    key: "pending" | "inProgress" | "completed" | "cancelled";
-    headerColor: string;
-    statuses: string[];
-    primaryKey: "start" | "finish" | "complete" | "reset";
-    secondaryKey: "cancel" | "printInvoice" | "delete";
-}
-
-const KANBAN_COLUMNS: KanbanColumnConfig[] = [
-    { key: "pending", headerColor: "bg-[#1A3A52]", statuses: ["Pending"], primaryKey: "start", secondaryKey: "cancel" },
-    { key: "inProgress", headerColor: "bg-[#1A3A52]/80", statuses: ["In progress"], primaryKey: "finish", secondaryKey: "cancel" },
-    { key: "completed", headerColor: "bg-[#4A5D4E]", statuses: ["Completed"], primaryKey: "complete", secondaryKey: "printInvoice" },
-    { key: "cancelled", headerColor: "bg-[#8C3A3A]", statuses: ["Cancelled"], primaryKey: "reset", secondaryKey: "delete" },
-];
-
 const SEARCH_DEBOUNCE_MS = 400;
-const KANBAN_PAGE_SIZE = 50;
 
 function OrdersContent() {
     const t = useTranslations("orders.management.List");
@@ -61,7 +41,6 @@ function OrdersContent() {
     const [searchQuery, setSearchQuery] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
-    const [viewMode, setViewMode] = useState<"grid" | "kanban">("grid");
     const [isRefreshing, setIsRefreshing] = useState(false);
     const [paymentCoupons, setPaymentCoupons] = useState<CouponDTO[]>([]);
     const [paymentPromotions, setPaymentPromotions] = useState<PromotionListDTO[]>([]);
@@ -197,8 +176,7 @@ function OrdersContent() {
 
     // Trigger data fetch khi params thay đổi
     useEffect(() => {
-        const effectivePageSize = viewMode === "kanban" ? KANBAN_PAGE_SIZE : pageSize;
-        const statusCode = viewMode === "kanban" ? undefined : TABS[activeTab].statusCode;
+        const statusCode = TABS[activeTab].statusCode;
 
         // Compute date range from preset
         let fromDate: Date | undefined;
@@ -213,17 +191,16 @@ function OrdersContent() {
         }
 
         onDataChange({
-            page: viewMode === "kanban" ? 1 : currentPage,
-            pageSize: effectivePageSize,
+            page: currentPage,
+            pageSize,
             search: searchQuery || undefined,
             orderStatusCode: statusCode,
             fromDate,
             toDate,
         });
-    }, [activeTab, currentPage, pageSize, searchQuery, viewMode, datePreset, customFrom, customTo, onDataChange, TABS]);
+    }, [activeTab, currentPage, pageSize, searchQuery, datePreset, customFrom, customTo, onDataChange, TABS]);
 
     const handleTabChange = (idx: number) => { setActiveTab(idx); setCurrentPage(1); };
-    const handleViewMode = (mode: "grid" | "kanban") => { setViewMode(mode); setCurrentPage(1); setActiveTab(0); };
 
     const handleRefresh = useCallback(async () => {
         setIsRefreshing(true);
@@ -275,12 +252,6 @@ function OrdersContent() {
 
     const handlePageSizeChange = useCallback((size: number) => { setPageSize(size); setCurrentPage(1); }, []);
 
-    // Kanban helpers
-    const getColumnOrders = (col: KanbanColumnConfig): OrderHistory[] => {
-        const lower = col.statuses.map((s) => s.toLowerCase());
-        return orders.filter((o) => lower.includes(o.orderStatus.toLowerCase()));
-    };
-
     const handleCreate = () => {
         router.push(`/dashboard/orders/create`);
     };
@@ -304,34 +275,28 @@ function OrdersContent() {
 
                     <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-2.5 xl:gap-4">
                         <div className="flex-1 min-w-0">
-                            {viewMode === "grid" ? (
-                                <div className="-mx-0.5 overflow-x-auto">
-                                    <div className="px-0.5 flex items-center gap-1.5 min-w-max">
-                                        {TABS.map((tab, idx) => (
-                                            <button
-                                                key={tab.label}
-                                                onClick={() => handleTabChange(idx)}
-                                                className={`h-8 inline-flex items-center gap-1.5 px-3 rounded-lg text-xs font-semibold transition-colors whitespace-nowrap ${activeTab === idx
-                                                    ? "bg-[#1A3A52] text-white shadow-sm"
-                                                    : "text-[#1A3A52]/70 bg-[#FDFBF9] border border-[#D5BA98]/50 hover:bg-[#D5BA98]/10"
-                                                    }`}
-                                            >
-                                                <span>{tab.label}</span>
-                                                <span className={`text-[10px] leading-tight rounded-full px-1.5 py-0.5 font-bold ${activeTab === idx
-                                                    ? "bg-white/20 text-white"
-                                                    : "bg-[#D5BA98]/25 text-[#1A3A52]/70"
-                                                    }`}>
-                                                    {tab.count}
-                                                </span>
-                                            </button>
-                                        ))}
-                                    </div>
+                            <div className="-mx-0.5 overflow-x-auto">
+                                <div className="px-0.5 flex items-center gap-1.5 min-w-max">
+                                    {TABS.map((tab, idx) => (
+                                        <button
+                                            key={tab.label}
+                                            onClick={() => handleTabChange(idx)}
+                                            className={`h-8 inline-flex items-center gap-1.5 px-3 rounded-lg text-xs font-semibold transition-colors whitespace-nowrap ${activeTab === idx
+                                                ? "bg-[#1A3A52] text-white shadow-sm"
+                                                : "text-[#1A3A52]/70 bg-[#FDFBF9] border border-[#D5BA98]/50 hover:bg-[#D5BA98]/10"
+                                                }`}
+                                        >
+                                            <span>{tab.label}</span>
+                                            <span className={`text-[10px] leading-tight rounded-full px-1.5 py-0.5 font-bold ${activeTab === idx
+                                                ? "bg-white/20 text-white"
+                                                : "bg-[#D5BA98]/25 text-[#1A3A52]/70"
+                                                }`}>
+                                                {tab.count}
+                                            </span>
+                                        </button>
+                                    ))}
                                 </div>
-                            ) : (
-                                <div className="text-xs sm:text-sm font-medium text-[#1A3A52]/60 px-0.5">
-                                    {t("kanbanLabel")}
-                                </div>
-                            )}
+                            </div>
                         </div>
 
                         <div className="w-full xl:w-auto flex flex-col sm:flex-row sm:items-center gap-2">
@@ -414,23 +379,6 @@ function OrdersContent() {
                                 >
                                     <RefreshCw className={`w-3 h-3 text-[#1A3A52]/60 transition-transform duration-500 ${(isLoading || isRefreshing) ? "animate-spin" : "group-hover:rotate-180"}`} />
                                 </button>
-
-                                <div className="h-8 inline-flex items-center border border-[#D5BA98]/60 rounded-lg bg-[#FDFBF9] p-0.5 gap-0.5">
-                                    <button
-                                        onClick={() => handleViewMode("grid")}
-                                        title={t("viewMode.grid")}
-                                        className={`h-full px-2 rounded-md transition-colors ${viewMode === "grid" ? "bg-[#1A3A52] text-white shadow-sm" : "text-[#1A3A52]/50 hover:bg-[#D5BA98]/15"}`}
-                                    >
-                                        <LayoutGrid className="w-4 h-4" />
-                                    </button>
-                                    <button
-                                        onClick={() => handleViewMode("kanban")}
-                                        title={t("viewMode.kanban")}
-                                        className={`h-full px-2 rounded-md transition-colors ${viewMode === "kanban" ? "bg-[#1A3A52] text-white shadow-sm" : "text-[#1A3A52]/50 hover:bg-[#D5BA98]/15"}`}
-                                    >
-                                        <SquareKanban className="w-4 h-4" />
-                                    </button>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -443,54 +391,6 @@ function OrdersContent() {
                         {isLoading ? (
                             <div className="flex items-center justify-center py-24 h-full">
                                 <Loader2 className="w-8 h-8 animate-spin text-[#1A3A52]" />
-                            </div>
-                        ) : viewMode === "kanban" ? (
-                            /* ── KANBAN VIEW — full-height scrollable, no pagination ── */
-                            <div className="h-full overflow-auto p-0 custom-scrollbar">
-                                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3 sm:gap-4">
-                                    {KANBAN_COLUMNS.map((col) => {
-                                        const colOrders = getColumnOrders(col);
-                                        return (
-                                            <div key={col.key} className="bg-white rounded-2xl border border border-[#D5BA98]/60 shadow-sm">
-                                                <div className={`flex items-center justify-between ${col.headerColor} rounded-t-2xl px-4 py-3`}>
-                                                    <span className="text-white font-semibold text-sm">{t(`kanban.${col.key}`)}</span>
-                                                    <span className="text-white text-sm font-medium bg-white/20 rounded-full px-2 py-0.5">
-                                                        {col.key === "pending" ? counts.pending
-                                                            : col.key === "inProgress" ? counts.inProgress
-                                                                : col.key === "completed" ? counts.completed
-                                                                    : counts.cancelled}
-                                                    </span>
-                                                </div>
-                                                <div className="p-3 flex flex-col gap-3">
-                                                    {colOrders.length === 0 ? (
-                                                        <div className="text-center py-10 text-[#1A3A52]/40 text-xs">
-                                                            {t("kanban.empty")}
-                                                        </div>
-                                                    ) : (
-                                                        colOrders.map((order) => (
-                                                            <KanbanOrderCard
-                                                                key={order.orderId}
-                                                                order={order}
-                                                                primaryAction={{ label: t(`kanban.${col.primaryKey}`), onClick: () => { void handleOrderAction(order.orderId, col.primaryKey); } }}
-                                                                secondaryAction={{ label: t(`kanban.${col.secondaryKey}`), onClick: () => { void handleOrderAction(order.orderId, col.secondaryKey); } }}
-                                                                onAction={(id, action) => {
-                                                                    console.log("Kanban Action:", action, "on order:", id);
-                                                                    if (action === "view" || action === "edit") {
-                                                                        router.push(`/dashboard/orders/${id}/edit`);
-                                                                    } else if (action !== 'pay') {
-                                                                        void handleOrderAction(id, action);
-                                                                    }
-                                                                }}
-                                                                couponOptions={paymentCoupons}
-                                                                promotionOptions={paymentPromotions}
-                                                            />
-                                                        ))
-                                                    )}
-                                                </div>
-                                            </div>
-                                        );
-                                    })}
-                                </div>
                             </div>
                         ) : (
                             /* ── GRID VIEW — scrollable cards + inline pagination ── */
@@ -516,7 +416,7 @@ function OrdersContent() {
                                                         promotionOptions={paymentPromotions}
                                                         onAction={(id, action) => {
                                                             console.log("Action:", action, "on order:", id);
-                                                            if (action === "view" || action === "edit") {
+                                                            if (action === "view") {
                                                                 router.push(`/dashboard/orders/${id}/edit`);
                                                             } else if (action !== 'pay') {
                                                                 void handleOrderAction(id, action);
