@@ -9,7 +9,7 @@ export const excelUtils = {
             "Ingredient ID": item.ingredientId,
             "Ingredient Name": item.ingredientName,
             "Category": item.typeName || "Uncategorized",
-            "Unit": item.unit,
+            "Unit": item.unitName,
             "Min Alert Level": item.minStockLevel,
             "Current Stock": item.quantityOnHand,
         }));
@@ -51,7 +51,7 @@ export const excelUtils = {
     mapExcelRowToRequest: (row: any): SaveIngredientRequest => {
         return {
             ingredientName: row["Ingredient Name"] || row["Name"] || "",
-            unit: row["Unit"] || "kg",
+            unitLvId: row["Unit"] || "kg",
             typeLvId: undefined,
             imageId: null,
             minStockLevel: parseFloat(row["Min Alert Level"] || row["Min Stock"] || 0),

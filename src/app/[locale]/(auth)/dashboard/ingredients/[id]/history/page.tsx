@@ -103,13 +103,13 @@ export default function StockHistoryPage() {
                             <div className="flex justify-between items-center">
                                 <span className="text-sm text-gray-500">Current Stock</span>
                                 <span className="font-bold text-blue-600 text-base">
-                                    {ingredient.quantityOnHand} <span className="text-xs font-normal text-gray-500">{ingredient.unit}</span>
+                                    {ingredient.quantityOnHand} <span className="text-xs font-normal text-gray-500">{ingredient.unitName}</span>
                                 </span>
                             </div>
                             <div className="flex justify-between items-center">
                                 <span className="text-sm text-gray-500">Min Alert Level</span>
                                 <span className="font-medium text-gray-700 text-sm">
-                                    {ingredient.minStockLevel} {ingredient.unit}
+                                    {ingredient.minStockLevel} {ingredient.unitName}
                                 </span>
                             </div>
                             <div className="flex justify-between items-center">

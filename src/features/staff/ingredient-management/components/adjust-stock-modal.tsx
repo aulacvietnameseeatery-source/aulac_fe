@@ -46,7 +46,7 @@ export const AdjustStockModal: React.FC<AdjustStockModalProps> = ({
 
         // Validate xuất kho quá lố
         if (type === "export" && quantity > ingredient.quantityOnHand) {
-            toast.error(`Cannot export more than current stock (${ingredient.quantityOnHand} ${ingredient.unit}).`);
+            toast.error(`Cannot export more than current stock (${ingredient.quantityOnHand} ${ingredient.unitName}).`);
             return;
         }
 
@@ -92,7 +92,7 @@ export const AdjustStockModal: React.FC<AdjustStockModalProps> = ({
                     <div className="flex items-center justify-between mt-2 pt-2 border-t border-gray-200">
                         <span className="text-sm text-gray-500">Current Stock:</span>
                         <span className="font-bold text-blue-600">
-              {ingredient.quantityOnHand} {ingredient.unit}
+              {ingredient.quantityOnHand} {ingredient.unitName}
             </span>
                     </div>
                 </div>
@@ -113,7 +113,7 @@ export const AdjustStockModal: React.FC<AdjustStockModalProps> = ({
                 {/* Quantity */}
                 <div className="relative">
                     <ALInput
-                        title={`Quantity (${ingredient.unit})`}
+                        title={`Quantity (${ingredient.unitName})`}
                         required
                         type="number"
                         min={0.1}

@@ -154,8 +154,12 @@ export function CartSummary({
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="w-full h-full flex flex-col p-5 md:p-6 text-white">
             <div className="flex justify-between items-start mb-4 md:mb-6 border-b border-[#C5A059]/20 pb-4">
                 <div className="flex flex-col gap-1">
-                    <label className="text-[10px] uppercase tracking-widest text-[#C5A059] flex items-center gap-2">Table <Edit3 size={10}/></label>
-                    <input value={tableNumber} onChange={(e) => onUpdateTable(e.target.value)} className="bg-transparent border-none outline-none text-xl md:text-2xl font-display font-bold text-white w-24 placeholder:text-white/20 focus:text-[#C5A059]" placeholder="A-01" />
+                    <label className="text-[10px] uppercase tracking-widest text-[#C5A059] flex items-center gap-2">
+                        Table
+                    </label>
+                    <span className="text-xl md:text-2xl font-display font-bold text-white w-24">
+                        {tableNumber}
+                    </span>
                 </div>
                 <button onClick={handleExpandToggle} className="p-2 -mr-2 -mt-2 text-white/50 hover:text-white rounded-full bg-white/5 hover:bg-white/10 transition-colors"><X size={20} /></button>
             </div>

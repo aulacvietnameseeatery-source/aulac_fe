@@ -40,6 +40,7 @@ export const LOOKUP_TYPE = {
   ShiftStatus: 22,
   ShiftAssignmentStatus: 23,
   AttendanceStatus: 24,
+  IngredientUnit: 27
 } as const;
 
 export type LookupTypeId = (typeof LOOKUP_TYPE)[keyof typeof LOOKUP_TYPE];
