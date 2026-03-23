@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+﻿import React, { useMemo } from 'react';
 import { PhoneIncoming, Footprints, ChevronDown } from 'lucide-react';
 import { BookingSource, BookingStatus } from '../types/types';
 import { useTranslations } from "next-intl";
@@ -12,7 +12,7 @@ interface Props {
 }
 
 export const StatusSection: React.FC<Props> = ({ source, status, onSourceChange, onStatusChange }) => {
-  const t = useTranslations("StaffReservation.status");
+  const t = useTranslations("reservations.staff.status");
 
   // Format options cho Combobox
   const sourceOptions = useMemo(() => [

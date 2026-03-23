@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+﻿import React, { useMemo } from 'react';
 import { AlertCircle, Calendar as CalIcon, Clock, Users, Minus, Plus } from 'lucide-react';
 import { useTranslations } from "next-intl";
 import { ALDatePicker } from "@/components/ui/al-date-picker";
@@ -17,7 +17,7 @@ interface Props {
 const BookingDetailsSectionComponent: React.FC<Props> = ({
   date, time, partySize, validationError, onDateChange, onTimeChange, onSizeChange
 }) => {
-  const t = useTranslations("StaffReservation.booking");
+  const t = useTranslations("reservations.staff.booking");
   const toMinutes = (time24: string) => {
     const [hours, minutes] = time24.split(':').map(Number);
     return hours * 60 + minutes;

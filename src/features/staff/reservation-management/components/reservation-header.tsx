@@ -4,6 +4,7 @@ import { format, addDays, isSameDay } from "date-fns";
 import { useTranslations } from "next-intl";
 import { Input } from "@/components/ui/input";
 import { ReservationStatusDto } from "../types/reservation-types";
+import { localizeStatusLabel } from "../utils/localize-reservation";
 
 interface ReservationHeaderProps {
     searchTerm: string;
@@ -24,7 +25,8 @@ export const ReservationHeader = ({
     onStatusChange,
     statuses
 }: ReservationHeaderProps) => {
-    const t = useTranslations("reservations.management.List");
+    const t = useTranslations("reservations.management.list");
+    const tStatus = useTranslations("reservations.management.status");
 
     const getStatusTabClasses = (statusId: number | null): string => {
         if (statusId === null) return "bg-slate-700 border-slate-700 text-white shadow-sm";
@@ -80,7 +82,7 @@ export const ReservationHeader = ({
                                 : 'text-gray-500 hover:bg-gray-200 hover:text-gray-700'
                                 }`}
                         >
-                            {t("today") || "Today"}
+                            {t("today")}
                         </button>
                         <button
                             onClick={() => onDateChange(addDays(new Date(), 1))}
@@ -89,7 +91,7 @@ export const ReservationHeader = ({
                                 : 'text-gray-500 hover:bg-gray-200 hover:text-gray-700'
                                 }`}
                         >
-                            {t("tomorrow") || "Tomorrow"}
+                            {t("tomorrow")}
                         </button>
 
                         {/* Date Display (Giả lập DatePicker như Figma) */}
@@ -127,7 +129,7 @@ export const ReservationHeader = ({
                                     : 'bg-white border-gray-200 text-gray-600 hover:bg-gray-50'}
                             `}
                         >
-                            {status.statusName}
+                            {localizeStatusLabel(status.statusCode, status.statusName, tStatus)}
                         </button>
                     ))}
                 </div>

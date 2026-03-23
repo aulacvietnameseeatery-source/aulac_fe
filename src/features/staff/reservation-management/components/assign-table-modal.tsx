@@ -17,8 +17,8 @@ interface AssignTableModalProps {
 }
 
 export const AssignTableModal = ({ reservation, onClose, onSuccess }: AssignTableModalProps) => {
-    const t = useTranslations("reservations.management.CheckInModal");
-    const tm = useTranslations("reservations.management.Messages");
+    const t = useTranslations("reservations.management.checkInModal");
+    const tm = useTranslations("reservations.management.messages");
     const [availableTables, setAvailableTables] = useState<any[]>([]);
     const [isLoadingTables, setIsLoadingTables] = useState(true);
 
@@ -57,7 +57,7 @@ export const AssignTableModal = ({ reservation, onClose, onSuccess }: AssignTabl
     const handleAssign = async (e: React.FormEvent) => {
         e.preventDefault();
         if (selectedTableIds.length === 0) {
-            toast.error(t("selectError") || "Vui lòng chọn ít nhất 1 bàn!");
+            toast.error(t("selectError"));
             return;
         }
 
@@ -80,7 +80,7 @@ export const AssignTableModal = ({ reservation, onClose, onSuccess }: AssignTabl
                     <div>
                         <span className="font-semibold">{format(new Date(reservation.reservedTime), "HH:mm, dd/MM")}</span>
                         <span className="mx-2">•</span>
-                        <span>{t("guestsCount", { count: reservation.pax }) || `Khách: ${reservation.pax} người`}</span>
+                        <span>{t("guestsCount", { count: reservation.pax })}</span>
                     </div>
                 </div>
 
@@ -116,7 +116,7 @@ export const AssignTableModal = ({ reservation, onClose, onSuccess }: AssignTabl
                                         <div className="flex-1">
                                             <p className="font-semibold text-gray-900 leading-none mb-1.5">{table.tableCode}</p>
                                             <div className="flex items-center text-xs text-gray-500 gap-3">
-                                                <span className="flex items-center gap-1"><Armchair size={12} /> {table.capacity} {t("seats") || "chỗ"}</span>
+                                                <span className="flex items-center gap-1"><Armchair size={12} /> {table.capacity} {t("seats")}</span>
                                                 <span className="flex items-center gap-1"><MapPin size={12} /> {table.zone}</span>
                                             </div>
                                         </div>
@@ -128,7 +128,7 @@ export const AssignTableModal = ({ reservation, onClose, onSuccess }: AssignTabl
                 </div>
 
                 <div className="mt-6 flex justify-between items-center pt-4 border-t border-gray-100">
-                    <p className="text-sm text-gray-500">{t("selectedTables", { count: selectedTableIds.length }) || `Đã chọn: ${selectedTableIds.length} bàn`}</p>
+                    <p className="text-sm text-gray-500">{t("selectedTables", { count: selectedTableIds.length })}</p>
                     <div className="flex gap-2">
                         <Button type="button" variant="outline" onClick={onClose} disabled={isSubmitting}>{t("cancel")}</Button>
                         <Button type="submit" disabled={isSubmitting || selectedTableIds.length === 0} className="bg-green-600 hover:bg-green-700">

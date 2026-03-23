@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { format } from "date-fns";
 import { toast } from "sonner";
 import { Loader2, FileText } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { Dialog } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { ALInput } from "@/components/ui/al-input";
@@ -54,6 +55,7 @@ export const EditReservationModal = ({
   onClose,
   onSuccess,
 }: EditReservationModalProps) => {
+  const tStaff = useTranslations("reservations.staff");
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSearchingCustomer, setIsSearchingCustomer] = useState(false);
@@ -96,7 +98,7 @@ export const EditReservationModal = ({
 
     const selected = new Date(`${selectedDate}T${selectedTime}`);
     if (selected.getTime() < Date.now()) {
-      setValidationError("Không thể chọn thời gian trong quá khứ.");
+      setValidationError(tStaff("errors.timePast"));
       return false;
     }
 
@@ -120,7 +122,7 @@ export const EditReservationModal = ({
       setCustomerType(customer.isMember ? "member" : "new");
       setLoyaltyPoints(customer.loyaltyPoints ?? 0);
     } catch {
-      toast.error("Không thể tìm thông tin khách hàng.");
+      toast.error(tStaff("errors.systemError"));
     } finally {
       setIsSearchingCustomer(false);
     }
@@ -150,7 +152,7 @@ export const EditReservationModal = ({
         setInitialCurrentOption(currentOption);
         setSelectedOptionId(currentOption?.optionId ?? null);
       } catch {
-        toast.error("Không thể lấy thông tin chi tiết đơn đặt bàn.");
+        toast.error(tStaff("errors.systemError"));
         onClose();
       } finally {
         setIsLoading(false);
@@ -221,14 +223,14 @@ export const EditReservationModal = ({
 
   const handleSubmit = async () => {
     if (!phone || !fullName || !date || !time || !partySize || !selectedOption) {
-      toast.error("Thiếu thông tin", {
-        description: "Vui lòng nhập đủ khách hàng, thời gian, số khách và chọn bàn.",
+      toast.error(tStaff("errors.missingTitle"), {
+        description: tStaff("errors.missingDescription"),
       });
       return;
     }
 
     if (!validateDateTime(date, time)) {
-      toast.error("Lỗi thời gian", { description: validationError ?? "Thời gian không hợp lệ." });
+      toast.error(tStaff("errors.timeErrorTitle"), { description: validationError ?? tStaff("errors.timePast") });
       return;
     }
 
@@ -244,10 +246,10 @@ export const EditReservationModal = ({
         tableIds: selectedOption.tableIds,
       });
 
-      toast.success("Cập nhật đơn đặt bàn thành công.");
+      toast.success(tStaff("success.title"));
       onSuccess();
     } catch (error: any) {
-      toast.error(error?.message || "Lỗi khi cập nhật đơn đặt bàn.");
+      toast.error(error?.message || tStaff("errors.systemError"));
     } finally {
       setIsSubmitting(false);
     }
@@ -257,7 +259,7 @@ export const EditReservationModal = ({
     <Dialog
       open={true}
       onClose={onClose}
-      title="Sửa đặt bàn"
+      title={tStaff("editTitle")}
       width="min(960px, 96vw)"
       bodyOverflowY="hidden"
     >
@@ -293,12 +295,12 @@ export const EditReservationModal = ({
 
             <div>
               <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 flex items-center gap-2">
-                <FileText size={14} className="text-blue-600" /> Ghi chú
+                <FileText size={14} className="text-blue-600" /> {tStaff("notes")}
               </label>
               <ALInput
                 value={notes}
                 onChange={(e: any) => setNotes(e.target.value)}
-                placeholder="VD: Sinh nhật, ưu tiên khu vực yên tĩnh..."
+                placeholder={tStaff("notesPlaceholder")}
               />
             </div>
 
@@ -314,11 +316,11 @@ export const EditReservationModal = ({
 
           <div className="shrink-0 bg-slate-50 border-t border-slate-200 px-3 sm:px-5 py-3 flex flex-col-reverse sm:flex-row sm:justify-end gap-2">
             <Button type="button" variant="outline" onClick={onClose} disabled={isSubmitting}>
-              Hủy
+              {tStaff("cancel")}
             </Button>
             <Button type="button" onClick={handleSubmit} disabled={isSubmitting}>
               {isSubmitting ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
-              Lưu thay đổi
+              {tStaff("saveChanges")}
             </Button>
           </div>
         </div>

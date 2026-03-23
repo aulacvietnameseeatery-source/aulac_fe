@@ -26,6 +26,32 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, React.TextareaHTMLAttribu
 );
 Textarea.displayName = "Textarea";
 
+const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+const IMAGE_ACCEPT = '.jpg,.jpeg,.png,.gif,.webp,image/jpeg,image/png,image/gif,image/webp';
+const VIDEO_ACCEPT = 'video/mp4,.mp4';
+const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
+const MAX_VIDEO_SIZE = 20 * 1024 * 1024;
+const MAX_VIDEO_DURATION_SECONDS = 15;
+
+const normalizeMediaUrl = (value: string): string => {
+    if (!value) return '';
+    if (/^(https?:|blob:|data:)/i.test(value)) return value;
+
+    const base = BASE_URL.replace(/\/+$/, '');
+    const normalized = value.replace(/\\/g, '/').trim();
+
+    if (normalized.startsWith('/uploads/')) {
+        return `${base}${normalized}`;
+    }
+
+    if (normalized.startsWith('uploads/')) {
+        return `${base}/${normalized}`;
+    }
+
+    const relative = normalized.replace(/^\/+/, '');
+    return `${base}/uploads/${relative}`;
+};
+
 export const IntroductionSettingsForm = () => {
     const t = useTranslations("settings");
     const [isLoading, setIsLoading] = useState(true);
@@ -136,14 +162,60 @@ export const IntroductionSettingsForm = () => {
         loadSettings();
     }, [loadSettings]);
 
+    const checkVideoDuration = (file: File, maxSeconds: number): Promise<boolean> => {
+        return new Promise((resolve) => {
+            const videoElement = document.createElement('video');
+            videoElement.preload = 'metadata';
+
+            videoElement.onloadedmetadata = () => {
+                window.URL.revokeObjectURL(videoElement.src);
+                resolve(videoElement.duration <= maxSeconds);
+            };
+
+            videoElement.onerror = () => {
+                resolve(false);
+            };
+
+            videoElement.src = URL.createObjectURL(file);
+        });
+    };
+
     const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>, fieldKey: string, isVideo = false) => {
         const file = e.target.files?.[0];
         if (!file) return;
 
-        const maxSize = isVideo ? 100 * 1024 * 1024 : 5 * 1024 * 1024;
-        if (file.size > maxSize) {
-            toast.error(t("StoreProfile.fileSizeError") || `File too large (max ${isVideo ? '100MB' : '5MB'})`);
+        if (isVideo && file.type !== 'video/mp4') {
+            toast.error(t('StoreProfile.invalidVideoFormatError'));
+            if (e.target) e.target.value = '';
             return;
+        }
+
+        if (!isVideo && !ALLOWED_IMAGE_TYPES.includes(file.type)) {
+            toast.error(t('StoreProfile.invalidImageFormatError'));
+            if (e.target) e.target.value = '';
+            return;
+        }
+
+        const maxSize = isVideo ? MAX_VIDEO_SIZE : MAX_IMAGE_SIZE;
+        if (file.size > maxSize) {
+            toast.error(isVideo ? t('StoreProfile.videoSizeError') : t('StoreProfile.fileSizeError'));
+            if (e.target) e.target.value = '';
+            return;
+        }
+
+        if (isVideo) {
+            const isValidDuration = await checkVideoDuration(file, MAX_VIDEO_DURATION_SECONDS);
+            if (!isValidDuration) {
+                toast.error(t('StoreProfile.videoDurationError'));
+                if (e.target) e.target.value = '';
+                return;
+            }
+        }
+
+        const previousValue = getValues(fieldKey as any);
+        const previousLocalPreview = localPreviews[fieldKey];
+        if (previousLocalPreview) {
+            URL.revokeObjectURL(previousLocalPreview);
         }
 
         const localUrl = URL.createObjectURL(file);
@@ -151,14 +223,28 @@ export const IntroductionSettingsForm = () => {
         setIsUploading(fieldKey);
 
         try {
-            const publicUrl = await uploadFile(file);
+            const relativePath = await uploadFile(file);
             // @ts-expect-error: dynamic key access for uploaded file fieldKey
-            setValue(fieldKey, publicUrl, { shouldDirty: true, shouldValidate: true });
+            setValue(fieldKey, relativePath, { shouldDirty: true, shouldValidate: true });
             toast.success(t("StoreProfile.uploadSuccess"));
         } catch (error) {
             toast.error(t("StoreProfile.uploadError"));
-            if (!getValues(fieldKey as any)) {
-                setLocalPreviews(prev => { delete prev[fieldKey]; return { ...prev }; });
+            if (!previousValue) {
+                setLocalPreviews(prev => {
+                    const next = { ...prev };
+                    delete next[fieldKey];
+                    return next;
+                });
+            } else {
+                setLocalPreviews(prev => {
+                    if (previousLocalPreview) {
+                        return { ...prev, [fieldKey]: previousLocalPreview };
+                    }
+
+                    const next = { ...prev };
+                    delete next[fieldKey];
+                    return next;
+                });
             }
         } finally {
             setIsUploading(null);
@@ -196,7 +282,7 @@ export const IntroductionSettingsForm = () => {
         const previewUrl = localPreviews[fieldKey];
         if (previewUrl) return previewUrl;
         if (!watchedVal) return '';
-        return (watchedVal.startsWith('http')) ? watchedVal : `${BASE_URL}${watchedVal}`;
+        return normalizeMediaUrl(watchedVal);
     };
 
     if (isLoading) {
@@ -301,7 +387,7 @@ export const IntroductionSettingsForm = () => {
                                             Preview
                                         </Button>
                                     )}
-                                    <input type="file" ref={heroImageRef} className="hidden" accept="image/*" onChange={(e) => handleFileChange(e, 'intro_hero_image')} />
+                                    <input type="file" ref={heroImageRef} className="hidden" accept={IMAGE_ACCEPT} onChange={(e) => handleFileChange(e, 'intro_hero_image')} />
                                 </div>
                             </div>
                         </div>
@@ -351,7 +437,7 @@ export const IntroductionSettingsForm = () => {
                                             Preview
                                         </Button>
                                     )}
-                                    <input type="file" ref={virtualTourVideoRef} className="hidden" accept="video/*" onChange={(e) => handleFileChange(e, 'intro_virtualTour_videoUrl', true)} />
+                                    <input type="file" ref={virtualTourVideoRef} className="hidden" accept={VIDEO_ACCEPT} onChange={(e) => handleFileChange(e, 'intro_virtualTour_videoUrl', true)} />
                                 </div>
                             </div>
                         </div>
@@ -422,7 +508,7 @@ export const IntroductionSettingsForm = () => {
                                                             Preview
                                                         </Button>
                                                     )}
-                                                    <input type="file" ref={dishImageRef} className="hidden" accept="image/*" onChange={(e) => handleFileChange(e, `intro_collection_dish${num}_image`)} />
+                                                    <input type="file" ref={dishImageRef} className="hidden" accept={IMAGE_ACCEPT} onChange={(e) => handleFileChange(e, `intro_collection_dish${num}_image`)} />
                                                 </div>
                                             </div>
                                         </div>

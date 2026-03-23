@@ -25,7 +25,7 @@ export const ReservationDetailModal = ({
     onEdit,
     onDelete,
 }: ReservationDetailModalProps) => {
-    const t = useTranslations("reservations.management.Detail");
+    const t = useTranslations("reservations.management.detail");
     const { reservation, isLoading, error } = useReservationDetail(reservationId ?? 0);
 
     if (!reservationId) return null;

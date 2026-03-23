@@ -18,7 +18,7 @@ interface PublicBookingFormProps {
 type CustomerMode = 'existing' | 'new';
 
 export default function PublicBookingForm({ onSuccess, onClose }: PublicBookingFormProps) {
-    const t = useTranslations('reservations.public.PublicForm');
+    const t = useTranslations('reservations.public.publicForm');
     const [mode, setMode] = useState<CustomerMode | null>(null);
 
     const [name, setName] = useState('');
@@ -38,6 +38,15 @@ export default function PublicBookingForm({ onSuccess, onClose }: PublicBookingF
     const { data: storeSettings } = useStoreSettings();
     const phoneNumber = storeSettings?.phone || "+84 28 3822 5264";
     const callHref = `tel:${phoneNumber.replace(/\s+/g, '')}`;
+
+    const mapApiErrorKey = (code?: number, subCode?: number) => {
+        if (code === 404) return 'toast.notFound';
+        if (code === 409) return 'toast.conflict';
+        if (code === 400) return 'toast.invalidRequest';
+        if (code === 500) return 'toast.serverError';
+        if (subCode && subCode > 0) return 'toast.createFailed';
+        return 'toast.unexpected';
+    };
 
     const timeOptions = useMemo(() => {
         const slots: string[] = [];
@@ -193,7 +202,7 @@ export default function PublicBookingForm({ onSuccess, onClose }: PublicBookingF
             const response = await reservationApi.createReservation(request);
 
             if (response.success && response.data) {
-                toast.success(response.userMessage || t('toast.created'));
+                toast.success(t('toast.created'));
                 if (onSuccess) onSuccess(response.data);
 
                 setName('');
@@ -203,10 +212,12 @@ export default function PublicBookingForm({ onSuccess, onClose }: PublicBookingF
                 setNotes('');
                 setMode(null);
             } else {
-                toast.error(response.userMessage || t('toast.createFailed'));
+                toast.error(t(mapApiErrorKey(response.code, response.subCode)));
             }
         } catch (error: any) {
-            const errorMsg = error?.response?.data?.userMessage || t('toast.unexpected');
+            const errorCode = error?.response?.data?.code as number | undefined;
+            const errorSubCode = error?.response?.data?.subCode as number | undefined;
+            const errorMsg = t(mapApiErrorKey(errorCode, errorSubCode));
             toast.error(errorMsg);
         } finally {
             setLoading(false);

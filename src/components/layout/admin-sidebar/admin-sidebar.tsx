@@ -145,7 +145,7 @@ const navigation: NavCategory[] = [
           { key: "storeAboutUs", href: "/dashboard/store-settings?tab=about", icon: UsersIcon },
         ]
       },
-      { key: "notifications", href: "/dashboard/notifications", icon: Bell },
+      // { key: "notifications", href: "/dashboard/notifications", icon: Bell },
       { key: "emails", href: "/dashboard/emails", icon: Mail },
     ]
   }
@@ -240,12 +240,12 @@ export function AdminSidebar({ onClose }: AdminSidebarProps) {
 
         {/* Column 1: Mini Sidebar */}
         <div className="w-[70px] bg-[#1A3A51] border-r border-white/5 flex flex-col items-center py-6 z-30">
-          <Link href={`/${locale}/`} className="mb-8 px-2 transition-transform hover:scale-105 active:scale-95" title="Về Trang Chủ">
+          <Link href={`/${locale}/`} className="mb-8 px-2 transition-transform hover:scale-105 active:scale-95" title={t('homeLinkTitle')}>
             <Image
               width={40}
               height={40}
               src={storeSettings?.logoUrl || "/images/logo.png"}
-              alt="An Lac"
+              alt={t('logoAlt')}
               className="w-10 h-10 object-contain drop-shadow-lg"
             />
           </Link>
@@ -288,27 +288,27 @@ export function AdminSidebar({ onClose }: AdminSidebarProps) {
 
           {/* Column 1 Bottom: Notifications + Profile */}
           <div className="mt-auto px-2 w-full flex flex-col gap-4 items-center">
-            {/* Notification Bell */}
-            <button
-              onClick={() => setIsNotificationsOpen(!isNotificationsOpen)}
-              className={`
-                relative p-3 rounded-xl transition-all group notification-toggle
-                ${isNotificationsOpen ? 'bg-white/10 text-[#FFAB2D]' : 'text-white/40 hover:text-[#FFAB2D] hover:bg-white/5'}
-              `}
-            >
-              <Bell size={20} />
-              {unreadCount > 0 && (
-                <span className="absolute -top-0.5 -right-0.5 flex items-center justify-center min-w-4.5 h-4.5 px-1 text-[10px] font-semibold text-white bg-red-500 rounded-full leading-none">
-                  {unreadCount > 99 ? "99+" : unreadCount}
-                </span>
-              )}
-            </button>
+            {/*/!* Notification Bell *!/*/}
+            {/*<button*/}
+            {/*  onClick={() => setIsNotificationsOpen(!isNotificationsOpen)}*/}
+            {/*  className={`*/}
+            {/*    relative p-3 rounded-xl transition-all group notification-toggle*/}
+            {/*    ${isNotificationsOpen ? 'bg-white/10 text-[#FFAB2D]' : 'text-white/40 hover:text-[#FFAB2D] hover:bg-white/5'}*/}
+            {/*  `}*/}
+            {/*>*/}
+            {/*  <Bell size={20} />*/}
+            {/*  {unreadCount > 0 && (*/}
+            {/*    <span className="absolute -top-0.5 -right-0.5 flex items-center justify-center min-w-4.5 h-4.5 px-1 text-[10px] font-semibold text-white bg-red-500 rounded-full leading-none">*/}
+            {/*      {unreadCount > 99 ? "99+" : unreadCount}*/}
+            {/*    </span>*/}
+            {/*  )}*/}
+            {/*</button>*/}
 
-            {/* _OLD: {isNotificationsOpen && (<NotificationPanel_DEPRECATED onClose={() => setIsNotificationsOpen(false)} />)} */}
-            <NotificationCenter
-              open={isNotificationsOpen}
-              onClose={() => setIsNotificationsOpen(false)}
-            />
+            {/*/!* _OLD: {isNotificationsOpen && (<NotificationPanel_DEPRECATED onClose={() => setIsNotificationsOpen(false)} />)} *!/*/}
+            {/*<NotificationCenter*/}
+            {/*  open={isNotificationsOpen}*/}
+            {/*  onClose={() => setIsNotificationsOpen(false)}*/}
+            {/*/>*/}
 
             <button
               onClick={handleLogoutClick}
@@ -326,7 +326,7 @@ export function AdminSidebar({ onClose }: AdminSidebarProps) {
 
               {/* Tooltip profile */}
               <div className="absolute left-full ml-4 bottom-0 w-48 bg-[#1A3A51] border border-white/10 rounded-xl shadow-2xl p-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
-                <p className="text-white text-sm font-semibold truncate">{userInfo?.username || "Admin"}</p>
+                <p className="text-white text-sm font-semibold truncate">{userInfo?.username || t('profileFallbackName')}</p>
                 <p className="text-white/50 text-[10px] uppercase tracking-wider mt-1">{userInfo?.roles?.[0] || t('managerPortal')}</p>
               </div>
             </div>

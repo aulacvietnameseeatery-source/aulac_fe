@@ -49,7 +49,8 @@
           "label": "Your Details",
           "name": "Full Name",
           "phone": "Phone Number *",
-          "email": "Email Address (Optional)"
+          "email": "Email Address (Optional)",
+          "partySize": "Party Size"
         },
         "action": {
           "book": "Book Selected Table",
@@ -165,6 +166,10 @@
         "toast": {
           "created": "Reservation request created successfully!",
           "createFailed": "Unable to create reservation.",
+          "invalidRequest": "Invalid reservation information.",
+          "conflict": "Selected slot is no longer available.",
+          "notFound": "Requested reservation resource was not found.",
+          "serverError": "Server error occurred. Please try again.",
           "unexpected": "An error occurred while creating reservation."
         }
       },
@@ -178,7 +183,183 @@
         "zone": "Zone",
         "pendingAssign": "Pending assign",
         "downloadTicket": "Download Ticket",
-        "close": "Close"
+        "close": "Close",
+        "closeAriaLabel": "Close booking modal"
+      },
+      "controls": {
+        "single": "Single",
+        "multiple": "Show Multiple",
+        "bookSelected": "Book Selected ({count})",
+        "selectMode": "Select Mode"
+      },
+      "legend": {
+        "available": "AVAILABLE",
+        "reserved": "RESERVED",
+        "selected": "SELECTED"
+      },
+      "tableGrid": {
+        "empty": "No tables available in this zone."
+      },
+      "tableCard": {
+        "available": "Available",
+        "reserved": "Reserved",
+        "selected": "Selected",
+        "guests": "{count} Guests"
+      },
+      "sidebar": {
+        "header": {
+          "title": "Reservation Summary",
+          "subtitle": "Please review your selection"
+        },
+        "datetime": {
+          "label": "Date & Time",
+          "edit": "Edit",
+          "save": "Save",
+          "cancel": "Cancel",
+          "selectDate": "Select Date",
+          "selectTime": "Select Time",
+          "openingHours": "(11:00 AM – 10:00 PM)"
+        },
+        "table": {
+          "label": "Selected Table",
+          "zone": "Standard Zone",
+          "guests": "{count} Guests",
+          "empty": "Please select a table"
+        },
+        "guest": {
+          "label": "Your Details",
+          "name": "Full Name",
+          "phone": "Phone Number *",
+          "email": "Email Address (Optional)",
+          "partySize": "Party Size"
+        },
+        "action": {
+          "book": "Book Selected Table",
+          "saveFirst": "Save Changes First"
+        },
+        "validation": {
+          "missingInfo": "* Please enter Name & Phone to book",
+          "timePast": "Cannot select time in the past."
+        },
+        "legal": "By booking, you agree to our Terms & Conditions and Cancellation Policy."
+      },
+      "bookingModal": {
+        "selectedTable": "Selected Table",
+        "title": "Confirm Reservation",
+        "restaurantName": "An Lac Vietnamese Eatery",
+        "date": "Date",
+        "time": "Time",
+        "guests": "Guests",
+        "guestsCount": "{count} Persons",
+        "guestInfo": "Guest Information",
+        "confirm": "Confirm Reservation",
+        "changeSelection": "Change Selection",
+        "fullName": "Full Name *",
+        "phoneNumber": "Phone Number *",
+        "emailAddress": "Email (Optional)",
+        "partySize": "Party Size *",
+        "cancel": "Cancel",
+        "confirmBooking": "Confirm Booking",
+        "confirmed": "Confirmed!",
+        "tableReserved": "Your table is reserved",
+        "restaurant": "Restaurant",
+        "guestName": "Guest Name",
+        "zone": "Zone",
+        "seeYouSoon": "See you soon!",
+        "downloadTicket": "Download Ticket",
+        "close": "Close",
+        "alerts": {
+          "ticketNotFound": "Ticket not found. Please try again.",
+          "downloadError": "Could not download ticket. Please take a screenshot."
+        }
+      },
+      "callButton": {
+        "title": "Call Restaurant",
+        "subtitle": "No tables available online",
+        "description": "Please call directly to make a reservation or inquire",
+        "restaurant": "Restaurant",
+        "phoneLabel": "Phone Number",
+        "callNow": "Call Now",
+        "copyNumber": "Copy Number",
+        "copied": "Copied!",
+        "hours": "11:00 AM – 10:00 PM",
+        "buttonText": "Call to Reserve",
+        "dialing": "Opening phone app..."
+      },
+      "zone": {
+        "label": "Zone",
+        "All": "All",
+        "Indoor": "Indoor",
+        "Outdoor": "Outdoor",
+        "Rooftop": "Rooftop"
+      },
+      "publicForm": {
+        "title": "Reserve Table",
+        "chooseCustomerType": "Choose customer type",
+        "existingCustomer": "Returning customer",
+        "newCustomer": "New customer",
+        "existingCustomerHint": "Enter phone number to auto-fill details",
+        "newCustomerHint": "Enter basic information to send reservation request",
+        "existingModeNote": "Returning customer: Enter phone number first, we will auto-fill your details if found.",
+        "newModeNote": "New customer: Please provide the required basic information.",
+        "noFitTitle": "No suitable table is available online for this time slot.",
+        "callRestaurant": "Call restaurant",
+        "goBack": "Go back",
+        "yourInfo": "Your information",
+        "phone": "Phone number",
+        "yourName": "Your name",
+        "email": "Email",
+        "loadingCustomerName": "Loading customer name...",
+        "loadingCustomerEmail": "Loading email...",
+        "existingCustomerName": "Returning customer name",
+        "existingCustomerEmail": "Returning customer email",
+        "bookingInfo": "Reservation details",
+        "partySize": "Party size",
+        "reservationDate": "Reservation date",
+        "selectDate": "Select date",
+        "arrivalTime": "Arrival time",
+        "selectTime": "Select time",
+        "notes": "Notes",
+        "close": "Close",
+        "closeAriaLabel": "Close booking modal",
+        "submit": "BOOK NOW",
+        "checkingTables": "Checking table availability...",
+        "processing": "Processing...",
+        "lookup": {
+          "notFound": "No returning customer found with this phone number."
+        },
+        "validation": {
+          "selectCustomerType": "Please choose a customer type.",
+          "phoneRequired": "Please enter a phone number.",
+          "nameRequired": "Please enter your name.",
+          "existingCustomerNotFound": "Returning customer info not found. Please check the phone number.",
+          "dateRequired": "Please select a reservation date.",
+          "timeRequired": "Please select an arrival time.",
+          "partySizeRequired": "Please select party size.",
+          "timePast": "Cannot select time in the past."
+        },
+        "toast": {
+          "created": "Reservation request created successfully!",
+          "createFailed": "Unable to create reservation.",
+          "invalidRequest": "Invalid reservation information.",
+          "conflict": "Selected slot is no longer available.",
+          "notFound": "Requested reservation resource was not found.",
+          "serverError": "Server error occurred. Please try again.",
+          "unexpected": "An error occurred while creating reservation."
+        }
+      },
+      "publicTicket": {
+        "title": "Reservation Ticket",
+        "customer": "Customer",
+        "guests": "Guests",
+        "date": "Date",
+        "time": "Time",
+        "table": "Table",
+        "zone": "Zone",
+        "pendingAssign": "Pending assign",
+        "downloadTicket": "Download Ticket",
+        "close": "Close",
+        "closeAriaLabel": "Close booking modal"
       }
     },
     "management": {
@@ -187,7 +368,16 @@
         "searchPlaceholder": "Search by customer, phone...",
         "addNew": "Add New",
         "all": "All",
-        "empty": "No reservations found"
+        "empty": "No reservations found",
+        "today": "Today",
+        "tomorrow": "Tomorrow",
+        "refresh": "Refresh",
+        "deleteTitle": "Delete reservation",
+        "deleteMessage": "Are you sure you want to delete this reservation? This action cannot be undone.",
+        "confirmDelete": "Delete",
+        "cancel": "Cancel",
+        "deleteSuccess": "Reservation deleted successfully.",
+        "deleteFail": "Failed to delete reservation."
       },
       "Card": {
         "table": "Table",
@@ -255,6 +445,102 @@
         "checkInSuccess": "Guest checked in successfully!",
         "checkInFail": "Failed to check in reservation",
         "loadTablesFail": "Failed to load available tables."
+      },
+      "list": {
+        "title": "Reservations",
+        "searchPlaceholder": "Search by customer, phone...",
+        "addNew": "Add New",
+        "all": "All",
+        "empty": "No reservations found",
+        "today": "Today",
+        "tomorrow": "Tomorrow",
+        "refresh": "Refresh",
+        "deleteTitle": "Delete reservation",
+        "deleteMessage": "Are you sure you want to delete this reservation? This action cannot be undone.",
+        "confirmDelete": "Delete",
+        "cancel": "Cancel",
+        "deleteSuccess": "Reservation deleted successfully.",
+        "deleteFail": "Failed to delete reservation."
+      },
+      "card": {
+        "table": "Table",
+        "guests": "Guests",
+        "createdOn": "Created on",
+        "status": "Status",
+        "late": "Late",
+        "viewNote": "View note",
+        "customerNotes": "Customer Notes:",
+        "noNotes": "No special requests or pre-orders for this reservation.",
+        "checkIn": "Check In",
+        "reservationTime": "Reservation Time",
+        "na": "N/A"
+      },
+      "detail": {
+        "title": "Reservation Details",
+        "back": "Back",
+        "backToList": "Back to listing",
+        "edit": "Edit",
+        "delete": "Delete",
+        "reservationId": "Reservation ID",
+        "loading": "Loading reservation details...",
+        "notFound": "Reservation not found",
+        "customer": {
+          "title": "Customer Information",
+          "fullName": "Full Name",
+          "phoneNumber": "Phone Number",
+          "emailAddress": "Email Address",
+          "partySize": "Party Size",
+          "guest": "guest",
+          "guests": "guests"
+        },
+        "booking": {
+          "title": "Booking Information",
+          "reservedDate": "Reserved Date",
+          "reservedTime": "Reserved Time",
+          "status": "Status",
+          "bookingSource": "Booking Source",
+          "createdOn": "Created on"
+        },
+        "table": {
+          "title": "Table Information",
+          "noTables": "No tables assigned",
+          "capacity": "Capacity",
+          "totalTables": "Total Assigned Tables"
+        }
+      },
+      "checkInModal": {
+        "title": "Guest Check-In",
+        "arrivalMsg": "{name} has arrived for their {time} reservation ({pax} guests).",
+        "assignTable": "Assign Table",
+        "selectPlaceholder": "-- Select an available table --",
+        "noTablesAvailable": "No tables currently available",
+        "tableOption": "{code} ({zone} - Capacity: {capacity})",
+        "capacityHint": "Tip: Try to assign a table with capacity ≥ {pax}",
+        "cancel": "Cancel",
+        "confirm": "Confirm",
+        "loading": "Loading tables...",
+        "selectError": "Please select at least one table!",
+        "guestsCount": "Guests: {count}",
+        "seats": "seats",
+        "selectedTables": "Selected: {count} table(s)"
+      },
+      "messages": {
+        "checkInSuccess": "Guest checked in successfully!",
+        "checkInFail": "Failed to check in reservation",
+        "loadTablesFail": "Failed to load available tables."
+      },
+      "status": {
+        "pending": "Pending",
+        "confirmed": "Confirmed",
+        "checkedIn": "Checked In",
+        "cancelled": "Cancelled",
+        "noShow": "No Show",
+        "completed": "Completed"
+      },
+      "source": {
+        "online": "Online",
+        "phone": "Phone",
+        "walkIn": "Walk-In"
       }
     },
     "staff": {

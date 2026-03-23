@@ -17,7 +17,7 @@ export default function TableGrid({
   onSelect,
   isLoading = false,
 }: TableGridProps) {
-  const t = useTranslations('reservations.public.TableGrid');
+  const t = useTranslations('reservations.public.tableGrid');
 
   if (isLoading) {
     return (

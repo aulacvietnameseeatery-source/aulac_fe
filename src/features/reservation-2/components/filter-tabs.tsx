@@ -19,7 +19,7 @@ export default function FilterTabs({
     className,
     translationPrefix
 }: FilterTabsProps) {
-    const t = useTranslations(translationPrefix || 'reservations.public.Zone');
+    const t = useTranslations(translationPrefix || 'reservations.public.zone');
 
     const getLabel = (option: string) => {
         try {

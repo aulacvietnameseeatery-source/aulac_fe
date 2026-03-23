@@ -49,7 +49,8 @@
           "label": "Thông Tin Của Bạn",
           "name": "Họ và tên",
           "phone": "Số điện thoại *",
-          "email": "Email (Tùy chọn)"
+          "email": "Email (Tùy chọn)",
+          "partySize": "Số lượng khách"
         },
         "action": {
           "book": "Đặt Bàn Đã Chọn",
@@ -165,6 +166,10 @@
         "toast": {
           "created": "Đã tạo yêu cầu đặt bàn thành công!",
           "createFailed": "Không thể đặt bàn.",
+          "invalidRequest": "Thông tin đặt bàn chưa hợp lệ.",
+          "conflict": "Khung giờ hoặc bàn đã không còn khả dụng.",
+          "notFound": "Không tìm thấy dữ liệu đặt bàn yêu cầu.",
+          "serverError": "Lỗi hệ thống. Vui lòng thử lại.",
           "unexpected": "Có lỗi xảy ra khi đặt bàn."
         }
       },
@@ -178,7 +183,183 @@
         "zone": "Khu vực",
         "pendingAssign": "Chờ xếp bàn",
         "downloadTicket": "Tải vé",
-        "close": "Đóng"
+        "close": "Đóng",
+        "closeAriaLabel": "Đóng hộp thoại đặt bàn"
+      },
+      "controls": {
+        "single": "Chọn Đơn",
+        "multiple": "Chọn Nhiều",
+        "bookSelected": "Đặt Bàn Đã Chọn ({count})",
+        "selectMode": "Chế độ chọn"
+      },
+      "legend": {
+        "available": "CÒN TRỐNG",
+        "reserved": "ĐÃ ĐẶT",
+        "selected": "ĐÃ CHỌN"
+      },
+      "tableGrid": {
+        "empty": "Không có bàn nào trong khu vực này."
+      },
+      "tableCard": {
+        "available": "Còn trống",
+        "reserved": "Đã đặt",
+        "selected": "Đã chọn",
+        "guests": "{count} Khách"
+      },
+      "sidebar": {
+        "header": {
+          "title": "Tóm Tắt Đặt Bàn",
+          "subtitle": "Vui lòng xem lại lựa chọn của bạn"
+        },
+        "datetime": {
+          "label": "Ngày & Giờ",
+          "edit": "Sửa",
+          "save": "Lưu",
+          "cancel": "Hủy",
+          "selectDate": "Chọn ngày",
+          "selectTime": "Chọn giờ",
+          "openingHours": "(11:00 Sáng – 10:00 Tối)"
+        },
+        "table": {
+          "label": "Bàn Đã Chọn",
+          "zone": "Khu Vực Tiêu Chuẩn",
+          "guests": "{count} Khách",
+          "empty": "Vui lòng chọn bàn"
+        },
+        "guest": {
+          "label": "Thông Tin Của Bạn",
+          "name": "Họ và tên",
+          "phone": "Số điện thoại *",
+          "email": "Email (Tùy chọn)",
+          "partySize": "Số lượng khách"
+        },
+        "action": {
+          "book": "Đặt Bàn Đã Chọn",
+          "saveFirst": "Lưu thay đổi trước"
+        },
+        "validation": {
+          "missingInfo": "* Vui lòng nhập Tên & Số điện thoại để đặt bàn",
+          "timePast": "Không thể chọn thời gian trong quá khứ."
+        },
+        "legal": "Bằng cách đặt bàn, bạn đồng ý với Điều khoản & Điều kiện và Chính sách Hủy của chúng tôi."
+      },
+      "bookingModal": {
+        "selectedTable": "Bàn Đã Chọn",
+        "title": "Xác Nhận Đặt Bàn",
+        "restaurantName": "An Lac Nhà Hàng Việt Nam",
+        "date": "Ngày",
+        "time": "Giờ",
+        "guests": "Khách",
+        "guestsCount": "{count} Người",
+        "guestInfo": "Thông Tin Khách",
+        "confirm": "Xác Nhận Đặt Bàn",
+        "changeSelection": "Thay Đổi Lựa Chọn",
+        "fullName": "Họ và Tên *",
+        "phoneNumber": "Số Điện Thoại *",
+        "emailAddress": "Email (Tùy chọn)",
+        "partySize": "Số Lượng Khách *",
+        "cancel": "Hủy",
+        "confirmBooking": "Xác Nhận Đặt Bàn",
+        "confirmed": "Đã Xác Nhận!",
+        "tableReserved": "Bàn của bạn đã được đặt",
+        "restaurant": "Nhà Hàng",
+        "guestName": "Tên Khách",
+        "zone": "Khu Vực",
+        "seeYouSoon": "Hẹn gặp lại!",
+        "downloadTicket": "Tải Vé",
+        "close": "Đóng",
+        "alerts": {
+          "ticketNotFound": "Không tìm thấy vé. Vui lòng thử lại.",
+          "downloadError": "Không thể tải xuống. Vui lòng chụp màn hình."
+        }
+      },
+      "callButton": {
+        "title": "Gọi Cho Nhà Hàng",
+        "subtitle": "Không có bàn trống trực tuyến",
+        "description": "Vui lòng gọi trực tiếp để đặt bàn hoặc hỏi thêm thông tin",
+        "restaurant": "Nhà hàng",
+        "phoneLabel": "Số điện thoại",
+        "callNow": "Gọi Ngay",
+        "copyNumber": "Sao Chép Số",
+        "copied": "Đã Sao Chép!",
+        "hours": "11:00 Sáng – 10:00 Tối",
+        "buttonText": "Gọi Đặt Bàn",
+        "dialing": "Đang mở ứng dụng điện thoại..."
+      },
+      "zone": {
+        "label": "Khu vực",
+        "All": "Tất cả",
+        "Indoor": "Trong nhà",
+        "Outdoor": "Ngoài trời",
+        "Rooftop": "Sân thượng"
+      },
+      "publicForm": {
+        "title": "Đặt bàn",
+        "chooseCustomerType": "Chọn loại khách",
+        "existingCustomer": "Khách cũ",
+        "newCustomer": "Khách mới",
+        "existingCustomerHint": "Nhập SĐT để tự động điền thông tin",
+        "newCustomerHint": "Nhập thông tin cơ bản để gửi yêu cầu đặt bàn",
+        "existingModeNote": "Khách cũ: Nhập SĐT trước, hệ thống sẽ tự điền thông tin nếu tìm thấy.",
+        "newModeNote": "Khách mới: Vui lòng nhập đầy đủ thông tin cơ bản.",
+        "noFitTitle": "Không có bàn online phù hợp cho khung giờ này.",
+        "callRestaurant": "Gọi nhà hàng",
+        "goBack": "Quay lại",
+        "yourInfo": "Thông tin của bạn",
+        "phone": "Số điện thoại",
+        "yourName": "Tên của bạn",
+        "email": "Email",
+        "loadingCustomerName": "Đang tải tên khách...",
+        "loadingCustomerEmail": "Đang tải email...",
+        "existingCustomerName": "Tên khách cũ",
+        "existingCustomerEmail": "Email khách cũ",
+        "bookingInfo": "Thông tin đặt bàn",
+        "partySize": "Số lượng khách",
+        "reservationDate": "Ngày đặt",
+        "selectDate": "Chọn ngày",
+        "arrivalTime": "Giờ đến",
+        "selectTime": "Chọn giờ",
+        "notes": "Ghi chú",
+        "close": "Đóng",
+        "closeAriaLabel": "Đóng hộp thoại đặt bàn",
+        "submit": "ĐẶT BÀN NGAY",
+        "checkingTables": "Đang kiểm tra bàn...",
+        "processing": "Đang xử lý...",
+        "lookup": {
+          "notFound": "Không tìm thấy khách cũ với số điện thoại này."
+        },
+        "validation": {
+          "selectCustomerType": "Vui lòng chọn loại khách.",
+          "phoneRequired": "Vui lòng nhập Số điện thoại.",
+          "nameRequired": "Vui lòng nhập Họ tên.",
+          "existingCustomerNotFound": "Không tìm thấy thông tin khách cũ. Vui lòng kiểm tra lại số điện thoại.",
+          "dateRequired": "Vui lòng chọn ngày đặt.",
+          "timeRequired": "Vui lòng chọn giờ đến.",
+          "partySizeRequired": "Vui lòng chọn số lượng khách.",
+          "timePast": "Không thể chọn thời gian trong quá khứ."
+        },
+        "toast": {
+          "created": "Đã tạo yêu cầu đặt bàn thành công!",
+          "createFailed": "Không thể đặt bàn.",
+          "invalidRequest": "Thông tin đặt bàn chưa hợp lệ.",
+          "conflict": "Khung giờ hoặc bàn đã không còn khả dụng.",
+          "notFound": "Không tìm thấy dữ liệu đặt bàn yêu cầu.",
+          "serverError": "Lỗi hệ thống. Vui lòng thử lại.",
+          "unexpected": "Có lỗi xảy ra khi đặt bàn."
+        }
+      },
+      "publicTicket": {
+        "title": "Phiếu đặt bàn",
+        "customer": "Khách hàng",
+        "guests": "Số khách",
+        "date": "Ngày",
+        "time": "Giờ",
+        "table": "Bàn",
+        "zone": "Khu vực",
+        "pendingAssign": "Chờ xếp bàn",
+        "downloadTicket": "Tải vé",
+        "close": "Đóng",
+        "closeAriaLabel": "Đóng hộp thoại đặt bàn"
       }
     },
     "management": {
@@ -187,7 +368,16 @@
         "searchPlaceholder": "Tìm tên khách, số điện thoại...",
         "addNew": "Thêm mới",
         "all": "Tất cả",
-        "empty": "Không tìm thấy đơn đặt bàn nào"
+        "empty": "Không tìm thấy đơn đặt bàn nào",
+        "today": "Hôm nay",
+        "tomorrow": "Ngày mai",
+        "refresh": "Làm mới",
+        "deleteTitle": "Xóa đơn đặt bàn",
+        "deleteMessage": "Bạn có chắc chắn muốn xóa đơn đặt bàn này? Hành động này không thể hoàn tác.",
+        "confirmDelete": "Xác nhận xóa",
+        "cancel": "Hủy",
+        "deleteSuccess": "Xóa đơn đặt bàn thành công.",
+        "deleteFail": "Không thể xóa đơn đặt bàn."
       },
       "Card": {
         "table": "Bàn",
@@ -255,6 +445,102 @@
         "checkInSuccess": "Khách nhận bàn thành công!",
         "checkInFail": "Lỗi khi cập nhật nhận bàn",
         "loadTablesFail": "Lỗi khi tải danh sách bàn trống."
+      },
+      "list": {
+        "title": "Danh sách đặt bàn",
+        "searchPlaceholder": "Tìm tên khách, số điện thoại...",
+        "addNew": "Thêm mới",
+        "all": "Tất cả",
+        "empty": "Không tìm thấy đơn đặt bàn nào",
+        "today": "Hôm nay",
+        "tomorrow": "Ngày mai",
+        "refresh": "Làm mới",
+        "deleteTitle": "Xóa đơn đặt bàn",
+        "deleteMessage": "Bạn có chắc chắn muốn xóa đơn đặt bàn này? Hành động này không thể hoàn tác.",
+        "confirmDelete": "Xác nhận xóa",
+        "cancel": "Hủy",
+        "deleteSuccess": "Xóa đơn đặt bàn thành công.",
+        "deleteFail": "Không thể xóa đơn đặt bàn."
+      },
+      "card": {
+        "table": "Bàn",
+        "guests": "Khách",
+        "createdOn": "Tạo lúc",
+        "status": "Trạng thái",
+        "late": "Trễ giờ",
+        "viewNote": "Ghi chú",
+        "customerNotes": "Ghi chú của khách:",
+        "noNotes": "Không có yêu cầu đặc biệt hay gọi món trước.",
+        "checkIn": "Nhận bàn",
+        "reservationTime": "Giờ đặt",
+        "na": "Chưa xếp"
+      },
+      "detail": {
+        "title": "Chi tiết đặt bàn",
+        "back": "Quay lại",
+        "backToList": "Quay lại danh sách đặt bàn",
+        "edit": "Chỉnh sửa",
+        "delete": "Xóa",
+        "reservationId": "Mã đặt bàn",
+        "loading": "Đang tải thông tin đặt bàn...",
+        "notFound": "Không tìm thấy đơn đặt bàn",
+        "customer": {
+          "title": "Thông tin khách hàng",
+          "fullName": "Họ và tên",
+          "phoneNumber": "Số điện thoại",
+          "emailAddress": "Địa chỉ Email",
+          "partySize": "Số lượng khách",
+          "guest": "khách",
+          "guests": "khách"
+        },
+        "booking": {
+          "title": "Thông tin đặt bàn",
+          "reservedDate": "Ngày đặt",
+          "reservedTime": "Giờ đặt",
+          "status": "Trạng thái",
+          "bookingSource": "Nguồn đặt",
+          "createdOn": "Ngày tạo"
+        },
+        "table": {
+          "title": "Thông tin bàn",
+          "noTables": "Chưa xếp bàn",
+          "capacity": "Sức chứa",
+          "totalTables": "Tổng số bàn đã xếp"
+        }
+      },
+      "checkInModal": {
+        "title": "Khách nhận bàn",
+        "arrivalMsg": "{name} đã đến nhận bàn lúc {time} ({pax} khách).",
+        "assignTable": "Xếp bàn",
+        "selectPlaceholder": "-- Chọn một bàn trống --",
+        "noTablesAvailable": "Hiện không có bàn trống",
+        "tableOption": "{code} ({zone} - Sức chứa: {capacity})",
+        "capacityHint": "Gợi ý: Hãy xếp khách vào bàn có sức chứa ≥ {pax}",
+        "cancel": "Hủy bỏ",
+        "confirm": "Xác nhận",
+        "loading": "Đang tải danh sách bàn...",
+        "selectError": "Vui lòng chọn ít nhất 1 bàn!",
+        "guestsCount": "Khách: {count} người",
+        "seats": "chỗ",
+        "selectedTables": "Đã chọn: {count} bàn"
+      },
+      "messages": {
+        "checkInSuccess": "Khách nhận bàn thành công!",
+        "checkInFail": "Lỗi khi cập nhật nhận bàn",
+        "loadTablesFail": "Lỗi khi tải danh sách bàn trống."
+      },
+      "status": {
+        "pending": "Chờ xử lý",
+        "confirmed": "Đã xác nhận",
+        "checkedIn": "Đã nhận bàn",
+        "cancelled": "Đã hủy",
+        "noShow": "Không đến",
+        "completed": "Hoàn thành"
+      },
+      "source": {
+        "online": "Đặt online",
+        "phone": "Điện thoại",
+        "walkIn": "Khách trực tiếp"
       }
     },
     "staff": {

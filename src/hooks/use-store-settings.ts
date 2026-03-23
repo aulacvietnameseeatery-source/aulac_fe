@@ -4,6 +4,25 @@ import { useQuery } from '@tanstack/react-query';
 import { getPublicGroupSettings } from '@/features/staff/system-settings/services/system-setting.service';
 import { BASE_URL } from '@/lib/http';
 
+const normalizeMediaUrl = (value: string): string => {
+    if (!value) return '';
+    if (/^(https?:|blob:|data:)/i.test(value)) return value;
+
+    const base = BASE_URL.replace(/\/+$/, '');
+    const normalized = value.replace(/\\/g, '/').trim();
+
+    if (normalized.startsWith('/uploads/')) {
+        return `${base}${normalized}`;
+    }
+
+    if (normalized.startsWith('uploads/')) {
+        return `${base}/${normalized}`;
+    }
+
+    const relative = normalized.replace(/^\/+/, '');
+    return `${base}/uploads/${relative}`;
+};
+
 export interface StoreSettings {
     logoUrl: string;
     name: string;
@@ -67,8 +86,8 @@ export const useStoreSettings = () => {
                     let value = s.value?.toString() || '';
 
                     // Specific logic for URLs
-                    if ((key === 'logoUrl' || key === 'promoVideoUrl') && value && !value.startsWith('http')) {
-                        value = `${BASE_URL}${value}`;
+                    if ((key === 'logoUrl' || key === 'promoVideoUrl') && value) {
+                        value = normalizeMediaUrl(value);
                     }
 
                     (data as any)[key] = value;
