@@ -2,7 +2,6 @@
 
 import React, { Suspense, useState } from "react";
 import { Loader2, RefreshCcw, Search, Armchair, Calendar as CalendarIcon, CirclePlus } from "lucide-react";
-import { format } from "date-fns";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { useReservationList } from "@/features/staff/reservation-management/hooks/use-reservation-list";
@@ -18,6 +17,8 @@ import { EditReservationModal } from "@/features/staff/reservation-management/co
 import { ReservationDetailModal } from "@/features/staff/reservation-management/components/reservation-detail-modal";
 import { ALConfirmDialog } from "@/components/ui/al-confirm-dialog";
 import { CreateReservationModal } from "@/features/staff/reservation-create";
+
+import { dateUtils } from "@/lib/date-utils";
 
 const ReservationListContent = () => {
     const t = useTranslations("reservations.management.List");
@@ -119,7 +120,7 @@ const ReservationListContent = () => {
                             <CalendarIcon className="w-4 h-4 text-[#1A3A52]/55 mr-2" />
                             <input
                                 type="date"
-                                value={filters.date ? format(filters.date, "yyyy-MM-dd") : ""}
+                                value={filters.date ? dateUtils.formatLocal(filters.date, "yyyy-MM-dd") : ""}
                                 onChange={(e) => actions.onDateChange(e.target.value ? new Date(e.target.value) : null)}
                                 className="w-full outline-none text-sm text-[#1A3A52] bg-transparent cursor-pointer [&::-webkit-calendar-picker-indicator]:cursor-pointer"
                             />
@@ -132,7 +133,7 @@ const ReservationListContent = () => {
                                 className={`shrink-0 px-4 py-1.5 text-[13px] font-medium rounded-md transition-all whitespace-nowrap ${filters.statusId === null
                                     ? 'bg-[#1A3A52] text-white shadow-sm border border-[#1A3A52]'
                                     : 'text-[#1A3A52]/65 hover:text-[#1A3A52] hover:bg-[#D5BA98]/18'
-                                    }`}
+                                }`}
                             >
                                 {t("all")}
                             </button>
@@ -143,7 +144,7 @@ const ReservationListContent = () => {
                                     className={`shrink-0 px-4 py-1.5 text-[13px] font-medium rounded-md transition-all whitespace-nowrap ${filters.statusId === status.statusId
                                         ? 'bg-[#1A3A52] text-white shadow-sm border border-[#1A3A52]'
                                         : 'text-[#1A3A52]/65 hover:text-[#1A3A52] hover:bg-[#D5BA98]/18'
-                                        }`}
+                                    }`}
                                 >
                                     {status.statusName}
                                 </button>
