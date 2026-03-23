@@ -178,12 +178,18 @@ export const IntroductionSettingsForm = () => {
         updateMutation.mutate({ items }, {
             onSuccess: () => {
                 toast.success(t('StoreProfile.updateSuccess'));
+                setLocalPreviews({}); // Clear local blobs after successful save
                 loadSettings();
             },
             onError: (err: any) => {
                 toast.error(err?.response?.data?.userMessage || t('StoreProfile.updateError'));
             }
         });
+    };
+
+    const onInvalid = (errors: any) => {
+        console.error('Form Validation errors:', errors);
+        toast.error(t('Common.invalidForm'));
     };
 
     const getFullUrl = (fieldKey: string, watchedVal: string) => {
@@ -202,7 +208,7 @@ export const IntroductionSettingsForm = () => {
     }
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6 w-full pb-12">
+        <form onSubmit={handleSubmit(onSubmit, onInvalid)} className="flex flex-col gap-6 w-full pb-12">
             {/* --- HEADER ACTIONS --- */}
             <ALCard variant="glass" elevation="sm" padding="md" radius="xl" className="flex flex-wrap items-center justify-between gap-4 border-amber-200/30">
                 <div className="flex items-center gap-6">
@@ -265,10 +271,10 @@ export const IntroductionSettingsForm = () => {
                             <Textarea {...register(`i18n.${activeLocale}.intro_hero_quote` as const)} />
                         </div>
 
-                        <div className="space-y-3 mt-6">
+                        <div className="space-y-4 mt-6">
                             <label className="font-[Inter] text-xs font-bold text-[#1A3A52]/50 uppercase tracking-widest block">{t('Introduction.heroImage')}</label>
-                            <div className="flex items-center gap-6">
-                                <div className="relative group">
+                            <div className="space-y-4">
+                                <div className="relative group w-fit">
                                     <div
                                         className={cn(
                                             "w-48 h-24 rounded-2xl border-2 border-dashed border-amber-200/60 bg-white/40 flex items-center justify-center overflow-hidden transition-all cursor-pointer hover:border-amber-300",
@@ -288,13 +294,13 @@ export const IntroductionSettingsForm = () => {
                                         )}
                                     </div>
                                 </div>
-                                <div className="flex flex-col gap-2">
+                                <div className="flex gap-3">
                                     {getFullUrl('intro_hero_image', heroImageUrl) && (
-                                        <Button type="button" variant="outline" size="icon" className="h-9 w-9 text-blue-600 bg-white" onClick={() => setPreviewData({ url: getFullUrl('intro_hero_image', heroImageUrl), title: "Hero Image", type: 'image' })}>
+                                        <Button type="button" variant="outline" size="sm" className="h-9 gap-2 text-blue-600 border-blue-100 hover:bg-blue-50" onClick={() => setPreviewData({ url: getFullUrl('intro_hero_image', heroImageUrl), title: "Hero Image", type: 'image' })}>
                                             <Maximize2 className="h-4 w-4" />
+                                            Preview
                                         </Button>
                                     )}
-                                    <Button type="button" variant="outline" size="sm" onClick={() => heroImageRef.current?.click()} className="h-9 mb-2">Upload image</Button>
                                     <input type="file" ref={heroImageRef} className="hidden" accept="image/*" onChange={(e) => handleFileChange(e, 'intro_hero_image')} />
                                 </div>
                             </div>
@@ -315,10 +321,10 @@ export const IntroductionSettingsForm = () => {
                             <Textarea {...register(`i18n.${activeLocale}.intro_virtualTour_desc` as const)} />
                         </div>
 
-                        <div className="space-y-3 mt-6">
+                        <div className="space-y-4 mt-6">
                             <label className="font-[Inter] text-xs font-bold text-[#1A3A52]/50 uppercase tracking-widest block">{t('Introduction.tourVideo')}</label>
-                            <div className="flex items-center gap-6">
-                                <div className="relative group">
+                            <div className="space-y-4">
+                                <div className="relative group w-fit">
                                     <div
                                         className={cn(
                                             "w-48 h-24 rounded-2xl border-2 border-dashed border-amber-200/60 bg-white/40 flex items-center justify-center overflow-hidden transition-all cursor-pointer hover:border-amber-300",
@@ -338,13 +344,13 @@ export const IntroductionSettingsForm = () => {
                                         )}
                                     </div>
                                 </div>
-                                <div className="flex flex-col gap-2">
+                                <div className="flex gap-3">
                                     {getFullUrl('intro_virtualTour_videoUrl', tourVideoUrl) && (
-                                        <Button type="button" variant="outline" size="icon" className="h-9 w-9 text-blue-600 bg-white" onClick={() => setPreviewData({ url: getFullUrl('intro_virtualTour_videoUrl', tourVideoUrl), title: "Tour Video", type: 'video' })}>
+                                        <Button type="button" variant="outline" size="sm" className="h-9 gap-2 text-blue-600 border-blue-100 hover:bg-blue-50" onClick={() => setPreviewData({ url: getFullUrl('intro_virtualTour_videoUrl', tourVideoUrl), title: "Tour Video", type: 'video' })}>
                                             <Maximize2 className="h-4 w-4" />
+                                            Preview
                                         </Button>
                                     )}
-                                    <Button type="button" variant="outline" size="sm" onClick={() => virtualTourVideoRef.current?.click()} className="h-9 mb-2">Upload video</Button>
                                     <input type="file" ref={virtualTourVideoRef} className="hidden" accept="video/*" onChange={(e) => handleFileChange(e, 'intro_virtualTour_videoUrl', true)} />
                                 </div>
                             </div>
@@ -388,12 +394,12 @@ export const IntroductionSettingsForm = () => {
                                     </div>
 
                                     <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-6">
-                                        <div className="space-y-3">
+                                        <div className="space-y-4">
                                             <label className="font-[Inter] text-xs font-bold text-[#1A3A52]/50 uppercase tracking-widest block">{t('Introduction.dishImage')}</label>
-                                            <div className="flex gap-4 items-start">
+                                            <div className="space-y-4">
                                                 <div
                                                     className={cn(
-                                                        "flex-1 aspect-[4/3] rounded-2xl border-2 border-dashed border-amber-200/60 bg-white/40 flex items-center justify-center overflow-hidden transition-all cursor-pointer hover:border-amber-300",
+                                                        "w-full aspect-[16/9] rounded-2xl border-2 border-dashed border-amber-200/60 bg-white/40 flex items-center justify-center overflow-hidden transition-all cursor-pointer hover:border-amber-300",
                                                         getFullUrl(`intro_collection_dish${num}_image`, dishImageUrl) && "border-solid bg-white shadow-sm"
                                                     )}
                                                     onClick={() => dishImageRef.current?.click()}
@@ -409,10 +415,11 @@ export const IntroductionSettingsForm = () => {
                                                         </div>
                                                     )}
                                                 </div>
-                                                <div className="flex flex-col gap-2">
+                                                <div className="flex gap-3">
                                                     {getFullUrl(`intro_collection_dish${num}_image`, dishImageUrl) && (
-                                                        <Button type="button" variant="outline" size="icon" className="h-9 w-9 text-blue-600 bg-white" onClick={() => setPreviewData({ url: getFullUrl(`intro_collection_dish${num}_image`, dishImageUrl), title: `Featured Dish ${num}`, type: 'image' })}>
+                                                        <Button type="button" variant="outline" size="sm" className="h-9 gap-2 text-blue-600 border-blue-100 hover:bg-blue-50" onClick={() => setPreviewData({ url: getFullUrl(`intro_collection_dish${num}_image`, dishImageUrl), title: `Featured Dish ${num}`, type: 'image' })}>
                                                             <Maximize2 className="h-4 w-4" />
+                                                            Preview
                                                         </Button>
                                                     )}
                                                     <input type="file" ref={dishImageRef} className="hidden" accept="image/*" onChange={(e) => handleFileChange(e, `intro_collection_dish${num}_image`)} />

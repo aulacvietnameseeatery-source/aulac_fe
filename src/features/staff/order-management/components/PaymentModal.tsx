@@ -49,7 +49,8 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
     const subTotal = order.orderItems
         .filter(item => item.itemStatus !== 'REJECTED' && item.itemStatus !== 'CANCELLED')
         .reduce((sum, item) => sum + item.price * item.quantity, 0);
-    const tax = subTotal * 0.026; // 2.6% TVA
+    const tax = order.taxAmount;
+
     const serviceCharge = 0;
 
     const selectedPromotion = React.useMemo(

@@ -524,5 +524,204 @@
       "discountPositive": "Doit être supérieur à 0",
       "endTimeAfterStartTime": "La fin doit être après le début"
     }
+  },
+  "Coupon": {
+    "List": {
+      "title": "Gestion des Coupons",
+      "description": "Gérez et organisez vos coupons efficacement.",
+      "searchPlaceholder": "Rechercher par code ou nom...",
+      "addNew": "Ajouter un nouveau coupon",
+      "table": {
+        "no": "N°",
+        "code": "Code Coupon",
+        "name": "Nom du Coupon",
+        "type": "Type",
+        "discountValue": "Valeur de Réduction",
+        "startTime": "Date de Début",
+        "endTime": "Date de Fin",
+        "usage": "Utilisation",
+        "status": "Statut"
+      },
+      "status": {
+        "active": "Actif",
+        "disabled": "Désactivé",
+        "scheduled": "Planifié",
+        "expired": "Expiré"
+      },
+      "type": {
+        "fixedAmount": "Montant Fixe",
+        "percent": "Pourcentage"
+      },
+      "deleteModal": {
+        "title": "Supprimer le Coupon",
+        "message": "Êtes-vous sûr de vouloir supprimer le coupon \"{name}\" ? Cette action est irréversible.",
+        "confirm": "Supprimer",
+        "cancel": "Annuler"
+      },
+      "notifications": {
+        "deleteSuccess": "Coupon supprimé avec succès",
+        "deleteError": "Impossible de supprimer le coupon"
+      }
+    },
+    "Add": {
+      "title": "Ajouter un nouveau coupon",
+      "couponCode": "Code Coupon",
+      "couponCodePlaceholder": "Saisir le code coupon",
+      "couponName": "Nom du Coupon",
+      "couponNamePlaceholder": "Saisir le nom du coupon",
+      "description": "Description",
+      "descriptionPlaceholder": "Saisir la description du coupon",
+      "discountValue": "Valeur de Réduction",
+      "discountValuePlaceholder": "Saisir la valeur de réduction",
+      "startTime": "Date & Heure de Début",
+      "endTime": "Date & Heure de Fin",
+      "maxUsage": "Nombre d'utilisations maximum",
+      "maxUsagePlaceholder": "Laisser vide si illimité",
+      "usedCount": "Nombre d'utilisations",
+      "createdAt": "Date de création",
+      "type": {
+        "label": "Type de Réduction",
+        "fixedAmount": "Montant Fixe",
+        "percent": "Pourcentage"
+      },
+      "status": {
+        "label": "Statut",
+        "active": "Actif",
+        "disabled": "Désactivé",
+        "scheduled": "Planifié",
+        "expired": "Expiré"
+      },
+      "validation": {
+        "codeRequired": "Le code coupon est obligatoire",
+        "codeMaxLength": "Le code coupon ne doit pas dépasser 50 caractères",
+        "codeNoSpaces": "Le code coupon ne doit pas contenir d'espaces",
+        "nameRequired": "Le nom du coupon est obligatoire",
+        "nameMaxLength": "Le nom du coupon ne doit pas dépasser 200 caractères",
+        "descriptionMaxLength": "La description ne doit pas dépasser 500 caractères",
+        "startTimeRequired": "La date & heure de début est obligatoire",
+        "endTimeRequired": "La date & heure de fin est obligatoire",
+        "endTimeAfterStart": "La date de fin doit être postérieure à la date de début",
+        "discountValueRequired": "La valeur de réduction doit être supérieure à 0",
+        "percentMax": "La réduction en pourcentage ne peut pas dépasser 100",
+        "maxUsageMin": "Le nombre d'utilisations maximum doit être supérieur à 0"
+      },
+      "saveButton": "Créer le coupon",
+      "cancel": "Annuler",
+      "notifications": {
+        "createSuccess": "Coupon créé avec succès",
+        "createError": "Impossible de créer le coupon"
+      }
+    },
+    "Edit": {
+      "title": "Modifier le Coupon",
+      "couponCode": "Code Coupon",
+      "couponCodePlaceholder": "Saisir le code coupon",
+      "couponName": "Nom du Coupon",
+      "couponNamePlaceholder": "Saisir le nom du coupon",
+      "description": "Description",
+      "descriptionPlaceholder": "Saisir la description du coupon",
+      "discountValue": "Valeur de Réduction",
+      "discountValuePlaceholder": "Saisir la valeur de réduction",
+      "startTime": "Date & Heure de Début",
+      "endTime": "Date & Heure de Fin",
+      "maxUsage": "Nombre d'utilisations maximum",
+      "maxUsagePlaceholder": "Saisir le nombre max (laisser vide si illimité)",
+      "usedCount": "Nombre d'utilisations",
+      "createdAt": "Date de création",
+      "type": {
+        "label": "Type de Réduction",
+        "fixedAmount": "Montant Fixe",
+        "percent": "Pourcentage"
+      },
+      "status": {
+        "label": "Statut",
+        "active": "Actif",
+        "disabled": "Désactivé",
+        "scheduled": "Planifié",
+        "expired": "Expiré"
+      },
+      "validation": {
+        "codeRequired": "Le code coupon est obligatoire",
+        "codeMaxLength": "Le code coupon ne doit pas dépasser 50 caractères",
+        "codeNoSpaces": "Le code coupon ne doit pas contenir d'espaces",
+        "nameRequired": "Le nom du coupon est obligatoire",
+        "nameMaxLength": "Le nom du coupon ne doit pas dépasser 200 caractères",
+        "descriptionMaxLength": "La description ne doit pas dépasser 500 caractères",
+        "startTimeRequired": "La date & heure de début est obligatoire",
+        "endTimeRequired": "La date & heure de fin est obligatoire",
+        "endTimeAfterStart": "La date de fin doit être postérieure à la date de début",
+        "discountValueRequired": "La valeur de réduction doit être supérieure à 0",
+        "percentMax": "La réduction en pourcentage ne peut pas dépasser 100",
+        "maxUsageMin": "Le nombre d'utilisations maximum doit être supérieur à 0"
+      },
+      "saveButton": "Mettre à jour le coupon",
+      "cancel": "Annuler",
+      "notifications": {
+        "updateSuccess": "Coupon mis à jour avec succès",
+        "updateError": "Impossible de mettre à jour le coupon"
+      }
+    },
+    "Detail": {
+      "title": "Détails du Coupon",
+      "couponCode": "Code Coupon",
+      "couponName": "Nom du Coupon",
+      "description": "Description",
+      "discountValue": "Valeur de Réduction",
+      "startTime": "Date & Heure de Début",
+      "endTime": "Date & Heure de Fin",
+      "maxUsage": "Nombre d'utilisations maximum",
+      "usedCount": "Nombre d'utilisations",
+      "createdAt": "Date de création",
+      "type": {
+        "label": "Type de Réduction",
+        "fixedAmount": "Montant Fixe",
+        "percent": "Pourcentage"
+      },
+      "status": {
+        "label": "Statut",
+        "active": "Actif",
+        "disabled": "Désactivé",
+        "scheduled": "Planifié",
+        "expired": "Expiré"
+      }
+    },
+    "close": "Fermer",
+    "edit": "Modifier"
+  },
+  "Tax": {
+    "title": "Gestion des Taxes",
+    "description": "Gérer et configurer les taxes du magasin",
+    "default": "Par défaut",
+    "Validation": {
+      "nameRequired": "Le nom de la taxe est requis",
+      "ratePositive": "Le taux doit être supérieur ou égal à 0"
+    },
+    "addTax": "Ajouter une nouvelle taxe",
+    "addNew": "Ajouter une nouvelle taxe",
+    "editTax": "Modifier la Taxe",
+    "noTaxes": "Aucune taxe trouvée.",
+    "name": "Nom de la taxe",
+    "rate": "Taux (%)",
+    "type": "Type de taxe",
+    "active": "Actif",
+    "isDefault": "Définir par défaut",
+    "deleteTitle": "Supprimer la Taxe",
+    "deleteDescription": "Êtes-vous sûr de vouloir supprimer cette taxe ? Cette action est irréversible.",
+    "deleteSuccess": "Taxe supprimée avec succès.",
+    "deleteError": "Échec de la suppression de la taxe.",
+    "createSuccess": "Taxe créée avec succès.",
+    "createError": "Échec de la création de la taxe.",
+    "updateSuccess": "Taxe mise à jour avec succès.",
+    "updateError": "Échec de la mise à jour de la taxe.",
+    "setDefaultSuccess": "Taxe par défaut définie avec succès.",
+    "fields": {
+      "name": "Nom de la taxe",
+      "rate": "Taux",
+      "type": "Type"
+    },
+    "types": {
+      "inclusive": "Inclus",
+      "exclusive": "Exclus"
+    }
   }
 }

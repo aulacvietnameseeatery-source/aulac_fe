@@ -30,10 +30,15 @@
       "autoTranslate": "Auto Translate",
       "search": "Search",
       "cancel": "Cancel",
+      "edit": "Edit",
+      "delete": "Delete",
       "facebook": "Facebook",
       "instagram": "Instagram",
       "tiktok": "TikTok",
-      "website": "Website"
+      "website": "Website",
+      "preview": "Preview",
+      "remove": "Remove",
+      "invalidForm": "Please check all language tabs for required fields."
     },
     "Introduction": {
       "title": "Introduction Page",

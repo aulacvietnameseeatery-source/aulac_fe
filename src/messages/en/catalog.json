@@ -524,5 +524,202 @@
       "discountPositive": "Must be greater than 0",
       "endTimeAfterStartTime": "End time must be after start time"
     }
+  },
+  "Coupon": {
+    "List": {
+      "title": "Coupon Management",
+      "description": "Manage and organize your coupons efficiently.",
+      "searchPlaceholder": "Search by code or name...",
+      "addNew": "Add New Coupon",
+      "table": {
+        "no": "No.",
+        "code": "Coupon Code",
+        "name": "Coupon Name",
+        "type": "Type",
+        "discountValue": "Discount Value",
+        "startTime": "Start Date",
+        "endTime": "End Date",
+        "usage": "Usage",
+        "status": "Status"
+      },
+      "status": {
+        "active": "Active",
+        "disabled": "Disabled",
+        "scheduled": "Scheduled",
+        "expired": "Expired"
+      },
+      "type": {
+        "fixedAmount": "Fixed Amount",
+        "percent": "Percent"
+      },
+      "deleteModal": {
+        "title": "Delete Coupon",
+        "message": "Are you sure you want to delete coupon \"{name}\"? This action cannot be undone.",
+        "confirm": "Delete",
+        "cancel": "Cancel"
+      },
+      "notifications": {
+        "deleteSuccess": "Coupon deleted successfully",
+        "deleteError": "Failed to delete coupon"
+      }
+    },
+    "Add": {
+      "title": "Add New Coupon",
+      "couponCode": "Coupon Code",
+      "couponCodePlaceholder": "Enter coupon code",
+      "couponName": "Coupon Name",
+      "couponNamePlaceholder": "Enter coupon name",
+      "description": "Description",
+      "descriptionPlaceholder": "Enter coupon description",
+      "discountValue": "Discount Value",
+      "discountValuePlaceholder": "Enter discount value",
+      "startTime": "Start Date & Time",
+      "endTime": "End Date & Time",
+      "maxUsage": "Max Usage",
+      "maxUsagePlaceholder": "Leave empty for unlimited",
+      "usedCount": "Used Count",
+      "createdAt": "Created At",
+      "type": {
+        "label": "Discount Type",
+        "fixedAmount": "Fixed Amount",
+        "percent": "Percent"
+      },
+      "status": {
+        "label": "Status",
+        "active": "Active",
+        "disabled": "Disabled",
+        "scheduled": "Scheduled",
+        "expired": "Expired"
+      },
+      "validation": {
+        "codeRequired": "Coupon code is required",
+        "codeMaxLength": "Coupon code must not exceed 50 characters",
+        "nameRequired": "Coupon name is required",
+        "nameMaxLength": "Coupon name must not exceed 200 characters",
+        "descriptionMaxLength": "Description must not exceed 500 characters",
+        "startTimeRequired": "Start date & time is required",
+        "endTimeRequired": "End date & time is required",
+        "endTimeAfterStart": "End date must be after start date",
+        "discountValueRequired": "Discount value is required",
+        "percentMax": "Percentage discount cannot exceed 100",
+        "maxUsageMin": "Max usage must be greater than 0"
+      },
+      "saveButton": "Create Coupon",
+      "cancel": "Cancel",
+      "notifications": {
+        "createSuccess": "Coupon created successfully",
+        "createError": "Failed to create coupon"
+      }
+    },
+    "Edit": {
+      "title": "Edit Coupon",
+      "couponCode": "Coupon Code",
+      "couponCodePlaceholder": "Enter coupon code",
+      "couponName": "Coupon Name",
+      "couponNamePlaceholder": "Enter coupon name",
+      "description": "Description",
+      "descriptionPlaceholder": "Enter coupon description",
+      "discountValue": "Discount Value",
+      "discountValuePlaceholder": "Enter discount value",
+      "startTime": "Start Date & Time",
+      "endTime": "End Date & Time",
+      "maxUsage": "Max Usage",
+      "maxUsagePlaceholder": "Leave empty for unlimited",
+      "usedCount": "Used Count",
+      "createdAt": "Created At",
+      "type": {
+        "label": "Discount Type",
+        "fixedAmount": "Fixed Amount",
+        "percent": "Percent"
+      },
+      "status": {
+        "label": "Status",
+        "active": "Active",
+        "disabled": "Disabled",
+        "scheduled": "Scheduled",
+        "expired": "Expired"
+      },
+      "validation": {
+        "codeRequired": "Coupon code is required",
+        "codeMaxLength": "Coupon code must not exceed 50 characters",
+        "nameRequired": "Coupon name is required",
+        "nameMaxLength": "Coupon name must not exceed 200 characters",
+        "descriptionMaxLength": "Description must not exceed 500 characters",
+        "startTimeRequired": "Start date & time is required",
+        "endTimeRequired": "End date & time is required",
+        "endTimeAfterStart": "End date must be after start date",
+        "discountValueRequired": "Discount value is required",
+        "percentMax": "Percentage discount cannot exceed 100",
+        "maxUsageMin": "Max usage must be greater than 0"
+      },
+      "saveButton": "Update Coupon",
+      "cancel": "Cancel",
+      "notifications": {
+        "updateSuccess": "Coupon updated successfully",
+        "updateError": "Failed to update coupon"
+      }
+    },
+    "Detail": {
+      "title": "Coupon Details",
+      "couponCode": "Coupon Code",
+      "couponName": "Coupon Name",
+      "description": "Description",
+      "discountValue": "Discount Value",
+      "startTime": "Start Date & Time",
+      "endTime": "End Date & Time",
+      "maxUsage": "Max Usage",
+      "usedCount": "Used Count",
+      "createdAt": "Created At",
+      "type": {
+        "label": "Discount Type",
+        "fixedAmount": "Fixed Amount",
+        "percent": "Percent"
+      },
+      "status": {
+        "label": "Status",
+        "active": "Active",
+        "disabled": "Disabled",
+        "scheduled": "Scheduled",
+        "expired": "Expired"
+      }
+    },
+    "close": "Close",
+    "edit": "Edit"
+  },
+  "Tax": {
+    "title": "Tax Management",
+    "description": "Manage and configure store taxes",
+    "default": "Default",
+    "Validation": {
+      "nameRequired": "Tax name is required",
+      "ratePositive": "Tax rate must be greater than or equal to 0"
+    },
+    "addTax": "Add New Tax",
+    "addNew": "Add New Tax",
+    "editTax": "Edit Tax",
+    "noTaxes": "No taxes found.",
+    "name": "Tax Name",
+    "rate": "Rate (%)",
+    "type": "Tax Type",
+    "active": "Active",
+    "isDefault": "Set as Default",
+    "deleteTitle": "Delete Tax",
+    "deleteDescription": "Are you sure you want to delete this tax? This action cannot be undone.",
+    "deleteSuccess": "Tax deleted successfully.",
+    "deleteError": "Failed to delete tax.",
+    "createSuccess": "Tax created successfully.",
+    "createError": "Failed to create tax.",
+    "updateSuccess": "Tax updated successfully.",
+    "updateError": "Failed to update tax.",
+    "setDefaultSuccess": "Default tax set successfully.",
+    "fields": {
+      "name": "Tax Name",
+      "rate": "Rate",
+      "type": "Type"
+    },
+    "types": {
+      "inclusive": "Inclusive",
+      "exclusive": "Exclusive"
+    }
   }
 }
