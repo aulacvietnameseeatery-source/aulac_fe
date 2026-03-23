@@ -35,7 +35,10 @@
       "facebook": "Facebook",
       "instagram": "Instagram",
       "tiktok": "TikTok",
-      "website": "Site web"
+      "website": "Site web",
+      "preview": "Aperçu",
+      "remove": "Supprimer",
+      "invalidForm": "Veuillez vérifier tous les onglets de langue pour les champs obligatoires."
     },
     "Introduction": {
       "title": "Page d'introduction",
@@ -200,7 +203,7 @@
       "public": {
         "subtitle": "Une expression tranquille de la cuisine vietnamienne",
         "paragraph_1": "An Lạc est guidé par l'équilibre, la mémoire et la sérénité. Son nom signifie bonheur paisible, inspiré du parcours de la fondatrice — mère de trois enfants — créant un espace reflétant le soin, la stabilité et l'essence de An cư Lạc nghiệp.",
-        "paragraph_2": "Chez An Lạc, nous ne cherchons pas à changer la cuisine vietnamienne, mais à l'honorer. Patience, harmonie et précision façonnent chaque plat : le lent mijotage d'un bouillon, l'équilibre soigné des herbes, la profondeur silencieuse de la fermentation et l'humilité du riz.",
+        "paragraph_2": "Chez An Lạc, we do not seek to change Vietnamese cuisine, but to honor it. Patience, harmony, and precision shape every dish: the slow simmer of a broth, the careful balance of herbs, the quiet depth of fermentation, and the humility of rice.",
         "paragraph_3": "Les techniques familières telles que le kho, le hấp et le nướng sont exprimées avec précision et minimalisme. Les saveurs sont mesurées, équilibrées et subtiles.",
         "closing_quote": "An Lạc est une invitation — à ralentir, goûter attentivement et se reconnecter à l'essentiel."
       },
@@ -332,36 +335,6 @@
         "DECIMAL": "Décimal",
         "BOOL": "Booléen",
         "JSON": "JSON"
-      }
-    },
-    "Tax": {
-      "title": "Gestion des Taxes",
-      "addTax": "Ajouter la Taxe",
-      "addNew": "Ajouter une taxe",
-      "editTax": "Modifier la Taxe",
-      "noTaxes": "Aucune taxe trouvée.",
-      "name": "Nom de la taxe",
-      "rate": "Taux (%)",
-      "type": "Type de taxe",
-      "active": "Actif",
-      "isDefault": "Définir par défaut",
-      "deleteTitle": "Supprimer la Taxe",
-      "deleteDescription": "Êtes-vous sûr de vouloir supprimer cette taxe ? Cette action est irréversible.",
-      "deleteSuccess": "Taxe supprimée avec succès.",
-      "deleteError": "Échec de la suppression de la taxe.",
-      "createSuccess": "Taxe créée avec succès.",
-      "createError": "Échec de la création de la taxe.",
-      "updateSuccess": "Taxe mise à jour avec succès.",
-      "updateError": "Échec de la mise à jour de la taxe.",
-      "setDefaultSuccess": "Taxe par défaut définie avec succès.",
-      "fields": {
-        "name": "Nom de la taxe",
-        "rate": "Taux",
-        "type": "Type"
-      },
-      "types": {
-        "inclusive": "Inclus",
-        "exclusive": "Exclus"
       }
     }
   }

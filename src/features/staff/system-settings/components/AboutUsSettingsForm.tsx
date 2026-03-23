@@ -113,6 +113,11 @@ export const AboutUsSettingsForm = () => {
         });
     };
 
+    const onInvalid = (errors: any) => {
+        console.error('Form Validation errors:', errors);
+        toast.error(t('Common.invalidForm'));
+    };
+
     if (isLoading) {
         return (
             <div className="flex justify-center items-center p-24">
@@ -122,7 +127,7 @@ export const AboutUsSettingsForm = () => {
     }
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6 w-full pb-12">
+        <form onSubmit={handleSubmit(onSubmit, onInvalid)} className="flex flex-col gap-6 w-full pb-12">
             <ALCard variant="glass" elevation="sm" padding="md" radius="xl" className="flex flex-wrap items-center justify-between gap-4 border-amber-200/30">
                 <div className="flex items-center gap-6">
                     <div className="flex bg-gray-100 p-1 rounded-lg border border-gray-200">

@@ -85,9 +85,18 @@ const navigation: NavCategory[] = [
     items: [
       { key: "dish", href: "/dashboard/dish", icon: UtensilsCrossed },
       { key: "dishCategory", href: "/dashboard/dish-category", icon: FolderOpen },
+      { key: "coupons", href: "/dashboard/coupons", icon: TicketPercent },
+      { key: "promotions", href: "/dashboard/promotions", icon: Tags },
+      { key: "taxSettings", href: "/dashboard/tax", icon: BadgePercent },
+    ]
+  },
+
+  {
+    status: "warehouse",
+    icon: Warehouse,
+    items: [
       { key: "ingredients", href: "/dashboard/ingredients", icon: Package },
       { key: "suppliers", href: "/dashboard/suppliers", icon: Truck },
-      { key: "coupons", href: "/dashboard/coupons", icon: TicketPercent },
     ]
   },
   {
@@ -132,11 +141,9 @@ const navigation: NavCategory[] = [
           { key: "storeProfile", href: "/dashboard/store-settings?tab=profile", icon: Building2 },
           { key: "storeIntroduction", href: "/dashboard/store-settings?tab=introduction", icon: Presentation },
           { key: "storeAboutUs", href: "/dashboard/store-settings?tab=about", icon: UsersIcon },
-          { key: "taxSettings", href: "/dashboard/store-settings?tab=tax", icon: BadgePercent },
         ]
       },
       { key: "notifications", href: "/dashboard/notifications", icon: Bell },
-      { key: "promotions", href: "/dashboard/promotions", icon: Tags },
       { key: "emails", href: "/dashboard/emails", icon: Mail },
     ]
   }
@@ -155,7 +162,7 @@ export function AdminSidebar({ onClose }: AdminSidebarProps) {
   const { mutate: logout, isPending: isLoggingOut } = useLogout();
   const { data: storeSettings } = useStoreSettings();
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
-  const t = useTranslations("AdminSidebar");
+  const t = useTranslations("navigation.adminSidebar");
 
   const filteredNavigation = useMemo(() => {
     return navigation.map((cat) => ({

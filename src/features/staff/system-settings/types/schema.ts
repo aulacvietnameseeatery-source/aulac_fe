@@ -5,10 +5,10 @@ export type SupportedLocale = typeof LOCALES[number];
 
 // --- STORE PROFILE ---
 const storeProfileI18nSchema = z.object({
-  name: z.string().trim().min(1, "Name is required"),
-  streetAddress: z.string().trim().min(1, "Street address is required"),
-  city: z.string().trim().min(1, "City is required"),
-  country: z.string().trim().min(1, "Country is required"),
+  name: z.string().trim().optional().default(""),
+  streetAddress: z.string().trim().optional().default(""),
+  city: z.string().trim().optional().default(""),
+  country: z.string().trim().optional().default(""),
   openingHours: z.string().trim().optional().default(""),
 });
 
@@ -54,10 +54,10 @@ export function mapFormValuesToStoreSettings(values: StoreProfileFormValues): Re
   const settings: Record<string, string> = {};
   LOCALES.forEach(loc => {
     const vals = values.i18n[loc];
-    settings[`name_${loc}`] = vals.name;
-    settings[`streetAddress_${loc}`] = vals.streetAddress;
-    settings[`city_${loc}`] = vals.city;
-    settings[`country_${loc}`] = vals.country;
+    settings[`name_${loc}`] = vals.name || "";
+    settings[`streetAddress_${loc}`] = vals.streetAddress || "";
+    settings[`city_${loc}`] = vals.city || "";
+    settings[`country_${loc}`] = vals.country || "";
     settings[`openingHours_${loc}`] = vals.openingHours || "";
   });
   settings["logoUrl"] = values.logoUrl || "";

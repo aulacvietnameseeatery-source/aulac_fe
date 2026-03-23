@@ -35,7 +35,10 @@
       "facebook": "Facebook",
       "instagram": "Instagram",
       "tiktok": "TikTok",
-      "website": "Trang web"
+      "website": "Trang web",
+      "preview": "Xem trước",
+      "remove": "Xóa",
+      "invalidForm": "Vui lòng kiểm tra tất cả các tab ngôn ngữ để biết các trường bắt buộc."
     },
     "Introduction": {
       "title": "Trang Giới thiệu",
@@ -175,7 +178,7 @@
         "subtitle": "Một không gian ẩm thực Việt bình yên",
         "paragraph_1": "An Lạc được dẫn dắt bởi sự cân bằng, ký ức và sự thanh thản. Tên gọi mang ý nghĩa hạnh phúc bình yên, lấy cảm hứng từ hành trình của người sáng lập — một người mẹ của ba đứa con — tạo ra một không gian phản chiếu sự chăm sóc, ổn định và tinh thần của An cư Lạc nghiệp.",
         "paragraph_2": "Tại An Lạc, we do not seek to change Vietnamese cuisine, but to honor it. Patience, harmony, and precision shape every dish: the slow simmer of a broth, the careful balance of herbs, the quiet depth of fermentation, and the humility of rice.",
-        "paragraph_3": "Các kỹ thuật quen thuộc như kho, hấp và nướng được thể hiện với sự chính xác và tối giản. Hương vị được đong đếm, cân bằng và tinh tế.",
+        "paragraph_3": "Các kỹ thuật quen thuộc như kho, hấp và nướng được thể hiện with sự chính xác và tối giản. Hương vị được đong đếm, cân bằng và tinh tế.",
         "closing_quote": "An Lạc là lời mời — hãy chậm lại, thưởng thức cẩn trọng và kết nối lại với điều cốt lõi."
       },
       "sections": {
@@ -306,36 +309,6 @@
         "DECIMAL": "Số thập phân",
         "BOOL": "Boolean",
         "JSON": "JSON"
-      }
-    },
-    "Tax": {
-      "title": "Quản lý Thuế",
-      "addTax": "Thêm Thuế",
-      "addNew": "Thêm Thuế mới",
-      "editTax": "Sửa Thuế",
-      "noTaxes": "Không tìm thấy loại thuế nào.",
-      "name": "Tên thuế",
-      "rate": "Mức thuế (%)",
-      "type": "Loại thuế",
-      "active": "Hoạt động",
-      "isDefault": "Đặt làm mặc định",
-      "deleteTitle": "Xóa Thuế",
-      "deleteDescription": "Bạn có chắc chắn muốn xóa loại thuế này không? Hành động này không thể hoàn tác.",
-      "deleteSuccess": "Xóa thuế thành công.",
-      "deleteError": "Xóa thuế thất bại.",
-      "createSuccess": "Tạo thuế thành công.",
-      "createError": "Tạo thuế thất bại.",
-      "updateSuccess": "Cập nhật thuế thành công.",
-      "updateError": "Cập nhật thuế thất bại.",
-      "setDefaultSuccess": "Đặt thuế mặc định thành công.",
-      "fields": {
-        "name": "Tên thuế",
-        "rate": "Mức thuế",
-        "type": "Loại"
-      },
-      "types": {
-        "inclusive": "Gộp",
-        "exclusive": "Tách"
       }
     }
   }

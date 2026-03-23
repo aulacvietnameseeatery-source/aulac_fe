@@ -35,7 +35,10 @@
       "facebook": "Facebook",
       "instagram": "Instagram",
       "tiktok": "TikTok",
-      "website": "Website"
+      "website": "Website",
+      "preview": "Preview",
+      "remove": "Remove",
+      "invalidForm": "Please check all language tabs for required fields."
     },
     "Introduction": {
       "title": "Introduction Page",
@@ -332,36 +335,6 @@
         "DECIMAL": "Decimal",
         "BOOL": "Boolean",
         "JSON": "JSON"
-      }
-    },
-    "Tax": {
-      "title": "Tax Management",
-      "addTax": "Add Tax",
-      "addNew": "Add New Tax",
-      "editTax": "Edit Tax",
-      "noTaxes": "No taxes found.",
-      "name": "Tax Name",
-      "rate": "Rate (%)",
-      "type": "Tax Type",
-      "active": "Active",
-      "isDefault": "Set as Default",
-      "deleteTitle": "Delete Tax",
-      "deleteDescription": "Are you sure you want to delete this tax? This action cannot be undone.",
-      "deleteSuccess": "Tax deleted successfully.",
-      "deleteError": "Failed to delete tax.",
-      "createSuccess": "Tax created successfully.",
-      "createError": "Failed to create tax.",
-      "updateSuccess": "Tax updated successfully.",
-      "updateError": "Failed to update tax.",
-      "setDefaultSuccess": "Default tax set successfully.",
-      "fields": {
-        "name": "Tax Name",
-        "rate": "Rate",
-        "type": "Type"
-      },
-      "types": {
-        "inclusive": "Inclusive",
-        "exclusive": "Exclusive"
       }
     }
   }

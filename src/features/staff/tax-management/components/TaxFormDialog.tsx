@@ -11,15 +11,13 @@ import { useTranslations } from 'next-intl';
 import { TaxDTO, CreateTaxRequestDTO } from '../services/tax.service';
 import { Switch } from '@/components/ui/switch';
 
-const taxSchema = z.object({
-    taxName: z.string().min(1, 'Tax name is required'),
-    taxRate: z.number().min(0, 'Tax rate must be positive'),
-    taxType: z.enum(['INCLUSIVE', 'EXCLUSIVE']),
-    isActive: z.boolean(),
-    isDefault: z.boolean(),
-});
-
-type TaxFormValues = z.infer<typeof taxSchema>;
+type TaxFormValues = {
+    taxName: string;
+    taxRate: number;
+    taxType: 'INCLUSIVE' | 'EXCLUSIVE';
+    isActive: boolean;
+    isDefault: boolean;
+};
 
 interface TaxFormDialogProps {
     isOpen: boolean;
@@ -30,15 +28,24 @@ interface TaxFormDialogProps {
 }
 
 export const TaxFormDialog: React.FC<TaxFormDialogProps> = ({
+
     isOpen,
     onClose,
     onSubmit,
     initialData,
     isLoading,
 }) => {
-    const t = useTranslations('settings.Tax');
+    const t = useTranslations('Tax');
     const commonT = useTranslations('settings.Common');
     const rootT = useTranslations('settings');
+
+    const taxSchema = React.useMemo(() => z.object({
+        taxName: z.string().min(1, t('Validation.nameRequired')),
+        taxRate: z.number().min(0, t('Validation.ratePositive')),
+        taxType: z.enum(['INCLUSIVE', 'EXCLUSIVE']),
+        isActive: z.boolean(),
+        isDefault: z.boolean(),
+    }), [t]);
 
     const {
         register,
@@ -57,6 +64,7 @@ export const TaxFormDialog: React.FC<TaxFormDialogProps> = ({
             isDefault: false,
         },
     });
+
 
     useEffect(() => {
         if (initialData) {

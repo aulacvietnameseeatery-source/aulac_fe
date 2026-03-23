@@ -26,7 +26,7 @@ interface TaxSettingsFormProps {
 }
 
 export const TaxSettingsForm: React.FC<TaxSettingsFormProps> = ({ isAddOpen, onAddOpenChange }) => {
-    const t = useTranslations('settings.Tax');
+    const t = useTranslations('Tax');
     const commonT = useTranslations('settings.Common');
 
     const { data: taxes = [], isLoading } = useTaxesQuery(false);
@@ -111,9 +111,6 @@ export const TaxSettingsForm: React.FC<TaxSettingsFormProps> = ({ isAddOpen, onA
                             className={`flex items-center justify-between p-4 sm:p-5 border-b border-slate-100 last:border-0 hover:bg-slate-50/50 transition-colors ${!tax.isActive ? 'opacity-60 grayscale' : ''}`}
                         >
                             <div className="flex items-center gap-4">
-                                <div className="h-10 w-10 rounded-full bg-primary-DEFAULT/10 flex items-center justify-center text-primary-DEFAULT">
-                                    <BadgePercent className="h-5 w-5" />
-                                </div>
                                 <div className="space-y-0.5">
                                     <div className="flex items-center gap-2">
                                         <Typography variant="body" className="font-semibold text-navy-DEFAULT">
@@ -121,9 +118,10 @@ export const TaxSettingsForm: React.FC<TaxSettingsFormProps> = ({ isAddOpen, onA
                                         </Typography>
                                         {tax.isDefault && (
                                             <Badge className="bg-emerald-500/10 text-emerald-600 border-none text-[10px] px-1.5 py-0 uppercase tracking-widest">
-                                                Default
+                                                {t('default')}
                                             </Badge>
                                         )}
+
                                     </div>
                                     <div className="flex items-center gap-2">
                                         <Badge variant="secondary" className="bg-blue-500/10 text-blue-600 border-none font-mono px-1.5 py-0 text-xs">

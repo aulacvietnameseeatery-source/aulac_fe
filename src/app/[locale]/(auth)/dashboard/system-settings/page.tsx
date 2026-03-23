@@ -6,7 +6,6 @@ import { ProtectedRoute } from "@/components/protected-route";
 import { Permissions } from "@/types/const";
 
 const SystemSettingsContent = () => {
-    const t = useTranslations("AdminSidebar");
     const st = useTranslations("settings");
 
     return (
