@@ -13,6 +13,28 @@ import { useStoreProfileForm } from '../hooks/useStoreProfileForm';
 import { mapStoreSettingsToFormValues, mapFormValuesToStoreSettings, LOCALES, SupportedLocale, StoreProfileFormValues } from '../types/schema';
 import { useUpdateStoreSettingsMutation, useTranslateSettingsMutation } from '../hooks/useSystemSettingsMutation';
 
+const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+const IMAGE_ACCEPT = '.jpg,.jpeg,.png,.gif,.webp,image/jpeg,image/png,image/gif,image/webp';
+
+const normalizeMediaUrl = (value: string): string => {
+    if (!value) return '';
+    if (/^(https?:|blob:|data:)/i.test(value)) return value;
+
+    const base = BASE_URL.replace(/\/+$/, '');
+    const normalized = value.replace(/\\/g, '/').trim();
+
+    if (normalized.startsWith('/uploads/')) {
+        return `${base}${normalized}`;
+    }
+
+    if (normalized.startsWith('uploads/')) {
+        return `${base}/${normalized}`;
+    }
+
+    const relative = normalized.replace(/^\/+/, '');
+    return `${base}/uploads/${relative}`;
+};
+
 export const StoreProfileForm = () => {
     const t = useTranslations('settings');
     const [isLoading, setIsLoading] = useState(true);
@@ -93,8 +115,15 @@ export const StoreProfileForm = () => {
         const file = e.target.files?.[0];
         if (!file) return;
 
+        if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
+            toast.error(t('StoreProfile.invalidImageFormatError'));
+            if (e.target) e.target.value = '';
+            return;
+        }
+
         if (file.size > 5 * 1024 * 1024) {
             toast.error(t('StoreProfile.fileSizeError'));
+            if (e.target) e.target.value = '';
             return;
         }
 
@@ -147,7 +176,7 @@ export const StoreProfileForm = () => {
         const previewUrl = localPreviews['logoUrl'];
         if (previewUrl) return previewUrl;
         if (!logoUrlValue) return '';
-        return (logoUrlValue.startsWith('http')) ? logoUrlValue : `${BASE_URL}${logoUrlValue}`;
+        return normalizeMediaUrl(logoUrlValue);
     };
 
     if (isLoading) {
@@ -251,7 +280,7 @@ export const StoreProfileForm = () => {
                                         type="file"
                                         ref={logoInputRef}
                                         className="hidden"
-                                        accept="image/*"
+                                        accept={IMAGE_ACCEPT}
                                         onChange={handleFileChange}
                                     />
                             </div>

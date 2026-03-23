@@ -16,7 +16,7 @@ interface BookingModalProps {
 }
 
 export default function BookingModal({ isOpen, onClose, onConfirm, tables, date, time }: BookingModalProps) {
-    const t = useTranslations('reservations.public.BookingModal');
+    const t = useTranslations('reservations.public.bookingModal');
 
     // View State: 'form' | 'success'
     const [view, setView] = useState<'form' | 'success'>('form');

@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { MapPin, CheckCircle, Users } from 'lucide-react';
 import { TableOptionDto } from '../types/types';
 import { useTranslations } from "next-intl";
@@ -15,7 +15,7 @@ interface Props {
 export const TableSelectionGrid: React.FC<Props> = ({
   options, selectedOptionId, isLoading, isChecked, onSelectOption, compact = false
 }) => {
-  const t = useTranslations("StaffReservation.table");
+  const t = useTranslations("reservations.staff.table");
   const heightClass = compact
     ? "h-[210px] sm:h-[240px] lg:h-[260px]"
     : "h-[220px] sm:h-[260px] lg:h-[300px]";

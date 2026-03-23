@@ -17,12 +17,14 @@ import { EditReservationModal } from "@/features/staff/reservation-management/co
 import { ReservationDetailModal } from "@/features/staff/reservation-management/components/reservation-detail-modal";
 import { ALConfirmDialog } from "@/components/ui/al-confirm-dialog";
 import { CreateReservationModal } from "@/features/staff/reservation-create";
+import { localizeStatusLabel } from "@/features/staff/reservation-management/utils/localize-reservation";
 
 import { dateUtils } from "@/lib/date-utils";
 
 const ReservationListContent = () => {
-    const t = useTranslations("reservations.management.List");
-    const tm = useTranslations("reservations.management.Messages");
+    const t = useTranslations("reservations.management.list");
+    const tm = useTranslations("reservations.management.messages");
+    const tStatus = useTranslations("reservations.management.status");
     const {
         reservations,
         statuses,
@@ -81,10 +83,10 @@ const ReservationListContent = () => {
         setIsDeleting(true);
         try {
             await reservationService.deleteReservation(deleteReservationId);
-            toast.success(t("deleteSuccess") || "Xóa đơn đặt bàn thành công!");
+            toast.success(t("deleteSuccess"));
             actions.refresh();
         } catch (error: any) {
-            toast.error(error.message || t("deleteFail") || "Lỗi khi xóa đơn đặt bàn");
+            toast.error(error.message || t("deleteFail"));
         } finally {
             setIsDeleting(false);
             setDeleteReservationId(null);
@@ -103,7 +105,7 @@ const ReservationListContent = () => {
                     <button
                         onClick={actions.refresh}
                         className="p-2 bg-[#FDFBF9] border border-[#D5BA98]/60 rounded-full text-[#1A3A52]/70 hover:bg-[#D5BA98]/10 hover:text-[#1A3A52] transition-colors shadow-none"
-                        title={t("refresh") || "Refresh"}
+                        title={t("refresh")}
                     >
                         <RefreshCcw className="w-4 h-4" />
                     </button>
@@ -146,7 +148,7 @@ const ReservationListContent = () => {
                                         : 'text-[#1A3A52]/65 hover:text-[#1A3A52] hover:bg-[#D5BA98]/18'
                                     }`}
                                 >
-                                    {status.statusName}
+                                    {localizeStatusLabel(status.statusCode, status.statusName, tStatus)}
                                 </button>
                             ))}
                         </div>
@@ -287,11 +289,11 @@ const ReservationListContent = () => {
                 onClose={() => setDeleteReservationId(null)}
                 onConfirm={handleDelete}
                 variant="delete"
-                title={t("deleteTitle") || "Xóa đơn đặt bàn"}
-                message={t("deleteMessage") || "Bạn có chắc chắn muốn xóa đơn đặt bàn này? Hành động này không thể hoàn tác và sẽ giải phóng các bàn đã gán (nếu có)."}
+                title={t("deleteTitle")}
+                message={t("deleteMessage")}
                 isLoading={isDeleting}
-                confirmText={t("confirmDelete") || "Xác nhận xóa"}
-                cancelText={t("cancel") || "Hủy"}
+                confirmText={t("confirmDelete")}
+                cancelText={t("cancel")}
             />
         </div>
     );

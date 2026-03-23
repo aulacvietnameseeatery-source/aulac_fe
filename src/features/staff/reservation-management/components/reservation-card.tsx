@@ -6,6 +6,7 @@ import { ReservationDto, ReservationStatusDto } from "../types/reservation-types
 import { Badge } from "@/components/ui/badge";
 import { Dropdown, DropdownContent, DropdownItem } from "@/components/ui/dropdown";
 import { Button } from "@/components/ui/button";
+import { localizeStatusLabel } from "../utils/localize-reservation";
 
 interface ReservationCardProps {
     reservation: ReservationDto;
@@ -18,8 +19,11 @@ interface ReservationCardProps {
 }
 
 export const ReservationCard = ({ reservation, statuses, onAssignTable, onEdit, onDelete, onCardClick, onStatusUpdate }: ReservationCardProps) => {
-    const t = useTranslations("reservations.management.Card");
+    const t = useTranslations("reservations.management.card");
+    const tStatus = useTranslations("reservations.management.status");
     const [isNoteVisible, setIsNoteVisible] = useState(false);
+
+    const currentStatusCode = statuses.find((s) => s.statusId === reservation.statusId)?.statusCode;
 
     const getBadgeClasses = (statusId: number): string => {
         switch (statusId) {
@@ -82,7 +86,7 @@ export const ReservationCard = ({ reservation, statuses, onAssignTable, onEdit, 
                     <div onClick={(e) => e.stopPropagation()}>
                         <Dropdown align="end" trigger={
                             <Badge className={`rounded-md px-2.5 py-1 text-xs font-semibold cursor-pointer hover:opacity-90 flex items-center gap-1.5 shadow-sm border ${getBadgeClasses(reservation.statusId)}`}>
-                                {reservation.statusName} <ChevronDown size={12} className="opacity-70" />
+                                {localizeStatusLabel(currentStatusCode, reservation.statusName, tStatus)} <ChevronDown size={12} className="opacity-70" />
                             </Badge>
                         }>
                             <DropdownContent className="w-40 z-50">
@@ -98,7 +102,7 @@ export const ReservationCard = ({ reservation, statuses, onAssignTable, onEdit, 
                                     }}>
                                         <div className="flex items-center gap-2">
                                             <div className={`w-2 h-2 rounded-full ${getStatusDotClass(s.statusId)}`} />
-                                            {s.statusName}
+                                            {localizeStatusLabel(s.statusCode, s.statusName, tStatus)}
                                         </div>
                                     </DropdownItem>
                                 ))}

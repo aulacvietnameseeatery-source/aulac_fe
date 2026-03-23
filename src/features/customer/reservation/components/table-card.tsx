@@ -16,7 +16,7 @@ interface TableCardProps {
 }
 
 export default function TableCard({ id, name, guests, image, status, onClick }: TableCardProps) {
-  const t = useTranslations('reservations.public.TableCard');
+  const t = useTranslations('reservations.public.tableCard');
   const isDisabled = status === 'reserved';
 
   return (

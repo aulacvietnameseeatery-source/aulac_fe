@@ -12,7 +12,7 @@ import { useSearchParams } from 'next/navigation';
 import { cn } from "@/lib/utils";
 
 const SystemSettingsContent = () => {
-    const t = useTranslations('AdminSidebar');
+    const t = useTranslations('navigation.adminSidebar');
     const searchParams = useSearchParams();
     const activeTab = searchParams.get('tab') || 'profile';
 

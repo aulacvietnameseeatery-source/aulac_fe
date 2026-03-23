@@ -3,6 +3,25 @@ import { useLocale } from 'next-intl';
 import { api, BASE_URL } from '@/lib/http';
 import { ApiResponse } from '@/types/api-response.types';
 
+const normalizeMediaUrl = (value: string): string => {
+    if (!value) return '';
+    if (/^(https?:|blob:|data:)/i.test(value)) return value;
+
+    const base = BASE_URL.replace(/\/+$/, '');
+    const normalized = value.replace(/\\/g, '/').trim();
+
+    if (normalized.startsWith('/uploads/')) {
+        return `${base}${normalized}`;
+    }
+
+    if (normalized.startsWith('uploads/')) {
+        return `${base}/${normalized}`;
+    }
+
+    const relative = normalized.replace(/^\/+/, '');
+    return `${base}/uploads/${relative}`;
+};
+
 type SettingItem = {
     settingKey: string;
     value: any;
@@ -59,8 +78,7 @@ export function useDynamicSettings() {
     const getMediaSetting = (key: string, fallback: string) => {
         const val = settings[key];
         if (!val || val.trim() === '') return fallback;
-        if (val.startsWith('http')) return val;
-        return `${BASE_URL}${val}`;
+        return normalizeMediaUrl(val);
     };
 
     return { settings, getSetting, getMediaSetting, isLoading };
