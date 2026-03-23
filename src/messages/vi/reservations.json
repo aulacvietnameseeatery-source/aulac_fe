@@ -528,6 +528,19 @@
         "checkInSuccess": "Khách nhận bàn thành công!",
         "checkInFail": "Lỗi khi cập nhật nhận bàn",
         "loadTablesFail": "Lỗi khi tải danh sách bàn trống."
+      },
+      "status": {
+        "pending": "Chờ xử lý",
+        "confirmed": "Đã xác nhận",
+        "checkedIn": "Đã nhận bàn",
+        "cancelled": "Đã hủy",
+        "noShow": "Không đến",
+        "completed": "Hoàn thành"
+      },
+      "source": {
+        "online": "Đặt online",
+        "phone": "Điện thoại",
+        "walkIn": "Khách trực tiếp"
       }
     },
     "staff": {

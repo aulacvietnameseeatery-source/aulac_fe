@@ -528,6 +528,19 @@
         "checkInSuccess": "Guest checked in successfully!",
         "checkInFail": "Failed to check in reservation",
         "loadTablesFail": "Failed to load available tables."
+      },
+      "status": {
+        "pending": "Pending",
+        "confirmed": "Confirmed",
+        "checkedIn": "Checked In",
+        "cancelled": "Cancelled",
+        "noShow": "No Show",
+        "completed": "Completed"
+      },
+      "source": {
+        "online": "Online",
+        "phone": "Phone",
+        "walkIn": "Walk-In"
       }
     },
     "staff": {

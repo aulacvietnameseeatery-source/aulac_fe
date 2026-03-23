@@ -65,7 +65,7 @@ export const uploadLogo = async (file: File): Promise<string> => {
         '/api/system-settings/upload-logo',
         formData
     );
-    return response.data.publicUrl || response.data.PublicUrl || '';
+    return response.data.publicUrl || response.data.PublicUrl || response.data.relativePath || response.data.RelativePath || '';
 };
 
 /**
@@ -78,7 +78,7 @@ export const uploadFile = async (file: File): Promise<string> => {
         '/api/system-settings/upload-file',
         formData
     );
-    return response.data.publicUrl || response.data.PublicUrl || '';
+    return response.data.publicUrl || response.data.PublicUrl || response.data.relativePath || response.data.RelativePath || '';
 };
 
 /**

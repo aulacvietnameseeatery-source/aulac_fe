@@ -4,6 +4,7 @@ import { format } from "date-fns";
 import { useTranslations } from "next-intl";
 import { ReservationDetailDto } from "../types/reservation-types";
 import { Badge } from "@/components/ui/badge";
+import { localizeSourceLabel, localizeStatusLabel } from "../utils/localize-reservation";
 
 interface BookingInfoSectionProps {
     reservation: ReservationDetailDto;
@@ -11,6 +12,8 @@ interface BookingInfoSectionProps {
 
 export const BookingInfoSection = ({ reservation }: BookingInfoSectionProps) => {
     const t = useTranslations("reservations.management.detail.booking");
+    const tStatus = useTranslations("reservations.management.status");
+    const tSource = useTranslations("reservations.management.source");
 
     const getBadgeVariant = (statusId: number): any => {
         switch (statusId) {
@@ -69,7 +72,7 @@ export const BookingInfoSection = ({ reservation }: BookingInfoSectionProps) => 
                             variant={getBadgeVariant(reservation.statusId)}
                             className="rounded-md px-3 py-1.5 text-sm font-medium"
                         >
-                            {reservation.statusName}
+                            {localizeStatusLabel(reservation.statusCode, reservation.statusName, tStatus)}
                         </Badge>
                     </div>
                 </div>
@@ -83,7 +86,7 @@ export const BookingInfoSection = ({ reservation }: BookingInfoSectionProps) => 
                             variant={getSourceBadgeVariant(reservation.sourceCode)}
                             className="rounded-md px-3 py-1.5 text-sm font-medium"
                         >
-                            {reservation.sourceName}
+                            {localizeSourceLabel(reservation.sourceCode, reservation.sourceName, tSource)}
                         </Badge>
                     </div>
                 </div>

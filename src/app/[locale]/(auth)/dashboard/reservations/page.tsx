@@ -18,10 +18,12 @@ import { EditReservationModal } from "@/features/staff/reservation-management/co
 import { ReservationDetailModal } from "@/features/staff/reservation-management/components/reservation-detail-modal";
 import { ALConfirmDialog } from "@/components/ui/al-confirm-dialog";
 import { CreateReservationModal } from "@/features/staff/reservation-create";
+import { localizeStatusLabel } from "@/features/staff/reservation-management/utils/localize-reservation";
 
 const ReservationListContent = () => {
     const t = useTranslations("reservations.management.list");
     const tm = useTranslations("reservations.management.messages");
+    const tStatus = useTranslations("reservations.management.status");
     const {
         reservations,
         statuses,
@@ -145,7 +147,7 @@ const ReservationListContent = () => {
                                         : 'text-[#1A3A52]/65 hover:text-[#1A3A52] hover:bg-[#D5BA98]/18'
                                         }`}
                                 >
-                                    {status.statusName}
+                                    {localizeStatusLabel(status.statusCode, status.statusName, tStatus)}
                                 </button>
                             ))}
                         </div>

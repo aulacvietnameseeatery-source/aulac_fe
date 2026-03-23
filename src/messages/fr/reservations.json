@@ -529,6 +529,19 @@
         "checkInSuccess": "Client enregistré avec succès !",
         "checkInFail": "Échec de l'enregistrement de la réservation",
         "loadTablesFail": "Échec du chargement des tables disponibles."
+      },
+      "status": {
+        "pending": "En attente",
+        "confirmed": "Confirmée",
+        "checkedIn": "Installé",
+        "cancelled": "Annulée",
+        "noShow": "Absent",
+        "completed": "Terminée"
+      },
+      "source": {
+        "online": "En ligne",
+        "phone": "Téléphone",
+        "walkIn": "Sur place"
       }
     },
     "staff": {
