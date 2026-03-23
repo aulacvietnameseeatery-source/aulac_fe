@@ -674,8 +674,17 @@
         "label": "Loại giảm giá",
         "fixedAmount": "Số tiền cố định",
         "percent": "Phần trăm"
+      },
+      "status": {
+        "label": "Trạng thái",
+        "active": "Đang hoạt động",
+        "disabled": "Vô hiệu hóa",
+        "scheduled": "Đã lên lịch",
+        "expired": "Đã hết hạn"
       }
-    }
+    },
+    "close": "Đóng",
+    "edit": "Chỉnh sửa"
   },
   "Tax": {
     "title": "Quản lý Thuế",
