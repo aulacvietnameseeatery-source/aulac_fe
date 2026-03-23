@@ -90,4 +90,11 @@ export const Permissions = {
   // Notification
   ViewNotification: 'NOTIFICATION:READ',
   AcknowledgeNotification: 'NOTIFICATION:ACK',
+
+  // Inventory
+  ViewInventory: 'INVENTORY:READ',
+  CreateInventoryTx: 'INVENTORY:CREATE',
+  ApproveInventoryTx: 'INVENTORY:APPROVE',
+  StockCheck: 'INVENTORY:STOCK_CHECK',
+  ViewInventoryReport: 'INVENTORY:REPORT_READ',
 } as const;

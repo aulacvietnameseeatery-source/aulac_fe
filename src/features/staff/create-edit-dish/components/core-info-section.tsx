@@ -139,7 +139,7 @@ export const CoreInfoSection: React.FC<{
         {/* 5. IS ONLINE (Checkbox) */}
         <div className="flex items-end h-full pb-0.5"> 
           <label className="flex items-center gap-3 cursor-pointer group p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors h-10 w-full">
-            <input 
+            <input
                 type="checkbox" 
                 {...register("isOnline")} 
                 className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500 transition-transform" 

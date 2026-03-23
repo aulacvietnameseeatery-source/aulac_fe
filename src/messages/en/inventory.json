@@ -1,0 +1,184 @@
+{
+  "inventory": {
+    "common": {
+    "title": "Inventory Management",
+    "loading": "Loading...",
+    "noData": "No data found",
+    "save": "Save",
+    "cancel": "Cancel",
+    "submit": "Submit",
+    "approve": "Approve",
+    "reject": "Reject",
+    "back": "Back",
+    "search": "Search...",
+    "filter": "Filter",
+    "clearFilters": "Clear filters",
+    "actions": "Actions",
+    "viewDetail": "View detail",
+    "created": "Created",
+    "updated": "Updated",
+    "all": "All"
+  },
+  "dashboard": {
+    "title": "Inventory Overview",
+    "description": "Quick summary of inventory status and recent activities",
+    "totalItems": "Total Items",
+    "lowStock": "Low Stock",
+    "outOfStock": "Out of Stock",
+    "pendingTx": "Pending Approval",
+    "lowStockItems": "Low Stock Items",
+    "recentTransactions": "Recent Transactions",
+    "stockHealthChart": "Stock health indicators",
+    "txTypeChart": "Recent transaction mix",
+    "viewAll": "View all",
+    "noLowStock": "All items are well stocked",
+    "noRecentTx": "No recent transactions"
+  },
+  "items": {
+    "title": "Inventory Items",
+    "description": "Manage all inventory items across categories",
+    "searchPlaceholder": "Search items by name...",
+    "table": {
+      "item": "Item",
+      "category": "Category",
+      "type": "Type",
+      "stock": "In Stock",
+      "unit": "Unit",
+      "minLevel": "Min Level",
+      "lastUpdated": "Last Updated",
+      "status": "Status"
+    },
+    "lowStock": "Low stock",
+    "inStock": "In stock",
+    "outOfStock": "Out of stock",
+    "stockCard": "Stock Card",
+    "uncategorized": "Uncategorized"
+  },
+  "stockCard": {
+    "title": "Stock Card",
+    "description": "Movement history for {name}",
+    "movementChart": "Inventory movement chart",
+    "range7d": "7d",
+    "range30d": "30d",
+    "rangeAll": "All",
+    "inbound": "Inbound",
+    "outbound": "Outbound",
+    "net": "Net",
+    "noMovements": "No movements recorded",
+    "previous": "Previous",
+    "next": "Next",
+    "table": {
+      "date": "Date",
+      "txCode": "Transaction",
+      "type": "Type",
+      "quantity": "Qty Changed",
+      "unit": "Unit",
+      "unitPrice": "Unit Price",
+      "reason": "Reason",
+      "note": "Note",
+      "createdBy": "By"
+    }
+  },
+  "transactions": {
+    "title": "Transactions",
+    "description": "View and manage inventory transactions",
+    "searchPlaceholder": "Search by code or note...",
+    "createNew": "New Transaction",
+    "table": {
+      "code": "Code",
+      "type": "Type",
+      "status": "Status",
+      "reason": "Reason",
+      "supplier": "Supplier",
+      "createdBy": "Created By",
+      "createdAt": "Created",
+      "submittedAt": "Submitted",
+      "approvedBy": "Approved By",
+      "items": "Items",
+      "totalValue": "Total Value",
+      "note": "Note"
+    },
+    "types": {
+      "IN": "Import",
+      "OUT": "Export",
+      "ADJUST": "Stock Check"
+    },
+    "statuses": {
+      "DRAFT": "Draft",
+      "PENDING_APPROVAL": "Pending Approval",
+      "COMPLETED": "Completed",
+      "CANCELLED": "Cancelled"
+    },
+    "detail": {
+      "title": "Transaction Detail",
+      "transactionInfo": "Transaction Information",
+      "itemsList": "Items ({count})",
+      "mediaEvidence": "Photo Evidence",
+      "approvalSection": "Approval",
+      "submitForApproval": "Submit for Approval",
+      "approveTransaction": "Approve",
+      "rejectTransaction": "Reject",
+      "rejectionNote": "Rejection reason (required)",
+      "confirmSubmit": "Submit this transaction for manager approval?",
+      "confirmApprove": "Approve this transaction? Stock will be updated.",
+      "confirmReject": "Reject this transaction?",
+      "stockCheckArea": "Stock Check Area",
+      "noMedia": "No photo evidence attached"
+    }
+  },
+  "create": {
+    "title": "Create Transaction",
+    "description": "Create a new inventory transaction",
+    "transactionCode": "Transaction Code",
+    "evidenceTitle": "Evidence Picture",
+    "evidenceHint": "Upload up to 4 images",
+    "selectType": "Transaction Type",
+    "selectTypeHint": "Choose Import, Export, or Stock Check",
+    "import": {
+      "title": "Import (IN)",
+      "description": "Record items received from suppliers",
+      "supplier": "Supplier",
+      "selectSupplier": "Select supplier..."
+    },
+    "export": {
+      "title": "Export (OUT)",
+      "description": "Record items taken out of inventory",
+      "reason": "Export Reason",
+      "selectReason": "Select reason..."
+    },
+    "stockCheck": {
+      "title": "Stock Check (ADJUST)",
+      "description": "Reconcile actual vs system quantities",
+      "area": "Stock Check Area / Notes",
+      "areaPlaceholder": "e.g. Main kitchen, Storage room B..."
+    },
+    "items": {
+      "title": "Items",
+      "addItem": "Add Item",
+      "selectItem": "Select item...",
+      "quantity": "Quantity",
+      "unit": "Unit",
+      "unitPrice": "Unit Price",
+      "note": "Note",
+      "noItems": "Add at least one item to continue",
+      "remove": "Remove"
+    },
+    "note": "Note",
+    "notePlaceholder": "Optional transaction note...",
+    "saveAsDraft": "Save as Draft",
+    "saveAndSubmit": "Save & Submit",
+    "clickToChange": "Click to change type"
+  },
+    "filters": {
+    "category": "Category",
+    "type": "Type",
+    "status": "Status",
+    "lowStockOnly": "Low stock only",
+    "exportReason": "Export Reason",
+    "supplier": "Supplier",
+    "dateRange": "Date Range",
+    "from": "From",
+    "to": "To"
+    }
+  }
+}

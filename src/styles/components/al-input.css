@@ -9,6 +9,10 @@
    entire input row (addons + field).
    ────────────────────────────────────────────────────────── */
 .al-input-group {
+  --al-input-control-height: 2.75rem;
+  --al-input-padding-x: 0.75rem;
+  --al-input-textarea-padding-y: 0.5rem;
+  --al-input-textarea-min-rows: 4;
   display: flex;
   align-items: stretch;
   width: 100%;
@@ -19,7 +23,16 @@
   overflow: hidden;
 }
 
-.al-input-group:focus-within {
+.al-input-textarea-wrap {
+  width: 100%;
+  border-radius: 0.375rem;
+  border: 1px solid rgba(26, 58, 82, 0.2);
+  background-color: transparent;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.al-input-group:focus-within,
+.al-input-textarea-wrap:focus-within {
   border-color: #c9a961; /* gold-classic */
   box-shadow: 0 0 0 1px #c9a961;
 }
@@ -51,13 +64,41 @@
 
 /* ── Size variants ─────────────────────────────────────────── */
 .al-input-group--sm {
+  --al-input-control-height: 2.25rem;
+  --al-input-padding-x: 0.625rem;
   height: 2.25rem; /* h-9 / 36px */
 }
 .al-input-group--default {
+  --al-input-control-height: 2.75rem;
+  --al-input-padding-x: 0.75rem;
   height: 2.75rem; /* h-11 / 44px */
 }
 .al-input-group--lg {
+  --al-input-control-height: 3rem;
+  --al-input-padding-x: 0.875rem;
   height: 3rem; /* h-12 / 48px */
+}
+
+.al-input-textarea-wrap--sm {
+  --al-input-control-height: 2.25rem;
+  --al-input-padding-x: 0.625rem;
+  --al-input-textarea-padding-y: 0.4375rem;
+  --al-input-textarea-min-rows: 3;
+  min-height: calc((var(--al-input-control-height) * 2) + (var(--al-input-textarea-padding-y) * 2));
+}
+.al-input-textarea-wrap--default {
+  --al-input-control-height: 2.75rem;
+  --al-input-padding-x: 0.75rem;
+  --al-input-textarea-padding-y: 0.5rem;
+  --al-input-textarea-min-rows: 4;
+  min-height: calc((var(--al-input-control-height) * 2.25) + (var(--al-input-textarea-padding-y) * 2));
+}
+.al-input-textarea-wrap--lg {
+  --al-input-control-height: 3rem;
+  --al-input-padding-x: 0.875rem;
+  --al-input-textarea-padding-y: 0.625rem;
+  --al-input-textarea-min-rows: 5;
+  min-height: calc((var(--al-input-control-height) * 2.5) + (var(--al-input-textarea-padding-y) * 2));
 }
 
 /* ── Input field inside group ──────────────────────────────
@@ -70,7 +111,7 @@
   border: none;
   outline: none;
   background: transparent;
-  padding: 0 0.75rem;
+  padding: 0 var(--al-input-padding-x);
   font-size: inherit;
   color: var(--navi-blue, #1a3a52);
 }
@@ -80,6 +121,29 @@
 }
 
 .al-input-field:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.al-input-textarea {
+  display: block;
+  width: 100%;
+  min-height: calc((1em * var(--al-input-textarea-min-rows)) + (var(--al-input-textarea-padding-y) * 2));
+  border: none;
+  outline: none;
+  background: transparent;
+  padding: var(--al-input-textarea-padding-y) var(--al-input-padding-x);
+  font-size: inherit;
+  color: var(--navi-blue, #1a3a52);
+  line-height: 1.4;
+  resize: vertical;
+}
+
+.al-input-textarea::placeholder {
+  color: rgba(26, 58, 82, 0.4);
+}
+
+.al-input-textarea:focus {
   outline: none;
   box-shadow: none;
 }
@@ -285,10 +349,24 @@
 /* ── Title / Label ─────────────────────────────────────────── */
 .al-input-title {
   display: block;
-  margin-bottom: 0.375rem;
-  font-size: 1rem;
+  margin-bottom: 0.3125rem; /* default fallback */
+  font-size: 0.875rem;      /* default fallback */
   font-weight: 500;
   color: var(--navi-blue, #1a3a52);
+}
+
+/* Size-scoped title font + spacing */
+.al-input-wrapper--sm .al-input-title {
+  font-size: 0.75rem;    /* text-xs */
+  margin-bottom: 0.25rem;
+}
+.al-input-wrapper--default .al-input-title {
+  font-size: 0.875rem;   /* text-sm */
+  margin-bottom: 0.3125rem;
+}
+.al-input-wrapper--lg .al-input-title {
+  font-size: 1rem;
+  margin-bottom: 0.375rem;
 }
 
 .al-input-required {
@@ -309,4 +387,65 @@
   margin-top: 0.25rem;
   font-size: 0.75rem;
   color: #ef4444;
+}
+
+/* ── Visual variants ───────────────────────────────────────── */
+
+/* Filled: light background, no border until focus */
+.al-input--filled {
+  background-color: rgba(26, 58, 82, 0.04);
+  border-color: transparent;
+}
+.al-input--filled:focus-within {
+  background-color: transparent;
+  border-color: #c9a961;
+  box-shadow: 0 0 0 1px #c9a961;
+}
+
+/* Ghost: no border, no background */
+.al-input--ghost {
+  border-color: transparent;
+  background-color: transparent;
+}
+.al-input--ghost:hover {
+  background-color: rgba(26, 58, 82, 0.03);
+}
+.al-input--ghost:focus-within {
+  border-color: #c9a961;
+  box-shadow: 0 0 0 1px #c9a961;
+}
+
+/* Underline: bottom border only */
+.al-input--underline {
+  border: none;
+  border-radius: 0;
+  border-bottom: 1px solid rgba(26, 58, 82, 0.2);
+}
+.al-input--underline:focus-within {
+  border-bottom-color: #c9a961;
+  box-shadow: 0 1px 0 0 #c9a961;
+}
+
+/* Error / Success priority for visual variants */
+.al-input-group--error.al-input--filled,
+.al-input-group--error.al-input--ghost {
+  border-color: #ef4444;
+  background-color: transparent;
+}
+.al-input-group--error.al-input--underline {
+  border-bottom-color: #ef4444;
+}
+.al-input-group--error.al-input--underline:focus-within {
+  box-shadow: 0 1px 0 0 #ef4444;
+}
+.al-input-group--success.al-input--filled,
+.al-input-group--success.al-input--ghost {
+  border-color: #22c55e;
+  background-color: transparent;
+}
+.al-input-group--success.al-input--underline {
+  border-bottom-color: #22c55e;
+}
+.al-input-group--success.al-input--underline:focus-within {
+  box-shadow: 0 1px 0 0 #22c55e;
 }

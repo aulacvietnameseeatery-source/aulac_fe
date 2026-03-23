@@ -4,15 +4,30 @@ import * as React from "react";
 import {
   Upload,
   X,
+  ImagePlus,
   File as FileIcon,
   FileImage,
   FileText,
   Loader2,
   AlertCircle,
   ImageIcon,
+  ZoomIn,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import type { ALFileUploaderProps, ALFileValidationError } from "./al-file-uploader.types";
+import { Dialog } from "@/components/ui/dialog";
+import { ALFieldLabel, ALFieldMessage } from "@/components/ui/al-field-wrapper";
+import type {
+  ALFileUploaderProps,
+  ALFileValidationError,
+  ALFileUploaderImagePerRow,
+} from "./al-file-uploader.types";
+
+const IMAGE_PER_ROW_CLASS_MAP: Record<ALFileUploaderImagePerRow, string> = {
+  2: "grid-cols-2",
+  4: "grid-cols-2 sm:grid-cols-4",
+  6: "grid-cols-3 sm:grid-cols-4 xl:grid-cols-6",
+  8: "grid-cols-4 sm:grid-cols-6 xl:grid-cols-8",
+};
 
 // ─── Helpers ──────────────────────────────────────────────────
 
@@ -76,14 +91,35 @@ const ExistingImageThumb: React.FC<{
   isPrimary?: boolean;
   isDeleting?: boolean;
   onDelete?: () => void;
+  onPreview?: () => void;
   disabled?: boolean;
-}> = ({ url, isPrimary, isDeleting, onDelete, disabled }) => (
-  <div className="relative group w-20 h-20 rounded-lg overflow-hidden border border-gray-200 bg-gray-50 shrink-0">
+  tileClassName?: string;
+  removeButtonClassName?: string;
+  primaryBadgeClassName?: string;
+}> = ({ url, isPrimary, isDeleting, onDelete, onPreview, disabled, tileClassName, removeButtonClassName, primaryBadgeClassName }) => (
+  <div
+    className={cn(
+      "relative group rounded-lg overflow-hidden border border-slate-200 bg-slate-50 shrink-0",
+      onPreview && "cursor-pointer",
+      tileClassName
+    )}
+    onClick={onPreview}
+    role={onPreview ? "button" : undefined}
+    tabIndex={onPreview ? 0 : undefined}
+    onKeyDown={onPreview ? (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onPreview(); } } : undefined}
+  >
     {/* eslint-disable-next-line @next/next/no-img-element */}
     <img src={url} alt="uploaded" className="w-full h-full object-cover" />
 
+    {/* Hover zoom overlay */}
+    {onPreview && !isDeleting && (
+      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
+        <ZoomIn size={18} className="text-white opacity-0 group-hover:opacity-100 transition-opacity" />
+      </div>
+    )}
+
     {isPrimary && (
-      <span className="absolute bottom-0 left-0 right-0 text-center text-[9px] font-semibold bg-indigo-600/80 text-white py-0.5">
+      <span className={cn("absolute bottom-0 left-0 right-0 text-center text-[9px] font-semibold bg-[#1A3A52]/80 text-white py-0.5", primaryBadgeClassName)}>
         Primary
       </span>
     )}
@@ -97,9 +133,11 @@ const ExistingImageThumb: React.FC<{
         <button
           type="button"
           aria-label="Remove image"
-          onClick={onDelete}
-          className="absolute top-0.5 right-0.5 p-0.5 rounded-full bg-black/50 text-white
-                     opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-600/80"
+          onClick={(e) => { e.stopPropagation(); onDelete(); }}
+          className={cn(
+            "absolute top-0.5 right-0.5 p-0.5 rounded-full bg-black/50 text-white opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-600/80",
+            removeButtonClassName
+          )}
         >
           <X size={12} />
         </button>
@@ -113,21 +151,45 @@ const PendingImageThumb: React.FC<{
   file: File;
   previewUrl: string;
   onRemove: () => void;
+  onPreview?: () => void;
   disabled?: boolean;
-}> = ({ file, previewUrl, onRemove, disabled }) => (
-  <div className="relative group w-20 h-20 rounded-lg overflow-hidden border border-dashed border-indigo-300 bg-indigo-50 shrink-0">
+  tileClassName?: string;
+  removeButtonClassName?: string;
+  sizeBadgeClassName?: string;
+}> = ({ file, previewUrl, onRemove, onPreview, disabled, tileClassName, removeButtonClassName, sizeBadgeClassName }) => (
+  <div
+    className={cn(
+      "relative group rounded-lg overflow-hidden border border-dashed border-[#D5BA98] bg-[#D5BA98]/10 shrink-0",
+      onPreview && "cursor-pointer",
+      tileClassName
+    )}
+    onClick={onPreview}
+    role={onPreview ? "button" : undefined}
+    tabIndex={onPreview ? 0 : undefined}
+    onKeyDown={onPreview ? (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onPreview(); } } : undefined}
+  >
     {/* eslint-disable-next-line @next/next/no-img-element */}
     <img src={previewUrl} alt={file.name} className="w-full h-full object-cover opacity-80" />
-    <div className="absolute bottom-0 left-0 right-0 bg-indigo-600/70 text-white text-[9px] truncate px-1 py-0.5">
+
+    {/* Hover zoom overlay */}
+    {onPreview && (
+      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
+        <ZoomIn size={18} className="text-white opacity-0 group-hover:opacity-100 transition-opacity" />
+      </div>
+    )}
+
+    <div className={cn("absolute bottom-0 left-0 right-0 bg-[#1A3A52]/70 text-white text-[9px] truncate px-1 py-0.5", sizeBadgeClassName)}>
       {formatBytes(file.size)}
     </div>
     {!disabled && (
       <button
         type="button"
         aria-label={`Remove ${file.name}`}
-        onClick={onRemove}
-        className="absolute top-0.5 right-0.5 p-0.5 rounded-full bg-black/50 text-white
-                   opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-600/80"
+        onClick={(e) => { e.stopPropagation(); onRemove(); }}
+        className={cn(
+          "absolute top-0.5 right-0.5 p-0.5 rounded-full bg-black/50 text-white opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-600/80",
+          removeButtonClassName
+        )}
       >
         <X size={12} />
       </button>
@@ -248,6 +310,7 @@ const ALFileUploader = React.forwardRef<HTMLDivElement, ALFileUploaderProps>(
       maxSizeBytes = 10 * 1024 * 1024,
       multiple = true,
       variant = "image",
+      imagePerRow = 4,
       disabled = false,
       className,
     },
@@ -256,17 +319,28 @@ const ALFileUploader = React.forwardRef<HTMLDivElement, ALFileUploaderProps>(
     const inputRef = React.useRef<HTMLInputElement>(null);
     const [isDragging, setIsDragging] = React.useState(false);
     const [validationErrors, setValidationErrors] = React.useState<ALFileValidationError[]>([]);
+    const isGalleryVariant = variant === "gallery";
+    const isImageLikeVariant = variant === "image" || isGalleryVariant;
+    const responsiveImageGridClass = cn(
+      "grid gap-2",
+      IMAGE_PER_ROW_CLASS_MAP[imagePerRow]
+    );
+    const responsiveGalleryGridClass = "grid grid-cols-[repeat(auto-fit,minmax(5.5rem,1fr))] gap-2 sm:grid-cols-[repeat(auto-fit,minmax(6.5rem,1fr))]";
+    const responsiveImageTileClass = "aspect-square h-auto w-full";
+    const responsiveGalleryTileClass = "aspect-square h-auto w-full shrink-none";
+    const responsiveRemoveButtonClass = "size-5 p-0 bg-white/90 text-slate-700 opacity-100 shadow-sm hover:bg-red-600 hover:text-white sm:size-6";
+    const responsiveBadgeClass = "text-[9px] py-0.5 sm:text-[10px] sm:py-1";
 
     // Generate stable object-URL previews for pending files
     const previews = React.useMemo(() => {
-      if (variant !== "image") return {};
+      if (!isImageLikeVariant) return {};
       return Object.fromEntries(
         pendingFiles.map((file) => [
           file.name + file.size,
           URL.createObjectURL(file),
         ])
       );
-    }, [pendingFiles, variant]);
+    }, [pendingFiles, isImageLikeVariant]);
 
     // Revoke object URLs on unmount to prevent memory leaks
     React.useEffect(() => {
@@ -358,6 +432,8 @@ const ALFileUploader = React.forwardRef<HTMLDivElement, ALFileUploaderProps>(
     };
 
     const isAtLimit = totalFileCount >= maxFiles;
+    const hasFiles = totalFileCount > 0;
+    const [previewUrl, setPreviewUrl] = React.useState<string | null>(null);
 
     // ── Dropzone hint text ──
     const hintParts: string[] = [];
@@ -366,125 +442,264 @@ const ALFileUploader = React.forwardRef<HTMLDivElement, ALFileUploaderProps>(
     if (maxSizeBytes > 0) hintParts.push(`up to ${formatBytes(maxSizeBytes)} each`);
     if (maxFiles < Infinity) hintParts.push(`max ${maxFiles} files`);
     const hintText = hintParts.join(" · ");
+    const galleryCountLabel = `${totalFileCount}/${maxFiles} ${maxFiles === 1 ? "image" : "images"}`;
 
+    // _OLD: previous render used unified grid for all variants + dropzone below thumbnails.
+    //       Now: image variant shows dropzone above (full when empty, compact bar with files),
+    //       thumbnails below with click-to-preview. Gallery/file variants largely unchanged.
+    //       Labels & messages unified via ALFieldLabel / ALFieldMessage.
     // ── Render ──
     return (
-      <div ref={ref} className={cn("space-y-1.5", className)}>
-        {/* Title */}
+      <div ref={ref} className={cn("space-y-2 min-w-0", className)}>
+        {/* ── Title (unified) ────────────────────────── */}
         {title && (
-          <p className="text-sm font-medium text-gray-700">
+          <ALFieldLabel size="default" required={required}>
             {title}
-            {required && <span className="text-red-500 ml-0.5">*</span>}
-          </p>
+          </ALFieldLabel>
         )}
 
-        {/* File grid / list */}
-        {(existingFiles.length > 0 || pendingFiles.length > 0) && (
-          <div
-            className={cn(
-              variant === "image"
-                ? "flex flex-wrap gap-2"
-                : "space-y-1.5"
-            )}
-          >
-            {/* Existing files */}
-            {existingFiles.map((f) =>
-              variant === "image" ? (
-                <ExistingImageThumb
-                  key={f.id}
-                  url={f.url}
-                  isPrimary={f.isPrimary}
-                  isDeleting={deletingExistingId === f.id}
-                  onDelete={onDeleteExisting ? () => onDeleteExisting(f.id) : undefined}
-                  disabled={disabled || isUploading}
-                />
-              ) : (
-                <FileListRow
-                  key={f.id}
-                  name={f.name ?? String(f.id)}
-                  url={f.url}
-                  isDeleting={deletingExistingId === f.id}
-                  onDelete={onDeleteExisting ? () => onDeleteExisting(f.id) : undefined}
-                  disabled={disabled || isUploading}
-                  icon={<ImageIcon size={16} />}
-                />
-              )
-            )}
+        {/* ═══ IMAGE VARIANT ═══════════════════════════ */}
+        {variant === "image" && (
+          <>
+            {/* Dropzone: full-size when empty, compact bar when has files */}
+            {!isAtLimit && (
+              <div
+                role="button"
+                tabIndex={disabled ? -1 : 0}
+                aria-label="Upload files"
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                onDrop={handleDrop}
+                onClick={openFilePicker}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    openFilePicker();
+                  }
+                }}
+                className={cn(
+                  "relative rounded-lg border-2 border-dashed transition-colors select-none mb-0",
+                  hasFiles
+                    ? "flex flex-wrap items-center gap-x-3 gap-y-1.5 px-3 py-2.5 cursor-pointer sm:px-4"
+                    : "flex min-h-40 flex-col items-center justify-center gap-2 p-5 cursor-pointer",
+                  isDragging
+                    ? "border-[#1A3A52] bg-[#D5BA98]/10"
+                    : "border-slate-300 bg-white hover:border-[#1A3A52]/40 hover:bg-[#D5BA98]/5",
+                  (disabled || isUploading) && "opacity-50 cursor-not-allowed pointer-events-none",
+                  error && "border-red-300 bg-red-50/30"
+                )}
+              >
+                {isUploading && (
+                  <div className="absolute inset-0 flex items-center justify-center rounded-lg bg-white/70 z-10">
+                    <Loader2 size={20} className="animate-spin text-[#1A3A52]" />
+                    <span className="ml-2 text-sm text-[#1A3A52] font-medium">Uploading…</span>
+                  </div>
+                )}
 
-            {/* Pending files */}
-            {pendingFiles.map((file) =>
-              variant === "image" ? (
-                <PendingImageThumb
-                  key={file.name + file.size}
-                  file={file}
-                  previewUrl={previews[file.name + file.size] ?? ""}
-                  onRemove={() => removePending(file)}
-                  disabled={disabled || isUploading}
-                />
-              ) : (
-                <FileListRow
-                  key={file.name + file.size}
-                  name={file.name}
-                  size={file.size}
-                  onDelete={() => removePending(file)}
-                  disabled={disabled || isUploading}
-                  isPending
-                  icon={getFileIcon(file)}
-                />
-              )
-            )}
-          </div>
-        )}
-
-        {/* Dropzone — shown unless at file limit */}
-        {!isAtLimit && (
-          <div
-            role="button"
-            tabIndex={disabled ? -1 : 0}
-            aria-label="Upload files"
-            onDragOver={handleDragOver}
-            onDragLeave={handleDragLeave}
-            onDrop={handleDrop}
-            onClick={openFilePicker}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" || e.key === " ") {
-                e.preventDefault();
-                openFilePicker();
-              }
-            }}
-            className={cn(
-              "relative flex flex-col items-center justify-center gap-1.5 rounded-lg border-2 border-dashed",
-              "p-4 text-center cursor-pointer select-none transition-colors",
-              isDragging
-                ? "border-indigo-400 bg-indigo-50"
-                : "border-gray-200 bg-gray-50 hover:border-indigo-300 hover:bg-indigo-50/40",
-              (disabled || isUploading) && "opacity-50 cursor-not-allowed pointer-events-none",
-              error && "border-red-300 bg-red-50/30"
-            )}
-          >
-            {/* Upload progress overlay */}
-            {isUploading && (
-              <div className="absolute inset-0 flex items-center justify-center rounded-lg bg-white/70 z-10">
-                <Loader2 size={20} className="animate-spin text-indigo-500" />
-                <span className="ml-2 text-sm text-indigo-600 font-medium">Uploading…</span>
+                {hasFiles ? (
+                  <>
+                    <Upload size={16} className="shrink-0 text-[#1A3A52]/50" />
+                    <span className="min-w-0 text-sm text-[#1A3A52]/70">
+                      {isDragging ? "Drop here" : "Add more images"}
+                    </span>
+                    {hintText && (
+                      <span className="basis-full text-xs text-[#1A3A52]/40 sm:ml-auto sm:basis-auto">
+                        {hintText}
+                      </span>
+                    )}
+                    <span className="text-xs font-medium text-[#1A3A52]/50 sm:ml-0">
+                      {totalFileCount}/{maxFiles}
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    <ImagePlus size={32} className="text-[#1A3A52]/35" />
+                    <p className="text-sm font-medium text-[#1A3A52]/70">
+                      {isDragging ? "Drop images here" : "Upload images"}
+                    </p>
+                    <p className="text-xs text-[#1A3A52]/50">
+                      {isDragging
+                        ? "Release to add files"
+                        : multiple
+                          ? "Drag & drop or click to browse"
+                          : "Drag & drop or click to browse"}
+                    </p>
+                    {hintText && (
+                      <p className="text-xs text-[#1A3A52]/40">{hintText}</p>
+                    )}
+                  </>
+                )}
               </div>
             )}
 
-            <div className="flex items-center gap-2 text-sm text-gray-500">
-              <Upload size={16} className={isDragging ? "text-indigo-500" : "text-gray-400"} />
-              <span>
-                {isDragging
-                  ? "Drop files here"
-                  : multiple
-                  ? "Drop files or click to browse"
-                  : "Drop a file or click to browse"}
-              </span>
-            </div>
-            {hintText && (
-              <p className="text-xs text-gray-400">{hintText}</p>
+            {/* Image thumbnail grid (below dropzone) */}
+            {hasFiles && (
+              <div className={cn(responsiveImageGridClass, "items-start")}>
+                {existingFiles.map((f) => (
+                  <ExistingImageThumb
+                    key={f.id}
+                    url={f.url}
+                    isPrimary={f.isPrimary}
+                    isDeleting={deletingExistingId === f.id}
+                    onDelete={onDeleteExisting ? () => onDeleteExisting(f.id) : undefined}
+                    onPreview={() => setPreviewUrl(f.url)}
+                    disabled={disabled || isUploading}
+                    tileClassName={responsiveImageTileClass}
+                    removeButtonClassName={responsiveRemoveButtonClass}
+                    primaryBadgeClassName={responsiveBadgeClass}
+                  />
+                ))}
+                {pendingFiles.map((file) => (
+                  <PendingImageThumb
+                    key={file.name + file.size}
+                    file={file}
+                    previewUrl={previews[file.name + file.size] ?? ""}
+                    onRemove={() => removePending(file)}
+                    onPreview={() => setPreviewUrl(previews[file.name + file.size] ?? "")}
+                    disabled={disabled || isUploading}
+                    tileClassName={responsiveImageTileClass}
+                    removeButtonClassName={responsiveRemoveButtonClass}
+                    sizeBadgeClassName={responsiveBadgeClass}
+                  />
+                ))}
+              </div>
+            )}
+          </>
+        )}
+
+        {/* ═══ GALLERY VARIANT (unchanged) ═════════════ */}
+        {isGalleryVariant && (
+          <div className={responsiveGalleryGridClass}>
+            {existingFiles.map((f) => (
+              <ExistingImageThumb
+                key={f.id}
+                url={f.url}
+                isPrimary={f.isPrimary}
+                isDeleting={deletingExistingId === f.id}
+                onDelete={onDeleteExisting ? () => onDeleteExisting(f.id) : undefined}
+                onPreview={() => setPreviewUrl(f.url)}
+                disabled={disabled || isUploading}
+                tileClassName={responsiveGalleryTileClass}
+                removeButtonClassName={responsiveRemoveButtonClass}
+                primaryBadgeClassName={responsiveBadgeClass}
+              />
+            ))}
+            {pendingFiles.map((file) => (
+              <PendingImageThumb
+                key={file.name + file.size}
+                file={file}
+                previewUrl={previews[file.name + file.size] ?? ""}
+                onRemove={() => removePending(file)}
+                onPreview={() => setPreviewUrl(previews[file.name + file.size] ?? "")}
+                disabled={disabled || isUploading}
+                tileClassName={responsiveGalleryTileClass}
+                removeButtonClassName={responsiveRemoveButtonClass}
+                sizeBadgeClassName={responsiveBadgeClass}
+              />
+            ))}
+            {!isAtLimit && (
+              <button
+                type="button"
+                aria-label="Add images"
+                onClick={openFilePicker}
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                onDrop={handleDrop}
+                className={cn(
+                  "flex aspect-square w-full cursor-pointer flex-col items-center justify-center gap-1 rounded-lg border-2 border-dashed transition-colors",
+                  isDragging
+                    ? "border-[#1A3A52] bg-[#D5BA98]/10"
+                    : "border-slate-300 bg-white hover:border-[#1A3A52]/40 hover:bg-[#D5BA98]/5",
+                  (disabled || isUploading) && "opacity-50 cursor-not-allowed pointer-events-none"
+                )}
+              >
+                <ImagePlus className="h-5 w-5 text-[#1A3A52]/55 sm:h-6 sm:w-6" />
+                <span className="text-[11px] text-[#1A3A52]/60 sm:text-xs">Add</span>
+              </button>
             )}
           </div>
         )}
+
+        {/* ═══ FILE VARIANT (unchanged) ════════════════ */}
+        {variant === "file" && (
+          <>
+            {hasFiles && (
+              <div className="space-y-1.5">
+                {existingFiles.map((f) => (
+                  <FileListRow
+                    key={f.id}
+                    name={f.name ?? String(f.id)}
+                    url={f.url}
+                    isDeleting={deletingExistingId === f.id}
+                    onDelete={onDeleteExisting ? () => onDeleteExisting(f.id) : undefined}
+                    disabled={disabled || isUploading}
+                    icon={<ImageIcon size={16} />}
+                  />
+                ))}
+                {pendingFiles.map((file) => (
+                  <FileListRow
+                    key={file.name + file.size}
+                    name={file.name}
+                    size={file.size}
+                    onDelete={() => removePending(file)}
+                    disabled={disabled || isUploading}
+                    isPending
+                    icon={getFileIcon(file)}
+                  />
+                ))}
+              </div>
+            )}
+
+            {!isAtLimit && (
+              <div
+                role="button"
+                tabIndex={disabled ? -1 : 0}
+                aria-label="Upload files"
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                onDrop={handleDrop}
+                onClick={openFilePicker}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    openFilePicker();
+                  }
+                }}
+                className={cn(
+                  "relative flex flex-col items-center justify-center gap-1.5 rounded-lg border-2 border-dashed",
+                  "p-4 text-center cursor-pointer select-none transition-colors mb-0",
+                  isDragging
+                    ? "border-[#1A3A52] bg-[#D5BA98]/10"
+                    : "border-slate-300 bg-white hover:border-[#1A3A52]/40 hover:bg-[#D5BA98]/5",
+                  (disabled || isUploading) && "opacity-50 cursor-not-allowed pointer-events-none",
+                  error && "border-red-300 bg-red-50/30"
+                )}
+              >
+                {isUploading && (
+                  <div className="absolute inset-0 flex items-center justify-center rounded-lg bg-white/70 z-10">
+                    <Loader2 size={20} className="animate-spin text-[#1A3A52]" />
+                    <span className="ml-2 text-sm text-[#1A3A52] font-medium">Uploading…</span>
+                  </div>
+                )}
+                <div className="flex items-center gap-2 text-sm text-[#1A3A52]/60">
+                  <Upload size={16} className={isDragging ? "text-[#1A3A52]" : "text-[#1A3A52]/40"} />
+                  <span>
+                    {isDragging
+                      ? "Drop files here"
+                      : multiple
+                        ? "Drop files or click to browse"
+                        : "Drop a file or click to browse"}
+                  </span>
+                </div>
+                {hintText && (
+                  <p className="text-xs text-[#1A3A52]/40">{hintText}</p>
+                )}
+              </div>
+            )}
+          </>
+        )}
+
+        {/* ═══ Common footer ═══════════════════════════ */}
 
         {/* Max-files hint */}
         {isAtLimit && (
@@ -492,6 +707,10 @@ const ALFileUploader = React.forwardRef<HTMLDivElement, ALFileUploaderProps>(
             <AlertCircle size={12} />
             Maximum of {maxFiles} file(s) reached. Remove a file to add more.
           </p>
+        )}
+
+        {isGalleryVariant && !error && (
+          <p className="text-xs text-center text-[#1A3A52]/55">{galleryCountLabel}</p>
         )}
 
         {/* Client-side validation errors */}
@@ -509,18 +728,8 @@ const ALFileUploader = React.forwardRef<HTMLDivElement, ALFileUploaderProps>(
           </ul>
         )}
 
-        {/* External error */}
-        {error && (
-          <p className="flex items-center gap-1.5 text-xs text-red-600">
-            <AlertCircle size={12} className="shrink-0" />
-            {error}
-          </p>
-        )}
-
-        {/* Helper text */}
-        {!error && description && (
-          <p className="text-xs text-gray-400">{description}</p>
-        )}
+        {/* External error / description (unified) */}
+        <ALFieldMessage error={error} description={description} />
 
         {/* Hidden file input */}
         <input
@@ -532,6 +741,25 @@ const ALFileUploader = React.forwardRef<HTMLDivElement, ALFileUploaderProps>(
           disabled={disabled || isUploading}
           onChange={handleInputChange}
         />
+
+        {/* ═══ Image preview dialog ════════════════════ */}
+        {previewUrl && (
+          <Dialog
+            open={!!previewUrl}
+            onClose={() => setPreviewUrl(null)}
+            title="Image Preview"
+            width="min(90vw, 800px)"
+          >
+            <div className="flex items-center justify-center p-2">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={previewUrl}
+                alt="Preview"
+                className="max-w-full max-h-[70vh] object-contain rounded-lg"
+              />
+            </div>
+          </Dialog>
+        )}
       </div>
     );
   }

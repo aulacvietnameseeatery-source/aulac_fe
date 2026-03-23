@@ -11,6 +11,7 @@ import type {
   ALComboboxProps,
   ALComboboxOption,
 } from "./al-combobox.types";
+import { ALFieldLabel, ALFieldMessage } from "@/components/ui/al-field-wrapper";
 
 // ─── Helpers ────────────────────────────────────────────────
 
@@ -435,16 +436,12 @@ const ALCombobox: React.FC<ALComboboxProps> = ({
 
   // ── Main render ───────────────────────────────────────────
   return (
-    <div className={cn("w-full", wrapperClassName)}>
-      {/* Title / Label */}
+    <div className={cn("w-full", `al-cb-wrapper--${inputSize ?? "default"}`, wrapperClassName)}>
+      {/* _OLD: inline al-cb-title-wrapper rendering, now unified via ALFieldLabel */}
       {title && (
-        <div className="flex items-center justify-between mb-1">
-          <label className="al-cb-title !mb-0">
-            {title}
-            {required && <span className="al-cb-required">*</span>}
-          </label>
-          {titleAction && <span>{titleAction}</span>}
-        </div>
+        <ALFieldLabel size={inputSize} required={required} action={titleAction}>
+          {title}
+        </ALFieldLabel>
       )}
 
       <PopoverPrimitive.Root
@@ -570,11 +567,8 @@ const ALCombobox: React.FC<ALComboboxProps> = ({
       {/* Hidden input for forms */}
       {name && <input type="hidden" name={name} value={String(hiddenValue)} />}
 
-      {/* Error / Description */}
-      {error && <span className="al-cb-error">{error}</span>}
-      {!error && description && (
-        <span className="al-cb-description">{description}</span>
-      )}
+      {/* _OLD: inline al-cb-error / al-cb-description rendering, now unified via ALFieldMessage */}
+      <ALFieldMessage error={error} description={description} />
     </div>
   );
 };
