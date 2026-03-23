@@ -142,7 +142,6 @@
         "searchPlaceholder": "Rechercher par numéro, client, personnel...",
         "refresh": "Actualiser",
         "addNewOrder": "Nouvelle commande",
-        "kanbanLabel": "Kanban — Tous les statuts",
         "dateRange": {
           "today": "Aujourd'hui",
           "yesterday": "Hier",
@@ -169,24 +168,6 @@
           "inProgress": "En cours",
           "completed": "Terminée",
           "cancelled": "Annulée"
-        },
-        "kanban": {
-          "pending": "En attente",
-          "inProgress": "En cours",
-          "completed": "Terminée",
-          "cancelled": "Annulée",
-          "empty": "Aucune commande",
-          "start": "Démarrer",
-          "finish": "Terminer",
-          "complete": "Finaliser",
-          "printInvoice": "Imprimer la facture",
-          "reset": "Réinitialiser",
-          "delete": "Supprimer",
-          "cancel": "Annuler"
-        },
-        "viewMode": {
-          "grid": "Vue grille",
-          "kanban": "Vue kanban"
         },
         "statusUpdateSuccess": "Le statut de la commande a été mis à jour",
         "statusUpdateError": "Impossible de mettre à jour le statut de la commande",
@@ -225,9 +206,6 @@
           },
           "action": {
             "view": "Détails",
-            "edit": "Modifier",
-            "start": "Démarrer",
-            "complete": "Terminer",
             "cancel": "Annuler",
             "reset": "Réinitialiser",
             "print": "Imprimer la facture",
