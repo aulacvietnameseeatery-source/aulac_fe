@@ -99,7 +99,7 @@ export function InventoryCheckContent() {
 
                                     <td className="px-5 py-3.5 text-right">
                                             <span className="font-medium text-gray-500">
-                                                {sysQty} <span className="text-[11px] text-gray-400 ml-0.5">{item.unitLvId}</span>
+                                                {sysQty} <span className="text-[11px] text-gray-400 ml-0.5">{item.unitName}</span>
                                             </span>
                                     </td>
 
@@ -113,7 +113,7 @@ export function InventoryCheckContent() {
                                                 onChange={(e) => handleQtyChange(item.ingredientId, e.target.value)}
                                                 className="w-20 text-center py-1.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none text-gray-900 font-bold shadow-sm transition-all"
                                             />
-                                            <span className="text-xs text-gray-500 w-6 font-medium">{item.unitLvId}</span>
+                                            <span className="text-xs text-gray-500 w-6 font-medium">{item.unitName}</span>
                                         </div>
                                     </td>
 

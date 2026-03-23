@@ -82,7 +82,9 @@ export function NotificationToastRenderer() {
   const router = useRouter();
   const { play: playSound } = useNotificationSound();
   const items = useNotificationStore((s) => s.items);
-  const prevCountRef = useRef(0);
+  const lastChangeSource = useNotificationStore((s) => s.lastChangeSource);
+  const lastAddedIds = useNotificationStore((s) => s.lastAddedIds);
+  const prevSignatureRef = useRef("");
 
   // -- build a single notification toast node --
   const buildToastNode = useCallback(
@@ -222,19 +224,22 @@ export function NotificationToastRenderer() {
   );
 
   useEffect(() => {
-    const currentCount = items.length;
+    const signature = `${lastChangeSource}:${lastAddedIds.join(",")}`;
+    if (signature === prevSignatureRef.current) return;
+    prevSignatureRef.current = signature;
 
-    if (currentCount > prevCountRef.current) {
-      const newCount = currentCount - prevCountRef.current;
-      const newItems = items.slice(0, newCount);
+    // Only show toasts for realtime hub pushes or reconnect missed events.
+    if (lastChangeSource !== "realtime" && lastChangeSource !== "missed") return;
+    if (lastAddedIds.length === 0) return;
 
-      for (const notification of newItems) {
+    const itemMap = new Map(items.map((item) => [item.id, item]));
+    for (const id of lastAddedIds) {
+      const notification = itemMap.get(id);
+      if (notification) {
         showToast(notification as NotificationListItem);
       }
     }
-
-    prevCountRef.current = currentCount;
-  }, [items, showToast]);
+  }, [items, lastChangeSource, lastAddedIds, showToast]);
 
   return null;
 }

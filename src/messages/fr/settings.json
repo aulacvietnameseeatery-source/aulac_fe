@@ -30,10 +30,15 @@
       "autoTranslate": "Traduction automatique",
       "search": "Rechercher",
       "cancel": "Annuler",
+      "edit": "Modifier",
+      "delete": "Supprimer",
       "facebook": "Facebook",
       "instagram": "Instagram",
       "tiktok": "TikTok",
-      "website": "Site web"
+      "website": "Site web",
+      "preview": "Aperçu",
+      "remove": "Supprimer",
+      "invalidForm": "Veuillez vérifier tous les onglets de langue pour les champs obligatoires."
     },
     "Introduction": {
       "title": "Page d'introduction",
@@ -145,7 +150,7 @@
       "contactLocation": "Contact et Emplacement",
       "contactLocationDesc": "Détails de l'adresse et coordonnées du magasin.",
       "operating": "Opérations",
-      "operatingDesc": "Heures d'ouverture et autres détails opérationnels.",
+      "operatingDesc": "Heures d'ouverture et autres d’étails opérationnels.",
       "socialMedia": "Réseaux Sociaux",
       "socialMediaDesc": "La présence de votre magasin sur les réseaux sociaux.",
       "changeLogo": "Changer le logo",
@@ -166,8 +171,8 @@
         "storeName": "Entrez le nom du restaurant/magasin",
         "street": "Par exemple : Avenue Jacques Dalcroze 9",
         "postalCode": "1000",
-        "city": "Nom de la ville",
-        "country": "Nom du pays",
+        "city": "Ville Name",
+        "country": "Pays Name",
         "email": "contact@restaurant.com",
         "phone": "+33 1 23 45 67 89",
         "openingHours": "Ex : lun - dim : 08h00 - 22h00",
@@ -198,7 +203,7 @@
       "public": {
         "subtitle": "Une expression tranquille de la cuisine vietnamienne",
         "paragraph_1": "An Lạc est guidé par l'équilibre, la mémoire et la sérénité. Son nom signifie bonheur paisible, inspiré du parcours de la fondatrice — mère de trois enfants — créant un espace reflétant le soin, la stabilité et l'essence de An cư Lạc nghiệp.",
-        "paragraph_2": "Chez An Lạc, nous ne cherchons pas à changer la cuisine vietnamienne, mais à l'honorer. Patience, harmonie et précision façonnent chaque plat : le lent mijotage d'un bouillon, l'équilibre soigné des herbes, la profondeur silencieuse de la fermentation et l'humilité du riz.",
+        "paragraph_2": "Chez An Lạc, we do not seek to change Vietnamese cuisine, but to honor it. Patience, harmony, and precision shape every dish: the slow simmer of a broth, the careful balance of herbs, the quiet depth of fermentation, and the humility of rice.",
         "paragraph_3": "Les techniques familières telles que le kho, le hấp et le nướng sont exprimées avec précision et minimalisme. Les saveurs sont mesurées, équilibrées et subtiles.",
         "closing_quote": "An Lạc est une invitation — à ralentir, goûter attentivement et se reconnecter à l'essentiel."
       },

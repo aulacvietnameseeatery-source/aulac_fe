@@ -129,12 +129,18 @@ export const StoreProfileForm = () => {
         updateMutation.mutate({ items }, {
             onSuccess: () => {
                 toast.success(t('StoreProfile.updateSuccess'));
+                setLocalPreviews({}); // Clear local blobs after successful save
                 loadSettings();
             },
             onError: (err: any) => {
                 toast.error(err?.response?.data?.userMessage || t('StoreProfile.updateError'));
             }
         });
+    };
+
+    const onInvalid = (errors: any) => {
+        console.error('Form Validation errors:', errors);
+        toast.error(t('Common.invalidForm'));
     };
 
     const getFullUrl = () => {
@@ -153,7 +159,7 @@ export const StoreProfileForm = () => {
     }
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6 w-full pb-12">
+        <form onSubmit={handleSubmit(onSubmit, onInvalid)} className="flex flex-col gap-6 w-full pb-12">
             {/* --- HEADER ACTIONS --- */}
             <ALCard variant="glass" elevation="sm" padding="md" radius="xl" className="flex flex-wrap items-center justify-between gap-4 border-amber-200/30">
                 <div className="flex items-center gap-6">
@@ -211,54 +217,11 @@ export const StoreProfileForm = () => {
                             <h2 className="text-xl font-bold text-gray-900 tracking-tight mb-2">
                                 {t("StoreProfile.sections.identity.title")}
                             </h2>
-                            <p className="font-[Inter] text-sm text-[#1A3A52]/60 ml-0 md:ml-13">
-                                {t("StoreProfile.sections.identity.description")}
-                            </p>
                         </div>
 
-                        <div className="p-6 md:p-8 space-y-6">
-                            {/* Logo Upload */}
+                        <div className="p-6 md:p-8 ">
                             <div className="space-y-3">
-                                <label className="font-[Inter] text-xs font-bold text-[#1A3A52]/50 uppercase tracking-widest block">
-                                    {t("StoreProfile.logo")}
-                                </label>
-                                <div className="flex items-center gap-6">
-                                    <div className="relative group">
-                                        <div
-                                            className={cn(
-                                                "w-24 h-24 rounded-2xl border-2 border-dashed border-amber-200/60 bg-white/40 flex items-center justify-center overflow-hidden transition-all cursor-pointer hover:border-amber-300 hover:bg-white/60",
-                                                getFullUrl() && "border-solid bg-white shadow-sm"
-                                            )}
-                                            onClick={() => logoInputRef.current?.click()}
-                                        >
-                                            {getFullUrl() ? (
-                                                <img
-                                                    src={getFullUrl()}
-                                                    className="w-full h-full object-cover"
-                                                    alt="Logo"
-                                                />
-                                            ) : (
-                                                <Upload className="w-7 h-7 text-[#D5BA98]/60" />
-                                            )}
-                                            {isUploading === 'logoUrl' && (
-                                                <div className="absolute inset-0 bg-white/80 flex items-center justify-center">
-                                                    <Loader2 className="w-5 h-5 animate-spin text-[#1A3A52]" />
-                                                </div>
-                                            )}
-                                        </div>
-                                    </div>
-                                    <div className="flex-1">
-                                        <div className="flex flex-wrap gap-3 mb-2">
-                                            <Button
-                                                type="button"
-                                                variant="outline"
-                                                size="sm"
-                                                className="h-9 border-[#D5BA98]/40 text-[#1A3A52] hover:bg-[#D5BA98]/10 font-[Inter] gap-2"
-                                                onClick={() => logoInputRef.current?.click()}
-                                            >
-                                                <Upload className="w-4 h-4" />
-                                                {t("StoreProfile.upload")}
-                                            </Button>
+                                        <div className="flex flex-wrap gap-3">
                                             {logoUrlValue && (
                                                 <Button
                                                     type="button"
@@ -268,7 +231,7 @@ export const StoreProfileForm = () => {
                                                     onClick={() => setValue('logoUrl', '', { shouldDirty: true })}
                                                 >
                                                     <Trash2 className="w-4 h-4" />
-                                                    {t("StoreProfile.remove")}
+                                                    {t("Common.remove")}
                                                 </Button>
                                             )}
                                             {getFullUrl() && (
@@ -280,14 +243,10 @@ export const StoreProfileForm = () => {
                                                     onClick={() => setPreviewData({ url: getFullUrl(), title: "Store Logo", type: 'image' })}
                                                 >
                                                     <Maximize2 className="w-4 h-4" />
-                                                    Preview
+                                                    {t("Common.preview")}
                                                 </Button>
                                             )}
                                         </div>
-                                        <p className="text-[11px] text-[#1A3A52]/40 font-[Inter]">
-                                            JPG, PNG &lt; 5MB
-                                        </p>
-                                    </div>
                                     <input
                                         type="file"
                                         ref={logoInputRef}
@@ -295,10 +254,8 @@ export const StoreProfileForm = () => {
                                         accept="image/*"
                                         onChange={handleFileChange}
                                     />
-                                </div>
                             </div>
 
-                            <div className="h-[1px] w-full bg-[#D5BA98]/20" />
 
                             <div className="space-y-6">
                                 <ALInput
@@ -325,9 +282,6 @@ export const StoreProfileForm = () => {
                             <h2 className="text-xl font-bold text-gray-900 tracking-tight mb-2">
                                 {t("StoreProfile.sections.social.title")}
                             </h2>
-                            <p className="font-[Inter] text-sm text-[#1A3A52]/60 ml-0 md:ml-13">
-                                {t("StoreProfile.sections.social.description")}
-                            </p>
                         </div>
                         <div className="p-6 md:p-8 space-y-6">
                             <ALInput
@@ -365,9 +319,7 @@ export const StoreProfileForm = () => {
                             <h2 className="text-xl font-bold text-gray-900 tracking-tight mb-2">
                                 {t("StoreProfile.sections.contact.title")}
                             </h2>
-                            <p className="font-[Inter] text-sm text-[#1A3A52]/60 ml-0 md:ml-13">
-                                {t("StoreProfile.sections.contact.description")}
-                            </p>
+
                         </div>
 
                         <div className="p-6 md:p-8 space-y-8 flex-1">

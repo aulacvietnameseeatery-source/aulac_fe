@@ -61,11 +61,11 @@ export const createSetting = async (
 export const uploadLogo = async (file: File): Promise<string> => {
     const formData = new FormData();
     formData.append('file', file);
-    const response = await api.post<ApiResponse<{ publicUrl: string }>>(
+    const response = await api.post<ApiResponse<any>>(
         '/api/system-settings/upload-logo',
         formData
     );
-    return response.data.publicUrl;
+    return response.data.publicUrl || response.data.PublicUrl || '';
 };
 
 /**
@@ -74,11 +74,11 @@ export const uploadLogo = async (file: File): Promise<string> => {
 export const uploadFile = async (file: File): Promise<string> => {
     const formData = new FormData();
     formData.append('file', file);
-    const response = await api.post<ApiResponse<{ publicUrl: string }>>(
+    const response = await api.post<ApiResponse<any>>(
         '/api/system-settings/upload-file',
         formData
     );
-    return response.data.publicUrl;
+    return response.data.publicUrl || response.data.PublicUrl || '';
 };
 
 /**

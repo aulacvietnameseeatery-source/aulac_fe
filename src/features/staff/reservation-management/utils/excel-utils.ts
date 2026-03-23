@@ -9,7 +9,7 @@ export const excelUtils = {
             "Ingredient ID": item.ingredientId,
             "Ingredient Name": item.ingredientName,
             "Category": item.typeName || "Uncategorized",
-            "Unit": item.unitLvId,
+            "Unit": item.unitName,
             "Min Alert Level": item.minStockLevel,
             "Current Stock": item.quantityOnHand,
         }));
