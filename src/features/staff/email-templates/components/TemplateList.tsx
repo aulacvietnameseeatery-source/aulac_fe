@@ -54,23 +54,31 @@ export const TemplateList: React.FC<TemplateListProps> = ({ onEdit, onView, onCr
     ], [t]);
 
     return (
-        <div className="w-full">
+        <div className="w-full h-full flex flex-col overflow-hidden">
             <BaseTable<EmailTemplate>
                 data={templates || []}
                 loading={isLoading}
                 columns={columns}
                 rowKey="templateId"
                 onRefresh={refetch}
-                noBorder
+                defaultRowsPerPage={10}
+                rowsPerPageOptions={[10, 20, 50]}
                 renderTitle={() => (
-                    <div className="flex justify-end w-full">
+                    <div className="flex justify-between items-center w-full">
+                        <div className="flex flex-col gap-1.5 pt-2">
+                            <h1 className="text-3xl font-bold text-gray-900 tracking-tight">
+                                {t("title")}
+                            </h1>
+                            <p className="text-sm text-gray-500 mt-1">
+                                {t("description")}
+                            </p>
+                        </div>
                         <Button
                             onClick={onCreate}
                             variant="outline"
-                            size="sm"
-                            className="gap-2"
+                            className="shadow-md"
                         >
-                            <Plus size={16} />
+                            <Plus className="mr-2 h-4 w-4" />
                             {t("actions.add")}
                         </Button>
                     </div>

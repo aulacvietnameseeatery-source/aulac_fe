@@ -14,9 +14,9 @@ export default function TaxManagementPage() {
 
     return (
         <ProtectedRoute permission={Permissions.ViewSystemSettings}>
-            <div className="w-full h-full flex flex-col overflow-hidden">
+            <div className="w-full h-full flex flex-col">
                 {/* Header Section */}
-                <div className="flex justify-between items-center w-full mb-6 py-2">
+                <div className="flex justify-between items-center w-full pb-4">
                     <div>
                         <h1 className="text-3xl font-bold text-gray-900 tracking-tight">
                             {t('title')}
@@ -38,7 +38,7 @@ export default function TaxManagementPage() {
 
                 {/* Content Section */}
                 <main className="flex-1 overflow-y-auto custom-scrollbar">
-                    <div className="max-w-7xl">
+                    <div className="w-full">
                         <TaxSettingsForm
                             isAddOpen={isAddTaxOpen}
                             onAddOpenChange={setIsAddTaxOpen}

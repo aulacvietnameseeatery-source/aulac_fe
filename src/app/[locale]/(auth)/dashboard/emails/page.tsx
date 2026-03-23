@@ -29,17 +29,7 @@ export default function EmailTemplatesPage() {
     };
 
     return (
-        <div className="animate-in fade-in slide-in-from-bottom-2 duration-500 space-y-4">
-            {/* Header section with Lexend font */}
-            <div className="flex flex-col gap-1.5 font-lexend pt-2">
-                <h1 className="text-[28px] font-bold tracking-wide text-[#1A3A52]">
-                    {t("title")}
-                </h1>
-                <p className="text-[#1A3A52]/70 text-sm max-w-2xl font-light">
-                    {t("description")}
-                </p>
-            </div>
-
+        <div className="w-full h-full flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-2 duration-500">
             <TemplateList
                 onEdit={handleEdit}
                 onView={handleView}

@@ -198,6 +198,7 @@
         "customerNotes": "Notes du client :",
         "noNotes": "Aucune demande spéciale ou précommande pour cette réservation.",
         "checkIn": "Enregistrer",
+        "reservationTime": "Heure de réservation",
         "na": "N/D"
       },
       "Detail": {
@@ -243,7 +244,11 @@
         "capacityHint": "Astuce : Essayez d'attribuer une table avec une capacité ≥ {pax}",
         "cancel": "Annuler",
         "confirm": "Confirmer",
-        "loading": "Chargement des tables..."
+        "loading": "Chargement des tables...",
+        "selectError": "Veuillez sélectionner au moins une table !",
+        "guestsCount": "Invités : {count}",
+        "seats": "places",
+        "selectedTables": "Sélectionné : {count} table(s)"
       },
       "Messages": {
         "checkInSuccess": "Client enregistré avec succès !",
