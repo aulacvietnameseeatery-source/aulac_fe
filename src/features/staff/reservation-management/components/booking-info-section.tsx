@@ -10,7 +10,7 @@ interface BookingInfoSectionProps {
 }
 
 export const BookingInfoSection = ({ reservation }: BookingInfoSectionProps) => {
-    const t = useTranslations("reservations.management.Detail.Booking");
+    const t = useTranslations("reservations.management.detail.booking");
 
     const getBadgeVariant = (statusId: number): any => {
         switch (statusId) {

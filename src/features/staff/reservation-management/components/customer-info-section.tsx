@@ -8,7 +8,7 @@ interface CustomerInfoSectionProps {
 }
 
 export const CustomerInfoSection = ({ reservation }: CustomerInfoSectionProps) => {
-    const t = useTranslations("reservations.management.Detail.Customer");
+    const t = useTranslations("reservations.management.detail.customer");
 
     return (
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">

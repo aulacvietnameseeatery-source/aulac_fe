@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { User, Search, Mail } from 'lucide-react';
 import { CustomerType } from '../types/types';
 import { useTranslations } from "next-intl";
@@ -21,7 +21,7 @@ const CustomerSectionComponent: React.FC<Props> = ({
   phone, fullName, email, customerType, loyaltyPoints, isSearching,
   onPhoneChange, onNameChange, onEmailChange, onSearch
 }) => {
-  const t = useTranslations("StaffReservation.customer");
+  const t = useTranslations("reservations.staff.customer");
 
   return (
     <div className="border-b border-slate-100 relative">

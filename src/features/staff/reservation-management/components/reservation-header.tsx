@@ -24,7 +24,7 @@ export const ReservationHeader = ({
     onStatusChange,
     statuses
 }: ReservationHeaderProps) => {
-    const t = useTranslations("reservations.management.List");
+    const t = useTranslations("reservations.management.list");
 
     const getStatusTabClasses = (statusId: number | null): string => {
         if (statusId === null) return "bg-slate-700 border-slate-700 text-white shadow-sm";
@@ -80,7 +80,7 @@ export const ReservationHeader = ({
                                 : 'text-gray-500 hover:bg-gray-200 hover:text-gray-700'
                                 }`}
                         >
-                            {t("today") || "Today"}
+                            {t("today")}
                         </button>
                         <button
                             onClick={() => onDateChange(addDays(new Date(), 1))}
@@ -89,7 +89,7 @@ export const ReservationHeader = ({
                                 : 'text-gray-500 hover:bg-gray-200 hover:text-gray-700'
                                 }`}
                         >
-                            {t("tomorrow") || "Tomorrow"}
+                            {t("tomorrow")}
                         </button>
 
                         {/* Date Display (Giả lập DatePicker như Figma) */}

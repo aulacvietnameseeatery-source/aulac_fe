@@ -10,7 +10,7 @@ interface CallRestaurantPopupProps {
 }
 
 export default function CallRestaurantPopup({ isOpen, onClose }: CallRestaurantPopupProps) {
-    const t = useTranslations('reservations.public.CallButton');
+    const t = useTranslations('reservations.public.callButton');
     const [copied, setCopied] = useState(false);
     const { data: storeSettings, isLoading } = useStoreSettings();
 

@@ -8,7 +8,7 @@ interface TableInfoSectionProps {
 }
 
 export const TableInfoSection = ({ reservation }: TableInfoSectionProps) => {
-    const t = useTranslations("reservations.management.Detail.Table");
+    const t = useTranslations("reservations.management.detail.table");
 
     return (
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">

@@ -18,7 +18,7 @@ interface ReservationCardProps {
 }
 
 export const ReservationCard = ({ reservation, statuses, onAssignTable, onEdit, onDelete, onCardClick, onStatusUpdate }: ReservationCardProps) => {
-    const t = useTranslations("reservations.management.Card");
+    const t = useTranslations("reservations.management.card");
     const [isNoteVisible, setIsNoteVisible] = useState(false);
 
     const getBadgeClasses = (statusId: number): string => {

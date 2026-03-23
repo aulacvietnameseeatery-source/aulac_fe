@@ -21,7 +21,7 @@ export default function MobileBookingSheet({
     isOpen,
     onClose,
 }: MobileBookingSheetProps) {
-    const t = useTranslations("reservations.public.Sidebar");
+    const t = useTranslations("reservations.public.sidebar");
     const [isExpanded, setIsExpanded] = useState(false);
 
     // Form State
@@ -132,7 +132,7 @@ export default function MobileBookingSheet({
                                     />
                                 </div>
                                 <div className="flex items-center justify-between bg-slate-50 p-3 rounded-lg border border border-[#D5BA98]/60">
-                                    <span className="text-sm font-semibold text-stone-500">Party Size</span>
+                                    <span className="text-sm font-semibold text-stone-500">{t("guest.partySize")}</span>
                                     <input
                                         type="number"
                                         min={1}
@@ -155,7 +155,7 @@ export default function MobileBookingSheet({
                             : "bg-[#1A3A52] text-white shadow-[#1A3A52]/20 hover:shadow-xl hover:shadow-[#1A3A52]/30"
                             }`}
                     >
-                        {isExpanded ? t("action.book") : `Book ${selectedTable.tableCode}`}
+                        {t("action.book")}
                     </button>
                     <div className="safe-area-bottom h-4" />
                 </div>
