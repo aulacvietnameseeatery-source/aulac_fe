@@ -743,6 +743,7 @@
       "sessionExpired": "Your session has expired. Please sign in again.",
       "tokenRefreshFailed": "Your session could not be refreshed. Please sign in again.",
       "noAccessToken": "You need to sign in before continuing.",
+      "invalidCredentials": "Invalid username or password",
       "unauthorized": "You are not authorized. Please sign in and try again.",
       "forbidden": "You do not have permission to perform this action.",
       "notFound": "The requested resource was not found.",
