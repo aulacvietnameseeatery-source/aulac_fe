@@ -16,6 +16,7 @@ import "@/styles/components/al-input.css";
 import type { ALDatePickerProps } from "./al-date-picker.types";
 import type { ALInputSize, ALInputState } from "@/components/ui/al-input";
 import type { Matcher } from "react-day-picker";
+import { ALFieldWrapper } from "@/components/ui/al-field-wrapper";
 
 // ─── Helpers ────────────────────────────────────────────────
 
@@ -30,9 +31,9 @@ const sizeClass = (size: ALInputSize = "default") =>
 /** Map size prop → font class */
 const fontClass = (size: ALInputSize = "default") =>
   ({
-    sm: "text-md bold",
-    default: "text-lg bold",
-    lg: "text-xl bold",
+    sm: "text-xs",
+    default: "text-sm",
+    lg: "text-base",
   })[size];
 
 /** Resolve visual state, auto-detecting error from props */
@@ -293,16 +294,16 @@ const ALDatePicker = React.forwardRef<HTMLButtonElement, ALDatePickerProps>(
       onChange?.(formatOutputDate(nextDate, "datetime"));
     };
 
+    // _OLD: inline label/error/description rendering, now unified via ALFieldWrapper
     return (
-      <div className={cn("w-full", wrapperClassName)}>
-        {/* ── Title / Label ───────────────────────────── */}
-        {title && (
-          <label className="al-input-title">
-            {title}
-            {isRequired && <span className="al-input-required">*</span>}
-          </label>
-        )}
-
+      <ALFieldWrapper
+        title={title}
+        description={description}
+        error={error}
+        required={isRequired}
+        size={inputSize}
+        className={wrapperClassName}
+      >
         {/* Hidden input for form compatibility */}
         {name && <input type="hidden" name={name} value={value ?? ""} />}
 
@@ -453,12 +454,7 @@ const ALDatePicker = React.forwardRef<HTMLButtonElement, ALDatePickerProps>(
           </PopoverContent>
         </Popover>
 
-        {/* ── Error / Description ─────────────────────── */}
-        {error && <span className="al-input-error">{error}</span>}
-        {!error && description && (
-          <span className="al-input-description">{description}</span>
-        )}
-      </div>
+      </ALFieldWrapper>
     );
   }
 );

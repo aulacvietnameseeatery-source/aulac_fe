@@ -456,7 +456,7 @@ export function BaseTable<T>({
     return (
         <div className="flex h-full flex-col gap-4">
             {renderTitle && (
-                <div className="flex flex-row items-center justify-between">
+                <div className="flex flex-row items-center justify-between ">
                     {renderTitle()}
                 </div>
             )}

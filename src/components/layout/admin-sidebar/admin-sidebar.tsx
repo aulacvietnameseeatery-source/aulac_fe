@@ -97,7 +97,8 @@ const navigation: NavCategory[] = [
     items: [
       { key: "ingredients", href: "/dashboard/ingredients", icon: Package },
       { key: "suppliers", href: "/dashboard/suppliers", icon: Truck },
-      { key: "stock", href: "/dashboard/stock", icon: Layers },
+      { key: "inventory", href: "/dashboard/inventory", icon: Warehouse, permission: Permissions.ViewInventory },
+      // _OLD: { key: "stock", href: "/dashboard/stock", icon: Layers },
     ]
   },
   {

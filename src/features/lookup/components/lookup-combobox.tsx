@@ -26,6 +26,7 @@ import { ALCombobox } from "@/components/ui/al-combobox";
 import LookupManagerModal from "./lookup-manager-modal";
 import type { LookupCrudReturn } from "../hooks/use-lookup-crud";
 import type { LookupValueDto } from "../types/lookup.types";
+import type { ALComboboxSize } from "@/components/ui/al-combobox/al-combobox.types";
 
 // ─── Props ────────────────────────────────────────────────────
 
@@ -55,6 +56,10 @@ export interface LookupComboboxProps {
   disabled?: boolean;
   /** Optional validation message */
   error?: string;
+  /** ALCombobox trigger size */
+  inputSize?: ALComboboxSize;
+  /** Optional class override for combobox trigger (e.g. text-sm/text-base) */
+  comboboxClassName?: string;
   /** Locale for displaying translated names */
   locale?: "en" | "vi" | "fr";
 }
@@ -72,6 +77,8 @@ const LookupCombobox: React.FC<LookupComboboxProps> = ({
   onCreated,
   disabled,
   error,
+  inputSize,
+  comboboxClassName,
   locale,
 }) => {
   const [isManagerOpen, setIsManagerOpen] = useState(false);
@@ -152,6 +159,8 @@ const LookupCombobox: React.FC<LookupComboboxProps> = ({
       <ALCombobox
         title={title}
         required={required}
+        inputSize={inputSize}
+        className={comboboxClassName}
         placeholder={placeholder}
         options={options}
         value={

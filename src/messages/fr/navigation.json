@@ -20,6 +20,7 @@
       "suppliers": "Fournisseurs",
       "coupons": "Coupons",
       "stock": "Stock",
+      "inventory": "Inventaire",
       "orders": "Commandes",
       "invoices": "Factures",
       "payments": "Paiements",

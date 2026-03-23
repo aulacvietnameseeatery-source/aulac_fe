@@ -207,6 +207,32 @@ Tailwind direction:
 - `renderToolbarAppend()` should provide compact inline controls that sit naturally inside the table toolbar area
 - When building new list pages, prefer: page header card(s) via `renderTitle()` + BaseTable default content card
 
+### Table + Mobile Responsiveness Rule
+
+For all staff list/management pages:
+
+- `renderTitle()` must remain usable on mobile first (`flex-col`, full-width controls, buttons expand to `w-full` on small screens).
+- Keep primary actions discoverable on mobile: do not hide the create/filter controls behind hover-only interactions.
+- Avoid hardcoded oversized table column widths that force unusable horizontal scrolling on phones.
+- Long text cells must support truncation + readable secondary metadata lines (`text-xs` / `text-sm`) for compact mobile scanning.
+- If a table is core on both desktop and mobile, design supporting controls to wrap and stack cleanly at `< md` breakpoints.
+
+### Scroll Containment Rule
+
+- **Desktop (`lg:` and above):** Do **not** use `overflow-y-auto` + `max-h-*` on main list/form content areas. Let the browser scroll naturally. Remove scroll containment using `lg:max-h-none lg:overflow-visible`.
+- **Mobile / Tablet (`< lg`):** Containment scrolling (`max-h-[44vh] overflow-y-auto`) is acceptable for long lists to keep the view usable on small screens.
+- Pattern: `className="max-h-[44vh] overflow-y-auto lg:max-h-none lg:overflow-visible"`
+- Exception: modals and drawers may use scroll containment at all breakpoints.
+
+### ALCombobox Sizing Rule
+
+- Use `inputSize` intentionally by context:
+  - dense toolbar/filter: `inputSize="sm"`
+  - default forms: `inputSize="default"`
+  - page-level filters and prominent selectors: `inputSize="lg"`
+- Explicitly set readable text size via class hooks when needed (for example `text-sm` on compact layouts).
+- For `LookupCombobox`, pass size/text props instead of ad-hoc CSS overrides whenever possible.
+
 ## Conventions
 
 - **No deletions:** Never delete existing code when implementing changes. Instead, comment it out and rename it with a `// _OLD:` prefix on the comment (for inline blocks) or append `_DEPRECATED` to the identifier name. This preserves history and makes rollback trivial. Moving file is allowed to delete the old path, but the new file must be a copy-paste of the old content with changes applied, never a refactor that edits in place.
