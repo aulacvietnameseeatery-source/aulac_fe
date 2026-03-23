@@ -10,19 +10,18 @@ import { ReservationCard } from "@/features/staff/reservation-management/compone
 import { AssignTableModal } from "@/features/staff/reservation-management/components/assign-table-modal";
 import { ReservationDto } from "@/features/staff/reservation-management/types/reservation-types";
 import { TablePagination } from "@/components/ui/table";
-import { useRouter } from "next/navigation";
 import { ProtectedRoute } from "@/components/protected-route";
 import { Permissions } from "@/types/const";
 import { reservationService } from "@/features/staff/reservation-management/services/reservation-service";
 import { toast } from "sonner";
 import { EditReservationModal } from "@/features/staff/reservation-management/components/edit-reservation-modal";
+import { ReservationDetailModal } from "@/features/staff/reservation-management/components/reservation-detail-modal";
 import { ALConfirmDialog } from "@/components/ui/al-confirm-dialog";
 import { CreateReservationModal } from "@/features/staff/reservation-create";
 
 const ReservationListContent = () => {
     const t = useTranslations("reservations.management.List");
     const tm = useTranslations("reservations.management.Messages");
-    const router = useRouter();
     const {
         reservations,
         statuses,
@@ -60,6 +59,7 @@ const ReservationListContent = () => {
         setShowCreateModal(true);
     };
 
+    const [detailReservationId, setDetailReservationId] = useState<number | null>(null);
     const [assignTableReservation, setAssignTableReservation] = useState<ReservationDto | null>(null);
     const [editReservationId, setEditReservationId] = useState<number | null>(null);
     const [deleteReservationId, setDeleteReservationId] = useState<number | null>(null);
@@ -200,7 +200,7 @@ const ReservationListContent = () => {
                                         onAssignTable={() => setAssignTableReservation(item)}
                                         onEdit={(id) => setEditReservationId(id)}
                                         onDelete={(id) => setDeleteReservationId(id)}
-                                        onCardClick={(id) => router.push(`/dashboard/reservations/${id}`)}
+                                        onCardClick={(id) => setDetailReservationId(id)}
                                         onStatusUpdate={handleStatusUpdate}
                                     />
                                 ))}
@@ -251,6 +251,22 @@ const ReservationListContent = () => {
                     onSuccess={() => {
                         setEditReservationId(null);
                         actions.refresh();
+                    }}
+                />
+            )}
+
+            {detailReservationId && (
+                <ReservationDetailModal
+                    reservationId={detailReservationId}
+                    open={!!detailReservationId}
+                    onClose={() => setDetailReservationId(null)}
+                    onEdit={(id) => {
+                        setDetailReservationId(null);
+                        setEditReservationId(id);
+                    }}
+                    onDelete={(id) => {
+                        setDetailReservationId(null);
+                        setDeleteReservationId(id);
                     }}
                 />
             )}

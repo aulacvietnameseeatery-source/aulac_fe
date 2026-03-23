@@ -117,6 +117,7 @@ export const CreateOrderPage = () => {
     customerId: customer?.customerId || 0,
     customerName: customer?.fullName || '',
     totalAmount: cartTotal,
+    taxAmount: 0,
     orderStatus: 'Pending',
     source: toOrderSourceCode(orderType),
     createdAt: new Date().toISOString(),

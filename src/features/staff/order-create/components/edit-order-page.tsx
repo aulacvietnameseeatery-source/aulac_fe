@@ -198,6 +198,7 @@ export const EditOrderPage = ({ orderId }: { orderId: number }) => {
     customerId: orderInfo.customerId || 0,
     customerName: orderInfo.customerName,
     totalAmount: orderInfo.totalAmount + newCartTotal,
+    taxAmount: orderInfo.taxAmount || 0,
     tipAmount: orderInfo.tipAmount,
     orderStatus: orderInfo.orderStatus,
     source: toOrderSourceCode(orderInfo.source),

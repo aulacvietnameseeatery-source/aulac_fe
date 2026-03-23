@@ -199,6 +199,7 @@
         "customerNotes": "Customer Notes:",
         "noNotes": "No special requests or pre-orders for this reservation.",
         "checkIn": "Check In",
+        "reservationTime": "Reservation Time",
         "na": "N/A"
       },
       "Detail": {
@@ -244,7 +245,11 @@
         "capacityHint": "Tip: Try to assign a table with capacity ≥ {pax}",
         "cancel": "Cancel",
         "confirm": "Confirm",
-        "loading": "Loading tables..."
+        "loading": "Loading tables...",
+        "selectError": "Please select at least one table!",
+        "guestsCount": "Guests: {count}",
+        "seats": "seats",
+        "selectedTables": "Selected: {count} table(s)"
       },
       "Messages": {
         "checkInSuccess": "Guest checked in successfully!",

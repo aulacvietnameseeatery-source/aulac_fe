@@ -125,7 +125,7 @@ export const TaxSettingsForm: React.FC<TaxSettingsFormProps> = ({ isAddOpen, onA
                                     </div>
                                     <div className="flex items-center gap-2">
                                         <Badge variant="secondary" className="bg-blue-500/10 text-blue-600 border-none font-mono px-1.5 py-0 text-xs">
-                                            {tax.taxRate}%
+                                            {tax.taxRate * 100}%
                                         </Badge>
                                         <Badge
                                             variant="outline"

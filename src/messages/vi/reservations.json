@@ -199,6 +199,7 @@
         "customerNotes": "Ghi chú của khách:",
         "noNotes": "Không có yêu cầu đặc biệt hay gọi món trước.",
         "checkIn": "Nhận bàn",
+        "reservationTime": "Giờ đặt",
         "na": "Chưa xếp"
       },
       "Detail": {
@@ -244,7 +245,11 @@
         "capacityHint": "Gợi ý: Hãy xếp khách vào bàn có sức chứa ≥ {pax}",
         "cancel": "Hủy bỏ",
         "confirm": "Xác nhận",
-        "loading": "Đang tải danh sách bàn..."
+        "loading": "Đang tải danh sách bàn...",
+        "selectError": "Vui lòng chọn ít nhất 1 bàn!",
+        "guestsCount": "Khách: {count} người",
+        "seats": "chỗ",
+        "selectedTables": "Đã chọn: {count} bàn"
       },
       "Messages": {
         "checkInSuccess": "Khách nhận bàn thành công!",
