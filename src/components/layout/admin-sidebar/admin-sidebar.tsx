@@ -85,10 +85,9 @@ const navigation: NavCategory[] = [
     items: [
       { key: "dish", href: "/dashboard/dish", icon: UtensilsCrossed },
       { key: "dishCategory", href: "/dashboard/dish-category", icon: FolderOpen },
-      { key: "coupons", href: "/dashboard/coupons", icon: TicketPercent },
       { key: "promotions", href: "/dashboard/promotions", icon: Tags },
-        { key: "coupons", href: "/dashboard/coupons", icon: TicketPercent },
-        { key: "taxSettings", href: "/dashboard/tax", icon: BadgePercent },
+      { key: "coupons", href: "/dashboard/coupons", icon: TicketPercent },
+      { key: "taxSettings", href: "/dashboard/tax", icon: BadgePercent },
     ]
   },
 
@@ -98,7 +97,7 @@ const navigation: NavCategory[] = [
     items: [
       { key: "ingredients", href: "/dashboard/ingredients", icon: Package },
       { key: "suppliers", href: "/dashboard/suppliers", icon: Truck },
-      { key: "stock", href: "/dashboard/stock", icon: Layers  },
+      { key: "stock", href: "/dashboard/stock", icon: Layers },
     ]
   },
   {
