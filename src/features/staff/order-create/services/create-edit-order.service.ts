@@ -29,6 +29,11 @@ export const createOrderService = {
     return res.data;
   },
 
+  searchCustomers: async (keyword: string, limit: number = 10): Promise<CustomerDto[]> => {
+    const res = await api.get<ApiResponse<CustomerDto[]>>(`/api/customers/search?keyword=${keyword}&limit=${limit}`);
+    return res.data;
+  },
+
   createOrder: async (payload: CreateOrderRequest): Promise<void> => {
     console.log(payload);
     await api.post<ApiResponse<any>>('/api/orders/staff', payload);
