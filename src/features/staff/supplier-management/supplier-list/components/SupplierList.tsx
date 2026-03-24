@@ -117,6 +117,8 @@ export default function SupplierList() {
           supplierName: formData.supplierName.trim(),
           phone: formData.phone.trim() || undefined,
           email: formData.email.trim() || undefined,
+          address: formData.address.trim() || undefined,
+          taxCode: formData.taxCode.trim() || undefined,
           ingredientIds: formData.ingredientIds,
         });
         toast.success(tAdd("notifications.createSuccess"));
@@ -125,6 +127,8 @@ export default function SupplierList() {
           supplierName: formData.supplierName.trim(),
           phone: formData.phone.trim() || undefined,
           email: formData.email.trim() || undefined,
+          address: formData.address.trim() || undefined,
+          taxCode: formData.taxCode.trim() || undefined,
           ingredientIds: formData.ingredientIds,
         });
         toast.success(tEdit("notifications.updateSuccess"));
@@ -172,6 +176,19 @@ export default function SupplierList() {
       field: 'email',
       header: t("table.email"),
       sortable: false,
+      cellRender: ({ value }) => value || <span className="text-gray-400 italic">-</span>,
+    },
+    {
+      field: 'address',
+      header: t("table.address"),
+      sortable: false,
+      cellRender: ({ value }) => value || <span className="text-gray-400 italic">-</span>,
+    },
+    {
+      field: 'taxCode',
+      header: t("table.taxCode"),
+      sortable: false,
+      width: '150px',
       cellRender: ({ value }) => value || <span className="text-gray-400 italic">-</span>,
     },
   ], [paginationInfo.page, paginationInfo.pageSize, t]);

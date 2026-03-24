@@ -1,0 +1,121 @@
+{
+  "Supplier": {
+    "close": "Đóng",
+    "edit": "Chỉnh sửa",
+    "List": {
+      "title": "Quản lý Nhà cung cấp",
+      "description": "Quản lý và tổ chức các nhà cung cấp một cách hiệu quả.",
+      "searchPlaceholder": "Tìm theo tên, số điện thoại hoặc email...",
+      "addNew": "Thêm Nhà cung cấp Mới",
+      "table": {
+        "no": "STT",
+        "name": "Tên Nhà cung cấp",
+        "phone": "Số điện thoại",
+        "email": "Email",
+        "address": "Địa chỉ",
+        "taxCode": "Mã số thuế"
+      },
+      "deleteModal": {
+        "title": "Xóa Nhà cung cấp",
+        "message": "Bạn có chắc chắn muốn xóa \"{name}\"? Hành động này không thể hoàn tác.",
+        "confirm": "Xóa",
+        "cancel": "Hủy"
+      },
+      "notifications": {
+        "deleteSuccess": "Đã xóa nhà cung cấp thành công",
+        "deleteError": "Không thể xóa nhà cung cấp"
+      }
+    },
+    "Add": {
+      "title": "Thêm Nhà cung cấp Mới",
+      "subtitle": "Tạo hồ sơ nhà cung cấp mới với thông tin liên hệ.",
+      "supplierName": "Tên Nhà cung cấp",
+      "supplierNamePlaceholder": "Nhập tên nhà cung cấp",
+      "phone": "Số điện thoại",
+      "phonePlaceholder": "Nhập số điện thoại (không bắt buộc)",
+      "email": "Email",
+      "emailPlaceholder": "Nhập địa chỉ email (không bắt buộc)",
+      "address": "Địa chỉ",
+      "addressPlaceholder": "Nhập địa chỉ (không bắt buộc)",
+      "taxCode": "Mã số thuế",
+      "taxCodePlaceholder": "Nhập mã số thuế (không bắt buộc)",
+      "ingredients": "Nguyên vật liệu cung cấp",
+      "ingredientsPlaceholder": "Chọn nguyên liệu mà nhà cung cấp cung cấp",
+      "cancel": "Hủy",
+      "saveButton": "Thêm Nhà cung cấp",
+      "validation": {
+        "nameRequired": "Tên nhà cung cấp là bắt buộc",
+        "nameMaxLength": "Tên nhà cung cấp không được vượt quá 200 ký tự",
+        "phoneInvalid": "Số điện thoại chỉ được chứa chữ số",
+        "phoneMaxLength": "Số điện thoại không được vượt quá 50 ký tự",
+        "emailInvalid": "Vui lòng nhập địa chỉ email hợp lệ",
+        "emailMaxLength": "Email không được vượt quá 150 ký tự",
+        "addressMaxLength": "Địa chỉ không được vượt quá 500 ký tự",
+        "taxCodeMaxLength": "Mã số thuế không được vượt quá 50 ký tự",
+        "fixErrors": "Vui lòng sửa các lỗi trước khi gửi"
+      },
+      "notifications": {
+        "createSuccess": "Đã thêm nhà cung cấp thành công",
+        "createError": "Không thể thêm nhà cung cấp"
+      }
+    },
+    "Edit": {
+      "title": "Chỉnh sửa Nhà cung cấp",
+      "subtitle": "Cập nhật thông tin và chi tiết liên hệ nhà cung cấp.",
+      "supplierName": "Tên Nhà cung cấp",
+      "supplierNamePlaceholder": "Nhập tên nhà cung cấp",
+      "phone": "Số điện thoại",
+      "phonePlaceholder": "Nhập số điện thoại (không bắt buộc)",
+      "email": "Email",
+      "emailPlaceholder": "Nhập địa chỉ email (không bắt buộc)",
+      "address": "Địa chỉ",
+      "addressPlaceholder": "Nhập địa chỉ (không bắt buộc)",
+      "taxCode": "Mã số thuế",
+      "taxCodePlaceholder": "Nhập mã số thuế (không bắt buộc)",
+      "ingredients": "Nguyên vật liệu cung cấp",
+      "ingredientsPlaceholder": "Chọn nguyên liệu mà nhà cung cấp cung cấp",
+      "cancel": "Hủy",
+      "saveButton": "Lưu Thay đổi",
+      "loading": "Đang tải dữ liệu nhà cung cấp...",
+      "errorTitle": "Không thể tải nhà cung cấp",
+      "backToList": "Quay lại Danh sách",
+      "validation": {
+        "nameRequired": "Tên nhà cung cấp là bắt buộc",
+        "nameMaxLength": "Tên nhà cung cấp không được vượt quá 200 ký tự",
+        "phoneInvalid": "Số điện thoại chỉ được chứa chữ số",
+        "phoneMaxLength": "Số điện thoại không được vượt quá 50 ký tự",
+        "emailInvalid": "Vui lòng nhập địa chỉ email hợp lệ",
+        "emailMaxLength": "Email không được vượt quá 150 ký tự",
+        "addressMaxLength": "Địa chỉ không được vượt quá 500 ký tự",
+        "taxCodeMaxLength": "Mã số thuế không được vượt quá 50 ký tự",
+        "fixErrors": "Vui lòng sửa các lỗi trước khi gửi"
+      },
+      "notifications": {
+        "updateSuccess": "Đã cập nhật nhà cung cấp thành công",
+        "updateError": "Không thể cập nhật nhà cung cấp",
+        "loadError": "Không thể tải dữ liệu nhà cung cấp"
+      }
+    },
+    "Detail": {
+      "title": "Chi tiết Nhà cung cấp",
+      "subtitle": "Xem thông tin và chi tiết liên hệ nhà cung cấp.",
+      "back": "Quay lại",
+      "edit": "Chỉnh sửa",
+      "information": "Thông tin Nhà cung cấp",
+      "supplierName": "Tên Nhà cung cấp",
+      "name": "Tên",
+      "phone": "Điện thoại",
+      "email": "Email",
+      "address": "Địa chỉ",
+      "taxCode": "Mã số thuế",
+      "ingredients": "Nguyên vật liệu cung cấp",
+      "ingredientName": "Tên nguyên liệu",
+      "unit": "Đơn vị",
+      "noIngredients": "Nhà cung cấp này chưa cung cấp nguyên vật liệu nào.",
+      "notFound": "Không tìm thấy nhà cung cấp",
+      "backToList": "Quay lại danh sách",
+      "loading": "Đang tải dữ liệu nhà cung cấp...",
+      "errorTitle": "Không thể tải nhà cung cấp"
+    }
+  }
+}
