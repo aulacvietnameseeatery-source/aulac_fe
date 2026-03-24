@@ -74,20 +74,20 @@ const navigation: NavCategory[] = [
     icon: LayoutDashboard,
     items: [
       { key: "dashboard", href: "/dashboard", icon: LayoutDashboard },
-      { key: "orders", href: "/dashboard/orders", icon: LayoutList },
-      { key: "kitchen", href: "/dashboard/kitchen", icon: ChefHat },
-      { key: "reservations", href: "/dashboard/reservations", icon: CalendarClock },
+      { key: "orders", href: "/dashboard/orders", icon: LayoutList, permission: Permissions.ViewOrder },
+      { key: "kitchen", href: "/dashboard/kitchen", icon: ChefHat, permission: Permissions.UpdateOrderItemStatus },
+      { key: "reservations", href: "/dashboard/reservations", icon: CalendarClock, permission: Permissions.ViewReservation },
     ]
   },
   {
     status: "management",
     icon: Layers,
     items: [
-      { key: "dish", href: "/dashboard/dish", icon: UtensilsCrossed },
-      { key: "dishCategory", href: "/dashboard/dish-category", icon: FolderOpen },
-      { key: "promotions", href: "/dashboard/promotions", icon: Tags },
-      { key: "coupons", href: "/dashboard/coupons", icon: TicketPercent },
-      { key: "taxSettings", href: "/dashboard/tax", icon: BadgePercent },
+      { key: "dish", href: "/dashboard/dish", icon: UtensilsCrossed, permission: Permissions.ViewDish },
+      { key: "dishCategory", href: "/dashboard/dish-category", icon: FolderOpen, permission: Permissions.ViewDishCategory },
+      { key: "promotions", href: "/dashboard/promotions", icon: Tags, permission: Permissions.ViewPromotion },
+      { key: "coupons", href: "/dashboard/coupons", icon: TicketPercent, permission: Permissions.ViewCoupon },
+      { key: "taxSettings", href: "/dashboard/tax", icon: BadgePercent, permission: Permissions.ViewSystemSettings },
     ]
   },
 
@@ -95,20 +95,20 @@ const navigation: NavCategory[] = [
     status: "warehouse",
     icon: Warehouse,
     items: [
-      { key: "ingredients", href: "/dashboard/ingredients", icon: Package },
-      { key: "suppliers", href: "/dashboard/suppliers", icon: Truck },
+      { key: "ingredients", href: "/dashboard/ingredients", icon: Package, permission: Permissions.ViewInventory },
+      { key: "suppliers", href: "/dashboard/suppliers", icon: Truck, permission: Permissions.ViewSupplier },
       { key: "inventory", href: "/dashboard/inventory", icon: Warehouse, permission: Permissions.ViewInventory },
-      // _OLD: { key: "stock", href: "/dashboard/stock", icon: Layers },
+      { key: "stock", href: "/dashboard/stock", icon: Layers, permission: Permissions.StockCheck },
     ]
   },
   {
     status: "operations",
     icon: Merge,
     items: [
-      { key: "tables", href: "/dashboard/tables", icon: Table },
-      { key: "customers", href: "/dashboard/customers", icon: UserRound },
-      { key: "invoices", href: "/dashboard/invoices", icon: FileSpreadsheet },
-      { key: "payments", href: "/dashboard/payments", icon: BadgeDollarSign },
+      { key: "tables", href: "/dashboard/tables", icon: Table, permission: Permissions.ViewTable },
+      { key: "customers", href: "/dashboard/customers", icon: UserRound, permission: Permissions.ViewCustomer },
+      { key: "invoices", href: "/dashboard/invoices", icon: FileSpreadsheet, permission: Permissions.ViewOrder },
+      { key: "payments", href: "/dashboard/payments", icon: BadgeDollarSign, permission: Permissions.ProcessPayment },
     ]
   },
   {
@@ -126,9 +126,9 @@ const navigation: NavCategory[] = [
     status: "administration",
     icon: UserCog,
     items: [
-      { key: "staff", href: "/dashboard/staff", icon: Users },
-      { key: "roles", href: "/dashboard/roles", icon: UserCog },
-      { key: "reports", href: "/dashboard/reports", icon: FileText },
+      { key: "staff", href: "/dashboard/staff", icon: Users, permission: Permissions.ViewAccount },
+      { key: "roles", href: "/dashboard/roles", icon: UserCog, permission: Permissions.ViewRole },
+      { key: "reports", href: "/dashboard/reports", icon: FileText, permission: Permissions.ViewInventoryReport },
     ]
   },
   {
@@ -139,6 +139,7 @@ const navigation: NavCategory[] = [
         key: "storeSettings",
         href: "/dashboard/store-settings",
         icon: Warehouse,
+        permission: Permissions.ViewSystemSettings,
         children: [
           { key: "storeProfile", href: "/dashboard/store-settings?tab=profile", icon: Building2 },
           { key: "storeIntroduction", href: "/dashboard/store-settings?tab=introduction", icon: Presentation },
@@ -147,7 +148,7 @@ const navigation: NavCategory[] = [
       },
       { key: "systemSettings", href: "/dashboard/system-settings", icon: Warehouse, permission: Permissions.ViewSystemSettings },
       // { key: "notifications", href: "/dashboard/notifications", icon: Bell },
-      { key: "emails", href: "/dashboard/emails", icon: Mail },
+      { key: "emails", href: "/dashboard/emails", icon: Mail, permission: Permissions.ViewSystemSettings },
     ]
   }
 ];
