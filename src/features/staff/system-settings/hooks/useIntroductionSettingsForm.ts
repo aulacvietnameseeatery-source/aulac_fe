@@ -23,6 +23,8 @@ export function useIntroductionSettingsForm(defaultValues?: Partial<IntroFormVal
       },
       "intro_hero_image": "",
       "intro_virtualTour_videoUrl": "",
+      "intro_virtualTour_videoUrlLeft": "",
+      "intro_virtualTour_videoUrlRight": "",
       "intro_collection_dish1_image": "",
       "intro_collection_dish2_image": "",
       "intro_collection_dish3_image": "",
