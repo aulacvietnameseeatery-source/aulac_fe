@@ -187,6 +187,58 @@ export const EditTicket: React.FC<Props> = ({
 
       {/* FOOTER & ACTIONS */}
       <div className="shrink-0 p-4 lg:p-5 border-t border-[#D5BA98]/30 bg-white shadow-[0_-10px_30px_rgba(213,186,152,0.1)]">
+      {/* === THÊM PHẦN CHI TIẾT KHI ORDER ĐÃ THANH TOÁN === */}
+        {orderInfo.isPaid && (
+          <div className="flex flex-col gap-1.5 mb-3 text-sm text-[#1A3A52]/80 border-b border-[#D5BA98]/20 pb-3">
+            <div className="flex justify-between">
+              <span>{t('subTotal', { fallback: 'Subtotal' })}</span>
+              <span>CHF {(orderInfo.subTotalAmount || 0).toFixed(2)}</span>
+            </div>
+            
+            {!!orderInfo.taxAmount && orderInfo.taxAmount > 0 && (
+              <div className="flex justify-between">
+                <span>{t('tax', { fallback: 'Tax' })}</span>
+                <span>CHF {orderInfo.taxAmount.toFixed(2)}</span>
+              </div>
+            )}
+
+            {/* Hiển thị danh sách Promotion */}
+            {orderInfo.promotions?.map((promo) => (
+              <div key={promo.promotionId} className="flex justify-between text-[#8C3A3A]">
+                <span>{promo.promotionName}</span>
+                <span>- CHF {promo.discountAmount.toFixed(2)}</span>
+              </div>
+            ))}
+
+            {/* Hiển thị danh sách Coupon */}
+            {orderInfo.coupons?.map((coupon) => (
+              <div key={coupon.couponId} className="flex justify-between text-[#8C3A3A]">
+                <span>{t('coupon', { fallback: 'Coupon' })}: {coupon.couponCode}</span>
+                <span>- CHF {coupon.discountAmount.toFixed(2)}</span>
+              </div>
+            ))}
+
+            {!!orderInfo.tipAmount && orderInfo.tipAmount > 0 && (
+              <div className="flex justify-between font-medium">
+                <span>{t('tip', { fallback: 'Tip' })}</span>
+                <span>CHF {orderInfo.tipAmount.toFixed(2)}</span>
+              </div>
+            )}
+
+            {/* Thông tin Payments nếu có */}
+            {orderInfo.payments && orderInfo.payments.length > 0 && (
+              <div className="mt-2 pt-2 border-t border-dashed border-[#D5BA98]/40">
+                {orderInfo.payments.map((payment) => (
+                  <div key={payment.paymentId} className="flex justify-between text-xs text-[#4A5D4E]">
+                    <span>{t('paidVia', { fallback: 'Paid via' })} {payment.method}</span>
+                    <span>CHF {payment.receivedAmount.toFixed(2)}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+        {/* ================================================= */}
         <div className="flex justify-between items-end pb-3 mb-3 border-b border-[#D5BA98]/20">
           <span className="font-bold text-[#1A3A52]/70 uppercase tracking-wide text-xs">
             {newCart.length > 0 ? t('newTotal') : t('totalAmount')}

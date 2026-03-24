@@ -21,6 +21,7 @@ import { orderHistoryService } from '../services/order-history.service';
 import { toast } from 'sonner';
 import { CouponDTO } from '../../coupon-management/coupon-list/types/coupon.types';
 import { PromotionListDTO } from '../../promotion-management/promotion-list/types/promotion-types';
+import { OrderDetailDto } from '../../order-create/types/edit-order.types';
 
 // ─── Constants ──────────────────────────────────────────────────────────────
 
@@ -64,6 +65,44 @@ const ACTION_ICONS: Record<ActionKey, { icon: React.ReactNode; danger?: boolean 
 
 const VISIBLE_ITEMS_COUNT = 3;
 
+// Helper: Map OrderHistory sang OrderDetailDto cho Invoice
+const mapOrderHistoryToOrderDetailDto = (order: OrderHistory): OrderDetailDto => {
+    const subTotal = order.orderItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    
+    return {
+        orderId: order.orderId,
+        tableId: order.tableId,
+        tableCode: order.tableCode,
+        staffId: order.staffId,
+        staffName: order.staffName,
+        customerId: order.customerId,
+        customerName: order.customerName,
+        subTotalAmount: subTotal,
+        totalAmount: order.totalAmount,
+        taxAmount: order.taxAmount || 0,
+        tipAmount: order.tipAmount || 0, 
+        orderStatus: order.orderStatus as any,
+        source: order.source,
+        createdAt: order.createdAt,
+        updatedAt: order.createdAt,
+        isPaid: order.isPaid,
+        orderItems: order.orderItems.map(item => ({
+            orderItemId: item.orderItemId,
+            dishId: item.dishId,
+            dishName: item.dishName,
+            quantity: item.quantity,
+            price: item.price,
+            itemStatus: item.itemStatus as any,
+            note: item.note,
+            rejectReason: item.rejectReason,
+        })),
+        promotions: [],
+        coupons: [],
+        payments: [],
+        itemCount: order.itemCount
+    };
+};
+
 // ─── Props ───────────────────────────────────────────────────────────────────
 
 interface OrderCardProps {
@@ -84,6 +123,8 @@ export const OrderCard: React.FC<OrderCardProps> = ({ order, onStatusChange, onA
     const [isProcessingPayment, setIsProcessingPayment] = useState(false);
     const [isPrintModalOpen, setIsPrintModalOpen] = useState(false);
     const [printType, setPrintType] = useState<'invoice' | 'receipt'>('receipt');
+    const [printData, setPrintData] = useState<OrderDetailDto | null>(null);
+    const [isFetchingOrder, setIsFetchingOrder] = useState(false);
 
     const sourceIcon = SOURCE_ICONS[order.source] ?? <ShoppingBag className="w-3 h-3" />;
     const statusStyle = STATUS_STYLES[order.orderStatus] ?? 'bg-gray-50 text-gray-700 border border-gray-200';
@@ -106,15 +147,27 @@ export const OrderCard: React.FC<OrderCardProps> = ({ order, onStatusChange, onA
     const hiddenCount = order.orderItems.length - VISIBLE_ITEMS_COUNT;
     const showPaymentBadge = order.orderStatus === 'Completed';
 
-    const handleActionClick = (key: ActionKey) => {
+    const handleActionClick = async (key: ActionKey) => {
         if (key === 'pay') {
             setIsPaymentModalOpen(true);
         } else if (key === 'print') {
+            const mappedData = mapOrderHistoryToOrderDetailDto(order);
+            setPrintData(mappedData);
             setPrintType('invoice');
             setIsPrintModalOpen(true);
         } else if (key === 'printReceipt') {
-            setPrintType('receipt');
-            setIsPrintModalOpen(true);
+            try {
+                setIsFetchingOrder(true);
+                const orderDetail = await orderHistoryService.getOrderById(order.orderId);
+                setPrintData(orderDetail);
+                setPrintType('receipt');
+                setIsPrintModalOpen(true);
+            } catch (error) {
+                console.error("Lỗi khi tải chi tiết đơn hàng:", error);
+                toast.error(t('fetchOrderError') || 'Cannot load order details for printing.');
+            } finally {
+                setIsFetchingOrder(false);
+            }
         } else {
             onAction?.(order.orderId, key);
         }
@@ -319,7 +372,7 @@ export const OrderCard: React.FC<OrderCardProps> = ({ order, onStatusChange, onA
             />
 
             <PrintOrderModal
-                order={order}
+                order={printData as any}
                 isOpen={isPrintModalOpen}
                 onClose={() => setIsPrintModalOpen(false)}
                 type={printType}
