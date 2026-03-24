@@ -15,6 +15,7 @@ import { DishDto } from '../types/create-order.types';
 import { Menu } from 'lucide-react';
 import { OrderHistory, OrderItem } from '../../order-management/types/order-history.types';
 import { PrintOrderModal } from '../../order-management/components/PrintOrderModal';
+import { ExistingOrderItemDto, OrderItemStatus, OrderStatus } from '../types/edit-order.types';
 
 export const CreateOrderPage = () => {
   const t = useTranslations("orders.management.Create");
@@ -94,35 +95,45 @@ export const CreateOrderPage = () => {
   }
 
   // Create Order Items from the current shopping cart
-  const mappedOrderItems: OrderItem[] = cart.map((item, index) => ({
+  const mappedOrderItems: ExistingOrderItemDto[] = cart.map((item, index) => ({
     orderItemId: -(index + 1), // Temporary ID
     dishId: item.dishId,
     dishName: item.localName,
     quantity: item.quantity,
     price: item.price,
-    itemStatus: 'New',
+    itemStatus: 'Created' as OrderItemStatus,
     note: item.note || undefined
   }));
 
   const cartTotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const totalItemCount = cart.reduce((acc, item) => acc + item.quantity, 0);
 
-  // create mock OrderHistory
-  const mappedOrderHistory: OrderHistory = {
-    orderId: 0,
-    tableId: selectedTable?.tableId || 0,
+  // create mock OrderDetailDto (Invoice tạm tính)
+  const mappedOrderHistory = {
+    orderId: 0, // Đơn chưa tạo nên chưa có ID chính thức
+    tableId: selectedTable?.tableId,
     tableCode: selectedTable?.tableCode || '',
     staffId: 0,
     staffName: '',
-    customerId: customer?.customerId || 0,
+    customerId: customer?.customerId,
     customerName: customer?.fullName || '',
-    totalAmount: cartTotal,
+    
+    subTotalAmount: cartTotal,
+    totalAmount: cartTotal, // Tạm thời bằng Subtotal vì chưa có tax/discount
     taxAmount: 0,
-    orderStatus: 'Pending',
+    tipAmount: 0,
+    
+    orderStatus: 'Pending' as OrderStatus,
     source: toOrderSourceCode(orderType),
+    
     createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
     isPaid: false,
+    
     orderItems: mappedOrderItems,
+    promotions: [], // Chưa có thông tin giảm giá
+    coupons: [],    // Chưa có thông tin mã giảm giá
+    payments: [],   // Chưa thanh toán
     itemCount: totalItemCount
   };
 
@@ -216,7 +227,7 @@ export const CreateOrderPage = () => {
         order={mappedOrderHistory}
         isOpen={isPrintModalOpen}
         onClose={() => setIsPrintModalOpen(false)}
-        type="receipt"
+        type="invoice"
       />
     </div>
   );

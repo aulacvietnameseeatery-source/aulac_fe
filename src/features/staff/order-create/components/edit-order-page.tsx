@@ -162,7 +162,7 @@ export const EditOrderPage = ({ orderId }: { orderId: number }) => {
     return value.trim().toUpperCase().replace(/[-\s]+/g, "_");
   }
 
-  const printType = orderInfo.isPaid ? 'invoice' : 'receipt';
+  const printType = orderInfo.isPaid ? 'receipt' : 'invoice';
 
   const combinedOrderItems: OrderItem[] = [
     ...(orderInfo.orderItems.map(item => ({
@@ -302,7 +302,7 @@ export const EditOrderPage = ({ orderId }: { orderId: number }) => {
       />
 
       <PrintOrderModal
-        order={mappedOrderHistory}
+        order={orderInfo}
         isOpen={isPrintModalOpen}
         onClose={() => setIsPrintModalOpen(false)}
         type={printType}

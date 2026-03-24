@@ -117,9 +117,27 @@ export function NotificationToastRenderer() {
           <div className="px-3 py-2.5">
             <p className="text-sm font-semibold text-[#1A3A52] leading-snug">{title}</p>
             {body && <p className="text-xs text-[#1A3A52]/70 mt-1 leading-relaxed">{body}</p>}
-            {notification.actionUrl && (
+            {(notification.actionUrl || (notification.entityType === "Reservation" && notification.entityId)) && (
               <button
-                onClick={() => router.push(`/${locale}${notification.actionUrl}`)}
+                onClick={() => {
+                  if (notification.entityType === "Reservation" && notification.entityId) {
+                    useNotificationStore.getState().setDetailReservationId(Number(notification.entityId));
+                    toast.dismiss(toastId);
+                    return;
+                  }
+
+                  if (notification.actionUrl) {
+                    const url = notification.actionUrl;
+                    const reservationMatch = url.match(/(?:\/dashboard)?\/reservations\/(\d+)/i);
+                    if (reservationMatch) {
+                      useNotificationStore.getState().setDetailReservationId(Number(reservationMatch[1]));
+                      toast.dismiss(toastId);
+                      return;
+                    }
+                    router.push(`/${locale}${url}`);
+                    toast.dismiss(toastId);
+                  }
+                }}
                 className="mt-2 inline-flex items-center text-[11px] font-medium text-blue-700 hover:text-blue-800"
               >
                 {t("view")}
