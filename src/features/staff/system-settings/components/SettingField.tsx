@@ -135,7 +135,7 @@ export const SettingField: React.FC<SettingFieldProps> = ({
             {description && (
                 <p className="text-xs text-gray-500">{description}</p>
             )}
-            <p className="text-[10px] text-gray-400 font-mono">{settingKey}</p>
+            {/*<p className="text-[10px] text-gray-400 font-mono">{settingKey}</p>*/}
         </div>
     );
 };

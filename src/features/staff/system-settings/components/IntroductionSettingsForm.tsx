@@ -30,8 +30,8 @@ const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp
 const IMAGE_ACCEPT = '.jpg,.jpeg,.png,.gif,.webp,image/jpeg,image/png,image/gif,image/webp';
 const VIDEO_ACCEPT = 'video/mp4,.mp4';
 const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
-const MAX_VIDEO_SIZE = 20 * 1024 * 1024;
-const MAX_VIDEO_DURATION_SECONDS = 15;
+const MAX_VIDEO_SIZE = 50 * 1024 * 1024;
+const MAX_VIDEO_DURATION_SECONDS = 30;
 
 const normalizeMediaUrl = (value: string): string => {
     if (!value) return '';
@@ -70,13 +70,16 @@ export const IntroductionSettingsForm = () => {
     const [localPreviews, setLocalPreviews] = useState<Record<string, string>>({});
 
     const heroImageRef = useRef<HTMLInputElement>(null);
-    const virtualTourVideoRef = useRef<HTMLInputElement>(null);
+    const virtualTourVideoLeftRef = useRef<HTMLInputElement>(null);
+    const virtualTourVideoRightRef = useRef<HTMLInputElement>(null);
     const dish1ImageRef = useRef<HTMLInputElement>(null);
     const dish2ImageRef = useRef<HTMLInputElement>(null);
     const dish3ImageRef = useRef<HTMLInputElement>(null);
 
     const heroImageUrl = watch('intro_hero_image') as string;
-    const tourVideoUrl = watch('intro_virtualTour_videoUrl') as string;
+    watch('intro_virtualTour_videoUrl');
+    const tourVideoUrlLeft = watch('intro_virtualTour_videoUrlLeft') as string;
+    const tourVideoUrlRight = watch('intro_virtualTour_videoUrlRight') as string;
     const dish1ImageUrl = watch('intro_collection_dish1_image') as string;
     const dish2ImageUrl = watch('intro_collection_dish2_image') as string;
     const dish3ImageUrl = watch('intro_collection_dish3_image') as string;
@@ -409,35 +412,71 @@ export const IntroductionSettingsForm = () => {
 
                         <div className="space-y-4 mt-6">
                             <label className="font-[Inter] text-xs font-bold text-[#1A3A52]/50 uppercase tracking-widest block">{t('Introduction.tourVideo')}</label>
-                            <div className="space-y-4">
-                                <div className="relative group w-fit">
-                                    <div
-                                        className={cn(
-                                            "w-48 h-24 rounded-2xl border-2 border-dashed border-amber-200/60 bg-white/40 flex items-center justify-center overflow-hidden transition-all cursor-pointer hover:border-amber-300",
-                                            getFullUrl('intro_virtualTour_videoUrl', tourVideoUrl) && "border-solid bg-white shadow-sm"
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="space-y-3">
+                                    <p className="text-xs font-semibold text-[#1A3A52]/70 uppercase tracking-wider">{t('Introduction.tourVideoLeft')}</p>
+                                    <div className="relative group w-fit">
+                                        <div
+                                            className={cn(
+                                                "w-48 h-24 rounded-2xl border-2 border-dashed border-amber-200/60 bg-white/40 flex items-center justify-center overflow-hidden transition-all cursor-pointer hover:border-amber-300",
+                                                getFullUrl('intro_virtualTour_videoUrlLeft', tourVideoUrlLeft) && "border-solid bg-white shadow-sm"
+                                            )}
+                                            onClick={() => virtualTourVideoLeftRef.current?.click()}
+                                        >
+                                            {getFullUrl('intro_virtualTour_videoUrlLeft', tourVideoUrlLeft) ? (
+                                                <video src={getFullUrl('intro_virtualTour_videoUrlLeft', tourVideoUrlLeft)} className="w-full h-full object-cover" />
+                                            ) : (
+                                                <Upload className="w-7 h-7 text-[#D5BA98]/60" />
+                                            )}
+                                            {isUploading === 'intro_virtualTour_videoUrlLeft' && (
+                                                <div className="absolute inset-0 bg-white/80 flex items-center justify-center">
+                                                    <Loader2 className="w-5 h-5 animate-spin text-[#1A3A52]" />
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                    <div className="flex gap-3">
+                                        {getFullUrl('intro_virtualTour_videoUrlLeft', tourVideoUrlLeft) && (
+                                            <Button type="button" variant="outline" size="sm" className="h-9 gap-2 text-blue-600 border-blue-100 hover:bg-blue-50" onClick={() => setPreviewData({ url: getFullUrl('intro_virtualTour_videoUrlLeft', tourVideoUrlLeft), title: "Tour Video Left", type: 'video' })}>
+                                                <Maximize2 className="h-4 w-4" />
+                                                Preview
+                                            </Button>
                                         )}
-                                        onClick={() => virtualTourVideoRef.current?.click()}
-                                    >
-                                        {getFullUrl('intro_virtualTour_videoUrl', tourVideoUrl) ? (
-                                            <video src={getFullUrl('intro_virtualTour_videoUrl', tourVideoUrl)} className="w-full h-full object-cover" />
-                                        ) : (
-                                            <Upload className="w-7 h-7 text-[#D5BA98]/60" />
-                                        )}
-                                        {isUploading === 'intro_virtualTour_videoUrl' && (
-                                            <div className="absolute inset-0 bg-white/80 flex items-center justify-center">
-                                                <Loader2 className="w-5 h-5 animate-spin text-[#1A3A52]" />
-                                            </div>
-                                        )}
+                                        <input type="file" ref={virtualTourVideoLeftRef} className="hidden" accept={VIDEO_ACCEPT} onChange={(e) => handleFileChange(e, 'intro_virtualTour_videoUrlLeft', true)} />
                                     </div>
                                 </div>
-                                <div className="flex gap-3">
-                                    {getFullUrl('intro_virtualTour_videoUrl', tourVideoUrl) && (
-                                        <Button type="button" variant="outline" size="sm" className="h-9 gap-2 text-blue-600 border-blue-100 hover:bg-blue-50" onClick={() => setPreviewData({ url: getFullUrl('intro_virtualTour_videoUrl', tourVideoUrl), title: "Tour Video", type: 'video' })}>
-                                            <Maximize2 className="h-4 w-4" />
-                                            Preview
-                                        </Button>
-                                    )}
-                                    <input type="file" ref={virtualTourVideoRef} className="hidden" accept={VIDEO_ACCEPT} onChange={(e) => handleFileChange(e, 'intro_virtualTour_videoUrl', true)} />
+
+                                <div className="space-y-3">
+                                    <p className="text-xs font-semibold text-[#1A3A52]/70 uppercase tracking-wider">{t('Introduction.tourVideoRight')}</p>
+                                    <div className="relative group w-fit">
+                                        <div
+                                            className={cn(
+                                                "w-48 h-24 rounded-2xl border-2 border-dashed border-amber-200/60 bg-white/40 flex items-center justify-center overflow-hidden transition-all cursor-pointer hover:border-amber-300",
+                                                getFullUrl('intro_virtualTour_videoUrlRight', tourVideoUrlRight) && "border-solid bg-white shadow-sm"
+                                            )}
+                                            onClick={() => virtualTourVideoRightRef.current?.click()}
+                                        >
+                                            {getFullUrl('intro_virtualTour_videoUrlRight', tourVideoUrlRight) ? (
+                                                <video src={getFullUrl('intro_virtualTour_videoUrlRight', tourVideoUrlRight)} className="w-full h-full object-cover" />
+                                            ) : (
+                                                <Upload className="w-7 h-7 text-[#D5BA98]/60" />
+                                            )}
+                                            {isUploading === 'intro_virtualTour_videoUrlRight' && (
+                                                <div className="absolute inset-0 bg-white/80 flex items-center justify-center">
+                                                    <Loader2 className="w-5 h-5 animate-spin text-[#1A3A52]" />
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                    <div className="flex gap-3">
+                                        {getFullUrl('intro_virtualTour_videoUrlRight', tourVideoUrlRight) && (
+                                            <Button type="button" variant="outline" size="sm" className="h-9 gap-2 text-blue-600 border-blue-100 hover:bg-blue-50" onClick={() => setPreviewData({ url: getFullUrl('intro_virtualTour_videoUrlRight', tourVideoUrlRight), title: "Tour Video Right", type: 'video' })}>
+                                                <Maximize2 className="h-4 w-4" />
+                                                Preview
+                                            </Button>
+                                        )}
+                                        <input type="file" ref={virtualTourVideoRightRef} className="hidden" accept={VIDEO_ACCEPT} onChange={(e) => handleFileChange(e, 'intro_virtualTour_videoUrlRight', true)} />
+                                    </div>
                                 </div>
                             </div>
                         </div>

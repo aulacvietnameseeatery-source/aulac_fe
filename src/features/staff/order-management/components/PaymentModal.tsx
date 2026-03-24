@@ -16,6 +16,7 @@ import { ALCombobox } from '@/components/ui/al-combobox';
 import { OrderHistory } from '../types/order-history.types';
 import { CouponDTO } from '../../coupon-management/coupon-list/types/coupon.types';
 import { PromotionListDTO } from '../../promotion-management/promotion-list/types/promotion-types';
+import { useTaxesQuery } from '../../tax-management/hooks/useTaxMutation';
 
 interface PaymentModalProps {
     order: OrderHistory;
@@ -49,7 +50,9 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
     const subTotal = order.orderItems
         .filter(item => item.itemStatus !== 'REJECTED' && item.itemStatus !== 'CANCELLED')
         .reduce((sum, item) => sum + item.price * item.quantity, 0);
-    const tax = order.taxAmount;
+
+    const { data: taxes = [] } = useTaxesQuery();
+    const defaultTaxes = React.useMemo(() => taxes.filter(t => t.isActive && t.isDefault), [taxes]);
 
     const serviceCharge = 0;
 
@@ -74,23 +77,36 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
     const couponAmount = calcDiscountAmount(selectedCoupon);
 
     const totalDiscount = React.useMemo(() => {
-        const uniqueAppliedIds = new Set<string>();
         let amount = 0;
 
-        if (selectedPromotion && selectedPromotionId && !uniqueAppliedIds.has(selectedPromotionId)) {
-            uniqueAppliedIds.add(selectedPromotionId);
+        if (selectedPromotion && selectedPromotionId) {
             amount += promotionAmount;
         }
 
-        if (selectedCoupon && selectedCouponId && !uniqueAppliedIds.has(selectedCouponId)) {
-            uniqueAppliedIds.add(selectedCouponId);
+        if (selectedCoupon && selectedCouponId) {
             amount += couponAmount;
         }
 
         return amount;
     }, [selectedPromotion, selectedPromotionId, promotionAmount, selectedCoupon, selectedCouponId, couponAmount]);
 
-    const total = Math.max(0, subTotal + tax + tipAmount - totalDiscount);
+    const baseForTax = Math.max(0, subTotal - totalDiscount);
+
+    const calculatedTaxes = React.useMemo(() => {
+        return defaultTaxes.map(t => {
+            const amount = t.taxType === 'EXCLUSIVE'
+                ? baseForTax * t.taxRate
+                : baseForTax * (t.taxRate / (1 + t.taxRate));
+            return { ...t, amount };
+        });
+    }, [defaultTaxes, baseForTax]);
+
+    const totalExclusiveTax = calculatedTaxes
+        .filter(t => t.taxType === 'EXCLUSIVE')
+        .reduce((sum, t) => sum + t.amount, 0);
+    const totalTaxAmount = calculatedTaxes.reduce((sum, t) => sum + t.amount, 0);
+
+    const total = Math.max(0, subTotal + totalExclusiveTax + tipAmount - totalDiscount);
 
     const [givenAmount, setGivenAmount] = useState<number>(total);
     const balance = Math.max(0, givenAmount - total);
@@ -196,13 +212,15 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
                                     <span>{t('subTotal')}</span>
                                     <span>{format.number(subTotal, { style: 'currency', currency: 'CHF' })}</span>
                                 </div>
-                                <div className="flex items-start justify-between gap-3 text-[#1A3A52]/70">
-                                    <span>{t('tax')}</span>
-                                    <span>{format.number(tax, { style: 'currency', currency: 'CHF' })}</span>
-                                </div>
+                                {calculatedTaxes.map((t, idx) => (
+                                    <div key={idx} className="flex items-start justify-between gap-3 text-[#1A3A52]/70">
+                                        <span>{t.taxName} ({t.taxRate * 100}% {t.taxType.toLowerCase()})</span>
+                                        <span>{format.number(t.amount, { style: 'currency', currency: 'CHF' })}</span>
+                                    </div>
+                                ))}
                                 <div className="flex items-start justify-between gap-3 text-[#1A3A52]/70 font-medium">
                                     <span>{t('totalTax')}</span>
-                                    <span>{format.number(tax, { style: 'currency', currency: 'CHF' })}</span>
+                                    <span>{format.number(totalTaxAmount, { style: 'currency', currency: 'CHF' })}</span>
                                 </div>
                                 {promotionAmount > 0 && (
                                     <div className="flex items-start justify-between gap-3 text-red-600 font-medium">
@@ -210,7 +228,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
                                         <span>-{format.number(promotionAmount, { style: 'currency', currency: 'CHF' })}</span>
                                     </div>
                                 )}
-                                {couponAmount > 0 && selectedCouponId !== selectedPromotionId && (
+                                {couponAmount > 0 && (
                                     <div className="flex items-start justify-between gap-3 text-red-600 font-medium">
                                         <span>{t('coupon')}</span>
                                         <span>-{format.number(couponAmount, { style: 'currency', currency: 'CHF' })}</span>
@@ -222,6 +240,10 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
                                         <span>{format.number(tipAmount, { style: 'currency', currency: 'CHF' })}</span>
                                     </div>
                                 )}
+                                <div className="pt-2.5 border-t border-[#D5BA98]/35 flex items-start justify-between gap-3 font-bold text-base text-[#1A3A52]">
+                                    <span>{t('finalTotal')}</span>
+                                    <span>{format.number(total, { style: 'currency', currency: 'CHF' })}</span>
+                                </div>
                             </section>
                         </div>
 
