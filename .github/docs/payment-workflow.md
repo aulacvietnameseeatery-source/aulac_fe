@@ -58,13 +58,21 @@ Discount = min(DiscountValue, BaseAmount)
 ### 3) Tổng giảm giá
 TotalDiscount = CouponDiscount + PromotionDiscount
 
-### 4) Tổng thanh toán cuối cùng
-FinalAmount = max(0, SubTotal + TaxAmount + TipAmount - TotalDiscount)
+### 4) Thuế (Tax)
+Thuế được tính dựa trên số tiền sau giảm giá (**Tax Base = SubTotal - TotalDiscount**).
+Số tiền thuế cho mỗi loại thuế mặc định:
+- Nếu là **EXCLUSIVE**: `Số tiền thuế = Tax Base x TaxRate` (Sẽ cộng thêm vào tổng thanh toán).
+- Nếu là **INCLUSIVE**: `Số tiền thuế = Tax Base x (TaxRate / (1 + TaxRate))` (Đã bao gồm trong SubTotal, chỉ dùng để hiển thị bóc tách).
 
-### 5) Tiền thối
+**TotalExclusiveTax** là tổng số tiền của tất cả các loại thuế EXCLUSIVE áp dụng cho đơn hàng.
+
+### 5) Tổng thanh toán cuối cùng
+FinalAmount = max(0, SubTotal + TotalExclusiveTax + TipAmount - TotalDiscount)
+
+### 6) Tiền thối
 ChangeAmount = max(0, ReceivedAmount - FinalAmount)
 
-### 6) Điểm loyalty
+### 7) Điểm loyalty
 EarnedPoints = floor(FinalAmount / loyalty.point_base_amount)
 
 Chỉ cộng điểm khi:
