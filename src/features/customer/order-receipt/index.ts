@@ -10,3 +10,4 @@ export { default as ReceiptSummary } from './components/receipt-summary';
 export { default as ReceiptPaymentFooter } from './components/receipt-payment-footer';
 export { default as ReceiptActions } from './components/receipt-actions';
 export { default as ReceiptBackLink } from './components/receipt-back-link';
+export { OrderPrintDocument } from './components/order-print-document';

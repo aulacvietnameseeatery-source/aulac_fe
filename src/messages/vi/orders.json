@@ -280,6 +280,11 @@
         "takeAway": "Mang về",
         "guest": "Khách",
         "notePlaceholder": "Ghi chú món...",
+        "subTotal": "Tạm tính",
+        "tax": "Thuế",
+        "coupon": "Mã giảm giá",
+        "tip": "Tiền tip",
+        "paidVia": "Thanh toán qua",
         "status": {
           "Pending": "Chờ xử lý",
           "In progress": "Đang làm",

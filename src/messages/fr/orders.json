@@ -280,6 +280,11 @@
         "takeAway": "À emporter",
         "guest": "Client",
         "notePlaceholder": "Note sur l'article...",
+        "subTotal": "Sous-total",
+        "tax": "Taxe",
+        "coupon": "Coupon",
+        "tip": "Pourboire",
+        "paidVia": "Payé via",
         "status": {
           "Pending": "En attente",
           "In progress": "En cours",
