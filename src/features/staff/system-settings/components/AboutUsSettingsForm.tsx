@@ -13,16 +13,6 @@ import { ALCard } from "@/components/ui/al-card";
 import { ALInput } from "@/components/ui/al-input";
 import { cn } from "@/lib/utils";
 
-const Textarea = React.forwardRef<HTMLTextAreaElement, React.TextareaHTMLAttributes<HTMLTextAreaElement>>(
-    (props, ref) => (
-        <textarea
-            ref={ref}
-            className="flex min-h-[80px] w-full rounded-xl border border-amber-200/40 bg-white/60 px-3 py-2 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#1A3A52] focus-visible:border-[#1A3A52] disabled:cursor-not-allowed disabled:opacity-50"
-            {...props}
-        />
-    )
-);
-Textarea.displayName = "Textarea";
 
 export const AboutUsSettingsForm = () => {
     const t = useTranslations("settings");
@@ -127,82 +117,107 @@ export const AboutUsSettingsForm = () => {
     }
 
     return (
-        <form onSubmit={handleSubmit(onSubmit, onInvalid)} className="flex flex-col gap-6 w-full pb-12">
-            <ALCard variant="glass" elevation="sm" padding="md" radius="xl" className="flex flex-wrap items-center justify-between gap-4 border-amber-200/30">
-                <div className="flex items-center gap-6">
-                    <div className="flex bg-gray-100 p-1 rounded-lg border border-gray-200">
-                        {LOCALES.map((loc) => (
-                            <Button
-                                key={loc}
-                                type="button"
-                                variant={activeLocale === loc ? "default" : "ghost"}
-                                size="sm"
-                                className={cn(
-                                    "px-4 py-1.5 h-8 text-xs font-bold uppercase transition-all duration-200 rounded-md",
-                                    activeLocale === loc
-                                        ? "bg-white shadow-sm text-blue-600 hover:bg-white hover:text-blue-600"
-                                        : "text-gray-500 hover:text-blue-600 hover:bg-white/50"
-                                )}
-                                onClick={() => setActiveLocale(loc)}
-                            >
-                                {loc}
-                            </Button>
-                        ))}
+        <form onSubmit={handleSubmit(onSubmit, onInvalid)} className="flex flex-col gap-6 w-full pb-12 relative">
+            <div className="sticky top-0 z-50 py-4 -mx-4 px-4 bg-background/80 backdrop-blur-md">
+                <ALCard variant="glass" elevation="sm" padding="sm" radius="xl" className="flex items-center justify-between gap-4 border-amber-200/30 shadow-md">
+                    <div className="flex items-center gap-2 sm:gap-4">
+                        <div className="flex bg-gray-100/90 p-1 rounded-xl border border-gray-200 shadow-inner">
+                            {LOCALES.map((loc) => (
+                                <Button
+                                    key={loc}
+                                    type="button"
+                                    variant={activeLocale === loc ? "default" : "ghost"}
+                                    size="sm"
+                                    className={cn(
+                                        "px-3 sm:px-5 py-1.5 h-8 text-[10px] sm:text-xs font-bold uppercase transition-all duration-300 rounded-lg",
+                                        activeLocale === loc
+                                            ? "bg-white shadow-md text-[#1A3A52] hover:bg-white/50"
+                                            : "text-gray-500 hover:text-[#1A3A52] hover:bg-white/40"
+                                    )}
+                                    onClick={() => setActiveLocale(loc)}
+                                >
+                                    {loc}
+                                </Button>
+                            ))}
+                        </div>
                     </div>
-                </div>
 
-                <div className="flex items-center gap-3">
-                    <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        className="h-9 gap-2 text-purple-600 border-purple-200 hover:bg-purple-50 hover:border-purple-300 font-semibold px-4 transition-all"
-                        onClick={handleAutoTranslate}
-                        isLoading={translateMutation.isPending}
-                    >
-                        <Languages className="w-4 h-4" />
-                        <span className="hidden sm:inline">{t('Common.autoTranslate')}</span>
-                    </Button>
-                    <Button
-                        type="submit"
-                        size="sm"
-                        className="h-9 gap-2 bg-[#1E3C52] hover:bg-[#12283A] text-white shadow-lg shadow-blue-900/20 font-semibold px-4 transition-all"
-                        isLoading={updateMutation.isPending}
-                    >
-                        <Save className="w-4 h-4" />
-                        {t("Common.saveChanges")}
-                    </Button>
-                </div>
-            </ALCard>
+                    <div className="flex items-center gap-3">
+                        <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            className="h-9 gap-2 text-purple-600 border-purple-200 hover:bg-purple-50 hover:border-purple-300 font-semibold px-4 transition-all"
+                            onClick={handleAutoTranslate}
+                            isLoading={translateMutation.isPending}
+                        >
+                            <Languages className="w-4 h-4" />
+                            <span className="hidden sm:inline">{t('Common.autoTranslate')}</span>
+                        </Button>
+                        <Button
+                            type="submit"
+                            size="sm"
+                            className="h-9 gap-2 bg-[#1E3C52] hover:bg-[#12283A] text-white shadow-lg shadow-blue-900/20 font-semibold px-4 transition-all"
+                            isLoading={updateMutation.isPending}
+                        >
+                            <Save className="w-4 h-4" />
+                            {t("Common.saveChanges")}
+                        </Button>
+                    </div>
+                </ALCard>
+            </div>
 
             <ALCard variant="soft" padding="none" radius="2xl" elevation="sm" className="border-amber-200/50 shadow-sm overflow-hidden" animation="slide-up">
-                <div className="p-6 md:p-8 border-b border-[#D5BA98]/20 bg-[#FDFBF9]">
-                    <h2 className="text-xl font-bold text-[#1A3A52] tracking-tight mb-2">{t('AboutUs.contentEditorTitle')}</h2>
-                    <p className="font-[Inter] text-sm text-[#1A3A52]/60">{t('AboutUs.contentEditorDesc')}</p>
-                </div>
 
-                <div className="p-6 md:p-8 space-y-6">
-                    <div className="space-y-4">
-                        <label className="text-sm font-semibold text-[#1A3A52]">{t('AboutUs.subtitleLabel')}</label>
-                        <Textarea {...register(`i18n.${activeLocale}.about_subtitle` as const)} rows={2} placeholder="An Lạc không phải là nơi phô trương. Đó là nơi của sự bình yên." />
-                    </div>
 
-                    <div className="space-y-4">
-                        <label className="text-sm font-semibold text-[#1A3A52]">{t('AboutUs.paragraphLabel')} 1</label>
-                        <Textarea {...register(`i18n.${activeLocale}.about_paragraph_1` as const)} rows={4} placeholder="An Lạc được dẫn dắt bởi..." />
-                    </div>
+                <div className="p-6 md:p-8 space-y-8">
 
-                    <div className="space-y-4">
-                        <label className="text-sm font-semibold text-[#1A3A52]">{t('AboutUs.paragraphLabel')} 2</label>
-                        <Textarea {...register(`i18n.${activeLocale}.about_paragraph_2` as const)} rows={4} placeholder="Tại An Lạc, chúng tôi..." />
-                    </div>
+                    <ALInput
+                        title={t('AboutUs.subtitleLabel')}
+                        fieldVariant="textarea"
+                        textareaRows={2}
+                        placeholder="An Lạc không phải là nơi phô trương. Đó là nơi của sự bình yên."
+                        wrapperClassName="bg-white/60 focus-within:bg-white focus-within:border-amber-200"
+                        textareaClassName="resize-none leading-relaxed"
+                        {...register(`i18n.${activeLocale}.about_subtitle` as const)}
+                    />
 
-                    <div className="space-y-4">
-                        <label className="text-sm font-semibold text-[#1A3A52]">{t('AboutUs.paragraphLabel')} 3</label>
-                        <Textarea {...register(`i18n.${activeLocale}.about_paragraph_3` as const)} rows={4} placeholder="Các kỹ thuật quen thuộc..." />
-                    </div>
+                    <ALInput
+                        title={`${t('AboutUs.paragraphLabel')} 1`}
+                        fieldVariant="textarea"
+                        textareaRows={4}
+                        placeholder="An Lạc được dẫn dắt bởi..."
+                        wrapperClassName="bg-white/60 focus-within:bg-white focus-within:border-amber-200"
+                        textareaClassName="resize-none leading-relaxed"
+                        {...register(`i18n.${activeLocale}.about_paragraph_1` as const)}
+                    />
 
-                    <ALInput title={t('AboutUs.closingQuoteLabel')} wrapperClassName="bg-white/60" {...register(`i18n.${activeLocale}.about_closing_quote` as const)} placeholder="An Lạc là lời mời..." />
+                    <ALInput
+                        title={`${t('AboutUs.paragraphLabel')} 2`}
+                        fieldVariant="textarea"
+                        textareaRows={4}
+                        placeholder="Tại An Lạc, chúng tôi..."
+                        wrapperClassName="bg-white/60 focus-within:bg-white focus-within:border-amber-200"
+                        textareaClassName="resize-none leading-relaxed"
+                        {...register(`i18n.${activeLocale}.about_paragraph_2` as const)}
+                    />
+
+                    <ALInput
+                        title={`${t('AboutUs.paragraphLabel')} 3`}
+                        fieldVariant="textarea"
+                        textareaRows={4}
+                        placeholder="Các kỹ thuật quen thuộc..."
+                        wrapperClassName="bg-white/60 focus-within:bg-white focus-within:border-amber-200"
+                        textareaClassName="resize-none leading-relaxed"
+                        {...register(`i18n.${activeLocale}.about_paragraph_3` as const)}
+                    />
+
+                    <ALInput
+                        title={t('AboutUs.closingQuoteLabel')}
+                        wrapperClassName="bg-white/60 focus-within:bg-white focus-within:border-amber-200 h-14"
+                        placeholder="An Lạc là lời mời..."
+                        {...register(`i18n.${activeLocale}.about_closing_quote` as const)}
+                    />
                 </div>
             </ALCard>
         </form>
