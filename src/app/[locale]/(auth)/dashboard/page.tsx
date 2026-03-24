@@ -1,70 +1,53 @@
+// src/app/(dashboard)/dashboard/page.tsx
 "use client";
 
+import React from "react";
 import { useAuth } from "@/components/providers/auth-provider";
+import { DashboardHeader } from "@/features/staff/dashboard/component/dashboard-header";
+import { DashboardStats } from "@/features/staff/dashboard/component/dashboard-stats";
+import { DashboardChartsRow1 } from "@/features/staff/dashboard/component/dashboard-charts-row1";
+import { DashboardTrendingRow } from "@/features/staff/dashboard/component/dashboard-trending-row";
+import { DashboardChartsRow2 } from "@/features/staff/dashboard/component/dashboard-charts-row2";
+import { DashboardActivityRow } from "@/features/staff/dashboard/component/dashboard-activity-row";
+import { DevTestingArea } from "@/features/staff/dashboard/component/dev-testing-area";
+
+import { useDashboard } from "@/features/staff/dashboard/hooks/use-dashboard";
 
 export default function DashboardPage() {
-  const { userInfo, isAuthenticated } = useAuth();
+    const { userInfo, isAuthenticated } = useAuth();
 
-  if (!isAuthenticated || !userInfo) {
+    const { data, isLoading, actions } = useDashboard();
+
+    if (!isAuthenticated || !userInfo) {
+        return <div className="flex items-center justify-center h-64 text-gray-500 animate-pulse">Loading dashboard...</div>;
+    }
+
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="text-lg">Loading...</div>
-      </div>
+        <div className="w-full min-h-screen pb-10 bg-[#FDFBF9] px-4 md:px-6">
+            <DashboardHeader />
+
+            <DashboardStats
+                // summaryData={data.summary}
+                // isLoading={isLoading}
+            />
+
+            <DashboardChartsRow1
+                // revenueData={data.revenueData}
+                // isLoading={isLoading}
+            />
+
+            <DashboardChartsRow2 />
+
+            <DashboardTrendingRow
+                // topSelling={data.topSelling}
+                // isLoading={isLoading}
+            />
+
+            <DashboardActivityRow />
+
+            <hr className="my-8 border-gray-300 border-dashed" />
+
+            <DevTestingArea userInfo={userInfo} />
+        </div>
     );
-  }
-
-  return (
-    <div>
-      <div className="mb-8">
-        <h1 className="text-4xl font-bold text-gray-900">Dashboard</h1>
-        <p className="mt-2 text-gray-600">Welcome back, {userInfo.username}!</p>
-      </div>
-
-      {/* User Info Card */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <div className="bg-white rounded-lg shadow p-6">
-          <h3 className="text-sm font-medium text-gray-500 mb-2">User ID</h3>
-          <p className="text-2xl font-bold text-gray-900">{userInfo.userId}</p>
-        </div>
-        
-        <div className="bg-white rounded-lg shadow p-6">
-          <h3 className="text-sm font-medium text-gray-500 mb-2">Username</h3>
-          <p className="text-2xl font-bold text-gray-900">{userInfo.username}</p>
-        </div>
-        
-        <div className="bg-white rounded-lg shadow p-6">
-          <h3 className="text-sm font-medium text-gray-500 mb-2">Roles</h3>
-          <div className="flex flex-wrap gap-2 mt-1">
-            {userInfo.roles.map((role) => (
-              <span
-                key={role}
-                className="px-3 py-1 bg-blue-100 text-blue-700 text-sm font-medium rounded-full"
-              >
-                {role}
-              </span>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Permissions Card */}
-      <div className="bg-white rounded-lg shadow p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Your Permissions</h3>
-        <div className="flex flex-wrap gap-2">
-          {userInfo.permissions.length > 0 ? (
-            userInfo.permissions.map((permission) => (
-              <span
-                key={permission}
-                className="px-3 py-1 bg-green-100 text-green-700 text-xs font-medium rounded-full"
-              >
-                {permission}
-              </span>
-            ))
-          ) : (
-            <p className="text-gray-500 text-sm">No permissions assigned</p>
-          )}
-        </div>
-      </div>
-    </div>
-  );
 }
