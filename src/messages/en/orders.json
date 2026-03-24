@@ -280,6 +280,11 @@
         "takeAway": "Take Away",
         "guest": "Guest",
         "notePlaceholder": "Item note...",
+        "subTotal": "Subtotal",
+        "tax": "Tax",
+        "coupon": "Coupon",
+        "tip": "Tip",
+        "paidVia": "Paid via",
         "status": {
           "Pending": "Pending",
           "In progress": "In Progress",
