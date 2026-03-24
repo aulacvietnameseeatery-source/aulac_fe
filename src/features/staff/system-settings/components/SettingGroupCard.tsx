@@ -49,7 +49,9 @@ export const SettingGroupCard: React.FC<SettingGroupCardProps> = ({
         await onSave(items);
     };
 
-    const groupLabel = groupName.charAt(0).toUpperCase() + groupName.slice(1).replace(/_/g, ' ');
+    const groupLabel = t.has(`${groupName}.title`)
+        ? t(`${groupName}.title`)
+        : groupName.charAt(0).toUpperCase() + groupName.slice(1).replace(/_/g, ' ');
     const editableCount = settings.filter((s) => !s.isSensitive).length;
 
     return (

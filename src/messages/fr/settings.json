@@ -309,6 +309,13 @@
       "aboutConfigTitle": "Configuration À Propos",
       "aboutConfigDesc": "Gestion de contenu minimaliste, axée sur la typographie pour la page À propos."
     },
+    "loyalty": {
+      "title": "Programme de fidélité",
+      "enabled": "Activer les points de fidélité",
+      "enabledDesc": "Permettre aux clients de gagner des points lors de leurs achats.",
+      "point_base_amount": "Montant de base des points",
+      "point_base_amountDesc": "Montant dépensé pour gagner 1 point de fidélité."
+    },
     "General": {
       "title": "Paramètres système",
       "addNew": "Ajouter un paramètre",

@@ -309,6 +309,13 @@
       "aboutConfigTitle": "About Us Configuration",
       "aboutConfigDesc": "Minimalist content management, focusing on typography for the About Us page."
     },
+    "loyalty": {
+      "title": "Loyalty Program",
+      "enabled": "Enable Loyalty Points",
+      "enabledDesc": "Allow customers to earn points from purchases.",
+      "point_base_amount": "Point Base Amount",
+      "point_base_amountDesc": "Amount spent per 1 loyalty point earned."
+    },
     "General": {
       "title": "System Parameters",
       "addNew": "Add New Setting",
