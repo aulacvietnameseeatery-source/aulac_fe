@@ -18,7 +18,7 @@ import { AdjustStockModal } from "@/features/staff/ingredient-management/compone
 import { ingredientService } from "@/features/staff/ingredient-management/services/ingredient-service";
 import { format } from "date-fns";
 import { listSupplierService } from "@/features/staff/supplier-management/supplier-list";
-import { excelUtils } from "@/features/staff/reservation-management/utils/excel-utils";
+import { excelUtils } from "@/lib/excel-utils";
 import {api} from "@/lib/http";
 import {ApiResponse} from "@/types/api-response.types";
 

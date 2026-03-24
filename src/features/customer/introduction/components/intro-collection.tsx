@@ -20,23 +20,23 @@ export function IntroCollection({ overrides }: { overrides?: Record<string, stri
         {
             id: 1,
             image: getMediaSetting("intro.collection.dish1.image", "/images/introduction-page/intro-collection/intro-collection-dish1.png"),
-            cardCategory: getSetting("intro.collection.dish1.cardCategory", t("cardCategory")),
-            cardTitle: getSetting("intro.collection.dish1.cardTitle", t("cardTitle")),
-            mainTitle: getSetting("intro.collection.dish1.mainTitle", t("dishMainTitle")),
+            cardCategory: getSetting("intro.collection.dish1.cardCategory", t("dish_1_category")),
+            cardTitle: getSetting("intro.collection.dish1.cardTitle", t("dish_1_title")),
+            mainTitle: getSetting("intro.collection.dish1.mainTitle", t("dish_1_main")),
         },
         {
             id: 2,
             image: getMediaSetting("intro.collection.dish2.image", "/images/introduction-page/intro-collection/intro-collection-dish2.png"),
-            cardCategory: getSetting("intro.collection.dish2.cardCategory", t("cardCategory")),
-            cardTitle: getSetting("intro.collection.dish2.cardTitle", t("cardTitle")),
-            mainTitle: getSetting("intro.collection.dish2.mainTitle", t("dishMainTitle")),
+            cardCategory: getSetting("intro.collection.dish2.cardCategory", t("dish_2_category")),
+            cardTitle: getSetting("intro.collection.dish2.cardTitle", t("dish_2_title")),
+            mainTitle: getSetting("intro.collection.dish2.mainTitle", t("dish_2_main")),
         },
         {
             id: 3,
             image: getMediaSetting("intro.collection.dish3.image", "/images/introduction-page/intro-collection/intro-collection-dish3.png"),
-            cardCategory: getSetting("intro.collection.dish3.cardCategory", t("cardCategory")),
-            cardTitle: getSetting("intro.collection.dish3.cardTitle", t("cardTitle")),
-            mainTitle: getSetting("intro.collection.dish3.mainTitle", t("dishMainTitle")),
+            cardCategory: getSetting("intro.collection.dish3.cardCategory", t("dish_3_category")),
+            cardTitle: getSetting("intro.collection.dish3.cardTitle", t("dish_3_title")),
+            mainTitle: getSetting("intro.collection.dish3.mainTitle", t("dish_3_main")),
         },
     ];
 

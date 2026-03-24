@@ -286,6 +286,13 @@
       "aboutConfigTitle": "Cấu hình About Us",
       "aboutConfigDesc": "Quản lý nội dung tối giản, tập trung vào kiểu chữ của trang About Us."
     },
+    "loyalty": {
+      "title": "Chương trình Khách hàng thân thiết",
+      "enabled": "Kích hoạt Tích điểm",
+      "enabledDesc": "Cho phép khách hàng tích lũy điểm từ các đơn hàng.",
+      "point_base_amount": "Số tiền cơ sở cho 1 điểm",
+      "point_base_amountDesc": "Số tiền chi tiêu tương ứng với 1 điểm thưởng."
+    },
     "General": {
       "title": "Tham số hệ thống",
       "addNew": "Thêm cài đặt mới",
