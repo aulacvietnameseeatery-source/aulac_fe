@@ -248,9 +248,8 @@ export function CreateTransactionForm() {
                   key={opt.code}
                   type="button"
                   onClick={() => handleTypeSelect(opt.code)}
-                  className={`w-full flex items-center gap-2.5 p-2.5 rounded-lg border transition-all ${
-                    selectedTypeCode === opt.code ? opt.selectedColor : opt.color
-                  }`}
+                  className={`w-full flex items-center gap-2.5 p-2.5 rounded-lg border transition-all ${selectedTypeCode === opt.code ? opt.selectedColor : opt.color
+                    }`}
                 >
                   {opt.icon}
                   <div className="text-left">
@@ -300,7 +299,7 @@ export function CreateTransactionForm() {
                     placeholder={t("import.selectSupplier")}
                     searchable
                     inputSize="sm"
-                    textClassName="text-sm"
+                    className="text-sm"
                     disabled={!isIN}
                   />
                 </div>
@@ -349,20 +348,20 @@ export function CreateTransactionForm() {
           </div>
         </ALCard>
         <ALCard variant="default" padding="sm" elevation="sm" radius="xl" className="xl:col-span-1">
-         <ALFileUploader
-                className="w-full h-full self-stretch"
-                title={t("evidenceTitle")}
-                existingFiles={[]}
-                pendingFiles={pendingEvidenceFiles}
-                onPendingChange={setPendingEvidenceFiles}
-                isUploading={false}
-                accept="image/*"
-                acceptHint={["PNG", "JPG", "WEBP"]}
-                maxFiles={4}
-                maxSizeBytes={5 * 1024 * 1024}
-                variant="image"
-                imagePerRow={4}
-              />
+          <ALFileUploader
+            className="w-full h-full self-stretch"
+            title={t("evidenceTitle")}
+            existingFiles={[]}
+            pendingFiles={pendingEvidenceFiles}
+            onPendingChange={setPendingEvidenceFiles}
+            isUploading={false}
+            accept="image/*"
+            acceptHint={["PNG", "JPG", "WEBP"]}
+            maxFiles={4}
+            maxSizeBytes={5 * 1024 * 1024}
+            variant="image"
+            imagePerRow={4}
+          />
         </ALCard>
       </div>
 
