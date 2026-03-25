@@ -115,53 +115,69 @@ export function DishDetailModal({ dishId, isOpen, onClose, onAddToCart }: DishDe
               </div>
             ) : (
               <div className="flex flex-col md:flex-row">
-                {/* ── LEFT: Image panel ── */}
-                <div className="relative w-full md:w-[380px] md:shrink-0 h-[340px] md:h-[480px] bg-[#0a0f1e] overflow-hidden shrink-0 flex flex-col">
+                {/* ── LEFT: Image panel — unified flex-col layout on all breakpoints ── */}
+                <div className="w-full md:w-[380px] md:shrink-0 flex flex-col bg-[#0a0f1e] md:border-r border-[#C5A059]/30 shrink-0">
                   <Script src="https://product-gallery.cloudinary.com/all.js" strategy="lazyOnload" />
 
-                  {/* Gold border overlay on image */}
-                  <div className="pointer-events-none absolute inset-0 z-20 md:border-r border-[#C5A059]/30" />
+                  {/* Tab row — in-flow, top of panel */}
+                  <div className="flex-none flex items-center justify-center gap-1 px-3 pt-3 pb-2">
+                    {(["photo", "360", "video"] as const).map((mode) => (
+                      <button
+                        key={mode}
+                        type="button"
+                        onClick={() => setViewMode(mode)}
+                        className={`font-body rounded-full px-3 py-1 text-[10px] font-bold tracking-widest uppercase transition-all duration-300 ${
+                          viewMode === mode
+                            ? "bg-[#FFAB2D] text-[#1A3A52] shadow-sm"
+                            : "text-white/60 hover:text-white"
+                        }`}
+                      >
+                        {mode === "photo" ? tHero("photo") : mode === "360" ? tHero("view_360") : tHero("video")}
+                      </button>
+                    ))}
+                  </div>
 
-                  {/* Photo */}
-                  {viewMode === "photo" && (
-                    <div className="absolute inset-0 flex items-center justify-center pb-16 md:pb-0">
-                      <img
-                        src={dishData.data.imageUrls?.[0] || HERO_IMAGE}
-                        alt={dishData.data.dishName}
-                        className="max-h-full max-w-full object-contain animate-in fade-in duration-400"
-                      />
-                      {/* dim overlay for elegance */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#0f172a]/60 via-transparent to-transparent pointer-events-none" />
-                    </div>
-                  )}
-
-                  {/* 360 */}
-                  <div
-                    id="cloudinary-360-modal"
-                    className={`absolute inset-0 w-full h-full z-10 bg-[#0a0f1e] pb-16 md:pb-0 ${viewMode === "360" ? "block" : "hidden"}`}
-                  />
-
-                  {/* Video */}
-                  {viewMode === "video" && (
-                    <div className="absolute inset-0 z-10 flex items-center justify-center bg-black animate-in fade-in pb-16 md:pb-0">
-                      {dishData.data.videoUrl ? (
-                        <video
-                          key={dishData.data.videoUrl}
-                          src={dishData.data.videoUrl}
-                          controls
-                          autoPlay
-                          playsInline
-                          className="max-h-full max-w-full object-contain"
+                  {/* Inset content box — margin on all sides, visually separated */}
+                  <div className="flex-none mx-3 mb-2 rounded-xl overflow-hidden relative h-[320px] md:h-[360px]">
+                    {/* Photo */}
+                    {viewMode === "photo" && (
+                      <div className="absolute inset-0 flex items-center justify-center bg-[#0a0f1e]">
+                        <img
+                          src={dishData.data.imageUrls?.[0] || HERO_IMAGE}
+                          alt={dishData.data.dishName}
+                          className="max-h-full max-w-full object-contain animate-in fade-in duration-400"
                         />
-                      ) : (
-                        <p className="text-[#C5A059] text-sm font-medium tracking-widest uppercase">Video Coming Soon</p>
-                      )}
-                    </div>
-                  )}
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#0f172a]/60 via-transparent to-transparent pointer-events-none" />
+                      </div>
+                    )}
 
-                  {/* Order Now */}
-                  {/* _OLD: viewMode !== "360" && ( — removed condition to show button on all tabs including 360 */}
-                  {(
+                    {/* 360 */}
+                    <div
+                      id="cloudinary-360-modal"
+                      className={`absolute inset-0 w-full h-full z-10 bg-[#0a0f1e] ${viewMode === "360" ? "block" : "hidden"}`}
+                    />
+
+                    {/* Video */}
+                    {viewMode === "video" && (
+                      <div className="absolute inset-0 z-10 flex items-center justify-center bg-black animate-in fade-in">
+                        {dishData.data.videoUrl ? (
+                          <video
+                            key={dishData.data.videoUrl}
+                            src={dishData.data.videoUrl}
+                            controls
+                            autoPlay
+                            playsInline
+                            className="w-full h-full object-contain"
+                          />
+                        ) : (
+                          <p className="text-[#C5A059] text-sm font-medium tracking-widest uppercase">Video Coming Soon</p>
+                        )}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Order Now button — in-flow, bottom of panel */}
+                  <div className="flex-none px-3 pb-3">
                     <button
                       type="button"
                       onClick={() => {
@@ -178,28 +194,10 @@ export function DishDetailModal({ dishId, isOpen, onClose, onAddToCart }: DishDe
                           setOpenPopup(true);
                         }
                       }}
-                      className="absolute bottom-4 md:bottom-4 left-4 right-4 z-30 h-10 rounded-lg bg-[#FFAB2D] px-4 shadow-lg hover:bg-[#FFAB2D]/90 transition-colors"
+                      className="w-full h-10 rounded-lg bg-[#FFAB2D] px-4 shadow-lg hover:bg-[#FFAB2D]/90 transition-colors"
                     >
                       <span className="font-body text-sm font-bold text-[#1A3A52] tracking-widest uppercase">{tHero("order_now")}</span>
                     </button>
-                  )}
-
-                  {/* View-mode tabs */}
-                  <div className="absolute left-1/2 top-3 z-30 inline-flex -translate-x-1/2 items-center gap-1 rounded-full bg-[#0f172a]/80 border border-white/10 p-1 backdrop-blur-md">
-                    {(["photo", "360", "video"] as const).map((mode) => (
-                      <button
-                        key={mode}
-                        type="button"
-                        onClick={() => setViewMode(mode)}
-                        className={`font-body rounded-full px-3 py-1 text-[10px] font-bold tracking-widest uppercase transition-all duration-300 ${
-                          viewMode === mode
-                            ? "bg-[#FFAB2D] text-[#1A3A52] shadow-sm"
-                            : "text-white/60 hover:text-white"
-                        }`}
-                      >
-                        {mode === "photo" ? tHero("photo") : mode === "360" ? tHero("view_360") : tHero("video")}
-                      </button>
-                    ))}
                   </div>
                 </div>
 
