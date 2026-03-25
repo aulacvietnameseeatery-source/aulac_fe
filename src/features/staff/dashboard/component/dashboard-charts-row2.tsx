@@ -19,7 +19,7 @@ export function DashboardChartsRow2({ activeOrders = [], isLoading }: DashboardC
 
     return (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-            {/* Category Statistics (Đợi API BE) */}
+            {/* Category Statistics */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
                 <div className="flex items-center justify-between border-b border-gray-100 pb-3 mb-3">
                     <div className="flex items-center gap-2"><PieChart size={18} className="text-gray-700" /><h5 className="font-semibold text-gray-800 m-0">Category Statistics</h5></div>
@@ -67,7 +67,7 @@ export function DashboardChartsRow2({ activeOrders = [], isLoading }: DashboardC
                 <button className="w-full mt-3 py-1.5 bg-gray-50 border border-gray-200 text-sm font-medium rounded hover:bg-gray-100 text-gray-700">View All</button>
             </div>
 
-            {/* Sales Performance (Đợi API BE) */}
+            {/* Sales Performance  */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 flex flex-col">
                 <div className="flex items-center justify-between border-b border-gray-100 pb-3 mb-3">
                     <div className="flex items-center gap-2"><BarChart size={18} className="text-gray-700" /><h5 className="font-semibold text-gray-800 m-0">Sales Performance</h5></div>
