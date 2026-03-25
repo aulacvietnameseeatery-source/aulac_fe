@@ -14,6 +14,8 @@ import { ALInput } from "@/components/ui/al-input";
 import { useIntroductionSettingsForm } from "../hooks/useIntroductionSettingsForm";
 import { mapIntroSettingsToFormValues, mapFormValuesToIntroSettings, LOCALES, SupportedLocale, IntroFormValues } from "../types/schema";
 import { useUpdateStoreSettingsMutation, useTranslateSettingsMutation } from "../hooks/useSystemSettingsMutation";
+import { normalizeMediaUrl } from "@/lib/normalize-media-url";
+
 
 
 const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
@@ -23,24 +25,7 @@ const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
 const MAX_VIDEO_SIZE = 50 * 1024 * 1024;
 const MAX_VIDEO_DURATION_SECONDS = 30;
 
-const normalizeMediaUrl = (value: string): string => {
-    if (!value) return '';
-    if (/^(https?:|blob:|data:)/i.test(value)) return value;
 
-    const base = BASE_URL.replace(/\/+$/, '');
-    const normalized = value.replace(/\\/g, '/').trim();
-
-    if (normalized.startsWith('/uploads/')) {
-        return `${base}${normalized}`;
-    }
-
-    if (normalized.startsWith('uploads/')) {
-        return `${base}/${normalized}`;
-    }
-
-    const relative = normalized.replace(/^\/+/, '');
-    return `${base}/uploads/${relative}`;
-};
 
 export const IntroductionSettingsForm = () => {
     const t = useTranslations("settings");
@@ -288,7 +273,7 @@ export const IntroductionSettingsForm = () => {
 
     return (
         <form onSubmit={handleSubmit(onSubmit, onInvalid)} className="flex flex-col gap-8 w-full pb-12 relative">
-            <div className="sticky top-0 z-50 py-4 -mx-4 px-4 bg-background/80 backdrop-blur-md">
+            <div className="py-4 -mx-4 px-4">
                 <ALCard variant="glass" elevation="sm" padding="sm" radius="xl" className="flex items-center justify-between gap-4 border-amber-200/30 shadow-md">
                     <div className="flex items-center gap-2 sm:gap-4">
                         <div className="flex bg-gray-100/90 p-1 rounded-xl border border-gray-200 shadow-inner">
@@ -369,8 +354,6 @@ export const IntroductionSettingsForm = () => {
 
                             {/* Right: Image Upload Area */}
                             <div className="p-8 lg:p-10 bg-[#FDFBF9]/60 flex flex-col justify-center items-center">
-                                <label className="font-bold text-xs text-amber-800/60 uppercase tracking-widest mb-6 block w-full text-center">{t('Introduction.heroImage')}</label>
-
                                 <div className="relative group w-full max-w-md aspect-[16/10] perspective-1000">
                                     <div
                                         className={cn(
@@ -452,8 +435,6 @@ export const IntroductionSettingsForm = () => {
 
                             {/* Right: Video Grid */}
                             <div className="p-8 lg:p-10 bg-[#F8FAFC]/60 space-y-8">
-                                <label className="font-bold text-xs text-blue-800/60 uppercase tracking-widest block">{t('Introduction.tourVideo')}</label>
-
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                     {/* Video Left */}
                                     <div className="space-y-4">
@@ -530,9 +511,6 @@ export const IntroductionSettingsForm = () => {
                                         </div>
                                         <input type="file" ref={virtualTourVideoRightRef} className="hidden" accept={VIDEO_ACCEPT} onChange={(e) => handleFileChange(e, 'intro_virtualTour_videoUrlRight', true)} />
                                     </div>
-                                </div>
-                                <div className="p-4 bg-blue-50/50 rounded-2xl border border-blue-100/50">
-                                    <p className="text-[10px] text-blue-700/70 font-medium leading-relaxed uppercase tracking-wider text-center">Limit: 30s • MP4 format • Under 50MB</p>
                                 </div>
                             </div>
                         </div>
@@ -647,17 +625,7 @@ export const IntroductionSettingsForm = () => {
                 </section>
             </div>
 
-            {/* Bottom Save Button (Mobile) */}
-            <div className="pb-6 lg:hidden">
-                <Button
-                    type="submit"
-                    className="w-full bg-[#1A3A52] hover:bg-[#1A3A52]/90 text-white shadow-xl h-14 font-bold text-base rounded-2xl gap-3"
-                    isLoading={updateMutation.isPending}
-                >
-                    <Save className="w-5 h-5" />
-                    {t("Common.saveChanges") || "Save All Changes"}
-                </Button>
-            </div>
+
 
             {previewData && (
                 <MediaPreviewModal

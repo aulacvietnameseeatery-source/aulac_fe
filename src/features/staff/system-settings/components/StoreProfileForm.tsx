@@ -12,28 +12,13 @@ import { ALInput } from '@/components/ui/al-input';
 import { useStoreProfileForm } from '../hooks/useStoreProfileForm';
 import { mapStoreSettingsToFormValues, mapFormValuesToStoreSettings, LOCALES, SupportedLocale, StoreProfileFormValues } from '../types/schema';
 import { useUpdateStoreSettingsMutation, useTranslateSettingsMutation } from '../hooks/useSystemSettingsMutation';
+import { normalizeMediaUrl } from '@/lib/normalize-media-url';
+
 
 const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
 const IMAGE_ACCEPT = '.jpg,.jpeg,.png,.gif,.webp,image/jpeg,image/png,image/gif,image/webp';
 
-const normalizeMediaUrl = (value: string): string => {
-    if (!value) return '';
-    if (/^(https?:|blob:|data:)/i.test(value)) return value;
 
-    const base = BASE_URL.replace(/\/+$/, '');
-    const normalized = value.replace(/\\/g, '/').trim();
-
-    if (normalized.startsWith('/uploads/')) {
-        return `${base}${normalized}`;
-    }
-
-    if (normalized.startsWith('uploads/')) {
-        return `${base}/${normalized}`;
-    }
-
-    const relative = normalized.replace(/^\/+/, '');
-    return `${base}/uploads/${relative}`;
-};
 
 export const StoreProfileForm = () => {
     const t = useTranslations('settings');
@@ -189,8 +174,8 @@ export const StoreProfileForm = () => {
 
     return (
         <form onSubmit={handleSubmit(onSubmit, onInvalid)} className="flex flex-col gap-6 w-full pb-12 relative">
-            {/* --- STICKY HEADER ACTIONS --- */}
-            <div className="sticky top-0 z-50 py-4 -mx-4 px-4 bg-background/80 backdrop-blur-md">
+            {/* --- HEADER ACTIONS --- */}
+            <div className="py-4 -mx-4 px-4">
                 <ALCard variant="glass" elevation="sm" padding="sm" radius="xl" className="flex items-center justify-between gap-4 border-amber-200/30 shadow-md">
                     <div className="flex items-center gap-2 sm:gap-4">
                         <div className="flex bg-gray-100/90 p-1 rounded-xl border border-gray-200 shadow-inner">
@@ -386,17 +371,7 @@ export const StoreProfileForm = () => {
                 </div>
             </div>
 
-            {/* Bottom Save Button (Mobile) */}
-            <div className="pb-6 lg:hidden">
-                <Button
-                    type="submit"
-                    className="w-full bg-[#1A3A52] hover:bg-[#1A3A52]/90 text-white shadow-lg h-12 font-[Inter] gap-2"
-                    isLoading={updateMutation.isPending}
-                >
-                    <Save className="w-4 h-4" />
-                    {t("Common.saveChanges") || "Save All Changes"}
-                </Button>
-            </div>
+
 
             {previewData && (
                 <MediaPreviewModal

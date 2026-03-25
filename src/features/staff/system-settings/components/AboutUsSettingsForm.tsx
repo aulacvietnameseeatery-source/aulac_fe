@@ -118,7 +118,7 @@ export const AboutUsSettingsForm = () => {
 
     return (
         <form onSubmit={handleSubmit(onSubmit, onInvalid)} className="flex flex-col gap-6 w-full pb-12 relative">
-            <div className="sticky top-0 z-50 py-4 -mx-4 px-4 bg-background/80 backdrop-blur-md">
+            <div className="py-4 -mx-4 px-4">
                 <ALCard variant="glass" elevation="sm" padding="sm" radius="xl" className="flex items-center justify-between gap-4 border-amber-200/30 shadow-md">
                     <div className="flex items-center gap-2 sm:gap-4">
                         <div className="flex bg-gray-100/90 p-1 rounded-xl border border-gray-200 shadow-inner">

@@ -146,7 +146,7 @@ const navigation: NavCategory[] = [
           { key: "storeAboutUs", href: "/dashboard/store-settings?tab=about", icon: UsersIcon },
         ]
       },
-      { key: "systemSettings", href: "/dashboard/system-settings", icon: Warehouse, permission: Permissions.ViewSystemSettings },
+      { key: "systemSettings", href: "/dashboard/system-settings", icon: Radio , permission: Permissions.ViewSystemSettings },
       // { key: "notifications", href: "/dashboard/notifications", icon: Bell },
       { key: "emails", href: "/dashboard/emails", icon: Mail, permission: Permissions.ViewSystemSettings },
     ]
