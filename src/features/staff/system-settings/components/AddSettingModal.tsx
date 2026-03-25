@@ -16,7 +16,7 @@ interface Props {
 }
 
 export const AddSettingModal = ({ open, onClose, onSuccess }: Props) => {
-    const t = useTranslations('SystemSettings');
+    const t = useTranslations('settings');
     const { addSetting } = useSystemSettings();
     const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -41,7 +41,7 @@ export const AddSettingModal = ({ open, onClose, onSuccess }: Props) => {
                 isSensitive,
             };
             // Try to create the setting
-            await addSetting(dto, t('notifications.createSuccess') || 'Setting created successfully.');
+            await addSetting(dto, t('notifications.createSuccess'));
             // Reset form
             setKey('');
             setSettingName('');
@@ -61,16 +61,16 @@ export const AddSettingModal = ({ open, onClose, onSuccess }: Props) => {
     const footer = (
         <div className="flex justify-end gap-3 w-full">
             <Button variant="outline" onClick={onClose} disabled={isSubmitting}>
-                {t('cancel') || 'Cancel'}
+                {t('cancel')}
             </Button>
             <Button variant="default" onClick={handleSubmit} disabled={isSubmitting || !key.trim()}>
-                {isSubmitting ? t('saving') || 'Saving...' : t('add') || 'Add Setting'}
+                {isSubmitting ? t('saving') : t('add')}
             </Button>
         </div>
     );
 
     return (
-        <Dialog open={open} onClose={onClose} title={t('addSetting') || 'Add New Setting'} width="500px" footer={footer}>
+        <Dialog open={open} onClose={onClose} title={t('AddModal.addTitle')} width="500px" footer={footer}>
             <div className="flex flex-col gap-4 py-4">
                 <div className="flex flex-col gap-2">
                     <label className="text-sm font-medium">{t('AddModal.key')}</label>
@@ -100,11 +100,11 @@ export const AddSettingModal = ({ open, onClose, onSuccess }: Props) => {
                         onChange={(e) => setValueType(e.target.value as SettingValueType)}
                         disabled={isSubmitting}
                     >
-                        <option value="STRING">String</option>
-                        <option value="INT">Integer</option>
-                        <option value="DECIMAL">Decimal</option>
-                        <option value="BOOL">Boolean</option>
-                        <option value="JSON">JSON</option>
+                        <option value="STRING">{t('Field.types.STRING')}</option>
+                        <option value="INT">{t('Field.types.INT')}</option>
+                        <option value="DECIMAL">{t('Field.types.DECIMAL')}</option>
+                        <option value="BOOL">{t('Field.types.BOOL')}</option>
+                        <option value="JSON">{t('Field.types.JSON')}</option>
                     </select>
                 </div>
 
@@ -113,7 +113,7 @@ export const AddSettingModal = ({ open, onClose, onSuccess }: Props) => {
                     {valueType === 'BOOL' ? (
                         <div className="flex items-center gap-2 mt-1">
                             <Switch checked={valueBool} onChange={setValueBool} disabled={isSubmitting} />
-                            <span className="text-sm text-gray-600">{valueBool ? 'True' : 'False'}</span>
+                            <span className="text-sm text-gray-600">{valueBool ? t('AddModal.true') : t('AddModal.false')}</span>
                         </div>
                     ) : valueType === 'JSON' ? (
                         <textarea

@@ -198,10 +198,18 @@ Permission constants live in `src/types/const.ts`.
 
 ## 8. i18n
 
-Add locale keys to **all three** files before committing:
-- `src/messages/en.json`
-- `src/messages/fr.json`
-- `src/messages/vi.json`
+Add locale keys to **all three locale folders** before committing:
+- `src/messages/en/<module>.json`
+- `src/messages/fr/<module>.json`
+- `src/messages/vi/<module>.json`
+
+Recommended modules: `common`, `auth`, `orders`, `kitchen`, `reservations`, `shift`.
+
+Rules:
+- Use nested namespaced keys by domain (example: `shift.reports.tabs.attendance`).
+- Keep the same key tree across locales to prevent runtime missing messages.
+- Avoid top-level generic keys that can collide across modules.
+- If migrating from legacy monolithic files (`src/messages/{locale}.json`), follow `docs/i18n-migration-from-monolith.md`.
 
 Access in components via `useTranslations("FeatureNamespace")` from `next-intl`.
 
@@ -225,5 +233,5 @@ Access in components via `useTranslations("FeatureNamespace")` from `next-intl`.
 - [ ] `schema.ts` + `FormValues` type defined (if feature has a form)
 - [ ] Status config map created (if feature has statuses)
 - [ ] Page wired with `<ProtectedRoute>`
-- [ ] Locale keys added to all three `.json` files
+- [ ] Locale keys added to all three locale module files
 - [ ] `npx tsc --noEmit` passes

@@ -1,34 +1,42 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
-import { ImagePlus, Trash2, Save, Loader2, Upload, Facebook, Instagram, Music2 as Tiktok } from 'lucide-react';
+import { Trash2, Save, Loader2, Upload, Facebook, Instagram, Music2 as Tiktok, Eye, Phone, Mail, Languages, Maximize2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { getGroupSettings, updateGroupSettings, uploadLogo } from '../services/system-setting.service';
-import { BulkUpdateSettingItemDto } from '../types/system-setting.types';
+import { getGroupSettings, uploadLogo } from '../services/system-setting.service';
+import { BASE_URL } from '@/lib/http';
+import { cn } from '@/lib/utils';
+import { MediaPreviewModal } from '@/components/shared/MediaPreviewModal';
+import { ALCard } from '@/components/ui/al-card';
+import { ALInput } from '@/components/ui/al-input';
+import { useStoreProfileForm } from '../hooks/useStoreProfileForm';
+import { mapStoreSettingsToFormValues, mapFormValuesToStoreSettings, LOCALES, SupportedLocale, StoreProfileFormValues } from '../types/schema';
+import { useUpdateStoreSettingsMutation, useTranslateSettingsMutation } from '../hooks/useSystemSettingsMutation';
+import { normalizeMediaUrl } from '@/lib/normalize-media-url';
+
+
+const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+const IMAGE_ACCEPT = '.jpg,.jpeg,.png,.gif,.webp,image/jpeg,image/png,image/gif,image/webp';
+
+
 
 export const StoreProfileForm = () => {
-    const t = useTranslations('SystemSettings.StoreProfile');
+    const t = useTranslations('settings');
     const [isLoading, setIsLoading] = useState(true);
-    const [isSaving, setIsSaving] = useState(false);
-    const [isUploading, setIsUploading] = useState(false);
-    const fileInputRef = useRef<HTMLInputElement>(null);
+    const [isUploading, setIsUploading] = useState<string | null>(null);
+    const [activeLocale, setActiveLocale] = useState<SupportedLocale>('en');
 
-    // Form state updated per user request
-    const [formData, setFormData] = useState({
-        logoUrl: '',
-        name: '',
-        streetAddress: '',
-        postalCode: '',
-        city: '',
-        country: '',
-        email: '',
-        phone: '',
-        openingHours: '',
-        facebookLink: '',
-        instagramLink: '',
-        tiktokLink: '',
-    });
+    const form = useStoreProfileForm();
+    const { register, handleSubmit, formState: { errors }, reset, setValue, watch, getValues } = form;
+
+    const translateMutation = useTranslateSettingsMutation();
+    const updateMutation = useUpdateStoreSettingsMutation();
+
+    const [previewData, setPreviewData] = useState<{ url: string; title: string, type: 'image' | 'video' } | null>(null);
+    const [localPreviews, setLocalPreviews] = useState<Record<string, string>>({});
+    const logoInputRef = useRef<HTMLInputElement>(null);
+
+    const logoUrlValue = watch('logoUrl');
 
     useEffect(() => {
         loadSettings();
@@ -38,14 +46,13 @@ export const StoreProfileForm = () => {
         setIsLoading(true);
         try {
             const settings = await getGroupSettings('store');
-            const data = { ...formData };
+            const kv: Record<string, string> = {};
             settings.forEach(s => {
                 const key = s.settingKey.replace('store.', '');
-                if (key in data) {
-                    (data as any)[key] = s.value?.toString() || '';
-                }
+                kv[key] = s.value?.toString() || '';
             });
-            setFormData(data);
+            const formattedData = mapStoreSettingsToFormValues(kv);
+            reset(formattedData);
         } catch (error) {
             console.error('Failed to load store settings:', error);
         } finally {
@@ -53,65 +60,108 @@ export const StoreProfileForm = () => {
         }
     };
 
-    const handleChange = (field: string, value: string) => {
-        setFormData(prev => ({ ...prev, [field]: value }));
+    const handleAutoTranslate = () => {
+        const currentData = getValues();
+        const activeI18n = currentData.i18n[activeLocale];
+
+        const dataToTranslate = Object.entries(activeI18n).reduce((acc, [k, v]) => {
+            if (v) acc[k] = v as string;
+            return acc;
+        }, {} as Record<string, string>);
+
+        if (Object.keys(dataToTranslate).length === 0) {
+            toast.warning(t('StoreProfile.nothingToTranslate'));
+            return;
+        }
+
+        translateMutation.mutate({
+            sourceLang: activeLocale,
+            data: dataToTranslate
+        }, {
+            onSuccess: (data) => {
+                const newValues = { ...currentData };
+                Object.entries(data.translations).forEach(([lang, translations]) => {
+                    const l = lang as SupportedLocale;
+                    Object.entries(translations).forEach(([key, value]) => {
+                        // @ts-expect-error: dynamic key access for translated values i18n
+                        newValues.i18n[l][key] = value;
+                    });
+                });
+                reset(newValues);
+                toast.success(t('StoreProfile.translatedSuccessfully'));
+            },
+            onError: () => {
+                toast.error(t('StoreProfile.translationFailed'));
+            }
+        });
     };
 
     const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
 
-        // Basic validation
-        if (file.size > 5 * 1024 * 1024) {
-            toast.error(t('fileSizeError'));
+        if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
+            toast.error(t('StoreProfile.invalidImageFormatError'));
+            if (e.target) e.target.value = '';
             return;
         }
 
-        setIsUploading(true);
+        if (file.size > 5 * 1024 * 1024) {
+            toast.error(t('StoreProfile.fileSizeError'));
+            if (e.target) e.target.value = '';
+            return;
+        }
+
+        const localUrl = URL.createObjectURL(file);
+        setLocalPreviews(prev => ({ ...prev, logoUrl: localUrl }));
+        setIsUploading('logoUrl');
+
         try {
             const publicUrl = await uploadLogo(file);
-            setFormData(prev => ({ ...prev, logoUrl: publicUrl }));
-            toast.success(t('uploadSuccess'));
+            setValue('logoUrl', publicUrl, { shouldDirty: true, shouldValidate: true });
+            toast.success(t('StoreProfile.uploadSuccess'));
         } catch (error) {
-            toast.error(t('uploadError'));
+            toast.error(t('StoreProfile.uploadError'));
+            if (!logoUrlValue) {
+                setLocalPreviews(prev => { delete prev['logoUrl']; return { ...prev }; });
+            }
         } finally {
-            setIsUploading(false);
-            if (fileInputRef.current) fileInputRef.current.value = '';
+            setIsUploading(null);
+            if (e.target) e.target.value = '';
         }
     };
 
-    const handleSave = async () => {
-        setIsSaving(true);
-        try {
-            const fieldNames: Record<string, string> = {
-                logoUrl: 'Store Logo',
-                name: 'Store Name',
-                streetAddress: 'Street Address',
-                postalCode: 'Postal Code',
-                city: 'City',
-                country: 'Country / Region',
-                email: 'Email',
-                phone: 'Phone',
-                openingHours: 'Opening Hours',
-                facebookLink: 'Facebook Link',
-                instagramLink: 'Instagram Link',
-                tiktokLink: 'TikTok Link'
-            };
+    const onSubmit = (values: StoreProfileFormValues) => {
+        const mappedSettings = mapFormValuesToStoreSettings(values);
+        const items = Object.entries(mappedSettings).map(([key, value]) => ({
+            key: `store.${key}`,
+            settingName: `Store ${key}`,
+            value: value,
+            description: `Store ${key}`
+        }));
 
-            const items: BulkUpdateSettingItemDto[] = Object.entries(formData).map(([key, value]) => ({
-                key: `store.${key}`,
-                settingName: fieldNames[key] || `Store ${key}`,
-                value: value,
-                description: `Store ${key}`
-            }));
+        updateMutation.mutate({ items }, {
+            onSuccess: () => {
+                toast.success(t('StoreProfile.updateSuccess'));
+                setLocalPreviews({}); // Clear local blobs after successful save
+                loadSettings();
+            },
+            onError: (err: any) => {
+                toast.error(err?.response?.data?.userMessage || t('StoreProfile.updateError'));
+            }
+        });
+    };
 
-            await updateGroupSettings('store', { items });
-            toast.success(t('updateSuccess'));
-        } catch (error: any) {
-            toast.error(error?.response?.data?.userMessage || t('updateError'));
-        } finally {
-            setIsSaving(false);
-        }
+    const onInvalid = (errors: any) => {
+        console.error('Form Validation errors:', errors);
+        toast.error(t('Common.invalidForm'));
+    };
+
+    const getFullUrl = () => {
+        const previewUrl = localPreviews['logoUrl'];
+        if (previewUrl) return previewUrl;
+        if (!logoUrlValue) return '';
+        return normalizeMediaUrl(logoUrlValue);
     };
 
     if (isLoading) {
@@ -123,284 +173,215 @@ export const StoreProfileForm = () => {
     }
 
     return (
-        <div className="space-y-6 animate-in fade-in duration-500">
-            {/* Identity Section */}
-            <div className="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden text-navy-DEFAULT">
-                <div className="px-6 py-4 border-b border-gray-100 bg-gray-50/50">
-                    <h3 className="text-lg font-bold text-gray-900">{t('identity')}</h3>
-                    <p className="text-sm text-gray-500 mt-0.5">{t('identityDesc')}</p>
-                </div>
-                <div className="p-6">
-                    <div className="flex flex-col md:flex-row gap-10">
-                        <div className="flex-shrink-0">
-                            <div className="w-40 h-40 bg-gray-50 border-2 border-dashed border-gray-200 rounded-2xl flex items-center justify-center relative overflow-hidden group transition-all hover:border-primary/50 shadow-sm mx-auto md:mx-0">
-                                {formData.logoUrl ? (
-                                    <>
-                                        <img src={formData.logoUrl} alt="Store Logo" className="w-full h-full object-contain p-3" />
-                                        <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity gap-2">
-                                            <Button
-                                                size="icon"
-                                                variant="outline"
-                                                className="h-8 w-8 rounded-full bg-white hover:bg-gray-100 border-none shadow-sm"
-                                                onClick={() => fileInputRef.current?.click()}
-                                            >
-                                                <Upload className="h-4 w-4 text-gray-700" />
-                                            </Button>
-                                            <Button
-                                                size="icon"
-                                                variant="danger"
-                                                className="h-8 w-8 rounded-full shadow-sm"
-                                                onClick={() => handleChange('logoUrl', '')}
-                                            >
-                                                <Trash2 className="h-4 w-4" />
-                                            </Button>
-                                        </div>
-                                    </>
-                                ) : (
-                                    <div
-                                        className="text-center flex flex-col items-center cursor-pointer px-4 w-full h-full justify-center"
-                                        onClick={() => fileInputRef.current?.click()}
-                                    >
-                                        <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mb-2 group-hover:bg-primary/10 transition-colors">
-                                            <ImagePlus className="h-6 w-6 text-gray-400 group-hover:text-primary transition-colors" />
-                                        </div>
-                                        <span className="text-xs uppercase font-bold text-gray-500 group-hover:text-primary transition-colors tracking-wider">Logo</span>
-                                    </div>
-                                )}
-                                {isUploading && (
-                                    <div className="absolute inset-0 bg-white/80 flex items-center justify-center">
-                                        <Loader2 className="h-6 w-6 animate-spin text-primary" />
-                                    </div>
-                                )}
+        <form onSubmit={handleSubmit(onSubmit, onInvalid)} className="flex flex-col gap-6 w-full pb-12 relative">
+            {/* --- HEADER ACTIONS --- */}
+            <div className="py-4 -mx-4 px-4">
+                <ALCard variant="glass" elevation="sm" padding="sm" radius="xl" className="flex items-center justify-between gap-4 border-amber-200/30 shadow-md">
+                    <div className="flex items-center gap-2 sm:gap-4">
+                        <div className="flex bg-gray-100/90 p-1 rounded-xl border border-gray-200 shadow-inner">
+                            {LOCALES.map((loc) => (
+                                <Button
+                                    key={loc}
+                                    type="button"
+                                    variant={activeLocale === loc ? "default" : "ghost"}
+                                    size="sm"
+                                    className={cn(
+                                        "px-3 sm:px-5 py-1.5 h-8 text-[10px] sm:text-xs font-bold uppercase transition-all duration-300 rounded-lg",
+                                        activeLocale === loc
+                                            ? "bg-white shadow-md text-[#1A3A52] hover:bg-white/50"
+                                            : "text-gray-500 hover:text-[#1A3A52] hover:bg-white/40"
+                                    )}
+                                    onClick={() => setActiveLocale(loc)}
+                                >
+                                    {loc}
+                                </Button>
+                            ))}
+                        </div>
+                    </div>
+
+                    <div className="flex items-center gap-3">
+                        <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            className="h-9 gap-2 text-purple-600 border-purple-200 hover:bg-purple-50 hover:border-purple-300 font-semibold px-4 transition-all"
+                            onClick={handleAutoTranslate}
+                            isLoading={translateMutation.isPending}
+                        >
+                            <Languages className="w-4 h-4" />
+                            <span className="hidden sm:inline">{t('Common.autoTranslate')}</span>
+                        </Button>
+                        <Button
+                            type="submit"
+                            size="sm"
+                            className="h-9 gap-2 bg-[#1E3C52] hover:bg-[#12283A] text-white shadow-lg shadow-blue-900/20 font-semibold px-4 transition-all"
+                            isLoading={updateMutation.isPending}
+                        >
+                            <Save className="w-4 h-4" />
+                            {t("Common.saveChanges")}
+                        </Button>
+                    </div>
+                </ALCard>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 pb-6">
+                {/* --- LEFT COLUMN --- */}
+                <div className="space-y-8">
+                    {/* --- IDENTITY SECTION --- */}
+                    <ALCard variant="soft" padding="none" radius="2xl" elevation="sm" className="border-amber-200/50 shadow-sm overflow-hidden" animation="slide-up">
+                        <div className="p-6 md:p-8 ">
+                            <div className="space-y-3">
+                                <div className="flex flex-wrap gap-3">
+                                    {logoUrlValue && (
+                                        <Button
+                                            type="button"
+                                            variant="outline"
+                                            size="sm"
+                                            className="h-9 border-red-100 text-red-500 hover:bg-red-50 font-[Inter] gap-2"
+                                            onClick={() => setValue('logoUrl', '', { shouldDirty: true })}
+                                        >
+                                            <Trash2 className="w-4 h-4" />
+                                            {t("Common.remove")}
+                                        </Button>
+                                    )}
+                                    {getFullUrl() && (
+                                        <Button
+                                            type="button"
+                                            variant="outline"
+                                            size="sm"
+                                            className="h-9 border-blue-100 text-blue-600 hover:bg-blue-50 font-[Inter] gap-2"
+                                            onClick={() => setPreviewData({ url: getFullUrl(), title: "Store Logo", type: 'image' })}
+                                        >
+                                            <Maximize2 className="w-4 h-4" />
+                                            {t("Common.preview")}
+                                        </Button>
+                                    )}
+                                </div>
                                 <input
                                     type="file"
-                                    ref={fileInputRef}
-                                    onChange={handleFileChange}
-                                    accept="image/*"
+                                    ref={logoInputRef}
                                     className="hidden"
+                                    accept={IMAGE_ACCEPT}
+                                    onChange={handleFileChange}
+                                />
+                            </div>
+
+
+                            <div className="space-y-6">
+                                <ALInput
+                                    title={t("StoreProfile.storeName")}
+                                    placeholder={t("StoreProfile.placeholders.storeName")}
+                                    wrapperClassName="bg-white/60"
+                                    error={errors.i18n?.[activeLocale]?.name?.message}
+                                    {...register(`i18n.${activeLocale}.name` as const)}
+                                />
+                                <ALInput
+                                    title={t("StoreProfile.openingHours")}
+                                    placeholder={t("StoreProfile.placeholders.openingHours")}
+                                    wrapperClassName="bg-white/60"
+                                    error={errors.i18n?.[activeLocale]?.openingHours?.message}
+                                    {...register(`i18n.${activeLocale}.openingHours` as const)}
                                 />
                             </div>
                         </div>
+                    </ALCard>
 
-                        <div className="flex-1 space-y-6">
-                            <div>
-                                <label className="block text-sm font-bold text-gray-700 mb-2 uppercase tracking-wide">
-                                    {t('storeName')} <span className="text-red-500">*</span>
-                                </label>
-                                <Input
-                                    placeholder={t('storeNamePlaceholder')}
-                                    value={formData.name}
-                                    onChange={(e) => handleChange('name', e.target.value)}
-                                    className="h-12 text-base"
+                    {/* --- SOCIAL FOOTPRINT SECTION --- */}
+                    <ALCard variant="soft" padding="none" radius="2xl" elevation="sm" className="border-amber-200/50 shadow-sm overflow-hidden" animation="fade">
+                        <div className="p-6 md:p-8 space-y-6">
+                            <ALInput
+                                title={t("Common.facebook") || "Facebook Profile"}
+                                iconStart={<Facebook className="w-4 h-4 text-[#1A3A52]/70" />}
+                                placeholder={t("StoreProfile.placeholders.facebook")}
+                                wrapperClassName="bg-white/60"
+                                error={errors.facebookLink?.message}
+                                {...register('facebookLink')}
+                            />
+                            <ALInput
+                                title={t("Common.instagram") || "Instagram Page"}
+                                iconStart={<Instagram className="w-4 h-4 text-[#1A3A52]/70" />}
+                                placeholder={t("StoreProfile.placeholders.instagram")}
+                                wrapperClassName="bg-white/60"
+                                error={errors.instagramLink?.message}
+                                {...register('instagramLink')}
+                            />
+                            <ALInput
+                                title={t("Common.tiktok") || "TikTok Page"}
+                                iconStart={<Tiktok className="w-4 h-4 text-[#1A3A52]/70" />}
+                                placeholder={t("StoreProfile.placeholders.tiktok")}
+                                wrapperClassName="bg-white/60"
+                                error={errors.tiktokLink?.message}
+                                {...register('tiktokLink')}
+                            />
+                        </div>
+                    </ALCard>
+                </div>
+
+                {/* --- RIGHT COLUMN --- */}
+                <div className="space-y-8 h-full">
+                    <ALCard variant="soft" padding="none" radius="2xl" elevation="sm" className="border-amber-200/50 shadow-sm flex flex-col h-full" animation="slide-up">
+                        <div className="p-6 md:p-8 space-y-8 flex-1">
+                            <ALInput
+                                title={t("StoreProfile.street")}
+                                placeholder={t("StoreProfile.placeholders.street")}
+                                wrapperClassName="bg-white/60"
+                                error={errors.i18n?.[activeLocale]?.streetAddress?.message}
+                                {...register(`i18n.${activeLocale}.streetAddress` as const)}
+                            />
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <ALInput
+                                    title={t("StoreProfile.city")}
+                                    placeholder={t("StoreProfile.placeholders.city")}
+                                    wrapperClassName="bg-white/60"
+                                    error={errors.i18n?.[activeLocale]?.city?.message}
+                                    {...register(`i18n.${activeLocale}.city` as const)}
+                                />
+                                <ALInput
+                                    title={t("StoreProfile.country")}
+                                    placeholder={t("StoreProfile.placeholders.country")}
+                                    wrapperClassName="bg-white/60"
+                                    error={errors.i18n?.[activeLocale]?.country?.message}
+                                    {...register(`i18n.${activeLocale}.country` as const)}
                                 />
                             </div>
-                            <div className="flex flex-wrap gap-3">
-                                <Button
-                                    variant="outline"
-                                    className="h-10 px-6 font-semibold shadow-sm"
-                                    onClick={() => fileInputRef.current?.click()}
-                                    disabled={isUploading}
-                                >
-                                    <Upload className="h-4 w-4 mr-2" />
-                                    {formData.logoUrl ? t('changeLogo') : t('uploadLogo')}
-                                </Button>
-                                {formData.logoUrl && (
-                                    <Button
-                                        variant="danger"
-                                        className="h-10 px-6 font-semibold shadow-sm"
-                                        onClick={() => handleChange('logoUrl', '')}
-                                    >
-                                        <Trash2 className="h-4 w-4 mr-2" />
-                                        {t('remove')}
-                                    </Button>
-                                )}
+
+
+
+                            <div className="grid grid-cols-1 gap-8">
+                                <ALInput
+                                    title={t("StoreProfile.phone")}
+                                    iconStart={<Phone className="w-4 h-4 text-[#1A3A52]/70" />}
+                                    placeholder={t("StoreProfile.placeholders.phone")}
+                                    wrapperClassName="bg-white/60"
+                                    error={errors.phone?.message}
+                                    {...register('phone')}
+                                />
+                                <ALInput
+                                    title={t("StoreProfile.email")}
+                                    iconStart={<Mail className="w-4 h-4 text-[#1A3A52]/70" />}
+                                    placeholder={t("StoreProfile.placeholders.email")}
+                                    wrapperClassName="bg-white/60"
+                                    error={errors.email?.message}
+                                    {...register('email')}
+                                />
                             </div>
                         </div>
-                    </div>
+                    </ALCard>
                 </div>
             </div>
 
-            {/* Contact & Location Section */}
-            <div className="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
-                <div className="px-6 py-4 border-b border-gray-100 bg-gray-50/50">
-                    <h3 className="text-lg font-bold text-gray-900">{t('contactLocation')}</h3>
-                    <p className="text-sm text-gray-500 mt-0.5">{t('contactLocationDesc')}</p>
-                </div>
-                <div className="p-6 space-y-6">
-                    <div className="grid grid-cols-1 gap-6">
-                        <div>
-                            <label className="block text-sm font-bold text-gray-700 mb-2 uppercase tracking-wide">
-                                {t('streetAddress')} <span className="text-red-500">*</span>
-                            </label>
-                            <Input
-                                placeholder={t('streetAddressPlaceholder')}
-                                value={formData.streetAddress}
-                                onChange={(e) => handleChange('streetAddress', e.target.value)}
-                                className="h-12 text-base"
-                            />
-                        </div>
-                    </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <div>
-                            <label className="block text-sm font-bold text-gray-700 mb-2 uppercase tracking-wide">{t('postalCode')}</label>
-                            <Input
-                                placeholder={t('postalCodePlaceholder')}
-                                value={formData.postalCode}
-                                onChange={(e) => handleChange('postalCode', e.target.value)}
-                                className="h-12 text-base"
-                            />
-                        </div>
-                        <div>
-                            <label className="block text-sm font-bold text-gray-700 mb-2 uppercase tracking-wide">
-                                {t('city')} <span className="text-red-500">*</span>
-                            </label>
-                            <Input
-                                placeholder={t('cityPlaceholder')}
-                                value={formData.city}
-                                onChange={(e) => handleChange('city', e.target.value)}
-                                className="h-12 text-base"
-                            />
-                        </div>
-                        <div>
-                            <label className="block text-sm font-bold text-gray-700 mb-2 uppercase tracking-wide">
-                                {t('country')} <span className="text-red-500">*</span>
-                            </label>
-                            <Input
-                                placeholder={t('countryPlaceholder')}
-                                value={formData.country}
-                                onChange={(e) => handleChange('country', e.target.value)}
-                                className="h-12 text-base"
-                            />
-                        </div>
-                    </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label className="block text-sm font-bold text-gray-700 mb-2 uppercase tracking-wide">
-                                {t('email')} <span className="text-red-500">*</span>
-                            </label>
-                            <Input
-                                type="email"
-                                placeholder={t('emailPlaceholder')}
-                                value={formData.email}
-                                onChange={(e) => handleChange('email', e.target.value)}
-                                className="h-12 text-base"
-                            />
-                        </div>
-                        <div>
-                            <label className="block text-sm font-bold text-gray-700 mb-2 uppercase tracking-wide">
-                                {t('phone')} <span className="text-red-500">*</span>
-                            </label>
-                            <Input
-                                placeholder={t('phonePlaceholder')}
-                                value={formData.phone}
-                                onChange={(e) => handleChange('phone', e.target.value)}
-                                className="h-12 text-base"
-                            />
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {/* Operating Details Section */}
-            <div className="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
-                <div className="px-6 py-4 border-b border-gray-100 bg-gray-50/50">
-                    <h3 className="text-lg font-bold text-gray-900">{t('operating')}</h3>
-                    <p className="text-sm text-gray-500 mt-0.5">{t('operatingDesc')}</p>
-                </div>
-                <div className="p-6">
-                    <div>
-                        <label className="block text-sm font-bold text-gray-700 mb-2 uppercase tracking-wide">
-                            {t('openingHours')} <span className="text-red-500">*</span>
-                        </label>
-                        <Input
-                            placeholder={t('openingHoursPlaceholder')}
-                            value={formData.openingHours}
-                            onChange={(e) => handleChange('openingHours', e.target.value)}
-                            className="h-12 text-base"
-                        />
-                    </div>
-                </div>
-            </div>
-
-            {/* Social Media Section */}
-            <div className="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
-                <div className="px-6 py-4 border-b border-gray-100 bg-gray-50/50">
-                    <h3 className="text-lg font-bold text-gray-900">{t('socialMedia')}</h3>
-                    <p className="text-sm text-gray-500 mt-0.5">{t('socialMediaDesc')}</p>
-                </div>
-                <div className="p-6 space-y-6">
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <div>
-                            <label className="flex items-center text-sm font-bold text-gray-700 mb-2 uppercase tracking-wide">
-                                <Facebook className="w-4 h-4 mr-2 text-blue-600" />
-                                {t('facebookLink')}
-                            </label>
-                            <Input
-                                placeholder={t('facebookPlaceholder')}
-                                value={formData.facebookLink}
-                                onChange={(e) => handleChange('facebookLink', e.target.value)}
-                                className="h-12 text-base"
-                            />
-                        </div>
-                        <div>
-                            <label className="flex items-center text-sm font-bold text-gray-700 mb-2 uppercase tracking-wide">
-                                <Instagram className="w-4 h-4 mr-2 text-pink-600" />
-                                {t('instagramLink')}
-                            </label>
-                            <Input
-                                placeholder={t('instagramPlaceholder')}
-                                value={formData.instagramLink}
-                                onChange={(e) => handleChange('instagramLink', e.target.value)}
-                                className="h-12 text-base"
-                            />
-                        </div>
-                        <div>
-                            <label className="flex items-center text-sm font-bold text-gray-700 mb-2 uppercase tracking-wide">
-                                <Tiktok className="w-4 h-4 mr-2 text-black" />
-                                {t('tiktokLink')}
-                            </label>
-                            <Input
-                                placeholder={t('tiktokPlaceholder')}
-                                value={formData.tiktokLink}
-                                onChange={(e) => handleChange('tiktokLink', e.target.value)}
-                                className="h-12 text-base"
-                            />
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {/* Sticky Actions Bar - Align with DishForm style */}
-            <div className="pt-8 flex items-center justify-end gap-4 border-t border-gray-200 mt-10 pb-10">
-                <Button
-                    variant="outline"
-                    onClick={loadSettings}
-                    disabled={isSaving}
-                    className="px-6 h-11 text-sm font-semibold text-gray-500 hover:text-gray-900 border-gray-300 transition-all"
-                >
-                    {t('reset')}
-                </Button>
-
-                <div className="h-8 w-px bg-gray-200 mx-1 hidden sm:block"></div>
-
-                <Button
-                    onClick={handleSave}
-                    disabled={isSaving}
-                    variant="default"
-                    className="min-w-[160px] h-11 text-sm font-bold bg-navy-DEFAULT text-white hover:bg-navy-header shadow-lg shadow-navy-DEFAULT/10 rounded-lg flex items-center justify-center gap-2 transition-all"
-                >
-                    {isSaving ? (
-                        <>
-                            <Loader2 className="h-4 w-4 animate-spin" />
-                            {t('saving')}
-                        </>
-                    ) : (
-                        t('saveChanges')
-                    )}
-                </Button>
-            </div>
-        </div>
+            {previewData && (
+                <MediaPreviewModal
+                    isOpen={!!previewData}
+                    onClose={() => setPreviewData(null)}
+                    url={previewData.url}
+                    title={previewData.title}
+                    type={previewData.type}
+                />
+            )}
+        </form>
     );
 };

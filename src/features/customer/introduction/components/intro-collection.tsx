@@ -2,37 +2,41 @@
 
 import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
+import { useDynamicSettings } from "../../shared/hooks/useDynamicSettings";
 
-export function IntroCollection() {
+export function IntroCollection({ overrides }: { overrides?: Record<string, string> }) {
     const t = useTranslations("Introduction.Collection");
+    const { getSetting: originalGetSetting, getMediaSetting } = useDynamicSettings();
+
+    const getSetting = (key: string, fallback: string) => {
+        if (overrides?.[key]) return overrides[key];
+        return originalGetSetting(key, fallback);
+    };
+
+    const label = getSetting("intro.collection.label", t("label"));
+    const title = getSetting("intro.collection.title", t("title"));
 
     const COLLECTION_ITEMS = [
         {
             id: 1,
-            image: "/images/introduction-page/intro-collection/intro-collection-dish1.png",
-            hoverCategory: t("dish_1_category"),
-            hoverTitle: t("dish_1_title"),
-            hoverDesc: t("dish_1_desc"),
-            mainTitle: t("dish_1_main"),
-            subTitle: t("dish_1_sub"),
+            image: getMediaSetting("intro.collection.dish1.image", "/images/introduction-page/intro-collection/intro-collection-dish1.png"),
+            cardCategory: getSetting("intro.collection.dish1.cardCategory", t("dish_1_category")),
+            cardTitle: getSetting("intro.collection.dish1.cardTitle", t("dish_1_title")),
+            mainTitle: getSetting("intro.collection.dish1.mainTitle", t("dish_1_main")),
         },
         {
             id: 2,
-            image: "/images/introduction-page/intro-collection/intro-collection-dish2.png",
-            hoverCategory: t("dish_2_category"),
-            hoverTitle: t("dish_2_title"),
-            hoverDesc: t("dish_2_desc"),
-            mainTitle: t("dish_2_main"),
-            subTitle: t("dish_2_sub"),
+            image: getMediaSetting("intro.collection.dish2.image", "/images/introduction-page/intro-collection/intro-collection-dish2.png"),
+            cardCategory: getSetting("intro.collection.dish2.cardCategory", t("dish_2_category")),
+            cardTitle: getSetting("intro.collection.dish2.cardTitle", t("dish_2_title")),
+            mainTitle: getSetting("intro.collection.dish2.mainTitle", t("dish_2_main")),
         },
         {
             id: 3,
-            image: "/images/introduction-page/intro-collection/intro-collection-dish3.png",
-            hoverCategory: t("dish_3_category"),
-            hoverTitle: t("dish_3_title"),
-            hoverDesc: t("dish_3_desc"),
-            mainTitle: t("dish_3_main"),
-            subTitle: t("dish_3_sub"),
+            image: getMediaSetting("intro.collection.dish3.image", "/images/introduction-page/intro-collection/intro-collection-dish3.png"),
+            cardCategory: getSetting("intro.collection.dish3.cardCategory", t("dish_3_category")),
+            cardTitle: getSetting("intro.collection.dish3.cardTitle", t("dish_3_title")),
+            mainTitle: getSetting("intro.collection.dish3.mainTitle", t("dish_3_main")),
         },
     ];
 
@@ -69,10 +73,10 @@ export function IntroCollection() {
                 >
                     <div className="flex flex-col items-center gap-2">
                         <span className="font-display text-[#8D6A2A] text-[10px] md:text-xs font-bold uppercase tracking-[0.4em] md:tracking-[0.5em]">
-                            {t("label")}
+                            {label}
                         </span>
                         <h2 className="font-display text-[#12283A] text-[34px] md:text-5xl font-bold leading-tight">
-                            {t("title")}
+                            {title}
                         </h2>
                     </div>
                     {/* Decorative Spacer */}
@@ -105,14 +109,11 @@ export function IntroCollection() {
                                 {/* Overlay: Mobile -> Tap to see, Desktop -> Hover */}
                                 <div className="absolute inset-0 bg-gradient-to-t from-[#12283A]/95 via-[#12283A]/65 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-6 md:p-8">
                                     <span className="font-display text-[#C9A961] text-[10px] md:text-xs uppercase tracking-widest mb-1 md:mb-2 translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-75">
-                                        {item.hoverCategory}
+                                        {item.cardCategory}
                                     </span>
                                     <h3 className="font-display text-white text-xl md:text-2xl font-bold mb-1 md:mb-2 translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-100">
-                                        {item.hoverTitle}
+                                        {item.cardTitle}
                                     </h3>
-                                    <p className="font-display text-white/80 text-xs md:text-sm leading-relaxed translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-150 line-clamp-3">
-                                        {item.hoverDesc}
-                                    </p>
                                 </div>
                             </div>
 
@@ -121,9 +122,6 @@ export function IntroCollection() {
                                 <h4 className="font-display text-[#8D6A2A] text-[16px] md:text-lg font-semibold">
                                     {item.mainTitle}
                                 </h4>
-                                <span className="font-display text-[#12283A] text-xs md:text-sm uppercase tracking-widest">
-                                    {item.subTitle}
-                                </span>
                             </div>
 
                         </motion.div>

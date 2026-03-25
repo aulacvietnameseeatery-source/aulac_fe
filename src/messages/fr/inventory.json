@@ -1,0 +1,184 @@
+{
+  "inventory": {
+    "common": {
+    "title": "Gestion des stocks",
+    "loading": "Chargement...",
+    "noData": "Aucune donnée trouvée",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "submit": "Soumettre",
+    "approve": "Approuver",
+    "reject": "Rejeter",
+    "back": "Retour",
+    "search": "Rechercher...",
+    "filter": "Filtrer",
+    "clearFilters": "Effacer les filtres",
+    "actions": "Actions",
+    "viewDetail": "Voir le détail",
+    "created": "Créé",
+    "updated": "Mis à jour",
+    "all": "Tous"
+  },
+  "dashboard": {
+    "title": "Vue d'ensemble des stocks",
+    "description": "Résumé rapide de l'état des stocks et des activités récentes",
+    "totalItems": "Total des articles",
+    "lowStock": "Stock bas",
+    "outOfStock": "Rupture de stock",
+    "pendingTx": "En attente d'approbation",
+    "lowStockItems": "Articles en stock bas",
+    "recentTransactions": "Transactions récentes",
+    "stockHealthChart": "Indicateurs de santé du stock",
+    "txTypeChart": "Répartition des transactions récentes",
+    "viewAll": "Voir tout",
+    "noLowStock": "Tous les articles sont bien approvisionnés",
+    "noRecentTx": "Aucune transaction récente"
+  },
+  "items": {
+    "title": "Articles en stock",
+    "description": "Gérer tous les articles en stock par catégorie",
+    "searchPlaceholder": "Rechercher par nom...",
+    "table": {
+      "item": "Article",
+      "category": "Catégorie",
+      "type": "Type",
+      "stock": "En stock",
+      "unit": "Unité",
+      "minLevel": "Niveau min.",
+      "lastUpdated": "Dernière mise à jour",
+      "status": "Statut"
+    },
+    "lowStock": "Stock bas",
+    "inStock": "En stock",
+    "outOfStock": "Rupture",
+    "stockCard": "Fiche de stock",
+    "uncategorized": "Non catégorisé"
+  },
+  "stockCard": {
+    "title": "Fiche de stock",
+    "description": "Historique des mouvements pour {name}",
+    "movementChart": "Graphique des mouvements de stock",
+    "range7d": "7 j",
+    "range30d": "30 j",
+    "rangeAll": "Tout",
+    "inbound": "Entrée",
+    "outbound": "Sortie",
+    "net": "Net",
+    "noMovements": "Aucun mouvement enregistré",
+    "previous": "Précédent",
+    "next": "Suivant",
+    "table": {
+      "date": "Date",
+      "txCode": "Transaction",
+      "type": "Type",
+      "quantity": "Qté modifiée",
+      "unit": "Unité",
+      "unitPrice": "Prix unitaire",
+      "reason": "Motif",
+      "note": "Note",
+      "createdBy": "Par"
+    }
+  },
+  "transactions": {
+    "title": "Transactions",
+    "description": "Consulter et gérer les transactions de stock",
+    "searchPlaceholder": "Rechercher par code ou note...",
+    "createNew": "Nouvelle transaction",
+    "table": {
+      "code": "Code",
+      "type": "Type",
+      "status": "Statut",
+      "reason": "Motif",
+      "supplier": "Fournisseur",
+      "createdBy": "Créé par",
+      "createdAt": "Créé le",
+      "submittedAt": "Soumis le",
+      "approvedBy": "Approuvé par",
+      "items": "Articles",
+      "totalValue": "Valeur totale",
+      "note": "Note"
+    },
+    "types": {
+      "IN": "Entrée",
+      "OUT": "Sortie",
+      "ADJUST": "Inventaire"
+    },
+    "statuses": {
+      "DRAFT": "Brouillon",
+      "PENDING_APPROVAL": "En attente",
+      "COMPLETED": "Terminé",
+      "CANCELLED": "Annulé"
+    },
+    "detail": {
+      "title": "Détail de la transaction",
+      "transactionInfo": "Informations de la transaction",
+      "itemsList": "Articles ({count})",
+      "mediaEvidence": "Preuves photo",
+      "approvalSection": "Approbation",
+      "submitForApproval": "Soumettre pour approbation",
+      "approveTransaction": "Approuver",
+      "rejectTransaction": "Rejeter",
+      "rejectionNote": "Motif du rejet (obligatoire)",
+      "confirmSubmit": "Soumettre cette transaction pour approbation ?",
+      "confirmApprove": "Approuver cette transaction ? Le stock sera mis à jour.",
+      "confirmReject": "Rejeter cette transaction ?",
+      "stockCheckArea": "Zone d'inventaire",
+      "noMedia": "Aucune photo jointe"
+    }
+  },
+  "create": {
+    "title": "Créer une transaction",
+    "description": "Créer une nouvelle transaction de stock",
+    "transactionCode": "Code transaction",
+    "evidenceTitle": "Preuve photo",
+    "evidenceHint": "Téléchargez jusqu'à 4 images",
+    "selectType": "Type de transaction",
+    "selectTypeHint": "Choisir Entrée, Sortie ou Inventaire",
+    "import": {
+      "title": "Entrée (IN)",
+      "description": "Enregistrer les articles reçus des fournisseurs",
+      "supplier": "Fournisseur",
+      "selectSupplier": "Sélectionner un fournisseur..."
+    },
+    "export": {
+      "title": "Sortie (OUT)",
+      "description": "Enregistrer les articles sortis du stock",
+      "reason": "Motif de sortie",
+      "selectReason": "Sélectionner un motif..."
+    },
+    "stockCheck": {
+      "title": "Inventaire (ADJUST)",
+      "description": "Réconcilier les quantités réelles et système",
+      "area": "Zone d'inventaire / Notes",
+      "areaPlaceholder": "Ex : Cuisine principale, Entrepôt B..."
+    },
+    "items": {
+      "title": "Articles",
+      "addItem": "Ajouter un article",
+      "selectItem": "Sélectionner un article...",
+      "quantity": "Quantité",
+      "unit": "Unité",
+      "unitPrice": "Prix unitaire",
+      "note": "Note",
+      "noItems": "Ajoutez au moins un article pour continuer",
+      "remove": "Supprimer"
+    },
+    "note": "Note",
+    "notePlaceholder": "Note de transaction (facultatif)...",
+    "saveAsDraft": "Enregistrer comme brouillon",
+    "saveAndSubmit": "Enregistrer & Soumettre",
+    "clickToChange": "Cliquer pour changer"
+  },
+    "filters": {
+    "category": "Catégorie",
+    "type": "Type",
+    "status": "Statut",
+    "lowStockOnly": "Stock bas uniquement",
+    "exportReason": "Motif de sortie",
+    "supplier": "Fournisseur",
+    "dateRange": "Période",
+    "from": "Du",
+    "to": "Au"
+    }
+  }
+}

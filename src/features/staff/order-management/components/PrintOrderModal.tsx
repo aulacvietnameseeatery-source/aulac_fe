@@ -3,28 +3,26 @@ import { createPortal } from 'react-dom';
 import { useTranslations, useFormatter } from 'next-intl';
 import { X, Printer } from 'lucide-react';
 import { OrderHistory } from '../types/order-history.types';
-import {
-    ReceiptHeader,
-    ReceiptInfoStrip,
-    ReceiptItemList,
-    ReceiptSummary,
-    ReceiptPaymentFooter,
-} from '@/features/customer/order-receipt';
-import { OrderReceipt, ReceiptItem } from '@/features/customer/order-receipt/types/receipt.types';
+import { PrintOrderData, PrintStoreSettings, PrintDiscount, PrintPaymentInfo } from '@/features/customer/order-receipt/types/receipt.types'; 
+import { OrderPrintDocument } from '@/features/customer/order-receipt';
+import { OrderDetailDto } from '../../order-create/types/edit-order.types';
+import { useStoreSettings } from '@/hooks/use-store-settings';
 
 interface PrintOrderModalProps {
-    order: OrderHistory;
+    order: OrderDetailDto;
     isOpen: boolean;
     onClose: () => void;
     type: 'invoice' | 'receipt';
 }
 
 export const PrintOrderModal: React.FC<PrintOrderModalProps> = ({ order, isOpen, onClose, type }) => {
-    const t = useTranslations('Order.List.card');
-    const rt = useTranslations('OrderReceipt');
+    const t = useTranslations('orders.management.List.card');
+    const rt = useTranslations('orders.receipt');
     const format = useFormatter();
     const printRef = useRef<HTMLDivElement>(null);
     const [mounted, setMounted] = useState(false);
+
+    const { data: storeData } = useStoreSettings();
 
     const handleClose = (event?: React.MouseEvent) => {
         event?.stopPropagation();
@@ -38,75 +36,165 @@ export const PrintOrderModal: React.FC<PrintOrderModalProps> = ({ order, isOpen,
     }, []);
 
     useEffect(() => {
-        if (!isOpen) {
-            return;
-        }
-
+        if (!isOpen) return;
         const previousOverflow = document.body.style.overflow;
         document.body.style.overflow = 'hidden';
-
-        return () => {
-            document.body.style.overflow = previousOverflow;
-        };
+        return () => { document.body.style.overflow = previousOverflow; };
     }, [isOpen]);
 
     if (!isOpen || !mounted) return null;
 
-    // Map OrderHistory to OrderReceipt
-    const mappedOrder: OrderReceipt = {
-        id: `#${order.orderId}`,
-        date: order.createdAt ? format.dateTime(new Date(order.createdAt), { dateStyle: 'medium' }) : 'N/A',
-        time: order.createdAt ? format.dateTime(new Date(order.createdAt), { timeStyle: 'short' }) : 'N/A',
-        status: type === 'invoice' ? t('paymentStatus.unpaid') : (order.isPaid ? t('paymentStatus.paid') : t('paymentStatus.unpaid')),
-        paymentMethod: (type === 'receipt' && order.isPaid) ? t('paymentStatus.paid') : '',
-        tips: type === 'invoice' ? 0 : (order.tipAmount ?? 0),
-        items: order.orderItems.map((item): ReceiptItem => ({
-            name: item.dishName,
-            qty: item.quantity,
-            price: item.price,
-            total: item.quantity * item.price,
-        })),
+    // --- MAPPING DATA ---
+    const storeSettings: PrintStoreSettings = {
+        name: storeData?.name || "An Lac",
+        streetAddress: storeData?.streetAddress || "Bahnhofstrasse 1",
+        // Gộp postal code và city
+        city: [storeData?.postalCode, storeData?.city].filter(Boolean).join(" ") || "8001 Zürich",
+        phone: storeData?.phone || "+41 44 123 45 67",
+        email: storeData?.email || "info@anlac.ch",
+        vatNumber: "", // VAT number hiện chưa có trong hook, tạm hardcode
+        logoUrl: storeData?.logoUrl || "/images/logo.png"
     };
 
-    const subtotal = mappedOrder.items.reduce((acc, item) => acc + item.total, 0);
-    const totalAmount = subtotal + mappedOrder.tips;
+    const printTranslations = {
+        invoice: t('action.print', { fallback: "INVOICE" }),
+        receipt: t('action.printReceipt', { fallback: "RECEIPT" }),
+        date: "Date",
+        orderType: "Type",
+        dineIn: "Dine In",
+        takeAway: "Take Away",
+        table: "Table",
+        customer: "Guest",
+        guest: "Guest",
+        qty: "Qty",
+        item: "Item",
+        total: "Total",
+        subtotalExclTax: "Net Total (Excl. VAT)",
+        subtotal: "Subtotal",
+        discount: "Discount",
+        tax: "Tax",
+        tip: "Tip",
+        totalAmount: "TOTAL",
+        paidVia: "Paid via",
+        given: "Given",
+        change: "Change",
+        thankYou: "Vielen Dank für Ihren Besuch!"
+    };
 
+    // Phân loại Discount
+    const discounts: PrintDiscount[] = [];
+    if (order.promotions && order.promotions.length > 0) {
+        order.promotions.forEach((p: any) => discounts.push({ 
+            type: 'Promotion', 
+            name: p.promotionName, 
+            amount: p.discountAmount 
+        }));
+    }
+    if (order.coupons && order.coupons.length > 0) {
+        order.coupons.forEach((c: any) => discounts.push({ 
+            type: 'Coupon', 
+            name: c.couponCode, 
+            amount: c.discountAmount 
+        }));
+    }
+
+    const paymentInfo: PrintPaymentInfo | undefined = (order.payments && order.payments.length > 0)
+        ? {
+            method: order.payments[0].method,
+            received: order.payments[0].receivedAmount,
+            change: order.payments[0].changeAmount
+        }
+        : undefined;
+
+    const mappedPrintData: PrintOrderData = {
+        id: order.orderId?.toString() || '',
+        date: order.createdAt ? format.dateTime(new Date(order.createdAt), { dateStyle: 'medium' }) : 'N/A',
+        time: order.createdAt ? format.dateTime(new Date(order.createdAt), { timeStyle: 'short' }) : 'N/A',
+        orderType: order.source || 'Dine-in',
+        tableNumber: order.tableCode || null,
+        customerName: order.customerName,
+        items: (order.orderItems || [])
+            .filter((item: any) => item.itemStatus !== 'REJECTED' && item.itemStatus !== 'CANCELLED')
+            .map((item: any) => ({
+                name: item.dishName,
+                qty: item.quantity,
+                price: item.price,
+                total: item.quantity * item.price
+            })),
+        subtotal: order.subTotalAmount || 0,
+        subtotalExclTax: (order.subTotalAmount || 0) - (order.taxAmount || 0),
+        discounts: discounts,
+        taxAmount: order.taxAmount || 0,
+        tipAmount: order.tipAmount || 0,
+        totalAmount: order.totalAmount || 0,
+        paymentInfo: paymentInfo
+    };
+
+    // --- LOGIC IN BẰNG IFRAME (Fix lỗi trang trắng) ---
     const handlePrint = () => {
-        const printContent = printRef.current;
-        if (!printContent) return;
+        // const printContent = printRef.current;
+        // if (!printContent) return;
 
-        const printWindow = window.open('', '_blank');
-        if (!printWindow) return;
+        // // 1. Tạo iframe ẩn
+        // const iframe = document.createElement('iframe');
+        // iframe.style.position = 'fixed';
+        // iframe.style.right = '0';
+        // iframe.style.bottom = '0';
+        // iframe.style.width = '0';
+        // iframe.style.height = '0';
+        // iframe.style.border = '0';
+        // document.body.appendChild(iframe);
 
-        // Copy styles
-        const styles = Array.from(document.querySelectorAll('style, link[rel="stylesheet"]'))
-            .map(s => s.outerHTML)
-            .join('');
+        // const iframeDoc = iframe.contentWindow?.document;
+        // if (!iframeDoc) return;
 
-        printWindow.document.write(`
-            <html>
-                <head>
-                    <title>${type === 'invoice' ? t('action.print') : t('action.printReceipt')} #${order.orderId}</title>
-                    ${styles}
-                    <style>
-                        body { background: white !important; margin: 0; padding: 20px; }
-                        #print-area { width: 100% !important; max-width: none !important; border: none !important; box-shadow: none !important; }
-                    </style>
-                </head>
-                <body>
-                    <div id="print-area">
-                        ${printContent.innerHTML}
-                    </div>
-                    <script>
-                        setTimeout(() => {
-                            window.print();
-                            window.close();
-                        }, 500);
-                    </script>
-                </body>
-            </html>
-        `);
-        printWindow.document.close();
+        // // 2. Clone CSS
+        // const styles = Array.from(document.querySelectorAll('style, link[rel="stylesheet"]'))
+        //     .map(s => s.outerHTML)
+        //     .join('');
+
+        // // 3. Viết nội dung vào iframe
+        // iframeDoc.open();
+        // iframeDoc.write(`
+        //     <!DOCTYPE html>
+        //     <html>
+        //         <head>
+        //             <title>${type === 'invoice' ? 'Invoice' : 'Receipt'} #${order.orderId}</title>
+        //             ${styles}
+        //             <style>
+        //                 @page { margin: 0; size: 80mm auto; }
+        //                 body { 
+        //                     background: white !important; 
+        //                     color: black !important;
+        //                     margin: 0; 
+        //                     padding: 5mm; 
+        //                     width: 80mm;
+        //                     -webkit-print-color-adjust: exact; 
+        //                     print-color-adjust: exact;
+        //                 }
+        //             </style>
+        //         </head>
+        //         <body>
+        //             ${printContent.outerHTML}
+        //         </body>
+        //     </html>
+        // `);
+        // iframeDoc.close();
+
+        // // 4. Delay một chút để DOM vẽ xong rồi gọi lệnh in
+        // setTimeout(() => {
+        //     iframe.contentWindow?.focus();
+        //     iframe.contentWindow?.print();
+            
+        //     // Dọn dẹp iframe sau 1 khoảng thời gian đủ dài
+        //     setTimeout(() => {
+        //         if (document.body.contains(iframe)) {
+        //             document.body.removeChild(iframe);
+        //         }
+        //     }, 3000);
+        // }, 500); 
+
+        window.print();
     };
 
     return createPortal(
@@ -122,12 +210,9 @@ export const PrintOrderModal: React.FC<PrintOrderModalProps> = ({ order, isOpen,
                 onMouseDown={(e) => e.stopPropagation()}
                 onPointerDown={(e) => e.stopPropagation()}
             >
-                {/* Header */}
                 <div
                     className="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-gray-50/50"
                     onClick={(e) => e.stopPropagation()}
-                    onMouseDown={(e) => e.stopPropagation()}
-                    onPointerDown={(e) => e.stopPropagation()}
                 >
                     <div className="flex items-center gap-3">
                         <div className="p-2 bg-blue-100 rounded-lg text-blue-600">
@@ -135,61 +220,41 @@ export const PrintOrderModal: React.FC<PrintOrderModalProps> = ({ order, isOpen,
                         </div>
                         <div>
                             <h3 className="font-bold text-gray-900">
-                                {type === 'invoice' ? t('action.print') : t('action.printReceipt')}
+                                {type === 'invoice' ? t('action.print', { fallback: 'Print Invoice' }) : t('action.printReceipt', { fallback: 'Print Receipt' })}
                             </h3>
                             <p className="text-xs text-gray-500">Order #{order.orderId}</p>
                         </div>
                     </div>
-                    <button
-                        onClick={(e) => handleClose(e)}
-                        className="p-2 hover:bg-gray-200 rounded-full transition-colors text-gray-400 hover:text-gray-600"
-                    >
+                    <button onClick={(e) => handleClose(e)} className="p-2 hover:bg-gray-200 rounded-full transition-colors text-gray-400">
                         <X className="w-5 h-5" />
                     </button>
                 </div>
 
-                {/* Preview Area */}
                 <div
                     className="flex-1 overflow-auto p-8 bg-gray-100/50 flex justify-center custom-scrollbar"
                     onClick={(e) => e.stopPropagation()}
-                    onMouseDown={(e) => e.stopPropagation()}
-                    onPointerDown={(e) => e.stopPropagation()}
                 >
-                    <div
-                        ref={printRef}
-                        id="receipt-print-area"
-                        className="w-full bg-white shadow-xl rounded-sm border border-[#1A3951] overflow-hidden"
-                        style={{ height: 'fit-content' }}
-                    >
-                        <ReceiptHeader />
-                        <ReceiptInfoStrip order={mappedOrder} showStatus={type === 'invoice'} />
-                        <ReceiptItemList items={mappedOrder.items} />
-                        <ReceiptSummary subtotal={subtotal} tips={mappedOrder.tips} total={totalAmount} />
-                        {type === 'invoice' && mappedOrder.paymentMethod && (
-                            <ReceiptPaymentFooter paymentMethod={mappedOrder.paymentMethod} />
-                        )}
+                    <div id="receipt-print-area" className="w-full max-w-[100mm] bg-white shadow-xl rounded-sm border border-gray-300 overflow-hidden" style={{ height: 'fit-content' }}>
+                        <OrderPrintDocument 
+                            ref={printRef} 
+                            type={type} 
+                            order={mappedPrintData} 
+                            settings={storeSettings} 
+                            translations={printTranslations} 
+                        />
                     </div>
                 </div>
 
-                {/* Footer */}
                 <div
                     className="px-6 py-4 border-t border-gray-100 flex items-center justify-end gap-3 bg-gray-50/50"
                     onClick={(e) => e.stopPropagation()}
-                    onMouseDown={(e) => e.stopPropagation()}
-                    onPointerDown={(e) => e.stopPropagation()}
                 >
-                    <button
-                        onClick={(e) => handleClose(e)}
-                        className="px-4 py-2 text-sm font-semibold text-gray-600 hover:text-gray-800 transition-colors"
-                    >
-                        {rt('BackLink.label')}
+                    <button onClick={(e) => handleClose(e)} className="px-4 py-2 text-sm font-semibold text-gray-600 hover:text-gray-800 transition-colors">
+                        {rt('BackLink.label', { fallback: 'Cancel' })}
                     </button>
-                    <button
-                        onClick={handlePrint}
-                        className="flex items-center gap-2 px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-bold shadow-lg shadow-blue-200 transition-all active:scale-95"
-                    >
+                    <button onClick={handlePrint} className="flex items-center gap-2 px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-bold shadow-lg transition-all active:scale-95">
                         <Printer className="w-4 h-4" />
-                        {rt('Actions.print')}
+                        {rt('Actions.print', { fallback: 'Print' })}
                     </button>
                 </div>
             </div>

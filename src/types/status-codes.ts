@@ -52,6 +52,7 @@ export enum OrderItemStatusCode {
     READY = "READY",
     SERVED = "SERVED",
     REJECTED = "REJECTED",
+    CANCELLED = "CANCELLED",
 }
 
 export enum DishStatusCode {
@@ -92,6 +93,7 @@ export enum ShiftStatusCode {
 }
 
 export enum ShiftAssignmentStatusCode {
+    DRAFT = "DRAFT",
     ASSIGNED = "ASSIGNED",
     CONFIRMED = "CONFIRMED",
     CANCELLED = "CANCELLED",
@@ -105,4 +107,27 @@ export enum AttendanceStatusCode {
     ABSENT = "ABSENT",
     EARLY_LEAVE = "EARLY_LEAVE",
     EXCUSED = "EXCUSED",
+}
+
+export enum InventoryCategoryCode {
+    FOOD_INGREDIENT = "FOOD_INGREDIENT",
+    KITCHEN_TOOL = "KITCHEN_TOOL",
+    CONSUMABLE_SUPPLY = "CONSUMABLE_SUPPLY",
+    EQUIPMENT = "EQUIPMENT",
+}
+
+export enum ExportReasonCode {
+    COOKING = "COOKING",
+    SPOILED = "SPOILED",
+    EXPIRED = "EXPIRED",
+    BROKEN = "BROKEN",
+    LOST = "LOST",
+    DISPOSED = "DISPOSED",
+    WORN_OUT = "WORN_OUT",
+}
+
+export enum VarianceReasonCode {
+    BREAKAGE = "BREAKAGE",
+    NATURAL_LOSS = "NATURAL_LOSS",
+    COUNTING_ERROR = "COUNTING_ERROR",
 }

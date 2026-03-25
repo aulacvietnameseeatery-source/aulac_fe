@@ -1,26 +1,33 @@
 import { api } from "@/lib/http";
 import type { ApiResponse, PagedResult } from "@/types/api-response.types";
 import type {
-  ShiftScheduleListDto,
-  ShiftScheduleDetailDto,
-  ShiftAssignmentDto,
+  ShiftTemplateListDto,
+  ShiftTemplateDetailDto,
+  ShiftAssignmentListDto,
+  ShiftAssignmentDetailDto,
+  ShiftLiveBoardItemDto,
   AttendanceRecordDto,
   AttendanceReportRowDto,
-  LiveShiftBoardDto,
   WorkedHoursReportRowDto,
   AttendanceExceptionReportRowDto,
   StaffBasicDto,
-  CreateShiftScheduleRequest,
-  UpdateShiftScheduleRequest,
-  CreateAssignmentsRequest,
+  CreateShiftTemplateRequest,
+  UpdateShiftTemplateRequest,
+  CreateShiftAssignmentRequest,
+  UpdateShiftAssignmentRequest,
   AdjustAttendanceRequest,
-  GetSchedulesParams,
+  BulkCreateAssignmentRequest,
+  PublishAssignmentsRequest,
+  CopyWeekRequest,
+  ReassignRequest,
+  TeamScheduleStaffRow,
+  TeamScheduleParams,
+  GetTemplatesParams,
   GetAssignmentsParams,
-  GetLiveBoardParams,
+  GetMyShiftsParams,
   GetAttendanceReportParams,
   GetWorkedHoursReportParams,
   GetExceptionsReportParams,
-  GetMyShiftsParams,
 } from "../types/shift-management.types";
 
 const BASE = "/api/shifts";
@@ -37,95 +44,149 @@ function toQuery(params: Record<string, string | number | boolean | undefined | 
 }
 
 export const shiftManagementService = {
-  // ─── Schedules ────────────────────────────────────────────────────────────
+  // ─── Templates ────────────────────────────────────────────────────────────
 
-  async getSchedules(params: GetSchedulesParams = {}): Promise<PagedResult<ShiftScheduleListDto>> {
-    const query = toQuery({
-      fromDate: params.fromDate,
-      toDate: params.toDate,
-      shiftTypeLvId: params.shiftTypeLvId,
-      statusLvId: params.statusLvId,
-      pageIndex: params.pageIndex ?? 1,
-      pageSize: params.pageSize ?? 20,
-    });
-    const res = await api.get<ApiResponse<PagedResult<ShiftScheduleListDto>>>(
-      `${BASE}/schedules${query}`
-    );
-    return (
-      res.data ?? { pageData: [], pageIndex: 1, pageSize: 20, totalCount: 0, totalPage: 0 }
-    );
+  async getTemplates(params: GetTemplatesParams = {}): Promise<ShiftTemplateListDto[]> {
+    const query = toQuery({ isActive: params.isActive });
+    const res = await api.get<ApiResponse<ShiftTemplateListDto[]>>(`${BASE}/templates${query}`);
+    return res.data ?? [];
   },
 
-  async getScheduleById(id: number): Promise<ShiftScheduleDetailDto> {
-    const res = await api.get<ApiResponse<ShiftScheduleDetailDto>>(
-      `${BASE}/schedules/${id}`
-    );
+  async getTemplateById(id: number): Promise<ShiftTemplateDetailDto> {
+    const res = await api.get<ApiResponse<ShiftTemplateDetailDto>>(`${BASE}/templates/${id}`);
     return res.data;
   },
 
-  async createSchedule(body: CreateShiftScheduleRequest): Promise<ShiftScheduleDetailDto> {
-    const res = await api.post<ApiResponse<ShiftScheduleDetailDto>>(
-      `${BASE}/schedules`,
-      body
-    );
+  async createTemplate(body: CreateShiftTemplateRequest): Promise<ShiftTemplateDetailDto> {
+    const res = await api.post<ApiResponse<ShiftTemplateDetailDto>>(`${BASE}/templates`, body);
     return res.data;
   },
 
-  async updateSchedule(
-    id: number,
-    body: UpdateShiftScheduleRequest
-  ): Promise<ShiftScheduleDetailDto> {
-    const res = await api.put<ApiResponse<ShiftScheduleDetailDto>>(
-      `${BASE}/schedules/${id}`,
-      body
-    );
-    return res.data;
-  },
-  async publishSchedule(id: number): Promise<ShiftScheduleDetailDto> {
-    const res = await api.post<ApiResponse<ShiftScheduleDetailDto>>(
-      `${BASE}/schedules/${id}/publish`,
-      {}
-    );
+  async updateTemplate(id: number, body: UpdateShiftTemplateRequest): Promise<ShiftTemplateDetailDto> {
+    const res = await api.put<ApiResponse<ShiftTemplateDetailDto>>(`${BASE}/templates/${id}`, body);
     return res.data;
   },
 
-  async closeSchedule(id: number): Promise<ShiftScheduleDetailDto> {
-    const res = await api.post<ApiResponse<ShiftScheduleDetailDto>>(
-      `${BASE}/schedules/${id}/close`,
-      {}
-    );
-    return res.data;
+  async deactivateTemplate(id: number): Promise<void> {
+    await api.delete(`${BASE}/templates/${id}`);
   },
+
   // ─── Assignments ──────────────────────────────────────────────────────────
 
-  async getAssignments(params: GetAssignmentsParams = {}): Promise<PagedResult<ShiftAssignmentDto>> {
+  async getAssignments(params: GetAssignmentsParams = {}): Promise<PagedResult<ShiftAssignmentListDto>> {
     const query = toQuery({
-      shiftScheduleId: params.shiftScheduleId,
+      staffId: params.staffId,
+      shiftTemplateId: params.shiftTemplateId,
       fromDate: params.fromDate,
       toDate: params.toDate,
-      staffId: params.staffId,
-      assignmentStatusLvId: params.assignmentStatusLvId,
+      isActive: params.isActive,
       pageIndex: params.pageIndex ?? 1,
       pageSize: params.pageSize ?? 20,
     });
-    const res = await api.get<ApiResponse<PagedResult<ShiftAssignmentDto>>>(
+    const res = await api.get<ApiResponse<PagedResult<ShiftAssignmentListDto>>>(
       `${BASE}/assignments${query}`
     );
-    return (
-      res.data ?? { pageData: [], pageIndex: 1, pageSize: 20, totalCount: 0, totalPage: 0 }
-    );
+    return res.data ?? { pageData: [], pageIndex: 1, pageSize: 20, totalCount: 0, totalPage: 0 };
   },
 
-  async createAssignments(body: CreateAssignmentsRequest): Promise<ShiftAssignmentDto[]> {
-    const res = await api.post<ApiResponse<ShiftAssignmentDto[]>>(
-      `${BASE}/assignments`,
+  async getAssignmentById(id: number): Promise<ShiftAssignmentDetailDto> {
+    const res = await api.get<ApiResponse<ShiftAssignmentDetailDto>>(`${BASE}/assignments/${id}`);
+    return res.data;
+  },
+
+  async getLiveBoard(params: GetAssignmentsParams = {}): Promise<ShiftLiveBoardItemDto[]> {
+    const query = toQuery({
+      staffId: params.staffId,
+      shiftTemplateId: params.shiftTemplateId,
+      fromDate: params.fromDate,
+      toDate: params.toDate,
+      isActive: params.isActive,
+      pageSize: params.pageSize ?? 200,
+    });
+    const res = await api.get<ApiResponse<ShiftLiveBoardItemDto[]>>(`${BASE}/live-board${query}`);
+    return res.data ?? [];
+  },
+
+  async createAssignment(body: CreateShiftAssignmentRequest): Promise<ShiftAssignmentDetailDto> {
+    const res = await api.post<ApiResponse<ShiftAssignmentDetailDto>>(`${BASE}/assignments`, body);
+    return res.data;
+  },
+
+  async updateAssignment(id: number, body: UpdateShiftAssignmentRequest): Promise<ShiftAssignmentDetailDto> {
+    const res = await api.put<ApiResponse<ShiftAssignmentDetailDto>>(`${BASE}/assignments/${id}`, body);
+    return res.data;
+  },
+
+  async cancelAssignment(id: number): Promise<void> {
+    await api.delete(`${BASE}/assignments/${id}`);
+  },
+
+  // ─── Bulk / Publish / Copy / Reassign / Confirm ───────────────────────────
+
+  async bulkCreateAssignments(body: BulkCreateAssignmentRequest): Promise<ShiftAssignmentListDto[]> {
+    const res = await api.post<ApiResponse<ShiftAssignmentListDto[]>>(
+      `${BASE}/assignments/bulk`,
       body
     );
     return res.data ?? [];
   },
 
-  async cancelAssignment(id: number): Promise<void> {
-    await api.delete(`${BASE}/assignments/${id}`);
+  async publishAssignments(body: PublishAssignmentsRequest): Promise<ShiftAssignmentListDto[]> {
+    const res = await api.post<ApiResponse<ShiftAssignmentListDto[]>>(
+      `${BASE}/assignments/publish`,
+      body
+    );
+    return res.data ?? [];
+  },
+
+  async copyWeek(body: CopyWeekRequest): Promise<ShiftAssignmentListDto[]> {
+    const res = await api.post<ApiResponse<ShiftAssignmentListDto[]>>(
+      `${BASE}/assignments/copy-week`,
+      body
+    );
+    return res.data ?? [];
+  },
+
+  async reassignAssignment(id: number, body: ReassignRequest): Promise<ShiftAssignmentDetailDto> {
+    const res = await api.put<ApiResponse<ShiftAssignmentDetailDto>>(
+      `${BASE}/assignments/${id}/reassign`,
+      body
+    );
+    return res.data;
+  },
+
+  async confirmAssignment(id: number): Promise<ShiftAssignmentDetailDto> {
+    const res = await api.post<ApiResponse<ShiftAssignmentDetailDto>>(
+      `${BASE}/assignments/${id}/confirm`,
+      {}
+    );
+    return res.data;
+  },
+
+  // ─── Team Schedule ────────────────────────────────────────────────────────
+
+  async getTeamSchedule(params: TeamScheduleParams): Promise<TeamScheduleStaffRow[]> {
+    const query = toQuery({ weekStart: params.weekStart, weekEnd: params.weekEnd });
+    // BE returns a flat List<ShiftAssignmentListDto> — group by staff on the FE side
+    const res = await api.get<ApiResponse<ShiftAssignmentListDto[]>>(
+      `${BASE}/team-schedule${query}`
+    );
+    const flatAssignments = res.data ?? [];
+    const staffMap = new Map<number, TeamScheduleStaffRow>();
+    for (const a of flatAssignments) {
+      let row = staffMap.get(a.staffId);
+      if (!row) {
+        row = {
+          staffId: a.staffId,
+          staffName: a.staffName,
+          roleName: "", // flat DTO doesn't carry roleName; filled by staff picker if needed
+          assignments: [],
+        };
+        staffMap.set(a.staffId, row);
+      }
+      row.assignments.push(a);
+    }
+    return Array.from(staffMap.values());
   },
 
   // ─── Attendance ───────────────────────────────────────────────────────────
@@ -146,10 +207,7 @@ export const shiftManagementService = {
     return res.data;
   },
 
-  async adjustAttendance(
-    attendanceId: number,
-    body: AdjustAttendanceRequest
-  ): Promise<AttendanceRecordDto> {
+  async adjustAttendance(attendanceId: number, body: AdjustAttendanceRequest): Promise<AttendanceRecordDto> {
     const res = await api.patch<ApiResponse<AttendanceRecordDto>>(
       `${BASE}/attendance/${attendanceId}`,
       body
@@ -157,39 +215,42 @@ export const shiftManagementService = {
     return res.data;
   },
 
-  // ─── Live Board ───────────────────────────────────────────────────────────
+  // ─── My Shifts (logged-in staff's assignments) ────────────────────────────
 
-  async getLiveBoard(params: GetLiveBoardParams = {}): Promise<LiveShiftBoardDto> {
-    const query = toQuery({ businessDate: params.businessDate });
-    const res = await api.get<ApiResponse<LiveShiftBoardDto>>(`${BASE}/live${query}`);
-    return res.data;
+  async getMyShifts(params: GetMyShiftsParams = {}): Promise<PagedResult<ShiftAssignmentListDto>> {
+    // Fetch assignments with isActive=true; server can further filter by current user
+    const query = toQuery({
+      fromDate: params.fromDate,
+      toDate: params.toDate,
+      isActive: true,
+      pageIndex: params.pageIndex ?? 1,
+      pageSize: params.pageSize ?? 20,
+    });
+    const res = await api.get<ApiResponse<PagedResult<ShiftAssignmentListDto>>>(
+      `${BASE}/assignments${query}`
+    );
+    return res.data ?? { pageData: [], pageIndex: 1, pageSize: 20, totalCount: 0, totalPage: 0 };
   },
 
   // ─── Reports ──────────────────────────────────────────────────────────────
 
-  async getAttendanceReport(
-    params: GetAttendanceReportParams = {}
-  ): Promise<PagedResult<AttendanceReportRowDto>> {
+  async getAttendanceReport(params: GetAttendanceReportParams = {}): Promise<PagedResult<AttendanceReportRowDto>> {
     const query = toQuery({
       fromDate: params.fromDate,
       toDate: params.toDate,
       staffId: params.staffId,
-      shiftTypeLvId: params.shiftTypeLvId,
-      attendanceStatusLvId: params.attendanceStatusLvId,
+      shiftTemplateId: params.shiftTemplateId,
+      attendanceStatusCode: params.attendanceStatusCode,
       pageIndex: params.pageIndex ?? 1,
       pageSize: params.pageSize ?? 20,
     });
     const res = await api.get<ApiResponse<PagedResult<AttendanceReportRowDto>>>(
       `${BASE}/reports/attendance${query}`
     );
-    return (
-      res.data ?? { pageData: [], pageIndex: 1, pageSize: 20, totalCount: 0, totalPage: 0 }
-    );
+    return res.data ?? { pageData: [], pageIndex: 1, pageSize: 20, totalCount: 0, totalPage: 0 };
   },
 
-  async getWorkedHoursReport(
-    params: GetWorkedHoursReportParams
-  ): Promise<WorkedHoursReportRowDto[]> {
+  async getWorkedHoursReport(params: GetWorkedHoursReportParams): Promise<WorkedHoursReportRowDto[]> {
     const query = toQuery({
       fromDate: params.fromDate,
       toDate: params.toDate,
@@ -201,9 +262,7 @@ export const shiftManagementService = {
     return res.data ?? [];
   },
 
-  async getExceptionsReport(
-    params: GetExceptionsReportParams
-  ): Promise<AttendanceExceptionReportRowDto[]> {
+  async getExceptionsReport(params: GetExceptionsReportParams): Promise<AttendanceExceptionReportRowDto[]> {
     const query = toQuery({
       fromDate: params.fromDate,
       toDate: params.toDate,
@@ -215,25 +274,7 @@ export const shiftManagementService = {
     return res.data ?? [];
   },
 
-  // ─── My Shifts ────────────────────────────────────────────────────────────
-
-  async getMyShifts(params: GetMyShiftsParams = {}): Promise<PagedResult<ShiftAssignmentDto>> {
-    // My shifts = assignments filtered by the logged-in user (server handles auth)
-    const query = toQuery({
-      fromDate: params.fromDate,
-      toDate: params.toDate,
-      pageIndex: params.pageIndex ?? 1,
-      pageSize: params.pageSize ?? 20,
-    });
-    const res = await api.get<ApiResponse<PagedResult<ShiftAssignmentDto>>>(
-      `${BASE}/assignments/my${query}`
-    );
-    return (
-      res.data ?? { pageData: [], pageIndex: 1, pageSize: 20, totalCount: 0, totalPage: 0 }
-    );
-  },
-
-  // ─── Staff Picker (for assignment form) ───────────────────────────────────────
+  // ─── Staff Picker ─────────────────────────────────────────────────────────
 
   async getStaffList(): Promise<StaffBasicDto[]> {
     const res = await api.get<ApiResponse<PagedResult<StaffBasicDto>>>(

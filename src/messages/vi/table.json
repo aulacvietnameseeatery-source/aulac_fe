@@ -1,0 +1,140 @@
+{
+  "tableManagement": {
+    "title": "Quản lý bàn",
+    "header": {
+      "tablesCount": "{count} bàn",
+      "inZone": "trong khu {zone}",
+      "availableCount": "{count} bàn trống"
+    },
+    "actions": {
+      "refresh": "Làm mới",
+      "addZone": "Thêm khu",
+      "addTable": "Thêm bàn",
+      "cancel": "Hủy",
+      "saveChanges": "Lưu thay đổi",
+      "createZone": "Tạo khu",
+      "viewDetails": "Xem chi tiết",
+      "edit": "Chỉnh sửa",
+      "delete": "Xóa",
+      "setStatus": "Đặt {status}"
+    },
+    "filters": {
+      "targetDatePlaceholder": "Chọn ngày mục tiêu",
+      "searchPlaceholder": "Tìm mã bàn...",
+      "targetDateInfo": "Đang hiển thị",
+      "availableEmphasis": "TRỐNG",
+      "targetDateOn": "vào ngày:",
+      "all": "Tất cả",
+      "allZones": "Tất cả khu",
+      "allTypes": "Tất cả loại",
+      "allStatuses": "Tất cả trạng thái",
+      "type": "Loại",
+      "status": "Trạng thái",
+      "connection": "Kết nối",
+      "online": "Online",
+      "offline": "Offline"
+    },
+    "states": {
+      "loading": "Đang tải danh sách bàn...",
+      "emptyTitle": "Không tìm thấy bàn",
+      "emptyDescription": "Hãy điều chỉnh bộ lọc hoặc thêm bàn mới.",
+      "error": "Lỗi"
+    },
+    "status": {
+      "available": "Trống",
+      "occupied": "Đang dùng",
+      "reserved": "Đã đặt",
+      "locked": "Khóa",
+      "confirmed": "Đã xác nhận",
+      "pending": "Chờ xử lý"
+    },
+    "zone": {
+      "label": "Khu",
+      "availCount": "{count} trống",
+      "seatsCount": "{count} chỗ",
+      "ordersCount": "{count} đơn",
+      "errorsCount": "{count} lỗi",
+      "setOffline": "Chuyển khu sang offline",
+      "setOnline": "Chuyển khu sang online",
+      "availableSummary": "{available}/{total} trống",
+      "addTitle": "Thêm khu mới",
+      "name": "Tên khu",
+      "namePlaceholder": "VD: Garden, Terrace, Balcony",
+      "createHint": "Khu sẽ sẵn sàng ngay để gán bàn."
+    },
+    "validation": {
+      "tableCodeRequired": "Mã bàn là bắt buộc",
+      "capacityMin": "Sức chứa phải lớn hơn hoặc bằng 1",
+      "zoneRequired": "Khu là bắt buộc",
+      "typeRequired": "Loại là bắt buộc",
+      "statusRequired": "Trạng thái là bắt buộc",
+      "fixHighlighted": "Vui lòng sửa các trường được đánh dấu trước khi lưu"
+    },
+    "modal": {
+      "addTitle": "Thêm bàn mới",
+      "editTitle": "Chỉnh sửa bàn"
+    },
+    "fields": {
+      "tableCode": "Mã bàn",
+      "tableCodePlaceholder": "VD: T-01",
+      "capacity": "Sức chứa",
+      "zone": "Khu",
+      "type": "Loại",
+      "status": "Trạng thái",
+      "selectZone": "Chọn khu",
+      "selectType": "Chọn loại",
+      "selectStatus": "Chọn trạng thái",
+      "onlineStatus": "Trạng thái online",
+      "onlineStatusHint": "Bàn hiển thị cho khách khi đang online"
+    },
+    "qr": {
+      "title": "Mã QR",
+      "encodes": "Mã hóa:",
+      "serverTokenHint": "Hệ thống sẽ thêm token bảo mật khi lưu bàn.",
+      "enterTableCode": "Nhập mã bàn để xem trước mã QR.",
+      "regenerate": "Tạo lại QR",
+      "download": "Tải xuống",
+      "hide": "Ẩn",
+      "preview": "Xem trước",
+      "active": "Đang hoạt động",
+      "token": "Token",
+      "noCodeYet": "Chưa có mã QR. Bấm \"Tạo lại QR\" để tạo mới."
+    },
+    "media": {
+      "title": "Hình ảnh"
+    },
+    "delete": {
+      "title": "Xác nhận xóa",
+      "confirmWithCode": "Bạn có chắc muốn xóa bàn \"{tableCode}\" không?",
+      "confirm": "Bạn có chắc muốn xóa không?",
+      "activeOrdersWarning": "Bàn này đang có {count} đơn hoạt động. Có thể không xóa được."
+    },
+    "detail": {
+      "ariaDescription": "Chi tiết bàn {tableCode}",
+      "title": "Chi tiết",
+      "activeOrders": "Đơn đang hoạt động",
+      "activeOrdersOnTable": "Có {count} đơn đang hoạt động trên bàn này",
+      "activeOrdersCount": "{count} đơn đang hoạt động",
+      "noActiveOrders": "Không có đơn đang hoạt động",
+      "errors": "Lỗi",
+      "errorsHint": "Bàn này có lỗi cần được xử lý.",
+      "upcomingReservations": "Đặt bàn sắp tới ({count})",
+      "paxCount": "{count} khách",
+      "quickStatusChange": "Đổi trạng thái nhanh"
+    },
+    "dashboard": {
+      "overview": "Tổng quan",
+      "totalCount": "Tổng {count}",
+      "tablesAndSeats": "{tables} bàn · {seats} chỗ",
+      "expandOverview": "Mở rộng tổng quan",
+      "collapseOverview": "Thu gọn tổng quan",
+      "totalCapacity": "Tổng sức chứa",
+      "avgSeatsPerTable": "TB {count} chỗ/bàn",
+      "needsAttention": "Cần chú ý",
+      "allClear": "Ổn định",
+      "incomingReservations": "Đặt bàn sắp đến",
+      "seeAll": "Xem tất cả",
+      "noUpcomingReservations": "Không có đặt bàn sắp tới"
+    }
+  }
+}

@@ -22,7 +22,10 @@ export interface OrderHistory {
     customerId: number;
     customerName?: string;
     totalAmount: number;
+    taxAmount: number;
+    taxId?: number;
     tipAmount?: number;
+
     orderStatus: string;
     source: string; // 'DINE_IN' | 'TAKE_AWAY' | 'DELIVERY'
     createdAt?: string;

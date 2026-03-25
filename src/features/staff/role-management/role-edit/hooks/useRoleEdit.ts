@@ -141,7 +141,10 @@ export const useRoleEdit = (roleId: number) => {
 
       await updateRole(roleId, request);
 
-      toast.success(t("success"));
+      toast.success(t("success"), {
+        description: t("successWithReloginNote"),
+        duration: 6000,
+      });
       router.push(`/dashboard/roles/${roleId}`);
     } catch (error: any) {
       console.error("Failed to update role:", error);

@@ -10,7 +10,7 @@ import { Scanner } from '@yudiel/react-qr-scanner'; // IMPORT THƯ VIỆN CAMERA
 
 interface AvailableTableDto {
     tableId: number;
-    tableCode: string;
+    tableCodes: string;
     capacity: number;
     tableType: string;
     zone: string;
@@ -172,9 +172,13 @@ export function TableSelectionModal({ isOpen, onConfirm, onClose }: {
 
                                                     {/* 4. Render danh sách bàn thực tế từ API */}
                                                     {!isLoading && availableTables.length > 0 ? (
-                                                        availableTables.map((table) => (
-                                                            <option key={table.tableId} value={table.tableCode} className="bg-[#204560] text-white">
-                                                                Table {table.tableCode} ({table.zone})
+                                                        availableTables.map((table, index) => (
+                                                            <option
+                                                                key={table.tableId || table.tableCodes || index}
+                                                                value={table.tableCodes}
+                                                                className="bg-[#204560] text-white"
+                                                            >
+                                                                Table {table.tableCodes} ({table.zone})
                                                             </option>
                                                         ))
                                                     ) : !isLoading && (

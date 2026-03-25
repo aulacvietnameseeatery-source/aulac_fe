@@ -7,7 +7,7 @@ import { OrderDetailDto } from '../types/edit-order.types';
 interface Props {
   orderInfo: OrderDetailDto;
   newCart: CartItem[];
-  customer: Partial<CustomerDto> | null; 
+  customer: Partial<CustomerDto> | null;
   onOpenCustomerModal: () => void;
   onUpdateQuantity: (id: number, delta: number) => void;
   onUpdateNote: (id: number, note: string) => void;
@@ -22,8 +22,8 @@ interface Props {
 export const EditTicket: React.FC<Props> = ({
   orderInfo, newCart, customer, onOpenCustomerModal, onUpdateQuantity, onUpdateNote, onRemoveFromCart, onClearCart, onSubmitItems, onCreateInvoice, onCloseMobile, isCustomerChanged
 }) => {
-  const t = useTranslations("Order.Edit");
-  const tCommon = useTranslations("Order.List.card");
+  const t = useTranslations("orders.management.Edit");
+  const tCommon = useTranslations("orders.management.List.card");
 
   const newSubtotal = newCart.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const finalTotal = orderInfo.totalAmount + newSubtotal;
@@ -75,21 +75,20 @@ export const EditTicket: React.FC<Props> = ({
             <span className="text-[10px] text-[#1A3A52]/50 block uppercase tracking-wide font-bold mb-0.5">{t('table')}</span>
             <span className="font-bold text-[#1A3A52]">{orderInfo.tableCode || t('takeAway')}</span>
           </div>
-          <button 
-            onClick={onOpenCustomerModal} 
+          <button
+            onClick={onOpenCustomerModal}
             disabled={isReadOnly}
-            className={`w-full col-span-2 group px-3 py-2.5 rounded-xl border shadow-sm text-left flex items-center justify-between transition-all bg-white border-[#D5BA98]/60 ${
-              !isReadOnly 
+            className={`w-full col-span-2 group px-3 py-2.5 rounded-xl border shadow-sm text-left flex items-center justify-between transition-all bg-white border-[#D5BA98]/60 ${!isReadOnly
                 ? 'hover:border-[#1A3A52] hover:shadow-md' : ''
-            }`}
+              }`}
           >
             <span className="font-bold text-[#1A3A52] truncate block mt-0.5">
               {customer ? customer.fullName : t('guest', { fallback: 'Guest' })}
             </span>
-            {!isReadOnly && 
-            <span className="text-[10px] font-bold text-[#1A3A52]/50 uppercase bg-[#D5BA98]/20 px-2 py-1 rounded group-hover:bg-[#1A3A52] group-hover:text-[#D5BA98] transition">
-            {t('change')}
-          </span>}
+            {!isReadOnly &&
+              <span className="text-[10px] font-bold text-[#1A3A52]/50 uppercase bg-[#D5BA98]/20 px-2 py-1 rounded group-hover:bg-[#1A3A52] group-hover:text-[#D5BA98] transition">
+                {t('change')}
+              </span>}
           </button>
         </div>
       </div>
@@ -188,6 +187,58 @@ export const EditTicket: React.FC<Props> = ({
 
       {/* FOOTER & ACTIONS */}
       <div className="shrink-0 p-4 lg:p-5 border-t border-[#D5BA98]/30 bg-white shadow-[0_-10px_30px_rgba(213,186,152,0.1)]">
+      {/* === THÊM PHẦN CHI TIẾT KHI ORDER ĐÃ THANH TOÁN === */}
+        {orderInfo.isPaid && (
+          <div className="flex flex-col gap-1.5 mb-3 text-sm text-[#1A3A52]/80 border-b border-[#D5BA98]/20 pb-3">
+            <div className="flex justify-between">
+              <span>{t('subTotal', { fallback: 'Subtotal' })}</span>
+              <span>CHF {(orderInfo.subTotalAmount || 0).toFixed(2)}</span>
+            </div>
+            
+            {!!orderInfo.taxAmount && orderInfo.taxAmount > 0 && (
+              <div className="flex justify-between">
+                <span>{t('tax', { fallback: 'Tax' })}</span>
+                <span>CHF {orderInfo.taxAmount.toFixed(2)}</span>
+              </div>
+            )}
+
+            {/* Hiển thị danh sách Promotion */}
+            {orderInfo.promotions?.map((promo) => (
+              <div key={promo.promotionId} className="flex justify-between text-[#8C3A3A]">
+                <span>{promo.promotionName}</span>
+                <span>- CHF {promo.discountAmount.toFixed(2)}</span>
+              </div>
+            ))}
+
+            {/* Hiển thị danh sách Coupon */}
+            {orderInfo.coupons?.map((coupon) => (
+              <div key={coupon.couponId} className="flex justify-between text-[#8C3A3A]">
+                <span>{t('coupon', { fallback: 'Coupon' })}: {coupon.couponCode}</span>
+                <span>- CHF {coupon.discountAmount.toFixed(2)}</span>
+              </div>
+            ))}
+
+            {!!orderInfo.tipAmount && orderInfo.tipAmount > 0 && (
+              <div className="flex justify-between font-medium">
+                <span>{t('tip', { fallback: 'Tip' })}</span>
+                <span>CHF {orderInfo.tipAmount.toFixed(2)}</span>
+              </div>
+            )}
+
+            {/* Thông tin Payments nếu có */}
+            {orderInfo.payments && orderInfo.payments.length > 0 && (
+              <div className="mt-2 pt-2 border-t border-dashed border-[#D5BA98]/40">
+                {orderInfo.payments.map((payment) => (
+                  <div key={payment.paymentId} className="flex justify-between text-xs text-[#4A5D4E]">
+                    <span>{t('paidVia', { fallback: 'Paid via' })} {payment.method}</span>
+                    <span>CHF {payment.receivedAmount.toFixed(2)}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+        {/* ================================================= */}
         <div className="flex justify-between items-end pb-3 mb-3 border-b border-[#D5BA98]/20">
           <span className="font-bold text-[#1A3A52]/70 uppercase tracking-wide text-xs">
             {newCart.length > 0 ? t('newTotal') : t('totalAmount')}

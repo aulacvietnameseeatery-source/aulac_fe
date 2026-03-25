@@ -1,13 +1,14 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { User, Phone, StickyNote, ChevronDown, Minus, Plus, Mail, X } from 'lucide-react';
+import React, { useState, useEffect, useMemo } from 'react';
+import { User, Phone, StickyNote, Mail, X, Minus, Plus } from 'lucide-react';
 import { ALDatePicker } from "@/components/ui/al-date-picker";
+import { ALCombobox } from '@/components/ui/al-combobox';
 import { reservationApi } from '../index';
 import { ReservationResponseDto } from '../types/reservation.types';
 import { toast } from 'sonner';
-import CallRestaurantPopup from './call-restaurant-popup';
 import { useTranslations } from 'next-intl';
+import { useStoreSettings } from '@/hooks/use-store-settings';
 
 interface PublicBookingFormProps {
     onSuccess?: (reservation: ReservationResponseDto) => void;
@@ -17,12 +18,13 @@ interface PublicBookingFormProps {
 type CustomerMode = 'existing' | 'new';
 
 export default function PublicBookingForm({ onSuccess, onClose }: PublicBookingFormProps) {
-    const t = useTranslations('Reservation.PublicForm');
+    const t = useTranslations('reservations.public.publicForm');
     const [mode, setMode] = useState<CustomerMode | null>(null);
 
     const [name, setName] = useState('');
     const [phone, setPhone] = useState('');
     const [email, setEmail] = useState('');
+    const [customerId, setCustomerId] = useState<number | undefined>(undefined);
     const [pax, setPax] = useState<number | null>(null);
     const [date, setDate] = useState<string>('');
     const [time, setTime] = useState('');
@@ -32,15 +34,44 @@ export default function PublicBookingForm({ onSuccess, onClose }: PublicBookingF
     const [checkingFit, setCheckingFit] = useState(false);
     const [canBookOnline, setCanBookOnline] = useState(true);
     const [fitMessage, setFitMessage] = useState<string>('');
-    const [showCallPopup, setShowCallPopup] = useState(false);
+    const [timeError, setTimeError] = useState<string | null>(null);
+    const { data: storeSettings } = useStoreSettings();
+    const phoneNumber = storeSettings?.phone || "+84 28 3822 5264";
+    const callHref = `tel:${phoneNumber.replace(/\s+/g, '')}`;
 
-    const resetBookingSelection = () => {
-        setDate('');
-        setTime('');
-        setPax(null);
-        setCanBookOnline(true);
-        setFitMessage('');
+    const mapApiErrorKey = (code?: number, subCode?: number) => {
+        if (code === 404) return 'toast.notFound';
+        if (code === 409) return 'toast.conflict';
+        if (code === 400) return 'toast.invalidRequest';
+        if (code === 500) return 'toast.serverError';
+        if (subCode && subCode > 0) return 'toast.createFailed';
+        return 'toast.unexpected';
     };
+
+    const timeOptions = useMemo(() => {
+        const slots: string[] = [];
+        // Lunch: 11:30 - 14:30
+        for (let h = 11; h <= 14; h++) {
+            for (let m = 0; m < 60; m += 30) {
+                if (h === 11 && m < 30) continue;
+                if (h === 14 && m > 30) break;
+                slots.push(`${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`);
+            }
+        }
+        // Dinner: 18:30 - 22:30
+        for (let h = 18; h <= 22; h++) {
+            for (let m = 0; m < 60; m += 30) {
+                if (h === 18 && m < 30) continue;
+                if (h === 22 && m > 30) break;
+                slots.push(`${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`);
+            }
+        }
+        return slots.map(slot => ({
+            value: slot,
+            label: slot
+        }));
+    }, []);
+
 
     const lookupExistingCustomer = async (targetPhone: string) => {
         if (mode !== 'existing') return;
@@ -49,12 +80,14 @@ export default function PublicBookingForm({ onSuccess, onClose }: PublicBookingF
 
         setName('');
         setEmail('');
+        setCustomerId(undefined);
         setLookingUpCustomer(true);
         try {
             const result = await reservationApi.getCustomerByPhone(normalized);
             if (result.success && result.data && result.data.phone) {
                 setName(result.data.fullName || '');
                 setEmail(result.data.email || '');
+                setCustomerId(result.data.customerId);
             } else {
                 toast.error(t('lookup.notFound'));
             }
@@ -74,7 +107,7 @@ export default function PublicBookingForm({ onSuccess, onClose }: PublicBookingF
         }
 
         const runFitCheck = async () => {
-            const reservedTime = `${date}T${time}:00`;
+            const reservedTime = new Date(`${date}T${time}`).toISOString();
             setCheckingFit(true);
             try {
                 const result = await reservationApi.fitCheck({
@@ -96,11 +129,30 @@ export default function PublicBookingForm({ onSuccess, onClose }: PublicBookingF
         void runFitCheck();
     }, [date, time, pax, mode]);
 
+    useEffect(() => {
+        if (!date || !time) {
+            setTimeError(null);
+            return;
+        }
+        const now = new Date();
+        const selected = new Date(`${date}T${time}`);
+        if (selected.getTime() < now.getTime()) {
+            setTimeError(t('validation.timePast'));
+        } else {
+            setTimeError(null);
+        }
+    }, [date, time, t]);
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
         if (!mode) {
             toast.error(t('validation.selectCustomerType'));
+            return;
+        }
+
+        if (timeError) {
+            toast.error(timeError);
             return;
         }
 
@@ -136,8 +188,9 @@ export default function PublicBookingForm({ onSuccess, onClose }: PublicBookingF
 
         setLoading(true);
         try {
-            const reservedTime = `${date}T${time}:00`;
+            const reservedTime = new Date(`${date}T${time}`).toISOString();
             const request = {
+                customerId: customerId,
                 customerName: name,
                 phone: phone,
                 email: email || undefined,
@@ -149,29 +202,30 @@ export default function PublicBookingForm({ onSuccess, onClose }: PublicBookingF
             const response = await reservationApi.createReservation(request);
 
             if (response.success && response.data) {
-                toast.success(response.userMessage || t('toast.created'));
+                toast.success(t('toast.created'));
                 if (onSuccess) onSuccess(response.data);
 
                 setName('');
                 setPhone('');
                 setEmail('');
+                setCustomerId(undefined);
                 setNotes('');
                 setMode(null);
             } else {
-                toast.error(response.userMessage || t('toast.createFailed'));
-                if (response.userMessage?.toLowerCase().includes("không") && response.userMessage?.toLowerCase().includes("bàn")) {
-                    setShowCallPopup(true);
-                }
+                toast.error(t(mapApiErrorKey(response.code, response.subCode)));
             }
         } catch (error: any) {
-            const errorMsg = error?.response?.data?.userMessage || t('toast.unexpected');
+            const errorCode = error?.response?.data?.code as number | undefined;
+            const errorSubCode = error?.response?.data?.subCode as number | undefined;
+            const errorMsg = t(mapApiErrorKey(errorCode, errorSubCode));
             toast.error(errorMsg);
-            if (errorMsg.toLowerCase().includes("không") && errorMsg.toLowerCase().includes("bàn")) {
-                setShowCallPopup(true);
-            }
         } finally {
             setLoading(false);
         }
+    };
+
+    const handleCallRestaurant = () => {
+        window.location.href = callHref;
     };
 
     return (
@@ -202,6 +256,7 @@ export default function PublicBookingForm({ onSuccess, onClose }: PublicBookingF
                                         setMode('existing');
                                         setName('');
                                         setEmail('');
+                                        setCustomerId(undefined);
                                     }}
                                     className="rounded-xl border border-stone-200 bg-stone-50 px-4 py-4 text-left hover:border-amber-500 transition-all min-h-[110px]"
                                 >
@@ -214,6 +269,7 @@ export default function PublicBookingForm({ onSuccess, onClose }: PublicBookingF
                                         setMode('new');
                                         setName('');
                                         setEmail('');
+                                        setCustomerId(undefined);
                                     }}
                                     className="rounded-xl border border-stone-200 bg-stone-50 px-4 py-4 text-left hover:border-amber-500 transition-all min-h-[110px]"
                                 >
@@ -234,234 +290,206 @@ export default function PublicBookingForm({ onSuccess, onClose }: PublicBookingF
                         <div className="rounded-2xl border border-orange-200 bg-orange-50 p-4 text-center">
                             <div className="font-semibold text-orange-900">{t('noFitTitle')}</div>
                             {fitMessage && <p className="text-sm text-orange-700 mt-1">{fitMessage}</p>}
-                            <div className="mt-4 flex flex-col items-center gap-2">
-                                <button
-                                    type="button"
-                                    onClick={() => setShowCallPopup(true)}
-                                    className="inline-flex items-center justify-center gap-2 rounded-lg bg-orange-600 px-4 py-2 text-white font-semibold hover:bg-orange-700 w-full sm:w-auto sm:min-w-[180px]"
-                                >
-                                    <Phone size={16} />
-                                    <span>{t('callRestaurant')}</span>
-                                </button>
-                                <button
-                                    type="button"
-                                    onClick={resetBookingSelection}
-                                    className="inline-flex items-center justify-center rounded-lg border border-orange-300 bg-white px-4 py-2 text-orange-800 font-semibold hover:bg-orange-100 w-full sm:w-auto sm:min-w-[180px]"
-                                >
-                                    {t('goBack')}
-                                </button>
-                            </div>
                         </div>
                     )}
 
-                    {mode && canBookOnline && (
-                    <>
-                    <div className="space-y-4">
-                        <h2 className="text-xs font-bold text-amber-600 uppercase tracking-widest flex items-center gap-2">
-                            <span className="w-1 h-3 bg-amber-500 rounded-full"></span>
-                            {t('yourInfo')}
-                        </h2>
+                    {mode && (
+                        <>
+                            <div className="space-y-4">
+                                <h2 className="text-xs font-bold text-amber-600 uppercase tracking-widest flex items-center gap-2">
+                                    <span className="w-1 h-3 bg-amber-500 rounded-full"></span>
+                                    {t('yourInfo')}
+                                </h2>
 
-                        <div className="grid grid-cols-1 gap-4">
-                            <div className="relative group">
-                                <Phone className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400 group-focus-within:text-amber-600 transition-colors" size={18} />
-                                <input
-                                    type="tel"
-                                    placeholder={t('phone')}
-                                    value={phone}
-                                    onChange={(e) => setPhone(e.target.value)}
-                                    onBlur={(e) => void lookupExistingCustomer(e.target.value)}
-                                    className="w-full bg-stone-50 border border-stone-200 rounded-xl py-3.5 pl-12 pr-4 text-slate-800 placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all font-medium"
-                                    required
-                                />
-                            </div>
-
-                            {mode === 'new' && (
-                                <>
+                                <div className="grid grid-cols-1 gap-4">
                                     <div className="relative group">
-                                        <User className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400 group-focus-within:text-amber-600 transition-colors" size={18} />
+                                        <Phone className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400 group-focus-within:text-amber-600 transition-colors" size={18} />
                                         <input
-                                            type="text"
-                                            placeholder={t('yourName')}
-                                            value={name}
-                                            onChange={(e) => setName(e.target.value)}
+                                            type="tel"
+                                            placeholder={t('phone')}
+                                            value={phone}
+                                            onChange={(e) => setPhone(e.target.value)}
+                                            onBlur={(e) => void lookupExistingCustomer(e.target.value)}
                                             className="w-full bg-stone-50 border border-stone-200 rounded-xl py-3.5 pl-12 pr-4 text-slate-800 placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all font-medium"
                                             required
                                         />
                                     </div>
 
-                                    <div className="relative group">
-                                        <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400 group-focus-within:text-amber-600 transition-colors" size={18} />
-                                        <input
-                                            type="email"
-                                            placeholder={t('email')}
-                                            value={email}
-                                            onChange={(e) => setEmail(e.target.value)}
-                                            className="w-full bg-stone-50 border border-stone-200 rounded-xl py-3.5 pl-12 pr-4 text-slate-800 placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all font-medium"
-                                        />
+                                    {mode === 'new' && (
+                                        <>
+                                            <div className="relative group">
+                                                <User className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400 group-focus-within:text-amber-600 transition-colors" size={18} />
+                                                <input
+                                                    type="text"
+                                                    placeholder={t('yourName')}
+                                                    value={name}
+                                                    onChange={(e) => setName(e.target.value)}
+                                                    className="w-full bg-stone-50 border border-stone-200 rounded-xl py-3.5 pl-12 pr-4 text-slate-800 placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all font-medium"
+                                                    required
+                                                />
+                                            </div>
+
+                                            <div className="relative group">
+                                                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400 group-focus-within:text-amber-600 transition-colors" size={18} />
+                                                <input
+                                                    type="email"
+                                                    placeholder={t('email')}
+                                                    value={email}
+                                                    onChange={(e) => setEmail(e.target.value)}
+                                                    className="w-full bg-stone-50 border border-stone-200 rounded-xl py-3.5 pl-12 pr-4 text-slate-800 placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all font-medium"
+                                                />
+                                            </div>
+                                        </>
+                                    )}
+
+                                    {mode === 'existing' && (name || email || lookingUpCustomer) && (
+                                        <>
+                                            <div className="relative group">
+                                                <User className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400" size={18} />
+                                                <input
+                                                    type="text"
+                                                    placeholder={lookingUpCustomer ? t('loadingCustomerName') : t('existingCustomerName')}
+                                                    value={name}
+                                                    readOnly
+                                                    className="w-full bg-stone-100 border border-stone-200 rounded-xl py-3.5 pl-12 pr-4 text-slate-700 placeholder-stone-400 font-medium"
+                                                />
+                                            </div>
+
+                                            <div className="relative group">
+                                                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400" size={18} />
+                                                <input
+                                                    type="text"
+                                                    placeholder={lookingUpCustomer ? t('loadingCustomerEmail') : t('existingCustomerEmail')}
+                                                    value={email}
+                                                    readOnly
+                                                    className="w-full bg-stone-100 border border-stone-200 rounded-xl py-3.5 pl-12 pr-4 text-slate-700 placeholder-stone-400 font-medium"
+                                                />
+                                            </div>
+                                        </>
+                                    )}
+                                </div>
+                            </div>
+
+                            <div className="space-y-4 sm:space-y-5">
+                                <h2 className="text-xs font-bold text-amber-600 uppercase tracking-widest flex items-center gap-2">
+                                    <span className="w-1 h-3 bg-amber-500 rounded-full"></span>
+                                    {t('bookingInfo')}
+                                </h2>
+
+                                <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
+                                    <div className="col-span-1 md:col-span-2">
+                                        <label className="text-[10px] font-bold text-stone-400 uppercase tracking-widest block mb-2">
+                                            {t('reservationDate')}
+                                        </label>
+                                        <div className="relative">
+                                            <ALDatePicker
+                                                value={date}
+                                                onChange={setDate}
+                                                minDate={new Date().toISOString().split('T')[0]}
+                                                placeholder={t('selectDate')}
+                                                displayFormat="dd/MM/yyyy"
+                                                inputSize="sm"
+                                                groupClassName="!bg-stone-50 !border-stone-200 !rounded-xl !h-[54px]"
+                                                className="text-sm sm:text-base font-semibold"
+                                            />
+                                        </div>
                                     </div>
-                                </>
-                            )}
 
-                            {mode === 'existing' && (name || email || lookingUpCustomer) && (
-                                <>
-                                    <div className="relative group">
-                                        <User className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400" size={18} />
-                                        <input
-                                            type="text"
-                                            placeholder={lookingUpCustomer ? t('loadingCustomerName') : t('existingCustomerName')}
-                                            value={name}
-                                            readOnly
-                                            className="w-full bg-stone-100 border border-stone-200 rounded-xl py-3.5 pl-12 pr-4 text-slate-700 placeholder-stone-400 font-medium"
-                                        />
+                                    <div className="col-span-1 md:col-span-1">
+                                        <label className="text-[10px] font-bold text-stone-400 uppercase tracking-widest block mb-2">
+                                            {t('arrivalTime')}
+                                        </label>
+                                        <div className="relative group">
+                                            <ALCombobox
+                                                options={timeOptions}
+                                                value={time}
+                                                onChange={(val) => setTime(val as string)}
+                                                placeholder={t('selectTime')}
+                                                className="!h-[54px] !rounded-xl !bg-stone-50 !border-stone-200 font-semibold"
+                                            />
+                                            {timeError && (
+                                                <div className="mt-1.5 flex items-center gap-1 text-red-500 text-[10px] font-bold animate-pulse">
+                                                    <div className="w-1 h-1 bg-red-500 rounded-full"></div>
+                                                    {timeError}
+                                                </div>
+                                            )}
+                                        </div>
                                     </div>
 
-                                    <div className="relative group">
-                                        <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400" size={18} />
-                                        <input
-                                            type="text"
-                                            placeholder={lookingUpCustomer ? t('loadingCustomerEmail') : t('existingCustomerEmail')}
-                                            value={email}
-                                            readOnly
-                                            className="w-full bg-stone-100 border border-stone-200 rounded-xl py-3.5 pl-12 pr-4 text-slate-700 placeholder-stone-400 font-medium"
-                                        />
+                                    <div className="col-span-2 md:col-span-1">
+                                        <label className="text-[10px] font-bold text-stone-400 uppercase tracking-widest block mb-2">
+                                            {t('partySize')}
+                                        </label>
+                                        <div className="flex items-center bg-stone-50 border border-stone-200 rounded-xl py-1 px-1">
+                                            <button
+                                                type="button"
+                                                onClick={() => setPax(Math.max(1, (pax ?? 1) - 1))}
+                                                className="p-3 text-stone-500 hover:text-amber-600 transition-colors"
+                                            >
+                                                <Minus size={16} strokeWidth={3} />
+                                            </button>
+                                            <div className="flex-1 text-center font-bold text-[#1A3A52] text-lg">
+                                                {pax ?? '-'}
+                                            </div>
+                                            <button
+                                                type="button"
+                                                onClick={() => setPax((pax ?? 0) + 1)}
+                                                className="p-3 text-stone-500 hover:text-amber-600 transition-colors"
+                                            >
+                                                <Plus size={16} strokeWidth={3} />
+                                            </button>
+                                        </div>
                                     </div>
-                                </>
-                            )}
-                        </div>
-                    </div>
+                                </div>
 
-                    <div className="space-y-4 sm:space-y-5">
-                        <h2 className="text-xs font-bold text-amber-600 uppercase tracking-widest flex items-center gap-2">
-                            <span className="w-1 h-3 bg-amber-500 rounded-full"></span>
-                            {t('bookingInfo')}
-                        </h2>
-
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
-                            <div className="col-span-1 md:col-span-2">
-                                <label className="text-[10px] font-bold text-stone-400 uppercase tracking-widest block mb-2">
-                                    {t('reservationDate')}
-                                </label>
-                                <div className="relative">
-                                    <ALDatePicker
-                                        value={date}
-                                        onChange={setDate}
-                                        minDate={new Date().toISOString().split('T')[0]}
-                                        placeholder={t('selectDate')}
-                                        inputSize="sm"
-                                        groupClassName="!bg-stone-50 !border-stone-200 !rounded-xl !h-[54px]"
-                                        className="text-sm sm:text-base font-semibold"
+                                <div className="relative group pb-1">
+                                    <StickyNote className="absolute left-4 top-4 text-stone-400 group-focus-within:text-amber-600 transition-colors" size={18} />
+                                    <textarea
+                                        placeholder={t('notes')}
+                                        value={notes}
+                                        onChange={(e) => setNotes(e.target.value)}
+                                        className="w-full bg-stone-50 border border-stone-200 rounded-xl py-3.5 pl-12 pr-4 text-slate-800 placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all font-medium min-h-[88px] sm:min-h-[110px]"
                                     />
                                 </div>
                             </div>
 
-                            <div className="col-span-1 md:col-span-1">
-                                <label className="text-[10px] font-bold text-stone-400 uppercase tracking-widest block mb-2">
-                                    {t('arrivalTime')}
-                                </label>
-                                <div className="relative group">
-                                    <select
-                                        value={time}
-                                        onChange={(e) => setTime(e.target.value)}
-                                        className="w-full h-[54px] bg-stone-50 border border-stone-200 rounded-xl px-4 pr-10 text-slate-800 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all font-semibold appearance-none"
-                                    >
-                                        <option value="" disabled>{t('selectTime')}</option>
-                                        {Array.from({ length: 14 }, (_, i) => i + 10).flatMap(h =>
-                                            ['00', '30'].map(m => {
-                                                const hour = h.toString().padStart(2, '0');
-                                                return `${hour}:${m}`;
-                                            })
-                                        ).map(slot => (
-                                            <option key={slot} value={slot}>
-                                                {slot}
-                                            </option>
-                                        ))}
-                                    </select>
-                                    <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-stone-400 pointer-events-none" size={18} />
-                                </div>
-                            </div>
-
-                            <div className="col-span-2 md:col-span-1">
-                                <label className="text-[10px] font-bold text-stone-400 uppercase tracking-widest block mb-2">
-                                    {t('partySize')}
-                                </label>
-                                <div className="flex items-center bg-stone-50 border border-stone-200 rounded-xl py-1 px-1">
-                                    <button
-                                        type="button"
-                                        onClick={() => setPax(Math.max(1, (pax ?? 1) - 1))}
-                                        className="p-3 text-stone-500 hover:text-amber-600 transition-colors"
-                                    >
-                                        <Minus size={16} strokeWidth={3} />
-                                    </button>
-                                    <div className="flex-1 text-center font-bold text-[#1A3A52] text-lg">
-                                        {pax ?? '-'}
-                                    </div>
-                                    <button
-                                        type="button"
-                                        onClick={() => setPax((pax ?? 0) + 1)}
-                                        className="p-3 text-stone-500 hover:text-amber-600 transition-colors"
-                                    >
-                                        <Plus size={16} strokeWidth={3} />
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="relative group pb-1">
-                            <StickyNote className="absolute left-4 top-4 text-stone-400 group-focus-within:text-amber-600 transition-colors" size={18} />
-                            <textarea
-                                placeholder={t('notes')}
-                                value={notes}
-                                onChange={(e) => setNotes(e.target.value)}
-                                className="w-full bg-stone-50 border border-stone-200 rounded-xl py-3.5 pl-12 pr-4 text-slate-800 placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all font-medium min-h-[88px] sm:min-h-[110px]"
-                            />
-                        </div>
-                    </div>
-
-                    <div className="pt-2 mt-1 border-t border-stone-200/80 bg-white flex flex-col-reverse sm:flex-row sm:items-center gap-3 sm:justify-between">
-                        <button
-                            type="button"
-                            onClick={() => {
-                                if (mode) {
-                                    setMode(null);
-                                    return;
-                                }
-                                onClose?.();
-                            }}
-                            className="w-full sm:w-auto text-center sm:text-left text-stone-400 font-bold hover:text-stone-600 transition-colors"
-                        >
-                            {t('close')}
-                        </button>
-                        <button
-                            type="submit"
-                            disabled={loading || !mode || checkingFit || !date || !time || !pax}
-                            className={`
+                            <div className="pt-2 mt-1 border-t border-stone-200/80 bg-white flex flex-col-reverse sm:flex-row sm:items-center gap-3 sm:justify-between">
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        if (mode) {
+                                            setMode(null);
+                                            return;
+                                        }
+                                        onClose?.();
+                                    }}
+                                    className="w-full sm:w-auto text-center sm:text-left text-stone-400 font-bold hover:text-stone-600 transition-colors"
+                                >
+                                    {t('close')}
+                                </button>
+                                <button
+                                    type={canBookOnline ? "submit" : "button"}
+                                    onClick={!canBookOnline ? handleCallRestaurant : undefined}
+                                    disabled={loading || !mode || checkingFit || !date || !time || !pax || !!timeError}
+                                    className={`
                                 relative w-full sm:w-auto px-5 py-2.5 sm:px-7 sm:py-3 text-sm bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-2xl shadow-lg shadow-amber-500/30 transition-all hover:scale-[1.02] active:scale-[0.98] whitespace-normal leading-tight
                                 ${loading || !mode || checkingFit || !date || !time ? 'opacity-70 cursor-not-allowed' : ''}
                             `}
-                        >
-                            {loading || checkingFit ? (
-                                <div className="flex items-center gap-2">
-                                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                                    <span>{checkingFit ? t('checkingTables') : t('processing')}</span>
-                                </div>
-                            ) : (
-                                t('submit')
-                            )}
-                        </button>
-                    </div>
-                    </>
+                                >
+                                    {loading || checkingFit ? (
+                                        <div className="flex items-center gap-2">
+                                            <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                                            <span>{checkingFit ? t('checkingTables') : t('processing')}</span>
+                                        </div>
+                                    ) : (
+                                        canBookOnline ? t('submit') : t('callRestaurant')
+                                    )}
+                                </button>
+                            </div>
+                        </>
                     )}
                 </form>
             </div>
-
-            <CallRestaurantPopup
-                isOpen={showCallPopup}
-                onClose={() => {
-                    setShowCallPopup(false);
-                    resetBookingSelection();
-                }}
-            />
         </div>
     );
 }

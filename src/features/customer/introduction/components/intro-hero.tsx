@@ -2,9 +2,20 @@
 
 import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
+import { useDynamicSettings } from "../../shared/hooks/useDynamicSettings";
 
-export function IntroHero() {
+export function IntroHero({ overrides }: { overrides?: Record<string, string> }) {
     const t = useTranslations("Introduction.Hero");
+    const { getSetting: originalGetSetting, getMediaSetting } = useDynamicSettings();
+
+    const getSetting = (key: string, fallback: string) => {
+        if (overrides?.[key]) return overrides[key];
+        return originalGetSetting(key, fallback);
+    };
+
+    const title = getSetting("intro.hero.title", t("title"));
+    const quote = getSetting("intro.hero.quote", t("quote"));
+    const heroImage = getMediaSetting("intro.hero.image", "/images/hero-bg.jpg");
 
     return (
         <section className="relative w-full min-h-[92dvh] md:min-h-[100dvh] flex flex-col items-center justify-center overflow-hidden">
@@ -18,7 +29,7 @@ export function IntroHero() {
                     className="w-full h-full"
                 >
                     <img
-                        src="/images/introduction-page/intro-hero/intro-hero-image.png"
+                        src={heroImage}
                         alt="Au Lac Introduction"
                         className="w-full h-full object-cover select-none"
                     />
@@ -36,10 +47,11 @@ export function IntroHero() {
                     transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
                 >
                     <h1 className="font-display text-white text-[42px] sm:text-[62px] md:text-[96px] font-black leading-[1.06] whitespace-pre-line drop-shadow-[0_14px_44px_rgba(0,0,0,0.5)]">
-                        {t("title")}
+                        {title}
                     </h1>
                 </motion.div>
 
+                {/* Title Only */}
                 {/* Quote / Description */}
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
@@ -49,7 +61,7 @@ export function IntroHero() {
                     className="pt-5 max-w-[92%] md:max-w-[760px]"
                 >
                     <p className="font-display text-white/90 text-[15px] md:text-[20px] font-light leading-relaxed italic">
-                        {t("quote")}
+                        {quote}
                     </p>
                 </motion.div>
             </div>

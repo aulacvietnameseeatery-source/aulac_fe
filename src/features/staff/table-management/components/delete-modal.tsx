@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { useTranslations } from "next-intl";
 import { ALConfirmDialog } from "@/components/ui/al-confirm-dialog";
 import type { RestaurantTable } from "../types";
 
@@ -19,24 +20,24 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
   onConfirm,
   isDeleting = false,
 }) => {
+  const t = useTranslations("tableManagement");
   return (
     <ALConfirmDialog
       isOpen={isOpen}
       onClose={onClose}
       onConfirm={onConfirm}
       variant="delete"
-      title="Delete Confirmation"
+      title={t("delete.title")}
       message={
         table
-          ? `Are you sure you want to delete table "${table.tableCode}"?`
-          : "Are you sure you want to delete?"
+          ? t("delete.confirmWithCode", { tableCode: table.tableCode })
+          : t("delete.confirm")
       }
       isLoading={isDeleting}
     >
       {table && table.activeOrders > 0 && (
         <p className="text-sm text-amber-600">
-          ⚠ This table has {table.activeOrders} active order
-          {table.activeOrders > 1 ? "s" : ""}. Deletion may be blocked.
+          {t("delete.activeOrdersWarning", { count: table.activeOrders })}
         </p>
       )}
     </ALConfirmDialog>

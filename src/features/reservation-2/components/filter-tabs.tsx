@@ -19,7 +19,7 @@ export default function FilterTabs({
     className,
     translationPrefix
 }: FilterTabsProps) {
-    const t = useTranslations(translationPrefix || 'Reservation.Zone');
+    const t = useTranslations(translationPrefix || 'reservations.public.zone');
 
     const getLabel = (option: string) => {
         try {
@@ -45,7 +45,7 @@ export default function FilterTabs({
                             "px-4 py-2 rounded-full text-sm whitespace-nowrap transition-colors border",
                             value === option
                                 ? "bg-[#1A3A52] text-white border-[#1A3A52]"
-                                : "bg-white text-slate-600 border-slate-200 hover:border-slate-300 hover:bg-slate-50"
+                                : "bg-white text-slate-600 border border-[#D5BA98]/60 hover:border-slate-300 hover:bg-slate-50"
                         )}
                     >
                         {getLabel(option)}

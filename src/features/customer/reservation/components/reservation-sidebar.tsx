@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { Calendar, Armchair, Check, Edit3, X, Clock, User, Phone, Mail, ChevronDown, ChevronUp } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { ALDatePicker } from "@/components/ui/al-date-picker";
+import { ALCombobox } from "@/components/ui/al-combobox";
 import "../styles/index.css";
 
 interface ReservationSidebarProps {
@@ -37,70 +38,74 @@ const convertTo24Hour = (timeStr: string) => {
 };
 
 // Helper: Generate Time Slots (e.g., 11:00, 11:30, 12:00...)
-const generateTimeSlots = (startHour: number, endHour: number, intervalMinutes: number) => {
-    const slots = [];
-    for (let h = startHour; h <= endHour; h++) {
-        for (let m = 0; m < 60; m += intervalMinutes) {
-             if (h === endHour && m > 0) break; 
-             
-             const hourStr = h.toString().padStart(2, '0');
-             const minStr = m.toString().padStart(2, '0');
-             slots.push(`${hourStr}:${minStr}`);
-        }
+const generateTimeSlots = () => {
+  const slots = [];
+  // Lunch: 11:30 - 14:30
+  for (let h = 11; h <= 14; h++) {
+    for (let m = 0; m < 60; m += 30) {
+      if (h === 11 && m < 30) continue;
+      if (h === 14 && m > 30) break;
+      slots.push(`${h.toString().padStart(2, "0")}:${m.toString().padStart(2, "0")}`);
     }
-    return slots;
+  }
+  // Dinner: 18:30 - 22:30
+  for (let h = 18; h <= 22; h++) {
+    for (let m = 0; m < 60; m += 30) {
+      if (h === 18 && m < 30) continue;
+      if (h === 22 && m > 30) break;
+      slots.push(`${h.toString().padStart(2, "0")}:${m.toString().padStart(2, "0")}`);
+    }
+  }
+  return slots;
 };
 
-export default function ReservationSidebar({ 
-  selectedTable, 
-  date, 
-  time, 
-  onDateTimeChange, 
-  onBook 
-} : ReservationSidebarProps) {
-  const t = useTranslations('Reservation.Sidebar');
+export default function ReservationSidebar({
+  selectedTable,
+  date,
+  time,
+  onDateTimeChange,
+  onBook
+}: ReservationSidebarProps) {
+  const t = useTranslations('reservations.public.sidebar');
 
   const [isEditing, setIsEditing] = useState(false);
-  
+
   // Temp State
   const [tempDate, setTempDate] = useState(date);
   // Input type="time" needs to be formatted as 24 hours (e.g., 19:30), so we convert it during initialization.
   const [tempTime, setTempTime] = useState(convertTo24Hour(time));
 
-  // State to manage the opening/closing of the time dropdown.
-  const [isTimeDropdownOpen, setIsTimeDropdownOpen] = useState(false);
 
   // --- STATE FOR CUSTOMER FORM ---
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
+  const [timeError, setTimeError] = useState<string | null>(null);
 
   // Validate: A phone number is required to place an order.
   const isFormValid = phone.trim().length > 0;
 
-  // Create a schedule: From 11:00 to 22:00, each slot spaced 30 minutes apart.
-  const timeSlots = useMemo(() => generateTimeSlots(11, 22, 30), []);
-
-  // The reference will close the dropdown if you click outside the specified area.
-  const dropdownRef = useRef<HTMLDivElement>(null);
+  const timeOptions = useMemo(() => {
+    return generateTimeSlots().map(slot => ({
+      value: slot,
+      label: slot
+    }));
+  }, []);
 
   useEffect(() => {
     setTempDate(date);
     setTempTime(convertTo24Hour(time));
   }, [date, time]);
 
-  // Handle click-out actions to close the dropdown.
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setIsTimeDropdownOpen(false);
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
 
   const handleSave = () => {
+    const now = new Date();
+    const selected = new Date(`${tempDate}T${tempTime}`);
+    if (selected.getTime() < now.getTime()) {
+      setTimeError(t("validation.timePast"));
+      return;
+    }
+    setTimeError(null);
     // When saving, reformat it to AM/PM for consistent display.
     const formattedTime = formatTimeDisplay(tempTime);
     onDateTimeChange(tempDate, formattedTime);
@@ -111,17 +116,17 @@ export default function ReservationSidebar({
     // Reset old data
     setTempDate(date);
     setTempTime(convertTo24Hour(time));
+    setTimeError(null);
     setIsEditing(false);
   };
 
   const handleSelectTime = (slot: string) => {
-      setTempTime(slot);
-      setIsTimeDropdownOpen(false);
+    setTempTime(slot);
   };
 
   const handleBookClick = () => {
     if (isFormValid && selectedTable) {
-        onBook({ name, phone, email });
+      onBook({ name, phone, email });
     }
   };
 
@@ -139,12 +144,11 @@ export default function ReservationSidebar({
         <div className="absolute -right-4 -top-4 w-24 h-24 bg-white/5 rounded-full blur-2xl" />
       </div>
 
-      <div className="p-5 space-y-5">
+      <div className="w-full lg:w-[320px] shrink-0">
         {/* === DATE & TIME SECTION === */}
         <div
-          className={`sidebar-datetime-section ${
-            isEditing ? "sidebar-datetime-section-editing" : ""
-          }`}
+          className={`sidebar-datetime-section ${isEditing ? "sidebar-datetime-section-editing" : ""
+            }`}
         >
           {/* Row: Icon + Title */}
           <div className="sidebar-datetime-header">
@@ -198,51 +202,35 @@ export default function ReservationSidebar({
                     value={tempDate}
                     onChange={(val) => setTempDate(val)}
                     placeholder={t("datetime.selectDate")}
+                    displayFormat="dd/MM/yyyy"
                     groupClassName="sidebar-date-input-override"
                   />
                 </div>
 
                 {/* === CUSTOM TIME DROPDOWN === */}
-                  <div className="space-y-1 relative" ref={dropdownRef}>
-                      <label className="text-[10px] font-bold text-stone-400 uppercase flex justify-between">
-                         {t('datetime.selectTime')}
-                         <span className="text-[9px] normal-case text-stone-400">{t('datetime.openingHours')}</span>
-                      </label>
-                      
-                      {/* Button Dropdown */}
-                      <div 
-                        onClick={() => setIsTimeDropdownOpen(!isTimeDropdownOpen)}
-                        className={`w-full text-sm font-bold text-[#1A3A52] bg-white border rounded-lg px-3 py-2 pl-9 flex items-center justify-between cursor-pointer transition-all ${isTimeDropdownOpen ? 'border-[#1A3A52] ring-1 ring-[#1A3A52]' : 'border-stone-300 hover:border-[#1A3A52]'}`}
-                      >
-                         <span>{formatTimeDisplay(tempTime)}</span>
-                         {isTimeDropdownOpen ? <ChevronUp size={14} className="text-stone-400"/> : <ChevronDown size={14} className="text-stone-400"/>}
-                      </div>
-                      <Clock size={16} className="absolute left-3 top-[2.4rem] -translate-y-1/2 text-stone-400 pointer-events-none"/>
-                      
-                      {/* Dropdown List Body */}
-                      {isTimeDropdownOpen && (
-                        <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-stone-200 rounded-lg shadow-xl max-h-43 overflow-y-auto z-50 
-                        [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-stone-50 [&::-webkit-scrollbar-thumb]:bg-stone-300 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-stone-400">
-                           {timeSlots.map((slot) => {
-                             const isSelected = slot === tempTime;
-                             return (
-                               <div 
-                                 key={slot} 
-                                 onClick={() => handleSelectTime(slot)}
-                                 className={`flex items-center justify-between px-4 py-2.5 text-sm cursor-pointer transition-colors ${isSelected ? 'bg-[#F0F5F9] text-[#1A3A52] font-bold' : 'text-stone-600 hover:bg-stone-50'}`}
-                               >
-                                 {formatTimeDisplay(slot)}
-                                 {isSelected && <Check size={14} className="text-[#DEA048]" />}
-                               </div>
-                             )
-                           })}
-                        </div>
-                      )}
-                  </div>
-                  {/* End Custom Dropdown */}
+                <div className="space-y-1">
+                  <label className="text-[10px] font-bold text-stone-400 uppercase flex justify-between">
+                    {t('datetime.selectTime')}
+                    <span className="text-[9px] normal-case text-stone-400">{t('datetime.openingHours')}</span>
+                  </label>
+                  <ALCombobox
+                    options={timeOptions}
+                    value={tempTime}
+                    onChange={(val) => handleSelectTime(val as string)}
+                    placeholder={t('datetime.selectTime')}
+                    iconStart={<Clock size={16} className="text-stone-400" />}
+                    className="!h-[40px] !rounded-lg !bg-white !border-stone-300 font-bold text-[#1A3A52]"
+                  />
+                  {timeError && (
+                    <p className="text-[10px] text-red-500 font-bold mt-1 animate-pulse">
+                      {timeError}
+                    </p>
+                  )}
+                </div>
+                {/* End Custom Dropdown */}
               </div>
             ) : (
-              <div className="sidebar-datetime-content-display fade-in animate-in slide-in-from-left-2">
+              <div className="sidebar-datetime-content-display flex flex-wrap items-center gap-x-2 fade-in animate-in slide-in-from-left-2">
                 <p className="sidebar-datetime-date">
                   {displayDate === "Invalid Date" ? date : displayDate}
                 </p>

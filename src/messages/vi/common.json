@@ -1,0 +1,1126 @@
+{
+  "Metadata": {
+    "title": "An Lac - Nhà Hàng Việt Nam",
+    "description": "Đỉnh cao của nghệ thuật ẩm thực Việt Nam ngay tại trung tâm thành phố."
+  },
+  "NotFound": {
+    "title": "Rất tiếc! Không tìm thấy trang!",
+    "description": "Xin lỗi, trang bạn đang tìm kiếm không tồn tại, đã bị xóa, đổi tên hoặc tạm thời không khả dụng",
+    "backToHome": "Quay lại Trang chủ"
+  },
+  "Unauthorized": {
+    "title": "Truy cập bị từ chối",
+    "description": "Bạn không có quyền truy cập vào khu vực này. Vui lòng liên hệ với quản trị viên nếu bạn cho rằng đây là một sự nhầm lẫn.",
+    "returnHome": "Về Trang chủ",
+    "goBack": "Quay lại"
+  },
+  "Header": {
+    "home": "Trang chủ",
+    "menu": "THỰC ĐƠN",
+    "about": "VỀ CHÚNG TÔI",
+    "contact": "LIÊN HỆ",
+    "qr_scan": "QUÉT MÃ QR",
+    "reserve": "ĐẶT BÀN",
+    "slogan_1": "Nhà Hàng Việt Nam",
+    "slogan_2": "Hương vị Việt Nam, tinh thần thân thiện"
+  },
+  "Footer": {
+    "description": "Định nghĩa bởi sự xuất sắc, dẫn dắt bởi di sản.\nĐỉnh cao của nghệ thuật ẩm thực Việt Nam\nngay tại trung tâm thành phố.",
+    "reservations": "Đặt bàn",
+    "location": "Vị trí",
+    "open_maps": "Mở bản đồ",
+    "newsletter": "Bản tin",
+    "newsletter_desc": "Tham gia cộng đồng của chúng tôi để nhận thông tin về\nsự kiện độc quyền và món ăn mùa mới.",
+    "email_placeholder": "Địa chỉ email",
+    "copyright": "© 2026 An Lac Nhà Hàng Việt Nam. Bản quyền đã được bảo hộ.",
+    "privacy": "Quyền riêng tư",
+    "terms": "Điều khoản",
+    "sitemap": "Sơ đồ trang web"
+  },
+  "Introduction": {
+    "Hero": {
+      "est": "Thành lập 1994",
+      "title": "Một không gian\n ẩm thực Việt\n bình yên",
+      "quote": "\"An Lạc là lời mời — hãy chậm lại, thưởng thức cẩn trọng và kết nối lại với điều cốt lõi.\""
+    },
+    "Chef": {
+      "label": "Nghệ Nhân",
+      "title": "Làm Chủ\nLinh Hồn Hương Vị",
+      "chef_1_name": "Bếp Trưởng Minh",
+      "chef_1_quote": "\"Ẩm thực là cầu nối giữa lịch sử và giác quan. Tại An Lac, chúng tôi không chỉ nấu; chúng tôi tạo nên ký ức qua gia vị truyền thống và kết cấu hiện đại.\"",
+      "chef_2_name": "Phó Bếp Trưởng Linh",
+      "chef_2_quote": "\"Sự cân bằng là kim chỉ nam của chúng tôi. Sự tương phản giữa nóng và lạnh, giòn và mềm, ngọt và mặn định hình bản sắc Việt Nam.\"",
+      "cta": "Đọc câu chuyện"
+    },
+    "Collection": {
+      "label": "Bộ Sưu Tập",
+      "title": "Kiệt Tác Đặc Trưng",
+      "dish_1_category": "Lựa Chọn Di Sản",
+      "dish_1_title": "Salad Củ Sen",
+      "dish_1_desc": "Trình bày nghệ thuật với lá vàng ăn được và nước sốt giấm Việt Nam lâu năm.",
+      "dish_1_main": "Sen Hoàng Gia",
+      "dish_1_sub": "Sự Tươi Mới Được Điêu Khắc",
+      "dish_2_category": "Nấu Chậm",
+      "dish_2_title": "Cá Kho Tộ",
+      "dish_2_desc": "Cá hồng om trong 6 giờ trong nồi gốm truyền thống với tiêu đen và đường thốt nốt.",
+      "dish_2_main": "Umami Đại Dương",
+      "dish_2_sub": "Ngấm 24 Giờ",
+      "dish_3_category": "Đặc Trưng",
+      "dish_3_title": "Phở Truyền Thống",
+      "dish_3_desc": "Bản giao hưởng của nước hầm xương 24 giờ với hoa hồi và thịt bò wagyu hiếm.",
+      "dish_3_main": "Nước Dùng Vàng",
+      "dish_3_sub": "Trái Tim Hà Nội"
+    },
+    "VirtualTour": {
+      "label": "Trải Nghiệm",
+      "title": "Tầm Nhìn Đắm Chìm",
+      "desc": "Đây là mô tả của bản thử nghiệm.",
+      "tour_label": "Thăm Quan Ảo",
+      "tour_title": "Xem 360°"
+    }
+  },
+  "Breadcrumb": {
+    "home": "Trang chủ",
+    "menu": "Thực đơn",
+    "about": "Về chúng tôi",
+    "dish_details": "Chi_Tiết_Món_Ăn"
+  },
+  "OrderPopup": {
+    "success_label": "Thành công",
+    "success_message": "Đã thêm món vào giỏ hàng",
+    "dish_name": "Bún Bò Huế\nHoàng Gia",
+    "price": "$18.50",
+    "quantity_label": "Số lượng",
+    "view_selection": "Xem giỏ hàng & Đặt món",
+    "continue_browsing": "Tiếp tục chọn món",
+    "footer_text": "Ẩm Thực Việt Nam Thủ Công"
+  },
+  "combobox": {
+    "placeholder": "Chọn...",
+    "searchPlaceholder": "Tìm kiếm...",
+    "emptyMessage": "Không có lựa chọn phù hợp.",
+    "loading": "Đang tải...",
+    "selectAll": "Chọn tất cả",
+    "clearAll": "Bỏ chọn tất cả",
+    "clearSelection": "Xóa lựa chọn",
+    "create": "Tạo",
+    "remove": "Bỏ"
+  },
+  "DishDetails": {
+    "Hero": {
+      "tag": "Kiệt Tác Của Bếp Trưởng",
+      "title_line_1": "Bún Bò Huế",
+      "title_line_2": "Hoàng Gia",
+      "subtitle": "Hành trình ẩm thực đến Cố đô Huế, cân bằng\nsự táo bạo và tinh tế trong một bát.",
+      "reserve": "Đặt Trải Nghiệm",
+      "share": "Chia sẻ",
+      "order_now": "Đặt Ngay",
+      "photo": "Hình ảnh",
+      "view_360": "Xem 360°",
+      "video": "Video"
+    },
+    "Narrative": {
+      "label": "Câu Chuyện",
+      "title": "Nơi truyền thống hoàng gia gặp gỡ\nsự tinh tế hiện đại.",
+      "paragraph_1": "Xuất phát từ ẩm thực cung đình triều Nguyễn, món này—được biết đến là Bún Bò Huế—là sự hòa quyện hài hòa giữa cay, chua, mặn và ngọt. Nó là minh chứng cho sự phức tạp ẩm thực của miền Trung Việt Nam, mang hương vị mạnh mẽ hơn nhiều so với Phở miền Bắc.",
+      "paragraph_2": "Linh hồn của món ăn nằm ở nước dùng. Chúng tôi ninh móng giò heo và xương bò cao cấp trong mười hai giờ với sả đập dập và một chút mắm ruốc. Quy trình tỉ mỉ này chiết xuất những nốt umami sâu sắc trong khi vẫn duy trì độ trong đặc trưng của ẩm thực Việt Nam cao cấp.",
+      "paragraph_3": "Phục vụ với bún to, hình trụ và hoàn thiện với sa tế ớt tự làm, mỗi bát là lời tri ân cho những buổi sáng sương mù bên sông Hương. Đây không chỉ là món súp; đó là lịch sử được đổ vào bát sứ.",
+      "pairing_label": "Gợi Ý Rượu",
+      "pairing_title": "Grand Cru Riesling 2018",
+      "pairing_desc": "\"Độ chua giòn và hương khoáng chất của loại Riesling Alsace này cắt ngang nước dùng đậm đà, cay nồng, làm sạch vòm miệng trong khi bổ sung cho hương thơm sả.\"",
+      "add_to_order": "Thêm vào đơn"
+    },
+    "Composition": {
+      "label": "Thành Phần",
+      "no_composition": "Chưa có thông tin thành phần",
+      "item_1_title": "Bún",
+      "item_1_sub": "Phong Cách Huế",
+      "item_1_desc": "Sợi bún to, hình trụ với độ dai hấp dẫn, truyền thống của miền Trung Việt Nam.",
+      "item_2_title": "Sả Hoàng Gia",
+      "item_2_sub": "Đồng Bằng Sông Cửu Long",
+      "item_2_desc": "Cây sả tươi thu hoạch mang lại hương thơm cam chanh đặc trưng cho nước dùng.",
+      "item_3_title": "Mắm Ruốc",
+      "item_3_sub": "Mắm Tôm Lên Men",
+      "item_3_desc": "Gia vị truyền thống cung cấp nền tảng umami thiết yếu cho món ăn.",
+      "stat_prep": "Chuẩn bị",
+      "stat_prep_val": "12 Giờ",
+      "stat_cal": "Calories",
+      "stat_cal_val": "580 kcal",
+      "stat_allergen": "Dị ứng",
+      "stat_allergen_val": "Hải sản",
+      "stat_spice": "Độ cay",
+      "stat_spice_val": "Trung bình - Cao"
+    }
+  },
+  "DishDetailsV2": {
+    "Hero": {
+      "label": "Trải Nghiệm Tương Tác 01",
+      "title": "Ẩm Thực Chiều Không",
+      "hold_rotate": "Giữ & Xoay để xem",
+      "order_now": "Đặt Ngay"
+    },
+    "Narrative": {
+      "tag": "Lựa Chọn Đặc Trưng Của Bếp Trưởng",
+      "title": "Bún Bò Huế Hoàng Gia",
+      "est": "Thành lập 1802 Triều Nguyễn",
+      "paragraph_1": "Xuất phát từ ẩm thực cung đình triều Nguyễn, món này—được biết đến là Bún Bò Huế—là sự hòa quyện hài hòa giữa cay, chua, mặn và ngọt. Nó là minh chứng cho sự phức tạp ẩm thực của miền Trung Việt Nam, mang hương vị mạnh mẽ hơn nhiều so với Phở miền Bắc.",
+      "paragraph_2": "Linh hồn của món ăn nằm ở nước dùng. Chúng tôi ninh móng giò heo và xương bò cao cấp trong mười hai giờ với sả đập dập và một chút mắm ruốc. Quy trình tỉ mỉ này chiết xuất những nốt umami sâu sắc trong khi vẫn duy trì độ trong đặc trưng của ẩm thực Việt Nam cao cấp.",
+      "paragraph_3": "Phục vụ với bún to, hình trụ và hoàn thiện với sa tế ớt tự làm, mỗi bát là lời tri ân cho những buổi sáng sương mù bên sông Hương. Đây không chỉ là món súp; đó là lịch sử được đổ vào bát sứ."
+    },
+    "Composition": {
+      "label": "Nền Tảng",
+      "title": "Thành Phần",
+      "item_1_title": "Bún",
+      "item_1_tag": "Truyền Thống Huế",
+      "item_1_desc": "Sợi bún to, hình trụ với độ dai hấp dẫn, được làm thủ công để mang trọng lượng đậm đà của nước dùng hoàng gia.",
+      "item_2_title": "Sả Mekong",
+      "item_2_tag": "Nền Thơm",
+      "item_2_desc": "Cây sả tươi thu hoạch mang lại hương thơm cam chanh đặc trưng, đập tay để giải phóng tinh dầu vào nước ninh.",
+      "item_3_title": "Mắm Ruốc",
+      "item_3_tag": "Umami Sâu",
+      "item_3_desc": "Mắm tôm lên men hiếm có từ vùng biển Huế, cung cấp nền tảng nhiều tầng lớp thiết yếu của món ăn.",
+      "stat_curing": "Thời gian ninh",
+      "stat_curing_val": "12 Giờ",
+      "stat_cal": "Giá trị năng lượng",
+      "stat_cal_val": "580 kcal",
+      "stat_spice": "Độ cay",
+      "stat_spice_val": "Cường độ cao",
+      "stat_allergen": "Dị ứng",
+      "stat_allergen_val": "Hải sản"
+    },
+    "CTA": {
+      "reserve": "Đặt Trải Nghiệm Của Bạn"
+    },
+    "Cinematic": {
+      "label": "Góc nhìn 02",
+      "title": "Nghệ Thuật Nước Dùng",
+      "description": "Nghiên cứu hình ảnh về tinh chất sả ninh mười hai giờ, được chụp vào thời điểm chiết xuất hương vị đỉnh cao."
+    },
+    "Video": {
+      "title": "Quy Trình Chế Biến",
+      "subtitle": "Một phim của An Lac",
+      "duration_label": "Thời lượng",
+      "duration_value": "02:45 PHÚT",
+      "resolution_label": "Độ phân giải",
+      "resolution_value": "4K ĐIỆN ẢNH"
+    }
+  },
+  "AboutUs": {
+    "title": "An Lạc – Vietnamese Eatery",
+    "subtitle": "Một không gian ẩm thực Việt bình yên",
+    "description_1": "An Lạc không phải là nơi phô trương.\nĐó là nơi của sự bình yên.",
+    "description_2": "An Lạc được dẫn dắt bởi cân bằng, ký ức và tĩnh lặng. Tên gọi mang ý nghĩa hạnh phúc bình yên, lấy cảm hứng từ hành trình của người sáng lập — một người mẹ của ba đứa con — tạo nên một không gian phản chiếu sự chăm sóc, ổn định và triết lý An cư Lạc nghiệp.",
+    "description_3": "Tại An Lạc, chúng tôi không tìm cách thay đổi ẩm thực Việt, mà tôn vinh nó. Kiên nhẫn, hài hòa và tinh tế tạo nên từng món ăn: ninh nhừ từ từ một nồi nước dùng, cân bằng tinh tế của thảo mộc, chiều sâu kín đáo của lên men và sự khiêm nhường của hạt gạo.",
+    "description_4": "Các kỹ thuật quen thuộc như kho, hấp và nướng được thể hiện với sự chính xác và tinh giản. Hương vị cân bằng, đo lường và tinh tế.",
+    "description_5": "An Lạc là lời mời — hãy chậm lại, thưởng thức cẩn trọng và kết nối lại với điều cốt lõi."
+  },
+  "OrderSuccess": {
+    "Loading": {
+      "title": "Đang xử lý...",
+      "subtitle": "Đang lấy chi tiết đơn hàng của bạn"
+    },
+    "NotFound": {
+      "title": "Không Tìm Thấy Đơn Hàng",
+      "description": "Chúng tôi không thể tìm thấy chi tiết đơn hàng bạn đang tìm. Nó có thể đã bị xóa hoặc ID không chính xác.",
+      "cta": "Quay về trang chủ"
+    },
+    "Header": {
+      "title": "Cảm Ơn Bạn",
+      "subtitle": "Đơn hàng của bạn đã được xác nhận thành công"
+    },
+    "Summary": {
+      "orderNumber": "Mã Đơn Hàng",
+      "totalAmount": "Tổng Tiền",
+      "diningOption": "Tùy Chọn Dùng Bữa",
+      "quote": "Hành trình ẩm thực của bạn bắt đầu...",
+      "readyIn": "Sẵn sàng trong {minutes} phút"
+    },
+    "DiningOption": {
+      "DINE_IN": "Dùng tại chỗ",
+      "TAKE_AWAY": "Mang đi"
+    },
+    "Location": {
+      "label": "Điểm Lấy Hàng",
+      "address": "Quai du Mont-Blanc 13, Geneva"
+    },
+    "Actions": {
+      "viewReceipt": "Xem biên lai",
+      "backHome": "Quay về Trang Chủ"
+    }
+  },
+  "OrderReceipt": {
+    "Header": {
+      "title": "Hóa Đơn",
+      "subtitle": "Cảm ơn đơn hàng của bạn"
+    },
+    "InfoStrip": {
+      "orderNumber": "Mã Đơn",
+      "date": "Ngày Đặt",
+      "time": "Giờ",
+      "status": "Trạng Thái"
+    },
+    "Items": {
+      "title": "Chi Tiết Đơn Hàng",
+      "quantity": "SL"
+    },
+    "Summary": {
+      "subtotal": "Tạm tính",
+      "tips": "Tiền tip / Phí dịch vụ",
+      "total": "Tổng Tiền"
+    },
+    "Payment": {
+      "label": "Đã thanh toán qua"
+    },
+    "Actions": {
+      "download": "Tải PDF",
+      "print": "In"
+    },
+    "BackLink": {
+      "label": "Quay lại Bảng điều khiển"
+    }
+  },
+  "Contact": {
+    "Hero": {
+      "title": "Kết Nối Với Chúng Tôi",
+      "description": "Trải nghiệm tinh túy của sang trọng Việt Nam trên bờ Hồ Geneva.\nChúng tôi ở đây để hỗ trợ các câu hỏi của bạn, đặt sự kiện riêng tư và yêu cầu đặc biệt."
+    },
+    "Info": {
+      "addressLabel": "Địa Chỉ",
+      "address": "Quai du Mont-Blanc 13\n1201 Geneva, Switzerland",
+      "phoneLabel": "Điện Thoại",
+      "phone": "+41 22 123 45 67",
+      "emailLabel": "Email",
+      "email": "geneva@aulac.ch",
+      "hoursLabel": "Giờ Mở Cửa",
+      "hours": "Thứ Hai - Chủ Nhật: 11:30 Sáng - 11:00 Tối"
+    },
+    "Map": {
+      "title": "Tìm Chúng Tôi",
+      "hint": "Nhấp để tương tác"
+    },
+    "Socials": {
+      "title": "Theo Dõi Hành Trình",
+      "instagram": "Instagram",
+      "facebook": "Facebook",
+      "linkedin": "LinkedIn"
+    },
+    "Form": {
+      "title": "Gửi Câu Hỏi",
+      "fullName": "Họ và Tên",
+      "fullNamePlaceholder": "Tên của bạn",
+      "email": "Địa Chỉ Email",
+      "subject": "Chủ Đề",
+      "message": "Tin Nhắn",
+      "messagePlaceholder": "Chúng tôi có thể giúp gì cho bạn?",
+      "submit": "Gửi Tin Nhắn",
+      "subjects": {
+        "general": "Câu Hỏi Chung",
+        "events": "Sự Kiện Riêng Tư",
+        "reservation": "Đặt Bàn"
+      }
+    },
+    "Footer": {
+      "copyright": "© 2024 An Lac Nhà Hàng Việt Nam - Geneva. Bản quyền đã được bảo hộ."
+    }
+  },
+  "MenuListing": {
+    "FilterBar": {
+      "all": "Tất cả",
+      "premium": "Cao cấp",
+      "seafood": "Hải sản",
+      "signature": "Đặc trưng",
+      "italian": "Ý",
+      "desserts": "Tráng miệng",
+      "beverages": "Đồ uống",
+      "appetizers": "Khai vị",
+      "main course": "Món chính",
+      "search_placeholder": "Tìm kiếm món ăn tinh tế...",
+      "metal": "Kim",
+      "wood": "Mộc",
+      "water": "Thủy",
+      "fire": "Hỏa",
+      "earth": "Thổ",
+      "vegetarian": "Chay"
+    },
+    "MenuGrid": {
+      "title": "Thực Đơn Cao Cấp",
+      "subtitle": "Trải nghiệm ẩm thực tinh tế từ các đầu bếp đẳng cấp thế giới, pha trộn hương vị Việt Nam truyền thống với kỹ thuật ẩm thực hiện đại.",
+      "book_link": "Không biết ăn gì? Đặt bàn trước",
+      "items": {
+        "1_name": "Bò Wagyu Nướng Cao Cấp",
+        "1_desc": "Thịt bò Wagyu A5 Nhật Bản nướng than, phục vụ với rau củ theo mùa và sốt nấm truffle.",
+        "2_name": "Tôm Hùm Thermidor",
+        "2_desc": "Tôm hùm tươi chế biến theo phong cách Pháp cổ điển, phủ sốt kem vàng và thảo mộc.",
+        "3_name": "Vịt Quay Bắc Kinh",
+        "3_desc": "Vịt vàng giòn phục vụ với bánh crepe ấm, hành lá và sốt đặc biệt của nhà hàng.",
+        "4_name": "Risotto Nấm Truffle",
+        "4_desc": "Gạo Arborio béo ngậy nấu chậm với phô mai Gruyère, rượu vang trắng và nấm truffle đen.",
+        "5_name": "Cá Hồi Hun Khói",
+        "5_desc": "Cá hồi hun khói tự làm phục vụ với crème fraîche, rau mầm tươi và bánh mì lúa mạch đen nướng.",
+        "6_name": "Tiramisu",
+        "6_desc": "Món tráng miệng Ý cổ điển làm từ mascarpone, bánh ladyfinger ngâm espresso và bột ca cao.",
+        "7_name": "Thịt Bò Nướng Hàn Quốc",
+        "7_desc": "Thịt bò thái mỏng nướng trên bàn bằng than, phục vụ với rau tươi và sốt gochujang.",
+        "8_name": "Krug Clos d'Ambonnay",
+        "8_desc": "Rượu champagne sang trọng với hương thơm phức tạp và ghi chú nếm tinh tế, hoàn hảo cho lễ kỷ niệm."
+      },
+      "order_btn": "Đặt Ngay"
+    },
+    "CartSummary": {
+      "title": "Tóm Tắt",
+      "items_count": "{count} Món",
+      "confirm_btn": "Xác Nhận Đơn"
+    }
+  },
+  "QrScan": {
+    "HeroSection": {
+      "label": "Không khí",
+      "quote": "\"Một hành trình ẩm thực bắt đầu bằng một tia lửa kỹ thuật số.\""
+    },
+    "ScanContent": {
+      "title": "Khám Phá\nLựa Chọn Của Chúng Tôi",
+      "subtitle": "Quét để khám phá câu chuyện ẩm thực đầy đủ của chúng tôi trên thiết bị của bạn",
+      "step_scan": "Quét",
+      "step_explore": "Khám phá",
+      "step_order": "Đặt món"
+    }
+  },
+  "FillInforCustomer": {
+    "title": "Chào Mừng Đến An Lac",
+    "subtitle": "Vui lòng cung cấp thông tin của bạn để bắt đầu trải nghiệm ẩm thực",
+    "form": {
+      "fullName": "Họ và tên",
+      "fullNamePlaceholder": "Nhập họ và tên của bạn",
+      "phoneNumber": "Số điện thoại",
+      "phoneNumberPlaceholder": "Nhập số điện thoại của bạn",
+      "emailAddress": "Địa chỉ email",
+      "emailAddressPlaceholder": "Nhập địa chỉ email của bạn",
+      "tableNumber": "Số bàn",
+      "submitting": "Đang xử lý...",
+      "startDining": "Bắt đầu dùng bữa",
+      "skipToMenu": "Bỏ qua, xem thực đơn",
+      "errors": {
+        "phoneRequired": "Số điện thoại là bắt buộc",
+        "emailInvalid": "Địa chỉ email không hợp lệ",
+        "tableOccupied": "Bàn này đã có khách",
+        "tableOccupiedDesc": "Bàn này đã có người khác sử dụng. Vui lòng chọn bàn khác.",
+        "updateFailed": "Không thể cập nhật trạng thái bàn. Vui lòng thử lại."
+      }
+    },
+    "footer": "Ẩm thực Việt Nam thủ công"
+  },
+  "ConfirmOrder": {
+    "OrderItem": {
+      "add_note": "Thêm ghi chú",
+      "edit_note": "Sửa ghi chú",
+      "note_placeholder": "ví dụ: Không cay, thêm sốt...",
+      "note_saved": "Đã lưu ghi chú"
+    },
+    "DiningOption": {
+      "eyebrow": "Bạn muốn thưởng thức như thế nào?",
+      "title": "Tùy Chọn Dùng Bữa",
+      "dine_in_label": "Trải Nghiệm",
+      "dine_in_title": "Dùng tại chỗ",
+      "dine_in_desc": "Đắm chìm trong bầu không khí yên tĩnh với dịch vụ đầy đủ.",
+      "take_away_label": "Nhanh & Tươi",
+      "take_away_title": "Mang đi",
+      "take_away_desc": "Thưởng thức hương vị tinh tế của chúng tôi trong sự thoải mái của ngôi nhà của bạn.",
+      "helper_dine_in": "Tiếp tục chọn bàn ưa thích của bạn.",
+      "helper_take_away": "Tiếp tục lên lịch thời gian nhận hàng.",
+      "btn_select_table": "Chọn Bàn",
+      "btn_checkout": "Đến Thanh Toán"
+    },
+    "OrderSummary": {
+      "title": "Xem Lại Đơn Hàng",
+      "section_title": "Món Đã Chọn",
+      "quantity_label": "Số lượng",
+      "subtotal": "Tạm tính",
+      "tax": "Dịch vụ & Thuế",
+      "total": "Tổng Tiền",
+      "items": {
+        "1_name": "Salad Củ Sen Hoàng Gia",
+        "1_category": "Lựa Chọn Di Sản",
+        "2_name": "Phở Bò Wagyu Truyền Thống",
+        "2_category": "Đặc Trưng"
+      }
+    }
+  },
+  "common": {
+    "table": {
+      "searchPlaceholder": "Tìm kiếm",
+      "selected": "Đã chọn",
+      "unselect": "Bỏ chọn",
+      "clearFilter": "Bỏ lọc",
+      "refresh": "Lấy lại dữ liệu",
+      "pin": "Ghim cột",
+      "unpin": "Bỏ ghim cột",
+      "sort": {
+        "none": "Không sắp xếp",
+        "asc": "Tăng dần",
+        "desc": "Giảm dần"
+      },
+      "operator": {
+        "contains": "Chứa",
+        "notContains": "Không chứa",
+        "equals": "Bằng",
+        "notequal": "Khác",
+        "different": "Khác",
+        "startsWith": "Bắt đầu bằng",
+        "endsWith": "Kết thúc bằng",
+        "greater": "Lớn hơn",
+        "less": "Nhỏ hơn",
+        "greaterOrEqual": "Lớn hơn hoặc bằng",
+        "lessOrEqual": "Nhỏ hơn hoặc bằng",
+        "isNull": "Trống",
+        "notNull": "Không trống",
+        "selected": "Đã chọn"
+      },
+      "noData": "Không có dữ liệu",
+      "pagination": {
+        "total": "Tổng số",
+        "pageSize": "Số dòng/trang",
+        "first": "Trang đầu",
+        "prev": "Trang trước",
+        "next": "Trang sau",
+        "last": "Trang cuối"
+      }
+    },
+    "apiErrors": {
+      "sessionExpired": "Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.",
+      "tokenRefreshFailed": "Không thể làm mới phiên đăng nhập. Vui lòng đăng nhập lại.",
+      "noAccessToken": "Bạn cần đăng nhập trước khi tiếp tục.",
+      "unauthorized": "Bạn chưa được xác thực. Vui lòng đăng nhập và thử lại.",
+      "forbidden": "Bạn không có quyền thực hiện thao tác này.",
+      "notFound": "Không tìm thấy dữ liệu yêu cầu.",
+      "validation": "Một số giá trị đầu vào không hợp lệ. Vui lòng kiểm tra lại.",
+      "conflict": "Thao tác này xung đột với dữ liệu hiện có.",
+      "unprocessable": "Không thể hoàn tất thao tác với dữ liệu hiện tại.",
+      "timeout": "Yêu cầu xử lý quá lâu. Vui lòng thử lại.",
+      "network": "Không thể kết nối đến máy chủ. Vui lòng kiểm tra mạng.",
+      "http": "Yêu cầu thất bại. Vui lòng thử lại.",
+      "httpStatus": "Yêu cầu thất bại với mã trạng thái {status}.",
+      "unexpected": "Đã xảy ra lỗi không mong muốn. Vui lòng thử lại sau."
+    }
+  },
+  "ShiftManagement": {
+    "Common": {
+      "shiftType": "Loại ca",
+      "businessDate": "Ngày làm việc",
+      "plannedStart": "Giờ bắt đầu",
+      "plannedEnd": "Giờ kết thúc",
+      "status": "Trạng thái",
+      "notes": "Ghi chú",
+      "assignedStaff": "Nhân viên phân công",
+      "role": "Vai trò",
+      "checkIn": "Chấm công vào",
+      "checkOut": "Chấm công ra",
+      "late": "Trễ",
+      "absent": "Vắng mặt",
+      "onDuty": "Đang làm việc",
+      "completed": "Hoàn thành",
+      "scheduled": "Đã lên lịch",
+      "workedHours": "Giờ làm việc",
+      "lateMinutes": "Trễ {minutes} phút",
+      "earlyLeaveMinutes": "Về sớm {minutes} phút",
+      "reason": "Lý do",
+      "adjustmentReason": "Lý do điều chỉnh"
+    },
+    "Schedule": {
+      "title": "Lịch Ca Làm Việc",
+      "description": "Tạo, công bố và quản lý lịch ca và phân công nhân viên.",
+      "addNew": "Tạo Ca",
+      "createTitle": "Tạo Lịch Ca",
+      "editTitle": "Chỉnh Sửa Lịch Ca",
+      "publishConfirm": "Công bố ca này? Nhân viên sẽ có thể xem.",
+      "cancelConfirm": "Hủy ca này? Không thể hoàn tác.",
+      "noSchedules": "Không tìm thấy lịch ca.",
+      "assignStaff": "Phân Công Nhân Viên",
+      "cancelAssignment": "Hủy Phân Công",
+      "cancelAssignmentConfirm": "Hủy phân công này?",
+      "table": {
+        "date": "Ngày",
+        "shiftType": "Loại Ca",
+        "timeRange": "Khung Giờ",
+        "status": "Trạng Thái",
+        "assigned": "Phân Công",
+        "actions": "Thao Tác"
+      },
+      "actions": {
+        "publish": "Công Bố",
+        "close": "Đóng Ca",
+        "cancel": "Hủy",
+        "edit": "Chỉnh Sửa",
+        "viewAssignments": "Xem Phân Công"
+      }
+    },
+    "Live": {
+      "title": "Bảng Trực Ca Trực Tiếp",
+      "description": "Xem trực tiếp tình trạng chấm công ca hôm nay.",
+      "summary": {
+        "scheduled": "Đã Lên Lịch",
+        "active": "Đang Làm",
+        "late": "Trễ",
+        "absent": "Vắng",
+        "completed": "Hoàn Thành"
+      },
+      "table": {
+        "staff": "Nhân Viên",
+        "role": "Vai Trò",
+        "shiftType": "Loại Ca",
+        "plannedTime": "Giờ Kế Hoạch",
+        "checkIn": "Vào",
+        "checkOut": "Ra",
+        "status": "Trạng Thái",
+        "lateMinutes": "Trễ (phút)"
+      }
+    },
+    "MyShift": {
+      "title": "Ca Của Tôi",
+      "description": "Xem ca được phân công và chấm công vào/ra.",
+      "todayShift": "Ca Hôm Nay",
+      "upcomingShifts": "Ca Sắp Tới",
+      "pastShifts": "Ca Đã Qua",
+      "noShifts": "Không có ca được phân công.",
+      "checkInBtn": "Chấm Công Vào",
+      "checkOutBtn": "Chấm Công Ra",
+      "checkedInAt": "Đã vào lúc {time}",
+      "checkedOutAt": "Đã ra lúc {time}"
+    },
+    "Reports": {
+      "title": "Báo Cáo Ca",
+      "description": "Báo cáo chấm công, giờ làm và ngoại lệ.",
+      "tabs": {
+        "attendance": "Chấm Công",
+        "workedHours": "Giờ Làm",
+        "exceptions": "Ngoại Lệ"
+      },
+      "filters": {
+        "fromDate": "Từ Ngày",
+        "toDate": "Đến Ngày",
+        "staff": "Nhân Viên",
+        "shiftType": "Loại Ca",
+        "attendanceStatus": "Trạng Thái Chấm Công",
+        "applyFilters": "Áp Dụng",
+        "clearFilters": "Xóa"
+      },
+      "attendance": {
+        "totalAssigned": "Tổng Phân Công",
+        "attendanceRate": "Tỷ Lệ Chấm Công",
+        "lateCount": "Trễ",
+        "absentCount": "Vắng",
+        "table": {
+          "staff": "Nhân Viên",
+          "role": "Vai Trò",
+          "assigned": "Phân Công",
+          "present": "Có Mặt",
+          "late": "Trễ",
+          "absent": "Vắng",
+          "rate": "Tỷ Lệ"
+        }
+      },
+      "workedHours": {
+        "totalScheduled": "Tổng Giờ KH",
+        "totalWorked": "Tổng Giờ Làm",
+        "variance": "Chênh Lệch",
+        "table": {
+          "staff": "Nhân Viên",
+          "role": "Vai Trò",
+          "scheduledMin": "KH (phút)",
+          "workedMin": "Làm (phút)",
+          "varianceMin": "Chênh (phút)",
+          "incomplete": "Thiếu Dữ Liệu"
+        }
+      },
+      "exceptions": {
+        "lateCount": "Đến Trễ",
+        "absentCount": "Vắng Mặt",
+        "earlyLeaveCount": "Về Sớm",
+        "adjustmentCount": "Điều Chỉnh Thủ Công",
+        "table": {
+          "date": "Ngày",
+          "staff": "Nhân Viên",
+          "role": "Vai Trò",
+          "shiftType": "Loại Ca",
+          "exceptionType": "Loại Ngoại Lệ",
+          "minutesAffected": "Phút",
+          "reviewer": "Người Duyệt"
+        }
+      },
+      "refresh": "Làm mới",
+      "exportCsv": "Xuất CSV",
+      "selectDateRange": "Chọn khoảng thời gian để tải báo cáo",
+      "highAbsenceRate": "Tỷ lệ vắng mặt cao",
+      "presets": {
+        "today": "Hôm nay",
+        "thisWeek": "Tuần này",
+        "last7Days": "7 ngày qua",
+        "thisMonth": "Tháng này",
+        "lastMonth": "Tháng trước"
+      },
+      "health": {
+        "attendanceRate": "Tỷ Lệ Chấm Công",
+        "hoursCompliance": "Tuân Thủ Giờ Làm",
+        "exceptions": "Ngoại Lệ",
+        "shiftsPresent": "{present} / {total} ca",
+        "hoursWorked": "{worked}h đã làm / {scheduled}h",
+        "noAttendanceData": "Chưa có dữ liệu chấm công",
+        "noHoursData": "Chưa có dữ liệu giờ làm",
+        "issuesFlagged": "{count, plural, =0 {Không có vấn đề} =1 {1 vấn đề} other {# vấn đề được ghi nhận}}"
+      },
+      "attendanceTab": {
+        "inner": {
+          "overview": "Tổng Quan",
+          "staffSummary": "Theo Nhân Viên",
+          "details": "Chi Tiết"
+        },
+        "searchLabel": "Tìm Nhân Viên",
+        "searchPlaceholder": "Nhập tên nhân viên...",
+        "filterByStaff": "Lọc theo nhân viên",
+        "allStaff": "Tất cả nhân viên",
+        "clearSearch": "Xóa",
+        "kpi": {
+          "totalAssignments": "Tổng phân công",
+          "checkInRate": "Tỷ lệ chấm công",
+          "lateArrivals": "Đi trễ",
+          "absences": "Vắng mặt"
+        },
+        "chart": {
+          "dailyBreakdown": "Chấm Công Theo Ngày",
+          "onTime": "Đúng Giờ",
+          "late": "Trễ",
+          "absent": "Vắng"
+        },
+        "topAbsences": "Vắng Nhiều Nhất",
+        "topLate": "Trễ Nhiều Nhất",
+        "recordsOf": "trong tổng số",
+        "scorePrefix": "Điểm:",
+        "insightsLabel": "Nhận Xét",
+        "showInsights": "Hiện Nhận Xét",
+        "hideInsights": "Ẩn Nhận Xét",
+        "insights": {
+          "highAbsence": "Tỷ lệ vắng mặt cao: {absentRate}% ca ({absent} lượt vắng). Hãy rà soát phân ca.",
+          "highLate": "Tỷ lệ đi trễ cao: {lateRate}%. Cân nhắc điều chỉnh giờ bắt đầu ca.",
+          "frequentAbsence": "Có {count} nhân viên vắng từ 3 lần trở lên trong giai đoạn này.",
+          "perfectAttendance": "Chấm công hoàn hảo! Tất cả ca đều có check-in trong giai đoạn đã chọn.",
+          "zeroLateAbsent": "Rất tốt! Không có ca vắng và không có ca đi trễ trong giai đoạn đã chọn."
+        },
+        "statusCards": {
+          "onTime": "Đúng Giờ",
+          "late": "Trễ",
+          "absent": "Vắng",
+          "present": "Có Mặt"
+        },
+        "badges": {
+          "total": "Tổng: {value}",
+          "present": "Có mặt: {value}",
+          "onTime": "Đúng giờ: {value}",
+          "late": "Trễ: {value}",
+          "absent": "Vắng: {value}"
+        },
+        "manualAdjusted": "Điều chỉnh thủ công",
+        "summaryTable": {
+          "staff": "Nhân Viên",
+          "total": "Tổng",
+          "present": "Có Mặt",
+          "onTime": "Đúng Giờ",
+          "late": "Trễ",
+          "absent": "Vắng",
+          "checkInRate": "Tỷ Lệ",
+          "reliability": "Độ Tin Cậy"
+        },
+        "detailTable": {
+          "date": "Ngày",
+          "staff": "Nhân Viên",
+          "shift": "Ca",
+          "planned": "Kế Hoạch",
+          "status": "Trạng Thái",
+          "checkIn": "Vào",
+          "checkOut": "Ra",
+          "late": "Trễ",
+          "earlyLeave": "Về Sớm"
+        }
+      },
+      "workedHoursTab": {
+        "inner": {
+          "summary": "Tổng Quan",
+          "details": "Chi Tiết"
+        },
+        "searchLabel": "Tìm Nhân Viên",
+        "searchPlaceholder": "Nhập tên nhân viên...",
+        "clearSearch": "Xóa",
+        "kpi": {
+          "totalScheduled": "Tổng giờ kế hoạch",
+          "totalWorked": "Tổng giờ làm",
+          "variance": "Chênh lệch",
+          "avgEfficiency": "Hiệu suất TB",
+          "incomplete": "thiếu dữ liệu"
+        },
+        "overSchedule": "vượt kế hoạch",
+        "underSchedule": "thiếu kế hoạch",
+        "cards": {
+          "staffTracked": "Nhân Viên",
+          "totalWorked": "Tổng Giờ Làm",
+          "scheduled": "Kế Hoạch",
+          "overtime": "Tăng Ca"
+        },
+        "chartTitle": "Giờ Làm vs Kế Hoạch — Top Nhân Viên",
+        "chartScheduled": "Kế Hoạch",
+        "chartWorked": "Thực Tế",
+        "overtimeAlert": "{count, plural, =1 {1 nhân viên làm thêm 30+ phút so với kế hoạch.} other {# nhân viên làm thêm 30+ phút so với kế hoạch.}}",
+        "table": {
+          "staff": "Nhân Viên",
+          "scheduled": "Kế Hoạch",
+          "worked": "Thực Tế",
+          "variance": "Chênh Lệch",
+          "efficiency": "Hiệu Suất",
+          "overtime": "Tăng Ca",
+          "incomplete": "Thiếu DL"
+        }
+      },
+      "exceptionsTab": {
+        "inner": {
+          "summary": "Tổng Quan",
+          "byStaff": "Theo NV",
+          "allRecords": "Tất Cả"
+        },
+        "searchLabel": "Tìm Nhân Viên",
+        "searchPlaceholder": "Nhập tên nhân viên...",
+        "clearSearch": "Xóa",
+        "kpi": {
+          "lateIncidents": "Đến trễ",
+          "absences": "Vắng mặt",
+          "earlyDepartures": "Về sớm",
+          "manualAdjustments": "Điều chỉnh thủ công",
+          "totalMinutes": "Tổng phút bị ảnh hưởng"
+        },
+        "cards": {
+          "lateArrivals": "Đến Trễ",
+          "absences": "Vắng Mặt",
+          "earlyLeave": "Về Sớm",
+          "manual": "Thủ Công",
+          "adjusted": "Điều Chỉnh"
+        },
+        "adjustedLabel": "✦ Đã Điều Chỉnh",
+        "noStaffFound": "Không có nhân viên nào có ngoại lệ.",
+        "table": {
+          "date": "Ngày",
+          "staff": "Nhân Viên",
+          "shift": "Ca",
+          "exceptionType": "Loại Ngoại Lệ",
+          "minutes": "Phút",
+          "reviewer": "Người Duyệt"
+        }
+      }
+    },
+    "ScheduleList": {
+      "title": "Phân Ca Nhân Viên",
+      "description": "Phân công nhân viên theo mẫu ca và theo dõi chấm công.",
+      "searchPlaceholder": "Tìm phân công",
+      "newAssignment": "Tạo phân công",
+      "confirmCancel": "Hủy phân công này?",
+      "activeCount": "Đang hiệu lực: {count}",
+      "cancelledCount": "Đã hủy: {count}",
+      "filters": {
+        "fromDate": "Từ ngày",
+        "toDate": "Đến ngày",
+        "fromDatePlaceholder": "Chọn ngày bắt đầu",
+        "toDatePlaceholder": "Chọn ngày kết thúc",
+        "refresh": "Làm mới"
+      },
+      "table": {
+        "no": "STT",
+        "date": "Ngày",
+        "template": "Mẫu ca",
+        "staff": "Nhân viên",
+        "plannedTime": "Giờ kế hoạch",
+        "status": "Trạng thái"
+      },
+      "noData": "Không có phân công nào. Hãy đổi bộ lọc ngày hoặc tạo phân công mới."
+    },
+    "AssignmentForm": {
+      "createTitle": "Tạo Phân Công Ca",
+      "editTitle": "Chỉnh Sửa Phân Công",
+      "cancel": "Hủy",
+      "saveChanges": "Lưu thay đổi",
+      "assignStaff": "Phân công",
+      "plannedHint": "Để trống giờ kế hoạch nếu muốn dùng giờ mặc định của mẫu ca.",
+      "fields": {
+        "shiftTemplate": "Mẫu Ca",
+        "staffMember": "Nhân Viên",
+        "workDate": "Ngày Làm Việc",
+        "plannedStart": "Giờ Bắt Đầu",
+        "plannedEnd": "Giờ Kết Thúc",
+        "notes": "Ghi Chú"
+      },
+      "placeholders": {
+        "shiftTemplate": "Chọn mẫu ca...",
+        "staffMember": "Chọn nhân viên...",
+        "loadingStaff": "Đang tải nhân viên...",
+        "workDate": "Chọn ngày",
+        "notes": "Ghi chú (không bắt buộc)..."
+      }
+    }
+  },
+  "InvoiceDetail": {
+    "title": "Chi tiết hóa đơn",
+    "loading": "Đang tải hóa đơn...",
+    "errorLoad": "Lỗi khi tải hóa đơn",
+    "notFound": "Không tìm thấy hóa đơn.",
+    "exportPrint": "Xuất / In",
+    "back": "Quay lại",
+    "status": {
+      "paid": "Đã thanh toán"
+    },
+    "from": "Hóa đơn từ",
+    "phone": "Điện thoại",
+    "to": "Khách hàng",
+    "walkInCustomer": "Khách lẻ",
+    "date": "Ngày",
+    "type": "Loại",
+    "table": "Bàn",
+    "items": "Chi tiết món",
+    "no": "STT",
+    "itemDetails": "Tên món",
+    "qty": "SL",
+    "rate": "Đơn giá",
+    "amount": "Thành tiền",
+    "terms": "Điều khoản và Quy định",
+    "term1": "1. Cảm ơn quý khách đã dùng bữa.",
+    "term2": "2. Vui lòng giữ lại biên lai này để đối chiếu.",
+    "paymentVerified": "Lưu ý: Thanh toán đã được xác nhận bởi {staffName}.",
+    "paymentMethod": "P.Thức TToán",
+    "subtotal": "Tạm tính",
+    "discount": "Giảm giá",
+    "tip": "Tiền thưởng (Tip)",
+    "total": "Tổng cộng",
+    "downloadPdf": "Tải PDF",
+    "printInvoice": "In hóa đơn",
+    "defaultStaff": "Nhân viên",
+    "thankYouBusiness": "Cảm ơn quý khách đã ủng hộ!",
+    "currency": "VND"
+  },
+  "Customer": {
+    "close": "Đóng",
+    "edit": "Chỉnh sửa",
+    "List": {
+      "title": "Quản lý khách hàng",
+      "description": "Quản lý và xem thông tin khách hàng, lịch sử đặt hàng và điểm thành viên.",
+      "searchPlaceholder": "Tìm kiếm theo tên, SĐT hoặc email...",
+      "addNew": "Thêm khách hàng",
+      "table": {
+        "no": "STT",
+        "customerName": "Khách hàng",
+        "email": "Email",
+        "type": "Loại",
+        "orders": "Đơn hàng",
+        "points": "Điểm",
+        "lastOrder": "Đơn gần nhất"
+      },
+      "filters": {
+        "member": "Thành viên",
+        "guest": "Khách vãng lai"
+      },
+      "labels": {
+        "member": "Thành viên",
+        "guest": "Khách vãng lai"
+      },
+      "actions": {
+        "view": "Xem chi tiết",
+        "edit": "Chỉnh sửa thông tin",
+        "delete": "Xóa khách hàng"
+      },
+      "notifications": {
+        "loadError": "Không thể tải thông tin khách hàng",
+        "deleteSuccess": "Xóa khách hàng thành công",
+        "deleteError": "Không thể xóa khách hàng"
+      },
+      "deleteModal": {
+        "title": "Xóa khách hàng",
+        "message": "Bạn có chắc chắn muốn xóa khách hàng '{name}'? Hành động này không thể hoàn tác.",
+        "confirm": "Xóa",
+        "cancel": "Hủy"
+      }
+    },
+    "Add": {
+      "title": "Thêm khách hàng mới",
+      "saveButton": "Lưu",
+      "cancel": "Hủy",
+      "fields": {
+        "phone": "Số điện thoại",
+        "fullName": "Họ và tên",
+        "email": "Email",
+        "loyaltyPoints": "Điểm tích lũy",
+        "isMember": "Trạng thái thành viên",
+        "createdAt": "Ngày tạo"
+      },
+      "placeholders": {
+        "phone": "Nhập số điện thoại",
+        "fullName": "Nhập họ và tên",
+        "email": "Nhập địa chỉ email",
+        "loyaltyPoints": "Nhập điểm tích lũy"
+      },
+      "validation": {
+        "phoneRequired": "Số điện thoại là bắt buộc",
+        "phoneMaxLength": "Số điện thoại không được quá 20 ký tự",
+        "phoneInvalid": "Số điện thoại chỉ được chứa chữ số",
+        "nameMaxLength": "Họ tên không được quá 100 ký tự",
+        "emailMaxLength": "Email không được quá 150 ký tự",
+        "emailInvalid": "Email không hợp lệ",
+        "pointsNegative": "Điểm tích lũy không được âm"
+      },
+      "notifications": {
+        "createSuccess": "Thêm khách hàng thành công",
+        "createError": "Không thể thêm khách hàng"
+      }
+    },
+    "Edit": {
+      "title": "Chỉnh sửa khách hàng",
+      "saveButton": "Lưu thay đổi",
+      "cancel": "Hủy",
+      "fields": {
+        "phone": "Số điện thoại",
+        "fullName": "Họ và tên",
+        "email": "Email",
+        "loyaltyPoints": "Điểm tích lũy",
+        "isMember": "Trạng thái thành viên",
+        "createdAt": "Ngày tạo"
+      },
+      "placeholders": {
+        "phone": "Nhập số điện thoại",
+        "fullName": "Nhập họ và tên",
+        "email": "Nhập địa chỉ email",
+        "loyaltyPoints": "Nhập điểm tích lũy"
+      },
+      "validation": {
+        "phoneRequired": "Số điện thoại là bắt buộc",
+        "phoneMaxLength": "Số điện thoại không được quá 20 ký tự",
+        "phoneInvalid": "Số điện thoại chỉ được chứa chữ số",
+        "nameMaxLength": "Họ tên không được quá 100 ký tự",
+        "emailMaxLength": "Email không được quá 150 ký tự",
+        "emailInvalid": "Email không hợp lệ",
+        "pointsNegative": "Điểm tích lũy không được âm"
+      },
+      "notifications": {
+        "updateSuccess": "Cập nhật khách hàng thành công",
+        "updateError": "Không thể cập nhật khách hàng"
+      }
+    },
+    "Detail": {
+      "title": "Chi tiết khách hàng",
+      "saveButton": "Đóng",
+      "cancel": "Đóng",
+      "fields": {
+        "phone": "Số điện thoại",
+        "fullName": "Họ và tên",
+        "email": "Email",
+        "loyaltyPoints": "Điểm tích lũy",
+        "isMember": "Trạng thái thành viên",
+        "createdAt": "Ngày tạo"
+      },
+      "placeholders": {
+        "phone": "",
+        "fullName": "",
+        "email": "",
+        "loyaltyPoints": ""
+      },
+      "validation": {
+        "phoneRequired": "",
+        "phoneMaxLength": "",
+        "phoneInvalid": "",
+        "nameMaxLength": "",
+        "emailMaxLength": "",
+        "emailInvalid": "",
+        "pointsNegative": ""
+      },
+      "backToCustomers": "Quay lại danh sách",
+      "customerNotFound": "Không tìm thấy khách hàng.",
+      "guestCustomer": "Khách vãng lai",
+      "member": "Thành viên",
+      "guest": "Khách",
+      "noPhone": "Không có SĐT",
+      "joined": "Tham gia",
+      "orders": "Số đơn",
+      "totalSpent": "Tổng chi tiêu",
+      "points": "Điểm",
+      "orderHistory": "Lịch sử mua hàng",
+      "from": "Từ ngày",
+      "to": "Đến ngày",
+      "allOrderTypes": "Tất cả loại đơn",
+      "clear": "Xóa bộ lọc",
+      "noOrdersFound": "Không tìm thấy đơn hàng nào.",
+      "totalAmount": "Tổng tiền",
+      "tip": "Tiền Tip",
+      "fetchDetailError": "Không thể tải chi tiết đơn hàng",
+      "orderTitle": "Đơn hàng",
+      "generalInfo": "Thông tin chung",
+      "table": "Bàn",
+      "staff": "Nhân viên",
+      "type": "Loại đơn",
+      "paymentDetails": "Chi tiết thanh toán",
+      "noPaymentRecorded": "Chưa có dữ liệu thanh toán",
+      "received": "Đã nhận",
+      "change": "Tiền thừa",
+      "items": "Món ăn",
+      "promotions": "Khuyến mãi",
+      "coupons": "Mã giảm giá",
+      "note": "Ghi chú",
+      "noPromotionsApplied": "Không có khuyến mãi",
+      "noCouponsApplied": "Không có mã giảm giá",
+      "of": "trên",
+      "status": {
+        "PENDING": "Chờ xử lý",
+        "IN_PROGRESS": "Đang thực hiện",
+        "COMPLETED": "Đã hoàn thành",
+        "CANCELLED": "Đã hủy",
+        "CREATED": "Đã tạo",
+        "READY": "Đã sẵn sàng",
+        "SERVED": "Đã phục vụ",
+        "REJECTED": "Bị từ chối",
+        "DINE_IN": "Tại quán",
+        "TAKEAWAY": "Mang đi"
+      }
+    }
+  },
+  "EmailTemplates": {
+    "title": "Quản lý Email Template",
+    "description": "Quản lý các mẫu email gửi cho khách hàng và nhân viên.",
+    "listTitle": "Danh sách Template",
+    "table": {
+      "name": "Tên Template",
+      "code": "Mã",
+      "subject": "Tiêu đề",
+      "edit": "Sửa"
+    },
+    "actions": {
+      "add": "Thêm Template",
+      "view": "Xem chi tiết",
+      "edit": "Chỉnh sửa",
+      "delete": "Xóa"
+    },
+    "dialog": {
+      "createTitle": "Tạo Template Mới",
+      "editTitle": "Chỉnh sửa Template",
+      "viewTitle": "Chi tiết Template",
+      "code": "Mã template",
+      "codePlaceholder": "Tự động tạo từ tên",
+      "name": "Tên template",
+      "namePlaceholder": "VD: Xác nhận đặt bàn",
+      "subject": "Tiêu đề Email",
+      "subjectPlaceholder": "VD: Xác nhận đặt bàn tại An Lạc",
+      "description": "Mô tả",
+      "descriptionPlaceholder": "Mô tả ngắn gọn về mục đích của template",
+      "body": "Nội dung HTML",
+      "bodyPlaceholder": "Nhập mã HTML tại đây...",
+      "tabEditor": "Soạn thảo",
+      "tabPreview": "Xem trước",
+      "placeholderHint": "* Sử dụng các placeholder như {{CustomerName}}, {{ReservedTime}}... tùy thuộc vào từng template.",
+      "close": "Đóng",
+      "save": "Lưu thay đổi",
+      "create": "Tạo mới"
+    },
+    "deleteDialog": {
+      "title": "Xóa Template",
+      "description": "Bạn có chắc chắn muốn xóa template này không? Hành động này không thể hoàn tác."
+    }
+  }
+}

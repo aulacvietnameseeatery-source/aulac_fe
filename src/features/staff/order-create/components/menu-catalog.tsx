@@ -2,7 +2,6 @@ import React, { useState, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
 import { Search } from 'lucide-react';
 import { DishDto, CategoryDto } from '../types/create-order.types';
-import { BASE_URL } from "@/lib/http";
 import { useDraggableScroll } from '@/hooks/use-draggable-scroll';
 
 interface Props {
@@ -10,10 +9,11 @@ interface Props {
   title: string; subtitle: string; dishes: DishDto[]; categories: CategoryDto[]; locale: string;
   getLocalizedDishName: (dish: DishDto) => string; getLocalizedCategoryName: (cat: CategoryDto) => string;
   onDishClick: (dish: DishDto) => void;
+  onQuickAdd: (dish: DishDto) => void;
 }
 
-export const MenuCatalog: React.FC<Props> = ({ isReadOnly, title, subtitle, dishes, categories, locale, getLocalizedDishName, getLocalizedCategoryName, onDishClick }) => {
-  const t = useTranslations("Order.Create");
+export const MenuCatalog: React.FC<Props> = ({ isReadOnly, title, subtitle, dishes, categories, locale, getLocalizedDishName, getLocalizedCategoryName, onDishClick, onQuickAdd }) => {
+  const t = useTranslations("orders.management.Create");
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | 'ALL'>('ALL');
 
@@ -39,33 +39,33 @@ export const MenuCatalog: React.FC<Props> = ({ isReadOnly, title, subtitle, dish
 
         <div className="flex items-center bg-white border border-[#D5BA98]/40 rounded-lg px-3 py-2 gap-2 focus-within:border-[#1A3A52] transition-colors shadow-sm">
           <Search className="w-4 h-4 text-[#1A3A52]/50" />
-          <input 
+          <input
             type="text" placeholder={t('searchDish')} value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}
             className="outline-none text-sm text-[#1A3A52] bg-transparent w-full sm:w-48 placeholder:text-[#1A3A52]/40"
           />
         </div>
       </div>
-
-      {/* Category Tabs (Cố định, cuộn ngang) */}
-      <div {...scrollProps} className="shrink-0 flex gap-2 overflow-x-auto pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden border-b border-[#D5BA98]/20">
-        <button
-          onClick={() => setSelectedCategoryId('ALL')}
-          className={`flex items-center px-4 py-2 rounded-lg border shrink-0 transition-all font-medium text-sm ${
-            selectedCategoryId === 'ALL' ? "border-[#1A3A52] bg-[#1A3A52] text-[#D5BA98] shadow-sm" : "border-[#D5BA98]/40 bg-[#FDFBF9] text-[#1A3A52]/70 hover:bg-[#D5BA98]/20"
-          }`}
-        >
-          {t('selectFilterAll')}
-        </button>
-        {categories.map((cat) => (
+      <div className="relative group">
+        {/* Category Tabs (Cố định, cuộn ngang) */}
+        <div {...scrollProps} className="shrink-0 flex gap-2 overflow-x-auto pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden border-b border-[#D5BA98]/20 cursor-grab active:cursor-grabbing">
           <button
-            key={cat.categoryId} onClick={() => setSelectedCategoryId(cat.categoryId)}
-            className={`flex items-center px-4 py-2 rounded-lg border shrink-0 transition-all font-medium text-sm ${
-              selectedCategoryId === cat.categoryId ? "border-[#1A3A52] bg-[#1A3A52] text-[#D5BA98] shadow-sm" : "border-[#D5BA98]/40 bg-[#FDFBF9] text-[#1A3A52]/70 hover:bg-[#D5BA98]/20"
-            }`}
+            onClick={() => setSelectedCategoryId('ALL')}
+            className={`flex items-center px-4 py-2 rounded-lg border shrink-0 transition-all font-medium text-sm ${selectedCategoryId === 'ALL' ? "border-[#1A3A52] bg-[#1A3A52] text-[#D5BA98] shadow-sm" : "border-[#D5BA98]/40 bg-[#FDFBF9] text-[#1A3A52]/70 hover:bg-[#D5BA98]/20"
+              }`}
           >
-            {getLocalizedCategoryName(cat)}
+            {t('selectFilterAll')}
           </button>
-        ))}
+          {categories.map((cat) => (
+            <button
+              key={cat.categoryId} onClick={() => setSelectedCategoryId(cat.categoryId)}
+              className={`flex items-center px-4 py-2 rounded-lg border shrink-0 transition-all font-medium text-sm ${selectedCategoryId === cat.categoryId ? "border-[#1A3A52] bg-[#1A3A52] text-[#D5BA98] shadow-sm" : "border-[#D5BA98]/40 bg-[#FDFBF9] text-[#1A3A52]/70 hover:bg-[#D5BA98]/20"
+                }`}
+            >
+              {getLocalizedCategoryName(cat)}
+            </button>
+          ))}
+        </div>
+        <div className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-[#FDFBF9] to-transparent pointer-events-none" />
       </div>
 
       {/* Menu Grid (Phần này sẽ tự động cuộn dọc) */}
@@ -76,19 +76,19 @@ export const MenuCatalog: React.FC<Props> = ({ isReadOnly, title, subtitle, dish
             const imgSrc = dish.imageUrl ? dish.imageUrl : '/images/logo.png';
 
             return (
-              <div 
+              <div
                 key={dish.dishId} onClick={() => !isReadOnly && onDishClick(dish)}
                 className="bg-white border border-[#D5BA98]/30 hover:border-[#1A3A52] rounded-xl overflow-hidden hover:shadow-lg transition-all cursor-pointer flex flex-col group"
               >
                 <div className="relative h-28 overflow-hidden bg-[#D5BA98]/10 flex items-center justify-center">
-                  <img 
-                    src={`${BASE_URL}${imgSrc}`} 
-                    alt={getLocalizedDishName(dish)} 
+                  <img
+                    src={`${imgSrc}`}
+                    alt={getLocalizedDishName(dish)}
                     className="w-full h-full object-cover"
                     loading="lazy"
                     onError={(e) => {
                       e.currentTarget.src = '/images/logo.png';
-                      e.currentTarget.className = "w-1/2 h-1/2 object-contain opacity-50"; 
+                      e.currentTarget.className = "w-1/2 h-1/2 object-contain opacity-50";
                     }}
                   />
                   {!isReadOnly && <div className="absolute inset-0 bg-[#1A3A52]/0 group-hover:bg-[#1A3A52]/5 transition-colors" />}
@@ -101,9 +101,16 @@ export const MenuCatalog: React.FC<Props> = ({ isReadOnly, title, subtitle, dish
                   <div className="flex items-center justify-between mt-auto">
                     <span className="text-[#1A3A52] font-bold text-base">CHF {dish.price.toFixed(2)}</span>
                     {!isReadOnly && (
-                      <div className="w-6 h-6 rounded-full border border-[#1A3A52] flex items-center justify-center text-[#1A3A52] group-hover:bg-[#1A3A52] group-hover:text-[#D5BA98] transition-colors">
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onQuickAdd(dish);
+                        }}
+                        className="w-6 h-6 rounded-full border border-[#1A3A52] flex items-center justify-center text-[#1A3A52] group-hover:bg-[#1A3A52] group-hover:text-[#D5BA98] hover:scale-110 transition-all"
+                      >
                         +
-                      </div>
+                      </button>
                     )}
                   </div>
                 </div>

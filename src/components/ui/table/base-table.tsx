@@ -80,6 +80,7 @@ interface BaseTableProps<T> {
     renderActionColumn?: (item: T, rowIndex: number) => React.ReactNode;
     renderNoData?: () => React.ReactNode;
     renderPaginationAppend?: () => React.ReactNode;
+    noBorder?: boolean;
 }
 
 export function BaseTable<T>({
@@ -108,6 +109,7 @@ export function BaseTable<T>({
     renderActionColumn,
     renderNoData,
     renderPaginationAppend,
+    noBorder = false,
 }: BaseTableProps<T>) {
     const t = useTranslations('common.table');
 
@@ -452,16 +454,21 @@ export function BaseTable<T>({
 
     // ========== RENDER ==========
     return (
-        <div className="flex flex-col h-full">
-            <div className="flex flex-row justify-between items-center mb-4">
-                {renderTitle?.()}
-            </div>
-            <div className="body-layout-list">
-                <div className="body-list">
-                    <div className="form-list flex flex-column">
+        <div className="flex h-full flex-col gap-4">
+            {renderTitle && (
+                <div className="flex flex-row items-center justify-between ">
+                    {renderTitle()}
+                </div>
+            )}
+            <div className={cn(
+                "body-layout-list rounded-xl shadow-sm overflow-hidden",
+                !noBorder && "border border-[#D5BA98]/60 bg-white"
+            )}>
+                <div className="body-list bg-transparent">
+                    <div className="form-list flex flex-column border-b border-slate-200 bg-white">
                         <div className="flex flex-column w-full">
                             {/* Toolbar */}
-                            <div className="condition-box flex flex-row items-center w-full">
+                            <div className="condition-box flex flex-row items-center w-full rounded-none bg-white">
                                 <div className="flex gap-2 items-center">
                                     <div className="ms-input ms-editor w-full flex items-center gap-4 search-input-list" style={{ height: 'auto' }}>
                                         <div className="flex-1 flex items-center input-container border pointer">
@@ -560,8 +567,8 @@ export function BaseTable<T>({
                         </div>
                     </div>
 
-                    <div className="voucher-body-grid">
-                        <div className="ms-grid-viewer flex flex-col has-paging flex-box">
+                    <div className="voucher-body-grid bg-white">
+                        <div className="ms-grid-viewer flex flex-col has-paging flex-box bg-transparent">
                             <div
                                 className={cn("ms-content-table sticky-1", !loading && "scroller")}
                                 style={loading ? { overflow: 'hidden' } : undefined}

@@ -1,0 +1,47 @@
+{
+  "Kitchen": {
+    "title": "Màn Hình Bếp",
+    "description": "Theo dõi đơn hàng và cập nhật trạng thái món ăn theo thời gian thực",
+    "refresh": "Làm mới",
+    "searchPlaceholder": "Tìm kiếm bàn, mã đơn, món ăn...",
+    "liveUpdates": "Cập nhật trực tiếp",
+    "tokenNo": "Số TT:",
+    "note": "Ghi chú",
+    "orderType": "Ăn tại bàn",
+    "tabs": {
+      "all": "Tất cả",
+      "new": "Mới",
+      "inProgress": "Đang làm"
+    },
+    "empty": {
+      "title": "Không có đơn hàng nào",
+      "hint": "Đơn hàng mới sẽ tự động xuất hiện tại đây"
+    },
+    "status": {
+      "all": "Tất cả",
+      "new": "Mới",
+      "inKitchen": "Đang làm",
+      "rejected": "Bị từ chối",
+      "completed": "Hoàn tất",
+      "CREATED": "Mới",
+      "IN_PROGRESS": "Đang làm",
+      "READY": "Sẵn sàng",
+      "SERVED": "Đã phục vụ",
+      "REJECTED": "Bị từ chối"
+    },
+    "actions": {
+      "print": "In đơn hàng",
+      "markDone": "Hoàn tất",
+      "start": "Bắt đầu",
+      "serve": "Phục vụ",
+      "reject": "Từ chối",
+      "cancel": "Hủy"
+    },
+    "rejectReason": {
+      "label": "Lý do",
+      "placeholder": "Nhập lý do...",
+      "confirm": "Xác nhận",
+      "cancel": "Hủy"
+    }
+  }
+}

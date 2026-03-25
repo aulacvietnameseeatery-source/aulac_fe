@@ -5,10 +5,15 @@ import { getMessages } from "next-intl/server";
 import QueryProvider from "@/components/providers/query-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { AuthProvider } from "@/components/providers/auth-provider";
+import {
+  NotificationProvider,
+  NotificationToastRenderer,
+} from "@/features/staff/notifications";
 
 import { inter, playfair, lexend } from "@/lib/fonts";
 
 import "@/styles/globals.css";
+import { NotificationToaster } from "@/features/staff/notifications";
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -20,7 +25,7 @@ export const viewport: Viewport = {
 };
 
 export async function generateMetadata(
-    { params }: { params: Promise<{ locale: string }> }
+  { params }: { params: Promise<{ locale: string }> }
 ): Promise<Metadata> {
   const { locale } = await params;
   const messages = await getMessages({ locale });
@@ -44,10 +49,10 @@ export async function generateMetadata(
 }
 
 export default async function LocaleLayout(
-    props: {
-      children: ReactNode;
-      params: Promise<{ locale: string }>;
-    }
+  props: {
+    children: ReactNode;
+    params: Promise<{ locale: string }>;
+  }
 ): Promise<ReactNode> {
   const { children } = props;
   const { locale } = await props.params;
@@ -55,17 +60,21 @@ export default async function LocaleLayout(
   const messages = await getMessages({ locale });
 
   return (
-      <html lang={locale}>
+    <html lang={locale}>
       <body className={`${inter.variable} ${playfair.variable} ${lexend.variable} antialiased`}>
-      <QueryProvider>
-        <AuthProvider>
-          <NextIntlClientProvider locale={locale} messages={messages}>
-            {children}
-            <Toaster />
-          </NextIntlClientProvider>
-        </AuthProvider>
-      </QueryProvider>
+        <QueryProvider>
+          <AuthProvider>
+            <NotificationProvider>
+              <NextIntlClientProvider locale={locale} messages={messages}>
+                {children}
+                <Toaster />
+                <NotificationToaster />
+                <NotificationToastRenderer />
+              </NextIntlClientProvider>
+            </NotificationProvider>
+          </AuthProvider>
+        </QueryProvider>
       </body>
-      </html>
+    </html>
   );
 }

@@ -4,7 +4,7 @@ import LegendItem from './legend-item';
 import "../styles/index.css";
 
 export default function Legend() {
-  const t = useTranslations('Reservation.Legend');
+  const t = useTranslations('reservations.public.legend');
 
   return (
     <div className="legend-wrapper">

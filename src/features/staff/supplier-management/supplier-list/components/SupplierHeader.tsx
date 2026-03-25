@@ -4,6 +4,8 @@ import React from "react";
 import { Plus } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
+import { PermissionGuard } from "@/components/permission-guard";
+import { Permissions } from "@/types/const";
 
 interface SupplierHeaderProps {
   onCreateClick: () => void;
@@ -24,14 +26,16 @@ export const SupplierHeader = ({
           {t("description")}
         </p>
       </div>
-      <Button 
-        onClick={onCreateClick}
-        variant="outline" 
-        className="shadow-md"
-      >
-        <Plus className="mr-2 h-4 w-4" />
-        {t("addNew")}
-      </Button>
+      <PermissionGuard permission={Permissions.CreateSupplier}>
+        <Button 
+          onClick={onCreateClick}
+          variant="outline" 
+          className="shadow-md"
+        >
+          <Plus className="mr-2 h-4 w-4" />
+          {t("addNew")}
+        </Button>
+      </PermissionGuard>
     </div>
   );
 };

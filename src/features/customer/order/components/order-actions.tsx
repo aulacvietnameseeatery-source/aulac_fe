@@ -3,7 +3,7 @@ import { useTranslations } from "next-intl";
 import "../styles/index.css";
 
 export default function OrderActions() {
-  const t = useTranslations("OrderSuccess.Actions");
+  const t = useTranslations("orders.success.Actions");
 
   return (
     <div className="order-actions-wrapper">

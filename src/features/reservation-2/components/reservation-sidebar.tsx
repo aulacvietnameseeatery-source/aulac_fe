@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { ALDatePicker } from "@/components/ui/al-date-picker";
+import { ALCombobox } from "@/components/ui/al-combobox";
 import "../styles/index.css";
 import { TableAvailabilityDto } from "../types/reservation.types";
 
@@ -54,19 +55,22 @@ const convertTo24Hour = (timeStr: string) => {
 };
 
 // Helper: Generate Time Slots (e.g., 11:00, 11:30, 12:00...)
-const generateTimeSlots = (
-    startHour: number,
-    endHour: number,
-    intervalMinutes: number
-) => {
+const generateTimeSlots = () => {
     const slots = [];
-    for (let h = startHour; h <= endHour; h++) {
-        for (let m = 0; m < 60; m += intervalMinutes) {
-            if (h === endHour && m > 0) break;
-
-            const hourStr = h.toString().padStart(2, "0");
-            const minStr = m.toString().padStart(2, "0");
-            slots.push(`${hourStr}:${minStr}`);
+    // Lunch: 11:30 - 14:30
+    for (let h = 11; h <= 14; h++) {
+        for (let m = 0; m < 60; m += 30) {
+            if (h === 11 && m < 30) continue;
+            if (h === 14 && m > 30) break;
+            slots.push(`${h.toString().padStart(2, "0")}:${m.toString().padStart(2, "0")}`);
+        }
+    }
+    // Dinner: 18:30 - 22:30
+    for (let h = 18; h <= 22; h++) {
+        for (let m = 0; m < 60; m += 30) {
+            if (h === 18 && m < 30) continue;
+            if (h === 22 && m > 30) break;
+            slots.push(`${h.toString().padStart(2, "0")}:${m.toString().padStart(2, "0")}`);
         }
     }
     return slots;
@@ -79,13 +83,12 @@ export default function ReservationSidebar({
     onDateTimeChange,
     onBook,
 }: ReservationSidebarProps) {
-    const t = useTranslations("Reservation.Sidebar");
+    const t = useTranslations("reservations.public.sidebar");
     const [isEditing, setIsEditing] = useState(false);
 
     // Temp State
     const [tempDate, setTempDate] = useState(date);
     const [tempTime, setTempTime] = useState(convertTo24Hour(time));
-    const [isTimeDropdownOpen, setIsTimeDropdownOpen] = useState(false);
 
     // User details
     const [name, setName] = useState("");
@@ -99,6 +102,7 @@ export default function ReservationSidebar({
     // We can add a simple input or default to table capacity.
     // Let's add an input for Party Size, defaulting to selectedTable capacity or 2.
     const [partySize, setPartySize] = useState(2);
+    const [timeError, setTimeError] = useState<string | null>(null);
 
     useEffect(() => {
         if (selectedTable) {
@@ -108,28 +112,28 @@ export default function ReservationSidebar({
 
     const isFormValid = phone.trim().length > 0 && name.trim().length > 0;
 
-    const timeSlots = useMemo(() => generateTimeSlots(11, 22, 30), []);
-    const dropdownRef = useRef<HTMLDivElement>(null);
+    const timeOptions = useMemo(() => {
+        return generateTimeSlots().map(slot => ({
+            value: slot,
+            label: slot
+        }));
+    }, []);
+
 
     useEffect(() => {
         setTempDate(date);
         setTempTime(convertTo24Hour(time));
     }, [date, time]);
 
-    useEffect(() => {
-        function handleClickOutside(event: MouseEvent) {
-            if (
-                dropdownRef.current &&
-                !dropdownRef.current.contains(event.target as Node)
-            ) {
-                setIsTimeDropdownOpen(false);
-            }
-        }
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => document.removeEventListener("mousedown", handleClickOutside);
-    }, []);
 
     const handleSave = () => {
+        const now = new Date();
+        const selected = new Date(`${tempDate}T${tempTime}`);
+        if (selected.getTime() < now.getTime()) {
+            setTimeError(t("validation.timePast"));
+            return;
+        }
+        setTimeError(null);
         const formattedTime = formatTimeDisplay(tempTime);
         onDateTimeChange(tempDate, formattedTime);
         setIsEditing(false);
@@ -138,12 +142,12 @@ export default function ReservationSidebar({
     const handleCancel = () => {
         setTempDate(date);
         setTempTime(convertTo24Hour(time));
+        setTimeError(null);
         setIsEditing(false);
     };
 
     const handleSelectTime = (slot: string) => {
         setTempTime(slot);
-        setIsTimeDropdownOpen(false);
     };
 
     const handleBookClick = () => {
@@ -169,7 +173,7 @@ export default function ReservationSidebar({
                 <div className="absolute -right-4 -top-4 w-24 h-24 bg-white/5 rounded-full blur-2xl" />
             </div>
 
-            <div className="p-5 space-y-5">
+            <div className="w-full lg:w-[320px] shrink-0">
                 {/* === DATE & TIME SECTION === */}
                 <div
                     className={`sidebar-datetime-section ${isEditing ? "sidebar-datetime-section-editing" : ""
@@ -223,67 +227,41 @@ export default function ReservationSidebar({
                                         value={tempDate}
                                         onChange={(val) => setTempDate(val)}
                                         placeholder={t("datetime.selectDate")}
+                                        displayFormat="dd/MM/yyyy"
                                         groupClassName="sidebar-date-input-override"
                                     />
                                 </div>
 
-                                <div className="space-y-1 relative" ref={dropdownRef}>
+                                <div className="space-y-1">
                                     <label className="text-[10px] font-bold text-stone-400 uppercase flex justify-between">
                                         {t("datetime.selectTime")}
                                         <span className="text-[9px] normal-case text-stone-400">
                                             {t("datetime.openingHours")}
                                         </span>
                                     </label>
-
-                                    <div
-                                        onClick={() => setIsTimeDropdownOpen(!isTimeDropdownOpen)}
-                                        className={`w-full text-sm font-bold text-[#1A3A52] bg-white border rounded-lg px-3 py-2 pl-9 flex items-center justify-between cursor-pointer transition-all ${isTimeDropdownOpen
-                                                ? "border-[#1A3A52] ring-1 ring-[#1A3A52]"
-                                                : "border-stone-300 hover:border-[#1A3A52]"
-                                            }`}
-                                    >
-                                        <span>{formatTimeDisplay(tempTime)}</span>
-                                        {isTimeDropdownOpen ? (
-                                            <ChevronUp size={14} className="text-stone-400" />
-                                        ) : (
-                                            <ChevronDown size={14} className="text-stone-400" />
-                                        )}
-                                    </div>
-                                    <Clock
-                                        size={16}
-                                        className="absolute left-3 top-[2.4rem] -translate-y-1/2 text-stone-400 pointer-events-none"
+                                    <ALCombobox
+                                        options={timeOptions}
+                                        value={tempTime}
+                                        onChange={(val) => handleSelectTime(val as string)}
+                                        placeholder={t("datetime.selectTime")}
+                                        iconStart={<Clock size={16} className="text-stone-400" />}
+                                        className="!h-[40px] !rounded-lg !bg-white !border-stone-300 font-bold text-[#1A3A52]"
                                     />
-
-                                    {isTimeDropdownOpen && (
-                                        <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-stone-200 rounded-lg shadow-xl max-h-43 overflow-y-auto z-50 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-stone-50 [&::-webkit-scrollbar-thumb]:bg-stone-300 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-stone-400">
-                                            {timeSlots.map((slot) => {
-                                                const isSelected = slot === tempTime;
-                                                return (
-                                                    <div
-                                                        key={slot}
-                                                        onClick={() => handleSelectTime(slot)}
-                                                        className={`flex items-center justify-between px-4 py-2.5 text-sm cursor-pointer transition-colors ${isSelected
-                                                                ? "bg-[#F0F5F9] text-[#1A3A52] font-bold"
-                                                                : "text-stone-600 hover:bg-stone-50"
-                                                            }`}
-                                                    >
-                                                        {formatTimeDisplay(slot)}
-                                                        {isSelected && (
-                                                            <Check size={14} className="text-[#DEA048]" />
-                                                        )}
-                                                    </div>
-                                                );
-                                            })}
-                                        </div>
+                                    {timeError && (
+                                        <p className="text-[10px] text-red-500 font-bold mt-1 animate-pulse">
+                                            {timeError}
+                                        </p>
                                     )}
                                 </div>
                             </div>
                         ) : (
                             <div className="sidebar-datetime-content-display fade-in animate-in slide-in-from-left-2">
-                                <p className="sidebar-datetime-date">
-                                    {displayDate === "Invalid Date" ? date : displayDate}
-                                </p>
-                                <p className="sidebar-datetime-time">{time}</p>
+                                <div className="sidebar-datetime-value flex flex-wrap items-center gap-x-2">
+                                    <p className="sidebar-datetime-date">
+                                        {displayDate === "Invalid Date" ? date : displayDate}
+                                    </p>
+                                    <p className="sidebar-datetime-time">{time}</p>
+                                </div>
                             </div>
                         )}
                     </div>

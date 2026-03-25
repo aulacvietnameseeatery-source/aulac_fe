@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 import { DishFormValues, Language, mapDishToFormValues } from "../types/schema";
@@ -21,6 +21,7 @@ import { getAllCategories, getDishById } from "../services/dish.service";
 import { useDishEditMedia } from "../hooks/useDishEditMedia";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
+import { VideoSection } from "./video-section";
 
 type DishMutationVariables  = {
   form: DishFormValues;
@@ -38,19 +39,25 @@ export function DishForm({ mode, dishId, onSuccess }: DishFormProps) {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<Language>("en");
   const isEdit = mode === "edit";
+  const queryClient = useQueryClient();
 
   const {
       staticImages,
       images360,
+      video, 
       setStaticImages,
-      setImages360
+      setImages360,
+      setVideo
     } = useDishImages();
 
   const {
       existingImages,
+      existingVideo,
       setExistingImages,
+      setExistingVideo,
       removedMediaIds,
-      removeExistingImage
+      removeExistingImage,
+      removeExistingVideo
     } = useDishEditMedia();
 
   const { data: categories } = useQuery({
@@ -84,8 +91,17 @@ export function DishForm({ mode, dishId, onSuccess }: DishFormProps) {
             isPrimary: m.isPrimary,
             }))
         );
+
+      const existingVideoData = data.media.find(m => m.mediaType === "VIDEO");
+      if (existingVideoData) {
+        setExistingVideo({
+          mediaId: existingVideoData.mediaId,
+          url: existingVideoData.url,
+          isPrimary: existingVideoData.isPrimary
+        });
+      }
     }
-  }, [data, categories?.length, form, setExistingImages]);
+  }, [data, categories?.length, form, setExistingImages, setExistingVideo]);
 
   /* ---------------------- Mutation ---------------------- */
   const mutation = useMutation({
@@ -93,6 +109,7 @@ export function DishForm({ mode, dishId, onSuccess }: DishFormProps) {
       isEdit ? onEdit(dishId!, form, images, removedMediaIds) : onCreate(form, images),
     onSuccess: () => {
       toast.success(isEdit ? t("toast.updated") : t("toast.created"));
+      queryClient.invalidateQueries({ queryKey: ["dish", dishId] });
       onSuccess?.();
     },
     onError: (err: any) => {
@@ -108,6 +125,7 @@ export function DishForm({ mode, dishId, onSuccess }: DishFormProps) {
     const imagesState: DishImagesState = {
         staticImages,
         images360,
+        video, 
     };
     mutation.mutate({form: form.getValues(), images: imagesState});
   };
@@ -152,15 +170,9 @@ export function DishForm({ mode, dishId, onSuccess }: DishFormProps) {
             </div>
         </div>
 
-        {/* ROW 3: MEDIA (360 + Static) */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-             {/* 3.1: 360 View */}
-            <SectionWrapper title={t("media.media360.title")} subtitle={t("media.media360.subtitle")}>
-                <ThreeSixtySection frames={images360} onChange={setImages360} />
-            </SectionWrapper>
-
-            {/* 3.2: Static Images */}
-            <SectionWrapper title={t("media.gallery.title")} subtitle={t("media.gallery.subtitle")}>
+        {/* ROW 3: MEDIA (Static) */}
+        <div className="mt-6">
+           <SectionWrapper title={t("media.gallery.title")} subtitle={t("media.gallery.subtitle")}>
                 <StaticImageSection
                     images={staticImages}
                     existingImages={existingImages}
@@ -170,7 +182,25 @@ export function DishForm({ mode, dishId, onSuccess }: DishFormProps) {
             </SectionWrapper>
         </div>
 
-        {/* ROW 4: ADDITIONAL INFO */}
+        {/* ROW 4: MEDIA (360 + VIDEO) */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+             {/* 4.1: 360 View */}
+            <SectionWrapper title={t("media.media360.title")} subtitle={t("media.media360.subtitle")}>
+                <ThreeSixtySection frames={images360} onChange={setImages360} />
+            </SectionWrapper>
+
+            {/* 4.2: VIDEO */}
+            <SectionWrapper title={t("media.video.title")} subtitle={t("media.video.subtitle")}>
+               <VideoSection 
+                  videoFile={video}
+                  existingVideo={existingVideo}
+                  onChange={setVideo}
+                  onRemoveExisting={removeExistingVideo}
+               />
+           </SectionWrapper>
+        </div>
+
+        {/* ROW 5: ADDITIONAL INFO */}
         <div>
             <AdditionalSection form={form} />
         </div>

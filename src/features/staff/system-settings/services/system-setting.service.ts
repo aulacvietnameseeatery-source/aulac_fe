@@ -61,14 +61,35 @@ export const createSetting = async (
 export const uploadLogo = async (file: File): Promise<string> => {
     const formData = new FormData();
     formData.append('file', file);
-    const response = await api.post<ApiResponse<{ publicUrl: string }>>(
+    const response = await api.post<ApiResponse<any>>(
         '/api/system-settings/upload-logo',
-        formData,
-        {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            },
-        }
+        formData
     );
-    return response.data.publicUrl;
+    return response.data.publicUrl || response.data.PublicUrl || response.data.relativePath || response.data.RelativePath || '';
+};
+
+/**
+ * Uploads a generic file (video/image) for system settings.
+ */
+export const uploadFile = async (file: File): Promise<string> => {
+    const formData = new FormData();
+    formData.append('file', file);
+    const response = await api.post<ApiResponse<any>>(
+        '/api/system-settings/upload-file',
+        formData
+    );
+    return response.data.publicUrl || response.data.PublicUrl || response.data.relativePath || response.data.RelativePath || '';
+};
+
+/**
+ * Automatically translates system settings.
+ */
+export const translateSystemSettings = async (
+    payload: import('../types/system-setting.types').TranslateSystemSettingsRequest
+): Promise<import('../types/system-setting.types').TranslateSystemSettingsResponse> => {
+    const response = await api.post<import('@/types/api-response.types').ApiResponse<import('../types/system-setting.types').TranslateSystemSettingsResponse>>(
+        '/api/translate/system-settings',
+        payload
+    );
+    return response.data;
 };

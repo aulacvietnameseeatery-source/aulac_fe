@@ -21,7 +21,8 @@ export const SettingField: React.FC<SettingFieldProps> = ({
     onChange,
     disabled = false,
 }) => {
-    const t = useTranslations('SystemSettings.Field');
+    const t = useTranslations('settings.Field');
+    const tSettings = useTranslations('settings');
     const { settingKey, settingName, valueType, description, isSensitive } = setting;
 
     // Type labels mapped from translations
@@ -38,9 +39,11 @@ export const SettingField: React.FC<SettingFieldProps> = ({
         ? settingKey.split('.').slice(1).join('.')
         : settingKey;
 
-    const displayLabel = settingName || rawLabel
-        .replace(/_/g, ' ')
-        .replace(/\b\w/g, (c) => c.toUpperCase());
+    const displayLabel = tSettings.has(settingKey)
+        ? tSettings(settingKey)
+        : (settingName || rawLabel
+            .replace(/_/g, ' ')
+            .replace(/\b\w/g, (c) => c.toUpperCase()));
 
     const fieldId = `setting-${settingKey.replace(/\./g, '-')}`;
 
@@ -132,10 +135,12 @@ export const SettingField: React.FC<SettingFieldProps> = ({
 
             {renderInput()}
 
-            {description && (
-                <p className="text-xs text-gray-500">{description}</p>
+            {(tSettings.has(`${settingKey}Desc`) || description) && (
+                <p className="text-xs text-gray-500">
+                    {tSettings.has(`${settingKey}Desc`) ? tSettings(`${settingKey}Desc`) : description}
+                </p>
             )}
-            <p className="text-[10px] text-gray-400 font-mono">{settingKey}</p>
+            {/*<p className="text-[10px] text-gray-400 font-mono">{settingKey}</p>*/}
         </div>
     );
 };

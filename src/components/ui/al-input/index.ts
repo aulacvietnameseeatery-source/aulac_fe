@@ -6,4 +6,6 @@ export type {
   ALInputButtonConfig,
   ALInputSize,
   ALInputState,
+  ALInputFieldVariant,
+  ALInputVariant,
 } from "./al-input.types";

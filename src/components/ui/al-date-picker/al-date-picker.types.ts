@@ -22,14 +22,18 @@ export interface ALDatePickerProps {
   state?: ALInputState;
 
   // ── Value ──────────────────────────────────────────────────
+  /** Picker variant. @default "date" */
+  variant?: "date" | "datetime";
   /** Selected date as "YYYY-MM-DD" string. */
   value?: string;
-  /** Called with "YYYY-MM-DD" string or "" when cleared. */
+  /** Called with "YYYY-MM-DD" or "YYYY-MM-DDTHH:mm:ss" depending on variant. */
   onChange?: (value: string) => void;
   /** Placeholder when no date is selected. @default "Pick a date" */
   placeholder?: string;
   /** date-fns format string for displaying the selected date. @default "dd/MM/yyyy" */
   displayFormat?: string;
+  /** Minute increment for datetime time selector. @default 5 */
+  timeStepMinutes?: number;
 
   // ── Calendar constraints ───────────────────────────────────
   /** Minimum selectable date as "YYYY-MM-DD". */

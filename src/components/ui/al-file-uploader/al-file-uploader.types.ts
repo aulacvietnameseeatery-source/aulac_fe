@@ -37,8 +37,12 @@ export interface ALFileValidationError {
 /**
  * `"image"` — shows existing files in a thumbnail grid, pending files with image previews.
  * `"file"` — shows existing and pending files in a compact list with icons.
+ * `"gallery"` — shows image tiles in a fixed grid with an inline add button tile.
  */
-export type ALFileUploaderVariant = "image" | "file";
+export type ALFileUploaderVariant = "image" | "file" | "gallery";
+
+/** Number of thumbnails per row for `variant="image"`. */
+export type ALFileUploaderImagePerRow = 2 | 4 | 6 | 8;
 
 // ─── Props ───────────────────────────────────────────────────
 
@@ -115,9 +119,16 @@ export interface ALFileUploaderProps {
   /**
    * `"image"` — thumbnail grid + image previews (default when `accept` starts with `image/` or `"image/*"`)
    * `"file"` — compact list with file-type icons
+    * `"gallery"` — image gallery grid with inline add-tile upload affordance
    * @default "image"
    */
   variant?: ALFileUploaderVariant;
+  /**
+   * Thumbnails per row for `variant="image"`.
+   * Allowed: 2, 4, 6, 8.
+   * @default 4
+   */
+  imagePerRow?: ALFileUploaderImagePerRow;
 
   // ── State ───────────────────────────────────────────────────
   /** Disables all interactions */

@@ -18,7 +18,9 @@ import { AdjustStockModal } from "@/features/staff/ingredient-management/compone
 import { ingredientService } from "@/features/staff/ingredient-management/services/ingredient-service";
 import { format } from "date-fns";
 import { listSupplierService } from "@/features/staff/supplier-management/supplier-list";
-import { excelUtils } from "@/features/staff/reservation-management/utils/excel-utils";
+import { excelUtils } from "@/lib/excel-utils";
+import {api} from "@/lib/http";
+import {ApiResponse} from "@/types/api-response.types";
 
 const IngredientListContent = () => {
 
@@ -42,6 +44,7 @@ const IngredientListContent = () => {
 
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [isImporting, setIsImporting] = useState(false);
+    const [isExportingAll, setIsExportingAll] = useState(false);
 
     const [availableSuppliers, setAvailableSuppliers] = useState<SupplierBasicDto[]>([]);
 
@@ -114,13 +117,44 @@ const IngredientListContent = () => {
         }
     };
 
+    const handleDownloadTemplate = () => {
+        const link = document.createElement("a");
+        link.href = "/templates/ingredient_template.xlsx";
+        link.download = "Ingredient_Import_Template.xlsx";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
+
     const handleExport = () => {
         if (!ingredients || ingredients.length === 0) {
             toast.error(t("notifications.noDataExport"));
             return;
         }
-        excelUtils.exportToExcel(ingredients, `Ingredients_${format(new Date(), "yyyyMMdd")}.xlsx`);
+        excelUtils.exportToExcel(ingredients, `Ingredients_Page_${format(new Date(), "yyyyMMdd")}.xlsx`);
         toast.success(t("notifications.exportSuccess"));
+    };
+
+    const handleExportAll = async () => {
+        setIsExportingAll(true);
+        const toastId = toast.loading(t("notifications.exportingAll") || "Đang xuất toàn bộ dữ liệu...");
+        try {
+            const response = await api.get<ApiResponse<IngredientDto[]>>("/api/ingredients/all");
+
+            const allData = response.data || [];
+
+            if (!Array.isArray(allData) || allData.length === 0) {
+                toast.error(t("notifications.noDataExport"), { id: toastId });
+                return;
+            }
+            excelUtils.exportToExcel(allData, `All_Ingredients_${format(new Date(), "yyyyMMdd")}.xlsx`);
+            toast.success(t("notifications.exportSuccess"), { id: toastId });
+        } catch (error) {
+            console.error("Export All Error:", error);
+            toast.error(t("notifications.exportError") || "Lỗi khi xuất dữ liệu", { id: toastId });
+        } finally {
+            setIsExportingAll(false);
+        }
     };
 
     const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -177,7 +211,7 @@ const IngredientListContent = () => {
                     </div>
                     <div className="flex flex-col">
                         <span className="font-semibold text-gray-900 line-clamp-1">{item.ingredientName}</span>
-                        <span className="text-xs text-gray-500">{t("table.unit")}: {item.unit}</span>
+                        <span className="text-xs text-gray-500">{t("table.unit")}: {item.unitName || "-"}</span>
                     </div>
                 </div>
             ),
@@ -220,7 +254,7 @@ const IngredientListContent = () => {
                 return (
                     <div className="flex flex-col items-end">
                         <span className={`font-bold text-sm ${isLowStock ? 'text-red-600' : 'text-emerald-600'}`}>
-                            {item.quantityOnHand} <span className="text-xs font-normal text-gray-500">{item.unit}</span>
+                            {item.quantityOnHand} <span className="text-xs font-normal text-gray-500">{item.unitName}</span>
                         </span>
                         {isLowStock && (
                             <span className="flex items-center text-[10px] text-red-500 font-medium mt-0.5 whitespace-nowrap">
@@ -252,7 +286,7 @@ const IngredientListContent = () => {
                 defaultRowsPerPage={10}
                 rowsPerPageOptions={[10, 20, 50]}
                 renderTitle={() => (
-                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center w-full gap-4">
+                    <div className="flex flex-col xl:flex-row justify-between items-start xl:items-center w-full gap-4">
                         <div>
                             <h1 className="text-2xl md:text-3xl font-bold text-gray-900 tracking-tight">
                                 {t("title")}
@@ -260,10 +294,10 @@ const IngredientListContent = () => {
                             <p className="text-sm text-gray-500 mt-1">{t("description")}</p>
                         </div>
 
-                        {/* RESPONSIVE: Wrap các nút và cho phép kéo giãn flex-1 trên mobile */}
-                        <div className="flex flex-wrap items-center gap-2 w-full md:w-auto">
-                            <Button variant="outline" className="flex-1 md:flex-none shadow-sm bg-white whitespace-nowrap" onClick={handleExport}>
-                                <Download className="mr-2 h-4 w-4" /> {t("export")}
+                        <div className="flex flex-wrap items-center gap-2 w-full xl:w-auto">
+
+                            <Button variant="outline"  onClick={handleDownloadTemplate}>
+                                <Download className="mr-2 h-4 w-4" /> Mẫu Import
                             </Button>
 
                             <input
@@ -283,9 +317,22 @@ const IngredientListContent = () => {
                                 {isImporting ? t("importing") : t("import")}
                             </Button>
 
+                            <Button variant="outline" className="flex-1 md:flex-none shadow-sm bg-white whitespace-nowrap" onClick={handleExport}>
+                                <Download className="mr-2 h-4 w-4" /> {t("export")}
+                            </Button>
+
                             <Button
                                 variant="outline"
-                                onClick={handleCreate} className="flex-1 md:flex-none shadow-md whitespace-nowrap">
+                                className="flex-1 md:flex-none shadow-sm bg-white whitespace-nowrap border-emerald-200 text-emerald-700 hover:bg-emerald-50 hover:text-emerald-800"
+                                onClick={handleExportAll}
+                                disabled={isExportingAll}
+                            >
+                                {isExportingAll ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Download className="mr-2 h-4 w-4" />}
+                                Export All
+                            </Button>
+
+                            <Button
+                                onClick={handleCreate} className="flex-1 md:flex-none shadow-md whitespace-nowrap bg-gray-900 text-white hover:bg-gray-800">
                                 <Plus className="mr-2 h-4 w-4" /> {t("addNew")}
                             </Button>
                         </div>

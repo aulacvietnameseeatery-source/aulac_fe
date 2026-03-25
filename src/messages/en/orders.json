@@ -1,0 +1,476 @@
+{
+  "orders": {
+    "popup": {
+      "success_label": "Success",
+      "success_message": "Item added to your selection",
+      "dish_name": "Imperial Hue Beef Noodle Soup",
+      "price": "$18.50",
+      "quantity_label": "Quantity",
+      "view_selection": "View Selection & Order",
+      "continue_browsing": "Continue Browsing",
+      "footer_text": "Artisanal Vietnamese Cuisine"
+    },
+    "fillInfo": {
+      "title": "Welcome to An Lac",
+      "subtitle": "Please provide your details to begin your culinary journey",
+      "form": {
+        "fullName": "Full Name",
+        "fullNamePlaceholder": "Enter your full name",
+        "phoneNumber": "Phone Number",
+        "phoneNumberPlaceholder": "Enter your phone number",
+        "emailAddress": "Email Address",
+        "emailAddressPlaceholder": "Enter your email address",
+        "tableNumber": "Table Number",
+        "submitting": "Processing...",
+        "startDining": "Start Dining",
+        "skipToMenu": "Skip, view menu",
+        "errors": {
+          "phoneRequired": "Phone number is required",
+          "emailInvalid": "Invalid email address",
+          "tableOccupied": "This table is already occupied",
+          "tableOccupiedDesc": "This table is being used by another guest. Please choose a different table.",
+          "updateFailed": "Failed to update table status. Please try again."
+        }
+      },
+      "footer": "Artisanal Vietnamese Cuisine"
+    },
+    "confirm": {
+      "OrderItem": {
+        "add_note": "Add note",
+        "edit_note": "Edit",
+        "note_placeholder": "e.g. No spicy, extra sauce...",
+        "note_saved": "Note saved"
+      },
+      "DiningOption": {
+        "eyebrow": "How would you like to enjoy?",
+        "title": "Dining Option",
+        "dine_in_label": "The Experience",
+        "dine_in_title": "Dine-in",
+        "dine_in_desc": "Immerse in our tranquil atmosphere with full service.",
+        "take_away_label": "Quick & Fresh",
+        "take_away_title": "Take-away",
+        "take_away_desc": "Enjoy our exquisite flavors in the comfort of your home.",
+        "helper_dine_in": "Proceed to select your preferred table.",
+        "helper_take_away": "Proceed to schedule pickup time.",
+        "btn_select_table": "Choose a Table",
+        "btn_checkout": "Proceed to Checkout"
+      },
+      "OrderSummary": {
+        "title": "Review Your Order",
+        "section_title": "Selected Dishes",
+        "quantity_label": "Quantity",
+        "subtotal": "Subtotal",
+        "tax": "Service & Tax",
+        "total": "Total Amount",
+        "items": {
+          "1_name": "Imperial Lotus Root Salad",
+          "1_category": "Heritage Selection",
+          "2_name": "Heritage Wagyu Pho",
+          "2_category": "Signature"
+        }
+      }
+    },
+    "success": {
+      "Loading": {
+        "title": "Processing...",
+        "subtitle": "Retrieving your order details"
+      },
+      "NotFound": {
+        "title": "Order Not Found",
+        "description": "We couldn't find the order details you're looking for. It might have been deleted or the ID is incorrect.",
+        "cta": "Return Home"
+      },
+      "Header": {
+        "title": "Thank You",
+        "subtitle": "Your order has been confirmed successfully"
+      },
+      "Summary": {
+        "orderNumber": "Order Number",
+        "totalAmount": "Total Amount",
+        "diningOption": "Dining Option",
+        "quote": "Your culinary journey begins...",
+        "readyIn": "Ready in {minutes} minutes"
+      },
+      "DiningOption": {
+        "DINE_IN": "Dine In",
+        "TAKE_AWAY": "Take Away"
+      },
+      "Location": {
+        "label": "Pickup Point",
+        "address": ""
+      },
+      "Actions": {
+        "viewReceipt": "View Receipt",
+        "backHome": "Return Home"
+      }
+    },
+    "receipt": {
+      "Header": {
+        "title": "Receipt",
+        "subtitle": "Thank you for your order"
+      },
+      "InfoStrip": {
+        "orderNumber": "Order",
+        "date": "Date",
+        "time": "Time",
+        "status": "Status"
+      },
+      "Items": {
+        "title": "Order Details",
+        "quantity": "Qty"
+      },
+      "Summary": {
+        "subtotal": "Subtotal",
+        "tips": "Tip",
+        "total": "Total Amount"
+      },
+      "Payment": {
+        "label": "Paid via"
+      },
+      "Actions": {
+        "download": "Download PDF",
+        "print": "Print"
+      },
+      "BackLink": {
+        "label": "Back to Dashboard"
+      }
+    },
+    "management": {
+      "List": {
+        "title": "Orders",
+        "description": "Manage and track all orders",
+        "searchPlaceholder": "Search by order ID, customer, staff...",
+        "refresh": "Refresh",
+        "addNewOrder": "Add New Order",
+        "dateRange": {
+          "today": "Today",
+          "yesterday": "Yesterday",
+          "last7": "Last 7 Days",
+          "last30": "Last 30 Days",
+          "thisMonth": "This Month",
+          "lastMonth": "Last Month",
+          "custom": "Custom Range",
+          "from": "From",
+          "to": "To",
+          "apply": "Apply",
+          "label": "Date Range"
+        },
+        "tabs": {
+          "all": "All",
+          "pending": "Pending",
+          "inProgress": "In Progress",
+          "completed": "Completed",
+          "cancelled": "Cancelled"
+        },
+        "statusCards": {
+          "all": "All",
+          "pending": "Pending",
+          "inProgress": "In Progress",
+          "completed": "Completed",
+          "cancelled": "Cancelled"
+        },
+        "statusUpdateSuccess": "Order status updated",
+        "statusUpdateError": "Failed to update order status",
+        "empty": {
+          "title": "No orders found",
+          "hint": "Try adjusting your filters or search query"
+        },
+        "card": {
+          "table": "Table",
+          "tip": "Tip",
+          "items": "items",
+          "moreItems": "more items",
+          "collapse": "Collapse",
+          "actions": "Actions",
+          "note": "Note",
+          "rejectReason": "Reject Reason",
+          "guest": "Guest",
+          "source": {
+            "DINE_IN": "Dine In",
+            "TAKE_AWAY": "Take Away",
+            "TAKEAWAY": "Take Away",
+            "DELIVERY": "Delivery",
+            "Takeaway": "Take Away",
+            "Dine-in": "Dine In",
+            "Delivery": "Delivery"
+          },
+          "status": {
+            "Pending": "Pending",
+            "In progress": "In Progress",
+            "Completed": "Completed",
+            "Cancelled": "Cancelled"
+          },
+          "paymentStatus": {
+            "paid": "Paid",
+            "unpaid": "Unpaid"
+          },
+          "action": {
+            "view": "View Details",
+            "cancel": "Cancel",
+            "reset": "Reset",
+            "print": "Print Invoice",
+            "pay": "Pay & Complete",
+            "printReceipt": "Print Receipt"
+          },
+          "paymentSuccess": "Payment processed successfully",
+          "paymentError": "Failed to process payment"
+        }
+      },
+      "Create": {
+        "title": "Create New Order",
+        "subtitle": "Select food and drinks to start serving the customer.",
+        "menuCatalog": "Menu Catalog",
+        "searchDish": "Find a dish...",
+        "dineIn": "Dine-in",
+        "takeAway": "Take-away",
+        "currentTicket": "Current Ticket",
+        "clear": "Clear",
+        "emptyTicket": "Ticket is empty",
+        "diningTable": "Dining Table",
+        "customer": "Customer",
+        "select": "Select",
+        "change": "Change",
+        "add": "Add",
+        "note": "Add a note (less spicy, no onions, etc.)",
+        "subtotal": "Subtotal",
+        "tax": "Tax (10%)",
+        "total": "Total",
+        "placeOrder": "Place Order",
+        "createInvoice": "Create Invoice",
+        "noTableSelected": "No table selected",
+        "anonymous": "Anonymous",
+        "selectFilterAll": "All",
+        "confirmSelection": "Confirm Selection",
+        "cancel": "Cancel",
+        "confirm": "Confirm",
+        "customerDetails": "Customer Details",
+        "phoneNumber": "Phone Number",
+        "fullName": "Full Name",
+        "email": "Email",
+        "saveDetails": "Save Details"
+      },
+      "Edit": {
+        "menuTitle": "Order Details",
+        "menuSubtitleEdit": "Select items to add to the current order.",
+        "menuSubtitleView": "This order has been paid. View-only mode.",
+        "menuSubtitleCancelled": "This order has been cancelled. View-only mode.",
+        "clear": "Clear",
+        "cancel": "Cancel",
+        "editOrderTitle": "Edit Order #{id}",
+        "viewOrderTitle": "View Order #{id}",
+        "totalAmount": "Total Amount",
+        "orderedItems": "Ordered Items",
+        "newItems": "New Items",
+        "addMoreItemsHint": "Select items from the left menu to add",
+        "paidOrderWarning": "This order has been paid. Please create a new order.",
+        "cancelledOrderWarning": "The order has been cancelled. It is not possible to edit or print the invoice.",
+        "change": "Change",
+        "table": "Table",
+        "addItemsButton": "Save Changes",
+        "createInvoice": "Create Invoice",
+        "createReceipt": "Create Receipt",
+        "newTotal": "Estimated Total",
+        "warningTitle": "Confirm Adding Items",
+        "completedOrderWarning": "This order is completed but not yet paid. Adding new items will change the order status back to In Progress. Are you sure?",
+        "confirmChangeStatus": "Confirm Add",
+        "saving": "Saving...",
+        "successMessage": "Changes saved successfully!",
+        "errorMessage": "An error occurred!",
+        "loading": "Loading...",
+        "takeAway": "Take Away",
+        "guest": "Guest",
+        "notePlaceholder": "Item note...",
+        "subTotal": "Subtotal",
+        "tax": "Tax",
+        "coupon": "Coupon",
+        "tip": "Tip",
+        "paidVia": "Paid via",
+        "status": {
+          "Pending": "Pending",
+          "In progress": "In Progress",
+          "Completed": "Completed",
+          "Cancelled": "Cancelled"
+        },
+        "tableLabel": "Table",
+        "customerLabel": "Customer"
+      },
+      "RecentOrders": {
+        "title": "Recent Orders",
+        "refresh": "Refresh",
+        "filterAll": "All",
+        "dineIn": "Dine-in",
+        "takeAway": "Takeaway",
+        "loading": "Loading orders...",
+        "noOrdersFound": "No orders found.",
+        "table": "Table",
+        "status": {
+          "PENDING": "Pending",
+          "IN_PROGRESS": "In Progress",
+          "COMPLETED": "Completed",
+          "CANCELLED": "Cancelled"
+        }
+      },
+      "DishDetail": {
+        "noDescription": "No description available.",
+        "price": "Price",
+        "addToOrder": "Add to Order"
+      },
+      "PaymentModal": {
+        "title": "Pay & Complete Order",
+        "finalTotal": "Final Total",
+        "orderInfo": "Order Info",
+        "orderNo": "Order No",
+        "noOfItems": "No of Items",
+        "orderType": "Order Type",
+        "orderedMenus": "Ordered Menus",
+        "subTotal": "Sub Total",
+        "tax": "Tax",
+        "totalTax": "Total Tax",
+        "serviceCharge": "Service Charge",
+        "tip": "Tip",
+        "paymentType": "Payment Type",
+        "cash": "Cash",
+        "card": "Card",
+        "scan": "Scan",
+        "promotion": "Promotion",
+        "coupon": "Coupon",
+        "givenAmount": "Given Amount",
+        "balance": "Balance",
+        "note": "Note",
+        "notePlaceholder": "Enter payment note...",
+        "close": "Close",
+        "payAndComplete": "Pay & Complete Order",
+        "paying": "Processing...",
+        "enterTip": "Enter tip amount",
+        "selectPromotion": "Select promotion",
+        "selectCoupon": "Select coupon",
+        "promotions": "Promotions",
+        "coupons": "Coupons"
+      },
+      "InvoiceDetail": {
+        "title": "Invoice Details",
+        "loading": "Loading invoice...",
+        "errorLoad": "Failed to load invoice",
+        "notFound": "Invoice not found.",
+        "exportPrint": "Export / Print",
+        "back": "Back",
+        "status": {
+          "paid": "Paid"
+        },
+        "from": "Invoice From",
+        "phone": "Phone",
+        "to": "Bill To",
+        "walkInCustomer": "Walk-in Customer",
+        "date": "Date",
+        "type": "Type",
+        "table": "Table",
+        "items": "Items Details",
+        "no": "#",
+        "itemDetails": "Item Details",
+        "qty": "Qty",
+        "rate": "Rate",
+        "amount": "Amount",
+        "terms": "Terms and Conditions",
+        "term1": "1. Thank you for dining with us.",
+        "term2": "2. Please keep this receipt for your records.",
+        "paymentVerified": "Note: Payment was verified by {staffName}.",
+        "paymentMethod": "Payment Method",
+        "subtotal": "Subtotal",
+        "discount": "Discount",
+        "tip": "Tip",
+        "total": "Total",
+        "downloadPdf": "Download PDF",
+        "printInvoice": "Print Invoice",
+        "defaultStaff": "Staff",
+        "thankYouBusiness": "Thank you for your business!",
+        "currency": "USD"
+      }
+    },
+    "invoices": {
+      "List": {
+        "title": "Sale Invoices",
+        "description": "Manage and track all sale invoices",
+        "searchPlaceholder": "Search by invoice code, customer, staff...",
+        "refresh": "Refresh",
+        "dateRange": {
+          "today": "Today",
+          "yesterday": "Yesterday",
+          "last7": "Last 7 Days",
+          "last30": "Last 30 Days",
+          "thisMonth": "This Month",
+          "lastMonth": "Last Month",
+          "custom": "Custom Range",
+          "from": "From",
+          "to": "To",
+          "selectDate": "Select Date"
+        },
+        "table": {
+          "no": "No",
+          "invoiceCode": "Invoice Code",
+          "createdAt": "Date & Time",
+          "tableCode": "Table",
+          "customerName": "Customer",
+          "staffName": "Staff",
+          "totalAmount": "Total Amount",
+          "tipAmount": "Tip Amount",
+          "paymentMethod": "Payment Method",
+          "orderStatus": "Order Status"
+        }
+      }
+    },
+    "history": {
+      "title": "Order History",
+      "fabLabel": "HISTORY",
+      "fabAriaLabel": "View order history",
+      "tableLabel": "Table",
+      "itemsCount": "{count} dishes",
+      "refresh": "Refresh",
+      "refreshAriaLabel": "Reload",
+      "close": "Close",
+      "closeAriaLabel": "Close",
+      "headers": {
+        "dish": "Dish",
+        "quantity": "QTY",
+        "price": "Price",
+        "status": "Status"
+      },
+      "status": {
+        "created": "Pending",
+        "inProgress": "In Progress",
+        "ready": "Ready",
+        "served": "Served",
+        "rejected": "Rejected",
+        "cancelled": "Cancelled"
+      },
+      "emptyState": {
+        "title": "No dishes ordered yet.",
+        "subtitle": "History will appear here after you place an order."
+      },
+      "chefNote": "Chef's Note:",
+      "estimatedTotal": "Estimated Total",
+      "requestPayment": "Request Payment",
+      "error": "Unable to load data",
+      "cancelItem": "Cancel Item",
+      "cancelling": "Cancelling...",
+      "cancelError": "Cannot cancel item",
+      "cancelNotAllowed": "“{dishName}” has already been processed by staff and can no longer be cancelled.",
+      "cancelPopup": {
+        "title": "Cancel This Item?",
+        "message": "Are you sure you want to cancel \"{dishName}\"? This action cannot be undone.",
+        "yes": "Yes, Cancel",
+        "no": "No, Keep"
+      },
+      "paymentPopup": {
+        "title": "Request Payment?",
+        "message": "A server will come to your table shortly with the bill for {tableLabel} {tableNumber}. Would you like to proceed?",
+        "estimatedTotalLabel": "ESTIMATED TOTAL",
+        "confirm": "CONFIRM",
+        "closeAriaLabel": "Close payment dialog"
+      },
+      "successPopup": {
+        "title": "Thank You!",
+        "message": "Your payment request for {tableLabel} {tableNumber} has been received. Our server will be with you shortly."
+      }
+    }
+  }
+}

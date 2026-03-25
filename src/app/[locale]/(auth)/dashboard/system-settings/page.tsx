@@ -5,22 +5,26 @@ import { GeneralSettings } from "@/features/staff/system-settings/components/Gen
 import { ProtectedRoute } from "@/components/protected-route";
 import { Permissions } from "@/types/const";
 
-const SystemSettingsContent = () => {
-    const t = useTranslations("AdminSidebar");
-    const st = useTranslations("SystemSettings");
+import { AddSettingHeader } from "@/features/staff/system-settings/components/AddSettingHeader";
 
+const SystemSettingsContent = () => {
+    const st = useTranslations("settings");
     return (
         <div className="flex flex-col h-full bg-gray-50 overflow-auto">
-            <header className="w-full max-w-7xl mx-auto space-y-6 mt-6 px-4 md:px-0">
+            <header className="w-full space-y-6">
                 <div className="flex flex-col gap-2">
-                    <h1 className="text-3xl font-bold text-gray-900 tracking-tight">
-                        {st("title")}
-                    </h1>
-                    <p className="text-sm text-gray-500">{st("description")}</p>
+                    <div className="flex items-center justify-between">
+                        <div>
+                            <h1 className="text-3xl font-bold text-gray-900 tracking-tight">
+                                {st("title")}
+                            </h1>
+                            <p className="text-sm text-gray-500">{st("description")}</p>
+                        </div>
+                        <AddSettingHeader />
+                    </div>
                 </div>
             </header>
-
-            <main className="w-full max-w-7xl mx-auto pb-16 space-y-6 mt-6 px-4 md:px-0">
+            <main className="w-full pb-16 space-y-6 mt-6">
                 <GeneralSettings />
             </main>
         </div>

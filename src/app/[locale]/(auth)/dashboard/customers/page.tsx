@@ -1,6 +1,6 @@
 "use client";
 
-import React, { Suspense, useCallback, useMemo } from "react";
+import React, { Suspense, useCallback, useMemo, useState } from "react";
 import { Loader2, Plus, UserCircle2 } from "lucide-react";
 import { BaseTable } from "@/components/ui/table/base-table";
 import { TableColumn } from "@/types/table.types";
@@ -9,29 +9,118 @@ import { ProtectedRoute } from "@/components/protected-route";
 import { PermissionGuard } from "@/components/permission-guard";
 import { Permissions } from "@/types/const";
 import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import dayjs from "dayjs";
 import { useCustomerList } from "@/features/staff/customer-management/hooks/use-customer-list";
-import { CustomerListDto } from "@/features/staff/customer-management/types/customer-types";
+import { CustomerListDto, CustomerDetailDto } from "@/features/staff/customer-management/types/customer-types";
 import { CustomerActions } from "@/features/staff/customer-management/components/customer-actions";
-import { Badge } from "@/components/ui/badge"; 
-import dayjs from "dayjs"; 
+import { CustomerModal, CustomerFormData } from "@/features/staff/customer-management/components/customer-modal";
+import { staffCustomerService } from "@/features/staff/customer-management/services/customer-service";
+import { ConfirmModal } from "@/components/layout/admin-sidebar/confirm-modal";
+import { useRouter } from "next/navigation";
 
 const CustomerListContent = () => {
     const t = useTranslations("Customer.List");
     const router = useRouter();
+    const tAdd = useTranslations("Customer.Add");
+    const tEdit = useTranslations("Customer.Edit");
 
     const { customers, isLoading, totalCount, paginationInfo, onDataChange, refresh } = useCustomerList();
 
-    const handleView = (customer: CustomerListDto) => {
+    // Modal state
+    const [modalOpen, setModalOpen] = useState(false);
+    const [modalMode, setModalMode] = useState<"add" | "edit" | "view">("add");
+    const [selectedCustomer, setSelectedCustomer] = useState<CustomerDetailDto | null>(null);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isLoadingDetail, setIsLoadingDetail] = useState(false);
+
+    // Delete modal state
+    const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+    const [customerToDelete, setCustomerToDelete] = useState<CustomerListDto | null>(null);
+    const [isDeleting, setIsDeleting] = useState(false);
+
+    // Handlers
+    const handleView = async (customer: CustomerListDto) => {
         router.push(`/dashboard/customers/${customer.customerId}/detail`);
     };
 
-    const handleEdit = (customer: CustomerListDto) => {
-        router.push(`/dashboard/customers/${customer.customerId}/edit`);
+    const handleEdit = async (customer: CustomerListDto) => {
+        setIsLoadingDetail(true);
+        try {
+            const detail = await staffCustomerService.getById(customer.customerId);
+            setSelectedCustomer(detail);
+            setModalMode("edit");
+            setModalOpen(true);
+        } catch (error: any) {
+            toast.error(error.response?.data?.userMessage || t("notifications.loadError"));
+        } finally {
+            setIsLoadingDetail(false);
+        }
     };
 
     const handleCreate = () => {
-        router.push(`/dashboard/customers/create`);
+        setSelectedCustomer(null);
+        setModalMode("add");
+        setModalOpen(true);
+    };
+
+    const handleDeleteClick = (customer: CustomerListDto) => {
+        setCustomerToDelete(customer);
+        setDeleteModalOpen(true);
+    };
+
+    const handleConfirmDelete = async () => {
+        if (!customerToDelete) return;
+        setIsDeleting(true);
+        try {
+            await staffCustomerService.deleteCustomer(customerToDelete.customerId);
+            toast.success(t("notifications.deleteSuccess"));
+            refresh();
+            setDeleteModalOpen(false);
+        } catch (error: any) {
+            toast.error(error.response?.data?.userMessage || t("notifications.deleteError"));
+        } finally {
+            setIsDeleting(false);
+            setCustomerToDelete(null);
+        }
+    };
+
+    const handleCloseModal = () => {
+        setModalOpen(false);
+        setSelectedCustomer(null);
+    };
+
+    const handleSubmit = async (formData: CustomerFormData) => {
+        setIsSubmitting(true);
+        try {
+            if (modalMode === "add") {
+                await staffCustomerService.createCustomer({
+                    phone: formData.phone.trim(),
+                    fullName: formData.fullName.trim() || undefined,
+                    email: formData.email.trim() || undefined,
+                    isMember: formData.isMember,
+                    loyaltyPoints: formData.loyaltyPoints,
+                });
+                toast.success(tAdd("notifications.createSuccess"));
+            } else if (modalMode === "edit" && selectedCustomer) {
+                await staffCustomerService.updateCustomer(selectedCustomer.customerId, {
+                    phone: formData.phone.trim(),
+                    fullName: formData.fullName.trim() || undefined,
+                    email: formData.email.trim() || undefined,
+                    isMember: formData.isMember,
+                    loyaltyPoints: formData.loyaltyPoints,
+                });
+                toast.success(tEdit("notifications.updateSuccess"));
+            }
+            refresh();
+            handleCloseModal();
+        } catch (error: any) {
+            const errorMessage = error.response?.data?.userMessage ||
+                (modalMode === "add" ? tAdd("notifications.createError") : tEdit("notifications.updateError"));
+            toast.error(errorMessage);
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     // Filter Options
@@ -45,7 +134,7 @@ const CustomerListContent = () => {
         {
             field: "no",
             header: t("table.no"),
-            width: "70px",
+            width: "60px",
             align: "center" as const,
             sortable: false,
             cellRender: ({ rowIndex }: { rowIndex: number }) =>
@@ -54,7 +143,7 @@ const CustomerListContent = () => {
         {
             field: "fullName",
             header: t("table.customerName"),
-            width: "250px",
+            width: "150px",
             filterType: "text" as const,
             cellRender: ({ item }: { item: CustomerListDto }) => (
                 <div className="flex items-center gap-3">
@@ -71,7 +160,7 @@ const CustomerListContent = () => {
         {
             field: "email",
             header: t("table.email"),
-            width: "200px",
+            width: "180px",
             cellRender: ({ value }: { value: string | null }) => (
                 <span className="text-gray-600">{value || "-"}</span>
             ),
@@ -79,20 +168,20 @@ const CustomerListContent = () => {
         {
             field: "isMember",
             header: t("table.type"),
-            width: "120px",
+            width: "110px",
             align: "center" as const,
             filterType: "select" as const,
             filterOptions: memberFilterOptions,
             cellRender: ({ value }: { value: boolean }) => (
-                value ? 
-                <span className="px-2 py-1 bg-green-100 text-green-700 text-xs font-medium rounded-full">{t("labels.member")}</span> : 
-                <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs font-medium rounded-full">{t("labels.guest")}</span>
+                value ?
+                    <span className="px-2 py-1 bg-green-100 text-green-700 text-xs font-medium rounded-full">{t("labels.member")}</span> :
+                    <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs font-medium rounded-full">{t("labels.guest")}</span>
             ),
         },
         {
             field: "orderCount",
             header: t("table.orders"),
-            width: "100px",
+            width: "90px",
             align: "center" as const,
             cellRender: ({ value }: { value: number }) => (
                 <span className="font-semibold text-gray-700">{value}</span>
@@ -101,7 +190,7 @@ const CustomerListContent = () => {
         {
             field: "loyaltyPoints",
             header: t("table.points"),
-            width: "100px",
+            width: "80px",
             align: "center" as const,
             cellRender: ({ value }: { value: number | null }) => (
                 <span className="text-orange-600 font-medium">{value || 0}</span>
@@ -110,7 +199,7 @@ const CustomerListContent = () => {
         {
             field: "lastOrderTime",
             header: t("table.lastOrder"),
-            width: "160px",
+            width: "150px",
             cellRender: ({ value }: { value: string | null }) => (
                 <span className="text-gray-600 text-sm">
                     {value ? dayjs(value).format("DD/MM/YYYY HH:mm") : "-"}
@@ -130,48 +219,75 @@ const CustomerListContent = () => {
     );
 
     return (
-        <div className="w-full h-full flex flex-col overflow-hidden">
-            <BaseTable<CustomerListDto>
-                data={customers}
-                loading={isLoading}
-                columns={columns}
-                rowKey="customerId"
-                total={totalCount}
-                onDataChange={onDataChange}
-                onRefresh={refresh}
-                searchPlaceholder={t("searchPlaceholder")}
-                defaultRowsPerPage={10}
-                rowsPerPageOptions={[10, 20, 50]}
-                renderTitle={() => (
-                    <div className="flex justify-between items-center w-full mb-4">
-                        <div>
-                            <h1 className="text-3xl font-bold text-gray-900 tracking-tight">
-                                {t("title")}
-                            </h1>
-                            <p className="text-sm text-gray-500 mt-1">{t("description")}</p>
+        <>
+            <div className="w-full h-full flex flex-col overflow-hidden">
+                <BaseTable<CustomerListDto>
+                    data={customers}
+                    loading={isLoading || isLoadingDetail}
+                    columns={columns}
+                    rowKey="customerId"
+                    total={totalCount}
+                    onDataChange={onDataChange}
+                    onRefresh={refresh}
+                    searchPlaceholder={t("searchPlaceholder")}
+                    defaultRowsPerPage={10}
+                    rowsPerPageOptions={[10, 20, 50]}
+                    renderTitle={() => (
+                        <div className="flex justify-between items-center w-full mb-4">
+                            <div>
+                                <h1 className="text-3xl font-bold text-gray-900 tracking-tight">
+                                    {t("title")}
+                                </h1>
+                                <p className="text-sm text-gray-500 mt-1">{t("description")}</p>
+                            </div>
+                            <PermissionGuard permission={Permissions.CreateAccount}>
+                                <Button
+                                    onClick={handleCreate}
+                                    variant="outline"
+                                    className="shadow-md"
+                                >
+                                    <Plus className="mr-2 h-4 w-4" />
+                                    {t("addNew")}
+                                </Button>
+                            </PermissionGuard>
                         </div>
-                        <PermissionGuard permission={Permissions.CreateAccount}>
-                            <Button
-                                onClick={handleCreate}
-                                variant="outline"
-                                className="shadow-md"
-                            >
-                                <Plus className="mr-2 h-4 w-4" />
-                                {t("addNew")}
-                            </Button>
-                        </PermissionGuard>
-                    </div>
-                )}
-                renderCell={handleGlobalRenderCell}
-                renderActionColumn={(item) => (
-                    <CustomerActions
-                        customer={item}
-                        onView={handleView}
-                        onEdit={handleEdit}
-                    />
-                )}
+                    )}
+                    renderCell={handleGlobalRenderCell}
+                    renderActionColumn={(item) => (
+                        <CustomerActions
+                            customer={item}
+                            onView={handleView}
+                            onEdit={handleEdit}
+                            onDelete={handleDeleteClick}
+                        />
+                    )}
+                />
+            </div>
+
+            {/* Add / Edit / View Modal */}
+            <CustomerModal
+                isOpen={modalOpen}
+                mode={modalMode}
+                customer={selectedCustomer}
+                onClose={handleCloseModal}
+                onSubmit={handleSubmit}
+                onEdit={() => setModalMode("edit")}
+                isSubmitting={isSubmitting}
             />
-        </div>
+
+            {/* Delete Confirmation */}
+            <ConfirmModal
+                isOpen={deleteModalOpen}
+                onClose={() => { setDeleteModalOpen(false); setCustomerToDelete(null); }}
+                onConfirm={handleConfirmDelete}
+                title={t("deleteModal.title")}
+                message={t("deleteModal.message", { name: customerToDelete?.fullName || customerToDelete?.phone || "" })}
+                confirmText={t("deleteModal.confirm")}
+                cancelText={t("deleteModal.cancel")}
+                isLoading={isDeleting}
+                variant="danger"
+            />
+        </>
     );
 };
 

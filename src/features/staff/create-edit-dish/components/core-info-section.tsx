@@ -104,14 +104,27 @@ export const CoreInfoSection: React.FC<{
         {/* 3. PRICE */}
         <div className="space-y-2">
           {/* _OLD: External label moved into ALInput via title + required props. */}
-          <ALInput
-            title={t("core.price")}
-            required
-            type="number"
-            step="0.01"
-            placeholder="0.00"
-            error={errors.price?.message}
-            {...register("price")}
+          <Controller
+            control={control}
+            name="price"
+            render={({ field }) => (
+              <ALInput
+                title={t("core.price")}
+                required
+                type="number"
+                step="0.01"
+                placeholder="0.00"
+                error={errors.price?.message}
+                value={(field.value as string | number | undefined) ?? ""}
+                onChange={(e) => {
+                  const val = e.target.value;
+                  field.onChange(val === "" ? undefined : Number(val));
+                }}
+                onBlur={field.onBlur}
+                name={field.name}
+                ref={field.ref}
+              />
+            )}
           />
         </div>
 
@@ -139,7 +152,7 @@ export const CoreInfoSection: React.FC<{
         {/* 5. IS ONLINE (Checkbox) */}
         <div className="flex items-end h-full pb-0.5"> 
           <label className="flex items-center gap-3 cursor-pointer group p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors h-10 w-full">
-            <input 
+            <input
                 type="checkbox" 
                 {...register("isOnline")} 
                 className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500 transition-transform" 

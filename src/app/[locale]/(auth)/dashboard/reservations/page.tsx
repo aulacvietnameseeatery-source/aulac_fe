@@ -2,23 +2,29 @@
 
 import React, { Suspense, useState } from "react";
 import { Loader2, RefreshCcw, Search, Armchair, Calendar as CalendarIcon, CirclePlus } from "lucide-react";
-import { format } from "date-fns";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { useReservationList } from "@/features/staff/reservation-management/hooks/use-reservation-list";
 import { ReservationCard } from "@/features/staff/reservation-management/components/reservation-card";
 import { AssignTableModal } from "@/features/staff/reservation-management/components/assign-table-modal";
 import { ReservationDto } from "@/features/staff/reservation-management/types/reservation-types";
 import { TablePagination } from "@/components/ui/table";
-import { useRouter } from "next/navigation";
 import { ProtectedRoute } from "@/components/protected-route";
 import { Permissions } from "@/types/const";
 import { reservationService } from "@/features/staff/reservation-management/services/reservation-service";
 import { toast } from "sonner";
 import { EditReservationModal } from "@/features/staff/reservation-management/components/edit-reservation-modal";
+import { ReservationDetailModal } from "@/features/staff/reservation-management/components/reservation-detail-modal";
 import { ALConfirmDialog } from "@/components/ui/al-confirm-dialog";
+import { CreateReservationModal } from "@/features/staff/reservation-create";
+import { localizeStatusLabel } from "@/features/staff/reservation-management/utils/localize-reservation";
+
+import { dateUtils } from "@/lib/date-utils";
 
 const ReservationListContent = () => {
-    const router = useRouter();
+    const t = useTranslations("reservations.management.list");
+    const tm = useTranslations("reservations.management.messages");
+    const tStatus = useTranslations("reservations.management.status");
     const {
         reservations,
         statuses,
@@ -50,10 +56,13 @@ const ReservationListContent = () => {
         }
     };
 
+    const [showCreateModal, setShowCreateModal] = useState(false);
+
     const handleCreate = () => {
-        router.push(`/dashboard/reservations/create`);
+        setShowCreateModal(true);
     };
 
+    const [detailReservationId, setDetailReservationId] = useState<number | null>(null);
     const [assignTableReservation, setAssignTableReservation] = useState<ReservationDto | null>(null);
     const [editReservationId, setEditReservationId] = useState<number | null>(null);
     const [deleteReservationId, setDeleteReservationId] = useState<number | null>(null);
@@ -62,10 +71,10 @@ const ReservationListContent = () => {
     const handleStatusUpdate = async (reservationId: number, statusCode: string) => {
         try {
             await reservationService.updateReservationStatus(reservationId, statusCode);
-            toast.success("Trạng thái đã được cập nhật thành công!");
+            toast.success(tm("checkInSuccess"));
             actions.refresh();
         } catch (error: any) {
-            toast.error(error.message || "Lỗi khi cập nhật trạng thái");
+            toast.error(error.message || tm("checkInFail"));
         }
     };
 
@@ -74,10 +83,10 @@ const ReservationListContent = () => {
         setIsDeleting(true);
         try {
             await reservationService.deleteReservation(deleteReservationId);
-            toast.success("Xóa đơn đặt bàn thành công!");
+            toast.success(t("deleteSuccess"));
             actions.refresh();
         } catch (error: any) {
-            toast.error(error.message || "Lỗi khi xóa đơn đặt bàn");
+            toast.error(error.message || t("deleteFail"));
         } finally {
             setIsDeleting(false);
             setDeleteReservationId(null);
@@ -92,11 +101,11 @@ const ReservationListContent = () => {
 
                 {/* Hàng 1: Tiêu đề */}
                 <div className="flex items-center justify-between sm:justify-start gap-3">
-                    <h3 className="text-2xl font-bold text-[#1A3A52] m-0">Reservations</h3>
+                    <h3 className="text-2xl font-bold text-[#1A3A52] m-0">{t("title")}</h3>
                     <button
                         onClick={actions.refresh}
                         className="p-2 bg-[#FDFBF9] border border-[#D5BA98]/60 rounded-full text-[#1A3A52]/70 hover:bg-[#D5BA98]/10 hover:text-[#1A3A52] transition-colors shadow-none"
-                        title="Refresh"
+                        title={t("refresh")}
                     >
                         <RefreshCcw className="w-4 h-4" />
                     </button>
@@ -113,7 +122,7 @@ const ReservationListContent = () => {
                             <CalendarIcon className="w-4 h-4 text-[#1A3A52]/55 mr-2" />
                             <input
                                 type="date"
-                                value={filters.date ? format(filters.date, "yyyy-MM-dd") : ""}
+                                value={filters.date ? dateUtils.formatLocal(filters.date, "yyyy-MM-dd") : ""}
                                 onChange={(e) => actions.onDateChange(e.target.value ? new Date(e.target.value) : null)}
                                 className="w-full outline-none text-sm text-[#1A3A52] bg-transparent cursor-pointer [&::-webkit-calendar-picker-indicator]:cursor-pointer"
                             />
@@ -123,25 +132,23 @@ const ReservationListContent = () => {
                         <div className="flex bg-[#D5BA98]/12 p-1 rounded-lg border border-[#D5BA98]/40 overflow-x-auto hide-scrollbar w-full sm:w-auto max-w-full">
                             <button
                                 onClick={() => actions.onStatusChange(null)}
-                                className={`shrink-0 px-4 py-1.5 text-[13px] font-medium rounded-md transition-all whitespace-nowrap ${
-                                    filters.statusId === null
-                                        ? 'bg-[#1A3A52] text-white shadow-sm border border-[#1A3A52]'
-                                        : 'text-[#1A3A52]/65 hover:text-[#1A3A52] hover:bg-[#D5BA98]/18'
+                                className={`shrink-0 px-4 py-1.5 text-[13px] font-medium rounded-md transition-all whitespace-nowrap ${filters.statusId === null
+                                    ? 'bg-[#1A3A52] text-white shadow-sm border border-[#1A3A52]'
+                                    : 'text-[#1A3A52]/65 hover:text-[#1A3A52] hover:bg-[#D5BA98]/18'
                                 }`}
                             >
-                                All
+                                {t("all")}
                             </button>
                             {statuses.map(status => (
                                 <button
                                     key={status.statusId}
                                     onClick={() => actions.onStatusChange(status.statusId)}
-                                    className={`shrink-0 px-4 py-1.5 text-[13px] font-medium rounded-md transition-all whitespace-nowrap ${
-                                        filters.statusId === status.statusId
-                                            ? 'bg-[#1A3A52] text-white shadow-sm border border-[#1A3A52]'
-                                            : 'text-[#1A3A52]/65 hover:text-[#1A3A52] hover:bg-[#D5BA98]/18'
+                                    className={`shrink-0 px-4 py-1.5 text-[13px] font-medium rounded-md transition-all whitespace-nowrap ${filters.statusId === status.statusId
+                                        ? 'bg-[#1A3A52] text-white shadow-sm border border-[#1A3A52]'
+                                        : 'text-[#1A3A52]/65 hover:text-[#1A3A52] hover:bg-[#D5BA98]/18'
                                     }`}
                                 >
-                                    {status.statusName}
+                                    {localizeStatusLabel(status.statusCode, status.statusName, tStatus)}
                                 </button>
                             ))}
                         </div>
@@ -157,7 +164,7 @@ const ReservationListContent = () => {
                             </div>
                             <input
                                 type="text"
-                                placeholder="Search customer, phone..."
+                                placeholder={t("searchPlaceholder")}
                                 value={filters.search || ""}
                                 onChange={(e) => actions.onSearchChange(e.target.value)}
                                 className="px-3 py-2 w-full sm:w-55 md:w-65 outline-none text-sm text-[#1A3A52] bg-transparent placeholder:text-[#1A3A52]/40"
@@ -171,7 +178,7 @@ const ReservationListContent = () => {
                             className="h-10 w-full sm:w-auto shrink-0 border-[#D5BA98]/60 bg-[#FDFBF9] text-[#1A3A52] hover:bg-[#D5BA98]/10"
                         >
                             <CirclePlus size={16} className="mr-2" />
-                            Add Reservation
+                            {t("addNew")}
                         </Button>
                     </div>
                 </div>
@@ -196,7 +203,7 @@ const ReservationListContent = () => {
                                         onAssignTable={() => setAssignTableReservation(item)}
                                         onEdit={(id) => setEditReservationId(id)}
                                         onDelete={(id) => setDeleteReservationId(id)}
-                                        onCardClick={(id) => router.push(`/dashboard/reservations/${id}`)}
+                                        onCardClick={(id) => setDetailReservationId(id)}
                                         onStatusUpdate={handleStatusUpdate}
                                     />
                                 ))}
@@ -205,7 +212,7 @@ const ReservationListContent = () => {
                             {reservations.length === 0 && (
                                 <div className="flex flex-col items-center justify-center py-16 bg-[#FDFBF9] rounded-xl border border-[#D5BA98]/40 border-dashed mt-4 text-[#1A3A52]/60">
                                     <Armchair className="w-12 h-12 text-[#D5BA98] mb-3" />
-                                    <p className="text-[#1A3A52] text-lg">No reservations found</p>
+                                    <p className="text-[#1A3A52] text-lg">{t("empty")}</p>
                                 </div>
                             )}
                         </div>
@@ -239,7 +246,7 @@ const ReservationListContent = () => {
                     }}
                 />
             )}
-            
+
             {editReservationId && (
                 <EditReservationModal
                     reservationId={editReservationId}
@@ -251,16 +258,42 @@ const ReservationListContent = () => {
                 />
             )}
 
+            {detailReservationId && (
+                <ReservationDetailModal
+                    reservationId={detailReservationId}
+                    open={!!detailReservationId}
+                    onClose={() => setDetailReservationId(null)}
+                    onEdit={(id) => {
+                        setDetailReservationId(null);
+                        setEditReservationId(id);
+                    }}
+                    onDelete={(id) => {
+                        setDetailReservationId(null);
+                        setDeleteReservationId(id);
+                    }}
+                />
+            )}
+
+            {showCreateModal && (
+                <CreateReservationModal
+                    onClose={() => setShowCreateModal(false)}
+                    onSuccess={() => {
+                        setShowCreateModal(false);
+                        actions.refresh();
+                    }}
+                />
+            )}
+
             <ALConfirmDialog
                 isOpen={!!deleteReservationId}
                 onClose={() => setDeleteReservationId(null)}
                 onConfirm={handleDelete}
                 variant="delete"
-                title="Xóa đơn đặt bàn"
-                message="Bạn có chắc chắn muốn xóa đơn đặt bàn này? Hành động này không thể hoàn tác và sẽ giải phóng các bàn đã gán (nếu có)."
+                title={t("deleteTitle")}
+                message={t("deleteMessage")}
                 isLoading={isDeleting}
-                confirmText="Xác nhận xóa"
-                cancelText="Hủy"
+                confirmText={t("confirmDelete")}
+                cancelText={t("cancel")}
             />
         </div>
     );

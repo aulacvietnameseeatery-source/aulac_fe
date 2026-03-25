@@ -24,7 +24,7 @@ interface BookingModalProps {
 }
 
 export default function BookingModal({ isOpen, onClose, onConfirm, tableData, guestInfo }: BookingModalProps) {
-  const t = useTranslations('Reservation.BookingModal');
+  const t = useTranslations('reservations.public.bookingModal');
 
   if (!isOpen || !tableData) return null;
 
@@ -51,7 +51,7 @@ export default function BookingModal({ isOpen, onClose, onConfirm, tableData, gu
             <span className="booking-modal-image-label">
               {t("selectedTable")}
             </span>
-            <h2 className="text-5xl font-bold">{tableData.name}</h2>
+            <h2 className="text-3xl md:text-5xl font-bold">{tableData.name}</h2>
           </div>
         </div>
 
@@ -69,7 +69,7 @@ export default function BookingModal({ isOpen, onClose, onConfirm, tableData, gu
               {t("restaurantName")}
             </p>
 
-            <div className="grid grid-cols-2 gap-8 mb-8 border-b border-stone-100 pb-8">
+            <div className="grid grid-cols-2 gap-4 sm:gap-8 mb-6 sm:mb-8 border-b border-stone-100 pb-6 sm:pb-8">
               <div>
                 <span className="block text-xs font-bold text-stone-400 uppercase tracking-widest mb-1">
                   {t("date")}
@@ -97,7 +97,7 @@ export default function BookingModal({ isOpen, onClose, onConfirm, tableData, gu
             </div>
 
             {guestInfo && (
-              <div className="bg-stone-50 p-5 rounded-xl border border-stone-100 mb-8 space-y-3">
+              <div className="bg-stone-50 p-4 sm:p-5 rounded-xl border border-stone-100 mb-6 sm:mb-8 space-y-3">
                 <h4 className="text-xs font-bold text-[#1A3A52] uppercase tracking-widest mb-2">
                   {t("guestInfo")}
                 </h4>
@@ -123,7 +123,7 @@ export default function BookingModal({ isOpen, onClose, onConfirm, tableData, gu
               </div>
             )}
 
-            <div className="flex gap-3 text-stone-500 text-xs mb-8 bg-stone-50 p-3 rounded-lg border border-stone-100">
+            <div className="flex gap-3 text-stone-500 text-[10px] sm:text-xs mb-6 sm:mb-8 bg-stone-50 p-3 rounded-lg border border-stone-100">
               <Info size={16} className="shrink-0 mt-0.5" />
               <p className="leading-relaxed">{t("policy")}</p>
             </div>

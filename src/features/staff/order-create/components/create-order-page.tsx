@@ -15,9 +15,10 @@ import { DishDto } from '../types/create-order.types';
 import { Menu } from 'lucide-react';
 import { OrderHistory, OrderItem } from '../../order-management/types/order-history.types';
 import { PrintOrderModal } from '../../order-management/components/PrintOrderModal';
+import { ExistingOrderItemDto, OrderItemStatus, OrderStatus } from '../types/edit-order.types';
 
 export const CreateOrderPage = () => {
-  const t = useTranslations("Order.Create");
+  const t = useTranslations("orders.management.Create");
   const {
     locale, isLoading, dishes, categories, tables, cart, orderType, setOrderType,
     selectedTable, setSelectedTable, customer, setCustomer,
@@ -41,10 +42,10 @@ export const CreateOrderPage = () => {
           email: customer.email
         } : undefined,
         source: orderType,
-        items: cart.map(item => ({ 
-          dishId: item.dishId, 
+        items: cart.map(item => ({
+          dishId: item.dishId,
           quantity: item.quantity,
-          note: item.note || undefined 
+          note: item.note || undefined
         }))
       });
       toast.success('Order placed successfully!');
@@ -61,14 +62,23 @@ export const CreateOrderPage = () => {
   const handleAddDishWithQuantity = (dish: DishDto, quantity: number) => {
     const existing = cart.find(item => item.dishId === dish.dishId);
     if (!existing) {
-      addToCart(dish); 
+      addToCart(dish);
       if (quantity > 1) {
-        updateQuantity(dish.dishId, quantity - 1); 
+        updateQuantity(dish.dishId, quantity - 1);
       }
     } else {
-      updateQuantity(dish.dishId, quantity); 
+      updateQuantity(dish.dishId, quantity);
     }
     setSelectedDish(null);
+  };
+
+  const handleQuickAdd = (dish: DishDto) => {
+    const existing = cart.find(item => item.dishId === dish.dishId);
+    if (!existing) {
+      addToCart(dish);
+    } else {
+      updateQuantity(dish.dishId, 1);
+    }
   };
 
   if (isLoading) {
@@ -85,43 +95,54 @@ export const CreateOrderPage = () => {
   }
 
   // Create Order Items from the current shopping cart
-  const mappedOrderItems: OrderItem[] = cart.map((item, index) => ({
+  const mappedOrderItems: ExistingOrderItemDto[] = cart.map((item, index) => ({
     orderItemId: -(index + 1), // Temporary ID
     dishId: item.dishId,
     dishName: item.localName,
     quantity: item.quantity,
     price: item.price,
-    itemStatus: 'New', 
+    itemStatus: 'Created' as OrderItemStatus,
     note: item.note || undefined
   }));
 
   const cartTotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const totalItemCount = cart.reduce((acc, item) => acc + item.quantity, 0);
 
-  // create mock OrderHistory
-  const mappedOrderHistory: OrderHistory = {
-    orderId: 0, 
-    tableId: selectedTable?.tableId || 0,
+  // create mock OrderDetailDto (Invoice tạm tính)
+  const mappedOrderHistory = {
+    orderId: 0, // Đơn chưa tạo nên chưa có ID chính thức
+    tableId: selectedTable?.tableId,
     tableCode: selectedTable?.tableCode || '',
     staffId: 0,
-    staffName: '', 
-    customerId: customer?.customerId || 0,
+    staffName: '',
+    customerId: customer?.customerId,
     customerName: customer?.fullName || '',
-    totalAmount: cartTotal,
-    orderStatus: 'Pending',
+    
+    subTotalAmount: cartTotal,
+    totalAmount: cartTotal, // Tạm thời bằng Subtotal vì chưa có tax/discount
+    taxAmount: 0,
+    tipAmount: 0,
+    
+    orderStatus: 'Pending' as OrderStatus,
     source: toOrderSourceCode(orderType),
+    
     createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
     isPaid: false,
+    
     orderItems: mappedOrderItems,
+    promotions: [], // Chưa có thông tin giảm giá
+    coupons: [],    // Chưa có thông tin mã giảm giá
+    payments: [],   // Chưa thanh toán
     itemCount: totalItemCount
   };
 
   return (
     <div className="flex flex-col lg:flex-row h-[100dvh] lg:h-full w-full font-sans overflow-hidden">
-      
+
       {/* ── Ticket opening button on Mobile ── */}
       {!showMobileTicket && (
-        <button 
+        <button
           onClick={() => setShowMobileTicket(true)}
           className="lg:hidden fixed bottom-4 right-4 z-50 bg-[#1A3A52] text-[#D5BA98] p-4 rounded-full shadow-2xl flex items-center justify-center animate-in fade-in zoom-in duration-300"
         >
@@ -135,7 +156,7 @@ export const CreateOrderPage = () => {
       )}
 
       <div className="flex-1 flex flex-col overflow-hidden lg:pr-5 gap-4">
-        
+
         {/* Recent Orders Section */}
         <section className="shrink-0 bg-white rounded-xl border border-[#D5BA98]/30 shadow-sm p-4">
           <RecentOrders />
@@ -143,15 +164,16 @@ export const CreateOrderPage = () => {
 
         {/* Menu Categories Section */}
         <section className="flex-1 min-h-0 bg-white rounded-xl border border-[#D5BA98]/30 shadow-sm p-4 flex flex-col">
-          <MenuCatalog 
+          <MenuCatalog
             title={t('title')}
             subtitle={t('subtitle')}
-            dishes={dishes} 
+            dishes={dishes}
             categories={categories}
-            locale={locale} 
-            getLocalizedDishName={getLocalizedDishName} 
+            locale={locale}
+            getLocalizedDishName={getLocalizedDishName}
             getLocalizedCategoryName={getLocalizedCategoryName}
             onDishClick={(dish) => setSelectedDish(dish)}
+            onQuickAdd={handleQuickAdd}
           />
         </section>
 
@@ -163,7 +185,7 @@ export const CreateOrderPage = () => {
         lg:relative lg:translate-x-0 lg:shadow-none lg:border-l rounded-xl border lg:border-[#D5BA98]/30 overflow-hidden
         ${showMobileTicket ? 'translate-x-0' : 'translate-x-full'}
       `}>
-        <CurrentTicket 
+        <CurrentTicket
           cart={cart}
           orderType={orderType}
           selectedTable={selectedTable}
@@ -183,16 +205,16 @@ export const CreateOrderPage = () => {
 
       {/* ── Background Overlay for Mobile ── */}
       {showMobileTicket && (
-        <div 
-          className="fixed inset-0 bg-[#1A3A52]/50 z-30 lg:hidden backdrop-blur-sm" 
-          onClick={() => setShowMobileTicket(false)} 
+        <div
+          className="fixed inset-0 bg-[#1A3A52]/50 z-30 lg:hidden backdrop-blur-sm"
+          onClick={() => setShowMobileTicket(false)}
         />
       )}
 
       {/* ── Modals ── */}
-      <DishDetailModal 
-        dish={selectedDish} 
-        isOpen={!!selectedDish} 
+      <DishDetailModal
+        dish={selectedDish}
+        isOpen={!!selectedDish}
         onClose={() => setSelectedDish(null)}
         onAdd={handleAddDishWithQuantity}
         locale={locale}
@@ -205,7 +227,7 @@ export const CreateOrderPage = () => {
         order={mappedOrderHistory}
         isOpen={isPrintModalOpen}
         onClose={() => setIsPrintModalOpen(false)}
-        type="receipt" 
+        type="invoice"
       />
     </div>
   );

@@ -11,13 +11,13 @@ interface TableGridProps {
   isLoading?: boolean;
 }
 
-export default function TableGrid ({
+export default function TableGrid({
   tables = [],
   selectedTableId,
   onSelect,
   isLoading = false,
-} : TableGridProps) {
-  const t = useTranslations('Reservation.TableGrid');
+}: TableGridProps) {
+  const t = useTranslations('reservations.public.tableGrid');
 
   if (isLoading) {
     return (

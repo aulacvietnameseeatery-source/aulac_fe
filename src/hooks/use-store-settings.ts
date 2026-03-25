@@ -2,6 +2,10 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { getPublicGroupSettings } from '@/features/staff/system-settings/services/system-setting.service';
+import { normalizeMediaUrl } from '@/lib/normalize-media-url';
+
+
+
 
 export interface StoreSettings {
     logoUrl: string;
@@ -16,11 +20,14 @@ export interface StoreSettings {
     facebookLink: string;
     instagramLink: string;
     tiktokLink: string;
+    promoVideoUrl: string;
 }
 
 export const useStoreSettings = () => {
+    const locale = typeof window !== 'undefined' ? (window.location.pathname.split('/')[1] || 'en') : 'en';
+
     return useQuery({
-        queryKey: ['system-settings', 'store', 'public'],
+        queryKey: ['system-settings', 'store', 'public', locale],
         queryFn: async () => {
             const settings = await getPublicGroupSettings('store');
             const data: StoreSettings = {
@@ -36,17 +43,43 @@ export const useStoreSettings = () => {
                 facebookLink: '',
                 instagramLink: '',
                 tiktokLink: '',
+                promoVideoUrl: '',
             };
 
             settings.forEach(s => {
-                const key = s.settingKey.replace('store.', '');
-                if (key in data) {
-                    (data as any)[key] = s.value?.toString() || '';
+                const fullKey = s.settingKey.replace('store.', '');
+
+                // If key has locale suffix (e.g. name_en), check if it matches current locale
+                let key = fullKey;
+                let isMatch = true;
+
+                const localeSuffix = `_${locale}`;
+                if (fullKey.endsWith(localeSuffix)) {
+                    key = fullKey.replace(localeSuffix, '');
+                    isMatch = true;
+                } else if (fullKey.includes('_')) {
+                    // It's a localized key but for a DIFFERENT locale
+                    const parts = fullKey.split('_');
+                    const suffix = parts[parts.length - 1];
+                    if (['en', 'vi', 'fr'].includes(suffix)) {
+                        isMatch = false;
+                    }
+                }
+
+                if (isMatch && key in data) {
+                    let value = s.value?.toString() || '';
+
+                    // Specific logic for URLs
+                    if ((key === 'logoUrl' || key === 'promoVideoUrl') && value) {
+                        value = normalizeMediaUrl(value);
+                    }
+
+                    (data as any)[key] = value;
                 }
             });
 
             return data;
         },
-        staleTime: 1000 * 60 * 60, // 1 hour
+        staleTime: 1000 * 60 * 5, // 5 minutes
     });
 };

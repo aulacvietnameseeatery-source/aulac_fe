@@ -3,7 +3,7 @@ import { useTranslations } from "next-intl";
 import "../styles/index.css";
 
 export default function ReceiptPaymentFooter({ paymentMethod }: { paymentMethod: string }) {
-  const t = useTranslations("OrderReceipt.Payment");
+  const t = useTranslations("orders.receipt.Payment");
 
   return (
     <div className="receipt-payment-footer">

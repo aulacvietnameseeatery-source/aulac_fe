@@ -23,7 +23,7 @@ interface IngredientModalProps {
 
 export interface IngredientFormData {
     ingredientName: string;
-    unit: string;
+    unitLvId: number | "";
     typeLvId: number | "";
     minStockLevel: number;
     supplierIds: number[];
@@ -32,34 +32,21 @@ export interface IngredientFormData {
 
 const initialFormData: IngredientFormData = {
     ingredientName: "",
-    unit: "kg",
+    unitLvId: "",
     typeLvId: "",
     minStockLevel: 0,
     supplierIds: [],
     images: [],
 };
 
-const UNIT_OPTIONS = [
-    { label: "Kilogram (kg)", value: "kg" },
-    { label: "Gram (g)", value: "g" },
-    { label: "Liter (l)", value: "l" },
-    { label: "Milliliter (ml)", value: "ml" },
-    { label: "Piece/Unit (cái/hộp)", value: "pcs" },
-];
-
 const IngredientModal: React.FC<IngredientModalProps> = ({
-                                                             isOpen,
-                                                             mode,
-                                                             ingredient,
-                                                             onClose,
-                                                             onSubmit,
-                                                             isSubmitting = false,
-                                                             availableSuppliers = [],
+                                                             isOpen, mode, ingredient, onClose, onSubmit, isSubmitting = false, availableSuppliers = []
                                                          }) => {
     const [formData, setFormData] = useState<IngredientFormData>(initialFormData);
     const [pendingFiles, setPendingFiles] = useState<File[]>([]);
     const [removedImageIds, setRemovedImageIds] = useState<number[]>([]);
 
+    // Hook lấy Danh mục nguyên liệu
     const typeLookup = useLookupCrud({
         typeId: LOOKUP_TYPE.IngredientType,
         queryKey: ["lookups", "ingredient-type"],
@@ -67,11 +54,18 @@ const IngredientModal: React.FC<IngredientModalProps> = ({
         typeLabel: "Ingredient Type",
     });
 
+    const unitLookup = useLookupCrud({
+        typeId: LOOKUP_TYPE.IngredientUnit,
+        queryKey: ["lookups", "ingredient-unit"],
+        entityLabel: "Unit",
+        typeLabel: "Unit",
+    });
+
     useEffect(() => {
         if (mode === "edit" && ingredient) {
             setFormData({
                 ingredientName: ingredient.ingredientName,
-                unit: ingredient.unit,
+                unitLvId: ingredient.unitLvId || "", // 🟢
                 typeLvId: ingredient.typeLvId || "",
                 minStockLevel: ingredient.minStockLevel,
                 supplierIds: ingredient.suppliers?.map(s => s.supplierId) || [],
@@ -97,17 +91,21 @@ const IngredientModal: React.FC<IngredientModalProps> = ({
 
     const handleRemoveSupplier = (supplierId: number) => {
         setFormData(prev => ({
-            ...prev,
-            supplierIds: prev.supplierIds.filter(id => id !== supplierId)
+            ...prev, supplierIds: prev.supplierIds.filter(id => id !== supplierId)
         }));
     };
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
+        // Validate Đơn vị tính
+        if (!formData.unitLvId) {
+            return;
+        }
+
         const submitData: SaveIngredientRequest = {
             ingredientName: formData.ingredientName,
-            unit: formData.unit,
+            unitLvId: Number(formData.unitLvId), // 🟢
             typeLvId: formData.typeLvId ? Number(formData.typeLvId) : undefined,
             minStockLevel: Number(formData.minStockLevel),
             supplierIds: formData.supplierIds,
@@ -119,36 +117,20 @@ const IngredientModal: React.FC<IngredientModalProps> = ({
 
     const supplierOptions = availableSuppliers
         .filter(s => !formData.supplierIds.includes(s.supplierId))
-        .map(s => ({
-            label: s.supplierName,
-            value: String(s.supplierId)
-        }));
+        .map(s => ({ label: s.supplierName, value: String(s.supplierId) }));
 
     return (
         <Dialog
             open={isOpen}
             onClose={onClose}
             title={mode === "add" ? "Add New Ingredient" : "Edit Ingredient"}
-            width="min(95vw, 660px)" // Responsive width cho Dialog
+            width="min(95vw, 660px)"
             footer={
-                // Chuyển nút Hủy xuống dưới trên mobile, giãn đều trên desktop
                 <div className="flex flex-col-reverse sm:flex-row items-center gap-3 w-full">
-                    <Button
-                        type="button"
-                        variant="outline"
-                        className="w-full sm:flex-1"
-                        onClick={onClose}
-                        disabled={isSubmitting}
-                    >
+                    <Button type="button" variant="outline" className="w-full sm:flex-1" onClick={onClose} disabled={isSubmitting}>
                         Cancel
                     </Button>
-                    <Button
-                        type="submit"
-                        form="ingredient-form"
-                        className="w-full sm:flex-1"
-                        disabled={isSubmitting}
-                        isLoading={isSubmitting}
-                    >
+                    <Button type="submit" form="ingredient-form" className="w-full sm:flex-1" disabled={!formData.unitLvId || isSubmitting} isLoading={isSubmitting}>
                         {mode === "add" ? "Add Ingredient" : "Save Changes"}
                     </Button>
                 </div>
@@ -156,31 +138,24 @@ const IngredientModal: React.FC<IngredientModalProps> = ({
         >
             <form id="ingredient-form" onSubmit={handleSubmit} className="max-h-[75vh] overflow-y-auto">
                 <div className="space-y-4 md:space-y-5 p-4 md:p-5">
-                    {/* RESPONSIVE: Name + Unit xếp chồng trên mobile (grid-cols-1), dàn hàng ngang trên md (grid-cols-3) */}
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div className="md:col-span-2">
-                            <ALInput
-                                title="Ingredient Name"
-                                required
-                                placeholder="e.g. Wagyu Beef A5"
-                                value={formData.ingredientName}
-                                onChange={(e) => handleChange("ingredientName", e.target.value)}
-                            />
-                        </div>
-                        <div className="md:col-span-1">
-                            <ALCombobox
-                                title="Unit"
-                                required
-                                options={UNIT_OPTIONS}
-                                value={formData.unit}
-                                onChange={(val) => handleChange("unit", val)}
-                                placeholder="Select unit"
-                                searchable={true}
-                            />
-                        </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <ALInput
+                            title="Ingredient Name"
+                            required
+                            placeholder="e.g. Wagyu Beef A5"
+                            value={formData.ingredientName}
+                            onChange={(e) => handleChange("ingredientName", e.target.value)}
+                        />
+                        <LookupCombobox
+                            lookup={unitLookup}
+                            title="Unit"
+                            required
+                            placeholder="Select unit"
+                            value={formData.unitLvId}
+                            onChange={(val) => handleChange("unitLvId", val)}
+                        />
                     </div>
 
-                    {/* RESPONSIVE: Type + Min Stock xếp chồng trên mobile, chia đôi trên máy tính */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <LookupCombobox
                             lookup={typeLookup}
@@ -196,50 +171,29 @@ const IngredientModal: React.FC<IngredientModalProps> = ({
                             min={0}
                             step={0.1}
                             value={formData.minStockLevel}
-                            onChange={(e) =>
-                                handleChange("minStockLevel", parseFloat(e.target.value) || 0)
-                            }
+                            onChange={(e) => handleChange("minStockLevel", parseFloat(e.target.value) || 0)}
                         />
                     </div>
 
-                    {/* Suppliers Section (Tag UI) */}
+                    {/* Suppliers Section */}
                     <div className="space-y-3">
                         <div className="flex items-center gap-2">
-                            <h5 className="text-xs md:text-sm font-semibold text-gray-500 uppercase tracking-wider">
-                                Suppliers
-                            </h5>
+                            <h5 className="text-xs md:text-sm font-semibold text-gray-500 uppercase tracking-wider">Suppliers</h5>
                             <div className="grow border-t border-gray-100" />
                         </div>
-
                         <div className="bg-gray-50 rounded-lg p-3 md:p-4 border border-gray-200">
                             <div className="mb-3">
-                                <ALCombobox
-                                    title=""
-                                    options={supplierOptions}
-                                    value=""
-                                    onChange={(val) => handleAddSupplier(val as string)}
-                                    placeholder="Select to add a supplier..."
-                                    searchable={true}
-                                />
+                                <ALCombobox title="" options={supplierOptions} value="" onChange={(val) => handleAddSupplier(val as string)} placeholder="Select to add a supplier..." searchable={true} />
                             </div>
-
                             <div className="flex flex-wrap gap-2">
-                                {formData.supplierIds.length === 0 && (
-                                    <span className="text-sm text-gray-400 italic">No suppliers assigned yet.</span>
-                                )}
+                                {formData.supplierIds.length === 0 && <span className="text-sm text-gray-400 italic">No suppliers assigned yet.</span>}
                                 {formData.supplierIds.map(id => {
                                     const supplier = availableSuppliers.find(s => s.supplierId === id);
                                     if (!supplier) return null;
                                     return (
                                         <div key={id} className="inline-flex items-center gap-1.5 px-3 py-1 bg-blue-50 text-blue-700 border border-blue-200 rounded-full text-sm">
                                             <span className="font-medium">{supplier.supplierName}</span>
-                                            <button
-                                                type="button"
-                                                onClick={() => handleRemoveSupplier(id)}
-                                                className="p-0.5 hover:bg-blue-200 rounded-full transition-colors text-blue-500 hover:text-blue-800"
-                                            >
-                                                <X size={14} />
-                                            </button>
+                                            <button type="button" onClick={() => handleRemoveSupplier(id)} className="p-0.5 hover:bg-blue-200 rounded-full transition-colors text-blue-500 hover:text-blue-800"><X size={14} /></button>
                                         </div>
                                     );
                                 })}
@@ -250,25 +204,15 @@ const IngredientModal: React.FC<IngredientModalProps> = ({
                     {/* Media Section */}
                     <div className="space-y-3">
                         <div className="flex items-center gap-2">
-                            <h5 className="text-xs md:text-sm font-semibold text-gray-500 uppercase tracking-wider">
-                                Image
-                            </h5>
+                            <h5 className="text-xs md:text-sm font-semibold text-gray-500 uppercase tracking-wider">Image</h5>
                             <div className="grow border-t border-gray-100" />
                         </div>
-
                         <ALFileUploader
-                            existingFiles={(formData.images ?? []).map((img) => ({
-                                id: img.mediaId,
-                                url: img.url,
-                                isPrimary: true,
-                            }))}
+                            existingFiles={(formData.images ?? []).map((img) => ({ id: img.mediaId, url: img.url, isPrimary: true }))}
                             onDeleteExisting={(id) => {
                                 const numId = Number(id);
                                 setRemovedImageIds((prev) => [...prev, numId]);
-                                setFormData((prev) => ({
-                                    ...prev,
-                                    images: prev.images.filter((img) => img.mediaId !== numId),
-                                }));
+                                setFormData((prev) => ({ ...prev, images: prev.images.filter((img) => img.mediaId !== numId) }));
                             }}
                             deletingExistingId={null}
                             pendingFiles={pendingFiles}

@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import * as signalR from '@microsoft/signalr';
+import { authStorage } from '@/lib/auth-storage';
 
 type SignalRContextType = {
     connection: signalR.HubConnection | null;
@@ -22,7 +23,9 @@ export const SignalRProvider = ({ children }: { children: React.ReactNode }) => 
     useEffect(() => {
         const baseUrl = process.env.NEXT_PUBLIC_API_URL || "https://localhost:7083";
         const newConnection = new signalR.HubConnectionBuilder()
-            .withUrl(`${baseUrl}/hubs/reservation`)
+            .withUrl(`${baseUrl}/hubs/restaurant`, {
+                accessTokenFactory: () => authStorage.getAccessToken() ?? '',
+            })
             .withAutomaticReconnect()
             .build();
 

@@ -21,7 +21,7 @@ export default function MobileBookingSheet({
     isOpen,
     onClose,
 }: MobileBookingSheetProps) {
-    const t = useTranslations("Reservation.Sidebar");
+    const t = useTranslations("reservations.public.sidebar");
     const [isExpanded, setIsExpanded] = useState(false);
 
     // Form State
@@ -108,7 +108,7 @@ export default function MobileBookingSheet({
                                         placeholder={t("guest.name")}
                                         value={name}
                                         onChange={(e) => setName(e.target.value)}
-                                        className="w-full pl-9 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-[#1A3A52] focus:bg-white transition-colors"
+                                        className="w-full pl-9 pr-4 py-3 bg-slate-50 border border border-[#D5BA98]/60 rounded-lg text-sm focus:outline-none focus:border-[#1A3A52] focus:bg-white transition-colors"
                                     />
                                 </div>
                                 <div className="relative">
@@ -118,7 +118,7 @@ export default function MobileBookingSheet({
                                         placeholder={t("guest.phone")}
                                         value={phone}
                                         onChange={(e) => setPhone(e.target.value)}
-                                        className="w-full pl-9 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-[#1A3A52] focus:bg-white transition-colors"
+                                        className="w-full pl-9 pr-4 py-3 bg-slate-50 border border border-[#D5BA98]/60 rounded-lg text-sm focus:outline-none focus:border-[#1A3A52] focus:bg-white transition-colors"
                                     />
                                 </div>
                                 <div className="relative">
@@ -128,11 +128,11 @@ export default function MobileBookingSheet({
                                         placeholder={t("guest.email")}
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
-                                        className="w-full pl-9 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-[#1A3A52] focus:bg-white transition-colors"
+                                        className="w-full pl-9 pr-4 py-3 bg-slate-50 border border border-[#D5BA98]/60 rounded-lg text-sm focus:outline-none focus:border-[#1A3A52] focus:bg-white transition-colors"
                                     />
                                 </div>
-                                <div className="flex items-center justify-between bg-slate-50 p-3 rounded-lg border border-slate-200">
-                                    <span className="text-sm font-semibold text-stone-500">Party Size</span>
+                                <div className="flex items-center justify-between bg-slate-50 p-3 rounded-lg border border border-[#D5BA98]/60">
+                                    <span className="text-sm font-semibold text-stone-500">{t("guest.partySize")}</span>
                                     <input
                                         type="number"
                                         min={1}
@@ -151,11 +151,11 @@ export default function MobileBookingSheet({
                         onClick={handleMainAction}
                         disabled={isExpanded && !isFormValid}
                         className={`w-full py-4 rounded-xl font-bold text-base shadow-lg transition-all active:scale-[0.98] ${isExpanded && !isFormValid
-                                ? "bg-slate-200 text-slate-400 cursor-not-allowed"
-                                : "bg-[#1A3A52] text-white shadow-[#1A3A52]/20 hover:shadow-xl hover:shadow-[#1A3A52]/30"
+                            ? "bg-slate-200 text-slate-400 cursor-not-allowed"
+                            : "bg-[#1A3A52] text-white shadow-[#1A3A52]/20 hover:shadow-xl hover:shadow-[#1A3A52]/30"
                             }`}
                     >
-                        {isExpanded ? t("action.book") : `Book ${selectedTable.tableCode}`}
+                        {t("action.book")}
                     </button>
                     <div className="safe-area-bottom h-4" />
                 </div>

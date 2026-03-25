@@ -15,12 +15,12 @@ export default function OrderSummaryCard({
   diningOption,
   readyInMinutes
 }: OrderSummaryProps) {
-  const t = useTranslations("OrderSuccess.Summary");
-  const tDining = useTranslations("OrderSuccess.DiningOption");
+  const t = useTranslations("orders.success.Summary");
+  const tDining = useTranslations("orders.success.DiningOption");
 
   return (
     <div className="w-full bg-white shadow-[0px_20px_60px_-15px_rgba(26,57,81,0.06)] border rounded-sm px-6 md:px-12 py-10 flex flex-col gap-8 text-left">
-      
+
       <div className="flex flex-col md:flex-row gap-8">
         <InfoBlock label={t("orderNumber")} value={orderNumber} />
         <InfoBlock label={t("totalAmount")} value={totalAmount} />
@@ -31,7 +31,7 @@ export default function OrderSummaryCard({
 
       <div className="flex flex-col items-center gap-3 text-center">
         <div className="font-serif italic text-slate-600">
-           “{t("quote")}”
+          “{t("quote")}”
         </div>
 
         <div className="flex items-center gap-2 text-[12px] text-[#DEA048]">

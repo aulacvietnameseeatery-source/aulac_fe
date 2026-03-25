@@ -3,6 +3,17 @@
     "title": "An Lac - Vietnamese Eatery",
     "description": "The pinnacle of Vietnamese culinary art in the heart of the city."
   },
+  "NotFound": {
+    "title": "Oops! Page Not Found!",
+    "description": "Sorry but the page you are looking for does not exist, have been removed, name changed or is temporarily unavailable",
+    "backToHome": "Back to Home"
+  },
+  "Unauthorized": {
+    "title": "Access Denied",
+    "description": "You don't have the required permissions to access this exclusive section. Please contact management if you believe this is an error.",
+    "returnHome": "Return Home",
+    "goBack": "Go Back"
+  },
   "Header": {
     "home": "Home",
     "menu": "MENU",
@@ -49,6 +60,9 @@
       "dish_1_desc": "Artfully plated with edible gold leaf and a reduction of aged Vietnamese vinegar.",
       "dish_1_main": "The Imperial Lotus",
       "dish_1_sub": "Sculpted Freshness",
+      "cardCategory": "Category",
+      "cardTitle": "Culinary Masterpiece",
+      "dishMainTitle": "Chef's Signature Dish",
       "dish_2_category": "Slow-Cooked",
       "dish_2_title": "Claypot Fish",
       "dish_2_desc": "Red Snapper simmered for 6 hours in a traditional ceramic vessel with black pepper and palm sugar.",
@@ -62,8 +76,8 @@
     },
     "VirtualTour": {
       "label": "Experience",
-      "title": "The Immersive View",
-      "desc": "Explore our space from every angle before you arrive.",
+      "title": "Immersive Vision",
+      "desc": "This is a description of the test.",
       "tour_label": "Virtual Tour",
       "tour_title": "A 360° Walkthrough"
     }
@@ -73,16 +87,6 @@
     "menu": "Menu",
     "about": "About Us",
     "dish_details": "Name_Dish_Details"
-  },
-  "OrderPopup": {
-    "success_label": "Success",
-    "success_message": "Item added to your selection",
-    "dish_name": "Imperial Hue Beef\nNoodle Soup",
-    "price": "$18.50",
-    "quantity_label": "Quantity",
-    "view_selection": "View Selection & Order",
-    "continue_browsing": "Continue Browsing",
-    "footer_text": "Handcrafted Vietnamese Cuisine"
   },
   "DishDetails": {
     "Hero": {
@@ -183,271 +187,17 @@
       "resolution_value": "4K CINEMATIC"
     }
   },
-  "AboutUs": {
-    "title": "An Lạc – Vietnamese Eatery",
-    "subtitle": "A Quiet Expression of Vietnamese Cuisine",
-    "description_1": "An Lạc is not a place of spectacle.\nIt is a place of calm.",
-    "description_2": "An Lạc is guided by balance, memory, and serenity. Its name means peaceful happiness, inspired by the founder’s journey — a mother of three children — creating a space reflecting care, stability, and the essence of An cư Lạc nghiệp.",
-    "description_3": "At An Lạc, we do not seek to change Vietnamese cuisine, but to honor it. Patience, harmony, and precision shape every dish: the slow simmer of a broth, the careful balance of herbs, the quiet depth of fermentation, and the humility of rice.",
-    "description_4": "Familiar techniques such as kho, hấp, and nướng are expressed with precision and minimalism. Flavors are measured, balanced, and subtle.",
-    "description_5": "An Lạc is an invitation — to slow down, taste attentively, and reconnect with the essential."
-  },
-  "Reservation": {
-    "Header": {
-      "title": "Select Your Table",
-      "subtitle": "Experience fine dining at its best. Choose your preferred zone and table below."
-    },
-    "Controls": {
-      "single": "Single",
-      "multiple": "Show Multiple",
-      "bookSelected": "Book Selected ({count})",
-      "selectMode": "Select Mode"
-    },
-    "Legend": {
-      "available": "AVAILABLE",
-      "reserved": "RESERVED",
-      "selected": "SELECTED"
-    },
-    "TableGrid": {
-      "empty": "No tables available in this zone."
-    },
-    "TableCard": {
-      "available": "Available",
-      "reserved": "Reserved",
-      "selected": "Selected",
-      "guests": "{count} Guests"
-    },
-    "Sidebar": {
-      "header": {
-        "title": "Reservation Summary",
-        "subtitle": "Please review your selection"
-      },
-      "datetime": {
-        "label": "Date & Time",
-        "edit": "Edit",
-        "save": "Save",
-        "cancel": "Cancel",
-        "selectDate": "Select Date",
-        "selectTime": "Select Time",
-        "openingHours": "(11:00 AM – 10:00 PM)"
-      },
-      "table": {
-        "label": "Selected Table",
-        "zone": "Standard Zone",
-        "guests": "{count} Guests",
-        "empty": "Please select a table"
-      },
-      "guest": {
-        "label": "Your Details",
-        "name": "Full Name",
-        "phone": "Phone Number *",
-        "email": "Email Address (Optional)"
-      },
-      "action": {
-        "book": "Book Selected Table",
-        "saveFirst": "Save Changes First"
-      },
-      "validation": {
-        "missingInfo": "* Please enter Name & Phone to book"
-      },
-      "legal": "By booking, you agree to our Terms & Conditions and Cancellation Policy."
-    },
-    "BookingModal": {
-      "selectedTable": "Selected Table",
-      "title": "Confirm Reservation",
-      "restaurantName": "An Lac Vietnamese Eatery",
-      "date": "Date",
-      "time": "Time",
-      "guests": "Guests",
-      "guestsCount": "{count} Persons",
-      "guestInfo": "Guest Information",
-      "confirm": "Confirm Reservation",
-      "changeSelection": "Change Selection",
-      "fullName": "Full Name *",
-      "phoneNumber": "Phone Number *",
-      "emailAddress": "Email (Optional)",
-      "partySize": "Party Size *",
-      "cancel": "Cancel",
-      "confirmBooking": "Confirm Booking",
-      "confirmed": "Confirmed!",
-      "tableReserved": "Your table is reserved",
-      "restaurant": "Restaurant",
-      "guestName": "Guest Name",
-      "zone": "Zone",
-      "seeYouSoon": "See you soon!",
-      "downloadTicket": "Download Ticket",
-      "close": "Close",
-      "alerts": {
-        "ticketNotFound": "Ticket not found. Please try again.",
-        "downloadError": "Could not download ticket. Please take a screenshot."
-      }
-    },
-    "CallButton": {
-      "title": "Call Restaurant",
-      "subtitle": "No tables available online",
-      "description": "Please call directly to make a reservation or inquire",
-      "restaurant": "Restaurant",
-      "phoneLabel": "Phone Number",
-      "callNow": "Call Now",
-      "copyNumber": "Copy Number",
-      "copied": "Copied!",
-      "hours": "11:00 AM – 10:00 PM",
-      "buttonText": "Call to Reserve",
-      "dialing": "Opening phone app..."
-    },
-    "Zone": {
-      "label": "Zone",
-      "All": "All",
-      "Indoor": "Indoor",
-      "Outdoor": "Outdoor",
-      "Rooftop": "Rooftop"
-    },
-    "Toast": {
-      "success": "Reservation confirmed successfully!",
-      "error": "Failed to confirm reservation. Please try again.",
-      "lockSuccess": "Table locked successfully. Please complete your reservation.",
-      "lockError": "Failed to lock table. It might be occupied."
-    },
-    "PublicForm": {
-      "title": "Reserve Table",
-      "chooseCustomerType": "Choose customer type",
-      "existingCustomer": "Returning customer",
-      "newCustomer": "New customer",
-      "existingCustomerHint": "Enter phone number to auto-fill details",
-      "newCustomerHint": "Enter basic information to send reservation request",
-      "existingModeNote": "Returning customer: Enter phone number first, we will auto-fill your details if found.",
-      "newModeNote": "New customer: Please provide the required basic information.",
-      "noFitTitle": "No suitable table is available online for this time slot.",
-      "callRestaurant": "Call restaurant",
-      "goBack": "Go back",
-      "yourInfo": "Your information",
-      "phone": "Phone number",
-      "yourName": "Your name",
-      "email": "Email",
-      "loadingCustomerName": "Loading customer name...",
-      "loadingCustomerEmail": "Loading email...",
-      "existingCustomerName": "Returning customer name",
-      "existingCustomerEmail": "Returning customer email",
-      "bookingInfo": "Reservation details",
-      "partySize": "Party size",
-      "reservationDate": "Reservation date",
-      "selectDate": "Select date",
-      "arrivalTime": "Arrival time",
-      "selectTime": "Select time",
-      "notes": "Notes",
-      "close": "Close",
-      "closeAriaLabel": "Close booking modal",
-      "submit": "BOOK NOW",
-      "checkingTables": "Checking table availability...",
-      "processing": "Processing...",
-      "lookup": {
-        "notFound": "No returning customer found with this phone number."
-      },
-      "validation": {
-        "selectCustomerType": "Please choose a customer type.",
-        "phoneRequired": "Please enter a phone number.",
-        "nameRequired": "Please enter your name.",
-        "existingCustomerNotFound": "Returning customer info not found. Please check the phone number.",
-        "dateRequired": "Please select a reservation date.",
-        "timeRequired": "Please select an arrival time.",
-        "partySizeRequired": "Please select party size."
-      },
-      "toast": {
-        "created": "Reservation request created successfully!",
-        "createFailed": "Unable to create reservation.",
-        "unexpected": "An error occurred while creating reservation."
-      }
-    },
-    "PublicTicket": {
-      "title": "Reservation Ticket",
-      "customer": "Customer",
-      "guests": "Guests",
-      "date": "Date",
-      "time": "Time",
-      "table": "Table",
-      "zone": "Zone",
-      "pendingAssign": "Pending assign",
-      "downloadTicket": "Download Ticket",
-      "close": "Close"
-    }
-  },
-  "OrderSuccess": {
-    "Loading": {
-      "title": "Processing...",
-      "subtitle": "Retrieving your order details"
-    },
-    "NotFound": {
-      "title": "Order Not Found",
-      "description": "We couldn't locate the order details you are looking for. It may have been removed or the ID is incorrect.",
-      "cta": "Return Home"
-    },
-    "Header": {
-      "title": "Thank You",
-      "subtitle": "Your order has been successfully confirmed"
-    },
-    "Summary": {
-      "orderNumber": "Order Number",
-      "totalAmount": "Total Amount",
-      "diningOption": "Dining Option",
-      "quote": "Your culinary journey begins...",
-      "readyIn": "Ready in {minutes} minutes"
-    },
-    "DiningOption": {
-      "DINE_IN": "Dine In",
-      "TAKE_AWAY": "Take Away"
-    },
-    "Location": {
-      "label": "Collection Point",
-      "address": "Quai du Mont-Blanc 13, Geneva"
-    },
-    "Actions": {
-      "viewReceipt": "View Receipt",
-      "backHome": "Back to Home"
-    }
-  },
-  "OrderReceipt": {
-    "Header": {
-      "title": "Receipt",
-      "subtitle": "Thank you for your order"
-    },
-    "InfoStrip": {
-      "orderNumber": "Order ID",
-      "date": "Order Date",
-      "time": "Time",
-      "status": "Status"
-    },
-    "Items": {
-      "title": "Order Details",
-      "quantity": "Qty"
-    },
-    "Summary": {
-      "subtotal": "Subtotal",
-      "tips": "Tips / Gratuity",
-      "total": "Total Amount"
-    },
-    "Payment": {
-      "label": "Paid via"
-    },
-    "Actions": {
-      "download": "Download PDF",
-      "print": "Print"
-    },
-    "BackLink": {
-      "label": "Return to Dashboard"
-    }
-  },
   "Contact": {
     "Hero": {
-      "title": "Connect With Us",
-      "description": "Experience the essence of Vietnamese luxury on the shores of Lake Geneva.\nWe are here to assist with your inquiries, private event bookings, and special requests."
+      "description": "Experience the essence of Vietnamese luxury.\nWe are here to assist with your inquiries, private event bookings, and special requests."
     },
     "Info": {
       "addressLabel": "Our Home",
-      "address": "Quai du Mont-Blanc 13\n1201 Geneva, Switzerland",
+      "address": "",
       "phoneLabel": "Speak With Us",
-      "phone": "+41 22 123 45 67",
+      "phone": "",
       "emailLabel": "Inquiries",
-      "email": "geneva@aulac.ch",
+      "email": "",
       "hoursLabel": "Hours",
       "hours": "Mon - Sun: 11:30 AM - 11:00 PM"
     },
@@ -477,7 +227,7 @@
       }
     },
     "Footer": {
-      "copyright": "© 2024 An Lac Vietnamese Eatery - Geneva. All Rights Reserved."
+      "copyright": "© {year} An Lac Vietnamese Eatery. All Rights Reserved."
     }
   },
   "MenuListing": {
@@ -540,66 +290,6 @@
       "step_scan": "Scan",
       "step_explore": "Explore",
       "step_order": "Order"
-    }
-  },
-  "FillInforCustomer": {
-    "title": "Welcome to An Lac",
-    "subtitle": "Please provide your information to begin your culinary journey",
-    "form": {
-      "fullName": "Full Name",
-      "fullNamePlaceholder": "Enter your full name",
-      "phoneNumber": "Phone Number",
-      "phoneNumberPlaceholder": "Enter your phone number",
-      "emailAddress": "Email Address",
-      "emailAddressPlaceholder": "Enter your email address",
-      "tableNumber": "Table Number",
-      "submitting": "Submitting...",
-      "startDining": "Start Dining",
-      "skipToMenu": "Skip, browse the menu",
-      "errors": {
-        "phoneRequired": "Phone number is required",
-        "emailInvalid": "Invalid email address",
-        "tableOccupied": "This table is already occupied",
-        "tableOccupiedDesc": "This table is being used by another customer. Please choose another table.",
-        "updateFailed": "Failed to update table status. Please try again."
-      }
-    },
-    "footer": "Handcrafted Vietnamese Cuisine"
-  },
-  "ConfirmOrder": {
-    "OrderItem": {
-      "add_note": "Add Note",
-      "edit_note": "Edit Note",
-      "note_placeholder": "e.g., No spicy, extra sauce...",
-      "note_saved": "Note saved"
-    },
-    "DiningOption": {
-      "eyebrow": "How would you like to enjoy?",
-      "title": "Dining Option",
-      "dine_in_label": "The Experience",
-      "dine_in_title": "Dine-In",
-      "dine_in_desc": "Immerse yourself in our tranquil atmosphere with full service.",
-      "take_away_label": "Quick & Fresh",
-      "take_away_title": "Take Away",
-      "take_away_desc": "Enjoy our exquisite flavors in the comfort of your own home.",
-      "helper_dine_in": "Proceed to select your preferred table.",
-      "helper_take_away": "Proceed to schedule pickup time.",
-      "btn_select_table": "Select Table",
-      "btn_checkout": "Go to Checkout"
-    },
-    "OrderSummary": {
-      "title": "Review Your Order",
-      "section_title": "Selected Dishes",
-      "quantity_label": "Quantity",
-      "subtotal": "Subtotal",
-      "tax": "Service & Tax",
-      "total": "Total Amount",
-      "items": {
-        "1_name": "Imperial Lotus Root Salad",
-        "1_category": "Heritage Selection",
-        "2_name": "Heritage Wagyu Pho",
-        "2_category": "Signature"
-      }
     }
   },
   "Account": {
@@ -890,6 +580,7 @@
       "loading": "Loading role data...",
       "loadError": "Failed to load role data. Please try again.",
       "success": "Role updated successfully",
+      "successWithReloginNote": "Users with this role need to log in again to apply new permissions.",
       "error": "Failed to update role. Please try again.",
       "validation": {
         "roleCodeRequired": "Role code is required",
@@ -1047,57 +738,22 @@
         "next": "Next page",
         "last": "Last page"
       }
-    }
-  },
-  "StaffReservation": {
-    "title": "Create Reservation Manually",
-    "subtitle": "Enter details for walk-in or phone bookings",
-    "cancel": "Cancel",
-    "save": "Save Reservation",
-    "errors": {
-      "missingTitle": "Missing information",
-      "missingDescription": "Please fill in phone, name, date, time and select a table.",
-      "timeErrorTitle": "Invalid time",
-      "timePast": "Cannot select a time in the past.",
-      "failTitle": "Reservation failed",
-      "systemError": "System error. Please try again."
     },
-    "success": {
-      "title": "Reservation successful!",
-      "description": "Customer: {name} - Reservation #{id}"
-    },
-    "customer": {
-      "sectionTitle": "Customer Identification",
-      "phone": "Phone Number",
-      "fullName": "Full Name",
-      "email": "Email Address",
-      "enterPhone": "Enter phone...",
-      "enterName": "Customer Name",
-      "newCustomer": "New Customer",
-      "member": "Member ({points} pts)"
-    },
-    "booking": {
-      "sectionTitle": "Booking Details",
-      "date": "Date",
-      "time": "Time",
-      "partySize": "Party Size",
-      "enterSize": "Ex: 4"
-    },
-    "table": {
-      "availability": "Table Availability",
-      "scanning": "Scanning...",
-      "found": "{count} tables found",
-      "emptyHint": "Enter Date, Time, and Size to find tables.",
-      "noTable": "No tables available."
-    },
-    "status": {
-      "source": "Reservation Source",
-      "phone": "Phone Booking",
-      "walkIn": "Walk-in",
-      "status": "Reservation Status",
-      "confirmed": "Confirmed",
-      "checkedIn": "Checked In",
-      "phoneHint": "*Phone bookings are set to 'Confirmed' by default."
+    "apiErrors": {
+      "sessionExpired": "Your session has expired. Please sign in again.",
+      "tokenRefreshFailed": "Your session could not be refreshed. Please sign in again.",
+      "noAccessToken": "You need to sign in before continuing.",
+      "unauthorized": "You are not authorized. Please sign in and try again.",
+      "forbidden": "You do not have permission to perform this action.",
+      "notFound": "The requested resource was not found.",
+      "validation": "Some input values are invalid. Please review and try again.",
+      "conflict": "This action conflicts with existing data.",
+      "unprocessable": "This action cannot be completed with the current data.",
+      "timeout": "The request took too long. Please try again.",
+      "network": "Unable to connect to the server. Please check your connection.",
+      "http": "The request failed. Please try again.",
+      "httpStatus": "The request failed with status {status}.",
+      "unexpected": "An unexpected error occurred. Please try again later."
     }
   },
   "DishCategory": {
@@ -1291,6 +947,17 @@
           "title": "Gallery Images",
           "subtitle": "Standard photos"
         },
+        "video": {
+          "title": "Dish Video",
+          "subtitle": "Upload a short introductory video (MP4, max 15s, 20MB)",
+          "uploadPrompt": "Click to upload video",
+          "uploadHint": "MP4 (Max 20MB, 15 seconds)",
+          "validation": {
+            "invalidFormat": "Only .mp4 video files are accepted",
+            "maxSize": "Video size cannot exceed 20MB",
+            "maxDuration": "Video duration cannot exceed 15 seconds"
+          }
+        },
         "badge": "360° VIEW",
         "drag": "Drag to rotate",
         "uploadTitle": "Upload 360° Sequence",
@@ -1302,7 +969,13 @@
         "changeFiles": "Change Files",
         "existing": "Existing",
         "addImage": "Add Image",
-        "recommended": "Recommended: 800x800px (JPG, PNG)"
+        "recommended": "Recommended: 800x800px",
+        "recommended2": "Max 5 images, 5MB/image. Formats: JPG, PNG, GIF, WEBP",
+        "validation": {
+          "maxImages": "You can upload a maximum of 5 images.",
+          "invalidFormat": "Invalid image format",
+          "maxSize": "Image size exceeds 5MB"
+        }
       },
       "additional": {
         "title": "Additional Info",
@@ -1352,7 +1025,10 @@
         "galleryTitle": "Gallery",
         "staticUploaded": "{count} static images uploaded",
         "primary": "Primary",
-        "noGallery": "No gallery images"
+        "noGallery": "No gallery images",
+        "videoTitle": "Dish Video",
+        "videoSubtitle": "Introduction video",
+        "noVideo": "No video available"
       },
       "additional": {
         "title": "Additional Information",
@@ -1365,283 +1041,6 @@
         "notChefRecommended": "Not marked as Chef Recommended"
       }
     }
-  },
-  "Order": {
-    "List": {
-      "title": "Orders",
-      "description": "Manage and track all orders",
-      "searchPlaceholder": "Search by order ID, customer, staff...",
-      "refresh": "Refresh",
-      "addNewOrder": "Add New Order",
-      "kanbanLabel": "Kanban — All statuses",
-      "dateRange": {
-        "today": "Today",
-        "yesterday": "Yesterday",
-        "last7": "Last 7 Days",
-        "last30": "Last 30 Days",
-        "thisMonth": "This Month",
-        "lastMonth": "Last Month",
-        "custom": "Custom Range",
-        "from": "From",
-        "to": "To",
-        "apply": "Apply",
-        "label": "Date Range"
-      },
-      "tabs": {
-        "all": "All",
-        "pending": "Pending",
-        "inProgress": "In Progress",
-        "completed": "Completed",
-        "cancelled": "Cancelled"
-      },
-      "statusCards": {
-        "all": "All",
-        "pending": "Pending",
-        "inProgress": "In Progress",
-        "completed": "Completed",
-        "cancelled": "Cancelled"
-      },
-      "kanban": {
-        "pending": "Pending",
-        "inProgress": "In Progress",
-        "completed": "Completed",
-        "cancelled": "Cancelled",
-        "empty": "No orders",
-        "start": "Start",
-        "finish": "Complete",
-        "complete": "Done",
-        "printInvoice": "Print Invoice",
-        "reset": "Reset",
-        "delete": "Delete",
-        "cancel": "Cancel"
-      },
-      "viewMode": {
-        "grid": "Grid view",
-        "kanban": "Kanban view"
-      },
-      "statusUpdateSuccess": "Order status updated",
-      "statusUpdateError": "Failed to update order status",
-      "empty": {
-        "title": "No orders found",
-        "hint": "Try adjusting your filters or search query"
-      },
-      "card": {
-        "table": "Table",
-        "tip": "Tip",
-        "items": "items",
-        "moreItems": "more items",
-        "collapse": "Collapse",
-        "actions": "Actions",
-        "note": "Note",
-        "rejectReason": "Reject Reason",
-        "guest": "Guest",
-        "source": {
-          "DINE_IN": "Dine In",
-          "TAKE_AWAY": "Take Away",
-          "TAKEAWAY": "Take Away",
-          "DELIVERY": "Delivery",
-          "Takeaway": "Take Away",
-          "Dine-in": "Dine In",
-          "Delivery": "Delivery"
-        },
-        "status": {
-          "Pending": "Pending",
-          "In progress": "In Progress",
-          "Completed": "Completed",
-          "Cancelled": "Cancelled"
-        },
-        "paymentStatus": {
-          "paid": "Paid",
-          "unpaid": "Unpaid"
-        },
-        "action": {
-          "view": "View Details",
-          "edit": "Edit Order",
-          "start": "Start",
-          "complete": "Complete",
-          "cancel": "Cancel",
-          "reset": "Reset",
-          "print": "Print Invoice",
-          "pay": "Pay & Complete",
-          "printReceipt": "Print Receipt"
-        },
-        "paymentSuccess": "Payment processed successfully",
-        "paymentError": "Failed to process payment"
-      }
-    },
-    "Create": {
-      "title": "Create New Order",
-      "subtitle": "Select food and drinks to start serving the customer.",
-      "menuCatalog": "Menu Catalog",
-      "searchDish": "Find a dish...",
-      "dineIn": "Dine-in",
-      "takeAway": "Take-away",
-      "currentTicket": "Current Ticket",
-      "clear": "Clear",
-      "emptyTicket": "Ticket is empty",
-      "diningTable": "Dining Table",
-      "customer": "Customer",
-      "select": "Select",
-      "change": "Change",
-      "add": "Add",
-      "note": "Add a note (less spicy, no onions, etc.)",
-      "subtotal": "Subtotal",
-      "tax": "Tax (10%)",
-      "total": "Total",
-      "placeOrder": "Place Order",
-      "createInvoice": "Create Invoice",
-      "noTableSelected": "No table selected",
-      "anonymous": "Anonymous",
-      "selectFilterAll": "All",
-      "confirmSelection": "Confirm Selection",
-      "cancel": "Cancel",
-      "confirm": "Confirm",
-      "customerDetails": "Customer Details",
-      "phoneNumber": "Phone Number",
-      "fullName": "Full Name",
-      "email": "Email",
-      "saveDetails": "Save Details"
-    },
-    "Edit": {
-      "menuTitle": "Order Details",
-      "menuSubtitleEdit": "Select items to add to the current order.",
-      "menuSubtitleView": "This order has been paid. View-only mode.",
-      "menuSubtitleCancelled": "This order has been cancelled. View-only mode.",
-      "clear": "Clear",
-      "cancel": "Cancel",
-      "editOrderTitle": "Edit Order #{id}",
-      "viewOrderTitle": "View Order #{id}",
-      "totalAmount": "Total Amount",
-      "orderedItems": "Ordered Items",
-      "newItems": "New Items",
-      "addMoreItemsHint": "Select items from the left menu to add",
-      "paidOrderWarning": "This order has been paid. Please create a new order.",
-      "cancelledOrderWarning": "The order has been cancelled. It is not possible to edit or print the invoice.",
-      "change": "Change",
-      "table": "Table",
-      "addItemsButton": "Save Changes",
-      "createInvoice": "Create Invoice",
-      "createReceipt": "Create Receipt",
-      "newTotal": "Estimated Total",
-      "warningTitle": "Confirm Adding Items",
-      "completedOrderWarning": "This order is completed but not yet paid. Adding new items will change the order status back to In Progress. Are you sure?",
-      "confirmChangeStatus": "Confirm Add",
-      "saving": "Saving...",
-      "successMessage": "Changes saved successfully!",
-      "errorMessage": "An error occurred!",
-      "loading":"Loading...",
-      "takeAway": "Take Away",
-      "guest": "Guest",
-      "notePlaceholder": "Item note...",
-      "status": {
-        "Pending": "Pending",
-        "In progress": "In Progress",
-        "Completed": "Completed",
-        "Cancelled": "Cancelled"
-      },
-      "tableLabel": "Table",
-      "customerLabel": "Customer"
-    },
-    "RecentOrders": {
-      "title": "Recent Orders",
-      "refresh": "Refresh",
-      "filterAll": "All",
-      "dineIn": "Dine-in",
-      "takeAway": "Takeaway",
-      "loading": "Loading orders...",
-      "noOrdersFound": "No orders found.",
-      "table": "Table",
-      "status": {
-        "PENDING": "Pending",
-        "IN_PROGRESS": "In Progress",
-        "COMPLETED": "Completed",
-        "CANCELLED": "Cancelled"
-      }
-    },
-    "DishDetail": {
-      "noDescription": "No description available.",
-      "price": "Price",
-      "addToOrder": "Add to Order"
-    },
-    "PaymentModal": {
-      "title": "Pay & Complete Order",
-      "finalTotal": "Final Total",
-      "orderInfo": "Order Info",
-      "orderNo": "Order No",
-      "noOfItems": "No of Items",
-      "orderType": "Order Type",
-      "orderedMenus": "Ordered Menus",
-      "subTotal": "Sub Total",
-      "tax": "Tax",
-      "serviceCharge": "Service Charge",
-      "tip": "Tip",
-      "paymentType": "Payment Type",
-      "cash": "Cash",
-      "card": "Card",
-      "scan": "Scan",
-      "promotion": "Promotion",
-      "coupon": "Coupon",
-      "givenAmount": "Given Amount",
-      "balance": "Balance",
-      "note": "Note",
-      "notePlaceholder": "Enter payment note...",
-      "close": "Close",
-      "payAndComplete": "Pay & Complete Order",
-      "paying": "Processing...",
-      "enterTip": "Enter tip amount",
-      "selectPromotion": "Select promotion",
-      "selectCoupon": "Select coupon",
-      "promotions": "Promotions"
-    }
-  },
-  "AdminSidebar": {
-    "categories": {
-      "main": "MAIN",
-      "management": "MANAGEMENT",
-      "operations": "OPERATIONS",
-      "shifts": "SHIFTS",
-      "administration": "ADMINISTRATION",
-      "settings": "SETTINGS"
-    },
-    "dashboard": "Dashboard",
-    "tables": "Tables",
-    "staff": "Staff",
-    "roles": "Roles",
-    "dish": "Dish",
-    "dishCategory": "Dish Category",
-    "ingredients": "Ingredients",
-    "suppliers": "Suppliers",
-    "coupons": "Coupons",
-    "orders": "Orders",
-    "invoices": "Invoices",
-    "payments": "Payments",
-    "kitchen": "Kitchen (KDS)",
-    "reports": "Reports",
-    "emails": "Emails",
-    "customers": "Customers",
-    "reservations": "Reservations",
-    "promotions": "Promotions",
-    "storeSettings": "Store Settings",
-    "systemSettings": "System Settings",
-    "notifications": "Notifications",
-    "logout": "Logout",
-    "loggingOut": "Logging out...",
-    "managerPortal": "Manager Portal",
-    "logoutMessage": "Are you sure you want to logout? You will be redirected to the login page.",
-    "cancel": "Cancel",
-    "expand": "Expand",
-    "collapse": "Collapse",
-    "shifts": "Schedules",
-    "shiftsLive": "Live Board",
-    "shiftsReports": "Shift Reports",
-    "myShifts": "My Shifts"
-  },
-  "DashboardTopNav": {
-    "pos": "POS",
-    "orders": "Orders",
-    "kitchen": "Kitchen",
-    "reservation": "Reservations",
-    "table": "Tables"
   },
   "ShiftManagement": {
     "Common": {
@@ -1786,66 +1185,244 @@
           "minutesAffected": "Minutes",
           "reviewer": "Reviewed By"
         }
+      },
+      "refresh": "Refresh",
+      "exportCsv": "Export CSV",
+      "selectDateRange": "Select a date range to load reports",
+      "highAbsenceRate": "High absence rate",
+      "presets": {
+        "today": "Today",
+        "thisWeek": "This Week",
+        "last7Days": "Last 7 Days",
+        "thisMonth": "This Month",
+        "lastMonth": "Last Month"
+      },
+      "health": {
+        "attendanceRate": "Attendance Rate",
+        "hoursCompliance": "Hours Compliance",
+        "exceptions": "Exceptions",
+        "shiftsPresent": "{present} of {total} shifts",
+        "hoursWorked": "{worked}h worked of {scheduled}h",
+        "noAttendanceData": "No attendance data",
+        "noHoursData": "No hours data yet",
+        "issuesFlagged": "{count, plural, =0 {No issues found} =1 {1 issue flagged} other {# issues flagged}}"
+      },
+      "attendanceTab": {
+        "inner": {
+          "overview": "Overview",
+          "staffSummary": "Staff Summary",
+          "details": "Details"
+        },
+        "searchLabel": "Search Staff",
+        "searchPlaceholder": "Type staff name...",
+        "filterByStaff": "Filter by staff",
+        "allStaff": "All staff",
+        "clearSearch": "Clear",
+        "kpi": {
+          "totalAssignments": "Total assignments",
+          "checkInRate": "Check-in rate",
+          "lateArrivals": "Late arrivals",
+          "absences": "Absences"
+        },
+        "chart": {
+          "dailyBreakdown": "Daily Attendance Breakdown",
+          "onTime": "On Time",
+          "late": "Late",
+          "absent": "Absent"
+        },
+        "topAbsences": "Most Absences",
+        "topLate": "Most Late Arrivals",
+        "recordsOf": "of records",
+        "scorePrefix": "Score:",
+        "insightsLabel": "Insights",
+        "showInsights": "Show Insights",
+        "hideInsights": "Hide Insights",
+        "insights": {
+          "highAbsence": "High absence rate: {absentRate}% of shifts ({absent} absences). Review staffing coverage.",
+          "highLate": "High late-arrival rate: {lateRate}%. Consider reviewing shift start times.",
+          "frequentAbsence": "{count} staff member(s) have 3+ absences in this period.",
+          "perfectAttendance": "Perfect attendance! All shifts have check-ins for the selected period.",
+          "zeroLateAbsent": "Outstanding! 0 absences and 0 late arrivals in the selected period."
+        },
+        "statusCards": {
+          "onTime": "On Time",
+          "late": "Late",
+          "absent": "Absent",
+          "present": "Present"
+        },
+        "badges": {
+          "total": "Total: {value}",
+          "present": "Present: {value}",
+          "onTime": "On Time: {value}",
+          "late": "Late: {value}",
+          "absent": "Absent: {value}"
+        },
+        "manualAdjusted": "Manually adjusted",
+        "summaryTable": {
+          "staff": "Staff",
+          "total": "Total",
+          "present": "Present",
+          "onTime": "On Time",
+          "late": "Late",
+          "absent": "Absent",
+          "checkInRate": "Check-in Rate",
+          "reliability": "Reliability"
+        },
+        "detailTable": {
+          "date": "Date",
+          "staff": "Staff",
+          "shift": "Shift",
+          "planned": "Planned",
+          "status": "Status",
+          "checkIn": "Check-in",
+          "checkOut": "Check-out",
+          "late": "Late",
+          "earlyLeave": "Early Leave"
+        }
+      },
+      "workedHoursTab": {
+        "inner": {
+          "summary": "Summary",
+          "details": "Staff Details"
+        },
+        "searchLabel": "Search Staff",
+        "searchPlaceholder": "Type staff name...",
+        "clearSearch": "Clear",
+        "kpi": {
+          "totalScheduled": "Total scheduled",
+          "totalWorked": "Total worked",
+          "variance": "Variance",
+          "avgEfficiency": "Avg. efficiency",
+          "incomplete": "incomplete"
+        },
+        "overSchedule": "over schedule",
+        "underSchedule": "under schedule",
+        "cards": {
+          "staffTracked": "Staff Tracked",
+          "totalWorked": "Total Worked",
+          "scheduled": "Scheduled",
+          "overtime": "Overtime"
+        },
+        "chartTitle": "Worked vs Scheduled Hours — Top Staff",
+        "chartScheduled": "Scheduled",
+        "chartWorked": "Worked",
+        "overtimeAlert": "{count, plural, =1 {1 staff member worked 30+ minutes over scheduled hours.} other {# staff members worked 30+ minutes over scheduled hours.}}",
+        "table": {
+          "staff": "Staff",
+          "scheduled": "Scheduled",
+          "worked": "Worked",
+          "variance": "Variance",
+          "efficiency": "Efficiency",
+          "overtime": "Overtime",
+          "incomplete": "Incomplete"
+        }
+      },
+      "exceptionsTab": {
+        "inner": {
+          "summary": "Summary",
+          "byStaff": "By Staff",
+          "allRecords": "All Records"
+        },
+        "searchLabel": "Search Staff",
+        "searchPlaceholder": "Type staff name...",
+        "clearSearch": "Clear",
+        "kpi": {
+          "lateIncidents": "Late incidents",
+          "absences": "Absences",
+          "earlyDepartures": "Early departures",
+          "manualAdjustments": "Manual adjustments",
+          "totalMinutes": "Total minutes affected"
+        },
+        "cards": {
+          "lateArrivals": "Late Arrivals",
+          "absences": "Absences",
+          "earlyLeave": "Early Leave",
+          "manual": "Manual",
+          "adjusted": "Adjusted"
+        },
+        "adjustedLabel": "✦ Adjusted",
+        "noStaffFound": "No staff with exceptions found.",
+        "table": {
+          "date": "Date",
+          "staff": "Staff",
+          "shift": "Shift",
+          "exceptionType": "Exception Type",
+          "minutes": "Minutes",
+          "reviewer": "Reviewer"
+        }
       }
-    }
-  },
-  "OrderHistory": {
-    "title": "Order History",
-    "fabLabel": "HISTORY",
-    "fabAriaLabel": "View order history",
-    "tableLabel": "Table",
-    "itemsCount": "{count} dishes",
-    "refresh": "Refresh",
-    "refreshAriaLabel": "Reload",
-    "close": "Close",
-    "closeAriaLabel": "Close",
-    "headers": {
-      "dish": "Dish",
-      "quantity": "QTY",
-      "price": "Price",
-      "status": "Status"
     },
-    "status": {
-      "created": "Pending",
-      "inProgress": "In Progress",
-      "ready": "Ready",
-      "served": "Served",
-      "rejected": "Rejected",
-      "cancelled": "Cancelled"
+    "ScheduleList": {
+      "title": "Shift Assignments",
+      "description": "Assign staff to shift templates and track attendance.",
+      "searchPlaceholder": "Search assignments",
+      "newAssignment": "New Assignment",
+      "confirmCancel": "Cancel this assignment?",
+      "activeCount": "Active: {count}",
+      "cancelledCount": "Cancelled: {count}",
+      "filters": {
+        "fromDate": "From Date",
+        "toDate": "To Date",
+        "fromDatePlaceholder": "From date",
+        "toDatePlaceholder": "To date",
+        "refresh": "Refresh"
+      },
+      "table": {
+        "no": "No",
+        "date": "Date",
+        "template": "Template",
+        "staff": "Staff",
+        "plannedTime": "Planned Time",
+        "status": "Status"
+      },
+      "noData": "No assignments found. Adjust the date range or create a new assignment."
     },
-    "emptyState": {
-      "title": "No dishes ordered yet.",
-      "subtitle": "History will appear here after you place an order."
-    },
-    "chefNote": "Chef's Note:",
-    "estimatedTotal": "Estimated Total",
-    "requestPayment": "Request Payment",
-    "error": "Unable to load data",
-    "cancelItem": "Cancel Item",
-    "cancelling": "Cancelling...",
-    "cancelError": "Cannot cancel item",
-    "cancelNotAllowed": "\u201c{dishName}\u201d has already been processed by staff and can no longer be cancelled.",
-    "cancelPopup": {
-      "title": "Cancel This Item?",
-      "message": "Are you sure you want to cancel \"{dishName}\"? This action cannot be undone.",
-      "yes": "Yes, Cancel",
-      "no": "No, Keep"
-    },
-    "paymentPopup": {
-      "title": "Request Payment?",
-      "message": "A server will come to your table shortly with the bill for {tableLabel} {tableNumber}. Would you like to proceed?",
-      "estimatedTotalLabel": "ESTIMATED TOTAL",
-      "confirm": "CONFIRM",
-      "closeAriaLabel": "Close payment dialog"
-    },
-    "successPopup": {
-      "title": "Thank You!",
-      "message": "Your payment request for {tableLabel} {tableNumber} has been received. Our server will be with you shortly."
+    "AssignmentForm": {
+      "createTitle": "New Shift Assignment",
+      "editTitle": "Edit Assignment",
+      "cancel": "Cancel",
+      "saveChanges": "Save Changes",
+      "assignStaff": "Assign Staff",
+      "plannedHint": "Leave planned times empty to use the template defaults.",
+      "fields": {
+        "shiftTemplate": "Shift Template",
+        "staffMember": "Staff Member",
+        "workDate": "Work Date",
+        "plannedStart": "Planned Start",
+        "plannedEnd": "Planned End",
+        "notes": "Notes"
+      },
+      "placeholders": {
+        "shiftTemplate": "Select shift template...",
+        "staffMember": "Select staff member...",
+        "loadingStaff": "Loading staff...",
+        "workDate": "Select date",
+        "notes": "Optional notes..."
+      }
     }
   },
   "Notifications": {
     "title": "Notifications",
     "markAllRead": "Mark all as read",
+    "markAllReadShort": "Mark all read",
+    "loadMore": "Load more",
+    "loading": "Loading...",
+    "batchSummary": "more notifications",
+    "acknowledge": "Acknowledge",
+    "acknowledged": "Acknowledged",
+    "view": "View",
+    "connected": "Connected",
+    "disconnected": "Disconnected",
+    "preferences": {
+      "title": "Notification Preferences",
+      "save": "Save",
+      "saveSuccess": "Preferences saved",
+      "saveError": "Failed to save preferences",
+      "soundOn": "Sound on",
+      "soundOff": "Sound off",
+      "enabled": "Enabled",
+      "disabled": "Disabled"
+    },
     "tabs": {
       "all": "All",
       "unread": "Unread",
@@ -1854,124 +1431,151 @@
       "orders": "Orders"
     },
     "empty": "No notifications",
+    "emptyUnread": "No unread notifications",
     "time": {
+      "justNow": "just now",
+      "minutesAgo": "{count}m ago",
+      "hoursAgo": "{count}h ago",
+      "daysAgo": "{count}d ago",
       "ago": "{time} ago"
-    }
-  },
-  "Kitchen": {
-    "title": "Kitchen Display",
-    "description": "Monitor incoming orders and update item statuses in real-time",
-    "refresh": "Refresh",
-    "searchPlaceholder": "Search by table, order ID, dish...",
-    "liveUpdates": "Live updates",
-    "tokenNo": "Token No:",
-    "note": "Note",
-    "orderType": "Dine-in",
-    "tabs": {
-      "all": "All Orders",
-      "new": "New",
-      "inProgress": "In Progress"
     },
-    "empty": {
-      "title": "No active orders",
-      "hint": "New orders will appear here automatically"
+    "types": {
+      "NEW_ORDER": "New Order",
+      "ORDER_CANCELLED": "Order Cancelled",
+      "ORDER_ITEM_READY": "Item Ready",
+      "ORDER_ITEM_REJECTED": "Item Rejected",
+      "ALL_ITEMS_READY": "All Items Ready",
+      "PAYMENT_COMPLETED": "Payment Completed",
+      "RESERVATION_CREATED": "New Reservation",
+      "RESERVATION_STATUS_CHANGED": "Reservation Updated",
+      "RESERVATION_REMINDER": "Reservation Reminder",
+      "TABLE_STATUS_CHANGED": "Table Status Changed",
+      "LOW_STOCK_ALERT": "Low Stock Alert",
+      "DISH_OUT_OF_STOCK": "Dish Out of Stock",
+      "SHIFT_ASSIGNED": "Shift Assigned",
+      "ATTENDANCE_ALERT": "Attendance Alert",
+      "SYSTEM_ALERT": "System Alert",
+      "ORDER_STATUS_CHANGED": "Order Updated",
+      "PAYMENT_REQUEST": "Payment Request",
+      "fallback": "Notification"
     },
-    "status": {
-      "all": "All",
-      "new": "New",
-      "inKitchen": "In Kitchen",
-      "rejected": "Rejected",
-      "completed": "Completed",
-      "CREATED": "New",
-      "IN_PROGRESS": "Preparing",
-      "READY": "Ready",
-      "SERVED": "Served",
-      "REJECTED": "Rejected"
+    "priority": {
+      "Low": "Low",
+      "Normal": "Normal",
+      "High": "High",
+      "Critical": "Critical"
     },
-    "actions": {
-      "print": "Print Order",
-      "markDone": "Mark Done",
-      "start": "Start",
-      "serve": "Serve",
-      "reject": "Reject",
-      "cancel": "Cancel"
+    "categories": {
+      "Orders": "Orders",
+      "Reservations": "Reservations",
+      "Tables": "Tables",
+      "Inventory": "Inventory",
+      "Shifts": "Shifts",
+      "System": "System",
+      "General": "General"
     },
-    "rejectReason": {
-      "label": "Reason",
-      "placeholder": "Enter reason...",
-      "confirm": "Confirm",
-      "cancel": "Cancel"
-    }
-  },
-  "ReservationManagement": {
-    "List": {
-      "title": "Reservations",
-      "searchPlaceholder": "Search customer, phone...",
-      "addNew": "Add New",
-      "all": "All",
-      "empty": "No reservations found"
-    },
-    "Card": {
-      "table": "Table",
-      "guests": "Guests",
-      "createdOn": "Created on",
-      "status": "Status",
-      "late": "Late",
-      "viewNote": "View Note",
-      "customerNotes": "Customer Notes:",
-      "noNotes": "No special requests or pre-orders for this reservation.",
-      "checkIn": "Check In",
-      "na": "N/A"
-    },
-    "Detail": {
-      "title": "Reservation Details",
-      "back": "Back",
-      "backToList": "Back to Reservations",
-      "edit": "Edit",
-      "delete": "Delete",
-      "reservationId": "Reservation ID",
-      "loading": "Loading reservation details...",
-      "notFound": "Reservation not found",
-      "Customer": {
-        "title": "Customer Information",
-        "fullName": "Full Name",
-        "phoneNumber": "Phone Number",
-        "emailAddress": "Email Address",
-        "partySize": "Party Size",
-        "guest": "guest",
-        "guests": "guests"
+    "messages": {
+      "NEW_ORDER": {
+        "title": "New order #{orderId}",
+        "body": "Table {tableName} placed a new order"
       },
-      "Booking": {
-        "title": "Booking Information",
-        "reservedDate": "Reserved Date",
-        "reservedTime": "Reserved Time",
-        "status": "Status",
-        "bookingSource": "Booking Source",
-        "createdOn": "Created On"
+      "ORDER_CANCELLED": {
+        "title": "Order #{orderId} cancelled",
+        "body": "Order #{orderId} has been cancelled"
       },
-      "Table": {
-        "title": "Table Information",
-        "noTables": "No tables assigned yet",
-        "capacity": "Capacity",
-        "totalTables": "Total tables assigned"
+      "ORDER_ITEM_READY": {
+        "title": "Order item ready",
+        "body": "An item in the order is ready to serve"
+      },
+      "ORDER_ITEM_REJECTED": {
+        "title": "Order item rejected",
+        "body": "An item in the order was rejected"
+      },
+      "ALL_ITEMS_READY": {
+        "title": "Order #{orderId} fully ready",
+        "body": "All items for table {tableName} are ready"
+      },
+      "PAYMENT_COMPLETED": {
+        "title": "Payment received",
+        "body": "Order #{orderId} — {amount} paid"
+      },
+      "RESERVATION_CREATED": {
+        "title": "New reservation",
+        "body": "{guestName} — {guestCount} guests at {time}"
+      },
+      "RESERVATION_STATUS_CHANGED": {
+        "title": "Reservation updated",
+        "body": "Reservation #{reservationId} — status changed to {status}"
+      },
+      "RESERVATION_REMINDER": {
+        "title": "Reservation reminder",
+        "body": "{guestName} — arriving in {minutes} minutes"
+      },
+      "TABLE_STATUS_CHANGED": {
+        "title": "Table {tableName}",
+        "body": "{oldStatus} → {status}"
+      },
+      "LOW_STOCK_ALERT": {
+        "title": "Low stock: {ingredientName}",
+        "body": "Current: {current}, Min: {minimum}"
+      },
+      "DISH_OUT_OF_STOCK": {
+        "title": "{dishName} out of stock",
+        "body": "This dish is no longer available"
+      },
+      "SHIFT_ASSIGNED": {
+        "title": "Shift assigned",
+        "body": "You have been assigned to {shiftName} on {date}"
+      },
+      "ATTENDANCE_ALERT": {
+        "title": "Attendance alert",
+        "body": "{staffName} — {reason}"
+      },
+      "SYSTEM_ALERT": {
+        "title": "System alert",
+        "body": "{message}"
+      },
+      "ORDER_STATUS_CHANGED": {
+        "title": "Order #{orderId} updated",
+        "body": "Order #{orderId} status changed to {status}"
+      },
+      "PAYMENT_REQUEST": {
+        "title": "Payment requested — {tableName}",
+        "body": "Order #{orderId} — {amount} payment requested"
+      },
+      "fallback": {
+        "title": "Notification",
+        "body": "You have a new notification."
       }
     },
-    "CheckInModal": {
-      "title": "Check-in Guest",
-      "arrivalMsg": "{name} has arrived for their {time} reservation ({pax} guests).",
-      "assignTable": "Assign Table",
-      "selectPlaceholder": "-- Select an available table --",
-      "noTablesAvailable": "No tables available",
-      "tableOption": "{code} ({zone} - Capacity: {capacity})",
-      "capacityHint": "Hint: Try to assign a table with capacity ≥ {pax}",
-      "cancel": "Cancel",
-      "confirm": "Confirm Check-in",
-      "loading": "Loading tables..."
-    },
-    "Messages": {
-      "checkInSuccess": "Guest checked in successfully!",
-      "checkInFail": "Failed to check in reservation",
-      "loadTablesFail": "Failed to load available tables."
+    "metadata": {
+      "defaults": {
+        "table": "Table",
+        "staff": "Staff",
+        "guest": "Guest"
+      },
+      "statuses": {
+        "LOCKED": "Locked",
+        "AVAILABLE": "Available",
+        "RESERVED": "Reserved",
+        "OCCUPIED": "Occupied",
+        "CONFIRMED": "Confirmed",
+        "CHECKED_IN": "Checked in",
+        "CANCELLED": "Cancelled",
+        "NO_SHOW": "No-show",
+        "PENDING": "Pending",
+        "COMPLETED": "Completed",
+        "IN_PROGRESS": "In progress",
+        "UNKNOWN": "Unknown",
+        "CREATED": "Created",
+        "READY": "Ready",
+        "SERVED": "Served",
+        "REJECTED": "Rejected"
+      },
+      "attendanceReasons": {
+        "LATE_CHECKIN": "checked in {minutes} minutes late",
+        "EARLY_LEAVE": "left {minutes} minutes early"
+      }
     }
   },
   "Ingredient": {
@@ -2111,135 +1715,9 @@
       "endTimeAfterStartTime": "End time must be after start time"
     }
   },
-  "SystemSettings": {
-    "title": "System Settings",
-    "description": "Manage system parameters and configurations.",
-    "refresh": "Refresh",
-    "loading": "Loading settings...",
-    "noSettings": "No settings found.",
-    "settingCount": "{count, plural, one {# setting} other {# settings}}",
-    "sensitiveHidden": "sensitive hidden",
-    "addSetting": "Add New Setting",
-    "add": "Add Setting",
-    "cancel": "Cancel",
-    "save": "Save",
-    "saving": "Saving...",
-    "notifications": {
-      "saveSuccess": "Settings for group '{group}' saved successfully.",
-      "createSuccess": "Setting created successfully.",
-      "saveError": "Failed to save settings."
-    },
-    "StoreProfile": {
-      "identity": "Store Identity",
-      "identityDesc": "Update your store logo and official name.",
-      "contactLocation": "Contact & Location",
-      "contactLocationDesc": "Address details and store contact information.",
-      "operating": "Operations",
-      "operatingDesc": "Business hours and other operational details.",
-      "socialMedia": "Social Media",
-      "socialMediaDesc": "Your store's social media presence.",
-      "changeLogo": "Change Logo",
-      "uploadLogo": "Upload Logo",
-      "remove": "Remove",
-      "storeName": "Store Name",
-      "storeNamePlaceholder": "Enter restaurant/store name",
-      "streetAddress": "Street Address",
-      "streetAddressPlaceholder": "E.g. Avenue Jacques Dalcroze 9",
-      "postalCode": "Postal Code",
-      "postalCodePlaceholder": "1000",
-      "city": "City",
-      "cityPlaceholder": "City Name",
-      "country": "Country / Region",
-      "countryPlaceholder": "Country Name",
-      "email": "Email Address",
-      "emailPlaceholder": "contact@restaurant.com",
-      "phone": "Phone Number",
-      "phonePlaceholder": "+84 123 456 789",
-      "openingHours": "Opening Hours",
-      "openingHoursPlaceholder": "E.g. Mon - Sun: 08:00 AM - 10:00 PM",
-      "facebookLink": "Facebook Link",
-      "facebookPlaceholder": "https://facebook.com/yourpage",
-      "instagramLink": "Instagram Link",
-      "instagramPlaceholder": "https://instagram.com/yourprofile",
-      "tiktokLink": "TikTok Link",
-      "tiktokPlaceholder": "https://tiktok.com/@yourprofile",
-      "saveChanges": "Save Changes",
-      "reset": "Reset",
-      "saving": "Saving...",
-      "clickToUpload": "Logo",
-      "uploadSuccess": "Logo uploaded successfully",
-      "uploadError": "Failed to upload logo",
-      "fileSizeError": "File size must be less than 5MB",
-      "updateSuccess": "Store profile updated successfully",
-      "updateError": "Failed to save store profile"
-    },
-    "General": {
-      "title": "System Parameters",
-      "addNew": "Add New Setting",
-      "empty": "No general settings found",
-      "emptyDesc": "Use the \"Add New Setting\" button above to create a group like \"reservation\"."
-    },
-    "AddModal": {
-      "key": "Setting Key",
-      "keyPlaceholder": "e.g. default_password, password.min_length",
-      "name": "Setting Name (Optional)",
-      "namePlaceholder": "A readable name for this setting",
-      "type": "Value Type",
-      "value": "Value",
-      "valuePlaceholder": "Setting value...",
-      "description": "Description (Optional)",
-      "descriptionPlaceholder": "What is this setting for?",
-      "sensitive": "Sensitive Data",
-      "sensitiveDesc": "Hide value by default (e.g. passwords, API keys)"
-    },
-    "Field": {
-      "sensitiveHidden": "Sensitive – value hidden",
-      "jsonPlaceholder": "JSON value...",
-      "sensitive": "Sensitive",
-      "types": {
-        "STRING": "Text",
-        "INT": "Integer",
-        "DECIMAL": "Decimal",
-        "BOOL": "Boolean",
-        "JSON": "JSON"
-      }
-    }
-  },
-  "InvoiceDetail": {
-    "title": "Invoice Details",
-    "loading": "Loading invoice...",
-    "errorLoad": "Failed to load invoice",
-    "notFound": "Invoice not found.",
-    "exportPrint": "Export / Print",
-    "back": "Back",
-    "status": {
-      "paid": "Paid"
-    },
-    "from": "Invoice From",
-    "phone": "Phone",
-    "to": "Bill To",
-    "walkInCustomer": "Walk-in Customer",
-    "date": "Date",
-    "type": "Type",
-    "table": "Table",
-    "items": "Items Details",
-    "no": "#",
-    "itemDetails": "Item Details",
-    "qty": "Qty",
-    "rate": "Rate",
-    "amount": "Amount",
-    "terms": "Terms and Conditions",
-    "term1": "1. Thank you for dining with us.",
-    "term2": "2. Please keep this receipt for your records.",
-    "paymentVerified": "Note: Payment was verified by {staffName}.",
-    "subtotal": "Subtotal",
-    "discount": "Discount",
-    "total": "Total ($)",
-    "downloadPdf": "Download PDF",
-    "printInvoice": "Print Invoice",
-    "defaultStaff": "Staff"
-  },
   "Customer": {
+    "close": "Close",
+    "edit": "Edit",
     "List": {
       "title": "Customer Management",
       "description": "Manage and view customer information, order history, and loyalty points.",
@@ -2264,8 +1742,201 @@
       },
       "actions": {
         "view": "View Details",
-        "edit": "Edit Customer"
+        "edit": "Edit Customer",
+        "delete": "Delete Customer"
+      },
+      "notifications": {
+        "loadError": "Failed to load customer details",
+        "deleteSuccess": "Customer deleted successfully",
+        "deleteError": "Failed to delete customer"
+      },
+      "deleteModal": {
+        "title": "Delete Customer",
+        "message": "Are you sure you want to delete customer '{name}'? This action cannot be undone.",
+        "confirm": "Delete",
+        "cancel": "Cancel"
       }
+    },
+    "Add": {
+      "title": "Add New Customer",
+      "saveButton": "Save",
+      "cancel": "Cancel",
+      "fields": {
+        "phone": "Phone Number",
+        "fullName": "Full Name",
+        "email": "Email",
+        "loyaltyPoints": "Loyalty Points",
+        "isMember": "Member Status",
+        "createdAt": "Created At"
+      },
+      "placeholders": {
+        "phone": "Enter phone number",
+        "fullName": "Enter full name",
+        "email": "Enter email address",
+        "loyaltyPoints": "Enter loyalty points"
+      },
+      "validation": {
+        "phoneRequired": "Phone number is required",
+        "phoneMaxLength": "Phone cannot exceed 20 characters",
+        "phoneInvalid": "Phone number must contain only digits",
+        "nameMaxLength": "Full name cannot exceed 100 characters",
+        "emailMaxLength": "Email cannot exceed 150 characters",
+        "emailInvalid": "Invalid email format",
+        "pointsNegative": "Loyalty points cannot be negative"
+      },
+      "notifications": {
+        "createSuccess": "Customer created successfully",
+        "createError": "Failed to create customer"
+      }
+    },
+    "Edit": {
+      "title": "Edit Customer",
+      "saveButton": "Save Changes",
+      "cancel": "Cancel",
+      "fields": {
+        "phone": "Phone Number",
+        "fullName": "Full Name",
+        "email": "Email",
+        "loyaltyPoints": "Loyalty Points",
+        "isMember": "Member Status",
+        "createdAt": "Created At"
+      },
+      "placeholders": {
+        "phone": "Enter phone number",
+        "fullName": "Enter full name",
+        "email": "Enter email address",
+        "loyaltyPoints": "Enter loyalty points"
+      },
+      "validation": {
+        "phoneRequired": "Phone number is required",
+        "phoneMaxLength": "Phone cannot exceed 20 characters",
+        "phoneInvalid": "Phone number must contain only digits",
+        "nameMaxLength": "Full name cannot exceed 100 characters",
+        "emailMaxLength": "Email cannot exceed 150 characters",
+        "emailInvalid": "Invalid email format",
+        "pointsNegative": "Loyalty points cannot be negative"
+      },
+      "notifications": {
+        "updateSuccess": "Customer updated successfully",
+        "updateError": "Failed to update customer"
+      }
+    },
+    "Detail": {
+      "title": "Customer Details",
+      "saveButton": "Close",
+      "cancel": "Close",
+      "fields": {
+        "phone": "Phone Number",
+        "fullName": "Full Name",
+        "email": "Email",
+        "loyaltyPoints": "Loyalty Points",
+        "isMember": "Member Status",
+        "createdAt": "Created At"
+      },
+      "placeholders": {
+        "phone": "",
+        "fullName": "",
+        "email": "",
+        "loyaltyPoints": ""
+      },
+      "validation": {
+        "phoneRequired": "",
+        "phoneMaxLength": "",
+        "phoneInvalid": "",
+        "nameMaxLength": "",
+        "emailMaxLength": "",
+        "emailInvalid": "",
+        "pointsNegative": ""
+      },
+      "backToCustomers": "Back to Customers",
+      "customerNotFound": "Customer not found.",
+      "guestCustomer": "Guest Customer",
+      "member": "Member",
+      "guest": "Guest",
+      "noPhone": "No phone",
+      "joined": "Joined",
+      "orders": "Orders",
+      "totalSpent": "Total Spent",
+      "points": "Points",
+      "orderHistory": "Order History",
+      "from": "From",
+      "to": "To",
+      "allOrderTypes": "All Order Types",
+      "clear": "Clear",
+      "noOrdersFound": "No orders found.",
+      "totalAmount": "Total Amount",
+      "tip": "Tip",
+      "fetchDetailError": "Cannot load order details",
+      "orderTitle": "Order",
+      "generalInfo": "General Info",
+      "table": "Table",
+      "staff": "Staff",
+      "type": "Type",
+      "paymentDetails": "Payment Details",
+      "noPaymentRecorded": "No payment recorded",
+      "received": "Received",
+      "change": "Change",
+      "items": "Items",
+      "promotions": "Promotions",
+      "coupons": "Coupons",
+      "note": "Note",
+      "noPromotionsApplied": "No promotions applied",
+      "noCouponsApplied": "No coupons applied",
+      "of": "of",
+      "status": {
+        "PENDING": "Pending",
+        "IN_PROGRESS": "In Progress",
+        "COMPLETED": "Completed",
+        "CANCELLED": "Cancelled",
+        "CREATED": "Created",
+        "READY": "Ready",
+        "SERVED": "Served",
+        "REJECTED": "Rejected",
+        "DINE_IN": "Dine-in",
+        "TAKEAWAY": "Takeaway"
+      }
+    }
+  },
+  "EmailTemplates": {
+    "title": "Email Template Management",
+    "description": "Manage email templates sent to customers and staff.",
+    "listTitle": "Template List",
+    "table": {
+      "name": "Template Name",
+      "code": "Code",
+      "subject": "Subject",
+      "edit": "Edit"
+    },
+    "actions": {
+      "add": "Add Template",
+      "view": "View details",
+      "edit": "Edit",
+      "delete": "Delete"
+    },
+    "dialog": {
+      "createTitle": "Create New Template",
+      "editTitle": "Edit Template",
+      "viewTitle": "Template Details",
+      "code": "Template Code",
+      "codePlaceholder": "Auto-generated from name",
+      "name": "Template Name",
+      "namePlaceholder": "e.g., Reservation Confirmation",
+      "subject": "Email Subject",
+      "subjectPlaceholder": "e.g., Confirmation of your reservation at An Lac",
+      "description": "Description",
+      "descriptionPlaceholder": "Brief description of the template purpose",
+      "body": "HTML Content",
+      "bodyPlaceholder": "Enter HTML code here...",
+      "tabEditor": "Editor",
+      "tabPreview": "Preview",
+      "placeholderHint": "* Use placeholders like {{CustomerName}}, {{ReservedTime}}... depending on the template.",
+      "close": "Close",
+      "save": "Save Changes",
+      "create": "Create New"
+    },
+    "deleteDialog": {
+      "title": "Delete Template",
+      "description": "Are you sure you want to delete this template? This action cannot be undone."
     }
   }
 }

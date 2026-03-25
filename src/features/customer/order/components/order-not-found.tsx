@@ -4,7 +4,7 @@ import { useTranslations } from "next-intl";
 import "../styles/index.css";
 
 export default function OrderNotFound() {
-  const t = useTranslations("OrderSuccess.NotFound");
+  const t = useTranslations("orders.success.NotFound");
 
   return (
     <div className="order-not-found-wrapper fade-in animate-in slide-in-from-bottom-4">

@@ -62,7 +62,7 @@ export const PromotionForm = ({ initialData, isEditMode = false, onSubmitAction 
       )}
 
       {/* 1. THÔNG TIN CƠ BẢN */}
-      <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col gap-4">
+      <div className="bg-white p-6 rounded-2xl border border border-[#D5BA98]/60 shadow-sm flex flex-col gap-4">
         <h2 className="text-lg font-bold text-slate-800">{t("basicInfo")}</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-1.5">
@@ -112,7 +112,7 @@ export const PromotionForm = ({ initialData, isEditMode = false, onSubmitAction 
       </div>
 
       {/* 2. CẤU HÌNH GIẢM GIÁ */}
-      <div className={`bg-white p-6 rounded-2xl border border-slate-200 shadow-sm ${!canEditCore ? "opacity-60 pointer-events-none" : ""}`}>
+      <div className={`bg-white p-6 rounded-2xl border border border-[#D5BA98]/60 shadow-sm ${!canEditCore ? "opacity-60 pointer-events-none" : ""}`}>
         <h2 className="text-lg font-bold text-slate-800 mb-4">{t("discountConfig")}</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
@@ -157,7 +157,7 @@ export const PromotionForm = ({ initialData, isEditMode = false, onSubmitAction 
       {/* 3. RULES & TARGETS */}
       <div className={`grid grid-cols-1 lg:grid-cols-2 gap-6 ${!canEditCore ? "opacity-60 pointer-events-none" : ""}`}>
         {/* Rules */}
-        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+        <div className="bg-white p-6 rounded-2xl border border border-[#D5BA98]/60 shadow-sm space-y-4">
           <h2 className="text-lg font-bold text-slate-800">{t("rules")}</h2>
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1.5">
@@ -188,7 +188,7 @@ export const PromotionForm = ({ initialData, isEditMode = false, onSubmitAction 
         </div>
 
         {/* Targets */}
-        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+        <div className="bg-white p-6 rounded-2xl border border border-[#D5BA98]/60 shadow-sm space-y-4">
           <h2 className="text-lg font-bold text-slate-800">{t("targets")}</h2>
           <Controller name="targetDishIds" control={control} render={({ field }) => (
             <ALCombobox options={dishOpts} value={field.value} onChange={field.onChange} multiple title={t("targetDish")} placeholder={t("targetDishPlaceholder")} />
@@ -200,7 +200,7 @@ export const PromotionForm = ({ initialData, isEditMode = false, onSubmitAction 
       </div>
 
       {/* ACTION BUTTONS */}
-      <div className="mt-8 pt-6 border-t border-slate-200 flex flex-col-reverse sm:flex-row justify-between items-center gap-4">
+      <div className="mt-8 pt-6 border-t border border-[#D5BA98]/60 flex flex-col-reverse sm:flex-row justify-between items-center gap-4">
         <div>
 
         </div>

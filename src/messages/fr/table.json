@@ -1,0 +1,140 @@
+{
+  "tableManagement": {
+    "title": "Gestion des tables",
+    "header": {
+      "tablesCount": "{count, plural, one {# table} other {# tables}}",
+      "inZone": "dans la zone {zone}",
+      "availableCount": "{count} disponibles"
+    },
+    "actions": {
+      "refresh": "Rafraîchir",
+      "addZone": "Ajouter une zone",
+      "addTable": "Ajouter une table",
+      "cancel": "Annuler",
+      "saveChanges": "Enregistrer les modifications",
+      "createZone": "Créer la zone",
+      "viewDetails": "Voir les détails",
+      "edit": "Modifier",
+      "delete": "Supprimer",
+      "setStatus": "Définir {status}"
+    },
+    "filters": {
+      "targetDatePlaceholder": "Choisir la date cible",
+      "searchPlaceholder": "Rechercher le code de table...",
+      "targetDateInfo": "Affichage des tables",
+      "availableEmphasis": "DISPONIBLES",
+      "targetDateOn": "le :",
+      "all": "Tous",
+      "allZones": "Toutes les zones",
+      "allTypes": "Tous les types",
+      "allStatuses": "Tous les statuts",
+      "type": "Type",
+      "status": "Statut",
+      "connection": "Connexion",
+      "online": "En ligne",
+      "offline": "Hors ligne"
+    },
+    "states": {
+      "loading": "Chargement des tables...",
+      "emptyTitle": "Aucune table trouvée",
+      "emptyDescription": "Essayez d'ajuster les filtres ou d'ajouter une nouvelle table.",
+      "error": "Erreur"
+    },
+    "status": {
+      "available": "Disponible",
+      "occupied": "Occupée",
+      "reserved": "Réservée",
+      "locked": "Verrouillée",
+      "confirmed": "Confirmée",
+      "pending": "En attente"
+    },
+    "zone": {
+      "label": "Zone",
+      "availCount": "{count} dispo",
+      "seatsCount": "{count} places",
+      "ordersCount": "{count} commandes",
+      "errorsCount": "{count} erreurs",
+      "setOffline": "Passer la zone hors ligne",
+      "setOnline": "Passer la zone en ligne",
+      "availableSummary": "{available}/{total} disponibles",
+      "addTitle": "Ajouter une nouvelle zone",
+      "name": "Nom de la zone",
+      "namePlaceholder": "ex. Jardin, Terrasse, Balcon",
+      "createHint": "La zone sera immédiatement disponible pour l'affectation des tables."
+    },
+    "validation": {
+      "tableCodeRequired": "Le code de table est requis",
+      "capacityMin": "La capacité doit être au moins 1",
+      "zoneRequired": "La zone est requise",
+      "typeRequired": "Le type est requis",
+      "statusRequired": "Le statut est requis",
+      "fixHighlighted": "Veuillez corriger les champs en surbrillance avant d'enregistrer"
+    },
+    "modal": {
+      "addTitle": "Ajouter une nouvelle table",
+      "editTitle": "Modifier la table"
+    },
+    "fields": {
+      "tableCode": "Code table",
+      "tableCodePlaceholder": "ex. T-01",
+      "capacity": "Capacité",
+      "zone": "Zone",
+      "type": "Type",
+      "status": "Statut",
+      "selectZone": "Sélectionner une zone",
+      "selectType": "Sélectionner un type",
+      "selectStatus": "Sélectionner un statut",
+      "onlineStatus": "Statut en ligne",
+      "onlineStatusHint": "La table est visible par les clients lorsqu'elle est en ligne"
+    },
+    "qr": {
+      "title": "Code QR",
+      "encodes": "Encode :",
+      "serverTokenHint": "Le serveur ajoutera un jeton sécurisé lors de l'enregistrement.",
+      "enterTableCode": "Saisissez un code table pour prévisualiser le QR.",
+      "regenerate": "Régénérer le QR",
+      "download": "Télécharger",
+      "hide": "Masquer",
+      "preview": "Aperçu",
+      "active": "Actif",
+      "token": "Jeton",
+      "noCodeYet": "Pas encore de QR. Cliquez sur \"Régénérer le QR\" pour en créer un."
+    },
+    "media": {
+      "title": "Médias"
+    },
+    "delete": {
+      "title": "Confirmation de suppression",
+      "confirmWithCode": "Voulez-vous vraiment supprimer la table \"{tableCode}\" ?",
+      "confirm": "Voulez-vous vraiment supprimer ?",
+      "activeOrdersWarning": "Cette table a {count} commande(s) active(s). La suppression peut être bloquée."
+    },
+    "detail": {
+      "ariaDescription": "Détails pour la table {tableCode}",
+      "title": "Détails",
+      "activeOrders": "Commandes actives",
+      "activeOrdersOnTable": "{count} commande(s) active(s) sur cette table",
+      "activeOrdersCount": "{count} commande(s) active(s)",
+      "noActiveOrders": "Aucune commande active",
+      "errors": "Erreurs",
+      "errorsHint": "Cette table a signalé des erreurs nécessitant une attention.",
+      "upcomingReservations": "Réservations à venir ({count})",
+      "paxCount": "{count} pax",
+      "quickStatusChange": "Changement rapide de statut"
+    },
+    "dashboard": {
+      "overview": "Vue d'ensemble",
+      "totalCount": "{count} total",
+      "tablesAndSeats": "{tables} tables · {seats} places",
+      "expandOverview": "Développer la vue d'ensemble",
+      "collapseOverview": "Réduire la vue d'ensemble",
+      "totalCapacity": "Capacité totale",
+      "avgSeatsPerTable": "Moy. {count} places/table",
+      "needsAttention": "Nécessite une attention",
+      "allClear": "Tout est bon",
+      "incomingReservations": "Réservations à venir",
+      "seeAll": "Voir tout",
+      "noUpcomingReservations": "Aucune réservation à venir"
+    }
+  }
+}

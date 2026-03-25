@@ -215,6 +215,7 @@
     0 0 0 1px rgba(var(--al-cb-beige-rgb), 0.2);
   overflow: hidden;
   outline: none;
+  z-index: 9999;
 }
 
 /* ── Search input inside dropdown ──────────────────────────── */
@@ -394,13 +395,28 @@
 }
 
 /* ── Title / Label (reuses ALInput pattern) ────────────────── */
+.al-cb-title-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.3125rem; /* default fallback */
+}
+.al-cb-wrapper--sm .al-cb-title-wrapper  { margin-bottom: 0.25rem; }
+.al-cb-wrapper--default .al-cb-title-wrapper { margin-bottom: 0.3125rem; }
+.al-cb-wrapper--lg .al-cb-title-wrapper  { margin-bottom: 0.375rem; }
+
 .al-cb-title {
   display: block;
-  margin-bottom: 0.375rem;
-  font-size: 1rem;
+  font-size: 0.875rem;   /* default fallback */
   font-weight: 500;
   color: var(--al-cb-navy);
+  /* margin-bottom controlled by .al-cb-title-wrapper */
 }
+
+/* Size-scoped title font */
+.al-cb-wrapper--sm .al-cb-title    { font-size: 0.75rem; }
+.al-cb-wrapper--default .al-cb-title { font-size: 0.875rem; }
+.al-cb-wrapper--lg .al-cb-title    { font-size: 1rem; }
 
 .al-cb-required {
   color: var(--al-cb-error);

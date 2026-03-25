@@ -13,8 +13,8 @@ interface ReceiptBackLinkProps {
 
 export default function ReceiptBackLink({
   href = "/dashboard",
-} : ReceiptBackLinkProps) {
-  const t = useTranslations("OrderReceipt.BackLink");
+}: ReceiptBackLinkProps) {
+  const t = useTranslations("orders.receipt.BackLink");
 
   return (
     <Link href={href} className="receipt-back-link group">

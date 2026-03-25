@@ -1,6 +1,26 @@
 export type OrderItemStatus = 'Created' | 'In Progress' | 'Ready' | 'Served' | 'Rejected';
 export type OrderStatus = 'Pending' | 'In Progress' | 'Completed' | 'Cancelled';
 
+export type OrderPromotionDto = {
+  promotionId: number;
+  promotionName: string;
+  discountAmount: number;
+};
+
+export type OrderCouponDto = {
+  couponId: number;
+  couponCode: string;
+  discountAmount: number;
+};
+
+export type OrderPaymentDto = {
+  paymentId: number;
+  receivedAmount: number;
+  changeAmount: number;
+  paidAt: string;
+  method: string; // e.g., 'CARD' | 'CASH'
+};
+
 export type ExistingOrderItemDto = {
   orderItemId: number;
   dishId: number;
@@ -20,14 +40,25 @@ export type OrderDetailDto = {
   staffName?: string;
   customerId?: number;
   customerName?: string;
+  
+  subTotalAmount: number;  
   totalAmount: number;
+  taxAmount: number;
+  taxId?: number;          
   tipAmount: number;
-  orderStatus: OrderStatus;
-  source: string; // 'Dine-in' | 'Takeaway'
-  createdAt: string;
-  updatedAt: string;
+  
+  orderStatus: OrderStatus; 
+  source: string;
+  
+  createdAt?: string;
+  updatedAt?: string;
   isPaid: boolean;
+  
   orderItems: ExistingOrderItemDto[];
+  promotions: OrderPromotionDto[]; 
+  coupons: OrderCouponDto[];       
+  payments: OrderPaymentDto[];     
+  itemCount: number;
 };
 
 export type AddOrderItemsRequest = {

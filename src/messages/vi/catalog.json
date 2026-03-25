@@ -1,0 +1,716 @@
+{
+  "Dish": {
+    "List": {
+      "title": "Quản lý món ăn",
+      "description": "Quản lý thực đơn, giá cả, danh mục và trạng thái hiển thị của món ăn.",
+      "searchPlaceholder": "Tìm theo tên món, danh mục...",
+      "addNew": "Thêm món mới",
+      "table": {
+        "no": "STT",
+        "dishName": "Tên món ăn",
+        "category": "Danh mục",
+        "price": "Giá",
+        "status": "Trạng thái",
+        "online": "Hiển thị",
+        "action": "Thao tác",
+        "empty": "Không tìm thấy món ăn nào."
+      },
+      "pagination": {
+        "pageSize": "Số bản ghi:",
+        "previous": "Trước",
+        "next": "Sau"
+      },
+      "actions": {
+        "view": "Xem chi tiết",
+        "edit": "Chỉnh sửa",
+        "delete": "Xóa món"
+      },
+      "status": {
+        "available": "Sẵn sàng",
+        "outOfStock": "Hết hàng",
+        "hidden": "Tạm ẩn"
+      },
+      "loading": "Đang tải dữ liệu món ăn...",
+      "filters": {
+        "category": "Danh mục",
+        "status": "Trạng thái",
+        "allCategories": "Tất cả danh mục",
+        "allStatuses": "Tất cả trạng thái"
+      },
+      "deleteModal": {
+        "title": "Xóa món ăn",
+        "message": "Bạn có chắc chắn muốn xóa món \"{name}\"? Hành động này không thể hoàn tác.",
+        "confirm": "Xóa",
+        "cancel": "Hủy"
+      },
+      "notifications": {
+        "deleteSuccess": "Xóa món ăn thành công",
+        "deleteError": "Đã xảy ra lỗi khi xóa món ăn",
+        "statusUpdated": "Đã cập nhật trạng thái món ăn",
+        "statusUpdateError": "Không thể cập nhật trạng thái món ăn",
+        "batchMakeAvailableSuccess": "Đã hiển thị {count} món ăn",
+        "batchMakeHiddenSuccess": "Đã ẩn {count} món ăn",
+        "batchUpdateError": "Có lỗi xảy ra khi cập nhật trạng thái hàng loạt"
+      },
+      "batchActions": {
+        "makeAvailable": "Hiển thị",
+        "makeHidden": "Ẩn"
+      }
+    },
+    "Validation": {
+      "dishName": {
+        "required": "Tên món ăn không được để trống",
+        "minLength": "Tên món phải có ít nhất 2 ký tự",
+        "maxLength": "Tên món không quá 150 ký tự"
+      },
+      "price": {
+        "required": "Giá không được để trống",
+        "min": "Giá phải lớn hơn hoặc bằng 0"
+      },
+      "category": {
+        "required": "Vui lòng chọn danh mục"
+      }
+    },
+    "Form": {
+      "header": {
+        "createTitle": "Tạo món ăn mới",
+        "editTitle": "Chỉnh sửa món ăn",
+        "createDescription": "Nhập thông tin để thêm món vào thực đơn.",
+        "editDescription": "Cập nhật thông tin món ăn."
+      },
+      "actions": {
+        "cancel": "Hủy bỏ",
+        "createDish": "Tạo món",
+        "creating": "Đang tạo...",
+        "saveChanges": "Lưu thay đổi",
+        "saving": "Đang lưu..."
+      },
+      "toast": {
+        "created": "Tạo món thành công",
+        "updated": "Cập nhật thành công",
+        "error": "Có lỗi xảy ra"
+      },
+      "core": {
+        "title": "Thông Tin Cơ Bản",
+        "subtitle": "Phân loại & Giá bán",
+        "category": "Danh mục",
+        "selectCategory": "Chọn danh mục...",
+        "tags": "Thẻ món ăn",
+        "price": "Giá cơ bản (CHF)",
+        "status": "Trạng thái",
+        "availableOnline": "Hiển thị Online"
+      },
+      "multilingual": {
+        "title": "Nội Dung Đa Ngôn Ngữ",
+        "subtitle": "Quản lý tên và mô tả để hiển thị trên menu."
+      },
+      "media": {
+        "media360": {
+          "title": "Tương Tác 360°",
+          "subtitle": "Chuỗi ảnh xoay"
+        },
+        "gallery": {
+          "title": "Thư Viện Ảnh",
+          "subtitle": "Hình ảnh tiêu chuẩn"
+        },
+        "video": {
+          "title": "Video món ăn",
+          "subtitle": "Tải lên 1 video giới thiệu ngắn gọn (MP4, tối đa 15s, 20MB)",
+          "uploadPrompt": "Nhấn để tải video lên",
+          "uploadHint": "MP4 (Tối đa 20MB, 15 giây)",
+          "validation": {
+            "invalidFormat": "Chỉ chấp nhận file video định dạng .mp4",
+            "maxSize": "Dung lượng video không được vượt quá 20MB",
+            "maxDuration": "Thời lượng video không được vượt quá 15 giây"
+          }
+        },
+        "badge": "XEM 360°",
+        "drag": "Kéo để xoay",
+        "uploadTitle": "Tải chuỗi ảnh 360°",
+        "uploadDesc": "Chọn 24-36 ảnh theo thứ tự tên để xoay.",
+        "chooseFiles": "Chọn ảnh",
+        "sequenceLoaded": "Đã tải chuỗi ảnh",
+        "frame": "Khung",
+        "delete": "Xóa chuỗi",
+        "changeFiles": "Đổi ảnh",
+        "existing": "Ảnh cũ",
+        "addImage": "Thêm ảnh",
+        "recommended": "Khuyến nghị: 800x800px",
+        "recommended2": "Tối đa 5 ảnh, 5MB/ảnh. Định dạng: JPG, PNG, GIF, WEBP",
+        "validation": {
+          "maxImages": "Bạn chỉ được tải lên tối đa 5 ảnh.",
+          "invalidFormat": "Định dạng ảnh không hợp lệ",
+          "maxSize": "Dung lượng ảnh vượt quá 5MB"
+        }
+      },
+      "additional": {
+        "title": "Thông tin bổ sung",
+        "subtitle": "Dinh dưỡng & thời gian",
+        "displayOrder": "Thứ tự hiển thị",
+        "calories": "Calo (kcal)",
+        "prep": "Chuẩn bị (phút)",
+        "cook": "Nấu (phút)",
+        "chefRecommended": "Món đề xuất"
+      }
+    },
+    "Detail": {
+      "header": {
+        "titleFallback": "Chi tiết món ăn",
+        "subtitle": "Đang xem thông tin món ăn ở chế độ chỉ đọc",
+        "back": "Quay lại",
+        "edit": "Chỉnh sửa món",
+        "loading": "Đang tải thông tin món ăn..."
+      },
+      "core": {
+        "title": "Thông tin cơ bản",
+        "subtitle": "Cài đặt cơ bản và phân loại món ăn",
+        "category": "Danh mục",
+        "basePrice": "Giá gốc",
+        "status": "Trạng thái",
+        "visibility": "Hiển thị",
+        "online": "Hiển thị Online",
+        "offline": "Đang ẩn",
+        "tags": "Nhãn (Tags)",
+        "noTags": "Chưa chọn nhãn nào"
+      },
+      "multilingual": {
+        "title": "Nội dung đa ngôn ngữ",
+        "subtitle": "Các bản dịch nội dung của món ăn",
+        "dishName": "Tên món ăn",
+        "description": "Mô tả",
+        "noDescription": "Chưa có mô tả...",
+        "shortDescription": "Mô tả ngắn",
+        "slogan": "Slogan (Khẩu hiệu)",
+        "internalNote": "Ghi chú nội bộ"
+      },
+      "media": {
+        "360Title": "Ảnh 360°",
+        "framesUploaded": "Đã tải lên {count} khung hình",
+        "images360": "{count} Ảnh (Góc nhìn 360°)",
+        "no360": "Chưa có ảnh 360° nào",
+        "galleryTitle": "Thư viện ảnh",
+        "staticUploaded": "Đã tải lên {count} ảnh tĩnh",
+        "primary": "Ảnh chính",
+        "noGallery": "Không có ảnh nào trong thư viện",
+        "videoTitle": "Video món ăn",
+        "videoSubtitle": "Video giới thiệu",
+        "noVideo": "Chưa có video"
+      },
+      "additional": {
+        "title": "Thông tin bổ sung",
+        "subtitle": "Chi tiết về dinh dưỡng và vận hành",
+        "displayOrder": "Thứ tự hiển thị",
+        "calories": "Calo (Kcal)",
+        "prepTime": "Thời gian chuẩn bị",
+        "cookTime": "Thời gian nấu",
+        "chefRecommended": "Đầu bếp khuyên dùng",
+        "notChefRecommended": "Không đánh dấu khuyên dùng"
+      }
+    }
+  },
+  "DishCategory": {
+    "List": {
+      "title": "Quản lý Danh mục Món ăn",
+      "description": "Quản lý và tổ chức các danh mục thực đơn nhà hàng một cách hiệu quả.",
+      "searchPlaceholder": "Tìm theo tên danh mục...",
+      "addNew": "Thêm Danh mục Mới",
+      "cancel": "Hủy",
+      "table": {
+        "no": "STT",
+        "name": "Tên",
+        "description": "Mô tả",
+        "status": "Trạng thái"
+      },
+      "status": {
+        "active": "Hoạt động",
+        "inactive": "Không hoạt động"
+      },
+      "notifications": {
+        "activated": "Đã kích hoạt danh mục thành công",
+        "deactivated": "Đã vô hiệu hóa danh mục thành công",
+        "updateError": "Không thể cập nhật trạng thái danh mục",
+        "createSuccess": "Tạo danh mục thành công",
+        "updateSuccess": "Cập nhật danh mục thành công",
+        "actionError": "Có lỗi xảy ra khi xử lý yêu cầu",
+        "batchActivateSuccess": "Đã kích hoạt {count} danh mục thành công",
+        "batchDeactivateSuccess": "Đã vô hiệu hóa {count} danh mục thành công",
+        "batchUpdateError": "Có lỗi xảy ra khi cập nhật trạng thái hàng loạt"
+      },
+      "filters": {
+        "allStatuses": "Tất cả Trạng thái",
+        "active": "Hoạt động",
+        "inactive": "Không hoạt động"
+      },
+      "batchActions": {
+        "activate": "Kích hoạt",
+        "deactivate": "Vô hiệu hóa"
+      }
+    },
+    "Add": {
+      "title": "Thêm Danh mục Món ăn Mới",
+      "subtitle": "Tạo danh mục mới để tổ chức các món ăn trong thực đơn",
+      "saveButton": "Tạo Danh mục",
+      "cancel": "Hủy",
+      "categoryName": "Tên Danh mục",
+      "categoryNamePlaceholder": "VD: Khai vị, Món chính, Tráng miệng",
+      "description": "Mô tả",
+      "descriptionPlaceholder": "Cung cấp mô tả ngắn về danh mục này và các loại món ăn trong danh mục...",
+      "validation": {
+        "nameRequired": "Tên danh mục không được để trống",
+        "nameMaxLength": "Tên danh mục không được vượt quá 100 ký tự",
+        "descriptionMaxLength": "Mô tả không được vượt quá 100 ký tự",
+        "fixErrors": "Vui lòng sửa các lỗi xác thực"
+      }
+    },
+    "Edit": {
+      "title": "Chỉnh sửa Danh mục Món ăn",
+      "subtitle": "Cập nhật thông tin và cài đặt danh mục",
+      "saveButton": "Lưu Thay đổi",
+      "cancel": "Hủy",
+      "categoryName": "Tên Danh mục",
+      "categoryNamePlaceholder": "VD: Khai vị, Món chính, Tráng miệng",
+      "description": "Mô tả",
+      "descriptionPlaceholder": "Cung cấp mô tả ngắn về danh mục này và các loại món ăn trong danh mục...",
+      "status": "Trạng thái Danh mục",
+      "statusDescription": "Bật để kích hoạt hoặc tắt để ẩn danh mục này",
+      "statusActive": "Danh mục đang hoạt động và hiển thị trong thực đơn",
+      "statusInactive": "Danh mục không hoạt động và ẩn khỏi khách hàng",
+      "validation": {
+        "nameRequired": "Tên danh mục không được để trống",
+        "nameMaxLength": "Tên danh mục không được vượt quá 100 ký tự",
+        "descriptionMaxLength": "Mô tả không được vượt quá 100 ký tự",
+        "fixErrors": "Vui lòng sửa các lỗi xác thực"
+      },
+      "loading": "Đang tải...",
+      "backToList": "Quay lại danh sách"
+    }
+  },
+  "Ingredient": {
+    "List": {
+      "title": "Kho Nguyên Liệu",
+      "description": "Quản lý kho, nguyên liệu công thức và mức tồn kho.",
+      "searchPlaceholder": "Tìm kiếm nguyên liệu...",
+      "addNew": "Thêm nguyên liệu",
+      "export": "Xuất Excel",
+      "import": "Nhập Excel",
+      "importing": "Đang nhập...",
+      "table": {
+        "ingredientName": "Tên Nguyên Liệu",
+        "unit": "ĐVT",
+        "category": "Danh mục",
+        "uncategorized": "Chưa phân loại",
+        "suppliers": "Nhà cung cấp",
+        "inStock": "Tồn kho",
+        "lowStock": "Sắp hết hàng"
+      },
+      "notifications": {
+        "deleteConfirm": "Bạn có chắc chắn muốn xóa {name} không?",
+        "deleteSuccess": "Đã xóa nguyên liệu thành công.",
+        "deleteError": "Xóa nguyên liệu thất bại.",
+        "createSuccess": "Thêm mới nguyên liệu thành công!",
+        "updateSuccess": "Cập nhật nguyên liệu thành công!",
+        "actionError": "Thao tác thất bại.",
+        "noDataExport": "Không có dữ liệu để xuất.",
+        "exportSuccess": "Xuất file thành công!",
+        "invalidExcel": "Không tìm thấy nguyên liệu hợp lệ trong file Excel.",
+        "importSuccess": "Đã nhập thành công {success}/{total} nguyên liệu.",
+        "readExcelError": "Lỗi đọc file Excel. Vui lòng kiểm tra lại định dạng."
+      }
+    }
+  },
+  "Supplier": {
+    "close": "Đóng",
+    "edit": "Chỉnh sửa",
+    "List": {
+      "title": "Quản lý Nhà cung cấp",
+      "description": "Quản lý và tổ chức các nhà cung cấp một cách hiệu quả.",
+      "searchPlaceholder": "Tìm theo tên, số điện thoại hoặc email...",
+      "addNew": "Thêm Nhà cung cấp Mới",
+      "table": {
+        "no": "STT",
+        "name": "Tên Nhà cung cấp",
+        "phone": "Số điện thoại",
+        "email": "Email"
+      },
+      "deleteModal": {
+        "title": "Xóa Nhà cung cấp",
+        "message": "Bạn có chắc chắn muốn xóa \"{name}\"? Hành động này không thể hoàn tác.",
+        "confirm": "Xóa",
+        "cancel": "Hủy"
+      },
+      "notifications": {
+        "deleteSuccess": "Đã xóa nhà cung cấp thành công",
+        "deleteError": "Không thể xóa nhà cung cấp"
+      }
+    },
+    "Add": {
+      "title": "Thêm Nhà cung cấp Mới",
+      "subtitle": "Tạo hồ sơ nhà cung cấp mới với thông tin liên hệ.",
+      "supplierName": "Tên Nhà cung cấp",
+      "supplierNamePlaceholder": "Nhập tên nhà cung cấp",
+      "phone": "Số điện thoại",
+      "phonePlaceholder": "Nhập số điện thoại (không bắt buộc)",
+      "email": "Email",
+      "emailPlaceholder": "Nhập địa chỉ email (không bắt buộc)",
+      "ingredients": "Nguyên vật liệu cung cấp",
+      "ingredientsPlaceholder": "Chọn nguyên liệu mà nhà cung cấp cung cấp",
+      "cancel": "Hủy",
+      "saveButton": "Thêm Nhà cung cấp",
+      "validation": {
+        "nameRequired": "Tên nhà cung cấp là bắt buộc",
+        "nameMaxLength": "Tên nhà cung cấp không được vượt quá 200 ký tự",
+        "phoneInvalid": "Số điện thoại chỉ được chứa chữ số",
+        "phoneMaxLength": "Số điện thoại không được vượt quá 50 ký tự",
+        "emailInvalid": "Vui lòng nhập địa chỉ email hợp lệ",
+        "emailMaxLength": "Email không được vượt quá 150 ký tự",
+        "fixErrors": "Vui lòng sửa các lỗi trước khi gửi"
+      },
+      "notifications": {
+        "createSuccess": "Đã thêm nhà cung cấp thành công",
+        "createError": "Không thể thêm nhà cung cấp"
+      }
+    },
+    "Edit": {
+      "title": "Chỉnh sửa Nhà cung cấp",
+      "subtitle": "Cập nhật thông tin và chi tiết liên hệ nhà cung cấp.",
+      "supplierName": "Tên Nhà cung cấp",
+      "supplierNamePlaceholder": "Nhập tên nhà cung cấp",
+      "phone": "Số điện thoại",
+      "phonePlaceholder": "Nhập số điện thoại (không bắt buộc)",
+      "email": "Email",
+      "emailPlaceholder": "Nhập địa chỉ email (không bắt buộc)",
+      "ingredients": "Nguyên vật liệu cung cấp",
+      "ingredientsPlaceholder": "Chọn nguyên liệu mà nhà cung cấp cung cấp",
+      "cancel": "Hủy",
+      "saveButton": "Lưu Thay đổi",
+      "loading": "Đang tải dữ liệu nhà cung cấp...",
+      "errorTitle": "Không thể tải nhà cung cấp",
+      "backToList": "Quay lại Danh sách",
+      "validation": {
+        "nameRequired": "Tên nhà cung cấp là bắt buộc",
+        "nameMaxLength": "Tên nhà cung cấp không được vượt quá 200 ký tự",
+        "phoneInvalid": "Số điện thoại chỉ được chứa chữ số",
+        "phoneMaxLength": "Số điện thoại không được vượt quá 50 ký tự",
+        "emailInvalid": "Vui lòng nhập địa chỉ email hợp lệ",
+        "emailMaxLength": "Email không được vượt quá 150 ký tự",
+        "fixErrors": "Vui lòng sửa các lỗi trước khi gửi"
+      },
+      "notifications": {
+        "updateSuccess": "Đã cập nhật nhà cung cấp thành công",
+        "updateError": "Không thể cập nhật nhà cung cấp",
+        "loadError": "Không thể tải dữ liệu nhà cung cấp"
+      }
+    },
+    "Detail": {
+      "title": "Chi tiết Nhà cung cấp",
+      "subtitle": "Xem thông tin và chi tiết liên hệ nhà cung cấp.",
+      "back": "Quay lại",
+      "edit": "Chỉnh sửa",
+      "information": "Thông tin Nhà cung cấp",
+      "supplierName": "Tên Nhà cung cấp",
+      "name": "Tên",
+      "phone": "Điện thoại",
+      "email": "Email",
+      "ingredients": "Nguyên vật liệu cung cấp",
+      "ingredientName": "Tên nguyên liệu",
+      "unit": "Đơn vị",
+      "noIngredients": "Nhà cung cấp này chưa cung cấp nguyên vật liệu nào.",
+      "notFound": "Không tìm thấy nhà cung cấp",
+      "backToList": "Quay lại danh sách",
+      "loading": "Đang tải dữ liệu nhà cung cấp...",
+      "errorTitle": "Không thể tải nhà cung cấp"
+    }
+  },
+  "Promotion": {
+    "List": {
+      "title": "Danh sách Khuyến mãi",
+      "description": "Quản lý các chương trình khuyến mãi và chiến dịch giảm giá của nhà hàng.",
+      "addNew": "Thêm mới",
+      "searchPlaceholder": "Tìm theo mã hoặc tên...",
+      "table": {
+        "no": "STT",
+        "promoCode": "Mã Khuyến mãi",
+        "discount": "Giảm giá",
+        "startTime": "Thời gian bắt đầu",
+        "endTime": "Thời gian kết thúc",
+        "usage": "Sử dụng",
+        "status": "Trạng thái"
+      },
+      "filters": {
+        "allStatuses": "Tất cả trạng thái",
+        "allTypes": "Tất cả loại"
+      },
+      "actions": {
+        "view": "Xem chi tiết",
+        "edit": "Chỉnh sửa"
+      },
+      "notifications": {
+        "statusUpdated": "Cập nhật trạng thái thành công",
+        "statusUpdateError": "Đã xảy ra lỗi khi cập nhật trạng thái"
+      }
+    },
+    "createTitle": "Tạo Khuyến mãi mới",
+    "createSubTitle": "Hệ thống sẽ tự động thay đổi trạng thái theo thời gian áp dụng.",
+    "editTitle": "Chi tiết Khuyến mãi #{id}",
+    "noData": "Không tìm thấy dữ liệu",
+    "Form": {
+      "basicInfo": "1. Thông tin cơ bản",
+      "promoCode": "Mã Khuyến mãi",
+      "promoCodePlaceholder": "vd: SUMMER24",
+      "promoName": "Tên Khuyến mãi",
+      "promoNamePlaceholder": "Nhập tên khuyến mãi...",
+      "desc": "Mô tả",
+      "descPlaceholder": "Nhập mô tả chi tiết...",
+      "start": "Thời gian bắt đầu",
+      "end": "Thời gian kết thúc",
+      "discountConfig": "2. Cấu hình Giảm giá",
+      "discountType": "Loại Giảm giá",
+      "typePercent": "Phần trăm (%)",
+      "typeFixed": "Số tiền cố định",
+      "discountValue": "Giá trị Giảm giá",
+      "discountValuePlaceholder": "Nhập giá trị...",
+      "maxUsage": "Giới hạn sử dụng (Tùy chọn)",
+      "unlimited": "Không giới hạn",
+      "rules": "3. Điều kiện (Quy tắc)",
+      "ruleDesc": "Đơn hàng phải đạt tối thiểu ${minOrder} và {minQty} món. Cũng phải chứa món/danh mục bắt buộc (nếu được chọn).",
+      "minOrder": "Giá trị đơn hàng tối thiểu",
+      "minOrderPlaceholder": "0",
+      "minQty": "Số lượng tối thiểu",
+      "minQtyPlaceholder": "0",
+      "reqDish": "Món bắt buộc (Tùy chọn)",
+      "reqDishPlaceholder": "Chọn món bắt buộc...",
+      "reqCate": "Danh mục bắt buộc (Tùy chọn)",
+      "reqCatePlaceholder": "Chọn danh mục bắt buộc...",
+      "targets": "4. Đối tượng áp dụng",
+      "targetDescAll": "Khuyến mãi áp dụng cho: Toàn bộ đơn hàng",
+      "targetDescFiltered": "Khuyến mãi áp dụng cho: Chỉ các món/danh mục được chọn bên dưới",
+      "targetDish": "Áp dụng cho Món cụ thể",
+      "targetDishPlaceholder": "Để trống để bỏ qua...",
+      "targetCate": "Áp dụng cho Danh mục cụ thể",
+      "targetCatePlaceholder": "Để trống để bỏ qua...",
+      "btnDisable": "Vô hiệu hóa",
+      "btnCancel": "Hủy",
+      "btnSave": "Lưu Khuyến mãi",
+      "btnSaving": "Đang lưu...",
+      "statusLockWarning": "Trạng thái hiện tại là {status}. Các điều kiện cấu hình đã bị khóa.",
+      "confirmDisable": "Vô hiệu hóa khuyến mãi này? Hành động này không thể hoàn tác.",
+      "successCreate": "Tạo thành công",
+      "successUpdate": "Cập nhật thành công",
+      "successDisable": "Vô hiệu hóa thành công",
+      "errorSave": "Đã xảy ra lỗi khi lưu"
+    },
+    "Detail": {
+      "title": "Chi tiết Khuyến mãi #{id}",
+      "status": "Trạng thái",
+      "usedCount": "Đã dùng: {count} lần",
+      "rulesInfo": "Quy tắc áp dụng",
+      "noRule": "Không có điều kiện",
+      "hasTarget": "Áp dụng cho các sản phẩm/danh mục cụ thể.",
+      "targetsInfo": "Đối tượng áp dụng",
+      "back": "Quay lại"
+    },
+    "Status": {
+      "SCHEDULED": "Đã lên lịch",
+      "ACTIVE": "Đang hoạt động",
+      "EXPIRED": "Đã hết hạn",
+      "DISABLED": "Vô hiệu hóa"
+    },
+    "Validation": {
+      "promoCodeMin": "Mã khuyến mãi phải có ít nhất 3 ký tự",
+      "startTimeRequired": "Vui lòng chọn thời gian bắt đầu",
+      "endTimeRequired": "Vui lòng chọn thời gian kết thúc",
+      "discountMinPercent": "Tối thiểu 1%",
+      "discountMaxPercent": "Tối đa 100%",
+      "discountPositive": "Phải lớn hơn 0",
+      "endTimeAfterStartTime": "Thời gian kết thúc phải sau thời gian bắt đầu"
+    }
+  },
+  "Coupon": {
+    "List": {
+      "title": "Quản lý Mã giảm giá",
+      "description": "Quản lý và tổ chức mã giảm giá hiệu quả.",
+      "searchPlaceholder": "Tìm kiếm theo mã hoặc tên...",
+      "addNew": "Thêm mã giảm giá mới",
+      "table": {
+        "no": "STT",
+        "code": "Mã giảm giá",
+        "name": "Tên mã",
+        "type": "Loại",
+        "discountValue": "Giá trị giảm",
+        "startTime": "Ngày bắt đầu",
+        "endTime": "Ngày kết thúc",
+        "usage": "Lượt sử dụng",
+        "status": "Trạng thái"
+      },
+      "status": {
+        "active": "Đang hoạt động",
+        "disabled": "Vô hiệu hóa",
+        "scheduled": "Đã lên lịch",
+        "expired": "Đã hết hạn"
+      },
+      "type": {
+        "fixedAmount": "Số tiền cố định",
+        "percent": "Phần trăm"
+      },
+      "deleteModal": {
+        "title": "Xóa mã giảm giá",
+        "message": "Bạn có chắc chắn muốn xóa mã giảm giá \"{name}\"? Hành động này không thể hoàn tác.",
+        "confirm": "Xóa",
+        "cancel": "Hủy"
+      },
+      "notifications": {
+        "deleteSuccess": "Xóa mã giảm giá thành công",
+        "deleteError": "Không thể xóa mã giảm giá"
+      }
+    },
+    "Add": {
+      "title": "Thêm mã giảm giá mới",
+      "couponCode": "Mã giảm giá",
+      "couponCodePlaceholder": "Nhập mã giảm giá",
+      "couponName": "Tên mã",
+      "couponNamePlaceholder": "Nhập tên mã",
+      "description": "Mô tả",
+      "descriptionPlaceholder": "Nhập mô tả mã giảm giá",
+      "discountValue": "Giá trị giảm",
+      "discountValuePlaceholder": "Nhập giá trị giảm",
+      "startTime": "Ngày & giờ bắt đầu",
+      "endTime": "Ngày & giờ kết thúc",
+      "maxUsage": "Số lượt sử dụng tối đa",
+      "maxUsagePlaceholder": "Để trống nếu không giới hạn",
+      "usedCount": "Số lượt đã sử dụng",
+      "createdAt": "Ngày tạo",
+      "type": {
+        "label": "Loại giảm giá",
+        "fixedAmount": "Số tiền cố định",
+        "percent": "Phần trăm"
+      },
+      "status": {
+        "label": "Trạng thái",
+        "active": "Đang hoạt động",
+        "disabled": "Vô hiệu hóa",
+        "scheduled": "Đã lên lịch",
+        "expired": "Đã hết hạn"
+      },
+      "validation": {
+        "codeRequired": "Mã giảm giá không được để trống",
+        "codeMaxLength": "Mã giảm giá không được vượt quá 50 ký tự",
+        "nameRequired": "Tên mã không được để trống",
+        "nameMaxLength": "Tên mã không được vượt quá 200 ký tự",
+        "descriptionMaxLength": "Mô tả không được vượt quá 500 ký tự",
+        "startTimeRequired": "Ngày & giờ bắt đầu không được để trống",
+        "endTimeRequired": "Ngày & giờ kết thúc không được để trống",
+        "endTimeAfterStart": "Ngày kết thúc phải sau ngày bắt đầu",
+        "discountValueRequired": "Giá trị giảm phải lớn hơn 0",
+        "percentMax": "Giảm giá theo phần trăm không được vượt quá 100",
+        "maxUsageMin": "Số lượt sử dụng tối đa phải lớn hơn 0"
+      },
+      "saveButton": "Tạo mã giảm giá",
+      "cancel": "Hủy",
+      "notifications": {
+        "createSuccess": "Tạo mã giảm giá thành công",
+        "createError": "Không thể tạo mã giảm giá"
+      }
+    },
+    "Edit": {
+      "title": "Chỉnh sửa mã giảm giá",
+      "couponCode": "Mã giảm giá",
+      "couponCodePlaceholder": "Nhập mã giảm giá",
+      "couponName": "Tên mã",
+      "couponNamePlaceholder": "Nhập tên mã",
+      "description": "Mô tả",
+      "descriptionPlaceholder": "Nhập mô tả mã giảm giá",
+      "discountValue": "Giá trị giảm",
+      "discountValuePlaceholder": "Nhập giá trị giảm",
+      "startTime": "Ngày & giờ bắt đầu",
+      "endTime": "Ngày & giờ kết thúc",
+      "maxUsage": "Số lượt sử dụng tối đa",
+      "maxUsagePlaceholder": "Để trống nếu không giới hạn",
+      "usedCount": "Số lượt đã sử dụng",
+      "createdAt": "Ngày tạo",
+      "type": {
+        "label": "Loại giảm giá",
+        "fixedAmount": "Số tiền cố định",
+        "percent": "Phần trăm"
+      },
+      "status": {
+        "label": "Trạng thái",
+        "active": "Đang hoạt động",
+        "disabled": "Vô hiệu hóa",
+        "scheduled": "Đã lên lịch",
+        "expired": "Đã hết hạn"
+      },
+      "validation": {
+        "codeRequired": "Mã giảm giá không được để trống",
+        "codeMaxLength": "Mã giảm giá không được vượt quá 50 ký tự",
+        "nameRequired": "Tên mã không được để trống",
+        "nameMaxLength": "Tên mã không được vượt quá 200 ký tự",
+        "descriptionMaxLength": "Mô tả không được vượt quá 500 ký tự",
+        "startTimeRequired": "Ngày & giờ bắt đầu không được để trống",
+        "endTimeRequired": "Ngày & giờ kết thúc không được để trống",
+        "endTimeAfterStart": "Ngày kết thúc phải sau ngày bắt đầu",
+        "discountValueRequired": "Giá trị giảm phải lớn hơn 0",
+        "percentMax": "Giảm giá theo phần trăm không được vượt quá 100",
+        "maxUsageMin": "Số lượt sử dụng tối đa phải lớn hơn 0"
+      },
+      "saveButton": "Cập nhật mã giảm giá",
+      "cancel": "Hủy",
+      "notifications": {
+        "updateSuccess": "Cập nhật mã giảm giá thành công",
+        "updateError": "Không thể cập nhật mã giảm giá"
+      }
+    },
+    "Detail": {
+      "title": "Chi tiết mã giảm giá",
+      "couponCode": "Mã giảm giá",
+      "couponName": "Tên mã",
+      "description": "Mô tả",
+      "discountValue": "Giá trị giảm",
+      "startTime": "Ngày & giờ bắt đầu",
+      "endTime": "Ngày & giờ kết thúc",
+      "maxUsage": "Số lượt sử dụng tối đa",
+      "usedCount": "Số lượt đã sử dụng",
+      "createdAt": "Ngày tạo",
+      "type": {
+        "label": "Loại giảm giá",
+        "fixedAmount": "Số tiền cố định",
+        "percent": "Phần trăm"
+      }
+    }
+  },
+  "Tax": {
+    "title": "Quản lý Thuế",
+    "description": "Quản lý và cấu hình các loại thuế cho cửa hàng",
+    "default": "Mặc định",
+    "Validation": {
+      "nameRequired": "Tên thuế không được để trống",
+      "ratePositive": "Mức thuế phải lớn hơn hoặc bằng 0"
+    },
+    "addTax": "Thêm Thuế mới",
+    "addNew": "Thêm Thuế mới",
+    "editTax": "Sửa Thuế",
+    "noTaxes": "Không tìm thấy loại thuế nào.",
+    "name": "Tên thuế",
+    "rate": "Mức thuế (%)",
+    "type": "Loại thuế",
+    "active": "Hoạt động",
+    "isDefault": "Đặt làm mặc định",
+    "deleteTitle": "Xóa Thuế",
+    "deleteDescription": "Bạn có chắc chắn muốn xóa loại thuế này không? Hành động này không thể hoàn tác.",
+    "deleteSuccess": "Xóa thuế thành công.",
+    "deleteError": "Xóa thuế thất bại.",
+    "createSuccess": "Tạo thuế thành công.",
+    "createError": "Tạo thuế thất bại.",
+    "updateSuccess": "Cập nhật thuế thành công.",
+    "updateError": "Cập nhật thuế thất bại.",
+    "setDefaultSuccess": "Đặt thuế mặc định thành công.",
+    "fields": {
+      "name": "Tên thuế",
+      "rate": "Mức thuế",
+      "type": "Loại"
+    },
+    "types": {
+      "inclusive": "Gộp",
+      "exclusive": "Tách"
+    }
+  }
+}

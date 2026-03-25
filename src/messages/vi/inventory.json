@@ -1,0 +1,184 @@
+{
+  "inventory": {
+    "common": {
+    "title": "Quản lý kho",
+    "loading": "Đang tải...",
+    "noData": "Không có dữ liệu",
+    "save": "Lưu",
+    "cancel": "Hủy",
+    "submit": "Gửi duyệt",
+    "approve": "Duyệt",
+    "reject": "Từ chối",
+    "back": "Quay lại",
+    "search": "Tìm kiếm...",
+    "filter": "Bộ lọc",
+    "clearFilters": "Xóa bộ lọc",
+    "actions": "Thao tác",
+    "viewDetail": "Xem chi tiết",
+    "created": "Tạo lúc",
+    "updated": "Cập nhật",
+    "all": "Tất cả"
+  },
+  "dashboard": {
+    "title": "Tổng quan kho",
+    "description": "Tóm tắt nhanh tình trạng kho và hoạt động gần đây",
+    "totalItems": "Tổng mặt hàng",
+    "lowStock": "Sắp hết",
+    "outOfStock": "Hết hàng",
+    "pendingTx": "Chờ duyệt",
+    "lowStockItems": "Mặt hàng sắp hết",
+    "recentTransactions": "Giao dịch gần đây",
+    "stockHealthChart": "Biểu đồ sức khỏe tồn kho",
+    "txTypeChart": "Cơ cấu giao dịch gần đây",
+    "viewAll": "Xem tất cả",
+    "noLowStock": "Tất cả mặt hàng đều đủ số lượng",
+    "noRecentTx": "Không có giao dịch gần đây"
+  },
+  "items": {
+    "title": "Danh sách hàng tồn",
+    "description": "Quản lý tất cả mặt hàng trong kho theo danh mục",
+    "searchPlaceholder": "Tìm mặt hàng theo tên...",
+    "table": {
+      "item": "Mặt hàng",
+      "category": "Danh mục",
+      "type": "Loại",
+      "stock": "Tồn kho",
+      "unit": "Đơn vị",
+      "minLevel": "Mức tối thiểu",
+      "lastUpdated": "Cập nhật cuối",
+      "status": "Trạng thái"
+    },
+    "lowStock": "Sắp hết",
+    "inStock": "Còn hàng",
+    "outOfStock": "Hết hàng",
+    "stockCard": "Thẻ kho",
+    "uncategorized": "Chưa phân loại"
+  },
+  "stockCard": {
+    "title": "Thẻ kho",
+    "description": "Lịch sử biến động cho {name}",
+    "movementChart": "Biểu đồ biến động tồn kho",
+    "range7d": "7 ngày",
+    "range30d": "30 ngày",
+    "rangeAll": "Tất cả",
+    "inbound": "Nhập",
+    "outbound": "Xuất",
+    "net": "Lũy kế",
+    "noMovements": "Chưa có biến động",
+    "previous": "Trước",
+    "next": "Sau",
+    "table": {
+      "date": "Ngày",
+      "txCode": "Mã giao dịch",
+      "type": "Loại",
+      "quantity": "SL thay đổi",
+      "unit": "Đơn vị",
+      "unitPrice": "Đơn giá",
+      "reason": "Lý do",
+      "note": "Ghi chú",
+      "createdBy": "Người tạo"
+    }
+  },
+  "transactions": {
+    "title": "Giao dịch kho",
+    "description": "Xem và quản lý các giao dịch kho",
+    "searchPlaceholder": "Tìm theo mã hoặc ghi chú...",
+    "createNew": "Tạo giao dịch",
+    "table": {
+      "code": "Mã",
+      "type": "Loại",
+      "status": "Trạng thái",
+      "reason": "Lý do",
+      "supplier": "Nhà cung cấp",
+      "createdBy": "Người tạo",
+      "createdAt": "Ngày tạo",
+      "submittedAt": "Ngày gửi",
+      "approvedBy": "Người duyệt",
+      "items": "Mặt hàng",
+      "totalValue": "Tổng giá trị",
+      "note": "Ghi chú"
+    },
+    "types": {
+      "IN": "Nhập kho",
+      "OUT": "Xuất kho",
+      "ADJUST": "Kiểm kho"
+    },
+    "statuses": {
+      "DRAFT": "Nháp",
+      "PENDING_APPROVAL": "Chờ duyệt",
+      "COMPLETED": "Hoàn thành",
+      "CANCELLED": "Đã hủy"
+    },
+    "detail": {
+      "title": "Chi tiết giao dịch",
+      "transactionInfo": "Thông tin giao dịch",
+      "itemsList": "Danh sách hàng ({count})",
+      "mediaEvidence": "Hình ảnh minh chứng",
+      "approvalSection": "Phê duyệt",
+      "submitForApproval": "Gửi để duyệt",
+      "approveTransaction": "Duyệt",
+      "rejectTransaction": "Từ chối",
+      "rejectionNote": "Lý do từ chối (bắt buộc)",
+      "confirmSubmit": "Gửi giao dịch này để quản lý duyệt?",
+      "confirmApprove": "Duyệt giao dịch này? Tồn kho sẽ được cập nhật.",
+      "confirmReject": "Từ chối giao dịch này?",
+      "stockCheckArea": "Khu vực kiểm kho",
+      "noMedia": "Không có hình ảnh đính kèm"
+    }
+  },
+  "create": {
+    "title": "Tạo giao dịch",
+    "description": "Tạo giao dịch kho mới",
+    "transactionCode": "Mã giao dịch",
+    "evidenceTitle": "Ảnh minh chứng",
+    "evidenceHint": "Tải tối đa 4 ảnh",
+    "selectType": "Loại giao dịch",
+    "selectTypeHint": "Chọn Nhập kho, Xuất kho hoặc Kiểm kho",
+    "import": {
+      "title": "Nhập kho (IN)",
+      "description": "Ghi nhận hàng nhận từ nhà cung cấp",
+      "supplier": "Nhà cung cấp",
+      "selectSupplier": "Chọn nhà cung cấp..."
+    },
+    "export": {
+      "title": "Xuất kho (OUT)",
+      "description": "Ghi nhận hàng xuất khỏi kho",
+      "reason": "Lý do xuất",
+      "selectReason": "Chọn lý do..."
+    },
+    "stockCheck": {
+      "title": "Kiểm kho (ADJUST)",
+      "description": "Đối chiếu số lượng thực tế với hệ thống",
+      "area": "Khu vực kiểm kho / Ghi chú",
+      "areaPlaceholder": "VD: Bếp chính, Kho B..."
+    },
+    "items": {
+      "title": "Mặt hàng",
+      "addItem": "Thêm mặt hàng",
+      "selectItem": "Chọn mặt hàng...",
+      "quantity": "Số lượng",
+      "unit": "Đơn vị",
+      "unitPrice": "Đơn giá",
+      "note": "Ghi chú",
+      "noItems": "Thêm ít nhất một mặt hàng để tiếp tục",
+      "remove": "Xóa"
+    },
+    "note": "Ghi chú",
+    "notePlaceholder": "Ghi chú giao dịch (tùy chọn)...",
+    "saveAsDraft": "Lưu nháp",
+    "saveAndSubmit": "Lưu & Gửi duyệt",
+    "clickToChange": "Nhấn để đổi loại"
+  },
+    "filters": {
+    "category": "Danh mục",
+    "type": "Loại",
+    "status": "Trạng thái",
+    "lowStockOnly": "Chỉ hàng sắp hết",
+    "exportReason": "Lý do xuất",
+    "supplier": "Nhà cung cấp",
+    "dateRange": "Khoảng thời gian",
+    "from": "Từ",
+    "to": "Đến"
+    }
+  }
+}

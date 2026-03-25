@@ -13,7 +13,7 @@ interface PublicBookingModalProps {
 }
 
 export default function PublicBookingModal({ isOpen, onClose }: PublicBookingModalProps) {
-	const t = useTranslations('Reservation.PublicTicket');
+	const t = useTranslations('reservations.public.publicTicket');
 	const [ticketData, setTicketData] = useState<ReservationResponseDto | null>(null);
 	const ticketRef = useRef<HTMLDivElement>(null);
 
@@ -52,7 +52,7 @@ export default function PublicBookingModal({ isOpen, onClose }: PublicBookingMod
 							type="button"
 							onClick={handleCloseAll}
 							className="absolute top-3 right-3 z-20 rounded-full bg-stone-100 p-2 text-stone-600 hover:bg-stone-200"
-							aria-label="Close booking modal"
+							aria-label={t('closeAriaLabel')}
 						>
 							<X size={18} />
 						</button>

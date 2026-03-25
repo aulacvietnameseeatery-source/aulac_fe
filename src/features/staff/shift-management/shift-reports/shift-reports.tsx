@@ -1,302 +1,24 @@
 "use client";
 
-import { useState } from "react";
-import { BarChart2, RefreshCcw } from "lucide-react";
+import { useMemo, useState } from "react";
+import { useTranslations } from "next-intl";
+import { Users, Clock, AlertTriangle } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import {
-  Card,
-  CardContent,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { ALDatePicker } from "@/components/ui/al-date-picker";
+import { ALCard } from "@/components/ui/al-card";
 import {
   useAttendanceReportQuery,
   useWorkedHoursReportQuery,
   useExceptionsReportQuery,
 } from "../hooks/use-shift-queries";
-import type {
-  AttendanceReportRowDto,
-  WorkedHoursReportRowDto,
-  AttendanceExceptionReportRowDto,
-} from "../types/shift-management.types";
-
-// ── helpers ──
-
-function minToHM(min: number) {
-  if (!min) return "0h 0m";
-  return `${Math.floor(min / 60)}h ${min % 60}m`;
-}
-
-function pct(n: number, d: number) {
-  if (!d) return "—";
-  return `${Math.round((n / d) * 100)}%`;
-}
-
-function thisMonthRange() {
-  const now = new Date();
-  const from = new Date(now.getFullYear(), now.getMonth(), 1).toISOString().slice(0, 10);
-  const to = new Date(now.getFullYear(), now.getMonth() + 1, 0).toISOString().slice(0, 10);
-  return { from, to };
-}
-
-// ── filter bar ──
-
-interface FiltersState {
-  fromDate: string;
-  toDate: string;
-}
-
-interface FilterBarProps {
-  filters: FiltersState;
-  onChange: (f: FiltersState) => void;
-  onRefetch: () => void;
-  isLoading: boolean;
-}
-
-function FilterBar({ filters, onChange, onRefetch, isLoading }: FilterBarProps) {
-  return (
-    <div className="flex flex-wrap items-center gap-3 rounded-xl border border-[#D5BA98]/50 bg-[#FDFBF9] p-3">
-      <label className="text-sm text-[#1A3A52]/70">From:</label>
-      <ALDatePicker
-        value={filters.fromDate}
-        onChange={(val) => onChange({ ...filters, fromDate: val })}
-        placeholder="From date"
-        clearable
-        inputSize="sm"
-        wrapperClassName="w-48"
-      />
-      <label className="text-sm text-[#1A3A52]/70">To:</label>
-      <ALDatePicker
-        value={filters.toDate}
-        onChange={(val) => onChange({ ...filters, toDate: val })}
-        placeholder="To date"
-        clearable
-        inputSize="sm"
-        wrapperClassName="w-48"
-      />
-      <Button
-        variant="outline"
-        size="sm"
-        onClick={onRefetch}
-        disabled={isLoading}
-        className="border-[#D5BA98]/70 bg-[#FDFBF9] text-[#1A3A52] hover:bg-[#D5BA98]/20"
-      >
-        <RefreshCcw className="w-4 h-4" />
-      </Button>
-    </div>
-  );
-}
-
-// ── KPI cards ──
-
-interface KpiProps {
-  label: string;
-  value: string | number;
-  sub?: string;
-}
-
-function Kpi({ label, value, sub }: KpiProps) {
-  return (
-    <Card className="py-4 border-[#D5BA98]/50 bg-[#FDFBF9] shadow-none">
-      <CardContent className="px-5">
-        <p className="text-2xl font-semibold leading-none text-[#1A3A52]">{value}</p>
-        {sub && <p className="mt-0.5 text-sm text-[#1A3A52]/70">{sub}</p>}
-        <p className="mt-1 text-xs text-[#1A3A52]/65">{label}</p>
-      </CardContent>
-    </Card>
-  );
-}
-
-// ── empty / loading states ──
-
-function TableState({ loading }: { loading: boolean }) {
-  return (
-    <div className="flex items-center justify-center py-14 text-sm text-[#1A3A52]/70">
-      {loading ? "Loading…" : "No data for the selected range."}
-    </div>
-  );
-}
-
-// ── Attendance tab ──
-
-function AttendanceTab({ rows, loading }: { rows: AttendanceReportRowDto[]; loading: boolean }) {
-  const total = rows.reduce((s, r) => s + r.assignedShifts, 0);
-  const present = rows.reduce((s, r) => s + r.presentShifts, 0);
-  const late = rows.reduce((s, r) => s + r.lateShifts, 0);
-  const absent = rows.reduce((s, r) => s + r.absentShifts, 0);
-
-  return (
-    <div className="space-y-5">
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <Kpi label="Total assigned shifts" value={total} />
-        <Kpi label="Attendance rate" value={pct(present, total)} sub={`${present} / ${total}`} />
-        <Kpi label="Late arrivals" value={late} />
-        <Kpi label="Absences" value={absent} />
-      </div>
-
-      {!loading && rows.length === 0 ? (
-        <TableState loading={loading} />
-      ) : loading ? (
-        <TableState loading={loading} />
-      ) : (
-        <div className="overflow-x-auto rounded-xl border border-[#D5BA98]/60 bg-[#FDFBF9]">
-          <table className="w-full text-sm">
-            <thead className="bg-[#D5BA98]/20">
-              <tr>
-                {["Staff", "Role", "Assigned", "Present", "Late", "Absent", "Rate"].map((h) => (
-                  <th key={h} className="px-4 py-3 text-left font-medium text-[#1A3A52]/80">{h}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-[#D5BA98]/40">
-              {rows.map((r) => (
-                <tr key={r.staffId} className="transition-colors hover:bg-[#D5BA98]/15">
-                  <td className="px-4 py-3 font-medium text-[#1A3A52]">{r.staffName}</td>
-                  <td className="px-4 py-3 text-[#1A3A52]/70">{r.roleName}</td>
-                  <td className="px-4 py-3 text-[#1A3A52]">{r.assignedShifts}</td>
-                  <td className="px-4 py-3 text-[#1A3A52]">{r.presentShifts}</td>
-                  <td className="px-4 py-3">
-                    {r.lateShifts > 0 ? (
-                      <Badge variant="warning" className="border-[#D5BA98]/60 bg-[#D5BA98]/25 text-[#1A3A52]">{r.lateShifts}</Badge>
-                    ) : r.lateShifts}
-                  </td>
-                  <td className="px-4 py-3">
-                    {r.absentShifts > 0 ? (
-                      <Badge variant="destructive">{r.absentShifts}</Badge>
-                    ) : r.absentShifts}
-                  </td>
-                  <td className="px-4 py-3 text-[#1A3A52]">{pct(r.presentShifts, r.assignedShifts)}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-    </div>
-  );
-}
-
-// ── Worked Hours tab ──
-
-function WorkedHoursTab({ rows, loading }: { rows: WorkedHoursReportRowDto[]; loading: boolean }) {
-  const totalSched = rows.reduce((s, r) => s + r.scheduledMinutes, 0);
-  const totalWorked = rows.reduce((s, r) => s + r.workedMinutes, 0);
-  const totalVariance = rows.reduce((s, r) => s + r.varianceMinutes, 0);
-
-  return (
-    <div className="space-y-5">
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-        <Kpi label="Total scheduled" value={minToHM(totalSched)} />
-        <Kpi label="Total worked" value={minToHM(totalWorked)} />
-        <Kpi
-          label="Variance"
-          value={`${totalVariance >= 0 ? "+" : ""}${minToHM(Math.abs(totalVariance))}`}
-          sub={totalVariance < 0 ? "under" : "over"}
-        />
-      </div>
-
-      {!loading && rows.length === 0 ? (
-        <TableState loading={loading} />
-      ) : loading ? (
-        <TableState loading={loading} />
-      ) : (
-        <div className="overflow-x-auto rounded-xl border border-[#D5BA98]/60 bg-[#FDFBF9]">
-          <table className="w-full text-sm">
-            <thead className="bg-[#D5BA98]/20">
-              <tr>
-                {["Staff", "Scheduled", "Worked", "Variance", "Incomplete"].map((h) => (
-                  <th key={h} className="px-4 py-3 text-left font-medium text-[#1A3A52]/80">{h}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-[#D5BA98]/40">
-              {rows.map((r) => (
-                <tr key={r.staffId} className="transition-colors hover:bg-[#D5BA98]/15">
-                  <td className="px-4 py-3 font-medium text-[#1A3A52]">{r.staffName}</td>
-                  <td className="px-4 py-3 text-[#1A3A52]">{minToHM(r.scheduledMinutes)}</td>
-                  <td className="px-4 py-3 text-[#1A3A52]">{minToHM(r.workedMinutes)}</td>
-                  <td className={`px-4 py-3 font-medium ${r.varianceMinutes < 0 ? "text-[#8C3A3A]" : "text-[#4A5D4E]"}`}>
-                    {r.varianceMinutes >= 0 ? "+" : ""}{minToHM(Math.abs(r.varianceMinutes))}
-                  </td>
-                  <td className="px-4 py-3">
-                    {r.incompleteRecords > 0 ? (
-                      <Badge variant="warning" className="border-[#D5BA98]/60 bg-[#D5BA98]/25 text-[#1A3A52]">{r.incompleteRecords}</Badge>
-                    ) : (
-                      <span className="text-[#1A3A52]/50">—</span>
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-    </div>
-  );
-}
-
-// ── Exceptions tab ──
-
-function ExceptionsTab({ rows, loading }: { rows: AttendanceExceptionReportRowDto[]; loading: boolean }) {
-  const late = rows.filter((r) => r.exceptionType === "LATE").length;
-  const absent = rows.filter((r) => r.exceptionType === "ABSENT").length;
-  const earlyLeave = rows.filter((r) => r.exceptionType === "EARLY_LEAVE").length;
-  const manual = rows.filter((r) => r.isManualAdjustment).length;
-
-  return (
-    <div className="space-y-5">
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <Kpi label="Late incidents" value={late} />
-        <Kpi label="Absences" value={absent} />
-        <Kpi label="Early departures" value={earlyLeave} />
-        <Kpi label="Manual adjustments" value={manual} />
-      </div>
-
-      {!loading && rows.length === 0 ? (
-        <TableState loading={loading} />
-      ) : loading ? (
-        <TableState loading={loading} />
-      ) : (
-        <div className="overflow-x-auto rounded-xl border border-[#D5BA98]/60 bg-[#FDFBF9]">
-          <table className="w-full text-sm">
-            <thead className="bg-[#D5BA98]/20">
-              <tr>
-                {["Date", "Staff", "Role", "Shift", "Exception", "Min Affected", "Reviewed By"].map((h) => (
-                  <th key={h} className="px-4 py-3 text-left font-medium text-[#1A3A52]/80">{h}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-[#D5BA98]/40">
-              {rows.map((r, i) => (
-                <tr key={i} className="transition-colors hover:bg-[#D5BA98]/15">
-                  <td className="px-4 py-3 text-[#1A3A52]">{r.businessDate}</td>
-                  <td className="px-4 py-3 font-medium text-[#1A3A52]">{r.staffName}</td>
-                  <td className="px-4 py-3 text-[#1A3A52]/70">{r.roleName}</td>
-                  <td className="px-4 py-3 text-[#1A3A52]/70">{r.shiftTypeCode}</td>
-                  <td className="px-4 py-3">
-                    <Badge variant={r.exceptionType === "ABSENT" ? "destructive" : "warning"}>
-                      {r.exceptionType}
-                    </Badge>
-                    {r.isManualAdjustment && (
-                      <Badge variant="secondary" className="ml-1 border-[#D5BA98]/60 bg-[#D5BA98]/20 text-[#1A3A52]">Adjusted</Badge>
-                    )}
-                  </td>
-                  <td className="px-4 py-3 text-[#1A3A52]">{r.minutesAffected > 0 ? r.minutesAffected : "—"}</td>
-                  <td className="px-4 py-3 text-[#1A3A52]/70">{r.reviewerName ?? "—"}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-    </div>
-  );
-}
-
-// ── main component ──
+import { thisMonthRange, exportToCsv, TAB_TRIGGER_CLASS, type FiltersState } from "./components/report-shared";
+import { ReportHeader } from "./components/report-header";
+import { ReportHealthBanner } from "./components/report-health-banner";
+import { AttendanceTab } from "./components/attendance-tab";
+import { WorkedHoursTab } from "./components/worked-hours-tab";
+import { ExceptionsTab } from "./components/exceptions-tab";
 
 export function ShiftReports() {
+  const t = useTranslations("shift.reports");
   const defaultRange = thisMonthRange();
   const [filters, setFilters] = useState<FiltersState>({
     fromDate: defaultRange.from,
@@ -306,24 +28,30 @@ export function ShiftReports() {
 
   const enabled = !!filters.fromDate && !!filters.toDate;
 
+  // Fetch all 3 reports eagerly so the health banner always has data
   const { data: attendancePage, isLoading: attLoading, refetch: attRefetch } =
     useAttendanceReportQuery(
-      enabled ? { fromDate: filters.fromDate, toDate: filters.toDate, pageSize: 100 } : {}
+      enabled ? { fromDate: filters.fromDate, toDate: filters.toDate, pageSize: 500 } : {}
     );
 
   const { data: workedHours = [], isLoading: whLoading, refetch: whRefetch } =
     useWorkedHoursReportQuery(
       { fromDate: filters.fromDate, toDate: filters.toDate },
-      enabled && activeTab === "workedHours"
+      enabled
     );
 
   const { data: exceptions = [], isLoading: excLoading, refetch: excRefetch } =
     useExceptionsReportQuery(
       { fromDate: filters.fromDate, toDate: filters.toDate },
-      enabled && activeTab === "exceptions"
+      enabled
     );
 
-  const attendanceRows = attendancePage?.pageData ?? [];
+  const attendanceRows = useMemo(() => attendancePage?.pageData ?? [], [attendancePage]);
+
+  const isLoading =
+    activeTab === "attendance" ? attLoading :
+    activeTab === "workedHours" ? whLoading :
+    excLoading;
 
   function handleRefetch() {
     if (activeTab === "attendance") attRefetch();
@@ -331,52 +59,144 @@ export function ShiftReports() {
     else excRefetch();
   }
 
-  const isLoading = activeTab === "attendance" ? attLoading : activeTab === "workedHours" ? whLoading : excLoading;
+  function handleExportCsv() {
+    if (activeTab === "attendance") {
+      exportToCsv(
+        attendanceRows.map((r) => ({
+          Date: r.workDate,
+          StaffId: r.staffId,
+          StaffName: r.staffName,
+          Template: r.templateName,
+          Status: r.attendanceStatusCode,
+          PlannedStart: r.plannedStartAt,
+          PlannedEnd: r.plannedEndAt,
+          CheckIn: r.actualCheckInAt ?? "",
+          CheckOut: r.actualCheckOutAt ?? "",
+          LateMinutes: r.lateMinutes,
+          EarlyLeaveMinutes: r.earlyLeaveMinutes,
+          ManualAdjustment: r.isManualAdjustment,
+        })),
+        `attendance-${filters.fromDate}-to-${filters.toDate}.csv`
+      );
+    } else if (activeTab === "workedHours") {
+      exportToCsv(
+        workedHours.map((r) => ({
+          StaffId: r.staffId,
+          StaffName: r.staffName,
+          ScheduledMinutes: r.scheduledMinutes,
+          WorkedMinutes: r.workedMinutes,
+          VarianceMinutes: r.varianceMinutes,
+          EfficiencyPct:
+            r.scheduledMinutes > 0
+              ? Math.round((r.workedMinutes / r.scheduledMinutes) * 100)
+              : 0,
+          IncompleteRecords: r.incompleteRecords,
+        })),
+        `worked-hours-${filters.fromDate}-to-${filters.toDate}.csv`
+      );
+    } else {
+      exportToCsv(
+        exceptions.map((r) => ({
+          Date: r.workDate,
+          StaffId: r.staffId,
+          StaffName: r.staffName,
+          Template: r.templateName,
+          ExceptionType: r.exceptionType,
+          MinutesAffected: r.minutesAffected,
+          IsManualAdjustment: r.isManualAdjustment,
+          Reviewer: r.reviewerName ?? "",
+        })),
+        `exceptions-${filters.fromDate}-to-${filters.toDate}.csv`
+      );
+    }
+  }
+
+  const exceptionCount = exceptions.length;
+  const attendanceAbsentRate =
+    attendanceRows.length > 0
+      ? Math.round(
+          (attendanceRows.filter((r) => r.attendanceStatusCode === "ABSENT").length /
+            attendanceRows.length) *
+            100
+        )
+      : 0;
 
   return (
-    <div className="space-y-6 rounded-2xl border border-[#D5BA98]/40 bg-linear-to-b from-[#FDFBF9] via-[#D5BA98]/10 to-[#FDFBF9] p-5 sm:p-6">
-      {/* Header */}
-      <div className="flex items-start justify-between">
-        <div>
-          <div className="flex items-center gap-2">
-            <BarChart2 className="h-5 w-5 text-[#1A3A52]/80" />
-            <h1 className="text-2xl font-semibold tracking-wide text-[#1A3A52]">Shift Reports</h1>
-          </div>
-          <p className="mt-0.5 text-sm text-[#1A3A52]/70">
-            Attendance summary, worked hours, and exception reports.
-          </p>
-        </div>
+    <div className="flex-1 flex flex-col h-full overflow-hidden">
+      <div className="shrink-0 space-y-4 pb-4">
+        <ReportHeader
+          filters={filters}
+          isLoading={isLoading}
+          onChange={setFilters}
+          onRefetch={handleRefetch}
+          onExportCsv={handleExportCsv}
+        />
+
+        <ReportHealthBanner
+          attendanceRows={attendanceRows}
+          workedHoursRows={workedHours}
+          exceptionRows={exceptions}
+        />
       </div>
 
-      {/* Filter bar */}
-      <FilterBar
-        filters={filters}
-        onChange={setFilters}
-        onRefetch={handleRefetch}
-        isLoading={isLoading}
-      />
+      <div className="flex flex-col flex-1 min-h-0">
+        <Tabs
+          value={activeTab}
+          onValueChange={setActiveTab}
+          className="flex-1 flex flex-col min-w-0 overflow-hidden"
+        >
+          <ALCard className="flex-1 flex flex-col min-w-0 border-[#D5BA98]/30 overflow-hidden">
+            <TabsList className="flex flex-wrap items-center justify-start border-b border-[#D5BA98]/30 shrink-0 p-0 bg-[#FDFBF9] w-full h-auto rounded-none">
+              <TabsTrigger
+                value="attendance"
+                className={`${TAB_TRIGGER_CLASS} flex items-center gap-1.5`}
+              >
+                <Users className="w-3.5 h-3.5 shrink-0" />
+                <span>{t("tabs.attendance")}</span>
+                {attendanceAbsentRate >= 15 && (
+                  <span
+                    className="inline-flex h-2 w-2 rounded-full bg-red-500 shrink-0"
+                    title={t("highAbsenceRate")}
+                  />
+                )}
+              </TabsTrigger>
+              <TabsTrigger
+                value="workedHours"
+                className={`${TAB_TRIGGER_CLASS} flex items-center gap-1.5`}
+              >
+                <Clock className="w-3.5 h-3.5 shrink-0" />
+                <span>{t("tabs.workedHours")}</span>
+              </TabsTrigger>
+              <TabsTrigger
+                value="exceptions"
+                className={`${TAB_TRIGGER_CLASS} flex items-center gap-1.5`}
+              >
+                <AlertTriangle className="w-3.5 h-3.5 shrink-0" />
+                <span>{t("tabs.exceptions")}</span>
+                {exceptionCount > 0 && (
+                  <span className="inline-flex items-center justify-center rounded-full bg-amber-500 text-white text-[10px] font-bold min-w-[16px] h-4 px-1 leading-none shrink-0">
+                    {exceptionCount > 9 ? "9+" : exceptionCount}
+                  </span>
+                )}
+              </TabsTrigger>
+            </TabsList>
 
-      {/* Tabs */}
-      <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="border border-[#D5BA98]/60 bg-[#FDFBF9]">
-          <TabsTrigger value="attendance" className="data-[state=active]:bg-[#1A3A52] data-[state=active]:text-[#FDFBF9]">Attendance</TabsTrigger>
-          <TabsTrigger value="workedHours" className="data-[state=active]:bg-[#1A3A52] data-[state=active]:text-[#FDFBF9]">Worked Hours</TabsTrigger>
-          <TabsTrigger value="exceptions" className="data-[state=active]:bg-[#1A3A52] data-[state=active]:text-[#FDFBF9]">Exceptions</TabsTrigger>
-        </TabsList>
+            <div className="flex-1 overflow-y-auto p-4 sm:p-5">
+              <TabsContent value="attendance" className="m-0 border-none p-0 outline-none">
+                <AttendanceTab rows={attendanceRows} loading={attLoading} />
+              </TabsContent>
 
-        <TabsContent value="attendance" className="mt-4">
-          <AttendanceTab rows={attendanceRows} loading={attLoading} />
-        </TabsContent>
+              <TabsContent value="workedHours" className="m-0 border-none p-0 outline-none">
+                <WorkedHoursTab rows={workedHours} loading={whLoading} />
+              </TabsContent>
 
-        <TabsContent value="workedHours" className="mt-4">
-          <WorkedHoursTab rows={workedHours} loading={whLoading} />
-        </TabsContent>
-
-        <TabsContent value="exceptions" className="mt-4">
-          <ExceptionsTab rows={exceptions} loading={excLoading} />
-        </TabsContent>
-      </Tabs>
+              <TabsContent value="exceptions" className="m-0 border-none p-0 outline-none">
+                <ExceptionsTab rows={exceptions} loading={excLoading} />
+              </TabsContent>
+            </div>
+          </ALCard>
+        </Tabs>
+      </div>
     </div>
   );
 }
-

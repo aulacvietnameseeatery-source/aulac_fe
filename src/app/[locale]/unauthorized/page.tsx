@@ -1,10 +1,9 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { ShieldX, ArrowLeft, Home } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { useAuth } from '@/components/providers/auth-provider';
-import { usePermissions } from '@/hooks/use-permissions';
+import { ArrowLeft, Home, Lock } from 'lucide-react';
+import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 
 /**
  * Unauthorized Access Page
@@ -12,122 +11,81 @@ import { usePermissions } from '@/hooks/use-permissions';
  */
 export default function UnauthorizedPage() {
   const router = useRouter();
-  const { isAuthenticated, userInfo } = useAuth();
-  const { permissions, roles } = usePermissions();
+  const t = useTranslations('Unauthorized');
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-red-50 via-white to-orange-50 p-4">
-      <div className="max-w-2xl w-full">
-        {/* Icon */}
-        <div className="flex justify-center mb-8">
-          <div className="relative">
-            <div className="absolute inset-0 bg-red-500/20 blur-3xl rounded-full"></div>
-            <div className="relative bg-white rounded-full p-6 shadow-xl border-4 border-red-100">
-              <ShieldX className="w-20 h-20 text-red-500" />
-            </div>
+    <div className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-[#0a0a0a]">
+      {/* Background Image with Overlay */}
+      <div
+        className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat grayscale-[0.5]"
+        style={{ backgroundImage: "url('/images/error-bg.png')" }}
+      />
+      <div className="absolute inset-0 z-10 bg-black/80 backdrop-blur-[4px]" />
+
+      {/* Content */}
+      <div className="relative z-20 text-center px-4 w-full max-w-4xl py-12">
+        <div className="mb-6 flex justify-center animate-in fade-in zoom-in duration-1000">
+          <div className="p-4 rounded-full bg-[#d4a373]/10 border border-[#d4a373]/20">
+            <Lock className="w-12 h-12 text-[#d4a373]" />
           </div>
         </div>
 
-        {/* Content */}
-        <div className="bg-white rounded-2xl shadow-xl border border-red-100 p-8 md:p-12 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-            Access Denied
-          </h1>
-          
-          <p className="text-lg text-gray-600 mb-8">
-            You don&apos;t have permission to access this resource.
-          </p>
+        <h1
+          className="text-[100px] md:text-[150px] font-playfair leading-none tracking-tighter text-[#d4a373] opacity-90 drop-shadow-[0_10px_10px_rgba(0,0,0,0.5)] animate-in fade-in slide-in-from-bottom-10 duration-1000"
+          style={{ fontFamily: "var(--font-playfair), serif" }}
+        >
+          403
+        </h1>
 
-          {/* User Info */}
-          {isAuthenticated && userInfo && (
-            <div className="bg-gray-50 rounded-lg p-6 mb-8 text-left">
-              <h2 className="text-sm font-semibold text-gray-700 mb-3 uppercase tracking-wide">
-                Current User
-              </h2>
-              
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-600">Username:</span>
-                  <span className="font-medium text-gray-900">{userInfo.username}</span>
-                </div>
-                
-                <div className="flex items-start justify-between">
-                  <span className="text-sm text-gray-600">Roles:</span>
-                  <div className="flex flex-wrap gap-1 justify-end">
-                    {roles.length > 0 ? (
-                      roles.map((role) => (
-                        <span
-                          key={role}
-                          className="px-2 py-0.5 bg-blue-100 text-blue-700 text-xs rounded-full font-medium"
-                        >
-                          {role}
-                        </span>
-                      ))
-                    ) : (
-                      <span className="text-sm text-gray-400">No roles</span>
-                    )}
-                  </div>
-                </div>
-                
-                <div className="flex items-start justify-between">
-                  <span className="text-sm text-gray-600">Permissions:</span>
-                  <div className="flex flex-wrap gap-1 justify-end max-w-xs">
-                    {permissions.length > 0 ? (
-                      permissions.map((perm) => (
-                        <span
-                          key={perm}
-                          className="px-2 py-0.5 bg-green-100 text-green-700 text-xs rounded-full font-medium"
-                        >
-                          {perm}
-                        </span>
-                      ))
-                    ) : (
-                      <span className="text-sm text-gray-400">No permissions</span>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
+        <h2
+          className="text-3xl md:text-5xl font-playfair text-white mb-4 animate-in fade-in slide-in-from-bottom-10 duration-1000 delay-200"
+          style={{ fontFamily: "var(--font-playfair), serif" }}
+        >
+          {t('title')}
+        </h2>
 
-          {/* Actions */}
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Button
-              variant="outline"
-              size="lg"
-              onClick={() => router.back()}
-              className="flex items-center gap-2"
-            >
-              <ArrowLeft className="w-4 h-4" />
-              Go Back
-            </Button>
-            
-            <Button
-              size="lg"
-              onClick={() => router.push('/')}
-              className="flex items-center gap-2"
-            >
-              <Home className="w-4 h-4" />
-              Go Home
-            </Button>
-          </div>
+        <p className="text-gray-400 text-sm md:text-base mb-10 max-w-md mx-auto leading-relaxed animate-in fade-in slide-in-from-bottom-10 duration-1000 delay-300">
+          {t('description')}
+        </p>
 
-          {/* Help Text */}
-          <p className="text-sm text-gray-500 mt-8">
-            If you believe this is an error, please contact your system administrator.
-          </p>
+
+        {/* Actions */}
+        <div className="flex flex-col sm:flex-row gap-4 justify-center animate-in fade-in slide-in-from-bottom-10 duration-1000 delay-700">
+          <button
+            onClick={() => router.back()}
+            className="px-8 py-3 bg-transparent text-white border border-white/20 font-bold text-[10px] tracking-[0.2em] rounded-full uppercase transition-all duration-300 hover:bg-white/5 flex items-center justify-center gap-2"
+          >
+            <ArrowLeft className="w-3 h-3" />
+            {t('goBack')}
+          </button>
+
+          <Link
+            href="/"
+            className="px-8 py-3 bg-[#d4a373] text-[#1a1a1a] font-bold text-[10px] tracking-[0.2em] rounded-full uppercase transition-all duration-300 hover:bg-[#e9c46a] shadow-xl flex items-center justify-center gap-2"
+          >
+            <Home className="w-3 h-3" />
+            {t('returnHome')}
+          </Link>
         </div>
-
-        {/* Debug Info (Development) */}
-        {process.env.NODE_ENV === 'development' && (
-          <div className="mt-6 bg-gray-900 text-white rounded-lg p-4 text-xs font-mono">
-            <div className="text-yellow-400 mb-2">🔧 Development Info:</div>
-            <div>Authenticated: {isAuthenticated ? 'Yes' : 'No'}</div>
-            <div>User ID: {userInfo?.userId || 'N/A'}</div>
-            <div>Permissions Count: {permissions.length}</div>
-          </div>
-        )}
       </div>
+
+      {/* Decorative */}
+      <div className="absolute top-10 right-10 z-20 opacity-20 hidden md:block">
+        <p className="text-[40px] font-playfair text-[#d4a373]" style={{ fontFamily: "var(--font-playfair), serif" }}>&quot;</p>
+      </div>
+
+      <style jsx global>{`
+        .custom-scrollbar::-webkit-scrollbar {
+          width: 3px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+          background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+          background: rgba(212, 163, 115, 0.2);
+          border-radius: 10px;
+        }
+      `}</style>
     </div>
   );
 }

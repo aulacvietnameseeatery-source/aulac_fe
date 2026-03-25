@@ -13,7 +13,7 @@ import { toast } from 'sonner';
 // For now we'll rely on window.print() for both, but we can instruct users to "Save as PDF".
 
 export default function InvoiceDetailPage({ params }: { params: { id: string } }) {
-    const t = useTranslations("InvoiceDetail");
+    const t = useTranslations("orders.management.InvoiceDetail");
     const router = useRouter();
     const [invoice, setInvoice] = useState<SaleInvoiceDto | null>(null);
     const [loading, setLoading] = useState(true);

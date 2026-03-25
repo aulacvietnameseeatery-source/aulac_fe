@@ -16,6 +16,7 @@ import { ALCombobox } from '@/components/ui/al-combobox';
 import { OrderHistory } from '../types/order-history.types';
 import { CouponDTO } from '../../coupon-management/coupon-list/types/coupon.types';
 import { PromotionListDTO } from '../../promotion-management/promotion-list/types/promotion-types';
+import { useTaxesQuery } from '../../tax-management/hooks/useTaxMutation';
 
 interface PaymentModalProps {
     order: OrderHistory;
@@ -36,8 +37,8 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
     couponOptions = [],
     promotionOptions = [],
 }) => {
-    const t = useTranslations('Order.PaymentModal');
-    const tCommon = useTranslations('Order.List.card');
+    const t = useTranslations('orders.management.PaymentModal');
+    const tCommon = useTranslations('orders.management.List.card');
     const format = useFormatter();
 
     const [paymentType, setPaymentType] = useState<'cash' | 'card' | 'scan'>('cash');
@@ -46,9 +47,14 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
     const [selectedPromotionId, setSelectedPromotionId] = useState<string>('');
     const [selectedCouponId, setSelectedCouponId] = useState<string>('');
 
-    const subTotal = order.orderItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
-    const tax = subTotal * 0.1; // Example 10%
-    const serviceCharge = 15; // Example fixed
+    const subTotal = order.orderItems
+        .filter(item => item.itemStatus !== 'REJECTED' && item.itemStatus !== 'CANCELLED')
+        .reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+    const { data: taxes = [] } = useTaxesQuery();
+    const defaultTaxes = React.useMemo(() => taxes.filter(t => t.isActive && t.isDefault), [taxes]);
+
+    const serviceCharge = 0;
 
     const selectedPromotion = React.useMemo(
         () => promotionOptions.find((p) => p.promotionId.toString() === selectedPromotionId),
@@ -71,23 +77,36 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
     const couponAmount = calcDiscountAmount(selectedCoupon);
 
     const totalDiscount = React.useMemo(() => {
-        const uniqueAppliedIds = new Set<string>();
         let amount = 0;
 
-        if (selectedPromotion && selectedPromotionId && !uniqueAppliedIds.has(selectedPromotionId)) {
-            uniqueAppliedIds.add(selectedPromotionId);
+        if (selectedPromotion && selectedPromotionId) {
             amount += promotionAmount;
         }
 
-        if (selectedCoupon && selectedCouponId && !uniqueAppliedIds.has(selectedCouponId)) {
-            uniqueAppliedIds.add(selectedCouponId);
+        if (selectedCoupon && selectedCouponId) {
             amount += couponAmount;
         }
 
         return amount;
     }, [selectedPromotion, selectedPromotionId, promotionAmount, selectedCoupon, selectedCouponId, couponAmount]);
 
-    const total = Math.max(0, subTotal + tax + serviceCharge + tipAmount - totalDiscount);
+    const baseForTax = Math.max(0, subTotal - totalDiscount);
+
+    const calculatedTaxes = React.useMemo(() => {
+        return defaultTaxes.map(t => {
+            const amount = t.taxType === 'EXCLUSIVE'
+                ? baseForTax * t.taxRate
+                : baseForTax * (t.taxRate / (1 + t.taxRate));
+            return { ...t, amount };
+        });
+    }, [defaultTaxes, baseForTax]);
+
+    const totalExclusiveTax = calculatedTaxes
+        .filter(t => t.taxType === 'EXCLUSIVE')
+        .reduce((sum, t) => sum + t.amount, 0);
+    const totalTaxAmount = calculatedTaxes.reduce((sum, t) => sum + t.amount, 0);
+
+    const total = Math.max(0, subTotal + totalExclusiveTax + tipAmount - totalDiscount);
 
     const [givenAmount, setGivenAmount] = useState<number>(total);
     const balance = Math.max(0, givenAmount - total);
@@ -108,9 +127,10 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
             orderId: order.orderId,
             receivedAmount: givenAmount,
             paymentMethod: methodMap[paymentType],
+            couponId: selectedCouponId ? Number(selectedCouponId) : undefined,
+            promotionId: selectedPromotionId ? Number(selectedPromotionId) : undefined,
             note: note || undefined,
-            tipAmount: tipAmount || undefined,
-            discountAmount: totalDiscount || undefined
+            tipAmount: tipAmount || undefined
         });
     };
 
@@ -173,15 +193,17 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
                             <section>
                                 <h3 className="text-sm font-bold text-[#1A3A52] mb-4 uppercase tracking-wider">{t('orderedMenus')}</h3>
                                 <div className="max-h-48 overflow-y-auto pr-1 sm:pr-2 space-y-3 custom-scrollbar">
-                                    {order.orderItems.map((item, idx) => (
-                                        <div key={idx} className="flex items-start justify-between gap-3 text-sm">
-                                            <span className="text-[#1A3A52]/85 flex-1 break-words">{item.dishName} ×{item.quantity}</span>
-                                            <div className="hidden sm:flex items-center gap-2 min-w-[120px]">
-                                                <span className="font-mono text-[#1A3A52]/75">{format.number(item.price * item.quantity, { style: 'currency', currency: 'CHF' })}</span>
+                                    {order.orderItems
+                                        .filter(item => item.itemStatus !== 'REJECTED' && item.itemStatus !== 'CANCELLED')
+                                        .map((item, idx) => (
+                                            <div key={idx} className="flex items-start justify-between gap-3 text-sm">
+                                                <span className="text-[#1A3A52]/85 flex-1 break-words">{item.dishName} ×{item.quantity}</span>
+                                                <div className="hidden sm:flex items-center gap-2 min-w-[120px]">
+                                                    <span className="font-mono text-[#1A3A52]/75">{format.number(item.price * item.quantity, { style: 'currency', currency: 'CHF' })}</span>
+                                                </div>
+                                                <span className="sm:hidden font-mono text-[#1A3A52]/75 shrink-0">{format.number(item.price * item.quantity, { style: 'currency', currency: 'CHF' })}</span>
                                             </div>
-                                            <span className="sm:hidden font-mono text-[#1A3A52]/75 shrink-0">{format.number(item.price * item.quantity, { style: 'currency', currency: 'CHF' })}</span>
-                                        </div>
-                                    ))}
+                                        ))}
                                 </div>
                             </section>
 
@@ -190,13 +212,15 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
                                     <span>{t('subTotal')}</span>
                                     <span>{format.number(subTotal, { style: 'currency', currency: 'CHF' })}</span>
                                 </div>
-                                <div className="flex items-start justify-between gap-3 text-[#1A3A52]/70">
-                                    <span>{t('tax')} (10%)</span>
-                                    <span>{format.number(tax, { style: 'currency', currency: 'CHF' })}</span>
-                                </div>
+                                {calculatedTaxes.map((t, idx) => (
+                                    <div key={idx} className="flex items-start justify-between gap-3 text-[#1A3A52]/70">
+                                        <span>{t.taxName} ({t.taxRate * 100}% {t.taxType.toLowerCase()})</span>
+                                        <span>{format.number(t.amount, { style: 'currency', currency: 'CHF' })}</span>
+                                    </div>
+                                ))}
                                 <div className="flex items-start justify-between gap-3 text-[#1A3A52]/70 font-medium">
-                                    <span>{t('serviceCharge')}</span>
-                                    <span>{format.number(serviceCharge, { style: 'currency', currency: 'CHF' })}</span>
+                                    <span>{t('totalTax')}</span>
+                                    <span>{format.number(totalTaxAmount, { style: 'currency', currency: 'CHF' })}</span>
                                 </div>
                                 {promotionAmount > 0 && (
                                     <div className="flex items-start justify-between gap-3 text-red-600 font-medium">
@@ -204,7 +228,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
                                         <span>-{format.number(promotionAmount, { style: 'currency', currency: 'CHF' })}</span>
                                     </div>
                                 )}
-                                {couponAmount > 0 && selectedCouponId !== selectedPromotionId && (
+                                {couponAmount > 0 && (
                                     <div className="flex items-start justify-between gap-3 text-red-600 font-medium">
                                         <span>{t('coupon')}</span>
                                         <span>-{format.number(couponAmount, { style: 'currency', currency: 'CHF' })}</span>
@@ -216,6 +240,10 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
                                         <span>{format.number(tipAmount, { style: 'currency', currency: 'CHF' })}</span>
                                     </div>
                                 )}
+                                <div className="pt-2.5 border-t border-[#D5BA98]/35 flex items-start justify-between gap-3 font-bold text-base text-[#1A3A52]">
+                                    <span>{t('finalTotal')}</span>
+                                    <span>{format.number(total, { style: 'currency', currency: 'CHF' })}</span>
+                                </div>
                             </section>
                         </div>
 

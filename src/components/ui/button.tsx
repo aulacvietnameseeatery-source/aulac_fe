@@ -25,6 +25,8 @@ const buttonVariants = cva(
                 success: "bg-green-600 text-white hover:bg-green-700 shadow-sm",
                 // Nút nguy hiểm: Xoá, Deactive, Reject.
                 danger: "bg-red-600 text-white hover:bg-red-700 shadow-sm",
+                // Nút dịch tự động / AI assist.
+                translate: "border border-purple-200 bg-purple-50 text-purple-700 shadow-sm hover:bg-purple-100 active:scale-95",
             },
 
             size: {

@@ -1,3 +1,5 @@
+import { OrderStatusCode } from '@/types/status-codes';
+
 export interface SaleInvoiceItemDto {
     orderItemId: number;
     quantity: number;
@@ -25,8 +27,33 @@ export interface SaleInvoiceDto {
 
     subTotal: number;
     discountAmount: number;
+    tipAmount: number;
     totalAmount: number;
     isPaid: boolean;
+    paymentMethod: string;
 
     items: SaleInvoiceItemDto[];
+}
+
+// For invoice list
+export interface SaleInvoiceListItem {
+    orderId: number;
+    invoiceCode: string;
+    createdAt: string;
+    tableCode: string;
+    staffName: string;
+    customerName: string;
+    totalAmount: number;
+    tipAmount: number;
+    orderStatus: string;
+    paymentMethod: string;
+}
+
+export interface SaleInvoiceListFilters {
+    pageIndex: number;
+    pageSize: number;
+    search?: string;
+    orderStatusCode?: OrderStatusCode;
+    fromDate?: string;
+    toDate?: string;
 }

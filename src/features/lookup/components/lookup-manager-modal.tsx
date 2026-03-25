@@ -11,6 +11,7 @@ import type {
   LookupValueDto,
   CreateLookupValueRequest,
   UpdateLookupValueRequest,
+  BatchReorderLookupRequest,
   I18nMap,
 } from "../types/lookup.types";
 
@@ -41,6 +42,8 @@ export interface LookupManagerModalProps {
   onUpdate: (id: number, data: UpdateLookupValueRequest) => Promise<unknown>;
   /** Delete a lookup value. */
   onDelete: (id: number) => Promise<unknown>;
+  /** Batch reorder lookup values in one request. */
+  onReorder?: (data: BatchReorderLookupRequest) => Promise<unknown>;
   /** Called after a new item is successfully created so the parent can auto-select it */
   onCreated?: (item: LookupValueDto) => void;
 }
@@ -71,6 +74,7 @@ const LookupManagerModal: React.FC<LookupManagerModalProps> = ({
   onSave,
   onUpdate,
   onDelete,
+  onReorder,
   onCreated,
 }) => {
   // ── Form state ──
@@ -81,6 +85,12 @@ const LookupManagerModal: React.FC<LookupManagerModalProps> = ({
   const [deleteTarget, setDeleteTarget] = useState<LookupValueDto | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [draggingId, setDraggingId] = useState<number | null>(null);
+  const [dragOverId, setDragOverId] = useState<number | null>(null);
+  const [displayItems, setDisplayItems] = useState<LookupValueDto[]>(items);
+  const [pendingSortIds, setPendingSortIds] = useState<number[]>([]);
+
+  const hasPendingSortChanges = pendingSortIds.length > 0;
 
   const nameInputRef = useRef<HTMLInputElement>(null);
 
@@ -100,8 +110,18 @@ const LookupManagerModal: React.FC<LookupManagerModalProps> = ({
       setForm(EMPTY_FORM);
       setDeleteTarget(null);
       setActiveLang("en");
+      setDraggingId(null);
+      setDragOverId(null);
+      setPendingSortIds([]);
     }
   }, [isOpen]);
+
+  // Keep local list synced with server data
+  useEffect(() => {
+    if (hasPendingSortChanges) return;
+    const sorted = [...items].sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
+    setDisplayItems(sorted);
+  }, [items, hasPendingSortChanges]);
 
   // ── Handlers ──
   const handleStartAdd = () => {
@@ -205,6 +225,108 @@ const LookupManagerModal: React.FC<LookupManagerModalProps> = ({
     }
   };
 
+  // ── Drag & drop sort ──
+  const handleDragStart = (e: React.DragEvent, itemId: number) => {
+    if (formMode !== "idle") {
+      e.preventDefault();
+      return;
+    }
+    setDraggingId(itemId);
+    setDragOverId(itemId);
+    e.dataTransfer.effectAllowed = "move";
+    e.dataTransfer.setData("text/plain", String(itemId));
+  };
+
+  const handleDragOver = (e: React.DragEvent, overId: number) => {
+    if (draggingId == null || draggingId === overId) return;
+    e.preventDefault();
+    setDragOverId(overId);
+  };
+
+  const handleDrop = (e: React.DragEvent, targetId: number) => {
+    e.preventDefault();
+    if (draggingId == null || draggingId === targetId) {
+      setDraggingId(null);
+      setDragOverId(null);
+      return;
+    }
+
+    const current = [...displayItems];
+    const fromIndex = current.findIndex((x) => x.valueId === draggingId);
+    const toIndex = current.findIndex((x) => x.valueId === targetId);
+    if (fromIndex < 0 || toIndex < 0) {
+      setDraggingId(null);
+      setDragOverId(null);
+      return;
+    }
+
+    const next = [...current];
+    const [moved] = next.splice(fromIndex, 1);
+    next.splice(toIndex, 0, moved);
+    setDisplayItems(next);
+
+    const minIndex = Math.min(fromIndex, toIndex);
+    const maxIndex = Math.max(fromIndex, toIndex);
+    const affectedIds = next.slice(minIndex, maxIndex + 1).map((x) => x.valueId);
+    setPendingSortIds((prev) => Array.from(new Set([...prev, ...affectedIds])));
+
+    setDraggingId(null);
+    setDragOverId(null);
+  };
+
+  const handleDragEnd = () => {
+    setDraggingId(null);
+    setDragOverId(null);
+  };
+
+  const handleDiscardSortChanges = () => {
+    const sorted = [...items].sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
+    setDisplayItems(sorted);
+    setPendingSortIds([]);
+  };
+
+  const handleSaveSortOrder = async () => {
+    const originalSortById = new Map(items.map((x) => [x.valueId, x.sortOrder ?? 0]));
+    const indexById = new Map(displayItems.map((x, idx) => [x.valueId, idx + 1]));
+
+    const updates = pendingSortIds
+      .map((id) => {
+        const newSort = indexById.get(id);
+        const oldSort = originalSortById.get(id) ?? 0;
+        if (newSort == null) return null;
+        return { id, newSort, oldSort };
+      })
+      .filter((x): x is { id: number; newSort: number; oldSort: number } => !!x)
+      .filter((x) => x.newSort !== x.oldSort);
+
+    if (updates.length === 0) {
+      setPendingSortIds([]);
+      return;
+    }
+
+    setIsSaving(true);
+    try {
+      if (onReorder) {
+        await onReorder({
+          items: updates.map((u) => ({
+            valueId: u.id,
+            sortOrder: u.newSort,
+          })),
+        });
+      } else {
+        // Fallback for older consumers that haven't wired batch endpoint yet.
+        for (const u of updates) {
+          await onUpdate(u.id, { sortOrder: u.newSort });
+        }
+      }
+      setPendingSortIds([]);
+    } catch {
+      // Parent mutation handles toast/error; keep pending order so user can retry/discard.
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
   // ── Form field helpers ──
   const updateName = (value: string) =>
     setForm((f) => ({ ...f, nameI18n: { ...f.nameI18n, [activeLang]: value } }));
@@ -270,13 +392,13 @@ const LookupManagerModal: React.FC<LookupManagerModalProps> = ({
         }
       >
         {/* ── Split layout: list left | form right ── */}
-        <div className="flex h-[500px] overflow-hidden">
+        <div className="flex h-125 overflow-hidden">
 
           {/* ════ Left panel — item list ════ */}
           <div
             className={cn(
               "flex flex-col border-r border-gray-200 transition-all duration-200",
-              formMode !== "idle" ? "w-[390px] shrink-0" : "flex-1"
+              formMode !== "idle" ? "w-97.5 shrink-0" : "flex-1"
             )}
           >
             {/* List header */}
@@ -284,17 +406,43 @@ const LookupManagerModal: React.FC<LookupManagerModalProps> = ({
               <span className="text-sm font-semibold text-gray-700">
                 {items.length} {entityLabel}{items.length !== 1 ? "s" : ""}
               </span>
-              {formMode === "idle" && isConfigurable && (
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={handleStartAdd}
-                >
-                  <Plus size={13} className="mr-1" />
-                  Add {entityLabel}
-                </Button>
-              )}
+              <div className="flex items-center gap-2">
+                {hasPendingSortChanges && formMode === "idle" && (
+                  <>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={handleDiscardSortChanges}
+                      disabled={isSaving}
+                    >
+                      Discard
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="primary"
+                      size="sm"
+                      onClick={handleSaveSortOrder}
+                      isLoading={isSaving}
+                      disabled={isSaving}
+                    >
+                      Save Order
+                    </Button>
+                  </>
+                )}
+                {formMode === "idle" && isConfigurable && (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={handleStartAdd}
+                    disabled={isSaving}
+                  >
+                    <Plus size={13} className="mr-1" />
+                    Add {entityLabel}
+                  </Button>
+                )}
+              </div>
             </div>
 
             {/* Legend */}
@@ -340,21 +488,30 @@ const LookupManagerModal: React.FC<LookupManagerModalProps> = ({
                 </div>
               ) : (
                 <ul className="divide-y divide-gray-100">
-                  {items.map((item) => {
+                  {displayItems.map((item, index) => {
                     const isActive = editTarget?.valueId === item.valueId;
+                    const isDragging = draggingId === item.valueId;
+                    const isDragOver = draggingId != null && dragOverId === item.valueId && !isDragging;
                     return (
                       <li
                         key={item.valueId}
+                        draggable={formMode === "idle" && !isSaving}
+                        onDragStart={(e) => handleDragStart(e, item.valueId)}
+                        onDragOver={(e) => handleDragOver(e, item.valueId)}
+                        onDrop={(e) => handleDrop(e, item.valueId)}
+                        onDragEnd={handleDragEnd}
                         className={cn(
-                          "flex items-center gap-3 px-4 py-3 group transition-colors",
+                          "flex items-center gap-3 px-4 py-3 group transition-all select-none",
                           isActive
                             ? "bg-indigo-50 border-l-2 border-indigo-500"
-                            : "hover:bg-gray-50 border-l-2 border-transparent"
+                            : "hover:bg-gray-50 border-l-2 border-transparent",
+                          isDragging && "opacity-60",
+                          isDragOver && "border-l-2 border-[#1A3A52] bg-[#D5BA98]/10"
                         )}
                       >
                         {/* Sort order / drag handle placeholder */}
                         <span className="text-xs text-gray-300 w-5 text-center font-mono shrink-0 group-hover:hidden">
-                          {item.sortOrder}
+                          {index + 1}
                         </span>
                         <GripVertical
                           size={14}
@@ -536,12 +693,12 @@ const LookupManagerModal: React.FC<LookupManagerModalProps> = ({
                           <td className="px-3 py-1.5 font-medium text-gray-600">
                             {flag} {label}
                           </td>
-                          <td className="px-3 py-1.5 text-gray-700 max-w-[130px] truncate">
+                          <td className="px-3 py-1.5 text-gray-700 max-w-32.5 truncate">
                             {form.nameI18n[key].trim() || (
                               <span className="text-gray-300 italic">empty</span>
                             )}
                           </td>
-                          <td className="px-3 py-1.5 text-gray-500 max-w-[130px] truncate">
+                          <td className="px-3 py-1.5 text-gray-500 max-w-32.5 truncate">
                             {form.descriptionI18n[key].trim() || (
                               <span className="text-gray-300 italic">empty</span>
                             )}
