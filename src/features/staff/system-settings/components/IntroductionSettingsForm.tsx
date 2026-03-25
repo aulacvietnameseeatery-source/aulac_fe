@@ -365,11 +365,12 @@ export const IntroductionSettingsForm = () => {
                                         {getFullUrl('intro_hero_image', heroImageUrl) ? (
                                             <div className="relative w-full h-full">
                                                 <img src={getFullUrl('intro_hero_image', heroImageUrl)} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="" />
-                                                <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-[2px]">
-                                                    <div className="bg-white/90 p-3 rounded-full shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                                                <div className="absolute inset-0 bg-black/20 lg:opacity-0 lg:group-hover:opacity-100 opacity-100 transition-opacity flex items-center justify-center backdrop-blur-[2px]">
+                                                    <div className="bg-white/90 p-3 rounded-full shadow-lg lg:transform lg:translate-y-4 lg:group-hover:translate-y-0 transition-transform duration-300">
                                                         <Upload className="w-6 h-6 text-[#1A3A52]" />
                                                     </div>
                                                 </div>
+
                                             </div>
                                         ) : (
                                             <div className="flex flex-col items-center gap-4 text-[#D5BA98]">
@@ -391,7 +392,8 @@ export const IntroductionSettingsForm = () => {
                                     {getFullUrl('intro_hero_image', heroImageUrl) && (
                                         <button
                                             type="button"
-                                            className="absolute -top-3 -right-3 p-2 bg-white rounded-xl shadow-lg border border-gray-100 hover:bg-blue-50 hover:text-blue-600 transition-all z-10 scale-0 group-hover:scale-100"
+                                            className="absolute -top-3 -right-3 p-2 bg-white rounded-xl shadow-lg border border-gray-100 hover:bg-blue-50 hover:text-blue-600 transition-all z-10 lg:scale-0 lg:group-hover:scale-100 scale-100"
+
                                             onClick={(e) => {
                                                 e.stopPropagation();
                                                 setPreviewData({ url: getFullUrl('intro_hero_image', heroImageUrl), title: "Hero Image", type: 'image' });
@@ -453,11 +455,12 @@ export const IntroductionSettingsForm = () => {
                                                     <Upload className="w-8 h-8 text-blue-200" />
                                                 )}
 
-                                                <div className="absolute inset-0 bg-[#1A3A52]/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                                <div className="absolute inset-0 bg-[#1A3A52]/40 lg:opacity-0 lg:group-hover:opacity-100 opacity-100 transition-opacity flex items-center justify-center">
                                                     <div className="bg-white/90 p-2 rounded-full shadow-lg">
                                                         <Upload className="w-5 h-5 text-[#1A3A52]" />
                                                     </div>
                                                 </div>
+
 
                                                 {isUploading === 'intro_virtualTour_videoUrlLeft' && (
                                                     <div className="absolute inset-0 bg-white/90 flex items-center justify-center">
@@ -491,11 +494,12 @@ export const IntroductionSettingsForm = () => {
                                                     <Upload className="w-8 h-8 text-blue-200" />
                                                 )}
 
-                                                <div className="absolute inset-0 bg-[#1A3A52]/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                                <div className="absolute inset-0 bg-[#1A3A52]/40 lg:opacity-0 lg:group-hover:opacity-100 opacity-100 transition-opacity flex items-center justify-center">
                                                     <div className="bg-white/90 p-2 rounded-full shadow-lg">
                                                         <Upload className="w-5 h-5 text-[#1A3A52]" />
                                                     </div>
                                                 </div>
+
 
                                                 {isUploading === 'intro_virtualTour_videoUrlRight' && (
                                                     <div className="absolute inset-0 bg-white/90 flex items-center justify-center">
@@ -569,8 +573,9 @@ export const IntroductionSettingsForm = () => {
                                                         <Upload className="w-8 h-8 text-amber-100" />
                                                     )}
 
-                                                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-[1px]">
-                                                        <div className="flex gap-2 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+                                                    <div className="absolute inset-0 bg-black/40 lg:opacity-0 lg:group-hover:opacity-100 opacity-100 transition-opacity flex items-center justify-center backdrop-blur-[1px]">
+                                                        <div className="flex gap-2 lg:transform lg:translate-y-2 lg:group-hover:translate-y-0 transition-transform duration-300">
+
                                                             <button type="button" className="p-2 bg-white text-[#1A3A52] rounded-lg shadow-lg" onClick={(e) => { e.stopPropagation(); dishImageRef.current?.click(); }}>
                                                                 <Upload className="w-4 h-4" />
                                                             </button>
@@ -597,7 +602,8 @@ export const IntroductionSettingsForm = () => {
 
                                                 <button
                                                     type="button"
-                                                    className="absolute top-3 right-3 z-10 h-7 w-7 flex items-center justify-center bg-white/90 text-amber-700 rounded-lg shadow-lg border border-amber-100 hover:bg-amber-600 hover:text-white transition-all scale-0 group-hover:scale-100"
+                                                    className="absolute top-3 right-3 z-10 h-7 w-7 flex items-center justify-center bg-white/90 text-amber-700 rounded-lg shadow-lg border border-amber-100 hover:bg-amber-600 hover:text-white transition-all lg:scale-0 lg:group-hover:scale-100 scale-100"
+
                                                     onClick={() => {
                                                         setSelectingDishIndex(index);
                                                         setIsDishModalOpen(true);

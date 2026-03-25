@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Dropdown, DropdownContent, DropdownItem } from "@/components/ui/dropdown";
 import { Button } from "@/components/ui/button";
 import { localizeStatusLabel } from "../utils/localize-reservation";
+import { dateUtils } from "@/lib/date-utils";
 
 interface ReservationCardProps {
     reservation: ReservationDto;
@@ -52,14 +53,14 @@ export const ReservationCard = ({ reservation, statuses, onAssignTable, onEdit, 
             <div className="flex items-start gap-4 mb-4">
                 <div className="bg-[#1A3A52] rounded-lg p-2.5 text-center shrink-0 min-w-17.5">
                     <p className="text-white font-semibold text-[15px] m-0 leading-tight">
-                        {format(new Date(reservation.reservedTime), "MMM dd")}
-                        <span className="block text-xs font-normal text-white/75 mt-1">{format(new Date(reservation.reservedTime), "yyyy")}</span>
+                        {dateUtils.formatLocal(reservation.reservedTime, "MMM dd")}
+                        <span className="block text-xs font-normal text-white/75 mt-1">{dateUtils.formatLocal(reservation.reservedTime, "yyyy")}</span>
                     </p>
                 </div>
                 <div className="flex-1 pt-0.5">
                     <h6 className="mb-2 font-semibold text-[#1A3A52] text-lg leading-none">{reservation.customerName}</h6>
                     <div className="flex items-center flex-wrap gap-x-3 gap-y-2 text-[13px] text-[#1A3A52]/70 font-medium">
-                        <p className="flex items-center m-0"><Clock className="w-3.5 h-3.5 mr-1.5 text-[#1A3A52]/50" />{format(new Date(reservation.reservedTime), "HH:mm")}</p>
+                        <p className="flex items-center m-0"><Clock className="w-3.5 h-3.5 mr-1.5 text-[#1A3A52]/50" />{dateUtils.formatLocal(reservation.reservedTime, "HH:mm")}</p>
                         <div className="w-px h-3.5 bg-[#D5BA98]/70"></div>
                         <p className="flex items-center m-0"><Armchair className="w-3.5 h-3.5 mr-1.5 text-[#1A3A52]/50" />
                             {/* Hiển thị chuỗi tên bàn (T01, T02...) */}
@@ -75,11 +76,11 @@ export const ReservationCard = ({ reservation, statuses, onAssignTable, onEdit, 
             <div className="mb-4 pb-4 border-b border-dashed border-[#D5BA98]/45">
                 <div className="flex items-center justify-between gap-2 mb-3 text-[14px]">
                     <span className="text-[#1A3A52]/55">{t("createdOn")}</span>
-                    <span className="text-[#1A3A52] font-medium">{reservation.createdAt ? format(new Date(reservation.createdAt), "dd MMM, HH:mm") : t("na")}</span>
+                    <span className="text-[#1A3A52] font-medium">{reservation.createdAt ? dateUtils.formatLocal(reservation.createdAt, "dd MMM, HH:mm") : t("na")}</span>
                 </div>
                 <div className="flex items-center justify-between gap-2 mb-3 text-[14px]">
                     <span className="text-[#1A3A52]/55">{t("reservationTime")}</span>
-                    <span className="text-[#1A3A52] font-medium">{format(new Date(reservation.reservedTime), "dd MMM, HH:mm")}</span>
+                    <span className="text-[#1A3A52] font-medium">{dateUtils.formatLocal(reservation.reservedTime, "dd MMM, HH:mm")}</span>
                 </div>
                 <div className="flex items-center justify-between gap-2 text-[14px]">
                     <span className="text-[#1A3A52]/55">{t("status")}</span>

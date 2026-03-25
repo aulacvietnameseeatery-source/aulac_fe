@@ -95,7 +95,7 @@ export function ShiftManagement() {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 flex flex-col h-full">
       {/* ── Header bar ──────────────────────────────────────── */}
       <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-[#D5BA98]/60 bg-white px-4 py-3 shadow-sm">
         <div>

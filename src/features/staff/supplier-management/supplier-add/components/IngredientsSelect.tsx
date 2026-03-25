@@ -71,7 +71,7 @@ export default function IngredientsSelect({ value, onChange }: IngredientsSelect
                   className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                 />
                 <span className="text-sm text-gray-700">
-                  {ingredient.ingredientName} ({ingredient.unit})
+                  {ingredient.ingredientName} ({ingredient.unitName})
                 </span>
               </label>
             ))}
