@@ -115,19 +115,19 @@ export function CartSummary({
 
     // --- 2. COMPONENT CON: NỘI DUNG LÁ TO (DESKTOP) ---
     const CartContentOld = ({ isOverlay = false }: { isOverlay?: boolean }) => (
-        <div className="flex flex-col items-center justify-center w-full h-full rotate-[15deg] px-8 antialiased -translate-y-4">
-            <div className="flex flex-col items-center gap-3 mb-6">
-                <span className={cn("text-[13px] font-display font-bold uppercase tracking-[4px] drop-shadow-sm", isOverlay ? "text-[#1A3A52]" : "text-[#C5A059]")}>
+        <div className="flex flex-col items-center justify-center w-full h-full rotate-[15deg] px-5 antialiased -translate-y-2">
+            <div className="flex flex-col items-center gap-2 mb-4">
+                <span className={cn("text-[11px] font-display font-bold uppercase tracking-[4px] drop-shadow-sm", isOverlay ? "text-[#1A3A52]" : "text-[#C5A059]")}>
                     {tableNumber ? `Table ${tableNumber}` : "Your Table"}
                 </span>
                 <div className={cn("w-8 h-[1px]", isOverlay ? "bg-[#1A3A52]" : "bg-[#C5A059]")} />
             </div>
 
-            <div className="flex flex-col items-center gap-1 mb-8">
-                <span className={cn("text-[42px] font-display font-light leading-none tracking-tight", isOverlay ? "text-[#1A3A52]" : "text-white")}>
-                    {totalPrice.toFixed(2)} <span className="text-[28px]">CHF</span>
+            <div className="flex flex-col items-center gap-1 mb-5">
+                <span className={cn("text-[32px] font-display font-light leading-none tracking-tight", isOverlay ? "text-[#1A3A52]" : "text-white")}>
+                    {totalPrice.toFixed(2)} <span className="text-[20px]">CHF</span>
                 </span>
-                <span className={cn("text-[10px] font-display font-medium uppercase tracking-[1.5px] mt-2", isOverlay ? "text-[#1A3A52]/80" : "text-white/70")}>
+                <span className={cn("text-[10px] font-display font-medium uppercase tracking-[1.5px] mt-1", isOverlay ? "text-[#1A3A52]/80" : "text-white/70")}>
                     {t("items_count", { count: totalItems })}
                 </span>
             </div>
@@ -136,7 +136,7 @@ export function CartSummary({
                 onClick={handleConfirm} 
                 disabled={totalItems === 0}
                 className={cn(
-                    "group relative w-full max-w-[170px] py-3 rounded-full flex items-center justify-center mr-2 shadow-lg transition-all duration-300",
+                    "group relative w-full max-w-[140px] py-2.5 rounded-full flex items-center justify-center mr-2 shadow-lg transition-all duration-300",
                     totalItems === 0 
                         ? "bg-gray-400 text-gray-600 cursor-not-allowed opacity-50"
                         : isOverlay 
@@ -264,10 +264,10 @@ export function CartSummary({
                 "bg-[#204560] overflow-hidden transition-all duration-300 shadow-[0px_10px_40px_-10px_rgba(0,0,0,0.5)]",
                 // XỬ LÝ CSS RESPONSIVE CHO 3 TRẠNG THÁI:
                 isExpanded
-                    ? "w-[92vw] md:w-[320px] h-[70vh] md:h-[550px] rounded-[28px] md:rounded-[24px] border border-[#C5A059]/30 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 cursor-default shadow-2xl z-[100]"
+                    ? "w-[92vw] md:w-[360px] h-[70vh] md:h-[560px] md:max-h-[calc(100vh-100px)] rounded-[28px] md:rounded-[24px] border border-[#C5A059]/30 fixed top-1/2 md:top-[calc(50%+40px)] left-1/2 -translate-x-1/2 -translate-y-1/2 cursor-default shadow-2xl z-[100]"
                     : isMobile
                         ? "relative w-[72px] h-[90px] rounded-tl-[60px] rounded-br-[60px] rotate-[-15deg] border-[1.5px] border-[#C5A059] bg-[#204560] cursor-pointer z-50 flex items-center justify-center shadow-[0_10px_25px_rgba(0,0,0,0.6)]"
-                        : "relative w-[286px] h-[357px] rounded-tl-[256px] rounded-br-[256px] rotate-[-15deg] border border-[#C5A059]/50 cursor-pointer shadow-[0px_25px_60px_-15px_rgba(0,0,0,0.6)]",
+                        : "relative w-[210px] h-[265px] rounded-tl-[190px] rounded-br-[190px] rotate-[-15deg] border border-[#C5A059]/50 cursor-pointer shadow-[0px_25px_60px_-15px_rgba(0,0,0,0.6)]",
                 className
             )}
         >

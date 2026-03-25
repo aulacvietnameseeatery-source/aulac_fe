@@ -476,6 +476,15 @@
         "selected": "Đã chọn"
       },
       "noData": "Không có dữ liệu",
+      "actions": {
+        "view": "Xem chi tiết",
+        "edit": "Chỉnh sửa",
+        "delete": "Xóa",
+        "cancel": "Hủy",
+        "deactivate": "Vô hiệu hóa",
+        "adjust-stock": "Điều chỉnh tồn kho",
+        "history": "Lịch sử"
+      },
       "pagination": {
         "total": "Tổng số",
         "pageSize": "Số dòng/trang",

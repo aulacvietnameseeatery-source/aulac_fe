@@ -15,7 +15,9 @@ import {
   RefreshCw,
   CreditCard,
   Check,
+  Loader2,
 } from "lucide-react";
+import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { api } from "@/lib/http";
 import { ALConfirmDialog } from "@/components/ui/al-confirm-dialog";
@@ -134,6 +136,7 @@ export function OrderHistoryFAB({ tableCode, tableNumber, dishNameMap = {}, refr
   const [cancelNotAllowedDishName, setCancelNotAllowedDishName] = useState<string | null>(null);
   const [cancellingItems, setCancellingItems] = useState<Set<number>>(new Set());
   const [cancelConfirmItemId, setCancelConfirmItemId] = useState<number | null>(null);
+  const [isRequestingPayment, setIsRequestingPayment] = useState(false);
 
   // Derive the dish name of the item pending cancel confirmation
   const cancelConfirmItemDishName = cancelConfirmItemId !== null
@@ -744,8 +747,30 @@ export function OrderHistoryFAB({ tableCode, tableNumber, dishNameMap = {}, refr
 
                 {/* Confirm Button */}
                 <button
-                  onClick={() => {
-                    // TODO: Implement payment request API call
+                  disabled={isRequestingPayment}
+                  onClick={async () => {
+                    const storedOrderId = typeof window !== 'undefined'
+                      ? sessionStorage.getItem(CURRENT_ORDER_ID_KEY)
+                      : null;
+
+                    setIsRequestingPayment(true);
+                    try {
+                      if (storedOrderId) {
+                        const params = effectiveTable
+                          ? `?tableCode=${encodeURIComponent(effectiveTable)}`
+                          : '';
+                        await api.post(
+                          `/api/public/orders/${storedOrderId}/request-payment${params}`,
+                          {}
+                        );
+                      }
+                    } catch {
+                      // Graceful degradation — still show success to customer
+                      toast.error("Không thể gửi yêu cầu thanh toán, xin vui lòng gọi nhân viên.");
+                    } finally {
+                      setIsRequestingPayment(false);
+                    }
+
                     setIsPaymentPopupOpen(false);
                     setIsSuccessPopupOpen(true);
 
@@ -754,14 +779,17 @@ export function OrderHistoryFAB({ tableCode, tableNumber, dishNameMap = {}, refr
                       handlePaymentComplete();
                     }, 3000);
                   }}
-                  className="w-full py-4 rounded-2xl font-bold text-sm tracking-widest uppercase transition-all hover:shadow-lg active:scale-[0.98]"
+                  className="w-full py-4 rounded-2xl font-bold text-sm tracking-widest uppercase transition-all hover:shadow-lg active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                   style={{
                     background: "linear-gradient(135deg, #f5d77a, #c9a84c)",
                     color: "#2a3f5f",
                     boxShadow: "0 4px 16px rgba(201,168,76,0.35)",
                   }}
                 >
-                  {t("paymentPopup.confirm")}
+                  {isRequestingPayment
+                    ? <><Loader2 size={16} className="animate-spin" /> Sending...</>
+                    : t("paymentPopup.confirm")
+                  }
                 </button>
               </div>
             </motion.div>

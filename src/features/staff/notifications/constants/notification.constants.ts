@@ -16,6 +16,8 @@ import {
   ShieldAlert,
   RefreshCw,
   Receipt,
+  PlusCircle,
+  MinusCircle,
 } from "lucide-react";
 import { NotificationPriority, NotificationType } from "../types/notification.types";
 
@@ -75,6 +77,8 @@ export const TYPE_CONFIG: Record<
   [NotificationType.SYSTEM_ALERT]: { icon: ShieldAlert, label: "SYSTEM_ALERT", category: "System" },
   [NotificationType.ORDER_STATUS_CHANGED]: { icon: RefreshCw, label: "ORDER_STATUS_CHANGED", category: "Orders" },
   [NotificationType.PAYMENT_REQUEST]: { icon: Receipt, label: "PAYMENT_REQUEST", category: "Orders" },
+  [NotificationType.ORDER_ITEMS_ADDED]: { icon: PlusCircle, label: "ORDER_ITEMS_ADDED", category: "Orders" },
+  [NotificationType.ORDER_ITEM_CANCELLED]: { icon: MinusCircle, label: "ORDER_ITEM_CANCELLED", category: "Orders" },
 };
 
 // Fallback config when type not found

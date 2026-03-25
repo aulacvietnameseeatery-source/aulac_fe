@@ -404,6 +404,9 @@
           "to": "À",
           "selectDate": "Sélectionner la date"
         },
+        "actions": {
+          "viewDetails": "Voir les détails"
+        },
         "table": {
           "no": "N°",
           "invoiceCode": "Code de facture",

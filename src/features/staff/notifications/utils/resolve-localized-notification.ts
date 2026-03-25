@@ -21,6 +21,8 @@ const REQUIRED_METADATA_FIELDS: Record<string, { title?: string[]; body?: string
   SYSTEM_ALERT: { body: ["message"] },
   ORDER_STATUS_CHANGED: { title: ["orderId"], body: ["orderId", "status"] },
   PAYMENT_REQUEST: { title: ["tableName"], body: ["orderId", "amount"] },
+  ORDER_ITEMS_ADDED: { title: ["tableName"], body: ["dishNames"] },
+  ORDER_ITEM_CANCELLED: { title: ["tableName"], body: ["dishName"] },
 };
 
 function hasRequiredMetadata(metadata: Record<string, string>, keys?: string[]) {
@@ -78,6 +80,8 @@ function normalizeMetadata(
   normalized.time ||= raw.reservedTime;
   normalized.current ||= raw.currentStock;
   normalized.minimum ||= raw.minStock;
+  normalized.dishNames ||= raw.dishNames || "";
+  normalized.dishName ||= raw.dishName || "";
   normalized.shiftName ||= raw.templateName;
   normalized.date ||= raw.workDate;
   normalized.status ||= localizeStatus(raw.newStatus || raw.status, t) || "";

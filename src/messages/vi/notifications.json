@@ -55,6 +55,8 @@
       "SYSTEM_ALERT": "Cảnh báo hệ thống",
       "ORDER_STATUS_CHANGED": "Đơn hàng cập nhật",
       "PAYMENT_REQUEST": "Yêu cầu thanh toán",
+      "ORDER_ITEMS_ADDED": "Gọi thêm món",
+      "ORDER_ITEM_CANCELLED": "Hủy món",
       "fallback": "Thông báo"
     },
     "priority": {
@@ -140,6 +142,14 @@
       "PAYMENT_REQUEST": {
         "title": "Yêu cầu thanh toán — {tableName}",
         "body": "Đơn #{orderId} — thanh toán {amount} được yêu cầu"
+      },
+      "ORDER_ITEMS_ADDED": {
+        "title": "Bàn {tableName} gọi thêm món",
+        "body": "{dishNames}"
+      },
+      "ORDER_ITEM_CANCELLED": {
+        "title": "Bàn {tableName} hủy món",
+        "body": "{dishName}"
       },
       "fallback": {
         "title": "Thông báo",
