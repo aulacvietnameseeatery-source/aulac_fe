@@ -12,28 +12,13 @@ import { ALInput } from '@/components/ui/al-input';
 import { useStoreProfileForm } from '../hooks/useStoreProfileForm';
 import { mapStoreSettingsToFormValues, mapFormValuesToStoreSettings, LOCALES, SupportedLocale, StoreProfileFormValues } from '../types/schema';
 import { useUpdateStoreSettingsMutation, useTranslateSettingsMutation } from '../hooks/useSystemSettingsMutation';
+import { normalizeMediaUrl } from '@/lib/normalize-media-url';
+
 
 const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
 const IMAGE_ACCEPT = '.jpg,.jpeg,.png,.gif,.webp,image/jpeg,image/png,image/gif,image/webp';
 
-const normalizeMediaUrl = (value: string): string => {
-    if (!value) return '';
-    if (/^(https?:|blob:|data:)/i.test(value)) return value;
 
-    const base = BASE_URL.replace(/\/+$/, '');
-    const normalized = value.replace(/\\/g, '/').trim();
-
-    if (normalized.startsWith('/uploads/')) {
-        return `${base}${normalized}`;
-    }
-
-    if (normalized.startsWith('uploads/')) {
-        return `${base}/${normalized}`;
-    }
-
-    const relative = normalized.replace(/^\/+/, '');
-    return `${base}/uploads/${relative}`;
-};
 
 export const StoreProfileForm = () => {
     const t = useTranslations('settings');

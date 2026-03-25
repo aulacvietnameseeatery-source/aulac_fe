@@ -14,6 +14,8 @@ import { ALInput } from "@/components/ui/al-input";
 import { useIntroductionSettingsForm } from "../hooks/useIntroductionSettingsForm";
 import { mapIntroSettingsToFormValues, mapFormValuesToIntroSettings, LOCALES, SupportedLocale, IntroFormValues } from "../types/schema";
 import { useUpdateStoreSettingsMutation, useTranslateSettingsMutation } from "../hooks/useSystemSettingsMutation";
+import { normalizeMediaUrl } from "@/lib/normalize-media-url";
+
 
 
 const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
@@ -23,24 +25,7 @@ const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
 const MAX_VIDEO_SIZE = 50 * 1024 * 1024;
 const MAX_VIDEO_DURATION_SECONDS = 30;
 
-const normalizeMediaUrl = (value: string): string => {
-    if (!value) return '';
-    if (/^(https?:|blob:|data:)/i.test(value)) return value;
 
-    const base = BASE_URL.replace(/\/+$/, '');
-    const normalized = value.replace(/\\/g, '/').trim();
-
-    if (normalized.startsWith('/uploads/')) {
-        return `${base}${normalized}`;
-    }
-
-    if (normalized.startsWith('uploads/')) {
-        return `${base}/${normalized}`;
-    }
-
-    const relative = normalized.replace(/^\/+/, '');
-    return `${base}/uploads/${relative}`;
-};
 
 export const IntroductionSettingsForm = () => {
     const t = useTranslations("settings");

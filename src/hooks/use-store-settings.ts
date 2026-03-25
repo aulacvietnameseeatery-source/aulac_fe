@@ -2,26 +2,10 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { getPublicGroupSettings } from '@/features/staff/system-settings/services/system-setting.service';
-import { BASE_URL } from '@/lib/http';
+import { normalizeMediaUrl } from '@/lib/normalize-media-url';
 
-const normalizeMediaUrl = (value: string): string => {
-    if (!value) return '';
-    if (/^(https?:|blob:|data:)/i.test(value)) return value;
 
-    const base = BASE_URL.replace(/\/+$/, '');
-    const normalized = value.replace(/\\/g, '/').trim();
 
-    if (normalized.startsWith('/uploads/')) {
-        return `${base}${normalized}`;
-    }
-
-    if (normalized.startsWith('uploads/')) {
-        return `${base}/${normalized}`;
-    }
-
-    const relative = normalized.replace(/^\/+/, '');
-    return `${base}/uploads/${relative}`;
-};
 
 export interface StoreSettings {
     logoUrl: string;
@@ -61,14 +45,14 @@ export const useStoreSettings = () => {
                 tiktokLink: '',
                 promoVideoUrl: '',
             };
-            
+
             settings.forEach(s => {
                 const fullKey = s.settingKey.replace('store.', '');
-                
+
                 // If key has locale suffix (e.g. name_en), check if it matches current locale
                 let key = fullKey;
                 let isMatch = true;
-                
+
                 const localeSuffix = `_${locale}`;
                 if (fullKey.endsWith(localeSuffix)) {
                     key = fullKey.replace(localeSuffix, '');
@@ -78,7 +62,7 @@ export const useStoreSettings = () => {
                     const parts = fullKey.split('_');
                     const suffix = parts[parts.length - 1];
                     if (['en', 'vi', 'fr'].includes(suffix)) {
-                        isMatch = false; 
+                        isMatch = false;
                     }
                 }
 
