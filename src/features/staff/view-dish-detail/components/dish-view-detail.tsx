@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
-import { BASE_URL } from "@/lib/http";
 import { DishDetailResponse, Language, LANGUAGES } from "../types/dish-detail.types";
 import { CheckCircle2, XCircle, Flame, Clock, ChefHat, X, ChevronLeft, ChevronRight, ZoomIn, PlayCircle } from "lucide-react";
 import { SectionWrapper } from "../../create-edit-dish/components/section-wrapper";
@@ -141,7 +140,7 @@ export function DishViewDetail({ dish }: Props) {
                 className="aspect-square relative rounded-lg overflow-hidden border border-gray-200 bg-gray-50 group cursor-zoom-in"
               >
                 <img 
-                  src={`${BASE_URL}${img.url}`} 
+                  src={`${img.url}`} 
                   alt="Dish" 
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
                 />
@@ -164,7 +163,7 @@ export function DishViewDetail({ dish }: Props) {
         <SectionWrapper title={t("media.360Title")} subtitle={t("media.framesUploaded", { count: rotationImages.length })}>
           {rotationImages.length > 0 ? (
             <div className="aspect-video bg-gray-100 rounded-xl flex items-center justify-center relative border border-gray-200 overflow-hidden">
-               <img src={`${BASE_URL}${rotationImages[0].url}`} alt="360 view preview" className="h-full object-contain" />
+               <img src={`${rotationImages[0].url}`} alt="360 view preview" className="h-full object-contain" />
                <div className="absolute inset-0 bg-black/10 flex items-center justify-center">
                   <span className="bg-white/90 backdrop-blur px-3 py-1.5 rounded-full text-xs font-bold shadow-sm text-gray-800">
                     {t("media.images360", { count: rotationImages.length })}
@@ -183,7 +182,7 @@ export function DishViewDetail({ dish }: Props) {
           {videoMedia ? (
             <div className="aspect-video bg-black rounded-xl overflow-hidden relative border border-gray-200">
               <video 
-                src={`${BASE_URL}${videoMedia.url}`} 
+                src={`${videoMedia.url}`} 
                 controls 
                 className="w-full h-full object-contain"
               />
@@ -236,7 +235,7 @@ export function DishViewDetail({ dish }: Props) {
           </button>
           <div className="relative max-w-[90vw] max-h-[90vh] flex flex-col items-center">
             <img 
-              src={`${BASE_URL}${staticImages[lightboxIndex].url}`} 
+              src={`${staticImages[lightboxIndex].url}`} 
               alt="Fullscreen view" 
               className="max-w-full max-h-[85vh] object-contain rounded-md shadow-2xl select-none"
             />
