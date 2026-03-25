@@ -18,9 +18,7 @@ const buildQueryParams = (params?: DashboardFilterParams) => {
     return `?${query.toString()}`;
 };
 
-// Hàm helper xử lý fetch chung (Bạn có thể thay bằng apiClient/axios của dự án)
 const fetchApi = async <T>(url: string): Promise<T> => {
-    // Thêm token ở đây nếu hệ thống yêu cầu
     const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
     const headers: HeadersInit = { 'Content-Type': 'application/json' };
     if (token) headers['Authorization'] = `Bearer ${token}`;
