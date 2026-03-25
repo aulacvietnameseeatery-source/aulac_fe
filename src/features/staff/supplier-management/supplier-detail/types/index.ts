@@ -9,5 +9,7 @@ export interface SupplierDetail {
   supplierName: string;
   phone?: string;
   email?: string;
+  address?: string;
+  taxCode?: string;
   ingredients: Ingredient[];
 }

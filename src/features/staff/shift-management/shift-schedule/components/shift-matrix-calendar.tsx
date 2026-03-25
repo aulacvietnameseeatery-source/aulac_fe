@@ -412,10 +412,10 @@ export function ShiftMatrixCalendar({
                 />
               </>
             )}
-            <div className="min-w-225 max-h-[calc(100vh-300px)]">
+            <div className="min-w-225">
               <ShiftMatrixHeader weekDates={weekDates} />
 
-              <div className="overflow-y-auto max-h-[calc(100vh-300px)]">
+              <div className="overflow-y-auto ">
                 {staffRows.map((staff, idx) => (
                   <ShiftMatrixRow
                     key={`${staff.staffId}-${idx}`}

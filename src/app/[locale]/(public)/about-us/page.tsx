@@ -91,7 +91,7 @@ export default function AboutUsUI() {
         >
           <div className="flex flex-col gap-12 md:gap-16 text-center md:text-left items-center md:items-start">
 
-            <motion.p variants={itemVariant} className="text-xl md:text-2xl font-serif text-[#1A1A1A]/90 leading-loose mx-auto md:mx-0 text-center">
+            <motion.p variants={itemVariant} className="text-xl md:text-2xl font-display text-[#1A1A1A]/90 leading-loose mx-auto md:mx-0 text-center">
               {getVal('paragraph_1')}
             </motion.p>
 

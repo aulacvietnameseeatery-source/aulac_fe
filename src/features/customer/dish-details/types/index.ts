@@ -18,6 +18,7 @@ export interface Dish {
   prepTimeMinutes?: number;
   cookTimeMinutes?: number;
   imageUrls: string[];
+  videoUrl?: string;
   composition: RecipeItem[];
 }
 

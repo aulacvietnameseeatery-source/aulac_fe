@@ -404,6 +404,9 @@
           "to": "To",
           "selectDate": "Select Date"
         },
+        "actions": {
+          "viewDetails": "View details"
+        },
         "table": {
           "no": "No",
           "invoiceCode": "Invoice Code",

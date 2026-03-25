@@ -3,6 +3,7 @@ import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { reservationService } from '../services/reservation.service';
 import { TableOptionDto, BookingSource, BookingStatus, CustomerType } from '../types/types';
+import { dateUtils } from '@/lib/date-utils';
 
 interface UseReservationFormOptions {
   onSuccess?: () => void;
@@ -74,11 +75,8 @@ export const useReservationForm = (
   const validateDateTime = (selectedDate: string, selectedTime: string): boolean => {
     if (!selectedDate || !selectedTime) return true; // Chưa nhập đủ thì chưa báo lỗi logic (để required check lo)
 
-    const now = new Date();
-    const selected = new Date(`${selectedDate}T${selectedTime}`);
-
     // So sánh timestamp
-    if (selected.getTime() < now.getTime()) {
+    if (dateUtils.isPast(selectedDate, selectedTime)) {
       setValidationError(t("errors.timePast"));
       return false;
     }
@@ -143,7 +141,7 @@ export const useReservationForm = (
     }
 
     // Combine Date + Time -> ISO String for Backend
-    const reservedTime = new Date(`${date}T${time}`).toISOString();
+    const reservedTime = dateUtils.toUtcIso(date, time);
     try {
       const payload = {
         customerId: customerId,
