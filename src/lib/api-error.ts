@@ -134,7 +134,7 @@ function resolveErrorKey(status?: number, body?: ApiErrorBody): ApiErrorKey {
   }
 
   if (status === 401) {
-    return "unauthorized";
+    return "invalidCredentials";
   }
 
   if (status && status >= 500) {

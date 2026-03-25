@@ -753,6 +753,7 @@
       "sessionExpired": "Votre session a expiré. Veuillez vous reconnecter.",
       "tokenRefreshFailed": "Impossible d'actualiser votre session. Veuillez vous reconnecter.",
       "noAccessToken": "Vous devez vous connecter avant de continuer.",
+      "invalidCredentials": "Nom d'utilisateur ou mot de passe incorrect.",
       "unauthorized": "Vous n'êtes pas authentifié. Veuillez vous connecter puis réessayer.",
       "forbidden": "Vous n'avez pas l'autorisation d'effectuer cette action.",
       "notFound": "La ressource demandée est introuvable.",

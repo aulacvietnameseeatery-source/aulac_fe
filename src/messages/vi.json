@@ -919,6 +919,7 @@
       "sessionExpired": "Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.",
       "tokenRefreshFailed": "Không thể làm mới phiên đăng nhập. Vui lòng đăng nhập lại.",
       "noAccessToken": "Bạn cần đăng nhập trước khi tiếp tục.",
+      "invalidCredentials": "Tên đăng nhập hoặc mật khẩu không đúng",
       "unauthorized": "Bạn chưa được xác thực. Vui lòng đăng nhập và thử lại.",
       "forbidden": "Bạn không có quyền thực hiện thao tác này.",
       "notFound": "Không tìm thấy dữ liệu yêu cầu.",
