@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import { createPortal } from "react-dom";
-import { X } from "lucide-react";
+import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useDishDetail } from "@/features/customer/dish-details";
 import { TableSelectionModal } from "@/features/customer/menu-listing-new/components/table-selection-modal";
@@ -36,6 +36,7 @@ export function DishDetailModal({ dishId, isOpen, onClose, onAddToCart }: DishDe
   const { data: dishData, isLoading, error } = useDishDetail(dishId || 0);
   const [openPopup, setOpenPopup] = useState(false);
   const [viewMode, setViewMode] = useState<"photo" | "360" | "video">("photo");
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const galleryRef = useRef<any>(null);
 
   const tHero = useTranslations("DishDetails.Hero");
@@ -47,9 +48,12 @@ export function DishDetailModal({ dishId, isOpen, onClose, onAddToCart }: DishDe
     return () => { document.body.style.overflow = "auto"; };
   }, [isOpen]);
 
-  // Reset view mode when modal opens
+  // Reset view mode and image index when modal opens
   useEffect(() => {
-    if (isOpen) setViewMode("photo");
+    if (isOpen) {
+      setViewMode("photo");
+      setCurrentImageIndex(0);
+    }
   }, [isOpen]);
 
   useEffect(() => {
@@ -139,17 +143,59 @@ export function DishDetailModal({ dishId, isOpen, onClose, onAddToCart }: DishDe
 
                   {/* Inset content box — margin on all sides, visually separated */}
                   <div className="flex-none mx-3 mb-2 rounded-xl overflow-hidden relative h-[320px] md:h-[360px]">
-                    {/* Photo */}
-                    {viewMode === "photo" && (
-                      <div className="absolute inset-0 flex items-center justify-center bg-[#0a0f1e]">
-                        <img
-                          src={dishData.data.imageUrls?.[0] || HERO_IMAGE}
-                          alt={dishData.data.dishName}
-                          className="max-h-full max-w-full object-contain animate-in fade-in duration-400"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-[#0f172a]/60 via-transparent to-transparent pointer-events-none" />
-                      </div>
-                    )}
+                    {/* Photo — multi-image carousel */}
+                    {viewMode === "photo" && (() => {
+                      const images = dishData.data.imageUrls?.length ? dishData.data.imageUrls : [HERO_IMAGE];
+                      const total = images.length;
+                      const safeIdx = Math.min(currentImageIndex, total - 1);
+                      return (
+                        <div className="absolute inset-0 flex items-center justify-center bg-[#0a0f1e]">
+                          <img
+                            key={safeIdx}
+                            src={images[safeIdx]}
+                            alt={`${dishData.data.dishName} ${safeIdx + 1}`}
+                            className="max-h-full max-w-full object-contain animate-in fade-in duration-300"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-[#0f172a]/60 via-transparent to-transparent pointer-events-none" />
+
+                          {/* Prev / Next arrows — only when multiple images */}
+                          {total > 1 && (
+                            <>
+                              <button
+                                type="button"
+                                onClick={() => setCurrentImageIndex((safeIdx - 1 + total) % total)}
+                                className="absolute left-2 top-1/2 -translate-y-1/2 z-20 flex h-7 w-7 items-center justify-center rounded-full bg-black/50 text-white hover:bg-black/70 transition-colors"
+                              >
+                                <ChevronLeft className="h-4 w-4" />
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => setCurrentImageIndex((safeIdx + 1) % total)}
+                                className="absolute right-2 top-1/2 -translate-y-1/2 z-20 flex h-7 w-7 items-center justify-center rounded-full bg-black/50 text-white hover:bg-black/70 transition-colors"
+                              >
+                                <ChevronRight className="h-4 w-4" />
+                              </button>
+
+                              {/* Dot indicators */}
+                              <div className="absolute bottom-2 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1.5">
+                                {images.map((_, i) => (
+                                  <button
+                                    key={i}
+                                    type="button"
+                                    onClick={() => setCurrentImageIndex(i)}
+                                    className={`rounded-full transition-all duration-200 ${
+                                      i === safeIdx
+                                        ? "w-4 h-1.5 bg-[#FFAB2D]"
+                                        : "w-1.5 h-1.5 bg-white/40 hover:bg-white/70"
+                                    }`}
+                                  />
+                                ))}
+                              </div>
+                            </>
+                          )}
+                        </div>
+                      );
+                    })()}
 
                     {/* 360 */}
                     <div
