@@ -10,7 +10,8 @@ interface ApiResponse<T> {
 export interface Ingredient {
   ingredientId: number;
   ingredientName: string;
-  unit: string;
+  unitLvId: string;
+  unitName?: string;
 }
 
 export const ingredientService = {

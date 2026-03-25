@@ -2,6 +2,7 @@ import { api } from '@/lib/http';
 import { ApiResponse, PagedResult } from '@/types/api-response.types';
 import { OrderHistory, OrderHistoryFilters, OrderStatusCount } from '../types/order-history.types';
 import { OrderStatusCode } from '@/types/status-codes';
+import { OrderDetailDto } from '../../order-create/types/edit-order.types';
 
 export const orderHistoryService = {
     getOrderHistory: async (filters: OrderHistoryFilters): Promise<PagedResult<OrderHistory>> => {
@@ -35,11 +36,16 @@ export const orderHistoryService = {
         return response.data;
     },
 
-    processPayment: async (data: { orderId: number; receivedAmount: number; paymentMethod: string; note?: string; tipAmount?: number; discountAmount?: number }): Promise<void> => {
+    processPayment: async (data: { orderId: number; receivedAmount: number; paymentMethod: string; note?: string; tipAmount?: number; couponId?: number; promotionId?: number }): Promise<void> => {
         await api.post('/api/payments', data);
     },
 
     updateOrderStatus: async (orderId: number, status: OrderStatusCode): Promise<void> => {
         await api.patch(`/api/orders/${orderId}/status`, { status });
+    },
+
+    getOrderById: async (id: number): Promise<OrderDetailDto> => {
+        const res = await api.get<ApiResponse<OrderDetailDto>>(`/api/orders/${id}`);
+        return res.data;
     },
 };

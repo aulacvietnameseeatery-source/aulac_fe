@@ -49,7 +49,9 @@ export const SettingGroupCard: React.FC<SettingGroupCardProps> = ({
         await onSave(items);
     };
 
-    const groupLabel = groupName.charAt(0).toUpperCase() + groupName.slice(1).replace(/_/g, ' ');
+    const groupLabel = t.has(`${groupName}.title`)
+        ? t(`${groupName}.title`)
+        : groupName.charAt(0).toUpperCase() + groupName.slice(1).replace(/_/g, ' ');
     const editableCount = settings.filter((s) => !s.isSensitive).length;
 
     return (
@@ -60,19 +62,17 @@ export const SettingGroupCard: React.FC<SettingGroupCardProps> = ({
             >
                 <div className="flex items-center justify-between gap-4">
                     <div className="flex items-center gap-4">
-                        <div className="p-2.5 rounded-xl bg-[#1A3A52]/5 border border-[#1A3A52]/10 shrink-0">
-                            <Settings2 className="h-5 w-5 text-[#1A3A52]" />
-                        </div>
+                        {/* Removed icon for group header */}
                         <div>
                             <h3 className="text-lg font-bold capitalize text-gray-900 leading-tight">{groupLabel}</h3>
-                            <p className="text-sm text-gray-500 font-[Inter] mt-1">
-                                {settings.length} {t('settingCount', { count: settings.length })}
-                                {editableCount < settings.length && (
-                                    <span className="ml-1 text-amber-600/80">
-                                        · {settings.length - editableCount} {t('sensitiveHidden')}
-                                    </span>
-                                )}
-                            </p>
+                            {/*<p className="text-sm text-gray-500 font-[Inter] mt-1">*/}
+                            {/*    {settings.length} {t('settingCount', { count: settings.length })}*/}
+                            {/*    {editableCount < settings.length && (*/}
+                            {/*        <span className="ml-1 text-amber-600/80">*/}
+                            {/*            · {settings.length - editableCount} {t('sensitiveHidden')}*/}
+                            {/*        </span>*/}
+                            {/*    )}*/}
+                            {/*</p>*/}
                         </div>
                     </div>
                     <div className="p-2 rounded-full hover:bg-gray-100 transition-colors shrink-0">

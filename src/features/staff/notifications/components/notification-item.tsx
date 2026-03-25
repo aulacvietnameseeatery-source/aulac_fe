@@ -66,8 +66,14 @@ export function NotificationItem({
     if (!notification.isRead) {
       onRead(notification.id);
     }
-    if (notification.actionUrl && onNavigate) {
-      onNavigate(notification.actionUrl);
+
+    if (onNavigate) {
+      if (notification.actionUrl) {
+        onNavigate(notification.actionUrl);
+      } else if (notification.entityType === "Reservation" && notification.entityId) {
+        // Fallback for reservation notifications without actionUrl
+        onNavigate(`/dashboard/reservations/${notification.entityId}`);
+      }
     }
   };
 

@@ -631,6 +631,10 @@
       "phonePlaceholder": "Nhập số điện thoại (không bắt buộc)",
       "email": "Email",
       "emailPlaceholder": "Nhập địa chỉ email (không bắt buộc)",
+      "address": "Địa chỉ",
+      "addressPlaceholder": "Nhập địa chỉ (không bắt buộc)",
+      "taxCode": "Mã số thuế",
+      "taxCodePlaceholder": "Nhập mã số thuế (không bắt buộc)",
       "ingredients": "Nguyên vật liệu cung cấp",
       "ingredientsPlaceholder": "Chọn nguyên liệu mà nhà cung cấp cung cấp",
       "cancel": "Hủy",
@@ -642,6 +646,8 @@
         "phoneMaxLength": "Số điện thoại không được vượt quá 50 ký tự",
         "emailInvalid": "Vui lòng nhập địa chỉ email hợp lệ",
         "emailMaxLength": "Email không được vượt quá 150 ký tự",
+        "addressMaxLength": "Địa chỉ không được vượt quá 500 ký tự",
+        "taxCodeMaxLength": "Mã số thuế không được vượt quá 50 ký tự",
         "fixErrors": "Vui lòng sửa các lỗi trước khi gửi"
       },
       "notifications": {
@@ -658,6 +664,10 @@
       "phonePlaceholder": "Nhập số điện thoại (không bắt buộc)",
       "email": "Email",
       "emailPlaceholder": "Nhập địa chỉ email (không bắt buộc)",
+      "address": "Địa chỉ",
+      "addressPlaceholder": "Nhập địa chỉ (không bắt buộc)",
+      "taxCode": "Mã số thuế",
+      "taxCodePlaceholder": "Nhập mã số thuế (không bắt buộc)",
       "ingredients": "Nguyên vật liệu cung cấp",
       "ingredientsPlaceholder": "Chọn nguyên liệu mà nhà cung cấp cung cấp",
       "cancel": "Hủy",
@@ -672,6 +682,8 @@
         "phoneMaxLength": "Số điện thoại không được vượt quá 50 ký tự",
         "emailInvalid": "Vui lòng nhập địa chỉ email hợp lệ",
         "emailMaxLength": "Email không được vượt quá 150 ký tự",
+        "addressMaxLength": "Địa chỉ không được vượt quá 500 ký tự",
+        "taxCodeMaxLength": "Mã số thuế không được vượt quá 50 ký tự",
         "fixErrors": "Vui lòng sửa các lỗi trước khi gửi"
       },
       "notifications": {
@@ -690,6 +702,8 @@
       "name": "Tên",
       "phone": "Điện thoại",
       "email": "Email",
+      "address": "Địa chỉ",
+      "taxCode": "Mã số thuế",
       "ingredients": "Nguyên vật liệu cung cấp",
       "ingredientName": "Tên nguyên liệu",
       "unit": "Đơn vị",

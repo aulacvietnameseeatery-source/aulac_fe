@@ -142,7 +142,6 @@
         "searchPlaceholder": "Tìm theo mã đơn, khách hàng, nhân viên...",
         "refresh": "Làm mới",
         "addNewOrder": "Thêm đơn mới",
-        "kanbanLabel": "Kanban — Tất cả trạng thái",
         "dateRange": {
           "today": "Hôm nay",
           "yesterday": "Hôm qua",
@@ -169,24 +168,6 @@
           "inProgress": "Đang làm",
           "completed": "Hoàn thành",
           "cancelled": "Đã hủy"
-        },
-        "kanban": {
-          "pending": "Chờ xử lý",
-          "inProgress": "Đang thực hiện",
-          "completed": "Đã hoàn thành",
-          "cancelled": "Đã hủy",
-          "empty": "Không có đơn",
-          "start": "Bắt đầu",
-          "finish": "Hoàn thành",
-          "complete": "Xong",
-          "printInvoice": "In hóa đơn",
-          "reset": "Đặt lại",
-          "delete": "Xóa",
-          "cancel": "Hủy"
-        },
-        "viewMode": {
-          "grid": "Dạng lưới",
-          "kanban": "Dạng Kanban"
         },
         "statusUpdateSuccess": "Đã cập nhật trạng thái đơn hàng",
         "statusUpdateError": "Cập nhật trạng thái thất bại",
@@ -225,14 +206,10 @@
           },
           "action": {
             "view": "Chi tiết",
-            "edit": "Sửa đơn",
-            "start": "Bắt đầu",
-            "complete": "Hoàn thành",
             "cancel": "Hủy đơn",
             "reset": "Đặt lại",
             "print": "In hóa đơn",
             "pay": "Thanh toán",
-            "reward": "Tích điểm",
             "printReceipt": "In biên lai"
           },
           "paymentSuccess": "Thanh toán thành công",
@@ -303,6 +280,11 @@
         "takeAway": "Mang về",
         "guest": "Khách",
         "notePlaceholder": "Ghi chú món...",
+        "subTotal": "Tạm tính",
+        "tax": "Thuế",
+        "coupon": "Mã giảm giá",
+        "tip": "Tiền tip",
+        "paidVia": "Thanh toán qua",
         "status": {
           "Pending": "Chờ xử lý",
           "In progress": "Đang làm",
@@ -433,6 +415,9 @@
           "tipAmount": "Tiền boa",
           "paymentMethod": "Phương thức thanh toán",
           "orderStatus": "Trạng thái đơn"
+        },
+        "actions": {
+          "viewDetails": "Xem chi tiết"
         }
       }
     },

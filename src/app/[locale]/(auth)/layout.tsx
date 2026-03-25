@@ -109,7 +109,7 @@ export default function DashboardLayout({
             </div>
           </header>
 
-          <div className="main-view flex-1 overflow-auto p-4 md:p-8 bg-[#FDFBF9]">
+          <div className="main-view flex-1 overflow-auto p-4 md:p-5 bg-[#FDFBF9]">
             {/* View for page content */}
             {children}
           </div>

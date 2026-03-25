@@ -142,7 +142,6 @@
         "searchPlaceholder": "Search by order ID, customer, staff...",
         "refresh": "Refresh",
         "addNewOrder": "Add New Order",
-        "kanbanLabel": "Kanban — All statuses",
         "dateRange": {
           "today": "Today",
           "yesterday": "Yesterday",
@@ -169,24 +168,6 @@
           "inProgress": "In Progress",
           "completed": "Completed",
           "cancelled": "Cancelled"
-        },
-        "kanban": {
-          "pending": "Pending",
-          "inProgress": "In Progress",
-          "completed": "Completed",
-          "cancelled": "Cancelled",
-          "empty": "No orders",
-          "start": "Start",
-          "finish": "Complete",
-          "complete": "Done",
-          "printInvoice": "Print Invoice",
-          "reset": "Reset",
-          "delete": "Delete",
-          "cancel": "Cancel"
-        },
-        "viewMode": {
-          "grid": "Grid view",
-          "kanban": "Kanban view"
         },
         "statusUpdateSuccess": "Order status updated",
         "statusUpdateError": "Failed to update order status",
@@ -225,14 +206,10 @@
           },
           "action": {
             "view": "View Details",
-            "edit": "Edit Order",
-            "start": "Start",
-            "complete": "Complete",
             "cancel": "Cancel",
             "reset": "Reset",
             "print": "Print Invoice",
             "pay": "Pay & Complete",
-            "reward": "Reward Points",
             "printReceipt": "Print Receipt"
           },
           "paymentSuccess": "Payment processed successfully",
@@ -303,6 +280,11 @@
         "takeAway": "Take Away",
         "guest": "Guest",
         "notePlaceholder": "Item note...",
+        "subTotal": "Subtotal",
+        "tax": "Tax",
+        "coupon": "Coupon",
+        "tip": "Tip",
+        "paidVia": "Paid via",
         "status": {
           "Pending": "Pending",
           "In progress": "In Progress",
@@ -421,6 +403,9 @@
           "from": "From",
           "to": "To",
           "selectDate": "Select Date"
+        },
+        "actions": {
+          "viewDetails": "View details"
         },
         "table": {
           "no": "No",

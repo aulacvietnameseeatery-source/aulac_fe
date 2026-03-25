@@ -23,6 +23,8 @@ export interface SupplierFormData {
     supplierName: string;
     phone: string;
     email: string;
+    address: string;
+    taxCode: string;
     ingredientIds: number[];
 }
 
@@ -30,6 +32,8 @@ const initialFormData: SupplierFormData = {
     supplierName: "",
     phone: "",
     email: "",
+    address: "",
+    taxCode: "",
     ingredientIds: [],
 };
 
@@ -75,6 +79,8 @@ export const SupplierModal: React.FC<SupplierModalProps> = ({
                 supplierName: supplier.supplierName,
                 phone: supplier.phone || "",
                 email: supplier.email || "",
+                address: supplier.address || "",
+                taxCode: supplier.taxCode || "",
                 ingredientIds: supplier.ingredients?.map((i: Ingredient) => i.ingredientId) || [],
             });
         } else if (mode === "view" && supplier) {
@@ -82,6 +88,8 @@ export const SupplierModal: React.FC<SupplierModalProps> = ({
                 supplierName: supplier.supplierName,
                 phone: supplier.phone || "",
                 email: supplier.email || "",
+                address: supplier.address || "",
+                taxCode: supplier.taxCode || "",
                 ingredientIds: supplier.ingredients?.map((i: Ingredient) => i.ingredientId) || [],
             });
         } else {
@@ -123,6 +131,14 @@ export const SupplierModal: React.FC<SupplierModalProps> = ({
             }
         }
 
+        if (formData.address && formData.address.length > 500) {
+            newErrors.address = t("validation.addressMaxLength");
+        }
+
+        if (formData.taxCode && formData.taxCode.length > 50) {
+            newErrors.taxCode = t("validation.taxCodeMaxLength");
+        }
+
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
@@ -146,7 +162,7 @@ export const SupplierModal: React.FC<SupplierModalProps> = ({
     const ingredientOptions = useMemo(() =>
         availableIngredients.map(ing => ({
             value: ing.ingredientId,
-            label: `${ing.ingredientName} (${ing.unit})`
+            label: ing.unitName ? `${ing.ingredientName} (${ing.unitName})` : ing.ingredientName
         })),
         [availableIngredients]
     );
@@ -218,6 +234,7 @@ export const SupplierModal: React.FC<SupplierModalProps> = ({
                     <div className="grid grid-cols-2 gap-4">
                         <ALInput
                             title={t("phone")}
+                            type={isViewMode ? "text" : "tel"}
                             placeholder={isViewMode ? "" : t("phonePlaceholder")}
                             value={formData.phone}
                             onChange={(e) => handleChange("phone", e.target.value)}
@@ -231,6 +248,26 @@ export const SupplierModal: React.FC<SupplierModalProps> = ({
                             value={formData.email}
                             onChange={(e) => handleChange("email", e.target.value)}
                             error={errors.email}
+                            readOnly={isViewMode}
+                        />
+                    </div>
+
+                    {/* Address & Tax Code row */}
+                    <div className="grid grid-cols-2 gap-4">
+                        <ALInput
+                            title={t("address")}
+                            placeholder={isViewMode ? "" : t("addressPlaceholder")}
+                            value={formData.address}
+                            onChange={(e) => handleChange("address", e.target.value)}
+                            error={errors.address}
+                            readOnly={isViewMode}
+                        />
+                        <ALInput
+                            title={t("taxCode")}
+                            placeholder={isViewMode ? "" : t("taxCodePlaceholder")}
+                            value={formData.taxCode}
+                            onChange={(e) => handleChange("taxCode", e.target.value)}
+                            error={errors.taxCode}
                             readOnly={isViewMode}
                         />
                     </div>

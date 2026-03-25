@@ -641,6 +641,8 @@
         "phoneMaxLength": "Phone number cannot exceed 50 characters",
         "emailInvalid": "Please enter a valid email address",
         "emailMaxLength": "Email cannot exceed 150 characters",
+        "addressMaxLength": "Address cannot exceed 500 characters",
+        "taxCodeMaxLength": "Tax code cannot exceed 50 characters",
         "fixErrors": "Please fix the errors before submitting"
       },
       "notifications": {
@@ -657,6 +659,10 @@
       "phonePlaceholder": "Enter phone number (optional)",
       "email": "Email",
       "emailPlaceholder": "Enter email address (optional)",
+      "address": "Address",
+      "addressPlaceholder": "Enter address (optional)",
+      "taxCode": "Tax Code",
+      "taxCodePlaceholder": "Enter tax code (optional)",
       "ingredients": "Supplied Ingredients",
       "ingredientsPlaceholder": "Select ingredients this supplier provides",
       "cancel": "Cancel",
@@ -671,6 +677,8 @@
         "phoneMaxLength": "Phone number cannot exceed 50 characters",
         "emailInvalid": "Please enter a valid email address",
         "emailMaxLength": "Email cannot exceed 150 characters",
+        "addressMaxLength": "Address cannot exceed 500 characters",
+        "taxCodeMaxLength": "Tax code cannot exceed 50 characters",
         "fixErrors": "Please fix the errors before submitting"
       },
       "notifications": {
@@ -689,6 +697,8 @@
       "name": "Name",
       "phone": "Phone",
       "email": "Email",
+      "address": "Address",
+      "taxCode": "Tax Code",
       "ingredients": "Supplied Ingredients",
       "ingredientName": "Ingredient Name",
       "unit": "Unit",

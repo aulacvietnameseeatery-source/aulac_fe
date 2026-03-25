@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { useTranslations, useFormatter } from 'next-intl';
 import {
     ShoppingBag,
@@ -8,11 +8,8 @@ import {
     Utensils,
     Package,
     Bike,
-    MoreHorizontal,
     Eye,
-    Pencil,
     X,
-    CheckCircle,
     RotateCcw,
     Printer,
     CreditCard,
@@ -24,6 +21,7 @@ import { orderHistoryService } from '../services/order-history.service';
 import { toast } from 'sonner';
 import { CouponDTO } from '../../coupon-management/coupon-list/types/coupon.types';
 import { PromotionListDTO } from '../../promotion-management/promotion-list/types/promotion-types';
+import { OrderDetailDto } from '../../order-create/types/edit-order.types';
 
 // ─── Constants ──────────────────────────────────────────────────────────────
 
@@ -46,7 +44,7 @@ const PAYMENT_STYLES = {
 };
 
 // Context actions per status
-type ActionKey = 'view' | 'edit' | 'start' | 'complete' | 'cancel' | 'reset' | 'print' | 'pay' | 'printReceipt';
+type ActionKey = 'view' | 'cancel' | 'reset' | 'print' | 'pay' | 'printReceipt';
 const STATUS_ACTIONS: Record<string, ActionKey[]> = {
     Pending: ['view', 'cancel'],
     'In progress': ['view', 'cancel'],
@@ -56,9 +54,6 @@ const STATUS_ACTIONS: Record<string, ActionKey[]> = {
 
 const ACTION_ICONS: Record<ActionKey, { icon: React.ReactNode; danger?: boolean }> = {
     view: { icon: <Eye className="w-3.5 h-3.5" /> },
-    edit: { icon: <Pencil className="w-3.5 h-3.5" /> },
-    start: { icon: <ChevronDown className="w-3.5 h-3.5" /> },
-    complete: { icon: <CheckCircle className="w-3.5 h-3.5" /> },
     cancel: { icon: <X className="w-3.5 h-3.5" />, danger: true },
     reset: { icon: <RotateCcw className="w-3.5 h-3.5" /> },
     print: { icon: <Printer className="w-3.5 h-3.5" /> },
@@ -69,6 +64,44 @@ const ACTION_ICONS: Record<ActionKey, { icon: React.ReactNode; danger?: boolean 
 // ─── Helpers ────────────────────────────────────────────────────────────────
 
 const VISIBLE_ITEMS_COUNT = 3;
+
+// Helper: Map OrderHistory sang OrderDetailDto cho Invoice
+const mapOrderHistoryToOrderDetailDto = (order: OrderHistory): OrderDetailDto => {
+    const subTotal = order.orderItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    
+    return {
+        orderId: order.orderId,
+        tableId: order.tableId,
+        tableCode: order.tableCode,
+        staffId: order.staffId,
+        staffName: order.staffName,
+        customerId: order.customerId,
+        customerName: order.customerName,
+        subTotalAmount: subTotal,
+        totalAmount: order.totalAmount,
+        taxAmount: order.taxAmount || 0,
+        tipAmount: order.tipAmount || 0, 
+        orderStatus: order.orderStatus as any,
+        source: order.source,
+        createdAt: order.createdAt,
+        updatedAt: order.createdAt,
+        isPaid: order.isPaid,
+        orderItems: order.orderItems.map(item => ({
+            orderItemId: item.orderItemId,
+            dishId: item.dishId,
+            dishName: item.dishName,
+            quantity: item.quantity,
+            price: item.price,
+            itemStatus: item.itemStatus as any,
+            note: item.note,
+            rejectReason: item.rejectReason,
+        })),
+        promotions: [],
+        coupons: [],
+        payments: [],
+        itemCount: order.itemCount
+    };
+};
 
 // ─── Props ───────────────────────────────────────────────────────────────────
 
@@ -86,22 +119,12 @@ export const OrderCard: React.FC<OrderCardProps> = ({ order, onStatusChange, onA
     const t = useTranslations('orders.management.List.card');
     const format = useFormatter();
     const [expanded, setExpanded] = useState(false);
-    const [actionsOpen, setActionsOpen] = useState(false);
     const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
     const [isProcessingPayment, setIsProcessingPayment] = useState(false);
     const [isPrintModalOpen, setIsPrintModalOpen] = useState(false);
     const [printType, setPrintType] = useState<'invoice' | 'receipt'>('receipt');
-
-    const actionsRef = useRef<HTMLDivElement>(null);
-
-    // Close dropdowns on outside click
-    useEffect(() => {
-        const handler = (e: MouseEvent) => {
-            if (actionsRef.current && !actionsRef.current.contains(e.target as Node)) setActionsOpen(false);
-        };
-        document.addEventListener('mousedown', handler);
-        return () => document.removeEventListener('mousedown', handler);
-    }, []);
+    const [printData, setPrintData] = useState<OrderDetailDto | null>(null);
+    const [isFetchingOrder, setIsFetchingOrder] = useState(false);
 
     const sourceIcon = SOURCE_ICONS[order.source] ?? <ShoppingBag className="w-3 h-3" />;
     const statusStyle = STATUS_STYLES[order.orderStatus] ?? 'bg-gray-50 text-gray-700 border border-gray-200';
@@ -124,19 +147,30 @@ export const OrderCard: React.FC<OrderCardProps> = ({ order, onStatusChange, onA
     const hiddenCount = order.orderItems.length - VISIBLE_ITEMS_COUNT;
     const showPaymentBadge = order.orderStatus === 'Completed';
 
-    const handleActionClick = (key: ActionKey) => {
+    const handleActionClick = async (key: ActionKey) => {
         if (key === 'pay') {
             setIsPaymentModalOpen(true);
         } else if (key === 'print') {
+            const mappedData = mapOrderHistoryToOrderDetailDto(order);
+            setPrintData(mappedData);
             setPrintType('invoice');
             setIsPrintModalOpen(true);
         } else if (key === 'printReceipt') {
-            setPrintType('receipt');
-            setIsPrintModalOpen(true);
+            try {
+                setIsFetchingOrder(true);
+                const orderDetail = await orderHistoryService.getOrderById(order.orderId);
+                setPrintData(orderDetail);
+                setPrintType('receipt');
+                setIsPrintModalOpen(true);
+            } catch (error) {
+                console.error("Lỗi khi tải chi tiết đơn hàng:", error);
+                toast.error(t('fetchOrderError') || 'Cannot load order details for printing.');
+            } finally {
+                setIsFetchingOrder(false);
+            }
         } else {
             onAction?.(order.orderId, key);
         }
-        setActionsOpen(false);
     };
 
     const handlePaymentComplete = async (orderId: number, data: any) => {
@@ -160,11 +194,12 @@ export const OrderCard: React.FC<OrderCardProps> = ({ order, onStatusChange, onA
     };
 
     return (
-        <div
-            className="bg-white rounded-xl shadow-sm border border border-[#D5BA98]/60 flex flex-col hover:-translate-y-0.5 hover:shadow-md transition-all duration-200 cursor-pointer"
-            onClick={() => onAction?.(order.orderId, 'view')}
-        >
-            <div className="p-4 flex flex-col flex-1">
+        <div className="flex h-full flex-col">
+            <div
+                className="bg-white rounded-xl shadow-sm border border border-[#D5BA98]/60 flex flex-col flex-1 hover:-translate-y-0.5 hover:shadow-md transition-all duration-200 cursor-pointer"
+                onClick={() => onAction?.(order.orderId, 'view')}
+            >
+                <div className="p-4 flex flex-col flex-1">
 
                 {/* ── Header ── */}
                 <div className="flex items-start justify-between mb-3 gap-2">
@@ -192,7 +227,7 @@ export const OrderCard: React.FC<OrderCardProps> = ({ order, onStatusChange, onA
                         </div>
                     </div>
 
-                    {/* Right: status dropdown + 3-dot menu */}
+                    {/* Right: status badges */}
                     <div className="flex items-center gap-1.5 shrink-0">
 
                         {/* Status badge (static) */}
@@ -215,38 +250,6 @@ export const OrderCard: React.FC<OrderCardProps> = ({ order, onStatusChange, onA
                             </div>
                         )}
 
-                        {/* 3-dot actions menu */}
-                        <div className="relative" ref={actionsRef}>
-                            <button
-                                onClick={(e) => { e.stopPropagation(); setActionsOpen(o => !o); }}
-                                className="p-1 rounded-lg text-[#1A3A52]/40 hover:text-[#1A3A52] hover:bg-[#D5BA98]/12 transition-colors"
-                                data-tooltip-content={t('actions')}
-                                data-tooltip-id="my-tooltip"
-                            >
-                                <MoreHorizontal className="w-4 h-4" />
-                            </button>
-
-                            {actionsOpen && (
-                                <div
-                                    className="absolute right-0 top-full mt-1 z-50 bg-[#FDFBF9] border border-[#D5BA98]/50 rounded-lg shadow-lg w-44 py-1 text-xs"
-                                    onClick={(e) => e.stopPropagation()}
-                                >
-                                    {contextActions.map(key => {
-                                        const iconWrap = ACTION_ICONS[key];
-                                        return (
-                                            <button
-                                                key={key}
-                                                onClick={(e) => { e.stopPropagation(); handleActionClick(key); }}
-                                                className={`w-full text-left flex items-center gap-2 px-3 py-2 hover:bg-[#D5BA98]/10 transition-colors ${iconWrap.danger ? 'text-[#8C3A3A] hover:bg-[#8C3A3A]/8' : 'text-[#1A3A52]'}`}
-                                            >
-                                                {iconWrap.icon}
-                                                {t(`action.${key}`)}
-                                            </button>
-                                        );
-                                    })}
-                                </div>
-                            )}
-                        </div>
                     </div>
                 </div>
 
@@ -334,6 +337,29 @@ export const OrderCard: React.FC<OrderCardProps> = ({ order, onStatusChange, onA
                     <span className="text-xs text-[#1A3A52]/55">{order.itemCount} {t('items')}</span>
                 </div>
             </div>
+            </div>
+
+            {/* External action bar below the card */}
+            <div className="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-3" onClick={(e) => e.stopPropagation()}>
+                {contextActions.map((key) => {
+                    const iconWrap = ACTION_ICONS[key];
+                    return (
+                        <button
+                            key={key}
+                            onClick={() => handleActionClick(key)}
+                            className={`h-8 w-full inline-flex items-center justify-center gap-1.5 rounded-lg border px-3 text-xs font-semibold transition-colors ${iconWrap.danger
+                                ? 'border-[#8C3A3A]/30 text-[#8C3A3A] bg-[#FDFBF9] hover:bg-[#8C3A3A]/8'
+                                : 'border-[#D5BA98]/60 text-[#1A3A52] bg-[#FDFBF9] hover:bg-[#D5BA98]/10'
+                                }`}
+                            data-tooltip-content={t(`action.${key}`)}
+                            data-tooltip-id="my-tooltip"
+                        >
+                            {iconWrap.icon}
+                            {t(`action.${key}`)}
+                        </button>
+                    );
+                })}
+            </div>
 
             <PaymentModal
                 order={order}
@@ -346,7 +372,7 @@ export const OrderCard: React.FC<OrderCardProps> = ({ order, onStatusChange, onA
             />
 
             <PrintOrderModal
-                order={order}
+                order={printData as any}
                 isOpen={isPrintModalOpen}
                 onClose={() => setIsPrintModalOpen(false)}
                 type={printType}

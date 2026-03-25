@@ -147,6 +147,8 @@ export const introFormSchema = z.object({
   }),
   "intro_hero_image": z.string().trim().optional().default(""),
   "intro_virtualTour_videoUrl": z.string().trim().optional().default(""),
+  "intro_virtualTour_videoUrlLeft": z.string().trim().optional().default(""),
+  "intro_virtualTour_videoUrlRight": z.string().trim().optional().default(""),
   "intro_collection_dish1_image": z.string().trim().optional().default(""),
   "intro_collection_dish2_image": z.string().trim().optional().default(""),
   "intro_collection_dish3_image": z.string().trim().optional().default(""),

@@ -11,6 +11,8 @@ import SupplierNameInput from './SupplierNameInput';
 import PhoneInput from './PhoneInput';
 import EmailInput from './EmailInput';
 import IngredientsSelect from './IngredientsSelect';
+import AddressInput from './AddressInput';
+import TaxCodeInput from './TaxCodeInput';
 import LoadingState from './LoadingState';
 import ErrorState from './ErrorState';
 import { FormErrors } from '../types';
@@ -25,6 +27,8 @@ export default function EditSupplier({ supplierId }: EditSupplierProps) {
   const [supplierName, setSupplierName] = useState('');
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
+  const [address, setAddress] = useState('');
+  const [taxCode, setTaxCode] = useState('');
   const [ingredientIds, setIngredientIds] = useState<number[]>([]);
   const [errors, setErrors] = useState<FormErrors>({});
 
@@ -37,6 +41,8 @@ export default function EditSupplier({ supplierId }: EditSupplierProps) {
       setSupplierName(supplier.supplierName);
       setPhone(supplier.phone || '');
       setEmail(supplier.email || '');
+      setAddress(supplier.address || '');
+      setTaxCode(supplier.taxCode || '');
       setIngredientIds(supplier.ingredients.map(i => i.ingredientId));
     }
   }, [supplier]);
@@ -66,6 +72,14 @@ export default function EditSupplier({ supplierId }: EditSupplierProps) {
       }
     }
 
+    if (address && address.length > 500) {
+      newErrors.address = t('validation.addressMaxLength');
+    }
+
+    if (taxCode && taxCode.length > 50) {
+      newErrors.taxCode = t('validation.taxCodeMaxLength');
+    }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -81,6 +95,8 @@ export default function EditSupplier({ supplierId }: EditSupplierProps) {
         supplierName: supplierName.trim(),
         phone: phone.trim() || undefined,
         email: email.trim() || undefined,
+        address: address.trim() || undefined,
+        taxCode: taxCode.trim() || undefined,
         ingredientIds,
       });
       
@@ -136,6 +152,18 @@ export default function EditSupplier({ supplierId }: EditSupplierProps) {
             value={email}
             onChange={setEmail}
             error={errors.email}
+          />
+
+          <AddressInput
+            value={address}
+            onChange={setAddress}
+            error={errors.address}
+          />
+
+          <TaxCodeInput
+            value={taxCode}
+            onChange={setTaxCode}
+            error={errors.taxCode}
           />
 
           <IngredientsSelect

@@ -40,7 +40,15 @@ export const LOOKUP_TYPE = {
   ShiftStatus: 22,
   ShiftAssignmentStatus: 23,
   AttendanceStatus: 24,
-  IngredientUnit: 27
+  CouponType: 25,
+  CouponStatus: 26,
+  IngredientUnit: 27,
+  InventoryCategory: 28,
+  ExportReason: 29,
+  VarianceReason: 30,
+  KitchenToolType: 31,
+  ConsumableType: 32,
+  EquipmentType: 33,
 } as const;
 
 export type LookupTypeId = (typeof LOOKUP_TYPE)[keyof typeof LOOKUP_TYPE];

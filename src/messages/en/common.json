@@ -476,6 +476,15 @@
         "selected": "Selected"
       },
       "noData": "No data available",
+      "actions": {
+        "view": "View details",
+        "edit": "Edit",
+        "delete": "Delete",
+        "cancel": "Cancel",
+        "deactivate": "Deactivate",
+        "adjust-stock": "Adjust stock",
+        "history": "History"
+      },
       "pagination": {
         "total": "Total",
         "pageSize": "Rows per page",

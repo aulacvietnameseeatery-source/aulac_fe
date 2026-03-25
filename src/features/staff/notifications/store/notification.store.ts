@@ -11,6 +11,8 @@ interface NotificationState {
   lastAddedIds: number[];
   /** Per-type notification preferences (loaded from API) */
   preferences: NotificationPreferenceDto[];
+  /** Global state for reservation detail modal */
+  detailReservationId: number | null;
 }
 
 interface NotificationActions {
@@ -24,6 +26,7 @@ interface NotificationActions {
   setUnreadCount: (count: number) => void;
   setConnected: (connected: boolean) => void;
   setPreferences: (preferences: NotificationPreferenceDto[]) => void;
+  setDetailReservationId: (id: number | null) => void;
 }
 
 export const useNotificationStore = create<NotificationState & NotificationActions>(
@@ -36,6 +39,7 @@ export const useNotificationStore = create<NotificationState & NotificationActio
     lastChangeSource: "idle",
     lastAddedIds: [],
     preferences: [],
+    detailReservationId: null,
 
     // Actions
     addNotification: (notification) =>
@@ -121,7 +125,7 @@ export const useNotificationStore = create<NotificationState & NotificationActio
         unreadCount: Math.max(
           0,
           state.unreadCount -
-            (state.items.find((n) => n.id === notificationId && !n.isRead) ? 1 : 0)
+          (state.items.find((n) => n.id === notificationId && !n.isRead) ? 1 : 0)
         ),
       })),
 
@@ -145,5 +149,7 @@ export const useNotificationStore = create<NotificationState & NotificationActio
     setConnected: (connected) => set({ connected }),
 
     setPreferences: (preferences) => set({ preferences }),
+
+    setDetailReservationId: (id) => set({ detailReservationId: id }),
   })
 );

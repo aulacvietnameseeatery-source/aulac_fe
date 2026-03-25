@@ -7,6 +7,7 @@ import { useMutation } from "@tanstack/react-query";
 import { translateDishContent } from "../services/dish.service";
 import { DishI18nDto } from "../types/dish-detail.types";
 import { ALInput } from "@/components/ui/al-input";
+import { Button } from "@/components/ui/button";
 
 interface LanguageTabsProps {
   form: UseFormReturn<DishFormValues>;
@@ -37,7 +38,7 @@ export const LanguageTabs: React.FC<LanguageTabsProps> = ({
     mutationFn: translateDishContent,
     onSuccess: (data) => {
       // Data returned: { translations: { "fr": { dishName: "..." }, "vi": { ... } } }
-      let count = 0;
+      // _OLD: translated item count was tracked for a toast message.
 
       Object.entries(data.translations).forEach(([langKey, content]) => {
         const targetLang = langKey as Language;
@@ -61,12 +62,12 @@ export const LanguageTabs: React.FC<LanguageTabsProps> = ({
         setField("slogan", content.slogan);
         setField("note", content.note);
         
-        count++;
+        // _OLD: count++;
       });
 
-      //toast.success(`Translated content to ${count} other languages!`);
+      // _OLD: toast.success(`Translated content to ${count} other languages!`);
     },
-    onError: (err: any) => {
+    onError: () => {
       //toast.error(err?.message || "Translation failed. Please try again.");
     },
   });
@@ -96,7 +97,7 @@ export const LanguageTabs: React.FC<LanguageTabsProps> = ({
   };
 
   return (
-    <div className="flex flex-col min-h-[400px]">
+    <div className="flex min-h-100 flex-col">
       <div className="flex items-center justify-between border-b border-gray-100 pr-4 bg-gray-50/30">
       {/* --- Minimal Tab Header --- */}
       <div className="flex items-center border-b border-gray-100">
@@ -123,11 +124,13 @@ export const LanguageTabs: React.FC<LanguageTabsProps> = ({
         })}
       </div>
         {/* Right: Translate Button */}
-        <button
+        <Button
           type="button"
+          variant="translate"
+          size="sm"
           onClick={handleAutoTranslate}
           disabled={translateMutation.isPending}
-          className="flex items-center gap-2 px-3 py-1.5 text-xs font-semibold text-purple-700 bg-purple-50 hover:bg-purple-100 border border-purple-200 rounded-md transition-all shadow-sm active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed group"
+          className="group h-auto px-3 py-1.5 text-xs font-semibold"
           data-tooltip-content={`Translate content from ${activeTab.toUpperCase()} to other languages`}
           data-tooltip-id="my-tooltip"
         >
@@ -137,7 +140,7 @@ export const LanguageTabs: React.FC<LanguageTabsProps> = ({
             <Sparkles size={14} className="text-purple-600 group-hover:text-purple-800 transition-colors" />
           )}
           <span className="hidden sm:inline">Auto Translate</span>
-        </button>
+        </Button>
       </div>
 
       {/* --- Tab Content --- */}

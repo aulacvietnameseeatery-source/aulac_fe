@@ -476,6 +476,15 @@
         "selected": "Sélectionné"
       },
       "noData": "Aucune donnée",
+      "actions": {
+        "view": "Voir les détails",
+        "edit": "Modifier",
+        "delete": "Supprimer",
+        "cancel": "Annuler",
+        "deactivate": "Désactiver",
+        "adjust-stock": "Ajuster le stock",
+        "history": "Historique"
+      },
       "pagination": {
         "total": "Total",
         "pageSize": "Lignes par page",
