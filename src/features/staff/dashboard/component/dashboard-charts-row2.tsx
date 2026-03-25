@@ -2,9 +2,8 @@
 import React from "react";
 import { PieChart, ShoppingCart, BarChart, CheckCircle, ShoppingBag, Wine, Utensils } from "lucide-react";
 
-// Định nghĩa kiểu dữ liệu cho Props
 interface DashboardChartsRow2Props {
-    activeOrders?: any[]; // Tạm dùng any, nếu bạn đã có interface KitchenOrder thì thay vào
+    activeOrders?: any[];
     isLoading?: boolean;
 }
 
