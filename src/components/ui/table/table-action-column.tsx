@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { PermissionGuard } from "@/components/permission-guard";
 import { MoreHorizontal } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export type BuiltInActionType = "view" | "edit" | "delete" | "cancel" | "deactivate" | "adjust-stock" | "history";
 
@@ -24,17 +25,19 @@ interface TableActionColumnProps<T> {
   item: T;
 }
 
-const BUILT_IN_ACTIONS: Record<BuiltInActionType, { icon: React.ReactNode, label: string, colorClass: string }> = {
-  view: { icon: <Eye size={18} />, label: "View", colorClass: "text-gray-400 hover:text-blue-600" },
-  edit: { icon: <Edit size={18} />, label: "Edit", colorClass: "text-gray-400 hover:text-blue-600" },
-  delete: { icon: <Trash2 size={18} />, label: "Delete", colorClass: "text-red-500 hover:text-red-600" },
-  cancel: { icon: <X size={18} />, label: "Cancel", colorClass: "text-red-500 hover:text-red-600" },
-  deactivate: { icon: <Power size={18} />, label: "Deactivate", colorClass: "text-red-500 hover:text-red-600" },
-  "adjust-stock": { icon: <PackagePlus size={18} />, label: "Adjust Stock", colorClass: "text-green-600 hover:text-green-700" },
-  history: { icon: <History size={18} />, label: "History", colorClass: "text-blue-600 hover:text-blue-700" }
+const ACTION_ICONS: Record<BuiltInActionType, { icon: React.ReactNode; colorClass: string }> = {
+  view: { icon: <Eye size={18} />, colorClass: "text-gray-400 hover:text-blue-600" },
+  edit: { icon: <Edit size={18} />, colorClass: "text-gray-400 hover:text-blue-600" },
+  delete: { icon: <Trash2 size={18} />, colorClass: "text-red-500 hover:text-red-600" },
+  cancel: { icon: <X size={18} />, colorClass: "text-red-500 hover:text-red-600" },
+  deactivate: { icon: <Power size={18} />, colorClass: "text-red-500 hover:text-red-600" },
+  "adjust-stock": { icon: <PackagePlus size={18} />, colorClass: "text-green-600 hover:text-green-700" },
+  history: { icon: <History size={18} />, colorClass: "text-blue-600 hover:text-blue-700" },
 };
 
 export function TableActionColumn<T>({ actions, item }: TableActionColumnProps<T>) {
+  const t = useTranslations("common.table.actions");
+
   const visibleActions = useMemo(() => {
     return actions.filter(action => {
       if (typeof action.show === 'function') return action.show(item);
@@ -46,25 +49,26 @@ export function TableActionColumn<T>({ actions, item }: TableActionColumnProps<T
   if (visibleActions.length === 0) return null;
 
   const renderButton = (actionDef: TableAction<T>, key: number) => {
-    const builtin = BUILT_IN_ACTIONS[actionDef.action];
+    const iconDef = ACTION_ICONS[actionDef.action];
+    const label = t(actionDef.action as any);
 
     // Fallback if an unknown action passes through somehow
-    if (!builtin) return null;
+    if (!iconDef) return null;
 
     const button = (
       <button
         key={key}
-        className={`transition-colors cursor-pointer p-1. rounded-md ${builtin.colorClass}`}
-        data-tooltip-content={builtin.label}
+        className={`transition-colors cursor-pointer p-1. rounded-md ${iconDef.colorClass}`}
+        data-tooltip-content={label}
         data-tooltip-id="my-tooltip"
         disabled={actionDef.disabled}
         onClick={(e) => {
           e.stopPropagation();
           actionDef.onClick(item);
         }}
-        title={builtin.label}
+        title={label}
       >
-        {builtin.icon}
+        {iconDef.icon}
       </button>
     );
 
@@ -117,8 +121,9 @@ export function TableActionColumn<T>({ actions, item }: TableActionColumnProps<T
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-48 z-50 bg-white shadow-md border rounded-md">
           {dropdownActions.map((actionDef, index) => {
-            const builtin = BUILT_IN_ACTIONS[actionDef.action];
-            if (!builtin) return null;
+            const iconDef = ACTION_ICONS[actionDef.action];
+            const label = t(actionDef.action as any);
+            if (!iconDef) return null;
 
             const menuItem = (
               <DropdownMenuItem
@@ -128,11 +133,11 @@ export function TableActionColumn<T>({ actions, item }: TableActionColumnProps<T
                   actionDef.onClick(item);
                 }}
                 disabled={actionDef.disabled}
-                className={`cursor-pointer px-3 py-2 text-sm flex items-center gap-2 transition-colors ${builtin.colorClass}`}
+                className={`cursor-pointer px-3 py-2 text-sm flex items-center gap-2 transition-colors ${iconDef.colorClass}`}
               >
                 <div className="flex items-center gap-2">
-                  {builtin.icon}
-                  <span>{builtin.label}</span>
+                  {iconDef.icon}
+                  <span>{label}</span>
                 </div>
               </DropdownMenuItem>
             );

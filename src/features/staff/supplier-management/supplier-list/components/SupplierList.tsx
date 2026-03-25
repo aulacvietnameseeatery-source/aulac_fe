@@ -88,14 +88,16 @@ export default function SupplierList() {
       await listSupplierService.deleteSupplier(supplierToDelete.supplierId);
       toast.success(t("notifications.deleteSuccess"));
       refresh();
-      setDeleteModalOpen(false);
+      handleCloseDeleteModal();
     } catch (error: any) {
       console.error('Failed to delete supplier:', error);
-      const errorMessage = error.response?.data?.userMessage || t("notifications.deleteError");
+      const status = error.response?.status ?? error.status;
+      const errorMessage = status === 409
+        ? t("notifications.deleteHasDependencies")
+        : t("notifications.deleteError");
       toast.error(errorMessage);
     } finally {
       setIsDeleting(false);
-      setSupplierToDelete(null);
     }
   };
 
@@ -117,6 +119,8 @@ export default function SupplierList() {
           supplierName: formData.supplierName.trim(),
           phone: formData.phone.trim() || undefined,
           email: formData.email.trim() || undefined,
+          address: formData.address.trim() || undefined,
+          taxCode: formData.taxCode.trim() || undefined,
           ingredientIds: formData.ingredientIds,
         });
         toast.success(tAdd("notifications.createSuccess"));
@@ -125,6 +129,8 @@ export default function SupplierList() {
           supplierName: formData.supplierName.trim(),
           phone: formData.phone.trim() || undefined,
           email: formData.email.trim() || undefined,
+          address: formData.address.trim() || undefined,
+          taxCode: formData.taxCode.trim() || undefined,
           ingredientIds: formData.ingredientIds,
         });
         toast.success(tEdit("notifications.updateSuccess"));
@@ -134,8 +140,11 @@ export default function SupplierList() {
       handleCloseSupplierModal();
     } catch (error: any) {
       console.error('Failed to save supplier:', error);
-      const errorMessage = error.response?.data?.userMessage || 
-        (supplierModalMode === "add" ? tAdd("notifications.createError") : tEdit("notifications.updateError"));
+      const status = error.response?.status ?? error.status;
+      const isAdd = supplierModalMode === "add";
+      const errorMessage = status === 409
+        ? (isAdd ? tAdd("notifications.duplicateName") : tEdit("notifications.duplicateName"))
+        : (isAdd ? tAdd("notifications.createError") : tEdit("notifications.updateError"));
       toast.error(errorMessage);
     } finally {
       setIsSubmitting(false);
@@ -172,6 +181,19 @@ export default function SupplierList() {
       field: 'email',
       header: t("table.email"),
       sortable: false,
+      cellRender: ({ value }) => value || <span className="text-gray-400 italic">-</span>,
+    },
+    {
+      field: 'address',
+      header: t("table.address"),
+      sortable: false,
+      cellRender: ({ value }) => value || <span className="text-gray-400 italic">-</span>,
+    },
+    {
+      field: 'taxCode',
+      header: t("table.taxCode"),
+      sortable: false,
+      width: '150px',
       cellRender: ({ value }) => value || <span className="text-gray-400 italic">-</span>,
     },
   ], [paginationInfo.page, paginationInfo.pageSize, t]);

@@ -2,6 +2,8 @@ export interface UpdateSupplierRequest {
   supplierName: string;
   phone?: string;
   email?: string;
+  address?: string;
+  taxCode?: string;
   ingredientIds: number[];
 }
 
@@ -16,6 +18,8 @@ export interface Supplier {
   supplierName: string;
   phone?: string;
   email?: string;
+  address?: string;
+  taxCode?: string;
   ingredients: Ingredient[];
 }
 

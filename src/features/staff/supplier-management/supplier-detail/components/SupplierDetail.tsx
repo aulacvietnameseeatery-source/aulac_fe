@@ -9,6 +9,8 @@ import FormCard from './FormCard';
 import SupplierNameDisplay from './SupplierNameDisplay';
 import PhoneDisplay from './PhoneDisplay';
 import EmailDisplay from './EmailDisplay';
+import AddressDisplay from './AddressDisplay';
+import TaxCodeDisplay from './TaxCodeDisplay';
 import IngredientsDisplay from './IngredientsDisplay';
 import LoadingState from './LoadingState';
 import ErrorState from './ErrorState';
@@ -58,6 +60,10 @@ export function SupplierDetail() {
           <PhoneDisplay value={supplier.phone || ''} />
 
           <EmailDisplay value={supplier.email || ''} />
+
+          <AddressDisplay value={supplier.address || ''} />
+
+          <TaxCodeDisplay value={supplier.taxCode || ''} />
 
           <IngredientsDisplay ingredients={supplier.ingredients} />
         </FormCard>
