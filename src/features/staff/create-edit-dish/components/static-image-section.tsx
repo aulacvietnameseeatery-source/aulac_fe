@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { ImagePlus, X } from "lucide-react";
-import { BASE_URL } from "@/lib/http";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
@@ -102,7 +101,7 @@ export const StaticImageSection: React.FC<{
             className="group relative aspect-square rounded-lg border border-gray-200 overflow-hidden bg-gray-100"
           >
             <img
-              src={`${BASE_URL}${img.url}`}
+              src={`${img.url}`}
               alt="existing"
               className="w-full h-full object-cover"
             />
