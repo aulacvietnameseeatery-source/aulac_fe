@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { useDebounce } from 'use-debounce';
 import { reservationService } from "../services/reservation-service";
 import { ReservationDto, ReservationStatusDto, GetReservationsParams } from "../types/reservation-types";
+import { dateUtils } from "@/lib/date-utils";
 
 export const useReservationList = () => {
     const [reservations, setReservations] = useState<ReservationDto[]>([]);
@@ -51,7 +52,7 @@ export const useReservationList = () => {
                 pageIndex: pagination.pageIndex,
                 pageSize: pagination.pageSize,
                 search: debouncedSearch, // <-- DÙNG BIẾN DEBOUNCE ĐỂ GỌI API
-                date: filters.date ? format(filters.date, "yyyy-MM-dd") : undefined,
+                date: filters.date ? dateUtils.formatLocal(filters.date, "yyyy-MM-dd") : undefined,
                 statusId: filters.statusId || undefined,
             };
 

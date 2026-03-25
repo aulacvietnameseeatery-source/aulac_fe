@@ -16,10 +16,10 @@ const Toaster = ({ ...props }: ToasterProps) => {
             toastOptions={{
                 classNames: {
                     toast:
-                        "group toast font-serif tracking-wide group-[.toaster]:bg-white group-[.toaster]:text-[#1A2B4C] group-[.toaster]:border-[#C5A059]/30 group-[.toaster]:shadow-xl rounded-xl",
-                    description: "group-[.toast]:text-slate-500 font-serif",
+                        "group toast font-display tracking-wide group-[.toaster]:bg-white group-[.toaster]:text-[#1A2B4C] group-[.toaster]:border-[#C5A059]/30 group-[.toaster]:shadow-xl rounded-xl",
+                    description: "group-[.toast]:text-slate-500 font-display",
                     actionButton:
-                        "group-[.toast]:bg-[#C5A059] group-[.toast]:text-white font-serif",
+                        "group-[.toast]:bg-[#C5A059] group-[.toast]:text-white font-display",
                     cancelButton:
                         "group-[.toast]:bg-slate-100 group-[.toast]:text-slate-500",
                     error: "group-[.toaster]:bg-red-50 group-[.toaster]:text-red-700 group-[.toaster]:border-red-200",

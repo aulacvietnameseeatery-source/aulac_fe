@@ -167,7 +167,7 @@ export const DishSelectionModal = ({ isOpen, onClose, onSelect, targetLocale }: 
                                     <Button
                                         size="sm"
                                         variant="ghost"
-                                        className="opacity-0 group-hover:opacity-100 transition-opacity text-primary h-8 w-8 p-0"
+                                        className="opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity text-primary h-8 w-8 p-0"
                                         disabled={isSelecting === dish.dishId}
                                     >
                                         {isSelecting === dish.dishId ? (
@@ -176,6 +176,7 @@ export const DishSelectionModal = ({ isOpen, onClose, onSelect, targetLocale }: 
                                             <Check className="w-4 h-4" />
                                         )}
                                     </Button>
+
                                 </div>
                             ))}
                         </div>

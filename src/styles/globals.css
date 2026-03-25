@@ -55,8 +55,10 @@
   --radius-sm: calc(var(--radius) - 4px);
 
   /* Fonts */
-  --font-sans: "Inter", sans-serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Playfair Display", ui-serif, Georgia, serif;
   --font-display: "Playfair Display", serif;
+  --font-lexend: "Lexend", sans-serif;
 
   /* Animations (Nếu bạn muốn khai báo thêm ở đây) */
   --animate-accordion-down: accordion-down 0.2s ease-out;
@@ -205,7 +207,7 @@ body {
   padding: 0;
   background: #f4f5f8;
   overflow: hidden;
-  font-family: Inter;
+  font-family: var(--font-sans);
   display: flex;
   flex-direction: column;
   height: 100vh;

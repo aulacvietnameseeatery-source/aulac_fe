@@ -14,7 +14,20 @@ export const dateUtils = {
      */
     formatLocal: (utcString: string | Date, formatStr: string): string => {
         if (!utcString) return "";
-        const date = typeof utcString === "string" ? new Date(utcString) : utcString;
+        let date: Date;
+        if (typeof utcString === "string") {
+            // Nếu chuỗi không có Z và không có offset (+/-), tự động thêm Z để trình duyệt coi là UTC
+            const normalized = (utcString.toUpperCase().includes("Z") || utcString.includes("+"))
+                ? utcString
+                : `${utcString}Z`;
+            date = new Date(normalized);
+            // Fallback nếu việc thêm Z làm chuỗi không hợp lệ
+            if (isNaN(date.getTime())) {
+                date = new Date(utcString);
+            }
+        } else {
+            date = utcString;
+        }
         return format(date, formatStr);
     },
 
