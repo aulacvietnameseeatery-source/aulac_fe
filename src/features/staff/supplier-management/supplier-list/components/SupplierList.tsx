@@ -88,14 +88,16 @@ export default function SupplierList() {
       await listSupplierService.deleteSupplier(supplierToDelete.supplierId);
       toast.success(t("notifications.deleteSuccess"));
       refresh();
-      setDeleteModalOpen(false);
+      handleCloseDeleteModal();
     } catch (error: any) {
       console.error('Failed to delete supplier:', error);
-      const errorMessage = error.response?.data?.userMessage || t("notifications.deleteError");
+      const status = error.response?.status ?? error.status;
+      const errorMessage = status === 409
+        ? t("notifications.deleteHasDependencies")
+        : t("notifications.deleteError");
       toast.error(errorMessage);
     } finally {
       setIsDeleting(false);
-      setSupplierToDelete(null);
     }
   };
 
@@ -138,8 +140,11 @@ export default function SupplierList() {
       handleCloseSupplierModal();
     } catch (error: any) {
       console.error('Failed to save supplier:', error);
-      const errorMessage = error.response?.data?.userMessage || 
-        (supplierModalMode === "add" ? tAdd("notifications.createError") : tEdit("notifications.updateError"));
+      const status = error.response?.status ?? error.status;
+      const isAdd = supplierModalMode === "add";
+      const errorMessage = status === 409
+        ? (isAdd ? tAdd("notifications.duplicateName") : tEdit("notifications.duplicateName"))
+        : (isAdd ? tAdd("notifications.createError") : tEdit("notifications.updateError"));
       toast.error(errorMessage);
     } finally {
       setIsSubmitting(false);

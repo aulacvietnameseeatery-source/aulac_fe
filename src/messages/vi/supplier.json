@@ -23,7 +23,8 @@
       },
       "notifications": {
         "deleteSuccess": "Đã xóa nhà cung cấp thành công",
-        "deleteError": "Không thể xóa nhà cung cấp"
+        "deleteError": "Không thể xóa nhà cung cấp",
+        "deleteHasDependencies": "Không thể xóa nhà cung cấp này vì đang liên kết với nguyên vật liệu hoặc phiếu nhập kho."
       }
     },
     "Add": {
@@ -56,7 +57,8 @@
       },
       "notifications": {
         "createSuccess": "Đã thêm nhà cung cấp thành công",
-        "createError": "Không thể thêm nhà cung cấp"
+        "createError": "Không thể thêm nhà cung cấp",
+        "duplicateName": "Tên nhà cung cấp đã tồn tại. Vui lòng sử dụng tên khác."
       }
     },
     "Edit": {
@@ -93,7 +95,8 @@
       "notifications": {
         "updateSuccess": "Đã cập nhật nhà cung cấp thành công",
         "updateError": "Không thể cập nhật nhà cung cấp",
-        "loadError": "Không thể tải dữ liệu nhà cung cấp"
+        "loadError": "Không thể tải dữ liệu nhà cung cấp",
+        "duplicateName": "Tên nhà cung cấp đã tồn tại. Vui lòng sử dụng tên khác."
       }
     },
     "Detail": {

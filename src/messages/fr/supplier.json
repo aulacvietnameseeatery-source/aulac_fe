@@ -23,7 +23,8 @@
       },
       "notifications": {
         "deleteSuccess": "Fournisseur supprimé avec succès",
-        "deleteError": "Échec de la suppression du fournisseur"
+        "deleteError": "Échec de la suppression du fournisseur",
+        "deleteHasDependencies": "Impossible de supprimer ce fournisseur car il est lié à des ingrédients ou des transactions de stock."
       }
     },
     "Add": {
@@ -56,7 +57,8 @@
       },
       "notifications": {
         "createSuccess": "Fournisseur ajouté avec succès",
-        "createError": "Échec de l'ajout du fournisseur"
+        "createError": "Échec de l'ajout du fournisseur",
+        "duplicateName": "Le nom du fournisseur existe déjà. Veuillez utiliser un autre nom."
       }
     },
     "Edit": {
@@ -93,7 +95,8 @@
       "notifications": {
         "updateSuccess": "Fournisseur mis à jour avec succès",
         "updateError": "Échec de la mise à jour du fournisseur",
-        "loadError": "Échec du chargement des données du fournisseur"
+        "loadError": "Échec du chargement des données du fournisseur",
+        "duplicateName": "Le nom du fournisseur existe déjà. Veuillez utiliser un autre nom."
       }
     },
     "Detail": {

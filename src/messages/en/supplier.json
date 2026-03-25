@@ -23,7 +23,8 @@
       },
       "notifications": {
         "deleteSuccess": "Supplier deleted successfully",
-        "deleteError": "Failed to delete supplier"
+        "deleteError": "Failed to delete supplier",
+        "deleteHasDependencies": "Cannot delete this supplier because it is linked to ingredients or inventory transactions."
       }
     },
     "Add": {
@@ -56,7 +57,8 @@
       },
       "notifications": {
         "createSuccess": "Supplier added successfully",
-        "createError": "Failed to add supplier"
+        "createError": "Failed to add supplier",
+        "duplicateName": "Supplier name already exists. Please use a different name."
       }
     },
     "Edit": {
@@ -93,7 +95,8 @@
       "notifications": {
         "updateSuccess": "Supplier updated successfully",
         "updateError": "Failed to update supplier",
-        "loadError": "Failed to load supplier data"
+        "loadError": "Failed to load supplier data",
+        "duplicateName": "Supplier name already exists. Please use a different name."
       }
     },
     "Detail": {
