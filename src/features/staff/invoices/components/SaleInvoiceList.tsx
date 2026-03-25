@@ -371,14 +371,15 @@ function SaleInvoiceListContent() {
           </div>
         )}
         renderActionColumn={(item) => (
-          <Button
-            variant="ghost"
-            size="sm"
+          <button
+            className="text-gray-400 hover:text-blue-600 transition-colors cursor-pointer p-1.5 rounded-md"
+            data-tooltip-content={t("actions.viewDetails")}
+            data-tooltip-id="my-tooltip"
             onClick={() => handleViewDetails(item)}
-            className="h-8 px-2"
+            title={t("actions.viewDetails")}
           >
             <Eye className="h-4 w-4" />
-          </Button>
+          </button>
         )}
       />
     </div>

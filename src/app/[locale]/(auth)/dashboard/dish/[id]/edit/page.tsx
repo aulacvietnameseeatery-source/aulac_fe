@@ -18,7 +18,7 @@ export default function EditDishPage() {
         mode="edit"
         dishId={dishId}
         onSuccess={() => {
-          
+          router.push(`/dashboard/dish`);
         }}
       />
     </div>

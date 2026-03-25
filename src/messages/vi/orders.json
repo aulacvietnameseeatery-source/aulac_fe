@@ -415,6 +415,9 @@
           "tipAmount": "Tiền boa",
           "paymentMethod": "Phương thức thanh toán",
           "orderStatus": "Trạng thái đơn"
+        },
+        "actions": {
+          "viewDetails": "Xem chi tiết"
         }
       }
     },

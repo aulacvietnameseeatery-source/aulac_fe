@@ -12,28 +12,13 @@ import { ALInput } from '@/components/ui/al-input';
 import { useStoreProfileForm } from '../hooks/useStoreProfileForm';
 import { mapStoreSettingsToFormValues, mapFormValuesToStoreSettings, LOCALES, SupportedLocale, StoreProfileFormValues } from '../types/schema';
 import { useUpdateStoreSettingsMutation, useTranslateSettingsMutation } from '../hooks/useSystemSettingsMutation';
+import { normalizeMediaUrl } from '@/lib/normalize-media-url';
+
 
 const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
 const IMAGE_ACCEPT = '.jpg,.jpeg,.png,.gif,.webp,image/jpeg,image/png,image/gif,image/webp';
 
-const normalizeMediaUrl = (value: string): string => {
-    if (!value) return '';
-    if (/^(https?:|blob:|data:)/i.test(value)) return value;
 
-    const base = BASE_URL.replace(/\/+$/, '');
-    const normalized = value.replace(/\\/g, '/').trim();
-
-    if (normalized.startsWith('/uploads/')) {
-        return `${base}${normalized}`;
-    }
-
-    if (normalized.startsWith('uploads/')) {
-        return `${base}/${normalized}`;
-    }
-
-    const relative = normalized.replace(/^\/+/, '');
-    return `${base}/uploads/${relative}`;
-};
 
 export const StoreProfileForm = () => {
     const t = useTranslations('settings');
@@ -188,101 +173,97 @@ export const StoreProfileForm = () => {
     }
 
     return (
-        <form onSubmit={handleSubmit(onSubmit, onInvalid)} className="flex flex-col gap-6 w-full pb-12">
+        <form onSubmit={handleSubmit(onSubmit, onInvalid)} className="flex flex-col gap-6 w-full pb-12 relative">
             {/* --- HEADER ACTIONS --- */}
-            <ALCard variant="glass" elevation="sm" padding="md" radius="xl" className="flex flex-wrap items-center justify-between gap-4 border-amber-200/30">
-                <div className="flex items-center gap-6">
-                    <div className="flex bg-gray-100 p-1 rounded-lg border border-gray-200">
-                        {LOCALES.map((loc) => (
-                            <Button
-                                key={loc}
-                                type="button"
-                                variant={activeLocale === loc ? "default" : "ghost"}
-                                size="sm"
-                                className={cn(
-                                    "px-4 py-1.5 h-8 text-xs font-bold uppercase transition-all duration-200 rounded-md",
-                                    activeLocale === loc
-                                        ? "bg-white shadow-sm text-blue-600 hover:bg-white hover:text-blue-600"
-                                        : "text-gray-500 hover:text-blue-600 hover:bg-white/50"
-                                )}
-                                onClick={() => setActiveLocale(loc)}
-                            >
-                                {loc}
-                            </Button>
-                        ))}
+            <div className="py-4 -mx-4 px-4">
+                <ALCard variant="glass" elevation="sm" padding="sm" radius="xl" className="flex items-center justify-between gap-4 border-amber-200/30 shadow-md">
+                    <div className="flex items-center gap-2 sm:gap-4">
+                        <div className="flex bg-gray-100/90 p-1 rounded-xl border border-gray-200 shadow-inner">
+                            {LOCALES.map((loc) => (
+                                <Button
+                                    key={loc}
+                                    type="button"
+                                    variant={activeLocale === loc ? "default" : "ghost"}
+                                    size="sm"
+                                    className={cn(
+                                        "px-3 sm:px-5 py-1.5 h-8 text-[10px] sm:text-xs font-bold uppercase transition-all duration-300 rounded-lg",
+                                        activeLocale === loc
+                                            ? "bg-white shadow-md text-[#1A3A52] hover:bg-white/50"
+                                            : "text-gray-500 hover:text-[#1A3A52] hover:bg-white/40"
+                                    )}
+                                    onClick={() => setActiveLocale(loc)}
+                                >
+                                    {loc}
+                                </Button>
+                            ))}
+                        </div>
                     </div>
-                </div>
 
-                <div className="flex items-center gap-3">
-                    <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        className="h-9 gap-2 text-purple-600 border-purple-200 hover:bg-purple-50 hover:border-purple-300 font-semibold px-4 transition-all"
-                        onClick={handleAutoTranslate}
-                        isLoading={translateMutation.isPending}
-                    >
-                        <Languages className="w-4 h-4" />
-                        <span className="hidden sm:inline">{t('Common.autoTranslate')}</span>
-                    </Button>
-                    <Button
-                        type="submit"
-                        size="sm"
-                        className="h-9 gap-2 bg-[#1E3C52] hover:bg-[#12283A] text-white shadow-lg shadow-blue-900/20 font-semibold px-4 transition-all"
-                        isLoading={updateMutation.isPending}
-                    >
-                        <Save className="w-4 h-4" />
-                        {t("Common.saveChanges")}
-                    </Button>
-                </div>
-            </ALCard>
+                    <div className="flex items-center gap-3">
+                        <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            className="h-9 gap-2 text-purple-600 border-purple-200 hover:bg-purple-50 hover:border-purple-300 font-semibold px-4 transition-all"
+                            onClick={handleAutoTranslate}
+                            isLoading={translateMutation.isPending}
+                        >
+                            <Languages className="w-4 h-4" />
+                            <span className="hidden sm:inline">{t('Common.autoTranslate')}</span>
+                        </Button>
+                        <Button
+                            type="submit"
+                            size="sm"
+                            className="h-9 gap-2 bg-[#1E3C52] hover:bg-[#12283A] text-white shadow-lg shadow-blue-900/20 font-semibold px-4 transition-all"
+                            isLoading={updateMutation.isPending}
+                        >
+                            <Save className="w-4 h-4" />
+                            {t("Common.saveChanges")}
+                        </Button>
+                    </div>
+                </ALCard>
+            </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 pb-6">
                 {/* --- LEFT COLUMN --- */}
                 <div className="space-y-8">
                     {/* --- IDENTITY SECTION --- */}
                     <ALCard variant="soft" padding="none" radius="2xl" elevation="sm" className="border-amber-200/50 shadow-sm overflow-hidden" animation="slide-up">
-                        <div className="p-6 md:p-8 border-b border-[#D5BA98]/20">
-                            <h2 className="text-xl font-bold text-gray-900 tracking-tight mb-2">
-                                {t("StoreProfile.sections.identity.title")}
-                            </h2>
-                        </div>
-
                         <div className="p-6 md:p-8 ">
                             <div className="space-y-3">
-                                        <div className="flex flex-wrap gap-3">
-                                            {logoUrlValue && (
-                                                <Button
-                                                    type="button"
-                                                    variant="outline"
-                                                    size="sm"
-                                                    className="h-9 border-red-100 text-red-500 hover:bg-red-50 font-[Inter] gap-2"
-                                                    onClick={() => setValue('logoUrl', '', { shouldDirty: true })}
-                                                >
-                                                    <Trash2 className="w-4 h-4" />
-                                                    {t("Common.remove")}
-                                                </Button>
-                                            )}
-                                            {getFullUrl() && (
-                                                <Button
-                                                    type="button"
-                                                    variant="outline"
-                                                    size="sm"
-                                                    className="h-9 border-blue-100 text-blue-600 hover:bg-blue-50 font-[Inter] gap-2"
-                                                    onClick={() => setPreviewData({ url: getFullUrl(), title: "Store Logo", type: 'image' })}
-                                                >
-                                                    <Maximize2 className="w-4 h-4" />
-                                                    {t("Common.preview")}
-                                                </Button>
-                                            )}
-                                        </div>
-                                    <input
-                                        type="file"
-                                        ref={logoInputRef}
-                                        className="hidden"
-                                        accept={IMAGE_ACCEPT}
-                                        onChange={handleFileChange}
-                                    />
+                                <div className="flex flex-wrap gap-3">
+                                    {logoUrlValue && (
+                                        <Button
+                                            type="button"
+                                            variant="outline"
+                                            size="sm"
+                                            className="h-9 border-red-100 text-red-500 hover:bg-red-50 font-[Inter] gap-2"
+                                            onClick={() => setValue('logoUrl', '', { shouldDirty: true })}
+                                        >
+                                            <Trash2 className="w-4 h-4" />
+                                            {t("Common.remove")}
+                                        </Button>
+                                    )}
+                                    {getFullUrl() && (
+                                        <Button
+                                            type="button"
+                                            variant="outline"
+                                            size="sm"
+                                            className="h-9 border-blue-100 text-blue-600 hover:bg-blue-50 font-[Inter] gap-2"
+                                            onClick={() => setPreviewData({ url: getFullUrl(), title: "Store Logo", type: 'image' })}
+                                        >
+                                            <Maximize2 className="w-4 h-4" />
+                                            {t("Common.preview")}
+                                        </Button>
+                                    )}
+                                </div>
+                                <input
+                                    type="file"
+                                    ref={logoInputRef}
+                                    className="hidden"
+                                    accept={IMAGE_ACCEPT}
+                                    onChange={handleFileChange}
+                                />
                             </div>
 
 
@@ -307,11 +288,6 @@ export const StoreProfileForm = () => {
 
                     {/* --- SOCIAL FOOTPRINT SECTION --- */}
                     <ALCard variant="soft" padding="none" radius="2xl" elevation="sm" className="border-amber-200/50 shadow-sm overflow-hidden" animation="fade">
-                        <div className="p-6 md:p-8 border-b border-[#D5BA98]/20">
-                            <h2 className="text-xl font-bold text-gray-900 tracking-tight mb-2">
-                                {t("StoreProfile.sections.social.title")}
-                            </h2>
-                        </div>
                         <div className="p-6 md:p-8 space-y-6">
                             <ALInput
                                 title={t("Common.facebook") || "Facebook Profile"}
@@ -344,13 +320,6 @@ export const StoreProfileForm = () => {
                 {/* --- RIGHT COLUMN --- */}
                 <div className="space-y-8 h-full">
                     <ALCard variant="soft" padding="none" radius="2xl" elevation="sm" className="border-amber-200/50 shadow-sm flex flex-col h-full" animation="slide-up">
-                        <div className="p-6 md:p-8 border-b border-[#D5BA98]/20">
-                            <h2 className="text-xl font-bold text-gray-900 tracking-tight mb-2">
-                                {t("StoreProfile.sections.contact.title")}
-                            </h2>
-
-                        </div>
-
                         <div className="p-6 md:p-8 space-y-8 flex-1">
                             <ALInput
                                 title={t("StoreProfile.street")}
@@ -377,7 +346,7 @@ export const StoreProfileForm = () => {
                                 />
                             </div>
 
-                            <div className="h-[1px] w-full bg-[#D5BA98]/20" />
+
 
                             <div className="grid grid-cols-1 gap-8">
                                 <ALInput
@@ -402,17 +371,7 @@ export const StoreProfileForm = () => {
                 </div>
             </div>
 
-            {/* Bottom Save Button (Mobile) */}
-            <div className="pb-6 lg:hidden">
-                <Button
-                    type="submit"
-                    className="w-full bg-[#1A3A52] hover:bg-[#1A3A52]/90 text-white shadow-lg h-12 font-[Inter] gap-2"
-                    isLoading={updateMutation.isPending}
-                >
-                    <Save className="w-4 h-4" />
-                    {t("Common.saveChanges") || "Save All Changes"}
-                </Button>
-            </div>
+
 
             {previewData && (
                 <MediaPreviewModal

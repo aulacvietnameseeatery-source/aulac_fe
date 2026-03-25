@@ -1,3 +1,4 @@
+"use client";
 import { useTranslations } from "next-intl";
 import "../styles/index.css";
 import { useStoreSettings } from "@/hooks/use-store-settings";

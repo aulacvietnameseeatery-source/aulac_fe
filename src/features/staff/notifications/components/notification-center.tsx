@@ -11,6 +11,7 @@ import { NotificationItem } from "./notification-item";
 import { NotificationPreferences } from "./notification-preferences";
 import { TYPE_CONFIG, DEFAULT_TYPE_CONFIG } from "../constants/notification.constants";
 import type { NotificationQueryParams } from "../types/notification.types";
+import { ReservationDetailModal } from "@/features/staff/reservation-management/components/reservation-detail-modal";
 
 interface NotificationCenterProps {
   open: boolean;
@@ -57,6 +58,8 @@ export function NotificationCenter({ open, onClose }: NotificationCenterProps) {
     acknowledge,
     setItems,
     appendItems,
+    detailReservationId,
+    setDetailReservationId,
   } = useNotificationStore();
 
   const categoryTabs = useMemo(() => {
@@ -218,10 +221,18 @@ export function NotificationCenter({ open, onClose }: NotificationCenterProps) {
   // Navigate — actionUrl handling (prepend locale for Next.js routing)
   const handleNavigate = useCallback(
     (url: string) => {
+      // Intercept reservation detail URL: /dashboard/reservations/123 or variants
+      const reservationMatch = url.match(/(?:\/dashboard)?\/reservations\/(\d+)/i);
+      if (reservationMatch) {
+        setDetailReservationId(Number(reservationMatch[1]));
+        onClose();
+        return;
+      }
+
       onClose();
       router.push(`/${locale}${url}`);
     },
-    [onClose, router, locale]
+    [onClose, router, locale, setDetailReservationId]
   );
 
   // Tải lần đầu khi mở
@@ -254,171 +265,181 @@ export function NotificationCenter({ open, onClose }: NotificationCenterProps) {
     [open]
   );
 
-  if (!open) return null;
+  const isOpen = open;
 
   return (
     <>
       {/* Overlay */}
-      <div
-        className="fixed inset-0 z-40"
-        onClick={onClose}
-      />
+      {isOpen && (
+        <div
+          className="fixed inset-0 z-40"
+          onClick={onClose}
+        />
+      )}
 
       {/* Panel — Dark navy theme matching sidebar aesthetic */}
-      <div
-        ref={panelRef}
-        className={`
-          fixed flex min-h-0 flex-col overflow-hidden z-50 animate-in slide-in-from-top-2 fade-in duration-300
-          bg-[#1A3A51] border border-white/10 rounded-2xl shadow-2xl
-          right-4 top-14 w-105 h-[min(calc(100vh-72px),720px)]
-        `}
-      >
-        {showPreferences ? (
-          <NotificationPreferences onBack={() => setShowPreferences(false)} />
-        ) : (
-          <>
-            {/* Header */}
-            <div className="flex items-center justify-between p-4 border-b border-white/5 shrink-0">
-              <div className="flex items-center gap-2">
-                <h3 className="text-white font-semibold text-base">{t("title")}</h3>
-                {unreadCount > 0 && (
-                  <span className="px-1.5 py-0.5 text-[10px] font-semibold text-white bg-red-500 rounded-full">
-                    {unreadCount}
-                  </span>
-                )}
-                {/* Connection indicator */}
-                <span
-                  className={cn(
-                    "w-2 h-2 rounded-full",
-                    connected ? "bg-emerald-500" : "bg-red-400"
+      {isOpen && (
+        <div
+          ref={panelRef}
+          className={`
+            fixed flex min-h-0 flex-col overflow-hidden z-50 animate-in slide-in-from-top-2 fade-in duration-300
+            bg-[#1A3A51] border border-white/10 rounded-2xl shadow-2xl
+            right-4 top-14 w-105 h-[min(calc(100vh-72px),720px)]
+          `}
+        >
+          {showPreferences ? (
+            <NotificationPreferences onBack={() => setShowPreferences(false)} />
+          ) : (
+            <>
+              {/* Header */}
+              <div className="flex items-center justify-between p-4 border-b border-white/5 shrink-0">
+                <div className="flex items-center gap-2">
+                  <h3 className="text-white font-semibold text-base">{t("title")}</h3>
+                  {unreadCount > 0 && (
+                    <span className="px-1.5 py-0.5 text-[10px] font-semibold text-white bg-red-500 rounded-full">
+                      {unreadCount}
+                    </span>
                   )}
-                  title={connected ? t("connected") : t("disconnected")}
-                />
-              </div>
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={handleMarkAllRead}
-                  disabled={unreadCount === 0}
-                  className="text-[#FFAB2D] text-xs font-medium hover:underline disabled:opacity-30 disabled:cursor-not-allowed disabled:no-underline"
-                  title={t("markAllRead")}
-                >
-                  {t("markAllReadShort")}
-                </button>
-                <button
-                  onClick={() => setShowPreferences(true)}
-                  className="p-1 text-white/40 hover:text-white transition-colors"
-                  title={t("preferences.title")}
-                >
-                  <Settings2 className="w-4 h-4" />
-                </button>
-                <button
-                  onClick={onClose}
-                  className="p-1 text-white/40 hover:text-white transition-colors"
-                >
-                  <X className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
-
-            {/* Tabs */}
-            <div className="p-2 bg-black/10 flex items-center gap-1 shrink-0">
-              <button
-                onClick={() => setTabWindowStart((prev) => Math.max(0, prev - 1))}
-                disabled={tabWindowStart === 0}
-                className="p-1.5 rounded-md text-white/50 hover:text-white hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed"
-                aria-label="Previous tabs"
-              >
-                <ChevronLeft className="w-4 h-4" />
-              </button>
-
-              <div className="flex-1 min-w-0 overflow-hidden">
-                <div className="flex gap-1">
-                  {visibleTabs.map(({ key, label, count }) => (
-                    <button
-                      key={key}
-                      onClick={() => setTab(key)}
-                      className={cn(
-                        "px-3 py-1.5 rounded-lg text-xs font-medium transition-all whitespace-nowrap",
-                        tab === key
-                          ? "bg-white text-[#1A3A51] shadow-sm"
-                          : "text-white/60 hover:text-white hover:bg-white/5"
-                      )}
-                    >
-                      {label}
-                      {count > 0 && key !== "all" && (
-                        <span className="ml-1.5 px-1.5 py-0.5 bg-red-500 text-white text-[10px] rounded-full">
-                          {count}
-                        </span>
-                      )}
-                    </button>
-                  ))}
+                  {/* Connection indicator */}
+                  <span
+                    className={cn(
+                      "w-2 h-2 rounded-full",
+                      connected ? "bg-emerald-500" : "bg-red-400"
+                    )}
+                    title={connected ? t("connected") : t("disconnected")}
+                  />
+                </div>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={handleMarkAllRead}
+                    disabled={unreadCount === 0}
+                    className="text-[#FFAB2D] text-xs font-medium hover:underline disabled:opacity-30 disabled:cursor-not-allowed disabled:no-underline"
+                    title={t("markAllRead")}
+                  >
+                    {t("markAllReadShort")}
+                  </button>
+                  <button
+                    onClick={() => setShowPreferences(true)}
+                    className="p-1 text-white/40 hover:text-white transition-colors"
+                    title={t("preferences.title")}
+                  >
+                    <Settings2 className="w-4 h-4" />
+                  </button>
+                  <button
+                    onClick={onClose}
+                    className="p-1 text-white/40 hover:text-white transition-colors"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
                 </div>
               </div>
 
-              <button
-                onClick={() => setTabWindowStart((prev) => Math.min(maxTabWindowStart, prev + 1))}
-                disabled={tabWindowStart >= maxTabWindowStart}
-                className="p-1.5 rounded-md text-white/50 hover:text-white hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed"
-                aria-label="Next tabs"
-              >
-                <ChevronRight className="w-4 h-4" />
-              </button>
-            </div>
+              {/* Tabs */}
+              <div className="p-2 bg-black/10 flex items-center gap-1 shrink-0">
+                <button
+                  onClick={() => setTabWindowStart((prev) => Math.max(0, prev - 1))}
+                  disabled={tabWindowStart === 0}
+                  className="p-1.5 rounded-md text-white/50 hover:text-white hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed"
+                  aria-label="Previous tabs"
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                </button>
 
-            {/* List — scrollable */}
-            <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain p-1">
-              {displayItems.length === 0 && !loading ? (
-                <div className="flex flex-col items-center justify-center py-12 text-white/20">
-                  <Inbox className="w-10 h-10 mb-2" />
-                  <p className="text-sm">
-                    {tab === "unread" ? t("emptyUnread") : t("empty")}
-                  </p>
-                </div>
-              ) : (
-                <div className="space-y-3 p-3">
-                  {groupedDisplayItems.map(({ category, notifications }) => (
-                    <div key={category}>
-                      <h6 className="text-white/40 text-[11px] font-bold uppercase tracking-wider mb-3">
-                        {t(`categories.${category}` as Parameters<typeof t>[0])}
-                      </h6>
-                      <div className="space-y-1">
-                        {notifications.map((notification) => (
-                          <NotificationItem
-                            key={notification.id}
-                            notification={notification}
-                            onRead={handleRead}
-                            onAcknowledge={handleAcknowledge}
-                            onNavigate={handleNavigate}
-                          />
-                        ))}
-                      </div>
-                    </div>
-                  ))}
-
-                  {/* Load more */}
-                  {hasMore && displayItems.length > 0 && (
-                    <div className="py-3 text-center">
+                <div className="flex-1 min-w-0 overflow-hidden">
+                  <div className="flex gap-1">
+                    {visibleTabs.map(({ key, label, count }) => (
                       <button
-                        onClick={loadMore}
-                        disabled={loading}
-                        className="px-4 py-1.5 text-xs text-white/50 hover:text-white bg-white/5 hover:bg-white/10 rounded-full transition-colors disabled:opacity-50"
+                        key={key}
+                        onClick={() => setTab(key)}
+                        className={cn(
+                          "px-3 py-1.5 rounded-lg text-xs font-medium transition-all whitespace-nowrap",
+                          tab === key
+                            ? "bg-white text-[#1A3A51] shadow-sm"
+                            : "text-white/60 hover:text-white hover:bg-white/5"
+                        )}
                       >
-                        {loading ? t("loading") : t("loadMore")}
+                        {label}
+                        {count > 0 && key !== "all" && (
+                          <span className="ml-1.5 px-1.5 py-0.5 bg-red-500 text-white text-[10px] rounded-full">
+                            {count}
+                          </span>
+                        )}
                       </button>
-                    </div>
-                  )}
+                    ))}
+                  </div>
                 </div>
-              )}
 
-              {loading && displayItems.length === 0 && (
-                <div className="flex items-center justify-center py-12">
-                  <div className="h-6 w-6 animate-spin rounded-full border-2 border-white border-r-transparent" />
-                </div>
-              )}
-            </div>
-          </>
-        )}
-      </div>
+                <button
+                  onClick={() => setTabWindowStart((prev) => Math.min(maxTabWindowStart, prev + 1))}
+                  disabled={tabWindowStart >= maxTabWindowStart}
+                  className="p-1.5 rounded-md text-white/50 hover:text-white hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed"
+                  aria-label="Next tabs"
+                >
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+              </div>
+
+              {/* List — scrollable */}
+              <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain p-1">
+                {displayItems.length === 0 && !loading ? (
+                  <div className="flex flex-col items-center justify-center py-12 text-white/20">
+                    <Inbox className="w-10 h-10 mb-2" />
+                    <p className="text-sm">
+                      {tab === "unread" ? t("emptyUnread") : t("empty")}
+                    </p>
+                  </div>
+                ) : (
+                  <div className="space-y-3 p-3">
+                    {groupedDisplayItems.map(({ category, notifications }) => (
+                      <div key={category}>
+                        <h6 className="text-white/40 text-[11px] font-bold uppercase tracking-wider mb-3">
+                          {t(`categories.${category}` as Parameters<typeof t>[0])}
+                        </h6>
+                        <div className="space-y-1">
+                          {notifications.map((notification) => (
+                            <NotificationItem
+                              key={notification.id}
+                              notification={notification}
+                              onRead={handleRead}
+                              onAcknowledge={handleAcknowledge}
+                              onNavigate={handleNavigate}
+                            />
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+
+                    {/* Load more */}
+                    {hasMore && displayItems.length > 0 && (
+                      <div className="py-3 text-center">
+                        <button
+                          onClick={loadMore}
+                          disabled={loading}
+                          className="px-4 py-1.5 text-xs text-white/50 hover:text-white bg-white/5 hover:bg-white/10 rounded-full transition-colors disabled:opacity-50"
+                        >
+                          {loading ? t("loading") : t("loadMore")}
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {loading && displayItems.length === 0 && (
+                  <div className="flex items-center justify-center py-12">
+                    <div className="h-6 w-6 animate-spin rounded-full border-2 border-white border-r-transparent" />
+                  </div>
+                )}
+              </div>
+            </>
+          )}
+        </div>
+      )}
+
+      <ReservationDetailModal
+        reservationId={detailReservationId}
+        open={!!detailReservationId}
+        onClose={() => setDetailReservationId(null)}
+      />
     </>
   );
 }
