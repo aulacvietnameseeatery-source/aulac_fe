@@ -10,7 +10,8 @@ import {
   NotificationToastRenderer,
 } from "@/features/staff/notifications";
 
-import { inter, playfair, lexend } from "@/lib/fonts";
+
+
 
 import "@/styles/globals.css";
 import { NotificationToaster } from "@/features/staff/notifications";
@@ -61,7 +62,7 @@ export default async function LocaleLayout(
 
   return (
     <html lang={locale}>
-      <body className={`${inter.variable} ${playfair.variable} ${lexend.variable} antialiased`}>
+      <body className="antialiased">
         <QueryProvider>
           <AuthProvider>
             <NotificationProvider>
