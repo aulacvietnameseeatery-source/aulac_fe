@@ -2,7 +2,6 @@ import React, { useState, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
 import { Search } from 'lucide-react';
 import { DishDto, CategoryDto } from '../types/create-order.types';
-import { BASE_URL } from "@/lib/http";
 import { useDraggableScroll } from '@/hooks/use-draggable-scroll';
 
 interface Props {
@@ -83,7 +82,7 @@ export const MenuCatalog: React.FC<Props> = ({ isReadOnly, title, subtitle, dish
               >
                 <div className="relative h-28 overflow-hidden bg-[#D5BA98]/10 flex items-center justify-center">
                   <img
-                    src={`${BASE_URL}${imgSrc}`}
+                    src={`${imgSrc}`}
                     alt={getLocalizedDishName(dish)}
                     className="w-full h-full object-cover"
                     loading="lazy"

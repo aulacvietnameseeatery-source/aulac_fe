@@ -5,7 +5,6 @@ import { toast } from "sonner";
 import { ExistingMedia } from "../hooks/useDishEditMedia";
 import { Button } from "@/components/ui/button";
 import { X, UploadCloud } from "lucide-react";
-import { BASE_URL } from "@/lib/http";
 import { useTranslations } from "next-intl";
 
 type VideoSectionProps = {
@@ -85,7 +84,7 @@ export function VideoSection({ videoFile, existingVideo, onChange, onRemoveExist
   };
 
   const hasVideo = !!videoFile || !!existingVideo;
-  const videoSrc = videoFile ? previewUrl : (existingVideo ? `${BASE_URL}${existingVideo.url}` : undefined);
+  const videoSrc = videoFile ? previewUrl : (existingVideo ? `${existingVideo.url}` : undefined);
 
   return (
     <div className="w-full">

@@ -14,17 +14,9 @@ import { ALInput } from "@/components/ui/al-input";
 import { useIntroductionSettingsForm } from "../hooks/useIntroductionSettingsForm";
 import { mapIntroSettingsToFormValues, mapFormValuesToIntroSettings, LOCALES, SupportedLocale, IntroFormValues } from "../types/schema";
 import { useUpdateStoreSettingsMutation, useTranslateSettingsMutation } from "../hooks/useSystemSettingsMutation";
+import { normalizeMediaUrl } from "@/lib/normalize-media-url";
 
-const Textarea = React.forwardRef<HTMLTextAreaElement, React.TextareaHTMLAttributes<HTMLTextAreaElement>>(
-    (props, ref) => (
-        <textarea
-            ref={ref}
-            className="flex min-h-[80px] w-full rounded-xl border border-amber-200/40 bg-white/60 px-3 py-2 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#1A3A52] focus-visible:border-[#1A3A52] disabled:cursor-not-allowed disabled:opacity-50"
-            {...props}
-        />
-    )
-);
-Textarea.displayName = "Textarea";
+
 
 const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
 const IMAGE_ACCEPT = '.jpg,.jpeg,.png,.gif,.webp,image/jpeg,image/png,image/gif,image/webp';
@@ -33,24 +25,7 @@ const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
 const MAX_VIDEO_SIZE = 50 * 1024 * 1024;
 const MAX_VIDEO_DURATION_SECONDS = 30;
 
-const normalizeMediaUrl = (value: string): string => {
-    if (!value) return '';
-    if (/^(https?:|blob:|data:)/i.test(value)) return value;
 
-    const base = BASE_URL.replace(/\/+$/, '');
-    const normalized = value.replace(/\\/g, '/').trim();
-
-    if (normalized.startsWith('/uploads/')) {
-        return `${base}${normalized}`;
-    }
-
-    if (normalized.startsWith('uploads/')) {
-        return `${base}/${normalized}`;
-    }
-
-    const relative = normalized.replace(/^\/+/, '');
-    return `${base}/uploads/${relative}`;
-};
 
 export const IntroductionSettingsForm = () => {
     const t = useTranslations("settings");
@@ -297,285 +272,360 @@ export const IntroductionSettingsForm = () => {
     }
 
     return (
-        <form onSubmit={handleSubmit(onSubmit, onInvalid)} className="flex flex-col gap-6 w-full pb-12">
-            {/* --- HEADER ACTIONS --- */}
-            <ALCard variant="glass" elevation="sm" padding="md" radius="xl" className="flex flex-wrap items-center justify-between gap-4 border-amber-200/30">
-                <div className="flex items-center gap-6">
-                    <div className="flex bg-gray-100 p-1 rounded-lg border border-gray-200">
-                        {LOCALES.map((loc) => (
-                            <Button
-                                key={loc}
-                                type="button"
-                                variant={activeLocale === loc ? "default" : "ghost"}
-                                size="sm"
-                                className={cn(
-                                    "px-4 py-1.5 h-8 text-xs font-bold uppercase transition-all duration-200 rounded-md",
-                                    activeLocale === loc
-                                        ? "bg-white shadow-sm text-blue-600 hover:bg-white hover:text-blue-600"
-                                        : "text-gray-500 hover:text-blue-600 hover:bg-white/50"
-                                )}
-                                onClick={() => setActiveLocale(loc)}
-                            >
-                                {loc}
-                            </Button>
-                        ))}
-                    </div>
-                </div>
-
-                <div className="flex items-center gap-3">
-                    <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        className="h-9 gap-2 text-purple-600 border-purple-200 hover:bg-purple-50 hover:border-purple-300 font-semibold px-4 transition-all"
-                        onClick={handleAutoTranslate}
-                        isLoading={translateMutation.isPending}
-                    >
-                        <Languages className="w-4 h-4" />
-                        <span className="hidden sm:inline">{t('Common.autoTranslate')}</span>
-                    </Button>
-                    <Button
-                        type="submit"
-                        size="sm"
-                        className="h-9 gap-2 bg-[#1E3C52] hover:bg-[#12283A] text-white shadow-lg shadow-blue-900/20 font-semibold px-4 transition-all"
-                        isLoading={updateMutation.isPending}
-                    >
-                        <Save className="w-4 h-4" />
-                        {t("Common.saveChanges")}
-                    </Button>
-                </div>
-            </ALCard>
-
-            <div className="grid grid-cols-1 gap-8 pb-6">
-
-                {/* HERO SECTION */}
-                <ALCard variant="soft" padding="none" radius="2xl" elevation="sm" className="border-amber-200/50 shadow-sm overflow-hidden" animation="slide-up">
-                    <div className="p-6 md:p-8 border-b border-[#D5BA98]/20 bg-[#FDFBF9]">
-                        <h2 className="text-xl font-bold text-[#1A3A52] tracking-tight mb-2">{t('Introduction.heroSection')}</h2>
-                    </div>
-                    <div className="p-6 md:p-8 space-y-6">
-                        <ALInput title={t('Introduction.heroTitle')} wrapperClassName="bg-white/60" {...register(`i18n.${activeLocale}.intro_hero_title` as const)} />
-                        <div className="space-y-4">
-                            <label className="text-sm font-semibold text-[#1A3A52]">{t('Introduction.heroQuote')}</label>
-                            <Textarea {...register(`i18n.${activeLocale}.intro_hero_quote` as const)} />
+        <form onSubmit={handleSubmit(onSubmit, onInvalid)} className="flex flex-col gap-8 w-full pb-12 relative">
+            <div className="py-4 -mx-4 px-4">
+                <ALCard variant="glass" elevation="sm" padding="sm" radius="xl" className="flex items-center justify-between gap-4 border-amber-200/30 shadow-md">
+                    <div className="flex items-center gap-2 sm:gap-4">
+                        <div className="flex bg-gray-100/90 p-1 rounded-xl border border-gray-200 shadow-inner">
+                            {LOCALES.map((loc) => (
+                                <Button
+                                    key={loc}
+                                    type="button"
+                                    variant={activeLocale === loc ? "default" : "ghost"}
+                                    size="sm"
+                                    className={cn(
+                                        "px-3 sm:px-5 py-1.5 h-8 text-[10px] sm:text-xs font-bold uppercase transition-all duration-300 rounded-lg",
+                                        activeLocale === loc
+                                            ? "bg-white shadow-md text-[#1A3A52] hover:bg-white/50"
+                                            : "text-gray-500 hover:text-[#1A3A52] hover:bg-white/40"
+                                    )}
+                                    onClick={() => setActiveLocale(loc)}
+                                >
+                                    {loc}
+                                </Button>
+                            ))}
                         </div>
+                    </div>
 
-                        <div className="space-y-4 mt-6">
-                            <label className="font-[Inter] text-xs font-bold text-[#1A3A52]/50 uppercase tracking-widest block">{t('Introduction.heroImage')}</label>
-                            <div className="space-y-4">
-                                <div className="relative group w-fit">
+                    <div className="flex items-center gap-3">
+                        <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            className="h-10 gap-2 text-purple-600 border-purple-200 hover:bg-purple-50 hover:border-purple-300 font-semibold px-5 rounded-xl transition-all shadow-sm"
+                            onClick={handleAutoTranslate}
+                            isLoading={translateMutation.isPending}
+                        >
+                            <Languages className="w-4 h-4" />
+                            <span className="hidden sm:inline">{t('Common.autoTranslate')}</span>
+                        </Button>
+                        <Button
+                            type="submit"
+                            size="sm"
+                            className="h-10 gap-2 bg-[#1A3A52] hover:bg-[#0D2131] text-white shadow-lg shadow-blue-900/10 font-semibold px-6 rounded-xl transition-all"
+                            isLoading={updateMutation.isPending}
+                        >
+                            <Save className="w-4 h-4" />
+                            {t("Common.saveChanges")}
+                        </Button>
+                    </div>
+                </ALCard>
+            </div>
+
+            <div className="grid grid-cols-1 gap-12">
+                {/* HERO SECTION */}
+                <section className="space-y-4">
+                    <div className="flex items-center gap-3 mb-2">
+                        <h2 className="text-2xl font-extrabold text-[#1A3A52] tracking-tight">{t('Introduction.heroSection')}</h2>
+                    </div>
+
+                    <ALCard variant="soft" padding="none" radius="2xl" elevation="sm" className="border-amber-200/40 shadow-sm overflow-hidden" animation="slide-up">
+                        <div className="grid grid-cols-1 lg:grid-cols-2">
+                            {/* Left: Text Content */}
+                            <div className="p-8 lg:p-10 space-y-8 bg-white/40 border-r border-amber-200/20">
+                                <div className="space-y-6">
+                                    <ALInput
+                                        title={t('Introduction.heroTitle')}
+                                        placeholder="Enter a catchy hero title..."
+                                        wrapperClassName="bg-white/80 border-amber-100/50 focus-within:border-amber-300"
+                                        {...register(`i18n.${activeLocale}.intro_hero_title` as const)}
+                                    />
+                                    <ALInput
+                                        title={t('Introduction.heroQuote')}
+                                        fieldVariant="textarea"
+                                        textareaRows={4}
+                                        placeholder="Write a welcoming quote or short description..."
+                                        wrapperClassName="bg-white/80 border-amber-100/50 focus-within:border-amber-300"
+                                        textareaClassName="resize-none leading-relaxed"
+                                        {...register(`i18n.${activeLocale}.intro_hero_quote` as const)}
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Right: Image Upload Area */}
+                            <div className="p-8 lg:p-10 bg-[#FDFBF9]/60 flex flex-col justify-center items-center">
+                                <div className="relative group w-full max-w-md aspect-[16/10] perspective-1000">
                                     <div
                                         className={cn(
-                                            "w-48 h-24 rounded-2xl border-2 border-dashed border-amber-200/60 bg-white/40 flex items-center justify-center overflow-hidden transition-all cursor-pointer hover:border-amber-300",
-                                            getFullUrl('intro_hero_image', heroImageUrl) && "border-solid bg-white shadow-sm"
+                                            "w-full h-full rounded-[2rem] border-2 border-dashed border-amber-200/80 bg-white/50 flex flex-col items-center justify-center overflow-hidden transition-all duration-500 cursor-pointer group-hover:border-amber-400 group-hover:bg-white/80 group-hover:shadow-2xl group-hover:shadow-amber-900/5",
+                                            getFullUrl('intro_hero_image', heroImageUrl) && "border-solid border-white bg-white shadow-xl"
                                         )}
                                         onClick={() => heroImageRef.current?.click()}
                                     >
                                         {getFullUrl('intro_hero_image', heroImageUrl) ? (
-                                            <img src={getFullUrl('intro_hero_image', heroImageUrl)} className="w-full h-full object-cover" alt="" />
+                                            <div className="relative w-full h-full">
+                                                <img src={getFullUrl('intro_hero_image', heroImageUrl)} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="" />
+                                                <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-[2px]">
+                                                    <div className="bg-white/90 p-3 rounded-full shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                                                        <Upload className="w-6 h-6 text-[#1A3A52]" />
+                                                    </div>
+                                                </div>
+                                            </div>
                                         ) : (
-                                            <Upload className="w-7 h-7 text-[#D5BA98]/60" />
+                                            <div className="flex flex-col items-center gap-4 text-[#D5BA98]">
+                                                <div className="p-5 bg-amber-50 rounded-full border border-amber-100 group-hover:scale-110 transition-transform">
+                                                    <Upload className="w-10 h-10" />
+                                                </div>
+                                                <span className="text-sm font-semibold tracking-wide">Click to upload high-res image</span>
+                                            </div>
                                         )}
+
                                         {isUploading === 'intro_hero_image' && (
-                                            <div className="absolute inset-0 bg-white/80 flex items-center justify-center">
-                                                <Loader2 className="w-5 h-5 animate-spin text-[#1A3A52]" />
+                                            <div className="absolute inset-0 bg-white/90 flex flex-col items-center justify-center gap-3 backdrop-blur-sm">
+                                                <Loader2 className="w-8 h-8 animate-spin text-[#1A3A52]" />
+                                                <span className="text-xs font-bold text-[#1A3A52] animate-pulse">Processing...</span>
                                             </div>
                                         )}
                                     </div>
-                                </div>
-                                <div className="flex gap-3">
+
                                     {getFullUrl('intro_hero_image', heroImageUrl) && (
-                                        <Button type="button" variant="outline" size="sm" className="h-9 gap-2 text-blue-600 border-blue-100 hover:bg-blue-50" onClick={() => setPreviewData({ url: getFullUrl('intro_hero_image', heroImageUrl), title: "Hero Image", type: 'image' })}>
+                                        <button
+                                            type="button"
+                                            className="absolute -top-3 -right-3 p-2 bg-white rounded-xl shadow-lg border border-gray-100 hover:bg-blue-50 hover:text-blue-600 transition-all z-10 scale-0 group-hover:scale-100"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                setPreviewData({ url: getFullUrl('intro_hero_image', heroImageUrl), title: "Hero Image", type: 'image' });
+                                            }}
+                                        >
                                             <Maximize2 className="h-4 w-4" />
-                                            Preview
-                                        </Button>
+                                        </button>
                                     )}
-                                    <input type="file" ref={heroImageRef} className="hidden" accept={IMAGE_ACCEPT} onChange={(e) => handleFileChange(e, 'intro_hero_image')} />
                                 </div>
+                                <input type="file" ref={heroImageRef} className="hidden" accept={IMAGE_ACCEPT} onChange={(e) => handleFileChange(e, 'intro_hero_image')} />
+                                <p className="mt-6 text-[10px] font-bold text-gray-400 uppercase tracking-widest">Recommended size: 1920x1080 (PNG/JPG)</p>
                             </div>
                         </div>
-                    </div>
-                </ALCard>
+                    </ALCard>
+                </section>
 
                 {/* VIRTUAL TOUR SECTION */}
-                <ALCard variant="soft" padding="none" radius="2xl" elevation="sm" className="border-amber-200/50 shadow-sm overflow-hidden" animation="fade">
-                    <div className="p-6 md:p-8 border-b border-[#D5BA98]/20 bg-[#FDFBF9]">
-                        <h2 className="text-xl font-bold text-[#1A3A52] tracking-tight mb-2">{t('Introduction.virtualTour')}</h2>
+                <section className="space-y-4">
+                    <div className="flex items-center gap-3 mb-2">
+                        <h2 className="text-2xl font-extrabold text-[#1A3A52] tracking-tight">{t('Introduction.virtualTour')}</h2>
                     </div>
-                    <div className="p-6 md:p-8 space-y-6">
-                        <ALInput title={t('AboutUs.sectionLabel')} wrapperClassName="bg-white/60" {...register(`i18n.${activeLocale}.intro_virtualTour_label` as const)} />
-                        <ALInput title={t('AboutUs.title')} wrapperClassName="bg-white/60" {...register(`i18n.${activeLocale}.intro_virtualTour_title` as const)} />
-                        <div className="space-y-4">
-                            <label className="text-sm font-semibold text-[#1A3A52]">{t('Introduction.description')}</label>
-                            <Textarea {...register(`i18n.${activeLocale}.intro_virtualTour_desc` as const)} />
-                        </div>
 
-                        <div className="space-y-4 mt-6">
-                            <label className="font-[Inter] text-xs font-bold text-[#1A3A52]/50 uppercase tracking-widest block">{t('Introduction.tourVideo')}</label>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div className="space-y-3">
-                                    <p className="text-xs font-semibold text-[#1A3A52]/70 uppercase tracking-wider">{t('Introduction.tourVideoLeft')}</p>
-                                    <div className="relative group w-fit">
-                                        <div
-                                            className={cn(
-                                                "w-48 h-24 rounded-2xl border-2 border-dashed border-amber-200/60 bg-white/40 flex items-center justify-center overflow-hidden transition-all cursor-pointer hover:border-amber-300",
-                                                getFullUrl('intro_virtualTour_videoUrlLeft', tourVideoUrlLeft) && "border-solid bg-white shadow-sm"
-                                            )}
-                                            onClick={() => virtualTourVideoLeftRef.current?.click()}
-                                        >
-                                            {getFullUrl('intro_virtualTour_videoUrlLeft', tourVideoUrlLeft) ? (
-                                                <video src={getFullUrl('intro_virtualTour_videoUrlLeft', tourVideoUrlLeft)} className="w-full h-full object-cover" />
-                                            ) : (
-                                                <Upload className="w-7 h-7 text-[#D5BA98]/60" />
-                                            )}
-                                            {isUploading === 'intro_virtualTour_videoUrlLeft' && (
-                                                <div className="absolute inset-0 bg-white/80 flex items-center justify-center">
-                                                    <Loader2 className="w-5 h-5 animate-spin text-[#1A3A52]" />
+                    <ALCard variant="soft" padding="none" radius="2xl" elevation="sm" className="border-blue-100/40 shadow-sm overflow-hidden" animation="fade">
+                        <div className="grid grid-cols-1 xl:grid-cols-[400px_1fr]">
+                            {/* Left: Branding & Info */}
+                            <div className="p-8 lg:p-10 space-y-8 bg-white/40 border-r border-blue-50">
+                                <div className="space-y-6">
+                                    <ALInput title={t('AboutUs.sectionLabel')} placeholder="Section Tag" wrapperClassName="bg-white/80 border-blue-50 focus-within:border-blue-200" {...register(`i18n.${activeLocale}.intro_virtualTour_label` as const)} />
+                                    <ALInput title={t('AboutUs.title')} placeholder="Main Heading" wrapperClassName="bg-white/80 border-blue-50 focus-within:border-blue-200" {...register(`i18n.${activeLocale}.intro_virtualTour_title` as const)} />
+                                    <ALInput
+                                        title={t('Introduction.description')}
+                                        fieldVariant="textarea"
+                                        textareaRows={5}
+                                        placeholder="Tell a story about your space..."
+                                        wrapperClassName="bg-white/80 border-blue-50 focus-within:border-blue-200"
+                                        textareaClassName="resize-none"
+                                        {...register(`i18n.${activeLocale}.intro_virtualTour_desc` as const)}
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Right: Video Grid */}
+                            <div className="p-8 lg:p-10 bg-[#F8FAFC]/60 space-y-8">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                    {/* Video Left */}
+                                    <div className="space-y-4">
+                                        <p className="text-[10px] font-bold text-[#1A3A52]/50 uppercase tracking-[0.2em]">{t('Introduction.tourVideoLeft')}</p>
+                                        <div className="relative group w-full aspect-video">
+                                            <div
+                                                className={cn(
+                                                    "w-full h-full rounded-2xl border-2 border-dashed border-blue-200/60 bg-white/50 flex items-center justify-center overflow-hidden transition-all cursor-pointer hover:border-blue-400 hover:shadow-lg",
+                                                    getFullUrl('intro_virtualTour_videoUrlLeft', tourVideoUrlLeft) && "border-solid bg-black shadow-md"
+                                                )}
+                                                onClick={() => virtualTourVideoLeftRef.current?.click()}
+                                            >
+                                                {getFullUrl('intro_virtualTour_videoUrlLeft', tourVideoUrlLeft) ? (
+                                                    <video src={getFullUrl('intro_virtualTour_videoUrlLeft', tourVideoUrlLeft)} className="w-full h-full object-cover" />
+                                                ) : (
+                                                    <Upload className="w-8 h-8 text-blue-200" />
+                                                )}
+
+                                                <div className="absolute inset-0 bg-[#1A3A52]/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                                    <div className="bg-white/90 p-2 rounded-full shadow-lg">
+                                                        <Upload className="w-5 h-5 text-[#1A3A52]" />
+                                                    </div>
                                                 </div>
+
+                                                {isUploading === 'intro_virtualTour_videoUrlLeft' && (
+                                                    <div className="absolute inset-0 bg-white/90 flex items-center justify-center">
+                                                        <Loader2 className="w-6 h-6 animate-spin text-[#1A3A52]" />
+                                                    </div>
+                                                )}
+                                            </div>
+                                            {getFullUrl('intro_virtualTour_videoUrlLeft', tourVideoUrlLeft) && (
+                                                <button type="button" className="absolute top-2 right-2 p-1.5 bg-black/40 text-white rounded-lg hover:bg-black/60 transition-colors backdrop-blur-sm" onClick={(e) => { e.stopPropagation(); setPreviewData({ url: getFullUrl('intro_virtualTour_videoUrlLeft', tourVideoUrlLeft), title: "Video Left", type: 'video' }); }}>
+                                                    <Maximize2 className="h-3.5 w-3.5" />
+                                                </button>
                                             )}
                                         </div>
-                                    </div>
-                                    <div className="flex gap-3">
-                                        {getFullUrl('intro_virtualTour_videoUrlLeft', tourVideoUrlLeft) && (
-                                            <Button type="button" variant="outline" size="sm" className="h-9 gap-2 text-blue-600 border-blue-100 hover:bg-blue-50" onClick={() => setPreviewData({ url: getFullUrl('intro_virtualTour_videoUrlLeft', tourVideoUrlLeft), title: "Tour Video Left", type: 'video' })}>
-                                                <Maximize2 className="h-4 w-4" />
-                                                Preview
-                                            </Button>
-                                        )}
                                         <input type="file" ref={virtualTourVideoLeftRef} className="hidden" accept={VIDEO_ACCEPT} onChange={(e) => handleFileChange(e, 'intro_virtualTour_videoUrlLeft', true)} />
                                     </div>
-                                </div>
 
-                                <div className="space-y-3">
-                                    <p className="text-xs font-semibold text-[#1A3A52]/70 uppercase tracking-wider">{t('Introduction.tourVideoRight')}</p>
-                                    <div className="relative group w-fit">
-                                        <div
-                                            className={cn(
-                                                "w-48 h-24 rounded-2xl border-2 border-dashed border-amber-200/60 bg-white/40 flex items-center justify-center overflow-hidden transition-all cursor-pointer hover:border-amber-300",
-                                                getFullUrl('intro_virtualTour_videoUrlRight', tourVideoUrlRight) && "border-solid bg-white shadow-sm"
-                                            )}
-                                            onClick={() => virtualTourVideoRightRef.current?.click()}
-                                        >
-                                            {getFullUrl('intro_virtualTour_videoUrlRight', tourVideoUrlRight) ? (
-                                                <video src={getFullUrl('intro_virtualTour_videoUrlRight', tourVideoUrlRight)} className="w-full h-full object-cover" />
-                                            ) : (
-                                                <Upload className="w-7 h-7 text-[#D5BA98]/60" />
-                                            )}
-                                            {isUploading === 'intro_virtualTour_videoUrlRight' && (
-                                                <div className="absolute inset-0 bg-white/80 flex items-center justify-center">
-                                                    <Loader2 className="w-5 h-5 animate-spin text-[#1A3A52]" />
+                                    {/* Video Right */}
+                                    <div className="space-y-4">
+                                        <p className="text-[10px] font-bold text-[#1A3A52]/50 uppercase tracking-[0.2em]">{t('Introduction.tourVideoRight')}</p>
+                                        <div className="relative group w-full aspect-video">
+                                            <div
+                                                className={cn(
+                                                    "w-full h-full rounded-2xl border-2 border-dashed border-blue-200/60 bg-white/50 flex items-center justify-center overflow-hidden transition-all cursor-pointer hover:border-blue-400 hover:shadow-lg",
+                                                    getFullUrl('intro_virtualTour_videoUrlRight', tourVideoUrlRight) && "border-solid bg-black shadow-md"
+                                                )}
+                                                onClick={() => virtualTourVideoRightRef.current?.click()}
+                                            >
+                                                {getFullUrl('intro_virtualTour_videoUrlRight', tourVideoUrlRight) ? (
+                                                    <video src={getFullUrl('intro_virtualTour_videoUrlRight', tourVideoUrlRight)} className="w-full h-full object-cover" />
+                                                ) : (
+                                                    <Upload className="w-8 h-8 text-blue-200" />
+                                                )}
+
+                                                <div className="absolute inset-0 bg-[#1A3A52]/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                                    <div className="bg-white/90 p-2 rounded-full shadow-lg">
+                                                        <Upload className="w-5 h-5 text-[#1A3A52]" />
+                                                    </div>
                                                 </div>
+
+                                                {isUploading === 'intro_virtualTour_videoUrlRight' && (
+                                                    <div className="absolute inset-0 bg-white/90 flex items-center justify-center">
+                                                        <Loader2 className="w-6 h-6 animate-spin text-[#1A3A52]" />
+                                                    </div>
+                                                )}
+                                            </div>
+                                            {getFullUrl('intro_virtualTour_videoUrlRight', tourVideoUrlRight) && (
+                                                <button type="button" className="absolute top-2 right-2 p-1.5 bg-black/40 text-white rounded-lg hover:bg-black/60 transition-colors backdrop-blur-sm" onClick={(e) => { e.stopPropagation(); setPreviewData({ url: getFullUrl('intro_virtualTour_videoUrlRight', tourVideoUrlRight), title: "Video Right", type: 'video' }); }}>
+                                                    <Maximize2 className="h-3.5 w-3.5" />
+                                                </button>
                                             )}
                                         </div>
-                                    </div>
-                                    <div className="flex gap-3">
-                                        {getFullUrl('intro_virtualTour_videoUrlRight', tourVideoUrlRight) && (
-                                            <Button type="button" variant="outline" size="sm" className="h-9 gap-2 text-blue-600 border-blue-100 hover:bg-blue-50" onClick={() => setPreviewData({ url: getFullUrl('intro_virtualTour_videoUrlRight', tourVideoUrlRight), title: "Tour Video Right", type: 'video' })}>
-                                                <Maximize2 className="h-4 w-4" />
-                                                Preview
-                                            </Button>
-                                        )}
                                         <input type="file" ref={virtualTourVideoRightRef} className="hidden" accept={VIDEO_ACCEPT} onChange={(e) => handleFileChange(e, 'intro_virtualTour_videoUrlRight', true)} />
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </ALCard>
+                    </ALCard>
+                </section>
 
                 {/* COLLECTION SECTION */}
-                <ALCard variant="soft" padding="none" radius="2xl" elevation="sm" className="border-amber-200/50 shadow-sm overflow-hidden" animation="fade">
-                    <div className="p-6 md:p-8 border-b border-[#D5BA98]/20 bg-[#FDFBF9]">
-                        <h2 className="text-xl font-bold text-[#1A3A52] tracking-tight mb-2">{t('Introduction.collection')}</h2>
+                <section className="space-y-4">
+                    <div className="flex items-center gap-3 mb-2">
+                        <h2 className="text-2xl font-extrabold text-[#1A3A52] tracking-tight">{t('Introduction.collection')}</h2>
                     </div>
-                    <div className="p-6 md:p-8 space-y-8">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pb-6 border-b border-amber-200/30">
-                            <ALInput title={t('AboutUs.sectionLabel')} wrapperClassName="bg-white/60" {...register(`i18n.${activeLocale}.intro_collection_label` as const)} />
-                            <ALInput title={t('AboutUs.title')} wrapperClassName="bg-white/60" {...register(`i18n.${activeLocale}.intro_collection_title` as const)} />
-                        </div>
 
-                        {[1, 2, 3].map((num) => {
-                            const index = num as 1 | 2 | 3;
-                            const dishImageRef = num === 1 ? dish1ImageRef : num === 2 ? dish2ImageRef : dish3ImageRef;
-                            const dishImageUrl = num === 1 ? dish1ImageUrl : num === 2 ? dish2ImageUrl : dish3ImageUrl;
+                    <ALCard variant="soft" padding="none" radius="2xl" elevation="sm" className="border-amber-200/50 shadow-sm overflow-hidden" animation="fade">
+                        <div className="p-8 lg:p-10 space-y-10 bg-[#FFFCF8]/40">
+                            <div className="flex flex-wrap items-end justify-between gap-6 border-b border-amber-100/50 pb-8">
+                                <div className="flex flex-col sm:flex-row gap-4 w-full">
+                                    <ALInput
+                                        title={t('AboutUs.sectionLabel')}
+                                        wrapperClassName="bg-white/80 border-amber-50 focus-within:border-amber-200 h-10 w-full sm:w-40"
+                                        {...register(`i18n.${activeLocale}.intro_collection_label` as const)}
+                                    />
+                                    <ALInput
+                                        title={t('AboutUs.title')}
+                                        wrapperClassName="bg-white/80 border-amber-50 focus-within:border-amber-200 h-10 flex-grow"
+                                        {...register(`i18n.${activeLocale}.intro_collection_title` as const)}
+                                    />
+                                </div>
+                            </div>
 
-                            return (
-                                <div key={num} className="space-y-6 p-6 rounded-2xl border border-amber-200/40 bg-white/40">
-                                    <div className="flex items-center justify-between">
-                                        <h3 className="font-semibold text-lg text-[#1A3A52]">{t('Introduction.featuredDish')} {num}</h3>
-                                        <Button
-                                            type="button"
-                                            variant="outline"
-                                            size="sm"
-                                            className="h-8 gap-2 border-primary/20 hover:bg-primary/5 text-primary"
-                                            onClick={() => {
-                                                setSelectingDishIndex(index);
-                                                setIsDishModalOpen(true);
-                                            }}
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                                {[1, 2, 3].map((num) => {
+                                    const index = num as 1 | 2 | 3;
+                                    const dishImageRef = num === 1 ? dish1ImageRef : num === 2 ? dish2ImageRef : dish3ImageRef;
+                                    const dishImageUrl = num === 1 ? dish1ImageUrl : num === 2 ? dish2ImageUrl : dish3ImageUrl;
+
+                                    return (
+                                        <ALCard
+                                            key={num}
+                                            variant="glass"
+                                            padding="none"
+                                            radius="2xl"
+                                            className="border-amber-100/60 hover:border-amber-400/40 transition-all duration-300 hover:shadow-xl hover:shadow-amber-900/5 group flex flex-col"
                                         >
-                                            <UtensilsCrossed className="w-4 h-4" />
-                                            {t('Introduction.selectFromSystem')}
-                                        </Button>
-                                    </div>
-
-                                    <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-6">
-                                        <div className="space-y-4">
-                                            <label className="font-[Inter] text-xs font-bold text-[#1A3A52]/50 uppercase tracking-widest block">{t('Introduction.dishImage')}</label>
-                                            <div className="space-y-4">
+                                            {/* Dish Card Header */}
+                                            <div className="relative aspect-[4/3] overflow-hidden">
                                                 <div
                                                     className={cn(
-                                                        "w-full aspect-[16/9] rounded-2xl border-2 border-dashed border-amber-200/60 bg-white/40 flex items-center justify-center overflow-hidden transition-all cursor-pointer hover:border-amber-300",
-                                                        getFullUrl(`intro_collection_dish${num}_image`, dishImageUrl) && "border-solid bg-white shadow-sm"
+                                                        "w-full h-full bg-amber-50/20 flex items-center justify-center cursor-pointer overflow-hidden",
+                                                        getFullUrl(`intro_collection_dish${num}_image`, dishImageUrl) && "bg-white"
                                                     )}
                                                     onClick={() => dishImageRef.current?.click()}
                                                 >
                                                     {getFullUrl(`intro_collection_dish${num}_image`, dishImageUrl) ? (
-                                                        <img src={getFullUrl(`intro_collection_dish${num}_image`, dishImageUrl)} className="w-full h-full object-cover" alt="" />
+                                                        <img src={getFullUrl(`intro_collection_dish${num}_image`, dishImageUrl)} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="" />
                                                     ) : (
-                                                        <Upload className="w-7 h-7 text-[#D5BA98]/60" />
+                                                        <Upload className="w-8 h-8 text-amber-100" />
                                                     )}
+
+                                                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-[1px]">
+                                                        <div className="flex gap-2 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+                                                            <button type="button" className="p-2 bg-white text-[#1A3A52] rounded-lg shadow-lg" onClick={(e) => { e.stopPropagation(); dishImageRef.current?.click(); }}>
+                                                                <Upload className="w-4 h-4" />
+                                                            </button>
+                                                            {getFullUrl(`intro_collection_dish${num}_image`, dishImageUrl) && (
+                                                                <button type="button" className="p-2 bg-white text-blue-600 rounded-lg shadow-lg" onClick={(e) => { e.stopPropagation(); setPreviewData({ url: getFullUrl(`intro_collection_dish${num}_image`, dishImageUrl), title: `Featured Dish ${num}`, type: 'image' }); }}>
+                                                                    <Maximize2 className="w-4 h-4" />
+                                                                </button>
+                                                            )}
+                                                        </div>
+                                                    </div>
+
                                                     {isUploading === `intro_collection_dish${num}_image` && (
                                                         <div className="absolute inset-0 bg-white/80 flex items-center justify-center">
-                                                            <Loader2 className="w-5 h-5 animate-spin text-[#1A3A52]" />
+                                                            <Loader2 className="w-6 h-6 animate-spin text-[#1A3A52]" />
                                                         </div>
                                                     )}
                                                 </div>
-                                                <div className="flex gap-3">
-                                                    {getFullUrl(`intro_collection_dish${num}_image`, dishImageUrl) && (
-                                                        <Button type="button" variant="outline" size="sm" className="h-9 gap-2 text-blue-600 border-blue-100 hover:bg-blue-50" onClick={() => setPreviewData({ url: getFullUrl(`intro_collection_dish${num}_image`, dishImageUrl), title: `Featured Dish ${num}`, type: 'image' })}>
-                                                            <Maximize2 className="h-4 w-4" />
-                                                            Preview
-                                                        </Button>
-                                                    )}
-                                                    <input type="file" ref={dishImageRef} className="hidden" accept={IMAGE_ACCEPT} onChange={(e) => handleFileChange(e, `intro_collection_dish${num}_image`)} />
+
+                                                <div className="absolute top-3 left-3 z-10">
+                                                    <span className="bg-[#1A3A52]/90 text-white text-[9px] font-bold px-2 py-0.5 rounded shadow-sm">
+                                                        {t('DishModal.dishLabel')} 0{num}
+                                                    </span>
+                                                </div>
+
+                                                <button
+                                                    type="button"
+                                                    className="absolute top-3 right-3 z-10 h-7 w-7 flex items-center justify-center bg-white/90 text-amber-700 rounded-lg shadow-lg border border-amber-100 hover:bg-amber-600 hover:text-white transition-all scale-0 group-hover:scale-100"
+                                                    onClick={() => {
+                                                        setSelectingDishIndex(index);
+                                                        setIsDishModalOpen(true);
+                                                    }}
+                                                >
+                                                    <UtensilsCrossed className="w-3.5 h-3.5" />
+                                                </button>
+                                            </div>
+
+                                            {/* Dish Card Body */}
+                                            <div className="p-4 space-y-4 flex-grow bg-white/40">
+                                                <ALInput title={t('Introduction.mainTitle')} wrapperClassName="bg-white/70 border-amber-50 focus-within:border-amber-200" {...register(`i18n.${activeLocale}.intro_collection_dish${num}_mainTitle` as any)} />
+                                                <div className="grid grid-cols-1 gap-3">
+                                                    <ALInput title={t('Introduction.cardTitle')} wrapperClassName="bg-white/50 border-amber-50 focus-within:border-amber-200" {...register(`i18n.${activeLocale}.intro_collection_dish${num}_cardTitle` as any)} />
+                                                    <ALInput title={t('Introduction.cardCategory')} wrapperClassName="bg-white/50 border-amber-50 focus-within:border-amber-200" {...register(`i18n.${activeLocale}.intro_collection_dish${num}_cardCategory` as any)} />
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div className="space-y-4">
-                                            <ALInput title={t('Introduction.mainTitle')} wrapperClassName="bg-white/60" {...register(`i18n.${activeLocale}.intro_collection_dish${num}_mainTitle` as any)} />
-                                            <ALInput title={t('Introduction.cardTitle')} wrapperClassName="bg-white/60" {...register(`i18n.${activeLocale}.intro_collection_dish${num}_cardTitle` as any)} />
-                                            <ALInput title={t('Introduction.cardCategory')} wrapperClassName="bg-white/60" {...register(`i18n.${activeLocale}.intro_collection_dish${num}_cardCategory` as any)} />
-                                        </div>
-                                    </div>
-                                </div>
-                            );
-                        })}
-                    </div>
-                </ALCard>
-
+                                            <input type="file" ref={dishImageRef} className="hidden" accept={IMAGE_ACCEPT} onChange={(e) => handleFileChange(e, `intro_collection_dish${num}_image`)} />
+                                        </ALCard>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    </ALCard>
+                </section>
             </div>
 
-            {/* Bottom Save Button (Mobile) */}
-            <div className="pb-6 lg:hidden">
-                <Button
-                    type="submit"
-                    className="w-full bg-[#1A3A52] hover:bg-[#1A3A52]/90 text-white shadow-lg h-12 font-[Inter] gap-2"
-                    isLoading={updateMutation.isPending}
-                >
-                    <Save className="w-4 h-4" />
-                    {t("Common.saveChanges") || "Save All Changes"}
-                </Button>
-            </div>
+
 
             {previewData && (
                 <MediaPreviewModal
