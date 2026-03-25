@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 import { DishFormValues, Language, mapDishToFormValues } from "../types/schema";
@@ -39,6 +39,7 @@ export function DishForm({ mode, dishId, onSuccess }: DishFormProps) {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<Language>("en");
   const isEdit = mode === "edit";
+  const queryClient = useQueryClient();
 
   const {
       staticImages,
@@ -108,6 +109,7 @@ export function DishForm({ mode, dishId, onSuccess }: DishFormProps) {
       isEdit ? onEdit(dishId!, form, images, removedMediaIds) : onCreate(form, images),
     onSuccess: () => {
       toast.success(isEdit ? t("toast.updated") : t("toast.created"));
+      queryClient.invalidateQueries({ queryKey: ["dish", dishId] });
       onSuccess?.();
     },
     onError: (err: any) => {

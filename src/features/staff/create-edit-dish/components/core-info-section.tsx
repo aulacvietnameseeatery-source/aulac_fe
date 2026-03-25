@@ -104,14 +104,27 @@ export const CoreInfoSection: React.FC<{
         {/* 3. PRICE */}
         <div className="space-y-2">
           {/* _OLD: External label moved into ALInput via title + required props. */}
-          <ALInput
-            title={t("core.price")}
-            required
-            type="number"
-            step="0.01"
-            placeholder="0.00"
-            error={errors.price?.message}
-            {...register("price")}
+          <Controller
+            control={control}
+            name="price"
+            render={({ field }) => (
+              <ALInput
+                title={t("core.price")}
+                required
+                type="number"
+                step="0.01"
+                placeholder="0.00"
+                error={errors.price?.message}
+                value={(field.value as string | number | undefined) ?? ""}
+                onChange={(e) => {
+                  const val = e.target.value;
+                  field.onChange(val === "" ? undefined : Number(val));
+                }}
+                onBlur={field.onBlur}
+                name={field.name}
+                ref={field.ref}
+              />
+            )}
           />
         </div>
 
