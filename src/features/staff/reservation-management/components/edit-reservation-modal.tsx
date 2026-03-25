@@ -17,6 +17,7 @@ import {
   ReservationTableOptionDto,
 } from "../types/reservation-types";
 import { reservationService } from "../services/reservation-service";
+import { dateUtils } from "@/lib/date-utils";
 
 interface EditReservationModalProps {
   reservationId: number;
@@ -96,8 +97,7 @@ export const EditReservationModal = ({
       return true;
     }
 
-    const selected = new Date(`${selectedDate}T${selectedTime}`);
-    if (selected.getTime() < Date.now()) {
+    if (dateUtils.isPast(selectedDate, selectedTime)) {
       setValidationError(tStaff("errors.timePast"));
       return false;
     }
@@ -132,9 +132,8 @@ export const EditReservationModal = ({
     const fetchDetail = async () => {
       try {
         const detail = await reservationService.getReservationDetail(reservationId);
-        const reserved = new Date(detail.reservedTime);
-        const initialDateValue = format(reserved, "yyyy-MM-dd");
-        const initialTimeValue = format(reserved, "HH:mm");
+        const initialDateValue = dateUtils.formatLocal(detail.reservedTime, "yyyy-MM-dd");
+        const initialTimeValue = dateUtils.formatLocal(detail.reservedTime, "HH:mm");
 
         setPhone(detail.phone ?? "");
         setFullName(detail.customerName ?? "");
@@ -241,7 +240,7 @@ export const EditReservationModal = ({
         phone,
         email: email || null,
         partySize: Number(partySize),
-        reservedTime: new Date(`${date}T${time}`).toISOString(),
+        reservedTime: dateUtils.toUtcIso(date, time),
         notes,
         tableIds: selectedOption.tableIds,
       });

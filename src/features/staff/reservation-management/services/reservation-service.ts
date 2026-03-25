@@ -10,6 +10,7 @@ import {
     ReservationCustomerLookupDto,
 } from "../types/reservation-types";
 import { api } from "@/lib/http";
+import { dateUtils } from '@/lib/date-utils';
 
 export const reservationService = {
     // 1. Get List Reservations
@@ -84,7 +85,7 @@ export const reservationService = {
         time: string,
         partySize: number
     ): Promise<ReservationTableOptionDto[]> => {
-        const reservedTime = new Date(`${date}T${time}`).toISOString();
+        const reservedTime = dateUtils.toUtcIso(date, time);
         const params = new URLSearchParams({
             reservedTime,
             partySize: partySize.toString(),
