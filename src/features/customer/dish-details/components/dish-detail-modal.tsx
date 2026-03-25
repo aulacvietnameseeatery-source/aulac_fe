@@ -144,7 +144,18 @@ export function DishDetailModal({ dishId, isOpen, onClose, onAddToCart }: DishDe
                   {/* Video */}
                   {viewMode === "video" && (
                     <div className="absolute inset-0 z-10 flex items-center justify-center bg-black animate-in fade-in pb-16 md:pb-0">
-                      <p className="text-[#C5A059] text-sm font-medium tracking-widest uppercase">Video Coming Soon</p>
+                      {dishData.data.videoUrl ? (
+                        <video
+                          key={dishData.data.videoUrl}
+                          src={dishData.data.videoUrl}
+                          controls
+                          autoPlay
+                          playsInline
+                          className="max-h-full max-w-full object-contain"
+                        />
+                      ) : (
+                        <p className="text-[#C5A059] text-sm font-medium tracking-widest uppercase">Video Coming Soon</p>
+                      )}
                     </div>
                   )}
 

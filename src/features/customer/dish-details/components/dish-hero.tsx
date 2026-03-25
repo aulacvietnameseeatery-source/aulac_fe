@@ -104,10 +104,21 @@ export function DishHero({ dish, onOrderNow }: DishHeroProps) {
             {/* Cloudinary Widget sẽ được render vào đây */}
           </div>
 
-          {/* --- 3. VIEW MODE: VIDEO (Placeholder) --- */}
+          {/* --- 3. VIEW MODE: VIDEO --- */}
           {viewMode === 'video' && (
               <div className="absolute inset-0 z-10 flex items-center justify-center bg-black animate-in fade-in">
-                <p className="text-white font-medium">Video Player Coming Soon</p>
+                {dish.videoUrl ? (
+                  <video
+                    key={dish.videoUrl}
+                    src={dish.videoUrl}
+                    controls
+                    autoPlay
+                    playsInline
+                    className="max-h-full max-w-full object-contain"
+                  />
+                ) : (
+                  <p className="text-white font-medium">Video Player Coming Soon</p>
+                )}
               </div>
           )}
 
