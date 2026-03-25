@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { EarningRecordDto, EarningFilterParams } from "../types/report-types";
+import {EarningFilterParams, EarningRecordDto} from "@/features/staff/report-management/earning/types/earning-types";
 
 export const useEarningReport = () => {
     const [data, setData] = useState<EarningRecordDto[]>([]);

@@ -2,7 +2,7 @@
 "use client";
 import React from "react";
 import { Search } from "lucide-react";
-import { EarningRecordDto } from "../types/report-types";
+import {EarningRecordDto} from "@/features/staff/report-management/earning/types/earning-types";
 
 interface EarningTableProps {
     data: EarningRecordDto[];
