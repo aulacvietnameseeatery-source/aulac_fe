@@ -21,7 +21,6 @@ export const dateUtils = {
     toUtcIso: (localDate: string, localTime: string): string => {
         if (!localDate || !localTime) return "";
 
-        // Báo cho code biết: "Cái ngày giờ string này là của Thụy Sĩ đấy nhé"
         const zonedDate = fromZonedTime(`${localDate}T${localTime}`, RESTAURANT_TZ);
 
         // Đổi nó ra UTC để gửi xuống BE
