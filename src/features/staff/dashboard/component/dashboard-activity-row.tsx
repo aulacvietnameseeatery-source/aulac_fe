@@ -1,8 +1,10 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { CalendarDays, ConciergeBell, Bell, Clock, Users, Armchair, ChefHat, ShoppingCart, DollarSign, Info, PackageOpen } from "lucide-react";
+import { useAuth } from "@/components/providers/auth-provider";
 
 export function DashboardActivityRow() {
+    const { token } = useAuth();
     const [reservations, setReservations] = useState<any[]>([]);
     const [tables, setTables] = useState<any[]>([]);
     const [notifications, setNotifications] = useState<any[]>([]);
@@ -10,44 +12,69 @@ export function DashboardActivityRow() {
 
     useEffect(() => {
         const fetchData = async () => {
+            if (!token) return;
             setIsLoading(true);
             try {
-                const token = typeof window !== 'undefined' ? localStorage.getItem('token') || localStorage.getItem('accessToken') : '';
                 const headers: HeadersInit = {
                     'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
                 };
-                if (token) {
-                    headers['Authorization'] = `Bearer ${token.replace(/['"]+/g, '')}`;
-                }
 
-                // Fetch Đặt bàn
-                const resReservations = await fetch("https://localhost:7083/api/reservations", { headers });
-                if (resReservations.ok) {
-                    const rData = await resReservations.json();
-                    setReservations(rData.data?.pageData || []);
-                }
+                // Fetch Đặt bàn an toàn
+                try {
+                    const resReservations = await fetch("https://localhost:7083/api/reservations", { headers });
+                    if (resReservations.ok) {
+                        const contentType = resReservations.headers.get("content-type");
+                        if (contentType && contentType.includes("application/json")) {
+                            const rData = await resReservations.json();
+                            setReservations(Array.isArray(rData.data?.pageData) ? rData.data.pageData : []);
+                        }
+                    }
+                } catch (e) { console.error("Lỗi fetch Reservations", e); }
 
-                // Fetch Bàn trống
-                const resTables = await fetch("https://localhost:7083/api/public/availability", { headers });
-                if (resTables.ok) {
-                    const tData = await resTables.json();
-                    setTables(tData.data || []);
-                }
+                // Fetch Bàn trống an toàn
+                try {
+                    const resTables = await fetch("https://localhost:7083/api/public/availability", { headers });
+                    if (resTables.ok) {
+                        const contentType = resTables.headers.get("content-type");
+                        if (contentType && contentType.includes("application/json")) {
+                            const tData = await resTables.json();
+                            setTables(Array.isArray(tData.data) ? tData.data : []);
+                        }
+                    }
+                } catch (e) { console.error("Lỗi fetch Tables", e); }
 
-                // Fetch Thông báo
-                const resNotifs = await fetch("https://localhost:7083/api/notifications", { headers });
-                if (resNotifs.ok) {
-                    const nData = await resNotifs.json();
-                    setNotifications(nData.data || []);
-                }
+                // Fetch Thông báo an toàn
+                try {
+                    const resNotifs = await fetch("https://localhost:7083/api/notifications", { headers });
+                    if (resNotifs.ok) {
+                        const contentType = resNotifs.headers.get("content-type");
+                        if (contentType && contentType.includes("application/json")) {
+                            const nData = await resNotifs.json();
+
+                            let notifArray = [];
+                            if (Array.isArray(nData.data)) {
+                                notifArray = nData.data;
+                            } else if (nData.data && Array.isArray(nData.data.pageData)) {
+                                notifArray = nData.data.pageData;
+                            } else if (Array.isArray(nData)) {
+                                notifArray = nData;
+                            }
+                            setNotifications(notifArray);
+                        } else {
+                            console.error("API Notifications không trả về JSON.");
+                        }
+                    }
+                } catch (e) { console.error("Lỗi fetch Notifications", e); }
+
             } catch (error) {
-                console.error("Lỗi khi fetch activity data:", error);
+                console.error("Lỗi tổng thể khi fetch activity data:", error);
             } finally {
                 setIsLoading(false);
             }
         };
         fetchData();
-    }, []);
+    }, [token]); // <-- Thêm token vào dependency array
 
     const getResStatusColor = (status: string) => {
         switch (status?.toLowerCase()) {
@@ -77,6 +104,11 @@ export function DashboardActivityRow() {
         return `${Math.floor(diff / 60)} hrs ago`;
     };
 
+    // Lớp bảo vệ cuối cùng trước khi render
+    const safeReservations = Array.isArray(reservations) ? reservations : [];
+    const safeTables = Array.isArray(tables) ? tables : [];
+    const safeNotifications = Array.isArray(notifications) ? notifications : [];
+
     return (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
             {/* Reservations */}
@@ -87,8 +119,8 @@ export function DashboardActivityRow() {
                 </div>
                 <div className="flex flex-col gap-4 overflow-y-auto max-h-[350px] pr-2 custom-scrollbar">
                     {isLoading ? <p className="text-center text-sm text-gray-500 mt-10 animate-pulse">Đang tải...</p>
-                        : reservations.length === 0 ? <p className="text-center text-sm text-gray-500 mt-10">No reservations</p>
-                            : reservations.slice(0, 10).map((res, i) => {
+                        : safeReservations.length === 0 ? <p className="text-center text-sm text-gray-500 mt-10">No reservations</p>
+                            : safeReservations.slice(0, 10).map((res, i) => {
                                 const date = new Date(res.reservedTime);
                                 return (
                                     <div key={i} className="flex items-center justify-between border-b border-gray-50 pb-3 last:border-0">
@@ -121,8 +153,8 @@ export function DashboardActivityRow() {
                 </div>
                 <div className="grid grid-cols-2 gap-3 overflow-y-auto max-h-[350px] pr-1 custom-scrollbar">
                     {isLoading ? <p className="col-span-2 text-center text-sm text-gray-500 mt-10 animate-pulse">Đang tải...</p>
-                        : tables.length === 0 ? <p className="col-span-2 text-center text-sm text-gray-500 mt-10">No tables available</p>
-                            : tables.map((t, i) => (
+                        : safeTables.length === 0 ? <p className="col-span-2 text-center text-sm text-gray-500 mt-10">No tables available</p>
+                            : safeTables.map((t, i) => (
                                 <div key={i} className="border border-emerald-100 rounded-lg p-3 text-center flex flex-col items-center justify-center bg-emerald-50/50 hover:bg-emerald-50 transition-colors">
                                     <Armchair size={28} className="text-emerald-500 mb-2" />
                                     <h6 className="text-xs font-bold text-gray-800 mb-0.5">{t.tableCode}</h6>
@@ -139,12 +171,17 @@ export function DashboardActivityRow() {
                 </div>
                 <div className="flex flex-col gap-4 overflow-y-auto max-h-[350px] relative before:absolute before:inset-y-0 before:left-[1.1rem] before:w-px before:bg-gray-100 pr-2 custom-scrollbar">
                     {isLoading ? <p className="text-center text-sm text-gray-500 mt-10 animate-pulse">Đang tải...</p>
-                        : notifications.length === 0 ? <p className="text-center text-sm text-gray-500 mt-10">No new notifications</p>
-                            : notifications.slice(0, 10).map((n, i) => {
+                        : safeNotifications.length === 0 ? <p className="text-center text-sm text-gray-500 mt-10">No new notifications</p>
+                            : safeNotifications.slice(0, 10).map((n, i) => {
                                 const ui = getNotifUI(n.type);
 
-                                const meta = n.metadata || {};
-                                let notifText = (n.type || "").replace(/_/g, " ");
+                                // Lớp bảo vệ Parse Metadata
+                                let meta = n.metadata || {};
+                                if (typeof meta === 'string') {
+                                    try { meta = JSON.parse(meta); } catch (e) { }
+                                }
+
+                                let notifText = (n.type || "NOTIFICATION").replace(/_/g, " ");
 
                                 if (n.type === "NEW_ORDER") {
                                     notifText = `New order at ${meta.tableCode || 'Table'} (${meta.itemCount || 0} items)`;
