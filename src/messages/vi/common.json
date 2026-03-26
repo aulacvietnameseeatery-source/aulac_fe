@@ -88,6 +88,8 @@
   "OrderPopup": {
     "success_label": "Thành công",
     "success_message": "Đã thêm món vào giỏ hàng",
+    "toast_added_single": "Đã thêm {dishName} vào giỏ hàng",
+    "toast_added_multiple": "Đã thêm {count} món vào giỏ hàng",
     "dish_name": "Bún Bò Huế\nHoàng Gia",
     "price": "$18.50",
     "quantity_label": "Số lượng",
@@ -370,7 +372,19 @@
       "title": "Tóm Tắt",
       "items_count": "{count} Món",
       "confirm_btn": "Xác Nhận Đơn"
-    }
+    },
+    "err_load_cart": "Không thể tải dữ liệu giỏ hàng cũ.",
+    "err_table_occupied_access": "Bàn này đã có người sử dụng. Không thể truy cập.",
+    "err_table_not_found": "Mã bàn không tồn tại.",
+    "err_qr_invalid": "Mã QR không hợp lệ. Vui lòng quét lại mã QR trên bàn.",
+    "err_table_validation": "Không thể xác thực bàn. Vui lòng thử lại.",
+    "err_save_cart": "Không thể lưu giỏ hàng hiện tại.",
+    "err_save_table": "Không thể lưu thông tin số bàn.",
+    "err_table_occupied_select": "Bàn này đã có người sử dụng. Vui lòng chọn bàn khác.",
+    "err_create_order": "Không thể tạo đơn hàng: {message}",
+    "success_order_title": "Đặt món thành công!",
+    "success_order_body": "Món ăn đang được chuẩn bị và sẽ được phục vụ tại Bàn {table}.",
+    "success_continue": "Tiếp tục chọn món"
   },
   "QrScan": {
     "HeroSection": {
