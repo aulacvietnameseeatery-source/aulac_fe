@@ -10,6 +10,7 @@ import { useMyShiftsQuery } from "../hooks/use-shift-queries";
 import { CheckInCard } from "../components/check-in-card";
 import { ShiftStatusBadge } from "../components/shift-status-badge";
 import type { ShiftAssignmentListDto } from "../types/shift-management.types";
+import { dateUtils } from "@/lib/date-utils";
 
 // ── helpers ──
 
@@ -20,7 +21,7 @@ function todayIso() {
 function fmt(iso: string | null | undefined, fallback = "—") {
   if (!iso) return fallback;
   try {
-    return new Date(iso).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+    return dateUtils.formatLocal(iso, "HH:mm");
   } catch {
     return fallback;
   }

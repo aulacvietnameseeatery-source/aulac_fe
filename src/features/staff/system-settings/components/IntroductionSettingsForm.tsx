@@ -13,11 +13,12 @@ import { ALInput } from "@/components/ui/al-input";
 import { useIntroductionSettingsForm } from "../hooks/useIntroductionSettingsForm";
 import { mapIntroSettingsToFormValues, mapFormValuesToIntroSettings, LOCALES, SupportedLocale, IntroFormValues } from "../types/schema";
 import { useUpdateStoreSettingsMutation, useTranslateSettingsMutation } from "../hooks/useSystemSettingsMutation";
+import { processImageFile, isHeicFile } from '@/lib/image-processing';
 
 
 
-const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
-const IMAGE_ACCEPT = '.jpg,.jpeg,.png,.gif,.webp,image/jpeg,image/png,image/gif,image/webp';
+const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/heic', 'image/heif'];
+const IMAGE_ACCEPT = '.jpg,.jpeg,.png,.gif,.webp,.heic,.heif,image/jpeg,image/png,image/gif,image/webp,image/heic,image/heif';
 const VIDEO_ACCEPT = 'video/mp4,.mp4';
 const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
 const MAX_VIDEO_SIZE = 50 * 1024 * 1024;
@@ -219,7 +220,7 @@ export const IntroductionSettingsForm = () => {
             return;
         }
 
-        if (!isVideo && !ALLOWED_IMAGE_TYPES.includes(file.type)) {
+        if (!isVideo && !ALLOWED_IMAGE_TYPES.includes(file.type) && !isHeicFile(file)) {
             toast.error(t('StoreProfile.invalidImageFormatError'));
             if (e.target) e.target.value = '';
             return;
@@ -241,18 +242,28 @@ export const IntroductionSettingsForm = () => {
             }
         }
 
+        // Process image (HEIC conversion + compression)
+        let fileToUpload: File = file;
+        if (!isVideo) {
+            try {
+                fileToUpload = await processImageFile(file);
+            } catch {
+                // fallback to original file
+            }
+        }
+
         const previousValue = getValues(fieldKey as any);
         const previousLocalPreview = localPreviews[fieldKey];
         if (previousLocalPreview) {
             URL.revokeObjectURL(previousLocalPreview);
         }
 
-        const localUrl = URL.createObjectURL(file);
+        const localUrl = URL.createObjectURL(fileToUpload);
         setLocalPreviews(prev => ({ ...prev, [fieldKey]: localUrl }));
         setIsUploading(fieldKey);
 
         try {
-            const { relativePath, publicUrl } = await uploadFile(file);
+            const { relativePath, publicUrl } = await uploadFile(fileToUpload);
             const serverRelative = toServerRelativeFromUpload(relativePath, publicUrl);
             // @ts-expect-error: dynamic key access for uploaded file fieldKey
             setValue(fieldKey, serverRelative, { shouldDirty: true, shouldValidate: true });

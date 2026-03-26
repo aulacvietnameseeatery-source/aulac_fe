@@ -17,14 +17,19 @@ import {
   ChevronRight,
   CalendarDays,
   Loader2,
+  MousePointerSquareDashed,
+  Check,
+  X,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { ALCombobox } from "@/components/ui/al-combobox";
 import type { ALComboboxOption } from "@/components/ui/al-combobox";
+import { ALDatePicker } from "@/components/ui/al-date-picker";
 import { Switch } from "@/components/ui/switch";
+import { cn } from "@/lib/utils";
 import {
-  useTeamScheduleMonthQuery,
+  useTeamScheduleQuery,
   useReassignAssignmentMutation,
   useStaffListQuery,
 } from "../../hooks/use-shift-queries";
@@ -58,6 +63,12 @@ function fmtDate(d: Date) {
   return d.toISOString().slice(0, 10);
 }
 
+/** Parse a "YYYY-MM-DD" string as local midnight (no TZ shift). */
+function parseIsoDate(s: string): Date {
+  const [y, m, d] = s.split("-").map(Number);
+  return new Date(y, m - 1, d);
+}
+
 function fmtWeekLabel(monday: Date): string {
   const sun = addDays(monday, 6);
   const opts: Intl.DateTimeFormatOptions = { month: "short", day: "numeric" };
@@ -71,6 +82,8 @@ interface ShiftMatrixCalendarProps {
   onCardClick?: (a: ShiftAssignmentListDto) => void;
   /** Callback when the + button in a cell is clicked */
   onAddClick?: (staffId: number, date: string) => void;
+  /** Callback when user confirms a multi-cell selection for bulk assignment */
+  onBulkSelect?: (staffIds: number[], workDates: string[]) => void;
   /** Current week override (defaults to this week) */
   initialMonday?: Date;
   /** External overrides for the staff schedule data (for read-only team view) */
@@ -84,50 +97,79 @@ interface ShiftMatrixCalendarProps {
 export function ShiftMatrixCalendar({
   onCardClick,
   onAddClick,
+  onBulkSelect,
   initialMonday,
   externalData,
   readOnly = false,
 }: ShiftMatrixCalendarProps) {
   const t = useTranslations("shift.schedule.matrix");
-  // ── Week navigation ─────────────────────────────────────────────
+  // ── Date range navigation ───────────────────────────────────
   const [monday, setMonday] = useState(() => initialMonday ?? getMonday(new Date()));
+  const [rangeStart, setRangeStart] = useState(() => fmtDate(initialMonday ?? getMonday(new Date())));
+  const [rangeEnd, setRangeEnd] = useState(() => fmtDate(addDays(initialMonday ?? getMonday(new Date()), 6)));
 
-  const weekDates = useMemo(() => {
-    return Array.from({ length: 7 }, (_, i) => addDays(monday, i));
-  }, [monday]);
+  /** All dates between rangeStart..rangeEnd inclusive */
+  const rangeDates = useMemo(() => {
+    const start = parseIsoDate(rangeStart);
+    const end = parseIsoDate(rangeEnd);
+    const dates: Date[] = [];
+    for (let cur = new Date(start); cur <= end; cur = addDays(cur, 1)) {
+      dates.push(new Date(cur));
+    }
+    return dates;
+  }, [rangeStart, rangeEnd]);
 
+  // Keep monday in sync for month-query when using week nav buttons
   const weekParams = useMemo(
     () => ({
-      weekStart: fmtDate(monday),
-      weekEnd: fmtDate(addDays(monday, 6)),
+      weekStart: rangeStart,
+      weekEnd: rangeEnd,
     }),
-    [monday]
+    [rangeStart, rangeEnd]
   );
 
-  const goToday = useCallback(() => setMonday(getMonday(new Date())), []);
-  const goPrev = useCallback(() => setMonday((m) => addDays(m, -7)), []);
-  const goNext = useCallback(() => setMonday((m) => addDays(m, 7)), []);
+  const goToday = useCallback(() => {
+    const m = getMonday(new Date());
+    setMonday(m);
+    setRangeStart(fmtDate(m));
+    setRangeEnd(fmtDate(addDays(m, 6)));
+  }, []);
+  const goPrev = useCallback(() => {
+    setMonday((m) => {
+      const prev = addDays(m, -7);
+      setRangeStart(fmtDate(prev));
+      setRangeEnd(fmtDate(addDays(prev, 6)));
+      return prev;
+    });
+  }, []);
+  const goNext = useCallback(() => {
+    setMonday((m) => {
+      const next = addDays(m, 7);
+      setRangeStart(fmtDate(next));
+      setRangeEnd(fmtDate(addDays(next, 6)));
+      return next;
+    });
+  }, []);
+
+  const handleRangeStartChange = useCallback((v: string) => {
+    setRangeStart(v);
+    setMonday(getMonday(parseIsoDate(v)));
+  }, []);
+
+  const handleRangeEndChange = useCallback((v: string) => {
+    setRangeEnd(v);
+  }, []);
 
   // ── Data fetching ───────────────────────────────────────────────
   const {
-    data: monthData,
+    data: rangeData,
     isLoading,
     isFetching,
-  } = useTeamScheduleMonthQuery(weekParams.weekStart, !externalData);
-
-  const weekStarts = useMemo(
-    () => monthData?.weekStarts ?? [weekParams.weekStart],
-    [monthData?.weekStarts, weekParams.weekStart]
-  );
-
-  const currentWeekPage = useMemo(() => {
-    const idx = weekStarts.indexOf(weekParams.weekStart);
-    return idx >= 0 ? idx + 1 : 1;
-  }, [weekParams.weekStart, weekStarts]);
+  } = useTeamScheduleQuery(weekParams, !externalData);
 
   const allStaffRows = useMemo<TeamScheduleStaffRow[]>(
-    () => externalData ?? monthData?.byWeek[weekParams.weekStart] ?? [],
-    [externalData, monthData?.byWeek, weekParams.weekStart]
+    () => externalData ?? rangeData ?? [],
+    [externalData, rangeData]
   );
 
   // ── Staff filter ────────────────────────────────────────────────
@@ -171,6 +213,75 @@ export function ShiftMatrixCalendar({
       ? mergedRows
       : mergedRows.filter((r) => (r.assignments?.length ?? 0) > 0);
   }, [allStaffRows, selectedStaffIds, showNoShiftEmployees, staffList]);
+
+  // ── Cell selection mode ─────────────────────────────────────────
+  const [selectionMode, setSelectionMode] = useState(false);
+  const [selectedCells, setSelectedCells] = useState<Set<string>>(new Set());
+  const isDraggingSelectRef = useRef(false);
+
+  const toggleSelectionMode = useCallback(() => {
+    setSelectionMode((prev) => {
+      if (prev) setSelectedCells(new Set());
+      return !prev;
+    });
+  }, []);
+
+  const handleCellMouseDown = useCallback(
+    (staffId: number, date: string) => {
+      if (!selectionMode) return;
+      isDraggingSelectRef.current = true;
+      const cellId = `${staffId}-${date}`;
+      setSelectedCells((prev) => {
+        const next = new Set(prev);
+        if (next.has(cellId)) next.delete(cellId);
+        else next.add(cellId);
+        return next;
+      });
+    },
+    [selectionMode]
+  );
+
+  const handleCellMouseEnter = useCallback(
+    (staffId: number, date: string) => {
+      if (!selectionMode || !isDraggingSelectRef.current) return;
+      const cellId = `${staffId}-${date}`;
+      setSelectedCells((prev) => {
+        if (prev.has(cellId)) return prev;
+        const next = new Set(prev);
+        next.add(cellId);
+        return next;
+      });
+    },
+    [selectionMode]
+  );
+
+  // Stop drag-selecting on mouseup anywhere
+  useEffect(() => {
+    const handleMouseUp = () => {
+      isDraggingSelectRef.current = false;
+    };
+    window.addEventListener("mouseup", handleMouseUp);
+    return () => window.removeEventListener("mouseup", handleMouseUp);
+  }, []);
+
+  const handleCancelSelection = useCallback(() => {
+    setSelectedCells(new Set());
+    setSelectionMode(false);
+  }, []);
+
+  const handleConfirmSelection = useCallback(() => {
+    if (!onBulkSelect || selectedCells.size === 0) return;
+    const staffIdSet = new Set<number>();
+    const dateSet = new Set<string>();
+    for (const cellId of selectedCells) {
+      const dashIdx = cellId.indexOf("-");
+      staffIdSet.add(parseInt(cellId.slice(0, dashIdx), 10));
+      dateSet.add(cellId.slice(dashIdx + 1));
+    }
+    onBulkSelect(Array.from(staffIdSet), Array.from(dateSet).sort());
+    setSelectedCells(new Set());
+    setSelectionMode(false);
+  }, [onBulkSelect, selectedCells]);
 
   // ── DnD ─────────────────────────────────────────────────────────
   const reassign = useReassignAssignmentMutation();
@@ -326,12 +437,24 @@ export function ShiftMatrixCalendar({
             </Button>
           </div>
 
-          <span className="text-sm font-semibold text-[#1A3A52]">
-            {fmtWeekLabel(monday)}
-          </span>
+          {/* Date range pickers */}
+          <ALDatePicker
+            value={rangeStart}
+            onChange={handleRangeStartChange}
+            inputSize="sm"
+            placeholder={t("from")}
+          />
+          <span className="text-xs text-[#1A3A52]/50">–</span>
+          <ALDatePicker
+            value={rangeEnd}
+            onChange={handleRangeEndChange}
+            minDate={rangeStart}
+            inputSize="sm"
+            placeholder={t("to")}
+          />
 
           <span className="rounded-full border border-[#D5BA98]/60 bg-[#FDFBF9] px-2 py-0.5 text-[10px] font-semibold text-[#1A3A52]/70">
-            {t("weekPage", { current: currentWeekPage, total: weekStarts.length })}
+            {rangeDates.length}d
           </span>
 
           {isFetching && (
@@ -374,8 +497,50 @@ export function ShiftMatrixCalendar({
               {t("draftCount", { count: draftCount })}
             </span>
           )}
+
+          {/* Selection mode toggle */}
+          {!readOnly && onBulkSelect && (
+            <Button
+              variant={selectionMode ? "default" : "outline"}
+              size="sm"
+              onClick={toggleSelectionMode}
+              className={cn("h-7 gap-1 text-xs", selectionMode && "bg-blue-600 hover:bg-blue-700 text-white")}
+              title={t("selectModeHint")}
+            >
+              <MousePointerSquareDashed className="h-3.5 w-3.5" />
+              {t("selectMode")}
+            </Button>
+          )}
         </div>
       </div>
+
+      {/* ─── Selection bar (when cells are selected) ─────────── */}
+      {selectionMode && selectedCells.size > 0 && (
+        <div className="flex items-center justify-between gap-2 border-b border-blue-200 bg-blue-50 px-4 py-1.5">
+          <span className="text-xs font-medium text-blue-700">
+            {t("confirmSelection", { count: selectedCells.size })}
+          </span>
+          <div className="flex items-center gap-1.5">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleCancelSelection}
+              className="h-6 gap-1 text-xs text-blue-700 hover:text-blue-900"
+            >
+              <X className="h-3 w-3" />
+              {t("cancelSelection")}
+            </Button>
+            <Button
+              size="sm"
+              onClick={handleConfirmSelection}
+              className="h-6 gap-1 bg-blue-600 text-xs text-white hover:bg-blue-700"
+            >
+              <Check className="h-3 w-3" />
+              {t("confirmSelection", { count: selectedCells.size })}
+            </Button>
+          </div>
+        </div>
+      )}
 
       {/* ─── Matrix ───────────────────────────────────────────── */}
       {isLoading ? (
@@ -390,7 +555,7 @@ export function ShiftMatrixCalendar({
         </div>
       ) : (
         <DndContext
-          sensors={readOnly ? [] : sensors}
+          sensors={readOnly || selectionMode ? [] : sensors}
           collisionDetection={closestCenter}
           onDragStart={handleDragStart}
           onDragMove={handleDragMove}
@@ -412,18 +577,21 @@ export function ShiftMatrixCalendar({
                 />
               </>
             )}
-            <div className="min-w-225">
-              <ShiftMatrixHeader weekDates={weekDates} />
+            <div className="min-w-[900px]">
+              <ShiftMatrixHeader weekDates={rangeDates} />
 
               <div className="overflow-y-auto ">
                 {staffRows.map((staff, idx) => (
                   <ShiftMatrixRow
                     key={`${staff.staffId}-${idx}`}
                     staff={staff}
-                    weekDates={weekDates}
+                    weekDates={rangeDates}
                     isEven={idx % 2 === 0}
+                    selectedCells={selectionMode ? selectedCells : undefined}
                     onCardClick={onCardClick}
                     onAddClick={readOnly ? undefined : onAddClick}
+                    onCellMouseDown={selectionMode ? handleCellMouseDown : undefined}
+                    onCellMouseEnter={selectionMode ? handleCellMouseEnter : undefined}
                   />
                 ))}
               </div>

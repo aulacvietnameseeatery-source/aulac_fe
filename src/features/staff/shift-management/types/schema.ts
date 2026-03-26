@@ -114,7 +114,8 @@ export type CopyWeekFormValues = z.input<typeof copyWeekFormSchema>;
 export const bulkCreateFormSchema = z.object({
   shiftTemplateId: z.number({ message: "Shift template is required" }).min(1, "Shift template is required"),
   staffIds: z.array(z.number()).min(1, "Select at least one staff member"),
-  workDate: z.string().min(1, "Work date is required"),
+  // _OLD: workDate: z.string().min(1, "Work date is required"),
+  workDates: z.array(z.string()).min(1, "Select at least one work date"),
   plannedStartAt: z.string().optional().nullable(),
   plannedEndAt: z.string().optional().nullable(),
   notes: z.string().max(500).optional().nullable(),

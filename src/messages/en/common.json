@@ -88,6 +88,8 @@
   "OrderPopup": {
     "success_label": "Success",
     "success_message": "Item added to your selection",
+    "toast_added_single": "{dishName} added to cart",
+    "toast_added_multiple": "{count} items added to cart",
     "dish_name": "Imperial Hue Beef\nNoodle Soup",
     "price": "$18.50",
     "quantity_label": "Quantity",
@@ -370,7 +372,19 @@
       "title": "Summary",
       "items_count": "{count} Distinct Items",
       "confirm_btn": "Confirm Order"
-    }
+    },
+    "err_load_cart": "Failed to load cart data.",
+    "err_table_occupied_access": "This table is already occupied. Access denied.",
+    "err_table_not_found": "Table code does not exist.",
+    "err_qr_invalid": "Invalid QR code. Please scan the QR code on the table again.",
+    "err_table_validation": "Could not validate the table. Please try again.",
+    "err_save_cart": "Failed to save the current cart.",
+    "err_save_table": "Failed to save table information.",
+    "err_table_occupied_select": "This table is already in use. Please choose another table.",
+    "err_create_order": "Could not create order: {message}",
+    "success_order_title": "Order Placed Successfully!",
+    "success_order_body": "Your order is being prepared and will be served shortly at Table {table}.",
+    "success_continue": "Continue Browsing"
   },
   "QrScan": {
     "HeroSection": {

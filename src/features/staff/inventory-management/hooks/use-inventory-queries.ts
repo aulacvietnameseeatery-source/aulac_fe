@@ -4,7 +4,7 @@ import { inventoryService } from "../services/inventory.service";
 import type {
   GetInventoryItemsFilter,
   GetTransactionsFilter,
-  CreateInventoryTransactionRequest,
+  // _OLD: CreateInventoryTransactionRequest — mutation now accepts FormData
   SubmitTransactionRequest,
   ApproveTransactionRequest,
 } from "../types/inventory.types";
@@ -70,7 +70,7 @@ export function useDashboardQuery() {
 export function useCreateTransactionMutation() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (body: CreateInventoryTransactionRequest) => inventoryService.createTransaction(body),
+    mutationFn: (formData: FormData) => inventoryService.createTransaction(formData),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: INVENTORY_KEYS.transactions() });
       qc.invalidateQueries({ queryKey: INVENTORY_KEYS.dashboard() });

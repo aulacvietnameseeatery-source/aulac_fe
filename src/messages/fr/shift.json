@@ -55,13 +55,19 @@
         "staff": "Personnel",
         "add": "Ajouter",
         "today": "Aujourd'hui",
+        "from": "Du",
+        "to": "Au",
         "filterStaff": "Filtrer les employés...",
         "showNoShiftEmployees": "Afficher les employés sans quart",
         "weekPage": "Semaine {current}/{total}",
         "draftCount": "{count} brouillon(s)",
         "loading": "Chargement du planning...",
-        "empty": "Aucune donnée de planning pour cette semaine",
+        "empty": "Aucune donnée de planning pour cette période",
         "dragToReassign": "Glisser pour réaffecter",
+        "selectMode": "Sélectionner",
+        "selectModeHint": "Cliquez et glissez pour sélectionner, puis affectez en masse",
+        "cancelSelection": "Annuler",
+        "confirmSelection": "Affecter {count} cellule(s)",
         "days": {
           "mon": "Lun",
           "tue": "Mar",
@@ -115,6 +121,15 @@
         "activeCount": "Actif : {count}",
         "inactiveCount": "Inactif : {count}",
         "totalCount": "Total des modèles : {count}",
+        "table": {
+          "no": "N\u00b0",
+          "template": "Modèle",
+          "defaultTime": "Horaire par défaut",
+          "description": "Description",
+          "status": "Statut",
+          "active": "Actif",
+          "inactive": "Inactif"
+        },
         "confirmDialog": {
           "title": "Désactiver le modèle de quart",
           "message": "Désactiver le modèle \"{name}\" ? Il ne sera plus disponible pour les nouveaux plannings.",
@@ -235,6 +250,10 @@
         "none": "Aucun incident enregistré"
       },
       "manualAdjusted": "Cet enregistrement a été ajusté manuellement.",
+      "actions": {
+        "checkIn": "Pointer entrée",
+        "checkOut": "Pointer sortie"
+      },
       "table": {
         "staff": "Personnel",
         "role": "Rôle",
@@ -372,6 +391,20 @@
         "noHoursData": "Aucune donnée d'heures",
         "issuesFlagged": "{count, plural, =0 {Aucun problème} =1 {1 problème signalé} other {# problèmes signalés}}"
       },
+      "statusNames": {
+        "ABSENT": "Absent",
+        "LATE": "En retard",
+        "ACTIVE": "Actif",
+        "ON_DUTY": "En service",
+        "COMPLETED": "Terminé",
+        "SCHEDULED": "Planifié",
+        "CHECKED_IN": "Pointé"
+      },
+      "exceptionNames": {
+        "LATE": "Arrivée tardive",
+        "ABSENT": "Absent",
+        "EARLY_LEAVE": "Départ anticipé"
+      },
       "shared": {
         "loading": "Chargement des données...",
         "empty": "Aucune donnée pour la période sélectionnée.",
@@ -480,6 +513,9 @@
         "chartScheduled": "Planifié",
         "chartWorked": "Travaillé",
         "overtimeAlert": "{count, plural, =1 {1 agent a travaillé 30+ minutes de plus que prévu.} other {# agents ont travaillé 30+ minutes de plus que prévu.}}",
+        "insightIncomplete": "{count, plural, =1 {1 agent a} other {# agents ont}} des enregistrements incomplets. Les heures de sortie peuvent manquer.",
+        "insightUnderwork": "Le personnel a travaillé {time} de moins que prévu au total. Vérifiez les lacunes.",
+        "insightOvertime": "{count, plural, =1 {1 agent} other {# agents}} a travaillé 30+ minutes de plus que prévu.",
         "table": {
           "staff": "Agent",
           "scheduled": "Planifié",
@@ -514,6 +550,17 @@
           "adjusted": "Ajusté"
         },
         "adjustedLabel": "✦ Ajusté",
+        "badgeLate": "Retard ×{count}",
+        "badgeAbsent": "Absent ×{count}",
+        "badgeEarly": "Anticipé ×{count}",
+        "minutesAffected": "{minutes}m affectées",
+        "trendTitle": "Tendance des Exceptions",
+        "chartLate": "Retard",
+        "chartAbsent": "Absent",
+        "chartEarlyLeave": "Départ anticipé",
+        "insightExceptions": "{count, plural, =1 {1 exception enregistrée.} other {# exceptions enregistrées.}}",
+        "insightImpact": " Impact total : {minutes} minutes.",
+        "insightAdjusted": " {count} ajusté(s) manuellement.",
         "noStaffFound": "Aucun agent avec des exceptions.",
         "table": {
           "date": "Date",
@@ -570,6 +617,26 @@
         "staffMember": "Sélectionner un agent...",
         "loadingStaff": "Chargement des agents...",
         "workDate": "Sélectionner une date",
+        "notes": "Notes facultatives..."
+      }
+    },
+    "bulkAssignment": {
+      "title": "Affectation en Masse",
+      "summary": "Affecter {staffCount} agents × {dateCount} date(s)",
+      "cancel": "Annuler",
+      "confirm": "Créer les Affectations",
+      "plannedHint": "Laissez les horaires vides pour utiliser les horaires par défaut du modèle.",
+      "fields": {
+        "shiftTemplate": "Modèle de Quart",
+        "staffMembers": "Agents",
+        "plannedStart": "Début Prévu",
+        "plannedEnd": "Fin Prévue",
+        "notes": "Notes"
+      },
+      "placeholders": {
+        "shiftTemplate": "Sélectionner un modèle de quart...",
+        "staffMembers": "Sélectionner les agents...",
+        "loadingStaff": "Chargement des agents...",
         "notes": "Notes facultatives..."
       }
     }
