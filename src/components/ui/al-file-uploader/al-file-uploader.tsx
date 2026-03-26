@@ -49,11 +49,11 @@ function getFileIcon(file: File) {
  * Check whether a File passes size + MIME constraints.
  * Returns a human-readable `message` or `null` if valid.
  */
-function validateFile(
+async function validateFile(
   file: File,
   maxSizeBytes: number,
   accept: string
-): { reason: ALFileValidationError["reason"]; message: string } | null {
+): Promise<{ reason: ALFileValidationError["reason"]; message: string } | null> {
   if (maxSizeBytes > 0 && file.size > maxSizeBytes) {
     return {
       reason: "size",
@@ -77,7 +77,7 @@ function validateFile(
     // iOS may report empty or application/octet-stream MIME for HEIC files,
     // which would fail the MIME check above. They'll be converted to JPEG
     // by processFiles before upload.
-    if (!mimeOk && isHeicFile(file)) {
+    if (!mimeOk && (await isHeicFile(file))) {
       const acceptsImages = accepted.some(
         (a) => a === "image/*" || a.startsWith("image/") || a === ".heic" || a === ".heif"
       );
@@ -358,7 +358,7 @@ const ALFileUploader = React.forwardRef<HTMLDivElement, ALFileUploaderProps>(
         // Step 1: HEIC conversion (if enabled)
         if (shouldAutoProcess) {
           for (const file of files) {
-            if (isHeicFile(file)) {
+            if (await isHeicFile(file)) {
               try {
                 const converted = await processImageFile(file);
                 results.push(converted);
@@ -454,7 +454,7 @@ const ALFileUploader = React.forwardRef<HTMLDivElement, ALFileUploaderProps>(
           );
           if (isDuplicate) continue;
 
-          const valError = validateFile(file, maxSizeBytes, accept);
+          const valError = await validateFile(file, maxSizeBytes, accept);
           if (valError) {
             errors.push({ file, ...valError });
             continue;
