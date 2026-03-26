@@ -5,7 +5,6 @@ import { Loader2, Save, Upload, Languages, UtensilsCrossed, Maximize2 } from "lu
 import { useTranslations } from "next-intl";
 import { getGroupSettings, uploadFile } from "../services/system-setting.service";
 import { cn } from "@/lib/utils";
-import { BASE_URL } from "@/lib/http";
 import { MediaPreviewModal } from "@/components/shared/MediaPreviewModal";
 import { DishSelectionModal } from './DishSelectionModal';
 import { DishDetailResponse } from '../../view-dish-detail/types/dish-detail.types';
@@ -14,7 +13,6 @@ import { ALInput } from "@/components/ui/al-input";
 import { useIntroductionSettingsForm } from "../hooks/useIntroductionSettingsForm";
 import { mapIntroSettingsToFormValues, mapFormValuesToIntroSettings, LOCALES, SupportedLocale, IntroFormValues } from "../types/schema";
 import { useUpdateStoreSettingsMutation, useTranslateSettingsMutation } from "../hooks/useSystemSettingsMutation";
-import { normalizeMediaUrl } from "@/lib/normalize-media-url";
 
 
 
@@ -24,6 +22,15 @@ const VIDEO_ACCEPT = 'video/mp4,.mp4';
 const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
 const MAX_VIDEO_SIZE = 50 * 1024 * 1024;
 const MAX_VIDEO_DURATION_SECONDS = 30;
+const INTRO_MEDIA_KEYS = [
+    "intro_hero_image",
+    "intro_virtualTour_videoUrl",
+    "intro_virtualTour_videoUrlLeft",
+    "intro_virtualTour_videoUrlRight",
+    "intro_collection_dish1_image",
+    "intro_collection_dish2_image",
+    "intro_collection_dish3_image"
+] as const;
 
 
 
@@ -43,6 +50,7 @@ export const IntroductionSettingsForm = () => {
     const [selectingDishIndex, setSelectingDishIndex] = useState<number | null>(null);
     const [previewData, setPreviewData] = useState<{ url: string; title: string, type: 'image' | 'video' } | null>(null);
     const [localPreviews, setLocalPreviews] = useState<Record<string, string>>({});
+    const [remotePublicUrls, setRemotePublicUrls] = useState<Record<string, string>>({});
 
     const heroImageRef = useRef<HTMLInputElement>(null);
     const virtualTourVideoLeftRef = useRef<HTMLInputElement>(null);
@@ -59,12 +67,48 @@ export const IntroductionSettingsForm = () => {
     const dish2ImageUrl = watch('intro_collection_dish2_image') as string;
     const dish3ImageUrl = watch('intro_collection_dish3_image') as string;
 
+    const toServerRelativePath = (value: string) => {
+        const trimmed = value.trim();
+        if (!trimmed) return "";
+
+        try {
+            const parsed = new URL(trimmed);
+            const path = parsed.pathname;
+            if (path.startsWith("/uploads/")) return path.substring(1);
+            return path.startsWith("/") ? `uploads${path}` : `uploads/${path}`;
+        } catch {
+            // not an absolute URL
+        }
+
+        if (trimmed.startsWith("/uploads/")) return trimmed.substring(1);
+        if (trimmed.startsWith("uploads/")) return trimmed;
+        return `uploads/${trimmed.replace(/^\/+/, "")}`;
+    };
+
+    const toServerRelativeFromUpload = (relativePath: string, publicUrl?: string) => {
+        if (relativePath) {
+            return toServerRelativePath(relativePath);
+        }
+        if (publicUrl) {
+            return toServerRelativePath(publicUrl);
+        }
+        return "";
+    };
+
     const handleDishSelect = (dish: DishDetailResponse, index: number) => {
         const baseKey = `intro_collection_dish${index}` as const;
         const primaryImage = dish.media.find(m => m.isPrimary && m.mediaType === 'IMAGE')?.url || dish.media.find(m => m.mediaType === 'IMAGE')?.url || "";
+        const serverRelativeImage = primaryImage ? toServerRelativePath(primaryImage) : "";
 
         // @ts-expect-error: dynamic key access from featured dish selection
-        setValue(`${baseKey}_image`, primaryImage, { shouldDirty: true });
+        setValue(`${baseKey}_image`, serverRelativeImage, { shouldDirty: true });
+
+        if (primaryImage) {
+            setRemotePublicUrls(prev => ({
+                ...prev,
+                [`${baseKey}_image`]: primaryImage
+            }));
+        }
 
         LOCALES.forEach(lang => {
             const l = lang;
@@ -123,12 +167,19 @@ export const IntroductionSettingsForm = () => {
         try {
             const settings = await getGroupSettings("store");
             const kv: Record<string, string> = {};
+            const publicUrlMap: Record<string, string> = {};
+            const mediaKeySet = new Set<string>(INTRO_MEDIA_KEYS);
             settings.forEach(s => {
                 const key = s.settingKey.replace('store.', '');
                 kv[key] = s.value?.toString() || '';
+                const formKey = key.replace(/\./g, '_');
+                if (mediaKeySet.has(formKey) && s.publicUrl) {
+                    publicUrlMap[formKey] = s.publicUrl;
+                }
             });
             const formattedData = mapIntroSettingsToFormValues(kv);
             reset(formattedData);
+            setRemotePublicUrls(publicUrlMap);
         } catch (error) {
             console.error("Failed to load intro settings:", error);
         } finally {
@@ -201,9 +252,15 @@ export const IntroductionSettingsForm = () => {
         setIsUploading(fieldKey);
 
         try {
-            const relativePath = await uploadFile(file);
+            const { relativePath, publicUrl } = await uploadFile(file);
+            const serverRelative = toServerRelativeFromUpload(relativePath, publicUrl);
             // @ts-expect-error: dynamic key access for uploaded file fieldKey
-            setValue(fieldKey, relativePath, { shouldDirty: true, shouldValidate: true });
+            setValue(fieldKey, serverRelative, { shouldDirty: true, shouldValidate: true });
+            if (publicUrl) {
+                setRemotePublicUrls(prev => ({ ...prev, [fieldKey]: publicUrl }));
+            } else if (serverRelative) {
+                setRemotePublicUrls(prev => ({ ...prev, [fieldKey]: serverRelative }));
+            }
             toast.success(t("StoreProfile.uploadSuccess"));
         } catch (error) {
             toast.error(t("StoreProfile.uploadError"));
@@ -259,8 +316,11 @@ export const IntroductionSettingsForm = () => {
     const getFullUrl = (fieldKey: string, watchedVal: string) => {
         const previewUrl = localPreviews[fieldKey];
         if (previewUrl) return previewUrl;
+        const remoteUrl = remotePublicUrls[fieldKey];
+        if (remoteUrl) return remoteUrl.startsWith("uploads/") ? `/${remoteUrl}` : remoteUrl;
         if (!watchedVal) return '';
-        return normalizeMediaUrl(watchedVal);
+        if (watchedVal.startsWith("/uploads/")) return watchedVal;
+        return watchedVal.startsWith("uploads/") ? `/${watchedVal}` : watchedVal;
     };
 
     if (isLoading) {
