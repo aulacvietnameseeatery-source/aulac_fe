@@ -3,7 +3,7 @@
 import { useEffect, useRef, useCallback } from "react";
 import { toast } from "sonner";
 import { useTranslations, useLocale } from "next-intl";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/routing"
 import { BellRing, Bell, X } from "lucide-react";
 import { useNotificationStore } from "../store/notification.store";
 import {

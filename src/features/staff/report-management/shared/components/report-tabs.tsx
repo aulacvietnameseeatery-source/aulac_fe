@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { DollarSign, ListTodo, ShoppingBag, Users, Hourglass } from "lucide-react";
-import Link from "next/link";
+import { Link } from "@/routing"
 
 interface ReportTabsProps {
     activeTab: string;

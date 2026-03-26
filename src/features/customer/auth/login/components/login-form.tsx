@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
+import { Link } from "@/routing"
 import { Eye, EyeOff, ArrowRight, ArrowLeft } from "lucide-react";
 import { useLogin } from "../hooks/use-login";
 import { useRateLimit } from "@/hooks/use-rate-limit";

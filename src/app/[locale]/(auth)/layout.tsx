@@ -2,7 +2,7 @@
 
 import { AdminSidebar } from "@/components/layout/admin-sidebar/admin-sidebar";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/routing"
 import { useAuth } from "@/components/providers/auth-provider";
 import "../../../styles/adminLayout.css"
 import { Tooltip } from "react-tooltip";

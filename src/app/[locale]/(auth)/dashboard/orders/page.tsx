@@ -11,7 +11,7 @@ import {
     X,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/routing"
 import { Button } from "@/components/ui/button";
 import { TablePagination } from "@/components/ui/table/table-pagination";
 import { useOrderHistory } from "@/features/staff/order-management/hooks/useOrderHistory";

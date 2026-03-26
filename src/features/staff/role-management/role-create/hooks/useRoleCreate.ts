@@ -1,6 +1,6 @@
 
 import { useState, useEffect, useMemo } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/routing"
 import { toast } from "sonner";
 import { createRole, getAllPermissions } from "../services/role-create.service";
 import { CreateRoleRequest, PermissionGroupDto } from "../types/role-create.types";

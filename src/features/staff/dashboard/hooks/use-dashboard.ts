@@ -1,18 +1,22 @@
-// src/features/dashboard/hooks/use-dashboard.ts
-
 import { useState, useEffect, useCallback } from "react";
 import { toast } from "sonner";
 import { dashboardService } from "../services/dashboard-service";
-import {
-    DashboardFilterParams,
+import type {
+    DashboardFilterRequest,
     DashboardSummaryDto,
     RevenueChartItemDto,
     TopSellingItemDto,
-    DashboardStatisticsDto
+    DashboardStatisticsDto,
+    ReservationActivityDto,
+    TableActivityDto,
+    NotificationActivityDto
 } from "../types/dashboard-types";
 
+export interface DashboardFilterParams extends DashboardFilterRequest {
+    period?: 'today' | 'weekly' | 'monthly' | 'yearly' | 'custom';
+}
+
 export const useDashboard = () => {
-    // STATES
     const [isLoading, setIsLoading] = useState(false);
 
     const [summary, setSummary] = useState<DashboardSummaryDto | null>(null);
@@ -20,59 +24,63 @@ export const useDashboard = () => {
     const [topSelling, setTopSelling] = useState<TopSellingItemDto[]>([]);
     const [statistics, setStatistics] = useState<DashboardStatisticsDto | null>(null);
 
-    // FILTERS
-    const [filters, setFilters] = useState<DashboardFilterParams>({
-        period: 'weekly'
-    });
+    const [reservations, setReservations] = useState<ReservationActivityDto[]>([]);
+    const [tables, setTables] = useState<TableActivityDto[]>([]);
+    const [notifications, setNotifications] = useState<NotificationActivityDto[]>([]);
+
+    const [filters, setFilters] = useState<DashboardFilterParams>({ period: 'weekly' });
 
     const fetchDashboardData = useCallback(async () => {
         setIsLoading(true);
         try {
-            const [summaryRes, revenueRes, topSellingRes, statsRes] = await Promise.all([
-                dashboardService.getSummary(filters),
-                dashboardService.getRevenueChart(filters),
-                dashboardService.getTopSelling(6, filters),
-                dashboardService.getStatistics(filters)
+            const apiFilters: DashboardFilterRequest = {
+                startDate: filters.startDate,
+                endDate: filters.endDate
+            };
+
+            const [
+                summaryRes, revenueRes, topSellingRes, statsRes,
+                reserRes, tablesRes, notifRes
+            ] = await Promise.allSettled([
+                dashboardService.getSummary(apiFilters),
+                dashboardService.getRevenueChart(apiFilters),
+                dashboardService.getTopSelling({ ...apiFilters, limit: 6 }),
+                dashboardService.getStatistics(apiFilters),
+                dashboardService.getRecentReservations(),
+                dashboardService.getAvailableTables(),
+                dashboardService.getNotifications()
             ]);
 
-            setSummary(summaryRes);
-            setRevenueData(revenueRes);
-            setTopSelling(topSellingRes);
-            setStatistics(statsRes);
+            if (summaryRes.status === 'fulfilled') setSummary(summaryRes.value);
+            if (revenueRes.status === 'fulfilled') setRevenueData(revenueRes.value);
+            if (topSellingRes.status === 'fulfilled') setTopSelling(topSellingRes.value);
+            if (statsRes.status === 'fulfilled') setStatistics(statsRes.value);
+            if (reserRes.status === 'fulfilled') setReservations(reserRes.value);
+            if (tablesRes.status === 'fulfilled') setTables(tablesRes.value);
+            if (notifRes.status === 'fulfilled') setNotifications(notifRes.value);
+
+            [summaryRes, revenueRes, topSellingRes, statsRes, reserRes, tablesRes, notifRes].forEach(res => {
+                if (res.status === 'rejected') console.error("Dashboard API Error:", res.reason);
+            });
 
         } catch (error: any) {
-            toast.error(error.message || "Không thể tải dữ liệu Dashboard. Vui lòng thử lại.");
+            toast.error(error.message || "Lỗi khi tải dữ liệu Dashboard.");
         } finally {
             setIsLoading(false);
         }
     }, [filters]);
 
-    // Tự động gọi khi filters thay đổi
     useEffect(() => {
         fetchDashboardData();
     }, [fetchDashboardData]);
 
-    // ACTIONS
-    const onFilterChange = (newFilters: Partial<DashboardFilterParams>) => {
-        setFilters(prev => ({ ...prev, ...newFilters }));
-    };
-
-    const refresh = () => {
-        fetchDashboardData();
-    };
+    const onFilterChange = (newFilters: Partial<DashboardFilterParams>) => setFilters(prev => ({ ...prev, ...newFilters }));
+    const refresh = () => fetchDashboardData();
 
     return {
-        data: {
-            summary,
-            revenueData,
-            topSelling,
-            statistics
-        },
+        data: { summary, revenueData, topSelling, statistics, reservations, tables, notifications },
         isLoading,
         filters,
-        actions: {
-            onFilterChange,
-            refresh
-        }
+        actions: { onFilterChange, refresh }
     };
 };

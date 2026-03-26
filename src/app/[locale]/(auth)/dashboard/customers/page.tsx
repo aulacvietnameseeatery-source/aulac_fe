@@ -17,7 +17,7 @@ import { CustomerActions } from "@/features/staff/customer-management/components
 import { CustomerModal, CustomerFormData } from "@/features/staff/customer-management/components/customer-modal";
 import { staffCustomerService } from "@/features/staff/customer-management/services/customer-service";
 import { ConfirmModal } from "@/components/layout/admin-sidebar/confirm-modal";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/routing"
 
 const CustomerListContent = () => {
     const t = useTranslations("Customer.List");

@@ -1,7 +1,7 @@
 "use client";
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { Link } from "@/routing"
+import { usePathname } from "@/routing"
 import { cn } from "@/lib/utils";
 
 interface NavLinkProps {

@@ -92,7 +92,6 @@ async function http<T>(path: string, options?: FetchOptions): Promise<T> {
         if (response.status === 401 && !path.includes('/auth/refresh') && !path.includes('/auth/login')) {
             // If already refreshing, queue this request
             if (isRefreshing) {
-                // SỬA LỖI 1: Thêm <string> vào Promise
                 return new Promise<string>((resolve, reject) => {
                     failedQueue.push({ resolve, reject });
                 }).then((newToken) => {
@@ -211,7 +210,6 @@ export const api = {
         http<T>(path, {
             ...options,
             method: "POST",
-            // SỬA LỖI 2: Ép kiểu body as any
             body: (body as any) instanceof FormData
                 ? (body as any)
                 : JSON.stringify(body),
@@ -221,7 +219,6 @@ export const api = {
         http<T>(path, {
             ...options,
             method: "PUT",
-            // SỬA LỖI 2: Ép kiểu body as any
             body: (body as any) instanceof FormData
                 ? (body as any)
                 : JSON.stringify(body),
@@ -234,7 +231,6 @@ export const api = {
         http<T>(path, {
             ...options,
             method: "PATCH",
-            // SỬA LỖI 3: Thêm check FormData cho PATCH
             body: (body as any) instanceof FormData
                 ? (body as any)
                 : JSON.stringify(body),

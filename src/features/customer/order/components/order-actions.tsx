@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "@/routing"
 import { useTranslations } from "next-intl";
 import "../styles/index.css";
 

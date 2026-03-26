@@ -13,7 +13,7 @@ import { ProtectedRoute } from "@/components/protected-route";
 import { PermissionGuard } from "@/components/permission-guard";
 import { Permissions } from "@/types/const";
 import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/routing"
 
 const RoleListContent = () => {
   const t = useTranslations("Role.List");
