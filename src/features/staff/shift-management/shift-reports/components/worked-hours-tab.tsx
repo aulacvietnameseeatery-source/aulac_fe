@@ -109,19 +109,19 @@ export function WorkedHoursTab({ rows, loading }: Props) {
       {incompleteCount > 0 && (
         <InsightBanner
           type="warning"
-          message={`${incompleteCount} staff member${incompleteCount > 1 ? "s have" : " has"} incomplete time records. Check-out times may be missing.`}
+          message={t("workedHoursTab.insightIncomplete", { count: incompleteCount })}
         />
       )}
       {totalVariance < -60 && (
         <InsightBanner
           type="info"
-          message={`Staff worked ${minToHM(Math.abs(totalVariance))} less than scheduled in total. Review coverage gaps.`}
+          message={t("workedHoursTab.insightUnderwork", { time: minToHM(Math.abs(totalVariance)) })}
         />
       )}
       {overtimeCount > 0 && (
         <InsightBanner
           type="info"
-          message={`${overtimeCount} staff member${overtimeCount > 1 ? "s" : ""} worked 30+ minutes over their scheduled hours.`}
+          message={t("workedHoursTab.insightOvertime", { count: overtimeCount })}
         />
       )}
 

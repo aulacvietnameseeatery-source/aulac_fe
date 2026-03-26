@@ -11,6 +11,7 @@ import { PublishToolbar } from "../components/publish-toolbar";
 import { CopyWeekDialog } from "../components/copy-week-dialog";
 import { ShiftAssignmentForm } from "../components/shift-assignment-form";
 import { ShiftAssignmentPanel } from "../components/shift-assignment-panel";
+import { BulkAssignmentDialog, type BulkAssignmentSelection } from "../components/bulk-assignment-dialog";
 // _OLD: import { ShiftScheduleList } from "../components/shift-schedule-list";
 import { useTeamScheduleQuery, useShiftAssignmentDetailQuery } from "../hooks/use-shift-queries";
 import type { ShiftAssignmentListDto } from "../types/shift-management.types";
@@ -69,6 +70,8 @@ export function ShiftManagement() {
   const [panelTargetId, setPanelTargetId] = useState<number | null>(null);
   const [prefillStaffId, setPrefillStaffId] = useState<number | undefined>();
   const [prefillDate, setPrefillDate] = useState<string | undefined>();
+  const [bulkOpen, setBulkOpen] = useState(false);
+  const [bulkSelection, setBulkSelection] = useState<BulkAssignmentSelection | null>(null);
 
   // Fetch detailed assignment for the panel
   const { data: panelDetail } = useShiftAssignmentDetailQuery(
@@ -93,6 +96,11 @@ export function ShiftManagement() {
     setPrefillDate(undefined);
     setFormOpen(true);
   };
+
+  const handleBulkSelect = useCallback((staffIds: number[], workDates: string[]) => {
+    setBulkSelection({ staffIds, workDates });
+    setBulkOpen(true);
+  }, []);
 
   return (
     <div className="space-y-4 flex flex-col h-full">
@@ -133,6 +141,7 @@ export function ShiftManagement() {
       <ShiftMatrixCalendar
         onCardClick={handleCardClick}
         onAddClick={handleAddClick}
+        onBulkSelect={handleBulkSelect}
         initialMonday={monday}
       />
 
@@ -141,6 +150,12 @@ export function ShiftManagement() {
         open={formOpen}
         onClose={() => setFormOpen(false)}
         editTarget={editTarget}
+      />
+
+      <BulkAssignmentDialog
+        open={bulkOpen}
+        onClose={() => setBulkOpen(false)}
+        selection={bulkSelection}
       />
 
       {panelDetail && panelTargetId && (

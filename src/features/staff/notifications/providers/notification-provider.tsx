@@ -14,6 +14,17 @@ interface NotificationContextType {
   connectionRef: React.RefObject<signalR.HubConnection | null>;
 }
 
+declare global {
+  interface Window {
+    __notificationDebug?: {
+      hubUrl: string;
+      getStoreState: () => ReturnType<typeof useNotificationStore.getState>;
+      getConnectionState: () => signalR.HubConnectionState;
+      connectionId: () => string | null;
+    };
+  }
+}
+
 const NotificationContext = createContext<NotificationContextType>({
   connectionRef: { current: null },
 });
@@ -25,6 +36,7 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
   const connectionRef = useRef<signalR.HubConnection | null>(null);
   const { addNotification, mergeMissed, setConnected, setUnreadCount, setPreferences } =
     useNotificationStore();
+  const isDev = process.env.NODE_ENV === "development";
 
   // Lấy unread count và preferences từ REST khi provider mount
   const fetchInitialData = useCallback(async () => {
@@ -58,8 +70,11 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
   useEffect(() => {
     if (!token) return;
 
+    let destroyed = false;
+    const hubUrl = `${BASE_URL}/hubs/restaurant`;
+
     const connection = new signalR.HubConnectionBuilder()
-      .withUrl(`${BASE_URL}/hubs/restaurant`, {
+      .withUrl(hubUrl, {
         accessTokenFactory: () => authStorage.getAccessToken() ?? "",
       })
       .withAutomaticReconnect([0, 2000, 5000, 10000, 30000])
@@ -68,6 +83,16 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
 
     connectionRef.current = connection;
 
+    if (isDev && typeof window !== "undefined") {
+      window.__notificationDebug = {
+        hubUrl,
+        getStoreState: () => useNotificationStore.getState(),
+        getConnectionState: () => connection.state,
+        connectionId: () => connection.connectionId,
+      };
+      console.info("[NotificationProvider] Debug helper ready: window.__notificationDebug");
+    }
+
     // Handle incoming notifications
     connection.on(SIGNALR_EVENT_RECEIVE, (notification: NotificationDto) => {
       addNotification(notification);
@@ -75,15 +100,28 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
 
     // Connection state handlers
     connection.onreconnecting(() => {
+      if (isDev) {
+        console.info("[NotificationProvider] Reconnecting...");
+      }
       setConnected(false);
     });
 
     connection.onreconnected(() => {
+      if (isDev) {
+        console.info("[NotificationProvider] Reconnected", {
+          connectionId: connection.connectionId,
+        });
+      }
       setConnected(true);
       recoverMissed();
     });
 
-    connection.onclose(() => {
+    connection.onclose((err) => {
+      if (isDev) {
+        console.info("[NotificationProvider] Closed", {
+          reason: err?.message ?? "normal-close",
+        });
+      }
       setConnected(false);
     });
 
@@ -91,17 +129,30 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
     connection
       .start()
       .then(() => {
+        if (destroyed) return;
+        if (isDev) {
+          console.info("[NotificationProvider] Connected", {
+            hubUrl,
+            connectionId: connection.connectionId,
+          });
+        }
         setConnected(true);
         fetchInitialData();
       })
       .catch((err) => {
-        console.error("[NotificationProvider] Connection failed:", err);
+        // `destroyed` means cleanup ran before start() resolved (React StrictMode double-invoke) — ignore
+        if (destroyed) return;
+        console.warn("[NotificationProvider] Connection failed:", err);
         setConnected(false);
       });
 
     return () => {
+      destroyed = true;
       connection.stop();
       connectionRef.current = null;
+      if (isDev && typeof window !== "undefined") {
+        delete window.__notificationDebug;
+      }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);

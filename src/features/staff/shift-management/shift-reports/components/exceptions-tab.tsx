@@ -82,24 +82,24 @@ function StaffExceptionAccordion({ group }: { group: StaffExceptionGroup }) {
           <div className="flex gap-1 flex-wrap">
             {group.late > 0 && (
               <Badge variant="outline" className="text-[10px] border-amber-600 bg-amber-600 text-white">
-                Late ×{group.late}
+                {t("exceptionsTab.badgeLate", { count: group.late })}
               </Badge>
             )}
             {group.absent > 0 && (
               <Badge variant="outline" className="text-[10px] border-red-600 bg-red-600 text-white">
-                Absent ×{group.absent}
+                {t("exceptionsTab.badgeAbsent", { count: group.absent })}
               </Badge>
             )}
             {group.earlyLeave > 0 && (
               <Badge variant="outline" className="text-[10px] border-blue-600 bg-blue-600 text-white">
-                Early ×{group.earlyLeave}
+                {t("exceptionsTab.badgeEarly", { count: group.earlyLeave })}
               </Badge>
             )}
           </div>
         </div>
         <div className="flex items-center gap-2 shrink-0 ml-2">
           {group.totalMinutes > 0 && (
-            <span className="text-xs text-[#1A3A52]/45">{group.totalMinutes}m affected</span>
+            <span className="text-xs text-[#1A3A52]/45">{t("exceptionsTab.minutesAffected", { minutes: group.totalMinutes })}</span>
           )}
           {open ? (
             <ChevronUp className="w-3.5 h-3.5 text-[#1A3A52]/45" />
@@ -137,7 +137,7 @@ function StaffExceptionAccordion({ group }: { group: StaffExceptionGroup }) {
                       variant="outline"
                       className={`text-[10px] font-semibold ${exceptionBadgeClass(r.exceptionType)}`}
                     >
-                      {displayExceptionName(r.exceptionType)}
+                      {displayExceptionName(r.exceptionType, (k) => t(`exceptionNames.${k}`))}
                     </Badge>
                     {r.isManualAdjustment && (
                       <Badge
@@ -231,7 +231,7 @@ export function ExceptionsTab({ rows, loading }: Props) {
       {filteredRows.length > 0 && (
         <InsightBanner
           type={filteredRows.length > 10 ? "warning" : "info"}
-          message={`${filteredRows.length} exception${filteredRows.length > 1 ? "s" : ""} recorded.${totalMinutes > 0 ? ` Total impact: ${totalMinutes} minutes.` : ""}${manual > 0 ? ` ${manual} manually adjusted.` : ""}`}
+          message={`${t("exceptionsTab.insightExceptions", { count: filteredRows.length })}${totalMinutes > 0 ? t("exceptionsTab.insightImpact", { minutes: totalMinutes }) : ""}${manual > 0 ? t("exceptionsTab.insightAdjusted", { count: manual }) : ""}`}
         />
       )}
 
@@ -297,7 +297,7 @@ export function ExceptionsTab({ rows, loading }: Props) {
             <Card className="border border-[#D5BA98]/60 bg-white shadow-sm overflow-hidden">
               <CardHeader className="bg-[#D5BA98]/10 py-3 border-b border-slate-100">
                 <CardTitle className="text-sm font-semibold text-[#1A3A52]">
-                  Exception Trends Over Time
+                  {t("exceptionsTab.trendTitle")}
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-4 pt-5">
@@ -325,11 +325,11 @@ export function ExceptionsTab({ rows, loading }: Props) {
                         }}
                       />
                       <Legend iconType="circle" wrapperStyle={{ fontSize: 12, paddingTop: 12 }} />
-                      <Line dataKey="late" name="Late" stroke="#d97706" strokeWidth={2} dot={false} />
-                      <Line dataKey="absent" name="Absent" stroke="#dc2626" strokeWidth={2} dot={false} />
+                      <Line dataKey="late" name={t("exceptionsTab.chartLate")} stroke="#d97706" strokeWidth={2} dot={false} />
+                      <Line dataKey="absent" name={t("exceptionsTab.chartAbsent")} stroke="#dc2626" strokeWidth={2} dot={false} />
                       <Line
                         dataKey="earlyLeave"
-                        name="Early Leave"
+                        name={t("exceptionsTab.chartEarlyLeave")}
                         stroke="#2563eb"
                         strokeWidth={2}
                         dot={false}
@@ -364,7 +364,7 @@ export function ExceptionsTab({ rows, loading }: Props) {
               <table className="w-full text-sm min-w-[540px]">
                 <thead className="bg-[#1A3A52]/5">
                   <tr>
-                    {["Date", "Staff", "Shift", "Exception", "Min Affected", "Reviewer"].map((h) => (
+                    {[t("exceptionsTab.table.date"), t("exceptionsTab.table.staff"), t("exceptionsTab.table.shift"), t("exceptionsTab.table.exceptionType"), t("exceptionsTab.table.minutes"), t("exceptionsTab.table.reviewer")].map((h) => (
                       <th
                         key={h}
                         className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-[#1A3A52]/65 whitespace-nowrap"
@@ -398,7 +398,7 @@ export function ExceptionsTab({ rows, loading }: Props) {
                             variant="outline"
                             className={`text-[10px] font-semibold ${exceptionBadgeClass(r.exceptionType)}`}
                           >
-                            {displayExceptionName(r.exceptionType)}
+                            {displayExceptionName(r.exceptionType, (k) => t(`exceptionNames.${k}`))}
                           </Badge>
                           {r.isManualAdjustment && (
                             <Badge
