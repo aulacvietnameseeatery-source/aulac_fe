@@ -6,6 +6,7 @@ import { Dialog } from "@/components/ui/dialog";
 import { ALInput } from "@/components/ui/al-input";
 import { ALCombobox } from "@/components/ui/al-combobox"; // used for static Status field (not a lookup entity)
 import { ALFileUploader } from "@/components/ui/al-file-uploader";
+import { useImageProcessing } from "@/hooks/use-image-processing";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { RefreshCcw, Download, Eye, EyeOff, ImageOff } from "lucide-react";
@@ -59,6 +60,7 @@ const TableModal: React.FC<TableModalProps> = ({
   const [qrPreview, setQrPreview] = useState(false);
   const [pendingFiles, setPendingFiles] = useState<File[]>([]);
   const [removedImageIds, setRemovedImageIds] = useState<number[]>([]);
+  const { processFiles } = useImageProcessing();
   // ── Fetch lookup values via shared useLookupCrud ──
   const zoneLookup = useLookupCrud({
     typeId:      LOOKUP_TYPE.TableZone,
@@ -444,10 +446,11 @@ const TableModal: React.FC<TableModalProps> = ({
                   onPendingChange={setPendingFiles}
                   isUploading={isSubmitting}
                   accept="image/*"
-                  acceptHint={["PNG", "JPG", "GIF", "WEBP"]}
+                  acceptHint={["PNG", "JPG", "GIF", "WEBP", "HEIC"]}
                   maxFiles={5}
                   maxSizeBytes={5 * 1024 * 1024}
                   variant="image"
+                  processFiles={processFiles}
                   disabled={isSubmitting}
                 />
           </div>

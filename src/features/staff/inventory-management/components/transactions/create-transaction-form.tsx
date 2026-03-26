@@ -17,6 +17,7 @@ import { ALCard } from "@/components/ui/al-card";
 import { ALInput } from "@/components/ui/al-input";
 import { ALCombobox } from "@/components/ui/al-combobox";
 import { ALFileUploader } from "@/components/ui/al-file-uploader";
+import { useImageProcessing } from "@/hooks/use-image-processing";
 import { LOOKUP_TYPE, useLookupCrud, LookupCombobox } from "@/features/lookup";
 import { listSupplierService } from "@/features/staff/supplier-management/supplier-list/services/listSupplierService";
 import {
@@ -116,6 +117,7 @@ export function CreateTransactionForm() {
   const [stockCheckAreaNote, setStockCheckAreaNote] = useState("");
   const [note, setNote] = useState("");
   const [pendingEvidenceFiles, setPendingEvidenceFiles] = useState<File[]>([]);
+  const { processFiles } = useImageProcessing();
   const [items, setItems] = useState<ItemRow[]>([]);
 
   const [generatedTransactionCode] = useState(() => {
@@ -366,11 +368,12 @@ export function CreateTransactionForm() {
             onPendingChange={setPendingEvidenceFiles}
             isUploading={false}
             accept="image/*"
-            acceptHint={["PNG", "JPG", "WEBP"]}
+            acceptHint={["PNG", "JPG", "WEBP", "HEIC"]}
             maxFiles={4}
             maxSizeBytes={5 * 1024 * 1024}
             variant="image"
             imagePerRow={4}
+            processFiles={processFiles}
           />
         </ALCard>
       </div>

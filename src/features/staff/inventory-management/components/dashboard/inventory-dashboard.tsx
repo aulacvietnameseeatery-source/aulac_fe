@@ -11,6 +11,7 @@ import {
   Clock,
   ArrowRight,
 } from "lucide-react";
+import { dateUtils } from "@/lib/date-utils";
 import { ALCard } from "@/components/ui/al-card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -241,7 +242,7 @@ function RecentTxRow({ tx }: { tx: RecentTransactionDto }) {
         </div>
         <div className="text-xs text-[#1A3A52]/40 mt-0.5">
           {tx.createdByName} · {t("itemCount", { count: tx.itemCount })}
-          {tx.createdAt && ` · ${format(new Date(tx.createdAt), "dd/MM HH:mm")}`}
+          {tx.createdAt && ` · ${dateUtils.formatLocal(tx.createdAt, "dd/MM HH:mm")}`}
         </div>
       </div>
       <ArrowRight className="w-4 h-4 text-[#1A3A52]/25 shrink-0" />

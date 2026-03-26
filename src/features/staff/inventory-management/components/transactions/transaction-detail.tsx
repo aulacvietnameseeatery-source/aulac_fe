@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { format } from "date-fns";
+import { dateUtils } from "@/lib/date-utils";
 import {
   ArrowLeft,
   ArrowDownCircle,
@@ -141,14 +142,14 @@ export function TransactionDetail({ transactionId }: Props) {
             <InfoField label={t("createdBy")} value={tx.createdByName} />
             <InfoField
               label={t("createdAt")}
-              value={tx.createdAt ? format(new Date(tx.createdAt), "dd/MM/yyyy HH:mm") : null}
+              value={tx.createdAt ? dateUtils.formatLocal(tx.createdAt, "dd/MM/yyyy HH:mm") : null}
             />
             {tx.supplierName && <InfoField label={t("supplier")} value={tx.supplierName} />}
             {tx.exportReasonName && <InfoField label={t("exportReason")} value={tx.exportReasonName} />}
             {tx.submittedAt && (
               <InfoField
                 label={t("submittedAt")}
-                value={format(new Date(tx.submittedAt), "dd/MM/yyyy HH:mm")}
+                value={dateUtils.formatLocal(tx.submittedAt, "dd/MM/yyyy HH:mm")}
               />
             )}
             {tx.approvedByName && (
@@ -156,7 +157,7 @@ export function TransactionDetail({ transactionId }: Props) {
                 <InfoField label={t("approvedBy")} value={tx.approvedByName} />
                 <InfoField
                   label={t("approvedAt")}
-                  value={tx.approvedAt ? format(new Date(tx.approvedAt), "dd/MM/yyyy HH:mm") : null}
+                  value={tx.approvedAt ? dateUtils.formatLocal(tx.approvedAt, "dd/MM/yyyy HH:mm") : null}
                 />
               </>
             )}

@@ -28,7 +28,7 @@ export interface ALExistingFile {
 
 export interface ALFileValidationError {
   file: File;
-  reason: "size" | "type" | "count";
+  reason: "size" | "type" | "count" | "processing-failed";
   message: string;
 }
 
@@ -129,6 +129,16 @@ export interface ALFileUploaderProps {
    * @default 4
    */
   imagePerRow?: ALFileUploaderImagePerRow;
+
+  // ── Processing ──────────────────────────────────────────────
+  /**
+   * Optional async callback to process files before they enter the pending queue.
+   * Use this to convert HEIC→JPEG and/or compress images client-side.
+   *
+   * Receives validated files, returns processed files.
+   * The component shows a "Processing…" state while this runs.
+   */
+  processFiles?: (files: File[]) => Promise<File[]>;
 
   // ── State ───────────────────────────────────────────────────
   /** Disables all interactions */

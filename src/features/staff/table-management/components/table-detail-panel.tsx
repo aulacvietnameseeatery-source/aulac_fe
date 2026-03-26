@@ -4,6 +4,7 @@ import React from "react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
+import { dateUtils } from "@/lib/date-utils";
 import { Pencil, Trash2, QrCode, CalendarClock, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PermissionGuard } from "@/components/permission-guard";
@@ -175,12 +176,7 @@ export const TableDetailPanel: React.FC<TableDetailPanelProps> = ({
                         </p>
                         <p className="text-[10px] text-gray-400">
                           {t("detail.paxCount", { count: r.pax })} &middot;{" "}
-                          {new Date(r.reservedTime).toLocaleString([], {
-                            month: "short",
-                            day: "numeric",
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          })}
+                          {dateUtils.formatLocal(r.reservedTime, "MMM dd, HH:mm")}
                         </p>
                       </div>
                     </div>
