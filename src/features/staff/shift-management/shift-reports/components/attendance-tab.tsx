@@ -536,7 +536,7 @@ export function AttendanceTab({ rows, loading }: Props) {
                             variant="outline"
                             className={`text-[10px] font-semibold ${attendanceBadgeClass(r.attendanceStatusCode)}`}
                           >
-                            {displayStatusName(r.attendanceStatusCode)}
+                            {displayStatusName(r.attendanceStatusCode, (k) => t(`statusNames.${k}`))}
                           </Badge>
                         </td>
                         <td className="px-3 py-2.5 text-[#1A3A52] whitespace-nowrap text-xs">

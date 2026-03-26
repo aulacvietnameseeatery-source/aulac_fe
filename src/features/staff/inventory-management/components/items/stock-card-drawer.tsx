@@ -178,7 +178,7 @@ export function StockCardDrawer({ item, open, onClose }: Props) {
           <ALCard variant="default" padding="md" elevation="sm" radius="xl">
           {isLoading ? (
             <div className="flex items-center justify-center py-12 text-[#1A3A52]/40">
-              Loading...
+              {t("loading")}
             </div>
           ) : entries.length === 0 ? (
             <div className="text-center py-12 text-[#1A3A52]/40 text-sm">
@@ -222,6 +222,7 @@ export function StockCardDrawer({ item, open, onClose }: Props) {
 }
 
 function StockCardEntry({ entry }: { entry: StockCardDto }) {
+  const t = useTranslations("inventory.stockCard");
   const isIn = entry.typeCode === InventoryTxTypeCode.IN;
   const isOut = entry.typeCode === InventoryTxTypeCode.OUT;
 
@@ -267,7 +268,7 @@ function StockCardEntry({ entry }: { entry: StockCardDto }) {
           </div>
         )}
         {entry.createdByName && (
-          <div className="text-[10px] text-[#1A3A52]/35 mt-0.5">by {entry.createdByName}</div>
+          <div className="text-[10px] text-[#1A3A52]/35 mt-0.5">{t("entryCreatedBy", { name: entry.createdByName })}</div>
         )}
       </div>
     </div>

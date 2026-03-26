@@ -12,8 +12,11 @@ interface ShiftMatrixRowProps {
   weekDates: Date[];
   conflictIds?: Set<number>;
   isEven?: boolean;
+  selectedCells?: Set<string>;
   onCardClick?: (a: ShiftAssignmentListDto) => void;
   onAddClick?: (staffId: number, date: string) => void;
+  onCellMouseDown?: (staffId: number, date: string) => void;
+  onCellMouseEnter?: (staffId: number, date: string) => void;
 }
 
 function fmtDate(d: Date) {
@@ -34,8 +37,11 @@ export function ShiftMatrixRow({
   weekDates,
   conflictIds,
   isEven,
+  selectedCells,
   onCardClick,
   onAddClick,
+  onCellMouseDown,
+  onCellMouseEnter,
 }: ShiftMatrixRowProps) {
   // Index assignments by workDate for O(1) lookup
   const byDate = new Map<string, ShiftAssignmentListDto[]>();
@@ -47,12 +53,16 @@ export function ShiftMatrixRow({
     else byDate.set(key, [a]);
   }
 
+  const colCount = weekDates.length;
+  const gridStyle = { gridTemplateColumns: `180px repeat(${colCount}, minmax(120px, 1fr))` };
+
   return (
     <div
       className={cn(
-        "grid grid-cols-[180px_repeat(7,1fr)] border-b border-[#D5BA98]/15",
+        "border-b border-[#D5BA98]/15",
         isEven ? "bg-white" : "bg-[#FDFBF9]"
       )}
+      style={{ display: "grid", ...gridStyle }}
     >
       {/* Staff info column */}
       <div className="flex flex-col justify-center px-3 py-2 border-r border-[#D5BA98]/20">
@@ -75,8 +85,11 @@ export function ShiftMatrixRow({
             assignments={byDate.get(dateStr) ?? []}
             isToday={isToday(d)}
             conflictIds={conflictIds}
+            isSelected={selectedCells?.has(cellId)}
             onCardClick={onCardClick}
             onAddClick={onAddClick ? () => onAddClick(staff.staffId, dateStr) : undefined}
+            onMouseDown={onCellMouseDown ? () => onCellMouseDown(staff.staffId, dateStr) : undefined}
+            onMouseEnter={onCellMouseEnter ? () => onCellMouseEnter(staff.staffId, dateStr) : undefined}
           />
         );
       })}

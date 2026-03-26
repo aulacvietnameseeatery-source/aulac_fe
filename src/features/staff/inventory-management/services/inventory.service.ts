@@ -6,7 +6,7 @@ import type {
   InventoryTransactionDetailDto,
   StockCardDto,
   InventoryDashboardDto,
-  CreateInventoryTransactionRequest,
+  // _OLD: CreateInventoryTransactionRequest — now accepts FormData directly
   SubmitTransactionRequest,
   ApproveTransactionRequest,
   GetInventoryItemsFilter,
@@ -45,8 +45,8 @@ export const inventoryService = {
     return res.data;
   },
 
-  async createTransaction(body: CreateInventoryTransactionRequest): Promise<InventoryTransactionDetailDto> {
-    const res = await api.post<ApiResponse<InventoryTransactionDetailDto>>("/api/inventory/transactions", body);
+  async createTransaction(formData: FormData): Promise<InventoryTransactionDetailDto> {
+    const res = await api.post<ApiResponse<InventoryTransactionDetailDto>>("/api/inventory/transactions", formData);
     return res.data;
   },
 

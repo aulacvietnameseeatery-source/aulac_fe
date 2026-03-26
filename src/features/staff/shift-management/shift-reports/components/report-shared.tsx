@@ -2,6 +2,7 @@
 
 import { AlertTriangle, CheckCircle2, Clock, TrendingDown, TrendingUp } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { dateUtils } from "@/lib/date-utils";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ALCard } from "@/components/ui/al-card";
@@ -56,12 +57,19 @@ export function thisMonthRange() {
     return { from, to };
 }
 
+// _OLD: formatTime used toLocaleTimeString — now uses dateUtils.formatLocal
 export function formatTime(isoString: string | null | undefined): string {
     if (!isoString) return "—";
-    return new Date(isoString).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+    try {
+        return dateUtils.formatLocal(isoString, "HH:mm");
+    } catch {
+        return "—";
+    }
 }
 
-export function displayStatusName(statusCode: string): string {
+export function displayStatusName(statusCode: string, t?: (key: string) => string): string {
+    const code = statusCode?.toUpperCase();
+    if (t) return t(code);
     const map: Record<string, string> = {
         ABSENT: "Absent",
         LATE: "Late",
@@ -71,16 +79,18 @@ export function displayStatusName(statusCode: string): string {
         SCHEDULED: "Scheduled",
         CHECKED_IN: "Checked In",
     };
-    return map[statusCode?.toUpperCase()] ?? statusCode;
+    return map[code] ?? statusCode;
 }
 
-export function displayExceptionName(type: string): string {
+export function displayExceptionName(type: string, t?: (key: string) => string): string {
+    const code = type?.toUpperCase();
+    if (t) return t(code);
     const map: Record<string, string> = {
         LATE: "Late Arrival",
         ABSENT: "Absent",
         EARLY_LEAVE: "Early Leave",
     };
-    return map[type?.toUpperCase()] ?? type;
+    return map[code] ?? type;
 }
 
 export function attendanceBadgeClass(statusCode: string) {

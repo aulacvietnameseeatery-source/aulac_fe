@@ -14,8 +14,11 @@ interface ShiftMatrixCellProps {
   assignments: ShiftAssignmentListDto[];
   isToday?: boolean;
   conflictIds?: Set<number>;
+  isSelected?: boolean;
   onCardClick?: (a: ShiftAssignmentListDto) => void;
   onAddClick?: () => void;
+  onMouseDown?: () => void;
+  onMouseEnter?: () => void;
 }
 
 export function ShiftMatrixCell({
@@ -23,8 +26,11 @@ export function ShiftMatrixCell({
   assignments,
   isToday = false,
   conflictIds,
+  isSelected,
   onCardClick,
   onAddClick,
+  onMouseDown,
+  onMouseEnter,
 }: ShiftMatrixCellProps) {
   const t = useTranslations("shift.schedule.matrix");
   const { isOver, setNodeRef } = useDroppable({ id: cellId });
@@ -39,8 +45,11 @@ export function ShiftMatrixCell({
       className={cn(
         "group/cell relative min-h-[64px] border-l border-[#D5BA98]/20 px-1 py-1 transition-colors",
         isToday && "bg-[#1A3A52]/[0.03]",
-        isOver && "bg-blue-50/60 ring-1 ring-inset ring-blue-300"
+        isOver && "bg-blue-50/60 ring-1 ring-inset ring-blue-300",
+        isSelected && "bg-blue-100/70 ring-1 ring-inset ring-blue-400"
       )}
+      onMouseDown={onMouseDown}
+      onMouseEnter={onMouseEnter}
     >
       <SortableContext items={sortableIds} strategy={verticalListSortingStrategy}>
         <div className="flex flex-col gap-1">

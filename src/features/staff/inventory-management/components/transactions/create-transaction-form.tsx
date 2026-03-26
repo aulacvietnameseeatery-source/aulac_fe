@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useMemo, useState } from "react";
+import React, { /* _OLD: useEffect, */ useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
@@ -108,7 +108,7 @@ export function CreateTransactionForm() {
   const createMutation = useCreateTransactionMutation();
   const submitMutation = useSubmitTransactionMutation();
 
-  const [isTypeExpanded, setIsTypeExpanded] = useState(false);
+  const [isTypeExpanded, setIsTypeExpanded] = useState(true);
   const [selectedTypeCode, setSelectedTypeCode] = useState<string>("");
   const [typeLvId, setTypeLvId] = useState<number | "">("");
   const [exportReasonLvId, setExportReasonLvId] = useState<number | "">("");
@@ -143,15 +143,16 @@ export function CreateTransactionForm() {
     [selectedTypeCode],
   );
 
-  useEffect(() => {
-    if (!selectedTypeCode && txTypeLookup.items.length > 0) {
-      const defaultType = txTypeLookup.items.find((lv) => lv.valueCode === InventoryTxTypeCode.IN);
-      if (defaultType) {
-        setSelectedTypeCode(defaultType.valueCode);
-        setTypeLvId(defaultType.valueId);
-      }
-    }
-  }, [selectedTypeCode, txTypeLookup.items]);
+  // _OLD: auto-select IN type on load — removed so user must explicitly pick
+  // useEffect(() => {
+  //   if (!selectedTypeCode && txTypeLookup.items.length > 0) {
+  //     const defaultType = txTypeLookup.items.find((lv) => lv.valueCode === InventoryTxTypeCode.IN);
+  //     if (defaultType) {
+  //       setSelectedTypeCode(defaultType.valueCode);
+  //       setTypeLvId(defaultType.valueId);
+  //     }
+  //   }
+  // }, [selectedTypeCode, txTypeLookup.items]);
 
   const handleTypeSelect = (code: string) => {
     setSelectedTypeCode(code);
@@ -191,29 +192,38 @@ export function CreateTransactionForm() {
 
   const canSubmit = typeLvId !== "" && items.length > 0 && items.every((i) => i.ingredientId > 0 && i.quantity > 0);
 
-  const buildRequest = (): CreateInventoryTransactionRequest => ({
-    typeLvId: typeLvId as number,
-    exportReasonLvId: isOUT && exportReasonLvId !== "" ? (exportReasonLvId as number) : undefined,
-    supplierId: isIN && supplierId !== "" ? supplierId : undefined,
-    stockCheckAreaNote: isADJUST && stockCheckAreaNote ? stockCheckAreaNote : undefined,
-    note: note || undefined,
-    items: items.map(({ ingredientId, quantity, unitLvId, unitPrice, note: itemNote }) => ({
-      ingredientId,
-      quantity,
-      unitLvId,
-      unitPrice: unitPrice ?? undefined,
-      note: itemNote ?? undefined,
-    })),
-  });
+  const buildFormData = (): FormData => {
+    const requestJson: CreateInventoryTransactionRequest = {
+      typeLvId: typeLvId as number,
+      exportReasonLvId: isOUT && exportReasonLvId !== "" ? (exportReasonLvId as number) : undefined,
+      supplierId: isIN && supplierId !== "" ? supplierId : undefined,
+      stockCheckAreaNote: isADJUST && stockCheckAreaNote ? stockCheckAreaNote : undefined,
+      note: note || undefined,
+      items: items.map(({ ingredientId, quantity, unitLvId, unitPrice, note: itemNote }) => ({
+        ingredientId,
+        quantity,
+        unitLvId,
+        unitPrice: unitPrice ?? undefined,
+        note: itemNote ?? undefined,
+      })),
+    };
+
+    const fd = new FormData();
+    fd.append("requestJson", JSON.stringify(requestJson));
+    for (const file of pendingEvidenceFiles) {
+      fd.append("evidenceFiles", file);
+    }
+    return fd;
+  };
 
   const handleSaveDraft = () => {
-    createMutation.mutate(buildRequest(), {
+    createMutation.mutate(buildFormData(), {
       onSuccess: () => router.push("/dashboard/inventory/transactions"),
     });
   };
 
   const handleSaveAndSubmit = () => {
-    createMutation.mutate(buildRequest(), {
+    createMutation.mutate(buildFormData(), {
       onSuccess: (data) => {
         submitMutation.mutate(
           { id: data.transactionId },

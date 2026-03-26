@@ -212,7 +212,8 @@ export interface AdjustAttendanceRequest {
 export interface BulkCreateAssignmentRequest {
   shiftTemplateId: number;
   staffIds: number[];
-  workDate: string;           // yyyy-MM-dd
+  workDate: string;           // yyyy-MM-dd (kept for backward compat)
+  workDates?: string[];       // yyyy-MM-dd[] — takes precedence when provided
   plannedStartAt?: string | null;
   plannedEndAt?: string | null;
   notes?: string | null;

@@ -43,7 +43,7 @@ export function InventoryDashboard() {
 
   if (isLoading || !data) {
     return (
-      <div className="flex items-center justify-center py-24 text-[#1A3A52]/40">Loading...</div>
+      <div className="flex items-center justify-center py-24 text-[#1A3A52]/40">{t("loading")}</div>
     );
   }
 
@@ -222,6 +222,7 @@ function LowStockRow({ item }: { item: LowStockItemDto }) {
 }
 
 function RecentTxRow({ tx }: { tx: RecentTransactionDto }) {
+  const t = useTranslations("inventory.dashboard");
   const router = useRouter();
   return (
     <button
@@ -239,7 +240,7 @@ function RecentTxRow({ tx }: { tx: RecentTransactionDto }) {
           </Badge>
         </div>
         <div className="text-xs text-[#1A3A52]/40 mt-0.5">
-          {tx.createdByName} · {tx.itemCount} items
+          {tx.createdByName} · {t("itemCount", { count: tx.itemCount })}
           {tx.createdAt && ` · ${format(new Date(tx.createdAt), "dd/MM HH:mm")}`}
         </div>
       </div>

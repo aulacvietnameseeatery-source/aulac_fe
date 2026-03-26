@@ -90,7 +90,7 @@ export function ShiftTemplateList() {
     () => [
       {
         field: "rowNo",
-        header: "No",
+        header: t("table.no"),
         width: "72px",
         align: "center",
         sortable: false,
@@ -99,24 +99,24 @@ export function ShiftTemplateList() {
       },
       {
         field: "templateName",
-        header: "Template",
+        header: t("table.template"),
         sortable: false,
       },
       {
         field: "defaultTime",
-        header: "Default Time",
+        header: t("table.defaultTime"),
         sortable: false,
         cellRender: ({ item }) => `${fmtTime(item.defaultStartTime)} - ${fmtTime(item.defaultEndTime)}`,
       },
       {
         field: "description",
-        header: "Description",
+        header: t("table.description"),
         sortable: false,
         cellRender: ({ value }) => value || "--",
       },
       {
         field: "isActive",
-        header: "Status",
+        header: t("table.status"),
         width: "120px",
         sortable: false,
         cellRender: ({ item }) => (
@@ -124,7 +124,7 @@ export function ShiftTemplateList() {
             variant={item.isActive ? "default" : "secondary"}
             className={item.isActive ? "bg-emerald-600 text-white" : "bg-slate-700 text-white"}
           >
-            {item.isActive ? "Active" : "Inactive"}
+            {item.isActive ? t("table.active") : t("table.inactive")}
           </Badge>
         ),
       },
