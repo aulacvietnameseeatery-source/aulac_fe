@@ -19,7 +19,8 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
-import { api } from "@/lib/http";
+import { api, BASE_URL } from "@/lib/http";
+import { HubConnectionBuilder, HubConnection, LogLevel } from '@microsoft/signalr';
 import { ALConfirmDialog } from "@/components/ui/al-confirm-dialog";
 
 // ─── Types ────────────────────────────────────────────────────────────────
@@ -148,6 +149,8 @@ export function OrderHistoryFAB({ tableCode, tableNumber, dishNameMap = {}, refr
     : "";
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const redirectTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const signalRRef = useRef<HubConnection | null>(null);
+  const connectedOrderIdRef = useRef<number | null>(null);
 
   // Clear all order-related data from session storage
   const clearAllOrderData = useCallback(() => {
@@ -175,6 +178,58 @@ export function OrderHistoryFAB({ tableCode, tableNumber, dishNameMap = {}, refr
       if (redirectTimeoutRef.current) {
         clearTimeout(redirectTimeoutRef.current);
       }
+    };
+  }, []);
+
+  // ── SignalR real-time listener ───────────────────────────────────────────
+  // Connects to the order's SignalR group so item-status changes from staff
+  // are pushed instantly without waiting for the 15 s polling interval.
+  useEffect(() => {
+    const storedOrderId = typeof window !== 'undefined'
+      ? sessionStorage.getItem(CURRENT_ORDER_ID_KEY)
+      : null;
+    const orderId = storedOrderId ? Number(storedOrderId) : null;
+
+    if (!orderId) return;
+
+    // Already connected to this order – nothing to do
+    if (connectedOrderIdRef.current === orderId && signalRRef.current) return;
+
+    // Replace any stale connection
+    signalRRef.current?.stop();
+    signalRRef.current = null;
+
+    const connection = new HubConnectionBuilder()
+      .withUrl(`${BASE_URL}/hubs/reservation`)
+      .withAutomaticReconnect()
+      .configureLogging(LogLevel.Warning)
+      .build();
+
+    signalRRef.current = connection;
+    connectedOrderIdRef.current = orderId;
+
+    connection
+      .start()
+      .then(() => connection.invoke('JoinOrder', orderId))
+      .then(() => {
+        connection.on('OrderItemUpdated', () => {
+          fetchOrderByOrderId(orderId)
+            .then((data) => setHistory(data))
+            .catch(() => {});
+        });
+        connection.on('OrderDetailUpdated', () => {
+          fetchOrderByOrderId(orderId)
+            .then((data) => setHistory(data))
+            .catch(() => {});
+        });
+      })
+      .catch((err) => console.error('[SignalR] Connection error:', err));
+  }, [refreshTrigger]); // re-run after each new order so the connection is established
+
+  // Stop SignalR when the component unmounts
+  useEffect(() => {
+    return () => {
+      signalRRef.current?.stop();
     };
   }, []);
 
