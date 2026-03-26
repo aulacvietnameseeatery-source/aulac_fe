@@ -13,7 +13,7 @@ import { ThreeSixtySection } from "./three-sixty-section";
 import { CoreInfoSection } from "./core-info-section";
 import { StaticImageSection } from "./static-image-section";
 import { AdditionalSection } from "./additional-section";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/routing"
 import { DishImagesState, useDishImages } from "../hooks/useDishImages";
 import { useCreateDish } from "../hooks/useCreateDish";
 import { useEditDish } from "../hooks/useEditDish";

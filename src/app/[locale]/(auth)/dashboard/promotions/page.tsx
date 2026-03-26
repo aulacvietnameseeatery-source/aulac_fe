@@ -11,7 +11,7 @@ import { PermissionGuard } from "@/components/permission-guard";
 import { Permissions } from "@/types/const";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/routing"
 
 import { usePromotionList } from "@/features/staff/promotion-management/promotion-list/hooks/use-promotion-list";
 import { PromotionListDTO } from "@/features/staff/promotion-management/promotion-list/types/promotion-types";

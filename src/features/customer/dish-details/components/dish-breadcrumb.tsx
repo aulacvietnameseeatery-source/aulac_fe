@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { ChevronRight, Home, UtensilsCrossed } from "lucide-react";
-import Link from "next/link";
+import { Link } from "@/routing"
 import { Dish } from "../types";
 
 type DishBreadcrumbProps = {

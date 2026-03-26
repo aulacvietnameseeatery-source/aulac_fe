@@ -1,81 +1,17 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { CalendarDays, ConciergeBell, Bell, Clock, Users, Armchair, ChefHat, ShoppingCart, DollarSign, Info, PackageOpen } from "lucide-react";
-import { useAuth } from "@/components/providers/auth-provider";
+import React from "react";
+import { CalendarDays, ConciergeBell, Bell, Clock, Users, Armchair, ChefHat, DollarSign, PackageOpen } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle, CardAction } from "@/components/ui/card";
+import type { ReservationActivityDto, TableActivityDto, NotificationActivityDto } from "../types/dashboard-types";
 
-export function DashboardActivityRow() {
-    const { token } = useAuth();
-    const [reservations, setReservations] = useState<any[]>([]);
-    const [tables, setTables] = useState<any[]>([]);
-    const [notifications, setNotifications] = useState<any[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
+interface DashboardActivityRowProps {
+    reservations: ReservationActivityDto[];
+    tables: TableActivityDto[];
+    notifications: NotificationActivityDto[];
+    isLoading: boolean;
+}
 
-    useEffect(() => {
-        const fetchData = async () => {
-            if (!token) return;
-            setIsLoading(true);
-            try {
-                const headers: HeadersInit = {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                };
-
-                // Fetch Đặt bàn an toàn
-                try {
-                    const resReservations = await fetch("https://localhost:7083/api/reservations", { headers });
-                    if (resReservations.ok) {
-                        const contentType = resReservations.headers.get("content-type");
-                        if (contentType && contentType.includes("application/json")) {
-                            const rData = await resReservations.json();
-                            setReservations(Array.isArray(rData.data?.pageData) ? rData.data.pageData : []);
-                        }
-                    }
-                } catch (e) { console.error("Lỗi fetch Reservations", e); }
-
-                // Fetch Bàn trống an toàn
-                try {
-                    const resTables = await fetch("https://localhost:7083/api/public/availability", { headers });
-                    if (resTables.ok) {
-                        const contentType = resTables.headers.get("content-type");
-                        if (contentType && contentType.includes("application/json")) {
-                            const tData = await resTables.json();
-                            setTables(Array.isArray(tData.data) ? tData.data : []);
-                        }
-                    }
-                } catch (e) { console.error("Lỗi fetch Tables", e); }
-
-                // Fetch Thông báo an toàn
-                try {
-                    const resNotifs = await fetch("https://localhost:7083/api/notifications", { headers });
-                    if (resNotifs.ok) {
-                        const contentType = resNotifs.headers.get("content-type");
-                        if (contentType && contentType.includes("application/json")) {
-                            const nData = await resNotifs.json();
-
-                            let notifArray = [];
-                            if (Array.isArray(nData.data)) {
-                                notifArray = nData.data;
-                            } else if (nData.data && Array.isArray(nData.data.pageData)) {
-                                notifArray = nData.data.pageData;
-                            } else if (Array.isArray(nData)) {
-                                notifArray = nData;
-                            }
-                            setNotifications(notifArray);
-                        } else {
-                            console.error("API Notifications không trả về JSON.");
-                        }
-                    }
-                } catch (e) { console.error("Lỗi fetch Notifications", e); }
-
-            } catch (error) {
-                console.error("Lỗi tổng thể khi fetch activity data:", error);
-            } finally {
-                setIsLoading(false);
-            }
-        };
-        fetchData();
-    }, [token]); // <-- Thêm token vào dependency array
-
+export function DashboardActivityRow({ reservations, tables, notifications, isLoading }: DashboardActivityRowProps) {
     const getResStatusColor = (status: string) => {
         switch (status?.toLowerCase()) {
             case "completed": return "bg-emerald-100 text-emerald-700";
@@ -104,23 +40,25 @@ export function DashboardActivityRow() {
         return `${Math.floor(diff / 60)} hrs ago`;
     };
 
-    // Lớp bảo vệ cuối cùng trước khi render
-    const safeReservations = Array.isArray(reservations) ? reservations : [];
-    const safeTables = Array.isArray(tables) ? tables : [];
-    const safeNotifications = Array.isArray(notifications) ? notifications : [];
-
     return (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
             {/* Reservations */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 flex flex-col">
-                <div className="flex items-center justify-between border-b border-gray-100 pb-3 mb-4">
-                    <div className="flex items-center gap-2"><CalendarDays size={18} className="text-gray-700" /><h5 className="font-semibold text-gray-800 m-0">Reservations</h5></div>
-                    <select className="text-sm border rounded px-2 py-1 outline-none"><option>All Orders</option></select>
-                </div>
-                <div className="flex flex-col gap-4 overflow-y-auto max-h-[350px] pr-2 custom-scrollbar">
-                    {isLoading ? <p className="text-center text-sm text-gray-500 mt-10 animate-pulse">Đang tải...</p>
-                        : safeReservations.length === 0 ? <p className="text-center text-sm text-gray-500 mt-10">No reservations</p>
-                            : safeReservations.slice(0, 10).map((res, i) => {
+            <Card className="flex flex-col h-[420px] border-gray-100/50 shadow-sm">
+                <CardHeader className="flex flex-row items-center justify-between pb-2 border-b border-gray-100/50 mb-4">
+                    <div className="flex items-center gap-2">
+                        <CalendarDays size={18} className="text-gray-500" />
+                        <CardTitle className="text-base text-gray-800">Reservations</CardTitle>
+                    </div>
+                    <CardAction>
+                        <select className="text-xs border rounded-md px-2 py-1 outline-none text-gray-600 bg-gray-50">
+                            <option>Today</option>
+                        </select>
+                    </CardAction>
+                </CardHeader>
+                <CardContent className="flex flex-col gap-4 overflow-y-auto pr-2 custom-scrollbar">
+                    {isLoading ? <p className="text-center text-sm text-gray-500 mt-10 animate-pulse">Loading...</p>
+                        : reservations.length === 0 ? <p className="text-center text-sm text-gray-500 mt-10">No reservations</p>
+                            : reservations.slice(0, 10).map((res, i) => {
                                 const date = new Date(res.reservedTime);
                                 return (
                                     <div key={i} className="flex items-center justify-between border-b border-gray-50 pb-3 last:border-0">
@@ -142,62 +80,53 @@ export function DashboardActivityRow() {
                                     </div>
                                 );
                             })}
-                </div>
-            </div>
+                </CardContent>
+            </Card>
 
             {/* Tables Available */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 flex flex-col">
-                <div className="flex items-center justify-between border-b border-gray-100 pb-3 mb-4">
-                    <div className="flex items-center gap-2"><ConciergeBell size={18} className="text-gray-700" /><h5 className="font-semibold text-gray-800 m-0">Tables Available</h5></div>
-                    <button className="text-sm bg-white border rounded px-2 py-1 hover:bg-gray-50">View All</button>
-                </div>
-                <div className="grid grid-cols-2 gap-3 overflow-y-auto max-h-[350px] pr-1 custom-scrollbar">
-                    {isLoading ? <p className="col-span-2 text-center text-sm text-gray-500 mt-10 animate-pulse">Đang tải...</p>
-                        : safeTables.length === 0 ? <p className="col-span-2 text-center text-sm text-gray-500 mt-10">No tables available</p>
-                            : safeTables.map((t, i) => (
+            <Card className="flex flex-col h-[420px] border-gray-100/50 shadow-sm">
+                <CardHeader className="flex flex-row items-center justify-between pb-2 border-b border-gray-100/50 mb-4">
+                    <div className="flex items-center gap-2">
+                        <ConciergeBell size={18} className="text-gray-500" />
+                        <CardTitle className="text-base text-gray-800">Tables Available</CardTitle>
+                    </div>
+                </CardHeader>
+                <CardContent className="grid grid-cols-2 gap-3 overflow-y-auto pr-1 custom-scrollbar">
+                    {isLoading ? <p className="col-span-2 text-center text-sm text-gray-500 mt-10 animate-pulse">Loading...</p>
+                        : tables.length === 0 ? <p className="col-span-2 text-center text-sm text-gray-500 mt-10">No tables available</p>
+                            : tables.map((t, i) => (
                                 <div key={i} className="border border-emerald-100 rounded-lg p-3 text-center flex flex-col items-center justify-center bg-emerald-50/50 hover:bg-emerald-50 transition-colors">
                                     <Armchair size={28} className="text-emerald-500 mb-2" />
                                     <h6 className="text-xs font-bold text-gray-800 mb-0.5">{t.tableCode}</h6>
-                                    <p className="text-[10px] text-gray-500 mb-0">Capacity: {t.capacity} • {t.zone}</p>
+                                    <p className="text-[10px] text-gray-500 mb-0">Cap: {t.capacity} • {t.zone}</p>
                                 </div>
                             ))}
-                </div>
-            </div>
+                </CardContent>
+            </Card>
 
             {/* Notifications */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 flex flex-col">
-                <div className="flex items-center border-b border-gray-100 pb-3 mb-4">
-                    <div className="flex items-center gap-2"><Bell size={18} className="text-gray-700" /><h5 className="font-semibold text-gray-800 m-0">Notifications</h5></div>
-                </div>
-                <div className="flex flex-col gap-4 overflow-y-auto max-h-[350px] relative before:absolute before:inset-y-0 before:left-[1.1rem] before:w-px before:bg-gray-100 pr-2 custom-scrollbar">
-                    {isLoading ? <p className="text-center text-sm text-gray-500 mt-10 animate-pulse">Đang tải...</p>
-                        : safeNotifications.length === 0 ? <p className="text-center text-sm text-gray-500 mt-10">No new notifications</p>
-                            : safeNotifications.slice(0, 10).map((n, i) => {
+            <Card className="flex flex-col h-[420px] border-gray-100/50 shadow-sm">
+                <CardHeader className="flex flex-row items-center justify-between pb-2 border-b border-gray-100/50 mb-4">
+                    <div className="flex items-center gap-2">
+                        <Bell size={18} className="text-gray-500" />
+                        <CardTitle className="text-base text-gray-800">Notifications</CardTitle>
+                    </div>
+                </CardHeader>
+                <CardContent className="flex flex-col gap-4 overflow-y-auto relative before:absolute before:inset-y-0 before:left-[1.5rem] before:w-px before:bg-gray-100 pr-2 custom-scrollbar">
+                    {isLoading ? <p className="text-center text-sm text-gray-500 mt-10 animate-pulse">Loading...</p>
+                        : notifications.length === 0 ? <p className="text-center text-sm text-gray-500 mt-10">No new notifications</p>
+                            : notifications.slice(0, 10).map((n, i) => {
                                 const ui = getNotifUI(n.type);
-
-                                // Lớp bảo vệ Parse Metadata
                                 let meta = n.metadata || {};
                                 if (typeof meta === 'string') {
                                     try { meta = JSON.parse(meta); } catch (e) { }
                                 }
-
                                 let notifText = (n.type || "NOTIFICATION").replace(/_/g, " ");
 
-                                if (n.type === "NEW_ORDER") {
-                                    notifText = `New order at ${meta.tableCode || 'Table'} (${meta.itemCount || 0} items)`;
-                                } else if (n.type === "PAYMENT_COMPLETED") {
-                                    notifText = `Payment of $${meta.amount || 0} via ${meta.method || 'Cash'}`;
-                                } else if (n.type === "TABLE_STATUS_CHANGED") {
-                                    notifText = `Table ${meta.tableCode || 'N/A'} is now ${meta.newStatus || 'Unknown'}`;
-                                } else if (n.type === "RESERVATION_CREATED") {
-                                    notifText = `New reservation by ${meta.customerName || 'Customer'} for ${meta.partySize || 0} pax`;
-                                } else if (n.type === "RESERVATION_STATUS_CHANGED") {
-                                    notifText = `Reservation #${meta.reservationId || 'N/A'} is now ${meta.newStatus || 'Unknown'}`;
-                                } else if (n.type === "INVENTORY_TX_SUBMITTED") {
-                                    notifText = `Inventory TX ${meta.transactionCode || 'N/A'} submitted`;
-                                } else if (n.type === "INVENTORY_TX_APPROVED") {
-                                    notifText = `Inventory TX ${meta.transactionCode || 'N/A'} approved`;
-                                }
+                                if (n.type === "NEW_ORDER") notifText = `New order at ${meta.tableCode || 'Table'} (${meta.itemCount || 0} items)`;
+                                else if (n.type === "PAYMENT_COMPLETED") notifText = `Payment of $${meta.amount || 0} via ${meta.method || 'Cash'}`;
+                                else if (n.type === "TABLE_STATUS_CHANGED") notifText = `Table ${meta.tableCode || 'N/A'} is now ${meta.newStatus || 'Unknown'}`;
+                                else if (n.type === "RESERVATION_CREATED") notifText = `New reservation by ${meta.customerName || 'Customer'}`;
 
                                 return (
                                     <div key={i} className="flex gap-3 relative z-10 bg-white">
@@ -209,8 +138,8 @@ export function DashboardActivityRow() {
                                     </div>
                                 );
                             })}
-                </div>
-            </div>
+                </CardContent>
+            </Card>
         </div>
     );
 }

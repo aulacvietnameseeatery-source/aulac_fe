@@ -2,7 +2,7 @@
 
 import React, { useMemo, useState, useCallback } from "react";
 import { useTranslations } from "next-intl";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/routing"
 import { format } from "date-fns";
 import { Plus } from "lucide-react";
 import { BaseTable } from "@/components/ui/table/base-table";

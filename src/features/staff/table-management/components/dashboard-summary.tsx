@@ -2,7 +2,7 @@
 
 import React, { useMemo } from "react";
 import { useTranslations } from "next-intl";
-import Link from "next/link";
+import { Link } from "@/routing"
 import { cn } from "@/lib/utils";
 import { Card, CardContent } from "@/components/ui/card";
 import {

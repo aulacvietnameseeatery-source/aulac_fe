@@ -1,54 +1,64 @@
-// src/features/dashboard/types/dashboard-types.ts
-
-export interface DashboardFilterParams {
+export interface DashboardFilterRequest {
     startDate?: string;
     endDate?: string;
-    period?: 'weekly' | 'monthly' | 'yearly' | 'all';
 }
 
-// Kiểu dữ liệu cho các con số có kèm % tăng giảm
-export interface TrendValue {
+export interface TrendValueDto {
     value: number;
     trend: number;
     isUp: boolean;
 }
 
-// 1. API Tổng quan (4 thẻ trên cùng)
 export interface DashboardSummaryDto {
-    totalOrders: TrendValue;
-    totalSales: TrendValue;
-    averageOrderValue: TrendValue;
-    totalReservations: TrendValue;
+    totalOrders: TrendValueDto;
+    totalSales: TrendValueDto;
+    averageOrderValue: TrendValueDto;
+    totalReservations: TrendValueDto;
 }
 
-// 2. API Biểu đồ Doanh thu
 export interface RevenueChartItemDto {
-    date: string; // Ngày/Tháng tùy filter
+    date: string;
     revenue: number;
     orders: number;
 }
 
-// 3. API Top Món Bán Chạy
 export interface TopSellingItemDto {
     dishId: number;
     dishName: string;
     totalQuantity: number;
-    isVeg: boolean;
     imageUrl?: string;
 }
 
-// 4. API Thống kê Category & Users
+export interface TopCustomerDto {
+    customerId: number;
+    customerName: string;
+    spent: number;
+}
+
 export interface DashboardStatisticsDto {
-    ordersByType: {
-        dineIn: number;
-        takeAway: number;
-        delivery: number;
-    };
-    topCustomer: {
-        customerId: number;
-        customerName: string;
-        spent: number;
-        avatarUrl?: string;
-    } | null;
-    totalNewUsers: TrendValue;
+    ordersByType: Record<string, number>;
+    topCustomer?: TopCustomerDto;
+}
+
+export interface ReservationActivityDto {
+    reservationId: number;
+    customerName: string;
+    reservedTime: string;
+    tableName?: string;
+    pax: number;
+    statusName: string;
+}
+
+export interface TableActivityDto {
+    tableId: number;
+    tableCode: string;
+    capacity: number;
+    zone: string;
+}
+
+export interface NotificationActivityDto {
+    id: number;
+    type: string;
+    createdAt: string;
+    metadata?: any;
 }

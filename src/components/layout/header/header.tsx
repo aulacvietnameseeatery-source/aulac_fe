@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/routing"
 import Image from "next/image";
 import {
     Menu as MenuIcon, X, MapPin, Phone, Clock,
@@ -81,7 +81,7 @@ export function Header({ isScrolled, locale }: HeaderProps) {
     ];
 
     // ==========================================
-    // COMPONENT: NGÔN NGỮ (Dropdown mượt mà cho cả 2 nền tảng)
+    // COMPONENT: NGÔN NGỮ
     // ==========================================
     const LanguageSelector = ({ isMobile = false }: { isMobile?: boolean }) => {
         const [isOpen, setIsOpen] = useState(false);

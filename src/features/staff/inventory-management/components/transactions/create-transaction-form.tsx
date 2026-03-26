@@ -2,7 +2,7 @@
 
 import React, { useEffect, useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/routing"
 import { useQuery } from "@tanstack/react-query";
 import {
   ArrowLeft,

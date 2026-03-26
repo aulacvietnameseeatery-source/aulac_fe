@@ -4,7 +4,7 @@ import { useState, useCallback, useMemo, useEffect } from "react";
 import { X, Inbox, Settings2, ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useTranslations, useLocale } from "next-intl";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/routing"
 import { useNotificationStore } from "../store/notification.store";
 import { notificationService } from "../services/notification.service";
 import { NotificationItem } from "./notification-item";

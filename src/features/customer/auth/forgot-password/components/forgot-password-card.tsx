@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "@/routing"
 import { ChevronLeft } from "lucide-react";
 import "../styles/index.css";
 
