@@ -4,7 +4,6 @@ import { toast } from 'sonner';
 import { Trash2, Save, Loader2, Upload, Facebook, Instagram, Music2 as Tiktok, Eye, Phone, Mail, Languages, Maximize2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { getGroupSettings, uploadLogo } from '../services/system-setting.service';
-import { BASE_URL } from '@/lib/http';
 import { cn } from '@/lib/utils';
 import { MediaPreviewModal } from '@/components/shared/MediaPreviewModal';
 import { ALCard } from '@/components/ui/al-card';
@@ -12,7 +11,6 @@ import { ALInput } from '@/components/ui/al-input';
 import { useStoreProfileForm } from '../hooks/useStoreProfileForm';
 import { mapStoreSettingsToFormValues, mapFormValuesToStoreSettings, LOCALES, SupportedLocale, StoreProfileFormValues } from '../types/schema';
 import { useUpdateStoreSettingsMutation, useTranslateSettingsMutation } from '../hooks/useSystemSettingsMutation';
-import { normalizeMediaUrl } from '@/lib/normalize-media-url';
 
 
 const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
@@ -34,9 +32,38 @@ export const StoreProfileForm = () => {
 
     const [previewData, setPreviewData] = useState<{ url: string; title: string, type: 'image' | 'video' } | null>(null);
     const [localPreviews, setLocalPreviews] = useState<Record<string, string>>({});
+    const [remotePublicUrls, setRemotePublicUrls] = useState<Record<string, string>>({});
     const logoInputRef = useRef<HTMLInputElement>(null);
 
     const logoUrlValue = watch('logoUrl');
+
+    const toServerRelativePath = (value: string) => {
+        const trimmed = value.trim();
+        if (!trimmed) return "";
+
+        try {
+            const parsed = new URL(trimmed);
+            const path = parsed.pathname;
+            if (path.startsWith("/uploads/")) return path.substring(1);
+            return path.startsWith("/") ? `uploads${path}` : `uploads/${path}`;
+        } catch {
+            // not an absolute URL
+        }
+
+        if (trimmed.startsWith("/uploads/")) return trimmed.substring(1);
+        if (trimmed.startsWith("uploads/")) return trimmed;
+        return `uploads/${trimmed.replace(/^\/+/, "")}`;
+    };
+
+    const toServerRelativeFromUpload = (relativePath: string, publicUrl?: string) => {
+        if (relativePath) {
+            return toServerRelativePath(relativePath);
+        }
+        if (publicUrl) {
+            return toServerRelativePath(publicUrl);
+        }
+        return "";
+    };
 
     useEffect(() => {
         loadSettings();
@@ -47,12 +74,17 @@ export const StoreProfileForm = () => {
         try {
             const settings = await getGroupSettings('store');
             const kv: Record<string, string> = {};
+            const publicUrlMap: Record<string, string> = {};
             settings.forEach(s => {
                 const key = s.settingKey.replace('store.', '');
                 kv[key] = s.value?.toString() || '';
+                if (key === 'logoUrl' && s.publicUrl) {
+                    publicUrlMap[key] = s.publicUrl;
+                }
             });
             const formattedData = mapStoreSettingsToFormValues(kv);
             reset(formattedData);
+            setRemotePublicUrls(publicUrlMap);
         } catch (error) {
             console.error('Failed to load store settings:', error);
         } finally {
@@ -117,8 +149,14 @@ export const StoreProfileForm = () => {
         setIsUploading('logoUrl');
 
         try {
-            const publicUrl = await uploadLogo(file);
-            setValue('logoUrl', publicUrl, { shouldDirty: true, shouldValidate: true });
+            const { relativePath, publicUrl } = await uploadLogo(file);
+            const serverRelative = toServerRelativeFromUpload(relativePath, publicUrl);
+            setValue('logoUrl', serverRelative, { shouldDirty: true, shouldValidate: true });
+            if (publicUrl) {
+                setRemotePublicUrls(prev => ({ ...prev, logoUrl: publicUrl }));
+            } else if (serverRelative) {
+                setRemotePublicUrls(prev => ({ ...prev, logoUrl: serverRelative }));
+            }
             toast.success(t('StoreProfile.uploadSuccess'));
         } catch (error) {
             toast.error(t('StoreProfile.uploadError'));
@@ -160,8 +198,11 @@ export const StoreProfileForm = () => {
     const getFullUrl = () => {
         const previewUrl = localPreviews['logoUrl'];
         if (previewUrl) return previewUrl;
+        const remoteUrl = remotePublicUrls['logoUrl'];
+        if (remoteUrl) return remoteUrl.startsWith("uploads/") ? `/${remoteUrl}` : remoteUrl;
         if (!logoUrlValue) return '';
-        return normalizeMediaUrl(logoUrlValue);
+        if (logoUrlValue.startsWith("/uploads/")) return logoUrlValue;
+        return logoUrlValue.startsWith("uploads/") ? `/${logoUrlValue}` : logoUrlValue;
     };
 
     if (isLoading) {
