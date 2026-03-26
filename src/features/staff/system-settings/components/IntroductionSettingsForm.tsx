@@ -13,6 +13,7 @@ import { ALInput } from "@/components/ui/al-input";
 import { useIntroductionSettingsForm } from "../hooks/useIntroductionSettingsForm";
 import { mapIntroSettingsToFormValues, mapFormValuesToIntroSettings, LOCALES, SupportedLocale, IntroFormValues } from "../types/schema";
 import { useUpdateStoreSettingsMutation, useTranslateSettingsMutation } from "../hooks/useSystemSettingsMutation";
+import { SystemSettingMediaUploader } from "./SystemSettingMediaUploader";
 
 
 
@@ -54,12 +55,6 @@ export const IntroductionSettingsForm = () => {
     const [localPreviews, setLocalPreviews] = useState<Record<string, string>>({});
     const [remotePublicUrls, setRemotePublicUrls] = useState<Record<string, string>>({});
 
-    const heroImageRef = useRef<HTMLInputElement>(null);
-    const virtualTourVideoLeftRef = useRef<HTMLInputElement>(null);
-    const virtualTourVideoRightRef = useRef<HTMLInputElement>(null);
-    const dish1ImageRef = useRef<HTMLInputElement>(null);
-    const dish2ImageRef = useRef<HTMLInputElement>(null);
-    const dish3ImageRef = useRef<HTMLInputElement>(null);
 
     const heroImageUrl = watch('intro_hero_image') as string;
     watch('intro_virtualTour_videoUrl');
@@ -68,7 +63,7 @@ export const IntroductionSettingsForm = () => {
     const dish1ImageUrl = watch('intro_collection_dish1_image') as string;
     const dish2ImageUrl = watch('intro_collection_dish2_image') as string;
     const dish3ImageUrl = watch('intro_collection_dish3_image') as string;
-    
+
     function isHeicFile(file: File): boolean {
         return file.type === 'image/heic' || file.type === 'image/heif';
     }
@@ -196,114 +191,7 @@ export const IntroductionSettingsForm = () => {
         loadSettings();
     }, [loadSettings]);
 
-    const checkVideoDuration = (file: File, maxSeconds: number): Promise<boolean> => {
-        return new Promise((resolve) => {
-            const videoElement = document.createElement('video');
-            videoElement.preload = 'metadata';
 
-            videoElement.onloadedmetadata = () => {
-                window.URL.revokeObjectURL(videoElement.src);
-                resolve(videoElement.duration <= maxSeconds);
-            };
-
-            videoElement.onerror = () => {
-                resolve(false);
-            };
-
-            videoElement.src = URL.createObjectURL(file);
-        });
-    };
-
-    const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>, fieldKey: string, isVideo = false) => {
-        const file = e.target.files?.[0];
-        if (!file) return;
-
-        if (isVideo && file.type !== 'video/mp4') {
-            toast.error(t('StoreProfile.invalidVideoFormatError'));
-            if (e.target) e.target.value = '';
-            return;
-        }
-
-        if (!isVideo && !ALLOWED_IMAGE_TYPES.includes(file.type) && !isHeicFile(file)) {
-            toast.error(t('StoreProfile.invalidImageFormatError'));
-            if (e.target) e.target.value = '';
-            return;
-        }
-
-        const maxSize = isVideo ? MAX_VIDEO_SIZE : MAX_IMAGE_SIZE;
-        if (file.size > maxSize) {
-            toast.error(
-                isVideo
-                    ? t('StoreProfile.videoSizeError', { max: MAX_VIDEO_SIZE_MB })
-                    : t('StoreProfile.fileSizeError', { max: MAX_IMAGE_SIZE_MB })
-            );
-            if (e.target) e.target.value = '';
-            return;
-        }
-
-        if (isVideo) {
-            const isValidDuration = await checkVideoDuration(file, MAX_VIDEO_DURATION_SECONDS);
-            if (!isValidDuration) {
-                toast.error(t('StoreProfile.videoDurationError'));
-                if (e.target) e.target.value = '';
-                return;
-            }
-        }
-
-        // Process image (HEIC conversion + compression)
-        let fileToUpload: File;
-        if (!isVideo) {
-            // ✅ ALFileUploader will handle HEIC conversion; just use file as-is
-            fileToUpload = file;
-        } else {
-            fileToUpload = file;
-        }
-
-        const previousValue = getValues(fieldKey as any);
-        const previousLocalPreview = localPreviews[fieldKey];
-        if (previousLocalPreview) {
-            URL.revokeObjectURL(previousLocalPreview);
-        }
-
-        const localUrl = URL.createObjectURL(fileToUpload);
-        setLocalPreviews(prev => ({ ...prev, [fieldKey]: localUrl }));
-        setIsUploading(fieldKey);
-
-        try {
-            const { relativePath, publicUrl } = await uploadFile(fileToUpload);
-            const serverRelative = toServerRelativeFromUpload(relativePath, publicUrl);
-            // @ts-expect-error: dynamic key access for uploaded file fieldKey
-            setValue(fieldKey, serverRelative, { shouldDirty: true, shouldValidate: true });
-            if (publicUrl) {
-                setRemotePublicUrls(prev => ({ ...prev, [fieldKey]: publicUrl }));
-            } else if (serverRelative) {
-                setRemotePublicUrls(prev => ({ ...prev, [fieldKey]: serverRelative }));
-            }
-            toast.success(t("StoreProfile.uploadSuccess"));
-        } catch (error) {
-            toast.error(t("StoreProfile.uploadError"));
-            if (!previousValue) {
-                setLocalPreviews(prev => {
-                    const next = { ...prev };
-                    delete next[fieldKey];
-                    return next;
-                });
-            } else {
-                setLocalPreviews(prev => {
-                    if (previousLocalPreview) {
-                        return { ...prev, [fieldKey]: previousLocalPreview };
-                    }
-
-                    const next = { ...prev };
-                    delete next[fieldKey];
-                    return next;
-                });
-            }
-        } finally {
-            setIsUploading(null);
-            if (e.target) e.target.value = '';
-        }
-    };
 
     const onSubmit = (values: IntroFormValues) => {
         const mappedSettings = mapFormValuesToIntroSettings(values);
@@ -431,59 +319,19 @@ export const IntroductionSettingsForm = () => {
                             </div>
 
                             {/* Right: Image Upload Area */}
-                            <div className="p-8 lg:p-10 bg-[#FDFBF9]/60 flex flex-col justify-center items-center">
-                                <div className="relative group w-full max-w-md aspect-[16/10] perspective-1000">
-                                    <div
-                                        className={cn(
-                                            "w-full h-full rounded-[2rem] border-2 border-dashed border-amber-200/80 bg-white/50 flex flex-col items-center justify-center overflow-hidden transition-all duration-500 cursor-pointer group-hover:border-amber-400 group-hover:bg-white/80 group-hover:shadow-2xl group-hover:shadow-amber-900/5",
-                                            getFullUrl('intro_hero_image', heroImageUrl) && "border-solid border-white bg-white shadow-xl"
-                                        )}
-                                        onClick={() => heroImageRef.current?.click()}
-                                    >
-                                        {getFullUrl('intro_hero_image', heroImageUrl) ? (
-                                            <div className="relative w-full h-full">
-                                                <img src={getFullUrl('intro_hero_image', heroImageUrl)} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="" />
-                                                <div className="absolute inset-0 bg-black/20 lg:opacity-0 lg:group-hover:opacity-100 opacity-100 transition-opacity flex items-center justify-center backdrop-blur-[2px]">
-                                                    <div className="bg-white/90 p-3 rounded-full shadow-lg lg:transform lg:translate-y-4 lg:group-hover:translate-y-0 transition-transform duration-300">
-                                                        <Upload className="w-6 h-6 text-[#1A3A52]" />
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                        ) : (
-                                            <div className="flex flex-col items-center gap-4 text-[#D5BA98]">
-                                                <div className="p-5 bg-amber-50 rounded-full border border-amber-100 group-hover:scale-110 transition-transform">
-                                                    <Upload className="w-10 h-10" />
-                                                </div>
-                                                <span className="text-sm font-semibold tracking-wide">Click to upload high-res image</span>
-                                            </div>
-                                        )}
-
-                                        {isUploading === 'intro_hero_image' && (
-                                            <div className="absolute inset-0 bg-white/90 flex flex-col items-center justify-center gap-3 backdrop-blur-sm">
-                                                <Loader2 className="w-8 h-8 animate-spin text-[#1A3A52]" />
-                                                <span className="text-xs font-bold text-[#1A3A52] animate-pulse">Processing...</span>
-                                            </div>
-                                        )}
-                                    </div>
-
-                                    {getFullUrl('intro_hero_image', heroImageUrl) && (
-                                        <button
-                                            type="button"
-                                            className="absolute -top-3 -right-3 p-2 bg-white rounded-xl shadow-lg border border-gray-100 hover:bg-blue-50 hover:text-blue-600 transition-all z-10 lg:scale-0 lg:group-hover:scale-100 scale-100"
-
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                setPreviewData({ url: getFullUrl('intro_hero_image', heroImageUrl), title: "Hero Image", type: 'image' });
-                                            }}
-                                        >
-                                            <Maximize2 className="h-4 w-4" />
-                                        </button>
-                                    )}
-                                </div>
-                                <input type="file" ref={heroImageRef} className="hidden" accept={IMAGE_ACCEPT} onChange={(e) => handleFileChange(e, 'intro_hero_image')} />
-                                <p className="mt-6 text-[10px] font-bold text-gray-400 uppercase tracking-widest">Recommended size: 1920x1080 (PNG/JPG)</p>
-                            </div>
+                            <SystemSettingMediaUploader
+                                label={t('Introduction.heroImage')}
+                                value={getFullUrl('intro_hero_image', heroImageUrl)}
+                                type="image"
+                                aspectRatioClassName="aspect-[16/10]"
+                                onUpload={(file) => uploadFile(file)}
+                                onChange={(rel, pub) => {
+                                    setValue('intro_hero_image', rel, { shouldDirty: true, shouldValidate: true });
+                                    if (pub) setRemotePublicUrls(prev => ({ ...prev, intro_hero_image: pub }));
+                                }}
+                                onPreview={(url) => setPreviewData({ url, title: "Hero Image", type: 'image' })}
+                                maxSizeMB={MAX_IMAGE_SIZE_MB}
+                            />
                         </div>
                     </ALCard>
                 </section>
@@ -517,82 +365,36 @@ export const IntroductionSettingsForm = () => {
                             <div className="p-8 lg:p-10 bg-[#F8FAFC]/60 space-y-8">
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                     {/* Video Left */}
-                                    <div className="space-y-4">
-                                        <p className="text-[10px] font-bold text-[#1A3A52]/50 uppercase tracking-[0.2em]">{t('Introduction.tourVideoLeft')}</p>
-                                        <div className="relative group w-full aspect-video">
-                                            <div
-                                                className={cn(
-                                                    "w-full h-full rounded-2xl border-2 border-dashed border-blue-200/60 bg-white/50 flex items-center justify-center overflow-hidden transition-all cursor-pointer hover:border-blue-400 hover:shadow-lg",
-                                                    getFullUrl('intro_virtualTour_videoUrlLeft', tourVideoUrlLeft) && "border-solid bg-black shadow-md"
-                                                )}
-                                                onClick={() => virtualTourVideoLeftRef.current?.click()}
-                                            >
-                                                {getFullUrl('intro_virtualTour_videoUrlLeft', tourVideoUrlLeft) ? (
-                                                    <video src={getFullUrl('intro_virtualTour_videoUrlLeft', tourVideoUrlLeft)} className="w-full h-full object-cover" />
-                                                ) : (
-                                                    <Upload className="w-8 h-8 text-blue-200" />
-                                                )}
-
-                                                <div className="absolute inset-0 bg-[#1A3A52]/40 lg:opacity-0 lg:group-hover:opacity-100 opacity-100 transition-opacity flex items-center justify-center">
-                                                    <div className="bg-white/90 p-2 rounded-full shadow-lg">
-                                                        <Upload className="w-5 h-5 text-[#1A3A52]" />
-                                                    </div>
-                                                </div>
-
-
-                                                {isUploading === 'intro_virtualTour_videoUrlLeft' && (
-                                                    <div className="absolute inset-0 bg-white/90 flex items-center justify-center">
-                                                        <Loader2 className="w-6 h-6 animate-spin text-[#1A3A52]" />
-                                                    </div>
-                                                )}
-                                            </div>
-                                            {getFullUrl('intro_virtualTour_videoUrlLeft', tourVideoUrlLeft) && (
-                                                <button type="button" className="absolute top-2 right-2 p-1.5 bg-black/40 text-white rounded-lg hover:bg-black/60 transition-colors backdrop-blur-sm" onClick={(e) => { e.stopPropagation(); setPreviewData({ url: getFullUrl('intro_virtualTour_videoUrlLeft', tourVideoUrlLeft), title: "Video Left", type: 'video' }); }}>
-                                                    <Maximize2 className="h-3.5 w-3.5" />
-                                                </button>
-                                            )}
-                                        </div>
-                                        <input type="file" ref={virtualTourVideoLeftRef} className="hidden" accept={VIDEO_ACCEPT} onChange={(e) => handleFileChange(e, 'intro_virtualTour_videoUrlLeft', true)} />
-                                    </div>
+                                    <SystemSettingMediaUploader
+                                        label={t('Introduction.tourVideoLeft')}
+                                        value={getFullUrl('intro_virtualTour_videoUrlLeft', tourVideoUrlLeft)}
+                                        type="video"
+                                        aspectRatioClassName="aspect-video"
+                                        onUpload={(file) => uploadFile(file)}
+                                        onChange={(rel, pub) => {
+                                            setValue('intro_virtualTour_videoUrlLeft', rel, { shouldDirty: true, shouldValidate: true });
+                                            if (pub) setRemotePublicUrls(prev => ({ ...prev, intro_virtualTour_videoUrlLeft: pub }));
+                                        }}
+                                        onPreview={(url) => setPreviewData({ url, title: "Video Left", type: 'video' })}
+                                        maxSizeMB={MAX_VIDEO_SIZE_MB}
+                                        maxVideoDuration={MAX_VIDEO_DURATION_SECONDS}
+                                    />
 
                                     {/* Video Right */}
-                                    <div className="space-y-4">
-                                        <p className="text-[10px] font-bold text-[#1A3A52]/50 uppercase tracking-[0.2em]">{t('Introduction.tourVideoRight')}</p>
-                                        <div className="relative group w-full aspect-video">
-                                            <div
-                                                className={cn(
-                                                    "w-full h-full rounded-2xl border-2 border-dashed border-blue-200/60 bg-white/50 flex items-center justify-center overflow-hidden transition-all cursor-pointer hover:border-blue-400 hover:shadow-lg",
-                                                    getFullUrl('intro_virtualTour_videoUrlRight', tourVideoUrlRight) && "border-solid bg-black shadow-md"
-                                                )}
-                                                onClick={() => virtualTourVideoRightRef.current?.click()}
-                                            >
-                                                {getFullUrl('intro_virtualTour_videoUrlRight', tourVideoUrlRight) ? (
-                                                    <video src={getFullUrl('intro_virtualTour_videoUrlRight', tourVideoUrlRight)} className="w-full h-full object-cover" />
-                                                ) : (
-                                                    <Upload className="w-8 h-8 text-blue-200" />
-                                                )}
-
-                                                <div className="absolute inset-0 bg-[#1A3A52]/40 lg:opacity-0 lg:group-hover:opacity-100 opacity-100 transition-opacity flex items-center justify-center">
-                                                    <div className="bg-white/90 p-2 rounded-full shadow-lg">
-                                                        <Upload className="w-5 h-5 text-[#1A3A52]" />
-                                                    </div>
-                                                </div>
-
-
-                                                {isUploading === 'intro_virtualTour_videoUrlRight' && (
-                                                    <div className="absolute inset-0 bg-white/90 flex items-center justify-center">
-                                                        <Loader2 className="w-6 h-6 animate-spin text-[#1A3A52]" />
-                                                    </div>
-                                                )}
-                                            </div>
-                                            {getFullUrl('intro_virtualTour_videoUrlRight', tourVideoUrlRight) && (
-                                                <button type="button" className="absolute top-2 right-2 p-1.5 bg-black/40 text-white rounded-lg hover:bg-black/60 transition-colors backdrop-blur-sm" onClick={(e) => { e.stopPropagation(); setPreviewData({ url: getFullUrl('intro_virtualTour_videoUrlRight', tourVideoUrlRight), title: "Video Right", type: 'video' }); }}>
-                                                    <Maximize2 className="h-3.5 w-3.5" />
-                                                </button>
-                                            )}
-                                        </div>
-                                        <input type="file" ref={virtualTourVideoRightRef} className="hidden" accept={VIDEO_ACCEPT} onChange={(e) => handleFileChange(e, 'intro_virtualTour_videoUrlRight', true)} />
-                                    </div>
+                                    <SystemSettingMediaUploader
+                                        label={t('Introduction.tourVideoRight')}
+                                        value={getFullUrl('intro_virtualTour_videoUrlRight', tourVideoUrlRight)}
+                                        type="video"
+                                        aspectRatioClassName="aspect-video"
+                                        onUpload={(file) => uploadFile(file)}
+                                        onChange={(rel, pub) => {
+                                            setValue('intro_virtualTour_videoUrlRight', rel, { shouldDirty: true, shouldValidate: true });
+                                            if (pub) setRemotePublicUrls(prev => ({ ...prev, intro_virtualTour_videoUrlRight: pub }));
+                                        }}
+                                        onPreview={(url) => setPreviewData({ url, title: "Video Right", type: 'video' })}
+                                        maxSizeMB={MAX_VIDEO_SIZE_MB}
+                                        maxVideoDuration={MAX_VIDEO_DURATION_SECONDS}
+                                    />
                                 </div>
                             </div>
                         </div>
@@ -625,7 +427,6 @@ export const IntroductionSettingsForm = () => {
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                                 {[1, 2, 3].map((num) => {
                                     const index = num as 1 | 2 | 3;
-                                    const dishImageRef = num === 1 ? dish1ImageRef : num === 2 ? dish2ImageRef : dish3ImageRef;
                                     const dishImageUrl = num === 1 ? dish1ImageUrl : num === 2 ? dish2ImageUrl : dish3ImageUrl;
 
                                     return (
@@ -637,51 +438,24 @@ export const IntroductionSettingsForm = () => {
                                             className="border-amber-100/60 hover:border-amber-400/40 transition-all duration-300 hover:shadow-xl hover:shadow-amber-900/5 group flex flex-col"
                                         >
                                             {/* Dish Card Header */}
-                                            <div className="relative aspect-[4/3] overflow-hidden">
-                                                <div
-                                                    className={cn(
-                                                        "w-full h-full bg-amber-50/20 flex items-center justify-center cursor-pointer overflow-hidden",
-                                                        getFullUrl(`intro_collection_dish${num}_image`, dishImageUrl) && "bg-white"
-                                                    )}
-                                                    onClick={() => dishImageRef.current?.click()}
-                                                >
-                                                    {getFullUrl(`intro_collection_dish${num}_image`, dishImageUrl) ? (
-                                                        <img src={getFullUrl(`intro_collection_dish${num}_image`, dishImageUrl)} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="" />
-                                                    ) : (
-                                                        <Upload className="w-8 h-8 text-amber-100" />
-                                                    )}
-
-                                                    <div className="absolute inset-0 bg-black/40 lg:opacity-0 lg:group-hover:opacity-100 opacity-100 transition-opacity flex items-center justify-center backdrop-blur-[1px]">
-                                                        <div className="flex gap-2 lg:transform lg:translate-y-2 lg:group-hover:translate-y-0 transition-transform duration-300">
-
-                                                            <button type="button" className="p-2 bg-white text-[#1A3A52] rounded-lg shadow-lg" onClick={(e) => { e.stopPropagation(); dishImageRef.current?.click(); }}>
-                                                                <Upload className="w-4 h-4" />
-                                                            </button>
-                                                            {getFullUrl(`intro_collection_dish${num}_image`, dishImageUrl) && (
-                                                                <button type="button" className="p-2 bg-white text-blue-600 rounded-lg shadow-lg" onClick={(e) => { e.stopPropagation(); setPreviewData({ url: getFullUrl(`intro_collection_dish${num}_image`, dishImageUrl), title: `Featured Dish ${num}`, type: 'image' }); }}>
-                                                                    <Maximize2 className="w-4 h-4" />
-                                                                </button>
-                                                            )}
-                                                        </div>
-                                                    </div>
-
-                                                    {isUploading === `intro_collection_dish${num}_image` && (
-                                                        <div className="absolute inset-0 bg-white/80 flex items-center justify-center">
-                                                            <Loader2 className="w-6 h-6 animate-spin text-[#1A3A52]" />
-                                                        </div>
-                                                    )}
-                                                </div>
-
-                                                <div className="absolute top-3 left-3 z-10">
-                                                    <span className="bg-[#1A3A52]/90 text-white text-[9px] font-bold px-2 py-0.5 rounded shadow-sm">
-                                                        {t('DishModal.dishLabel')} 0{num}
-                                                    </span>
-                                                </div>
-
+                                            <div className="relative">
+                                                <SystemSettingMediaUploader
+                                                    label={`${t('DishModal.dishLabel')} 0${num}`}
+                                                    value={getFullUrl(`intro_collection_dish${num}_image`, dishImageUrl)}
+                                                    type="image"
+                                                    aspectRatioClassName="aspect-[4/3]"
+                                                    onUpload={(file) => uploadFile(file)}
+                                                    onChange={(rel, pub) => {
+                                                        // @ts-expect-error: dynamic key access for dish image
+                                                        setValue(`intro_collection_dish${num}_image`, rel, { shouldDirty: true, shouldValidate: true });
+                                                        if (pub) setRemotePublicUrls(prev => ({ ...prev, [`intro_collection_dish${num}_image`]: pub }));
+                                                    }}
+                                                    onPreview={(url) => setPreviewData({ url, title: `Featured Dish ${num}`, type: 'image' })}
+                                                    maxSizeMB={MAX_IMAGE_SIZE_MB}
+                                                />
                                                 <button
                                                     type="button"
                                                     className="absolute top-3 right-3 z-10 h-7 w-7 flex items-center justify-center bg-white/90 text-amber-700 rounded-lg shadow-lg border border-amber-100 hover:bg-amber-600 hover:text-white transition-all lg:scale-0 lg:group-hover:scale-100 scale-100"
-
                                                     onClick={() => {
                                                         setSelectingDishIndex(index);
                                                         setIsDishModalOpen(true);
@@ -699,7 +473,6 @@ export const IntroductionSettingsForm = () => {
                                                     <ALInput title={t('Introduction.cardCategory')} wrapperClassName="bg-white/50 border-amber-50 focus-within:border-amber-200" {...register(`i18n.${activeLocale}.intro_collection_dish${num}_cardCategory` as any)} />
                                                 </div>
                                             </div>
-                                            <input type="file" ref={dishImageRef} className="hidden" accept={IMAGE_ACCEPT} onChange={(e) => handleFileChange(e, `intro_collection_dish${num}_image`)} />
                                         </ALCard>
                                     );
                                 })}
