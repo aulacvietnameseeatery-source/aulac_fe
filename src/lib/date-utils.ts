@@ -1,4 +1,4 @@
-import { format, addMinutes } from "date-fns";
+import { format, addMinutes, parseISO } from "date-fns";
 import { formatInTimeZone, fromZonedTime, toZonedTime } from "date-fns-tz";
 
 const RESTAURANT_TZ = "Europe/Zurich";
@@ -66,5 +66,31 @@ export const dateUtils = {
             fromTime: startSwiss.toISOString(),
             toTime: endSwiss.toISOString()
         };
-    }
+    },
+
+    /**
+     * Format a DateOnly string (e.g. "2026-03-25") without any timezone conversion.
+     * Backend DateOnly fields have no time component — parsing as UTC would shift the date.
+     * @param dateOnlyStr Chuỗi ngày thuần (VD: "2026-03-25")
+     * @param formatStr Định dạng (VD: "dd/MM/yyyy", "MMM dd", "yyyy-MM-dd")
+     * @returns Chuỗi đã format, giữ nguyên ngày gốc
+     */
+    formatDateOnly: (dateOnlyStr: string | null | undefined, formatStr: string): string => {
+        if (!dateOnlyStr) return "";
+        // parseISO treats date-only strings as local midnight (no TZ shift)
+        const date = parseISO(dateOnlyStr);
+        if (isNaN(date.getTime())) return dateOnlyStr;
+        return format(date, formatStr);
+    },
+
+    /**
+     * Convert a Date object or ISO string to a "yyyy-MM-dd" date-only string
+     * using the local timezone (no UTC conversion).
+     * @param date Date object or ISO string
+     * @returns "yyyy-MM-dd" string in local time
+     */
+    toDateOnlyString: (date: Date | string): string => {
+        const d = typeof date === "string" ? new Date(date) : date;
+        return format(d, "yyyy-MM-dd");
+    },
 };

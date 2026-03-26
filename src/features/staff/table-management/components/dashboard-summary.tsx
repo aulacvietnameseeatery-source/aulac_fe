@@ -4,6 +4,7 @@ import React, { useMemo } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/routing"
 import { cn } from "@/lib/utils";
+import { dateUtils } from "@/lib/date-utils";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   Users,
@@ -153,21 +154,23 @@ const MOCK_RESERVATIONS: IncomingReservation[] = [
   },
 ];
 
-function formatTimeUntil(iso: string): string {
+function formatTimeUntil(iso: string, t: (key: string, values?: Record<string, number>) => string): string {
   const diff = new Date(iso).getTime() - Date.now();
-  if (diff <= 0) return "Now";
+  if (diff <= 0) return t("dashboard.timeNow");
   const mins = Math.round(diff / 60_000);
-  if (mins < 60) return `in ${mins}m`;
+  if (mins < 60) return t("dashboard.timeMinutes", { minutes: mins });
   const hrs = Math.floor(mins / 60);
   const rem = mins % 60;
-  return rem > 0 ? `in ${hrs}h ${rem}m` : `in ${hrs}h`;
+  return rem > 0 ? t("dashboard.timeHoursMinutes", { hours: hrs, minutes: rem }) : t("dashboard.timeHours", { hours: hrs });
 }
 
+// _OLD: formatTime used toLocaleTimeString — now uses dateUtils.formatLocal
 function formatTime(iso: string): string {
-  return new Date(iso).toLocaleTimeString([], {
-    hour: "2-digit",
-    minute: "2-digit",
-  });
+  try {
+    return dateUtils.formatLocal(iso, "HH:mm");
+  } catch {
+    return "—";
+  }
 }
 
 const ReservationCard: React.FC<{ r: IncomingReservation }> = ({ r }) => {
@@ -189,7 +192,7 @@ const ReservationCard: React.FC<{ r: IncomingReservation }> = ({ r }) => {
             {formatTime(r.reservedTime)}
           </span>
           <span className="text-[10px] mt-0.5 leading-none">
-            {formatTimeUntil(r.reservedTime)}
+            {formatTimeUntil(r.reservedTime, t)}
           </span>
         </div>
         <span

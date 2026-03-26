@@ -28,7 +28,7 @@ export interface ALExistingFile {
 
 export interface ALFileValidationError {
   file: File;
-  reason: "size" | "type" | "count";
+  reason: "size" | "type" | "count" | "processing-failed";
   message: string;
 }
 
@@ -129,6 +129,24 @@ export interface ALFileUploaderProps {
    * @default 4
    */
   imagePerRow?: ALFileUploaderImagePerRow;
+
+  // ── Processing ──────────────────────────────────────────────
+  /**
+   * When `true`, automatically converts HEIC/HEIF images to JPEG client-side.
+   * Errors in conversion are reported to the user; failed files are rejected.
+   * Also applies any custom processing via the `processFiles` callback.
+   *
+   * @default true (enabled for image variants, disabled for file/gallery)
+   */
+  autoProcessImages?: boolean;
+  /**
+   * Optional async callback to process files after HEIC conversion (if enabled).
+   * Use this for additional compression, resizing, metadata stripping, etc.
+   *
+   * Receives validated (and optionally HEIC-converted) files, returns processed files.
+   * The component shows a "Processing…" state while this runs.
+   */
+  processFiles?: (files: File[]) => Promise<File[]>;
 
   // ── State ───────────────────────────────────────────────────
   /** Disables all interactions */

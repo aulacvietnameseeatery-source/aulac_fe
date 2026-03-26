@@ -20,20 +20,16 @@ function fmtShort(d: Date) {
   return d.toLocaleDateString(undefined, { month: "short", day: "numeric" });
 }
 
+const DAY_KEYS = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"] as const;
+
 export function ShiftMatrixHeader({ weekDates }: ShiftMatrixHeaderProps) {
   const t = useTranslations("shift.schedule.matrix");
-  const dayLabels = [
-    t("days.mon"),
-    t("days.tue"),
-    t("days.wed"),
-    t("days.thu"),
-    t("days.fri"),
-    t("days.sat"),
-    t("days.sun"),
-  ];
+
+  const colCount = weekDates.length;
+  const gridStyle = { gridTemplateColumns: `180px repeat(${colCount}, minmax(120px, 1fr))` };
 
   return (
-    <div className="grid grid-cols-[180px_repeat(7,1fr)] border-b border-[#D5BA98]/40 sticky top-0 z-10 bg-white">
+    <div className="border-b border-[#D5BA98]/40 sticky top-0 z-10 bg-white" style={{ display: "grid", ...gridStyle }}>
       {/* Staff column label */}
       <div className="flex items-end px-3 py-2">
         <span className="text-xs font-medium text-[#1A3A52]/60 uppercase tracking-wider">
@@ -51,7 +47,7 @@ export function ShiftMatrixHeader({ weekDates }: ShiftMatrixHeaderProps) {
           )}
         >
           <span className="text-[10px] font-semibold uppercase tracking-wider text-[#1A3A52]/50">
-            {dayLabels[i]}
+            {t(`days.${DAY_KEYS[d.getDay()]}`)}
           </span>
           <span
             className={cn(

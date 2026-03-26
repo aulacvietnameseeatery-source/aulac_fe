@@ -34,7 +34,10 @@ export function useDynamicSettings() {
 
                 setSettings(newSettings);
             } catch (error) {
-                console.error('Failed to load public store settings', error);
+                // Non-critical: store settings are optional — UI falls back to hardcoded defaults
+                if (process.env.NODE_ENV === 'development') {
+                    console.warn('[useDynamicSettings] Could not load public store settings:', error);
+                }
             } finally {
                 setIsLoading(false);
             }

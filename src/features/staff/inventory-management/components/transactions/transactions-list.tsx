@@ -4,6 +4,7 @@ import React, { useMemo, useState, useCallback } from "react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "@/routing"
 import { format } from "date-fns";
+import { dateUtils } from "@/lib/date-utils";
 import { Plus } from "lucide-react";
 import { BaseTable } from "@/components/ui/table/base-table";
 import type { TableColumn } from "@/types/table.types";
@@ -114,7 +115,7 @@ export function TransactionsList() {
           <div className="flex flex-col">
             <span className="text-sm text-[#1A3A52]/80">{item.createdByName ?? "-"}</span>
             <span className="text-[10px] text-[#1A3A52]/40">
-              {item.createdAt ? format(new Date(item.createdAt), "dd/MM HH:mm") : ""}
+              {item.createdAt ? dateUtils.formatLocal(item.createdAt, "dd/MM HH:mm") : ""}
             </span>
           </div>
         ),

@@ -60,7 +60,12 @@
       "addTitle": "Add New Zone",
       "name": "Zone Name",
       "namePlaceholder": "e.g. Garden, Terrace, Balcony",
-      "createHint": "The zone will be available immediately for assigning tables."
+      "createHint": "The zone will be available immediately for assigning tables.",
+      "subtitles": {
+        "Indoor": "Main dining area",
+        "Outdoor": "Al fresco seating",
+        "Rooftop": "Upper-level terrace"
+      }
     },
     "validation": {
       "tableCodeRequired": "Table code is required",
@@ -134,7 +139,11 @@
       "allClear": "All clear",
       "incomingReservations": "Incoming Reservations",
       "seeAll": "See all",
-      "noUpcomingReservations": "No upcoming reservations"
+      "noUpcomingReservations": "No upcoming reservations",
+      "timeNow": "Now",
+      "timeMinutes": "in {minutes}m",
+      "timeHoursMinutes": "in {hours}h {minutes}m",
+      "timeHours": "in {hours}h"
     }
   }
 }

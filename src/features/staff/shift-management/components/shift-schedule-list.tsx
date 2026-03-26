@@ -11,6 +11,7 @@ import { PermissionGuard } from "@/components/permission-guard";
 import { Permissions } from "@/types/const";
 import type { TableColumn } from "@/types/table.types";
 import type { TableDataChangeParams } from "@/types/table-data-change.types";
+import { dateUtils } from "@/lib/date-utils";
 import { useShiftAssignmentsQuery, useCancelAssignmentMutation } from "../hooks/use-shift-queries";
 import { ShiftStatusBadge } from "./shift-status-badge";
 import { ShiftAssignmentForm } from "./shift-assignment-form";
@@ -60,7 +61,7 @@ export function ShiftScheduleList() {
   };
 
   function formatTime(iso: string) {
-    try { return new Date(iso).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }); }
+    try { return dateUtils.formatLocal(iso, "HH:mm"); }
     catch { return iso; }
   }
 

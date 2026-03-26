@@ -16,11 +16,13 @@ import { useUpdateStoreSettingsMutation, useTranslateSettingsMutation } from "..
 
 
 
-const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
-const IMAGE_ACCEPT = '.jpg,.jpeg,.png,.gif,.webp,image/jpeg,image/png,image/gif,image/webp';
+const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/heic', 'image/heif'];
+const IMAGE_ACCEPT = '.jpg,.jpeg,.png,.gif,.webp,.heic,.heif,image/jpeg,image/png,image/gif,image/webp,image/heic,image/heif';
 const VIDEO_ACCEPT = 'video/mp4,.mp4';
-const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
-const MAX_VIDEO_SIZE = 50 * 1024 * 1024;
+const MAX_IMAGE_SIZE_MB = 5;
+const MAX_VIDEO_SIZE_MB = 50;
+const MAX_IMAGE_SIZE = MAX_IMAGE_SIZE_MB * 1024 * 1024;
+const MAX_VIDEO_SIZE = MAX_VIDEO_SIZE_MB * 1024 * 1024;
 const MAX_VIDEO_DURATION_SECONDS = 30;
 const INTRO_MEDIA_KEYS = [
     "intro_hero_image",
@@ -66,7 +68,10 @@ export const IntroductionSettingsForm = () => {
     const dish1ImageUrl = watch('intro_collection_dish1_image') as string;
     const dish2ImageUrl = watch('intro_collection_dish2_image') as string;
     const dish3ImageUrl = watch('intro_collection_dish3_image') as string;
-
+    
+    function isHeicFile(file: File): boolean {
+        return file.type === 'image/heic' || file.type === 'image/heif';
+    }
     const toServerRelativePath = (value: string) => {
         const trimmed = value.trim();
         if (!trimmed) return "";
@@ -219,7 +224,7 @@ export const IntroductionSettingsForm = () => {
             return;
         }
 
-        if (!isVideo && !ALLOWED_IMAGE_TYPES.includes(file.type)) {
+        if (!isVideo && !ALLOWED_IMAGE_TYPES.includes(file.type) && !isHeicFile(file)) {
             toast.error(t('StoreProfile.invalidImageFormatError'));
             if (e.target) e.target.value = '';
             return;
@@ -227,7 +232,11 @@ export const IntroductionSettingsForm = () => {
 
         const maxSize = isVideo ? MAX_VIDEO_SIZE : MAX_IMAGE_SIZE;
         if (file.size > maxSize) {
-            toast.error(isVideo ? t('StoreProfile.videoSizeError') : t('StoreProfile.fileSizeError'));
+            toast.error(
+                isVideo
+                    ? t('StoreProfile.videoSizeError', { max: MAX_VIDEO_SIZE_MB })
+                    : t('StoreProfile.fileSizeError', { max: MAX_IMAGE_SIZE_MB })
+            );
             if (e.target) e.target.value = '';
             return;
         }
@@ -241,18 +250,27 @@ export const IntroductionSettingsForm = () => {
             }
         }
 
+        // Process image (HEIC conversion + compression)
+        let fileToUpload: File;
+        if (!isVideo) {
+            // ✅ ALFileUploader will handle HEIC conversion; just use file as-is
+            fileToUpload = file;
+        } else {
+            fileToUpload = file;
+        }
+
         const previousValue = getValues(fieldKey as any);
         const previousLocalPreview = localPreviews[fieldKey];
         if (previousLocalPreview) {
             URL.revokeObjectURL(previousLocalPreview);
         }
 
-        const localUrl = URL.createObjectURL(file);
+        const localUrl = URL.createObjectURL(fileToUpload);
         setLocalPreviews(prev => ({ ...prev, [fieldKey]: localUrl }));
         setIsUploading(fieldKey);
 
         try {
-            const { relativePath, publicUrl } = await uploadFile(file);
+            const { relativePath, publicUrl } = await uploadFile(fileToUpload);
             const serverRelative = toServerRelativeFromUpload(relativePath, publicUrl);
             // @ts-expect-error: dynamic key access for uploaded file fieldKey
             setValue(fieldKey, serverRelative, { shouldDirty: true, shouldValidate: true });
@@ -714,3 +732,5 @@ export const IntroductionSettingsForm = () => {
         </form>
     );
 };
+
+

@@ -32,7 +32,9 @@
     "txTypeChart": "Recent transaction mix",
     "viewAll": "View all",
     "noLowStock": "All items are well stocked",
-    "noRecentTx": "No recent transactions"
+    "noRecentTx": "No recent transactions",
+    "loading": "Loading...",
+    "itemCount": "{count} items"
   },
   "items": {
     "title": "Inventory Items",
@@ -67,6 +69,8 @@
     "noMovements": "No movements recorded",
     "previous": "Previous",
     "next": "Next",
+    "loading": "Loading...",
+    "entryCreatedBy": "by {name}",
     "table": {
       "date": "Date",
       "txCode": "Transaction",
@@ -123,7 +127,18 @@
       "confirmApprove": "Approve this transaction? Stock will be updated.",
       "confirmReject": "Reject this transaction?",
       "stockCheckArea": "Stock Check Area",
-      "noMedia": "No photo evidence attached"
+      "noMedia": "No photo evidence attached",
+      "loading": "Loading...",
+      "createdBy": "Created By",
+      "createdAt": "Created At",
+      "supplier": "Supplier",
+      "exportReason": "Export Reason",
+      "submittedAt": "Submitted At",
+      "approvedBy": "Approved By",
+      "approvedAt": "Approved At",
+      "note": "Note",
+      "evidenceAlt": "Evidence",
+      "confirmRejectBtn": "Confirm Reject"
     }
   },
   "create": {

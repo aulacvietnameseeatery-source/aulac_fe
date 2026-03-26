@@ -13,8 +13,10 @@ import { mapStoreSettingsToFormValues, mapFormValuesToStoreSettings, LOCALES, Su
 import { useUpdateStoreSettingsMutation, useTranslateSettingsMutation } from '../hooks/useSystemSettingsMutation';
 
 
-const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
-const IMAGE_ACCEPT = '.jpg,.jpeg,.png,.gif,.webp,image/jpeg,image/png,image/gif,image/webp';
+const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/heic', 'image/heif'];
+const IMAGE_ACCEPT = '.jpg,.jpeg,.png,.gif,.webp,.heic,.heif,image/jpeg,image/png,image/gif,image/webp,image/heic,image/heif';
+const MAX_IMAGE_SIZE_MB = 5;
+const MAX_IMAGE_SIZE = MAX_IMAGE_SIZE_MB * 1024 * 1024;
 
 
 
@@ -132,18 +134,20 @@ export const StoreProfileForm = () => {
         const file = e.target.files?.[0];
         if (!file) return;
 
-        if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
+        if (!ALLOWED_IMAGE_TYPES.includes(file.type) && !file.type.includes('heic') && !file.type.includes('heif')) {
             toast.error(t('StoreProfile.invalidImageFormatError'));
             if (e.target) e.target.value = '';
             return;
         }
 
-        if (file.size > 5 * 1024 * 1024) {
-            toast.error(t('StoreProfile.fileSizeError'));
+        if (file.size > MAX_IMAGE_SIZE) {
+            toast.error(t('StoreProfile.fileSizeError', { max: MAX_IMAGE_SIZE_MB }));
             if (e.target) e.target.value = '';
             return;
         }
 
+        // ✅ ALFileUploader will handle HEIC conversion in the upload flow
+        // Just use the file as-is here for preview
         const localUrl = URL.createObjectURL(file);
         setLocalPreviews(prev => ({ ...prev, logoUrl: localUrl }));
         setIsUploading('logoUrl');

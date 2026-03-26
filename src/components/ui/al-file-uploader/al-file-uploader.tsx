@@ -21,6 +21,7 @@ import type {
   ALFileValidationError,
   ALFileUploaderImagePerRow,
 } from "./al-file-uploader.types";
+import { isHeicFile, processImageFile } from "@/lib/image-processing";
 
 const IMAGE_PER_ROW_CLASS_MAP: Record<ALFileUploaderImagePerRow, string> = {
   2: "grid-cols-2",
@@ -71,6 +72,17 @@ function validateFile(
       if (a.startsWith(".")) return file.name.toLowerCase().endsWith(a.toLowerCase());
       return file.type === a;
     });
+
+    // Allow HEIC/HEIF files through when the accept pattern includes images —
+    // iOS may report empty or application/octet-stream MIME for HEIC files,
+    // which would fail the MIME check above. They'll be converted to JPEG
+    // by processFiles before upload.
+    if (!mimeOk && isHeicFile(file)) {
+      const acceptsImages = accepted.some(
+        (a) => a === "image/*" || a.startsWith("image/") || a === ".heic" || a === ".heif"
+      );
+      if (acceptsImages) return null;
+    }
 
     if (!mimeOk) {
       return {
@@ -311,6 +323,8 @@ const ALFileUploader = React.forwardRef<HTMLDivElement, ALFileUploaderProps>(
       multiple = true,
       variant = "image",
       imagePerRow = 4,
+      autoProcessImages,
+      processFiles,
       disabled = false,
       className,
     },
@@ -318,7 +332,80 @@ const ALFileUploader = React.forwardRef<HTMLDivElement, ALFileUploaderProps>(
   ) => {
     const inputRef = React.useRef<HTMLInputElement>(null);
     const [isDragging, setIsDragging] = React.useState(false);
+    const [isProcessing, setIsProcessing] = React.useState(false);
     const [validationErrors, setValidationErrors] = React.useState<ALFileValidationError[]>([]);
+    const processingAbortRef = React.useRef<AbortController | null>(null);
+
+    // Determine whether to auto-process images
+    // Default: enabled for image/gallery variants, disabled for file variant
+    const shouldAutoProcess =
+      autoProcessImages ??
+      (variant === "image" || variant === "gallery");
+
+    // Abort any in-flight processing on unmount
+    React.useEffect(() => {
+      return () => {
+        processingAbortRef.current?.abort();
+      };
+    }, []);
+
+    // Create wrapped processFiles that handles HEIC conversion + user callback
+    const wrappedProcessFiles = React.useCallback(
+      async (files: File[]): Promise<File[]> => {
+        const results: File[] = [];
+        const errors: { file: File; error: Error }[] = [];
+
+        // Step 1: HEIC conversion (if enabled)
+        if (shouldAutoProcess) {
+          for (const file of files) {
+            if (isHeicFile(file)) {
+              try {
+                const converted = await processImageFile(file);
+                results.push(converted);
+              } catch (err) {
+                const error = err instanceof Error ? err : new Error(String(err));
+                errors.push({ file, error });
+              }
+            } else {
+              results.push(file);
+            }
+          }
+
+          // If any HEIC conversions failed, add them to validation errors and skip
+          // the rest of processing for those files
+          if (errors.length > 0) {
+            setValidationErrors((prev) => [
+              ...prev,
+              ...errors.map((e) => ({
+                file: e.file,
+                reason: "processing-failed" as const,
+                message: `${e.file.name}: ${e.error.message}`,
+              })),
+            ]);
+            // Only continue with successfully-converted files
+          }
+        } else {
+          // If auto-processing disabled, return files as-is
+          results.push(...files);
+        }
+
+        // Step 2: Apply user's custom processFiles callback (if provided)
+        if (processFiles && results.length > 0) {
+          try {
+            const customProcessed = await processFiles(results);
+            return customProcessed;
+          } catch (err) {
+            // If custom processing fails, log but return converted files so far
+            console.error("[ALFileUploader] Custom processFiles failed:", err);
+            return results;
+          }
+        }
+
+        return results;
+      },
+      [shouldAutoProcess, processFiles]
+    );
+
     const isGalleryVariant = variant === "gallery";
     const isImageLikeVariant = variant === "image" || isGalleryVariant;
     const responsiveImageGridClass = cn(
@@ -331,12 +418,15 @@ const ALFileUploader = React.forwardRef<HTMLDivElement, ALFileUploaderProps>(
     const responsiveRemoveButtonClass = "size-5 p-0 bg-white/90 text-slate-700 opacity-100 shadow-sm hover:bg-red-600 hover:text-white sm:size-6";
     const responsiveBadgeClass = "text-[9px] py-0.5 sm:text-[10px] sm:py-1";
 
-    // Generate stable object-URL previews for pending files
+    // Generate stable object-URL previews for pending files.
+    // Key uses lastModified (stable across HEIC→JPEG conversion) instead of size.
+    const fileKey = (f: File) => f.name + f.lastModified;
+
     const previews = React.useMemo(() => {
       if (!isImageLikeVariant) return {};
       return Object.fromEntries(
         pendingFiles.map((file) => [
-          file.name + file.size,
+          fileKey(file),
           URL.createObjectURL(file),
         ])
       );
@@ -353,14 +443,14 @@ const ALFileUploader = React.forwardRef<HTMLDivElement, ALFileUploaderProps>(
 
     // ── Add files (from input or drop) ──
     const addFiles = React.useCallback(
-      (incoming: File[]) => {
+      async (incoming: File[]) => {
         const errors: ALFileValidationError[] = [];
         const valid: File[] = [];
 
         for (const file of incoming) {
-          // Deduplicate by name + size
+          // Deduplicate by name + lastModified (stable across conversion)
           const isDuplicate = pendingFiles.some(
-            (p) => p.name === file.name && p.size === file.size
+            (p) => p.name === file.name && p.lastModified === file.lastModified
           );
           if (isDuplicate) continue;
 
@@ -385,11 +475,39 @@ const ALFileUploader = React.forwardRef<HTMLDivElement, ALFileUploaderProps>(
         }
 
         setValidationErrors(errors);
-        if (valid.length > 0) {
-          onPendingChange([...pendingFiles, ...valid]);
+
+        if (valid.length === 0) return;
+
+        // Use wrapped processFiles that includes auto HEIC conversion + custom processing
+        processingAbortRef.current?.abort();
+        const controller = new AbortController();
+        processingAbortRef.current = controller;
+
+        setIsProcessing(true);
+        try {
+          const processed = await wrappedProcessFiles(valid);
+          if (!controller.signal.aborted) {
+            onPendingChange([...pendingFiles, ...processed]);
+          }
+        } catch {
+          // If processing fails entirely, log and show processing-failed error
+          if (!controller.signal.aborted) {
+            setValidationErrors((prev) => [
+              ...prev,
+              ...valid.map((f) => ({
+                file: f,
+                reason: "processing-failed" as const,
+                message: `Failed to process ${f.name}. Please try again or use a different format.`,
+              })),
+            ]);
+          }
+        } finally {
+          if (!controller.signal.aborted) {
+            setIsProcessing(false);
+          }
         }
       },
-      [pendingFiles, onPendingChange, accept, maxSizeBytes, maxFiles, totalFileCount]
+      [pendingFiles, onPendingChange, accept, maxSizeBytes, maxFiles, totalFileCount, wrappedProcessFiles]
     );
 
     const removePending = React.useCallback(
@@ -415,7 +533,7 @@ const ALFileUploader = React.forwardRef<HTMLDivElement, ALFileUploaderProps>(
     const handleDrop = (e: React.DragEvent) => {
       e.preventDefault();
       setIsDragging(false);
-      if (disabled || isUploading) return;
+      if (disabled || isUploading || isProcessing) return;
       const files = Array.from(e.dataTransfer.files);
       addFiles(multiple ? files : files.slice(0, 1));
     };
@@ -428,7 +546,7 @@ const ALFileUploader = React.forwardRef<HTMLDivElement, ALFileUploaderProps>(
     };
 
     const openFilePicker = () => {
-      if (!disabled && !isUploading) inputRef.current?.click();
+      if (!disabled && !isUploading && !isProcessing) inputRef.current?.click();
     };
 
     const isAtLimit = totalFileCount >= maxFiles;
@@ -496,6 +614,13 @@ const ALFileUploader = React.forwardRef<HTMLDivElement, ALFileUploaderProps>(
                   </div>
                 )}
 
+                {isProcessing && (
+                  <div className="absolute inset-0 flex items-center justify-center rounded-lg bg-white/70 z-10">
+                    <Loader2 size={20} className="animate-spin text-[#1A3A52]" />
+                    <span className="ml-2 text-sm text-[#1A3A52] font-medium">Processing images…</span>
+                  </div>
+                )}
+
                 {hasFiles ? (
                   <>
                     <Upload size={16} className="shrink-0 text-[#1A3A52]/50" />
@@ -551,11 +676,11 @@ const ALFileUploader = React.forwardRef<HTMLDivElement, ALFileUploaderProps>(
                 ))}
                 {pendingFiles.map((file) => (
                   <PendingImageThumb
-                    key={file.name + file.size}
+                    key={fileKey(file)}
                     file={file}
-                    previewUrl={previews[file.name + file.size] ?? ""}
+                    previewUrl={previews[fileKey(file)] ?? ""}
                     onRemove={() => removePending(file)}
-                    onPreview={() => setPreviewUrl(previews[file.name + file.size] ?? "")}
+                    onPreview={() => setPreviewUrl(previews[fileKey(file)] ?? "")}
                     disabled={disabled || isUploading}
                     tileClassName={responsiveImageTileClass}
                     removeButtonClassName={responsiveRemoveButtonClass}
@@ -586,11 +711,11 @@ const ALFileUploader = React.forwardRef<HTMLDivElement, ALFileUploaderProps>(
             ))}
             {pendingFiles.map((file) => (
               <PendingImageThumb
-                key={file.name + file.size}
+                key={fileKey(file)}
                 file={file}
-                previewUrl={previews[file.name + file.size] ?? ""}
+                previewUrl={previews[fileKey(file)] ?? ""}
                 onRemove={() => removePending(file)}
-                onPreview={() => setPreviewUrl(previews[file.name + file.size] ?? "")}
+                onPreview={() => setPreviewUrl(previews[fileKey(file)] ?? "")}
                 disabled={disabled || isUploading}
                 tileClassName={responsiveGalleryTileClass}
                 removeButtonClassName={responsiveRemoveButtonClass}
@@ -638,7 +763,7 @@ const ALFileUploader = React.forwardRef<HTMLDivElement, ALFileUploaderProps>(
                 ))}
                 {pendingFiles.map((file) => (
                   <FileListRow
-                    key={file.name + file.size}
+                    key={fileKey(file)}
                     name={file.name}
                     size={file.size}
                     onDelete={() => removePending(file)}
@@ -718,7 +843,7 @@ const ALFileUploader = React.forwardRef<HTMLDivElement, ALFileUploaderProps>(
           <ul className="space-y-1">
             {validationErrors.map((ve) => (
               <li
-                key={ve.file.name + ve.file.size}
+                key={ve.file.name + ve.file.lastModified}
                 className="flex items-start gap-1.5 text-xs text-red-600"
               >
                 <AlertCircle size={12} className="shrink-0 mt-0.5" />

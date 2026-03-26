@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { ImagePlus, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
+import { isHeicFile } from "@/lib/image-processing";
 
 type ExistingImage = {
   mediaId: number;
@@ -10,7 +11,7 @@ type ExistingImage = {
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 const MAX_FILE_COUNT = 5;
-const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/gif", "image/webp"];
+const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/gif", "image/webp", "image/heic", "image/heif"];
 
 export const StaticImageSection: React.FC<{
   images: File[];
@@ -29,7 +30,7 @@ export const StaticImageSection: React.FC<{
   }, [newImagePreviews]);
 
   /* ---------- Upload new images ---------- */
-  const handleUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
 
     const selectedFiles = Array.from(e.target.files);
@@ -47,8 +48,8 @@ export const StaticImageSection: React.FC<{
 
     // Lọc qua từng file để check size và type
     for (const file of selectedFiles) {
-      // 2. Validate định dạng
-      if (!ALLOWED_TYPES.includes(file.type)) {
+      // 2. Validate định dạng (also accept HEIC via extension check)
+      if (!ALLOWED_TYPES.includes(file.type) && !isHeicFile(file)) {
         toast.error(`${t("validation.invalidFormat") || "Định dạng không hợp lệ"}: ${file.name}`);
         continue;
       }
@@ -67,10 +68,24 @@ export const StaticImageSection: React.FC<{
       return;
     }
 
-    const previews = validFiles.map((f) => URL.createObjectURL(f));
+    // Process images (HEIC conversion + compression)
+    const processedFiles: File[] = [];
+    for (const file of validFiles) {
+      // ✅ ALFileUploader now handles HEIC conversion automatically
+      // Just collect the valid files and add to state
+      processedFiles.push(file);
+    }
+
+    if (processedFiles.length === 0) {
+      toast.error(t("validation.noValidFiles") || "No valid files were processed");
+      e.target.value = ""; 
+      return;
+    }
+
+    const previews = processedFiles.map((f) => URL.createObjectURL(f));
 
     setNewImagePreviews((prev) => [...prev, ...previews]);
-    onChange([...images, ...validFiles]);
+    onChange([...images, ...processedFiles]);
     
     e.target.value = "";
   };
@@ -151,7 +166,7 @@ export const StaticImageSection: React.FC<{
             <input
               type="file"
               multiple
-              accept=".jpg,.jpeg,.png,.gif,.webp,image/jpeg,image/png,image/gif,image/webp"
+              accept=".jpg,.jpeg,.png,.gif,.webp,.heic,.heif,image/jpeg,image/png,image/gif,image/webp,image/heic,image/heif"
               className="hidden"
               onChange={handleUpload}
             />

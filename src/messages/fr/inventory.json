@@ -32,7 +32,9 @@
     "txTypeChart": "Répartition des transactions récentes",
     "viewAll": "Voir tout",
     "noLowStock": "Tous les articles sont bien approvisionnés",
-    "noRecentTx": "Aucune transaction récente"
+    "noRecentTx": "Aucune transaction récente",
+    "loading": "Chargement...",
+    "itemCount": "{count} articles"
   },
   "items": {
     "title": "Articles en stock",
@@ -67,6 +69,8 @@
     "noMovements": "Aucun mouvement enregistré",
     "previous": "Précédent",
     "next": "Suivant",
+    "loading": "Chargement...",
+    "entryCreatedBy": "par {name}",
     "table": {
       "date": "Date",
       "txCode": "Transaction",
@@ -123,7 +127,18 @@
       "confirmApprove": "Approuver cette transaction ? Le stock sera mis à jour.",
       "confirmReject": "Rejeter cette transaction ?",
       "stockCheckArea": "Zone d'inventaire",
-      "noMedia": "Aucune photo jointe"
+      "noMedia": "Aucune photo jointe",
+      "loading": "Chargement...",
+      "createdBy": "Créé par",
+      "createdAt": "Créé le",
+      "supplier": "Fournisseur",
+      "exportReason": "Motif de sortie",
+      "submittedAt": "Soumis le",
+      "approvedBy": "Approuvé par",
+      "approvedAt": "Approuvé le",
+      "note": "Note",
+      "evidenceAlt": "Preuve",
+      "confirmRejectBtn": "Confirmer le rejet"
     }
   },
   "create": {

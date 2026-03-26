@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "@/routing"
 import { format } from "date-fns";
+import { dateUtils } from "@/lib/date-utils";
 import {
   ArrowLeft,
   ArrowDownCircle,
@@ -70,7 +71,7 @@ export function TransactionDetail({ transactionId }: Props) {
   if (isLoading || !tx) {
     return (
       <div className="flex items-center justify-center py-24 text-[#1A3A52]/40">
-        Loading...
+        {t("loading")}
       </div>
     );
   }
@@ -138,25 +139,25 @@ export function TransactionDetail({ transactionId }: Props) {
 
           {/* Detail Grid */}
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
-            <InfoField label="Created By" value={tx.createdByName} />
+            <InfoField label={t("createdBy")} value={tx.createdByName} />
             <InfoField
-              label="Created At"
-              value={tx.createdAt ? format(new Date(tx.createdAt), "dd/MM/yyyy HH:mm") : null}
+              label={t("createdAt")}
+              value={tx.createdAt ? dateUtils.formatLocal(tx.createdAt, "dd/MM/yyyy HH:mm") : null}
             />
-            {tx.supplierName && <InfoField label="Supplier" value={tx.supplierName} />}
-            {tx.exportReasonName && <InfoField label="Export Reason" value={tx.exportReasonName} />}
+            {tx.supplierName && <InfoField label={t("supplier")} value={tx.supplierName} />}
+            {tx.exportReasonName && <InfoField label={t("exportReason")} value={tx.exportReasonName} />}
             {tx.submittedAt && (
               <InfoField
-                label="Submitted At"
-                value={format(new Date(tx.submittedAt), "dd/MM/yyyy HH:mm")}
+                label={t("submittedAt")}
+                value={dateUtils.formatLocal(tx.submittedAt, "dd/MM/yyyy HH:mm")}
               />
             )}
             {tx.approvedByName && (
               <>
-                <InfoField label="Approved By" value={tx.approvedByName} />
+                <InfoField label={t("approvedBy")} value={tx.approvedByName} />
                 <InfoField
-                  label="Approved At"
-                  value={tx.approvedAt ? format(new Date(tx.approvedAt), "dd/MM/yyyy HH:mm") : null}
+                  label={t("approvedAt")}
+                  value={tx.approvedAt ? dateUtils.formatLocal(tx.approvedAt, "dd/MM/yyyy HH:mm") : null}
                 />
               </>
             )}
@@ -165,7 +166,7 @@ export function TransactionDetail({ transactionId }: Props) {
           {/* Notes */}
           {tx.note && (
             <div className="bg-[#FDFBF9] rounded-lg p-3 border border-[#D5BA98]/20">
-              <span className="text-xs font-medium text-[#1A3A52]/50 block mb-1">Note</span>
+              <span className="text-xs font-medium text-[#1A3A52]/50 block mb-1">{t("note")}</span>
               <p className="text-sm text-[#1A3A52]/80">{tx.note}</p>
             </div>
           )}
@@ -182,7 +183,7 @@ export function TransactionDetail({ transactionId }: Props) {
       <ALCard variant="default" padding="none" elevation="sm" radius="xl">
         <div className="px-5 py-4 border-b border-[#D5BA98]/20">
           <h2 className="text-base font-semibold text-[#1A3A52]">
-            Items ({tx.items.length})
+            {t("itemsList", { count: tx.items.length })}
           </h2>
         </div>
         <div className="divide-y divide-[#D5BA98]/10">
@@ -206,7 +207,7 @@ export function TransactionDetail({ transactionId }: Props) {
                 className="aspect-square rounded-lg overflow-hidden border border-[#D5BA98]/30 hover:border-[#1A3A52]/30 transition-colors"
               >
                 {m.url ? (
-                  <img src={m.url} className="w-full h-full object-cover" alt="Evidence" />
+                  <img src={m.url} className="w-full h-full object-cover" alt={t("evidenceAlt")} />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center bg-[#FDFBF9]">
                     <ImageIcon className="w-6 h-6 text-[#1A3A52]/20" />
@@ -273,7 +274,7 @@ export function TransactionDetail({ transactionId }: Props) {
                       isLoading={approveMutation.isPending}
                       className="bg-red-600 text-white hover:bg-red-700"
                     >
-                      Confirm Reject
+                      {t("confirmRejectBtn")}
                     </Button>
                   </div>
                 )}
