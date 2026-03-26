@@ -1,101 +1,107 @@
 @reference "tailwindcss";
 
+.contact-hero-section {
+  @apply relative w-full min-h-[40vh] md:min-h-[50vh] flex items-center justify-center overflow-hidden;
+  background-image: url('/images/introduction-page/intro-hero/intro-hero-image.png');
+  background-size: cover;
+  background-position: center;
+}
 
-.contact-wrapper {
-    @apply relative;
-  }
+.contact-hero-bg-overlay {
+  @apply absolute inset-0 bg-black/40;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.2));
+}
 
-  .contact-form-wrapper {
-    @apply sticky top-20 bg-white p-8 md:p-12 border rounded-sm shadow-lg flex flex-col gap-8;
-  }
+.contact-hero-content-glass {
+  @apply relative z-10 max-w-3xl mx-4 p-6 md:p-12 rounded-2xl backdrop-blur-md bg-white/10 border border-white/20 text-center flex flex-col items-center gap-4 md:gap-6 shadow-2xl;
+}
 
-  .contact-form-header {
-    @apply flex flex-col gap-2 shrink-0;
-  }
+.contact-hero-title {
+  @apply font-serif text-3xl md:text-5xl lg:text-6xl text-white leading-tight;
+}
 
-  .contact-form-grid {
-    @apply grid md:grid-cols-2 gap-6;
-  }
+.contact-hero-divider {
+  @apply w-12 md:w-16 h-1 bg-[#C9A961] mx-auto rounded-full;
+}
 
-  .form-field-wrapper {
-    @apply flex flex-col gap-2;
-  }
+.contact-hero-description {
+  @apply text-white/90 text-sm md:text-lg leading-relaxed max-w-xl;
+}
 
-  .form-select-wrapper {
-    @apply flex flex-col gap-2;
-  }
+.contact-info-grid {
+  @apply w-full max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 px-4 py-8 md:py-12;
+}
 
-  .form-textarea-wrapper {
-    @apply flex flex-col gap-2;
-  }
+.contact-card {
+  @apply flex flex-col items-center text-center p-6 md:p-8 bg-white rounded-2xl shadow-sm border border-slate-100 transition-all duration-300 hover:shadow-xl hover:-translate-y-2 cursor-default min-w-0 w-full;
+}
 
-  .input-group-field {
-    @apply flex flex-col gap-2 w-full;
-  }
+.contact-card-icon-wrapper {
+  @apply w-12 h-12 md:w-14 md:h-14 rounded-full bg-[#C9A961]/10 flex items-center justify-center text-[#C9A961] mb-4 md:mb-6 shrink-0;
+}
 
-  .contact-item-container {
-    @apply flex items-start gap-5;
-  }
+.contact-card-icon-wrapper svg {
+  @apply w-5 h-5 md:w-6 md:h-6;
+}
 
-  .contact-item-icon {
-    @apply w-6 mt-1 flex justify-center text-[#C9A961];
-  }
+.contact-card-content {
+  @apply flex flex-col gap-1 md:gap-2 w-full min-w-0 overflow-hidden;
+}
 
-  .contact-item-content {
-    @apply flex flex-col gap-1;
-  }
+.contact-card-label {
+  @apply text-[10px] md:text-xs font-bold uppercase tracking-widest text-slate-400 truncate w-full;
+}
 
-  .contact-socials-container {
-    @apply flex flex-col gap-4;
-  }
+.contact-card-text {
+  @apply text-slate-700 font-medium text-base md:text-lg leading-relaxed break-words w-full;
+  overflow-wrap: anywhere;
+}
 
-  .contact-socials-links {
-    @apply flex gap-8;
-  }
 
-  .contact-map-wrapper {
-    @apply flex flex-col gap-6;
-  }
+.contact-map-wrapper {
+  @apply w-full max-w-7xl mx-auto px-4 mb-12 md:mb-20 flex flex-col gap-6 md:gap-8;
+}
 
-  .contact-map-header {
-    @apply flex items-center gap-4;
-  }
+.contact-map-header {
+  @apply flex items-center gap-4 md:gap-6;
+}
 
-  .contact-map-divider {
-    @apply h-px flex-1 bg-slate-200;
-  }
+.contact-map-title {
+  @apply font-serif text-2xl md:text-4xl text-slate-900;
+}
 
-  .contact-map-container {
-    @apply w-full h-75 md:h-87.5 bg-slate-200 relative rounded-sm overflow-hidden border border-slate-300 shadow-sm;
-  }
+.contact-map-divider {
+  @apply flex-1 h-px bg-slate-200;
+}
 
-  .contact-map-iframe {
-    @apply border-0;
-  }
+.contact-map-container {
+  @apply w-full h-[300px] md:h-[450px] rounded-2xl md:rounded-3xl overflow-hidden shadow-2xl border border-slate-200 relative;
+}
 
-  .contact-map-hint {
-    @apply absolute bottom-2 right-2 bg-white/80 backdrop-blur-sm px-2 py-1 text-[10px] text-slate-500 rounded pointer-events-none opacity-0 group-hover:opacity-100 transition;
-  }
+.contact-map-hint {
+  @apply absolute bottom-4 right-4 py-2 px-4 bg-white/90 backdrop-blur-sm rounded-full text-[10px] md:text-xs text-slate-600 shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300;
+}
 
-  /* Contact Hero */
-  .contact-hero-wrapper {
-    @apply w-full max-w-2xl flex flex-col items-center text-center gap-6;
-  }
+.contact-socials-container {
+  @apply w-full max-w-7xl mx-auto px-4 mb-12 md:mb-20 flex flex-col items-center gap-6 md:gap-8;
+}
 
-  .contact-hero-title {
-    @apply font-serif text-4xl md:text-5xl lg:text-6xl text-slate-900 leading-tight;
-  }
+.contact-socials-title {
+  @apply text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] text-[#C9A961];
+}
 
-  .contact-hero-divider {
-    @apply w-12 h-px bg-[#C9A961] mx-auto;
-  }
+.contact-socials-links {
+  @apply flex flex-wrap justify-center gap-6 md:gap-12;
+}
 
-  .contact-hero-description {
-    @apply text-slate-600 text-sm md:text-base leading-relaxed max-w-xl;
-  }
+.contact-social-link {
+  @apply font-serif text-xl md:text-3xl text-slate-800 hover:text-[#C9A961] transition-all duration-300 relative;
+}
 
-  /* Contact Info List */
-  .contact-info-list-wrapper {
-    @apply flex flex-col gap-10;
-  }
+.contact-social-link::after {
+  @apply content-[''] absolute -bottom-1 md:-bottom-2 left-0 w-0 h-0.5 bg-[#C9A961] transition-all duration-300;
+}
 
+.contact-social-link:hover::after {
+  @apply w-full;
+}
