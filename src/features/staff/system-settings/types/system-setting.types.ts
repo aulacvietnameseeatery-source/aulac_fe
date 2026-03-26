@@ -6,6 +6,7 @@ export interface SystemSettingDetailDto {
   group: string;
   valueType: SettingValueType;
   value: string | number | boolean | null;
+  publicUrl?: string | null;
   description: string | null;
   isSensitive: boolean;
   updatedAt: string;

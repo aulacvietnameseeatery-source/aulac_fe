@@ -3,10 +3,12 @@
 import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
 import { useDynamicSettings } from "../../shared/hooks/useDynamicSettings";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useSettingMedia } from "../../shared/hooks/useSettingMedia";
 
 export function IntroHero({ overrides }: { overrides?: Record<string, string> }) {
     const t = useTranslations("Introduction.Hero");
-    const { getSetting: originalGetSetting, getMediaSetting } = useDynamicSettings();
+    const { getSetting: originalGetSetting, getMediaSetting, isLoading } = useDynamicSettings();
 
     const getSetting = (key: string, fallback: string) => {
         if (overrides?.[key]) return overrides[key];
@@ -15,7 +17,9 @@ export function IntroHero({ overrides }: { overrides?: Record<string, string> })
 
     const title = getSetting("intro.hero.title", t("title"));
     const quote = getSetting("intro.hero.quote", t("quote"));
-    const heroImage = getMediaSetting("intro.hero.image", "/images/hero-bg.jpg");
+    const heroImage = getMediaSetting("intro.hero.image", "");
+    const heroMedia = useSettingMedia(heroImage, isLoading);
+    const showTextSkeleton = isLoading && !overrides;
 
     return (
         <section className="relative w-full min-h-[92dvh] md:min-h-[100dvh] flex flex-col items-center justify-center overflow-hidden">
@@ -28,11 +32,20 @@ export function IntroHero({ overrides }: { overrides?: Record<string, string> })
                     transition={{ duration: 10, ease: "easeOut" }}
                     className="w-full h-full"
                 >
-                    <img
-                        src={heroImage}
-                        alt="Au Lac Introduction"
-                        className="w-full h-full object-cover select-none"
-                    />
+                    <>
+                        {heroMedia.showSkeleton && (
+                            <Skeleton className="absolute inset-0 h-full w-full rounded-none bg-[#D7C4A0]/30" />
+                        )}
+                        {heroMedia.hasSource && (
+                            <img
+                                src={heroMedia.mediaSrc}
+                                alt="Au Lac Introduction"
+                                className={`h-full w-full object-cover select-none ${heroMedia.showSkeleton ? "opacity-0" : "opacity-100"} transition-opacity duration-300`}
+                                onLoad={heroMedia.handleLoad}
+                                onError={heroMedia.handleError}
+                            />
+                        )}
+                    </>
                 </motion.div>
                 <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(8,16,24,0.55),rgba(8,16,24,0.72))]" />
             </div>
@@ -45,10 +58,18 @@ export function IntroHero({ overrides }: { overrides?: Record<string, string> })
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
+                    className="flex justify-center"
                 >
-                    <h1 className="font-display text-white text-[42px] sm:text-[62px] md:text-[96px] font-black leading-[1.06] whitespace-pre-line drop-shadow-[0_14px_44px_rgba(0,0,0,0.5)]">
-                        {title}
-                    </h1>
+                    {showTextSkeleton ? (
+                        <div className="flex w-full max-w-[920px] flex-col items-center gap-4">
+                            <Skeleton className="h-12 w-[min(92vw,680px)] bg-white/20 md:h-20" />
+                            <Skeleton className="h-12 w-[min(80vw,520px)] bg-white/20 md:h-20" />
+                        </div>
+                    ) : (
+                        <h1 className="font-display text-white text-[42px] sm:text-[62px] md:text-[96px] font-black leading-[1.06] whitespace-pre-line drop-shadow-[0_14px_44px_rgba(0,0,0,0.5)]">
+                            {title}
+                        </h1>
+                    )}
                 </motion.div>
 
                 {/* Title Only */}
@@ -60,9 +81,17 @@ export function IntroHero({ overrides }: { overrides?: Record<string, string> })
                     transition={{ duration: 0.8, delay: 0.6, ease: "easeOut" }}
                     className="pt-5 max-w-[92%] md:max-w-[760px]"
                 >
-                    <p className="font-display text-white/90 text-[15px] md:text-[20px] font-light leading-relaxed italic">
-                        {quote}
-                    </p>
+                    {showTextSkeleton ? (
+                        <div className="flex flex-col items-center gap-3">
+                            <Skeleton className="h-5 w-[min(88vw,720px)] bg-white/15 md:h-6" />
+                            <Skeleton className="h-5 w-[min(82vw,640px)] bg-white/15 md:h-6" />
+                            <Skeleton className="h-5 w-[min(60vw,420px)] bg-white/15 md:h-6" />
+                        </div>
+                    ) : (
+                        <p className="font-display text-white/90 text-[15px] md:text-[20px] font-light leading-relaxed italic">
+                            {quote}
+                        </p>
+                    )}
                 </motion.div>
             </div>
 
