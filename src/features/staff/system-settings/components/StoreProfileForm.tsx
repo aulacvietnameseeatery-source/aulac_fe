@@ -15,6 +15,8 @@ import { useUpdateStoreSettingsMutation, useTranslateSettingsMutation } from '..
 
 const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/heic', 'image/heif'];
 const IMAGE_ACCEPT = '.jpg,.jpeg,.png,.gif,.webp,.heic,.heif,image/jpeg,image/png,image/gif,image/webp,image/heic,image/heif';
+const MAX_IMAGE_SIZE_MB = 5;
+const MAX_IMAGE_SIZE = MAX_IMAGE_SIZE_MB * 1024 * 1024;
 
 
 
@@ -138,8 +140,8 @@ export const StoreProfileForm = () => {
             return;
         }
 
-        if (file.size > 5 * 1024 * 1024) {
-            toast.error(t('StoreProfile.fileSizeError'));
+        if (file.size > MAX_IMAGE_SIZE) {
+            toast.error(t('StoreProfile.fileSizeError', { max: MAX_IMAGE_SIZE_MB }));
             if (e.target) e.target.value = '';
             return;
         }
