@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useMemo } from 'react';
-import { User, Phone, StickyNote, Mail, X, Minus, Plus } from 'lucide-react';
+import { User, Phone, StickyNote, Mail, X, Minus, Plus, Clock, Calendar } from 'lucide-react';
 import { ALDatePicker } from "@/components/ui/al-date-picker";
 import { ALCombobox } from '@/components/ui/al-combobox';
 import { reservationApi } from '../index';
@@ -229,7 +229,7 @@ export default function PublicBookingForm({ onSuccess, onClose }: PublicBookingF
     };
 
     return (
-        <div className="relative max-w-lg mx-auto bg-white rounded-3xl shadow-xl border border-stone-100 overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-500">
+        <div className="relative max-w-2xl mx-auto bg-white rounded-3xl shadow-xl border border-stone-100 overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-500">
             <button
                 type="button"
                 onClick={() => onClose?.()}
@@ -238,12 +238,12 @@ export default function PublicBookingForm({ onSuccess, onClose }: PublicBookingF
             >
                 <X size={18} />
             </button>
-            <div className="p-4 sm:p-5 md:p-6">
-                <h1 className="text-xl sm:text-[30px] leading-tight font-display font-bold text-[#1A3A52] mb-4 mr-10 border-l-4 border-amber-500 pl-3 break-words">
+            <div className="p-6 sm:p-8 lg:p-10">
+                <h1 className="text-2xl sm:text-[32px] lg:text-[36px] leading-tight font-display font-bold text-[#1A3A52] mb-6 mr-10 border-l-4 border-amber-500 pl-4 break-words">
                     {t('title')}
                 </h1>
 
-                <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
+                <form onSubmit={handleSubmit} className="space-y-6 sm:space-y-8">
                     {!mode && (
                         <div className="space-y-4">
                             <h2 className="text-xs font-bold text-amber-600 uppercase tracking-widest leading-relaxed break-words">
@@ -258,10 +258,10 @@ export default function PublicBookingForm({ onSuccess, onClose }: PublicBookingF
                                         setEmail('');
                                         setCustomerId(undefined);
                                     }}
-                                    className="rounded-xl border border-stone-200 bg-stone-50 px-4 py-4 text-left hover:border-amber-500 transition-all min-h-[110px]"
+                                    className="rounded-xl border border-stone-200 bg-stone-50 px-6 py-5 text-left hover:border-amber-500 transition-all min-h-[130px]"
                                 >
-                                    <div className="font-bold text-slate-800 leading-snug break-words">{t('existingCustomer')}</div>
-                                    <div className="text-sm text-stone-500 leading-snug break-words mt-1">{t('existingCustomerHint')}</div>
+                                    <div className="font-bold text-slate-800 text-lg leading-snug break-words">{t('existingCustomer')}</div>
+                                    <div className="text-sm text-stone-500 leading-snug break-words mt-2">{t('existingCustomerHint')}</div>
                                 </button>
                                 <button
                                     type="button"
@@ -271,10 +271,10 @@ export default function PublicBookingForm({ onSuccess, onClose }: PublicBookingF
                                         setEmail('');
                                         setCustomerId(undefined);
                                     }}
-                                    className="rounded-xl border border-stone-200 bg-stone-50 px-4 py-4 text-left hover:border-amber-500 transition-all min-h-[110px]"
+                                    className="rounded-xl border border-stone-200 bg-stone-50 px-6 py-5 text-left hover:border-amber-500 transition-all min-h-[130px]"
                                 >
-                                    <div className="font-bold text-slate-800 leading-snug break-words">{t('newCustomer')}</div>
-                                    <div className="text-sm text-stone-500 leading-snug break-words mt-1">{t('newCustomerHint')}</div>
+                                    <div className="font-bold text-slate-800 text-lg leading-snug break-words">{t('newCustomer')}</div>
+                                    <div className="text-sm text-stone-500 leading-snug break-words mt-2">{t('newCustomerHint')}</div>
                                 </button>
                             </div>
                         </div>
@@ -376,9 +376,9 @@ export default function PublicBookingForm({ onSuccess, onClose }: PublicBookingF
                                     {t('bookingInfo')}
                                 </h2>
 
-                                <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
-                                    <div className="col-span-1 md:col-span-2">
-                                        <label className="text-[10px] font-bold text-stone-400 uppercase tracking-widest block mb-2">
+                                <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+                                    <div className="col-span-2 sm:col-span-1 lg:col-span-2">
+                                        <label className="text-[10px] font-bold text-stone-400 uppercase tracking-widest block mb-2 truncate">
                                             {t('reservationDate')}
                                         </label>
                                         <div className="relative">
@@ -395,8 +395,8 @@ export default function PublicBookingForm({ onSuccess, onClose }: PublicBookingF
                                         </div>
                                     </div>
 
-                                    <div className="col-span-1 md:col-span-1">
-                                        <label className="text-[10px] font-bold text-stone-400 uppercase tracking-widest block mb-2">
+                                    <div className="col-span-1 lg:col-span-1">
+                                        <label className="text-[10px] font-bold text-stone-400 uppercase tracking-widest block mb-2 truncate">
                                             {t('arrivalTime')}
                                         </label>
                                         <div className="relative group">
@@ -405,7 +405,8 @@ export default function PublicBookingForm({ onSuccess, onClose }: PublicBookingF
                                                 value={time}
                                                 onChange={(val) => setTime(val as string)}
                                                 placeholder={t('selectTime')}
-                                                className="!h-[54px] !rounded-xl !bg-stone-50 !border-stone-200 font-semibold"
+                                                iconStart={<Clock size={16} className="text-stone-400" />}
+                                                className="!h-[54px] !rounded-xl !bg-stone-50 !border-stone-200 font-semibold text-sm sm:text-base"
                                             />
                                             {timeError && (
                                                 <div className="mt-1.5 flex items-center gap-1 text-red-500 text-[10px] font-bold animate-pulse">
@@ -416,25 +417,34 @@ export default function PublicBookingForm({ onSuccess, onClose }: PublicBookingF
                                         </div>
                                     </div>
 
-                                    <div className="col-span-2 md:col-span-1">
-                                        <label className="text-[10px] font-bold text-stone-400 uppercase tracking-widest block mb-2">
+                                    <div className="col-span-1 lg:col-span-1">
+                                        <label className="text-[10px] font-bold text-stone-400 uppercase tracking-widest block mb-2 truncate">
                                             {t('partySize')}
                                         </label>
-                                        <div className="flex items-center bg-stone-50 border border-stone-200 rounded-xl py-1 px-1">
+                                        <div className="flex items-center bg-stone-50 border border-stone-200 rounded-xl py-1 px-1 h-[54px]">
                                             <button
                                                 type="button"
                                                 onClick={() => setPax(Math.max(1, (pax ?? 1) - 1))}
-                                                className="p-3 text-stone-500 hover:text-amber-600 transition-colors"
+                                                className="p-2 text-stone-500 hover:text-amber-600 transition-colors shrink-0"
                                             >
                                                 <Minus size={16} strokeWidth={3} />
                                             </button>
-                                            <div className="flex-1 text-center font-bold text-[#1A3A52] text-lg">
-                                                {pax ?? '-'}
-                                            </div>
+                                            <input
+                                                type="number"
+                                                min={1}
+                                                max={100}
+                                                value={pax ?? ''}
+                                                onChange={(e) => {
+                                                    const val = e.target.value === '' ? null : parseInt(e.target.value);
+                                                    setPax(val);
+                                                }}
+                                                className="w-full bg-transparent text-center font-bold text-[#1A3A52] text-lg focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                                placeholder="-"
+                                            />
                                             <button
                                                 type="button"
                                                 onClick={() => setPax((pax ?? 0) + 1)}
-                                                className="p-3 text-stone-500 hover:text-amber-600 transition-colors"
+                                                className="p-2 text-stone-500 hover:text-amber-600 transition-colors shrink-0"
                                             >
                                                 <Plus size={16} strokeWidth={3} />
                                             </button>
@@ -463,7 +473,7 @@ export default function PublicBookingForm({ onSuccess, onClose }: PublicBookingF
                                         }
                                         onClose?.();
                                     }}
-                                    className="w-full sm:w-auto text-center sm:text-left text-stone-400 font-bold hover:text-stone-600 transition-colors"
+                                    className="w-full sm:w-auto text-center sm:text-left text-stone-400 font-bold hover:text-stone-600 transition-colors py-2"
                                 >
                                     {t('close')}
                                 </button>
@@ -472,18 +482,20 @@ export default function PublicBookingForm({ onSuccess, onClose }: PublicBookingF
                                     onClick={!canBookOnline ? handleCallRestaurant : undefined}
                                     disabled={loading || !mode || checkingFit || !date || !time || !pax || !!timeError}
                                     className={`
-                                relative w-full sm:w-auto px-5 py-2.5 sm:px-7 sm:py-3 text-sm bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-2xl shadow-lg shadow-amber-500/30 transition-all hover:scale-[1.02] active:scale-[0.98] whitespace-normal leading-tight
-                                ${loading || !mode || checkingFit || !date || !time ? 'opacity-70 cursor-not-allowed' : ''}
-                            `}
+                                        relative w-full sm:min-w-[180px] px-5 py-2.5 sm:px-7 sm:py-3 text-sm bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-2xl shadow-lg shadow-amber-500/30 transition-all hover:scale-[1.02] active:scale-[0.98] whitespace-nowrap overflow-hidden
+                                        ${loading || !mode || checkingFit || !date || !time || !pax ? 'opacity-70 cursor-not-allowed' : ''}
+                                    `}
                                 >
-                                    {loading || checkingFit ? (
-                                        <div className="flex items-center gap-2">
-                                            <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                                            <span>{checkingFit ? t('checkingTables') : t('processing')}</span>
-                                        </div>
-                                    ) : (
-                                        canBookOnline ? t('submit') : t('callRestaurant')
-                                    )}
+                                    <div className="flex items-center justify-center gap-2 min-h-[20px]">
+                                        {loading || checkingFit ? (
+                                            <>
+                                                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                                                <span>{checkingFit ? t('checkingTables') : t('processing')}</span>
+                                            </>
+                                        ) : (
+                                            <span>{canBookOnline ? t('submit') : t('callRestaurant')}</span>
+                                        )}
+                                    </div>
                                 </button>
                             </div>
                         </>
