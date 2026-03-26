@@ -11,7 +11,6 @@ import { ALInput } from '@/components/ui/al-input';
 import { useStoreProfileForm } from '../hooks/useStoreProfileForm';
 import { mapStoreSettingsToFormValues, mapFormValuesToStoreSettings, LOCALES, SupportedLocale, StoreProfileFormValues } from '../types/schema';
 import { useUpdateStoreSettingsMutation, useTranslateSettingsMutation } from '../hooks/useSystemSettingsMutation';
-import { processImageFile, isHeicFile } from '@/lib/image-processing';
 
 
 const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/heic', 'image/heif'];
@@ -133,7 +132,7 @@ export const StoreProfileForm = () => {
         const file = e.target.files?.[0];
         if (!file) return;
 
-        if (!ALLOWED_IMAGE_TYPES.includes(file.type) && !isHeicFile(file)) {
+        if (!ALLOWED_IMAGE_TYPES.includes(file.type) && !file.type.includes('heic') && !file.type.includes('heif')) {
             toast.error(t('StoreProfile.invalidImageFormatError'));
             if (e.target) e.target.value = '';
             return;
@@ -145,20 +144,14 @@ export const StoreProfileForm = () => {
             return;
         }
 
-        // Process image (HEIC conversion + compression)
-        let processedFile = file;
-        try {
-            processedFile = await processImageFile(file);
-        } catch {
-            // fallback to original file
-        }
-
-        const localUrl = URL.createObjectURL(processedFile);
+        // ✅ ALFileUploader will handle HEIC conversion in the upload flow
+        // Just use the file as-is here for preview
+        const localUrl = URL.createObjectURL(file);
         setLocalPreviews(prev => ({ ...prev, logoUrl: localUrl }));
         setIsUploading('logoUrl');
 
         try {
-            const { relativePath, publicUrl } = await uploadLogo(processedFile);
+            const { relativePath, publicUrl } = await uploadLogo(file);
             const serverRelative = toServerRelativeFromUpload(relativePath, publicUrl);
             setValue('logoUrl', serverRelative, { shouldDirty: true, shouldValidate: true });
             if (publicUrl) {

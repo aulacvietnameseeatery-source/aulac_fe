@@ -3,9 +3,7 @@ import createMiddleware from 'next-intl/middleware';
 export default createMiddleware({
     locales: ['en', 'fr', 'vi'],
     defaultLocale: 'fr',
-    // todo muốn không hiện en hay fr hay vi thì để never
     localePrefix: 'always',
-    localeDetection: false
 });
 
 export const config = {

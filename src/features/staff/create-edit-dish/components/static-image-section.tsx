@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { ImagePlus, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
-import { processImageFile, isHeicFile } from "@/lib/image-processing";
+import { isHeicFile } from "@/lib/image-processing";
 
 type ExistingImage = {
   mediaId: number;
@@ -71,11 +71,15 @@ export const StaticImageSection: React.FC<{
     // Process images (HEIC conversion + compression)
     const processedFiles: File[] = [];
     for (const file of validFiles) {
-      try {
-        processedFiles.push(await processImageFile(file));
-      } catch {
-        processedFiles.push(file);
-      }
+      // ✅ ALFileUploader now handles HEIC conversion automatically
+      // Just collect the valid files and add to state
+      processedFiles.push(file);
+    }
+
+    if (processedFiles.length === 0) {
+      toast.error(t("validation.noValidFiles") || "No valid files were processed");
+      e.target.value = ""; 
+      return;
     }
 
     const previews = processedFiles.map((f) => URL.createObjectURL(f));

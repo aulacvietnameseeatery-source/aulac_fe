@@ -132,10 +132,18 @@ export interface ALFileUploaderProps {
 
   // ── Processing ──────────────────────────────────────────────
   /**
-   * Optional async callback to process files before they enter the pending queue.
-   * Use this to convert HEIC→JPEG and/or compress images client-side.
+   * When `true`, automatically converts HEIC/HEIF images to JPEG client-side.
+   * Errors in conversion are reported to the user; failed files are rejected.
+   * Also applies any custom processing via the `processFiles` callback.
    *
-   * Receives validated files, returns processed files.
+   * @default true (enabled for image variants, disabled for file/gallery)
+   */
+  autoProcessImages?: boolean;
+  /**
+   * Optional async callback to process files after HEIC conversion (if enabled).
+   * Use this for additional compression, resizing, metadata stripping, etc.
+   *
+   * Receives validated (and optionally HEIC-converted) files, returns processed files.
    * The component shows a "Processing…" state while this runs.
    */
   processFiles?: (files: File[]) => Promise<File[]>;

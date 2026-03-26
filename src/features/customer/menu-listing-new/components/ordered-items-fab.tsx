@@ -19,8 +19,9 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
-import { api, BASE_URL } from "@/lib/http";
-import { HubConnectionBuilder, HubConnection, LogLevel } from '@microsoft/signalr';
+import { api } from "@/lib/http";
+import type { HubConnection } from '@microsoft/signalr';
+import { acquireConnection, releaseConnection, waitForStart } from '@/lib/signalr';
 import { ALConfirmDialog } from "@/components/ui/al-confirm-dialog";
 
 // ─── Types ────────────────────────────────────────────────────────────────
@@ -184,6 +185,8 @@ export function OrderHistoryFAB({ tableCode, tableNumber, dishNameMap = {}, refr
   // ── SignalR real-time listener ───────────────────────────────────────────
   // Connects to the order's SignalR group so item-status changes from staff
   // are pushed instantly without waiting for the 15 s polling interval.
+  const RESTAURANT_HUB = '/hubs/restaurant';
+
   useEffect(() => {
     const storedOrderId = typeof window !== 'undefined'
       ? sessionStorage.getItem(CURRENT_ORDER_ID_KEY)
@@ -195,43 +198,44 @@ export function OrderHistoryFAB({ tableCode, tableNumber, dishNameMap = {}, refr
     // Already connected to this order – nothing to do
     if (connectedOrderIdRef.current === orderId && signalRRef.current) return;
 
-    // Replace any stale connection
-    signalRRef.current?.stop();
-    signalRRef.current = null;
+    // Release previous reference if switching orders
+    if (signalRRef.current) {
+      signalRRef.current.off('OrderItemUpdated');
+      signalRRef.current.off('OrderDetailUpdated');
+      releaseConnection(RESTAURANT_HUB);
+      signalRRef.current = null;
+    }
 
-    const connection = new HubConnectionBuilder()
-      .withUrl(`${BASE_URL}/hubs/reservation`)
-      .withAutomaticReconnect()
-      .configureLogging(LogLevel.Warning)
-      .build();
-
+    const connection = acquireConnection(RESTAURANT_HUB);
     signalRRef.current = connection;
     connectedOrderIdRef.current = orderId;
 
-    connection
-      .start()
+    const onItemUpdated = () => {
+      fetchOrderByOrderId(orderId)
+        .then((data) => setHistory(data))
+        .catch(() => {});
+    };
+    const onDetailUpdated = () => {
+      fetchOrderByOrderId(orderId)
+        .then((data) => setHistory(data))
+        .catch(() => {});
+    };
+
+    waitForStart(RESTAURANT_HUB)
       .then(() => connection.invoke('JoinOrder', orderId))
       .then(() => {
-        connection.on('OrderItemUpdated', () => {
-          fetchOrderByOrderId(orderId)
-            .then((data) => setHistory(data))
-            .catch(() => {});
-        });
-        connection.on('OrderDetailUpdated', () => {
-          fetchOrderByOrderId(orderId)
-            .then((data) => setHistory(data))
-            .catch(() => {});
-        });
+        connection.on('OrderItemUpdated', onItemUpdated);
+        connection.on('OrderDetailUpdated', onDetailUpdated);
       })
       .catch((err) => console.error('[SignalR] Connection error:', err));
-  }, [refreshTrigger]); // re-run after each new order so the connection is established
 
-  // Stop SignalR when the component unmounts
-  useEffect(() => {
     return () => {
-      signalRRef.current?.stop();
+      connection.off('OrderItemUpdated', onItemUpdated);
+      connection.off('OrderDetailUpdated', onDetailUpdated);
+      releaseConnection(RESTAURANT_HUB);
+      signalRRef.current = null;
     };
-  }, []);
+  }, [refreshTrigger]); // re-run after each new order so the connection is established
 
   // Helper function to get translated status label
   const getStatusLabel = (status: string): string => {

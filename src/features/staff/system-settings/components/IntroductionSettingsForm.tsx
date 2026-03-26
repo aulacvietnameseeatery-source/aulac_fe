@@ -13,7 +13,6 @@ import { ALInput } from "@/components/ui/al-input";
 import { useIntroductionSettingsForm } from "../hooks/useIntroductionSettingsForm";
 import { mapIntroSettingsToFormValues, mapFormValuesToIntroSettings, LOCALES, SupportedLocale, IntroFormValues } from "../types/schema";
 import { useUpdateStoreSettingsMutation, useTranslateSettingsMutation } from "../hooks/useSystemSettingsMutation";
-import { processImageFile, isHeicFile } from '@/lib/image-processing';
 
 
 
@@ -67,7 +66,10 @@ export const IntroductionSettingsForm = () => {
     const dish1ImageUrl = watch('intro_collection_dish1_image') as string;
     const dish2ImageUrl = watch('intro_collection_dish2_image') as string;
     const dish3ImageUrl = watch('intro_collection_dish3_image') as string;
-
+    
+    function isHeicFile(file: File): boolean {
+        return file.type === 'image/heic' || file.type === 'image/heif';
+    }
     const toServerRelativePath = (value: string) => {
         const trimmed = value.trim();
         if (!trimmed) return "";
@@ -243,13 +245,12 @@ export const IntroductionSettingsForm = () => {
         }
 
         // Process image (HEIC conversion + compression)
-        let fileToUpload: File = file;
+        let fileToUpload: File;
         if (!isVideo) {
-            try {
-                fileToUpload = await processImageFile(file);
-            } catch {
-                // fallback to original file
-            }
+            // ✅ ALFileUploader will handle HEIC conversion; just use file as-is
+            fileToUpload = file;
+        } else {
+            fileToUpload = file;
         }
 
         const previousValue = getValues(fieldKey as any);
@@ -725,3 +726,5 @@ export const IntroductionSettingsForm = () => {
         </form>
     );
 };
+
+

@@ -21,7 +21,7 @@ import type {
   ALFileValidationError,
   ALFileUploaderImagePerRow,
 } from "./al-file-uploader.types";
-import { isHeicFile } from "@/lib/image-processing";
+import { isHeicFile, processImageFile } from "@/lib/image-processing";
 
 const IMAGE_PER_ROW_CLASS_MAP: Record<ALFileUploaderImagePerRow, string> = {
   2: "grid-cols-2",
@@ -323,6 +323,7 @@ const ALFileUploader = React.forwardRef<HTMLDivElement, ALFileUploaderProps>(
       multiple = true,
       variant = "image",
       imagePerRow = 4,
+      autoProcessImages,
       processFiles,
       disabled = false,
       className,
@@ -335,12 +336,76 @@ const ALFileUploader = React.forwardRef<HTMLDivElement, ALFileUploaderProps>(
     const [validationErrors, setValidationErrors] = React.useState<ALFileValidationError[]>([]);
     const processingAbortRef = React.useRef<AbortController | null>(null);
 
+    // Determine whether to auto-process images
+    // Default: enabled for image/gallery variants, disabled for file variant
+    const shouldAutoProcess =
+      autoProcessImages ??
+      (variant === "image" || variant === "gallery");
+
     // Abort any in-flight processing on unmount
     React.useEffect(() => {
       return () => {
         processingAbortRef.current?.abort();
       };
     }, []);
+
+    // Create wrapped processFiles that handles HEIC conversion + user callback
+    const wrappedProcessFiles = React.useCallback(
+      async (files: File[]): Promise<File[]> => {
+        const results: File[] = [];
+        const errors: { file: File; error: Error }[] = [];
+
+        // Step 1: HEIC conversion (if enabled)
+        if (shouldAutoProcess) {
+          for (const file of files) {
+            if (isHeicFile(file)) {
+              try {
+                const converted = await processImageFile(file);
+                results.push(converted);
+              } catch (err) {
+                const error = err instanceof Error ? err : new Error(String(err));
+                errors.push({ file, error });
+              }
+            } else {
+              results.push(file);
+            }
+          }
+
+          // If any HEIC conversions failed, add them to validation errors and skip
+          // the rest of processing for those files
+          if (errors.length > 0) {
+            setValidationErrors((prev) => [
+              ...prev,
+              ...errors.map((e) => ({
+                file: e.file,
+                reason: "processing-failed" as const,
+                message: `${e.file.name}: ${e.error.message}`,
+              })),
+            ]);
+            // Only continue with successfully-converted files
+          }
+        } else {
+          // If auto-processing disabled, return files as-is
+          results.push(...files);
+        }
+
+        // Step 2: Apply user's custom processFiles callback (if provided)
+        if (processFiles && results.length > 0) {
+          try {
+            const customProcessed = await processFiles(results);
+            return customProcessed;
+          } catch (err) {
+            // If custom processing fails, log but return converted files so far
+            console.error("[ALFileUploader] Custom processFiles failed:", err);
+            return results;
+          }
+        }
+
+        return results;
+      },
+      [shouldAutoProcess, processFiles]
+    );
+
     const isGalleryVariant = variant === "gallery";
     const isImageLikeVariant = variant === "image" || isGalleryVariant;
     const responsiveImageGridClass = cn(
@@ -413,33 +478,36 @@ const ALFileUploader = React.forwardRef<HTMLDivElement, ALFileUploaderProps>(
 
         if (valid.length === 0) return;
 
-        // If a processFiles callback is provided, run conversion/compression
-        if (processFiles) {
-          processingAbortRef.current?.abort();
-          const controller = new AbortController();
-          processingAbortRef.current = controller;
+        // Use wrapped processFiles that includes auto HEIC conversion + custom processing
+        processingAbortRef.current?.abort();
+        const controller = new AbortController();
+        processingAbortRef.current = controller;
 
-          setIsProcessing(true);
-          try {
-            const processed = await processFiles(valid);
-            if (!controller.signal.aborted) {
-              onPendingChange([...pendingFiles, ...processed]);
-            }
-          } catch {
-            // If processing fails entirely, add originals so user can see them
-            if (!controller.signal.aborted) {
-              onPendingChange([...pendingFiles, ...valid]);
-            }
-          } finally {
-            if (!controller.signal.aborted) {
-              setIsProcessing(false);
-            }
+        setIsProcessing(true);
+        try {
+          const processed = await wrappedProcessFiles(valid);
+          if (!controller.signal.aborted) {
+            onPendingChange([...pendingFiles, ...processed]);
           }
-        } else {
-          onPendingChange([...pendingFiles, ...valid]);
+        } catch {
+          // If processing fails entirely, log and show processing-failed error
+          if (!controller.signal.aborted) {
+            setValidationErrors((prev) => [
+              ...prev,
+              ...valid.map((f) => ({
+                file: f,
+                reason: "processing-failed" as const,
+                message: `Failed to process ${f.name}. Please try again or use a different format.`,
+              })),
+            ]);
+          }
+        } finally {
+          if (!controller.signal.aborted) {
+            setIsProcessing(false);
+          }
         }
       },
-      [pendingFiles, onPendingChange, accept, maxSizeBytes, maxFiles, totalFileCount, processFiles]
+      [pendingFiles, onPendingChange, accept, maxSizeBytes, maxFiles, totalFileCount, wrappedProcessFiles]
     );
 
     const removePending = React.useCallback(
