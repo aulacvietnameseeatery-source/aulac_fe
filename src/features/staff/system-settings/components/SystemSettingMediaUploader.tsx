@@ -120,11 +120,6 @@ export const SystemSettingMediaUploader: React.FC<SystemSettingMediaUploaderProp
 
     const currentUrl = localPreview || value;
 
-    const handleRemove = (e: React.MouseEvent) => {
-        e.stopPropagation();
-        setLocalPreview(null);
-        onChange("");
-    };
 
     const handlePreview = (e: React.MouseEvent) => {
         e.stopPropagation();
