@@ -382,7 +382,7 @@ export const IntroductionSettingsForm = () => {
                 </ALCard>
             </div>
 
-            <div className="grid grid-cols-1 gap-12">
+            <div key={activeLocale} className="grid grid-cols-1 gap-12">
                 {/* HERO SECTION */}
                 <section className="space-y-4">
                     <div className="flex items-center gap-3 mb-2">
