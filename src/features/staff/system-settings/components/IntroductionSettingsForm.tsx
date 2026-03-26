@@ -20,8 +20,10 @@ import { processImageFile, isHeicFile } from '@/lib/image-processing';
 const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/heic', 'image/heif'];
 const IMAGE_ACCEPT = '.jpg,.jpeg,.png,.gif,.webp,.heic,.heif,image/jpeg,image/png,image/gif,image/webp,image/heic,image/heif';
 const VIDEO_ACCEPT = 'video/mp4,.mp4';
-const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
-const MAX_VIDEO_SIZE = 50 * 1024 * 1024;
+const MAX_IMAGE_SIZE_MB = 5;
+const MAX_VIDEO_SIZE_MB = 50;
+const MAX_IMAGE_SIZE = MAX_IMAGE_SIZE_MB * 1024 * 1024;
+const MAX_VIDEO_SIZE = MAX_VIDEO_SIZE_MB * 1024 * 1024;
 const MAX_VIDEO_DURATION_SECONDS = 30;
 const INTRO_MEDIA_KEYS = [
     "intro_hero_image",
@@ -228,7 +230,11 @@ export const IntroductionSettingsForm = () => {
 
         const maxSize = isVideo ? MAX_VIDEO_SIZE : MAX_IMAGE_SIZE;
         if (file.size > maxSize) {
-            toast.error(isVideo ? t('StoreProfile.videoSizeError') : t('StoreProfile.fileSizeError'));
+            toast.error(
+                isVideo
+                    ? t('StoreProfile.videoSizeError', { max: MAX_VIDEO_SIZE_MB })
+                    : t('StoreProfile.fileSizeError', { max: MAX_IMAGE_SIZE_MB })
+            );
             if (e.target) e.target.value = '';
             return;
         }
