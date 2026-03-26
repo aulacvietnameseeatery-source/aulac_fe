@@ -47,7 +47,7 @@ export default function PublicBookingModal({ isOpen, onClose }: PublicBookingMod
 		>
 			<div className="relative w-full max-w-md sm:max-w-xl lg:max-w-2xl max-h-[calc(100dvh-5.5rem)] sm:max-h-[calc(100dvh-7rem)] lg:max-h-[92vh] overflow-auto no-scrollbar">
 				{ticketData ? (
-					<div className="relative max-w-lg mx-auto bg-white rounded-3xl shadow-xl border border-stone-100 overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-500 p-5 sm:p-6">
+					<div className="relative max-w-2xl mx-auto bg-white rounded-3xl shadow-xl border border-stone-100 overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-500 p-5 sm:p-6 pb-8">
 						<button
 							type="button"
 							onClick={handleCloseAll}
