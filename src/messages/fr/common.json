@@ -88,6 +88,8 @@
   "OrderPopup": {
     "success_label": "Succès",
     "success_message": "Article ajouté à votre sélection",
+    "toast_added_single": "{dishName} ajouté au panier",
+    "toast_added_multiple": "{count} articles ajoutés au panier",
     "dish_name": "Soupe Impériale de Hue aux Nouilles de Boeuf",
     "price": "18,50 $",
     "quantity_label": "Quantité",
@@ -370,7 +372,19 @@
       "title": "Résumé",
       "items_count": "{count} Articles Distincts",
       "confirm_btn": "Confirmer"
-    }
+    },
+    "err_load_cart": "Impossible de charger les données du panier.",
+    "err_table_occupied_access": "Cette table est déjà occupée. Accès refusé.",
+    "err_table_not_found": "Le code de table n'existe pas.",
+    "err_qr_invalid": "QR code invalide. Veuillez scanner à nouveau le QR code sur la table.",
+    "err_table_validation": "Impossible de valider la table. Veuillez réessayer.",
+    "err_save_cart": "Impossible d'enregistrer le panier actuel.",
+    "err_save_table": "Impossible d'enregistrer les informations de la table.",
+    "err_table_occupied_select": "Cette table est déjà occupée. Veuillez choisir une autre table.",
+    "err_create_order": "Impossible de créer la commande : {message}",
+    "success_order_title": "Commande passée avec succès !",
+    "success_order_body": "Votre commande est en cours de préparation et sera servie à la Table {table}.",
+    "success_continue": "Continuer à parcourir"
   },
   "QrScan": {
     "HeroSection": {
