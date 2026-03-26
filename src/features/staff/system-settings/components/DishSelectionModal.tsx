@@ -9,7 +9,6 @@ import { createOrderService } from '../../order-create/services/create-edit-orde
 import { getDishById } from '../../create-edit-dish/services/dish.service';
 import { DishDto, CategoryDto } from '../../order-create/types/create-order.types';
 import { useTranslations, useLocale } from 'next-intl';
-import { normalizeMediaUrl } from '@/lib/normalize-media-url';
 
 
 interface DishSelectionModalProps {
@@ -148,7 +147,7 @@ export const DishSelectionModal = ({ isOpen, onClose, onSelect, targetLocale }: 
                                         <div className="w-12 h-12 rounded-lg bg-gray-100 flex items-center justify-center overflow-hidden border">
                                             {dish.imageUrl ? (
                                                 <img
-                                                    src={normalizeMediaUrl(dish.imageUrl)}
+                                                    src={dish.imageUrl}
                                                     alt={getLocalizedDishName(dish)}
                                                     className="w-full h-full object-cover"
                                                 />
