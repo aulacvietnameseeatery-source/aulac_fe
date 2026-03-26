@@ -1,66 +1,51 @@
 import { format, addMinutes } from "date-fns";
+import { formatInTimeZone, fromZonedTime, toZonedTime } from "date-fns-tz";
 
-/**
- * Bộ công cụ xử lý Thời gian (UTC <-> Local) dùng chung cho toàn dự án.
- * Backend lưu và trả về UTC (ISO 8601).
- * Frontend hiển thị và xử lý bằng Local Time (Giờ địa phương của thiết bị).
- */
+const RESTAURANT_TZ = "Europe/Zurich";
+
 export const dateUtils = {
     /**
-     * Lấy chuỗi UTC từ Backend và format thành giờ Local để hiển thị.
-     * @param utcString Chuỗi thời gian từ BE (VD: "2026-03-22T14:00:00Z")
-     * @param formatStr Định dạng muốn hiển thị (VD: "HH:mm", "yyyy-MM-dd", "dd MMM, HH:mm")
-     * @returns Chuỗi đã được format theo giờ địa phương
+     * Lấy chuỗi UTC từ Backend và format thành giờ THỤY SĨ để hiển thị.
      */
     formatLocal: (utcString: string | Date, formatStr: string): string => {
         if (!utcString) return "";
-        let date: Date;
-        if (typeof utcString === "string") {
-            // Nếu chuỗi không có Z và không có offset (+/-), tự động thêm Z để trình duyệt coi là UTC
-            const normalized = (utcString.toUpperCase().includes("Z") || utcString.includes("+"))
-                ? utcString
-                : `${utcString}Z`;
-            date = new Date(normalized);
-            // Fallback nếu việc thêm Z làm chuỗi không hợp lệ
-            if (isNaN(date.getTime())) {
-                date = new Date(utcString);
-            }
-        } else {
-            date = utcString;
-        }
-        return format(date, formatStr);
+        const dateObj = typeof utcString === "string" ? new Date(utcString) : utcString;
+
+        // format theo giờ Thụy Sĩ
+        return formatInTimeZone(dateObj, RESTAURANT_TZ, formatStr);
     },
 
     /**
-     * Ghép Ngày (Local) và Giờ (Local) từ Form, sau đó ép sang chuẩn UTC để gửi xuống Backend.
-     * @param localDate Chuỗi ngày (VD: "2026-03-23")
-     * @param localTime Chuỗi giờ (VD: "18:00")
-     * @returns Chuỗi chuẩn ISO UTC (VD: "2026-03-23T11:00:00.000Z")
+     * Nhận Ngày/Giờ ( Giờ Thụy Sĩ) từ Form, ép sang chuẩn UTC gửi cho BE.
      */
     toUtcIso: (localDate: string, localTime: string): string => {
         if (!localDate || !localTime) return "";
-        return new Date(`${localDate}T${localTime}`).toISOString();
+
+        // Báo cho code biết: "Cái ngày giờ string này là của Thụy Sĩ đấy nhé"
+        const zonedDate = fromZonedTime(`${localDate}T${localTime}`, RESTAURANT_TZ);
+
+        // Đổi nó ra UTC để gửi xuống BE
+        return zonedDate.toISOString();
     },
 
     /**
-     * Kiểm tra xem Ngày + Giờ được chọn có nằm trong quá khứ so với "Ngay lúc này" không.
-     * @param localDate Chuỗi ngày (VD: "2026-03-23")
-     * @param localTime Chuỗi giờ (VD: "18:00")
-     * @returns true nếu là quá khứ, false nếu là tương lai/hiện tại
+     * Kiểm tra xem Ngày + Giờ (Thụy Sĩ) có nằm trong quá khứ không.
      */
     isPast: (localDate: string, localTime: string): boolean => {
         if (!localDate || !localTime) return false;
-        const selectedTime = new Date(`${localDate}T${localTime}`).getTime();
-        return selectedTime < Date.now();
+
+        const inputTime = fromZonedTime(`${localDate}T${localTime}`, RESTAURANT_TZ).getTime();
+        return inputTime < Date.now();
     },
 
     /**
-     * Lấy Ngày và Giờ mặc định cho Form tạo mới (VD: Hiện tại + 30 phút).
-     * @param addMins Số phút muốn cộng thêm (Mặc định: 30)
-     * @returns Object chứa date và time dạng chuỗi
+     * Lấy Ngày và Giờ mặc định cho Form (Thời gian hiện tại ở Thụy Sĩ + 30 phút).
      */
     getDefaultLocalInput: (addMins: number = 30): { date: string; time: string } => {
-        const futureDate = addMinutes(new Date(), addMins);
+        // Lấy giờ hiện tại, chuyển sang múi giờ Thụy Sĩ, rồi cộng thêm 30 phút
+        const nowInSwiss = toZonedTime(new Date(), RESTAURANT_TZ);
+        const futureDate = addMinutes(nowInSwiss, addMins);
+
         return {
             date: format(futureDate, "yyyy-MM-dd"),
             time: format(futureDate, "HH:mm")
@@ -68,21 +53,19 @@ export const dateUtils = {
     },
 
     /**
-     * Lấy 2 mốc bắt đầu (00:00:00) và kết thúc (23:59:59) của một ngày Local,
-     * ép sang UTC để gửi cho Backend làm bộ lọc tìm kiếm (Date Filter).
-     * @param localDate Chuỗi ngày hoặc Object Date
-     * @returns Object chứa fromTime và toTime chuẩn UTC
+     * Lấy mốc bắt đầu/kết thúc của 1 ngày (Tính theo ngày của Thụy Sĩ), đổi ra UTC.
      */
     getUtcDayRange: (localDate: string | Date): { fromTime: string; toTime: string } => {
-        const start = new Date(localDate);
-        start.setHours(0, 0, 0, 0);
+        const dateStr = typeof localDate === "string" ? localDate : format(localDate, "yyyy-MM-dd");
 
-        const end = new Date(localDate);
-        end.setHours(23, 59, 59, 999);
+        // Bắt đầu ngày (00:00:00) tại Thụy Sĩ
+        const startSwiss = fromZonedTime(`${dateStr}T00:00:00`, RESTAURANT_TZ);
+        // Kết thúc ngày (23:59:59) tại Thụy Sĩ
+        const endSwiss = fromZonedTime(`${dateStr}T23:59:59`, RESTAURANT_TZ);
 
         return {
-            fromTime: start.toISOString(),
-            toTime: end.toISOString()
+            fromTime: startSwiss.toISOString(),
+            toTime: endSwiss.toISOString()
         };
     }
 };
