@@ -13,7 +13,7 @@
     "save": "Save",
     "saving": "Saving...",
     "notifications": {
-      "saveSuccess": "Settings for group '{group}' saved successfully.",
+      "saveSuccess": "Settings saved successfully.",
       "createSuccess": "Setting created successfully.",
       "saveError": "Failed to save settings."
     },
@@ -108,6 +108,16 @@
         "ambianceVideo": "Ambiance Video",
         "dishImage": "Signature Dish {index} Image"
       }
+    },
+    "landing_page": {
+      "title": "Dish Media Visibility Settings",
+      "description": "Configure display options for the Landing Page.",
+      "show_dish_image": "Show Dish Image",
+      "show_dish_imageDesc": "Toggle visibility of the standard image in dish details.",
+      "show_dish_image360": "Show Dish 360",
+      "show_dish_image360Desc": "Toggle visibility of the 360-degree rotation in dish details.",
+      "show_dish_video": "Show Dish Video",
+      "show_dish_videoDesc": "Toggle visibility of the introduction video in dish details."
     },
     "DishModal": {
       "noCategory": "No Category",
@@ -348,7 +358,9 @@
         "DECIMAL": "Decimal",
         "BOOL": "Boolean",
         "JSON": "JSON"
-      }
+      },
+      "active": "Active",
+      "inactive": "Inactive"
     }
   }
 }

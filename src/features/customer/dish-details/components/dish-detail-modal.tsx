@@ -8,6 +8,7 @@ import { useDishDetail } from "@/features/customer/dish-details";
 import { TableSelectionModal } from "@/features/customer/menu-listing-new/components/table-selection-modal";
 import { useTranslations } from "next-intl";
 import Script from "next/script";
+import { useLandingPageSettings } from "@/hooks/use-landing-page-settings";
 
 declare global {
   interface Window {
@@ -41,6 +42,16 @@ export function DishDetailModal({ dishId, isOpen, onClose, onAddToCart }: DishDe
 
   const tHero = useTranslations("DishDetails.Hero");
   const tComp = useTranslations("DishDetails.Composition");
+  const { data: landingSettings } = useLandingPageSettings();
+
+  // Determine available modes based on system settings
+  const availableModes = (["photo", "360", "video"] as const).filter((mode) => {
+    if (!landingSettings) return true; // Default to all if settings not loaded yet
+    if (mode === "photo") return landingSettings.showDishImage;
+    if (mode === "360") return landingSettings.showDishImage360;
+    if (mode === "video") return landingSettings.showDishVideo;
+    return true;
+  });
 
 
   useEffect(() => {
@@ -51,10 +62,15 @@ export function DishDetailModal({ dishId, isOpen, onClose, onAddToCart }: DishDe
   // Reset view mode and image index when modal opens
   useEffect(() => {
     if (isOpen) {
-      setViewMode("photo");
+      // Set to first available mode
+      if (availableModes.length > 0) {
+        setViewMode(availableModes[0]);
+      } else {
+        setViewMode("photo");
+      }
       setCurrentImageIndex(0);
     }
-  }, [isOpen]);
+  }, [isOpen, availableModes]);
 
   useEffect(() => {
     if (viewMode === "360" && typeof window !== "undefined" && window.cloudinary) {
@@ -125,16 +141,15 @@ export function DishDetailModal({ dishId, isOpen, onClose, onAddToCart }: DishDe
 
                   {/* Tab row — in-flow, top of panel */}
                   <div className="flex-none flex items-center justify-center gap-1 px-3 pt-3 pb-2">
-                    {(["photo", "360", "video"] as const).map((mode) => (
+                    {availableModes.map((mode) => (
                       <button
                         key={mode}
                         type="button"
                         onClick={() => setViewMode(mode)}
-                        className={`font-body rounded-full px-3 py-1 text-[10px] font-bold tracking-widest uppercase transition-all duration-300 ${
-                          viewMode === mode
+                        className={`font-body rounded-full px-3 py-1 text-[10px] font-bold tracking-widest uppercase transition-all duration-300 ${viewMode === mode
                             ? "bg-[#FFAB2D] text-[#1A3A52] shadow-sm"
                             : "text-white/60 hover:text-white"
-                        }`}
+                          }`}
                       >
                         {mode === "photo" ? tHero("photo") : mode === "360" ? tHero("view_360") : tHero("video")}
                       </button>
@@ -183,11 +198,10 @@ export function DishDetailModal({ dishId, isOpen, onClose, onAddToCart }: DishDe
                                     key={i}
                                     type="button"
                                     onClick={() => setCurrentImageIndex(i)}
-                                    className={`rounded-full transition-all duration-200 ${
-                                      i === safeIdx
+                                    className={`rounded-full transition-all duration-200 ${i === safeIdx
                                         ? "w-4 h-1.5 bg-[#FFAB2D]"
                                         : "w-1.5 h-1.5 bg-white/40 hover:bg-white/70"
-                                    }`}
+                                      }`}
                                   />
                                 ))}
                               </div>
