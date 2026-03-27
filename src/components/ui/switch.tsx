@@ -7,14 +7,18 @@ interface SwitchProps {
     onChange: (checked: boolean) => void;
     disabled?: boolean;
     showLabel?: boolean; // Cho phép ẩn/hiện chữ Active/Inactive bên cạnh
+    activeLabel?: string;
+    inactiveLabel?: string;
 }
 
 export const Switch = ({
-                           checked,
-                           onChange,
-                           disabled = false,
-                           showLabel = true
-                       }: SwitchProps) => {
+    checked,
+    onChange,
+    disabled = false,
+    showLabel = true,
+    activeLabel = 'Active',
+    inactiveLabel = 'Inactive'
+}: SwitchProps) => {
 
     const handleToggle = () => {
         if (!disabled) {
@@ -36,8 +40,8 @@ export const Switch = ({
 
             {showLabel && (
                 <span className={`admin-switch-text ${checked ? 'active' : 'inactive'}`}>
-          {checked ? 'Active' : 'Inactive'}
-        </span>
+                    {checked ? activeLabel : inactiveLabel}
+                </span>
             )}
         </div>
     );

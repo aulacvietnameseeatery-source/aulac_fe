@@ -104,3 +104,13 @@ export const translateSystemSettings = async (
     );
     return response.data;
 };
+
+/**
+ * Updates a boolean system setting.
+ */
+export const updateBoolSetting = async (
+    key: string,
+    value: boolean
+): Promise<void> => {
+    await api.put(`/api/system-settings/${key}/bool`, value);
+};

@@ -13,7 +13,7 @@
     "save": "Enregistrer",
     "saving": "Enregistrement...",
     "notifications": {
-      "saveSuccess": "Paramètres du groupe '{group}' enregistrés avec succès.",
+      "saveSuccess": "Paramètres enregistrés avec succès.",
       "createSuccess": "Paramètre créé avec succès.",
       "saveError": "Échec de l'enregistrement des paramètres."
     },
@@ -108,6 +108,16 @@
         "ambianceVideo": "Vidéo d'ambiance",
         "dishImage": "Image du plat signature {index}"
       }
+    },
+    "landing_page": {
+      "title": "Paramètres de Visibilité des Médias",
+      "description": "Configurer les options d'affichage de la page d'accueil.",
+      "show_dish_image": "Afficher l'Image",
+      "show_dish_imageDesc": "Activer la visibilité de l'image standard dans les détails du plat.",
+      "show_dish_image360": "Afficher le 360°",
+      "show_dish_image360Desc": "Activer la visibilité de la rotation à 360 degrés dans les détails du plat.",
+      "show_dish_video": "Afficher la Vidéo",
+      "show_dish_videoDesc": "Activer la visibilité de la vidéo d'introduction dans les détails du plat."
     },
     "DishModal": {
       "noCategory": "Pas de catégorie",
@@ -348,7 +358,9 @@
         "DECIMAL": "Décimal",
         "BOOL": "Booléen",
         "JSON": "JSON"
-      }
+      },
+      "active": "Actif",
+      "inactive": "Inactif"
     }
   }
 }

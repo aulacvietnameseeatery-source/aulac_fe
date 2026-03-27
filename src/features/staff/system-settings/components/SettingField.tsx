@@ -65,7 +65,9 @@ export const SettingField: React.FC<SettingFieldProps> = ({
                             checked={value === 'true'}
                             onChange={(checked: boolean) => onChange(settingKey, String(checked))}
                             disabled={disabled}
-                            showLabel={false}
+                            showLabel={true}
+                            activeLabel={t('active')}
+                            inactiveLabel={t('inactive')}
                         />
                     </div>
                 );
@@ -123,9 +125,9 @@ export const SettingField: React.FC<SettingFieldProps> = ({
                 <label htmlFor={fieldId} className="text-sm font-medium text-gray-700">
                     {displayLabel}
                 </label>
-                <Badge variant="secondary" className="text-[10px] px-1.5 py-0 h-4">
+                {/* <Badge variant="secondary" className="text-[10px] px-1.5 py-0 h-4">
                     {VALUE_TYPE_LABELS[valueType]}
-                </Badge>
+                </Badge> */}
                 {isSensitive && (
                     <Badge variant="outline" className="text-[10px] px-1.5 py-0 h-4 text-amber-600 border-amber-300">
                         {t('sensitive')}
