@@ -39,7 +39,7 @@ export default function DishDetailPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col pb-20">
-      <header className="flex-1 w-full max-w-7xl mx-auto space-y-6 mt-6 px-4 sm:px-6">
+      <header className="flex-1 w-full mx-auto space-y-6 mt-6">
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold text-gray-900 tracking-tight">
@@ -66,7 +66,7 @@ export default function DishDetailPage() {
         </div>
       </header>
 
-      <main className="flex-1 w-full max-w-7xl mx-auto mt-6 px-4 sm:px-6">
+      <main className="flex-1 w-full mx-auto mt-6">
         <DishViewDetail dish={dish} />
       </main>
     </div>

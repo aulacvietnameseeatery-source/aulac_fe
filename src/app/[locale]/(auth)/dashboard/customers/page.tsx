@@ -18,6 +18,7 @@ import { CustomerModal, CustomerFormData } from "@/features/staff/customer-manag
 import { staffCustomerService } from "@/features/staff/customer-management/services/customer-service";
 import { ConfirmModal } from "@/components/layout/admin-sidebar/confirm-modal";
 import { useRouter } from "@/routing"
+import { dateUtils } from "@/lib/date-utils";
 
 const CustomerListContent = () => {
     const t = useTranslations("Customer.List");
@@ -202,7 +203,7 @@ const CustomerListContent = () => {
             width: "150px",
             cellRender: ({ value }: { value: string | null }) => (
                 <span className="text-gray-600 text-sm">
-                    {value ? dayjs(value).format("DD/MM/YYYY HH:mm") : "-"}
+                    {value ? dateUtils.formatLocal(value, "dd/MM/yyyy HH:mm") : "-"}
                 </span>
             ),
         },
@@ -293,7 +294,7 @@ const CustomerListContent = () => {
 
 export default function CustomerListPage() {
     return (
-        <ProtectedRoute permission={Permissions.ViewAccount}>
+        <ProtectedRoute permission={Permissions.ViewCustomer}>
             <Suspense fallback={
                 <div className="flex h-screen items-center justify-center">
                     <Loader2 className="animate-spin text-gray-400" />

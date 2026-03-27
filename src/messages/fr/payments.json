@@ -1,0 +1,33 @@
+{
+  "Payment": {
+    "List": {
+      "title": "Gestion des Paiements",
+      "description": "Affichez et suivez toutes les transactions de paiement dans le système.",
+      "searchPlaceholder": "Rechercher par nom, numéro de téléphone ou numéro de commande...",
+      "export": "Exporter Excel",
+      "exportAll": "Tout Exporter",
+      "exportingAll": "Exportation de toutes les données...",
+      "labels": {
+        "guest": "Invité",
+        "cash": "Espèces",
+        "card": "Carte",
+        "transfer": "Virement"
+      },
+      "table": {
+        "no": "N°",
+        "orderId": "N° Commande",
+        "customer": "Client",
+        "method": "Méthode",
+        "receivedAmount": "Reçu",
+        "changeAmount": "Rendu",
+        "finalAmount": "Montant Final",
+        "paidAt": "Payé le"
+      },
+      "notifications": {
+        "noDataExport": "Aucune donnée à exporter",
+        "exportSuccess": "Fichier Excel exporté avec succès",
+        "exportError": "Une erreur s'est produite lors de l'exportation des données"
+      }
+    }
+  }
+}

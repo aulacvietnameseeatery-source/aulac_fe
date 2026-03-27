@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslations } from 'next-intl';
-import { Receipt, AlertTriangle, UtensilsCrossed, Minus, Plus, Trash2, CheckCircle2, Eye, FileText, X, UserSearch } from 'lucide-react';
+import { Receipt, AlertTriangle, UtensilsCrossed, Minus, Plus, Trash2, CheckCircle2, Eye, FileText, X, UserSearch, ArrowLeft } from 'lucide-react';
 import { CartItem, CustomerDto } from '../types/create-order.types';
 import { OrderDetailDto } from '../types/edit-order.types';
 
@@ -17,10 +17,11 @@ interface Props {
   onCreateInvoice: () => void;
   onCloseMobile: () => void;
   isCustomerChanged?: boolean;
+  onReturnToCreate: () => void;
 }
 
 export const EditTicket: React.FC<Props> = ({
-  orderInfo, newCart, customer, onOpenCustomerModal, onUpdateQuantity, onUpdateNote, onRemoveFromCart, onClearCart, onSubmitItems, onCreateInvoice, onCloseMobile, isCustomerChanged
+  orderInfo, newCart, customer, onOpenCustomerModal, onUpdateQuantity, onUpdateNote, onRemoveFromCart, onClearCart, onSubmitItems, onCreateInvoice, onCloseMobile, isCustomerChanged, onReturnToCreate
 }) => {
   const t = useTranslations("orders.management.Edit");
   const tCommon = useTranslations("orders.management.List.card");
@@ -60,7 +61,14 @@ export const EditTicket: React.FC<Props> = ({
             <button onClick={onCloseMobile} className="lg:hidden p-1 bg-[#D5BA98]/20 text-[#1A3A52] rounded-md">
               <X className="w-5 h-5" />
             </button>
-            {orderInfo.isPaid ? <Eye className="w-5 h-5 text-[#1A3A52]/50" /> : <Receipt className="w-5 h-5 text-[#1A3A52]" />}
+            <button 
+              onClick={onReturnToCreate} 
+              className="p-1.5  hover:bg-[#D5BA98]/40 text-[#1A3A52] rounded-md transition-all duration-200 group flex items-center justify-center mr-1 cursor-pointer"
+              title={t('returnToCreate', { fallback: 'Tạo đơn mới' })}
+            >
+              <ArrowLeft className="w-5 h-5 group-hover:-translate-x-0.5 transition-transform" />
+            </button>
+            {/* {orderInfo.isPaid ? <Eye className="w-5 h-5 text-[#1A3A52]/50" /> : <Receipt className="w-5 h-5 text-[#1A3A52]" />} */}
             <h2 className={`text-lg font-bold ${orderInfo.isPaid ? 'text-[#1A3A52]/70' : 'text-[#1A3A52]'}`}>
               {orderInfo.isPaid ? t('viewOrderTitle', { id: orderInfo.orderId }) : t('editOrderTitle', { id: orderInfo.orderId })}
             </h2>
@@ -112,7 +120,7 @@ export const EditTicket: React.FC<Props> = ({
                   <div className="text-right shrink-0">
                     <div className="font-bold text-sm text-[#1A3A52]">CHF {(item.price * item.quantity).toFixed(2)}</div>
                     <span className={`text-[9px] uppercase font-bold px-1.5 py-0.5 rounded mt-1.5 inline-block border ${getStatusColor(item.itemStatus)}`}>
-                      {formatStatusName(item.itemStatus)}
+                      {t(`itemStatus.${item.itemStatus}`, { fallback: formatStatusName(item.itemStatus) })}
                     </span>
                   </div>
                 </div>
@@ -230,7 +238,7 @@ export const EditTicket: React.FC<Props> = ({
               <div className="mt-2 pt-2 border-t border-dashed border-[#D5BA98]/40">
                 {orderInfo.payments.map((payment) => (
                   <div key={payment.paymentId} className="flex justify-between text-xs text-[#4A5D4E]">
-                    <span>{t('paidVia', { fallback: 'Paid via' })} {payment.method}</span>
+                    <span>{t('paidVia', { fallback: 'Paid via' })} {t(`paymentMethod.${payment.method}`, { fallback: payment.method })}</span>
                     <span>CHF {payment.receivedAmount.toFixed(2)}</span>
                   </div>
                 ))}

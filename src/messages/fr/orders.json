@@ -231,6 +231,7 @@
         "select": "Sélectionner",
         "change": "Modifier",
         "add": "Ajouter",
+        "guest": "Invité",
         "note": "Ajoutez une note (moins épicé, sans oignons, etc.)",
         "subtotal": "Sous-total",
         "tax": "Taxe (10%)",
@@ -291,8 +292,24 @@
           "Completed": "Terminé",
           "Cancelled": "Annulé"
         },
+        "itemStatus": {
+          "PENDING": "En attente",
+          "COMPLETED": "Terminé",
+          "CANCELLED": "Annulé",
+          "CREATED": "Créé",
+          "IN_PROGRESS": "En cours",
+          "READY": "Prêt",
+          "SERVED": "Servi",
+          "REJECTED": "Rejeté"
+        },
+        "paymentMethod": {
+          "CASH": "espèces",
+          "CARD": "carte",
+          "QR": "code QR"
+        },
         "tableLabel": "Table",
-        "customerLabel": "Client"
+        "customerLabel": "Client",
+        "returnToCreate": "Nouvelle commande"
       },
       "RecentOrders": {
         "title": "Commandes récentes",
