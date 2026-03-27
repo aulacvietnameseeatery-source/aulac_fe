@@ -7,7 +7,6 @@ import { KeywordSearch } from "@/components/ui/keyword-search/keyword-search";
 import { PermissionGuard } from '@/components/permission-guard';
 import { Permissions } from '@/types/const';
 import { Button } from "@/components/ui/button";
-// import { DishStatusCode } from "../types/dish-types"; // Không cần import Enum nữa
 import { DishStatusOption } from "../services/dish-service";
 
 interface DishHeaderProps {
@@ -18,11 +17,11 @@ interface DishHeaderProps {
 
     // Filter Values
     category?: string;
-    status?: number | "All"; // Dùng number vì ID backend trả về là 42, 43...
+    status?: number | "All";
 
     // Filter Options Sources
     categories: string[];
-    statuses: DishStatusOption[]; // Thêm prop này
+    statuses: DishStatusOption[];
     isLoadingFilters: boolean;
 
     // Handlers
@@ -38,7 +37,7 @@ export const DishHeader = ({
     category,
     status,
     categories,
-    statuses, // Nhận prop mới
+    statuses,
     isLoadingFilters,
     onCategoryChange,
     onStatusChange,
@@ -98,7 +97,6 @@ export const DishHeader = ({
                                 <option value="All">{t("filters.allStatuses")}</option>
                                 {statuses.map((s) => (
                                     <option key={s.statusId} value={s.statusId}>
-                                        {/* Hiển thị tên từ Backend, hoặc có thể dùng t() nếu muốn map key */}
                                         {s.statusName}
                                     </option>
                                 ))}

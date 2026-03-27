@@ -20,7 +20,7 @@ export function DashboardChartsRow2({ statistics, activeOrders = [], isLoading }
         }
     };
 
-    // Chuẩn bị dữ liệu cho biểu đồ tròn (Pie Chart) từ API ordersByType
+
     const categoryData = statistics?.ordersByType ? [
         { name: "Dine-In", value: statistics.ordersByType["DINE_IN"] || 0, color: "#3B82F6", icon: Wine, bgColor: "bg-blue-100 text-blue-600" },
         { name: "Takeaway", value: statistics.ordersByType["TAKEAWAY"] || 0, color: "#10B981", icon: ShoppingBag, bgColor: "bg-emerald-100 text-emerald-600" },
@@ -153,7 +153,7 @@ export function DashboardChartsRow2({ statistics, activeOrders = [], isLoading }
                             <div className="mt-8 w-full bg-orange-50/50 rounded-xl p-5 border border-orange-100/50">
                                 <p className="text-sm text-orange-600/80 font-medium mb-1">Total Spent</p>
                                 <p className="text-3xl font-black text-orange-600">
-                                    ${statistics.topCustomer.spent.toLocaleString()}
+                                    {statistics.topCustomer.spent.toLocaleString()} CHF
                                 </p>
                             </div>
                         </div>

@@ -13,7 +13,7 @@ export function ReportTabs({ activeTab }: ReportTabsProps) {
         { name: "Order Report", icon: ListTodo, href: "/dashboard/reports/order" },
         { name: "Sales Report", icon: ShoppingBag, href: "/dashboard/reports/sales" },
         { name: "Customer Report", icon: Users, href: "/dashboard/reports/customer" },
-        { name: "Audit Logs", icon: Hourglass, href: "/dashboard/reports/audit" },
+        //{ name: "Audit Logs", icon: Hourglass, href: "/dashboard/reports/audit" },
     ];
 
     return (

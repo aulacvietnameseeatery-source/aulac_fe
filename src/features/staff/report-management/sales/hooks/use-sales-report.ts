@@ -1,38 +1,79 @@
-import { useState, useEffect, useCallback } from "react";
-import { SalesReportRecordDto, SalesFilterParams } from "../types/sales-report-types";
+import { useState, useCallback, useEffect } from "react";
+import { toast } from "sonner";
+import { salesReportService } from "../services/sales-report.service";
+import {SalesFilterParams, SalesItemDto} from "@/features/staff/report-management/sales/types/sales-report-types";
 
 export const useSalesReport = () => {
-    const [data, setData] = useState<SalesReportRecordDto[]>([]);
+    const [data, setData] = useState<SalesItemDto[]>([]);
     const [isLoading, setIsLoading] = useState(false);
-    const [filters, setFilters] = useState<SalesFilterParams>({});
+    const [totalCount, setTotalCount] = useState(0);
+
+    const [paginationInfo, setPaginationInfo] = useState({
+        page: 1,
+        pageSize: 10,
+    });
+
+    const [filters, setFilters] = useState<SalesFilterParams>({
+        startDate: new Date(new Date().setDate(new Date().getDate() - 30)).toISOString().split('T')[0],
+        endDate: new Date().toISOString().split('T')[0],
+    });
 
     const fetchReportData = useCallback(async () => {
+        if (!filters.startDate || !filters.endDate) return;
+
         setIsLoading(true);
         try {
-            // TODO: await reportService.getSalesReport(filters)
-            setTimeout(() => {
-                setData([
-                    { salesId: "#SA0016", date: "01 Nov 2025", category: "Sea Food", itemsSold: 28, totalOrders: 32, grandTotal: 1000, status: "Completed" },
-                    { salesId: "#SA0015", date: "01 Nov 2025", category: "Pizza", itemsSold: 42, totalOrders: 45, grandTotal: 1500, status: "Completed" },
-                    { salesId: "#SA0014", date: "01 Nov 2025", category: "Salads", itemsSold: 66, totalOrders: 70, grandTotal: 1200, status: "Completed" },
-                    { salesId: "#SA0013", date: "01 Nov 2025", category: "Tacos", itemsSold: 48, totalOrders: 53, grandTotal: 800, status: "Completed" },
-                    { salesId: "#SA0012", date: "01 Nov 2025", category: "Burgers", itemsSold: 24, totalOrders: 34, grandTotal: 750, status: "Completed" },
-                ]);
-                setIsLoading(false);
-            }, 500);
-        } catch (error) {
-            console.error(error);
+            const response = await salesReportService.getSalesItems({
+                startDate: filters.startDate,
+                endDate: filters.endDate,
+                pageIndex: paginationInfo.page,
+                pageSize: paginationInfo.pageSize
+            });
+
+            if (response && response.pageData) {
+                setData(response.pageData);
+                setTotalCount(response.totalCount);
+            }
+        } catch (error: any) {
+            console.error("Fetch sales report failed:", error);
+            toast.error(error.response?.data?.userMessage || "Failed to load sales items.");
+        } finally {
             setIsLoading(false);
         }
-    }, [filters]);
+    }, [filters, paginationInfo.page, paginationInfo.pageSize]);
+
+    // Xử lý onDataChange an toàn, không bị lỗi TS2322
+    const onDataChange = useCallback((params: {
+        search?: string;
+        filters?: Record<string, any>;
+        sort?: any[];
+        page?: number;
+        pageSize?: number
+    }) => {
+        setPaginationInfo(prev => ({
+            ...prev,
+            page: params.page ?? prev.page,
+            pageSize: params.pageSize ?? prev.pageSize,
+        }));
+    }, []);
 
     useEffect(() => {
         fetchReportData();
     }, [fetchReportData]);
 
-    const updateFilter = (newFilters: Partial<SalesFilterParams>) => {
-        setFilters(prev => ({ ...prev, ...newFilters }));
-    };
+    const applyDateFilter = useCallback((startDate: string, endDate: string) => {
+        setFilters({ startDate, endDate });
+        setPaginationInfo(prev => ({ ...prev, page: 1 }));
+    }, []);
 
-    return { data, isLoading, filters, updateFilter, refresh: fetchReportData };
+    return {
+        data,
+        isLoading,
+        totalCount,
+        paginationInfo,
+        filters,
+        onDataChange,
+        refresh: fetchReportData,
+        applyDateFilter
+    };
 };

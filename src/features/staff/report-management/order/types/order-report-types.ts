@@ -1,7 +1,5 @@
-import { BaseReportFilterParams } from "../../shared/types/shared-types";
-
 export interface OrderReportRecordDto {
-    orderId: string;
+    orderId: string | number;
     date: string;
     customerName: string;
     tokenNo: string;
@@ -11,6 +9,7 @@ export interface OrderReportRecordDto {
     status: string;
 }
 
-export interface OrderFilterParams extends BaseReportFilterParams {
-    customerIds?: number[];
+export interface OrderFilterParams {
+    startDate?: string;
+    endDate?: string;
 }

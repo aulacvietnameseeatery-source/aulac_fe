@@ -26,7 +26,7 @@ interface DashboardSummaryCardsProps {
 export function DashboardSummaryCards({ summary, isLoading }: DashboardSummaryCardsProps) {
     const t = useTranslations("dashboard.summary");
 
-    // Nếu đang tải, hiển thị khung xương (Skeleton)
+
     if (isLoading || !summary) {
         return (
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-6">
@@ -46,11 +46,11 @@ export function DashboardSummaryCards({ summary, isLoading }: DashboardSummaryCa
         );
     }
 
-    // Cấu hình mảng dữ liệu để render bằng vòng lặp cho gọn
+
     const cards = [
         {
             title: "Total Revenue",
-            value: `$${summary.totalSales.value.toLocaleString()}`,
+            value: `${summary.totalSales.value.toLocaleString()} CHF`,
             trend: summary.totalSales.trend,
             isUp: summary.totalSales.isUp,
             icon: DollarSign,
@@ -68,7 +68,7 @@ export function DashboardSummaryCards({ summary, isLoading }: DashboardSummaryCa
         },
         {
             title: "Average Order Value",
-            value: `$${summary.averageOrderValue.value.toLocaleString()}`,
+            value: `${summary.averageOrderValue.value.toLocaleString()} CHF`,
             trend: summary.averageOrderValue.trend,
             isUp: summary.averageOrderValue.isUp,
             icon: Receipt,

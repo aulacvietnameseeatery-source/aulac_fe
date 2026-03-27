@@ -13,10 +13,10 @@ interface DashboardChartsRow1Props {
 }
 
 export function DashboardChartsRow1({ revenueData, topSelling, summary, isLoading }: DashboardChartsRow1Props) {
-    // Tìm món best seller (phần tử đầu tiên vì API đã sort giảm dần)
+
     const bestSeller = topSelling.length > 0 ? topSelling[0] : null;
 
-    // Tìm max quantity để tính phần trăm thanh trượt
+
     const maxQuantity = topSelling.length > 0 ? topSelling[0].totalQuantity : 1;
 
     const colors = ["bg-blue-600", "bg-emerald-500", "bg-purple-500", "bg-orange-500", "bg-rose-500", "bg-indigo-500"];
@@ -42,7 +42,7 @@ export function DashboardChartsRow1({ revenueData, topSelling, summary, isLoadin
                             <div>
                                 <p className="text-sm text-gray-500 mb-0 font-medium">Total Revenue</p>
                                 <h4 className="text-xl font-bold text-gray-800 mb-0">
-                                    ${summary?.totalSales.value.toLocaleString() || '0'}
+                                    {summary?.totalSales.value.toLocaleString() || '0'} CHF
                                 </h4>
                             </div>
                         </div>
@@ -50,7 +50,7 @@ export function DashboardChartsRow1({ revenueData, topSelling, summary, isLoadin
                             <span className="w-3 h-3 rounded-full bg-[#FFAB2D]"></span> Revenue
                         </div>
                     </div>
-                    {/* Render Biểu đồ thật vào đây */}
+
                     {isLoading ? (
                         <div className="flex-1 min-h-[300px] bg-gray-50/50 animate-pulse rounded-lg border border-dashed border-gray-200"></div>
                     ) : (
