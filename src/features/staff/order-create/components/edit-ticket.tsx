@@ -109,7 +109,7 @@ export const EditTicket: React.FC<Props> = ({
           <h3 className="text-[10px] font-bold text-[#1A3A52]/50 uppercase tracking-wider mb-2">{t('orderedItems')}</h3>
           <div className="space-y-2 text-opacity-80">
             {orderInfo.orderItems.map((item) => (
-              <div key={item.orderItemId} className={`bg-white border rounded-xl p-3 shadow-sm ${item.itemStatus === 'Rejected' ? 'border-[#8C3A3A]/30 bg-[#8C3A3A]/5' : 'border-[#D5BA98]/40'}`}>
+              <div key={item.orderItemId} className={`bg-white border rounded-xl p-3 shadow-sm ${item.itemStatus === 'REJECTED' ? 'border-[#8C3A3A]/30 bg-[#8C3A3A]/5' : 'border-[#D5BA98]/40'}`}>
                 <div className="flex justify-between items-start gap-2">
                   <div>
                     <div className="font-bold text-sm text-[#1A3A52]">

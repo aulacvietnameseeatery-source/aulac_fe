@@ -3,7 +3,7 @@
 import { useParams, useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { Loader2, ArrowLeft, Edit3 } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { getDishDetailById } from "@/features/staff/view-dish-detail/services/dish.service";
 import { DishViewDetail } from "@/features/staff/view-dish-detail";
 import { Button } from "@/components/ui/button";
@@ -13,6 +13,7 @@ export default function DishDetailPage() {
   const params = useParams();
   const dishId = Number(params.id);
   const t = useTranslations("Dish.Detail");
+  const locale = useLocale();
 
   const { data: dish, isLoading } = useQuery({
     queryKey: ["dish", dishId],
@@ -37,13 +38,18 @@ export default function DishDetailPage() {
 
   if (!dish) return null;
 
+  const currentDishName = 
+    dish.i18n[locale as keyof typeof dish.i18n]?.dishName || 
+    dish.i18n.en?.dishName || 
+    t("header.titleFallback");
+
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col pb-20">
       <header className="flex-1 w-full mx-auto space-y-6 mt-6">
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold text-gray-900 tracking-tight">
-              {dish.i18n.en?.dishName || t("header.titleFallback")}
+              {currentDishName}
             </h1>
             <p className="text-gray-500 mt-1">{t("header.subtitle")}</p>
           </div>

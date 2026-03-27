@@ -23,15 +23,9 @@ const getStatusColor = (status: string) => {
   }
 };
 
-const formatDateTime = (utcDateString: string) => {
+const getUtcDateString = (utcDateString: string) => {
   const dateStringWithZ = utcDateString.endsWith('Z') ? utcDateString : `${utcDateString}Z`;
-  const date = new Date(dateStringWithZ);
-
-  // Convert to Local Time format: DD/MM/YYYY, HH:mm
-  return date.toLocaleString(undefined, {
-    day: '2-digit', month: '2-digit', year: 'numeric',
-    hour: '2-digit', minute: '2-digit'
-  });
+  return dateStringWithZ;
 };
 
 export const RecentOrders = ({ activeOrderId, onOrderSelect }: RecentOrdersProps) => {
@@ -132,7 +126,7 @@ export const RecentOrders = ({ activeOrderId, onOrderSelect }: RecentOrdersProps
 
                 <div className="flex items-center gap-3 text-xs text-[#1A3A52]/70 font-medium">
                   <div className="flex items-center gap-1">
-                    <Clock className="w-3 h-3 text-[#D5BA98]" /> {dateUtils.formatLocal(order.createdAt, "dd/MM/yyyy, HH:mm")}
+                    <Clock className="w-3 h-3 text-[#D5BA98]" /> {dateUtils.formatLocal(getUtcDateString(order.createdAt), "dd/MM/yyyy, HH:mm")}
                   </div>
                   <div className="flex items-center gap-1">
                     {order.source === 'DINE_IN' ? <Utensils className="w-3 h-3 text-[#D5BA98]" /> : <ShoppingBag className="w-3 h-3 text-[#D5BA98]" />}
