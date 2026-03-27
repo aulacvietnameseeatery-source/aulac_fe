@@ -4,13 +4,16 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
 import { createOrderService } from '../services/create-edit-order.service';
 import { EditTicket } from './edit-ticket';
-import { OrderDetailDto } from '../types/edit-order.types';
+import { ExistingOrderItemDto, OrderDetailDto, OrderStatus } from '../types/edit-order.types';
 import { CustomerDto } from '../types/create-order.types';
 import { Dialog } from '@/components/ui/dialog';
 import { AlertTriangle } from 'lucide-react';
 import { toast } from 'sonner';
 import { PrintOrderModal } from '../../order-management/components/PrintOrderModal';
 import { OrderHistory, OrderItem } from '../../order-management/types/order-history.types';
+import { useOrdersSignalR } from '../hooks/useOrdersSignalR';
+import { OrderItemRealtimeDTO, OrderRealtimeDTO } from '../types/order-realtime.types';
+import { OrderItemStatusCode } from '@/types/status-codes';
 
 interface EditOrderSidebarProps {
   orderId: number;
@@ -73,6 +76,56 @@ export const EditOrderSidebar = ({
     fetchOrder();
   }, [orderId]);
 
+  useOrdersSignalR({
+    activeOrderId: orderId, 
+    
+    onOrderDetailUpdated: (data: OrderRealtimeDTO) => {
+      setOrderInfo(prev => {
+        if (!prev || Number(prev.orderId) !== Number(data.orderId)) return prev;
+        
+        // --- Helper function để map status ---
+        const mapOrderStatus = (backendStatus: string): OrderStatus => {
+          const statusMap: Record<string, OrderStatus> = {
+            'PENDING': 'Pending',
+            'IN_PROGRESS': 'In progress',
+            'COMPLETED': 'Completed',
+            'CANCELLED': 'Cancelled',
+          };
+
+          return statusMap[backendStatus] || (backendStatus as OrderStatus);
+        };
+
+        const updatedOrder = {
+          ...prev,
+          orderStatus: mapOrderStatus(data.status),
+        };
+        
+        onOrderFetched(updatedOrder); 
+        
+        return updatedOrder;
+      });
+    },
+
+    onOrderItemUpdated: (data: OrderItemRealtimeDTO) => {
+      setOrderInfo(prev => {
+        if (!prev || Number(prev.orderId) !== Number(data.orderId)) return prev;
+
+        const updatedOrder = {
+          ...prev,
+          orderItems: prev.orderItems.map(item => 
+            Number(item.orderItemId) === Number(data.orderItemId)
+              ? { ...item, itemStatus: data.status as OrderItemStatusCode } 
+              : item
+          )
+        };
+        
+        onOrderFetched(updatedOrder);
+        
+        return updatedOrder;
+      });
+    }
+  });
+
   const handleSubmitAttempt = () => {
     if (!orderInfo) return;
     const newCartTotal = newCart.reduce((sum, item) => sum + item.price * item.quantity, 0);
@@ -129,7 +182,7 @@ export const EditOrderSidebar = ({
         return formatted.charAt(0).toUpperCase() + formatted.slice(1);
     }
 
-    const combinedOrderItems: OrderItem[] = [
+    const combinedOrderItems: ExistingOrderItemDto[] = [
       ...orderInfo.orderItems.map(item => ({
         orderItemId: item.orderItemId,
         dishId: item.dishId,

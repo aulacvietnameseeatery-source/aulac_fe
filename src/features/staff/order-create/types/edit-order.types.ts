@@ -1,5 +1,7 @@
+import { OrderItemStatusCode } from "@/types/status-codes";
+
 export type OrderItemStatus = 'Created' | 'In Progress' | 'Ready' | 'Served' | 'Rejected';
-export type OrderStatus = 'Pending' | 'In Progress' | 'Completed' | 'Cancelled';
+export type OrderStatus = 'Pending' | 'In progress' | 'Completed' | 'Cancelled';
 
 export type OrderPromotionDto = {
   promotionId: number;
@@ -27,7 +29,7 @@ export type ExistingOrderItemDto = {
   dishName: string;
   quantity: number;
   price: number;
-  itemStatus: OrderItemStatus;
+  itemStatus: OrderItemStatusCode;
   rejectReason?: string | null;
   note?: string | null;
 };
