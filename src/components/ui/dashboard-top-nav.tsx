@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 
 const NAV_ITEMS = [
-  { id: "pos", key: "pos", href: "/dashboard/orders/create", icon: <ShoppingCart className="w-4 h-4" /> },
+  { id: "pos", key: "pos", href: "/dashboard/orders/pos", icon: <ShoppingCart className="w-4 h-4" /> },
   { id: "orders", key: "orders", href: "/dashboard/orders", icon: <LayoutGrid className="w-4 h-4" /> },
   { id: "kitchen", key: "kitchen", href: "/dashboard/kitchen", icon: <ChefHat className="w-4 h-4" /> },
   { id: "reservation", key: "reservation", href: "/dashboard/reservations", icon: <CalendarCheck className="w-4 h-4" /> },

@@ -11,6 +11,7 @@ import dayjs from "dayjs";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { useTranslations } from "next-intl";
+import { dateUtils } from "@/lib/date-utils";
 
 interface OrderDetailModalProps {
     customerId: number;
@@ -95,7 +96,7 @@ export const OrderDetailModal = ({ customerId, orderId, isOpen, onClose }: Order
                         <div>
                             <h2 className="text-3xl font-extrabold tracking-tight text-slate-900">{t('orderTitle')} #{detail.orderId}</h2>
                             <p className="text-sm text-slate-500 mt-1 font-medium">
-                                {dayjs(detail.createdAt).format("DD/MM/YYYY HH:mm")}
+                                {dateUtils.formatLocal(detail.createdAt, "dd/MM/yyyy HH:mm")}
                             </p>
                         </div>
                         <div className="text-right flex flex-col items-end">

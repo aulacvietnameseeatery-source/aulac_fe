@@ -5,7 +5,7 @@ export interface CustomerProfileDto {
     email: string | null;
     isMember: boolean;
     loyaltyPoints: number;
-    createdAt: string | null;
+    createdAt: string;
     orderCount: number;
     reservationCount: number;
     lastOrderTime: string | null;
@@ -14,7 +14,7 @@ export interface CustomerProfileDto {
 
 export interface CustomerOrderDto {
     orderId: number;
-    createdAt: string | null;
+    createdAt: string;
     totalAmount: number;
     tipAmount: number | null;
     orderType: string;
@@ -63,7 +63,7 @@ export interface CustomerOrderPaymentDto {
 
 export interface CustomerOrderDetailDto {
     orderId: number;
-    createdAt: string | null;
+    createdAt: string;
     totalAmount: number;
     tipAmount: number | null;
     status: string;

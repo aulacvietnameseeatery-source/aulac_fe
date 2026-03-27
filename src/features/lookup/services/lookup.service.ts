@@ -8,8 +8,11 @@ import type {
   UpdateLookupValueRequest,
   BatchReorderLookupRequest,
   BatchReorderLookupResponse,
+  TranslateLookupRequest,
+  TranslateLookupResponse,
 } from "../types/lookup.types";
 import { mapLookupI18n } from "../types/lookup.types";
+import { ReactJsxRuntime } from "next/dist/server/route-modules/app-page/vendored/rsc/entrypoints";
 
 /**
  * Creates a generic CRUD service for lookup values by typeId.
@@ -54,6 +57,11 @@ export function createLookupService(
 
     async reorder(data: BatchReorderLookupRequest): Promise<BatchReorderLookupResponse> {
       const res = await api.put<ApiResponse<BatchReorderLookupResponse>>(`${baseUrl}/reorder`, data);
+      return res.data;
+    },
+
+    async translateLookupContent(data: TranslateLookupRequest) {
+      const res = await api.post<ApiResponse<TranslateLookupResponse>>("/api/translate/lookup", data);
       return res.data;
     },
   };

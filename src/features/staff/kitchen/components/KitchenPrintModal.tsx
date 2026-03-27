@@ -1,138 +1,256 @@
 "use client";
 
-import React, { useMemo, useRef } from "react";
-import { X, Printer, Clock } from "lucide-react";
-import { useFormatter } from "next-intl";
-import type { KitchenOrder } from "../types/kitchen.types";
-import { isProcessedItemStatus, normalizeKitchenItemStatus } from "../utils/kitchen-status";
+import React, { forwardRef, useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
+import { X, Printer } from "lucide-react";
+import type { KitchenOrder, KitchenOrderItem } from "../types/kitchen.types";
 
+// --- 1. COMPONENT BẢN IN ---
+interface KitchenPrintDocumentProps {
+    order: KitchenOrder;
+    translations: { [key: string]: string };
+}
+
+const formatTime = (date?: string | Date) => {
+    if (!date) return '-';
+    const d = new Date(date);
+    return d.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' });
+};
+
+export const KitchenPrintDocument = forwardRef<HTMLDivElement, KitchenPrintDocumentProps>(
+    ({ order, translations: t }, ref) => {
+        const printTime = new Date();
+
+        const newItems = order.items.filter(i => i.itemStatus === 'CREATED');
+        const inProgressItems = order.items.filter(i => i.itemStatus === 'IN_PROGRESS');
+        const completedItems = order.items.filter(i => 
+            ['READY', 'SERVED', 'REJECTED', 'CANCELLED'].includes(i.itemStatus)
+        );
+
+        const renderItem = (item: KitchenOrderItem) => {
+            const isNew = item.itemStatus === 'CREATED';
+            const isCancelled = item.itemStatus === 'CANCELLED';
+            const isRejected = item.itemStatus === 'REJECTED';
+
+            let prefix = '';
+            if (item.itemStatus === 'IN_PROGRESS') prefix = '[~] ';
+            if (item.itemStatus === 'READY') prefix = '[✓] ';
+            if (item.itemStatus === 'SERVED') prefix = '[DONE] ';
+            if (isCancelled) prefix = '[X] ';
+            if (isRejected) prefix = '[!] ';
+
+            return (
+                <div key={item.dishName + item.itemStatus} className="mb-3">
+                    <div className={`
+                        flex items-start gap-2 
+                        ${isNew ? 'text-base font-bold' : 'text-sm font-normal'} 
+                        ${isCancelled ? 'line-through text-gray-700' : ''}
+                        uppercase leading-tight
+                    `}>
+                        <span className="shrink-0 whitespace-nowrap">
+                            {prefix}{item.quantity}X
+                        </span>
+                        <span className="flex-1 break-words">
+                            {item.dishName}
+                        </span>
+                    </div>
+
+                    {item.note && (
+                        <div className={`ml-8 mt-1 text-sm lowercase first-letter:uppercase ${isNew ? 'font-semibold' : 'font-normal'}`}>
+                            - {item.note}
+                        </div>
+                    )}
+
+                    {isRejected && item.rejectReason && (
+                        <div className="ml-8 mt-1 p-1.5 border border-black text-xs uppercase font-bold">
+                            {t['reason']}: {item.rejectReason}
+                        </div>
+                    )}
+                </div>
+            );
+        };
+
+        return (
+            <div
+                ref={ref}
+                className="w-full max-w-[80mm] mx-auto bg-white text-black p-4 font-mono"
+                style={{ color: '#000' }} // Ép màu đen toàn cục giống OrderPrintDocument
+            >
+                {/* HEADER */}
+                <div className="text-center mb-4 mt-2">
+                    <h1 className="text-2xl font-black uppercase tracking-widest">{t['title']}</h1>
+                    <div className="text-lg font-bold mt-1">{t['order']} #{order.orderId}</div>
+                    <div className="text-lg font-bold">{t['table']} {order.tableCode}</div>
+                    <div className="text-sm font-bold mt-1">{t['time']} {formatTime(order.createdAt)}</div>
+                </div>
+
+                <div className="border-t-2 border-black border-dashed mb-4"></div>
+
+                {/* NEW ITEMS */}
+                {newItems.length > 0 && (
+                    <div className="mb-4">
+                        <div className="text-center font-black text-lg bg-black text-white py-1 mb-3 uppercase tracking-widest">
+                            *** {t['newItem']} ***
+                        </div>
+                        {newItems.map(renderItem)}
+                    </div>
+                )}
+
+                {/* IN PROGRESS ITEMS */}
+                {inProgressItems.length > 0 && (
+                    <div className="mb-4">
+                        <div className="border-b border-black mb-2 text-sm font-bold uppercase">
+                            {t['cooking']}
+                        </div>
+                        {inProgressItems.map(renderItem)}
+                    </div>
+                )}
+
+                {/* COMPLETED ITEMS */}
+                {completedItems.length > 0 && (
+                    <div className="mb-4">
+                        {(newItems.length > 0 || inProgressItems.length > 0) && (
+                            <div className="border-t border-black mb-2 border-dotted"></div>
+                        )}
+                        <div className="mb-2 text-xs font-bold uppercase tracking-wider">
+                            --- {t['processed']} ---
+                        </div>
+                        {completedItems.map(renderItem)}
+                    </div>
+                )}
+
+                <div className="border-t-2 border-black border-dashed mt-6 mb-2"></div>
+
+                {/* FOOTER */}
+                <div className="text-center text-xs font-normal space-y-1">
+                    <p>{t['printedAt']} {formatTime(printTime)}</p>
+                    <p>--- {t['end']} ---</p>
+                </div>
+            </div>
+        );
+    }
+);
+
+KitchenPrintDocument.displayName = 'KitchenPrintDocument';
+
+
+// --- 2. MODAL WRAPPER ---
 interface KitchenPrintModalProps {
     order: KitchenOrder;
     isOpen: boolean;
     onClose: () => void;
-    t: any;
+    t: any; // Hàm translations truyền từ component cha
 }
 
-export function KitchenPrintModal({ order, isOpen, onClose, t }: KitchenPrintModalProps) {
+export const KitchenPrintModal: React.FC<KitchenPrintModalProps> = ({ order, isOpen, onClose, t }) => {
     const printRef = useRef<HTMLDivElement>(null);
+    const [mounted, setMounted] = useState(false);
 
-    const format = useFormatter();
-
-    const formattedTime = order.createdAt ? format.dateTime(new Date(order.createdAt), { hour: '2-digit', minute: '2-digit' }) : "-";
-    const formattedDate = order.createdAt ? format.dateTime(new Date(order.createdAt), { day: '2-digit', month: '2-digit', year: 'numeric' }) : "-";
-
-    const processedCount = useMemo(
-        () =>
-            order.items.filter((item) => {
-                const s = normalizeKitchenItemStatus(item.itemStatus);
-                return isProcessedItemStatus(s);
-            }).length,
-        [order.items],
-    );
-
-    const handlePrint = () => {
-        const printContent = printRef.current;
-        if (!printContent) return;
-
-        const printWindow = window.open("", "_blank");
-        if (!printWindow) return;
-
-        const styles = Array.from(document.querySelectorAll("style, link[rel='stylesheet']"))
-            .map((s) => s.outerHTML)
-            .join("");
-
-        printWindow.document.write(`
-            <html>
-                <head>
-                    <title>Kitchen Ticket #${order.orderId}</title>
-                    ${styles}
-                    <style>
-                        body { background: #fff !important; margin: 0; padding: 16px; }
-                        #print-area { width: 100% !important; max-width: none !important; border: none !important; box-shadow: none !important; }
-                    </style>
-                </head>
-                <body>
-                    <div id="print-area">${printContent.innerHTML}</div>
-                    <script>
-                        setTimeout(() => {
-                            window.print();
-                            window.close();
-                        }, 300);
-                    </script>
-                </body>
-            </html>
-        `);
-        printWindow.document.close();
+    const handleClose = (event?: React.MouseEvent) => {
+        event?.stopPropagation();
+        document.body.style.overflow = 'unset';
+        onClose();
     };
 
-    if (!isOpen) return null;
+    useEffect(() => {
+        setMounted(true);
+        return () => setMounted(false);
+    }, []);
 
-    return (
-        <div className="fixed inset-0 z-[70] bg-black/40 backdrop-blur-sm flex items-center justify-center p-4" onClick={onClose}>
-            <div className="w-full max-w-lg bg-white rounded-2xl shadow-2xl overflow-hidden" onClick={(e) => e.stopPropagation()}>
-                <div className="px-5 py-4 border-b border-gray-100 flex items-center justify-between bg-gray-50">
-                    <div>
-                        <h3 className="text-sm font-bold text-gray-900">{t?.("actions.print") || "Print Order"}</h3>
-                        <p className="text-xs text-gray-500">#{order.orderId} - {order.tableCode}</p>
+    useEffect(() => {
+        if (!isOpen) return;
+        const previousOverflow = document.body.style.overflow;
+        document.body.style.overflow = 'hidden';
+        return () => { document.body.style.overflow = previousOverflow; };
+    }, [isOpen]);
+
+    if (!isOpen || !mounted) return null;
+
+    // Map các key dịch thuật để truyền vào Document
+    const printTranslations = {
+        title: t?.("kitchen.title") || "KITCHEN",
+        order: t?.("kitchen.order") || "ORDER",
+        table: t?.("kitchen.table") || "TABLE",
+        time: t?.("kitchen.time") || "TIME",
+        newItem: t?.("kitchen.newItem") || "NEW ITEM",
+        cooking: t?.("kitchen.cooking") || "Cooking",
+        processed: t?.("kitchen.processed") || "Processed",
+        reason: t?.("kitchen.reason") || "REASON",
+        printedAt: t?.("kitchen.printedAt") || "PRINTED AT",
+        end: t?.("kitchen.end") || "END",
+        printTicket: t?.("kitchen.printTicket") || "Print Ticket",
+        cancel: t?.("kitchen.cancel") || "Cancel",
+        print: t?.("kitchen.print") || "Print"
+    };
+
+    const handlePrint = () => {
+        window.print();
+    };
+
+    return createPortal(
+        <div
+            className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
+            onClick={(e) => handleClose(e)}
+            onMouseDown={(e) => e.stopPropagation()}
+            onPointerDown={(e) => e.stopPropagation()}
+        >
+            <div
+                className="bg-white rounded-2xl shadow-2xl w-full max-w-xl max-h-[90vh] flex flex-col overflow-hidden animate-in fade-in zoom-in duration-200"
+                onClick={(e) => e.stopPropagation()}
+                onMouseDown={(e) => e.stopPropagation()}
+                onPointerDown={(e) => e.stopPropagation()}
+            >
+                {/* Header Modal */}
+                <div
+                    className="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-gray-50/50"
+                    onClick={(e) => e.stopPropagation()}
+                >
+                    <div className="flex items-center gap-3">
+                        <div className="p-2 bg-blue-100 rounded-lg text-blue-600">
+                            <Printer className="w-5 h-5" />
+                        </div>
+                        <div>
+                            <h3 className="font-bold text-gray-900">
+                                {printTranslations.printTicket}
+                            </h3>
+                            <p className="text-xs text-gray-500">Order #{order.orderId}</p>
+                        </div>
                     </div>
-                    <button onClick={onClose} className="p-2 rounded-full hover:bg-gray-200 text-gray-500">
-                        <X className="w-4 h-4" />
+                    <button onClick={(e) => handleClose(e)} className="p-2 hover:bg-gray-200 rounded-full transition-colors text-gray-400">
+                        <X className="w-5 h-5" />
                     </button>
                 </div>
 
-                <div className="p-4 bg-gray-100 max-h-[65vh] overflow-auto custom-scrollbar">
-                    <div ref={printRef} className="bg-white border border-gray-200 rounded-xl overflow-hidden">
-                        <div className="bg-gray-900 text-white px-4 py-3">
-                            <p className="text-sm font-bold">{t?.("title") || "Kitchen Ticket"}</p>
-                            <p className="text-xs text-gray-200">{t?.("orderType") || "Table"} {order.tableCode} - #{order.orderId}</p>
-                        </div>
-
-                        <div className="px-4 py-3 border-b border-gray-100 text-xs text-gray-600 space-y-1.5">
-                            <div className="flex items-center justify-between">
-                                <span>{t?.("tokenNo") || "Token No"}</span>
-                                <span className="font-semibold text-gray-900">{order.orderId % 100}</span>
-                            </div>
-                            <div className="flex items-center justify-between">
-                                <span className="inline-flex items-center gap-1"><Clock className="w-3 h-3" />Time</span>
-                                <span className="font-semibold text-gray-900">{formattedTime}</span>
-                            </div>
-                            <div className="flex items-center justify-between">
-                                <span>Date</span>
-                                <span className="font-semibold text-gray-900">{formattedDate}</span>
-                            </div>
-                        </div>
-
-                        <div className="px-4 py-2">
-                            {order.items.map((item) => (
-                                <div key={item.orderItemId} className="py-2.5 border-b last:border-b-0 border-gray-100">
-                                    <div className="flex items-center justify-between gap-2">
-                                        <span className="text-sm font-semibold text-gray-800">{item.dishName}</span>
-                                        <span className="text-sm font-bold text-gray-900">x{item.quantity}</span>
-                                    </div>
-                                    <p className="text-[11px] text-gray-500 mt-0.5">{t?.(`status.${normalizeKitchenItemStatus(item.itemStatus)}`) || item.itemStatus}</p>
-                                    {item.note ? <p className="text-[11px] text-gray-600 mt-1">{t?.("note") || "Note"}: {item.note}</p> : null}
-                                    {item.rejectReason ? <p className="text-[11px] text-red-600 mt-1">{t?.("rejectReason.label") || "Reject"}: {item.rejectReason}</p> : null}
-                                </div>
-                            ))}
-                        </div>
-
-                        <div className="px-4 py-2.5 bg-gray-50 border-t border-gray-100 text-xs text-gray-600 flex items-center justify-between">
-                            <span>Processed</span>
-                            <span className="font-semibold text-gray-900">{processedCount}/{order.items.length}</span>
-                        </div>
+                {/* Preview Area */}
+                <div
+                    className="flex-1 overflow-auto p-8 bg-gray-100/50 flex justify-center custom-scrollbar"
+                    onClick={(e) => e.stopPropagation()}
+                >
+                    {/* KHU VỰC IN: Dùng đúng id="receipt-print-area" để ăn CSS in ấn toàn cục */}
+                    <div id="receipt-print-area" className="w-full max-w-[80mm] bg-white shadow-xl rounded-sm border border-gray-300 overflow-hidden" style={{ height: 'fit-content' }}>
+                        <KitchenPrintDocument 
+                            ref={printRef} 
+                            order={order} 
+                            translations={printTranslations} 
+                        />
                     </div>
                 </div>
 
-                <div className="px-5 py-4 border-t border-gray-100 bg-gray-50 flex justify-end gap-2">
-                    <button onClick={onClose} className="h-9 px-4 rounded-lg bg-white border border-gray-200 text-sm font-semibold text-gray-700 hover:bg-gray-100">
-                        {t?.("actions.cancel") || "Cancel"}
+                {/* Footer Modal */}
+                <div
+                    className="px-6 py-4 border-t border-gray-100 flex items-center justify-end gap-3 bg-gray-50/50"
+                    onClick={(e) => e.stopPropagation()}
+                >
+                    <button onClick={(e) => handleClose(e)} className="px-4 py-2 text-sm font-semibold text-gray-600 hover:text-gray-800 transition-colors">
+                        {printTranslations.cancel}
                     </button>
-                    <button onClick={handlePrint} className="h-9 px-4 rounded-lg bg-gray-900 text-white text-sm font-semibold inline-flex items-center gap-2 hover:bg-black">
+                    <button onClick={handlePrint} className="flex items-center gap-2 px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-bold shadow-lg transition-all active:scale-95">
                         <Printer className="w-4 h-4" />
-                        {t?.("actions.print") || "Print"}
+                        {printTranslations.print}
                     </button>
                 </div>
             </div>
-        </div>
+        </div>,
+        document.body
     );
-}
+};

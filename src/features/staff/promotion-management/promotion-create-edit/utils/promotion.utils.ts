@@ -1,13 +1,10 @@
 import { PromotionDto, PromotionRuleDto, PromotionTargetDto } from "../types/promotion.types";
 import { PromotionFormValues } from "../schemas/promotion.schema";
+import { dateUtils } from "@/lib/date-utils";
 
 export const utcToLocalDatetimeLocal = (utcStr?: string): string => {
   if (!utcStr) return "";
-  const dateStr = utcStr.endsWith('Z') ? utcStr : `${utcStr}Z`;
-  const date = new Date(dateStr);
-  const offset = date.getTimezoneOffset() * 60000;
-  const localDate = new Date(date.getTime() - offset);
-  return localDate.toISOString().slice(0, 16); // YYYY-MM-DDTHH:mm
+  return dateUtils.formatLocal(utcStr, "yyyy-MM-dd'T'HH:mm");
 };
 
 export const mapApiToForm = (apiData: PromotionDto): PromotionFormValues => {
@@ -47,12 +44,15 @@ export const mapFormToApi = (formData: PromotionFormValues): Partial<PromotionDt
     targetCategoryIds.forEach(id => targets.push({ dishId: null, categoryId: id }));
   }
 
+  const [startDate, startTimeStr] = formData.startTime.split("T");
+  const [endDate, endTimeStr] = formData.endTime.split("T");
+
   return {
     promoCode: formData.promoCode,
     promoName: formData.promoName ?? null,
     description: formData.description,
-    startTime: new Date(formData.startTime).toISOString(),
-    endTime: new Date(formData.endTime).toISOString(),
+    startTime: dateUtils.toUtcIso(startDate, startTimeStr),
+    endTime: dateUtils.toUtcIso(endDate, endTimeStr),
     type: formData.type,
     discountValue: formData.discountValue,
     maxUsage: formData.maxUsage,
