@@ -150,3 +150,20 @@ export interface BatchReorderLookupResponse {
   updatedCount: number;
   version?: string;
 }
+
+export const LANGUAGES = ["en", "vi", "fr"] as const;
+export type Language = (typeof LANGUAGES)[number];
+
+export interface LookupDto {
+  valueName: string;
+  description: string;
+}
+
+export type TranslateLookupRequest = {
+  sourceLang: Language; 
+  data: LookupDto;    
+};
+
+export type TranslateLookupResponse = {
+  translations: Record<string, LookupDto>;  
+};

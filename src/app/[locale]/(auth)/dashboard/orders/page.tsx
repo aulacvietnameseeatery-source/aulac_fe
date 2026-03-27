@@ -417,7 +417,7 @@ function OrdersContent() {
                                                         onAction={(id, action) => {
                                                             console.log("Action:", action, "on order:", id);
                                                             if (action === "view") {
-                                                                router.push(`/dashboard/orders/${id}/edit`);
+                                                                router.push(`/dashboard/orders/pos/${id}`);
                                                             } else if (action !== 'pay') {
                                                                 void handleOrderAction(id, action);
                                                             }

@@ -1,5 +1,7 @@
 import * as XLSX from 'xlsx';
 import {IngredientDto, SaveIngredientRequest} from "@/features/staff/ingredient-management/types/ingredient-types";
+import { PaymentListDto } from '@/features/staff/payment-management/types/payment-types';
+import dayjs from 'dayjs';
 
 export const excelUtils = {
     // --- EXPORT EXCEL ---
@@ -17,6 +19,35 @@ export const excelUtils = {
         const worksheet = XLSX.utils.json_to_sheet(excelData);
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, "Ingredients");
+
+        XLSX.writeFile(workbook, fileName);
+    },
+
+    // ==========================================
+    // --- EXPORT PAYMENT EXCEL ---
+    // ==========================================
+    exportPaymentsToExcel: (payments: PaymentListDto[], fileName: string = "Payments_Export.xlsx") => {
+        const excelData = payments.map((item, index) => {
+            // Xác định khách vãng lai
+            const isGuest = !item.customerName || item.customerName.toLowerCase() === "guest" || item.customerPhone === "0000000000";
+
+            return {
+                "No.": index + 1,
+                "Payment ID": item.paymentId,
+                "Order ID": item.orderId,
+                "Customer Name": isGuest ? "Guest" : item.customerName,
+                "Phone Number": isGuest ? "-" : (item.customerPhone || "-"),
+                "Payment Method": item.method,
+                "Received Amount (CHF)": item.receivedAmount,
+                "Change Amount (CHF)": item.changeAmount,
+                "Final Amount (CHF)": item.finalAmount,
+                "Paid At": item.paidAt ? dayjs(item.paidAt).format("DD/MM/YYYY HH:mm") : "-",
+            };
+        });
+
+        const worksheet = XLSX.utils.json_to_sheet(excelData);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Payments");
 
         XLSX.writeFile(workbook, fileName);
     },

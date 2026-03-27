@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useCallback, useRef, useEffect } from "react";
-import { Plus, Pencil, Trash2, Check, X, GripVertical, TagIcon } from "lucide-react";
+import { Plus, Pencil, Trash2, Check, X, GripVertical, TagIcon, Loader2, Sparkles } from "lucide-react";
 import { Dialog } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { ALInput } from "@/components/ui/al-input";
@@ -13,7 +13,10 @@ import type {
   UpdateLookupValueRequest,
   BatchReorderLookupRequest,
   I18nMap,
+  TranslateLookupRequest,
+  TranslateLookupResponse,
 } from "../types/lookup.types";
+import { useMutation } from "@tanstack/react-query";
 
 // ─── Types ───────────────────────────────────────────────────
 
@@ -36,6 +39,7 @@ export interface LookupManagerModalProps {
   isLoading?: boolean;
   /** Whether add/delete is allowed for this lookup type */
   isConfigurable?: boolean;
+  isTranslating?: boolean;
   /** Create a new lookup value. Must return the created item (for auto-select). */
   onSave: (data: CreateLookupValueRequest) => Promise<LookupValueDto>;
   /** Update an existing lookup value. */
@@ -46,6 +50,7 @@ export interface LookupManagerModalProps {
   onReorder?: (data: BatchReorderLookupRequest) => Promise<unknown>;
   /** Called after a new item is successfully created so the parent can auto-select it */
   onCreated?: (item: LookupValueDto) => void;
+  onTranslate?: (data: TranslateLookupRequest) => Promise<TranslateLookupResponse>;
 }
 
 // ─── Inline form state ───────────────────────────────────────
@@ -71,11 +76,13 @@ const LookupManagerModal: React.FC<LookupManagerModalProps> = ({
   items,
   isLoading = false,
   isConfigurable = true,
+  isTranslating = false,
   onSave,
   onUpdate,
   onDelete,
   onReorder,
   onCreated,
+  onTranslate,
 }) => {
   // ── Form state ──
   const [formMode, setFormMode] = useState<"idle" | "add" | "edit">("idle");
@@ -122,6 +129,50 @@ const LookupManagerModal: React.FC<LookupManagerModalProps> = ({
     const sorted = [...items].sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
     setDisplayItems(sorted);
   }, [items, hasPendingSortChanges]);
+
+  // ── Auto Translate Handler ──
+  const handleAutoTranslate = async () => {
+    if (!onTranslate) return;
+
+    const currentName = form.nameI18n[activeLang];
+    const currentDesc = form.descriptionI18n[activeLang];
+
+    if (!currentName.trim()) {
+      return; 
+    }
+
+    try {
+      const data = await onTranslate({
+        sourceLang: activeLang,
+        data: {
+          valueName: currentName,
+          description: currentDesc,
+        },
+      });
+
+      if (data?.translations) {
+        setForm((prev) => {
+          const newForm = {
+            ...prev,
+            nameI18n: { ...prev.nameI18n },
+            descriptionI18n: { ...prev.descriptionI18n },
+          };
+
+          Object.entries(data.translations).forEach(([langKey, content]: [string, any]) => {
+            const targetLang = langKey as Locale;
+            if (targetLang === activeLang) return; 
+
+            if (content.valueName) newForm.nameI18n[targetLang] = content.valueName;
+            if (content.description !== undefined) newForm.descriptionI18n[targetLang] = content.description;
+          });
+
+          return newForm;
+        });
+      }
+    } catch (error) {
+      
+    }
+  };
 
   // ── Handlers ──
   const handleStartAdd = () => {
@@ -590,27 +641,50 @@ const LookupManagerModal: React.FC<LookupManagerModalProps> = ({
                   )}
                 </h3>
 
-                {/* Language tabs */}
-                <div className="flex items-center gap-1 bg-gray-100 rounded-lg p-0.5">
-                  {LOCALES.map(({ key, flag, label }) => (
-                    <button
-                      key={key}
+                {/* ── Tabs & Translate Button Container ── */}
+                <div className="flex items-center gap-3">
+                  {/* Translate Button */}
+                  {onTranslate && (
+                    <Button
                       type="button"
-                      onClick={() => setActiveLang(key)}
-                      className={cn(
-                        "relative flex items-center gap-1 px-2.5 py-1 text-xs font-medium rounded-md transition-colors",
-                        activeLang === key
-                          ? "bg-white text-gray-900 shadow-sm"
-                          : "text-gray-500 hover:text-gray-700"
-                      )}
+                      variant="outline"
+                      size="sm"
+                      onClick={handleAutoTranslate}
+                      disabled={isTranslating || !form.nameI18n[activeLang].trim()}
+                      className="group h-auto px-2.5 py-1 text-xs font-semibold bg-purple-50 hover:bg-purple-100 border-purple-200"
+                      data-tooltip-content={`Translate content from ${activeLang.toUpperCase()}`}
                     >
-                      <span>{flag}</span>
-                      <span>{label}</span>
-                      {hasContent(key) && (
-                        <span className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 bg-emerald-500 rounded-full" />
+                      {isTranslating ? (
+                        <Loader2 size={13} className="animate-spin text-purple-600" />
+                      ) : (
+                        <Sparkles size={13} className="text-purple-600 group-hover:text-purple-800 transition-colors" />
                       )}
-                    </button>
-                  ))}
+                      <span className="hidden sm:inline ml-1 text-purple-700">Auto Translate</span>
+                    </Button>
+                  )}
+
+                  {/* Language tabs */}
+                  <div className="flex items-center gap-1 bg-gray-100 rounded-lg p-0.5">
+                    {LOCALES.map(({ key, flag, label }) => (
+                      <button
+                        key={key}
+                        type="button"
+                        onClick={() => setActiveLang(key)}
+                        className={cn(
+                          "relative flex items-center gap-1 px-2.5 py-1 text-xs font-medium rounded-md transition-colors",
+                          activeLang === key
+                            ? "bg-white text-gray-900 shadow-sm"
+                            : "text-gray-500 hover:text-gray-700"
+                        )}
+                      >
+                        <span>{flag}</span>
+                        <span>{label}</span>
+                        {hasContent(key) && (
+                          <span className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 bg-emerald-500 rounded-full" />
+                        )}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </div>
 

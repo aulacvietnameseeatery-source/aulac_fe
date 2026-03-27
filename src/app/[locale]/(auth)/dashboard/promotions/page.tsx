@@ -17,6 +17,7 @@ import { usePromotionList } from "@/features/staff/promotion-management/promotio
 import { PromotionListDTO } from "@/features/staff/promotion-management/promotion-list/types/promotion-types";
 import { PromotionActions } from "@/features/staff/promotion-management/promotion-list/components/promotion-actions";
 import { staffPromotionService } from "@/features/staff/promotion-management/promotion-list/services/promotion-service";
+import { dateUtils } from "@/lib/date-utils";
 
 const PromotionListContent = () => {
     const t = useTranslations("Promotion.List");
@@ -122,7 +123,7 @@ const PromotionListContent = () => {
             width: "160px",
             cellRender: ({ item }: { item: PromotionListDTO }) => (
                 <span className="text-sm text-gray-600">
-                    {formatUtcToLocalDate(item.startTime)}
+                    {dateUtils.formatLocal(item.startTime, "dd/MM/yyyy HH:mm")}
                 </span>
             ),
         },
@@ -132,7 +133,7 @@ const PromotionListContent = () => {
             width: "160px",
             cellRender: ({ item }: { item: PromotionListDTO }) => (
                 <span className="text-sm text-gray-600">
-                    {formatUtcToLocalDate(item.endTime)}
+                    {dateUtils.formatLocal(item.endTime, "dd/MM/yyyy HH:mm")}
                 </span>
             ),
         },

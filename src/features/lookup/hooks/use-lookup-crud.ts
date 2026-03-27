@@ -11,6 +11,8 @@ import type {
   UpdateLookupValueRequest,
   BatchReorderLookupRequest,
   BatchReorderLookupResponse,
+  TranslateLookupRequest,
+  TranslateLookupResponse,
 } from "../types/lookup.types";
 import { isLookupTypeConfigurable } from "../types/lookup.types";
 
@@ -159,6 +161,23 @@ export function useLookupCrud({
     },
   });
 
+  // ── Translate ─────────────────────────────────────────
+  const translateMutation = useMutation<
+    TranslateLookupResponse,
+    Error,
+    TranslateLookupRequest
+  >({
+    mutationFn: (data) => service.translateLookupContent(data),
+    onSuccess: () => {
+      toast.success("Translation completed successfully!");
+    },
+    onError: (error: any) => {
+      toast.error("Auto-translate failed", {
+        description: error?.response?.data?.userMessage || error.message,
+      });
+    },
+  });
+
   // ──────────────────────────────────────────────────────
   return {
     // ── LookupManagerModal props (spread-ready) ──
@@ -170,12 +189,14 @@ export function useLookupCrud({
     onUpdate: (id: number, data: UpdateLookupValueRequest) => updateMutation.mutateAsync({ id, data }),
     onDelete: (id: number)                                 => deleteMutation.mutateAsync(id),
     onReorder: (data: BatchReorderLookupRequest)           => reorderMutation.mutateAsync(data),
+    onTranslate: (data: TranslateLookupRequest)            => translateMutation.mutateAsync(data),
 
     // ── Granular state (for loading indicators etc.) ──
     isCreating: createMutation.isPending,
     isUpdating: updateMutation.isPending,
     isDeleting: deleteMutation.isPending,
     isReordering: reorderMutation.isPending,
+    isTranslating: translateMutation.isPending,
   };
 }
 

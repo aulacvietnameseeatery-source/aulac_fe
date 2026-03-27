@@ -42,6 +42,21 @@
       "placeholder": "Entrez la raison...",
       "confirm": "Confirmer",
       "cancel": "Annuler"
+    },
+    "kitchen": {
+      "title": "CUISINE",
+      "order": "COMMANDE",
+      "table": "TABLE",
+      "time": "HEURE",
+      "newItem": "NOUVEL ARTICLE",
+      "cooking": "En cours",
+      "processed": "Traité",
+      "reason": "RAISON",
+      "printedAt": "IMPRIMÉ À",
+      "end": "FIN",
+      "printTicket": "Imprimer le ticket",
+      "cancel": "Annuler",
+      "print": "Imprimer"
     }
   }
 }

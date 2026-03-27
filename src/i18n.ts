@@ -16,6 +16,7 @@ const MODULES = [
     "navigation",
     "inventory",
     "supplier",
+    "payments"
 ] as const;
 
 type MessageTree = Record<string, unknown>;
