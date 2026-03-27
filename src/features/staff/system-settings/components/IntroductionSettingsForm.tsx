@@ -16,14 +16,8 @@ import { useUpdateStoreSettingsMutation, useTranslateSettingsMutation } from "..
 import { SystemSettingMediaUploader } from "./SystemSettingMediaUploader";
 
 
-
-const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/heic', 'image/heif'];
-const IMAGE_ACCEPT = '.jpg,.jpeg,.png,.gif,.webp,.heic,.heif,image/jpeg,image/png,image/gif,image/webp,image/heic,image/heif';
-const VIDEO_ACCEPT = 'video/mp4,.mp4';
 const MAX_IMAGE_SIZE_MB = 5;
 const MAX_VIDEO_SIZE_MB = 50;
-const MAX_IMAGE_SIZE = MAX_IMAGE_SIZE_MB * 1024 * 1024;
-const MAX_VIDEO_SIZE = MAX_VIDEO_SIZE_MB * 1024 * 1024;
 const MAX_VIDEO_DURATION_SECONDS = 30;
 const INTRO_MEDIA_KEYS = [
     "intro_hero_image",
@@ -309,7 +303,7 @@ export const IntroductionSettingsForm = () => {
                                     <ALInput
                                         title={t('Introduction.heroQuote')}
                                         fieldVariant="textarea"
-                                        textareaRows={4}
+                                        textareaRows={10}
                                         placeholder="Write a welcoming quote or short description..."
                                         wrapperClassName="bg-white/80 border-amber-100/50 focus-within:border-amber-300"
                                         textareaClassName="resize-none leading-relaxed"
@@ -319,6 +313,9 @@ export const IntroductionSettingsForm = () => {
                             </div>
 
                             {/* Right: Image Upload Area */}
+                            <div className="p-8 lg:p-10 space-y-8 bg-white/40 border-r border-amber-200/20">
+                            <div className="space-y-6">
+
                             <SystemSettingMediaUploader
                                 label={t('Introduction.heroImage')}
                                 value={getFullUrl('intro_hero_image', heroImageUrl)}
@@ -332,6 +329,8 @@ export const IntroductionSettingsForm = () => {
                                 onPreview={(url) => setPreviewData({ url, title: "Hero Image", type: 'image' })}
                                 maxSizeMB={MAX_IMAGE_SIZE_MB}
                             />
+                            </div>
+                        </div>
                         </div>
                     </ALCard>
                 </section>
