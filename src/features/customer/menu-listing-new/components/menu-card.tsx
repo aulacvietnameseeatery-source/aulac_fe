@@ -1,5 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
+import { useLandingPageSettings } from '@/hooks/use-landing-page-settings';
 
 export interface MenuItem {
     id: string;
@@ -15,6 +16,8 @@ interface MenuCardProps extends MenuItem {
 }
 
 export const MenuCard = ({ id, name, price, desc, image, onOrder, onDetail }: MenuCardProps) => {
+    const { data: settings } = useLandingPageSettings();
+    const showDishImage = settings?.showDishImage ?? true;
 
     const handleOrderClick = (e: React.MouseEvent) => {
         e.stopPropagation();
@@ -37,19 +40,21 @@ export const MenuCard = ({ id, name, price, desc, image, onOrder, onDetail }: Me
             className="w-full flex flex-col items-center text-center group cursor-pointer bg-transparent justify-start"
             onClick={handleDetailClick}
         >
-            <div className="relative w-[45%] aspect-square mb-[2%] rounded-full overflow-hidden border border-[#C5A059]/40 group-hover:border-[#C5A059] shadow-sm group-hover:shadow-md transition-all duration-500">
-                <Image
-                    width={300}
-                    height={300}
-                    src={imgSrc}
-                    onError={(e) => {
-                        e.currentTarget.src = fallbackImg;
-                        e.currentTarget.srcset = fallbackImg;
-                    }}
-                    alt={name}
-                    className="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700 ease-out"
-                />
-            </div>
+            {showDishImage && (
+                <div className="relative w-[45%] aspect-square mb-[2%] rounded-full overflow-hidden border border-[#C5A059]/40 group-hover:border-[#C5A059] shadow-sm group-hover:shadow-md transition-all duration-500">
+                    <Image
+                        width={300}
+                        height={300}
+                        src={imgSrc}
+                        onError={(e) => {
+                            e.currentTarget.src = fallbackImg;
+                            e.currentTarget.srcset = fallbackImg;
+                        }}
+                        alt={name}
+                        className="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700 ease-out"
+                    />
+                </div>
+            )}
 
             <h3 className="text-[#0f172a] font-display text-[7.5px] md:text-[8px] lg:text-[10px] xl:text-[11px] uppercase tracking-widest font-bold mb-[1%] px-[2%] line-clamp-2 transition-colors duration-300 group-hover:text-[#C5A059] leading-tight sm:leading-snug">
                 {name}

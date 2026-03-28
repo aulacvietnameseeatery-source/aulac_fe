@@ -1,6 +1,7 @@
 import React from 'react';
 import { X } from 'lucide-react';
 import { MenuItemData } from '../data/mock-menu';
+import { useLandingPageSettings } from '@/hooks/use-landing-page-settings';
 
 interface ItemDetailModalProps {
     item: MenuItemData | null;
@@ -9,6 +10,9 @@ interface ItemDetailModalProps {
 }
 
 export const ItemDetailModal = ({ item, onClose, onAddToCart }: ItemDetailModalProps) => {
+    const { data: settings } = useLandingPageSettings();
+    const showDishImage = settings?.showDishImage ?? true;
+
     if (!item) return null;
 
     return (
@@ -23,13 +27,15 @@ export const ItemDetailModal = ({ item, onClose, onAddToCart }: ItemDetailModalP
                     <X size={24} />
                 </button>
 
-                <div className="aspect-video w-full rounded overflow-hidden mb-4 border border-[#C5A059]/30">
-                    <img
-                        src={item.image}
-                        alt={item.name}
-                        className="w-full h-full object-cover"
-                    />
-                </div>
+                {showDishImage && (
+                    <div className="aspect-video w-full rounded overflow-hidden mb-4 border border-[#C5A059]/30">
+                        <img
+                            src={item.image}
+                            alt={item.name}
+                            className="w-full h-full object-cover"
+                        />
+                    </div>
+                )}
 
                 <h3 className="font-display text-2xl text-[#C5A059] mb-2">{item.name}</h3>
                 <p className="font-serif text-[#E5D9B6]/80 text-sm mb-6 leading-relaxed">

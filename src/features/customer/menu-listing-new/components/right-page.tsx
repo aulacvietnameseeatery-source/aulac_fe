@@ -2,6 +2,7 @@ import React from 'react';
 import { MenuItemData } from '../data/mock-menu';
 import Image from 'next/image';
 import { Plus } from 'lucide-react';
+import { useLandingPageSettings } from '@/hooks/use-landing-page-settings';
 
 interface PageProps {
     title: string;
@@ -12,6 +13,8 @@ interface PageProps {
 
 export const RightPage = ({ title, items, onItemClick, onAddToCart }: PageProps) => {
     const fallbackImg = '/images/menu-listing/menu-grid/Tiramisu.png';
+    const { data: settings } = useLandingPageSettings();
+    const showDishImage = settings?.showDishImage ?? true;
 
     return (
         <div className="w-full h-full relative flex flex-col font-serif overflow-hidden bg-[#FDFBF7]">
@@ -30,7 +33,7 @@ export const RightPage = ({ title, items, onItemClick, onAddToCart }: PageProps)
                     <div className="w-[30px] h-[1.5px] md:h-[2px] bg-[#C5A059] mx-auto mt-[2%] md:mt-[3%] shadow-sm"></div>
                 </div>
 
-                {/* DANH SÁCH 3 MÓN - ÉP CHIỀU CAO VỪA KHÍT (max-h-[31%]) ĐỂ KHÔNG BỊ TRÀN TRÊN MOBILE */}
+                {/* DANH SÁCH 3 MÓN - ÉP CHIỀU CAO VỪA KHÍT (max-h-[31%]) ĐỀ KHÔNG BỊ TRÀN TRÊN MOBILE */}
                 <div className="flex flex-col gap-[3%] md:gap-[4%] grow justify-start h-full pb-2">
                     {items.map((item, idx) => {
                         // Logic Xử lý đường dẫn ảnh từ Backend
@@ -46,20 +49,22 @@ export const RightPage = ({ title, items, onItemClick, onAddToCart }: PageProps)
                                 className="flex flex-row items-center gap-3 md:gap-4 bg-white/60 p-2 md:p-3 rounded-lg md:rounded-xl border border-[#C5A059]/20 shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer group flex-1 max-h-[31%]"
                             >
                                 {/* Ảnh */}
-                                <div className="w-[32%] md:w-[36%] h-full min-h-[65px] md:min-h-[80px] rounded-md md:rounded-lg overflow-hidden relative shadow-inner shrink-0">
-                                    <Image
-                                        src={imgSrc}
-                                        alt={item.name}
-                                        fill
-                                        sizes="(max-width: 768px) 30vw, 20vw"
-                                        style={{ objectFit: 'cover' }}
-                                        className="group-hover:scale-110 transition-transform duration-700 ease-out"
-                                        onError={(e) => {
-                                            e.currentTarget.src = fallbackImg;
-                                            e.currentTarget.srcset = fallbackImg;
-                                        }}
-                                    />
-                                </div>
+                                {showDishImage && (
+                                    <div className="w-[32%] md:w-[36%] h-full min-h-[65px] md:min-h-[80px] rounded-md md:rounded-lg overflow-hidden relative shadow-inner shrink-0">
+                                        <Image
+                                            src={imgSrc}
+                                            alt={item.name}
+                                            fill
+                                            sizes="(max-width: 768px) 30vw, 20vw"
+                                            style={{ objectFit: 'cover' }}
+                                            className="group-hover:scale-110 transition-transform duration-700 ease-out"
+                                            onError={(e) => {
+                                                e.currentTarget.src = fallbackImg;
+                                                e.currentTarget.srcset = fallbackImg;
+                                            }}
+                                        />
+                                    </div>
+                                )}
 
                                 {/* Thông tin món */}
                                 <div className="flex-1 flex flex-col py-0.5 md:py-1 pr-1 h-full justify-between overflow-hidden">
