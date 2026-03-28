@@ -955,11 +955,12 @@
       "notifications": {
         "loadError": "Failed to load customer details",
         "deleteSuccess": "Customer deleted successfully",
-        "deleteError": "Failed to delete customer"
+        "deleteError": "Failed to delete customer",
+        "deleteHasDependencies": "Cannot delete a customer who has existing orders or reservations"
       },
       "deleteModal": {
         "title": "Delete Customer",
-        "message": "Are you sure you want to delete customer '{name}'? This action cannot be undone.",
+        "message": "Are you sure you want to delete customer {name}? This action cannot be undone.",
         "confirm": "Delete",
         "cancel": "Cancel"
       }
@@ -993,7 +994,8 @@
       },
       "notifications": {
         "createSuccess": "Customer created successfully",
-        "createError": "Failed to create customer"
+        "createError": "Failed to create customer",
+        "phoneAlreadyExists": "A customer with this phone number already exists"
       }
     },
     "Edit": {
@@ -1025,7 +1027,8 @@
       },
       "notifications": {
         "updateSuccess": "Customer updated successfully",
-        "updateError": "Failed to update customer"
+        "updateError": "Failed to update customer",
+        "phoneAlreadyExists": "A customer with this phone number already exists"
       }
     },
     "Detail": {

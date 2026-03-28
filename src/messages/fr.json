@@ -1799,7 +1799,8 @@
         },
         "notifications": {
           "createSuccess": "Client créé avec succès",
-          "createError": "Échec de la création du client"
+          "createError": "Échec de la création du client",
+          "phoneAlreadyExists": "Un client avec ce numéro de téléphone existe déjà"
         }
       },
       "Edit": {
@@ -1831,7 +1832,8 @@
         },
         "notifications": {
           "updateSuccess": "Client mis à jour avec succès",
-          "updateError": "Échec de la mise à jour du client"
+          "updateError": "Échec de la mise à jour du client",
+          "phoneAlreadyExists": "Un client avec ce numéro de téléphone existe déjà"
         }
       },
       "Detail": {

@@ -955,11 +955,12 @@
       "notifications": {
         "loadError": "Échec du chargement des détails du client",
         "deleteSuccess": "Client supprimé avec succès",
-        "deleteError": "Échec de la suppression du client"
+        "deleteError": "Échec de la suppression du client",
+        "deleteHasDependencies": "Impossible de supprimer un client ayant des commandes ou des réservations"
       },
       "deleteModal": {
         "title": "Supprimer le client",
-        "message": "Êtes-vous sûr de vouloir supprimer le client '{name}' ? Cette action est irréversible.",
+        "message": "Êtes-vous sûr de vouloir supprimer le client {name} ? Cette action est irréversible.",
         "confirm": "Supprimer",
         "cancel": "Annuler"
       }
@@ -993,7 +994,8 @@
       },
       "notifications": {
         "createSuccess": "Client créé avec succès",
-        "createError": "Échec de la création du client"
+        "createError": "Échec de la création du client",
+        "phoneAlreadyExists": "Un client avec ce numéro de téléphone existe déjà"
       }
     },
     "Edit": {
@@ -1025,7 +1027,8 @@
       },
       "notifications": {
         "updateSuccess": "Client mis à jour avec succès",
-        "updateError": "Échec de la mise à jour du client"
+        "updateError": "Échec de la mise à jour du client",
+        "phoneAlreadyExists": "Un client avec ce numéro de téléphone existe déjà"
       }
     },
     "Detail": {

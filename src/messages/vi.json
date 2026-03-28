@@ -1985,7 +1985,8 @@
       },
       "notifications": {
         "createSuccess": "Thêm khách hàng thành công",
-        "createError": "Không thể thêm khách hàng"
+        "createError": "Không thể thêm khách hàng",
+        "phoneAlreadyExists": "Số điện thoại này đã được sử dụng bởi khách hàng khác"
       }
     },
     "Edit": {
@@ -2017,7 +2018,8 @@
       },
       "notifications": {
         "updateSuccess": "Cập nhật khách hàng thành công",
-        "updateError": "Không thể cập nhật khách hàng"
+        "updateError": "Không thể cập nhật khách hàng",
+        "phoneAlreadyExists": "Số điện thoại này đã được sử dụng bởi khách hàng khác"
       }
     },
     "Detail": {

@@ -955,11 +955,12 @@
       "notifications": {
         "loadError": "Không thể tải thông tin khách hàng",
         "deleteSuccess": "Xóa khách hàng thành công",
-        "deleteError": "Không thể xóa khách hàng"
+        "deleteError": "Không thể xóa khách hàng",
+        "deleteHasDependencies": "Không thể xóa khách hàng đã có đơn hàng hoặc đặt bàn"
       },
       "deleteModal": {
         "title": "Xóa khách hàng",
-        "message": "Bạn có chắc chắn muốn xóa khách hàng '{name}'? Hành động này không thể hoàn tác.",
+        "message": "Bạn có chắc chắn muốn xóa khách hàng {name}? Hành động này không thể hoàn tác.",
         "confirm": "Xóa",
         "cancel": "Hủy"
       }
@@ -993,7 +994,8 @@
       },
       "notifications": {
         "createSuccess": "Thêm khách hàng thành công",
-        "createError": "Không thể thêm khách hàng"
+        "createError": "Không thể thêm khách hàng",
+        "phoneAlreadyExists": "Số điện thoại này đã được sử dụng bởi khách hàng khác"
       }
     },
     "Edit": {
@@ -1025,7 +1027,8 @@
       },
       "notifications": {
         "updateSuccess": "Cập nhật khách hàng thành công",
-        "updateError": "Không thể cập nhật khách hàng"
+        "updateError": "Không thể cập nhật khách hàng",
+        "phoneAlreadyExists": "Số điện thoại này đã được sử dụng bởi khách hàng khác"
       }
     },
     "Detail": {

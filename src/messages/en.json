@@ -1798,7 +1798,8 @@
       },
       "notifications": {
         "createSuccess": "Customer created successfully",
-        "createError": "Failed to create customer"
+        "createError": "Failed to create customer",
+        "phoneAlreadyExists": "A customer with this phone number already exists"
       }
     },
     "Edit": {
@@ -1830,7 +1831,8 @@
       },
       "notifications": {
         "updateSuccess": "Customer updated successfully",
-        "updateError": "Failed to update customer"
+        "updateError": "Failed to update customer",
+        "phoneAlreadyExists": "A customer with this phone number already exists"
       }
     },
     "Detail": {
