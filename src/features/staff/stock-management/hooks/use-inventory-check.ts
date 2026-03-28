@@ -99,7 +99,7 @@ export function useInventoryCheck() {
             await Promise.all(promises);
 
             toast.success("Chốt kiểm kê thành công!", { id: toastId });
-            router.push("/dashboard/ingredients");
+            router.push("/dashboard/inventory/items");
         } catch (error) {
             console.error("Audit submit error:", error);
             toast.error("Có lỗi xảy ra khi cập nhật tồn kho. Vui lòng thử lại.", { id: toastId });

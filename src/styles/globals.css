@@ -169,6 +169,57 @@
   }
 }
 
+/* 5.1 Global Scrollbar */
+@layer base {
+  :root {
+    --al-scrollbar-size: 6px;
+    --al-scrollbar-size-hover: 10px;
+    --al-scrollbar-thumb: #b0b7c3;
+    --al-scrollbar-thumb-hover: #8b95a7;
+    --al-scrollbar-track: transparent;
+  }
+
+  /* Firefox */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--al-scrollbar-thumb) var(--al-scrollbar-track);
+  }
+
+  *:hover {
+    scrollbar-color: var(--al-scrollbar-thumb-hover) var(--al-scrollbar-track);
+  }
+
+  /* Chromium/WebKit */
+  *::-webkit-scrollbar {
+    width: var(--al-scrollbar-size);
+    height: var(--al-scrollbar-size);
+  }
+
+  *:hover::-webkit-scrollbar {
+    width: var(--al-scrollbar-size-hover);
+    height: var(--al-scrollbar-size-hover);
+  }
+
+  *::-webkit-scrollbar-track {
+    background: var(--al-scrollbar-track);
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background: var(--al-scrollbar-thumb);
+    border-radius: 999px;
+  }
+
+  *:hover::-webkit-scrollbar-thumb {
+    background: var(--al-scrollbar-thumb-hover);
+  }
+
+  *::-webkit-scrollbar-button {
+    width: 0;
+    height: 0;
+    display: none;
+  }
+}
+
 /* 6. Utilities */
 @layer utilities {
   .no-scrollbar::-webkit-scrollbar {

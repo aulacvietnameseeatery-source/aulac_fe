@@ -111,8 +111,10 @@ export const useNotificationStore = create<NotificationState & NotificationActio
       set((state) => {
         const existingIds = new Set(state.items.map((n) => n.id));
         const unique = newItems.filter((n) => !existingIds.has(n.id));
+        const mergedItems = [...state.items, ...unique];
         return {
-          items: [...state.items, ...unique],
+          items: mergedItems,
+          unreadCount: mergedItems.filter((n) => !n.isRead).length,
           lastChangeSource: "list-sync",
           lastAddedIds: [],
         };
