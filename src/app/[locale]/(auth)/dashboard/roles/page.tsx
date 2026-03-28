@@ -31,13 +31,13 @@ const RoleListContent = () => {
 
   // Action Handlers
   const handleView = (role: RoleDto) => {
-    router.push(`/${locale}/dashboard/roles/${role.roleId}`);
+    router.push(`/dashboard/roles/${role.roleId}`);
   };
   const handleEdit = (role: RoleDto) => {
-    router.push(`/${locale}/dashboard/roles/${role.roleId}/edit`);
+    router.push(`/dashboard/roles/${role.roleId}/edit`);
   };
   const handleCreate = () => {
-    router.push(`/${locale}/dashboard/roles/create`);
+    router.push(`/dashboard/roles/create`);
   };
 
   const handleDeleteClick = (role: RoleDto) => {
