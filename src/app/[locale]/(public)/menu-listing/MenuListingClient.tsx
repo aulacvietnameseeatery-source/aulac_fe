@@ -49,6 +49,8 @@ export default function MenuListingClient({ initialMenuData, tableFromUrl, token
     useEffect(() => {
         if (typeof window === 'undefined') return;
 
+        let ignored = false;
+
         if (!tableFromUrl) {
             sessionStorage.removeItem(TABLE_STORAGE_KEY);
             sessionStorage.removeItem(CART_STORAGE_KEY);
@@ -79,6 +81,7 @@ export default function MenuListingClient({ initialMenuData, tableFromUrl, token
             const tokenParam = tokenFromUrl ? `?token=${encodeURIComponent(tokenFromUrl)}` : '';
             api.post(`/api/public/tables/${encodeURIComponent(tableFromUrl)}/occupy${tokenParam}`, {})
                 .then(() => {
+                    if (ignored) return;
                     // Bàn trống, occupy thành công → cho phép truy cập
                     setTableNumber(tableFromUrl);
                     sessionStorage.setItem(TABLE_STORAGE_KEY, tableFromUrl);
@@ -87,6 +90,7 @@ export default function MenuListingClient({ initialMenuData, tableFromUrl, token
                     }
                 })
                 .catch((error: any) => {
+                    if (ignored) return;
                     if (error.response?.status === 409) {
                         toast.error(tMenu("err_table_occupied_access"));
                     } else if (error.response?.status === 404) {
@@ -106,8 +110,10 @@ export default function MenuListingClient({ initialMenuData, tableFromUrl, token
                     setCurrentOrderId(null);
                     router.replace('/menu-listing');
                 })
-                .finally(() => setIsValidatingTable(false));
+                .finally(() => { if (!ignored) setIsValidatingTable(false); });
         }
+
+        return () => { ignored = true; };
     }, [tableFromUrl, tokenFromUrl, router]);
 
     useEffect(() => {
