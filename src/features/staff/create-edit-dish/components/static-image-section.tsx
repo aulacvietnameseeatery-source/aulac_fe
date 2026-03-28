@@ -1,17 +1,12 @@
-import React, { useState, useEffect } from "react";
-import { ImagePlus, X } from "lucide-react";
+import React from "react";
 import { useTranslations } from "next-intl";
-import { toast } from "sonner";
-import { processImageFile, isHeicFile } from "@/lib/image-processing";
+import { ALFileUploader, ALExistingFile } from "@/components/ui/al-file-uploader";
 
 type ExistingImage = {
   mediaId: number;
   url: string;
+  isPrimary?: boolean; // Thêm isPrimary nếu backend có trả về
 };
-
-const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
-const MAX_FILE_COUNT = 5;
-const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/gif", "image/webp", "image/heic", "image/heif"];
 
 export const StaticImageSection: React.FC<{
   images: File[];
@@ -20,169 +15,51 @@ export const StaticImageSection: React.FC<{
   onRemoveExisting: (mediaId: number) => void;
 }> = ({ images, existingImages, onChange, onRemoveExisting }) => {
   const t = useTranslations("Dish.Form.media");
-  const [newImagePreviews, setNewImagePreviews] = useState<string[]>([]);
 
-  /* ---------- Cleanup object URLs ---------- */
-  useEffect(() => {
-    return () => {
-      newImagePreviews.forEach((url) => URL.revokeObjectURL(url));
-    };
-  }, [newImagePreviews]);
-
-  /* ---------- Upload new images ---------- */
-  const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files) return;
-
-    const selectedFiles = Array.from(e.target.files);
-    
-    // 1. Validate tổng số lượng ảnh (Ảnh đã có + Ảnh mới chọn)
-    const currentTotal = (existingImages?.length || 0) + images.length;
-    if (currentTotal + selectedFiles.length > MAX_FILE_COUNT) {
-      // Báo lỗi bằng toast
-      toast.error(t("validation.maxImages") || `Bạn chỉ được tải lên tối đa ${MAX_FILE_COUNT} ảnh`);
-      e.target.value = ""; // Reset input
-      return;
-    }
-
-    const validFiles: File[] = [];
-
-    // Lọc qua từng file để check size và type
-    for (const file of selectedFiles) {
-      // 2. Validate định dạng (also accept HEIC via extension check)
-      if (!ALLOWED_TYPES.includes(file.type) && !isHeicFile(file)) {
-        toast.error(`${t("validation.invalidFormat") || "Định dạng không hợp lệ"}: ${file.name}`);
-        continue;
-      }
-      
-      // 3. Validate dung lượng
-      if (file.size > MAX_FILE_SIZE) {
-        toast.error(`${t("validation.maxSize") || "Dung lượng vượt quá 5MB"}: ${file.name}`);
-        continue;
-      }
-      
-      validFiles.push(file);
-    }
-
-    if (validFiles.length === 0) {
-      e.target.value = ""; // Reset input
-      return;
-    }
-
-    // Process images (HEIC conversion + compression)
-    const processedFiles: File[] = [];
-    for (const file of validFiles) {
-      try {
-        processedFiles.push(await processImageFile(file));
-      } catch {
-        processedFiles.push(file);
-      }
-    }
-
-    const previews = processedFiles.map((f) => URL.createObjectURL(f));
-
-    setNewImagePreviews((prev) => [...prev, ...previews]);
-    onChange([...images, ...processedFiles]);
-    
-    e.target.value = "";
-  };
-
-  /* ---------- Remove NEW image ---------- */
-  const removeNewImage = (index: number) => {
-    setNewImagePreviews((prev) => prev.filter((_, i) => i !== index));
-    onChange(images.filter((_, i) => i !== index));
-  };
-
-  /* ---------- Remove EXISTING image ---------- */
-  const removeExistingImage = (mediaId: number) => {
-    onRemoveExisting(mediaId);
-  };
-
-  const currentTotal = (existingImages?.length || 0) + images.length;
-  const canUploadMore = currentTotal < MAX_FILE_COUNT;
+  // Map cấu trúc dữ liệu của existingImages sang chuẩn của ALFileUploader
+  const mappedExistingFiles: ALExistingFile[] = (existingImages || []).map(
+    (img) => ({
+      id: img.mediaId,
+      url: img.url,
+      isPrimary: img.isPrimary,
+    })
+  );
 
   return (
-    <div className="p-0">
-      {/* Grid 2 columns */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+    <div className="relative h-max overflow-hidden w-full pb-2">
+      <ALFileUploader
+        variant="gallery" 
+
+        className="
+          [&>div:first-of-type]:!grid 
+          [&>div:first-of-type]:!grid-cols-2 
+          sm:[&>div:first-of-type]:!grid-cols-3 
+          md:[&>div:first-of-type]:!grid-cols-4 
+          lg:[&>div:first-of-type]:!grid-cols-5 
+          [&>div:first-of-type]:!gap-3
+          [&>div:first-of-type>div]:!aspect-square 
+          [&>div:first-of-type>div]:!h-auto
+          [&>div:first-of-type>button]:!aspect-square 
+          [&>div:first-of-type>button]:!h-auto
+        "
+        existingFiles={mappedExistingFiles}
+        onDeleteExisting={(id) => onRemoveExisting(Number(id))}
+
+        pendingFiles={images}
+        onPendingChange={onChange}
+
+        multiple={true}
+        maxFiles={5}
+        maxSizeBytes={5 * 1024 * 1024} // 5MB
+        accept=".jpg,.jpeg,.png,.gif,.webp,.heic,.heif,image/jpeg,image/png,image/gif,image/webp,image/heic,image/heif"
+        acceptHint={["JPG", "PNG", "GIF", "WEBP", "HEIC"]}
         
-        {/* ===== EXISTING IMAGES ===== */}
-        {existingImages?.map((img) => (
-          <div
-            key={`existing-${img.mediaId}`}
-            className="group relative aspect-square rounded-lg border border-gray-200 overflow-hidden bg-gray-100"
-          >
-            <img
-              src={`${img.url}`}
-              alt="existing"
-              className="w-full h-full object-cover"
-            />
-
-            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-start justify-end p-2">
-              <button
-                type="button"
-                onClick={() => removeExistingImage(img.mediaId)}
-                className="bg-white/90 hover:bg-red-500 hover:text-white text-gray-600 p-1.5 rounded-full shadow-sm opacity-0 group-hover:opacity-100"
-              >
-                <X size={14} />
-              </button>
-            </div>
-
-            <div className="absolute bottom-2 left-2 bg-black/60 text-white text-[10px] px-1.5 py-0.5 rounded">
-              {t("existing")}
-            </div>
-          </div>
-        ))}
-
-        {/* Render Uploaded Images */}
-        {newImagePreviews.map((src, idx) => (
-          <div key={idx} className="group relative aspect-square rounded-lg border border-gray-200 overflow-hidden bg-gray-100">
-            <img src={src} alt="uploaded" className="w-full h-full object-cover transition-transform group-hover:scale-105" />
-            
-            {/* Overlay & Remove Button */}
-            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-start justify-end p-2">
-              <button
-                type="button"
-                onClick={() => removeNewImage(idx)}
-                className="bg-white/90 hover:bg-red-500 hover:text-white text-gray-600 p-1.5 rounded-full shadow-sm opacity-0 group-hover:opacity-100 transition-all transform scale-90 group-hover:scale-100"
-              >
-                <X size={14} />
-              </button>
-            </div>
-            
-            {/* Badge index */}
-            <div className="absolute bottom-2 left-2 bg-black/60 text-white text-[10px] px-1.5 py-0.5 rounded backdrop-blur-sm">
-              #{idx + 1}
-            </div>
-          </div>
-        ))}
-
-        {/* The Upload Button (Always at the end) */}
-        {canUploadMore && (
-          <label className="cursor-pointer group relative aspect-square rounded-lg border-2 border-dashed border-gray-300 hover:border-blue-500 hover:bg-blue-50/50 transition-all flex flex-col items-center justify-center gap-2">
-            <input
-              type="file"
-              multiple
-              accept=".jpg,.jpeg,.png,.gif,.webp,.heic,.heif,image/jpeg,image/png,image/gif,image/webp,image/heic,image/heif"
-              className="hidden"
-              onChange={handleUpload}
-            />
-            <div className="p-3 rounded-full bg-gray-100 group-hover:bg-blue-100 group-hover:text-blue-600 transition-colors">
-              <ImagePlus size={20} className="text-gray-400 group-hover:text-blue-600" />
-            </div>
-            <span className="text-xs font-semibold text-gray-500 group-hover:text-blue-700 text-center px-2">
-              {t("addImage") || "Thêm ảnh"}
-            </span>
-          </label>
-        )}
-
-      </div>
-      
-      {/* Helper text footer */}
-      <div className="flex flex-col items-center gap-1 mt-3">
+      />
+      <div className="flex flex-col items-center gap-1 mt-4">
          <p className="text-xs text-gray-400 text-center">
            {t("recommended")}
          </p>
-         <p className="text-[11px] text-gray-400 font-medium">
+         <p className="text-[11px] text-gray-400 font-medium text-center">
             ({t("recommended2")})
          </p>
       </div>

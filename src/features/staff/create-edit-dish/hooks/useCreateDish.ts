@@ -6,22 +6,12 @@ import { toast } from "sonner";
 
 
 export function useCreateDish() {
-  const [loading, setLoading] = useState(false);
-
   const onCreate = async (
     data: DishFormValues,
     images: DishImagesState
   ) => {
-    try {
-      setLoading(true);
-      await createDish(data, images);
-
-    } catch {
-
-    } finally {
-      setLoading(false);
-    }
+    return await createDish(data, images);
   };
 
-  return { onCreate, loading };
+  return { onCreate };
 }

@@ -13,7 +13,7 @@
     "save": "Lưu",
     "saving": "Đang lưu...",
     "notifications": {
-      "saveSuccess": "Đã lưu cài đặt nhóm '{group}' thành công.",
+      "saveSuccess": "Đã lưu cài đặt thành công.",
       "createSuccess": "Tạo cài đặt mới thành công.",
       "saveError": "Lưu cài đặt thất bại."
     },
@@ -109,6 +109,16 @@
         "dishImage": "Ảnh món ăn {index}"
       }
     },
+    "landing_page": {
+      "title": "Cài đặt ẩn hiện hình ảnh món ăn trên menu",
+      "description": "Cấu hình hiển thị cho trang Landing Page.",
+      "show_dish_image": "Hiển thị ảnh món ăn",
+      "show_dish_imageDesc": "Bật/Tắt hiển thị hình ảnh tiêu chuẩn trong chi tiết món ăn.",
+      "show_dish_image360": "Hiển thị ảnh 360 độ",
+      "show_dish_image360Desc": "Bật/Tắt hiển thị xoay 360 độ trong chi tiết món ăn.",
+      "show_dish_video": "Hiển thị video món ăn",
+      "show_dish_videoDesc": "Bật/Tắt hiển thị video giới thiệu trong chi tiết món ăn."
+    },
     "DishModal": {
       "noCategory": "Chưa có danh mục",
       "dishLabel": "MÓN",
@@ -172,8 +182,8 @@
       "nothingToTranslate": "Không có gì để dịch.",
       "uploadSuccess": "Tải tệp lên thành công",
       "uploadError": "Tải tệp lên thất bại",
-      "fileSizeError": "Dung lượng ảnh phải nhỏ hơn 5MB",
-      "videoSizeError": "Dung lượng video phải nhỏ hơn 50MB",
+      "fileSizeError": "Dung lượng ảnh phải nhỏ hơn {max}MB",
+      "videoSizeError": "Dung lượng video phải nhỏ hơn {max}MB",
       "invalidImageFormatError": "Định dạng ảnh không hợp lệ. Chỉ chấp nhận JPG, PNG, GIF, WEBP.",
       "invalidVideoFormatError": "Định dạng video không hợp lệ. Chỉ chấp nhận MP4.",
       "videoDurationError": "Thời lượng video không được vượt quá 30 giây.",
@@ -325,7 +335,9 @@
         "DECIMAL": "Số thập phân",
         "BOOL": "Boolean",
         "JSON": "JSON"
-      }
+      },
+      "active": "Đang bật",
+      "inactive": "Đang tắt"
     }
   }
 }

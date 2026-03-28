@@ -90,7 +90,7 @@ export const CurrentTicket: React.FC<Props> = ({
           <div className="flex items-center gap-2 overflow-hidden">
             <UserSearch className="w-4 h-4 text-[#1A3A52]/60 shrink-0" />
             <span className="text-sm font-semibold text-[#1A3A52] truncate">
-              {customer ? `${customer.fullName}` : t('add')} {t('customer')}
+              {customer ? `${customer.fullName}` : t('guest')}
             </span>
           </div>
           <span className="text-[10px] font-bold text-[#1A3A52]/50 uppercase bg-[#D5BA98]/20 px-2 py-1 rounded group-hover:bg-[#1A3A52] group-hover:text-[#D5BA98] transition">
@@ -166,7 +166,7 @@ export const CurrentTicket: React.FC<Props> = ({
         <div className="grid grid-cols-3 gap-2">
           <button
             onClick={onCreateInvoice}
-            disabled={cart.length === 0}
+            disabled={isPlaceOrderDisabled}
             className="col-span-1 bg-white border-2 border-[#1A3A52] text-[#1A3A52] font-bold py-3 rounded-xl flex items-center justify-center gap-2 disabled:opacity-50 disabled:border-[#D5BA98] text-sm hover:bg-[#FDFBF9] transition"
           >
             <FileText className="w-4 h-4" /> Invoice

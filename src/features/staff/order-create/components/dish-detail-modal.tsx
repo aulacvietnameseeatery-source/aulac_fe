@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { X, ShoppingBag, Plus, Minus } from 'lucide-react';
 import { DishDto } from '../types/create-order.types';
-import { BASE_URL } from "@/lib/http";
 import { useTranslations } from 'next-intl';
 
 interface Props {
@@ -20,7 +19,7 @@ export const DishDetailModal: React.FC<Props> = ({ isOpen, dish, onClose, onAdd,
 
   if (!isOpen || !dish) return null;
 
-  const imgSrc = dish.imageUrl ? `${BASE_URL}${dish.imageUrl}` : '/images/logo.png';
+  const imgSrc = dish.imageUrl ? `${dish.imageUrl}` : '/images/logo.png';
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">

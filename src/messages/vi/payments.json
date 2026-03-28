@@ -1,0 +1,33 @@
+{
+  "Payment": {
+    "List": {
+      "title": "Lịch sử thanh toán",
+      "description": "Xem và theo dõi tất cả các giao dịch thanh toán.",
+      "searchPlaceholder": "Tìm kiếm theo mã đơn hoặc số điện thoại...",
+      "export": "Xuất Excel",
+      "exportAll": "Xuất Tất cả",
+      "exportingAll": "Đang xuất toàn bộ dữ liệu...",
+      "labels": {
+        "guest": "Khách vãng lai",
+        "cash": "Tiền mặt",
+        "card": "Thẻ",
+        "transfer": "Chuyển khoản"
+      },
+      "table": {
+        "no": "STT",
+        "orderId": "Mã Đơn",
+        "customer": "Khách hàng",
+        "method": "Phương thức",
+        "receivedAmount": "Tiền nhận",
+        "changeAmount": "Tiền thừa",
+        "finalAmount": "Thực thu",
+        "paidAt": "Thời gian"
+      },
+      "notifications": {
+        "noDataExport": "Không có dữ liệu để xuất",
+        "exportSuccess": "Xuất file Excel thành công",
+        "exportError": "Đã xảy ra lỗi khi xuất dữ liệu"
+      }
+    }
+  }
+}

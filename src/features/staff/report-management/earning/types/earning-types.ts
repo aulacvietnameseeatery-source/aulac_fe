@@ -1,17 +1,14 @@
 import { BaseReportFilterParams } from "../../shared/types/shared-types";
 
-export interface EarningRecordDto {
-    earningId: string;
+export interface EarningTableItemDto {
     date: string;
-    orderId: string;
-    customerName: string;
-    orderType: string;
-    paymentMethod: string;
-    grandTotal: number;
-    status: string;
+    totalOrders: number;
+    grossRevenue: number;
+    netRevenue: number;
+    totalTax: number;
 }
 
 export interface EarningFilterParams extends BaseReportFilterParams {
-    customerIds?: number[];
-    paymentMethodIds?: number[];
+    startDate?: string;
+    endDate?: string;
 }

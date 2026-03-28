@@ -2,7 +2,7 @@
 'use client';
 
 import { useState, useEffect, useCallback, useMemo } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/routing"
 import { updateRole, getRoleForEdit } from "../services/role-edit.service";
 import { UpdateRoleRequest, PermissionGroupDto } from "../types/role-edit.types";
 import { useTranslations } from "next-intl";

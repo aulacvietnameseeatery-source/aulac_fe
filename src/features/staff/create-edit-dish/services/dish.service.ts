@@ -50,9 +50,9 @@ export async function createDish(
     formData.append("video", images.video);
   }
 
-  const res =  api.post<ApiResponse<void>>("/api/dishes", formData);
+  const res = await api.post<ApiResponse<void>>("/api/dishes", formData);
 
-  if (!(await res).success) throw new Error("Create dish failed");
+  if (!res.success) throw new Error("Create dish failed");
 }
 
 export async function getDishById(dishId : number) {
@@ -131,9 +131,9 @@ export async function editDish(
 
   formData.append("removedMediaIds", JSON.stringify(removedMediaIds));
 
-  const res =  api.put<ApiResponse<void>>(`/api/dishes/${dishId}/edit`, formData);
+  const res = await api.put<ApiResponse<void>>(`/api/dishes/${dishId}/edit`, formData);
 
-  if (!(await res).success) throw new Error("Edit dish failed");
+  if (!res.success) throw new Error("Edit dish failed");
 }
 
 export async function translateDishContent(payload: TranslateDishRequest) {

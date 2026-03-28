@@ -8,6 +8,8 @@ interface SwitchProps {
     onChange: (checked: boolean) => void;
     disabled?: boolean;
     showLabel?: boolean; // Cho phép ẩn/hiện chữ Active/Inactive bên cạnh
+    activeLabel?: string;
+    inactiveLabel?: string;
 }
 
 export const Switch = ({

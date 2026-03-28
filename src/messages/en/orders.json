@@ -231,6 +231,7 @@
         "select": "Select",
         "change": "Change",
         "add": "Add",
+        "guest": "Guest",
         "note": "Add a note (less spicy, no onions, etc.)",
         "subtotal": "Subtotal",
         "tax": "Tax (10%)",
@@ -291,8 +292,24 @@
           "Completed": "Completed",
           "Cancelled": "Cancelled"
         },
+        "itemStatus": {
+          "PENDING": "Pending",
+          "COMPLETED": "Completed",
+          "CANCELLED": "Cancelled",
+          "CREATED": "Created",
+          "IN_PROGRESS": "In Progress",
+          "READY": "Ready",
+          "SERVED": "Served",
+          "REJECTED": "Rejected"
+        },
+        "paymentMethod": {
+          "CASH": "cash",
+          "CARD": "card",
+          "QR": "QR Code"
+        },
         "tableLabel": "Table",
-        "customerLabel": "Customer"
+        "customerLabel": "Customer",
+        "returnToCreate": "New Order"
       },
       "RecentOrders": {
         "title": "Recent Orders",

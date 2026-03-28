@@ -130,70 +130,8 @@ export const PrintOrderModal: React.FC<PrintOrderModalProps> = ({ order, isOpen,
         paymentInfo: paymentInfo
     };
 
-    // --- LOGIC IN BẰNG IFRAME (Fix lỗi trang trắng) ---
+    // --- LOGIC IN ---
     const handlePrint = () => {
-        // const printContent = printRef.current;
-        // if (!printContent) return;
-
-        // // 1. Tạo iframe ẩn
-        // const iframe = document.createElement('iframe');
-        // iframe.style.position = 'fixed';
-        // iframe.style.right = '0';
-        // iframe.style.bottom = '0';
-        // iframe.style.width = '0';
-        // iframe.style.height = '0';
-        // iframe.style.border = '0';
-        // document.body.appendChild(iframe);
-
-        // const iframeDoc = iframe.contentWindow?.document;
-        // if (!iframeDoc) return;
-
-        // // 2. Clone CSS
-        // const styles = Array.from(document.querySelectorAll('style, link[rel="stylesheet"]'))
-        //     .map(s => s.outerHTML)
-        //     .join('');
-
-        // // 3. Viết nội dung vào iframe
-        // iframeDoc.open();
-        // iframeDoc.write(`
-        //     <!DOCTYPE html>
-        //     <html>
-        //         <head>
-        //             <title>${type === 'invoice' ? 'Invoice' : 'Receipt'} #${order.orderId}</title>
-        //             ${styles}
-        //             <style>
-        //                 @page { margin: 0; size: 80mm auto; }
-        //                 body { 
-        //                     background: white !important; 
-        //                     color: black !important;
-        //                     margin: 0; 
-        //                     padding: 5mm; 
-        //                     width: 80mm;
-        //                     -webkit-print-color-adjust: exact; 
-        //                     print-color-adjust: exact;
-        //                 }
-        //             </style>
-        //         </head>
-        //         <body>
-        //             ${printContent.outerHTML}
-        //         </body>
-        //     </html>
-        // `);
-        // iframeDoc.close();
-
-        // // 4. Delay một chút để DOM vẽ xong rồi gọi lệnh in
-        // setTimeout(() => {
-        //     iframe.contentWindow?.focus();
-        //     iframe.contentWindow?.print();
-            
-        //     // Dọn dẹp iframe sau 1 khoảng thời gian đủ dài
-        //     setTimeout(() => {
-        //         if (document.body.contains(iframe)) {
-        //             document.body.removeChild(iframe);
-        //         }
-        //     }, 3000);
-        // }, 500); 
-
         window.print();
     };
 

@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/routing"
 import { stockService } from "../services/stock.service";
 import type { IngredientDto } from "@/features/staff/ingredient-management/types/ingredient-types";
 import type { AuditItemState } from "../types/stock.types";

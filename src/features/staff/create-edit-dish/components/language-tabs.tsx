@@ -8,6 +8,7 @@ import { translateDishContent } from "../services/dish.service";
 import { DishI18nDto } from "../types/dish-detail.types";
 import { ALInput } from "@/components/ui/al-input";
 import { Button } from "@/components/ui/button";
+import { useTranslations } from "next-intl";
 
 interface LanguageTabsProps {
   form: UseFormReturn<DishFormValues>;
@@ -26,6 +27,7 @@ export const LanguageTabs: React.FC<LanguageTabsProps> = ({
   activeTab,
   setActiveTab,
 }) => {
+  const t = useTranslations("Dish.Form.multilingual");
   const {
     register,
     getValues,
@@ -96,6 +98,8 @@ export const LanguageTabs: React.FC<LanguageTabsProps> = ({
     });
   };
 
+  const activeTabUpper = activeTab.toUpperCase();
+
   return (
     <div className="flex min-h-100 flex-col">
       <div className="flex items-center justify-between border-b border-gray-100 pr-4 bg-gray-50/30">
@@ -131,7 +135,7 @@ export const LanguageTabs: React.FC<LanguageTabsProps> = ({
           onClick={handleAutoTranslate}
           disabled={translateMutation.isPending}
           className="group h-auto px-3 py-1.5 text-xs font-semibold"
-          data-tooltip-content={`Translate content from ${activeTab.toUpperCase()} to other languages`}
+          data-tooltip-content={t("autoTranslateTooltip", { lang: activeTabUpper })}
           data-tooltip-id="my-tooltip"
         >
           {translateMutation.isPending ? (
@@ -139,7 +143,7 @@ export const LanguageTabs: React.FC<LanguageTabsProps> = ({
           ) : (
             <Sparkles size={14} className="text-purple-600 group-hover:text-purple-800 transition-colors" />
           )}
-          <span className="hidden sm:inline">Auto Translate</span>
+          <span className="hidden sm:inline">{t("autoTranslate")}</span>
         </Button>
       </div>
 
@@ -148,12 +152,12 @@ export const LanguageTabs: React.FC<LanguageTabsProps> = ({
         {/* Dish Name */}
         <div className="space-y-2">
             <label className="text-sm font-semibold text-gray-900">
-              Dish Name ({activeTab.toUpperCase()}) <span className="text-red-500">*</span>
+              {t("fields.dishName")} ({activeTabUpper}) <span className="text-red-500">*</span>
             </label>
             <ALInput
               key={`dishName-${activeTab}`}
               {...register(`i18n.${activeTab}.dishName`)}
-              placeholder={`e.g. Traditional Beef Noodle Soup`}
+              placeholder={t("fields.dishNamePlaceholder")}
               error={errors.i18n?.[activeTab]?.dishName?.message}
             />
         </div>
@@ -161,7 +165,7 @@ export const LanguageTabs: React.FC<LanguageTabsProps> = ({
         {/* Description */}
         <div className="space-y-2">
             <label className="text-sm font-semibold text-gray-900">
-              Description ({activeTab.toUpperCase()})
+              {t("fields.description")} ({activeTabUpper})
             </label>
             <textarea
               key={`description-${activeTab}`}
@@ -171,7 +175,7 @@ export const LanguageTabs: React.FC<LanguageTabsProps> = ({
                 "w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none resize-none text-base",
                 errors.i18n?.[activeTab]?.description ? "border-red-300 bg-red-50" : "border-gray-200"
               )}
-              placeholder={`Describe the taste, ingredients, and story of the dish in ${activeTab.toUpperCase()}...`}
+              placeholder={t("fields.descriptionPlaceholder", { lang: activeTabUpper })}
             />
              {errors.i18n?.[activeTab]?.description && (
               <p className="text-sm text-red-500 font-medium">{errors.i18n[activeTab]?.description?.message}</p>
@@ -181,32 +185,32 @@ export const LanguageTabs: React.FC<LanguageTabsProps> = ({
         {/* Optional Fields Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-600">Short Description</label>
+              <label className="text-sm font-medium text-gray-600">{t("fields.shortDescription")}</label>
               <ALInput
                 key={`shortDescription-${activeTab}`}
                 {...register(`i18n.${activeTab}.shortDescription`)}
-                placeholder="Max 100 chars for mobile view"
+                placeholder={t("fields.shortDescriptionPlaceholder")}
                 error={errors.i18n?.[activeTab]?.shortDescription?.message}
               />
             </div>
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-600">Slogan</label>
+              <label className="text-sm font-medium text-gray-600">{t("fields.slogan")}</label>
               <ALInput
                 key={`slogan-${activeTab}`}
                 {...register(`i18n.${activeTab}.slogan`)}
-                placeholder="e.g. Best seller!"
+                placeholder={t("fields.sloganPlaceholder")}
                 error={errors.i18n?.[activeTab]?.slogan?.message}
               />
             </div>
         </div>
           
         <div className="space-y-2 pt-2 border-t border-dashed border-gray-200">
-              <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Note ({activeTab})</label>
+              <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">{t("fields.note")} ({activeTab})</label>
               <ALInput
                 key={`note-${activeTab}`}
                 {...register(`i18n.${activeTab}.note`)}
                 className="bg-yellow-50/50"
-                placeholder="Note for chefs or waiters regarding this language version..."
+                placeholder={t("fields.notePlaceholder")}
                 error={errors.i18n?.[activeTab]?.note?.message}
               />
         </div>

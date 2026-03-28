@@ -42,6 +42,21 @@
       "placeholder": "Nhập lý do...",
       "confirm": "Xác nhận",
       "cancel": "Hủy"
+    },
+    "kitchen": {
+      "title": "BẾP",
+      "order": "ĐƠN HÀNG",
+      "table": "BÀN",
+      "time": "THỜI GIAN",
+      "newItem": "MÓN MỚI",
+      "cooking": "Đang nấu",
+      "processed": "Đã xử lý",
+      "reason": "LÝ DO",
+      "printedAt": "IN LÚC",
+      "end": "KẾT THÚC",
+      "printTicket": "In Phiếu Bếp",
+      "cancel": "Hủy",
+      "print": "In"
     }
   }
 }

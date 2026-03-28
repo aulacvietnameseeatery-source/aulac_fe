@@ -13,7 +13,7 @@
     "save": "Enregistrer",
     "saving": "Enregistrement...",
     "notifications": {
-      "saveSuccess": "Paramètres du groupe '{group}' enregistrés avec succès.",
+      "saveSuccess": "Paramètres enregistrés avec succès.",
       "createSuccess": "Paramètre créé avec succès.",
       "saveError": "Échec de l'enregistrement des paramètres."
     },
@@ -109,6 +109,16 @@
         "dishImage": "Image du plat signature {index}"
       }
     },
+    "landing_page": {
+      "title": "Paramètres de Visibilité des Médias",
+      "description": "Configurer les options d'affichage de la page d'accueil.",
+      "show_dish_image": "Afficher l'Image",
+      "show_dish_imageDesc": "Activer la visibilité de l'image standard dans les détails du plat.",
+      "show_dish_image360": "Afficher le 360°",
+      "show_dish_image360Desc": "Activer la visibilité de la rotation à 360 degrés dans les détails du plat.",
+      "show_dish_video": "Afficher la Vidéo",
+      "show_dish_videoDesc": "Activer la visibilité de la vidéo d'introduction dans les détails du plat."
+    },
     "DishModal": {
       "noCategory": "Pas de catégorie",
       "dishLabel": "PLAT",
@@ -195,8 +205,8 @@
       "translatedSuccessfully": "Traduit avec succès !",
       "nothingToTranslate": "Rien à traduire.",
       "uploadError": "Échec du téléchargement du fichier",
-      "fileSizeError": "La taille du fichier doit être inférieure à 5 Mo",
-      "videoSizeError": "La taille de la vidéo doit être inférieure à 50 Mo",
+      "fileSizeError": "La taille du fichier doit être inférieure à {max} Mo",
+      "videoSizeError": "La taille de la vidéo doit être inférieure à {max} Mo",
       "invalidImageFormatError": "Format d'image invalide. Seuls JPG, PNG, GIF et WEBP sont acceptés.",
       "invalidVideoFormatError": "Format vidéo invalide. Seul MP4 est accepté.",
       "videoDurationError": "La durée de la vidéo ne doit pas dépasser 30 secondes.",
@@ -348,7 +358,9 @@
         "DECIMAL": "Décimal",
         "BOOL": "Booléen",
         "JSON": "JSON"
-      }
+      },
+      "active": "Actif",
+      "inactive": "Inactif"
     }
   }
 }

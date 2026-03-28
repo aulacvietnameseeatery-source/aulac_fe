@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useTranslations } from "next-intl";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/routing"
 import { CheckCircle } from "lucide-react";
 // Import toast từ thư viện sonner
 import { toast } from "sonner";

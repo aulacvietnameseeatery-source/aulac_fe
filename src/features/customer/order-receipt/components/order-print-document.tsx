@@ -47,7 +47,7 @@ export const OrderPrintDocument = forwardRef<HTMLDivElement, OrderPrintDocumentP
           </div>
           <div className="flex justify-between">
             <span>{t['orderType']}: {order.orderType === 'Dine-in' ? t['dineIn'] : t['takeAway']}</span>
-            {order.tableNumber && <span className="font-bold">{t['table']}: {order.tableNumber}</span>}
+            {order.tableNumber && order.orderType === 'Dine-in' && <span className="font-bold">{t['table']}: {order.tableNumber}</span>}
           </div>
           <div className="flex justify-between">
             <span>{t['customer']}:</span>
