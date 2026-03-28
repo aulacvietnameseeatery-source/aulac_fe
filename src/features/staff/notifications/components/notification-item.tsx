@@ -155,15 +155,16 @@ export function NotificationItem({
   );
 }
 
-// UTC-safe relative time helper using centralized date utilities.
+// Relative time helper: diff is timezone-independent (UTC ms vs UTC now),
+// but the fallback absolute date is displayed in Swiss timezone via dateUtils.formatLocal.
 function getRelativeTimeUtcSafe(
   dateStr: string,
   t: ReturnType<typeof useTranslations<"Notifications">>
 ): string {
   if (!dateStr) return "";
 
-  const utcSafeDate = dateUtils.formatLocal(dateStr, "yyyy-MM-dd'T'HH:mm:ss.SSSxxx");
-  const date = new Date(utcSafeDate).getTime();
+  // new Date() correctly parses ISO UTC strings — no intermediate TZ conversion needed
+  const date = new Date(dateStr).getTime();
   if (Number.isNaN(date)) return "";
 
   const now = Date.now();
@@ -177,25 +178,6 @@ function getRelativeTimeUtcSafe(
   if (diffMin < 60) return t("time.minutesAgo", { count: diffMin });
   if (diffHr < 24) return t("time.hoursAgo", { count: diffHr });
   if (diffDay < 7) return t("time.daysAgo", { count: diffDay });
-  return dateUtils.formatLocal(dateStr, "dd/MM/yyyy");
-}
-
-// _OLD: kept for rollback-safety/history during timezone migration.
-function getRelativeTime_OLD_DEPRECATED(
-  dateStr: string,
-  t: ReturnType<typeof useTranslations<"Notifications">>
-): string {
-  const now = Date.now();
-  const date = new Date(dateStr).getTime();
-  const diffMs = now - date;
-  const diffSec = Math.floor(diffMs / 1000);
-  const diffMin = Math.floor(diffSec / 60);
-  const diffHr = Math.floor(diffMin / 60);
-  const diffDay = Math.floor(diffHr / 24);
-
-  if (diffSec < 60) return t("time.justNow");
-  if (diffMin < 60) return t("time.minutesAgo", { count: diffMin });
-  if (diffHr < 24) return t("time.hoursAgo", { count: diffHr });
-  if (diffDay < 7) return t("time.daysAgo", { count: diffDay });
-  return new Date(dateStr).toLocaleDateString();
+  // Older than a week — display the date converted to Swiss timezone
+  return dateUtils.formatLocal(dateStr, "dd/MM/yyyy HH:mm");
 }

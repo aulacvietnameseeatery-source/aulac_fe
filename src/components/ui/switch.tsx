@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { useTranslations } from 'next-intl';
 import '@/styles/components/switch.css';
 interface SwitchProps {
     checked: boolean;
@@ -10,11 +11,12 @@ interface SwitchProps {
 }
 
 export const Switch = ({
-                           checked,
-                           onChange,
-                           disabled = false,
-                           showLabel = true
-                       }: SwitchProps) => {
+    checked,
+    onChange,
+    disabled = false,
+    showLabel = true
+}: SwitchProps) => {
+    const t = useTranslations('common.switch');
 
     const handleToggle = () => {
         if (!disabled) {
@@ -25,6 +27,8 @@ export const Switch = ({
     return (
         <div className={`admin-switch-container ${disabled ? 'disabled' : ''}`}>
             <button
+                data-tooltip-content={checked ? t('active') : t('inactive')}
+                data-tooltip-id="my-tooltip"
                 type="button"
                 role="switch"
                 aria-checked={checked}
@@ -36,8 +40,8 @@ export const Switch = ({
 
             {showLabel && (
                 <span className={`admin-switch-text ${checked ? 'active' : 'inactive'}`}>
-          {checked ? 'Active' : 'Inactive'}
-        </span>
+                    {checked ? t('active') : t('inactive')}
+                </span>
             )}
         </div>
     );

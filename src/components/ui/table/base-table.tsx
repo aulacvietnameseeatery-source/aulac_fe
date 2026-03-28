@@ -87,9 +87,9 @@ export function BaseTable<T>({
     data,
     columns,
     loading = false,
-    searchPlaceholder = 'Tìm kiếm',
+    searchPlaceholder,
     showAddButton = true,
-    addButtonText = 'Thêm',
+    addButtonText,
     batchActions = [],
     rowsPerPageOptions = [10, 20, 30, 50, 100],
     defaultRowsPerPage = 10,
@@ -477,10 +477,10 @@ export function BaseTable<T>({
                                                 value={searchQuery}
                                                 onChange={(e) => setSearchQuery(e.target.value)}
                                                 className="ms-input-item flex w-full min-w-[200px]"
-                                                placeholder={searchPlaceholder}
+                                                placeholder={searchPlaceholder ?? t('searchPlaceholder')}
                                                 type="text"
                                                 autoComplete="on"
-                                                size={Math.max(searchPlaceholder?.length || 20, searchQuery.length) + 2}
+                                                size={Math.max((searchPlaceholder ?? t('searchPlaceholder'))?.length || 20, searchQuery.length) + 2}
                                             />
                                         </div>
                                     </div>
@@ -558,6 +558,8 @@ export function BaseTable<T>({
                                             className="ms-button btn-outline-neutral only-icon"
                                             onClick={onRefresh}
                                             title={t('refresh')}
+                                            data-tooltip-content={t('refresh')}
+                                            data-tooltip-id="my-tooltip"
                                         >
                                             <div className="icon reload mi icon16">&nbsp;</div>
                                         </button>

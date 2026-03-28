@@ -506,6 +506,17 @@
         "prev": "Previous page",
         "next": "Next page",
         "last": "Last page"
+      },
+      "filter": {
+        "title": "Filter {column}",
+        "condition": "Condition",
+        "value": "Value",
+        "placeholder": "Enter filter value",
+        "selectPlaceholder": "Select value...",
+        "clear": "Clear filter",
+        "cancel": "Cancel",
+        "apply": "Apply",
+        "close": "Close"
       }
     },
     "apiErrors": {
@@ -523,6 +534,49 @@
       "http": "The request failed. Please try again.",
       "httpStatus": "The request failed with status {status}.",
       "unexpected": "An unexpected error occurred. Please try again later."
+    },
+    "switch": {
+      "active": "Active",
+      "inactive": "Inactive"
+    },
+    "confirmDialog": {
+      "close": "Close",
+      "cancel": "Cancel",
+      "variants": {
+        "delete": "Delete",
+        "warning": "Continue",
+        "confirm": "Confirm"
+      }
+    },
+    "datePicker": {
+      "placeholder": "Pick a date",
+      "placeholderWithTime": "Pick date and time",
+      "clear": "Clear date"
+    },
+    "fileUploader": {
+      "primary": "Primary",
+      "pending": "Pending",
+      "add": "Add",
+      "addImages": "Add images",
+      "uploadImages": "Upload images",
+      "removeImage": "Remove image",
+      "removeFile": "Remove file",
+      "uploading": "Uploading…",
+      "processingImages": "Processing images…",
+      "dropHere": "Drop here",
+      "dropImagesHere": "Drop images here",
+      "dropFilesHere": "Drop files here",
+      "addMoreImages": "Add more images",
+      "releaseToAdd": "Release to add files",
+      "dragOrClick": "Drag & drop or click to browse",
+      "dropOrClick": "Drop files or click to browse",
+      "dropOneOrClick": "Drop a file or click to browse",
+      "maxReached": "Maximum of {maxFiles} file(s) reached. Remove a file to add more.",
+      "imagePreview": "Image Preview",
+      "uploadFiles": "Upload files",
+      "imageCount": "{current}/{max} {unit}",
+      "image": "image",
+      "images": "images"
     }
   },
   "ShiftManagement": {

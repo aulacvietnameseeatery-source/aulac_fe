@@ -18,6 +18,7 @@ import type {
   GetTransactionsFilter,
 } from "../../types/inventory.types";
 import { InventoryTxTypeCode, InventoryTxStatusCode } from "@/types/status-codes";
+import { TransactionDetailModal } from "./transaction-detail-modal";
 
 const STATUS_STYLE: Record<string, string> = {
   [InventoryTxStatusCode.DRAFT]: "bg-slate-100 text-slate-700 border-slate-200",
@@ -44,14 +45,16 @@ export function TransactionsList() {
   const { data, isLoading, refetch } = useTransactionsQuery(filter);
   const transactions = useMemo(() => data?.pageData ?? [], [data]);
 
+  const [detailTxId, setDetailTxId] = useState<number | null>(null);
+
   const getTransactionActions = useCallback(
     (item: InventoryTransactionListDto): TableAction<InventoryTransactionListDto>[] => [
       {
         action: "view",
-        onClick: () => router.push(`/dashboard/inventory/transactions/${item.transactionId}`),
+        onClick: () => setDetailTxId(item.transactionId),
       },
     ],
-    [router],
+    [],
   );
 
   const handleDataChange = useCallback(
@@ -146,6 +149,7 @@ export function TransactionsList() {
   );
 
   return (
+    <>
     <BaseTable<InventoryTransactionListDto>
       data={transactions}
       loading={isLoading}
@@ -195,5 +199,12 @@ export function TransactionsList() {
         <TableActionColumn item={item} actions={getTransactionActions(item)} />
       )}
     />
+
+    <TransactionDetailModal
+      transactionId={detailTxId}
+      open={detailTxId != null}
+      onClose={() => setDetailTxId(null)}
+    />
+    </>
   );
 }

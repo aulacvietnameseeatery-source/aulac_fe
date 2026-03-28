@@ -9,6 +9,7 @@ import {
   X,
   type LucideIcon,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
@@ -56,7 +57,6 @@ interface VariantConfig {
   iconBg: string;
   iconColor: string;
   confirmBtnVariant: "danger" | "primary" | "default" | "success";
-  defaultConfirmText: string;
 }
 
 const VARIANT_CONFIG: Record<Exclude<ALConfirmDialogVariant, "custom">, VariantConfig> = {
@@ -65,21 +65,18 @@ const VARIANT_CONFIG: Record<Exclude<ALConfirmDialogVariant, "custom">, VariantC
     iconBg: "bg-red-50",
     iconColor: "text-red-500",
     confirmBtnVariant: "danger",
-    defaultConfirmText: "Delete",
   },
   warning: {
     icon: AlertTriangle,
     iconBg: "bg-amber-50",
     iconColor: "text-amber-500",
     confirmBtnVariant: "primary",
-    defaultConfirmText: "Continue",
   },
   confirm: {
     icon: CheckCircle2,
     iconBg: "bg-blue-50",
     iconColor: "text-blue-500",
     confirmBtnVariant: "default",
-    defaultConfirmText: "Confirm",
   },
 };
 
@@ -113,16 +110,18 @@ export function ALConfirmDialog({
   message,
   variant = "confirm",
   confirmText,
-  cancelText = "Cancel",
+  cancelText,
   icon,
   isLoading = false,
   children,
   confirmButtonVariant,
   className,
 }: ALConfirmDialogProps) {
+  const t = useTranslations("common.confirmDialog");
   // Resolve config based on variant
   const config = variant !== "custom" ? VARIANT_CONFIG[variant] : null;
-  const resolvedConfirmText = confirmText ?? config?.defaultConfirmText ?? "Confirm";
+  const resolvedConfirmText = confirmText ?? (variant !== "custom" ? t(`variants.${variant}` as any) : t("variants.confirm"));
+  const resolvedCancelText = cancelText ?? t("cancel");
   const resolvedBtnVariant = confirmButtonVariant ?? config?.confirmBtnVariant ?? "default";
 
   // Resolve icon
@@ -173,8 +172,10 @@ export function ALConfirmDialog({
             <button
               type="button"
               onClick={onClose}
+              data-tooltip-content={t("close")}
+              data-tooltip-id="my-tooltip"
               className="absolute top-4 right-4 p-1 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
-              aria-label="Close"
+              aria-label={t("close")}
             >
               <X className="w-5 h-5" />
             </button>
@@ -207,8 +208,10 @@ export function ALConfirmDialog({
                     className="flex-1"
                     onClick={onClose}
                     disabled={isLoading}
+                    data-tooltip-content={resolvedCancelText}
+                    data-tooltip-id="my-tooltip"
                   >
-                    {cancelText}
+                    {resolvedCancelText}
                   </Button>
                   <Button
                     type="button"
@@ -217,6 +220,8 @@ export function ALConfirmDialog({
                     onClick={onConfirm}
                     isLoading={isLoading}
                     disabled={isLoading}
+                    data-tooltip-content={resolvedConfirmText}
+                    data-tooltip-id="my-tooltip"
                   >
                     {resolvedConfirmText}
                   </Button>

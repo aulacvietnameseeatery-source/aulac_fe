@@ -506,6 +506,17 @@
         "prev": "Page précédente",
         "next": "Page suivante",
         "last": "Dernière page"
+      },
+      "filter": {
+        "title": "Filtrer {column}",
+        "condition": "Condition",
+        "value": "Valeur",
+        "placeholder": "Saisir une valeur",
+        "selectPlaceholder": "Sélectionner une valeur...",
+        "clear": "Supprimer le filtre",
+        "cancel": "Annuler",
+        "apply": "Appliquer",
+        "close": "Fermer"
       }
     },
     "apiErrors": {
@@ -523,6 +534,49 @@
       "http": "La requête a échoué. Veuillez réessayer.",
       "httpStatus": "La requête a échoué avec le statut {status}.",
       "unexpected": "Une erreur inattendue s'est produite. Veuillez réessayer plus tard."
+    },
+    "switch": {
+      "active": "Actif",
+      "inactive": "Inactif"
+    },
+    "confirmDialog": {
+      "close": "Fermer",
+      "cancel": "Annuler",
+      "variants": {
+        "delete": "Supprimer",
+        "warning": "Continuer",
+        "confirm": "Confirmer"
+      }
+    },
+    "datePicker": {
+      "placeholder": "Choisir une date",
+      "placeholderWithTime": "Choisir date et heure",
+      "clear": "Effacer la date"
+    },
+    "fileUploader": {
+      "primary": "Principale",
+      "pending": "En attente",
+      "add": "Ajouter",
+      "addImages": "Ajouter des images",
+      "uploadImages": "Télécharger des images",
+      "removeImage": "Supprimer l'image",
+      "removeFile": "Supprimer le fichier",
+      "uploading": "Téléchargement…",
+      "processingImages": "Traitement des images…",
+      "dropHere": "Déposer ici",
+      "dropImagesHere": "Déposer les images ici",
+      "dropFilesHere": "Déposer les fichiers ici",
+      "addMoreImages": "Ajouter des images",
+      "releaseToAdd": "Relâcher pour ajouter",
+      "dragOrClick": "Glisser-déposer ou cliquer pour parcourir",
+      "dropOrClick": "Déposer des fichiers ou cliquer pour parcourir",
+      "dropOneOrClick": "Déposer un fichier ou cliquer pour parcourir",
+      "maxReached": "Maximum de {maxFiles} fichier(s) atteint. Supprimez un fichier pour en ajouter.",
+      "imagePreview": "Aperçu de l'image",
+      "uploadFiles": "Télécharger des fichiers",
+      "imageCount": "{current}/{max} {unit}",
+      "image": "image",
+      "images": "images"
     }
   },
   "ShiftManagement": {

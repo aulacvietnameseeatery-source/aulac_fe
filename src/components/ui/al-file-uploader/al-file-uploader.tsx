@@ -13,6 +13,7 @@ import {
   ImageIcon,
   ZoomIn,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import { Dialog } from "@/components/ui/dialog";
 import { ALFieldLabel, ALFieldMessage } from "@/components/ui/al-field-wrapper";
@@ -108,7 +109,9 @@ const ExistingImageThumb: React.FC<{
   tileClassName?: string;
   removeButtonClassName?: string;
   primaryBadgeClassName?: string;
-}> = ({ url, isPrimary, isDeleting, onDelete, onPreview, disabled, tileClassName, removeButtonClassName, primaryBadgeClassName }) => (
+  primaryLabel?: string;
+  removeLabel?: string;
+}> = ({ url, isPrimary, isDeleting, onDelete, onPreview, disabled, tileClassName, removeButtonClassName, primaryBadgeClassName, primaryLabel = "Primary", removeLabel = "Remove image" }) => (
   <div
     className={cn(
       "relative group rounded-lg overflow-hidden border border-slate-200 bg-slate-50 shrink-0",
@@ -132,7 +135,7 @@ const ExistingImageThumb: React.FC<{
 
     {isPrimary && (
       <span className={cn("absolute bottom-0 left-0 right-0 text-center text-[9px] font-semibold bg-[#1A3A52]/80 text-white py-0.5", primaryBadgeClassName)}>
-        Primary
+        {primaryLabel}
       </span>
     )}
 
@@ -144,7 +147,9 @@ const ExistingImageThumb: React.FC<{
       !disabled && onDelete && (
         <button
           type="button"
-          aria-label="Remove image"
+          aria-label={removeLabel}
+          data-tooltip-content={removeLabel}
+          data-tooltip-id="my-tooltip"
           onClick={(e) => { e.stopPropagation(); onDelete(); }}
           className={cn(
             "absolute top-0.5 right-0.5 p-0.5 rounded-full bg-black/50 text-white opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-600/80",
@@ -168,7 +173,8 @@ const PendingImageThumb: React.FC<{
   tileClassName?: string;
   removeButtonClassName?: string;
   sizeBadgeClassName?: string;
-}> = ({ file, previewUrl, onRemove, onPreview, disabled, tileClassName, removeButtonClassName, sizeBadgeClassName }) => (
+  removeLabel?: string;
+}> = ({ file, previewUrl, onRemove, onPreview, disabled, tileClassName, removeButtonClassName, sizeBadgeClassName, removeLabel = "Remove image" }) => (
   <div
     className={cn(
       "relative group rounded-lg overflow-hidden border border-dashed border-[#D5BA98] bg-[#D5BA98]/10 shrink-0",
@@ -196,7 +202,9 @@ const PendingImageThumb: React.FC<{
     {!disabled && (
       <button
         type="button"
-        aria-label={`Remove ${file.name}`}
+        aria-label={`${removeLabel}: ${file.name}`}
+        data-tooltip-content={removeLabel}
+        data-tooltip-id="my-tooltip"
         onClick={(e) => { e.stopPropagation(); onRemove(); }}
         className={cn(
           "absolute top-0.5 right-0.5 p-0.5 rounded-full bg-black/50 text-white opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-600/80",
@@ -219,7 +227,9 @@ const FileListRow: React.FC<{
   disabled?: boolean;
   isPending?: boolean;
   icon?: React.ReactNode;
-}> = ({ name, size, url, isDeleting, onDelete, disabled, isPending, icon }) => (
+  pendingLabel?: string;
+  removeLabel?: string;
+}> = ({ name, size, url, isDeleting, onDelete, disabled, isPending, icon, pendingLabel = "Pending", removeLabel = "Remove file" }) => (
   <div
     className={cn(
       "flex items-center gap-3 px-3 py-2 rounded-lg border text-sm",
@@ -251,7 +261,7 @@ const FileListRow: React.FC<{
     </div>
 
     {isPending && (
-      <span className="shrink-0 text-xs text-indigo-500 font-medium">Pending</span>
+      <span className="shrink-0 text-xs text-indigo-500 font-medium">{pendingLabel}</span>
     )}
 
     {isDeleting ? (
@@ -260,7 +270,9 @@ const FileListRow: React.FC<{
       !disabled && onDelete && (
         <button
           type="button"
-          aria-label={`Remove ${name}`}
+          aria-label={`${removeLabel}: ${name}`}
+          data-tooltip-content={removeLabel}
+          data-tooltip-id="my-tooltip"
           onClick={onDelete}
           className="shrink-0 p-1 rounded hover:bg-red-50 text-gray-400 hover:text-red-500 transition-colors"
         >
@@ -334,6 +346,7 @@ const ALFileUploader = React.forwardRef<HTMLDivElement, ALFileUploaderProps>(
     const [isProcessing, setIsProcessing] = React.useState(false);
     const [validationErrors, setValidationErrors] = React.useState<ALFileValidationError[]>([]);
     const processingAbortRef = React.useRef<AbortController | null>(null);
+    const t = useTranslations("common.fileUploader");
 
     // Abort any in-flight processing on unmount
     React.useEffect(() => {
@@ -492,7 +505,7 @@ const ALFileUploader = React.forwardRef<HTMLDivElement, ALFileUploaderProps>(
     if (maxSizeBytes > 0) hintParts.push(`up to ${formatBytes(maxSizeBytes)} each`);
     if (maxFiles < Infinity) hintParts.push(`max ${maxFiles} files`);
     const hintText = hintParts.join(" · ");
-    const galleryCountLabel = `${totalFileCount}/${maxFiles} ${maxFiles === 1 ? "image" : "images"}`;
+    const galleryCountLabel = `${totalFileCount}/${maxFiles} ${maxFiles === 1 ? t("image") : t("images")}`;
 
     // _OLD: previous render used unified grid for all variants + dropzone below thumbnails.
     //       Now: image variant shows dropzone above (full when empty, compact bar with files),
@@ -516,7 +529,7 @@ const ALFileUploader = React.forwardRef<HTMLDivElement, ALFileUploaderProps>(
               <div
                 role="button"
                 tabIndex={disabled ? -1 : 0}
-                aria-label="Upload files"
+                aria-label={t("uploadImages")}
                 onDragOver={handleDragOver}
                 onDragLeave={handleDragLeave}
                 onDrop={handleDrop}
@@ -542,14 +555,14 @@ const ALFileUploader = React.forwardRef<HTMLDivElement, ALFileUploaderProps>(
                 {isUploading && (
                   <div className="absolute inset-0 flex items-center justify-center rounded-lg bg-white/70 z-10">
                     <Loader2 size={20} className="animate-spin text-[#1A3A52]" />
-                    <span className="ml-2 text-sm text-[#1A3A52] font-medium">Uploading…</span>
+                    <span className="ml-2 text-sm text-[#1A3A52] font-medium">{t("uploading")}</span>
                   </div>
                 )}
 
                 {isProcessing && (
                   <div className="absolute inset-0 flex items-center justify-center rounded-lg bg-white/70 z-10">
                     <Loader2 size={20} className="animate-spin text-[#1A3A52]" />
-                    <span className="ml-2 text-sm text-[#1A3A52] font-medium">Processing images…</span>
+                    <span className="ml-2 text-sm text-[#1A3A52] font-medium">{t("processingImages")}</span>
                   </div>
                 )}
 
@@ -557,7 +570,7 @@ const ALFileUploader = React.forwardRef<HTMLDivElement, ALFileUploaderProps>(
                   <>
                     <Upload size={16} className="shrink-0 text-[#1A3A52]/50" />
                     <span className="min-w-0 text-sm text-[#1A3A52]/70">
-                      {isDragging ? "Drop here" : "Add more images"}
+                      {isDragging ? t("dropHere") : t("addMoreImages")}
                     </span>
                     {hintText && (
                       <span className="basis-full text-xs text-[#1A3A52]/40 sm:ml-auto sm:basis-auto">
@@ -572,14 +585,10 @@ const ALFileUploader = React.forwardRef<HTMLDivElement, ALFileUploaderProps>(
                   <>
                     <ImagePlus size={32} className="text-[#1A3A52]/35" />
                     <p className="text-sm font-medium text-[#1A3A52]/70">
-                      {isDragging ? "Drop images here" : "Upload images"}
+                      {isDragging ? t("dropImagesHere") : t("uploadImages")}
                     </p>
                     <p className="text-xs text-[#1A3A52]/50">
-                      {isDragging
-                        ? "Release to add files"
-                        : multiple
-                          ? "Drag & drop or click to browse"
-                          : "Drag & drop or click to browse"}
+                      {isDragging ? t("releaseToAdd") : t("dragOrClick")}
                     </p>
                     {hintText && (
                       <p className="text-xs text-[#1A3A52]/40">{hintText}</p>
@@ -604,6 +613,8 @@ const ALFileUploader = React.forwardRef<HTMLDivElement, ALFileUploaderProps>(
                     tileClassName={responsiveImageTileClass}
                     removeButtonClassName={responsiveRemoveButtonClass}
                     primaryBadgeClassName={responsiveBadgeClass}
+                    primaryLabel={t("primary")}
+                    removeLabel={t("removeImage")}
                   />
                 ))}
                 {pendingFiles.map((file) => (
@@ -617,6 +628,7 @@ const ALFileUploader = React.forwardRef<HTMLDivElement, ALFileUploaderProps>(
                     tileClassName={responsiveImageTileClass}
                     removeButtonClassName={responsiveRemoveButtonClass}
                     sizeBadgeClassName={responsiveBadgeClass}
+                    removeLabel={t("removeImage")}
                   />
                 ))}
               </div>
@@ -639,6 +651,8 @@ const ALFileUploader = React.forwardRef<HTMLDivElement, ALFileUploaderProps>(
                 tileClassName={responsiveGalleryTileClass}
                 removeButtonClassName={responsiveRemoveButtonClass}
                 primaryBadgeClassName={responsiveBadgeClass}
+                primaryLabel={t("primary")}
+                removeLabel={t("removeImage")}
               />
             ))}
             {pendingFiles.map((file) => (
@@ -652,12 +666,15 @@ const ALFileUploader = React.forwardRef<HTMLDivElement, ALFileUploaderProps>(
                 tileClassName={responsiveGalleryTileClass}
                 removeButtonClassName={responsiveRemoveButtonClass}
                 sizeBadgeClassName={responsiveBadgeClass}
+                removeLabel={t("removeImage")}
               />
             ))}
             {!isAtLimit && (
               <button
                 type="button"
-                aria-label="Add images"
+                aria-label={t("addImages")}
+                data-tooltip-content={t("addImages")}
+                data-tooltip-id="my-tooltip"
                 onClick={openFilePicker}
                 onDragOver={handleDragOver}
                 onDragLeave={handleDragLeave}
@@ -671,7 +688,7 @@ const ALFileUploader = React.forwardRef<HTMLDivElement, ALFileUploaderProps>(
                 )}
               >
                 <ImagePlus className="h-5 w-5 text-[#1A3A52]/55 sm:h-6 sm:w-6" />
-                <span className="text-[11px] text-[#1A3A52]/60 sm:text-xs">Add</span>
+                <span className="text-[11px] text-[#1A3A52]/60 sm:text-xs">{t("add")}</span>
               </button>
             )}
           </div>
@@ -691,6 +708,7 @@ const ALFileUploader = React.forwardRef<HTMLDivElement, ALFileUploaderProps>(
                     onDelete={onDeleteExisting ? () => onDeleteExisting(f.id) : undefined}
                     disabled={disabled || isUploading}
                     icon={<ImageIcon size={16} />}
+                    removeLabel={t("removeFile")}
                   />
                 ))}
                 {pendingFiles.map((file) => (
@@ -702,8 +720,11 @@ const ALFileUploader = React.forwardRef<HTMLDivElement, ALFileUploaderProps>(
                     disabled={disabled || isUploading}
                     isPending
                     icon={getFileIcon(file)}
+                    pendingLabel={t("pending")}
+                    removeLabel={t("removeFile")}
                   />
                 ))}
+                ))
               </div>
             )}
 
@@ -711,7 +732,7 @@ const ALFileUploader = React.forwardRef<HTMLDivElement, ALFileUploaderProps>(
               <div
                 role="button"
                 tabIndex={disabled ? -1 : 0}
-                aria-label="Upload files"
+                aria-label={t("uploadFiles")}
                 onDragOver={handleDragOver}
                 onDragLeave={handleDragLeave}
                 onDrop={handleDrop}
@@ -735,17 +756,17 @@ const ALFileUploader = React.forwardRef<HTMLDivElement, ALFileUploaderProps>(
                 {isUploading && (
                   <div className="absolute inset-0 flex items-center justify-center rounded-lg bg-white/70 z-10">
                     <Loader2 size={20} className="animate-spin text-[#1A3A52]" />
-                    <span className="ml-2 text-sm text-[#1A3A52] font-medium">Uploading…</span>
+                    <span className="ml-2 text-sm text-[#1A3A52] font-medium">{t("uploading")}</span>
                   </div>
                 )}
                 <div className="flex items-center gap-2 text-sm text-[#1A3A52]/60">
                   <Upload size={16} className={isDragging ? "text-[#1A3A52]" : "text-[#1A3A52]/40"} />
                   <span>
                     {isDragging
-                      ? "Drop files here"
+                      ? t("dropFilesHere")
                       : multiple
-                        ? "Drop files or click to browse"
-                        : "Drop a file or click to browse"}
+                        ? t("dropOrClick")
+                        : t("dropOneOrClick")}
                   </span>
                 </div>
                 {hintText && (
@@ -762,7 +783,7 @@ const ALFileUploader = React.forwardRef<HTMLDivElement, ALFileUploaderProps>(
         {isAtLimit && (
           <p className="text-xs text-amber-600 flex items-center gap-1">
             <AlertCircle size={12} />
-            Maximum of {maxFiles} file(s) reached. Remove a file to add more.
+            {t("maxReached", { maxFiles })}
           </p>
         )}
 
@@ -804,7 +825,7 @@ const ALFileUploader = React.forwardRef<HTMLDivElement, ALFileUploaderProps>(
           <Dialog
             open={!!previewUrl}
             onClose={() => setPreviewUrl(null)}
-            title="Image Preview"
+            title={t("imagePreview")}
             width="min(90vw, 800px)"
           >
             <div className="flex items-center justify-center p-2">

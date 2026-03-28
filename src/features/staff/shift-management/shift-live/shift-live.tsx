@@ -485,7 +485,7 @@ export function ShiftLive() {
               </span>
               <span
                 className={cn(
-                  "inline-flex items-center rounded-full border px-3 py-1 text-xs font-medium",
+                  "inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-medium",
                   isRealtimeConnected
                     ? "border-blue-600 bg-blue-600 text-white"
                     : "border-slate-300 bg-slate-100 text-slate-700"
@@ -494,15 +494,12 @@ export function ShiftLive() {
                 {isRealtimeConnected ? t("connection.realtime") : t("connection.polling")}
               </span>
             </div>
-            <p className="max-w-3xl text-sm text-[#1A3A52]/70">
-              {t("description")}
-            </p>
-            <div className="flex flex-wrap items-center gap-3 text-xs text-[#1A3A52]/60">
-              <span className="inline-flex items-center gap-1">
+            <div className="flex flex-wrap items-center gap-2 text-xs text-[#1A3A52]/60">
+              <span className="inline-flex items-center gap-1 rounded-full border border-[#D5BA98]/50 bg-white px-2.5 py-1">
                 <TimerReset className="h-3.5 w-3.5" />
                 {t("autoRefresh")}
               </span>
-              {lastUpdated && <span>{t("lastUpdated", { time: lastUpdated })}</span>}
+              {lastUpdated && <span className="rounded-full border border-[#D5BA98]/50 bg-white px-2.5 py-1">{t("lastUpdated", { time: lastUpdated })}</span>}
             </div>
           </div>
 
@@ -580,10 +577,6 @@ export function ShiftLive() {
                   );
                 })}
               </div>
-            </div>
-
-            <div className="rounded-xl border border-[#D5BA98]/40 bg-[#D5BA98]/10 p-3 text-sm text-[#1A3A52]/70">
-              {t("kpiHint")}
             </div>
           </div>
         </ALCard>
@@ -683,39 +676,24 @@ export function ShiftLive() {
                     </div>
                   ) : null}
 
-                  <div className="space-y-3 rounded-xl border border-[#D5BA98]/40 bg-white p-4">
-                    <div>
-                      <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-[#1A3A52]/55">
-                        {t("sections.statusLocation")}
-                      </p>
-                      <div className="mt-2 flex items-start gap-2 text-sm text-[#1A3A52]">
-                        <UserRound className="mt-0.5 h-4 w-4 shrink-0 text-[#1A3A52]/60" />
-                        <span>{getActivityLabel(row, t)}</span>
-                      </div>
+                  <div className="space-y-2 rounded-xl border border-[#D5BA98]/40 bg-white p-4">
+                    <div className="flex items-start gap-2 text-sm text-[#1A3A52]">
+                      <UserRound className="mt-0.5 h-4 w-4 shrink-0 text-[#1A3A52]/60" />
+                      <span>{getActivityLabel(row, t)}</span>
                     </div>
 
-                    <div>
-                      <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-[#1A3A52]/55">
-                        {t("sections.performance")}
-                      </p>
-                      <div className="mt-2 flex items-start gap-2 text-sm text-[#1A3A52]">
-                        <Wallet className="mt-0.5 h-4 w-4 shrink-0 text-[#1A3A52]/60" />
-                        <span>{getPerformanceLabel(row, t)}</span>
-                      </div>
+                    <div className="flex items-start gap-2 text-sm text-[#1A3A52]">
+                      <Wallet className="mt-0.5 h-4 w-4 shrink-0 text-[#1A3A52]/60" />
+                      <span>{getPerformanceLabel(row, t)}</span>
                     </div>
 
-                    <div>
-                      <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-[#1A3A52]/55">
-                        {t("sections.issues")}
-                      </p>
-                      <div className="mt-2 rounded-xl border border-slate-200 bg-[#FDFBF9] px-3 py-2 text-sm text-[#1A3A52]/70">
+                    {(row.latestIssueText || row.issueCount > 0) && (
+                      <div className="rounded-lg border border-red-100 bg-red-50 px-3 py-2 text-sm text-red-700">
                         {row.latestIssueText
                           ? row.latestIssueText
-                          : row.issueCount > 0
-                            ? t("issues.pending", { count: row.issueCount })
-                            : t("issues.none")}
+                          : t("issues.pending", { count: row.issueCount })}
                       </div>
-                    </div>
+                    )}
                   </div>
 
                   {(row.notes || row.isManualAdjustment) && (
