@@ -1148,5 +1148,129 @@
       "title": "Xóa Template",
       "description": "Bạn có chắc chắn muốn xóa template này không? Hành động này không thể hoàn tác."
     }
+  },
+  "Role": {
+    "List": {
+      "title": "Danh sách Vai trò",
+      "description": "Quản lý vai trò, quyền hạn và phân bổ nhân viên.",
+      "searchPlaceholder": "Tìm kiếm theo tên hoặc mã...",
+      "addNew": "Thêm Vai trò Mới",
+      "table": {
+        "no": "STT",
+        "name": "Tên",
+        "code": "Mã",
+        "staffCount": "Số lượng nhân viên",
+        "action": "Hành động",
+        "empty": "Không tìm thấy vai trò nào."
+      },
+      "pagination": {
+        "pageSize": "Kích thước trang:",
+        "previous": "Trước",
+        "next": "Tiếp"
+      },
+      "actions": {
+        "view": "Xem chi tiết",
+        "edit": "Sửa vai trò",
+        "delete": "Xóa vai trò"
+      },
+      "loading": "Đang tải dữ liệu...",
+      "deleteModal": {
+        "title": "Xóa Vai trò",
+        "message": "Bạn có chắc chắn muốn xóa vai trò này không? Hành động này không thể hoàn tác.",
+        "confirm": "Xóa",
+        "cancel": "Hủy"
+      },
+      "notifications": {
+        "deleteSuccess": "Xóa vai trò thành công",
+        "deleteError": "Có lỗi xảy ra khi xóa vai trò",
+        "batchDeleteSuccess": "Đã xóa {count} vai trò thành công",
+        "batchDeleteError": "Có lỗi xảy ra khi xóa vai trò"
+      },
+      "batchActions": {
+        "delete": "Xóa"
+      }
+    },
+    "Detail": {
+      "title": "Chi tiết Vai trò",
+      "roleCode": "Mã Vai trò",
+      "roleName": "Tên Vai trò",
+      "status": "Trạng thái",
+      "active": "Hoạt động",
+      "inactive": "Không hoạt động",
+      "permissions": "Quyền hạn",
+      "all": "Tất cả",
+      "back": "Quay lại",
+      "edit": "Chỉnh sửa",
+      "loading": "Đang tải chi tiết vai trò...",
+      "errorTitle": "Không thể tải Vai trò",
+      "errorMessage": "Có lỗi xảy ra khi tải chi tiết vai trò. Vui lòng thử lại.",
+      "backToList": "Quay lại Danh sách Vai trò",
+      "breadcrumb": {
+        "roles": "Danh sách Vai trò",
+        "detail": "Chi tiết Vai trò"
+      }
+    },
+    "Create": {
+      "title": "Thêm Vai trò Mới",
+      "roleCode": "Mã Vai trò",
+      "roleCodePlaceholder": "Nhập mã vai trò (VD: MANAGER, STAFF)",
+      "roleName": "Tên Vai trò",
+      "roleNamePlaceholder": "Nhập tên vai trò",
+      "roleCodeAutoGenNote": "Mã vai trò sẽ được tự động tạo từ tên vai trò (viết hoa)",
+      "status": "Trạng thái",
+      "active": "Hoạt động",
+      "inactive": "Không hoạt động",
+      "permissions": "Quyền hạn",
+      "all": "Tất cả",
+      "cancel": "Hủy",
+      "create": "Thêm",
+      "loadingPermissions": "Đang tải quyền hạn...",
+      "breadcrumb": {
+        "roles": "Danh sách Vai trò",
+        "create": "Thêm Vai trò"
+      },
+      "validation": {
+        "roleNameRequired": "Tên vai trò là bắt buộc",
+        "roleNameMaxLength": "Tên vai trò không được vượt quá 100 ký tự"
+      },
+      "notifications": {
+        "createSuccess": "Thêm vai trò thành công",
+        "createError": "Không thể thêm vai trò",
+        "roleAlreadyExists": "Vai trò với tên này đã tồn tại",
+        "loadPermissionsError": "Không thể tải danh sách quyền hạn"
+      }
+    },
+    "Edit": {
+      "title": "Chỉnh sửa Vai trò",
+      "roleCode": "Mã Vai trò",
+      "roleCodePlaceholder": "Nhập mã vai trò (VD: MANAGER, STAFF)",
+      "roleCodeReadOnly": "Mã vai trò không thể chỉnh sửa",
+      "roleName": "Tên Vai trò",
+      "roleNamePlaceholder": "Nhập tên vai trò",
+      "status": "Trạng thái",
+      "active": "Hoạt động",
+      "inactive": "Không hoạt động",
+      "permissions": "Quyền hạn",
+      "all": "Tất cả",
+      "cancel": "Hủy",
+      "save": "Lưu Thay Đổi",
+      "loading": "Đang tải dữ liệu vai trò...",
+      "loadError": "Không thể tải dữ liệu vai trò. Vui lòng thử lại.",
+      "success": "Cập nhật vai trò thành công",
+      "successWithReloginNote": "Người dùng có vai trò này cần đăng nhập lại để áp dụng quyền mới.",
+      "error": "Không thể cập nhật vai trò. Vui lòng thử lại.",
+      "validation": {
+        "roleCodeRequired": "Mã vai trò là bắt buộc",
+        "roleCodeMaxLength": "Mã vai trò không được vượt quá 50 ký tự",
+        "roleNameRequired": "Tên vai trò là bắt buộc",
+        "roleNameMaxLength": "Tên vai trò không được vượt quá 100 ký tự",
+        "failed": "Vui lòng kiểm tra lại biểu mẫu"
+      },
+      "breadcrumb": {
+        "roles": "Danh sách Vai trò",
+        "detail": "Chi tiết Vai trò",
+        "edit": "Chỉnh sửa Vai trò"
+      }
+    }
   }
 }

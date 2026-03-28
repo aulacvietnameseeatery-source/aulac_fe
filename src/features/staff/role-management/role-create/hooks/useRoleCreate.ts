@@ -2,11 +2,13 @@
 import { useState, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 import { createRole, getAllPermissions } from "../services/role-create.service";
 import { CreateRoleRequest, PermissionGroupDto } from "../types/role-create.types";
 
 export const useRoleCreate = () => {
   const router = useRouter();
+  const t = useTranslations("Role.Create");
   const [permissionGroups, setPermissionGroups] = useState<PermissionGroupDto[]>([]);
   const [isLoadingPermissions, setIsLoadingPermissions] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -36,7 +38,7 @@ export const useRoleCreate = () => {
         }
       } catch (error: any) {
         console.error("Failed to load permissions:", error);
-        toast.error("Failed to load permissions");
+        toast.error(t("notifications.loadPermissionsError"));
       } finally {
         setIsLoadingPermissions(false);
       }
@@ -106,9 +108,9 @@ export const useRoleCreate = () => {
     const newErrors: typeof errors = {};
     
     if (!roleName.trim()) {
-      newErrors.roleName = "Role name is required";
+      newErrors.roleName = t("validation.roleNameRequired");
     } else if (roleName.length > 100) {
-      newErrors.roleName = "Role name must not exceed 100 characters";
+      newErrors.roleName = t("validation.roleNameMaxLength");
     }
     
     setErrors(newErrors);
@@ -136,11 +138,14 @@ export const useRoleCreate = () => {
     setIsSubmitting(true);
     try {
       const newRole = await createRole(request);
-      toast.success("Role created successfully");
+      toast.success(t("notifications.createSuccess"));
       router.push(`/dashboard/roles/${newRole.roleId}`);
     } catch (error: any) {
       console.error("Failed to create role:", error);
-      const errorMessage = error.message || "Failed to create role";
+      const status = error.response?.status || error.status;
+      const errorMessage = status === 409
+        ? t("notifications.roleAlreadyExists")
+        : t("notifications.createError");
       toast.error(errorMessage);
     } finally {
       setIsSubmitting(false);

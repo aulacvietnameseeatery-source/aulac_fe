@@ -1106,5 +1106,129 @@
         "TAKEAWAY": "À emporter"
       }
     }
+  },
+  "Role": {
+    "List": {
+      "title": "Liste des rôles",
+      "description": "Gérer les rôles, les permissions et la répartition du personnel.",
+      "searchPlaceholder": "Rechercher par nom ou code...",
+      "addNew": "Ajouter un rôle",
+      "table": {
+        "no": "N°",
+        "name": "Nom",
+        "code": "Code",
+        "staffCount": "Nombre d'employés",
+        "action": "Action",
+        "empty": "Aucun rôle trouvé."
+      },
+      "pagination": {
+        "pageSize": "Taille de page :",
+        "previous": "Précédent",
+        "next": "Suivant"
+      },
+      "actions": {
+        "view": "Voir les détails",
+        "edit": "Modifier le rôle",
+        "delete": "Supprimer le rôle"
+      },
+      "loading": "Chargement des données...",
+      "deleteModal": {
+        "title": "Supprimer le Rôle",
+        "message": "Êtes-vous sûr de vouloir supprimer ce rôle ? Cette action est irréversible.",
+        "confirm": "Supprimer",
+        "cancel": "Annuler"
+      },
+      "notifications": {
+        "deleteSuccess": "Rôle supprimé avec succès",
+        "deleteError": "Une erreur est survenue lors de la suppression du rôle",
+        "batchDeleteSuccess": "Suppression de {count} rôles réussie",
+        "batchDeleteError": "Une erreur est survenue lors de la suppression des rôles"
+      },
+      "batchActions": {
+        "delete": "Supprimer"
+      }
+    },
+    "Detail": {
+      "title": "Détail du Rôle",
+      "roleCode": "Code du Rôle",
+      "roleName": "Nom du Rôle",
+      "status": "Statut",
+      "active": "Actif",
+      "inactive": "Inactif",
+      "permissions": "Permissions",
+      "all": "Tout",
+      "back": "Retour",
+      "edit": "Modifier",
+      "loading": "Chargement des détails du rôle...",
+      "errorTitle": "Échec du chargement du rôle",
+      "errorMessage": "Une erreur s'est produite lors du chargement des détails du rôle. Veuillez réessayer.",
+      "backToList": "Retour à la liste des rôles",
+      "breadcrumb": {
+        "roles": "Liste des rôles",
+        "detail": "Détail du Rôle"
+      }
+    },
+    "Create": {
+      "title": "Ajouter un Nouveau Rôle",
+      "roleCode": "Code du Rôle",
+      "roleCodePlaceholder": "Entrez le code du rôle (ex: MANAGER, STAFF)",
+      "roleName": "Nom du Rôle",
+      "roleNamePlaceholder": "Entrez le nom du rôle",
+      "roleCodeAutoGenNote": "Le code du rôle sera généré automatiquement à partir du nom du rôle (majuscules)",
+      "status": "Statut",
+      "active": "Actif",
+      "inactive": "Inactif",
+      "permissions": "Permissions",
+      "all": "Tout",
+      "cancel": "Annuler",
+      "create": "Ajouter",
+      "loadingPermissions": "Chargement des permissions...",
+      "breadcrumb": {
+        "roles": "Liste des rôles",
+        "create": "Ajouter un Rôle"
+      },
+      "validation": {
+        "roleNameRequired": "Le nom du rôle est requis",
+        "roleNameMaxLength": "Le nom du rôle ne doit pas dépasser 100 caractères"
+      },
+      "notifications": {
+        "createSuccess": "Rôle créé avec succès",
+        "createError": "Échec de la création du rôle",
+        "roleAlreadyExists": "Un rôle avec ce nom existe déjà",
+        "loadPermissionsError": "Échec du chargement des permissions"
+      }
+    },
+    "Edit": {
+      "title": "Modifier le Rôle",
+      "roleCode": "Code du Rôle",
+      "roleCodePlaceholder": "Entrez le code du rôle (ex: MANAGER, STAFF)",
+      "roleCodeReadOnly": "Le code du rôle ne peut pas être modifié",
+      "roleName": "Nom du Rôle",
+      "roleNamePlaceholder": "Entrez le nom du rôle",
+      "status": "Statut",
+      "active": "Actif",
+      "inactive": "Inactif",
+      "permissions": "Permissions",
+      "all": "Tout",
+      "cancel": "Annuler",
+      "save": "Enregistrer les Modifications",
+      "loading": "Chargement des données du rôle...",
+      "loadError": "Échec du chargement des données du rôle. Veuillez réessayer.",
+      "success": "Rôle mis à jour avec succès",
+      "successWithReloginNote": "Les utilisateurs avec ce rôle doivent se reconnecter pour appliquer les nouvelles permissions.",
+      "error": "Échec de la mise à jour du rôle. Veuillez réessayer.",
+      "validation": {
+        "roleCodeRequired": "Le code du rôle est requis",
+        "roleCodeMaxLength": "Le code du rôle ne doit pas dépasser 50 caractères",
+        "roleNameRequired": "Le nom du rôle est requis",
+        "roleNameMaxLength": "Le nom du rôle ne doit pas dépasser 100 caractères",
+        "failed": "Veuillez vérifier les erreurs dans le formulaire"
+      },
+      "breadcrumb": {
+        "roles": "Liste des rôles",
+        "detail": "Détail du Rôle",
+        "edit": "Modifier le Rôle"
+      }
+    }
   }
 }
