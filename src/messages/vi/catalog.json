@@ -706,7 +706,9 @@
     "default": "Mặc định",
     "Validation": {
       "nameRequired": "Tên thuế không được để trống",
-      "ratePositive": "Mức thuế phải lớn hơn hoặc bằng 0"
+      "ratePositive": "Mức thuế phải lớn hơn hoặc bằng 0",
+      "rateMax": "Mức thuế không được vượt quá 100%",
+      "invalidInput": "Giá trị không hợp lệ"
     },
     "addTax": "Thêm Thuế mới",
     "addNew": "Thêm Thuế mới",

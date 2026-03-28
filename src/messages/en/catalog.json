@@ -706,7 +706,9 @@
     "default": "Default",
     "Validation": {
       "nameRequired": "Tax name is required",
-      "ratePositive": "Tax rate must be greater than or equal to 0"
+      "ratePositive": "Tax rate must be greater than or equal to 0",
+      "rateMax": "Tax rate cannot exceed 100%",
+      "invalidInput": "Invalid input"
     },
     "addTax": "Add New Tax",
     "addNew": "Add New Tax",
