@@ -956,6 +956,7 @@
         "updateError": "Không thể cập nhật trạng thái danh mục",
         "createSuccess": "Tạo danh mục thành công",
         "updateSuccess": "Cập nhật danh mục thành công",
+        "nameAlreadyExists": "Tên danh mục đã tồn tại",
         "actionError": "Có lỗi xảy ra khi xử lý yêu cầu",
         "batchActivateSuccess": "Đã kích hoạt {count} danh mục thành công",
         "batchDeactivateSuccess": "Đã vô hiệu hóa {count} danh mục thành công",
@@ -1984,7 +1985,8 @@
       },
       "notifications": {
         "createSuccess": "Thêm khách hàng thành công",
-        "createError": "Không thể thêm khách hàng"
+        "createError": "Không thể thêm khách hàng",
+        "phoneAlreadyExists": "Số điện thoại này đã được sử dụng bởi khách hàng khác"
       }
     },
     "Edit": {
@@ -2016,7 +2018,8 @@
       },
       "notifications": {
         "updateSuccess": "Cập nhật khách hàng thành công",
-        "updateError": "Không thể cập nhật khách hàng"
+        "updateError": "Không thể cập nhật khách hàng",
+        "phoneAlreadyExists": "Số điện thoại này đã được sử dụng bởi khách hàng khác"
       }
     },
     "Detail": {

@@ -1009,11 +1009,12 @@
       "notifications": {
         "loadError": "Failed to load customer details",
         "deleteSuccess": "Customer deleted successfully",
-        "deleteError": "Failed to delete customer"
+        "deleteError": "Failed to delete customer",
+        "deleteHasDependencies": "Cannot delete a customer who has existing orders or reservations"
       },
       "deleteModal": {
         "title": "Delete Customer",
-        "message": "Are you sure you want to delete customer '{name}'? This action cannot be undone.",
+        "message": "Are you sure you want to delete customer {name}? This action cannot be undone.",
         "confirm": "Delete",
         "cancel": "Cancel"
       }
@@ -1047,7 +1048,8 @@
       },
       "notifications": {
         "createSuccess": "Customer created successfully",
-        "createError": "Failed to create customer"
+        "createError": "Failed to create customer",
+        "phoneAlreadyExists": "A customer with this phone number already exists"
       }
     },
     "Edit": {
@@ -1079,7 +1081,8 @@
       },
       "notifications": {
         "updateSuccess": "Customer updated successfully",
-        "updateError": "Failed to update customer"
+        "updateError": "Failed to update customer",
+        "phoneAlreadyExists": "A customer with this phone number already exists"
       }
     },
     "Detail": {
@@ -1198,6 +1201,132 @@
     "deleteDialog": {
       "title": "Delete Template",
       "description": "Are you sure you want to delete this template? This action cannot be undone."
+    }
+  },
+  "Role": {
+    "List": {
+      "title": "Role List",
+      "description": "Manage roles, permissions, and staff distribution.",
+      "searchPlaceholder": "Search by name or code...",
+      "addNew": "Add New Role",
+      "table": {
+        "no": "No",
+        "name": "Name",
+        "code": "Code",
+        "staffCount": "Staff Count",
+        "action": "Action",
+        "empty": "No roles found."
+      },
+      "pagination": {
+        "pageSize": "Page size:",
+        "previous": "Previous",
+        "next": "Next"
+      },
+      "actions": {
+        "view": "View details",
+        "edit": "Edit role",
+        "delete": "Delete role"
+      },
+      "loading": "Loading data...",
+      "deleteModal": {
+        "title": "Delete Role",
+        "message": "Are you sure you want to delete this role? This action cannot be undone.",
+        "confirm": "Delete",
+        "cancel": "Cancel"
+      },
+      "notifications": {
+        "deleteSuccess": "Role deleted successfully",
+        "deleteError": "An error occurred while deleting the role",
+        "deleteHasDependencies": "Cannot delete a role that has assigned staff members",
+        "batchDeleteSuccess": "Successfully deleted {count} roles",
+        "batchDeleteError": "An error occurred while deleting roles"
+      },
+      "batchActions": {
+        "delete": "Delete"
+      }
+    },
+    "Detail": {
+      "title": "Role Detail",
+      "roleCode": "Role Code",
+      "roleName": "Role Name",
+      "status": "Status",
+      "active": "Active",
+      "inactive": "Inactive",
+      "permissions": "Permissions",
+      "all": "All",
+      "back": "Back",
+      "edit": "Edit",
+      "loading": "Loading role details...",
+      "errorTitle": "Failed to Load Role",
+      "errorMessage": "An error occurred while loading the role details. Please try again.",
+      "backToList": "Back to Role List",
+      "breadcrumb": {
+        "roles": "Role List",
+        "detail": "Role Detail"
+      }
+    },
+    "Create": {
+      "title": "Add New Role",
+      "roleCode": "Role Code",
+      "roleCodePlaceholder": "Enter role code (e.g., MANAGER, STAFF)",
+      "roleName": "Role Name",
+      "roleNamePlaceholder": "Enter role name",
+      "roleCodeAutoGenNote": "Role code will be auto-generated from role name (uppercase)",
+      "status": "Status",
+      "active": "Active",
+      "inactive": "Inactive",
+      "permissions": "Permissions",
+      "all": "All",
+      "cancel": "Cancel",
+      "create": "Add",
+      "loadingPermissions": "Loading permissions...",
+      "breadcrumb": {
+        "roles": "Role List",
+        "create": "Add Role"
+      },
+      "validation": {
+        "roleNameRequired": "Role name is required",
+        "roleNameMaxLength": "Role name must not exceed 100 characters"
+      },
+      "notifications": {
+        "createSuccess": "Role created successfully",
+        "createError": "Failed to create role",
+        "roleAlreadyExists": "A role with this name already exists",
+        "loadPermissionsError": "Failed to load permissions"
+      }
+    },
+    "Edit": {
+      "title": "Edit Role",
+      "roleCode": "Role Code",
+      "roleCodePlaceholder": "Enter role code (e.g., MANAGER, STAFF)",
+      "roleCodeReadOnly": "Role code cannot be edited",
+      "roleName": "Role Name",
+      "roleNamePlaceholder": "Enter role name",
+      "status": "Status",
+      "active": "Active",
+      "inactive": "Inactive",
+      "permissions": "Permissions",
+      "all": "All",
+      "cancel": "Cancel",
+      "save": "Save Changes",
+      "loading": "Loading role data...",
+      "loadError": "Failed to load role data. Please try again.",
+      "success": "Role updated successfully",
+      "successWithReloginNote": "Users with this role need to log in again to apply new permissions.",
+      "error": "Failed to update role. Please try again.",
+      "roleAlreadyExists": "A role with this name already exists.",
+      "validation": {
+        "roleCodeRequired": "Role code is required",
+        "roleCodeMaxLength": "Role code must not exceed 50 characters",
+        "roleNameRequired": "Role name is required",
+        "roleNameMaxLength": "Role name must not exceed 100 characters",
+        "failed": "Please check the form for errors"
+      },
+      "breadcrumb": {
+        "roles": "Role List",
+        "detail": "Role Detail",
+        "edit": "Edit Role"
+      }
     }
   }
 }

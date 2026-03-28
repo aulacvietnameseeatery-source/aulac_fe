@@ -245,6 +245,7 @@
         "updateError": "Échec de la mise à jour du statut de la catégorie",
         "createSuccess": "Catégorie créée avec succès",
         "updateSuccess": "Catégorie mise à jour avec succès",
+        "nameAlreadyExists": "Ce nom de catégorie existe déjà",
         "actionError": "Une erreur s'est produite lors du traitement de la demande",
         "batchActivateSuccess": "{count} catégorie(s) activée(s) avec succès",
         "batchDeactivateSuccess": "{count} catégorie(s) désactivée(s) avec succès",
@@ -708,7 +709,9 @@
     "default": "Par défaut",
     "Validation": {
       "nameRequired": "Le nom de la taxe est requis",
-      "ratePositive": "Le taux doit être supérieur ou égal à 0"
+      "ratePositive": "Le taux doit être supérieur ou égal à 0",
+      "rateMax": "Le taux ne peut pas dépasser 100%",
+      "invalidInput": "Entrée invalide"
     },
     "addTax": "Ajouter une nouvelle taxe",
     "addNew": "Ajouter une nouvelle taxe",

@@ -790,6 +790,7 @@
         "updateError": "Failed to update category status",
         "createSuccess": "Category created successfully",
         "updateSuccess": "Category updated successfully",
+        "nameAlreadyExists": "Category name already exists",
         "actionError": "An error occurred while processing the request",
         "batchActivateSuccess": "Successfully activated {count} categories",
         "batchDeactivateSuccess": "Successfully deactivated {count} categories",
@@ -1797,7 +1798,8 @@
       },
       "notifications": {
         "createSuccess": "Customer created successfully",
-        "createError": "Failed to create customer"
+        "createError": "Failed to create customer",
+        "phoneAlreadyExists": "A customer with this phone number already exists"
       }
     },
     "Edit": {
@@ -1829,7 +1831,8 @@
       },
       "notifications": {
         "updateSuccess": "Customer updated successfully",
-        "updateError": "Failed to update customer"
+        "updateError": "Failed to update customer",
+        "phoneAlreadyExists": "A customer with this phone number already exists"
       }
     },
     "Detail": {
