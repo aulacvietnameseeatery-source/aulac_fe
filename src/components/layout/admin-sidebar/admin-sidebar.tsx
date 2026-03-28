@@ -14,7 +14,6 @@ import {
   Settings2,
   UserCog,
   Tags,
-  Package,
   LogOut,
   X,
   FolderOpen,
@@ -95,10 +94,10 @@ const navigation: NavCategory[] = [
     status: "warehouse",
     icon: Warehouse,
     items: [
-      { key: "ingredients", href: "/dashboard/ingredients", icon: Package, permission: Permissions.ViewInventory },
+      // _OLD: { key: "ingredients", href: "/dashboard/ingredients", icon: Package, permission: Permissions.ViewInventory },
       { key: "suppliers", href: "/dashboard/suppliers", icon: Truck, permission: Permissions.ViewSupplier },
       { key: "inventory", href: "/dashboard/inventory", icon: Warehouse, permission: Permissions.ViewInventory },
-      { key: "stock", href: "/dashboard/stock", icon: Layers, permission: Permissions.StockCheck },
+      // _OLD: { key: "stock", href: "/dashboard/stock", icon: Layers, permission: Permissions.StockCheck },
     ]
   },
   {

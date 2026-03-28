@@ -173,6 +173,7 @@
         "reason": "Reason",
         "noAttendance": "No attendance recorded yet.",
         "checkInAction": "Check In",
+        "publishAction": "Publish",
         "checkOutAction": "Check Out",
         "adjustAttendance": "Adjust Attendance",
         "cancelAssignmentConfirm": "Cancel this assignment?",

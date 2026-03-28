@@ -58,6 +58,8 @@ export const TablePagination: React.FC<TablePaginationProps> = ({
                         disabled={!hasPrev}
                         onClick={() => onPageChange('first')}
                         className="h-8 w-8 text-[#1A3A52] hover:bg-[#D5BA98]/15"
+                        data-tooltip-content={t('first')}
+                        data-tooltip-id="my-tooltip"
                     >
                         <ChevronsLeft className="h-4 w-4" />
                     </Button>
@@ -67,6 +69,8 @@ export const TablePagination: React.FC<TablePaginationProps> = ({
                         disabled={!hasPrev}
                         onClick={() => onPageChange('prev')}
                         className="h-8 w-8 text-[#1A3A52] hover:bg-[#D5BA98]/15"
+                        data-tooltip-content={t('prev')}
+                        data-tooltip-id="my-tooltip"
                     >
                         <ChevronLeft className="h-4 w-4" />
                     </Button>
@@ -76,6 +80,8 @@ export const TablePagination: React.FC<TablePaginationProps> = ({
                         disabled={!hasNext}
                         onClick={() => onPageChange('next')}
                         className="h-8 w-8 text-[#1A3A52] hover:bg-[#D5BA98]/15"
+                        data-tooltip-content={t('next')}
+                        data-tooltip-id="my-tooltip"
                     >
                         <ChevronRight className="h-4 w-4" />
                     </Button>
@@ -85,6 +91,8 @@ export const TablePagination: React.FC<TablePaginationProps> = ({
                         disabled={!hasNext}
                         onClick={() => onPageChange('last')}
                         className="h-8 w-8 text-[#1A3A52] hover:bg-[#D5BA98]/15"
+                        data-tooltip-content={t('last')}
+                        data-tooltip-id="my-tooltip"
                     >
                         <ChevronsRight className="h-4 w-4" />
                     </Button>

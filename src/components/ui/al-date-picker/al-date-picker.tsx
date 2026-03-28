@@ -3,6 +3,7 @@
 import * as React from "react";
 import { CalendarIcon, X } from "lucide-react";
 import { format, getMonth, getYear, isValid, parse } from "date-fns";
+import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar";
 import { ALCombobox } from "@/components/ui/al-combobox";
@@ -155,8 +156,9 @@ const ALDatePicker = React.forwardRef<HTMLButtonElement, ALDatePickerProps>(
   ) => {
     const [open, setOpen] = React.useState(false);
     const isDateTime = variant === "datetime";
+    const tDatePicker = useTranslations("common.datePicker");
     const resolvedPlaceholder =
-      placeholder ?? (isDateTime ? "Pick date and time" : "Pick a date");
+      placeholder ?? (isDateTime ? tDatePicker("placeholderWithTime") : tDatePicker("placeholder"));
     const resolvedDisplayFormat =
       displayFormat ?? (isDateTime ? "dd/MM/yyyy HH:mm" : "dd/MM/yyyy");
 
@@ -348,6 +350,8 @@ const ALDatePicker = React.forwardRef<HTMLButtonElement, ALDatePickerProps>(
                   className="al-input-addon al-input-addon--icon al-input-addon--end al-input-addon--clickable"
                   role="button"
                   tabIndex={0}
+                  data-tooltip-content={tDatePicker("clear")}
+                  data-tooltip-id="my-tooltip"
                   onClick={handleClear}
                   onKeyDown={(e) => {
                     if (e.key === "Enter" || e.key === " ") {

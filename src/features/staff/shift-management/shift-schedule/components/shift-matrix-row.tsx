@@ -53,28 +53,28 @@ export function ShiftMatrixRow({
     else byDate.set(key, [a]);
   }
 
-  const colCount = weekDates.length;
-  const gridStyle = { gridTemplateColumns: `180px repeat(${colCount}, minmax(120px, 1fr))` };
+  const rowBg = isEven ? "bg-white" : "bg-[#FDFBF9]";
 
   return (
-    <div
-      className={cn(
-        "border-b border-[#D5BA98]/15",
-        isEven ? "bg-white" : "bg-[#FDFBF9]"
-      )}
-      style={{ display: "grid", ...gridStyle }}
-    >
-      {/* Staff info column */}
-      <div className="flex flex-col justify-center px-3 py-2 border-r border-[#D5BA98]/20">
-        <span className="text-sm font-medium text-[#1A3A52] truncate">
-          {staff.staffName}
-        </span>
-        <span className="text-[10px] text-[#1A3A52]/50 truncate">
-          {staff.roleName}
-        </span>
-      </div>
+    <tr className={cn("border-b border-[#D5BA98]/15", rowBg)}>
+      {/* Staff info column — sticky left */}
+      <td
+        className={cn(
+          "sticky left-0 z-10 px-3 py-2 border-r border-[#D5BA98]/20 min-w-[180px] w-[180px]",
+          rowBg
+        )}
+      >
+        <div className="flex flex-col justify-center">
+          <span className="text-sm font-medium text-[#1A3A52] truncate">
+            {staff.staffName}
+          </span>
+          <span className="text-[10px] text-[#1A3A52]/50 truncate">
+            {staff.roleName}
+          </span>
+        </div>
+      </td>
 
-      {/* 7 day cells */}
+      {/* Day cells */}
       {weekDates.map((d) => {
         const dateStr = fmtDate(d);
         const cellId = `${staff.staffId}-${dateStr}`;
@@ -93,6 +93,6 @@ export function ShiftMatrixRow({
           />
         );
       })}
-    </div>
+    </tr>
   );
 }

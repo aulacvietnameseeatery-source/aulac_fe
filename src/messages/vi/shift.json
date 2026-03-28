@@ -173,6 +173,7 @@
         "reason": "Lý do",
         "noAttendance": "Chưa có bản ghi chấm công.",
         "checkInAction": "Check In",
+        "publishAction": "Công Bố",
         "checkOutAction": "Check Out",
         "adjustAttendance": "Điều Chỉnh Chấm Công",
         "cancelAssignmentConfirm": "Hủy phân công này?",

@@ -40,10 +40,11 @@ export function ShiftMatrixCell({
   );
 
   return (
-    <div
+    <td
       ref={setNodeRef}
+      data-cell-id={cellId}
       className={cn(
-        "group/cell relative min-h-[64px] border-l border-[#D5BA98]/20 px-1 py-1 transition-colors",
+        "group/cell relative min-h-[64px] min-w-[120px] border-l border-[#D5BA98]/20 px-1 py-1 transition-colors align-top",
         isToday && "bg-[#1A3A52]/[0.03]",
         isOver && "bg-blue-50/60 ring-1 ring-inset ring-blue-300",
         isSelected && "bg-blue-100/70 ring-1 ring-inset ring-blue-400"
@@ -78,6 +79,6 @@ export function ShiftMatrixCell({
           {t("add")}
         </button>
       )}
-    </div>
+    </td>
   );
 }

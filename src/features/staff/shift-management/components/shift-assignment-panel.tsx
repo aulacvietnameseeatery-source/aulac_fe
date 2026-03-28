@@ -12,8 +12,7 @@ import { Permissions } from "@/types/const";
 import { dateUtils } from "@/lib/date-utils";
 import {
   useCancelAssignmentMutation,
-  useCheckInMutation,
-  useCheckOutMutation,
+  usePublishAssignmentsMutation,
 } from "../hooks/use-shift-queries";
 import { ShiftStatusBadge } from "./shift-status-badge";
 import { AttendanceAdjustmentDialog } from "./attendance-adjustment-dialog";
@@ -32,10 +31,10 @@ export function ShiftAssignmentPanel({ open, onClose, assignment }: Props) {
   const [adjustTarget, setAdjustTarget] = useState<AttendanceRecordDto | null>(null);
 
   const cancelAssignment = useCancelAssignmentMutation();
-  const checkIn = useCheckInMutation();
-  const checkOut = useCheckOutMutation();
+  const publishAssignments = usePublishAssignmentsMutation();
 
   const ar = assignment.attendance;
+  const isDraftAssignment = assignment.assignmentStatusCode?.toUpperCase() === "DRAFT";
 
   function formatTime(iso: string) {
     try { return dateUtils.formatLocal(iso, "HH:mm"); }
@@ -152,28 +151,20 @@ export function ShiftAssignmentPanel({ open, onClose, assignment }: Props) {
 
           {/* Action footer */}
           <div className="space-y-2 border-t border border-[#D5BA98]/60 bg-[#FDFBF9] p-4">
-            {/* Check-in / check-out buttons */}
+            {/* Publish button for draft assignment */}
             {assignment.isActive && (
               <div className="flex gap-2">
-                {!ar?.actualCheckInAt && (
-                  <PermissionGuard permission={Permissions.CheckInShift}>
+                {isDraftAssignment && (
+                  <PermissionGuard permission={Permissions.PublishShift}>
                     <Button
                       className="flex-1 bg-[#1A3A52] text-white hover:bg-[#1A3A52]/90"
-                      onClick={() => checkIn.mutate(assignment.shiftAssignmentId)}
-                      isLoading={checkIn.isPending}
+                      onClick={() => publishAssignments.mutate(
+                        { assignmentIds: [assignment.shiftAssignmentId] },
+                        { onSuccess: onClose }
+                      )}
+                      isLoading={publishAssignments.isPending}
                     >
-                      {t("checkInAction")}
-                    </Button>
-                  </PermissionGuard>
-                )}
-                {ar?.actualCheckInAt && !ar.actualCheckOutAt && (
-                  <PermissionGuard permission={Permissions.CheckOutShift}>
-                    <Button
-                      className="flex-1 border-blue-600 text-blue-700 hover:bg-blue-50"
-                      onClick={() => checkOut.mutate(assignment.shiftAssignmentId)}
-                      isLoading={checkOut.isPending}
-                    >
-                      {t("checkOutAction")}
+                      {t("publishAction")}
                     </Button>
                   </PermissionGuard>
                 )}
