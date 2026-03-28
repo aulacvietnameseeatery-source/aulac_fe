@@ -55,8 +55,10 @@ const RoleListContent = () => {
       setDeleteModalOpen(false);
     } catch (error: any) {
       console.error("Delete role failed:", error);
-      const errorMessage =
-        error.response?.data?.userMessage || t("notifications.deleteError");
+      const status = error.response?.status || error.status;
+      const errorMessage = status === 400
+        ? t("notifications.deleteHasDependencies")
+        : t("notifications.deleteError");
       toast.error(errorMessage);
     } finally {
       setIsDeleting(false);

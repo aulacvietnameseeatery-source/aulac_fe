@@ -1183,6 +1183,7 @@
       "notifications": {
         "deleteSuccess": "Xóa vai trò thành công",
         "deleteError": "Có lỗi xảy ra khi xóa vai trò",
+        "deleteHasDependencies": "Không thể xóa vai trò đang được gán cho nhân viên",
         "batchDeleteSuccess": "Đã xóa {count} vai trò thành công",
         "batchDeleteError": "Có lỗi xảy ra khi xóa vai trò"
       },
@@ -1259,6 +1260,7 @@
       "success": "Cập nhật vai trò thành công",
       "successWithReloginNote": "Người dùng có vai trò này cần đăng nhập lại để áp dụng quyền mới.",
       "error": "Không thể cập nhật vai trò. Vui lòng thử lại.",
+      "roleAlreadyExists": "Vai trò với tên này đã tồn tại.",
       "validation": {
         "roleCodeRequired": "Mã vai trò là bắt buộc",
         "roleCodeMaxLength": "Mã vai trò không được vượt quá 50 ký tự",

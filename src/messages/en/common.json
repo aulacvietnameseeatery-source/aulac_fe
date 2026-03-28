@@ -1183,6 +1183,7 @@
       "notifications": {
         "deleteSuccess": "Role deleted successfully",
         "deleteError": "An error occurred while deleting the role",
+        "deleteHasDependencies": "Cannot delete a role that has assigned staff members",
         "batchDeleteSuccess": "Successfully deleted {count} roles",
         "batchDeleteError": "An error occurred while deleting roles"
       },
@@ -1259,6 +1260,7 @@
       "success": "Role updated successfully",
       "successWithReloginNote": "Users with this role need to log in again to apply new permissions.",
       "error": "Failed to update role. Please try again.",
+      "roleAlreadyExists": "A role with this name already exists.",
       "validation": {
         "roleCodeRequired": "Role code is required",
         "roleCodeMaxLength": "Role code must not exceed 50 characters",
