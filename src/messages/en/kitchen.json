@@ -42,6 +42,21 @@
       "placeholder": "Enter reason...",
       "confirm": "Confirm",
       "cancel": "Cancel"
-    }
+    },
+    "kitchen": {
+    "title": "KITCHEN",
+    "order": "ORDER",
+    "table": "TABLE",
+    "time": "TIME",
+    "newItem": "NEW ITEM",
+    "cooking": "Cooking",
+    "processed": "Processed",
+    "reason": "REASON",
+    "printedAt": "PRINTED AT",
+    "end": "END",
+    "printTicket": "Print Kitchen Ticket",
+    "cancel": "Cancel",
+    "print": "Print"
+  }
   }
 }

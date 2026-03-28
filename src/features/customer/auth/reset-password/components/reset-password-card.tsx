@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "@/routing"
 import "../styles/index.css";
 
 export function ResetPasswordCard({ children }: { children: React.ReactNode }) {

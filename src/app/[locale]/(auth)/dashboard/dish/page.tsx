@@ -17,7 +17,7 @@ import { DishStatusCode } from "@/types/status-codes";
 import { DishActions } from "@/features/staff/dish-management/components/dish-actions";
 import { staffDishService } from "@/features/staff/dish-management/services/dish-service";
 import { useStatusBatchActions } from "@/features/staff/dish-management/hooks/useStatusBatchActions";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/routing"
 
 const DishListContent = () => {
     const t = useTranslations("Dish.List");

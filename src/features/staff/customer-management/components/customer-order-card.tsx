@@ -5,6 +5,7 @@ import dayjs from "dayjs";
 import { cn } from "@/lib/utils";
 import { CustomerOrderDto } from "../types/customer-detail-types";
 import { useTranslations } from "next-intl";
+import { dateUtils } from "@/lib/date-utils";
 
 interface CustomerOrderCardProps {
     order: CustomerOrderDto;
@@ -44,7 +45,7 @@ export const CustomerOrderCard: React.FC<CustomerOrderCardProps> = ({ order, onC
                     </div>
                     <div className="flex items-center gap-1.5 mt-1.5 text-xs text-slate-500 font-medium">
                         <CalendarDays className="w-3.5 h-3.5" />
-                        {dayjs(order.createdAt).format("DD/MM/YYYY HH:mm")}
+                        {dateUtils.formatLocal(order.createdAt, "dd/MM/yyyy HH:mm")}
                     </div>
                 </div>
                 <Badge className={cn("uppercase text-[10px] tracking-wider px-2 py-0.5 border shadow-none", getStatusColor(order.status))}>

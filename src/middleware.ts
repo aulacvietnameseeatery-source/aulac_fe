@@ -1,14 +1,8 @@
 import createMiddleware from 'next-intl/middleware';
+import { routing } from './routing';
 
-export default createMiddleware({
-    locales: ['en', 'fr', 'vi'],
-    defaultLocale: 'fr',
-    // todo muốn không hiện en hay fr hay vi thì để never
-    localePrefix: 'always',
-    localeDetection: false
-});
+export default createMiddleware(routing);
 
 export const config = {
-    // Không chạy middleware trên các file hệ thống/ảnh
     matcher: ['/', '/(en|fr|vi)/:path*', '/((?!api|_next|_vercel|.*\\..*).*)']
 };

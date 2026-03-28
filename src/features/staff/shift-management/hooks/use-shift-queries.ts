@@ -264,6 +264,7 @@ export function useCheckInMutation() {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: SHIFT_QUERY_KEYS.assignments() });
       qc.invalidateQueries({ queryKey: SHIFT_QUERY_KEYS.myShifts({}) });
+      qc.invalidateQueries({ queryKey: SHIFT_QUERY_KEYS.liveBoard({}) });
       toast.success("Checked in successfully");
     },
     onError: () => toast.error("Failed to check in"),
@@ -277,6 +278,7 @@ export function useCheckOutMutation() {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: SHIFT_QUERY_KEYS.assignments() });
       qc.invalidateQueries({ queryKey: SHIFT_QUERY_KEYS.myShifts({}) });
+      qc.invalidateQueries({ queryKey: SHIFT_QUERY_KEYS.liveBoard({}) });
       toast.success("Checked out successfully");
     },
     onError: () => toast.error("Failed to check out"),

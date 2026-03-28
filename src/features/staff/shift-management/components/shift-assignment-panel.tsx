@@ -9,6 +9,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { PermissionGuard } from "@/components/permission-guard";
 import { Permissions } from "@/types/const";
+import { dateUtils } from "@/lib/date-utils";
 import {
   useCancelAssignmentMutation,
   useCheckInMutation,
@@ -37,7 +38,7 @@ export function ShiftAssignmentPanel({ open, onClose, assignment }: Props) {
   const ar = assignment.attendance;
 
   function formatTime(iso: string) {
-    try { return new Date(iso).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }); }
+    try { return dateUtils.formatLocal(iso, "HH:mm"); }
     catch { return iso; }
   }
 

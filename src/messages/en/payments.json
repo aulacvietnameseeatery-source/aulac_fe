@@ -1,0 +1,33 @@
+{
+  "Payment": {
+    "List": {
+      "title": "Payment Management",
+      "description": "View and track all payment transactions in the system.",
+      "searchPlaceholder": "Search by customer name, phone number or order ID...",
+      "export": "Export Excel",
+      "exportAll": "Export All",
+      "exportingAll": "Exporting all data...",
+      "labels": {
+        "guest": "Guest",
+        "cash": "Cash",
+        "card": "Card",
+        "transfer": "Transfer"
+      },
+      "table": {
+        "no": "No.",
+        "orderId": "Order ID",
+        "customer": "Customer",
+        "method": "Method",
+        "receivedAmount": "Received",
+        "changeAmount": "Change",
+        "finalAmount": "Final Amount",
+        "paidAt": "Paid At"
+      },
+      "notifications": {
+        "noDataExport": "No data available to export",
+        "exportSuccess": "Excel file exported successfully",
+        "exportError": "An error occurred while exporting data"
+      }
+    }
+  }
+}

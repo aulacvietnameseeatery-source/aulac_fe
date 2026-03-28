@@ -11,10 +11,13 @@ import { ALInput } from '@/components/ui/al-input';
 import { useStoreProfileForm } from '../hooks/useStoreProfileForm';
 import { mapStoreSettingsToFormValues, mapFormValuesToStoreSettings, LOCALES, SupportedLocale, StoreProfileFormValues } from '../types/schema';
 import { useUpdateStoreSettingsMutation, useTranslateSettingsMutation } from '../hooks/useSystemSettingsMutation';
+import { SystemSettingMediaUploader } from './SystemSettingMediaUploader';
 
 
-const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
-const IMAGE_ACCEPT = '.jpg,.jpeg,.png,.gif,.webp,image/jpeg,image/png,image/gif,image/webp';
+const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/heic', 'image/heif'];
+const IMAGE_ACCEPT = '.jpg,.jpeg,.png,.gif,.webp,.heic,.heif,image/jpeg,image/png,image/gif,image/webp,image/heic,image/heif';
+const MAX_IMAGE_SIZE_MB = 5;
+const MAX_IMAGE_SIZE = MAX_IMAGE_SIZE_MB * 1024 * 1024;
 
 
 
@@ -33,8 +36,6 @@ export const StoreProfileForm = () => {
     const [previewData, setPreviewData] = useState<{ url: string; title: string, type: 'image' | 'video' } | null>(null);
     const [localPreviews, setLocalPreviews] = useState<Record<string, string>>({});
     const [remotePublicUrls, setRemotePublicUrls] = useState<Record<string, string>>({});
-    const logoInputRef = useRef<HTMLInputElement>(null);
-
     const logoUrlValue = watch('logoUrl');
 
     const toServerRelativePath = (value: string) => {
@@ -128,46 +129,6 @@ export const StoreProfileForm = () => {
         });
     };
 
-    const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (!file) return;
-
-        if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
-            toast.error(t('StoreProfile.invalidImageFormatError'));
-            if (e.target) e.target.value = '';
-            return;
-        }
-
-        if (file.size > 5 * 1024 * 1024) {
-            toast.error(t('StoreProfile.fileSizeError'));
-            if (e.target) e.target.value = '';
-            return;
-        }
-
-        const localUrl = URL.createObjectURL(file);
-        setLocalPreviews(prev => ({ ...prev, logoUrl: localUrl }));
-        setIsUploading('logoUrl');
-
-        try {
-            const { relativePath, publicUrl } = await uploadLogo(file);
-            const serverRelative = toServerRelativeFromUpload(relativePath, publicUrl);
-            setValue('logoUrl', serverRelative, { shouldDirty: true, shouldValidate: true });
-            if (publicUrl) {
-                setRemotePublicUrls(prev => ({ ...prev, logoUrl: publicUrl }));
-            } else if (serverRelative) {
-                setRemotePublicUrls(prev => ({ ...prev, logoUrl: serverRelative }));
-            }
-            toast.success(t('StoreProfile.uploadSuccess'));
-        } catch (error) {
-            toast.error(t('StoreProfile.uploadError'));
-            if (!logoUrlValue) {
-                setLocalPreviews(prev => { delete prev['logoUrl']; return { ...prev }; });
-            }
-        } finally {
-            setIsUploading(null);
-            if (e.target) e.target.value = '';
-        }
-    };
 
     const onSubmit = (values: StoreProfileFormValues) => {
         const mappedSettings = mapFormValuesToStoreSettings(values);
@@ -271,42 +232,6 @@ export const StoreProfileForm = () => {
                     {/* --- IDENTITY SECTION --- */}
                     <ALCard variant="soft" padding="none" radius="2xl" elevation="sm" className="border-amber-200/50 shadow-sm overflow-hidden" animation="slide-up">
                         <div className="p-6 md:p-8 ">
-                            <div className="space-y-3">
-                                <div className="flex flex-wrap gap-3">
-                                    {logoUrlValue && (
-                                        <Button
-                                            type="button"
-                                            variant="outline"
-                                            size="sm"
-                                            className="h-9 border-red-100 text-red-500 hover:bg-red-50 font-[Inter] gap-2"
-                                            onClick={() => setValue('logoUrl', '', { shouldDirty: true })}
-                                        >
-                                            <Trash2 className="w-4 h-4" />
-                                            {t("Common.remove")}
-                                        </Button>
-                                    )}
-                                    {getFullUrl() && (
-                                        <Button
-                                            type="button"
-                                            variant="outline"
-                                            size="sm"
-                                            className="h-9 border-blue-100 text-blue-600 hover:bg-blue-50 font-[Inter] gap-2"
-                                            onClick={() => setPreviewData({ url: getFullUrl(), title: "Store Logo", type: 'image' })}
-                                        >
-                                            <Maximize2 className="w-4 h-4" />
-                                            {t("Common.preview")}
-                                        </Button>
-                                    )}
-                                </div>
-                                <input
-                                    type="file"
-                                    ref={logoInputRef}
-                                    className="hidden"
-                                    accept={IMAGE_ACCEPT}
-                                    onChange={handleFileChange}
-                                />
-                            </div>
-
 
                             <div className="space-y-6">
                                 <ALInput

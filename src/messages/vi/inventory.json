@@ -32,7 +32,9 @@
     "txTypeChart": "Cơ cấu giao dịch gần đây",
     "viewAll": "Xem tất cả",
     "noLowStock": "Tất cả mặt hàng đều đủ số lượng",
-    "noRecentTx": "Không có giao dịch gần đây"
+    "noRecentTx": "Không có giao dịch gần đây",
+    "loading": "Đang tải...",
+    "itemCount": "{count} mặt hàng"
   },
   "items": {
     "title": "Danh sách hàng tồn",
@@ -67,6 +69,8 @@
     "noMovements": "Chưa có biến động",
     "previous": "Trước",
     "next": "Sau",
+    "loading": "Đang tải...",
+    "entryCreatedBy": "bởi {name}",
     "table": {
       "date": "Ngày",
       "txCode": "Mã giao dịch",
@@ -123,7 +127,18 @@
       "confirmApprove": "Duyệt giao dịch này? Tồn kho sẽ được cập nhật.",
       "confirmReject": "Từ chối giao dịch này?",
       "stockCheckArea": "Khu vực kiểm kho",
-      "noMedia": "Không có hình ảnh đính kèm"
+      "noMedia": "Không có hình ảnh đính kèm",
+      "loading": "Đang tải...",
+      "createdBy": "Người tạo",
+      "createdAt": "Ngày tạo",
+      "supplier": "Nhà cung cấp",
+      "exportReason": "Lý do xuất",
+      "submittedAt": "Ngày gửi duyệt",
+      "approvedBy": "Người duyệt",
+      "approvedAt": "Ngày duyệt",
+      "note": "Ghi chú",
+      "evidenceAlt": "Minh chứng",
+      "confirmRejectBtn": "Xác nhận từ chối"
     }
   },
   "create": {

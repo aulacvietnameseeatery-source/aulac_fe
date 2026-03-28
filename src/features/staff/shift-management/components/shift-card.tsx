@@ -5,6 +5,7 @@ import { CSS } from "@dnd-kit/utilities";
 import { GripVertical, AlertCircle } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
+import { dateUtils } from "@/lib/date-utils";
 import type { ShiftAssignmentListDto } from "../types/shift-management.types";
 
 // ─── Status → visual config ─────────────────────────────────────────────────
@@ -45,7 +46,7 @@ function getStyle(code: string) {
 
 function fmtTime(iso: string) {
   try {
-    return new Date(iso).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+    return dateUtils.formatLocal(iso, "HH:mm");
   } catch {
     return iso?.slice(11, 16) ?? "--:--";
   }

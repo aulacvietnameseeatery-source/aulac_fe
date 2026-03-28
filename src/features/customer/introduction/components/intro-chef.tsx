@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/routing"
 import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
 import { useDynamicSettings } from "../../shared/hooks/useDynamicSettings";

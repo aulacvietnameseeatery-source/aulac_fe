@@ -2,7 +2,7 @@
 
 import React, { Suspense, useCallback, useMemo, useState, useRef, useEffect } from "react";
 import { Loader2, Plus, AlertTriangle, Download, Upload } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/routing"
 import { toast } from "sonner";
 import { useTranslations } from "next-intl";
 

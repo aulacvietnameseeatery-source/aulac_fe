@@ -60,7 +60,12 @@
       "addTitle": "Thêm khu mới",
       "name": "Tên khu",
       "namePlaceholder": "VD: Garden, Terrace, Balcony",
-      "createHint": "Khu sẽ sẵn sàng ngay để gán bàn."
+      "createHint": "Khu sẽ sẵn sàng ngay để gán bàn.",
+      "subtitles": {
+        "Indoor": "Khu ăn chính",
+        "Outdoor": "Khu ngoài trời",
+        "Rooftop": "Tầng thượng"
+      }
     },
     "validation": {
       "tableCodeRequired": "Mã bàn là bắt buộc",
@@ -134,7 +139,11 @@
       "allClear": "Ổn định",
       "incomingReservations": "Đặt bàn sắp đến",
       "seeAll": "Xem tất cả",
-      "noUpcomingReservations": "Không có đặt bàn sắp tới"
+      "noUpcomingReservations": "Không có đặt bàn sắp tới",
+      "timeNow": "Ngay bây giờ",
+      "timeMinutes": "trong {minutes} phút",
+      "timeHoursMinutes": "trong {hours}h {minutes}p",
+      "timeHours": "trong {hours}h"
     }
   }
 }

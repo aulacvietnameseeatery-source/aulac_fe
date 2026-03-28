@@ -97,4 +97,7 @@ export const Permissions = {
   ApproveInventoryTx: 'INVENTORY:APPROVE',
   StockCheck: 'INVENTORY:STOCK_CHECK',
   ViewInventoryReport: 'INVENTORY:REPORT_READ',
+
+  // Payment
+  ViewPayment: 'PAYMENT:READ',
 } as const;

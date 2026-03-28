@@ -60,7 +60,12 @@
       "addTitle": "Ajouter une nouvelle zone",
       "name": "Nom de la zone",
       "namePlaceholder": "ex. Jardin, Terrasse, Balcon",
-      "createHint": "La zone sera immédiatement disponible pour l'affectation des tables."
+      "createHint": "La zone sera immédiatement disponible pour l'affectation des tables.",
+      "subtitles": {
+        "Indoor": "Salle principale",
+        "Outdoor": "En terrasse",
+        "Rooftop": "Terrasse supérieure"
+      }
     },
     "validation": {
       "tableCodeRequired": "Le code de table est requis",
@@ -134,7 +139,11 @@
       "allClear": "Tout est bon",
       "incomingReservations": "Réservations à venir",
       "seeAll": "Voir tout",
-      "noUpcomingReservations": "Aucune réservation à venir"
+      "noUpcomingReservations": "Aucune réservation à venir",
+      "timeNow": "Maintenant",
+      "timeMinutes": "dans {minutes}m",
+      "timeHoursMinutes": "dans {hours}h {minutes}m",
+      "timeHours": "dans {hours}h"
     }
   }
 }

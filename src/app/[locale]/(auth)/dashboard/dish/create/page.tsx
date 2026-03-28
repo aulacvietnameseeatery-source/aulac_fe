@@ -1,7 +1,7 @@
 "use client";
 
 import { DishForm } from "@/features/staff/create-edit-dish";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/routing"
 
 export default function CreateDishPage() {
   const router = useRouter();

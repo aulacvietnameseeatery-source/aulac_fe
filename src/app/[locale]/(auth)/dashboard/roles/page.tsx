@@ -13,7 +13,7 @@ import { ProtectedRoute } from "@/components/protected-route";
 import { PermissionGuard } from "@/components/permission-guard";
 import { Permissions } from "@/types/const";
 import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/routing"
 
 const RoleListContent = () => {
   const t = useTranslations("Role.List");
@@ -31,13 +31,13 @@ const RoleListContent = () => {
 
   // Action Handlers
   const handleView = (role: RoleDto) => {
-    router.push(`/${locale}/dashboard/roles/${role.roleId}`);
+    router.push(`/dashboard/roles/${role.roleId}`);
   };
   const handleEdit = (role: RoleDto) => {
-    router.push(`/${locale}/dashboard/roles/${role.roleId}/edit`);
+    router.push(`/dashboard/roles/${role.roleId}/edit`);
   };
   const handleCreate = () => {
-    router.push(`/${locale}/dashboard/roles/create`);
+    router.push(`/dashboard/roles/create`);
   };
 
   const handleDeleteClick = (role: RoleDto) => {

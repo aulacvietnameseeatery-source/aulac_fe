@@ -35,11 +35,11 @@ interface ZoneSectionProps {
   onStatusChange?: (tableId: number, status: TableStatus) => void;
 }
 
-const ZONE_SUBTITLES: Record<string, string> = {
-  Indoor: "Main dining area",
-  Outdoor: "Al fresco seating",
-  Rooftop: "Upper-level terrace",
-};
+// _OLD: const ZONE_SUBTITLES: Record<string, string> = {
+//   Indoor: "Main dining area",
+//   Outdoor: "Al fresco seating",
+//   Rooftop: "Upper-level terrace",
+// };
 
 export const ZoneSection: React.FC<ZoneSectionProps> = ({
   zone,
@@ -88,7 +88,7 @@ export const ZoneSection: React.FC<ZoneSectionProps> = ({
               </span>
             </CardTitle>
             <p className="mt-0.5 text-[11px] text-[#1A3A52]/55">
-              {ZONE_SUBTITLES[zone] ?? zone}
+              {t.has(`zone.subtitles.${zone}`) ? t(`zone.subtitles.${zone}`) : zone}
             </p>
           </div>
         </div>

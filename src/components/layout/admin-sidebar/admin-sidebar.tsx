@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useMemo, useEffect } from "react";
-import Link from "next/link";
+import { Link } from "@/routing"
 import { usePathname, useParams } from "next/navigation";
 import {
   LayoutDashboard,
@@ -159,8 +159,6 @@ interface AdminSidebarProps {
 
 export function AdminSidebar({ onClose }: AdminSidebarProps) {
   const pathname = usePathname();
-  const params = useParams();
-  const locale = params.locale as string || 'vi';
   const { userInfo } = useAuth();
   const { can } = usePermissions();
   const { mutate: logout, isPending: isLoggingOut } = useLogout();
@@ -242,7 +240,7 @@ export function AdminSidebar({ onClose }: AdminSidebarProps) {
 
           {/* Column 1: Mini Sidebar */}
           <div className="w-[70px] bg-[#1A3A51] border-r border-white/5 flex flex-col items-center py-6 z-30">
-            <Link href={`/${locale}/`} className="mb-8 px-2 transition-transform hover:scale-105 active:scale-95" title={t('homeLinkTitle')}>
+            <Link href="/" className="mb-8 px-2 transition-transform hover:scale-105 active:scale-95" title={t('homeLinkTitle')}>
               <Image
                   width={40}
                   height={40}
@@ -290,28 +288,6 @@ export function AdminSidebar({ onClose }: AdminSidebarProps) {
 
             {/* Column 1 Bottom: Notifications + Profile */}
             <div className="mt-auto px-2 w-full flex flex-col gap-4 items-center">
-              {/*/!* Notification Bell *!/*/}
-              {/*<button*/}
-              {/* onClick={() => setIsNotificationsOpen(!isNotificationsOpen)}*/}
-              {/* className={`*/}
-              {/* relative p-3 rounded-xl transition-all group notification-toggle*/}
-              {/* ${isNotificationsOpen ? 'bg-white/10 text-[#FFAB2D]' : 'text-white/40 hover:text-[#FFAB2D] hover:bg-white/5'}*/}
-              {/* `}*/}
-              {/*>*/}
-              {/* <Bell size={20} />*/}
-              {/* {unreadCount > 0 && (*/}
-              {/* <span className="absolute -top-0.5 -right-0.5 flex items-center justify-center min-w-4.5 h-4.5 px-1 text-[10px] font-semibold text-white bg-red-500 rounded-full leading-none">*/}
-              {/* {unreadCount > 99 ? "99+" : unreadCount}*/}
-              {/* </span>*/}
-              {/* )}*/}
-              {/*</button>*/}
-
-              {/*/!* _OLD: {isNotificationsOpen && (<NotificationPanel_DEPRECATED onClose={() => setIsNotificationsOpen(false)} />)} *!/*/}
-              {/*<NotificationCenter*/}
-              {/* open={isNotificationsOpen}*/}
-              {/* onClose={() => setIsNotificationsOpen(false)}*/}
-              {/*/>*/}
-
               <button
                   onClick={handleLogoutClick}
                   disabled={isLoggingOut}
@@ -365,7 +341,7 @@ export function AdminSidebar({ onClose }: AdminSidebarProps) {
                   return (
                       <li key={item.key} className="space-y-1">
                         <Link
-                            href={`/${locale}${item.href}`}
+                            href={item.href as any}
                             onClick={onClose}
                             className={`
                         group flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300
@@ -397,7 +373,7 @@ export function AdminSidebar({ onClose }: AdminSidebarProps) {
                                 return (
                                     <li key={child.key}>
                                       <Link
-                                          href={`/${locale}${child.href}`}
+                                          href={child.href as any}
                                           onClick={onClose}
                                           className={`
                                   group flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all

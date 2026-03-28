@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/routing"
 import Image from "next/image";
 import {
     Menu as MenuIcon, X, MapPin, Phone, Clock,
@@ -17,7 +17,6 @@ import { useStoreSettings } from "@/hooks/use-store-settings";
 import { useAuth } from "@/components/providers/auth-provider";
 import PublicBookingModal from "@/features/reservation-2/components/public-booking-modal";
 
-// IMPORT COMPONENT QUÉT QR ĐỘC LẬP
 import { QrScannerModal } from "@/components/ui/qr-scanner-modal";
 
 interface HeaderProps {
@@ -35,7 +34,6 @@ export function Header({ isScrolled, locale }: HeaderProps) {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isReservationModalOpen, setIsReservationModalOpen] = useState(false);
 
-    // STATE RIÊNG BIỆT QUẢN LÝ BẬT TẮT CAMERA
     const [isQrScannerOpen, setIsQrScannerOpen] = useState(false);
 
     const { data: storeSettings } = useStoreSettings();
@@ -66,11 +64,8 @@ export function Header({ isScrolled, locale }: HeaderProps) {
         });
     };
 
-    const getLink = (path: string) => `/${locale}${path}`;
-
-    // Handle staff login navigation - go to dashboard if already authenticated, otherwise go to login
     const getStaffLoginLink = () => {
-        return isAuthenticated ? getLink('/dashboard') : getLink('/login');
+        return isAuthenticated ? '/dashboard' : '/login';
     };
 
     const navItems = [
@@ -81,7 +76,7 @@ export function Header({ isScrolled, locale }: HeaderProps) {
     ];
 
     // ==========================================
-    // COMPONENT: NGÔN NGỮ (Dropdown mượt mà cho cả 2 nền tảng)
+    // COMPONENT: NGÔN NGỮ
     // ==========================================
     const LanguageSelector = ({ isMobile = false }: { isMobile?: boolean }) => {
         const [isOpen, setIsOpen] = useState(false);
@@ -105,7 +100,6 @@ export function Header({ isScrolled, locale }: HeaderProps) {
 
         return (
             <div className="relative inline-block text-left z-[110]" ref={dropdownRef}>
-                {/* Nút bấm (Trigger) */}
                 <button
                     onClick={() => setIsOpen(!isOpen)}
                     className={cn(
@@ -122,7 +116,6 @@ export function Header({ isScrolled, locale }: HeaderProps) {
                     <ChevronDown size={14} className={cn("text-[#C5A059] transition-transform duration-300 ease-out opacity-70", isOpen && "rotate-180 opacity-100")} />
                 </button>
 
-                {/* Hộp Dropdown (Content) */}
                 {isOpen && (
                     <>
                         <div
@@ -173,7 +166,6 @@ export function Header({ isScrolled, locale }: HeaderProps) {
 
     return (
         <>
-            {/* TÍCH HỢP MODAL CAMERA VÀO UI */}
             <QrScannerModal
                 isOpen={isQrScannerOpen}
                 onClose={() => setIsQrScannerOpen(false)}
@@ -193,8 +185,7 @@ export function Header({ isScrolled, locale }: HeaderProps) {
             )}>
                 <div className="w-full max-w-[1600px] mx-auto px-4 md:px-8 lg:px-12 flex flex-col transition-all duration-500">
                     <div className="flex items-center justify-between">
-                        {/* 1. LOGO */}
-                        <Link href={getLink("/")} className="flex items-center gap-4 z-50" onClick={() => setIsMobileMenuOpen(false)}>
+                        <Link href="/" className="flex items-center gap-4 z-50" onClick={() => setIsMobileMenuOpen(false)}>
                             <Image
                                 src={storeSettings?.logoUrl || "/images/logo.png"}
                                 alt="An Lac Logo"
@@ -226,7 +217,7 @@ export function Header({ isScrolled, locale }: HeaderProps) {
                             {navItems.map((item) => (
                                 <NavLink
                                     key={item.href}
-                                    href={getLink(item.href)}
+                                    href={item.href as any}
                                     title={item.label}
                                     className="text-white hover:text-[#C5A059] text-[13px] font-bold tracking-[0.1em] uppercase transition-colors"
                                 >
@@ -237,12 +228,9 @@ export function Header({ isScrolled, locale }: HeaderProps) {
 
                         {/* 3. ACTIONS PHẢI */}
                         <div className="flex items-center gap-4 lg:gap-6 z-50">
-
-                            {/* KHÔI PHỤC DROPDOWN NGÔN NGỮ ĐẸP */}
                             <div className="lg:hidden"><LanguageSelector isMobile={true} /></div>
                             <div className="hidden lg:block"><LanguageSelector isMobile={false} /></div>
 
-                            {/* NÚT KÍCH HOẠT CAMERA BÊN DESKTOP */}
                             <button
                                 onClick={() => setIsQrScannerOpen(true)}
                                 className="text-[#C5A059] hover:text-[#FDE08B] transition-colors p-1.5 lg:p-2 border border-[#C5A059]/40 rounded hover:bg-[#C5A059]/10 cursor-pointer"
@@ -260,7 +248,7 @@ export function Header({ isScrolled, locale }: HeaderProps) {
                                     RESERVE
                                 </button>
 
-                                <Link href={getStaffLoginLink()} className="text-white hover:text-[#C5A059] transition-colors" title={isAuthenticated ? "Go to Dashboard" : "Login as Staff"}>
+                                <Link href={getStaffLoginLink() as any} className="text-white hover:text-[#C5A059] transition-colors" title={isAuthenticated ? "Go to Dashboard" : "Login as Staff"}>
                                     <User size={20} />
                                 </Link>
                             </div>
@@ -308,10 +296,10 @@ export function Header({ isScrolled, locale }: HeaderProps) {
                 {isMobileMenuOpen && (
                     <div className="fixed inset-0 top-[76px] bg-[#152e42] z-[90] flex flex-col px-6 py-8 overflow-y-auto">
                         <nav className="flex flex-col mt-4">
-                            {navItems.map((item, index) => (
+                            {navItems.map((item) => (
                                 <Link
                                     key={item.href}
-                                    href={getLink(item.href)}
+                                    href={item.href as any}
                                     onClick={() => setIsMobileMenuOpen(false)}
                                     className="flex items-center justify-between py-6 border-b border-[#C5A059]/20 group"
                                 >
@@ -325,7 +313,6 @@ export function Header({ isScrolled, locale }: HeaderProps) {
                                     )}
                                 </Link>
                             ))}
-                            {/* NÚT KÍCH HOẠT CAMERA TRÊN MOBILE */}
                             <button
                                 onClick={() => {
                                     setIsMobileMenuOpen(false);
@@ -351,8 +338,9 @@ export function Header({ isScrolled, locale }: HeaderProps) {
                             >
                                 RESERVE
                             </button>
+
                             <Link
-                                href={getStaffLoginLink()}
+                                href={getStaffLoginLink() as any}
                                 onClick={() => setIsMobileMenuOpen(false)}
                                 className="flex items-center justify-center gap-3 text-white/70 hover:text-[#C5A059] transition-colors py-4 text-xs uppercase tracking-[0.15em] font-medium border border-[#C5A059]/30 rounded-sm bg-[#C5A059]/5"
                             >
@@ -360,7 +348,6 @@ export function Header({ isScrolled, locale }: HeaderProps) {
                                 <span>{isAuthenticated ? "GO TO DASHBOARD" : "LOGIN AS STAFF"}</span>
                             </Link>
 
-                            {/* Social Media Links for Mobile */}
                             <div className="flex items-center justify-center gap-6 mt-6 pb-8">
                                 {storeSettings?.facebookLink && (
                                     <a href={storeSettings.facebookLink} target="_blank" rel="noopener noreferrer" className="text-white/60 hover:text-[#C5A059] transition-colors">

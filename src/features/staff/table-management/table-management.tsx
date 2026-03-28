@@ -10,6 +10,7 @@ import { Permissions } from "@/types/const";
 import { LookupManagerModal, LOOKUP_TYPE, useLookupCrud } from "@/features/lookup";
 import { useDebounce } from "use-debounce";
 import { format } from "date-fns"; // Dùng để format ngày giờ
+import { dateUtils } from "@/lib/date-utils";
 import type {
   RestaurantTable,
   TableFormData,
@@ -86,7 +87,7 @@ export const TableManagementContent: React.FC = () => {
     if (filters.isOnline === "OFFLINE") params.isOnline = false;
 
     if (filters.targetTime) {
-      params.targetTime = new Date(filters.targetTime).toISOString();
+      params.targetTime = dateUtils.formatLocal(filters.targetTime, "yyyy-MM-dd'T'HH:mm:ss.SSSxxx");
     }
 
     return params;

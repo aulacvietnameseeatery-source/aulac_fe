@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { DollarSign, ListTodo, ShoppingBag, Users, Hourglass } from "lucide-react";
-import Link from "next/link";
+import { Link } from "@/routing"
 
 interface ReportTabsProps {
     activeTab: string;
@@ -13,7 +13,7 @@ export function ReportTabs({ activeTab }: ReportTabsProps) {
         { name: "Order Report", icon: ListTodo, href: "/dashboard/reports/order" },
         { name: "Sales Report", icon: ShoppingBag, href: "/dashboard/reports/sales" },
         { name: "Customer Report", icon: Users, href: "/dashboard/reports/customer" },
-        { name: "Audit Logs", icon: Hourglass, href: "/dashboard/reports/audit" },
+        //{ name: "Audit Logs", icon: Hourglass, href: "/dashboard/reports/audit" },
     ];
 
     return (
