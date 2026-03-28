@@ -1,9 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { editCategoryService } from "../services/editCategoryService";
 import { DishCategory, UpdateDishCategoryRequest } from "../types";
+import { ApiClientError } from "@/lib/api-error";
 
 /**
  * Hook to fetch a single category by ID
@@ -44,16 +46,23 @@ export const useDishCategory = (id: number) => {
 export const useUpdateDishCategory = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const t = useTranslations("DishCategory.List");
 
   const updateCategory = async (id: number, request: UpdateDishCategoryRequest) => {
     try {
       setIsLoading(true);
       setError(null);
       const data = await editCategoryService.updateCategory(id, request);
-      toast.success("Category updated successfully");
+      toast.success(t("notifications.updateSuccess"));
       return data;
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : "Failed to update category";
+      const apiErr = err as ApiClientError;
+      const errorMessage =
+        apiErr.status === 409
+          ? t("notifications.nameAlreadyExists")
+          : apiErr instanceof Error
+          ? apiErr.message
+          : t("notifications.actionError");
       setError(errorMessage);
       toast.error(errorMessage);
       console.error("Error updating category:", err);

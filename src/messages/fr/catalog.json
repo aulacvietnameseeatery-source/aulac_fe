@@ -231,6 +231,7 @@
         "updateError": "Échec de la mise à jour du statut de la catégorie",
         "createSuccess": "Catégorie créée avec succès",
         "updateSuccess": "Catégorie mise à jour avec succès",
+        "nameAlreadyExists": "Ce nom de catégorie existe déjà",
         "actionError": "Une erreur s'est produite lors du traitement de la demande",
         "batchActivateSuccess": "{count} catégorie(s) activée(s) avec succès",
         "batchDeactivateSuccess": "{count} catégorie(s) désactivée(s) avec succès",

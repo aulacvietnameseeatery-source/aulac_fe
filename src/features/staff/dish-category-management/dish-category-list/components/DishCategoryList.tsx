@@ -4,7 +4,7 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { BaseTable } from "@/components/ui/table/base-table";
 import { TableColumn } from "@/types/table.types";
 import { toast } from "sonner";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { CategoryHeader } from './CategoryHeader';
 import { CategoryActions } from './CategoryActions';
 import { useCategoryList } from '../hooks/useCategoryList';
@@ -18,6 +18,7 @@ import { editCategoryService } from '../../dish-category-edit/services/editCateg
 
 export default function DishCategoryList() {
   const t = useTranslations("DishCategory.List");
+  const locale = useLocale() as 'vi' | 'en' | 'fr';
   
   // Logic Hook
   const { categories, isLoading, totalCount, paginationInfo, onDataChange, refresh, updateCategoryLocally } = useCategoryList();
@@ -76,17 +77,22 @@ export default function DishCategoryList() {
   const handleSaveCategory = async (submitData: SaveCategoryRequest) => {
     setIsSubmitting(true);
     try {
+      const request = { i18n: submitData.i18n, isDisabled: submitData.isDisabled };
       if (modalMode === "add") {
-        await createCategoryService.createCategory(submitData);
+        await createCategoryService.createCategory(request);
         toast.success(t("notifications.createSuccess"));
       } else if (selectedCategory) {
-        await editCategoryService.updateCategory(selectedCategory.categoryId, submitData);
+        await editCategoryService.updateCategory(selectedCategory.categoryId, request);
         toast.success(t("notifications.updateSuccess"));
       }
       setIsModalOpen(false);
       refresh();
     } catch (error: any) {
-      toast.error(error.response?.data?.userMessage || t("notifications.actionError"));
+      const msg =
+        error?.status === 409
+          ? t("notifications.nameAlreadyExists")
+          : t("notifications.actionError");
+      toast.error(msg);
     } finally {
       setIsSubmitting(false);
     }
@@ -166,12 +172,17 @@ export default function DishCategoryList() {
       sortable: false,
       width: '250px',
       filterType: 'text' as const,
+      cellRender: ({ item }: { item: DishCategory }) =>
+        item.nameI18n?.[locale] || item.categoryName,
     },
     {
       field: 'description',
       header: t("table.description"),
       sortable: false,
-      cellRender: ({ value }) => value || <span className="text-gray-400 italic">-</span>,
+      cellRender: ({ item }: { item: DishCategory }) => {
+        const desc = item.descriptionI18n?.[locale] || item.description;
+        return desc ? desc : <span className="text-gray-400 italic">-</span>;
+      },
     },
     {
       field: 'isDisabled',
