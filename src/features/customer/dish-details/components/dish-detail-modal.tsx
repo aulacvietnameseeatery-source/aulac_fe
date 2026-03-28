@@ -136,130 +136,109 @@ export function DishDetailModal({ dishId, isOpen, onClose, onAddToCart }: DishDe
             ) : (
               <div className="flex flex-col md:flex-row">
                 {/* ── LEFT: Image panel — unified flex-col layout on all breakpoints ── */}
-                <div className="w-full md:w-[380px] md:shrink-0 flex flex-col bg-[#0a0f1e] md:border-r border-[#C5A059]/30 shrink-0">
-                  <Script src="https://product-gallery.cloudinary.com/all.js" strategy="lazyOnload" />
+                {availableModes.length > 0 && (
+                  <div className="w-full md:w-[380px] md:shrink-0 flex flex-col bg-[#0a0f1e] md:border-r border-[#C5A059]/30 shrink-0">
+                    <Script src="https://product-gallery.cloudinary.com/all.js" strategy="lazyOnload" />
 
-                  {/* Tab row — in-flow, top of panel */}
-                  <div className="flex-none flex items-center justify-center gap-1 px-3 pt-3 pb-2">
-                    {availableModes.map((mode) => (
-                      <button
-                        key={mode}
-                        type="button"
-                        onClick={() => setViewMode(mode)}
-                        className={`font-body rounded-full px-3 py-1 text-[10px] font-bold tracking-widest uppercase transition-all duration-300 ${viewMode === mode
+                    {/* Tab row — in-flow, top of panel */}
+                    <div className="flex-none flex items-center justify-center gap-1 px-3 pt-3 pb-2">
+                      {availableModes.map((mode) => (
+                        <button
+                          key={mode}
+                          type="button"
+                          onClick={() => setViewMode(mode)}
+                          className={`font-body rounded-full px-3 py-1 text-[10px] font-bold tracking-widest uppercase transition-all duration-300 ${viewMode === mode
                             ? "bg-[#FFAB2D] text-[#1A3A52] shadow-sm"
                             : "text-white/60 hover:text-white"
-                          }`}
-                      >
-                        {mode === "photo" ? tHero("photo") : mode === "360" ? tHero("view_360") : tHero("video")}
-                      </button>
-                    ))}
-                  </div>
+                            }`}
+                        >
+                          {mode === "photo" ? tHero("photo") : mode === "360" ? tHero("view_360") : tHero("video")}
+                        </button>
+                      ))}
+                    </div>
 
-                  {/* Inset content box — margin on all sides, visually separated */}
-                  <div className="flex-none mx-3 mb-2 rounded-xl overflow-hidden relative h-[320px] md:h-[360px]">
-                    {/* Photo — multi-image carousel */}
-                    {viewMode === "photo" && (() => {
-                      const images = dishData.data.imageUrls?.length ? dishData.data.imageUrls : [HERO_IMAGE];
-                      const total = images.length;
-                      const safeIdx = Math.min(currentImageIndex, total - 1);
-                      return (
-                        <div className="absolute inset-0 flex items-center justify-center bg-[#0a0f1e]">
-                          <img
-                            key={safeIdx}
-                            src={images[safeIdx]}
-                            alt={`${dishData.data.dishName} ${safeIdx + 1}`}
-                            className="max-h-full max-w-full object-contain animate-in fade-in duration-300"
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-t from-[#0f172a]/60 via-transparent to-transparent pointer-events-none" />
+                    {/* Inset content box — margin on all sides, visually separated */}
+                    <div className="flex-none mx-3 mb-2 rounded-xl overflow-hidden relative h-[320px] md:h-[360px]">
+                      {/* Photo — multi-image carousel */}
+                      {viewMode === "photo" && (() => {
+                        const images = dishData.data.imageUrls?.length ? dishData.data.imageUrls : [HERO_IMAGE];
+                        const total = images.length;
+                        const safeIdx = Math.min(currentImageIndex, total - 1);
+                        return (
+                          <div className="absolute inset-0 flex items-center justify-center bg-[#0a0f1e]">
+                            <img
+                              key={safeIdx}
+                              src={images[safeIdx]}
+                              alt={`${dishData.data.dishName} ${safeIdx + 1}`}
+                              className="max-h-full max-w-full object-contain animate-in fade-in duration-300"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-[#0f172a]/60 via-transparent to-transparent pointer-events-none" />
 
-                          {/* Prev / Next arrows — only when multiple images */}
-                          {total > 1 && (
-                            <>
-                              <button
-                                type="button"
-                                onClick={() => setCurrentImageIndex((safeIdx - 1 + total) % total)}
-                                className="absolute left-2 top-1/2 -translate-y-1/2 z-20 flex h-7 w-7 items-center justify-center rounded-full bg-black/50 text-white hover:bg-black/70 transition-colors"
-                              >
-                                <ChevronLeft className="h-4 w-4" />
-                              </button>
-                              <button
-                                type="button"
-                                onClick={() => setCurrentImageIndex((safeIdx + 1) % total)}
-                                className="absolute right-2 top-1/2 -translate-y-1/2 z-20 flex h-7 w-7 items-center justify-center rounded-full bg-black/50 text-white hover:bg-black/70 transition-colors"
-                              >
-                                <ChevronRight className="h-4 w-4" />
-                              </button>
+                            {/* Prev / Next arrows — only when multiple images */}
+                            {total > 1 && (
+                              <>
+                                <button
+                                  type="button"
+                                  onClick={() => setCurrentImageIndex((safeIdx - 1 + total) % total)}
+                                  className="absolute left-2 top-1/2 -translate-y-1/2 z-20 flex h-7 w-7 items-center justify-center rounded-full bg-black/50 text-white hover:bg-black/70 transition-colors"
+                                >
+                                  <ChevronLeft className="h-4 w-4" />
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() => setCurrentImageIndex((safeIdx + 1) % total)}
+                                  className="absolute right-2 top-1/2 -translate-y-1/2 z-20 flex h-7 w-7 items-center justify-center rounded-full bg-black/50 text-white hover:bg-black/70 transition-colors"
+                                >
+                                  <ChevronRight className="h-4 w-4" />
+                                </button>
 
-                              {/* Dot indicators */}
-                              <div className="absolute bottom-2 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1.5">
-                                {images.map((_, i) => (
-                                  <button
-                                    key={i}
-                                    type="button"
-                                    onClick={() => setCurrentImageIndex(i)}
-                                    className={`rounded-full transition-all duration-200 ${i === safeIdx
+                                {/* Dot indicators */}
+                                <div className="absolute bottom-2 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1.5">
+                                  {images.map((_, i) => (
+                                    <button
+                                      key={i}
+                                      type="button"
+                                      onClick={() => setCurrentImageIndex(i)}
+                                      className={`rounded-full transition-all duration-200 ${i === safeIdx
                                         ? "w-4 h-1.5 bg-[#FFAB2D]"
                                         : "w-1.5 h-1.5 bg-white/40 hover:bg-white/70"
-                                      }`}
-                                  />
-                                ))}
-                              </div>
-                            </>
+                                        }`}
+                                    />
+                                  ))}
+                                </div>
+                              </>
+                            )}
+                          </div>
+                        );
+                      })()}
+
+                      {/* 360 */}
+                      <div
+                        id="cloudinary-360-modal"
+                        className={`absolute inset-0 w-full h-full z-10 bg-[#0a0f1e] ${viewMode === "360" ? "block" : "hidden"}`}
+                      />
+
+                      {/* Video */}
+                      {viewMode === "video" && (
+                        <div className="absolute inset-0 z-10 flex items-center justify-center bg-black animate-in fade-in">
+                          {dishData.data.videoUrl ? (
+                            <video
+                              key={dishData.data.videoUrl}
+                              src={dishData.data.videoUrl}
+                              controls
+                              autoPlay
+                              playsInline
+                              className="w-full h-full object-contain"
+                            />
+                          ) : (
+                            <p className="text-[#C5A059] text-sm font-medium tracking-widest uppercase">Video Coming Soon</p>
                           )}
                         </div>
-                      );
-                    })()}
+                      )}
+                    </div>
 
-                    {/* 360 */}
-                    <div
-                      id="cloudinary-360-modal"
-                      className={`absolute inset-0 w-full h-full z-10 bg-[#0a0f1e] ${viewMode === "360" ? "block" : "hidden"}`}
-                    />
-
-                    {/* Video */}
-                    {viewMode === "video" && (
-                      <div className="absolute inset-0 z-10 flex items-center justify-center bg-black animate-in fade-in">
-                        {dishData.data.videoUrl ? (
-                          <video
-                            key={dishData.data.videoUrl}
-                            src={dishData.data.videoUrl}
-                            controls
-                            autoPlay
-                            playsInline
-                            className="w-full h-full object-contain"
-                          />
-                        ) : (
-                          <p className="text-[#C5A059] text-sm font-medium tracking-widest uppercase">Video Coming Soon</p>
-                        )}
-                      </div>
-                    )}
                   </div>
-
-                  {/* Order Now button — in-flow, bottom of panel */}
-                  <div className="flex-none px-3 pb-3">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        if (onAddToCart && dishData?.data) {
-                          onAddToCart({
-                            id: String(dishData.data.dishId),
-                            name: dishData.data.dishName,
-                            price: dishData.data.price,
-                            image: dishData.data.imageUrls?.[0] || '',
-                            desc: dishData.data.shortDescription || dishData.data.description || '',
-                          });
-                          onClose();
-                        } else {
-                          setOpenPopup(true);
-                        }
-                      }}
-                      className="w-full h-10 rounded-lg bg-[#FFAB2D] px-4 shadow-lg hover:bg-[#FFAB2D]/90 transition-colors"
-                    >
-                      <span className="font-body text-sm font-bold text-[#1A3A52] tracking-widest uppercase">{tHero("order_now")}</span>
-                    </button>
-                  </div>
-                </div>
+                )}
 
                 {/* ── RIGHT: Info panel ── */}
                 <div className="flex-1 px-6 py-5 overflow-y-auto no-scrollbar max-h-[340px] md:max-h-[480px] bg-[#0f172a]">
@@ -363,6 +342,29 @@ export function DishDetailModal({ dishId, isOpen, onClose, onAddToCart }: DishDe
                     ) : (
                       <p className="text-xs text-[#f5ead8]/30 italic">{tComp("no_composition")}</p>
                     )}
+                    {/* Order Now button — Added here to be visible even if left panel is hidden */}
+                    <div className="mt-6 flex-none">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (onAddToCart && dishData?.data) {
+                            onAddToCart({
+                              id: String(dishData.data.dishId),
+                              name: dishData.data.dishName,
+                              price: dishData.data.price,
+                              image: dishData.data.imageUrls?.[0] || '',
+                              desc: dishData.data.shortDescription || dishData.data.description || '',
+                            });
+                            onClose();
+                          } else {
+                            setOpenPopup(true);
+                          }
+                        }}
+                        className="w-full h-11 rounded-lg bg-[#FFAB2D] px-4 shadow-lg hover:bg-[#FFAB2D]/90 transition-colors flex items-center justify-center gap-2"
+                      >
+                        <span className="font-body text-sm font-bold text-[#1A3A52] tracking-widest uppercase">{tHero("order_now")}</span>
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
