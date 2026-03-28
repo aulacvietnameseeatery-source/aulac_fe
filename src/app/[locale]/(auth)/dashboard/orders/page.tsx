@@ -253,7 +253,7 @@ function OrdersContent() {
     const handlePageSizeChange = useCallback((size: number) => { setPageSize(size); setCurrentPage(1); }, []);
 
     const handleCreate = () => {
-        router.push(`/dashboard/orders/create`);
+        router.push(`/dashboard/orders/pos`);
     };
 
     return (
