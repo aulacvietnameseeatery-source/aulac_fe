@@ -1,8 +1,16 @@
+export interface CategoryI18n {
+  vi: string;
+  en: string;
+  fr: string;
+}
+
 export interface DishCategory {
   categoryId: number;
   categoryName: string;
   description?: string;
   isDisabled: boolean;
+  nameI18n: CategoryI18n;
+  descriptionI18n: CategoryI18n;
 }
 
 export type StatusFilter = 'all' | 'active' | 'inactive';

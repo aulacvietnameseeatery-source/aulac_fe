@@ -245,6 +245,7 @@
         "updateError": "Không thể cập nhật trạng thái danh mục",
         "createSuccess": "Tạo danh mục thành công",
         "updateSuccess": "Cập nhật danh mục thành công",
+        "nameAlreadyExists": "Tên danh mục đã tồn tại",
         "actionError": "Có lỗi xảy ra khi xử lý yêu cầu",
         "batchActivateSuccess": "Đã kích hoạt {count} danh mục thành công",
         "batchDeactivateSuccess": "Đã vô hiệu hóa {count} danh mục thành công",

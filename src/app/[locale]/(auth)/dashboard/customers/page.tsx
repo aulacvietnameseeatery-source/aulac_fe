@@ -78,11 +78,15 @@ const CustomerListContent = () => {
             toast.success(t("notifications.deleteSuccess"));
             refresh();
             setDeleteModalOpen(false);
+            setCustomerToDelete(null);
         } catch (error: any) {
-            toast.error(error.response?.data?.userMessage || t("notifications.deleteError"));
+            const status = error.response?.status || error.status;
+            const errorMessage = status === 400
+                ? t("notifications.deleteHasDependencies")
+                : t("notifications.deleteError");
+            toast.error(errorMessage);
         } finally {
             setIsDeleting(false);
-            setCustomerToDelete(null);
         }
     };
 
@@ -116,8 +120,17 @@ const CustomerListContent = () => {
             refresh();
             handleCloseModal();
         } catch (error: any) {
-            const errorMessage = error.response?.data?.userMessage ||
-                (modalMode === "add" ? tAdd("notifications.createError") : tEdit("notifications.updateError"));
+            const status = error.response?.status || error.status;
+            let errorMessage: string;
+            if (status === 400) {
+                errorMessage = modalMode === "add"
+                    ? tAdd("notifications.phoneAlreadyExists")
+                    : tEdit("notifications.phoneAlreadyExists");
+            } else {
+                errorMessage = modalMode === "add"
+                    ? tAdd("notifications.createError")
+                    : tEdit("notifications.updateError");
+            }
             toast.error(errorMessage);
         } finally {
             setIsSubmitting(false);
