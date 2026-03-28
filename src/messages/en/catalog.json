@@ -245,6 +245,7 @@
         "updateError": "Failed to update category status",
         "createSuccess": "Category created successfully",
         "updateSuccess": "Category updated successfully",
+        "nameAlreadyExists": "Category name already exists",
         "actionError": "An error occurred while processing the request",
         "batchActivateSuccess": "Successfully activated {count} categories",
         "batchDeactivateSuccess": "Successfully deactivated {count} categories",

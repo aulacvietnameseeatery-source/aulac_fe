@@ -9,6 +9,9 @@ import { useTranslations } from "next-intl";
 
 import type { DishCategory } from "../types";
 
+const LANGUAGES = ["en", "vi", "fr"] as const;
+type Language = typeof LANGUAGES[number];
+
 interface DishCategoryModalProps {
     isOpen: boolean;
     mode: "add" | "edit";
@@ -18,22 +21,27 @@ interface DishCategoryModalProps {
     isSubmitting?: boolean;
 }
 
-export interface SaveCategoryRequest {
-    categoryName: string;
-    description?: string;
-    isDisabled: boolean;
-}
-
-export interface CategoryFormData {
-    categoryName: string;
+export interface CategoryI18nContent {
+    name: string;
     description: string;
+}
+
+export interface SaveCategoryRequest {
+    i18n: Record<Language, CategoryI18nContent>;
     isDisabled: boolean;
 }
 
-const initialFormData: CategoryFormData = {
-    categoryName: "",
-    description: "",
-    isDisabled: false,
+type I18nFormData = Record<Language, CategoryI18nContent>;
+type I18nErrors = Partial<Record<Language, { name?: string; description?: string }>>;
+
+const makeEmptyLang = (): CategoryI18nContent => ({ name: "", description: "" });
+
+const initialI18n: I18nFormData = { en: makeEmptyLang(), vi: makeEmptyLang(), fr: makeEmptyLang() };
+
+const LANG_LABELS: Record<Language, string> = {
+    en: "EN",
+    vi: "VI",
+    fr: "FR",
 };
 
 const DishCategoryModal: React.FC<DishCategoryModalProps> = ({
@@ -45,58 +53,83 @@ const DishCategoryModal: React.FC<DishCategoryModalProps> = ({
     isSubmitting = false,
 }) => {
     const t = useTranslations("DishCategory");
-    const [formData, setFormData] = useState<CategoryFormData>(initialFormData);
-    const [errors, setErrors] = useState<{ [key: string]: string }>({});
+    const [activeTab, setActiveTab] = useState<Language>("en");
+    const [i18n, setI18n] = useState<I18nFormData>(initialI18n);
+    const [isDisabled, setIsDisabled] = useState(false);
+    const [errors, setErrors] = useState<I18nErrors>({});
 
     useEffect(() => {
         if (mode === "edit" && category) {
-            setFormData({
-                categoryName: category.categoryName,
-                description: category.description || "",
-                isDisabled: category.isDisabled,
+            setI18n({
+                en: {
+                    name: category.nameI18n?.en ?? category.categoryName,
+                    description: category.descriptionI18n?.en ?? category.description ?? "",
+                },
+                vi: {
+                    name: category.nameI18n?.vi ?? category.categoryName,
+                    description: category.descriptionI18n?.vi ?? category.description ?? "",
+                },
+                fr: {
+                    name: category.nameI18n?.fr ?? category.categoryName,
+                    description: category.descriptionI18n?.fr ?? category.description ?? "",
+                },
             });
+            setIsDisabled(category.isDisabled);
         } else {
-            setFormData(initialFormData);
+            setI18n(initialI18n);
+            setIsDisabled(false);
         }
         setErrors({});
+        setActiveTab("en");
     }, [mode, category, isOpen]);
 
-    const handleChange = (field: keyof CategoryFormData, value: any) => {
-        setFormData((prev) => ({ ...prev, [field]: value }));
-        // Clear error when user starts typing
-        if (errors[field]) {
-            setErrors((prev) => ({ ...prev, [field]: "" }));
+    const handleLangChange = (lang: Language, field: keyof CategoryI18nContent, value: string) => {
+        setI18n((prev) => ({ ...prev, [lang]: { ...prev[lang], [field]: value } }));
+        if (errors[lang]?.[field]) {
+            setErrors((prev) => ({
+                ...prev,
+                [lang]: { ...prev[lang], [field]: undefined },
+            }));
         }
     };
 
-    const validateForm = () => {
-        const newErrors: { [key: string]: string } = {};
+    const validateForm = (): boolean => {
+        const newErrors: I18nErrors = {};
 
-        if (!formData.categoryName.trim()) {
-            newErrors.categoryName = t("Add.validation.nameRequired");
-        } else if (formData.categoryName.length > 100) {
-            newErrors.categoryName = t("Add.validation.nameMaxLength");
-        }
+        for (const lang of LANGUAGES) {
+            if (!i18n[lang].name.trim()) {
+                newErrors[lang] = { ...newErrors[lang], name: t("Add.validation.nameRequired") };
+            } else if (i18n[lang].name.length > 100) {
+                newErrors[lang] = { ...newErrors[lang], name: t("Add.validation.nameMaxLength") };
+            }
 
-        if (formData.description && formData.description.length > 100) {
-            newErrors.description = t("Add.validation.descriptionMaxLength");
+            if (i18n[lang].description.length > 100) {
+                newErrors[lang] = { ...newErrors[lang], description: t("Add.validation.descriptionMaxLength") };
+            }
         }
 
         setErrors(newErrors);
-        return Object.keys(newErrors).length === 0;
+
+        const hasErrors = Object.keys(newErrors).length > 0;
+        if (hasErrors) {
+            // Switch to first tab with an error
+            const firstErrorLang = LANGUAGES.find((l) => newErrors[l]);
+            if (firstErrorLang) setActiveTab(firstErrorLang);
+        }
+        return !hasErrors;
     };
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-
-        if (!validateForm()) {
-            return;
-        }
+        if (!validateForm()) return;
 
         const submitData: SaveCategoryRequest = {
-            categoryName: formData.categoryName.trim(),
-            description: formData.description.trim() || undefined,
-            isDisabled: formData.isDisabled,
+            i18n: {
+                en: { name: i18n.en.name.trim(), description: i18n.en.description.trim() },
+                vi: { name: i18n.vi.name.trim(), description: i18n.vi.description.trim() },
+                fr: { name: i18n.fr.name.trim(), description: i18n.fr.description.trim() },
+            },
+            isDisabled,
         };
 
         onSubmit(submitData);
@@ -107,7 +140,7 @@ const DishCategoryModal: React.FC<DishCategoryModalProps> = ({
             open={isOpen}
             onClose={onClose}
             title={mode === "add" ? t("Add.title") : t("Edit.title")}
-            width="600px"
+            width="640px"
             footer={
                 <div className="flex items-center gap-3 w-full">
                     <Button
@@ -134,37 +167,64 @@ const DishCategoryModal: React.FC<DishCategoryModalProps> = ({
         >
             <form id="category-form" onSubmit={handleSubmit}>
                 <div className="space-y-5 p-5">
-                    {/* Category Name */}
-                    <ALInput
-                        title={t("Add.categoryName")}
-                        required
-                        placeholder={t("Add.categoryNamePlaceholder")}
-                        value={formData.categoryName}
-                        onChange={(e) => handleChange("categoryName", e.target.value)}
-                        error={errors.categoryName}
-                    />
-
-                    {/* Description */}
-                    <div className="space-y-2">
-                        <label className="text-sm font-medium text-gray-700">
-                            {t("Add.description")}
-                        </label>
-                        <textarea
-                            className={`w-full px-3 py-2 border rounded-lg text-sm resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                                errors.description ? "border-red-500" : "border-gray-300"
-                            }`}
-                            rows={3}
-                            placeholder={t("Add.descriptionPlaceholder")}
-                            value={formData.description}
-                            onChange={(e) => handleChange("description", e.target.value)}
-                            disabled={isSubmitting}
-                        />
-                        {errors.description && (
-                            <p className="text-xs text-red-500">{errors.description}</p>
-                        )}
+                    {/* Language Tabs */}
+                    <div className="flex border-b border-gray-200">
+                        {LANGUAGES.map((lang) => {
+                            const hasError = !!errors[lang];
+                            return (
+                                <button
+                                    key={lang}
+                                    type="button"
+                                    onClick={() => setActiveTab(lang)}
+                                    className={`px-5 py-2 text-sm font-medium border-b-2 transition-colors ${
+                                        activeTab === lang
+                                            ? "border-primary text-primary"
+                                            : "border-transparent text-gray-500 hover:text-gray-700"
+                                    } ${hasError ? "text-red-500" : ""}`}
+                                >
+                                    {LANG_LABELS[lang]}
+                                    {hasError && <span className="ml-1 text-red-500">•</span>}
+                                </button>
+                            );
+                        })}
                     </div>
 
-                    {/* Status Toggle (only for edit mode) */}
+                    {/* Per-language fields */}
+                    {LANGUAGES.map((lang) => (
+                        <div key={lang} className={lang === activeTab ? "space-y-4" : "hidden"}>
+                            {/* Name */}
+                            <ALInput
+                                title={t("Add.categoryName")}
+                                required
+                                placeholder={t("Add.categoryNamePlaceholder")}
+                                value={i18n[lang].name}
+                                onChange={(e) => handleLangChange(lang, "name", e.target.value)}
+                                error={errors[lang]?.name}
+                            />
+
+                            {/* Description */}
+                            <div className="space-y-2">
+                                <label className="text-sm font-medium text-gray-700">
+                                    {t("Add.description")}
+                                </label>
+                                <textarea
+                                    className={`w-full px-3 py-2 border rounded-lg text-sm resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                                        errors[lang]?.description ? "border-red-500" : "border-gray-300"
+                                    }`}
+                                    rows={3}
+                                    placeholder={t("Add.descriptionPlaceholder")}
+                                    value={i18n[lang].description}
+                                    onChange={(e) => handleLangChange(lang, "description", e.target.value)}
+                                    disabled={isSubmitting}
+                                />
+                                {errors[lang]?.description && (
+                                    <p className="text-xs text-red-500">{errors[lang]?.description}</p>
+                                )}
+                            </div>
+                        </div>
+                    ))}
+
+                    {/* Status Toggle (edit mode only) */}
                     {mode === "edit" && (
                         <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200">
                             <div>
@@ -176,8 +236,8 @@ const DishCategoryModal: React.FC<DishCategoryModalProps> = ({
                                 </p>
                             </div>
                             <Switch
-                                checked={!formData.isDisabled}
-                                onChange={(checked) => handleChange("isDisabled", !checked)}
+                                checked={!isDisabled}
+                                onChange={(checked) => setIsDisabled(!checked)}
                                 disabled={isSubmitting}
                             />
                         </div>
@@ -189,3 +249,4 @@ const DishCategoryModal: React.FC<DishCategoryModalProps> = ({
 };
 
 export default DishCategoryModal;
+

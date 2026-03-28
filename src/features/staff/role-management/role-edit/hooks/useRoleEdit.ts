@@ -148,8 +148,10 @@ export const useRoleEdit = (roleId: number) => {
       router.push(`/dashboard/roles/${roleId}`);
     } catch (error: any) {
       console.error("Failed to update role:", error);
-      
-      const errorMessage = error.message || t("error");
+      const status = error.response?.status || error.status;
+      const errorMessage = status === 409
+        ? t("roleAlreadyExists")
+        : t("error");
       toast.error(errorMessage);
     } finally {
       setIsSubmitting(false);
