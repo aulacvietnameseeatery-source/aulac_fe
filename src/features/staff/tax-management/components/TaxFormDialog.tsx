@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { Dialog } from '@/components/ui/dialog';
@@ -41,7 +41,9 @@ export const TaxFormDialog: React.FC<TaxFormDialogProps> = ({
 
     const taxSchema = React.useMemo(() => z.object({
         taxName: z.string().min(1, t('Validation.nameRequired')),
-        taxRate: z.number().min(0, t('Validation.ratePositive')),
+        taxRate: z.number({ message: t('Validation.invalidInput') })
+            .min(0, t('Validation.ratePositive'))
+            .max(100, t('Validation.rateMax')),
         taxType: z.enum(['INCLUSIVE', 'EXCLUSIVE']),
         isActive: z.boolean(),
         isDefault: z.boolean(),
@@ -53,6 +55,7 @@ export const TaxFormDialog: React.FC<TaxFormDialogProps> = ({
         reset,
         setValue,
         watch,
+        control,
         formState: { errors },
     } = useForm<TaxFormValues>({
         resolver: zodResolver(taxSchema),
@@ -90,12 +93,16 @@ export const TaxFormDialog: React.FC<TaxFormDialogProps> = ({
     const isActive = watch('isActive');
     const isDefault = watch('isDefault');
 
+    const handleFormSubmit = (data: TaxFormValues) => {
+        onSubmit(data as CreateTaxRequestDTO);
+    };
+
     const footer = (
         <div className="flex justify-end gap-2 px-4 pb-4">
             <Button type="button" variant="outline" onClick={onClose} disabled={isLoading}>
                 {commonT('cancel')}
             </Button>
-            <Button type="button" variant="default" onClick={handleSubmit(onSubmit)} isLoading={isLoading}>
+            <Button type="button" variant="default" onClick={handleSubmit(handleFormSubmit)} isLoading={isLoading}>
                 {rootT('save')}
             </Button>
         </div>
@@ -115,12 +122,21 @@ export const TaxFormDialog: React.FC<TaxFormDialogProps> = ({
                         error={errors.taxName?.message}
                         {...register('taxName')}
                     />
-                    <ALInput
-                        title={t('rate')}
-                        type="number"
-                        step="0.01"
-                        error={errors.taxRate?.message}
-                        {...register('taxRate', { valueAsNumber: true })}
+                    <Controller
+                        name="taxRate"
+                        control={control}
+                        render={({ field }) => (
+                            <ALInput
+                                title={t('rate')}
+                                type="number"
+                                numberDecimalScale={2}
+                                numberSuffix=" %"
+                                error={errors.taxRate?.message}
+                                value={field.value}
+                                onChange={(e) => field.onChange(Number(e.target.value))}
+                                onBlur={field.onBlur}
+                            />
+                        )}
                     />
 
                     <ALCombobox

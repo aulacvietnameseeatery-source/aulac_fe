@@ -709,7 +709,9 @@
     "default": "Par défaut",
     "Validation": {
       "nameRequired": "Le nom de la taxe est requis",
-      "ratePositive": "Le taux doit être supérieur ou égal à 0"
+      "ratePositive": "Le taux doit être supérieur ou égal à 0",
+      "rateMax": "Le taux ne peut pas dépasser 100%",
+      "invalidInput": "Entrée invalide"
     },
     "addTax": "Ajouter une nouvelle taxe",
     "addNew": "Ajouter une nouvelle taxe",
