@@ -4,7 +4,6 @@ import { toast } from 'sonner';
 import { Trash2, Save, Loader2, Upload, Facebook, Instagram, Music2 as Tiktok, Eye, Phone, Mail, Languages, Maximize2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { getGroupSettings, uploadLogo } from '../services/system-setting.service';
-import { BASE_URL } from '@/lib/http';
 import { cn } from '@/lib/utils';
 import { MediaPreviewModal } from '@/components/shared/MediaPreviewModal';
 import { ALCard } from '@/components/ui/al-card';
@@ -12,11 +11,13 @@ import { ALInput } from '@/components/ui/al-input';
 import { useStoreProfileForm } from '../hooks/useStoreProfileForm';
 import { mapStoreSettingsToFormValues, mapFormValuesToStoreSettings, LOCALES, SupportedLocale, StoreProfileFormValues } from '../types/schema';
 import { useUpdateStoreSettingsMutation, useTranslateSettingsMutation } from '../hooks/useSystemSettingsMutation';
-import { normalizeMediaUrl } from '@/lib/normalize-media-url';
+import { SystemSettingMediaUploader } from './SystemSettingMediaUploader';
 
 
-const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
-const IMAGE_ACCEPT = '.jpg,.jpeg,.png,.gif,.webp,image/jpeg,image/png,image/gif,image/webp';
+const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/heic', 'image/heif'];
+const IMAGE_ACCEPT = '.jpg,.jpeg,.png,.gif,.webp,.heic,.heif,image/jpeg,image/png,image/gif,image/webp,image/heic,image/heif';
+const MAX_IMAGE_SIZE_MB = 5;
+const MAX_IMAGE_SIZE = MAX_IMAGE_SIZE_MB * 1024 * 1024;
 
 
 
@@ -34,9 +35,36 @@ export const StoreProfileForm = () => {
 
     const [previewData, setPreviewData] = useState<{ url: string; title: string, type: 'image' | 'video' } | null>(null);
     const [localPreviews, setLocalPreviews] = useState<Record<string, string>>({});
-    const logoInputRef = useRef<HTMLInputElement>(null);
-
+    const [remotePublicUrls, setRemotePublicUrls] = useState<Record<string, string>>({});
     const logoUrlValue = watch('logoUrl');
+
+    const toServerRelativePath = (value: string) => {
+        const trimmed = value.trim();
+        if (!trimmed) return "";
+
+        try {
+            const parsed = new URL(trimmed);
+            const path = parsed.pathname;
+            if (path.startsWith("/uploads/")) return path.substring(1);
+            return path.startsWith("/") ? `uploads${path}` : `uploads/${path}`;
+        } catch {
+            // not an absolute URL
+        }
+
+        if (trimmed.startsWith("/uploads/")) return trimmed.substring(1);
+        if (trimmed.startsWith("uploads/")) return trimmed;
+        return `uploads/${trimmed.replace(/^\/+/, "")}`;
+    };
+
+    const toServerRelativeFromUpload = (relativePath: string, publicUrl?: string) => {
+        if (relativePath) {
+            return toServerRelativePath(relativePath);
+        }
+        if (publicUrl) {
+            return toServerRelativePath(publicUrl);
+        }
+        return "";
+    };
 
     useEffect(() => {
         loadSettings();
@@ -47,12 +75,17 @@ export const StoreProfileForm = () => {
         try {
             const settings = await getGroupSettings('store');
             const kv: Record<string, string> = {};
+            const publicUrlMap: Record<string, string> = {};
             settings.forEach(s => {
                 const key = s.settingKey.replace('store.', '');
                 kv[key] = s.value?.toString() || '';
+                if (key === 'logoUrl' && s.publicUrl) {
+                    publicUrlMap[key] = s.publicUrl;
+                }
             });
             const formattedData = mapStoreSettingsToFormValues(kv);
             reset(formattedData);
+            setRemotePublicUrls(publicUrlMap);
         } catch (error) {
             console.error('Failed to load store settings:', error);
         } finally {
@@ -96,40 +129,6 @@ export const StoreProfileForm = () => {
         });
     };
 
-    const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (!file) return;
-
-        if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
-            toast.error(t('StoreProfile.invalidImageFormatError'));
-            if (e.target) e.target.value = '';
-            return;
-        }
-
-        if (file.size > 5 * 1024 * 1024) {
-            toast.error(t('StoreProfile.fileSizeError'));
-            if (e.target) e.target.value = '';
-            return;
-        }
-
-        const localUrl = URL.createObjectURL(file);
-        setLocalPreviews(prev => ({ ...prev, logoUrl: localUrl }));
-        setIsUploading('logoUrl');
-
-        try {
-            const publicUrl = await uploadLogo(file);
-            setValue('logoUrl', publicUrl, { shouldDirty: true, shouldValidate: true });
-            toast.success(t('StoreProfile.uploadSuccess'));
-        } catch (error) {
-            toast.error(t('StoreProfile.uploadError'));
-            if (!logoUrlValue) {
-                setLocalPreviews(prev => { delete prev['logoUrl']; return { ...prev }; });
-            }
-        } finally {
-            setIsUploading(null);
-            if (e.target) e.target.value = '';
-        }
-    };
 
     const onSubmit = (values: StoreProfileFormValues) => {
         const mappedSettings = mapFormValuesToStoreSettings(values);
@@ -160,8 +159,11 @@ export const StoreProfileForm = () => {
     const getFullUrl = () => {
         const previewUrl = localPreviews['logoUrl'];
         if (previewUrl) return previewUrl;
+        const remoteUrl = remotePublicUrls['logoUrl'];
+        if (remoteUrl) return remoteUrl.startsWith("uploads/") ? `/${remoteUrl}` : remoteUrl;
         if (!logoUrlValue) return '';
-        return normalizeMediaUrl(logoUrlValue);
+        if (logoUrlValue.startsWith("/uploads/")) return logoUrlValue;
+        return logoUrlValue.startsWith("uploads/") ? `/${logoUrlValue}` : logoUrlValue;
     };
 
     if (isLoading) {
@@ -230,42 +232,6 @@ export const StoreProfileForm = () => {
                     {/* --- IDENTITY SECTION --- */}
                     <ALCard variant="soft" padding="none" radius="2xl" elevation="sm" className="border-amber-200/50 shadow-sm overflow-hidden" animation="slide-up">
                         <div className="p-6 md:p-8 ">
-                            <div className="space-y-3">
-                                <div className="flex flex-wrap gap-3">
-                                    {logoUrlValue && (
-                                        <Button
-                                            type="button"
-                                            variant="outline"
-                                            size="sm"
-                                            className="h-9 border-red-100 text-red-500 hover:bg-red-50 font-[Inter] gap-2"
-                                            onClick={() => setValue('logoUrl', '', { shouldDirty: true })}
-                                        >
-                                            <Trash2 className="w-4 h-4" />
-                                            {t("Common.remove")}
-                                        </Button>
-                                    )}
-                                    {getFullUrl() && (
-                                        <Button
-                                            type="button"
-                                            variant="outline"
-                                            size="sm"
-                                            className="h-9 border-blue-100 text-blue-600 hover:bg-blue-50 font-[Inter] gap-2"
-                                            onClick={() => setPreviewData({ url: getFullUrl(), title: "Store Logo", type: 'image' })}
-                                        >
-                                            <Maximize2 className="w-4 h-4" />
-                                            {t("Common.preview")}
-                                        </Button>
-                                    )}
-                                </div>
-                                <input
-                                    type="file"
-                                    ref={logoInputRef}
-                                    className="hidden"
-                                    accept={IMAGE_ACCEPT}
-                                    onChange={handleFileChange}
-                                />
-                            </div>
-
 
                             <div className="space-y-6">
                                 <ALInput

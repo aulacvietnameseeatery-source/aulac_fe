@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/routing"
 import { Facebook, Instagram, Music2 as Tiktok, ArrowRight } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { BackToTop } from "@/components/ui/back-to-top";

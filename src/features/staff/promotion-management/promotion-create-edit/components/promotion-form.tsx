@@ -3,7 +3,7 @@
 import React, { useMemo } from "react";
 import { Controller } from "react-hook-form";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/routing"
 import { PromotionStatusCode } from "@/types/status-codes";
 import { mapFormToApi } from "../utils/promotion.utils";
 import { usePromotionForm } from "../hooks/use-promotion-form";

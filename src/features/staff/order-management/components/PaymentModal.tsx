@@ -95,8 +95,8 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
     const calculatedTaxes = React.useMemo(() => {
         return defaultTaxes.map(t => {
             const amount = t.taxType === 'EXCLUSIVE'
-                ? baseForTax * t.taxRate
-                : baseForTax * (t.taxRate / (1 + t.taxRate));
+                ? baseForTax * (t.taxRate / 100)
+                : baseForTax * ((t.taxRate / 100) / (1 + (t.taxRate / 100)));
             return { ...t, amount };
         });
     }, [defaultTaxes, baseForTax]);
@@ -214,7 +214,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
                                 </div>
                                 {calculatedTaxes.map((t, idx) => (
                                     <div key={idx} className="flex items-start justify-between gap-3 text-[#1A3A52]/70">
-                                        <span>{t.taxName} ({t.taxRate * 100}% {t.taxType.toLowerCase()})</span>
+                                        <span>{t.taxName} ({t.taxRate}% {t.taxType.toLowerCase()})</span>
                                         <span>{format.number(t.amount, { style: 'currency', currency: 'CHF' })}</span>
                                     </div>
                                 ))}

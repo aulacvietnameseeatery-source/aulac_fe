@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/routing"
 import { stockService } from "../services/stock.service";
 import type { IngredientDto } from "@/features/staff/ingredient-management/types/ingredient-types";
 import type { AuditItemState } from "../types/stock.types";
@@ -99,7 +99,7 @@ export function useInventoryCheck() {
             await Promise.all(promises);
 
             toast.success("Chốt kiểm kê thành công!", { id: toastId });
-            router.push("/dashboard/ingredients");
+            router.push("/dashboard/inventory/items");
         } catch (error) {
             console.error("Audit submit error:", error);
             toast.error("Có lỗi xảy ra khi cập nhật tồn kho. Vui lòng thử lại.", { id: toastId });

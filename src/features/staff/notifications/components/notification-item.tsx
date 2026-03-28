@@ -2,6 +2,7 @@
 
 import { CheckCheck, Clock } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { dateUtils } from "@/lib/date-utils";
 import { useTranslations } from "next-intl";
 import {
   TYPE_CONFIG,
@@ -77,8 +78,8 @@ export function NotificationItem({
     }
   };
 
-  // Localized relative time
-  const timeAgo = getRelativeTime(notification.createdAt, t);
+  // Localized relative time with UTC-safe parsing
+  const timeAgo = getRelativeTimeUtcSafe(notification.createdAt, t);
 
   return (
     <div
@@ -154,13 +155,19 @@ export function NotificationItem({
   );
 }
 
-// Localized relative time helper
-function getRelativeTime(
+// Relative time helper: diff is timezone-independent (UTC ms vs UTC now),
+// but the fallback absolute date is displayed in Swiss timezone via dateUtils.formatLocal.
+function getRelativeTimeUtcSafe(
   dateStr: string,
   t: ReturnType<typeof useTranslations<"Notifications">>
 ): string {
-  const now = Date.now();
+  if (!dateStr) return "";
+
+  // new Date() correctly parses ISO UTC strings — no intermediate TZ conversion needed
   const date = new Date(dateStr).getTime();
+  if (Number.isNaN(date)) return "";
+
+  const now = Date.now();
   const diffMs = now - date;
   const diffSec = Math.floor(diffMs / 1000);
   const diffMin = Math.floor(diffSec / 60);
@@ -171,5 +178,6 @@ function getRelativeTime(
   if (diffMin < 60) return t("time.minutesAgo", { count: diffMin });
   if (diffHr < 24) return t("time.hoursAgo", { count: diffHr });
   if (diffDay < 7) return t("time.daysAgo", { count: diffDay });
-  return new Date(dateStr).toLocaleDateString();
+  // Older than a week — display the date converted to Swiss timezone
+  return dateUtils.formatLocal(dateStr, "dd/MM/yyyy HH:mm");
 }

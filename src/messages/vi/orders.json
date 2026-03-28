@@ -231,6 +231,7 @@
         "select": "Chọn",
         "change": "Thay đổi",
         "add": "Thêm",
+        "guest": "Khách vãng lai",
         "note": "Thêm ghi chú (ít cay, không hành, v.v.)",
         "subtotal": "Tạm tính",
         "tax": "Thuế (10%)",
@@ -291,8 +292,24 @@
           "Completed": "Hoàn thành",
           "Cancelled": "Đã hủy"
         },
+        "itemStatus": {
+          "PENDING": "Chờ xác nhận",
+          "COMPLETED": "Hoàn thành",
+          "CANCELLED": "Đã hủy",
+          "CREATED": "Mới tạo",
+          "IN_PROGRESS": "Đang làm",
+          "READY": "Đã xong",
+          "SERVED": "Đã phục vụ",
+          "REJECTED": "Bị từ chối"
+        },
+        "paymentMethod": {
+          "CASH": "tiền mặt",
+          "CARD": "thẻ",
+          "QR": "mã QR"
+        },
         "tableLabel": "Bàn",
-        "customerLabel": "Khách hàng"
+        "customerLabel": "Khách hàng",
+        "returnToCreate": "Tạo đơn mới"
       },
       "RecentOrders": {
         "title": "Đơn hàng gần đây",
@@ -331,7 +348,7 @@
         "paymentType": "Phương thức thanh toán",
         "cash": "Tiền mặt",
         "card": "Thẻ",
-        "scan": "Chuyển khoản / Quét mã",
+        "scan": "Chuyển khoản",
         "promotion": "Khuyến mãi",
         "coupon": "Mã giảm giá",
         "givenAmount": "Số tiền khách đưa",

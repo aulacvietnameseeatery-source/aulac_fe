@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslations } from "next-intl";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/routing"
 import {
   X,
   ScrollText,
@@ -20,6 +20,8 @@ import {
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { api } from "@/lib/http";
+import type { HubConnection } from '@microsoft/signalr';
+import { acquireConnection, releaseConnection, waitForStart } from '@/lib/signalr';
 import { ALConfirmDialog } from "@/components/ui/al-confirm-dialog";
 
 // ─── Types ────────────────────────────────────────────────────────────────
@@ -148,6 +150,8 @@ export function OrderHistoryFAB({ tableCode, tableNumber, dishNameMap = {}, refr
     : "";
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const redirectTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const signalRRef = useRef<HubConnection | null>(null);
+  const connectedOrderIdRef = useRef<number | null>(null);
 
   // Clear all order-related data from session storage
   const clearAllOrderData = useCallback(() => {
@@ -177,6 +181,61 @@ export function OrderHistoryFAB({ tableCode, tableNumber, dishNameMap = {}, refr
       }
     };
   }, []);
+
+  // ── SignalR real-time listener ───────────────────────────────────────────
+  // Connects to the order's SignalR group so item-status changes from staff
+  // are pushed instantly without waiting for the 15 s polling interval.
+  const RESTAURANT_HUB = '/hubs/restaurant';
+
+  useEffect(() => {
+    const storedOrderId = typeof window !== 'undefined'
+      ? sessionStorage.getItem(CURRENT_ORDER_ID_KEY)
+      : null;
+    const orderId = storedOrderId ? Number(storedOrderId) : null;
+
+    if (!orderId) return;
+
+    // Already connected to this order – nothing to do
+    if (connectedOrderIdRef.current === orderId && signalRRef.current) return;
+
+    // Release previous reference if switching orders
+    if (signalRRef.current) {
+      signalRRef.current.off('OrderItemUpdated');
+      signalRRef.current.off('OrderDetailUpdated');
+      releaseConnection(RESTAURANT_HUB);
+      signalRRef.current = null;
+    }
+
+    const connection = acquireConnection(RESTAURANT_HUB);
+    signalRRef.current = connection;
+    connectedOrderIdRef.current = orderId;
+
+    const onItemUpdated = () => {
+      fetchOrderByOrderId(orderId)
+        .then((data) => setHistory(data))
+        .catch(() => {});
+    };
+    const onDetailUpdated = () => {
+      fetchOrderByOrderId(orderId)
+        .then((data) => setHistory(data))
+        .catch(() => {});
+    };
+
+    waitForStart(RESTAURANT_HUB)
+      .then(() => connection.invoke('JoinOrder', orderId))
+      .then(() => {
+        connection.on('OrderItemUpdated', onItemUpdated);
+        connection.on('OrderDetailUpdated', onDetailUpdated);
+      })
+      .catch((err) => console.error('[SignalR] Connection error:', err));
+
+    return () => {
+      connection.off('OrderItemUpdated', onItemUpdated);
+      connection.off('OrderDetailUpdated', onDetailUpdated);
+      releaseConnection(RESTAURANT_HUB);
+      signalRRef.current = null;
+    };
+  }, [refreshTrigger]); // re-run after each new order so the connection is established
 
   // Helper function to get translated status label
   const getStatusLabel = (status: string): string => {

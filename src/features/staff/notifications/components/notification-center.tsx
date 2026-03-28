@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useCallback, useMemo, useEffect } from "react";
+import { useState, useCallback, useMemo, useRef, useEffect } from "react";
 import { X, Inbox, Settings2, ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useTranslations, useLocale } from "next-intl";
-import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
+import { useRouter } from "@/routing"
 import { useNotificationStore } from "../store/notification.store";
 import { notificationService } from "../services/notification.service";
 import { NotificationItem } from "./notification-item";
@@ -22,7 +22,6 @@ type TabKey = "all" | "unread";
 
 const TAKE = 20;
 const CATEGORY_TAB_PREFIX = "category:";
-const TAB_WINDOW_SIZE = 5;
 
 type CategoryTabKey = `${typeof CATEGORY_TAB_PREFIX}${string}`;
 type NotificationTabKey = TabKey | CategoryTabKey;
@@ -41,10 +40,11 @@ function categoryFromTab(tab: CategoryTabKey): string {
 
 export function NotificationCenter({ open, onClose }: NotificationCenterProps) {
   const t = useTranslations("Notifications");
-  const locale = useLocale();
   const router = useRouter();
+  const tabScrollRef = useRef<HTMLDivElement | null>(null);
   const [tab, setTab] = useState<NotificationTabKey>("all");
-  const [tabWindowStart, setTabWindowStart] = useState(0);
+  const [canScrollPrev, setCanScrollPrev] = useState(false);
+  const [canScrollNext, setCanScrollNext] = useState(false);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [showPreferences, setShowPreferences] = useState(false);
@@ -79,6 +79,7 @@ export function NotificationCenter({ open, onClose }: NotificationCenterProps) {
   const tabCountByCategory = useMemo(() => {
     const counts: Record<string, number> = {};
     for (const item of items) {
+      if (item.isRead) continue;
       const category = getNotificationCategory(item.type);
       counts[category] = (counts[category] ?? 0) + 1;
     }
@@ -98,27 +99,49 @@ export function NotificationCenter({ open, onClose }: NotificationCenterProps) {
     [t, items.length, unreadCount, categoryTabs, tabCountByCategory]
   );
 
-  const maxTabWindowStart = Math.max(0, tabs.length - TAB_WINDOW_SIZE);
-  const visibleTabs = tabs.slice(tabWindowStart, tabWindowStart + TAB_WINDOW_SIZE);
-
-  useEffect(() => {
-    setTabWindowStart((prev) => Math.min(prev, maxTabWindowStart));
-  }, [maxTabWindowStart]);
-
-  useEffect(() => {
-    const activeIndex = tabs.findIndex((entry) => entry.key === tab);
-    if (activeIndex < 0) return;
-
-    if (activeIndex < tabWindowStart) {
-      setTabWindowStart(activeIndex);
+  const updateTabScrollState = useCallback(() => {
+    const node = tabScrollRef.current;
+    if (!node) {
+      setCanScrollPrev(false);
+      setCanScrollNext(false);
       return;
     }
 
-    const tabWindowEnd = tabWindowStart + TAB_WINDOW_SIZE - 1;
-    if (activeIndex > tabWindowEnd) {
-      setTabWindowStart(Math.min(activeIndex - TAB_WINDOW_SIZE + 1, maxTabWindowStart));
-    }
-  }, [tab, tabs, tabWindowStart, maxTabWindowStart]);
+    const maxScrollLeft = Math.max(0, node.scrollWidth - node.clientWidth);
+    setCanScrollPrev(node.scrollLeft > 2);
+    setCanScrollNext(node.scrollLeft < maxScrollLeft - 2);
+  }, []);
+
+  const scrollTabsBy = useCallback((direction: "prev" | "next") => {
+    const node = tabScrollRef.current;
+    if (!node) return;
+
+    const offset = direction === "prev" ? -180 : 180;
+    node.scrollBy({ left: offset, behavior: "smooth" });
+  }, []);
+
+  const stopNavButtonEvent = useCallback((event: React.PointerEvent<HTMLButtonElement> | React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+  }, []);
+
+  useEffect(() => {
+    updateTabScrollState();
+
+    const node = tabScrollRef.current;
+    if (!node) return;
+
+    const handleScroll = () => updateTabScrollState();
+    const handleResize = () => updateTabScrollState();
+
+    node.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      node.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [tabs.length, open, updateTabScrollState]);
 
   const displayItems = useMemo(() => {
     if (tab === "all") {
@@ -230,9 +253,9 @@ export function NotificationCenter({ open, onClose }: NotificationCenterProps) {
       }
 
       onClose();
-      router.push(`/${locale}${url}`);
+      router.push(`/${url}`);
     },
-    [onClose, router, locale, setDetailReservationId]
+    [onClose, router, setDetailReservationId]
   );
 
   // Tải lần đầu khi mở
@@ -337,18 +360,27 @@ export function NotificationCenter({ open, onClose }: NotificationCenterProps) {
               {/* Tabs */}
               <div className="p-2 bg-black/10 flex items-center gap-1 shrink-0">
                 <button
-                  onClick={() => setTabWindowStart((prev) => Math.max(0, prev - 1))}
-                  disabled={tabWindowStart === 0}
+                  type="button"
+                  onPointerDown={stopNavButtonEvent}
+                  onClick={(event) => {
+                    stopNavButtonEvent(event);
+                    scrollTabsBy("prev");
+                  }}
+                  disabled={!canScrollPrev}
                   className="p-1.5 rounded-md text-white/50 hover:text-white hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed"
                   aria-label="Previous tabs"
                 >
                   <ChevronLeft className="w-4 h-4" />
                 </button>
 
-                <div className="flex-1 min-w-0 overflow-hidden">
-                  <div className="flex gap-1">
-                    {visibleTabs.map(({ key, label, count }) => (
+                <div
+                  ref={tabScrollRef}
+                  className="flex-1 min-w-0 overflow-x-auto overflow-y-hidden [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+                >
+                  <div className="flex gap-1 w-max pr-1">
+                    {tabs.map(({ key, label, count }) => (
                       <button
+                        type="button"
                         key={key}
                         onClick={() => setTab(key)}
                         className={cn(
@@ -370,8 +402,13 @@ export function NotificationCenter({ open, onClose }: NotificationCenterProps) {
                 </div>
 
                 <button
-                  onClick={() => setTabWindowStart((prev) => Math.min(maxTabWindowStart, prev + 1))}
-                  disabled={tabWindowStart >= maxTabWindowStart}
+                  type="button"
+                  onPointerDown={stopNavButtonEvent}
+                  onClick={(event) => {
+                    stopNavButtonEvent(event);
+                    scrollTabsBy("next");
+                  }}
+                  disabled={!canScrollNext}
                   className="p-1.5 rounded-md text-white/50 hover:text-white hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed"
                   aria-label="Next tabs"
                 >

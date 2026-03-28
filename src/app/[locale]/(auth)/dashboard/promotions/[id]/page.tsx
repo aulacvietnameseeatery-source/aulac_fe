@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl";
 import { promotionService } from "@/features/staff/promotion-management/promotion-create-edit/services/promotion.service";
 import { PromotionDetailDto } from "@/features/staff/promotion-management/promotion-create-edit/types/promotion.types";
 import { Loader2, ArrowLeft } from "lucide-react";
+import { dateUtils } from "@/lib/date-utils";
 
 export default function PromotionDetailPage() {
   const params = useParams();
@@ -89,11 +90,11 @@ export default function PromotionDetailPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-slate-100">
             <div>
               <p className="text-xs text-slate-500 uppercase font-bold">{tForm("start")}</p>
-              <p className="font-medium text-slate-800">{formatLocalDate(detail.startTime)}</p>
+              <p className="font-medium text-slate-800">{dateUtils.formatLocal(detail.startTime, "dd/MM/yyyy HH:mm")}</p>
             </div>
             <div>
               <p className="text-xs text-slate-500 uppercase font-bold">{tForm("end")}</p>
-              <p className="font-medium text-slate-800">{formatLocalDate(detail.endTime)}</p>
+              <p className="font-medium text-slate-800">{dateUtils.formatLocal(detail.endTime, "dd/MM/yyyy HH:mm")}</p>
             </div>
           </div>
 

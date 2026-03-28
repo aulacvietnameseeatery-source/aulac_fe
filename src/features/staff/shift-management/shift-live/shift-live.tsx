@@ -4,6 +4,8 @@ import { useMemo, useState } from "react";
 import {
   AlertTriangle,
   Clock3,
+  LogIn,
+  LogOut,
   RefreshCcw,
   TimerReset,
   UserRound,
@@ -14,9 +16,12 @@ import { Button } from "@/components/ui/button";
 import { ALDatePicker } from "@/components/ui/al-date-picker";
 import { ALCard } from "@/components/ui/al-card";
 import { cn } from "@/lib/utils";
-import { useShiftAssignmentsQuery, useShiftLiveBoardQuery } from "../hooks/use-shift-queries";
+import { PermissionGuard } from "@/components/permission-guard";
+import { Permissions } from "@/types/const";
+import { useShiftAssignmentsQuery, useShiftLiveBoardQuery, useCheckInMutation, useCheckOutMutation } from "../hooks/use-shift-queries";
 import { useShiftLiveBoardRealtime } from "../hooks/use-shift-live-board-realtime";
 import { ShiftStatusBadge } from "../components/shift-status-badge";
+import { dateUtils } from "@/lib/date-utils";
 import type {
   ShiftAssignmentListDto,
   ShiftLiveBoardItemDto,
@@ -31,10 +36,11 @@ function todayIso() {
   return new Date().toISOString().slice(0, 10);
 }
 
+// _OLD: function fmt(iso, fallback) — replaced by dateUtils.formatLocal
 function fmt(iso: string | null | undefined, fallback = "—") {
   if (!iso) return fallback;
   try {
-    return new Date(iso).toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" });
+    return dateUtils.formatLocal(iso, "HH:mm");
   } catch {
     return fallback;
   }
@@ -254,7 +260,7 @@ function ShiftLiveTable_DEPRECATED() {
   }
 
   const lastUpdated = dataUpdatedAt
-    ? new Date(dataUpdatedAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" })
+    ? dateUtils.formatLocal(new Date(dataUpdatedAt), "HH:mm:ss")
     : null;
 
   return (
@@ -377,6 +383,8 @@ export function ShiftLive() {
 
   const { data, isLoading, isFetching, refetch, dataUpdatedAt } = useShiftLiveBoardQuery(queryParams);
   const { isRealtimeConnected } = useShiftLiveBoardRealtime(businessDate);
+  const checkInMutation = useCheckInMutation();
+  const checkOutMutation = useCheckOutMutation();
 
   const rows = useMemo(() => data ?? [], [data]);
 
@@ -448,11 +456,7 @@ export function ShiftLive() {
   ];
 
   const lastUpdated = dataUpdatedAt
-    ? new Date(dataUpdatedAt).toLocaleTimeString("vi-VN", {
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
-      })
+    ? dateUtils.formatLocal(new Date(dataUpdatedAt), "HH:mm:ss")
     : null;
 
   return (
@@ -481,7 +485,7 @@ export function ShiftLive() {
               </span>
               <span
                 className={cn(
-                  "inline-flex items-center rounded-full border px-3 py-1 text-xs font-medium",
+                  "inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-medium",
                   isRealtimeConnected
                     ? "border-blue-600 bg-blue-600 text-white"
                     : "border-slate-300 bg-slate-100 text-slate-700"
@@ -490,15 +494,12 @@ export function ShiftLive() {
                 {isRealtimeConnected ? t("connection.realtime") : t("connection.polling")}
               </span>
             </div>
-            <p className="max-w-3xl text-sm text-[#1A3A52]/70">
-              {t("description")}
-            </p>
-            <div className="flex flex-wrap items-center gap-3 text-xs text-[#1A3A52]/60">
-              <span className="inline-flex items-center gap-1">
+            <div className="flex flex-wrap items-center gap-2 text-xs text-[#1A3A52]/60">
+              <span className="inline-flex items-center gap-1 rounded-full border border-[#D5BA98]/50 bg-white px-2.5 py-1">
                 <TimerReset className="h-3.5 w-3.5" />
                 {t("autoRefresh")}
               </span>
-              {lastUpdated && <span>{t("lastUpdated", { time: lastUpdated })}</span>}
+              {lastUpdated && <span className="rounded-full border border-[#D5BA98]/50 bg-white px-2.5 py-1">{t("lastUpdated", { time: lastUpdated })}</span>}
             </div>
           </div>
 
@@ -576,10 +577,6 @@ export function ShiftLive() {
                   );
                 })}
               </div>
-            </div>
-
-            <div className="rounded-xl border border-[#D5BA98]/40 bg-[#D5BA98]/10 p-3 text-sm text-[#1A3A52]/70">
-              {t("kpiHint")}
             </div>
           </div>
         </ALCard>
@@ -679,45 +676,63 @@ export function ShiftLive() {
                     </div>
                   ) : null}
 
-                  <div className="space-y-3 rounded-xl border border-[#D5BA98]/40 bg-white p-4">
-                    <div>
-                      <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-[#1A3A52]/55">
-                        {t("sections.statusLocation")}
-                      </p>
-                      <div className="mt-2 flex items-start gap-2 text-sm text-[#1A3A52]">
-                        <UserRound className="mt-0.5 h-4 w-4 shrink-0 text-[#1A3A52]/60" />
-                        <span>{getActivityLabel(row, t)}</span>
-                      </div>
+                  <div className="space-y-2 rounded-xl border border-[#D5BA98]/40 bg-white p-4">
+                    <div className="flex items-start gap-2 text-sm text-[#1A3A52]">
+                      <UserRound className="mt-0.5 h-4 w-4 shrink-0 text-[#1A3A52]/60" />
+                      <span>{getActivityLabel(row, t)}</span>
                     </div>
 
-                    <div>
-                      <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-[#1A3A52]/55">
-                        {t("sections.performance")}
-                      </p>
-                      <div className="mt-2 flex items-start gap-2 text-sm text-[#1A3A52]">
-                        <Wallet className="mt-0.5 h-4 w-4 shrink-0 text-[#1A3A52]/60" />
-                        <span>{getPerformanceLabel(row, t)}</span>
-                      </div>
+                    <div className="flex items-start gap-2 text-sm text-[#1A3A52]">
+                      <Wallet className="mt-0.5 h-4 w-4 shrink-0 text-[#1A3A52]/60" />
+                      <span>{getPerformanceLabel(row, t)}</span>
                     </div>
 
-                    <div>
-                      <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-[#1A3A52]/55">
-                        {t("sections.issues")}
-                      </p>
-                      <div className="mt-2 rounded-xl border border-slate-200 bg-[#FDFBF9] px-3 py-2 text-sm text-[#1A3A52]/70">
+                    {(row.latestIssueText || row.issueCount > 0) && (
+                      <div className="rounded-lg border border-red-100 bg-red-50 px-3 py-2 text-sm text-red-700">
                         {row.latestIssueText
                           ? row.latestIssueText
-                          : row.issueCount > 0
-                            ? t("issues.pending", { count: row.issueCount })
-                            : t("issues.none")}
+                          : t("issues.pending", { count: row.issueCount })}
                       </div>
-                    </div>
+                    )}
                   </div>
 
                   {(row.notes || row.isManualAdjustment) && (
                     <div className="rounded-xl border border-[#D5BA98]/40 bg-[#D5BA98]/10 px-3 py-2 text-sm text-[#1A3A52]/70">
                       {row.isManualAdjustment && <p>{t("manualAdjusted")}</p>}
                       {row.notes && <p>{row.notes}</p>}
+                    </div>
+                  )}
+
+                  {/* Action buttons: Check-in / Check-out */}
+                  {(row.liveStatusCode === "NOT_CHECKED_IN" || row.liveStatusCode === "ON_DUTY" || row.liveStatusCode === "WAITING") && (
+                    <div className="flex items-center gap-2 border-t border-[#D5BA98]/30 pt-4">
+                      {row.liveStatusCode === "NOT_CHECKED_IN" && (
+                        <PermissionGuard permission={Permissions.CheckInShift}>
+                          <Button
+                            size="sm"
+                            onClick={() => checkInMutation.mutate(row.shiftAssignmentId)}
+                            disabled={checkInMutation.isPending}
+                            className="gap-1.5 bg-emerald-600 text-white hover:bg-emerald-700"
+                          >
+                            <LogIn className="h-3.5 w-3.5" />
+                            {t("actions.checkIn")}
+                          </Button>
+                        </PermissionGuard>
+                      )}
+                      {(row.liveStatusCode === "ON_DUTY" || row.liveStatusCode === "WAITING") && (
+                        <PermissionGuard permission={Permissions.CheckOutShift}>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => checkOutMutation.mutate(row.shiftAssignmentId)}
+                            disabled={checkOutMutation.isPending}
+                            className="gap-1.5 border-red-300 text-red-700 hover:bg-red-50"
+                          >
+                            <LogOut className="h-3.5 w-3.5" />
+                            {t("actions.checkOut")}
+                          </Button>
+                        </PermissionGuard>
+                      )}
                     </div>
                   )}
                 </div>

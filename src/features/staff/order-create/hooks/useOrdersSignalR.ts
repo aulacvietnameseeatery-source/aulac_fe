@@ -1,68 +1,75 @@
 // src/features/orders/hooks/useOrdersSignalR.ts
 import { useEffect, useRef, useState } from 'react';
-import { HubConnectionBuilder, LogLevel, HubConnection } from '@microsoft/signalr';
-import { UseOrdersSignalRProps, OrderRealtimeDTO } from '../types/order-realtime.types';
-import { BASE_URL } from '@/lib/http';
+import type { HubConnection } from '@microsoft/signalr';
+import { UseOrdersSignalRProps, OrderRealtimeDTO, OrderItemRealtimeDTO } from '../types/order-realtime.types';
+import { acquireConnection, releaseConnection, waitForStart } from '@/lib/signalr';
+import { authStorage } from '@/lib/auth-storage';
 
-export const useOrdersSignalR = ({ onOrderCreated, onOrderUpdated }: UseOrdersSignalRProps) => {
+const HUB_PATH = '/hubs/restaurant';
+
+export const useOrdersSignalR = ({ activeOrderId, onOrderCreated, onOrderUpdated, onOrderDetailUpdated, onOrderItemUpdated }: UseOrdersSignalRProps) => {
   const [isConnected, setIsConnected] = useState(false);
   const connectionRef = useRef<HubConnection | null>(null);
 
   // Dùng refs để lưu callback mới nhất, tránh trigger useEffect của SignalR
-  const onOrderCreatedRef = useRef(onOrderCreated);
-  const onOrderUpdatedRef = useRef(onOrderUpdated);
+  const callbacksRef = useRef({ onOrderCreated, onOrderUpdated, onOrderDetailUpdated, onOrderItemUpdated });
 
   useEffect(() => {
-    onOrderCreatedRef.current = onOrderCreated;
-    onOrderUpdatedRef.current = onOrderUpdated;
-  }, [onOrderCreated, onOrderUpdated]);
+    callbacksRef.current = { onOrderCreated, onOrderUpdated, onOrderDetailUpdated, onOrderItemUpdated };
+  }, [onOrderCreated, onOrderUpdated, onOrderDetailUpdated, onOrderItemUpdated]);
 
   useEffect(() => {
-    const hubUrl = `${BASE_URL}/hubs/reservation`;
-    
-    const connection = new HubConnectionBuilder()
-      .withUrl(hubUrl)
-      .withAutomaticReconnect()
-      .configureLogging(LogLevel.Warning)
-      .build();
-
+    const connection = acquireConnection(HUB_PATH, {
+      accessTokenFactory: () => authStorage.getAccessToken() ?? '',
+    });
     connectionRef.current = connection;
 
-    const startSignalR = async () => {
-      try {
-        await connection.start();
+    const onCreated = (data: OrderRealtimeDTO) => callbacksRef.current.onOrderCreated?.(data);
+    const onUpdated = (data: OrderRealtimeDTO) => callbacksRef.current.onOrderUpdated?.(data);
+    const onDetailUpdated = (data: OrderRealtimeDTO) => callbacksRef.current.onOrderDetailUpdated?.(data);
+    const onIemUpdated = (data: OrderItemRealtimeDTO) => callbacksRef.current.onOrderItemUpdated?.(data);
+
+    waitForStart(HUB_PATH)
+      .then(async () => {
         setIsConnected(true);
-        console.log("SignalR Connected to ReservationHub");
-        
+
         // Đăng ký vào group
         await connection.invoke("JoinOrders");
 
         // Lắng nghe events
-        connection.on("OrderCreated", (data: OrderRealtimeDTO) => {
-          if (onOrderCreatedRef.current) onOrderCreatedRef.current(data);
-        });
-
-        connection.on("OrderUpdated", (data: OrderRealtimeDTO) => {
-          if (onOrderUpdatedRef.current) onOrderUpdatedRef.current(data);
-        });
-
-      } catch (error) {
+        connection.on("OrderCreated", onCreated);
+        connection.on("OrderUpdated", onUpdated);
+        connection.on("OrderDetailUpdated", onDetailUpdated);
+        connection.on("OrderItemUpdated", onIemUpdated);
+      })
+      .catch((error) => {
         console.error("SignalR Connection Error:", error);
         setIsConnected(false);
-      }
-    };
-
-    startSignalR();
+      });
 
     // Cleanup khi component unmount
     return () => {
       if (connectionRef.current) {
-        connectionRef.current.off("OrderCreated");
-        connectionRef.current.off("OrderUpdated");
-        connectionRef.current.stop();
+        connectionRef.current.off("OrderCreated", onCreated);
+        connectionRef.current.off("OrderUpdated", onUpdated);
+        connectionRef.current.off("OrderDetailUpdated", onDetailUpdated);
+        connectionRef.current.off("OrderItemUpdated", onIemUpdated);
       }
+      releaseConnection(HUB_PATH);
     };
   }, []); 
+
+  // Xử lý Join/Leave Group khi activeOrderId thay đổi
+  useEffect(() => {
+    const connection = connectionRef.current;
+    if (!connection || !isConnected || !activeOrderId) return;
+
+    connection.invoke("JoinOrder", activeOrderId).catch(console.error);
+
+    return () => {
+      connection.invoke("LeaveOrder", activeOrderId).catch(console.error);
+    };
+  }, [activeOrderId, isConnected]);
 
   return { isConnected };
 };

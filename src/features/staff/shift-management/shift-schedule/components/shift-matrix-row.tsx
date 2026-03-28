@@ -12,8 +12,11 @@ interface ShiftMatrixRowProps {
   weekDates: Date[];
   conflictIds?: Set<number>;
   isEven?: boolean;
+  selectedCells?: Set<string>;
   onCardClick?: (a: ShiftAssignmentListDto) => void;
   onAddClick?: (staffId: number, date: string) => void;
+  onCellMouseDown?: (staffId: number, date: string) => void;
+  onCellMouseEnter?: (staffId: number, date: string) => void;
 }
 
 function fmtDate(d: Date) {
@@ -34,8 +37,11 @@ export function ShiftMatrixRow({
   weekDates,
   conflictIds,
   isEven,
+  selectedCells,
   onCardClick,
   onAddClick,
+  onCellMouseDown,
+  onCellMouseEnter,
 }: ShiftMatrixRowProps) {
   // Index assignments by workDate for O(1) lookup
   const byDate = new Map<string, ShiftAssignmentListDto[]>();
@@ -47,24 +53,28 @@ export function ShiftMatrixRow({
     else byDate.set(key, [a]);
   }
 
-  return (
-    <div
-      className={cn(
-        "grid grid-cols-[180px_repeat(7,1fr)] border-b border-[#D5BA98]/15",
-        isEven ? "bg-white" : "bg-[#FDFBF9]"
-      )}
-    >
-      {/* Staff info column */}
-      <div className="flex flex-col justify-center px-3 py-2 border-r border-[#D5BA98]/20">
-        <span className="text-sm font-medium text-[#1A3A52] truncate">
-          {staff.staffName}
-        </span>
-        <span className="text-[10px] text-[#1A3A52]/50 truncate">
-          {staff.roleName}
-        </span>
-      </div>
+  const rowBg = isEven ? "bg-white" : "bg-[#FDFBF9]";
 
-      {/* 7 day cells */}
+  return (
+    <tr className={cn("border-b border-[#D5BA98]/15", rowBg)}>
+      {/* Staff info column — sticky left */}
+      <td
+        className={cn(
+          "sticky left-0 z-10 px-3 py-2 border-r border-[#D5BA98]/20 min-w-[180px] w-[180px]",
+          rowBg
+        )}
+      >
+        <div className="flex flex-col justify-center">
+          <span className="text-sm font-medium text-[#1A3A52] truncate">
+            {staff.staffName}
+          </span>
+          <span className="text-[10px] text-[#1A3A52]/50 truncate">
+            {staff.roleName}
+          </span>
+        </div>
+      </td>
+
+      {/* Day cells */}
       {weekDates.map((d) => {
         const dateStr = fmtDate(d);
         const cellId = `${staff.staffId}-${dateStr}`;
@@ -75,11 +85,14 @@ export function ShiftMatrixRow({
             assignments={byDate.get(dateStr) ?? []}
             isToday={isToday(d)}
             conflictIds={conflictIds}
+            isSelected={selectedCells?.has(cellId)}
             onCardClick={onCardClick}
             onAddClick={onAddClick ? () => onAddClick(staff.staffId, dateStr) : undefined}
+            onMouseDown={onCellMouseDown ? () => onCellMouseDown(staff.staffId, dateStr) : undefined}
+            onMouseEnter={onCellMouseEnter ? () => onCellMouseEnter(staff.staffId, dateStr) : undefined}
           />
         );
       })}
-    </div>
+    </tr>
   );
 }

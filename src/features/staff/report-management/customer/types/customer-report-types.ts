@@ -1,12 +1,13 @@
-import { BaseReportFilterParams } from "../../shared/types/shared-types";
-
 export interface CustomerReportRecordDto {
-    customerId: string;
+    customerId: number;
     customerName: string;
+    phone: string;
     totalOrders: number;
-    grandTotal: number;
+    totalSpent: number;
+    lastVisitDate: string | null;
 }
 
-export interface CustomerFilterParams extends BaseReportFilterParams {
-    customerIds?: number[];
+export interface CustomerFilterParams {
+    startDate?: string;
+    endDate?: string;
 }

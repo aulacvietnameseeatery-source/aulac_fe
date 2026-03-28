@@ -1,7 +1,7 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import Link from "next/link";
+import { useRouter } from "@/routing"
+import { Link } from "@/routing"
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Typography } from "@/components/ui/typography";
 import { useChangePassword, ChangePasswordForm } from "@/features/customer/auth/change-password";

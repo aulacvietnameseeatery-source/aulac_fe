@@ -1,11 +1,13 @@
 "use client";
 import { useTranslations } from "next-intl";
+import { motion } from "framer-motion";
 import "../styles/index.css";
 import { useStoreSettings } from "@/hooks/use-store-settings";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export function ContactMap() {
   const t = useTranslations("Contact.Map");
-  const { data: storeSettings } = useStoreSettings();
+  const { data: storeSettings, isLoading } = useStoreSettings();
 
   const address = storeSettings?.streetAddress && storeSettings?.city
     ? `${storeSettings.streetAddress}, ${storeSettings.city}`
@@ -15,14 +17,32 @@ export function ContactMap() {
     ? `https://maps.google.com/maps?q=${encodeURIComponent(address)}&t=&z=15&ie=UTF8&iwloc=&output=embed`
     : "";
 
+  if (isLoading) {
+    return (
+      <div className="contact-map-wrapper">
+        <div className="contact-map-header">
+          <Skeleton className="h-8 w-48" />
+          <div className="contact-map-divider" />
+        </div>
+        <Skeleton className="w-full h-[300px] md:h-[450px] rounded-2xl md:rounded-3xl shadow-2xl" />
+      </div>
+    );
+  }
+
   return (
-    <div className="contact-map-wrapper">
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.6 }}
+      className="contact-map-wrapper"
+    >
       <div className="contact-map-header">
-        <b className="contact-map-title">{t("title")}</b>
+        <h2 className="contact-map-title">{t("title")}</h2>
         <div className="contact-map-divider" />
       </div>
 
-      <div className="contact-map-container group">
+      <div className="contact-map-container group shadow-2xl">
         {mapUrl ? (
           <iframe
             src={mapUrl}
@@ -32,15 +52,16 @@ export function ContactMap() {
             allowFullScreen={true}
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
+            className="rounded-3xl"
           ></iframe>
         ) : (
-          <div className="flex items-center justify-center h-full bg-gray-100 text-gray-500">
-             {t("no_address") || "Map not available"}
+          <div className="flex items-center justify-center h-full bg-slate-50 text-slate-400 font-serif text-xl italic">
+            {t("no_address") || "Map not available"}
           </div>
         )}
 
         <div className="contact-map-hint">{t("hint")}</div>
       </div>
-    </div>
+    </motion.div>
   );
 }

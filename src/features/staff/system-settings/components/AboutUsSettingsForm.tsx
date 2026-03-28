@@ -168,9 +168,7 @@ export const AboutUsSettingsForm = () => {
             </div>
 
             <ALCard variant="soft" padding="none" radius="2xl" elevation="sm" className="border-amber-200/50 shadow-sm overflow-hidden" animation="slide-up">
-
-
-                <div className="p-6 md:p-8 space-y-8">
+                <div key={activeLocale} className="p-6 md:p-8 space-y-8">
 
                     <ALInput
                         title={t('AboutUs.subtitleLabel')}

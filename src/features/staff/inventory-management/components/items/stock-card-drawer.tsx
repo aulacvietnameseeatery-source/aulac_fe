@@ -3,6 +3,7 @@
 import React, { useState, useMemo } from "react";
 import { useTranslations } from "next-intl";
 import { format } from "date-fns";
+import { dateUtils } from "@/lib/date-utils";
 import { ArrowDownCircle, ArrowUpCircle, RefreshCw } from "lucide-react";
 import {
   Drawer,
@@ -26,6 +27,7 @@ import {
 import { useStockCardQuery } from "../../hooks/use-inventory-queries";
 import type { InventoryItemDto, StockCardDto } from "../../types/inventory.types";
 import { InventoryTxTypeCode } from "@/types/status-codes";
+import { TransactionDetailModal } from "../transactions/transaction-detail-modal";
 
 interface Props {
   item: InventoryItemDto;
@@ -43,6 +45,7 @@ export function StockCardDrawer({ item, open, onClose }: Props) {
   const t = useTranslations("inventory.stockCard");
   const [page, setPage] = useState(1);
   const [range, setRange] = useState<"7d" | "30d" | "all">("30d");
+  const [detailTxId, setDetailTxId] = useState<number | null>(null);
   const { data, isLoading } = useStockCardQuery(item.ingredientId, page, 20);
   const entries = useMemo(() => data?.pageData ?? [], [data]);
   const chartData = useMemo(() => {
@@ -54,12 +57,13 @@ export function StockCardDrawer({ item, open, onClose }: Props) {
 
     const filtered = entries.filter((entry) => {
       if (!entry.createdAt || !minDate) return true;
-      return new Date(entry.createdAt) >= minDate;
+      const entryTime = parseCreatedAtUtcSafeMs(entry.createdAt);
+      return entryTime >= minDate.getTime();
     });
 
     const sorted = [...filtered].sort((a, b) => {
-      const ta = a.createdAt ? new Date(a.createdAt).getTime() : 0;
-      const tb = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+      const ta = a.createdAt ? parseCreatedAtUtcSafeMs(a.createdAt) : 0;
+      const tb = b.createdAt ? parseCreatedAtUtcSafeMs(b.createdAt) : 0;
       return ta - tb;
     });
 
@@ -70,7 +74,7 @@ export function StockCardDrawer({ item, open, onClose }: Props) {
       runningNet += qty;
 
       return {
-        label: entry.createdAt ? format(new Date(entry.createdAt), "dd/MM") : `#${idx + 1}`,
+        label: entry.createdAt ? dateUtils.formatLocal(entry.createdAt, "dd/MM") : `#${idx + 1}`,
         inbound: qty > 0 ? qty : 0,
         outbound: qty < 0 ? Math.abs(qty) : 0,
         net: runningNet,
@@ -80,7 +84,7 @@ export function StockCardDrawer({ item, open, onClose }: Props) {
 
   return (
     <Drawer open={open} onOpenChange={(v) => { if (!v) onClose(); }} direction="right">
-      <DrawerContent className="w-full md:w-[66.666vw] max-w-none">
+      <DrawerContent className="w-full md:w-[40vw] max-w-none">
         <DrawerHeader className="border-b border-[#D5BA98]/30 pb-4">
           <DrawerTitle className="text-lg font-semibold text-[#1A3A52] font-['Cormorant_Garamond']">
             {t("title")}
@@ -178,7 +182,7 @@ export function StockCardDrawer({ item, open, onClose }: Props) {
           <ALCard variant="default" padding="md" elevation="sm" radius="xl">
           {isLoading ? (
             <div className="flex items-center justify-center py-12 text-[#1A3A52]/40">
-              Loading...
+              {t("loading")}
             </div>
           ) : entries.length === 0 ? (
             <div className="text-center py-12 text-[#1A3A52]/40 text-sm">
@@ -187,7 +191,7 @@ export function StockCardDrawer({ item, open, onClose }: Props) {
           ) : (
             <div className="space-y-2">
               {entries.map((entry) => (
-                <StockCardEntry key={entry.transactionItemId} entry={entry} />
+                <StockCardEntry key={entry.transactionItemId} entry={entry} onClickTx={setDetailTxId} />
               ))}
             </div>
           )}
@@ -216,23 +220,41 @@ export function StockCardDrawer({ item, open, onClose }: Props) {
           )}
           </ALCard>
         </div>
+        <TransactionDetailModal
+          transactionId={detailTxId}
+          open={detailTxId !== null}
+          onClose={() => setDetailTxId(null)}
+        />
       </DrawerContent>
     </Drawer>
   );
 }
 
-function StockCardEntry({ entry }: { entry: StockCardDto }) {
+function parseCreatedAtUtcSafeMs(createdAt: string): number {
+  if (!createdAt) return 0;
+  const utcSafeDate = dateUtils.formatLocal(createdAt, "yyyy-MM-dd'T'HH:mm:ss.SSSxxx");
+  const parsed = new Date(utcSafeDate).getTime();
+  return Number.isNaN(parsed) ? 0 : parsed;
+}
+
+function StockCardEntry({ entry, onClickTx }: { entry: StockCardDto; onClickTx?: (id: number) => void }) {
+  const t = useTranslations("inventory.stockCard");
   const isIn = entry.typeCode === InventoryTxTypeCode.IN;
   const isOut = entry.typeCode === InventoryTxTypeCode.OUT;
 
   return (
-    <div className="flex items-start gap-3 px-3 py-2.5 rounded-lg border border-[#D5BA98]/20 bg-white hover:bg-[#FDFBF9] transition-colors">
+    <div
+      role="button"
+      tabIndex={0}
+      onClick={() => entry.transactionId && onClickTx?.(entry.transactionId)}
+      onKeyDown={(e) => e.key === "Enter" && entry.transactionId && onClickTx?.(entry.transactionId)}
+      className="flex items-start gap-3 px-3 py-2.5 rounded-lg border border-[#D5BA98]/20 bg-white hover:bg-[#FDFBF9] transition-colors cursor-pointer">
       <div className="mt-0.5">{TYPE_ICON[entry.typeCode ?? ""] ?? null}</div>
       <div className="flex-1 min-w-0">
         <div className="flex items-center justify-between gap-2">
           <span className="text-xs font-mono text-[#1A3A52]/50">{entry.transactionCode}</span>
           <span className="text-xs text-[#1A3A52]/40">
-            {entry.createdAt ? format(new Date(entry.createdAt), "dd/MM/yyyy HH:mm") : "-"}
+            {entry.createdAt ? dateUtils.formatLocal(entry.createdAt, "dd/MM/yyyy HH:mm") : "-"}
           </span>
         </div>
         <div className="flex items-center gap-2 mt-1">
@@ -267,7 +289,7 @@ function StockCardEntry({ entry }: { entry: StockCardDto }) {
           </div>
         )}
         {entry.createdByName && (
-          <div className="text-[10px] text-[#1A3A52]/35 mt-0.5">by {entry.createdByName}</div>
+          <div className="text-[10px] text-[#1A3A52]/35 mt-0.5">{t("entryCreatedBy", { name: entry.createdByName })}</div>
         )}
       </div>
     </div>

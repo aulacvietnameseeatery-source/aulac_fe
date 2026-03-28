@@ -2,7 +2,8 @@
 
 import React, { useState, useEffect, useCallback } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
+import { useRouter } from "@/routing"
 import { CheckCircle } from "lucide-react";
 // Import toast từ thư viện sonner
 import { toast } from "sonner";
@@ -31,6 +32,8 @@ const TOKEN_STORAGE_KEY = "aulac_qr_token";
 
 export default function MenuListingClient({ initialMenuData, tableFromUrl, tokenFromUrl }: Props) {
     const router = useRouter();
+    const tCommon = useTranslations("OrderPopup");
+    const tMenu = useTranslations("MenuListing");
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
     const [tableNumber, setTableNumber] = useState("");
     const [currentOrderId, setCurrentOrderId] = useState<number | null>(null);
@@ -68,7 +71,7 @@ export default function MenuListingClient({ initialMenuData, tableFromUrl, token
                 const savedOrderId = sessionStorage.getItem(CURRENT_ORDER_ID_KEY);
                 if (savedOrderId) setCurrentOrderId(Number(savedOrderId));
             } catch {
-                toast.error("Không thể tải dữ liệu giỏ hàng cũ.");
+                toast.error(tMenu("err_load_cart"));
             }
         } else {
             // Tab mới hoặc copy link → xác thực quyền truy cập bàn
@@ -85,13 +88,13 @@ export default function MenuListingClient({ initialMenuData, tableFromUrl, token
                 })
                 .catch((error: any) => {
                     if (error.response?.status === 409) {
-                        toast.error("Bàn này đã có người sử dụng. Không thể truy cập.");
+                        toast.error(tMenu("err_table_occupied_access"));
                     } else if (error.response?.status === 404) {
-                        toast.error("Mã bàn không tồn tại.");
+                        toast.error(tMenu("err_table_not_found"));
                     } else if (error.response?.status === 400) {
-                        toast.error("Mã QR không hợp lệ. Vui lòng quét lại mã QR trên bàn.");
+                        toast.error(tMenu("err_qr_invalid"));
                     } else {
-                        toast.error("Không thể xác thực bàn. Vui lòng thử lại.");
+                        toast.error(tMenu("err_table_validation"));
                     }
                     // Xóa table param khỏi URL và chuyển về trang menu không có bàn
                     sessionStorage.removeItem(TABLE_STORAGE_KEY);
@@ -112,7 +115,7 @@ export default function MenuListingClient({ initialMenuData, tableFromUrl, token
             try {
                 sessionStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cartItems));
             } catch (error) {
-                toast.error("Không thể lưu giỏ hàng hiện tại.");
+                toast.error(tMenu("err_save_cart"));
             }
         }
     }, [cartItems]);
@@ -122,7 +125,7 @@ export default function MenuListingClient({ initialMenuData, tableFromUrl, token
             try {
                 sessionStorage.setItem(TABLE_STORAGE_KEY, tableNumber);
             } catch (error) {
-                toast.error("Không thể lưu thông tin số bàn.");
+                toast.error(tMenu("err_save_table"));
             }
         }
     }, [tableNumber]);
@@ -166,9 +169,9 @@ export default function MenuListingClient({ initialMenuData, tableFromUrl, token
         });
         // Hiển thị thông báo bên ngoài setCartItems để tránh bị gọi 2 lần (React StrictMode)
         if (itemsToAdd.length === 1) {
-            toast.success(`Đã thêm ${itemsToAdd[0].name} vào giỏ hàng`);
+            toast.success(tCommon("toast_added_single", { dishName: itemsToAdd[0].name }));
         } else {
-            toast.success(`Đã thêm ${itemsToAdd.length} món vào giỏ hàng`);
+            toast.success(tCommon("toast_added_multiple", { count: itemsToAdd.length }));
         }
     };
 
@@ -196,7 +199,7 @@ export default function MenuListingClient({ initialMenuData, tableFromUrl, token
             }
         } catch (error: any) {
             if (error.response?.status === 409) {
-                toast.error("Bàn này đã có người sử dụng. Vui lòng chọn bàn khác.");
+                toast.error(tMenu("err_table_occupied_select"));
                 if (typeof window !== 'undefined') {
                     sessionStorage.removeItem(TABLE_STORAGE_KEY);
                     sessionStorage.removeItem(CART_STORAGE_KEY);
@@ -308,7 +311,7 @@ export default function MenuListingClient({ initialMenuData, tableFromUrl, token
             // Handle specific error cases
             if (err.response?.status === 409) {
                 // Table is already occupied by another customer
-                toast.error("Bàn này đã có người đang sử dụng. Vui lòng chọn bàn khác.");
+                toast.error(tMenu("err_table_occupied_select"));
                 // Clear the session and redirect to menu without table
                 if (typeof window !== 'undefined') {
                     sessionStorage.removeItem(TABLE_STORAGE_KEY);
@@ -322,14 +325,14 @@ export default function MenuListingClient({ initialMenuData, tableFromUrl, token
                 router.push('/menu-listing');
             } else if (err.response?.status === 400 && err.response?.data?.userMessage?.includes('QR')) {
                 // Invalid QR token
-                toast.error("Mã QR không hợp lệ. Vui lòng quét lại mã QR trên bàn.");
+                toast.error(tMenu("err_qr_invalid"));
                 if (typeof window !== 'undefined') {
                     sessionStorage.removeItem(TOKEN_STORAGE_KEY);
                 }
             } else {
                 // Generic error
-                const message = err.response?.data?.userMessage || err.message || "Vui lòng thử lại sau.";
-                toast.error(`Không thể tạo đơn hàng: ${message}`);
+                const message = err.response?.data?.userMessage || err.message || "";
+                toast.error(tMenu("err_create_order", { message }));
             }
         }
     }, [cartItems, tableNumber, currentOrderId]);
@@ -355,11 +358,10 @@ export default function MenuListingClient({ initialMenuData, tableFromUrl, token
                         >
                             <CheckCircle className="text-[#FFAB2D]" size={64} strokeWidth={1.5} />
                             <h2 className="text-[#1A3A51] text-2xl font-bold font-serif leading-tight">
-                                Order Placed<br />Successfully!
+                                {tMenu("success_order_title")}
                             </h2>
                             <p className="text-slate-500 text-sm font-serif leading-relaxed">
-                                Your order is being prepared and will be served shortly at{" "}
-                                <span className="font-bold text-[#1A3A51]">Table {orderedTableNumber}</span>.
+                                {tMenu("success_order_body", { table: orderedTableNumber })}
                             </p>
                             <button
                                 onClick={() => {
@@ -370,7 +372,7 @@ export default function MenuListingClient({ initialMenuData, tableFromUrl, token
                                 }}
                                 className="mt-2 w-full bg-[#C5A059] hover:bg-[#b08c4a] active:bg-[#9c7a3f] text-white font-bold font-serif text-sm tracking-widest uppercase py-4 rounded-xl transition-colors"
                             >
-                                Continue Browsing
+                                {tMenu("success_continue")}
                             </button>
                         </motion.div>
                     </motion.div>

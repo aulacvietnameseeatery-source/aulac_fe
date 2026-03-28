@@ -4,6 +4,7 @@ import React, { useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { useSystemSettings } from '../hooks/useSystemSettings';
 import { SettingGroupCard } from './SettingGroupCard';
+import { LandingPageSettingsCard } from './LandingPageSettingsCard';
 import { Loader2, Settings, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { AddSettingModal } from './AddSettingModal';
@@ -50,13 +51,17 @@ export const GeneralSettings: React.FC = () => {
             ) : (
                 <div className="grid grid-cols-1 gap-6">
                     {groups.map((groupName) => (
-                        <SettingGroupCard
-                            key={groupName}
-                            groupName={groupName}
-                            settings={filteredGrouped[groupName]}
-                            isSaving={savingGroups[groupName] || false}
-                            onSave={(items) => saveGroup(groupName, items, t('notifications.saveSuccess', { group: groupName }))}
-                        />
+                        groupName === 'landing_page' ? (
+                            <LandingPageSettingsCard key={groupName} settings={filteredGrouped[groupName]} />
+                        ) : (
+                            <SettingGroupCard
+                                key={groupName}
+                                groupName={groupName}
+                                settings={filteredGrouped[groupName]}
+                                isSaving={savingGroups[groupName] || false}
+                                onSave={(items) => saveGroup(groupName, items, t('notifications.saveSuccess', { group: groupName }))}
+                            />
+                        )
                     ))}
                 </div>
             )}

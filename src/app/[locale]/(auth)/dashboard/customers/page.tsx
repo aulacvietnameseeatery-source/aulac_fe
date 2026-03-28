@@ -17,7 +17,8 @@ import { CustomerActions } from "@/features/staff/customer-management/components
 import { CustomerModal, CustomerFormData } from "@/features/staff/customer-management/components/customer-modal";
 import { staffCustomerService } from "@/features/staff/customer-management/services/customer-service";
 import { ConfirmModal } from "@/components/layout/admin-sidebar/confirm-modal";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/routing"
+import { dateUtils } from "@/lib/date-utils";
 
 const CustomerListContent = () => {
     const t = useTranslations("Customer.List");
@@ -77,11 +78,15 @@ const CustomerListContent = () => {
             toast.success(t("notifications.deleteSuccess"));
             refresh();
             setDeleteModalOpen(false);
+            setCustomerToDelete(null);
         } catch (error: any) {
-            toast.error(error.response?.data?.userMessage || t("notifications.deleteError"));
+            const status = error.response?.status || error.status;
+            const errorMessage = status === 400
+                ? t("notifications.deleteHasDependencies")
+                : t("notifications.deleteError");
+            toast.error(errorMessage);
         } finally {
             setIsDeleting(false);
-            setCustomerToDelete(null);
         }
     };
 
@@ -115,8 +120,17 @@ const CustomerListContent = () => {
             refresh();
             handleCloseModal();
         } catch (error: any) {
-            const errorMessage = error.response?.data?.userMessage ||
-                (modalMode === "add" ? tAdd("notifications.createError") : tEdit("notifications.updateError"));
+            const status = error.response?.status || error.status;
+            let errorMessage: string;
+            if (status === 400) {
+                errorMessage = modalMode === "add"
+                    ? tAdd("notifications.phoneAlreadyExists")
+                    : tEdit("notifications.phoneAlreadyExists");
+            } else {
+                errorMessage = modalMode === "add"
+                    ? tAdd("notifications.createError")
+                    : tEdit("notifications.updateError");
+            }
             toast.error(errorMessage);
         } finally {
             setIsSubmitting(false);
@@ -202,7 +216,7 @@ const CustomerListContent = () => {
             width: "150px",
             cellRender: ({ value }: { value: string | null }) => (
                 <span className="text-gray-600 text-sm">
-                    {value ? dayjs(value).format("DD/MM/YYYY HH:mm") : "-"}
+                    {value ? dateUtils.formatLocal(value, "dd/MM/yyyy HH:mm") : "-"}
                 </span>
             ),
         },
@@ -293,7 +307,7 @@ const CustomerListContent = () => {
 
 export default function CustomerListPage() {
     return (
-        <ProtectedRoute permission={Permissions.ViewAccount}>
+        <ProtectedRoute permission={Permissions.ViewCustomer}>
             <Suspense fallback={
                 <div className="flex h-screen items-center justify-center">
                     <Loader2 className="animate-spin text-gray-400" />

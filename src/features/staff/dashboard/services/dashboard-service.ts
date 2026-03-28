@@ -1,57 +1,87 @@
-// src/features/dashboard/services/dashboard-service.ts
-
-import {
-    DashboardFilterParams,
+import { api } from "@/lib/http";
+import type {ApiResponse, PagedResult} from "@/types/api-response.types";
+import type {
+    DashboardFilterRequest,
     DashboardSummaryDto,
     RevenueChartItemDto,
     TopSellingItemDto,
-    DashboardStatisticsDto
+    DashboardStatisticsDto, ReservationActivityDto, TableActivityDto, NotificationActivityDto
 } from "../types/dashboard-types";
 
-// Hàm helper để build query string
-const buildQueryParams = (params?: DashboardFilterParams) => {
-    if (!params) return "";
-    const query = new URLSearchParams();
-    if (params.startDate) query.append("startDate", params.startDate);
-    if (params.endDate) query.append("endDate", params.endDate);
-    if (params.period) query.append("period", params.period);
-    return `?${query.toString()}`;
-};
+const BASE = "/api/dashboard";
 
-const fetchApi = async <T>(url: string): Promise<T> => {
-    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
-    const headers: HeadersInit = { 'Content-Type': 'application/json' };
-    if (token) headers['Authorization'] = `Bearer ${token}`;
-
-    const response = await fetch(url, { headers });
-    const json = await response.json();
-
-    if (!response.ok || !json.success) {
-        throw new Error(json.userMessage || "Lỗi khi tải dữ liệu Dashboard");
+function toQuery(params: Record<string, string | number | boolean | undefined | null>): string {
+    const q = new URLSearchParams();
+    for (const [k, v] of Object.entries(params)) {
+        if (v !== undefined && v !== null && v !== "") {
+            q.set(k, String(v));
+        }
     }
-    return json.data;
-};
+    const str = q.toString();
+    return str ? `?${str}` : "";
+}
 
 export const dashboardService = {
-    // 1. Lấy thông số tổng quan
-    getSummary: (params?: DashboardFilterParams): Promise<DashboardSummaryDto> => {
-        return fetchApi(`/api/dashboard/summary${buildQueryParams(params)}`);
+    // 1. Thống kê tổng quan
+    async getSummary(params: DashboardFilterRequest = {}): Promise<DashboardSummaryDto> {
+        const query = toQuery({
+            startDate: params.startDate,
+            endDate: params.endDate
+        });
+        const res = await api.get<ApiResponse<DashboardSummaryDto>>(`${BASE}/summary${query}`);
+        return res.data!;
     },
 
-    // 2. Lấy dữ liệu biểu đồ doanh thu
-    getRevenueChart: (params?: DashboardFilterParams): Promise<RevenueChartItemDto[]> => {
-        return fetchApi(`/api/dashboard/revenue-chart${buildQueryParams(params)}`);
+    // 2. Biểu đồ doanh thu
+    async getRevenueChart(params: DashboardFilterRequest = {}): Promise<RevenueChartItemDto[]> {
+        const query = toQuery({
+            startDate: params.startDate,
+            endDate: params.endDate
+        });
+        const res = await api.get<ApiResponse<RevenueChartItemDto[]>>(`${BASE}/revenue-chart${query}`);
+        return res.data ?? [];
     },
 
-    // 3. Lấy Top món ăn bán chạy
-    getTopSelling: (limit: number = 6, params?: DashboardFilterParams): Promise<TopSellingItemDto[]> => {
-        const query = buildQueryParams(params);
-        const limitQuery = query ? `${query}&limit=${limit}` : `?limit=${limit}`;
-        return fetchApi(`/api/dashboard/top-selling${limitQuery}`);
+    // 3. Top món bán chạy
+    async getTopSelling(params: DashboardFilterRequest & { limit?: number } = {}): Promise<TopSellingItemDto[]> {
+        const query = toQuery({
+            startDate: params.startDate,
+            endDate: params.endDate,
+            limit: params.limit ?? 6 // 6 món
+        });
+        const res = await api.get<ApiResponse<TopSellingItemDto[]>>(`${BASE}/top-selling${query}`);
+        return res.data ?? [];
     },
 
-    // 4. Lấy thống kê Phân loại & Người dùng
-    getStatistics: (params?: DashboardFilterParams): Promise<DashboardStatisticsDto> => {
-        return fetchApi(`/api/dashboard/statistics${buildQueryParams(params)}`);
+    // 4. Phân loại đơn & Top Khách hàng
+    async getStatistics(params: DashboardFilterRequest = {}): Promise<DashboardStatisticsDto> {
+        const query = toQuery({
+            startDate: params.startDate,
+            endDate: params.endDate
+        });
+        const res = await api.get<ApiResponse<DashboardStatisticsDto>>(`${BASE}/statistics${query}`);
+        return res.data!;
+    },
+
+    async getRecentReservations(): Promise<ReservationActivityDto[]> {
+        const res = await api.get<ApiResponse<PagedResult<ReservationActivityDto>>>("/api/reservations?pageIndex=1&pageSize=10");
+        return res.data?.pageData ?? [];
+    },
+
+    async getAvailableTables(): Promise<TableActivityDto[]> {
+        const res = await api.get<ApiResponse<TableActivityDto[]>>("/api/public/availability");
+        return res.data ?? [];
+    },
+
+    async getNotifications(): Promise<NotificationActivityDto[]> {
+        const res = await api.get<ApiResponse<any>>("/api/notifications");
+
+        let notifArray: NotificationActivityDto[] = [];
+        if (Array.isArray(res.data)) {
+            notifArray = res.data;
+        } else if (res.data && Array.isArray((res.data as any).pageData)) {
+            notifArray = (res.data as any).pageData;
+        }
+        return notifArray;
     }
 };

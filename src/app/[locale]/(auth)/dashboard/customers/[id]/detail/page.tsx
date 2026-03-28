@@ -13,6 +13,7 @@ import { OrderDetailModal } from "@/features/staff/customer-management/component
 import { CustomerOrderCard } from "@/features/staff/customer-management/components/customer-order-card";
 import { TablePagination } from "@/components/ui/table/table-pagination"; 
 import { useTranslations } from "next-intl";
+import { dateUtils } from "@/lib/date-utils";
 
 export default function CustomerDetailPage() {
     const t = useTranslations("Customer.Detail");
@@ -41,14 +42,13 @@ export default function CustomerDetailPage() {
         const filters: Record<string, any> = {};
 
         if (startDate) {
-            const from = new Date(startDate);
-            filters.fromDate = { value: from.toISOString(), operator: 'eq', type: 'date' };
+            const { fromTime } = dateUtils.getUtcDayRange(startDate);
+            filters.fromDate = { value: fromTime, operator: 'eq', type: 'date' };
         }
         
         if (endDate) {
-            const to = new Date(endDate);
-            to.setHours(23, 59, 59, 999); 
-            filters.toDate = { value: to.toISOString(), operator: 'eq', type: 'date' };
+            const { toTime } = dateUtils.getUtcDayRange(endDate);
+            filters.toDate = { value: toTime, operator: 'eq', type: 'date' };
         }
 
         if (orderType) {
@@ -142,7 +142,7 @@ export default function CustomerDetailPage() {
                     <div className="flex flex-wrap items-center gap-x-5 gap-y-2 mt-3 text-sm font-medium text-slate-500">
                         <div className="flex items-center gap-1.5"><Phone size={14} className="text-slate-400"/> {profile.phone || t('noPhone')}</div>
                         {profile.email && <div className="flex items-center gap-1.5"><Mail size={14} className="text-slate-400"/> {profile.email}</div>}
-                        <div className="flex items-center gap-1.5"><CalendarDays size={14} className="text-slate-400"/> {t('joined')}: {dayjs(profile.createdAt).format("DD/MM/YYYY")}</div>
+                        <div className="flex items-center gap-1.5"><CalendarDays size={14} className="text-slate-400"/> {t('joined')}: {dateUtils.formatLocal(profile.createdAt, "dd/MM/yyyy")}{dayjs(profile.createdAt).format("DD/MM/YYYY")}</div>
                     </div>
                 </div>
 

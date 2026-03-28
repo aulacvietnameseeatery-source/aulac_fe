@@ -11,7 +11,7 @@ import {
     X,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/routing"
 import { Button } from "@/components/ui/button";
 import { TablePagination } from "@/components/ui/table/table-pagination";
 import { useOrderHistory } from "@/features/staff/order-management/hooks/useOrderHistory";
@@ -253,7 +253,7 @@ function OrdersContent() {
     const handlePageSizeChange = useCallback((size: number) => { setPageSize(size); setCurrentPage(1); }, []);
 
     const handleCreate = () => {
-        router.push(`/dashboard/orders/create`);
+        router.push(`/dashboard/orders/pos`);
     };
 
     return (
@@ -417,7 +417,7 @@ function OrdersContent() {
                                                         onAction={(id, action) => {
                                                             console.log("Action:", action, "on order:", id);
                                                             if (action === "view") {
-                                                                router.push(`/dashboard/orders/${id}/edit`);
+                                                                router.push(`/dashboard/orders/pos/${id}`);
                                                             } else if (action !== 'pay') {
                                                                 void handleOrderAction(id, action);
                                                             }

@@ -13,6 +13,7 @@ import {
   ImageIcon,
   ZoomIn,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import { Dialog } from "@/components/ui/dialog";
 import { ALFieldLabel, ALFieldMessage } from "@/components/ui/al-field-wrapper";
@@ -21,6 +22,7 @@ import type {
   ALFileValidationError,
   ALFileUploaderImagePerRow,
 } from "./al-file-uploader.types";
+import { isHeicFile, processImageFile } from "@/lib/image-processing";
 
 const IMAGE_PER_ROW_CLASS_MAP: Record<ALFileUploaderImagePerRow, string> = {
   2: "grid-cols-2",
@@ -48,11 +50,11 @@ function getFileIcon(file: File) {
  * Check whether a File passes size + MIME constraints.
  * Returns a human-readable `message` or `null` if valid.
  */
-function validateFile(
+async function validateFile(
   file: File,
   maxSizeBytes: number,
   accept: string
-): { reason: ALFileValidationError["reason"]; message: string } | null {
+): Promise<{ reason: ALFileValidationError["reason"]; message: string } | null> {
   if (maxSizeBytes > 0 && file.size > maxSizeBytes) {
     return {
       reason: "size",
@@ -71,6 +73,17 @@ function validateFile(
       if (a.startsWith(".")) return file.name.toLowerCase().endsWith(a.toLowerCase());
       return file.type === a;
     });
+
+    // Allow HEIC/HEIF files through when the accept pattern includes images —
+    // iOS may report empty or application/octet-stream MIME for HEIC files,
+    // which would fail the MIME check above. They'll be converted to JPEG
+    // by processFiles before upload.
+    if (!mimeOk && (await isHeicFile(file))) {
+      const acceptsImages = accepted.some(
+        (a) => a === "image/*" || a.startsWith("image/") || a === ".heic" || a === ".heif"
+      );
+      if (acceptsImages) return null;
+    }
 
     if (!mimeOk) {
       return {
@@ -96,7 +109,9 @@ const ExistingImageThumb: React.FC<{
   tileClassName?: string;
   removeButtonClassName?: string;
   primaryBadgeClassName?: string;
-}> = ({ url, isPrimary, isDeleting, onDelete, onPreview, disabled, tileClassName, removeButtonClassName, primaryBadgeClassName }) => (
+  primaryLabel?: string;
+  removeLabel?: string;
+}> = ({ url, isPrimary, isDeleting, onDelete, onPreview, disabled, tileClassName, removeButtonClassName, primaryBadgeClassName, primaryLabel = "Primary", removeLabel = "Remove image" }) => (
   <div
     className={cn(
       "relative group rounded-lg overflow-hidden border border-slate-200 bg-slate-50 shrink-0",
@@ -120,7 +135,7 @@ const ExistingImageThumb: React.FC<{
 
     {isPrimary && (
       <span className={cn("absolute bottom-0 left-0 right-0 text-center text-[9px] font-semibold bg-[#1A3A52]/80 text-white py-0.5", primaryBadgeClassName)}>
-        Primary
+        {primaryLabel}
       </span>
     )}
 
@@ -132,7 +147,9 @@ const ExistingImageThumb: React.FC<{
       !disabled && onDelete && (
         <button
           type="button"
-          aria-label="Remove image"
+          aria-label={removeLabel}
+          data-tooltip-content={removeLabel}
+          data-tooltip-id="my-tooltip"
           onClick={(e) => { e.stopPropagation(); onDelete(); }}
           className={cn(
             "absolute top-0.5 right-0.5 p-0.5 rounded-full bg-black/50 text-white opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-600/80",
@@ -156,7 +173,8 @@ const PendingImageThumb: React.FC<{
   tileClassName?: string;
   removeButtonClassName?: string;
   sizeBadgeClassName?: string;
-}> = ({ file, previewUrl, onRemove, onPreview, disabled, tileClassName, removeButtonClassName, sizeBadgeClassName }) => (
+  removeLabel?: string;
+}> = ({ file, previewUrl, onRemove, onPreview, disabled, tileClassName, removeButtonClassName, sizeBadgeClassName, removeLabel = "Remove image" }) => (
   <div
     className={cn(
       "relative group rounded-lg overflow-hidden border border-dashed border-[#D5BA98] bg-[#D5BA98]/10 shrink-0",
@@ -184,7 +202,9 @@ const PendingImageThumb: React.FC<{
     {!disabled && (
       <button
         type="button"
-        aria-label={`Remove ${file.name}`}
+        aria-label={`${removeLabel}: ${file.name}`}
+        data-tooltip-content={removeLabel}
+        data-tooltip-id="my-tooltip"
         onClick={(e) => { e.stopPropagation(); onRemove(); }}
         className={cn(
           "absolute top-0.5 right-0.5 p-0.5 rounded-full bg-black/50 text-white opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-600/80",
@@ -207,7 +227,9 @@ const FileListRow: React.FC<{
   disabled?: boolean;
   isPending?: boolean;
   icon?: React.ReactNode;
-}> = ({ name, size, url, isDeleting, onDelete, disabled, isPending, icon }) => (
+  pendingLabel?: string;
+  removeLabel?: string;
+}> = ({ name, size, url, isDeleting, onDelete, disabled, isPending, icon, pendingLabel = "Pending", removeLabel = "Remove file" }) => (
   <div
     className={cn(
       "flex items-center gap-3 px-3 py-2 rounded-lg border text-sm",
@@ -239,7 +261,7 @@ const FileListRow: React.FC<{
     </div>
 
     {isPending && (
-      <span className="shrink-0 text-xs text-indigo-500 font-medium">Pending</span>
+      <span className="shrink-0 text-xs text-indigo-500 font-medium">{pendingLabel}</span>
     )}
 
     {isDeleting ? (
@@ -248,7 +270,9 @@ const FileListRow: React.FC<{
       !disabled && onDelete && (
         <button
           type="button"
-          aria-label={`Remove ${name}`}
+          aria-label={`${removeLabel}: ${name}`}
+          data-tooltip-content={removeLabel}
+          data-tooltip-id="my-tooltip"
           onClick={onDelete}
           className="shrink-0 p-1 rounded hover:bg-red-50 text-gray-400 hover:text-red-500 transition-colors"
         >
@@ -311,6 +335,8 @@ const ALFileUploader = React.forwardRef<HTMLDivElement, ALFileUploaderProps>(
       multiple = true,
       variant = "image",
       imagePerRow = 4,
+      autoProcessImages,
+      processFiles,
       disabled = false,
       className,
     },
@@ -318,7 +344,81 @@ const ALFileUploader = React.forwardRef<HTMLDivElement, ALFileUploaderProps>(
   ) => {
     const inputRef = React.useRef<HTMLInputElement>(null);
     const [isDragging, setIsDragging] = React.useState(false);
+    const [isProcessing, setIsProcessing] = React.useState(false);
     const [validationErrors, setValidationErrors] = React.useState<ALFileValidationError[]>([]);
+    const processingAbortRef = React.useRef<AbortController | null>(null);
+    const t = useTranslations("common.fileUploader");
+
+    // Determine whether to auto-process images
+    // Default: enabled for image/gallery variants, disabled for file variant
+    const shouldAutoProcess =
+      autoProcessImages ??
+      (variant === "image" || variant === "gallery");
+
+    // Abort any in-flight processing on unmount
+    React.useEffect(() => {
+      return () => {
+        processingAbortRef.current?.abort();
+      };
+    }, []);
+
+    // Create wrapped processFiles that handles HEIC conversion + user callback
+    const wrappedProcessFiles = React.useCallback(
+      async (files: File[]): Promise<File[]> => {
+        const results: File[] = [];
+        const errors: { file: File; error: Error }[] = [];
+
+        // Step 1: HEIC conversion (if enabled)
+        if (shouldAutoProcess) {
+          for (const file of files) {
+            if (await isHeicFile(file)) {
+              try {
+                const converted = await processImageFile(file);
+                results.push(converted);
+              } catch (err) {
+                const error = err instanceof Error ? err : new Error(String(err));
+                errors.push({ file, error });
+              }
+            } else {
+              results.push(file);
+            }
+          }
+
+          // If any HEIC conversions failed, add them to validation errors and skip
+          // the rest of processing for those files
+          if (errors.length > 0) {
+            setValidationErrors((prev) => [
+              ...prev,
+              ...errors.map((e) => ({
+                file: e.file,
+                reason: "processing-failed" as const,
+                message: `${e.file.name}: ${e.error.message}`,
+              })),
+            ]);
+            // Only continue with successfully-converted files
+          }
+        } else {
+          // If auto-processing disabled, return files as-is
+          results.push(...files);
+        }
+
+        // Step 2: Apply user's custom processFiles callback (if provided)
+        if (processFiles && results.length > 0) {
+          try {
+            const customProcessed = await processFiles(results);
+            return customProcessed;
+          } catch (err) {
+            // If custom processing fails, log but return converted files so far
+            console.error("[ALFileUploader] Custom processFiles failed:", err);
+            return results;
+          }
+        }
+
+        return results;
+      },
+      [shouldAutoProcess, processFiles]
+    );
+
     const isGalleryVariant = variant === "gallery";
     const isImageLikeVariant = variant === "image" || isGalleryVariant;
     const responsiveImageGridClass = cn(
@@ -331,12 +431,15 @@ const ALFileUploader = React.forwardRef<HTMLDivElement, ALFileUploaderProps>(
     const responsiveRemoveButtonClass = "size-5 p-0 bg-white/90 text-slate-700 opacity-100 shadow-sm hover:bg-red-600 hover:text-white sm:size-6";
     const responsiveBadgeClass = "text-[9px] py-0.5 sm:text-[10px] sm:py-1";
 
-    // Generate stable object-URL previews for pending files
+    // Generate stable object-URL previews for pending files.
+    // Key uses lastModified (stable across HEIC→JPEG conversion) instead of size.
+    const fileKey = (f: File) => f.name + f.lastModified;
+
     const previews = React.useMemo(() => {
       if (!isImageLikeVariant) return {};
       return Object.fromEntries(
         pendingFiles.map((file) => [
-          file.name + file.size,
+          fileKey(file),
           URL.createObjectURL(file),
         ])
       );
@@ -353,18 +456,18 @@ const ALFileUploader = React.forwardRef<HTMLDivElement, ALFileUploaderProps>(
 
     // ── Add files (from input or drop) ──
     const addFiles = React.useCallback(
-      (incoming: File[]) => {
+      async (incoming: File[]) => {
         const errors: ALFileValidationError[] = [];
         const valid: File[] = [];
 
         for (const file of incoming) {
-          // Deduplicate by name + size
+          // Deduplicate by name + lastModified (stable across conversion)
           const isDuplicate = pendingFiles.some(
-            (p) => p.name === file.name && p.size === file.size
+            (p) => p.name === file.name && p.lastModified === file.lastModified
           );
           if (isDuplicate) continue;
 
-          const valError = validateFile(file, maxSizeBytes, accept);
+          const valError = await validateFile(file, maxSizeBytes, accept);
           if (valError) {
             errors.push({ file, ...valError });
             continue;
@@ -385,11 +488,39 @@ const ALFileUploader = React.forwardRef<HTMLDivElement, ALFileUploaderProps>(
         }
 
         setValidationErrors(errors);
-        if (valid.length > 0) {
-          onPendingChange([...pendingFiles, ...valid]);
+
+        if (valid.length === 0) return;
+
+        // Use wrapped processFiles that includes auto HEIC conversion + custom processing
+        processingAbortRef.current?.abort();
+        const controller = new AbortController();
+        processingAbortRef.current = controller;
+
+        setIsProcessing(true);
+        try {
+          const processed = await wrappedProcessFiles(valid);
+          if (!controller.signal.aborted) {
+            onPendingChange([...pendingFiles, ...processed]);
+          }
+        } catch {
+          // If processing fails entirely, log and show processing-failed error
+          if (!controller.signal.aborted) {
+            setValidationErrors((prev) => [
+              ...prev,
+              ...valid.map((f) => ({
+                file: f,
+                reason: "processing-failed" as const,
+                message: `Failed to process ${f.name}. Please try again or use a different format.`,
+              })),
+            ]);
+          }
+        } finally {
+          if (!controller.signal.aborted) {
+            setIsProcessing(false);
+          }
         }
       },
-      [pendingFiles, onPendingChange, accept, maxSizeBytes, maxFiles, totalFileCount]
+      [pendingFiles, onPendingChange, accept, maxSizeBytes, maxFiles, totalFileCount, wrappedProcessFiles]
     );
 
     const removePending = React.useCallback(
@@ -415,7 +546,7 @@ const ALFileUploader = React.forwardRef<HTMLDivElement, ALFileUploaderProps>(
     const handleDrop = (e: React.DragEvent) => {
       e.preventDefault();
       setIsDragging(false);
-      if (disabled || isUploading) return;
+      if (disabled || isUploading || isProcessing) return;
       const files = Array.from(e.dataTransfer.files);
       addFiles(multiple ? files : files.slice(0, 1));
     };
@@ -428,7 +559,7 @@ const ALFileUploader = React.forwardRef<HTMLDivElement, ALFileUploaderProps>(
     };
 
     const openFilePicker = () => {
-      if (!disabled && !isUploading) inputRef.current?.click();
+      if (!disabled && !isUploading && !isProcessing) inputRef.current?.click();
     };
 
     const isAtLimit = totalFileCount >= maxFiles;
@@ -442,7 +573,7 @@ const ALFileUploader = React.forwardRef<HTMLDivElement, ALFileUploaderProps>(
     if (maxSizeBytes > 0) hintParts.push(`up to ${formatBytes(maxSizeBytes)} each`);
     if (maxFiles < Infinity) hintParts.push(`max ${maxFiles} files`);
     const hintText = hintParts.join(" · ");
-    const galleryCountLabel = `${totalFileCount}/${maxFiles} ${maxFiles === 1 ? "image" : "images"}`;
+    const galleryCountLabel = `${totalFileCount}/${maxFiles} ${maxFiles === 1 ? t("image") : t("images")}`;
 
     // _OLD: previous render used unified grid for all variants + dropzone below thumbnails.
     //       Now: image variant shows dropzone above (full when empty, compact bar with files),
@@ -466,7 +597,7 @@ const ALFileUploader = React.forwardRef<HTMLDivElement, ALFileUploaderProps>(
               <div
                 role="button"
                 tabIndex={disabled ? -1 : 0}
-                aria-label="Upload files"
+                aria-label={t("uploadImages")}
                 onDragOver={handleDragOver}
                 onDragLeave={handleDragLeave}
                 onDrop={handleDrop}
@@ -492,7 +623,14 @@ const ALFileUploader = React.forwardRef<HTMLDivElement, ALFileUploaderProps>(
                 {isUploading && (
                   <div className="absolute inset-0 flex items-center justify-center rounded-lg bg-white/70 z-10">
                     <Loader2 size={20} className="animate-spin text-[#1A3A52]" />
-                    <span className="ml-2 text-sm text-[#1A3A52] font-medium">Uploading…</span>
+                    <span className="ml-2 text-sm text-[#1A3A52] font-medium">{t("uploading")}</span>
+                  </div>
+                )}
+
+                {isProcessing && (
+                  <div className="absolute inset-0 flex items-center justify-center rounded-lg bg-white/70 z-10">
+                    <Loader2 size={20} className="animate-spin text-[#1A3A52]" />
+                    <span className="ml-2 text-sm text-[#1A3A52] font-medium">{t("processingImages")}</span>
                   </div>
                 )}
 
@@ -500,7 +638,7 @@ const ALFileUploader = React.forwardRef<HTMLDivElement, ALFileUploaderProps>(
                   <>
                     <Upload size={16} className="shrink-0 text-[#1A3A52]/50" />
                     <span className="min-w-0 text-sm text-[#1A3A52]/70">
-                      {isDragging ? "Drop here" : "Add more images"}
+                      {isDragging ? t("dropHere") : t("addMoreImages")}
                     </span>
                     {hintText && (
                       <span className="basis-full text-xs text-[#1A3A52]/40 sm:ml-auto sm:basis-auto">
@@ -515,14 +653,10 @@ const ALFileUploader = React.forwardRef<HTMLDivElement, ALFileUploaderProps>(
                   <>
                     <ImagePlus size={32} className="text-[#1A3A52]/35" />
                     <p className="text-sm font-medium text-[#1A3A52]/70">
-                      {isDragging ? "Drop images here" : "Upload images"}
+                      {isDragging ? t("dropImagesHere") : t("uploadImages")}
                     </p>
                     <p className="text-xs text-[#1A3A52]/50">
-                      {isDragging
-                        ? "Release to add files"
-                        : multiple
-                          ? "Drag & drop or click to browse"
-                          : "Drag & drop or click to browse"}
+                      {isDragging ? t("releaseToAdd") : t("dragOrClick")}
                     </p>
                     {hintText && (
                       <p className="text-xs text-[#1A3A52]/40">{hintText}</p>
@@ -547,19 +681,22 @@ const ALFileUploader = React.forwardRef<HTMLDivElement, ALFileUploaderProps>(
                     tileClassName={responsiveImageTileClass}
                     removeButtonClassName={responsiveRemoveButtonClass}
                     primaryBadgeClassName={responsiveBadgeClass}
+                    primaryLabel={t("primary")}
+                    removeLabel={t("removeImage")}
                   />
                 ))}
                 {pendingFiles.map((file) => (
                   <PendingImageThumb
-                    key={file.name + file.size}
+                    key={fileKey(file)}
                     file={file}
-                    previewUrl={previews[file.name + file.size] ?? ""}
+                    previewUrl={previews[fileKey(file)] ?? ""}
                     onRemove={() => removePending(file)}
-                    onPreview={() => setPreviewUrl(previews[file.name + file.size] ?? "")}
+                    onPreview={() => setPreviewUrl(previews[fileKey(file)] ?? "")}
                     disabled={disabled || isUploading}
                     tileClassName={responsiveImageTileClass}
                     removeButtonClassName={responsiveRemoveButtonClass}
                     sizeBadgeClassName={responsiveBadgeClass}
+                    removeLabel={t("removeImage")}
                   />
                 ))}
               </div>
@@ -582,25 +719,30 @@ const ALFileUploader = React.forwardRef<HTMLDivElement, ALFileUploaderProps>(
                 tileClassName={responsiveGalleryTileClass}
                 removeButtonClassName={responsiveRemoveButtonClass}
                 primaryBadgeClassName={responsiveBadgeClass}
+                primaryLabel={t("primary")}
+                removeLabel={t("removeImage")}
               />
             ))}
             {pendingFiles.map((file) => (
               <PendingImageThumb
-                key={file.name + file.size}
+                key={fileKey(file)}
                 file={file}
-                previewUrl={previews[file.name + file.size] ?? ""}
+                previewUrl={previews[fileKey(file)] ?? ""}
                 onRemove={() => removePending(file)}
-                onPreview={() => setPreviewUrl(previews[file.name + file.size] ?? "")}
+                onPreview={() => setPreviewUrl(previews[fileKey(file)] ?? "")}
                 disabled={disabled || isUploading}
                 tileClassName={responsiveGalleryTileClass}
                 removeButtonClassName={responsiveRemoveButtonClass}
                 sizeBadgeClassName={responsiveBadgeClass}
+                removeLabel={t("removeImage")}
               />
             ))}
             {!isAtLimit && (
               <button
                 type="button"
-                aria-label="Add images"
+                aria-label={t("addImages")}
+                data-tooltip-content={t("addImages")}
+                data-tooltip-id="my-tooltip"
                 onClick={openFilePicker}
                 onDragOver={handleDragOver}
                 onDragLeave={handleDragLeave}
@@ -614,7 +756,7 @@ const ALFileUploader = React.forwardRef<HTMLDivElement, ALFileUploaderProps>(
                 )}
               >
                 <ImagePlus className="h-5 w-5 text-[#1A3A52]/55 sm:h-6 sm:w-6" />
-                <span className="text-[11px] text-[#1A3A52]/60 sm:text-xs">Add</span>
+                <span className="text-[11px] text-[#1A3A52]/60 sm:text-xs">{t("add")}</span>
               </button>
             )}
           </div>
@@ -634,19 +776,23 @@ const ALFileUploader = React.forwardRef<HTMLDivElement, ALFileUploaderProps>(
                     onDelete={onDeleteExisting ? () => onDeleteExisting(f.id) : undefined}
                     disabled={disabled || isUploading}
                     icon={<ImageIcon size={16} />}
+                    removeLabel={t("removeFile")}
                   />
                 ))}
                 {pendingFiles.map((file) => (
                   <FileListRow
-                    key={file.name + file.size}
+                    key={fileKey(file)}
                     name={file.name}
                     size={file.size}
                     onDelete={() => removePending(file)}
                     disabled={disabled || isUploading}
                     isPending
                     icon={getFileIcon(file)}
+                    pendingLabel={t("pending")}
+                    removeLabel={t("removeFile")}
                   />
                 ))}
+                ))
               </div>
             )}
 
@@ -654,7 +800,7 @@ const ALFileUploader = React.forwardRef<HTMLDivElement, ALFileUploaderProps>(
               <div
                 role="button"
                 tabIndex={disabled ? -1 : 0}
-                aria-label="Upload files"
+                aria-label={t("uploadFiles")}
                 onDragOver={handleDragOver}
                 onDragLeave={handleDragLeave}
                 onDrop={handleDrop}
@@ -678,17 +824,17 @@ const ALFileUploader = React.forwardRef<HTMLDivElement, ALFileUploaderProps>(
                 {isUploading && (
                   <div className="absolute inset-0 flex items-center justify-center rounded-lg bg-white/70 z-10">
                     <Loader2 size={20} className="animate-spin text-[#1A3A52]" />
-                    <span className="ml-2 text-sm text-[#1A3A52] font-medium">Uploading…</span>
+                    <span className="ml-2 text-sm text-[#1A3A52] font-medium">{t("uploading")}</span>
                   </div>
                 )}
                 <div className="flex items-center gap-2 text-sm text-[#1A3A52]/60">
                   <Upload size={16} className={isDragging ? "text-[#1A3A52]" : "text-[#1A3A52]/40"} />
                   <span>
                     {isDragging
-                      ? "Drop files here"
+                      ? t("dropFilesHere")
                       : multiple
-                        ? "Drop files or click to browse"
-                        : "Drop a file or click to browse"}
+                        ? t("dropOrClick")
+                        : t("dropOneOrClick")}
                   </span>
                 </div>
                 {hintText && (
@@ -705,7 +851,7 @@ const ALFileUploader = React.forwardRef<HTMLDivElement, ALFileUploaderProps>(
         {isAtLimit && (
           <p className="text-xs text-amber-600 flex items-center gap-1">
             <AlertCircle size={12} />
-            Maximum of {maxFiles} file(s) reached. Remove a file to add more.
+            {t("maxReached", { maxFiles })}
           </p>
         )}
 
@@ -718,7 +864,7 @@ const ALFileUploader = React.forwardRef<HTMLDivElement, ALFileUploaderProps>(
           <ul className="space-y-1">
             {validationErrors.map((ve) => (
               <li
-                key={ve.file.name + ve.file.size}
+                key={ve.file.name + ve.file.lastModified}
                 className="flex items-start gap-1.5 text-xs text-red-600"
               >
                 <AlertCircle size={12} className="shrink-0 mt-0.5" />
@@ -747,7 +893,7 @@ const ALFileUploader = React.forwardRef<HTMLDivElement, ALFileUploaderProps>(
           <Dialog
             open={!!previewUrl}
             onClose={() => setPreviewUrl(null)}
-            title="Image Preview"
+            title={t("imagePreview")}
             width="min(90vw, 800px)"
           >
             <div className="flex items-center justify-center p-2">

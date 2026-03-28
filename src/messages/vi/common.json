@@ -88,6 +88,8 @@
   "OrderPopup": {
     "success_label": "Thành công",
     "success_message": "Đã thêm món vào giỏ hàng",
+    "toast_added_single": "Đã thêm {dishName} vào giỏ hàng",
+    "toast_added_multiple": "Đã thêm {count} món vào giỏ hàng",
     "dish_name": "Bún Bò Huế\nHoàng Gia",
     "price": "$18.50",
     "quantity_label": "Số lượng",
@@ -370,7 +372,19 @@
       "title": "Tóm Tắt",
       "items_count": "{count} Món",
       "confirm_btn": "Xác Nhận Đơn"
-    }
+    },
+    "err_load_cart": "Không thể tải dữ liệu giỏ hàng cũ.",
+    "err_table_occupied_access": "Bàn này đã có người sử dụng. Không thể truy cập.",
+    "err_table_not_found": "Mã bàn không tồn tại.",
+    "err_qr_invalid": "Mã QR không hợp lệ. Vui lòng quét lại mã QR trên bàn.",
+    "err_table_validation": "Không thể xác thực bàn. Vui lòng thử lại.",
+    "err_save_cart": "Không thể lưu giỏ hàng hiện tại.",
+    "err_save_table": "Không thể lưu thông tin số bàn.",
+    "err_table_occupied_select": "Bàn này đã có người sử dụng. Vui lòng chọn bàn khác.",
+    "err_create_order": "Không thể tạo đơn hàng: {message}",
+    "success_order_title": "Đặt món thành công!",
+    "success_order_body": "Món ăn đang được chuẩn bị và sẽ được phục vụ tại Bàn {table}.",
+    "success_continue": "Tiếp tục chọn món"
   },
   "QrScan": {
     "HeroSection": {
@@ -492,6 +506,17 @@
         "prev": "Trang trước",
         "next": "Trang sau",
         "last": "Trang cuối"
+      },
+      "filter": {
+        "title": "Lọc {column}",
+        "condition": "Điều kiện",
+        "value": "Giá trị",
+        "placeholder": "Nhập giá trị lọc",
+        "selectPlaceholder": "Chọn giá trị...",
+        "clear": "Bỏ lọc",
+        "cancel": "Hủy",
+        "apply": "Áp dụng",
+        "close": "Đóng"
       }
     },
     "apiErrors": {
@@ -509,6 +534,49 @@
       "http": "Yêu cầu thất bại. Vui lòng thử lại.",
       "httpStatus": "Yêu cầu thất bại với mã trạng thái {status}.",
       "unexpected": "Đã xảy ra lỗi không mong muốn. Vui lòng thử lại sau."
+    },
+    "switch": {
+      "active": "Hoạt động",
+      "inactive": "Không hoạt động"
+    },
+    "confirmDialog": {
+      "close": "Đóng",
+      "cancel": "Hủy",
+      "variants": {
+        "delete": "Xóa",
+        "warning": "Tiếp tục",
+        "confirm": "Xác nhận"
+      }
+    },
+    "datePicker": {
+      "placeholder": "Chọn ngày",
+      "placeholderWithTime": "Chọn ngày và giờ",
+      "clear": "Xóa ngày"
+    },
+    "fileUploader": {
+      "primary": "Chính",
+      "pending": "Chờ tải",
+      "add": "Thêm",
+      "addImages": "Thêm ảnh",
+      "uploadImages": "Tải ảnh lên",
+      "removeImage": "Xóa ảnh",
+      "removeFile": "Xóa tệp",
+      "uploading": "Đang tải lên…",
+      "processingImages": "Đang xử lý ảnh…",
+      "dropHere": "Thả vào đây",
+      "dropImagesHere": "Thả ảnh vào đây",
+      "dropFilesHere": "Thả tệp vào đây",
+      "addMoreImages": "Thêm ảnh",
+      "releaseToAdd": "Thả để thêm tệp",
+      "dragOrClick": "Kéo thả hoặc nhấp để chọn",
+      "dropOrClick": "Thả tệp hoặc nhấp để chọn",
+      "dropOneOrClick": "Thả một tệp hoặc nhấp để chọn",
+      "maxReached": "Đã đạt tối đa {maxFiles} tệp. Xóa một tệp để thêm.",
+      "imagePreview": "Xem trước ảnh",
+      "uploadFiles": "Tải tệp lên",
+      "imageCount": "{current}/{max} {unit}",
+      "image": "ảnh",
+      "images": "ảnh"
     }
   },
   "ShiftManagement": {
@@ -941,11 +1009,12 @@
       "notifications": {
         "loadError": "Không thể tải thông tin khách hàng",
         "deleteSuccess": "Xóa khách hàng thành công",
-        "deleteError": "Không thể xóa khách hàng"
+        "deleteError": "Không thể xóa khách hàng",
+        "deleteHasDependencies": "Không thể xóa khách hàng đã có đơn hàng hoặc đặt bàn"
       },
       "deleteModal": {
         "title": "Xóa khách hàng",
-        "message": "Bạn có chắc chắn muốn xóa khách hàng '{name}'? Hành động này không thể hoàn tác.",
+        "message": "Bạn có chắc chắn muốn xóa khách hàng {name}? Hành động này không thể hoàn tác.",
         "confirm": "Xóa",
         "cancel": "Hủy"
       }
@@ -979,7 +1048,8 @@
       },
       "notifications": {
         "createSuccess": "Thêm khách hàng thành công",
-        "createError": "Không thể thêm khách hàng"
+        "createError": "Không thể thêm khách hàng",
+        "phoneAlreadyExists": "Số điện thoại này đã được sử dụng bởi khách hàng khác"
       }
     },
     "Edit": {
@@ -1011,7 +1081,8 @@
       },
       "notifications": {
         "updateSuccess": "Cập nhật khách hàng thành công",
-        "updateError": "Không thể cập nhật khách hàng"
+        "updateError": "Không thể cập nhật khách hàng",
+        "phoneAlreadyExists": "Số điện thoại này đã được sử dụng bởi khách hàng khác"
       }
     },
     "Detail": {
@@ -1130,6 +1201,132 @@
     "deleteDialog": {
       "title": "Xóa Template",
       "description": "Bạn có chắc chắn muốn xóa template này không? Hành động này không thể hoàn tác."
+    }
+  },
+  "Role": {
+    "List": {
+      "title": "Danh sách Vai trò",
+      "description": "Quản lý vai trò, quyền hạn và phân bổ nhân viên.",
+      "searchPlaceholder": "Tìm kiếm theo tên hoặc mã...",
+      "addNew": "Thêm Vai trò Mới",
+      "table": {
+        "no": "STT",
+        "name": "Tên",
+        "code": "Mã",
+        "staffCount": "Số lượng nhân viên",
+        "action": "Hành động",
+        "empty": "Không tìm thấy vai trò nào."
+      },
+      "pagination": {
+        "pageSize": "Kích thước trang:",
+        "previous": "Trước",
+        "next": "Tiếp"
+      },
+      "actions": {
+        "view": "Xem chi tiết",
+        "edit": "Sửa vai trò",
+        "delete": "Xóa vai trò"
+      },
+      "loading": "Đang tải dữ liệu...",
+      "deleteModal": {
+        "title": "Xóa Vai trò",
+        "message": "Bạn có chắc chắn muốn xóa vai trò này không? Hành động này không thể hoàn tác.",
+        "confirm": "Xóa",
+        "cancel": "Hủy"
+      },
+      "notifications": {
+        "deleteSuccess": "Xóa vai trò thành công",
+        "deleteError": "Có lỗi xảy ra khi xóa vai trò",
+        "deleteHasDependencies": "Không thể xóa vai trò đang được gán cho nhân viên",
+        "batchDeleteSuccess": "Đã xóa {count} vai trò thành công",
+        "batchDeleteError": "Có lỗi xảy ra khi xóa vai trò"
+      },
+      "batchActions": {
+        "delete": "Xóa"
+      }
+    },
+    "Detail": {
+      "title": "Chi tiết Vai trò",
+      "roleCode": "Mã Vai trò",
+      "roleName": "Tên Vai trò",
+      "status": "Trạng thái",
+      "active": "Hoạt động",
+      "inactive": "Không hoạt động",
+      "permissions": "Quyền hạn",
+      "all": "Tất cả",
+      "back": "Quay lại",
+      "edit": "Chỉnh sửa",
+      "loading": "Đang tải chi tiết vai trò...",
+      "errorTitle": "Không thể tải Vai trò",
+      "errorMessage": "Có lỗi xảy ra khi tải chi tiết vai trò. Vui lòng thử lại.",
+      "backToList": "Quay lại Danh sách Vai trò",
+      "breadcrumb": {
+        "roles": "Danh sách Vai trò",
+        "detail": "Chi tiết Vai trò"
+      }
+    },
+    "Create": {
+      "title": "Thêm Vai trò Mới",
+      "roleCode": "Mã Vai trò",
+      "roleCodePlaceholder": "Nhập mã vai trò (VD: MANAGER, STAFF)",
+      "roleName": "Tên Vai trò",
+      "roleNamePlaceholder": "Nhập tên vai trò",
+      "roleCodeAutoGenNote": "Mã vai trò sẽ được tự động tạo từ tên vai trò (viết hoa)",
+      "status": "Trạng thái",
+      "active": "Hoạt động",
+      "inactive": "Không hoạt động",
+      "permissions": "Quyền hạn",
+      "all": "Tất cả",
+      "cancel": "Hủy",
+      "create": "Thêm",
+      "loadingPermissions": "Đang tải quyền hạn...",
+      "breadcrumb": {
+        "roles": "Danh sách Vai trò",
+        "create": "Thêm Vai trò"
+      },
+      "validation": {
+        "roleNameRequired": "Tên vai trò là bắt buộc",
+        "roleNameMaxLength": "Tên vai trò không được vượt quá 100 ký tự"
+      },
+      "notifications": {
+        "createSuccess": "Thêm vai trò thành công",
+        "createError": "Không thể thêm vai trò",
+        "roleAlreadyExists": "Vai trò với tên này đã tồn tại",
+        "loadPermissionsError": "Không thể tải danh sách quyền hạn"
+      }
+    },
+    "Edit": {
+      "title": "Chỉnh sửa Vai trò",
+      "roleCode": "Mã Vai trò",
+      "roleCodePlaceholder": "Nhập mã vai trò (VD: MANAGER, STAFF)",
+      "roleCodeReadOnly": "Mã vai trò không thể chỉnh sửa",
+      "roleName": "Tên Vai trò",
+      "roleNamePlaceholder": "Nhập tên vai trò",
+      "status": "Trạng thái",
+      "active": "Hoạt động",
+      "inactive": "Không hoạt động",
+      "permissions": "Quyền hạn",
+      "all": "Tất cả",
+      "cancel": "Hủy",
+      "save": "Lưu Thay Đổi",
+      "loading": "Đang tải dữ liệu vai trò...",
+      "loadError": "Không thể tải dữ liệu vai trò. Vui lòng thử lại.",
+      "success": "Cập nhật vai trò thành công",
+      "successWithReloginNote": "Người dùng có vai trò này cần đăng nhập lại để áp dụng quyền mới.",
+      "error": "Không thể cập nhật vai trò. Vui lòng thử lại.",
+      "roleAlreadyExists": "Vai trò với tên này đã tồn tại.",
+      "validation": {
+        "roleCodeRequired": "Mã vai trò là bắt buộc",
+        "roleCodeMaxLength": "Mã vai trò không được vượt quá 50 ký tự",
+        "roleNameRequired": "Tên vai trò là bắt buộc",
+        "roleNameMaxLength": "Tên vai trò không được vượt quá 100 ký tự",
+        "failed": "Vui lòng kiểm tra lại biểu mẫu"
+      },
+      "breadcrumb": {
+        "roles": "Danh sách Vai trò",
+        "detail": "Chi tiết Vai trò",
+        "edit": "Chỉnh sửa Vai trò"
+      }
     }
   }
 }

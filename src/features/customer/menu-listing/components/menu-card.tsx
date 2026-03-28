@@ -6,6 +6,8 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { DishDetailModal } from "@/features/customer/dish-details";
 
+import { useLandingPageSettings } from "@/hooks/use-landing-page-settings";
+
 export interface MenuItem {
     id: string;
     price: number;
@@ -31,6 +33,8 @@ export function MenuCard({ item, onOrder }: MenuCardProps) {
     const tGrid = useTranslations("MenuListing.MenuGrid");
     const tFilter = useTranslations("MenuListing.FilterBar");
     const locale = useLocale() as "en" | "fr";
+    const { data: settings } = useLandingPageSettings();
+    const showDishImage = settings?.showDishImage ?? true;
 
     const [isAdded, setIsAdded] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -79,27 +83,29 @@ export function MenuCard({ item, onOrder }: MenuCardProps) {
             className="group relative flex flex-col overflow-hidden rounded-2xl bg-white border border-[#E8E4DF]"
         >
             {/* Image - Click to open modal */}
-            <div 
-                onClick={handleCardClick}
-                className="relative h-[224px] w-full bg-[#F5F3F0] overflow-hidden cursor-pointer"
-            >
-                <Image
-                    width={1920}
-                    height={1080}
-                    src={item.image}
-                    alt={name}
-                    className="object-cover transition-transform duration-700 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-                <div className="absolute left-4 top-4 rounded-full bg-white/90 backdrop-blur-sm px-3 py-1.5 shadow-sm">
-                    <span className="block text-[11px] font-bold uppercase tracking-[0.5px] text-[#1A3A52]">
-                        {categoryLabel}
-                    </span>
+            {showDishImage && (
+                <div
+                    onClick={handleCardClick}
+                    className="relative h-[224px] w-full bg-[#F5F3F0] overflow-hidden cursor-pointer"
+                >
+                    <Image
+                        width={1920}
+                        height={1080}
+                        src={item.image}
+                        alt={name}
+                        className="object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                    <div className="absolute left-4 top-4 rounded-full bg-white/90 backdrop-blur-sm px-3 py-1.5 shadow-sm">
+                        <span className="block text-[11px] font-bold uppercase tracking-[0.5px] text-[#1A3A52]">
+                            {categoryLabel}
+                        </span>
+                    </div>
                 </div>
-            </div>
+            )}
 
             <div className="flex flex-1 flex-col p-6">
-                <div 
+                <div
                     onClick={handleCardClick}
                     className="block mb-2 cursor-pointer"
                 >

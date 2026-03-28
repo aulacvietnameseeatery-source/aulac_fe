@@ -1,38 +1,78 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
+import { toast } from "sonner";
 import { OrderReportRecordDto, OrderFilterParams } from "../types/order-report-types";
+import { orderReportService } from "../services/order-report.service";
 
 export const useOrderReport = () => {
     const [data, setData] = useState<OrderReportRecordDto[]>([]);
     const [isLoading, setIsLoading] = useState(false);
-    const [filters, setFilters] = useState<OrderFilterParams>({});
+    const [totalCount, setTotalCount] = useState(0);
+
+    const [paginationInfo, setPaginationInfo] = useState({
+        page: 1,
+        pageSize: 10,
+    });
+
+    const [filters, setFilters] = useState<OrderFilterParams>({
+        startDate: new Date(new Date().setDate(new Date().getDate() - 30)).toISOString().split('T')[0],
+        endDate: new Date().toISOString().split('T')[0],
+    });
 
     const fetchReportData = useCallback(async () => {
+        if (!filters.startDate || !filters.endDate) return;
+
         setIsLoading(true);
         try {
-            // TODO:  await reportService.getOrderReport(filters)
-            setTimeout(() => {
-                setData([
-                    { orderId: "#23588", date: "01 Nov 2025", customerName: "Walk-in Customer", tokenNo: "16", orderType: "Dine In", menusCount: 3, grandTotal: 34.50, status: "Paid" },
-                    { orderId: "#23587", date: "01 Nov 2025", customerName: "Sue Allen", tokenNo: "15", orderType: "Take Away", menusCount: 7, grandTotal: 78.20, status: "Paid" },
-                    { orderId: "#23586", date: "01 Nov 2025", customerName: "Frank Barrett", tokenNo: "14", orderType: "Dine In", menusCount: 4, grandTotal: 45.10, status: "Paid" },
-                    { orderId: "#23585", date: "01 Nov 2025", customerName: "Kelley Davis", tokenNo: "13", orderType: "Take Away", menusCount: 9, grandTotal: 92.80, status: "Paid" },
-                    { orderId: "#23584", date: "01 Nov 2025", customerName: "Jim Vickers", tokenNo: "12", orderType: "Dine In", menusCount: 6, grandTotal: 61.40, status: "Paid" },
-                ]);
-                setIsLoading(false);
-            }, 500);
-        } catch (error) {
-            console.error(error);
+            const response = await orderReportService.getOrderHistory({
+                startDate: filters.startDate,
+                endDate: filters.endDate,
+                pageIndex: paginationInfo.page,
+                pageSize: paginationInfo.pageSize
+            });
+
+            if (response && response.pageData) {
+                setData(response.pageData);
+                setTotalCount(response.totalCount);
+            }
+        } catch (error: any) {
+            console.error("Fetch order report failed:", error);
+            toast.error(error.response?.data?.userMessage || "Failed to load order history.");
+        } finally {
             setIsLoading(false);
         }
-    }, [filters]);
+    }, [filters, paginationInfo.page, paginationInfo.pageSize]);
+
+    const onDataChange = useCallback((params: {
+        search?: string;
+        filters?: Record<string, any>;
+        sort?: any[];
+        page?: number;
+        pageSize?: number
+    }) => {
+        setPaginationInfo(prev => ({
+            ...prev,
+            page: params.page ?? prev.page,
+            pageSize: params.pageSize ?? prev.pageSize,
+        }));
+    }, []);
 
     useEffect(() => {
         fetchReportData();
     }, [fetchReportData]);
 
-    const updateFilter = (newFilters: Partial<OrderFilterParams>) => {
-        setFilters(prev => ({ ...prev, ...newFilters }));
-    };
+    const applyDateFilter = useCallback((startDate: string, endDate: string) => {
+        setFilters({ startDate, endDate });
+        setPaginationInfo(prev => ({ ...prev, page: 1 }));
+    }, []);
 
-    return { data, isLoading, filters, updateFilter, refresh: fetchReportData };
+    return {
+        data,
+        isLoading,
+        totalCount,
+        paginationInfo,
+        filters,
+        onDataChange,
+        refresh: fetchReportData,
+        applyDateFilter
+    };
 };

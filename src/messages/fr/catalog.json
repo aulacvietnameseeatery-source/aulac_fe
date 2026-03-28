@@ -102,7 +102,21 @@
       },
       "multilingual": {
         "title": "Contenu Multilingue",
-        "subtitle": "Gérer les noms et descriptions pour l'affichage du menu."
+        "subtitle": "Gérer les noms et descriptions pour l'affichage du menu.",
+        "autoTranslate": "Traduction Auto",
+        "autoTranslateTooltip": "Traduire le contenu de {lang} vers d'autres langues",
+        "fields": {
+          "dishName": "Nom du plat",
+          "dishNamePlaceholder": "ex: Soupe de nouilles au bœuf traditionnelle",
+          "description": "Description",
+          "descriptionPlaceholder": "Décrivez le goût, les ingrédients et l'histoire du plat en {lang}...",
+          "shortDescription": "Description courte",
+          "shortDescriptionPlaceholder": "Max 100 caractères pour vue mobile",
+          "slogan": "Slogan",
+          "sloganPlaceholder": "ex: Meilleure vente !",
+          "note": "Note",
+          "notePlaceholder": "Note pour les chefs ou serveurs concernant cette version linguistique..."
+        }
       },
       "media": {
         "media360": {
@@ -136,7 +150,7 @@
         "existing": "Existant",
         "addImage": "Ajouter image",
         "recommended": "Recommandé : 800x800px",
-        "recommended2": "Max 5 images, 5 Mo/image. Formats : JPG, PNG, GIF, WEBP",
+        "recommended2": "Max 5 images, 5 Mo/image. Formats : JPG, PNG, GIF, WEBP, HEIC",
         "validation": {
           "maxImages": "Vous pouvez télécharger un maximum de 5 images.",
           "invalidFormat": "Format d'image invalide",
@@ -231,6 +245,7 @@
         "updateError": "Échec de la mise à jour du statut de la catégorie",
         "createSuccess": "Catégorie créée avec succès",
         "updateSuccess": "Catégorie mise à jour avec succès",
+        "nameAlreadyExists": "Ce nom de catégorie existe déjà",
         "actionError": "Une erreur s'est produite lors du traitement de la demande",
         "batchActivateSuccess": "{count} catégorie(s) activée(s) avec succès",
         "batchDeactivateSuccess": "{count} catégorie(s) désactivée(s) avec succès",
@@ -694,7 +709,9 @@
     "default": "Par défaut",
     "Validation": {
       "nameRequired": "Le nom de la taxe est requis",
-      "ratePositive": "Le taux doit être supérieur ou égal à 0"
+      "ratePositive": "Le taux doit être supérieur ou égal à 0",
+      "rateMax": "Le taux ne peut pas dépasser 100%",
+      "invalidInput": "Entrée invalide"
     },
     "addTax": "Ajouter une nouvelle taxe",
     "addNew": "Ajouter une nouvelle taxe",

@@ -5,6 +5,7 @@ import { Dialog } from "@/components/ui/dialog";
 import { ALInput } from "@/components/ui/al-input";
 import { ALCombobox } from "@/components/ui/al-combobox";
 import { ALFileUploader } from "@/components/ui/al-file-uploader";
+import { useImageProcessing } from "@/hooks/use-image-processing";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
 
@@ -45,6 +46,7 @@ const IngredientModal: React.FC<IngredientModalProps> = ({
     const [formData, setFormData] = useState<IngredientFormData>(initialFormData);
     const [pendingFiles, setPendingFiles] = useState<File[]>([]);
     const [removedImageIds, setRemovedImageIds] = useState<number[]>([]);
+    const { processFiles } = useImageProcessing();
 
     // Hook lấy Danh mục nguyên liệu
     const typeLookup = useLookupCrud({
@@ -219,10 +221,11 @@ const IngredientModal: React.FC<IngredientModalProps> = ({
                             onPendingChange={setPendingFiles}
                             isUploading={isSubmitting}
                             accept="image/*"
-                            acceptHint={["PNG", "JPG", "WEBP"]}
+                            acceptHint={["PNG", "JPG", "WEBP", "HEIC"]}
                             maxFiles={1}
                             maxSizeBytes={5 * 1024 * 1024}
                             variant="image"
+                            processFiles={processFiles}
                             disabled={isSubmitting}
                         />
                     </div>

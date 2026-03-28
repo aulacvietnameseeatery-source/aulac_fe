@@ -5,6 +5,31 @@ const withNextIntl = createNextIntlPlugin('./src/i18n.ts');
 
 const nextConfig: NextConfig = {
 
+  async redirects() {
+    return [
+      {
+        source: "/:locale(en|fr|vi)/dashboard/ingredients/:path*",
+        destination: "/:locale/dashboard/inventory/items",
+        permanent: true,
+      },
+      {
+        source: "/:locale(en|fr|vi)/dashboard/stock/:path*",
+        destination: "/:locale/dashboard/inventory/items",
+        permanent: true,
+      },
+      {
+        source: "/dashboard/ingredients/:path*",
+        destination: "/dashboard/inventory/items",
+        permanent: true,
+      },
+      {
+        source: "/dashboard/stock/:path*",
+        destination: "/dashboard/inventory/items",
+        permanent: true,
+      },
+    ];
+  },
+
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "placehold.co" },

@@ -7,7 +7,7 @@ export { NotificationToastRenderer } from "./components/notification-toast-rende
 export { NotificationToaster } from "./components/notification-toaster";
 
 // Provider
-export { NotificationProvider, useNotificationConnection } from "./providers/notification-provider";
+export { NotificationProvider, useNotificationConnection, RESTAURANT_HUB } from "./providers/notification-provider";
 
 // Store
 export { useNotificationStore } from "./store/notification.store";

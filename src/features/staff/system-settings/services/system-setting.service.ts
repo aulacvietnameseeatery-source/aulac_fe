@@ -2,6 +2,11 @@ import { api } from '@/lib/http';
 import { ApiResponse } from '@/types/api-response.types';
 import { BulkUpdateGroupDto, GroupedSettingsMap, SystemSettingDetailDto } from '../types/system-setting.types';
 
+export type UploadFileResult = {
+    relativePath: string;
+    publicUrl: string;
+};
+
 /**
  * Fetch all system settings grouped by their key prefix.
  * е.g. { "password": [...], "restaurant": [...] }
@@ -58,27 +63,33 @@ export const createSetting = async (
 /**
  * Uploads a store logo image.
  */
-export const uploadLogo = async (file: File): Promise<string> => {
+export const uploadLogo = async (file: File): Promise<UploadFileResult> => {
     const formData = new FormData();
     formData.append('file', file);
     const response = await api.post<ApiResponse<any>>(
         '/api/system-settings/upload-logo',
         formData
     );
-    return response.data.publicUrl || response.data.PublicUrl || response.data.relativePath || response.data.RelativePath || '';
+    return {
+        relativePath: response.data.relativePath || response.data.RelativePath || '',
+        publicUrl: response.data.publicUrl || response.data.PublicUrl || ''
+    };
 };
 
 /**
  * Uploads a generic file (video/image) for system settings.
  */
-export const uploadFile = async (file: File): Promise<string> => {
+export const uploadFile = async (file: File): Promise<UploadFileResult> => {
     const formData = new FormData();
     formData.append('file', file);
     const response = await api.post<ApiResponse<any>>(
         '/api/system-settings/upload-file',
         formData
     );
-    return response.data.publicUrl || response.data.PublicUrl || response.data.relativePath || response.data.RelativePath || '';
+    return {
+        relativePath: response.data.relativePath || response.data.RelativePath || '',
+        publicUrl: response.data.publicUrl || response.data.PublicUrl || ''
+    };
 };
 
 /**
@@ -92,4 +103,14 @@ export const translateSystemSettings = async (
         payload
     );
     return response.data;
+};
+
+/**
+ * Updates a boolean system setting.
+ */
+export const updateBoolSetting = async (
+    key: string,
+    value: boolean
+): Promise<void> => {
+    await api.put(`/api/system-settings/${key}/bool`, value);
 };

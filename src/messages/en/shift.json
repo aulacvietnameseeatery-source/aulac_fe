@@ -55,13 +55,19 @@
         "staff": "Staff",
         "add": "Add",
         "today": "Today",
+        "from": "From",
+        "to": "To",
         "filterStaff": "Filter employees...",
         "showNoShiftEmployees": "Show employees without shifts",
         "weekPage": "Week {current}/{total}",
         "draftCount": "{count} draft(s)",
         "loading": "Loading schedule...",
-        "empty": "No schedule data for this week",
+        "empty": "No schedule data for this period",
         "dragToReassign": "Drag to reassign",
+        "selectMode": "Select",
+        "selectModeHint": "Click and drag to select cells, then assign in bulk",
+        "cancelSelection": "Cancel",
+        "confirmSelection": "Assign {count} cell(s)",
         "days": {
           "mon": "Mon",
           "tue": "Tue",
@@ -115,6 +121,15 @@
         "activeCount": "Active: {count}",
         "inactiveCount": "Inactive: {count}",
         "totalCount": "Total templates: {count}",
+        "table": {
+          "no": "No",
+          "template": "Template",
+          "defaultTime": "Default Time",
+          "description": "Description",
+          "status": "Status",
+          "active": "Active",
+          "inactive": "Inactive"
+        },
         "confirmDialog": {
           "title": "Deactivate Shift Template",
           "message": "Deactivate template \"{name}\"? It will no longer be available for new schedules.",
@@ -158,6 +173,7 @@
         "reason": "Reason",
         "noAttendance": "No attendance recorded yet.",
         "checkInAction": "Check In",
+        "publishAction": "Publish",
         "checkOutAction": "Check Out",
         "adjustAttendance": "Adjust Attendance",
         "cancelAssignmentConfirm": "Cancel this assignment?",
@@ -235,6 +251,10 @@
         "none": "No issues recorded"
       },
       "manualAdjusted": "This record was manually adjusted.",
+      "actions": {
+        "checkIn": "Check In",
+        "checkOut": "Check Out"
+      },
       "table": {
         "staff": "Staff",
         "role": "Role",
@@ -372,6 +392,20 @@
         "noHoursData": "No hours data yet",
         "issuesFlagged": "{count, plural, =0 {No issues found} =1 {1 issue flagged} other {# issues flagged}}"
       },
+      "statusNames": {
+        "ABSENT": "Absent",
+        "LATE": "Late",
+        "ACTIVE": "Active",
+        "ON_DUTY": "On Duty",
+        "COMPLETED": "Completed",
+        "SCHEDULED": "Scheduled",
+        "CHECKED_IN": "Checked In"
+      },
+      "exceptionNames": {
+        "LATE": "Late Arrival",
+        "ABSENT": "Absent",
+        "EARLY_LEAVE": "Early Leave"
+      },
       "shared": {
         "loading": "Loading data...",
         "empty": "No data for the selected range.",
@@ -480,6 +514,9 @@
         "chartScheduled": "Scheduled",
         "chartWorked": "Worked",
         "overtimeAlert": "{count, plural, =1 {1 staff member worked 30+ minutes over scheduled hours.} other {# staff members worked 30+ minutes over scheduled hours.}}",
+        "insightIncomplete": "{count, plural, =1 {1 staff member has} other {# staff members have}} incomplete time records. Check-out times may be missing.",
+        "insightUnderwork": "Staff worked {time} less than scheduled in total. Review coverage gaps.",
+        "insightOvertime": "{count, plural, =1 {1 staff member} other {# staff members}} worked 30+ minutes over their scheduled hours.",
         "table": {
           "staff": "Staff",
           "scheduled": "Scheduled",
@@ -514,6 +551,17 @@
           "adjusted": "Adjusted"
         },
         "adjustedLabel": "✦ Adjusted",
+        "badgeLate": "Late ×{count}",
+        "badgeAbsent": "Absent ×{count}",
+        "badgeEarly": "Early ×{count}",
+        "minutesAffected": "{minutes}m affected",
+        "trendTitle": "Exception Trends Over Time",
+        "chartLate": "Late",
+        "chartAbsent": "Absent",
+        "chartEarlyLeave": "Early Leave",
+        "insightExceptions": "{count, plural, =1 {1 exception recorded.} other {# exceptions recorded.}}",
+        "insightImpact": " Total impact: {minutes} minutes.",
+        "insightAdjusted": " {count} manually adjusted.",
         "noStaffFound": "No staff with exceptions found.",
         "table": {
           "date": "Date",
@@ -570,6 +618,26 @@
         "staffMember": "Select staff member...",
         "loadingStaff": "Loading staff...",
         "workDate": "Select date",
+        "notes": "Optional notes..."
+      }
+    },
+    "bulkAssignment": {
+      "title": "Bulk Shift Assignment",
+      "summary": "Assigning {staffCount} staff × {dateCount} date(s)",
+      "cancel": "Cancel",
+      "confirm": "Create Assignments",
+      "plannedHint": "Leave planned times empty to use the template defaults.",
+      "fields": {
+        "shiftTemplate": "Shift Template",
+        "staffMembers": "Staff Members",
+        "plannedStart": "Planned Start",
+        "plannedEnd": "Planned End",
+        "notes": "Notes"
+      },
+      "placeholders": {
+        "shiftTemplate": "Select shift template...",
+        "staffMembers": "Select staff members...",
+        "loadingStaff": "Loading staff...",
         "notes": "Optional notes..."
       }
     }

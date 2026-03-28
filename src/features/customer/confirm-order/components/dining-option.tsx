@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
+import { Link } from "@/routing"
 import { cn } from "@/lib/utils";
 import { Check } from "lucide-react";
 import { useTranslations } from "next-intl"; // Import hook
@@ -17,9 +17,9 @@ export function DiningOption() {
         <div className="flex w-full flex-col items-start gap-8">
             {/* Header */}
             <div className="flex w-full flex-col items-center gap-2 border-b-4 border-transparent">
-         <span className="font-body text-[12px] font-bold uppercase tracking-[3.6px] text-[#C9A961]">
-            {t("eyebrow")}
-         </span>
+                <span className="font-body text-[12px] font-bold uppercase tracking-[3.6px] text-[#C9A961]">
+                    {t("eyebrow")}
+                </span>
                 <h2 className="font-display text-[24px] font-bold leading-[32px] text-[#1A3A52]">
                     {t("title")}
                 </h2>
@@ -57,9 +57,9 @@ export function DiningOption() {
                     </div>
 
                     <div className="absolute bottom-0 left-0 flex w-full flex-col p-8">
-                <span className="font-serif text-[10px] font-bold uppercase tracking-[2px] text-[#C5A059]">
-                    {t("dine_in_label")}
-                </span>
+                        <span className="font-serif text-[10px] font-bold uppercase tracking-[2px] text-[#C5A059]">
+                            {t("dine_in_label")}
+                        </span>
                         <h3 className="mt-2 font-serif text-[28px] font-light leading-none text-white">
                             {t("dine_in_title")}
                         </h3>
@@ -97,9 +97,9 @@ export function DiningOption() {
                     </div>
 
                     <div className="absolute bottom-0 left-0 flex w-full flex-col p-8">
-                <span className="font-serif text-[10px] font-bold uppercase tracking-[2px] text-[#C5A059]">
-                    {t("take_away_label")}
-                </span>
+                        <span className="font-serif text-[10px] font-bold uppercase tracking-[2px] text-[#C5A059]">
+                            {t("take_away_label")}
+                        </span>
                         <h3 className="mt-2 font-serif text-[28px] font-light leading-none text-white">
                             {t("take_away_title")}
                         </h3>
@@ -120,20 +120,20 @@ export function DiningOption() {
                         <div className="h-[15px] w-[15px] bg-[#C9A961] rounded-[2px]" />
                     </div>
                     <span className="font-body text-[14px] font-medium text-[#1A3A52]/70">
-                {selected === "dine-in"
-                    ? t("helper_dine_in")
-                    : t("helper_take_away")}
-             </span>
+                        {selected === "dine-in"
+                            ? t("helper_dine_in")
+                            : t("helper_take_away")}
+                    </span>
                 </div>
 
                 {/* Nút Tiếp Tục */}
                 <Link
-                    href={selected === "dine-in" ? "/selection-table" : "/checkout"}
+                    href={selected === "dine-in" ? "/reservation" : "/checkout"}
                     className="group flex h-[56px] w-full items-center justify-center gap-2 rounded-full bg-[#1A3A52] text-white shadow-lg transition-all hover:bg-[#234b6b] hover:shadow-xl active:scale-95"
                 >
-            <span className="font-display text-[16px] font-bold tracking-widest uppercase">
-                {selected === "dine-in" ? t("btn_select_table") : t("btn_checkout")}
-            </span>
+                    <span className="font-display text-[16px] font-bold tracking-widest uppercase">
+                        {selected === "dine-in" ? t("btn_select_table") : t("btn_checkout")}
+                    </span>
                     <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
                 </Link>
 

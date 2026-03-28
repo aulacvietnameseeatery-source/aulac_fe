@@ -55,13 +55,19 @@
         "staff": "Nhân viên",
         "add": "Thêm",
         "today": "Hôm nay",
+        "from": "Từ",
+        "to": "Đến",
         "filterStaff": "Lọc nhân viên...",
         "showNoShiftEmployees": "Hiển thị nhân viên không có ca",
         "weekPage": "Tuần {current}/{total}",
         "draftCount": "{count} bản nháp",
         "loading": "Đang tải lịch ca...",
-        "empty": "Không có dữ liệu lịch cho tuần này",
+        "empty": "Không có dữ liệu lịch cho khoảng thời gian này",
         "dragToReassign": "Kéo để phân công lại",
+        "selectMode": "Chọn",
+        "selectModeHint": "Nhấp và kéo để chọn ô, sau đó phân công hàng loạt",
+        "cancelSelection": "Hủy",
+        "confirmSelection": "Phân công {count} ô",
         "days": {
           "mon": "T2",
           "tue": "T3",
@@ -115,6 +121,15 @@
         "activeCount": "Đang hoạt động: {count}",
         "inactiveCount": "Ngừng hoạt động: {count}",
         "totalCount": "Tổng mẫu: {count}",
+        "table": {
+          "no": "STT",
+          "template": "Mẫu ca",
+          "defaultTime": "Giờ mặc định",
+          "description": "Mô tả",
+          "status": "Trạng thái",
+          "active": "Hoạt động",
+          "inactive": "Ngừng"
+        },
         "confirmDialog": {
           "title": "Ngừng kích hoạt mẫu ca",
           "message": "Ngừng kích hoạt mẫu \"{name}\"? Mẫu này sẽ không còn khả dụng cho các lịch mới.",
@@ -158,6 +173,7 @@
         "reason": "Lý do",
         "noAttendance": "Chưa có bản ghi chấm công.",
         "checkInAction": "Check In",
+        "publishAction": "Công Bố",
         "checkOutAction": "Check Out",
         "adjustAttendance": "Điều Chỉnh Chấm Công",
         "cancelAssignmentConfirm": "Hủy phân công này?",
@@ -235,6 +251,10 @@
         "none": "Không có sự cố nào được ghi nhận"
       },
       "manualAdjusted": "Bản ghi này đã được điều chỉnh thủ công.",
+      "actions": {
+        "checkIn": "Chấm vào",
+        "checkOut": "Chấm ra"
+      },
       "table": {
         "staff": "Nhân Viên",
         "role": "Vai Trò",
@@ -372,6 +392,20 @@
         "noHoursData": "Chưa có dữ liệu giờ làm",
         "issuesFlagged": "{count, plural, =0 {Không có vấn đề} =1 {1 vấn đề} other {# vấn đề được ghi nhận}}"
       },
+      "statusNames": {
+        "ABSENT": "Vắng mặt",
+        "LATE": "Trễ",
+        "ACTIVE": "Đang hoạt động",
+        "ON_DUTY": "Đang trực",
+        "COMPLETED": "Hoàn thành",
+        "SCHEDULED": "Đã lên lịch",
+        "CHECKED_IN": "Đã chấm công"
+      },
+      "exceptionNames": {
+        "LATE": "Đến trễ",
+        "ABSENT": "Vắng mặt",
+        "EARLY_LEAVE": "Về sớm"
+      },
       "shared": {
         "loading": "Đang tải dữ liệu...",
         "empty": "Không có dữ liệu trong khoảng thời gian đã chọn.",
@@ -480,6 +514,9 @@
         "chartScheduled": "Kế Hoạch",
         "chartWorked": "Thực Tế",
         "overtimeAlert": "{count, plural, =1 {1 nhân viên làm thêm 30+ phút so với kế hoạch.} other {# nhân viên làm thêm 30+ phút so với kế hoạch.}}",
+        "insightIncomplete": "{count, plural, =1 {1 nhân viên} other {# nhân viên}} có bản ghi thiếu dữ liệu. Giờ ra có thể bị thiếu.",
+        "insightUnderwork": "Nhân viên làm ít hơn kế hoạch {time}. Kiểm tra lại phân ca.",
+        "insightOvertime": "{count, plural, =1 {1 nhân viên} other {# nhân viên}} làm thêm 30+ phút so với kế hoạch.",
         "table": {
           "staff": "Nhân Viên",
           "scheduled": "Kế Hoạch",
@@ -514,6 +551,17 @@
           "adjusted": "Điều Chỉnh"
         },
         "adjustedLabel": "✦ Đã Điều Chỉnh",
+        "badgeLate": "Trễ ×{count}",
+        "badgeAbsent": "Vắng ×{count}",
+        "badgeEarly": "Sớm ×{count}",
+        "minutesAffected": "{minutes} phút bị ảnh hưởng",
+        "trendTitle": "Xu Hướng Ngoại Lệ Theo Thời Gian",
+        "chartLate": "Trễ",
+        "chartAbsent": "Vắng",
+        "chartEarlyLeave": "Về Sớm",
+        "insightExceptions": "{count, plural, =1 {1 ngoại lệ được ghi nhận.} other {# ngoại lệ được ghi nhận.}}",
+        "insightImpact": " Tổng ảnh hưởng: {minutes} phút.",
+        "insightAdjusted": " {count} đã điều chỉnh thủ công.",
         "noStaffFound": "Không có nhân viên nào có ngoại lệ.",
         "table": {
           "date": "Ngày",
@@ -570,6 +618,26 @@
         "staffMember": "Chọn nhân viên...",
         "loadingStaff": "Đang tải nhân viên...",
         "workDate": "Chọn ngày",
+        "notes": "Ghi chú (không bắt buộc)..."
+      }
+    },
+    "bulkAssignment": {
+      "title": "Phân Công Ca Hàng Loạt",
+      "summary": "Phân công {staffCount} nhân viên × {dateCount} ngày",
+      "cancel": "Hủy",
+      "confirm": "Tạo Phân Công",
+      "plannedHint": "Để trống giờ kế hoạch nếu muốn dùng giờ mặc định của mẫu ca.",
+      "fields": {
+        "shiftTemplate": "Mẫu Ca",
+        "staffMembers": "Nhân Viên",
+        "plannedStart": "Giờ Bắt Đầu",
+        "plannedEnd": "Giờ Kết Thúc",
+        "notes": "Ghi Chú"
+      },
+      "placeholders": {
+        "shiftTemplate": "Chọn mẫu ca...",
+        "staffMembers": "Chọn nhân viên...",
+        "loadingStaff": "Đang tải nhân viên...",
         "notes": "Ghi chú (không bắt buộc)..."
       }
     }

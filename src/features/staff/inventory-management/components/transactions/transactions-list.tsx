@@ -2,8 +2,9 @@
 
 import React, { useMemo, useState, useCallback } from "react";
 import { useTranslations } from "next-intl";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/routing"
 import { format } from "date-fns";
+import { dateUtils } from "@/lib/date-utils";
 import { Plus } from "lucide-react";
 import { BaseTable } from "@/components/ui/table/base-table";
 import type { TableColumn } from "@/types/table.types";
@@ -17,6 +18,7 @@ import type {
   GetTransactionsFilter,
 } from "../../types/inventory.types";
 import { InventoryTxTypeCode, InventoryTxStatusCode } from "@/types/status-codes";
+import { TransactionDetailModal } from "./transaction-detail-modal";
 
 const STATUS_STYLE: Record<string, string> = {
   [InventoryTxStatusCode.DRAFT]: "bg-slate-100 text-slate-700 border-slate-200",
@@ -43,14 +45,16 @@ export function TransactionsList() {
   const { data, isLoading, refetch } = useTransactionsQuery(filter);
   const transactions = useMemo(() => data?.pageData ?? [], [data]);
 
+  const [detailTxId, setDetailTxId] = useState<number | null>(null);
+
   const getTransactionActions = useCallback(
     (item: InventoryTransactionListDto): TableAction<InventoryTransactionListDto>[] => [
       {
         action: "view",
-        onClick: () => router.push(`/dashboard/inventory/transactions/${item.transactionId}`),
+        onClick: () => setDetailTxId(item.transactionId),
       },
     ],
-    [router],
+    [],
   );
 
   const handleDataChange = useCallback(
@@ -114,7 +118,7 @@ export function TransactionsList() {
           <div className="flex flex-col">
             <span className="text-sm text-[#1A3A52]/80">{item.createdByName ?? "-"}</span>
             <span className="text-[10px] text-[#1A3A52]/40">
-              {item.createdAt ? format(new Date(item.createdAt), "dd/MM HH:mm") : ""}
+              {item.createdAt ? dateUtils.formatLocal(item.createdAt, "dd/MM HH:mm") : ""}
             </span>
           </div>
         ),
@@ -145,6 +149,7 @@ export function TransactionsList() {
   );
 
   return (
+    <>
     <BaseTable<InventoryTransactionListDto>
       data={transactions}
       loading={isLoading}
@@ -194,5 +199,12 @@ export function TransactionsList() {
         <TableActionColumn item={item} actions={getTransactionActions(item)} />
       )}
     />
+
+    <TransactionDetailModal
+      transactionId={detailTxId}
+      open={detailTxId != null}
+      onClose={() => setDetailTxId(null)}
+    />
+    </>
   );
 }

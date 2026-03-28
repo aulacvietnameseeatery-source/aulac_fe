@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { dateUtils } from "@/lib/date-utils";
 import { MAX_STORE_ITEMS } from "../constants/notification.constants";
 import type { NotificationDto, NotificationListItem, NotificationPreferenceDto } from "../types/notification.types";
 
@@ -85,7 +86,7 @@ export const useNotificationStore = create<NotificationState & NotificationActio
         }
 
         const merged = [...newItems, ...state.items]
-          .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+          .sort((a, b) => parseCreatedAtUtcSafeMs(b.createdAt) - parseCreatedAtUtcSafeMs(a.createdAt))
           .slice(0, MAX_STORE_ITEMS);
 
         const unreadCount = merged.filter((n) => !n.isRead).length;
@@ -110,8 +111,10 @@ export const useNotificationStore = create<NotificationState & NotificationActio
       set((state) => {
         const existingIds = new Set(state.items.map((n) => n.id));
         const unique = newItems.filter((n) => !existingIds.has(n.id));
+        const mergedItems = [...state.items, ...unique];
         return {
-          items: [...state.items, ...unique],
+          items: mergedItems,
+          unreadCount: mergedItems.filter((n) => !n.isRead).length,
           lastChangeSource: "list-sync",
           lastAddedIds: [],
         };
@@ -153,3 +156,10 @@ export const useNotificationStore = create<NotificationState & NotificationActio
     setDetailReservationId: (id) => set({ detailReservationId: id }),
   })
 );
+
+function parseCreatedAtUtcSafeMs(createdAt: string): number {
+  if (!createdAt) return 0;
+  const utcSafeDate = dateUtils.formatLocal(createdAt, "yyyy-MM-dd'T'HH:mm:ss.SSSxxx");
+  const parsed = new Date(utcSafeDate).getTime();
+  return Number.isNaN(parsed) ? 0 : parsed;
+}

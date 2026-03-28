@@ -4,14 +4,28 @@ import React, { createContext, useContext, useEffect, useRef, useCallback } from
 import * as signalR from "@microsoft/signalr";
 import { useAuth } from "@/components/providers/auth-provider";
 import { authStorage } from "@/lib/auth-storage";
-import { BASE_URL } from "@/lib/http";
+import { acquireConnection, releaseConnection, waitForStart } from "@/lib/signalr";
 import { SIGNALR_EVENT_RECEIVE } from "../constants/notification.constants";
 import { useNotificationStore } from "../store/notification.store";
 import { notificationService } from "../services/notification.service";
 import type { NotificationDto } from "../types/notification.types";
 
+/** Hub path constant — shared with other features that piggyback on the same connection. */
+export const RESTAURANT_HUB = "/hubs/restaurant";
+
 interface NotificationContextType {
   connectionRef: React.RefObject<signalR.HubConnection | null>;
+}
+
+declare global {
+  interface Window {
+    __notificationDebug?: {
+      hubUrl: string;
+      getStoreState: () => ReturnType<typeof useNotificationStore.getState>;
+      getConnectionState: () => signalR.HubConnectionState;
+      connectionId: () => string | null;
+    };
+  }
 }
 
 const NotificationContext = createContext<NotificationContextType>({
@@ -25,6 +39,12 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
   const connectionRef = useRef<signalR.HubConnection | null>(null);
   const { addNotification, mergeMissed, setConnected, setUnreadCount, setPreferences } =
     useNotificationStore();
+  const isDev = process.env.NODE_ENV === "development";
+
+  // Track login/logout transitions only (not token refresh).
+  // accessTokenFactory reads the latest token from localStorage on each reconnect,
+  // so we only need to react when "logged in" ↔ "logged out" changes.
+  const isLoggedIn = !!token;
 
   // Lấy unread count và preferences từ REST khi provider mount
   const fetchInitialData = useCallback(async () => {
@@ -56,55 +76,87 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
   }, [mergeMissed]);
 
   useEffect(() => {
-    if (!token) return;
+    if (!isLoggedIn) return;
 
-    const connection = new signalR.HubConnectionBuilder()
-      .withUrl(`${BASE_URL}/hubs/restaurant`, {
-        accessTokenFactory: () => authStorage.getAccessToken() ?? "",
-      })
-      .withAutomaticReconnect([0, 2000, 5000, 10000, 30000])
-      .configureLogging(signalR.LogLevel.Warning)
-      .build();
+    // Acquire singleton connection — reuses existing if already connected
+    const connection = acquireConnection(RESTAURANT_HUB, {
+      accessTokenFactory: () => authStorage.getAccessToken() ?? "",
+    });
 
     connectionRef.current = connection;
 
-    // Handle incoming notifications
-    connection.on(SIGNALR_EVENT_RECEIVE, (notification: NotificationDto) => {
+    if (isDev && typeof window !== "undefined") {
+      window.__notificationDebug = {
+        hubUrl: RESTAURANT_HUB,
+        getStoreState: () => useNotificationStore.getState(),
+        getConnectionState: () => connection.state,
+        connectionId: () => connection.connectionId,
+      };
+      console.info("[NotificationProvider] Debug helper ready: window.__notificationDebug");
+    }
+
+    // Handle incoming notifications (removable via .off)
+    const onReceive = (notification: NotificationDto) => {
       addNotification(notification);
-    });
+    };
+    connection.on(SIGNALR_EVENT_RECEIVE, onReceive);
 
-    // Connection state handlers
-    connection.onreconnecting(() => {
+    // Lifecycle handlers — use named functions so we can avoid duplicates.
+    // SignalR's onreconnecting/onreconnected/onclose are ADDITIVE (not replaceable),
+    // so we must guard against duplicate registration.
+    const onReconnecting = () => {
+      console.info("[NotificationProvider] Reconnecting...");
       setConnected(false);
-    });
-
-    connection.onreconnected(() => {
+    };
+    const onReconnected = () => {
+      console.info("[NotificationProvider] Reconnected", {
+        connectionId: connection.connectionId,
+      });
       setConnected(true);
       recoverMissed();
-    });
-
-    connection.onclose(() => {
+    };
+    const onClose = (err?: Error) => {
+      console.info("[NotificationProvider] Closed", {
+        reason: err?.message ?? "normal-close",
+      });
       setConnected(false);
-    });
+    };
 
-    // Start connection
-    connection
-      .start()
+    // SignalR JS client doesn't expose removeOnReconnecting/etc, so we use
+    // a wrapper flag to prevent stale handlers from executing after cleanup.
+    let active = true;
+    connection.onreconnecting(() => { if (active) onReconnecting(); });
+    connection.onreconnected(() => { if (active) onReconnected(); });
+    connection.onclose((err) => { if (active) onClose(err); });
+
+    // Wait for singleton start, then fetch initial data
+    waitForStart(RESTAURANT_HUB)
       .then(() => {
+        if (!active) return;
+        if (isDev) {
+          console.info("[NotificationProvider] Connected", {
+            hubUrl: RESTAURANT_HUB,
+            connectionId: connection.connectionId,
+          });
+        }
         setConnected(true);
         fetchInitialData();
       })
-      .catch((err) => {
-        console.error("[NotificationProvider] Connection failed:", err);
-        setConnected(false);
+      .catch(() => {
+        if (active) setConnected(false);
       });
 
     return () => {
-      connection.stop();
+      active = false;
+      connection.off(SIGNALR_EVENT_RECEIVE, onReceive);
+      releaseConnection(RESTAURANT_HUB);
       connectionRef.current = null;
+      if (isDev && typeof window !== "undefined") {
+        delete window.__notificationDebug;
+      }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [token]);
+  }, [isLoggedIn]);
 
   return (
     <NotificationContext.Provider value={{ connectionRef }}>

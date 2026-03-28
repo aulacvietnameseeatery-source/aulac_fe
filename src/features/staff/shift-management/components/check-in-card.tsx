@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { PermissionGuard } from "@/components/permission-guard";
 import { Permissions } from "@/types/const";
 import { useCheckInMutation, useCheckOutMutation } from "../hooks/use-shift-queries";
+import { dateUtils } from "@/lib/date-utils";
 import { ShiftStatusBadge } from "./shift-status-badge";
 import type { ShiftAssignmentDto } from "../types/shift-management.types";
 import { useState, useEffect } from "react";
@@ -24,7 +25,7 @@ interface Props {
 function fmt(iso: string | null | undefined, fallback = "—") {
   if (!iso) return fallback;
   try {
-    return new Date(iso).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+    return dateUtils.formatLocal(iso, "HH:mm");
   } catch {
     return fallback;
   }
