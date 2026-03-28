@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useCallback } from "react";
+import { useState, useCallback } from "react";
 import { CalendarDays, List, Plus } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
@@ -13,7 +13,7 @@ import { ShiftAssignmentForm } from "../components/shift-assignment-form";
 import { ShiftAssignmentPanel } from "../components/shift-assignment-panel";
 import { BulkAssignmentDialog, type BulkAssignmentSelection } from "../components/bulk-assignment-dialog";
 // _OLD: import { ShiftScheduleList } from "../components/shift-schedule-list";
-import { useTeamScheduleQuery, useShiftAssignmentDetailQuery } from "../hooks/use-shift-queries";
+import { useShiftAssignmentDetailQuery } from "../hooks/use-shift-queries";
 import type { ShiftAssignmentListDto } from "../types/shift-management.types";
 
 // ─── Week helpers (duplicated to keep this file self-contained) ──────────────
@@ -45,24 +45,11 @@ export function ShiftManagement() {
   const weekStart = fmtDate(monday);
   const weekEnd = fmtDate(addDays(monday, 6));
 
-  // Fetch data once to derive draft count for publish bar
-  const { data: staffRows = [] } = useTeamScheduleQuery(
-    { weekStart, weekEnd },
-    true
-  );
-
-  const draftCount = useMemo(
-    () =>
-      staffRows.reduce(
-        (sum, row) =>
-          sum +
-          (row?.assignments ?? []).filter(
-            (a) => a.assignmentStatusCode?.toUpperCase() === "DRAFT"
-          ).length,
-        0
-      ),
-    [staffRows]
-  );
+  const [currentPeriod, setCurrentPeriod] = useState({
+    fromDate: weekStart,
+    toDate: weekEnd,
+  });
+  const [draftCount, setDraftCount] = useState(0);
 
   // ── Form / Panel state ──────────────────────────────────────
   const [formOpen, setFormOpen] = useState(false);
@@ -102,6 +89,19 @@ export function ShiftManagement() {
     setBulkOpen(true);
   }, []);
 
+  const handlePeriodChange = useCallback((fromDate: string, toDate: string) => {
+    setCurrentPeriod((prev) => {
+      if (prev.fromDate === fromDate && prev.toDate === toDate) {
+        return prev;
+      }
+      return { fromDate, toDate };
+    });
+  }, []);
+
+  const handleDraftCountChange = useCallback((count: number) => {
+    setDraftCount((prev) => (prev === count ? prev : count));
+  }, []);
+
   return (
     <div className="space-y-4 flex flex-col h-full">
       {/* ── Header bar ──────────────────────────────────────── */}
@@ -133,8 +133,8 @@ export function ShiftManagement() {
       {/* ── Publish toolbar (visible when drafts exist) ──── */}
       <PublishToolbar
         draftCount={draftCount}
-        weekStart={weekStart}
-        weekEnd={weekEnd}
+        weekStart={currentPeriod.fromDate}
+        weekEnd={currentPeriod.toDate}
       />
 
       {/* ── Matrix Calendar ────────────────────────────────── */}
@@ -142,6 +142,8 @@ export function ShiftManagement() {
         onCardClick={handleCardClick}
         onAddClick={handleAddClick}
         onBulkSelect={handleBulkSelect}
+        onPeriodChange={handlePeriodChange}
+        onDraftCountChange={handleDraftCountChange}
         initialMonday={monday}
       />
 

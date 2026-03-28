@@ -134,7 +134,7 @@ export function NotificationToastRenderer() {
                       toast.dismiss(toastId);
                       return;
                     }
-                    router.push(`/${locale}${url}`);
+                    router.push(`/${url}`);
                     toast.dismiss(toastId);
                   }
                 }}

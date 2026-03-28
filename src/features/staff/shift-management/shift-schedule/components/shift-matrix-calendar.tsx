@@ -84,6 +84,10 @@ interface ShiftMatrixCalendarProps {
   onAddClick?: (staffId: number, date: string) => void;
   /** Callback when user confirms a multi-cell selection for bulk assignment */
   onBulkSelect?: (staffIds: number[], workDates: string[]) => void;
+  /** Notifies parent when the visible date period changes */
+  onPeriodChange?: (fromDate: string, toDate: string) => void;
+  /** Notifies parent when draft count changes for current visible period */
+  onDraftCountChange?: (count: number) => void;
   /** Current week override (defaults to this week) */
   initialMonday?: Date;
   /** External overrides for the staff schedule data (for read-only team view) */
@@ -98,6 +102,8 @@ export function ShiftMatrixCalendar({
   onCardClick,
   onAddClick,
   onBulkSelect,
+  onPeriodChange,
+  onDraftCountChange,
   initialMonday,
   externalData,
   readOnly = false,
@@ -119,6 +125,8 @@ export function ShiftMatrixCalendar({
     return dates;
   }, [rangeStart, rangeEnd]);
 
+  const periodLengthDays = useMemo(() => Math.max(rangeDates.length, 1), [rangeDates]);
+
   // Keep monday in sync for month-query when using week nav buttons
   const weekParams = useMemo(
     () => ({
@@ -135,21 +143,19 @@ export function ShiftMatrixCalendar({
     setRangeEnd(fmtDate(addDays(m, 6)));
   }, []);
   const goPrev = useCallback(() => {
-    setMonday((m) => {
-      const prev = addDays(m, -7);
-      setRangeStart(fmtDate(prev));
-      setRangeEnd(fmtDate(addDays(prev, 6)));
-      return prev;
-    });
-  }, []);
+    const prevStart = addDays(parseIsoDate(rangeStart), -periodLengthDays);
+    const prevEnd = addDays(parseIsoDate(rangeEnd), -periodLengthDays);
+    setRangeStart(fmtDate(prevStart));
+    setRangeEnd(fmtDate(prevEnd));
+    setMonday(getMonday(prevStart));
+  }, [periodLengthDays, rangeEnd, rangeStart]);
   const goNext = useCallback(() => {
-    setMonday((m) => {
-      const next = addDays(m, 7);
-      setRangeStart(fmtDate(next));
-      setRangeEnd(fmtDate(addDays(next, 6)));
-      return next;
-    });
-  }, []);
+    const nextStart = addDays(parseIsoDate(rangeStart), periodLengthDays);
+    const nextEnd = addDays(parseIsoDate(rangeEnd), periodLengthDays);
+    setRangeStart(fmtDate(nextStart));
+    setRangeEnd(fmtDate(nextEnd));
+    setMonday(getMonday(nextStart));
+  }, [periodLengthDays, rangeEnd, rangeStart]);
 
   const handleRangeStartChange = useCallback((v: string) => {
     setRangeStart(v);
@@ -531,7 +537,7 @@ export function ShiftMatrixCalendar({
   // ── Draft count for publish indicator ───────────────────────────
   const draftCount = useMemo(
     () =>
-      staffRows.reduce(
+      allStaffRows.reduce(
         (sum, row) =>
           sum +
           (row?.assignments ?? []).filter(
@@ -539,8 +545,16 @@ export function ShiftMatrixCalendar({
           ).length,
         0
       ),
-    [staffRows]
+    [allStaffRows]
   );
+
+  useEffect(() => {
+    onPeriodChange?.(rangeStart, rangeEnd);
+  }, [onPeriodChange, rangeEnd, rangeStart]);
+
+  useEffect(() => {
+    onDraftCountChange?.(draftCount);
+  }, [draftCount, onDraftCountChange]);
 
   // ── Render ──────────────────────────────────────────────────────
   return (

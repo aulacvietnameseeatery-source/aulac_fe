@@ -173,6 +173,7 @@
         "reason": "Raison",
         "noAttendance": "Aucune présence enregistrée pour le moment.",
         "checkInAction": "Pointer Entrée",
+        "publishAction": "Publier",
         "checkOutAction": "Pointer Sortie",
         "adjustAttendance": "Ajuster la présence",
         "cancelAssignmentConfirm": "Annuler cette affectation ?",
