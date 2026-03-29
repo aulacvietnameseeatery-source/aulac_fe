@@ -45,7 +45,7 @@ export const RoleHeader = ({
         />
 
         {/* Add Button */}
-        <PermissionGuard permission={Permissions.CreateRole}>
+        <PermissionGuard permission={Permissions.CreateRole} showDisabled={true}>
           <Button
             onClick={onCreateClick}
             variant="outline"

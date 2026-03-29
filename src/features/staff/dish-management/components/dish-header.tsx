@@ -106,7 +106,7 @@ export const DishHeader = ({
                     </div>
                 </div>
 
-                <PermissionGuard permission={Permissions.CreateDish}>
+                <PermissionGuard permission={Permissions.CreateDish} showDisabled={true}>
                     <Button
                         onClick={onCreateClick}
                         variant="outline"

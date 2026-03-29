@@ -1,56 +1,102 @@
-# Permission Usage Guide (Admin Sidebar)
+# Permission Usage Guide
 
-This document describes the permission mapping for the Admin Sidebar navigation items.
+This document describes how to implement and use the permission-based access control system in the Aulac Frontend.
 
-## Permission mapping
+## 1. Core Policy: Hidden vs. Blurred
 
-The sidebar uses the `can(permission)` hook to show/hide navigation items based on the user's roles and permissions.
+To balance security and discoverability, we use a hybrid UI policy:
 
-### General Access (No permission required)
-- `dashboard`: `/dashboard`
-- `myShifts`: `/dashboard/my-shifts` (All staff can see their own shifts)
+1. **Sidebar Navigation**: Menu items are **HIDDEN** if the user lacks the required `READ` permission.
+2. **In-Page Buttons (CRUD)**: Buttons like "Add", "Edit", or "Delete" are **BLURRED and DISABLED** instead of hidden. This allows users to see available features even if they don't have access yet.
+3. **Internal URL Access**: Accessing a protected URL directly (e.g., `/dashboard/dish/create`) will **REDIRECT** to `/unauthorized`.
 
-### Main Category
-- **Orders**: `ORDER:READ`
-- **Kitchen**: `ORDER:UPDATE_ITEM_STATUS`
-- **Reservations**: `RESERVATION:READ`
+---
 
-### Management Category
-- **Dish**: `DISH:READ`
-- **Dish Category**: `DISH_CATEGORY:READ`
-- **Promotions**: `PROMOTION:READ`
-- **Coupons**: `COUPON:READ`
-- **Tax Settings**: `SYSTEM_SETTING:READ`
+## 2. Implementation Methods
 
-### Warehouse Category
-- **Ingredients**: `INVENTORY:READ`
-- **Suppliers**: `SUPPLIER:READ`
-- **Inventory**: `INVENTORY:READ`
-- **Stock (Audit/Inventory Check)**: `INVENTORY:STOCK_CHECK`
+### Case 1: Hiding Sidebar Items
+Currently implemented in `admin-sidebar.tsx`. Unauthorized items are filtered out.
+- **Permission required**: Usually `FEATURE:READ`.
 
-### Operations Category
-- **Tables**: `TABLE:READ`
-- **Customers**: `CUSTOMER:READ`
-- **Invoices**: `ORDER:READ`
-- **Payments**: `ORDER:PROCESS_PAYMENT`
+### Case 2: Blurring Action Buttons (In-Page)
+Use `PermissionGuard` with `showDisabled={true}`.
+```tsx
+<PermissionGuard permission={Permissions.CreateDish} showDisabled={true}>
+  <Button onClick={handleAdd}>Add New Dish</Button>
+</PermissionGuard>
+```
+*   **Unauthorized state**: Opacity is reduced, grayscale and blur applied, and a tooltip shows "Bạn không có quyền thực hiện hành động này".
 
-### Shifts Category
-- **Shift Templates**: `SHIFT:MANAGE_TEMPLATE`
-- **Shift Schedule**: `SHIFT:READ`
-- **Live Shifts**: `SHIFT:READ`
-- **Shift Reports**: `SHIFT:REPORT_READ`
+### Case 3: Row Actions in Tables
+Controlled via the `permission` and `showDisabled` config in `TableActionColumn`.
+```tsx
+const actions = [
+  {
+    key: 'edit',
+    icon: <Pencil />,
+    permission: Permissions.EditDish,
+    showDisabled: true, // IMPORTANT: Should be true for actions
+    onClick: (item) => handleEdit(item)
+  }
+];
+```
 
-### Administration Category
-- **Staff**: `ACCOUNT:READ`
-- **Roles**: `ROLE:READ`
-- **Reports (General)**: `INVENTORY:REPORT_READ`
+### Case 4: Protecting Routes (URL Access)
+Wrap the entire page or layout with `ProtectedRoute`.
+```tsx
+// Inside src/app/[locale]/(auth)/dashboard/dish/create/page.tsx
+export default function CreateDishPage() {
+  return (
+    <ProtectedRoute permission={Permissions.CreateDish}>
+      <DishForm mode="create" />
+    </ProtectedRoute>
+  );
+}
+```
+*   **Logic**: If unauthorized, the user is automatically redirected to `/unauthorized`.
 
-### Settings Category
-- **Store Settings**: `SYSTEM_SETTING:READ`
-- **System Settings**: `SYSTEM_SETTING:READ`
-- **Emails**: `SYSTEM_SETTING:READ`
+### Case 5: Complex logic (Hook level)
+Use `usePermissions` when you need to check multiple conditions in JS.
+```tsx
+const { can, canAny, canAll } = usePermissions();
 
-## Reference
+if (can(Permissions.ProcessPayment)) {
+  // logic...
+}
+```
 
-Permissions are defined in `aulac_fe/src/types/const.ts`.
-Sidebar logic is located in `aulac_fe/src/components/layout/admin-sidebar/admin-sidebar.tsx`.
+---
+
+## 3. Reference Table: Sidebar vs. Actions
+
+| Feature | Sidebar Permission (Hidden) | Action Permissions (Blurred) |
+|---------|---------------------------|----------------------------|
+| Dishes | `DISH:READ` | `DISH:CREATE`, `DISH:EDIT`, `DISH:DELETE` |
+| Roles | `ROLE:READ` | `ROLE:CREATE`, `ROLE:EDIT`, `ROLE:DELETE` |
+| Orders | `ORDER:READ` | `ORDER:CREATE`, `ORDER:EDIT`, `ORDER:PROCESS_PAYMENT` |
+| Inventory | `INVENTORY:READ` | `INVENTORY:UPDATE`, `INVENTORY:STOCK_CHECK` |
+
+---
+
+## 4. Frontend & Backend Synchronization
+
+To ensure the permission system works correctly, the frontend constants **MUST** always match the backend definitions.
+
+### Reference
+- **Backend File**: `aulac_be/Core/Data/Permissions.cs`
+- **Frontend File**: `src/types/const.ts`
+
+### Synchronization Process
+Whenever a new permission is added or an existing one is modified in the backend:
+1.  Open `src/types/const.ts`.
+2.  Add or update the key-value pair in the `Permissions` object.
+3.  Ensure the **Value** string exactly matches the backend constant string (e.g., `'DISH:CREATE'`).
+4.  Apply the new permission to the corresponding UI components using `PermissionGuard` or `ProtectedRoute`.
+
+---
+
+## 5. Implementation Rules Summary
+1.  **Frontend permissions are for UX only**.
+2.  Always use the `Permissions` object from `@/types/const.ts`.
+3.  **NEVER** hide buttons in CRUD pages; always use the blur state.
+4.  **ALWAYS** protect create/edit/management pages with `ProtectedRoute`.

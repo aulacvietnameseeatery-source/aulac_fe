@@ -73,7 +73,7 @@ export function TableActionColumn<T>({ actions, item }: TableActionColumnProps<T
     );
 
     if (actionDef.permission) {
-      return <PermissionGuard key={`perm-${key}`} permission={actionDef.permission}>{button}</PermissionGuard>;
+      return <PermissionGuard key={`perm-${key}`} permission={actionDef.permission} showDisabled={true}>{button}</PermissionGuard>;
     }
     return button;
   };
@@ -94,7 +94,7 @@ export function TableActionColumn<T>({ actions, item }: TableActionColumnProps<T
       const primary = sortedForDisplay.splice(primaryIndex, 1)[0];
       sortedForDisplay.unshift(primary);
     }
-    
+
     return (
       <div className="flex items-center justify-end gap-1">
         {sortedForDisplay.map((action, index) => renderButton(action, index))}
@@ -144,7 +144,7 @@ export function TableActionColumn<T>({ actions, item }: TableActionColumnProps<T
 
             if (actionDef.permission) {
               return (
-                <PermissionGuard key={`perm-dropdown-${index}`} permission={actionDef.permission}>
+                <PermissionGuard key={`perm-dropdown-${index}`} permission={actionDef.permission} showDisabled={true}>
                   {menuItem}
                 </PermissionGuard>
               );

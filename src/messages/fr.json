@@ -765,6 +765,9 @@
       "http": "La requête a échoué. Veuillez réessayer.",
       "httpStatus": "La requête a échoué avec le statut {status}.",
       "unexpected": "Une erreur inattendue s'est produite. Veuillez réessayer plus tard."
+    },
+    "permission": {
+      "noAccess": "Vous n'avez pas la permission d'effectuer cette action."
     }
   },
   "DishCategory": {

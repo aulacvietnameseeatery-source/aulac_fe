@@ -11,11 +11,11 @@ interface SupplierHeaderProps {
   onCreateClick: () => void;
 }
 
-export const SupplierHeader = ({ 
+export const SupplierHeader = ({
   onCreateClick,
 }: SupplierHeaderProps) => {
   const t = useTranslations("Supplier.List");
-  
+
   return (
     <div className="flex justify-between items-center w-full">
       <div>
@@ -26,10 +26,10 @@ export const SupplierHeader = ({
           {t("description")}
         </p>
       </div>
-      <PermissionGuard permission={Permissions.CreateSupplier}>
-        <Button 
+      <PermissionGuard permission={Permissions.CreateSupplier} showDisabled={true}>
+        <Button
           onClick={onCreateClick}
-          variant="outline" 
+          variant="outline"
           className="shadow-md"
         >
           <Plus className="mr-2 h-4 w-4" />

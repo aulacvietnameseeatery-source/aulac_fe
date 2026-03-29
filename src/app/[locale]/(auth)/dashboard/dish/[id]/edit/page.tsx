@@ -2,6 +2,8 @@
 
 import { DishForm } from "@/features/staff/create-edit-dish";
 import { useParams, useRouter } from "next/navigation";
+import { ProtectedRoute } from "@/components/protected-route";
+import { Permissions } from "@/types/const";
 
 
 export default function EditDishPage() {
@@ -13,14 +15,16 @@ export default function EditDishPage() {
   if (!dishId) return null;
 
   return (
-    <div className="">
-      <DishForm
-        mode="edit"
-        dishId={dishId}
-        onSuccess={() => {
-          router.push(`/dashboard/dish`);
-        }}
-      />
-    </div>
+    <ProtectedRoute permission={Permissions.EditDish}>
+      <div className="">
+        <DishForm
+          mode="edit"
+          dishId={dishId}
+          onSuccess={() => {
+            router.push(`/dashboard/dish`);
+          }}
+        />
+      </div>
+    </ProtectedRoute>
   );
 }

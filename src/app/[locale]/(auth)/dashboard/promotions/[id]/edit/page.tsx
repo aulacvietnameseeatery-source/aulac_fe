@@ -8,6 +8,8 @@ import { mapApiToForm } from "@/features/staff/promotion-management/promotion-cr
 import { PromotionFormValues } from "@/features/staff/promotion-management/promotion-create-edit/schemas/promotion.schema";
 import { Loader2 } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { ProtectedRoute } from "@/components/protected-route";
+import { Permissions } from "@/types/const";
 
 export default function EditPromotionPage() {
   const t = useTranslations("Promotion");
@@ -29,22 +31,24 @@ export default function EditPromotionPage() {
   };
 
   return (
-    <div className="mx-auto">
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-[#1A3A51]">{t("editTitle", { id })}</h1>
-      </div>
+    <ProtectedRoute permission={Permissions.UpdatePromotion}>
+      <div className="mx-auto">
+        <div className="mb-6">
+          <h1 className="text-2xl font-bold text-[#1A3A51]">{t("editTitle", { id })}</h1>
+        </div>
 
-      {isLoading ? (
-        <div className="flex items-center justify-center py-20 text-slate-500">
-          <Loader2 className="w-8 h-8 animate-spin" />
-        </div>
-      ) : initialData ? (
-        <PromotionForm initialData={initialData} isEditMode={true} onSubmitAction={handleSubmit} />
-      ) : (
-        <div className="text-center py-20 text-slate-500 bg-white rounded-2xl border">
-          {t("noData")}
-        </div>
-      )}
-    </div>
+        {isLoading ? (
+          <div className="flex items-center justify-center py-20 text-slate-500">
+            <Loader2 className="w-8 h-8 animate-spin" />
+          </div>
+        ) : initialData ? (
+          <PromotionForm initialData={initialData} isEditMode={true} onSubmitAction={handleSubmit} />
+        ) : (
+          <div className="text-center py-20 text-slate-500 bg-white rounded-2xl border">
+            {t("noData")}
+          </div>
+        )}
+      </div>
+    </ProtectedRoute>
   );
 }

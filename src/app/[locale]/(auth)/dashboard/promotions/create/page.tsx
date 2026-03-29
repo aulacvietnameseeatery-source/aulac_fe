@@ -3,6 +3,8 @@
 import { PromotionForm } from "@/features/staff/promotion-management/promotion-create-edit/components/promotion-form";
 import { promotionService } from "@/features/staff/promotion-management/promotion-create-edit/services/promotion.service";
 import { useTranslations } from "next-intl";
+import { ProtectedRoute } from "@/components/protected-route";
+import { Permissions } from "@/types/const";
 
 export default function CreatePromotionPage() {
   const t = useTranslations("Promotion");
@@ -11,12 +13,14 @@ export default function CreatePromotionPage() {
   };
 
   return (
-    <div className="mx-auto">
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-[#1A3A51]">{t("createTitle")}</h1>
-        <p className="text-slate-500 mt-1">{t("createSubTitle")}</p>
+    <ProtectedRoute permission={Permissions.CreatePromotion}>
+      <div className="mx-auto">
+        <div className="mb-6">
+          <h1 className="text-2xl font-bold text-[#1A3A51]">{t("createTitle")}</h1>
+          <p className="text-slate-500 mt-1">{t("createSubTitle")}</p>
+        </div>
+        <PromotionForm onSubmitAction={handleSubmit} />
       </div>
-      <PromotionForm onSubmitAction={handleSubmit} />
-    </div>
+    </ProtectedRoute>
   );
 }

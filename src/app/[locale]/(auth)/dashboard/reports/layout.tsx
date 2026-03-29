@@ -4,10 +4,12 @@ import React from "react";
 import { usePathname } from "next/navigation";
 import { ReportHeader } from "@/features/staff/report-management/shared/components/report-header";
 import { ReportTabs } from "@/features/staff/report-management/shared/components/report-tabs";
+import { ProtectedRoute } from "@/components/protected-route";
+import { Permissions } from "@/types/const";
 
 export default function ReportsLayout({
-                                          children,
-                                      }: {
+    children,
+}: {
     children: React.ReactNode;
 }) {
     const pathname = usePathname();
@@ -28,14 +30,16 @@ export default function ReportsLayout({
     };
 
     return (
-        <div className="w-full min-h-[calc(100vh-100px)] flex flex-col bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <ReportHeader onRefresh={handleGlobalRefresh} />
+        <ProtectedRoute permission={Permissions.ViewInventoryReport}>
+            <div className="w-full min-h-[calc(100vh-100px)] flex flex-col bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                <ReportHeader onRefresh={handleGlobalRefresh} />
 
-            <ReportTabs activeTab={activeTab} />
+                <ReportTabs activeTab={activeTab} />
 
-            <div className="flex-1 w-full flex flex-col">
-                {children}
+                <div className="flex-1 w-full flex flex-col">
+                    {children}
+                </div>
             </div>
-        </div>
+        </ProtectedRoute>
     );
 }

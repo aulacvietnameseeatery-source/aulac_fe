@@ -7,6 +7,8 @@ import { useRoleEdit } from "@/features/staff/role-management/role-edit/hooks/us
 import { RoleEditForm } from "@/features/staff/role-management/role-edit/components/RoleEditForm";
 import { Loader2, AlertCircle } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { ProtectedRoute } from "@/components/protected-route";
+import { Permissions } from "@/types/const";
 
 const RoleEditContent = () => {
   const params = useParams();
@@ -69,14 +71,16 @@ const RoleEditContent = () => {
 
 export default function RoleEditPage() {
   return (
-    <div className="min-h-screen bg-gray-50/50 font-sans text-gray-900">
-      <Suspense fallback={
-        <div className="flex justify-center p-10">
-          <Loader2 className="animate-spin" size={32} />
-        </div>
-      }>
-        <RoleEditContent />
-      </Suspense>
-    </div>
+    <ProtectedRoute permission={Permissions.UpdateRole}>
+      <div className="min-h-screen bg-gray-50/50 font-sans text-gray-900">
+        <Suspense fallback={
+          <div className="flex justify-center p-10">
+            <Loader2 className="animate-spin" size={32} />
+          </div>
+        }>
+          <RoleEditContent />
+        </Suspense>
+      </div>
+    </ProtectedRoute>
   );
 }
