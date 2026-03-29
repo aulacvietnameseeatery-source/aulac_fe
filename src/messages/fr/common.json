@@ -1286,5 +1286,47 @@
         "edit": "Modifier le Rôle"
       }
     }
+  },
+  "EmailTemplates": {
+    "title": "Gestion des modèles d'e-mail",
+    "description": "Gérez les modèles d'e-mail envoyés aux clients et au personnel.",
+    "listTitle": "Liste des modèles",
+    "table": {
+      "name": "Nom du modèle",
+      "code": "Code",
+      "subject": "Objet",
+      "edit": "Modifier"
+    },
+    "actions": {
+      "add": "Ajouter un modèle",
+      "view": "Voir les détails",
+      "edit": "Modifier",
+      "delete": "Supprimer"
+    },
+    "dialog": {
+      "createTitle": "Créer un nouveau modèle",
+      "editTitle": "Modifier le modèle",
+      "viewTitle": "Détails du modèle",
+      "code": "Code du modèle",
+      "codePlaceholder": "Généré automatiquement à partir du nom",
+      "name": "Nom du modèle",
+      "namePlaceholder": "ex: Confirmation de réservation",
+      "subject": "Objet de l'e-mail",
+      "subjectPlaceholder": "ex: Confirmation de votre réservation chez An Lac",
+      "description": "Description",
+      "descriptionPlaceholder": "Brève description de l'objectif du modèle",
+      "body": "Contenu HTML",
+      "bodyPlaceholder": "Saisissez le code HTML ici...",
+      "tabEditor": "Éditeur",
+      "tabPreview": "Aperçu",
+      "placeholderHint": "* Utilisez des tags comme {{CustomerName}}, {{ReservedTime}}... selon le modèle.",
+      "close": "Fermer",
+      "save": "Enregistrer les modifications",
+      "create": "Créer"
+    },
+    "deleteDialog": {
+      "title": "Supprimer le modèle",
+      "description": "Êtes-vous sûr de vouloir supprimer ce modèle ? Cette action est irréversible."
+    }
   }
 }
