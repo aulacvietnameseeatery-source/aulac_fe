@@ -11,11 +11,11 @@ interface CategoryHeaderProps {
   onCreateClick: () => void;
 }
 
-export const CategoryHeader = ({ 
+export const CategoryHeader = ({
   onCreateClick,
 }: CategoryHeaderProps) => {
   const t = useTranslations("DishCategory.List");
-  
+
   return (
     <div className="flex justify-between items-center w-full">
       <div>
@@ -26,10 +26,10 @@ export const CategoryHeader = ({
           {t("description")}
         </p>
       </div>
-      <PermissionGuard permission={Permissions.CreateDishCategory}>
-        <Button 
+      <PermissionGuard permission={Permissions.CreateDishCategory} showDisabled={true}>
+        <Button
           onClick={onCreateClick}
-          variant="outline" 
+          variant="outline"
           className="shadow-md"
         >
           <Plus className="mr-2 h-4 w-4" />

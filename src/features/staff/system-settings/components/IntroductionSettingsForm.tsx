@@ -139,11 +139,10 @@ export const IntroductionSettingsForm = () => {
             data: dataToTranslate
         }, {
             onSuccess: (data) => {
-                const newValues = { ...currentData };
+                const newValues = JSON.parse(JSON.stringify(currentData));
                 Object.entries(data.translations).forEach(([lang, translations]) => {
                     const l = lang as SupportedLocale;
                     Object.entries(translations).forEach(([key, value]) => {
-                        // @ts-expect-error: dynamic key access for translated values i18n
                         newValues.i18n[l][key] = value;
                     });
                 });
@@ -314,23 +313,23 @@ export const IntroductionSettingsForm = () => {
 
                             {/* Right: Image Upload Area */}
                             <div className="p-8 lg:p-10 space-y-8 bg-white/40 border-r border-amber-200/20">
-                            <div className="space-y-6">
+                                <div className="space-y-6">
 
-                            <SystemSettingMediaUploader
-                                label={t('Introduction.heroImage')}
-                                value={getFullUrl('intro_hero_image', heroImageUrl)}
-                                type="image"
-                                aspectRatioClassName="aspect-[16/10]"
-                                onUpload={(file) => uploadFile(file)}
-                                onChange={(rel, pub) => {
-                                    setValue('intro_hero_image', rel, { shouldDirty: true, shouldValidate: true });
-                                    if (pub) setRemotePublicUrls(prev => ({ ...prev, intro_hero_image: pub }));
-                                }}
-                                onPreview={(url) => setPreviewData({ url, title: "Hero Image", type: 'image' })}
-                                maxSizeMB={MAX_IMAGE_SIZE_MB}
-                            />
+                                    <SystemSettingMediaUploader
+                                        label={t('Introduction.heroImage')}
+                                        value={getFullUrl('intro_hero_image', heroImageUrl)}
+                                        type="image"
+                                        aspectRatioClassName="aspect-[16/10]"
+                                        onUpload={(file) => uploadFile(file)}
+                                        onChange={(rel, pub) => {
+                                            setValue('intro_hero_image', rel, { shouldDirty: true, shouldValidate: true });
+                                            if (pub) setRemotePublicUrls(prev => ({ ...prev, intro_hero_image: pub }));
+                                        }}
+                                        onPreview={(url) => setPreviewData({ url, title: "Hero Image", type: 'image' })}
+                                        maxSizeMB={MAX_IMAGE_SIZE_MB}
+                                    />
+                                </div>
                             </div>
-                        </div>
                         </div>
                     </ALCard>
                 </section>

@@ -112,11 +112,10 @@ export const StoreProfileForm = () => {
             data: dataToTranslate
         }, {
             onSuccess: (data) => {
-                const newValues = { ...currentData };
+                const newValues = JSON.parse(JSON.stringify(currentData));
                 Object.entries(data.translations).forEach(([lang, translations]) => {
                     const l = lang as SupportedLocale;
                     Object.entries(translations).forEach(([key, value]) => {
-                        // @ts-expect-error: dynamic key access for translated values i18n
                         newValues.i18n[l][key] = value;
                     });
                 });
@@ -226,7 +225,7 @@ export const StoreProfileForm = () => {
                 </ALCard>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 pb-6">
+            <div key={activeLocale} className="grid grid-cols-1 lg:grid-cols-2 gap-8 pb-6">
                 {/* --- LEFT COLUMN --- */}
                 <div className="space-y-8">
                     {/* --- IDENTITY SECTION --- */}

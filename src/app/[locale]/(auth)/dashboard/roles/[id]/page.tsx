@@ -7,12 +7,14 @@ import { useRoleDetail } from "@/features/staff/role-management/role-detail/hook
 import { RoleDetailForm } from "@/features/staff/role-management/role-detail/components/RoleDetailForm";
 import { Loader2, AlertCircle } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { ProtectedRoute } from "@/components/protected-route";
+import { Permissions } from "@/types/const";
 
 const RoleDetailContent = () => {
   const params = useParams();
   const router = useRouter();
   const t = useTranslations("Role.Detail");
-  
+
   const roleId = Number(params.id);
   const { roleDetail, isLoading, error } = useRoleDetail(roleId);
 
@@ -67,14 +69,16 @@ const RoleDetailContent = () => {
 
 export default function RoleDetailPage() {
   return (
-    <div className="min-h-screen bg-gray-50/50 font-sans text-gray-900">
-      <Suspense fallback={
-        <div className="flex justify-center p-10">
-          <Loader2 className="animate-spin" size={32} />
-        </div>
-      }>
-        <RoleDetailContent />
-      </Suspense>
-    </div>
+    <ProtectedRoute permission={Permissions.ViewRole}>
+      <div className="min-h-screen bg-gray-50/50 font-sans text-gray-900">
+        <Suspense fallback={
+          <div className="flex justify-center p-10">
+            <Loader2 className="animate-spin" size={32} />
+          </div>
+        }>
+          <RoleDetailContent />
+        </Suspense>
+      </div>
+    </ProtectedRoute>
   );
 }

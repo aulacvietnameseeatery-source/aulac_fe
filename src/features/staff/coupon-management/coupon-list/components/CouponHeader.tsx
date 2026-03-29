@@ -11,11 +11,11 @@ interface CouponHeaderProps {
   onCreateClick: () => void;
 }
 
-export const CouponHeader = ({ 
+export const CouponHeader = ({
   onCreateClick,
 }: CouponHeaderProps) => {
   const t = useTranslations("Coupon.List");
-  
+
   return (
     <div className="flex justify-between items-center w-full">
       <div>
@@ -26,10 +26,10 @@ export const CouponHeader = ({
           {t("description")}
         </p>
       </div>
-      <PermissionGuard permission={Permissions.CreateCoupon}>
-        <Button 
+      <PermissionGuard permission={Permissions.CreateCoupon} showDisabled={true}>
+        <Button
           onClick={onCreateClick}
-          variant="outline" 
+          variant="outline"
           className="shadow-md"
         >
           <Plus className="mr-2 h-4 w-4" />

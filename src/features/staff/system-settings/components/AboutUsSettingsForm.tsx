@@ -66,11 +66,10 @@ export const AboutUsSettingsForm = () => {
             data: dataToTranslate
         }, {
             onSuccess: (data) => {
-                const newValues = { ...currentData };
+                const newValues = JSON.parse(JSON.stringify(currentData));
                 Object.entries(data.translations).forEach(([lang, translations]) => {
                     const l = lang as SupportedLocale;
                     Object.entries(translations).forEach(([key, value]) => {
-                        // @ts-expect-error: dynamic key access for translated values i18n
                         newValues.i18n[l][key] = value;
                     });
                 });
