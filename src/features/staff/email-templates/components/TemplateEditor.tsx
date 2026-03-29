@@ -17,6 +17,7 @@ import {
     CardFooter
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useTranslations } from "next-intl";
 
 const schema = zod.object({
     templateName: zod.string().min(1, "Vui lòng nhập tên template"),
@@ -32,6 +33,7 @@ interface TemplateEditorProps {
 }
 
 export const TemplateEditor: React.FC<TemplateEditorProps> = ({ template, onCancel, onSuccess }) => {
+    const t = useTranslations("EmailTemplates");
     const { mutate: update, isPending } = useUpdateEmailTemplate();
 
     const {
@@ -76,8 +78,8 @@ export const TemplateEditor: React.FC<TemplateEditorProps> = ({ template, onCanc
                     <div className="p-2 rounded-lg bg-primary/10">
                         <Code className="h-4 w-4 text-primary" />
                     </div>
-                    <CardTitle className="text-base font-semibold">
-                        Chỉnh sửa: {template.templateName}
+                    <CardTitle className="text-base font-semibold font-lexend">
+                        {t("dialog.editTitle")}: {template.templateName}
                     </CardTitle>
                 </div>
                 <Button variant="ghost" size="icon" onClick={onCancel} className="h-8 w-8 text-muted-foreground hover:text-foreground">
@@ -86,21 +88,23 @@ export const TemplateEditor: React.FC<TemplateEditorProps> = ({ template, onCanc
             </CardHeader>
 
             <form onSubmit={handleSubmit(onSubmit)}>
-                <CardContent className="space-y-6 pt-2">
+                <CardContent className="space-y-6 pt-2 font-lexend">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-2">
-                            <label className="text-sm font-medium text-foreground/70">Tên Template</label>
+                            <label className="text-sm font-medium text-foreground/70">{t("dialog.name")}</label>
                             <Input
                                 {...register("templateName")}
+                                placeholder={t("dialog.namePlaceholder")}
                                 className="border-border focus:ring-primary"
                             />
                             {errors.templateName && <p className="text-destructive text-xs mt-1">{errors.templateName.message}</p>}
                         </div>
 
                         <div className="space-y-2">
-                            <label className="text-sm font-medium text-foreground/70">Tiêu đề Email</label>
+                            <label className="text-sm font-medium text-foreground/70">{t("dialog.subject")}</label>
                             <Input
                                 {...register("subject")}
+                                placeholder={t("dialog.subjectPlaceholder")}
                                 className="border-border focus:ring-primary"
                             />
                             {errors.subject && <p className="text-destructive text-xs mt-1">{errors.subject.message}</p>}
@@ -108,22 +112,23 @@ export const TemplateEditor: React.FC<TemplateEditorProps> = ({ template, onCanc
                     </div>
 
                     <div className="space-y-2">
-                        <label className="text-sm font-medium text-foreground/70">Mô tả</label>
+                        <label className="text-sm font-medium text-foreground/70">{t("dialog.description")}</label>
                         <Input
                             {...register("description")}
+                            placeholder={t("dialog.descriptionPlaceholder")}
                             className="border-border focus:ring-primary"
                         />
                     </div>
 
                     <div className="space-y-2">
-                        <label className="text-sm font-medium text-foreground/70">Nội dung HTML</label>
+                        <label className="text-sm font-medium text-foreground/70">{t("dialog.body")}</label>
                         <Tabs defaultValue="editor" className="w-full">
                             <TabsList className="bg-muted/50 border border-border mb-4">
                                 <TabsTrigger value="editor" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
-                                    <Code size={14} className="mr-2" /> Soạn thảo
+                                    <Code size={14} className="mr-2" /> {t("dialog.tabEditor")}
                                 </TabsTrigger>
                                 <TabsTrigger value="preview" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
-                                    <Eye size={14} className="mr-2" /> Xem trước
+                                    <Eye size={14} className="mr-2" /> {t("dialog.tabPreview")}
                                 </TabsTrigger>
                             </TabsList>
 
@@ -131,11 +136,11 @@ export const TemplateEditor: React.FC<TemplateEditorProps> = ({ template, onCanc
                                 <textarea
                                     {...register("bodyHtml")}
                                     className="w-full h-96 bg-white border border-border rounded-md p-4 font-mono text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-primary transition-all resize-none shadow-sm"
-                                    placeholder="Nhập mã HTML tại đây..."
+                                    placeholder={t("dialog.bodyPlaceholder")}
                                 />
                                 {errors.bodyHtml && <p className="text-destructive text-xs mt-1">{errors.bodyHtml.message}</p>}
                                 <p className="text-muted-foreground text-[11px] mt-2 italic">
-                                    * Sử dụng các placeholder như {"{{CustomerName}}"}, {"{{ReservedTime}}"}... tùy thuộc vào từng template.
+                                    {t("dialog.placeholderHint")}
                                 </p>
                             </TabsContent>
 
@@ -152,9 +157,9 @@ export const TemplateEditor: React.FC<TemplateEditorProps> = ({ template, onCanc
                     </div>
                 </CardContent>
 
-                <CardFooter className="flex justify-end gap-3 border-t pt-4">
+                <CardFooter className="flex justify-end gap-3 border-t pt-4 font-lexend">
                     <Button variant="outline" type="button" onClick={onCancel} size="sm">
-                        Hủy
+                        {t("dialog.close")}
                     </Button>
                     <Button
                         disabled={isPending}
@@ -163,7 +168,7 @@ export const TemplateEditor: React.FC<TemplateEditorProps> = ({ template, onCanc
                         className="min-w-[120px]"
                     >
                         {isPending ? <Loader2 className="animate-spin mr-2" size={16} /> : <Save className="mr-2" size={16} />}
-                        Lưu thay đổi
+                        {t("dialog.save")}
                     </Button>
                 </CardFooter>
             </form>
