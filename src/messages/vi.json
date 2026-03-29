@@ -931,6 +931,9 @@
       "http": "Yêu cầu thất bại. Vui lòng thử lại.",
       "httpStatus": "Yêu cầu thất bại với mã trạng thái {status}.",
       "unexpected": "Đã xảy ra lỗi không mong muốn. Vui lòng thử lại sau."
+    },
+    "permission": {
+      "noAccess": "Bạn không có quyền thực hiện hành động này"
     }
   },
   "DishCategory": {

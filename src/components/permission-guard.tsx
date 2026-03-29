@@ -2,28 +2,34 @@
 
 import { ReactNode } from 'react';
 import { usePermissions } from '@/hooks/use-permissions';
+import { useTranslations } from 'next-intl';
 
 interface PermissionGuardProps {
   /**
    * Single permission to check
    */
   permission?: string;
-  
+
   /**
    * Multiple permissions to check
    */
   permissions?: string[];
-  
+
   /**
    * If true, requires ALL permissions. If false (default), requires ANY permission.
    */
   requireAll?: boolean;
-  
+
   /**
    * Content to show when user lacks permission
    */
   fallback?: ReactNode;
-  
+
+  /**
+   * If true, renders children in a visually disabled/blurred state instead of hiding them when unauthorized.
+   */
+  showDisabled?: boolean;
+
   /**
    * Content to show when user has permission
    */
@@ -33,59 +39,41 @@ interface PermissionGuardProps {
 /**
  * Permission Guard Component
  * Conditionally renders children based on user permissions
- * 
- * @example
- * ```tsx
- * // Single permission check
- * <PermissionGuard permission="ACCOUNT:CREATE">
- *   <CreateAccountButton />
- * </PermissionGuard>
- * 
- * // Any permission (OR logic)
- * <PermissionGuard permissions={['ACCOUNT:EDIT', 'ACCOUNT:UPDATE']}>
- *   <EditButton />
- * </PermissionGuard>
- * 
- * // All permissions (AND logic)
- * <PermissionGuard 
- *   permissions={['ACCOUNT:READ', 'ACCOUNT:DELETE']} 
- *   requireAll
- * >
- *   <AdminPanel />
- * </PermissionGuard>
- * 
- * // With fallback
- * <PermissionGuard 
- *   permission="DISH:READ"
- *   fallback={<div>You need DISH:READ permission</div>}
- * >
- *   <DishList />
- * </PermissionGuard>
- * ```
  */
 export function PermissionGuard({
   permission,
   permissions,
   requireAll = false,
   fallback = null,
+  showDisabled = false,
   children,
 }: PermissionGuardProps) {
   const { can, canAny, canAll } = usePermissions();
+  const t = useTranslations('common.permission');
 
   let hasAccess = false;
 
   if (permission) {
-    // Single permission check
     hasAccess = can(permission);
   } else if (permissions && permissions.length > 0) {
-    // Multiple permissions check
     hasAccess = requireAll ? canAll(permissions) : canAny(permissions);
   } else {
-    // No permission specified - allow access
     hasAccess = true;
   }
 
   if (!hasAccess) {
+    if (showDisabled) {
+      return (
+        <span
+          className="inline-block opacity-50 grayscale blur-[0.5px] cursor-not-allowed"
+          title={t('noAccess')}
+        >
+          <span className="pointer-events-none">
+            {children}
+          </span>
+        </span>
+      );
+    }
     return <>{fallback}</>;
   }
 

@@ -109,7 +109,7 @@ export const AccountHeader = ({
         </div>
 
         {/* Add Button */}
-        <PermissionGuard permission={Permissions.CreateAccount}>
+        <PermissionGuard permission={Permissions.CreateAccount} showDisabled={true}>
           <Button
             onClick={onCreateClick}
             variant="outline"

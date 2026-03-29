@@ -3,6 +3,8 @@ import { useTranslations } from 'next-intl';
 import { Receipt, AlertTriangle, UtensilsCrossed, Minus, Plus, Trash2, CheckCircle2, Eye, FileText, X, UserSearch, ArrowLeft } from 'lucide-react';
 import { CartItem, CustomerDto } from '../types/create-order.types';
 import { OrderDetailDto } from '../types/edit-order.types';
+import { PermissionGuard } from '@/components/permission-guard';
+import { Permissions } from '@/types/const';
 
 interface Props {
   orderInfo: OrderDetailDto;
@@ -61,8 +63,8 @@ export const EditTicket: React.FC<Props> = ({
             <button onClick={onCloseMobile} className="lg:hidden p-1 bg-[#D5BA98]/20 text-[#1A3A52] rounded-md">
               <X className="w-5 h-5" />
             </button>
-            <button 
-              onClick={onReturnToCreate} 
+            <button
+              onClick={onReturnToCreate}
               className="p-1.5  hover:bg-[#D5BA98]/40 text-[#1A3A52] rounded-md transition-all duration-200 group flex items-center justify-center mr-1 cursor-pointer"
               title={t('returnToCreate', { fallback: 'Tạo đơn mới' })}
             >
@@ -87,7 +89,7 @@ export const EditTicket: React.FC<Props> = ({
             onClick={onOpenCustomerModal}
             disabled={isReadOnly}
             className={`w-full col-span-2 group px-3 py-2.5 rounded-xl border shadow-sm text-left flex items-center justify-between transition-all bg-white border-[#D5BA98]/60 ${!isReadOnly
-                ? 'hover:border-[#1A3A52] hover:shadow-md' : ''
+              ? 'hover:border-[#1A3A52] hover:shadow-md' : ''
               }`}
           >
             <span className="font-bold text-[#1A3A52] truncate block mt-0.5">
@@ -195,14 +197,14 @@ export const EditTicket: React.FC<Props> = ({
 
       {/* FOOTER & ACTIONS */}
       <div className="shrink-0 p-4 lg:p-5 border-t border-[#D5BA98]/30 bg-white shadow-[0_-10px_30px_rgba(213,186,152,0.1)]">
-      {/* === THÊM PHẦN CHI TIẾT KHI ORDER ĐÃ THANH TOÁN === */}
+        {/* === THÊM PHẦN CHI TIẾT KHI ORDER ĐÃ THANH TOÁN === */}
         {orderInfo.isPaid && (
           <div className="flex flex-col gap-1.5 mb-3 text-sm text-[#1A3A52]/80 border-b border-[#D5BA98]/20 pb-3">
             <div className="flex justify-between">
               <span>{t('subTotal', { fallback: 'Subtotal' })}</span>
               <span>CHF {(orderInfo.subTotalAmount || 0).toFixed(2)}</span>
             </div>
-            
+
             {!!orderInfo.taxAmount && orderInfo.taxAmount > 0 && (
               <div className="flex justify-between">
                 <span>{t('tax', { fallback: 'Tax' })}</span>
@@ -279,13 +281,15 @@ export const EditTicket: React.FC<Props> = ({
             >
               <FileText className="w-4 h-4" /> {t('createInvoice')}
             </button>
-            <button
-              onClick={onSubmitItems}
-              disabled={isDisableSubmit}
-              className="col-span-2 bg-[#1A3A52] text-[#D5BA98] font-bold py-3 rounded-xl flex items-center justify-center gap-2 disabled:opacity-50 text-sm hover:bg-[#1A3A52]/90 transition shadow-lg shadow-[#1A3A52]/20"
-            >
-              {t('addItemsButton')}
-            </button>
+            <PermissionGuard permission={Permissions.EditOrder} showDisabled={true}>
+              <button
+                onClick={onSubmitItems}
+                disabled={isDisableSubmit}
+                className="col-span-2 bg-[#1A3A52] text-[#D5BA98] font-bold py-3 rounded-xl flex items-center justify-center gap-2 disabled:opacity-50 text-sm hover:bg-[#1A3A52]/90 transition shadow-lg shadow-[#1A3A52]/20 w-full h-full"
+              >
+                {t('addItemsButton')}
+              </button>
+            </PermissionGuard>
           </div>
         )}
       </div>
