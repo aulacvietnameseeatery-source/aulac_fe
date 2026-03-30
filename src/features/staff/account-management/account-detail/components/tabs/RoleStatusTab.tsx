@@ -66,8 +66,8 @@ export const RoleStatusTab = ({ account }: RoleStatusTabProps) => {
           </div>
         </div>
 
-        {/* Permissions */}
-        {account.role.permissions && account.role.permissions.length > 0 && (
+        {/* Permissions — only render if BE actually sends them */}
+        {account.role.permissions && account.role.permissions.length > 0 ? (
           <div className="sm:col-span-2 flex items-start gap-3 p-4 bg-gray-50 rounded-lg border border-gray-100">
             <div className="shrink-0 w-9 h-9 rounded-lg bg-indigo-50 flex items-center justify-center">
               <Shield size={16} className="text-indigo-600" />
@@ -85,6 +85,12 @@ export const RoleStatusTab = ({ account }: RoleStatusTabProps) => {
                 ))}
               </div>
             </div>
+          </div>
+        ) : (
+          <div className="sm:col-span-2 p-4 bg-gray-50/50 rounded-lg border border-dashed border-gray-200 text-center">
+            <p className="text-xs text-gray-400">
+              {t("permissionsNotAvailable")}
+            </p>
           </div>
         )}
       </div>
