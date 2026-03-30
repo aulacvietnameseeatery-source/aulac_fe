@@ -3,6 +3,7 @@ import React from "react";
 import { CalendarDays, ConciergeBell, Bell, Clock, Users, Armchair, ChefHat, DollarSign, PackageOpen } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardAction } from "@/components/ui/card";
 import type { ReservationActivityDto, TableActivityDto, NotificationActivityDto } from "../types/dashboard-types";
+import { useTranslations } from "next-intl";
 
 interface DashboardActivityRowProps {
     reservations: ReservationActivityDto[];
@@ -12,6 +13,8 @@ interface DashboardActivityRowProps {
 }
 
 export function DashboardActivityRow({ reservations, tables, notifications, isLoading }: DashboardActivityRowProps) {
+    const t = useTranslations("dashboard.activityRow");
+
     const getResStatusColor = (status: string) => {
         switch (status?.toLowerCase()) {
             case "completed": return "bg-emerald-100 text-emerald-700";
@@ -36,28 +39,27 @@ export function DashboardActivityRow({ reservations, tables, notifications, isLo
     const formatTimeAgo = (dateStr: string) => {
         if (!dateStr) return "";
         const diff = Math.floor((new Date().getTime() - new Date(dateStr).getTime()) / 60000);
-        if (diff < 60) return `${diff} min ago`;
-        return `${Math.floor(diff / 60)} hrs ago`;
+        if (diff < 60) return t("time.minAgo", { count: diff });
+        return t("time.hrsAgo", { count: Math.floor(diff / 60) });
     };
 
     return (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-            {/* Reservations */}
             <Card className="flex flex-col h-[420px] border-gray-100/50 shadow-sm">
-                <CardHeader className="flex flex-row items-center justify-between pb-2 border-b border-gray-100/50 mb-4">
+                <CardHeader className="flex flex-row items-center justify-between pb-2 border-b border-gray-100/50 mb-2">
                     <div className="flex items-center gap-2">
                         <CalendarDays size={18} className="text-gray-500" />
-                        <CardTitle className="text-base text-gray-800">Reservations</CardTitle>
+                        <CardTitle className="text-base text-gray-800">{t("reservations.title")}</CardTitle>
                     </div>
                     <CardAction>
                         <select className="text-xs border rounded-md px-2 py-1 outline-none text-gray-600 bg-gray-50">
-                            <option>Today</option>
+                            <option>{t("reservations.today")}</option>
                         </select>
                     </CardAction>
                 </CardHeader>
                 <CardContent className="flex flex-col gap-4 overflow-y-auto pr-2 custom-scrollbar">
-                    {isLoading ? <p className="text-center text-sm text-gray-500 mt-10 animate-pulse">Loading...</p>
-                        : reservations.length === 0 ? <p className="text-center text-sm text-gray-500 mt-10">No reservations</p>
+                    {isLoading ? <p className="text-center text-sm text-gray-500 mt-10 animate-pulse">{t("common.loading")}</p>
+                        : reservations.length === 0 ? <p className="text-center text-sm text-gray-500 mt-10">{t("reservations.empty")}</p>
                             : reservations.slice(0, 10).map((res, i) => {
                                 const date = new Date(res.reservedTime);
                                 return (
@@ -83,50 +85,48 @@ export function DashboardActivityRow({ reservations, tables, notifications, isLo
                 </CardContent>
             </Card>
 
-            {/* Tables Available */}
             <Card className="flex flex-col h-[420px] border-gray-100/50 shadow-sm">
-                <CardHeader className="flex flex-row items-center justify-between pb-2 border-b border-gray-100/50 mb-4">
+                <CardHeader className="flex flex-row items-center justify-between pb-2 border-b border-gray-100/50 mb-2">
                     <div className="flex items-center gap-2">
                         <ConciergeBell size={18} className="text-gray-500" />
-                        <CardTitle className="text-base text-gray-800">Tables Available</CardTitle>
+                        <CardTitle className="text-base text-gray-800">{t("tables.title")}</CardTitle>
                     </div>
                 </CardHeader>
                 <CardContent className="grid grid-cols-2 gap-3 overflow-y-auto pr-1 custom-scrollbar">
-                    {isLoading ? <p className="col-span-2 text-center text-sm text-gray-500 mt-10 animate-pulse">Loading...</p>
-                        : tables.length === 0 ? <p className="col-span-2 text-center text-sm text-gray-500 mt-10">No tables available</p>
-                            : tables.map((t, i) => (
+                    {isLoading ? <p className="col-span-2 text-center text-sm text-gray-500 mt-10 animate-pulse">{t("common.loading")}</p>
+                        : tables.length === 0 ? <p className="col-span-2 text-center text-sm text-gray-500 mt-10">{t("tables.empty")}</p>
+                            : tables.map((tItem, i) => (
                                 <div key={i} className="border border-emerald-100 rounded-lg p-3 text-center flex flex-col items-center justify-center bg-emerald-50/50 hover:bg-emerald-50 transition-colors">
                                     <Armchair size={28} className="text-emerald-500 mb-2" />
-                                    <h6 className="text-xs font-bold text-gray-800 mb-0.5">{t.tableCode}</h6>
-                                    <p className="text-[10px] text-gray-500 mb-0">Cap: {t.capacity} • {t.zone}</p>
+                                    <h6 className="text-xs font-bold text-gray-800 mb-0.5">{tItem.tableCode}</h6>
+                                    <p className="text-[10px] text-gray-500 mb-0">{t("tables.capacity", { cap: tItem.capacity })} • {tItem.zone}</p>
                                 </div>
                             ))}
                 </CardContent>
             </Card>
 
-            {/* Notifications */}
             <Card className="flex flex-col h-[420px] border-gray-100/50 shadow-sm">
-                <CardHeader className="flex flex-row items-center justify-between pb-2 border-b border-gray-100/50 mb-4">
+                <CardHeader className="flex flex-row items-center justify-between pb-2 border-b border-gray-100/50 mb-2">
                     <div className="flex items-center gap-2">
                         <Bell size={18} className="text-gray-500" />
-                        <CardTitle className="text-base text-gray-800">Notifications</CardTitle>
+                        <CardTitle className="text-base text-gray-800">{t("notifications.title")}</CardTitle>
                     </div>
                 </CardHeader>
                 <CardContent className="flex flex-col gap-4 overflow-y-auto relative before:absolute before:inset-y-0 before:left-[1.5rem] before:w-px before:bg-gray-100 pr-2 custom-scrollbar">
-                    {isLoading ? <p className="text-center text-sm text-gray-500 mt-10 animate-pulse">Loading...</p>
-                        : notifications.length === 0 ? <p className="text-center text-sm text-gray-500 mt-10">No new notifications</p>
+                    {isLoading ? <p className="text-center text-sm text-gray-500 mt-10 animate-pulse">{t("common.loading")}</p>
+                        : notifications.length === 0 ? <p className="text-center text-sm text-gray-500 mt-10">{t("notifications.empty")}</p>
                             : notifications.slice(0, 10).map((n, i) => {
                                 const ui = getNotifUI(n.type);
-                                let meta = n.metadata || {};
+                                let meta: any = n.metadata || {};
                                 if (typeof meta === 'string') {
                                     try { meta = JSON.parse(meta); } catch (e) { }
                                 }
                                 let notifText = (n.type || "NOTIFICATION").replace(/_/g, " ");
 
-                                if (n.type === "NEW_ORDER") notifText = `New order at ${meta.tableCode || 'Table'} (${meta.itemCount || 0} items)`;
-                                else if (n.type === "PAYMENT_COMPLETED") notifText = `Payment of $${meta.amount || 0} via ${meta.method || 'Cash'}`;
-                                else if (n.type === "TABLE_STATUS_CHANGED") notifText = `Table ${meta.tableCode || 'N/A'} is now ${meta.newStatus || 'Unknown'}`;
-                                else if (n.type === "RESERVATION_CREATED") notifText = `New reservation by ${meta.customerName || 'Customer'}`;
+                                if (n.type === "NEW_ORDER") notifText = t("notifications.newOrder", { table: meta.tableCode || 'Table', items: meta.itemCount || 0 });
+                                else if (n.type === "PAYMENT_COMPLETED") notifText = t("notifications.payment", { amount: meta.amount || 0, method: meta.method || 'Cash' });
+                                else if (n.type === "TABLE_STATUS_CHANGED") notifText = t("notifications.tableStatus", { table: meta.tableCode || 'N/A', status: meta.newStatus || 'Unknown' });
+                                else if (n.type === "RESERVATION_CREATED") notifText = t("notifications.newReservation", { name: meta.customerName || 'Customer' });
 
                                 return (
                                     <div key={i} className="flex gap-3 relative z-10 bg-white">

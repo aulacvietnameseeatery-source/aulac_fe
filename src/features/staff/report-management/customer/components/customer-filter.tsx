@@ -1,15 +1,17 @@
 "use client";
 import React, { useState } from "react";
 import { Calendar } from "lucide-react";
-import {Button} from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
+import { useTranslations } from "next-intl";
 
-interface CustomerFilterProps {
+interface FilterProps {
     initialStart?: string;
     initialEnd?: string;
     onApply: (start: string, end: string) => void;
 }
 
-export function CustomerFilter({ initialStart, initialEnd, onApply }: CustomerFilterProps) {
+export function CustomerFilter({ initialStart, initialEnd, onApply }: FilterProps) {
+    const t = useTranslations("reports.filters");
     const [startDate, setStartDate] = useState(initialStart || "");
     const [endDate, setEndDate] = useState(initialEnd || "");
 
@@ -22,7 +24,7 @@ export function CustomerFilter({ initialStart, initialEnd, onApply }: CustomerFi
     return (
         <div className="flex flex-wrap items-end gap-4 mb-6 p-4 bg-white border border-gray-100 rounded-xl shadow-sm">
             <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Start Date</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">{t("startDate")}</label>
                 <div className="relative">
                     <input
                         type="date"
@@ -34,7 +36,7 @@ export function CustomerFilter({ initialStart, initialEnd, onApply }: CustomerFi
                 </div>
             </div>
             <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">End Date</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">{t("endDate")}</label>
                 <div className="relative">
                     <input
                         type="date"
@@ -47,10 +49,10 @@ export function CustomerFilter({ initialStart, initialEnd, onApply }: CustomerFi
             </div>
             <Button
                 onClick={handleSubmit}
-                variant ={"outline"}
-                className=" py-2 px-6 rounded-lg text-sm font-medium transition-colors"
+                variant={"outline"}
+                className="py-2 px-6 rounded-lg text-sm font-medium transition-colors"
             >
-                Submit
+                {t("submit")}
             </Button>
         </div>
     );

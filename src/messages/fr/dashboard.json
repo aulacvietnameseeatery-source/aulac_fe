@@ -1,0 +1,106 @@
+{
+  "dashboard": {
+    "header": {
+      "title": "Tableau de bord",
+      "refresh": "Rafraîchir",
+      "syncData": "Synchroniser",
+      "syncing": "Synchronisation...",
+      "selectPeriod": "Sélectionner",
+      "periods": {
+        "today": "Aujourd'hui",
+        "yesterday": "Hier",
+        "last7Days": "7 derniers jours",
+        "last30Days": "30 derniers jours",
+        "thisMonth": "Ce mois-ci",
+        "lastMonth": "Mois dernier"
+      }
+    },
+    "summary": {
+      "totalRevenue": "Revenu total",
+      "totalOrders": "Commandes totales",
+      "avgOrderValue": "Panier moyen",
+      "totalReservations": "Réservations totales",
+      "vsLastPeriod": "vs période précédente"
+    },
+    "activityRow": {
+      "common": {
+        "loading": "Chargement..."
+      },
+      "time": {
+        "minAgo": "Il y a {count} min",
+        "hrsAgo": "Il y a {count} h"
+      },
+      "reservations": {
+        "title": "Réservations",
+        "today": "Aujourd'hui",
+        "empty": "Aucune réservation"
+      },
+      "tables": {
+        "title": "Tables disponibles",
+        "empty": "Aucune table disponible",
+        "capacity": "Cap: {cap}"
+      },
+      "notifications": {
+        "title": "Notifications",
+        "empty": "Aucune nouvelle notification",
+        "newOrder": "Nouv. commande {table} ({items} art.)",
+        "payment": "Paiement de ${amount} via {method}",
+        "tableStatus": "Table {table} est maintenant {status}",
+        "newReservation": "Nouv. réservation par {name}"
+      }
+    },
+    "chartsRow1": {
+      "common": {
+        "loading": "Chargement des données...",
+        "noData": "Aucune donnée disponible"
+      },
+      "revenue": {
+        "title": "Analyse des revenus",
+        "total": "Revenu total",
+        "label": "Revenu"
+      },
+      "topSelling": {
+        "title": "Meilleures ventes",
+        "mostOrdered": "Plus commandé",
+        "totalSold": "Total vendu"
+      }
+    },
+    "chartsRow2": {
+      "common": {
+        "noData": "Aucune donnée disponible"
+      },
+      "category": {
+        "title": "Statistiques par catégorie",
+        "selectedPeriod": "Période",
+        "ordersUnit": "Commandes",
+        "total": "Total",
+        "dineIn": "Sur place",
+        "takeaway": "À emporter",
+        "delivery": "Livraison"
+      },
+      "activeOrders": {
+        "title": "Commandes en cours",
+        "addNew": "Ajouter",
+        "loading": "Chargement...",
+        "empty": "Aucune commande en cours",
+        "orderId": "Commande #{id}",
+        "itemsUnit": "articles"
+      },
+      "customerInsights": {
+        "title": "Aperçu client",
+        "topSpender": "Meilleur client",
+        "totalSpent": "Dépense totale",
+        "empty": "Aucune donnée client"
+      }
+    },
+    "devArea": {
+      "title": "Espace de test développeur",
+      "loggedInAs": "Connecté en tant que",
+      "userId": "ID Utilisateur",
+      "username": "Nom d'utilisateur",
+      "roles": "Rôles",
+      "permissions": "Vos permissions",
+      "noPermissions": "Aucune permission"
+    }
+  }
+}

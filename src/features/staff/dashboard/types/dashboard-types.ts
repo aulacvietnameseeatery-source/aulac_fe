@@ -37,7 +37,7 @@ export interface TopCustomerDto {
 
 export interface DashboardStatisticsDto {
     ordersByType: Record<string, number>;
-    topCustomer?: TopCustomerDto;
+    topCustomers?: TopCustomerDto[];
 }
 
 export interface ReservationActivityDto {

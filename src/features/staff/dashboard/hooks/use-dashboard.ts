@@ -9,7 +9,8 @@ import type {
     DashboardStatisticsDto,
     ReservationActivityDto,
     TableActivityDto,
-    NotificationActivityDto
+    NotificationActivityDto,
+    TopCustomerDto
 } from "../types/dashboard-types";
 
 export interface DashboardFilterParams extends DashboardFilterRequest {
@@ -23,6 +24,8 @@ export const useDashboard = () => {
     const [revenueData, setRevenueData] = useState<RevenueChartItemDto[]>([]);
     const [topSelling, setTopSelling] = useState<TopSellingItemDto[]>([]);
     const [statistics, setStatistics] = useState<DashboardStatisticsDto | null>(null);
+
+    const [topSpenders, setTopSpenders] = useState<TopCustomerDto[]>([]);
 
     const [reservations, setReservations] = useState<ReservationActivityDto[]>([]);
     const [tables, setTables] = useState<TableActivityDto[]>([]);
@@ -40,7 +43,7 @@ export const useDashboard = () => {
 
             const [
                 summaryRes, revenueRes, topSellingRes, statsRes,
-                reserRes, tablesRes, notifRes
+                reserRes, tablesRes, notifRes, topSpendersRes
             ] = await Promise.allSettled([
                 dashboardService.getSummary(apiFilters),
                 dashboardService.getRevenueChart(apiFilters),
@@ -48,7 +51,8 @@ export const useDashboard = () => {
                 dashboardService.getStatistics(apiFilters),
                 dashboardService.getRecentReservations(),
                 dashboardService.getAvailableTables(),
-                dashboardService.getNotifications()
+                dashboardService.getNotifications(),
+                dashboardService.getTopSpenders(apiFilters)
             ]);
 
             if (summaryRes.status === 'fulfilled') setSummary(summaryRes.value);
@@ -59,7 +63,9 @@ export const useDashboard = () => {
             if (tablesRes.status === 'fulfilled') setTables(tablesRes.value);
             if (notifRes.status === 'fulfilled') setNotifications(notifRes.value);
 
-            [summaryRes, revenueRes, topSellingRes, statsRes, reserRes, tablesRes, notifRes].forEach(res => {
+            if (topSpendersRes.status === 'fulfilled') setTopSpenders(topSpendersRes.value);
+
+            [summaryRes, revenueRes, topSellingRes, statsRes, reserRes, tablesRes, notifRes, topSpendersRes].forEach(res => {
                 if (res.status === 'rejected') console.error("Dashboard API Error:", res.reason);
             });
 
@@ -78,7 +84,7 @@ export const useDashboard = () => {
     const refresh = () => fetchDashboardData();
 
     return {
-        data: { summary, revenueData, topSelling, statistics, reservations, tables, notifications },
+        data: { summary, revenueData, topSelling, statistics, reservations, tables, notifications, topSpenders },
         isLoading,
         filters,
         actions: { onFilterChange, refresh }

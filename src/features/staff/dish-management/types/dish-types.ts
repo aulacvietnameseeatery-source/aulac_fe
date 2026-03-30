@@ -2,26 +2,34 @@
 
 import { DishStatusCode } from "@/types/status-codes";
 
-// DishStatusCode has been moved to @/types/status-codes.ts
-
-
 export interface GetDishesParams {
     pageIndex: number;
     pageSize: number;
     search?: string;
     category?: string;
-    status?: DishStatusCode | string; // Chấp nhận cả Enum hoặc "All"
+    status?: DishStatusCode | string;
     sortBy?: string;
     isDescending?: boolean;
     locale?: string;
+}
+
+export interface I18nTextDto {
+    vi: string;
+    en: string;
+    fr: string;
 }
 
 export interface DishManagementDto {
     dishId: number;
     dishName: string;
     categoryName: string;
+
+    nameI18n?: I18nTextDto;
+    descriptionI18n?: I18nTextDto;
+    categoryNameI18n?: I18nTextDto;
+
     price: number;
-    status: string; // "AVAILABLE", "OUT_OF_STOCK", v.v.
+    status: string;
     isOnline: boolean;
     createdAt: string;
 }

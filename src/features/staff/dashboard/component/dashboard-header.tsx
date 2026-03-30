@@ -1,10 +1,11 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
-import { RefreshCcw, FolderSync, Calendar as CalendarIcon, ChevronDown } from "lucide-react";
+import { RefreshCw, Calendar as CalendarIcon, ChevronDown, RefreshCcw } from "lucide-react";
 import { format, subDays, startOfMonth, subMonths, endOfMonth } from "date-fns";
 import { DateRange } from "react-day-picker";
 import { Calendar } from "@/components/ui/calendar";
+import { useTranslations } from "next-intl";
 
 interface DashboardHeaderProps {
     onRefresh: () => void;
@@ -14,6 +15,7 @@ interface DashboardHeaderProps {
 }
 
 export function DashboardHeader({ onRefresh, isLoading, currentPeriod = 'last_30_days', onPeriodChange }: DashboardHeaderProps) {
+    const t = useTranslations("dashboard.header");
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
     const [dateRange, setDateRange] = useState<DateRange | undefined>();
@@ -29,33 +31,28 @@ export function DashboardHeader({ onRefresh, isLoading, currentPeriod = 'last_30
     }, []);
 
     const periods = [
-        { id: "today", label: "Today" },
-        { id: "yesterday", label: "Yesterday" },
-        { id: "last_7_days", label: "Last 7 Days" },
-        { id: "last_30_days", label: "Last 30 Days" },
-        { id: "this_month", label: "This Month" },
-        { id: "last_month", label: "Last Month" },
+        { id: "today", label: t("periods.today") },
+        { id: "yesterday", label: t("periods.yesterday") },
+        { id: "last_7_days", label: t("periods.last7Days") },
+        { id: "last_30_days", label: t("periods.last30Days") },
+        { id: "this_month", label: t("periods.thisMonth") },
+        { id: "last_month", label: t("periods.lastMonth") },
     ];
 
     const getDateRangeForPeriod = (periodId: string): { start: Date; end: Date } => {
         const today = new Date();
         switch (periodId) {
-            case "today":
-                return { start: today, end: today };
+            case "today": return { start: today, end: today };
             case "yesterday":
                 const yesterday = subDays(today, 1);
                 return { start: yesterday, end: yesterday };
-            case "last_7_days":
-                return { start: subDays(today, 6), end: today };
-            case "last_30_days":
-                return { start: subDays(today, 29), end: today };
-            case "this_month":
-                return { start: startOfMonth(today), end: endOfMonth(today) };
+            case "last_7_days": return { start: subDays(today, 6), end: today };
+            case "last_30_days": return { start: subDays(today, 29), end: today };
+            case "this_month": return { start: startOfMonth(today), end: endOfMonth(today) };
             case "last_month":
                 const lastMonth = subMonths(today, 1);
                 return { start: startOfMonth(lastMonth), end: endOfMonth(lastMonth) };
-            default:
-                return { start: subDays(today, 29), end: today };
+            default: return { start: subDays(today, 29), end: today };
         }
     };
 
@@ -67,7 +64,7 @@ export function DashboardHeader({ onRefresh, isLoading, currentPeriod = 'last_30
     }, [currentPeriod]);
 
     const getDisplayDateText = () => {
-        if (!dateRange || !dateRange.from) return "Select Period";
+        if (!dateRange || !dateRange.from) return t("selectPeriod");
 
         const startStr = format(dateRange.from, "dd MMM yy");
         if (!dateRange.to || dateRange.from.getTime() === dateRange.to.getTime()) {
@@ -102,30 +99,33 @@ export function DashboardHeader({ onRefresh, isLoading, currentPeriod = 'last_30
     return (
         <div className="flex flex-wrap items-center justify-between gap-4 mb-6 relative z-50">
             <div className="flex items-center gap-3">
-                <h3 className="text-2xl font-bold text-gray-800 m-0">Dashboard</h3>
+                <h3 className="text-2xl font-bold text-gray-800 m-0">{t("title")}</h3>
                 <button
                     onClick={onRefresh}
                     disabled={isLoading}
-                    className="p-1.5 bg-white border border-gray-200 rounded-full text-gray-500 hover:bg-gray-50 transition-colors shadow-sm disabled:opacity-50"
-                    title="Refresh Data"
+                    className="p-1.5 bg-white border border-gray-200 rounded-full text-gray-500 hover:bg-gray-50 transition-colors shadow-sm disabled:opacity-50 group"
+                    title={t("refresh")}
                 >
-                    <RefreshCcw size={16} className={isLoading ? "animate-spin text-[#FFAB2D]" : ""} />
+                    <RefreshCcw
+                        size={16}
+                        className={`transition-transform duration-500 ${isLoading ? "animate-spin text-[#FFAB2D]" : "group-hover:rotate-180"}`}
+                    />
                 </button>
             </div>
 
             <div className="flex flex-wrap items-center gap-2">
-
-                {/* Sync Data  */}
                 <button
                     onClick={onRefresh}
                     disabled={isLoading}
-                    className="inline-flex items-center px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 shadow-sm transition-colors disabled:opacity-60"
+                    className="inline-flex items-center px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 shadow-sm transition-colors disabled:opacity-60 group"
                 >
-                    <FolderSync size={16} className={`mr-2 ${isLoading ? "animate-spin text-[#FFAB2D]" : "text-gray-500"}`} />
-                    {isLoading ? "Syncing..." : "Sync Data"}
+                    <RefreshCw
+                        size={16}
+                        className={`mr-2 transition-transform duration-500 ${isLoading ? "animate-spin text-[#FFAB2D]" : "group-hover:rotate-180 text-gray-500"}`}
+                    />
+                    {isLoading ? t("syncing") : t("syncData")}
                 </button>
 
-                {/* Dropdown Lịch & Presets */}
                 <div className="relative" ref={dropdownRef}>
                     <button
                         onClick={() => setIsDropdownOpen(!isDropdownOpen)}
@@ -138,11 +138,8 @@ export function DashboardHeader({ onRefresh, isLoading, currentPeriod = 'last_30
                         <ChevronDown size={14} className={`ml-2 transition-transform ${isDropdownOpen ? 'rotate-180 text-[#1A3A52]' : 'text-gray-400'}`} />
                     </button>
 
-                    {/* Popover/Dropdown  */}
                     {isDropdownOpen && (
                         <div className="absolute right-0 mt-2 bg-white border border-gray-100 rounded-xl shadow-2xl z-[100] flex flex-col md:flex-row overflow-hidden animate-in fade-in slide-in-from-top-2">
-
-                            {/* (Presets) */}
                             <div className="flex flex-col border-b md:border-b-0 md:border-r border-gray-100 p-2 w-full md:w-40 bg-gray-50/50">
                                 {periods.map((period) => (
                                     <button
@@ -158,8 +155,6 @@ export function DashboardHeader({ onRefresh, isLoading, currentPeriod = 'last_30
                                     </button>
                                 ))}
                             </div>
-
-                            {/* Calendar Component */}
                             <div className="p-3">
                                 <Calendar
                                     initialFocus
