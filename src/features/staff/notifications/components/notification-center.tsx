@@ -38,6 +38,13 @@ function categoryFromTab(tab: CategoryTabKey): string {
   return tab.slice(CATEGORY_TAB_PREFIX.length);
 }
 
+function parseNotificationCreatedAtMs(createdAt: string): number {
+  if (!createdAt) return 0;
+
+  const parsed = new Date(createdAt).getTime();
+  return Number.isNaN(parsed) ? 0 : parsed;
+}
+
 export function NotificationCenter({ open, onClose }: NotificationCenterProps) {
   const t = useTranslations("Notifications");
   const router = useRouter();
@@ -154,7 +161,25 @@ export function NotificationCenter({ open, onClose }: NotificationCenterProps) {
     return items.filter((n) => getNotificationCategory(n.type) === selectedCategory);
   }, [items, tab, getNotificationCategory]);
 
+  const isTimeSortedTab = tab === "all" || tab === "unread";
+
+  const timeSortedDisplayItems = useMemo(() => {
+    if (!isTimeSortedTab) {
+      return displayItems;
+    }
+
+    return [...displayItems].sort(
+      (left, right) =>
+        parseNotificationCreatedAtMs(right.createdAt) -
+        parseNotificationCreatedAtMs(left.createdAt)
+    );
+  }, [displayItems, isTimeSortedTab]);
+
   const groupedDisplayItems = useMemo(() => {
+    if (isTimeSortedTab) {
+      return [];
+    }
+
     const grouped: Record<string, typeof displayItems> = {};
     for (const item of displayItems) {
       const category = getNotificationCategory(item.type);
@@ -183,7 +208,7 @@ export function NotificationCenter({ open, onClose }: NotificationCenterProps) {
     }
 
     return ordered;
-  }, [displayItems, getNotificationCategory, tab, categoryTabs]);
+  }, [displayItems, getNotificationCategory, isTimeSortedTab, tab, categoryTabs]);
 
   // Tải thêm (load more)
   const loadMore = useCallback(async () => {
@@ -418,7 +443,7 @@ export function NotificationCenter({ open, onClose }: NotificationCenterProps) {
 
               {/* List — scrollable */}
               <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain p-1">
-                {displayItems.length === 0 && !loading ? (
+                {timeSortedDisplayItems.length === 0 && !loading ? (
                   <div className="flex flex-col items-center justify-center py-12 text-white/20">
                     <Inbox className="w-10 h-10 mb-2" />
                     <p className="text-sm">
@@ -427,27 +452,41 @@ export function NotificationCenter({ open, onClose }: NotificationCenterProps) {
                   </div>
                 ) : (
                   <div className="space-y-3 p-3">
-                    {groupedDisplayItems.map(({ category, notifications }) => (
-                      <div key={category}>
-                        <h6 className="text-white/40 text-[11px] font-bold uppercase tracking-wider mb-3">
-                          {t(`categories.${category}` as Parameters<typeof t>[0])}
-                        </h6>
-                        <div className="space-y-1">
-                          {notifications.map((notification) => (
-                            <NotificationItem
-                              key={notification.id}
-                              notification={notification}
-                              onRead={handleRead}
-                              onAcknowledge={handleAcknowledge}
-                              onNavigate={handleNavigate}
-                            />
-                          ))}
-                        </div>
+                    {isTimeSortedTab ? (
+                      <div className="space-y-1">
+                        {timeSortedDisplayItems.map((notification) => (
+                          <NotificationItem
+                            key={notification.id}
+                            notification={notification}
+                            onRead={handleRead}
+                            onAcknowledge={handleAcknowledge}
+                            onNavigate={handleNavigate}
+                          />
+                        ))}
                       </div>
-                    ))}
+                    ) : (
+                      groupedDisplayItems.map(({ category, notifications }) => (
+                        <div key={category}>
+                          <h6 className="text-white/40 text-[11px] font-bold uppercase tracking-wider mb-3">
+                            {t(`categories.${category}` as Parameters<typeof t>[0])}
+                          </h6>
+                          <div className="space-y-1">
+                            {notifications.map((notification) => (
+                              <NotificationItem
+                                key={notification.id}
+                                notification={notification}
+                                onRead={handleRead}
+                                onAcknowledge={handleAcknowledge}
+                                onNavigate={handleNavigate}
+                              />
+                            ))}
+                          </div>
+                        </div>
+                      ))
+                    )}
 
                     {/* Load more */}
-                    {hasMore && displayItems.length > 0 && (
+                    {hasMore && timeSortedDisplayItems.length > 0 && (
                       <div className="py-3 text-center">
                         <button
                           onClick={loadMore}
@@ -461,7 +500,7 @@ export function NotificationCenter({ open, onClose }: NotificationCenterProps) {
                   </div>
                 )}
 
-                {loading && displayItems.length === 0 && (
+                {loading && timeSortedDisplayItems.length === 0 && (
                   <div className="flex items-center justify-center py-12">
                     <div className="h-6 w-6 animate-spin rounded-full border-2 border-white border-r-transparent" />
                   </div>

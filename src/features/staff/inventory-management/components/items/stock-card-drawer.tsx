@@ -4,9 +4,10 @@ import React, { useState, useMemo } from "react";
 import { useTranslations } from "next-intl";
 import { format } from "date-fns";
 import { dateUtils } from "@/lib/date-utils";
-import { ArrowDownCircle, ArrowUpCircle, RefreshCw } from "lucide-react";
+import { ArrowDownCircle, ArrowUpCircle, RefreshCw, X } from "lucide-react";
 import {
   Drawer,
+  DrawerClose,
   DrawerContent,
   DrawerHeader,
   DrawerTitle,
@@ -84,17 +85,28 @@ export function StockCardDrawer({ item, open, onClose }: Props) {
 
   return (
     <Drawer open={open} onOpenChange={(v) => { if (!v) onClose(); }} direction="right">
-      <DrawerContent className="w-full md:w-[40vw] max-w-none">
+      <DrawerContent className="w-full sm:w-[85vw] lg:w-1/2 max-w-none">
         <DrawerHeader className="border-b border-[#D5BA98]/30 pb-4">
-          <DrawerTitle className="text-lg font-semibold text-[#1A3A52] font-['Cormorant_Garamond']">
-            {t("title")}
-          </DrawerTitle>
-          <DrawerDescription className="text-sm text-[#1A3A52]/60">
-            {item.ingredientName} — {item.quantityOnHand} {item.unitName}
-          </DrawerDescription>
+          <div className="flex items-start justify-between gap-3">
+            <div className="min-w-0">
+              <DrawerTitle className="text-lg font-semibold text-[#1A3A52] font-['Cormorant_Garamond']">
+                {t("title")}
+              </DrawerTitle>
+              <DrawerDescription className="text-sm text-[#1A3A52]/60">
+                {item.ingredientName} — {item.quantityOnHand} {item.unitName}
+              </DrawerDescription>
+            </div>
+            <DrawerClose
+              type="button"
+              aria-label="Close drawer"
+              className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-[#D5BA98]/35 text-[#1A3A52]/70 transition-colors hover:bg-[#D5BA98]/15 hover:text-[#1A3A52]"
+            >
+              <X className="h-4 w-4" />
+            </DrawerClose>
+          </div>
         </DrawerHeader>
 
-        <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-[#FDFBF9]">
+        <div className="flex-1 overflow-y-auto p-3 sm:p-4 space-y-4 bg-[#FDFBF9]">
           <ALCard variant="default" padding="md" elevation="sm" radius="xl">
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div>

@@ -46,8 +46,8 @@ export const OrdersTab = ({ accountId }: OrdersTabProps) => {
   }
 
   return (
-    <div className="space-y-4">
-      <h4 className="text-sm font-semibold text-gray-500 uppercase tracking-wider">
+    <div className="space-y-3 sm:space-y-4">
+      <h4 className="text-[11px] sm:text-xs md:text-sm font-semibold text-gray-500 uppercase tracking-wider">
         {t("tabs.orders")}
         {data && <span className="ml-2 text-xs font-normal text-gray-400">({data.totalCount})</span>}
       </h4>
@@ -59,18 +59,18 @@ export const OrdersTab = ({ accountId }: OrdersTabProps) => {
         </div>
       ) : (
         <>
-          <div className="space-y-2">
+          <div className="space-y-2 max-h-[44vh] overflow-y-auto pr-1 lg:max-h-none lg:overflow-visible">
             {orders.map((order) => (
               <div
                 key={order.orderId}
-                className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg border border-gray-100 hover:bg-gray-100/50 transition-colors"
+                className="flex flex-wrap sm:flex-nowrap items-start sm:items-center gap-2 sm:gap-3 p-2.5 sm:p-3 bg-gray-50 rounded-lg border border-gray-100 hover:bg-gray-100/50 transition-colors"
               >
-                <div className="shrink-0 w-9 h-9 rounded-lg bg-blue-50 flex items-center justify-center">
-                  <ShoppingBag size={14} className="text-blue-600" />
+                <div className="shrink-0 w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-blue-50 flex items-center justify-center">
+                  <ShoppingBag size={13} className="text-blue-600" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm font-medium text-gray-800">#{order.orderId}</span>
+                  <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                    <span className="text-xs sm:text-sm font-medium text-gray-800">#{order.orderId}</span>
                     <Badge variant={ORDER_STATUS_VARIANT[order.orderStatus] ?? "soft-secondary"} className="text-[10px]">
                       {order.orderStatus}
                     </Badge>
@@ -88,8 +88,8 @@ export const OrdersTab = ({ accountId }: OrdersTabProps) => {
                     <span>{order.source}</span>
                   </div>
                 </div>
-                <div className="shrink-0 text-right">
-                  <p className="text-sm font-semibold text-gray-800 flex items-center gap-1">
+                <div className="w-full pl-10 sm:pl-0 sm:w-auto shrink-0 text-left sm:text-right">
+                  <p className="text-xs sm:text-sm font-semibold text-gray-800 flex items-center justify-start sm:justify-end gap-1">
                     <DollarSign size={12} className="text-green-600" />
                     {formatCurrency(order.totalAmount)}
                   </p>
@@ -101,14 +101,14 @@ export const OrdersTab = ({ accountId }: OrdersTabProps) => {
 
           {/* Pagination */}
           {data && data.totalPage > 1 && (
-            <div className="flex items-center justify-center gap-2 pt-2">
-              <Button variant="outline" size="sm" disabled={page <= 1} onClick={() => setPage((p) => p - 1)}>
+            <div className="flex items-center justify-center flex-wrap sm:flex-nowrap gap-2 pt-2">
+              <Button variant="outline" size="sm" className="flex-1 sm:flex-none" disabled={page <= 1} onClick={() => setPage((p) => p - 1)}>
                 {t("activity.prev")}
               </Button>
               <span className="text-xs text-gray-500">
                 {page} / {data.totalPage}
               </span>
-              <Button variant="outline" size="sm" disabled={page >= data.totalPage} onClick={() => setPage((p) => p + 1)}>
+              <Button variant="outline" size="sm" className="flex-1 sm:flex-none" disabled={page >= data.totalPage} onClick={() => setPage((p) => p + 1)}>
                 {t("activity.next")}
               </Button>
             </div>
