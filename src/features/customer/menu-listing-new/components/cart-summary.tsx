@@ -155,7 +155,7 @@ export function CartSummary({
             <div className="flex justify-between items-start mb-4 md:mb-6 border-b border-[#C5A059]/20 pb-4">
                 <div className="flex flex-col gap-1">
                     <label className="text-[10px] uppercase tracking-widest text-[#C5A059] flex items-center gap-2">
-                        Table
+                        {t("table_label")}
                     </label>
                     <span className="text-xl md:text-2xl font-display font-bold text-white w-24">
                         {tableNumber}
@@ -217,7 +217,7 @@ export function CartSummary({
                                     handleNoteChange(item.id, newNote);
                                 }
                             }}
-                            placeholder="Add note for chef..."
+                            placeholder={t("note_placeholder")}
                             className="w-full bg-[#204560]/50 border border-[#C5A059]/20 rounded-lg px-2 py-1.5 text-xs text-white placeholder:text-white/30 focus:border-[#C5A059] focus:outline-none focus:ring-1 focus:ring-[#C5A059]"
                         />
                     </div>
@@ -226,7 +226,7 @@ export function CartSummary({
 
             <div className="mt-4 pt-4 border-t border-[#C5A059]/20">
                 <div className="flex justify-between items-center mb-4">
-                    <span className="text-sm uppercase tracking-wider text-white/60">Total</span>
+                    <span className="text-sm uppercase tracking-wider text-white/60">{t("total_label")}</span>
                     <span className="text-2xl font-display font-bold text-[#C5A059]">{totalPrice.toFixed(2)} <span className="text-base">CHF</span></span>
                 </div>
                 <button 

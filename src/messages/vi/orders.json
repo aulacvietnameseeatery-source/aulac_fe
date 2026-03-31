@@ -440,7 +440,7 @@
     },
     "history": {
       "title": "Lịch Sử Đặt Món",
-      "fabLabel": "HISTORY",
+      "fabLabel": "LỊCH SỬ",
       "fabAriaLabel": "Xem lịch sử đặt món",
       "tableLabel": "Bàn",
       "itemsCount": "{count} món",
