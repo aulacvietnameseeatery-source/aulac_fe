@@ -93,15 +93,36 @@ export default function MenuListingClient({ initialMenuData, tableFromUrl, token
         } else {
             // Tab mới hoặc copy link → xác thực quyền truy cập bàn
             setIsValidatingTable(true);
+            const isSameTable = savedTable === tableFromUrl;
             const tokenParam = tokenFromUrl ? `?token=${encodeURIComponent(tokenFromUrl)}` : '';
             api.post(`/api/public/tables/${encodeURIComponent(tableFromUrl)}/occupy${tokenParam}`, {})
                 .then(() => {
                     if (ignored) return;
-                    // Bàn trống, occupy thành công → cho phép truy cập
+                    // Nếu đổi sang bàn khác → xóa cart và orderId cũ
+                    // Nếu cùng bàn (chỉ token thay đổi, vd: quét lại QR) → giữ nguyên cart
+                    if (!isSameTable) {
+                        sessionStorage.removeItem(CART_STORAGE_KEY);
+                        sessionStorage.removeItem(CURRENT_ORDER_ID_KEY);
+                        setCartItems([]);
+                        setCurrentOrderId(null);
+                    } else {
+                        // Cùng bàn, khôi phục cart nếu có
+                        try {
+                            const savedCart = sessionStorage.getItem(CART_STORAGE_KEY);
+                            if (savedCart) setCartItems(JSON.parse(savedCart));
+                            const savedOrderId = sessionStorage.getItem(CURRENT_ORDER_ID_KEY);
+                            if (savedOrderId) setCurrentOrderId(Number(savedOrderId));
+                        } catch {
+                            toast.error(tMenu("err_load_cart"));
+                        }
+                    }
+                    // Ghi session bàn mới
                     setTableNumber(tableFromUrl);
                     sessionStorage.setItem(TABLE_STORAGE_KEY, tableFromUrl);
                     if (tokenFromUrl) {
                         sessionStorage.setItem(TOKEN_STORAGE_KEY, tokenFromUrl);
+                    } else {
+                        sessionStorage.removeItem(TOKEN_STORAGE_KEY);
                     }
                 })
                 .catch((error: any) => {

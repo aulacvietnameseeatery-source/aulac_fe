@@ -309,6 +309,18 @@ export function OrderHistoryFAB({ tableCode, tableNumber, dishNameMap = {}, refr
     }
   }, [load, t]);
 
+  // On mount: silently fetch badge count so it shows correctly after a page reload
+  useEffect(() => {
+    const storedOrderId = typeof window !== 'undefined'
+      ? sessionStorage.getItem(CURRENT_ORDER_ID_KEY)
+      : null;
+    if (!storedOrderId) return;
+    fetchOrderByOrderId(Number(storedOrderId))
+      .then((data) => setHistory(data))
+      .catch(() => { /* ignore – badge stays 0 if fetch fails */ });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   useEffect(() => {
     const hasSession = typeof window !== 'undefined' && !!sessionStorage.getItem(CURRENT_ORDER_ID_KEY);
     if (isOpen && (effectiveTable || hasSession)) {
