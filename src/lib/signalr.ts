@@ -122,6 +122,9 @@ export async function waitForStart(hubPath: string): Promise<void> {
   const managed = connections.get(fullUrl);
   if (managed) {
     await managed.startPromise;
+    if (managed.connection.state !== signalR.HubConnectionState.Connected) {
+      throw new Error(`[SignalR] Connection to ${hubPath} is not in Connected state.`);
+    }
   }
 }
 

@@ -227,7 +227,7 @@ export function OrderHistoryFAB({ tableCode, tableNumber, dishNameMap = {}, refr
         connection.on('OrderItemUpdated', onItemUpdated);
         connection.on('OrderDetailUpdated', onDetailUpdated);
       })
-      .catch((err) => console.error('[SignalR] Connection error:', err));
+      .catch((err) => console.warn('[SignalR] Could not join order group, real-time updates disabled:', err));
 
     return () => {
       connection.off('OrderItemUpdated', onItemUpdated);
