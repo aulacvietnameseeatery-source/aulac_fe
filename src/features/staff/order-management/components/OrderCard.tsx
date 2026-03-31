@@ -15,6 +15,7 @@ import {
     CreditCard,
 } from 'lucide-react';
 import { OrderHistory } from '../types/order-history.types';
+import { OrderItemStatusCode } from '@/types/status-codes';
 import { PaymentModal } from './PaymentModal';
 import { PrintOrderModal } from './PrintOrderModal';
 import { orderHistoryService } from '../services/order-history.service';
@@ -68,7 +69,7 @@ const VISIBLE_ITEMS_COUNT = 3;
 // Helper: Map OrderHistory sang OrderDetailDto cho Invoice
 const mapOrderHistoryToOrderDetailDto = (order: OrderHistory): OrderDetailDto => {
     const subTotal = order.orderItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    
+
     return {
         orderId: order.orderId,
         tableId: order.tableId,
@@ -80,7 +81,7 @@ const mapOrderHistoryToOrderDetailDto = (order: OrderHistory): OrderDetailDto =>
         subTotalAmount: subTotal,
         totalAmount: order.totalAmount,
         taxAmount: order.taxAmount || 0,
-        tipAmount: order.tipAmount || 0, 
+        tipAmount: order.tipAmount || 0,
         orderStatus: order.orderStatus as any,
         source: order.source,
         createdAt: order.createdAt,
@@ -201,142 +202,149 @@ export const OrderCard: React.FC<OrderCardProps> = ({ order, onStatusChange, onA
             >
                 <div className="p-4 flex flex-col flex-1">
 
-                {/* ── Header ── */}
-                <div className="flex items-start justify-between mb-3 gap-2">
-                    {/* Left: icon + order info */}
-                    <div className="flex items-center gap-3 min-w-0">
-                        <div className="w-11 h-11 rounded-full bg-[#1A3A52] flex items-center justify-center shrink-0">
-                            <ShoppingBag className="w-5 h-5 text-white" />
-                        </div>
-                        <div className="min-w-0">
-                            <h6 className="font-semibold text-[#1A3A52] text-sm leading-tight">#{order.orderId}</h6>
-                            <div className="flex items-center gap-1.5 mt-0.5 flex-wrap">
-                                <span className="flex items-center gap-1 text-xs text-[#1A3A52]/55">
-                                    {sourceIcon}
-                                    {t(`source.${order.source}`)}
-                                </span>
-                                {order.source === 'DINE_IN' && order.tableCode && (
-                                    <>
-                                        <span className="text-[#D5BA98] text-xs italic">|</span>
-                                        <span className="text-xs font-bold text-[#1A3A52] bg-[#D5BA98]/18 px-1.5 py-0.5 rounded border border-[#D5BA98]/45 shadow-none animate-in fade-in zoom-in duration-300">
-                                            {t('table')} {order.tableCode}
-                                        </span>
-                                    </>
-                                )}
+                    {/* ── Header ── */}
+                    <div className="flex items-start justify-between mb-3 gap-2">
+                        {/* Left: icon + order info */}
+                        <div className="flex items-center gap-3 min-w-0">
+                            <div className="w-11 h-11 rounded-full bg-[#1A3A52] flex items-center justify-center shrink-0">
+                                <ShoppingBag className="w-5 h-5 text-white" />
                             </div>
-                        </div>
-                    </div>
-
-                    {/* Right: status badges */}
-                    <div className="flex items-center gap-1.5 shrink-0">
-
-                        {/* Status badge (static) */}
-                        <div
-                            className={`flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-full shadow-sm ${statusStyle}`}
-                        >
-                            <span className="w-1.5 h-1.5 rounded-full bg-white/85" />
-                            {t(`status.${order.orderStatus}`)}
-                        </div>
-
-                        {/* Payment badge */}
-                        {showPaymentBadge && (
-                            <div
-                                className={`flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded border shadow-sm ${order.isPaid ? PAYMENT_STYLES.paid : PAYMENT_STYLES.unpaid}`}
-                                data-tooltip-content={order.isPaid ? t('paymentStatus.paid') : t('paymentStatus.unpaid')}
-                                data-tooltip-id="my-tooltip"
-                            >
-                                <CreditCard className="w-2.5 h-2.5" />
-                                {order.isPaid ? t('paymentStatus.paid') : t('paymentStatus.unpaid')}
-                            </div>
-                        )}
-
-                    </div>
-                </div>
-
-                {/* ── Meta row ── */}
-                <div className="flex items-center justify-between mb-3">
-                    <div className="min-w-0">
-                        <span className="text-xs font-medium text-[#1A3A52] block truncate">
-                            {order.customerName ?? order.staffName}
-                        </span>
-                        {order.tableCode && (
-                            <span className="text-[11px] text-[#1A3A52]/75 font-semibold block mt-0.5">
-                                {t('table')} {order.tableCode}
-                            </span>
-                        )}
-                    </div>
-                    <div className="flex items-center gap-1.5 text-sm font-semibold text-[#1A3A52]/75">
-                        <Clock className="w-4 h-4" />
-                        {order.createdAt ? format.dateTime(new Date(order.createdAt), { hour: '2-digit', minute: '2-digit' }) : '—'}
-                    </div>
-                </div>
-
-                {/* ── Order Items ── */}
-                <div className="border-t border-[#D5BA98]/25 pt-3 mb-3 flex-1">
-                    <ul className="space-y-2">
-                        {visibleItems.map((item) => (
-                            <li key={item.orderItemId} className="flex flex-col gap-0.5">
-                                <div className="flex items-center justify-between text-xs">
-                                    <div className="flex items-center gap-2 min-w-0">
-                                        <span className="w-1.5 h-1.5 rounded-full bg-[#D5BA98] shrink-0" />
-                                        <span className="text-[#1A3A52]/85 truncate">{item.dishName}</span>
-                                    </div>
-                                    <div className="flex items-center gap-2 shrink-0 ml-2">
-                                        <span className="text-[#1A3A52]/55">×{item.quantity}</span>
-                                        <span className="text-[#1A3A52]/45 font-mono">{format.number(item.price, { style: 'currency', currency: 'CHF' })}</span>
-                                    </div>
+                            <div className="min-w-0">
+                                <h6 className="font-semibold text-[#1A3A52] text-sm leading-tight">#{order.orderId}</h6>
+                                <div className="flex items-center gap-1.5 mt-0.5 flex-wrap">
+                                    <span className="flex items-center gap-1 text-xs text-[#1A3A52]/55">
+                                        {sourceIcon}
+                                        {t(`source.${order.source}`)}
+                                    </span>
+                                    {order.source === 'DINE_IN' && order.tableCode && (
+                                        <>
+                                            <span className="text-[#D5BA98] text-xs italic">|</span>
+                                            <span className="text-xs font-bold text-[#1A3A52] bg-[#D5BA98]/18 px-1.5 py-0.5 rounded border border-[#D5BA98]/45 shadow-none animate-in fade-in zoom-in duration-300">
+                                                {t('table')} {order.tableCode}
+                                            </span>
+                                        </>
+                                    )}
                                 </div>
-                                {item.note && (
-                                    <div className="flex items-start gap-1 p-1 bg-[#D5BA98]/10 rounded-md border border-[#D5BA98]/30">
-                                        <p className="text-[10px] font-bold text-[#1A3A52]/75 line-clamp-2">
-                                            <span className="font-bold text-[9px] mr-1 text-[#1A3A52]/45 uppercase">
-                                                {t('note')}:
-                                            </span>
-                                            {item.note}
-                                        </p>
-                                    </div>
-                                )}
-                                {item.rejectReason && (
-                                    <div className="flex items-start gap-1 p-1 bg-[#8C3A3A]/8 rounded-md border border-[#8C3A3A]/20">
-                                        <p className="text-[10px] text-[#8C3A3A] line-clamp-2 font-medium">
-                                            <span className="font-bold text-[9px] mr-1 text-[#8C3A3A]/70 uppercase">
-                                                {t('rejectReason')}:
-                                            </span>
-                                            {item.rejectReason}
-                                        </p>
-                                    </div>
-                                )}
-                            </li>
-                        ))}
-                    </ul>
+                            </div>
+                        </div>
 
-                    {order.orderItems.length > VISIBLE_ITEMS_COUNT && (
-                        <button
-                            onClick={(e) => { e.stopPropagation(); setExpanded(prev => !prev); }}
-                            className="mt-2 flex items-center gap-1 text-xs font-semibold text-[#1A3A52] hover:text-[#1A3A52]/80 transition-colors"
-                        >
-                            {expanded ? (
-                                <><ChevronUp className="w-3 h-3" />{t('collapse')}</>
-                            ) : (
-                                <><ChevronDown className="w-3 h-3" />+{hiddenCount} {t('moreItems')}</>
+                        {/* Right: status badges */}
+                        <div className="flex items-center gap-1.5 shrink-0">
+
+                            {/* Status badge (static) */}
+                            <div
+                                className={`flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-full shadow-sm ${statusStyle}`}
+                            >
+                                <span className="w-1.5 h-1.5 rounded-full bg-white/85" />
+                                {t(`status.${order.orderStatus}`)}
+                            </div>
+
+                            {/* Payment badge */}
+                            {showPaymentBadge && (
+                                <div
+                                    className={`flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded border shadow-sm ${order.isPaid ? PAYMENT_STYLES.paid : PAYMENT_STYLES.unpaid}`}
+                                    data-tooltip-content={order.isPaid ? t('paymentStatus.paid') : t('paymentStatus.unpaid')}
+                                    data-tooltip-id="my-tooltip"
+                                >
+                                    <CreditCard className="w-2.5 h-2.5" />
+                                    {order.isPaid ? t('paymentStatus.paid') : t('paymentStatus.unpaid')}
+                                </div>
                             )}
-                        </button>
-                    )}
-                </div>
 
-                {/* ── Footer ── */}
-                <div className="flex items-center justify-between pt-3 border-t border-[#D5BA98]/25">
-                    <div className="flex flex-col">
-                        <span className="text-sm font-bold text-[#1A3A52]">{format.number(order.totalAmount, { style: 'currency', currency: 'CHF' })}</span>
-                        {order.tipAmount != null && order.tipAmount > 0 && (
-                            <span className="text-xs text-[#4A5D4E] font-medium">
-                                + {t('tip')} {format.number(order.tipAmount, { style: 'currency', currency: 'CHF' })}
+                        </div>
+                    </div>
+
+                    {/* ── Meta row ── */}
+                    <div className="flex items-center justify-between mb-3">
+                        <div className="min-w-0">
+                            <span className="text-xs font-medium text-[#1A3A52] block truncate">
+                                {order.customerName ?? order.staffName}
                             </span>
+                            {order.tableCode && (
+                                <span className="text-[11px] text-[#1A3A52]/75 font-semibold block mt-0.5">
+                                    {t('table')} {order.tableCode}
+                                </span>
+                            )}
+                        </div>
+                        <div className="flex items-center gap-1.5 text-sm font-semibold text-[#1A3A52]/75">
+                            <Clock className="w-4 h-4" />
+                            {order.createdAt ? format.dateTime(new Date(order.createdAt), { hour: '2-digit', minute: '2-digit' }) : '—'}
+                        </div>
+                    </div>
+
+                    {/* ── Order Items ── */}
+                    <div className="border-t border-[#D5BA98]/25 pt-3 mb-3 flex-1">
+                        <ul className="space-y-2">
+                            {visibleItems.map((item) => (
+                                <li key={item.orderItemId} className="flex flex-col gap-0.5">
+                                    <div className="flex items-center justify-between text-xs">
+                                        <div className="flex items-center gap-2 min-w-0">
+                                            <span className="w-1.5 h-1.5 rounded-full bg-[#D5BA98] shrink-0" />
+                                            <span className="text-[#1A3A52]/85 truncate">{item.dishName}</span>
+                                        </div>
+                                        <div className="flex items-center gap-2 shrink-0 ml-2">
+                                            <span className="text-[#1A3A52]/55">×{item.quantity}</span>
+                                            <span className="text-[#1A3A52]/45 font-mono">{format.number(item.price, { style: 'currency', currency: 'CHF' })}</span>
+                                        </div>
+                                    </div>
+                                    {item.note && (
+                                        <div className="flex items-start gap-1 p-1 bg-[#D5BA98]/10 rounded-md border border-[#D5BA98]/30">
+                                            <p className="text-[10px] font-bold text-[#1A3A52]/75 line-clamp-2">
+                                                <span className="font-bold text-[9px] mr-1 text-[#1A3A52]/45 uppercase">
+                                                    {t('note')}:
+                                                </span>
+                                                {item.note}
+                                            </p>
+                                        </div>
+                                    )}
+                                    {item.rejectReason && (
+                                        <div className="flex items-start gap-1 p-1 bg-[#8C3A3A]/8 rounded-md border border-[#8C3A3A]/20">
+                                            <p className="text-[10px] text-[#8C3A3A] line-clamp-2 font-medium">
+                                                <span className="font-bold text-[9px] mr-1 text-[#8C3A3A]/70 uppercase">
+                                                    {t('rejectReason')}:
+                                                </span>
+                                                {item.rejectReason}
+                                            </p>
+                                        </div>
+                                    )}
+                                    {item.itemStatus === OrderItemStatusCode.CANCELLED && (
+                                        <div className="flex items-start gap-1 p-1 bg-[#8C3A3A]/8 rounded-md border border-[#8C3A3A]/20">
+                                            <p className="text-[10px] text-[#8C3A3A] line-clamp-2 font-medium italic">
+                                                {t('customerCancelled')}
+                                            </p>
+                                        </div>
+                                    )}
+                                </li>
+                            ))}
+                        </ul>
+
+                        {order.orderItems.length > VISIBLE_ITEMS_COUNT && (
+                            <button
+                                onClick={(e) => { e.stopPropagation(); setExpanded(prev => !prev); }}
+                                className="mt-2 flex items-center gap-1 text-xs font-semibold text-[#1A3A52] hover:text-[#1A3A52]/80 transition-colors"
+                            >
+                                {expanded ? (
+                                    <><ChevronUp className="w-3 h-3" />{t('collapse')}</>
+                                ) : (
+                                    <><ChevronDown className="w-3 h-3" />+{hiddenCount} {t('moreItems')}</>
+                                )}
+                            </button>
                         )}
                     </div>
-                    <span className="text-xs text-[#1A3A52]/55">{order.itemCount} {t('items')}</span>
+
+                    {/* ── Footer ── */}
+                    <div className="flex items-center justify-between pt-3 border-t border-[#D5BA98]/25">
+                        <div className="flex flex-col">
+                            <span className="text-sm font-bold text-[#1A3A52]">{format.number(order.totalAmount, { style: 'currency', currency: 'CHF' })}</span>
+                            {order.tipAmount != null && order.tipAmount > 0 && (
+                                <span className="text-xs text-[#4A5D4E] font-medium">
+                                    + {t('tip')} {format.number(order.tipAmount, { style: 'currency', currency: 'CHF' })}
+                                </span>
+                            )}
+                        </div>
+                        <span className="text-xs text-[#1A3A52]/55">{order.itemCount} {t('items')}</span>
+                    </div>
                 </div>
-            </div>
             </div>
 
             {/* External action bar below the card */}

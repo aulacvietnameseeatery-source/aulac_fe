@@ -184,6 +184,7 @@
           "actions": "Thao tác",
           "note": "Ghi chú",
           "rejectReason": "Lý do từ chối",
+          "customerCancelled": "Khách hàng hủy",
           "guest": "Khách",
           "source": {
             "DINE_IN": "Tại quán",

@@ -27,7 +27,8 @@
       "IN_PROGRESS": "En préparation",
       "READY": "Prêt",
       "SERVED": "Servi",
-      "REJECTED": "Rejeté"
+      "REJECTED": "Rejeté",
+      "CANCELLED": "Annulé par le client"
     },
     "actions": {
       "print": "Imprimer la commande",
@@ -43,6 +44,7 @@
       "confirm": "Confirmer",
       "cancel": "Annuler"
     },
+    "customerCancelled": "Annulé par le client",
     "kitchen": {
       "title": "CUISINE",
       "order": "COMMANDE",

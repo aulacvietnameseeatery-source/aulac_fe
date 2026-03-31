@@ -184,6 +184,7 @@
           "actions": "Actions",
           "note": "Note",
           "rejectReason": "Raison du rejet",
+          "customerCancelled": "Annulé par le client",
           "guest": "Invité",
           "source": {
             "DINE_IN": "Sur place",

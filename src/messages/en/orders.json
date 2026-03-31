@@ -184,6 +184,7 @@
           "actions": "Actions",
           "note": "Note",
           "rejectReason": "Reject Reason",
+          "customerCancelled": "Customer cancelled",
           "guest": "Guest",
           "source": {
             "DINE_IN": "Dine In",
