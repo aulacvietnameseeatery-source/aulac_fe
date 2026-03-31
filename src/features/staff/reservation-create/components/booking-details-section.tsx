@@ -48,15 +48,27 @@ const BookingDetailsSectionComponent: React.FC<Props> = ({
   const allTimeSlots = useMemo(() => generateTimeSlots(), []);
 
   const timeOptions = useMemo(() => {
-    const slots = date === todayString
-      ? allTimeSlots.filter((slot) => toMinutes(slot) >= (new Date().getHours() * 60 + new Date().getMinutes()))
-      : allTimeSlots;
+    let slots = [...allTimeSlots];
+
+    // Filter out past slots only if it's today
+    if (date === todayString) {
+      const now = new Date();
+      const currentMinutes = now.getHours() * 60 + now.getMinutes();
+      slots = slots.filter((slot) => toMinutes(slot) >= currentMinutes);
+    }
+
+    // CRITICAL: Always ensure the CURRENT time is in the options list 
+    // so it doesn't disappear when editing an existing/past reservation
+    if (time && !slots.includes(time)) {
+      slots.push(time);
+      slots.sort((a, b) => toMinutes(a) - toMinutes(b));
+    }
 
     return slots.map(slot => ({
       value: slot,
       label: slot
     }));
-  }, [allTimeSlots, date, todayString]);
+  }, [allTimeSlots, date, todayString, time]);
 
 
   return (

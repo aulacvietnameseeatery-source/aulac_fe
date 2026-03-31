@@ -23,6 +23,7 @@ import { toast } from 'sonner';
 import { CouponDTO } from '../../coupon-management/coupon-list/types/coupon.types';
 import { PromotionListDTO } from '../../promotion-management/promotion-list/types/promotion-types';
 import { OrderDetailDto } from '../../order-create/types/edit-order.types';
+import { formatCHF } from '@/lib/format-chf-utils';
 
 // ─── Constants ──────────────────────────────────────────────────────────────
 
@@ -118,6 +119,7 @@ interface OrderCardProps {
 export const OrderCard: React.FC<OrderCardProps> = ({ order, onStatusChange, onAction, couponOptions = [] }) => {
     const t = useTranslations('orders.management.List.card');
     const format = useFormatter();
+
     const [expanded, setExpanded] = useState(false);
     const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
     const [isProcessingPayment, setIsProcessingPayment] = useState(false);
@@ -283,7 +285,7 @@ export const OrderCard: React.FC<OrderCardProps> = ({ order, onStatusChange, onA
                                         </div>
                                         <div className="flex items-center gap-2 shrink-0 ml-2">
                                             <span className="text-[#1A3A52]/55">×{item.quantity}</span>
-                                            <span className="text-[#1A3A52]/45 font-mono">{format.number(item.price, { style: 'currency', currency: 'CHF' })}</span>
+                                            <span className="text-[#1A3A52]/45 font-mono">{formatCHF(item.price)}</span>
                                         </div>
                                     </div>
                                     {item.note && (
@@ -334,10 +336,10 @@ export const OrderCard: React.FC<OrderCardProps> = ({ order, onStatusChange, onA
                     {/* ── Footer ── */}
                     <div className="flex items-center justify-between pt-3 border-t border-[#D5BA98]/25">
                         <div className="flex flex-col">
-                            <span className="text-sm font-bold text-[#1A3A52]">{format.number(order.totalAmount, { style: 'currency', currency: 'CHF' })}</span>
+                            <span className="text-sm font-bold text-[#1A3A52]">{formatCHF(order.totalAmount)}</span>
                             {order.tipAmount != null && order.tipAmount > 0 && (
                                 <span className="text-xs text-[#4A5D4E] font-medium">
-                                    + {t('tip')} {format.number(order.tipAmount, { style: 'currency', currency: 'CHF' })}
+                                    + {t('tip')} {formatCHF(order.tipAmount)}
                                 </span>
                             )}
                         </div>

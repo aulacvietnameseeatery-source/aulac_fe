@@ -18,6 +18,7 @@ import { CouponDTO } from '../../coupon-management/coupon-list/types/coupon.type
 import { staffPromotionService } from '../../promotion-management/promotion-list/services/promotion-service';
 import { AvailablePromotionDTO } from '../../promotion-management/promotion-list/types/promotion-types';
 import { useTaxesQuery } from '../../tax-management/hooks/useTaxMutation';
+import { formatCHF } from '@/lib/format-chf-utils';
 
 interface PaymentModalProps {
     order: OrderHistory;
@@ -177,7 +178,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
                     <div className="bg-[#FDFBF9] rounded-2xl p-4 sm:p-5 md:p-6 text-center border border-[#D5BA98]/45 shadow-sm">
                         <p className="text-xs uppercase tracking-wider font-semibold text-[#1A3A52]/60 mb-1">{t('finalTotal')}</p>
                         <h2 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-[#1A3A52] leading-tight">
-                            {t('finalTotal')}: {format.number(total, { style: 'currency', currency: 'CHF' })}
+                            {t('finalTotal')}: {formatCHF(total)}
                         </h2>
                     </div>
 
@@ -220,9 +221,9 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
                                                     <div className="flex items-start justify-between gap-3 text-sm">
                                                         <span className="text-[#1A3A52]/85 flex-1 break-words">{item.dishName} ×{item.quantity}</span>
                                                         <div className="hidden sm:flex items-center gap-2 min-w-[120px]">
-                                                            <span className="font-mono text-[#1A3A52]/75">{format.number(item.price * item.quantity, { style: 'currency', currency: 'CHF' })}</span>
+                                                            <span className="font-mono text-[#1A3A52]/75">{formatCHF(item.price * item.quantity)}</span>
                                                         </div>
-                                                        <span className="sm:hidden font-mono text-[#1A3A52]/75 shrink-0">{format.number(item.price * item.quantity, { style: 'currency', currency: 'CHF' })}</span>
+                                                        <span className="sm:hidden font-mono text-[#1A3A52]/75 shrink-0">{formatCHF(item.price * item.quantity)}</span>
                                                     </div>
                                                     {itemPromos.length > 0 && (
                                                         <div className="flex flex-wrap gap-1 ml-2">
@@ -230,7 +231,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
                                                                 <div key={pIdx} className="flex flex-col gap-0.5 text-[10px] text-emerald-600 font-bold">
                                                                     <div className="flex items-center gap-1">
                                                                         <span className="bg-emerald-50 px-1 rounded border border-emerald-100 italic">
-                                                                            {t('autoPromotion')}: {promo.promoName} ({promo.promotionType === 'PERCENT' ? `${promo.discountValue}%` : format.number(promo.discountValue, { style: 'currency', currency: 'CHF' })})
+                                                                            {t('autoPromotion')}: {promo.promoName} ({promo.promotionType === 'PERCENT' ? `${promo.discountValue}%` : formatCHF(promo.discountValue)})
                                                                         </span>
                                                                     </div>
                                                                     {promo.appliedRule && (
@@ -251,39 +252,39 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
                             <section className="pt-4 border-t border-[#D5BA98]/35 space-y-2.5 text-sm">
                                 <div className="flex items-start justify-between gap-3 text-[#1A3A52]/70">
                                     <span>{t('subTotal')}</span>
-                                    <span>{format.number(subTotal, { style: 'currency', currency: 'CHF' })}</span>
+                                    <span>{formatCHF(subTotal)}</span>
                                 </div>
                                 {calculatedTaxes.map((t, idx) => (
                                     <div key={idx} className="flex items-start justify-between gap-3 text-[#1A3A52]/70">
                                         <span>{t.taxName} ({t.taxRate}% {t.taxType.toLowerCase()})</span>
-                                        <span>{format.number(t.amount, { style: 'currency', currency: 'CHF' })}</span>
+                                        <span>{formatCHF(t.amount)}</span>
                                     </div>
                                 ))}
                                 <div className="flex items-start justify-between gap-3 text-[#1A3A52]/70 font-medium">
                                     <span>{t('totalTax')}</span>
-                                    <span>{format.number(totalTaxAmount, { style: 'currency', currency: 'CHF' })}</span>
+                                    <span>{formatCHF(totalTaxAmount)}</span>
                                 </div>
                                 {autoPromotionAmount > 0 && (
                                     <div className="flex items-start justify-between gap-3 text-emerald-600 font-medium">
                                         <span>{t('appliedPromotions')}</span>
-                                        <span>-{format.number(autoPromotionAmount, { style: 'currency', currency: 'CHF' })}</span>
+                                        <span>-{formatCHF(autoPromotionAmount)}</span>
                                     </div>
                                 )}
                                 {couponAmount > 0 && (
                                     <div className="flex items-start justify-between gap-3 text-red-600 font-medium">
                                         <span>{t('coupon')}</span>
-                                        <span>-{format.number(couponAmount, { style: 'currency', currency: 'CHF' })}</span>
+                                        <span>-{formatCHF(couponAmount)}</span>
                                     </div>
                                 )}
                                 {(tipAmount > 0) && (
                                     <div className="flex items-start justify-between gap-3 text-emerald-600 font-medium">
                                         <span>{t('tip')}</span>
-                                        <span>{format.number(tipAmount, { style: 'currency', currency: 'CHF' })}</span>
+                                        <span>{formatCHF(tipAmount)}</span>
                                     </div>
                                 )}
                                 <div className="pt-2.5 border-t border-[#D5BA98]/35 flex items-start justify-between gap-3 font-bold text-base text-[#1A3A52]">
                                     <span>{t('finalTotal')}</span>
-                                    <span>{format.number(total, { style: 'currency', currency: 'CHF' })}</span>
+                                    <span>{formatCHF(total)}</span>
                                 </div>
                             </section>
                         </div>
@@ -328,6 +329,9 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
                                     onChange={(e) => setTipAmount(Number(e.target.value))}
                                     textEnd="CHF"
                                     placeholder={t('enterTip')}
+                                    numberDecimalScale={2}
+                                    step={0.01}
+                                    min={0}
                                 />
 
                                 <div className="grid grid-cols-1 gap-4">
@@ -355,7 +359,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
                                                 {availablePromotions.map((p, i) => (
                                                     <div key={i} className="flex flex-col gap-1">
                                                         <span className="text-[11px] bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full border border-emerald-100 font-medium w-fit">
-                                                            {p.promoName} ({p.promotionType === 'PERCENT' ? `${p.discountValue}%` : format.number(p.discountValue, { style: 'currency', currency: 'CHF' })})
+                                                            {p.promoName} ({p.promotionType === 'PERCENT' ? `${p.discountValue}%` : formatCHF(p.discountValue)})
                                                         </span>
                                                         {p.appliedRule && (
                                                             <div className="flex flex-col gap-0.5 ml-2 text-[10px] text-[#1A3A52]/60 italic">
@@ -379,13 +383,16 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
                                     onChange={(e) => setGivenAmount(Number(e.target.value))}
                                     className="font-bold text-lg"
                                     textEnd="CHF"
+                                    numberDecimalScale={2}
+                                    step={0.01}
+                                    min={0}
                                 />
                                 <div className="space-y-1.5">
                                     <label className="text-xs font-bold text-gray-500 uppercase tracking-wider block">
                                         {t('balance')} <span className="text-red-500">*</span>
                                     </label>
                                     <div className="min-h-10 border border-[#D5BA98]/55 bg-[#FDFBF9] rounded-md flex items-center px-3 py-2 font-bold text-lg text-[#1A3A52] break-all">
-                                        {format.number(balance, { style: 'currency', currency: 'CHF' })}
+                                        {formatCHF(balance)}
                                     </div>
                                 </div>
                             </div>
