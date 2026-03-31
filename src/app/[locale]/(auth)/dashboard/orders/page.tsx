@@ -331,7 +331,7 @@ function OrdersContent() {
                                     </button>
 
                                     {datePickerOpen && (
-                                        <div className="absolute right-0 sm:left-0 sm:right-auto top-full mt-1 z-50 bg-[#FDFBF9] border border-[#D5BA98]/50 rounded-xl shadow-xl w-64 py-1 text-sm">
+                                        <div className="absolute right-0 top-full mt-1 z-50 bg-[#FDFBF9] border border-[#D5BA98]/50 rounded-xl shadow-xl w-64 py-1 text-sm">
                                             {DATE_PRESETS.filter(p => p.key !== "custom").map(preset => (
                                                 <button
                                                     key={preset.key}
