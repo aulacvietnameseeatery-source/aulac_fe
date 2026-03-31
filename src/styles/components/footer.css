@@ -44,7 +44,6 @@
 }
 
 @media (min-width: 1024px) {
-    /* Desktop: Về lại kích thước tự nhiên */
     .footer-brand-col { @apply w-full max-w-[320px]; }
     .footer-newsletter-col { @apply w-full max-w-[288px]; }
 }
@@ -52,20 +51,19 @@
 /* Reservations & Location: Mỗi cái 1 cột trên mobile */
 .footer-res-col,
 .footer-loc-col {
-    @apply col-span-1 min-w-0; /* min-w-0 giúp text tự xuống dòng nếu quá dài */
+    @apply col-span-1 min-w-0; /* min-w-0 :text tự xuống dòng nếu quá dài */
 }
 
 @media (min-width: 1024px) {
     .footer-res-col, .footer-loc-col { @apply min-w-[200px]; }
 }
 
-/* --- CÁC STYLE KHÁC (GIỮ NGUYÊN) --- */
+/* --- CÁC STYLE KHÁC --- */
 .footer-brand-title {
     @apply font-display font-bold text-[24px] tracking-[3px] text-white uppercase;
 }
 
 .footer-heading {
-    /* Giảm size chữ heading trên mobile một chút cho gọn */
     @apply font-display font-bold text-[11px] md:text-[13px] leading-5 tracking-[1.5px] text-[#C9A961] uppercase mb-3 block;
 }
 
@@ -74,8 +72,7 @@
 }
 
 .footer-link {
-    /* Font nhỏ hơn xíu để vừa layout 2 cột */
-    @apply font-display text-[13px] md:text-[16px] leading-6 md:leading-8 text-white/90 hover:text-[#C9A961] transition-colors block py-0.5;
+    @apply font-sans text-[10px] md:text-[16px] leading-6 md:leading-8 text-white/90 hover:text-[#C9A961] transition-colors block py-0.5;
 }
 
 .social-btn {
