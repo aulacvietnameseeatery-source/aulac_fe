@@ -45,7 +45,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
     const [tipAmount, setTipAmount] = useState<number>(0);
     const [note, setNote] = useState('');
     const [selectedPromotionId, setSelectedPromotionId] = useState<string>('');
-    const [selectedCouponId, setSelectedCouponId] = useState<string>('');
+    const [selectedCouponIds, setSelectedCouponIds] = useState<string[]>([]);
 
     const subTotal = order.orderItems
         .filter(item => item.itemStatus !== 'REJECTED' && item.itemStatus !== 'CANCELLED')
@@ -60,9 +60,9 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
         () => promotionOptions.find((p) => p.promotionId.toString() === selectedPromotionId),
         [promotionOptions, selectedPromotionId],
     );
-    const selectedCoupon = React.useMemo(
-        () => couponOptions.find((p) => p.couponId.toString() === selectedCouponId),
-        [couponOptions, selectedCouponId],
+    const selectedCoupons = React.useMemo(
+        () => couponOptions.filter((p) => selectedCouponIds.includes(p.couponId.toString())),
+        [couponOptions, selectedCouponIds],
     );
 
     const calcDiscountAmount = React.useCallback((discount?: { type: string; discountValue: number }) => {
@@ -74,21 +74,20 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
     }, [subTotal]);
 
     const promotionAmount = calcDiscountAmount(selectedPromotion);
-    const couponAmount = calcDiscountAmount(selectedCoupon);
+    const couponAmount = React.useMemo(() => {
+        return selectedCoupons.reduce((sum, coupon) => sum + calcDiscountAmount(coupon), 0);
+    }, [selectedCoupons, calcDiscountAmount]);
 
     const totalDiscount = React.useMemo(() => {
         let amount = 0;
-
         if (selectedPromotion && selectedPromotionId) {
             amount += promotionAmount;
         }
-
-        if (selectedCoupon && selectedCouponId) {
+        if (selectedCoupons.length > 0) {
             amount += couponAmount;
         }
-
         return amount;
-    }, [selectedPromotion, selectedPromotionId, promotionAmount, selectedCoupon, selectedCouponId, couponAmount]);
+    }, [selectedPromotion, selectedPromotionId, promotionAmount, selectedCoupons, couponAmount]);
 
     const baseForTax = Math.max(0, subTotal - totalDiscount);
 
@@ -122,12 +121,11 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
             'card': 'CARD',
             'scan': 'QR'
         };
-
         onPaymentComplete(order.orderId, {
             orderId: order.orderId,
             receivedAmount: givenAmount,
             paymentMethod: methodMap[paymentType],
-            couponId: selectedCouponId ? Number(selectedCouponId) : undefined,
+            couponIds: selectedCouponIds.map(Number),
             promotionId: selectedPromotionId ? Number(selectedPromotionId) : undefined,
             note: note || undefined,
             tipAmount: tipAmount || undefined
@@ -298,14 +296,12 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
                                             description: p.couponName,
                                             group: t('coupons'),
                                         }))}
-                                        value={selectedCouponId}
-                                        onChange={(val) => {
-                                            if (!val) {
-                                                setSelectedCouponId('');
-                                                return;
-                                            }
-                                            setSelectedCouponId(String(val));
+                                        value={selectedCouponIds}
+                                        onChange={(vals) => {
+                                            setSelectedCouponIds(Array.isArray(vals) ? vals : []);
                                         }}
+                                        multiple={true}
+                                        showSelectAll={true}
                                         placeholder={t('selectCoupon')}
                                         clearable={true}
                                     />
