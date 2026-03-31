@@ -4,11 +4,15 @@ import React, { useMemo, useCallback } from "react";
 import { UserRound, Phone } from "lucide-react";
 import { BaseTable } from "@/components/ui/table/base-table";
 import { TableColumn } from "@/types/table.types";
-import {useCustomerReport} from "@/features/staff/report-management/customer/hooks/use-customer-report";
+import { useCustomerReport } from "@/features/staff/report-management/customer/hooks/use-customer-report";
 import { CustomerReportRecordDto } from "@/features/staff/report-management/customer/types/customer-report-types";
-import {CustomerFilter} from "@/features/staff/report-management/customer/components/customer-filter";
+import { CustomerFilter } from "@/features/staff/report-management/customer/components/customer-filter";
+import { useTranslations } from "next-intl";
 
 export default function CustomerReportPage() {
+    const t = useTranslations("reports.customer");
+    const tCommon = useTranslations("reports.common");
+
     const {
         data,
         isLoading,
@@ -23,7 +27,7 @@ export default function CustomerReportPage() {
         () => [
             {
                 field: "customerId",
-                header: "Customer ID",
+                header: t("table.customerId"),
                 width: "120px",
                 cellRender: ({ value }: { value: any }) => (
                     <span className="text-blue-600 font-medium bg-blue-50 px-2 py-1 rounded-md">
@@ -33,7 +37,7 @@ export default function CustomerReportPage() {
             },
             {
                 field: "customerName",
-                header: "Customer Name",
+                header: t("table.customerName"),
                 width: "250px",
                 cellRender: ({ value, item }: { value: any; item: CustomerReportRecordDto }) => (
                     <div className="flex items-center gap-3">
@@ -53,7 +57,7 @@ export default function CustomerReportPage() {
             },
             {
                 field: "totalOrders",
-                header: "Total Orders",
+                header: t("table.totalOrders"),
                 width: "150px",
                 align: "center" as const,
                 cellRender: ({ value }: { value: any }) => (
@@ -62,7 +66,7 @@ export default function CustomerReportPage() {
             },
             {
                 field: "totalSpent",
-                header: "Grand Total",
+                header: t("table.grandTotal"),
                 width: "150px",
                 align: "right" as const,
                 cellRender: ({ value }: { value: any }) => (
@@ -72,7 +76,7 @@ export default function CustomerReportPage() {
                 ),
             },
         ],
-        []
+        [t]
     );
 
     const handleGlobalRenderCell = useCallback(
@@ -86,14 +90,13 @@ export default function CustomerReportPage() {
     );
 
     return (
-        <div className="w-full h-full flex flex-col gap-6"> {/* THÊM gap-6 */}
+        <div className="w-full h-full flex flex-col gap-6">
             <CustomerFilter
                 initialStart={filters.startDate}
                 initialEnd={filters.endDate}
                 onApply={applyDateFilter}
             />
 
-            {/* XÓA BỎ các class viền, bo góc, màu nền */}
             <div className="flex-1 w-full overflow-hidden">
                 <BaseTable<CustomerReportRecordDto>
                     data={data}
@@ -103,16 +106,16 @@ export default function CustomerReportPage() {
                     total={totalCount}
                     onDataChange={onDataChange}
                     onRefresh={refresh}
-                    searchPlaceholder="Search customer..."
+                    searchPlaceholder={t("searchPlaceholder")}
                     defaultRowsPerPage={10}
                     rowsPerPageOptions={[10, 20, 50]}
                     renderTitle={() => (
-                        <div className="pb-4"> {/* ĐỔI py-2 px-4 thành pb-4 */}
+                        <div className="pb-4">
                             <h2 className="text-xl font-bold text-gray-800 tracking-tight">
-                                Top Spenders
+                                {t("title")}
                             </h2>
                             <p className="text-sm text-gray-500 mt-1">
-                                Analysis of customer purchasing behavior.
+                                {t("description")}
                             </p>
                         </div>
                     )}

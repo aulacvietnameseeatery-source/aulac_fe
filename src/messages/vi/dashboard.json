@@ -1,0 +1,106 @@
+{
+  "dashboard": {
+    "header": {
+      "title": "Bảng điều khiển",
+      "refresh": "Làm mới dữ liệu",
+      "syncData": "Đồng bộ",
+      "syncing": "Đang đồng bộ...",
+      "selectPeriod": "Chọn thời gian",
+      "periods": {
+        "today": "Hôm nay",
+        "yesterday": "Hôm qua",
+        "last7Days": "7 ngày qua",
+        "last30Days": "30 ngày qua",
+        "thisMonth": "Tháng này",
+        "lastMonth": "Tháng trước"
+      }
+    },
+    "summary": {
+      "totalRevenue": "Tổng doanh thu",
+      "totalOrders": "Tổng đơn hàng",
+      "avgOrderValue": "Giá trị Đơn TB",
+      "totalReservations": "Tổng đặt bàn",
+      "vsLastPeriod": "so với kỳ trước"
+    },
+    "activityRow": {
+      "common": {
+        "loading": "Đang tải..."
+      },
+      "time": {
+        "minAgo": "{count} phút trước",
+        "hrsAgo": "{count} giờ trước"
+      },
+      "reservations": {
+        "title": "Lịch đặt bàn",
+        "today": "Hôm nay",
+        "empty": "Không có lịch đặt bàn"
+      },
+      "tables": {
+        "title": "Bàn trống",
+        "empty": "Không có bàn trống",
+        "capacity": "Sức chứa: {cap}"
+      },
+      "notifications": {
+        "title": "Thông báo",
+        "empty": "Không có thông báo mới",
+        "newOrder": "Đơn mới tại {table} ({items} món)",
+        "payment": "Thanh toán ${amount} qua {method}",
+        "tableStatus": "Bàn {table} hiện đang {status}",
+        "newReservation": "Lịch đặt mới từ {name}"
+      }
+    },
+    "chartsRow1": {
+      "common": {
+        "loading": "Đang tải dữ liệu...",
+        "noData": "Không có dữ liệu"
+      },
+      "revenue": {
+        "title": "Phân tích doanh thu",
+        "total": "Tổng doanh thu",
+        "label": "Doanh thu"
+      },
+      "topSelling": {
+        "title": "Món ăn bán chạy",
+        "mostOrdered": "Đặt nhiều nhất",
+        "totalSold": "Đã bán"
+      }
+    },
+    "chartsRow2": {
+      "common": {
+        "noData": "Không có dữ liệu"
+      },
+      "category": {
+        "title": "Thống kê danh mục",
+        "selectedPeriod": "Kỳ được chọn",
+        "ordersUnit": "Đơn",
+        "total": "Tổng số",
+        "dineIn": "Tại quán",
+        "takeaway": "Mang đi",
+        "delivery": "Giao hàng"
+      },
+      "activeOrders": {
+        "title": "Đơn hàng đang xử lý",
+        "addNew": "Thêm mới",
+        "loading": "Đang tải đơn hàng...",
+        "empty": "Không có đơn hàng nào",
+        "orderId": "Đơn #{id}",
+        "itemsUnit": "món"
+      },
+      "customerInsights": {
+        "title": "Khách hàng tiêu biểu",
+        "topSpender": "Chi tiêu nhiều nhất",
+        "totalSpent": "Tổng chi",
+        "empty": "Chưa có dữ liệu khách hàng"
+      }
+    },
+    "devArea": {
+      "title": "Khu vực kiểm thử",
+      "loggedInAs": "Đăng nhập với tư cách",
+      "userId": "Mã ID",
+      "username": "Tên người dùng",
+      "roles": "Vai trò",
+      "permissions": "Quyền của bạn",
+      "noPermissions": "Không có quyền nào"
+    }
+  }
+}

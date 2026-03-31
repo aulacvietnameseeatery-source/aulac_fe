@@ -4,11 +4,15 @@ import React, { useMemo, useCallback } from "react";
 import { Utensils } from "lucide-react";
 import { BaseTable } from "@/components/ui/table/base-table";
 import { TableColumn } from "@/types/table.types";
-import {useSalesReport} from "@/features/staff/report-management/sales/hooks/use-sales-report";
-import {SalesItemDto} from "@/features/staff/report-management/sales/types/sales-report-types";
-import {SalesFilter} from "@/features/staff/report-management/sales/components/sales-filter";
+import { useSalesReport } from "@/features/staff/report-management/sales/hooks/use-sales-report";
+import { SalesItemDto } from "@/features/staff/report-management/sales/types/sales-report-types";
+import { SalesFilter } from "@/features/staff/report-management/sales/components/sales-filter";
+import { useTranslations } from "next-intl";
 
 export default function SalesReportPage() {
+    const t = useTranslations("reports.sales");
+    const tCommon = useTranslations("reports.common");
+
     const {
         data,
         isLoading,
@@ -23,7 +27,7 @@ export default function SalesReportPage() {
         () => [
             {
                 field: "dishId",
-                header: "Item ID",
+                header: t("table.itemId"),
                 width: "100px",
                 cellRender: ({ value }: { value: any }) => (
                     <span className="text-gray-500 text-xs font-mono">#{value}</span>
@@ -31,9 +35,9 @@ export default function SalesReportPage() {
             },
             {
                 field: "dishName",
-                header: "Item Name",
+                header: t("table.itemName"),
                 width: "250px",
-                filterType: "text" as const, // Kích hoạt thanh search nếu component hỗ trợ
+                filterType: "text" as const,
                 cellRender: ({ value }: { value: any }) => (
                     <div className="flex items-center gap-3">
                         <div className="w-8 h-8 rounded bg-orange-50 border border-orange-100 flex items-center justify-center text-orange-500 shrink-0">
@@ -45,7 +49,7 @@ export default function SalesReportPage() {
             },
             {
                 field: "categoryName",
-                header: "Category",
+                header: t("table.category"),
                 width: "150px",
                 cellRender: ({ value }: { value: any }) => (
                     <span className="px-2.5 py-1 bg-gray-100 text-gray-600 rounded text-xs font-medium">
@@ -55,7 +59,7 @@ export default function SalesReportPage() {
             },
             {
                 field: "quantitySold",
-                header: "Items Sold",
+                header: t("table.itemsSold"),
                 width: "120px",
                 align: "center" as const,
                 sortable: true,
@@ -65,7 +69,7 @@ export default function SalesReportPage() {
             },
             {
                 field: "totalRevenue",
-                header: "Total Revenue",
+                header: t("table.totalRevenue"),
                 width: "150px",
                 align: "right" as const,
                 sortable: true,
@@ -76,7 +80,7 @@ export default function SalesReportPage() {
                 ),
             },
         ],
-        []
+        [t]
     );
 
     const handleGlobalRenderCell = useCallback(
@@ -90,14 +94,14 @@ export default function SalesReportPage() {
     );
 
     return (
-        <div className="w-full h-full flex flex-col">
+        <div className="w-full h-full flex flex-col gap-6">
             <SalesFilter
                 initialStart={filters.startDate}
                 initialEnd={filters.endDate}
                 onApply={applyDateFilter}
             />
 
-            <div className="flex-1 bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+            <div className="flex-1 w-full overflow-hidden">
                 <BaseTable<SalesItemDto>
                     data={data}
                     loading={isLoading}
@@ -106,16 +110,16 @@ export default function SalesReportPage() {
                     total={totalCount}
                     onDataChange={onDataChange}
                     onRefresh={refresh}
-                    searchPlaceholder="Search dish name..."
+                    searchPlaceholder={t("searchPlaceholder")}
                     defaultRowsPerPage={10}
                     rowsPerPageOptions={[10, 20, 50]}
                     renderTitle={() => (
-                        <div className="py-2 px-4">
+                        <div className="pb-4">
                             <h2 className="text-xl font-bold text-gray-800 tracking-tight">
-                                Item Sales Performance
+                                {t("title")}
                             </h2>
                             <p className="text-sm text-gray-500 mt-1">
-                                Analysis of best-selling dishes and revenue contribution.
+                                {t("description")}
                             </p>
                         </div>
                     )}
