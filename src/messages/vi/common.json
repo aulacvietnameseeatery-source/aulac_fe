@@ -371,7 +371,10 @@
     "CartSummary": {
       "title": "Tóm Tắt",
       "items_count": "{count} Món",
-      "confirm_btn": "Xác Nhận Đơn"
+      "confirm_btn": "Xác Nhận Đơn",
+      "table_label": "Bàn",
+      "note_placeholder": "Ghi chú cho bếp...",
+      "total_label": "Tổng cộng"
     },
     "err_load_cart": "Không thể tải dữ liệu giỏ hàng cũ.",
     "err_table_occupied_access": "Bàn này đã có người sử dụng. Không thể truy cập.",
