@@ -43,9 +43,7 @@ function OrdersContent() {
     const [pageSize, setPageSize] = useState(10);
     const [isRefreshing, setIsRefreshing] = useState(false);
     const [paymentCoupons, setPaymentCoupons] = useState<CouponDTO[]>([]);
-    const [paymentPromotions, setPaymentPromotions] = useState<PromotionListDTO[]>([]);
     const hasLoadedCouponsRef = useRef(false);
-    const hasLoadedPromotionsRef = useRef(false);
 
     // ── Date range filter ──────────────────────────────────────────────────
     type DatePreset = "today" | "yesterday" | "last7" | "last30" | "thisMonth" | "lastMonth" | "custom";
@@ -134,26 +132,6 @@ function OrdersContent() {
         void fetchPaymentCoupons();
     }, []);
 
-    useEffect(() => {
-        if (hasLoadedPromotionsRef.current) return;
-        hasLoadedPromotionsRef.current = true;
-
-        const fetchPaymentPromotions = async () => {
-            try {
-                const data = await staffPromotionService.getPromotions({
-                    pageIndex: 1,
-                    pageSize: 100,
-                    promotionStatus: "ACTIVE",
-                });
-                setPaymentPromotions(data.pageData ?? []);
-            } catch (error) {
-                console.error("Failed to fetch payment promotions:", error);
-                setPaymentPromotions([]);
-            }
-        };
-
-        void fetchPaymentPromotions();
-    }, []);
 
     // Tabs config — label + badge count từ API
     const TABS = useMemo(() => [
@@ -413,7 +391,6 @@ function OrdersContent() {
                                                         order={order}
                                                         onStatusChange={handleRefresh}
                                                         couponOptions={paymentCoupons}
-                                                        promotionOptions={paymentPromotions}
                                                         onAction={(id, action) => {
                                                             console.log("Action:", action, "on order:", id);
                                                             if (action === "view") {

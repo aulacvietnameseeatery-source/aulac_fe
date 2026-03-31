@@ -363,7 +363,9 @@
         "selectPromotion": "Select promotion",
         "selectCoupon": "Select coupon",
         "promotions": "Promotions",
-        "coupons": "Coupons"
+        "coupons": "Coupons",
+        "autoPromotion": "Auto Promotion",
+        "appliedPromotions": "Applied Promotions"
       },
       "InvoiceDetail": {
         "title": "Invoice Details",

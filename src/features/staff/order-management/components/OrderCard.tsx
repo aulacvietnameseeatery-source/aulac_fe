@@ -111,12 +111,11 @@ interface OrderCardProps {
     onStatusChange?: (orderId: number, newStatus: string) => void;
     onAction?: (orderId: number, action: ActionKey) => void;
     couponOptions?: CouponDTO[];
-    promotionOptions?: PromotionListDTO[];
 }
 
 // ─── Component ───────────────────────────────────────────────────────────────
 
-export const OrderCard: React.FC<OrderCardProps> = ({ order, onStatusChange, onAction, couponOptions = [], promotionOptions = [] }) => {
+export const OrderCard: React.FC<OrderCardProps> = ({ order, onStatusChange, onAction, couponOptions = [] }) => {
     const t = useTranslations('orders.management.List.card');
     const format = useFormatter();
     const [expanded, setExpanded] = useState(false);
@@ -376,7 +375,6 @@ export const OrderCard: React.FC<OrderCardProps> = ({ order, onStatusChange, onA
                 onPaymentComplete={handlePaymentComplete}
                 isLoading={isProcessingPayment}
                 couponOptions={couponOptions}
-                promotionOptions={promotionOptions}
             />
 
             <PrintOrderModal

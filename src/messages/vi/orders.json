@@ -363,7 +363,9 @@
         "selectPromotion": "Chọn khuyến mãi",
         "selectCoupon": "Chọn mã giảm giá",
         "promotions": "Khuyến mãi",
-        "coupons": "Mã giảm giá"
+        "coupons": "Mã giảm giá",
+        "autoPromotion": "Khuyến mãi tự động",
+        "appliedPromotions": "Khuyến mãi đã áp dụng"
       },
       "InvoiceDetail": {
         "title": "Chi tiết hóa đơn",
