@@ -443,7 +443,7 @@
     },
     "history": {
       "title": "Historique des Commandes",
-      "fabLabel": "HISTORY",
+      "fabLabel": "HISTORIQUE",
       "fabAriaLabel": "Voir l'historique des commandes",
       "tableLabel": "Table",
       "itemsCount": "{count} plats",

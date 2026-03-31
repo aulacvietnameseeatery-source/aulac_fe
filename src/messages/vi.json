@@ -277,7 +277,10 @@
     "CartSummary": {
       "title": "Tóm Tắt",
       "items_count": "{count} Món",
-      "confirm_btn": "Xác Nhận Đơn"
+      "confirm_btn": "Xác Nhận Đơn",
+      "table_label": "Bàn",
+      "note_placeholder": "Ghi chú cho bếp...",
+      "total_label": "Tổng cộng"
     }
   },
   "QrScan": {
@@ -1584,7 +1587,7 @@
   },
   "OrderHistory": {
     "title": "Lịch Sử Đặt Món",
-    "fabLabel": "HISTORY",
+    "fabLabel": "LỊCH SỬ",
     "fabAriaLabel": "Xem lịch sử đặt món",
     "tableLabel": "Bàn",
     "itemsCount": "{count} món",

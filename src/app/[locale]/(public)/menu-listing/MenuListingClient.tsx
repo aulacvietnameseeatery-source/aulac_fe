@@ -52,6 +52,18 @@ export default function MenuListingClient({ initialMenuData, tableFromUrl, token
         let ignored = false;
 
         if (!tableFromUrl) {
+            // Nếu không có table trong URL, kiểm tra sessionStorage trước
+            // Trường hợp: user đã chọn bàn trước đó, navigate sang trang khác rồi quay lại
+            const savedTable = sessionStorage.getItem(TABLE_STORAGE_KEY);
+            const savedToken = sessionStorage.getItem(TOKEN_STORAGE_KEY);
+            if (savedTable) {
+                // Restore session bằng cách redirect về URL có table param
+                const params = new URLSearchParams({ table: savedTable });
+                if (savedToken) params.set("token", savedToken);
+                router.replace(`/menu-listing?${params.toString()}`);
+                return;
+            }
+            // Không có session → landing bình thường
             sessionStorage.removeItem(TABLE_STORAGE_KEY);
             sessionStorage.removeItem(CART_STORAGE_KEY);
             sessionStorage.removeItem(CURRENT_ORDER_ID_KEY);
@@ -63,9 +75,12 @@ export default function MenuListingClient({ initialMenuData, tableFromUrl, token
         }
 
         const savedTable = sessionStorage.getItem(TABLE_STORAGE_KEY);
+        const savedToken = sessionStorage.getItem(TOKEN_STORAGE_KEY);
+        // Normalise: sessionStorage trả null khi không có, prop có thể là undefined
+        const tokenMatches = (savedToken ?? undefined) === tokenFromUrl;
 
-        if (savedTable === tableFromUrl) {
-            // Cùng tab, reload trang → tin tưởng session hiện tại
+        if (savedTable === tableFromUrl && tokenMatches) {
+            // Cùng tab, reload trang, token không đổi → tin tưởng session hiện tại
             setTableNumber(tableFromUrl);
             try {
                 const savedCart = sessionStorage.getItem(CART_STORAGE_KEY);
@@ -78,15 +93,36 @@ export default function MenuListingClient({ initialMenuData, tableFromUrl, token
         } else {
             // Tab mới hoặc copy link → xác thực quyền truy cập bàn
             setIsValidatingTable(true);
+            const isSameTable = savedTable === tableFromUrl;
             const tokenParam = tokenFromUrl ? `?token=${encodeURIComponent(tokenFromUrl)}` : '';
             api.post(`/api/public/tables/${encodeURIComponent(tableFromUrl)}/occupy${tokenParam}`, {})
                 .then(() => {
                     if (ignored) return;
-                    // Bàn trống, occupy thành công → cho phép truy cập
+                    // Nếu đổi sang bàn khác → xóa cart và orderId cũ
+                    // Nếu cùng bàn (chỉ token thay đổi, vd: quét lại QR) → giữ nguyên cart
+                    if (!isSameTable) {
+                        sessionStorage.removeItem(CART_STORAGE_KEY);
+                        sessionStorage.removeItem(CURRENT_ORDER_ID_KEY);
+                        setCartItems([]);
+                        setCurrentOrderId(null);
+                    } else {
+                        // Cùng bàn, khôi phục cart nếu có
+                        try {
+                            const savedCart = sessionStorage.getItem(CART_STORAGE_KEY);
+                            if (savedCart) setCartItems(JSON.parse(savedCart));
+                            const savedOrderId = sessionStorage.getItem(CURRENT_ORDER_ID_KEY);
+                            if (savedOrderId) setCurrentOrderId(Number(savedOrderId));
+                        } catch {
+                            toast.error(tMenu("err_load_cart"));
+                        }
+                    }
+                    // Ghi session bàn mới
                     setTableNumber(tableFromUrl);
                     sessionStorage.setItem(TABLE_STORAGE_KEY, tableFromUrl);
                     if (tokenFromUrl) {
                         sessionStorage.setItem(TOKEN_STORAGE_KEY, tokenFromUrl);
+                    } else {
+                        sessionStorage.removeItem(TOKEN_STORAGE_KEY);
                     }
                 })
                 .catch((error: any) => {
