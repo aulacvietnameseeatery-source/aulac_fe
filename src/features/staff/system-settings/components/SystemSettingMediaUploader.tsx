@@ -134,6 +134,16 @@ export const SystemSettingMediaUploader: React.FC<SystemSettingMediaUploaderProp
         }
     };
 
+    const handleDelete = (e: React.MouseEvent) => {
+        console.log("SystemSettingMediaUploader: handleDelete triggered");
+        e.stopPropagation();
+        if (inputRef.current) {
+            inputRef.current.value = "";
+        }
+        setLocalPreview(null);
+        onChange("", "");
+    };
+
     return (
         <div className={cn("relative group w-full", aspectRatioClassName, className)}>
             <div
@@ -174,7 +184,14 @@ export const SystemSettingMediaUploader: React.FC<SystemSettingMediaUploaderProp
                                         <Maximize2 className="w-5 h-5" />
                                     </button>
                                 )}
-
+                                <button
+                                    type="button"
+                                    className="p-2 rounded-xl hover:bg-red-50 hover:text-red-600 transition-colors"
+                                    onClick={handleDelete}
+                                    title={t("Common.delete") || "Delete"}
+                                >
+                                    <X className="w-5 h-5" />
+                                </button>
                             </div>
                         </div>
 
