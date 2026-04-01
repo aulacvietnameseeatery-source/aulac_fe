@@ -985,6 +985,7 @@
     "List": {
       "title": "Gestion des clients",
       "description": "Gérez et consultez les informations des clients, l'historique des commandes et les points de fidélité.",
+      "close": "Fermer",
       "searchPlaceholder": "Rechercher par nom, téléphone ou email...",
       "addNew": "Ajouter un client",
       "table": {
@@ -1006,6 +1007,7 @@
       },
       "actions": {
         "view": "Voir les détails",
+        "loyalty": "Fidélité",
         "edit": "Modifier le client",
         "delete": "Supprimer le client"
       },
@@ -1020,6 +1022,37 @@
         "message": "Êtes-vous sûr de vouloir supprimer le client {name} ? Cette action est irréversible.",
         "confirm": "Supprimer",
         "cancel": "Annuler"
+      }
+    },
+    "Loyalty": {
+      "title": "Conversion de fidélité",
+      "customer": "Client",
+      "currentPoints": "Points actuels",
+      "voucherValue": "Valeur du coupon",
+      "exchangeTab": "Échanger",
+      "historyTab": "Historique",
+      "pointsLabel": "Points à échanger",
+      "pointsPlaceholder": "Saisissez les points à échanger",
+      "redeemButton": "Échanger les points",
+      "ratioHint": "1 point = {amount}",
+      "minPointsHint": "Échange minimum : {points} points",
+      "historyEmpty": "Aucun coupon n'a encore été échangé.",
+      "notifications": {
+        "loadError": "Échec du chargement des données de fidélité",
+        "exchangeSuccess": "Coupon {code} créé avec succès",
+        "exchangeError": "Échec de la conversion des points en coupon",
+        "redemptionDisabled": "La conversion de fidélité est actuellement désactivée."
+      },
+      "validation": {
+        "pointsPositive": "Les points doivent être supérieurs à 0",
+        "insufficientPoints": "Le client n'a pas assez de points",
+        "minPoints": "L'échange minimum est de {points} points"
+      },
+      "status": {
+        "used": "Utilisé",
+        "unused": "Non utilisé",
+        "expired": "Expiré",
+        "disabled": "Désactivé"
       }
     },
     "Add": {

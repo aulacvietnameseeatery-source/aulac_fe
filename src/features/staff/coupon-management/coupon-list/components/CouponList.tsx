@@ -207,6 +207,17 @@ export default function CouponList() {
       sortable: false,
       width: '200px',
       filterType: 'text' as const,
+      cellRender: ({ item }) => {
+        const coupon = item as CouponDTO;
+        return (
+          <div className="leading-tight">
+            <div className="font-medium text-gray-900">{coupon.couponName}</div>
+            {coupon.customerName && (
+              <div className="mt-1 text-xs text-gray-500">{coupon.customerName}</div>
+            )}
+          </div>
+        );
+      },
     },
     {
       field: 'type',
