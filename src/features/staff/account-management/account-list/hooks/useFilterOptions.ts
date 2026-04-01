@@ -20,7 +20,7 @@ export function useFilterOptions(): UseFilterOptionsReturn {
       setIsLoadingFilters(true);
       try {
         const [rolesData, statusesData] = await Promise.all([
-          staffAccountService.getAllRoles(),
+          staffAccountService.getActiveRoles(),
           staffAccountService.getAccountStatuses(),
         ]);
         setRoles(rolesData);

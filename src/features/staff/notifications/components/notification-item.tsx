@@ -167,7 +167,7 @@ function getRelativeTimeUtcSafe(
   const date = new Date(dateStr).getTime();
   if (Number.isNaN(date)) return "";
 
-  const now = Date.now();
+  const now = dateUtils.getSwissNow().getTime();
   const diffMs = now - date;
   const diffSec = Math.floor(diffMs / 1000);
   const diffMin = Math.floor(diffSec / 60);

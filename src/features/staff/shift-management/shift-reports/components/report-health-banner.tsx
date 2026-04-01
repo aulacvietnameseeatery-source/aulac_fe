@@ -102,26 +102,26 @@ export function ReportHealthBanner({ attendanceRows, workedHoursRows, exceptionR
   ];
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-2 sm:gap-2.5">
       {metrics.map((m) => (
         <ALCard
           key={m.label}
-          radius="2xl"
+          radius="xl"
           hoverEffect="glow"
           animation="fade"
-          className="px-4 py-3 space-y-2"
+          className="px-3 py-2.5 space-y-1.5"
         >
           <div className="flex items-center justify-between">
-            <span className="text-[10px] font-semibold uppercase tracking-wider text-[#1A3A52]/50">
+            <span className="text-[10px] font-semibold uppercase tracking-wider text-[#1A3A52]/55">
               {m.label}
             </span>
             <span className={`${m.valueClass} opacity-60`}>{m.icon}</span>
           </div>
-          <div>
-            <span className={`text-3xl font-semibold leading-none ${m.valueClass}`}>
+          <div className="flex items-end justify-between gap-3">
+            <span className={`text-2xl sm:text-[26px] font-semibold leading-none ${m.valueClass}`}>
               {m.value}
             </span>
-            <p className="text-xs text-[#1A3A52]/50 mt-1">{m.sub}</p>
+            <p className="text-[11px] text-[#1A3A52]/55 leading-tight text-right max-w-[72%]">{m.sub}</p>
           </div>
           <div className="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
             <div

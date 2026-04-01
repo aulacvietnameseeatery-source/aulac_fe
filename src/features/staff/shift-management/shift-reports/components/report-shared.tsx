@@ -11,7 +11,7 @@ import type { AttendanceReportRowDto } from "../../types/shift-management.types"
 // ── Constants ──────────────────────────────────────────────────────────────────
 
 export const TAB_TRIGGER_CLASS =
-    "h-auto py-1.5 px-3 mb-1 text-[#1A3A52]/70 font-medium transition-all data-[state=active]:!bg-[#1A3A52] data-[state=active]:!text-white data-[state=active]:!shadow-sm rounded-lg";
+    "h-auto py-1 px-2.5 sm:py-1.5 sm:px-3 mb-1 text-xs sm:text-sm text-[#1A3A52]/70 font-medium transition-all data-[state=active]:!bg-[#1A3A52] data-[state=active]:!text-white data-[state=active]:!shadow-sm rounded-lg";
 
 export const INNER_TAB_LIST_CLASS =
     "flex items-center justify-start gap-6 border-b border-[#D5BA98]/40 bg-transparent p-0 w-full rounded-none h-auto";
@@ -280,7 +280,7 @@ export function PaginationControls({
                         setPageSize(Number(e.target.value));
                         setPage(1);
                     }}
-                    className="h-7 rounded border border border-[#D5BA98]/60 bg-white px-1 text-xs outline-none"
+                    className="h-7 rounded border border-[#D5BA98]/60 bg-white px-1 text-xs outline-none"
                 >
                     <option value={25}>25</option>
                     <option value={50}>50</option>
