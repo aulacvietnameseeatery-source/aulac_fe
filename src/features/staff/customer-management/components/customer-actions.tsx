@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Eye, Edit, Trash2 } from "lucide-react";
+import { Coins, Eye, Edit, Trash2 } from "lucide-react";
 import { CustomerListDto } from "../types/customer-types";
 import { useTranslations } from "next-intl";
 import { PermissionGuard } from '@/components/permission-guard';
@@ -10,11 +10,12 @@ import { Permissions } from '@/types/const';
 interface CustomerActionsProps {
     customer: CustomerListDto;
     onView: (customer: CustomerListDto) => void;
+    onLoyalty: (customer: CustomerListDto) => void;
     onEdit: (customer: CustomerListDto) => void;
     onDelete: (customer: CustomerListDto) => void;
 }
 
-export const CustomerActions = ({ customer, onView, onEdit, onDelete }: CustomerActionsProps) => {
+export const CustomerActions = ({ customer, onView, onLoyalty, onEdit, onDelete }: CustomerActionsProps) => {
     const t = useTranslations("Customer.List.actions");
 
     const handleAction = (e: React.MouseEvent, action: (item: CustomerListDto) => void) => {
@@ -32,6 +33,17 @@ export const CustomerActions = ({ customer, onView, onEdit, onDelete }: Customer
                     onClick={(e) => handleAction(e, onView)}
                 >
                     <Eye size={18} />
+                </button>
+            </PermissionGuard>
+
+            <PermissionGuard permission={Permissions.UpdateCustomer}>
+                <button
+                    className="text-gray-400 hover:text-amber-600 transition-colors cursor-pointer p-1"
+                    data-tooltip-content={t("loyalty")}
+                    data-tooltip-id="my-tooltip"
+                    onClick={(e) => handleAction(e, onLoyalty)}
+                >
+                    <Coins size={18} />
                 </button>
             </PermissionGuard>
 

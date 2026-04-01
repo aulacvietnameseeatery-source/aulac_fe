@@ -5,6 +5,7 @@ export interface CouponDTO {
     couponId: number;
     couponCode: string;
     couponName: string;
+    customerName?: string | null;
     startTime: string;
     endTime: string;
     discountValue: number;

@@ -15,6 +15,7 @@ import { useCustomerList } from "@/features/staff/customer-management/hooks/use-
 import { CustomerListDto, CustomerDetailDto } from "@/features/staff/customer-management/types/customer-types";
 import { CustomerActions } from "@/features/staff/customer-management/components/customer-actions";
 import { CustomerModal, CustomerFormData } from "@/features/staff/customer-management/components/customer-modal";
+import { LoyaltyManagementModal } from "@/features/staff/customer-management/components/LoyaltyManagementModal";
 import { staffCustomerService } from "@/features/staff/customer-management/services/customer-service";
 import { ConfirmModal } from "@/components/layout/admin-sidebar/confirm-modal";
 import { useRouter } from "@/routing"
@@ -34,6 +35,10 @@ const CustomerListContent = () => {
     const [selectedCustomer, setSelectedCustomer] = useState<CustomerDetailDto | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isLoadingDetail, setIsLoadingDetail] = useState(false);
+
+    // Loyalty modal state
+    const [loyaltyModalOpen, setLoyaltyModalOpen] = useState(false);
+    const [customerToManageLoyalty, setCustomerToManageLoyalty] = useState<CustomerListDto | null>(null);
 
     // Delete modal state
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
@@ -57,6 +62,11 @@ const CustomerListContent = () => {
         } finally {
             setIsLoadingDetail(false);
         }
+    };
+
+    const handleManageLoyalty = (customer: CustomerListDto) => {
+        setCustomerToManageLoyalty(customer);
+        setLoyaltyModalOpen(true);
     };
 
     const handleCreate = () => {
@@ -266,6 +276,7 @@ const CustomerListContent = () => {
                         <CustomerActions
                             customer={item}
                             onView={handleView}
+                            onLoyalty={handleManageLoyalty}
                             onEdit={handleEdit}
                             onDelete={handleDeleteClick}
                         />
@@ -282,6 +293,16 @@ const CustomerListContent = () => {
                 onSubmit={handleSubmit}
                 onEdit={() => setModalMode("edit")}
                 isSubmitting={isSubmitting}
+            />
+
+            <LoyaltyManagementModal
+                isOpen={loyaltyModalOpen}
+                customer={customerToManageLoyalty}
+                onClose={() => {
+                    setLoyaltyModalOpen(false);
+                    setCustomerToManageLoyalty(null);
+                }}
+                onSuccess={refresh}
             />
 
             {/* Delete Confirmation */}
