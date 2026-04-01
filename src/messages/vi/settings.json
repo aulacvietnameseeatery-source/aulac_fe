@@ -38,7 +38,8 @@
       "website": "Trang web",
       "preview": "Xem trước",
       "remove": "Xóa",
-      "invalidForm": "Vui lòng kiểm tra tất cả các tab ngôn ngữ để biết các trường bắt buộc."
+      "invalidForm": "Vui lòng kiểm tra tất cả các tab ngôn ngữ để biết các trường bắt buộc.",
+      "noResults": "Không tìm thấy dữ liệu"
     },
     "Introduction": {
       "title": "Trang Giới thiệu",
