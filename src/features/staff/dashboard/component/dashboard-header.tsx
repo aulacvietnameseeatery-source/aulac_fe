@@ -97,7 +97,7 @@ export function DashboardHeader({ onRefresh, isLoading, currentPeriod = 'last_30
     };
 
     return (
-        <div className="flex flex-wrap items-center justify-between gap-4 mb-6 relative z-50">
+        <div className="flex flex-wrap items-center justify-between gap-4 mb-6 relative z-10">
             <div className="flex items-center gap-3">
                 <h3 className="text-2xl font-bold text-gray-800 m-0">{t("title")}</h3>
                 <button

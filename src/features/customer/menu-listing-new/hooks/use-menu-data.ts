@@ -10,7 +10,6 @@ export interface DishDisplayDto {
     imageUrl: string | null;
 }
 
-// 1. TẠO TYPE MỚI CHO DỮ LIỆU THÔ CHỨA ĐA NGÔN NGỮ
 export interface RawMenuItemData {
     id: string;
     name: I18nText;
@@ -25,7 +24,6 @@ export interface RawMenuCategory {
     items: RawMenuItemData[];
 }
 
-// 2. Cập nhật hàm format trả về RawMenuCategory[]
 export const formatMenuData = (dishes: DishDisplayDto[]): RawMenuCategory[] => {
     const groupedData: Record<string, { catI18n: I18nText, items: RawMenuItemData[] }> = {};
 
