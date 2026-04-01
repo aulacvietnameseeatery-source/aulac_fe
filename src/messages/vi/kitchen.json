@@ -27,7 +27,8 @@
       "IN_PROGRESS": "Đang làm",
       "READY": "Sẵn sàng",
       "SERVED": "Đã phục vụ",
-      "REJECTED": "Bị từ chối"
+      "REJECTED": "Bị từ chối",
+      "CANCELLED": "Khách hàng hủy"
     },
     "actions": {
       "print": "In đơn hàng",
@@ -43,6 +44,7 @@
       "confirm": "Xác nhận",
       "cancel": "Hủy"
     },
+    "customerCancelled": "Khách hàng hủy",
     "kitchen": {
       "title": "BẾP",
       "order": "ĐƠN HÀNG",

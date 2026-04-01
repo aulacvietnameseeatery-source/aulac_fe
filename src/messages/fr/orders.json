@@ -184,6 +184,7 @@
           "actions": "Actions",
           "note": "Note",
           "rejectReason": "Raison du rejet",
+          "customerCancelled": "Annulé par le client",
           "guest": "Invité",
           "source": {
             "DINE_IN": "Sur place",
@@ -362,7 +363,9 @@
         "selectPromotion": "Choisir une promotion",
         "selectCoupon": "Choisir un coupon",
         "promotions": "Promotions",
-        "coupons": "Coupons"
+        "coupons": "Coupons",
+        "autoPromotion": "Promotion automatique",
+        "appliedPromotions": "Promotions appliquées"
       },
       "InvoiceDetail": {
         "title": "Détails de la facture",

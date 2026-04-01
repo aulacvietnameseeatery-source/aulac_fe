@@ -184,6 +184,7 @@
           "actions": "Thao tác",
           "note": "Ghi chú",
           "rejectReason": "Lý do từ chối",
+          "customerCancelled": "Khách hàng hủy",
           "guest": "Khách",
           "source": {
             "DINE_IN": "Tại quán",
@@ -362,7 +363,9 @@
         "selectPromotion": "Chọn khuyến mãi",
         "selectCoupon": "Chọn mã giảm giá",
         "promotions": "Khuyến mãi",
-        "coupons": "Mã giảm giá"
+        "coupons": "Mã giảm giá",
+        "autoPromotion": "Khuyến mãi tự động",
+        "appliedPromotions": "Khuyến mãi đã áp dụng"
       },
       "InvoiceDetail": {
         "title": "Chi tiết hóa đơn",
