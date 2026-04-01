@@ -3,7 +3,8 @@ import React from "react";
 import { CircleDollarSign, TrendingUp, Donut, MoreVertical } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardAction } from "@/components/ui/card";
 import type { RevenueChartItemDto, TopSellingItemDto, DashboardSummaryDto } from "../types/dashboard-types";
-import {RevenueChart} from "@/components/ui/revenue-chart";
+import { RevenueChart } from "@/components/ui/revenue-chart";
+import { useTranslations } from "next-intl";
 
 interface DashboardChartsRow1Props {
     revenueData: RevenueChartItemDto[];
@@ -13,41 +14,37 @@ interface DashboardChartsRow1Props {
 }
 
 export function DashboardChartsRow1({ revenueData, topSelling, summary, isLoading }: DashboardChartsRow1Props) {
-
+    const t = useTranslations("dashboard.chartsRow1");
     const bestSeller = topSelling.length > 0 ? topSelling[0] : null;
-
-
     const maxQuantity = topSelling.length > 0 ? topSelling[0].totalQuantity : 1;
-
     const colors = ["bg-blue-600", "bg-emerald-500", "bg-purple-500", "bg-orange-500", "bg-rose-500", "bg-indigo-500"];
 
     return (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-            {/* Revenue Chart */}
             <Card className="lg:col-span-2 flex flex-col h-full border-gray-100/50 shadow-sm">
-                <CardHeader className="flex flex-row items-center justify-between pb-2 border-b border-gray-100/50 mb-4">
+                <CardHeader className="flex flex-row items-center justify-between pb-2 border-b border-gray-100/50 mb-2">
                     <div className="flex items-center gap-2">
                         <div className="w-8 h-8 rounded-md border flex items-center justify-center bg-gray-50 text-gray-700">
                             <CircleDollarSign size={16} />
                         </div>
-                        <CardTitle className="text-base text-gray-800">Revenue Analysis</CardTitle>
+                        <CardTitle className="text-base text-gray-800">{t("revenue.title")}</CardTitle>
                     </div>
                 </CardHeader>
                 <CardContent className="flex-1 flex flex-col">
-                    <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center justify-between mb-2">
                         <div className="flex items-center gap-3">
                             <div className="w-10 h-10 rounded-md bg-orange-50 flex items-center justify-center text-orange-600">
                                 <TrendingUp size={20} />
                             </div>
                             <div>
-                                <p className="text-sm text-gray-500 mb-0 font-medium">Total Revenue</p>
+                                <p className="text-sm text-gray-500 mb-0 font-medium">{t("revenue.total")}</p>
                                 <h4 className="text-xl font-bold text-gray-800 mb-0">
                                     {summary?.totalSales.value.toLocaleString() || '0'} CHF
                                 </h4>
                             </div>
                         </div>
                         <div className="flex items-center gap-2 text-sm text-gray-500 font-medium">
-                            <span className="w-3 h-3 rounded-full bg-[#FFAB2D]"></span> Revenue
+                            <span className="w-3 h-3 rounded-full bg-[#FFAB2D]"></span> {t("revenue.label")}
                         </div>
                     </div>
 
@@ -61,14 +58,13 @@ export function DashboardChartsRow1({ revenueData, topSelling, summary, isLoadin
                 </CardContent>
             </Card>
 
-            {/* Top Selling Item */}
             <Card className="lg:col-span-1 flex flex-col h-full border-gray-100/50 shadow-sm">
-                <CardHeader className="flex flex-row items-center justify-between pb-2 border-b border-gray-100/50 mb-4">
+                <CardHeader className="flex flex-row items-center justify-between pb-2 border-b border-gray-100/50 mb-2">
                     <div className="flex items-center gap-2">
                         <div className="w-8 h-8 rounded-md border flex items-center justify-center bg-gray-50 text-gray-700">
                             <Donut size={16} />
                         </div>
-                        <CardTitle className="text-base text-gray-800">Top Selling Items</CardTitle>
+                        <CardTitle className="text-base text-gray-800">{t("topSelling.title")}</CardTitle>
                     </div>
                     <CardAction>
                         <MoreVertical size={18} className="text-gray-400 cursor-pointer" />
@@ -76,16 +72,15 @@ export function DashboardChartsRow1({ revenueData, topSelling, summary, isLoadin
                 </CardHeader>
                 <CardContent className="flex flex-col gap-4">
                     {isLoading ? (
-                        <div className="h-64 flex items-center justify-center text-sm text-gray-400 animate-pulse">Loading data...</div>
+                        <div className="h-64 flex items-center justify-center text-sm text-gray-400 animate-pulse">{t("common.loading")}</div>
                     ) : topSelling.length === 0 ? (
-                        <div className="h-64 flex items-center justify-center text-sm text-gray-400">No data available</div>
+                        <div className="h-64 flex items-center justify-center text-sm text-gray-400">{t("common.noData")}</div>
                     ) : (
                         <>
-                            {/* Hiển thị món hạng 1 */}
                             {bestSeller && (
                                 <>
                                     <div className="bg-orange-50 border border-orange-100 text-orange-700 px-4 py-2.5 rounded-lg text-sm font-medium">
-                                        ✨ Most Ordered : {bestSeller.dishName}
+                                        ✨ {t("topSelling.mostOrdered")} : {bestSeller.dishName}
                                     </div>
                                     <div className="flex items-center border border-gray-100 rounded-lg p-3 shadow-sm bg-white">
                                         <div className="w-12 h-12 bg-gray-100 rounded-md mr-3 overflow-hidden">
@@ -97,13 +92,11 @@ export function DashboardChartsRow1({ revenueData, topSelling, summary, isLoadin
                                         </div>
                                         <div>
                                             <h6 className="text-sm font-bold text-gray-800 mb-0.5">{bestSeller.dishName}</h6>
-                                            <p className="text-xs text-gray-500 mb-0 font-medium">Total Sold : {bestSeller.totalQuantity}</p>
+                                            <p className="text-xs text-gray-500 mb-0 font-medium">{t("topSelling.totalSold")} : {bestSeller.totalQuantity}</p>
                                         </div>
                                     </div>
                                 </>
                             )}
-
-                            {/* Danh sách các món còn lại */}
                             <div className="flex flex-col gap-3 mt-2">
                                 {topSelling.slice(1).map((item, index) => {
                                     const percent = (item.totalQuantity / maxQuantity) * 100;

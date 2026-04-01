@@ -43,9 +43,7 @@ function OrdersContent() {
     const [pageSize, setPageSize] = useState(10);
     const [isRefreshing, setIsRefreshing] = useState(false);
     const [paymentCoupons, setPaymentCoupons] = useState<CouponDTO[]>([]);
-    const [paymentPromotions, setPaymentPromotions] = useState<PromotionListDTO[]>([]);
     const hasLoadedCouponsRef = useRef(false);
-    const hasLoadedPromotionsRef = useRef(false);
 
     // ── Date range filter ──────────────────────────────────────────────────
     type DatePreset = "today" | "yesterday" | "last7" | "last30" | "thisMonth" | "lastMonth" | "custom";
@@ -134,26 +132,6 @@ function OrdersContent() {
         void fetchPaymentCoupons();
     }, []);
 
-    useEffect(() => {
-        if (hasLoadedPromotionsRef.current) return;
-        hasLoadedPromotionsRef.current = true;
-
-        const fetchPaymentPromotions = async () => {
-            try {
-                const data = await staffPromotionService.getPromotions({
-                    pageIndex: 1,
-                    pageSize: 100,
-                    promotionStatus: "ACTIVE",
-                });
-                setPaymentPromotions(data.pageData ?? []);
-            } catch (error) {
-                console.error("Failed to fetch payment promotions:", error);
-                setPaymentPromotions([]);
-            }
-        };
-
-        void fetchPaymentPromotions();
-    }, []);
 
     // Tabs config — label + badge count từ API
     const TABS = useMemo(() => [
@@ -331,7 +309,7 @@ function OrdersContent() {
                                     </button>
 
                                     {datePickerOpen && (
-                                        <div className="absolute right-0 sm:left-0 sm:right-auto top-full mt-1 z-50 bg-[#FDFBF9] border border-[#D5BA98]/50 rounded-xl shadow-xl w-64 py-1 text-sm">
+                                        <div className="absolute left-0 sm:left-auto sm:right-0 top-full mt-1 z-50 bg-[#FDFBF9] border border-[#D5BA98]/50 rounded-xl shadow-xl w-64 py-1 text-sm">
                                             {DATE_PRESETS.filter(p => p.key !== "custom").map(preset => (
                                                 <button
                                                     key={preset.key}
@@ -413,7 +391,6 @@ function OrdersContent() {
                                                         order={order}
                                                         onStatusChange={handleRefresh}
                                                         couponOptions={paymentCoupons}
-                                                        promotionOptions={paymentPromotions}
                                                         onAction={(id, action) => {
                                                             console.log("Action:", action, "on order:", id);
                                                             if (action === "view") {

@@ -1,0 +1,74 @@
+{
+  "reports": {
+    "header": {
+      "title": "Báo cáo",
+      "export": "Xuất file",
+      "exportPdf": "Xuất file PDF",
+      "exportExcel": "Xuất file Excel"
+    },
+    "tabs": {
+      "earning": "Tài chính",
+      "order": "Đơn hàng",
+      "sales": "Sản phẩm",
+      "customer": "Khách hàng"
+    },
+    "filters": {
+      "startDate": "Từ ngày",
+      "endDate": "Đến ngày",
+      "submit": "Áp dụng"
+    },
+    "common": {
+      "searchPlaceholder": "Tìm kiếm...",
+      "loading": "Đang tải...",
+      "noResults": "Không tìm thấy dữ liệu"
+    },
+    "earning": {
+      "title": "Tổng quan doanh thu",
+      "description": "Chi tiết doanh thu theo ngày bao gồm trước thuế, sau thuế và thuế.",
+      "table": {
+        "date": "Ngày",
+        "totalOrders": "Số đơn hàng",
+        "grossRevenue": "Trước thuế",
+        "totalTax": "Tổng thuế",
+        "netRevenue": "Doanh thu thuần"
+      }
+    },
+    "order": {
+      "title": "Lịch sử đơn hàng",
+      "description": "Danh sách chi tiết các đơn hàng trong thời gian đã chọn.",
+      "searchPlaceholder": "Tìm mã đơn hàng...",
+      "table": {
+        "orderId": "Mã Đơn",
+        "date": "Ngày tạo",
+        "customer": "Khách hàng",
+        "type": "Loại đơn",
+        "items": "Số món",
+        "grandTotal": "Tổng tiền",
+        "status": "Trạng thái"
+      }
+    },
+    "sales": {
+      "title": "Sản phẩm bán ra",
+      "description": "Phân tích các món ăn bán chạy và tỷ lệ đóng góp doanh thu.",
+      "searchPlaceholder": "Tìm tên món ăn...",
+      "table": {
+        "itemId": "Mã món",
+        "itemName": "Tên món ăn",
+        "category": "Danh mục",
+        "itemsSold": "Đã bán",
+        "totalRevenue": "Tổng thu"
+      }
+    },
+    "customer": {
+      "title": "Khách hàng tiêu biểu",
+      "description": "Phân tích hành vi chi tiêu của khách hàng.",
+      "searchPlaceholder": "Tìm tên khách hàng...",
+      "table": {
+        "customerId": "Mã KH",
+        "customerName": "Tên khách hàng",
+        "totalOrders": "Số lượng đơn",
+        "grandTotal": "Tổng chi tiêu"
+      }
+    }
+  }
+}

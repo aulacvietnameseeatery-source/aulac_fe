@@ -216,7 +216,7 @@ export const CustomerModal: React.FC<CustomerModalProps> = ({
                     </div>
 
                     {/* Loyalty Points + Member status */}
-                    <div className="grid grid-cols-2 gap-4 items-start">
+                    <div className={isViewMode ? "grid grid-cols-2 gap-4 items-start" : ""}>
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1.5">
                                 {t("fields.loyaltyPoints")}
@@ -235,19 +235,21 @@ export const CustomerModal: React.FC<CustomerModalProps> = ({
                             )}
                         </div>
 
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                                {t("fields.isMember")}
-                            </label>
-                            <div className="flex items-center h-11">
-                                <Switch
-                                    checked={formData.isMember}
-                                    onChange={(checked) => handleChange("isMember", checked)}
-                                    disabled={isViewMode}
-                                    showLabel={true}
-                                />
+                        {isViewMode && (
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                                    {t("fields.isMember")}
+                                </label>
+                                <div className="flex items-center h-11">
+                                    <Switch
+                                        checked={formData.isMember}
+                                        onChange={(checked) => handleChange("isMember", checked)}
+                                        disabled={isViewMode}
+                                        showLabel={true}
+                                    />
+                                </div>
                             </div>
-                        </div>
+                        )}
                     </div>
 
                     {/* Created At – view only */}

@@ -3,15 +3,19 @@ import React from "react";
 import { PieChart as PieChartIcon, ShoppingCart, CheckCircle, ShoppingBag, Wine, Utensils, User, Crown } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardAction } from "@/components/ui/card";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
-import type { DashboardStatisticsDto } from "../types/dashboard-types";
+import type { DashboardStatisticsDto, TopCustomerDto } from "../types/dashboard-types";
+import { useTranslations } from "next-intl";
 
 interface DashboardChartsRow2Props {
     statistics: DashboardStatisticsDto | null;
     activeOrders?: any[];
+    topSpenders?: TopCustomerDto[]; // Bổ sung props nhận topSpenders độc lập
     isLoading?: boolean;
 }
 
-export function DashboardChartsRow2({ statistics, activeOrders = [], isLoading }: DashboardChartsRow2Props) {
+export function DashboardChartsRow2({ statistics, activeOrders = [], topSpenders = [], isLoading }: DashboardChartsRow2Props) {
+    const t = useTranslations("dashboard.chartsRow2");
+
     const getStatusColor = (status: string) => {
         switch (status?.toUpperCase()) {
             case "PENDING": return "bg-purple-100 text-purple-700";
@@ -20,35 +24,34 @@ export function DashboardChartsRow2({ statistics, activeOrders = [], isLoading }
         }
     };
 
-
     const categoryData = statistics?.ordersByType ? [
-        { name: "Dine-In", value: statistics.ordersByType["DINE_IN"] || 0, color: "#3B82F6", icon: Wine, bgColor: "bg-blue-100 text-blue-600" },
-        { name: "Takeaway", value: statistics.ordersByType["TAKEAWAY"] || 0, color: "#10B981", icon: ShoppingBag, bgColor: "bg-emerald-100 text-emerald-600" },
-        { name: "Delivery", value: statistics.ordersByType["DELIVERY"] || 0, color: "#8B5CF6", icon: CheckCircle, bgColor: "bg-purple-100 text-purple-600" },
+        { name: t("category.dineIn"), value: statistics.ordersByType["DINE_IN"] || 0, color: "#3B82F6", icon: Wine, bgColor: "bg-blue-100 text-blue-600" },
+        { name: t("category.takeaway"), value: statistics.ordersByType["TAKEAWAY"] || 0, color: "#10B981", icon: ShoppingBag, bgColor: "bg-emerald-100 text-emerald-600" },
+        { name: t("category.delivery"), value: statistics.ordersByType["DELIVERY"] || 0, color: "#8B5CF6", icon: CheckCircle, bgColor: "bg-purple-100 text-purple-600" },
     ].filter(item => item.value > 0) : [];
 
     return (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
 
-            {/* Category Statistics */}
+            {/* --- 1. Category Statistics --- */}
             <Card className="flex flex-col h-full border-gray-100/50 shadow-sm min-w-0">
-                <CardHeader className="flex flex-row items-center justify-between pb-2 border-b border-gray-100/50 mb-4">
+                <CardHeader className="flex flex-row items-center justify-between pb-2 border-b border-gray-100/50 mb-2">
                     <div className="flex items-center gap-2">
                         <PieChartIcon size={18} className="text-gray-500" />
-                        <CardTitle className="text-base text-gray-800">Category Statistics</CardTitle>
+                        <CardTitle className="text-base text-gray-800">{t("category.title")}</CardTitle>
                     </div>
                     <CardAction>
                         <select className="text-xs border rounded-md px-2 py-1 outline-none text-gray-600 bg-gray-50">
-                            <option>Selected Period</option>
+                            <option>{t("category.selectedPeriod")}</option>
                         </select>
                     </CardAction>
                 </CardHeader>
                 <CardContent className="flex flex-col h-full">
                     {isLoading ? (
-                        <div className="h-40 bg-gray-50/50 animate-pulse rounded-lg border border-dashed flex items-center justify-center mb-4"></div>
+                        <div className="h-40 bg-gray-50/50 animate-pulse rounded-lg border border-dashed flex items-center justify-center mb-2"></div>
                     ) : categoryData.length > 0 ? (
                         <>
-                            <div className="h-40 mb-4 w-full">
+                            <div className="h-40 mb-2 w-full">
                                 <ResponsiveContainer width="100%" height="100%">
                                     <PieChart>
                                         <Pie
@@ -64,7 +67,7 @@ export function DashboardChartsRow2({ statistics, activeOrders = [], isLoading }
                                             ))}
                                         </Pie>
                                         <Tooltip
-                                            formatter={(value) => [`${value} Orders`, 'Total']}
+                                            formatter={(value) => [`${value} ${t("category.ordersUnit")}`, t("category.total")]}
                                             contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
                                         />
                                     </PieChart>
@@ -81,34 +84,34 @@ export function DashboardChartsRow2({ statistics, activeOrders = [], isLoading }
                                                 </div>
                                                 <span className="text-sm font-medium text-gray-700">{item.name}</span>
                                             </div>
-                                            <span className="text-sm font-bold text-gray-800">{item.value} Orders</span>
+                                            <span className="text-sm font-bold text-gray-800">{item.value} {t("category.ordersUnit")}</span>
                                         </div>
                                     );
                                 })}
                             </div>
                         </>
                     ) : (
-                        <div className="flex-1 flex items-center justify-center text-sm text-gray-400">No data available</div>
+                        <div className="flex-1 flex items-center justify-center text-sm text-gray-400">{t("common.noData")}</div>
                     )}
                 </CardContent>
             </Card>
 
-            {/* Active Orders */}
+            {/* --- 2. Active Orders --- */}
             <Card className="flex flex-col h-full border-gray-100/50 shadow-sm min-w-0">
-                <CardHeader className="flex flex-row items-center justify-between pb-2 border-b border-gray-100/50 mb-4">
+                <CardHeader className="flex flex-row items-center justify-between pb-2 border-b border-gray-100/50 mb-2">
                     <div className="flex items-center gap-2">
                         <ShoppingCart size={18} className="text-gray-500" />
-                        <CardTitle className="text-base text-gray-800">Active Orders</CardTitle>
+                        <CardTitle className="text-base text-gray-800">{t("activeOrders.title")}</CardTitle>
                     </div>
                     <CardAction>
-                        <button className="text-xs bg-white border rounded-md px-2 py-1 hover:bg-gray-50 text-gray-600">Add New</button>
+                        <button className="text-xs bg-white border rounded-md px-2 py-1 hover:bg-gray-50 text-gray-600">{t("activeOrders.addNew")}</button>
                     </CardAction>
                 </CardHeader>
                 <CardContent className="flex-1 flex flex-col gap-3 overflow-y-auto pr-2 custom-scrollbar">
                     {isLoading ? (
-                        <p className="text-center text-sm text-gray-500 mt-10 animate-pulse">Loading orders...</p>
+                        <p className="text-center text-sm text-gray-500 mt-10 animate-pulse">{t("activeOrders.loading")}</p>
                     ) : activeOrders.length === 0 ? (
-                        <p className="text-center text-sm text-gray-500 mt-10">No active orders</p>
+                        <p className="text-center text-sm text-gray-500 mt-10">{t("activeOrders.empty")}</p>
                     ) : (
                         activeOrders.map((order: any, i: number) => {
                             const itemCount = order.items?.reduce((sum: number, item: any) => sum + item.quantity, 0) || 0;
@@ -119,8 +122,8 @@ export function DashboardChartsRow2({ statistics, activeOrders = [], isLoading }
                                             <Utensils size={16} />
                                         </div>
                                         <div>
-                                            <p className="text-sm font-bold text-gray-800 mb-0.5 leading-tight">Order #{order.orderId}</p>
-                                            <p className="text-xs text-gray-500 mb-0">{itemCount} items • {order.tableCode || "N/A"}</p>
+                                            <p className="text-sm font-bold text-gray-800 mb-0.5 leading-tight">{t("activeOrders.orderId", { id: order.orderId })}</p>
+                                            <p className="text-xs text-gray-500 mb-0">{itemCount} {t("activeOrders.itemsUnit")} • {order.tableCode || "N/A"}</p>
                                         </div>
                                     </div>
                                     <span className={`text-[10px] px-2 py-1 rounded-md font-semibold ${getStatusColor(order.orderStatus)}`}>{order.orderStatus}</span>
@@ -131,36 +134,59 @@ export function DashboardChartsRow2({ statistics, activeOrders = [], isLoading }
                 </CardContent>
             </Card>
 
-            {/* Customer Insights */}
+            {/* --- 3. Customer Insights (Top 5) --- */}
             <Card className="flex flex-col h-full border-gray-100/50 shadow-sm min-w-0">
-                <CardHeader className="flex flex-row items-center justify-between pb-2 border-b border-gray-100/50 mb-4">
+                <CardHeader className="flex flex-row items-center justify-between pb-2 border-b border-gray-100/50 mb-2">
                     <div className="flex items-center gap-2">
                         <Crown size={18} className="text-[#FFAB2D]" />
-                        <CardTitle className="text-base text-gray-800">Customer Insights</CardTitle>
+                        <CardTitle className="text-base text-gray-800">{t("customerInsights.title")}</CardTitle>
                     </div>
                 </CardHeader>
-                <CardContent className="flex flex-col justify-center flex-1">
+                <CardContent className="flex flex-col flex-1">
                     {isLoading ? (
                         <div className="h-full bg-gray-50/50 animate-pulse rounded-lg border border-dashed flex items-center justify-center"></div>
-                    ) : statistics?.topCustomer ? (
-                        <div className="flex flex-col items-center justify-center text-center h-full">
-                            <div className="w-20 h-20 bg-gradient-to-br from-[#FFAB2D] to-orange-500 rounded-full flex items-center justify-center mb-4 shadow-lg ring-4 ring-orange-50">
-                                <User size={32} className="text-white" />
-                            </div>
-                            <h4 className="text-sm font-bold text-gray-400 mb-1 uppercase tracking-wider">Top Spender</h4>
-                            <p className="text-xl font-bold text-gray-800">{statistics.topCustomer.customerName}</p>
+                    ) : topSpenders && topSpenders.length > 0 ? (
 
-                            <div className="mt-8 w-full bg-orange-50/50 rounded-xl p-5 border border-orange-100/50">
-                                <p className="text-sm text-orange-600/80 font-medium mb-1">Total Spent</p>
-                                <p className="text-3xl font-black text-orange-600">
-                                    {statistics.topCustomer.spent.toLocaleString()} CHF
-                                </p>
+                        <div className="flex flex-col h-full overflow-y-auto pr-1 custom-scrollbar">
+                            <div className="flex items-center justify-between p-3 bg-gradient-to-r from-orange-50 to-orange-100/50 border border-orange-100 rounded-xl mb-2 shadow-sm">
+                                <div className="flex items-center gap-3">
+                                    <div className="w-10 h-10 bg-gradient-to-br from-[#FFAB2D] to-orange-500 rounded-full flex items-center justify-center shadow-md ring-2 ring-white">
+                                        <Crown size={18} className="text-white" />
+                                    </div>
+                                    <div>
+                                        <h4 className="text-[10px] font-bold text-orange-600 uppercase tracking-wider mb-0.5">{t("customerInsights.topSpender")}</h4>
+                                        <p className="text-sm font-bold text-gray-800 leading-tight">{topSpenders[0].customerName}</p>
+                                    </div>
+                                </div>
+                                <div className="text-right">
+                                    <p className="text-lg font-black text-orange-600">
+                                        {topSpenders[0].spent.toLocaleString()} CHF
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div className="flex flex-col gap-3">
+                                {topSpenders.slice(1, 5).map((customer, idx) => (
+                                    <div key={idx} className="flex items-center justify-between border-b border-gray-50 pb-2 last:border-0 last:pb-0">
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-7 h-7 bg-gray-100 text-gray-500 rounded-full flex items-center justify-center text-xs font-bold">
+                                                #{idx + 2}
+                                            </div>
+                                            <span className="text-sm font-medium text-gray-700 truncate max-w-[120px]">
+                                                {customer.customerName}
+                                            </span>
+                                        </div>
+                                        <span className="text-sm font-bold text-gray-800">
+                                            {customer.spent.toLocaleString()} CHF
+                                        </span>
+                                    </div>
+                                ))}
                             </div>
                         </div>
                     ) : (
                         <div className="flex flex-col items-center justify-center h-full text-center text-gray-500">
                             <User size={32} className="text-gray-300 mb-2" />
-                            <p className="text-sm">No customer data available</p>
+                            <p className="text-sm">{t("customerInsights.empty")}</p>
                         </div>
                     )}
                 </CardContent>

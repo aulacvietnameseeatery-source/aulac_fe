@@ -36,7 +36,7 @@ export const orderHistoryService = {
         return response.data;
     },
 
-    processPayment: async (data: { orderId: number; receivedAmount: number; paymentMethod: string; note?: string; tipAmount?: number; couponId?: number; promotionId?: number }): Promise<void> => {
+    processPayment: async (data: { orderId: number; receivedAmount: number; paymentMethod: string; note?: string; tipAmount?: number; couponIds?: number[]; promotionId?: number }): Promise<void> => {
         await api.post('/api/payments', data);
     },
 

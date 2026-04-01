@@ -7,16 +7,16 @@ export interface GetPromotionsParams {
     search?: string;
     promotionStatus?: PromotionStatusCode | "All";
     type?: PromotionType | "All";
-    fromDate?: string; 
-    toDate?: string;  
+    fromDate?: string;
+    toDate?: string;
 }
 
 export interface PromotionListDTO {
     promotionId: number;
     promoCode: string;
     promoName: string;
-    startTime: string; 
-    endTime: string;   
+    startTime: string;
+    endTime: string;
     discountValue: number;
     maxUsage: number | null;
     usedCount: number | null;
@@ -33,4 +33,7 @@ export interface AvailablePromotionDTO {
     discountValue: number;
     estimatedDiscount: number;
     finalAmount: number;
+    appliedRule?: Record<string, string> | null;
+    targetDishIds: number[];
+    targetCategoryIds: number[];
 }

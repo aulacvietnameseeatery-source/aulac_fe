@@ -5,6 +5,8 @@ import { Upload, Maximize2, Loader2, X, PlayCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { processImageFile } from "@/lib/image-processing";
+import { useTranslations } from "next-intl";
+
 
 interface SystemSettingMediaUploaderProps {
     value?: string;
@@ -35,7 +37,9 @@ export const SystemSettingMediaUploader: React.FC<SystemSettingMediaUploaderProp
     disabled = false,
     label,
 }) => {
+    const t = useTranslations("settings");
     const [isUploading, setIsUploading] = useState(false);
+
     const [localPreview, setLocalPreview] = useState<string | null>(null);
     const inputRef = useRef<HTMLInputElement>(null);
 
@@ -63,20 +67,20 @@ export const SystemSettingMediaUploader: React.FC<SystemSettingMediaUploaderProp
 
         // Basic type check
         if (type === "video" && !file.type.startsWith("video/")) {
-            toast.error("Invalid video format");
+            toast.error(t("StoreProfile.invalidVideoFormatError"));
             if (e.target) e.target.value = "";
             return;
         }
 
         if (type === "image" && !file.type.startsWith("image/") && !file.name.toLowerCase().endsWith(".heic") && !file.name.toLowerCase().endsWith(".heif")) {
-            toast.error("Invalid image format");
+            toast.error(t("StoreProfile.invalidImageFormatError"));
             if (e.target) e.target.value = "";
             return;
         }
 
         // Size check
         if (file.size > maxSizeMB * 1024 * 1024) {
-            toast.error(`File size exceeds ${maxSizeMB}MB limit`);
+            toast.error(t(type === "video" ? "StoreProfile.videoSizeError" : "StoreProfile.fileSizeError", { max: maxSizeMB }));
             if (e.target) e.target.value = "";
             return;
         }
@@ -86,12 +90,13 @@ export const SystemSettingMediaUploader: React.FC<SystemSettingMediaUploaderProp
             setIsUploading(true);
             const isValidDuration = await checkVideoDuration(file, maxVideoDuration);
             if (!isValidDuration) {
-                toast.error(`Video duration must be under ${maxVideoDuration} seconds`);
+                toast.error(t("StoreProfile.videoDurationError", { max: maxVideoDuration }));
                 setIsUploading(false);
                 if (e.target) e.target.value = "";
                 return;
             }
         }
+
 
         setIsUploading(true);
 
@@ -107,12 +112,13 @@ export const SystemSettingMediaUploader: React.FC<SystemSettingMediaUploaderProp
 
             const result = await onUpload(fileToUpload);
             onChange(result.relativePath, result.publicUrl);
-            toast.success("Upload successful");
+            toast.success(t("StoreProfile.uploadSuccess"));
         } catch (error) {
             console.error("Upload error:", error);
-            toast.error("Failed to upload file");
+            toast.error(t("StoreProfile.uploadError"));
             setLocalPreview(null);
         } finally {
+
             setIsUploading(false);
             if (e.target) e.target.value = "";
         }

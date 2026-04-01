@@ -4,11 +4,15 @@ import React, { useMemo, useCallback } from "react";
 import { BaseTable } from "@/components/ui/table/base-table";
 import { TableColumn } from "@/types/table.types";
 import { CalendarDays } from "lucide-react";
-import {useEarningReport} from "@/features/staff/report-management/earning/hooks/use-earning-report";
+import { useEarningReport } from "@/features/staff/report-management/earning/hooks/use-earning-report";
 import { EarningFilter } from "@/features/staff/report-management/earning/components/earning-filter";
-import {EarningTableItemDto} from "@/features/staff/report-management/earning/types/earning-types";
+import { EarningTableItemDto } from "@/features/staff/report-management/earning/types/earning-types";
+import { useTranslations } from "next-intl";
 
 export default function EarningReportPage() {
+    const t = useTranslations("reports.earning");
+    const tCommon = useTranslations("reports.common");
+
     const {
         data,
         isLoading,
@@ -19,7 +23,6 @@ export default function EarningReportPage() {
         applyDateFilter
     } = useEarningReport();
 
-    // Hàm format tiền tệ CHF (Thụy Sĩ)
     const formatCurrency = (value: number) => {
         return new Intl.NumberFormat('de-CH', {
             style: 'currency',
@@ -31,7 +34,7 @@ export default function EarningReportPage() {
         () => [
             {
                 field: "date",
-                header: "Date",
+                header: t("table.date"),
                 width: "180px",
                 cellRender: ({ value }: { value: any }) => (
                     <div className="flex items-center gap-2 text-gray-800 font-medium">
@@ -42,7 +45,7 @@ export default function EarningReportPage() {
             },
             {
                 field: "totalOrders",
-                header: "Total Orders",
+                header: t("table.totalOrders"),
                 width: "150px",
                 align: "center" as const,
                 cellRender: ({ value }: { value: any }) => (
@@ -53,7 +56,7 @@ export default function EarningReportPage() {
             },
             {
                 field: "grossRevenue",
-                header: "Gross Revenue",
+                header: t("table.grossRevenue"),
                 width: "180px",
                 align: "right" as const,
                 cellRender: ({ value }: { value: any }) => (
@@ -62,7 +65,7 @@ export default function EarningReportPage() {
             },
             {
                 field: "totalTax",
-                header: "Total Tax",
+                header: t("table.totalTax"),
                 width: "150px",
                 align: "right" as const,
                 cellRender: ({ value }: { value: any }) => (
@@ -71,7 +74,7 @@ export default function EarningReportPage() {
             },
             {
                 field: "netRevenue",
-                header: "Net Revenue",
+                header: t("table.netRevenue"),
                 width: "180px",
                 align: "right" as const,
                 cellRender: ({ value }: { value: any }) => (
@@ -81,7 +84,7 @@ export default function EarningReportPage() {
                 ),
             },
         ],
-        []
+        [t]
     );
 
     const handleGlobalRenderCell = useCallback(
@@ -95,14 +98,13 @@ export default function EarningReportPage() {
     );
 
     return (
-        <div className="w-full h-full flex flex-col gap-6"> {/* THÊM gap-6 */}
+        <div className="w-full h-full flex flex-col gap-6">
             <EarningFilter
                 initialStart={filters.startDate}
                 initialEnd={filters.endDate}
                 onApply={applyDateFilter}
             />
 
-            {/* XÓA BỎ các class viền, bo góc, màu nền */}
             <div className="flex-1 w-full overflow-hidden">
                 <BaseTable<EarningTableItemDto>
                     data={data}
@@ -112,16 +114,16 @@ export default function EarningReportPage() {
                     total={totalCount}
                     onDataChange={onDataChange}
                     onRefresh={refresh}
-                    searchPlaceholder="Search date..."
+                    searchPlaceholder={tCommon("searchPlaceholder")}
                     defaultRowsPerPage={10}
                     rowsPerPageOptions={[10, 20, 50]}
                     renderTitle={() => (
-                        <div className="pb-4"> {/* ĐỔI py-2 px-4 thành pb-4 */}
+                        <div className="pb-4">
                             <h2 className="text-xl font-bold text-gray-800 tracking-tight">
-                                Daily Earning Summary
+                                {t("title")}
                             </h2>
                             <p className="text-sm text-gray-500 mt-1">
-                                Revenue breakdown by date including gross, net, and tax.
+                                {t("description")}
                             </p>
                         </div>
                     )}

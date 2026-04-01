@@ -371,7 +371,10 @@
     "CartSummary": {
       "title": "Summary",
       "items_count": "{count} Distinct Items",
-      "confirm_btn": "Confirm Order"
+      "confirm_btn": "Confirm Order",
+      "table_label": "Table",
+      "note_placeholder": "Add note for chef...",
+      "total_label": "Total"
     },
     "err_load_cart": "Failed to load cart data.",
     "err_table_occupied_access": "This table is already occupied. Access denied.",

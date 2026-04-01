@@ -1,20 +1,8 @@
 "use client";
 
 import React from "react";
-import {
-    DollarSign,
-    ShoppingBag,
-    Receipt,
-    CalendarDays,
-    TrendingUp,
-    TrendingDown
-} from "lucide-react";
-import {
-    Card,
-    CardContent,
-    CardHeader,
-    CardTitle
-} from "@/components/ui/card"; // Sửa lại đường dẫn tới thư mục chứa file Card của bạn
+import { DollarSign, ShoppingBag, Receipt, CalendarDays, TrendingUp, TrendingDown } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { DashboardSummaryDto } from "../types/dashboard-types";
 import { useTranslations } from "next-intl";
 
@@ -25,7 +13,6 @@ interface DashboardSummaryCardsProps {
 
 export function DashboardSummaryCards({ summary, isLoading }: DashboardSummaryCardsProps) {
     const t = useTranslations("dashboard.summary");
-
 
     if (isLoading || !summary) {
         return (
@@ -46,10 +33,9 @@ export function DashboardSummaryCards({ summary, isLoading }: DashboardSummaryCa
         );
     }
 
-
     const cards = [
         {
-            title: "Total Revenue",
+            title: t("totalRevenue"),
             value: `${summary.totalSales.value.toLocaleString()} CHF`,
             trend: summary.totalSales.trend,
             isUp: summary.totalSales.isUp,
@@ -58,7 +44,7 @@ export function DashboardSummaryCards({ summary, isLoading }: DashboardSummaryCa
             bgColor: "bg-emerald-100"
         },
         {
-            title: "Total Orders",
+            title: t("totalOrders"),
             value: summary.totalOrders.value.toLocaleString(),
             trend: summary.totalOrders.trend,
             isUp: summary.totalOrders.isUp,
@@ -67,7 +53,7 @@ export function DashboardSummaryCards({ summary, isLoading }: DashboardSummaryCa
             bgColor: "bg-blue-100"
         },
         {
-            title: "Average Order Value",
+            title: t("avgOrderValue"),
             value: `${summary.averageOrderValue.value.toLocaleString()} CHF`,
             trend: summary.averageOrderValue.trend,
             isUp: summary.averageOrderValue.isUp,
@@ -76,7 +62,7 @@ export function DashboardSummaryCards({ summary, isLoading }: DashboardSummaryCa
             bgColor: "bg-orange-100"
         },
         {
-            title: "Total Reservations",
+            title: t("totalReservations"),
             value: summary.totalReservations.value.toLocaleString(),
             trend: summary.totalReservations.trend,
             isUp: summary.totalReservations.isUp,
@@ -97,7 +83,6 @@ export function DashboardSummaryCards({ summary, isLoading }: DashboardSummaryCa
                     <Card key={index} className="border-gray-100/50 shadow-sm hover:shadow-md transition-shadow">
                         <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
                             <CardTitle className="text-sm font-medium text-muted-foreground">
-                                {/* Dùng i18n nếu bạn đã setup, tạm thời tôi để trực tiếp card.title */}
                                 {card.title}
                             </CardTitle>
                             <div className={`p-2 rounded-xl ${card.bgColor}`}>
@@ -114,7 +99,7 @@ export function DashboardSummaryCards({ summary, isLoading }: DashboardSummaryCa
                                     {card.trend}%
                                 </span>
                                 <span className="text-xs text-muted-foreground ml-2">
-                                    vs last period
+                                    {t("vsLastPeriod")}
                                 </span>
                             </div>
                         </CardContent>

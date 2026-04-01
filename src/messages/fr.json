@@ -277,7 +277,10 @@
     "CartSummary": {
       "title": "Résumé",
       "items_count": "{count} Articles Distincts",
-      "confirm_btn": "Confirmer"
+      "confirm_btn": "Confirmer",
+      "table_label": "Table",
+      "note_placeholder": "Note pour le chef...",
+      "total_label": "Total"
     }
   },
   "QrScan": {

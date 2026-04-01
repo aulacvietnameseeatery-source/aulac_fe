@@ -371,7 +371,10 @@
     "CartSummary": {
       "title": "Résumé",
       "items_count": "{count} Articles Distincts",
-      "confirm_btn": "Confirmer"
+      "confirm_btn": "Confirmer",
+      "table_label": "Table",
+      "note_placeholder": "Note pour le chef...",
+      "total_label": "Total"
     },
     "err_load_cart": "Impossible de charger les données du panier.",
     "err_table_occupied_access": "Cette table est déjà occupée. Accès refusé.",

@@ -97,6 +97,12 @@ export const EditReservationModal = ({
       return true;
     }
 
+    // Allow initial date/time even if in the past (e.g. when opening an existing record)
+    if (selectedDate === initialDate && selectedTime === initialTime) {
+      setValidationError(null);
+      return true;
+    }
+
     if (dateUtils.isPast(selectedDate, selectedTime)) {
       setValidationError(tStaff("errors.timePast"));
       return false;
