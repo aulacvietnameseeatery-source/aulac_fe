@@ -38,7 +38,8 @@
       "website": "Website",
       "preview": "Preview",
       "remove": "Remove",
-      "invalidForm": "Please check all language tabs for required fields."
+      "invalidForm": "Please check all language tabs for required fields.",
+      "noResults": "No results found"
     },
     "Introduction": {
       "title": "Introduction Page",
