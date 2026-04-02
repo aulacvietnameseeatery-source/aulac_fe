@@ -405,7 +405,10 @@
         "printInvoice": "Print Invoice",
         "defaultStaff": "Staff",
         "thankYouBusiness": "Thank you for your business!",
-        "currency": "USD"
+        "currency": "USD",
+        "totalAmount": "Total Amount",
+        "customer": "Guest",
+        "close": "Close"
       }
     },
     "invoices": {

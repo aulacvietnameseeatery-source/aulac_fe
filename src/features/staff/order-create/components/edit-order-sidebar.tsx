@@ -187,6 +187,7 @@ export const EditOrderSidebar = ({
         orderItemId: item.orderItemId,
         dishId: item.dishId,
         dishName: item.dishName,
+        dishNameI18n: item.dishNameI18n,
         quantity: item.quantity,
         price: item.price,
         itemStatus: item.itemStatus,
