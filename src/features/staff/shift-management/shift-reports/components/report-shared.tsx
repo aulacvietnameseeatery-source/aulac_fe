@@ -57,7 +57,6 @@ export function thisMonthRange() {
     return { from, to };
 }
 
-// _OLD: formatTime used toLocaleTimeString — now uses dateUtils.formatLocal
 export function formatTime(isoString: string | null | undefined): string {
     if (!isoString) return "—";
     try {

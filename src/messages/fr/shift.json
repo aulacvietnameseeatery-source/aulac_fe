@@ -267,7 +267,7 @@
       }
     },
     "myShift": {
-      "title": "Mes Quarts",
+      "title": "Feuille de temps",
       "description": "Consultez vos quarts assignés et pointez votre entrée/sortie.",
       "loading": "Chargement des quarts...",
       "empty": "Aucun quart assigné pour les 30 prochains jours.",
@@ -278,6 +278,19 @@
         "swap": "Échanger",
         "leave": "Congé"
       },
+      "viewMode": {
+        "week": "Semaine",
+        "month": "Mois"
+      },
+      "stats": {
+        "totalWorkdays": "Total jours travaillés",
+        "totalOvertimeHours": "Total heures sup. (coeff.)",
+        "totalLateEarly": "Total retards et départs anticipés",
+        "totalLeaveDays": "Total jours de congé"
+      },
+      "checkedInTodayAt": "Vous avez pointé aujourd'hui à",
+      "autoSyncNote": "Note : La feuille de temps sera synchronisée automatiquement aux heures suivantes : 10h00, 12h00, 15h15 et 17h30 chaque jour",
+      "timesheetPeriod": "Feuille de temps du {date}",
       "summary": {
         "title": "Résumé du mois",
         "subtitle": "Vue d'ensemble de la présence",
@@ -300,7 +313,22 @@
         "networkConnected": "Connecté au réseau magasin",
         "locationUnverified": "Position non vérifiée",
         "checkInAction": "Pointer Entrée",
-        "checkOutAction": "Pointer Sortie"
+        "checkOutAction": "Pointer Sortie",
+        "checkInAvailableFrom": "Pointage disponible à partir de {time}",
+        "inMinutes": "dans {minutes} min",
+        "shiftEnded": "Ce quart est terminé — pointage indisponible",
+        "tooEarlyToast": "Trop tôt ! Pointage à partir de {time}",
+        "shiftEndedToast": "Ce quart est déjà terminé"
+      },
+      "autoLogout": {
+        "bannerTitle": "Déconnexion auto dans {time}",
+        "bannerMessage": "Vous avez pointé la sortie. Vous serez déconnecté automatiquement.",
+        "stay": "Rester",
+        "logoutNow": "Se déconnecter"
+      },
+      "todayAttendance": {
+        "title": "Présence du jour",
+        "noShiftsToday": "Aucun quart assigné aujourd'hui"
       },
       "todayShift": "Quart du jour",
       "upcomingShifts": "Prochains quarts",

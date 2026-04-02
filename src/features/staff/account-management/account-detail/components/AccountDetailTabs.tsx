@@ -17,8 +17,6 @@ const OrdersTab = lazy(() => import("./tabs/OrdersTab").then((m) => ({ default: 
 const InventoryTab = lazy(() => import("./tabs/InventoryTab").then((m) => ({ default: m.InventoryTab })));
 const ServiceErrorsTab = lazy(() => import("./tabs/ServiceErrorsTab").then((m) => ({ default: m.ServiceErrorsTab })));
 const AuditLogsTab = lazy(() => import("./tabs/AuditLogsTab").then((m) => ({ default: m.AuditLogsTab })));
-
-// _OLD: SystemSettingsTab hidden — no account-scoped BE endpoint
 // const SystemSettingsTab = lazy(() => import("./tabs/SystemSettingsTab").then((m) => ({ default: m.SystemSettingsTab })));
 
 type ActiveTabKey = Extract<AccountTabKey, "general" | "role-status" | "security" | "orders" | "inventory" | "service-errors" | "audit-logs">;

@@ -5,11 +5,8 @@ import { useTranslations } from 'next-intl';
 import { useSystemSettings } from '../hooks/useSystemSettings';
 import { SettingGroupCard } from './SettingGroupCard';
 import { LandingPageSettingsCard } from './LandingPageSettingsCard';
-import { Loader2, Settings, Plus } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { AddSettingModal } from './AddSettingModal';
-import { PermissionGuard } from '@/components/permission-guard';
-import { Permissions } from '@/types/const';
+import { ShiftSettingsCard } from './ShiftSettingsCard';
+import { Loader2 } from 'lucide-react';
 
 export const GeneralSettings: React.FC = () => {
     const t = useTranslations('settings');
@@ -21,7 +18,7 @@ export const GeneralSettings: React.FC = () => {
 
     if (isLoading && Object.keys(grouped).length === 0) {
         return (
-            <div className="flex flex-col items-center justify-center p-24 space-y-4">
+            <div className="flex min-h-screen flex-col items-center justify-center p-24 space-y-4">
                 <Loader2 className="h-10 w-10 animate-spin text-primary/60" />
                 <p className="text-sm text-muted-foreground animate-pulse">{t('loading')}</p>
             </div>
@@ -39,7 +36,7 @@ export const GeneralSettings: React.FC = () => {
     const groups = Object.keys(filteredGrouped).sort();
 
     return (
-        <div className="space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-500">
+        <div className="w-full min-h-screen space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-500">
             {groups.length === 0 ? (
                 <div className="bg-white rounded-xl border border-dashed p-12 text-center flex flex-col items-center">
                     <div className="w-12 h-12 bg-gray-50 rounded-full flex items-center justify-center mb-4" />
@@ -53,6 +50,13 @@ export const GeneralSettings: React.FC = () => {
                     {groups.map((groupName) => (
                         groupName === 'landing_page' ? (
                             <LandingPageSettingsCard key={groupName} settings={filteredGrouped[groupName]} />
+                        ) : groupName === 'shift' ? (
+                            <ShiftSettingsCard
+                                key={groupName}
+                                settings={filteredGrouped[groupName]}
+                                isSaving={savingGroups[groupName] || false}
+                                onSave={(items) => saveGroup(groupName, items, t('notifications.saveSuccess', { group: groupName }))}
+                            />
                         ) : (
                             <SettingGroupCard
                                 key={groupName}

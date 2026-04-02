@@ -4,7 +4,6 @@ import { inventoryService } from "../services/inventory.service";
 import type {
   GetInventoryItemsFilter,
   GetTransactionsFilter,
-  // _OLD: CreateInventoryTransactionRequest — mutation now accepts FormData
   SubmitTransactionRequest,
   ApproveTransactionRequest,
 } from "../types/inventory.types";

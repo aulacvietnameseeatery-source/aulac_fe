@@ -1,6 +1,4 @@
 'use client';
-
-// _OLD: SignalRProvider was a standalone connection to /hubs/restaurant.
 // This is now handled by the global NotificationProvider singleton.
 // Use useNotificationConnection() from @/features/staff/notifications instead.
 //

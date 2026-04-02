@@ -40,7 +40,6 @@ export const LanguageTabs: React.FC<LanguageTabsProps> = ({
     mutationFn: translateDishContent,
     onSuccess: (data) => {
       // Data returned: { translations: { "fr": { dishName: "..." }, "vi": { ... } } }
-      // _OLD: translated item count was tracked for a toast message.
 
       Object.entries(data.translations).forEach(([langKey, content]) => {
         const targetLang = langKey as Language;
@@ -63,11 +62,7 @@ export const LanguageTabs: React.FC<LanguageTabsProps> = ({
         setField("shortDescription", content.shortDescription);
         setField("slogan", content.slogan);
         setField("note", content.note);
-        
-        // _OLD: count++;
       });
-
-      // _OLD: toast.success(`Translated content to ${count} other languages!`);
     },
     onError: () => {
       //toast.error(err?.message || "Translation failed. Please try again.");

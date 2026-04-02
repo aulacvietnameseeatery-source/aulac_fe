@@ -295,8 +295,6 @@ const ALDatePicker = React.forwardRef<HTMLButtonElement, ALDatePickerProps>(
       const nextDate = applyTimeToDate(selectedDate, nextHour, nextMinute, nextPeriod);
       onChange?.(formatOutputDate(nextDate, "datetime"));
     };
-
-    // _OLD: inline label/error/description rendering, now unified via ALFieldWrapper
     return (
       <ALFieldWrapper
         title={title}

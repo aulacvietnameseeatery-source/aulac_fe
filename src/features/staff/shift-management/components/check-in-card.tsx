@@ -1,6 +1,6 @@
 "use client";
 
-import { Clock, LogIn, LogOut, CheckCircle2, AlertCircle, Timer } from "lucide-react";
+import { Clock, LogIn, LogOut, CheckCircle2, AlertCircle, Timer, Ban } from "lucide-react";
 import { useTranslations } from "next-intl";
 import {
   Card,
@@ -16,10 +16,15 @@ import { useCheckInMutation, useCheckOutMutation } from "../hooks/use-shift-quer
 import { dateUtils } from "@/lib/date-utils";
 import { ShiftStatusBadge } from "./shift-status-badge";
 import type { ShiftAssignmentDto } from "../types/shift-management.types";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
+import { toast } from "sonner";
+
+const CHECK_IN_WINDOW_MINUTES = 120; // 2 hours before shift start
 
 interface Props {
   assignment: ShiftAssignmentDto;
+  /** Called after a successful check-out (trigger auto-logout countdown) */
+  onCheckOutSuccess?: () => void;
 }
 
 function fmt(iso: string | null | undefined, fallback = "—") {
@@ -45,7 +50,43 @@ function fmtDatetime(iso: string | null | undefined, fallback = "—") {
   }
 }
 
-export function CheckInCard({ assignment }: Props) {
+type CheckInAvailability =
+  | { status: "TOO_EARLY"; earliestTime: string; minutesUntil: number }
+  | { status: "AVAILABLE" }
+  | { status: "SHIFT_ENDED" }
+  | { status: "ALREADY_CHECKED_IN" };
+
+function getCheckInAvailability(
+  assignment: ShiftAssignmentDto,
+  hasCheckedIn: boolean,
+  now: Date
+): CheckInAvailability {
+  if (hasCheckedIn) return { status: "ALREADY_CHECKED_IN" };
+
+  const plannedStart = assignment.plannedStartAt ? new Date(assignment.plannedStartAt) : null;
+  const plannedEnd = assignment.plannedEndAt ? new Date(assignment.plannedEndAt) : null;
+
+  if (!plannedStart || !plannedEnd) return { status: "AVAILABLE" };
+
+  const earliestCheckIn = new Date(plannedStart.getTime() - CHECK_IN_WINDOW_MINUTES * 60_000);
+
+  if (now > plannedEnd) {
+    return { status: "SHIFT_ENDED" };
+  }
+
+  if (now < earliestCheckIn) {
+    const minutesUntil = Math.ceil((earliestCheckIn.getTime() - now.getTime()) / 60_000);
+    return {
+      status: "TOO_EARLY",
+      earliestTime: fmt(earliestCheckIn.toISOString()),
+      minutesUntil,
+    };
+  }
+
+  return { status: "AVAILABLE" };
+}
+
+export function CheckInCard({ assignment, onCheckOutSuccess }: Props) {
   const t = useTranslations("shift.myShift.checkInCard");
   const checkIn = useCheckInMutation();
   const checkOut = useCheckOutMutation();
@@ -57,24 +98,55 @@ export function CheckInCard({ assignment }: Props) {
   const isCompleted = statusCode === "COMPLETED";
   const isLate = statusCode === "LATE" || (att?.lateMinutes ?? 0) > 0;
 
+  // Live clock for check-in availability (updates every 30s for countdown)
+  const [now, setNow] = useState(() => new Date());
+  useEffect(() => {
+    const interval = setInterval(() => setNow(new Date()), 30_000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const availability = useMemo(
+    () => getCheckInAvailability(assignment, hasCheckedIn, now),
+    [assignment, hasCheckedIn, now]
+  );
+
+  const canCheckIn = availability.status === "AVAILABLE";
+
   // Geofencing / Network simulation state
   const [isVerifyingLocation, setIsVerifyingLocation] = useState(false);
   const [locationVerified, setLocationVerified] = useState(false);
 
   useEffect(() => {
-    // Only run simulation when the shift is active and not yet checked in
-    if (assignment.isActive && !hasCheckedIn && !isCompleted) {
+    // Only run simulation when check-in is available and not yet checked in
+    if (assignment.isActive && canCheckIn && !isCompleted) {
       setIsVerifyingLocation(true);
       const timer = setTimeout(() => {
         setLocationVerified(true);
         setIsVerifyingLocation(false);
-      }, 1500); // Simulate network ping / GPS check latency
+      }, 1500);
       return () => clearTimeout(timer);
     }
-  }, [assignment.isActive, hasCheckedIn, isCompleted]);
+  }, [assignment.isActive, canCheckIn, isCompleted]);
 
-  const handleCheckIn = () => checkIn.mutate(assignment.shiftAssignmentId);
-  const handleCheckOut = () => checkOut.mutate(assignment.shiftAssignmentId);
+  const handleCheckIn = useCallback(() => {
+    if (!canCheckIn) {
+      if (availability.status === "TOO_EARLY") {
+        toast.info(t("tooEarlyToast", { time: availability.earliestTime }));
+      } else if (availability.status === "SHIFT_ENDED") {
+        toast.info(t("shiftEndedToast"));
+      }
+      return;
+    }
+    checkIn.mutate(assignment.shiftAssignmentId);
+  }, [canCheckIn, availability, assignment.shiftAssignmentId, checkIn, t]);
+
+  const handleCheckOut = useCallback(() => {
+    checkOut.mutate(assignment.shiftAssignmentId, {
+      onSuccess: () => {
+        onCheckOutSuccess?.();
+      },
+    });
+  }, [assignment.shiftAssignmentId, checkOut, onCheckOutSuccess]);
 
   return (
     <Card className="overflow-hidden border border-[#D5BA98]/60 bg-white shadow-sm">
@@ -112,22 +184,47 @@ export function CheckInCard({ assignment }: Props) {
         <div className="flex items-center gap-3 rounded-lg border border-[#D5BA98]/45 bg-[#FDFBF9] px-3 py-2 text-sm text-[#1A3A52]/70">
           <Clock className="w-4 h-4 shrink-0" />
           <span>
-            {t("scheduled")} {" "}
+            {t("scheduled")}{" "}
             <span className="font-medium text-[#1A3A52]">
               {fmt(assignment.plannedStartAt)} – {fmt(assignment.plannedEndAt)}
             </span>
           </span>
         </div>
 
+        {/* Check-in availability info — shown BEFORE check-in */}
+        {!hasCheckedIn && !isCompleted && assignment.isActive && (
+          <>
+            {availability.status === "TOO_EARLY" && (
+              <div className="flex items-center gap-2 rounded-lg border border-blue-200 bg-blue-50 px-3 py-2 text-sm text-blue-700">
+                <Clock className="w-4 h-4 shrink-0" />
+                <span>
+                  {t("checkInAvailableFrom", { time: availability.earliestTime })}
+                  {availability.minutesUntil <= 30 && (
+                    <span className="ml-1 font-medium">
+                      ({t("inMinutes", { minutes: availability.minutesUntil })})
+                    </span>
+                  )}
+                </span>
+              </div>
+            )}
+            {availability.status === "SHIFT_ENDED" && (
+              <div className="flex items-center gap-2 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-600">
+                <Ban className="w-4 h-4 shrink-0" />
+                {t("shiftEnded")}
+              </div>
+            )}
+          </>
+        )}
+
         {/* Attendance timestamps */}
         <div className="grid grid-cols-2 gap-3">
-          <div className="space-y-0.5 rounded-lg border border border-[#D5BA98]/60 bg-[#FDFBF9] p-3">
+          <div className="space-y-0.5 rounded-lg border border-[#D5BA98]/60 bg-[#FDFBF9] p-3">
             <p className="text-xs uppercase tracking-wide text-[#1A3A52]/60">{t("checkIn")}</p>
             <p className="text-sm font-semibold text-[#1A3A52]">
               {hasCheckedIn ? fmtDatetime(att!.actualCheckInAt) : "—"}
             </p>
           </div>
-          <div className="space-y-0.5 rounded-lg border border border-[#D5BA98]/60 bg-[#FDFBF9] p-3">
+          <div className="space-y-0.5 rounded-lg border border-[#D5BA98]/60 bg-[#FDFBF9] p-3">
             <p className="text-xs uppercase tracking-wide text-[#1A3A52]/60">{t("checkOut")}</p>
             <p className="text-sm font-semibold text-[#1A3A52]">
               {hasCheckedOut ? fmtDatetime(att!.actualCheckOutAt) : "—"}
@@ -164,7 +261,7 @@ export function CheckInCard({ assignment }: Props) {
         {/* Action buttons — only shown when assignment is active and not fully completed */}
         {assignment.isActive && !isCompleted && (
           <div className="space-y-3 pt-1">
-            {!hasCheckedIn && (
+            {!hasCheckedIn && canCheckIn && (
               <div className={`flex items-center gap-2 rounded-lg border px-3 py-2 text-xs font-medium transition-all ${
                 isVerifyingLocation
                   ? "border-blue-200 bg-blue-50 text-blue-700 animate-pulse"
@@ -194,9 +291,13 @@ export function CheckInCard({ assignment }: Props) {
             <div className="flex gap-3">
               <PermissionGuard permission={Permissions.CheckInShift}>
                 <Button
-                  className={`flex-1 gap-2 ${hasCheckedIn ? 'bg-slate-100 text-slate-400 cursor-not-allowed border-none hover:bg-slate-100' : 'bg-[#1A3A52] text-white hover:bg-[#1A3A52]/90 shadow-sm'}`}
+                  className={`flex-1 gap-2 ${
+                    hasCheckedIn || !canCheckIn
+                      ? "bg-slate-100 text-slate-400 cursor-not-allowed border-none hover:bg-slate-100"
+                      : "bg-[#1A3A52] text-white hover:bg-[#1A3A52]/90 shadow-sm"
+                  }`}
                   onClick={handleCheckIn}
-                  disabled={hasCheckedIn || checkIn.isPending || !locationVerified}
+                  disabled={hasCheckedIn || !canCheckIn || checkIn.isPending || (!locationVerified && canCheckIn)}
                   isLoading={checkIn.isPending}
                 >
                   <LogIn className="w-4 h-4" />
@@ -206,7 +307,11 @@ export function CheckInCard({ assignment }: Props) {
               <PermissionGuard permission={Permissions.CheckOutShift}>
                 <Button
                   variant="outline"
-                  className={`flex-1 gap-2 border-slate-300 ${!hasCheckedIn || hasCheckedOut ? 'bg-slate-50 text-slate-400 cursor-not-allowed hover:bg-slate-50' : 'border-blue-600 text-blue-700 hover:bg-blue-50 bg-white shadow-sm'}`}
+                  className={`flex-1 gap-2 border-slate-300 ${
+                    !hasCheckedIn || hasCheckedOut
+                      ? "bg-slate-50 text-slate-400 cursor-not-allowed hover:bg-slate-50"
+                      : "border-blue-600 text-blue-700 hover:bg-blue-50 bg-white shadow-sm"
+                  }`}
                   onClick={handleCheckOut}
                   disabled={!hasCheckedIn || hasCheckedOut || checkOut.isPending}
                   isLoading={checkOut.isPending}

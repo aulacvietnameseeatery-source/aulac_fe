@@ -7,6 +7,8 @@ import { Button } from "@/components/ui/button";
 import { ALDatePicker } from "@/components/ui/al-date-picker";
 import { Switch } from "@/components/ui/switch";
 import { Dialog } from "@/components/ui/dialog";
+import { PermissionGuard } from "@/components/permission-guard";
+import { Permissions } from "@/types/const";
 import { useCopyWeekMutation } from "../hooks/use-shift-queries";
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
@@ -70,7 +72,7 @@ export function CopyWeekDialog({ defaultSource }: CopyWeekDialogProps) {
   };
 
   return (
-    <>
+    <PermissionGuard permission={Permissions.ScheduleShift}>
       <Button variant="outline" size="sm" className="gap-1.5" onClick={() => setOpen(true)}>
         <Copy className="h-3.5 w-3.5" />
         {t("open")}
@@ -141,6 +143,6 @@ export function CopyWeekDialog({ defaultSource }: CopyWeekDialogProps) {
           </div>
         </div>
       </Dialog>
-    </>
+    </PermissionGuard>
   );
 }
