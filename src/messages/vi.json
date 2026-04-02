@@ -2091,16 +2091,18 @@
       "noCouponsApplied": "Không có mã giảm giá",
       "of": "trên",
       "status": {
-        "PENDING": "Chờ xử lý",
+        "PENDING": "Chờ xác nhận",
         "IN_PROGRESS": "Đang thực hiện",
-        "COMPLETED": "Đã hoàn thành",
-        "CANCELLED": "Đã hủy",
-        "CREATED": "Đã tạo",
-        "READY": "Đã sẵn sàng",
+        "COMPLETED": "Hoàn thành",
+        "CANCELLED": "Đã hủy"
+      },
+      "itemStatus": {
+        "CREATED": "Mới tạo",
+        "IN_PROGRESS": "Đang làm",
+        "READY": "Sẵn sàng",
         "SERVED": "Đã phục vụ",
-        "REJECTED": "Bị từ chối",
-        "DINE_IN": "Tại quán",
-        "TAKEAWAY": "Mang đi"
+        "REJECTED": "Từ chối",
+        "CANCELLED": "Đã hủy"
       }
     }
   },

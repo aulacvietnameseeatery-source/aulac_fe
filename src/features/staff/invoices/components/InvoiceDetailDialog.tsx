@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { RefreshCcw, Download, Printer } from 'lucide-react';
+import { RefreshCcw, Printer } from 'lucide-react';
 import { getSaleInvoiceDetail } from '@/features/staff/invoices/api/invoice-api';
 import { SaleInvoiceDto } from '@/features/staff/invoices/types/invoice.types';
 import { useStoreSettings } from '@/hooks/use-store-settings';
@@ -24,6 +24,14 @@ export function InvoiceDetailDialog({ open, onClose, orderId }: InvoiceDetailDia
     const { data: settings } = useStoreSettings();
     const printRef = useRef<HTMLDivElement>(null);
 
+    const formatCurrency = (val: number) => {
+        return new Intl.NumberFormat('fr-CH', { 
+            style: 'currency', 
+            currency: 'CHF',
+            minimumFractionDigits: 2
+        }).format(val);
+    };
+
     const fetchInvoice = async () => {
         if (!orderId) return;
         try {
@@ -31,7 +39,7 @@ export function InvoiceDetailDialog({ open, onClose, orderId }: InvoiceDetailDia
             const data = await getSaleInvoiceDetail(orderId);
             setInvoice(data);
         } catch (error: any) {
-            toast.error(error.message || t('errorLoad'));
+            toast.error(error.message || t('errorLoad', { fallback: 'Failed to load invoice' }));
         } finally {
             setLoading(false);
         }
@@ -49,176 +57,181 @@ export function InvoiceDetailDialog({ open, onClose, orderId }: InvoiceDetailDia
         window.print();
     };
 
-    const storeName = settings?.name || 'Restaurant Name';
-    const storeAddress = settings?.streetAddress || 'Restaurant Address';
-    const storePhone = settings?.phone || 'Phone';
-
     const bodyContent = () => {
         if (loading) {
-            return <div className="py-12 text-center text-gray-500">{t('loading')}</div>;
+            return <div className="py-12 text-center text-gray-500">{t('loading', { fallback: 'Loading...' })}</div>;
         }
         if (!invoice) {
-            return <div className="py-12 text-center text-red-500">{t('notFound')}</div>;
+            return <div className="py-12 text-center text-red-500">{t('notFound', { fallback: 'Invoice not found' })}</div>;
         }
 
+        const storeName = invoice.restaurantName || settings?.name || 'Restaurant Name';
+        const storeAddress = invoice.restaurantAddress || settings?.streetAddress || 'Restaurant Address';
+        const storePhone = invoice.restaurantPhone || settings?.phone || 'Phone';
+
         return (
-            <div ref={printRef} className="bg-white w-full">
+            <div className="bg-gray-100 flex flex-col items-center py-6 custom-scrollbar" onClick={(e) => e.stopPropagation()}>
                 <style type="text/css" media="print">
                     {`
-                        @page { margin: 10mm; }
+                        @page { margin: 0; size: auto; }
+                        body * { visibility: hidden; }
+                        #receipt-print-area, #receipt-print-area * {
+                            visibility: visible;
+                        }
+                        #receipt-print-area {
+                            position: absolute;
+                            left: 0;
+                            top: 0;
+                            width: 100mm;
+                            margin: 0;
+                            padding: 10mm;
+                        }
                         * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
                     `}
                 </style>
-                <div className="w-full bg-white">
-                    {/* Brand Header */}
-                    <div className="bg-[#1A3A52] px-6 py-6 text-white flex flex-col sm:flex-row justify-between items-center sm:items-start relative overflow-hidden">
-                        {/* subtle pattern */}
-                        <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '32px 32px' }}></div>
-
-                        <div className="relative z-10 text-center sm:text-left mb-6 sm:mb-0">
-                            <h2 className="text-3xl font-black tracking-tight mb-2">{storeName}</h2>
-                            <p className="text-white/70 text-sm max-w-[250px] leading-relaxed">{storeAddress}</p>
-                            <p className="text-white/70 text-sm mt-1.5"><span className="opacity-60">{t('phone')}:</span> {storePhone}</p>
-                        </div>
-
-                        <div className="relative z-10 text-center sm:text-right">
-                            <h6 className="text-3xl font-black mb-3 opacity-95">{invoice.invoiceCode}</h6>
-                            <span className="inline-flex items-center gap-1.5 px-4 py-1.5 bg-emerald-500/20 text-emerald-50 text-xs font-bold rounded-lg uppercase tracking-widest border border-emerald-500/30 backdrop-blur-sm shadow-sm">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10-10 0 1 1-5.93-9.14" /><path d="m9 11 3 3L22 4" /></svg>
-                                {t('status.paid')}
-                            </span>
-                        </div>
+                
+                {/* PHẦN SẼ ĐƯỢC IN RA */}
+                <div 
+                    id="receipt-print-area" 
+                    ref={printRef} 
+                    className="w-full max-w-[100mm] bg-white text-black p-4 text-sm font-sans shadow-xl border border-gray-300 mb-6"
+                    style={{ color: '#000', height: 'fit-content' }}
+                >
+                    {/* HEADER */}
+                    <div className="text-center mb-6">
+                        <img 
+                            src={settings?.logoUrl || '/images/logo.png'} 
+                            alt="Logo" 
+                            className="w-16 h-16 mx-auto mb-2 object-contain grayscale"
+                        />
+                        <h1 className="font-bold text-lg uppercase tracking-wider">{storeName}</h1>
+                        <p className="text-xs">{storeAddress}</p>
+                        <p className="text-xs">Tel: {storePhone}</p>
                     </div>
 
-                    <div className="px-6 py-6">
-                        {/* Info Section */}
-                        <div className="flex flex-col md:flex-row justify-between gap-6 mb-8">
-                            <div className="space-y-4">
-                                <div>
-                                    <h6 className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5">{t('to')}</h6>
-                                    <p className="text-gray-900 text-lg font-bold">{invoice.customerName || t('walkInCustomer')}</p>
-                                    {invoice.customerPhone && <p className="text-gray-500 text-sm mt-0.5"><span className="opacity-70">{t('phone')}:</span> {invoice.customerPhone}</p>}
-                                </div>
-                            </div>
+                    <div className="border-t border-black border-dashed my-3"></div>
 
-                            <div className="flex flex-wrap gap-x-12 gap-y-5 md:justify-end">
-                                <div className="md:text-right">
-                                    <h6 className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5">{t('date')}</h6>
-                                    <p className="text-gray-900 text-sm font-semibold">{new Date(invoice.createdAt).toLocaleString()}</p>
-                                </div>
-                                <div className="md:text-right">
-                                    <h6 className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5">{t('type')}</h6>
-                                    <p className="text-gray-900 text-sm font-semibold">{invoice.orderType}</p>
-                                </div>
-                                {invoice.tableCode && (
-                                    <div className="md:text-right">
-                                        <h6 className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5">{t('table')}</h6>
-                                        <p className="text-[#1A3A52] text-sm font-black">{invoice.tableCode}</p>
-                                    </div>
-                                )}
-                            </div>
+                    {/* ORDER INFO */}
+                    <div className="mb-4 text-xs space-y-1">
+                        <div className="flex justify-between font-bold text-sm mb-2">
+                            <span>{t('title', { fallback: 'INVOICE' })}</span>
+                            <span>{invoice.invoiceCode}</span>
                         </div>
-
-                        {/* Items Table - Clean minimalist look */}
-                        <div className="mb-10 lg:mb-12">
-                            <div className="overflow-x-auto">
-                                <table className="w-full text-left">
-                                    <thead>
-                                        <tr className="border-b-2 border-gray-100">
-                                            <th className="py-4 px-2 font-bold text-gray-400 text-[10px] uppercase tracking-widest w-12 text-center">{t('no')}</th>
-                                            <th className="py-4 px-2 font-bold text-gray-400 text-[10px] uppercase tracking-widest">{t('itemDetails')}</th>
-                                            <th className="py-4 px-2 font-bold text-gray-400 text-[10px] uppercase tracking-widest w-24 text-center">{t('qty')}</th>
-                                            <th className="py-4 px-2 font-bold text-gray-400 text-[10px] uppercase tracking-widest w-32 text-right">{t('rate')}</th>
-                                            <th className="py-4 px-2 font-bold text-gray-400 text-[10px] uppercase tracking-widest w-36 text-right">{t('amount')}</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody className="text-sm">
-                                        {invoice.items.map((item, index) => (
-                                            <tr key={item.orderItemId} className="border-b border-gray-50 last:border-0 hover:bg-gray-50/50 transition-colors group">
-                                                <td className="py-5 px-2 text-center font-semibold text-gray-400 text-xs">{index + 1}</td>
-                                                <td className="py-5 px-2">
-                                                    <p className="font-bold text-gray-900 group-hover:text-[#1A3A52] transition-colors text-base">{item.itemName}</p>
-                                                    {item.note && (
-                                                        <p className="text-xs text-gray-500 mt-1.5 flex items-start gap-1.5">
-                                                            <span className="text-gray-300">↳</span>
-                                                            <span className="italic">{item.note}</span>
-                                                        </p>
-                                                    )}
-                                                </td>
-                                                <td className="py-5 px-2">
-                                                    <div className="mx-auto w-fit bg-gray-50 px-3 py-1 rounded-md text-gray-700 font-bold border border-gray-100">
-                                                        {item.quantity}
-                                                    </div>
-                                                </td>
-                                                <td className="py-5 px-2 text-right font-medium text-gray-500">${item.itemPrice.toFixed(2)}</td>
-                                                <td className="py-5 px-2 text-right font-black text-gray-900 text-base">${item.amount.toFixed(2)}</td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </div>
+                        <div className="flex justify-between">
+                            <span>{t('date', { fallback: 'Date' })}: {new Date(invoice.createdAt).toLocaleDateString()}</span>
+                            <span>{new Date(invoice.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
                         </div>
-
-                        {/* Summary Section */}
-                        <div className="flex flex-col lg:flex-row justify-between items-end gap-6 border-t-2 border-dashed border-gray-200 pt-6">
-
-                            {/* Payment Verified & Method info */}
-                            <div className="w-full lg:w-1/2 order-2 lg:order-1">
-                                <div className="bg-gradient-to-br from-gray-50 to-white rounded-2xl p-5 border border-gray-100 shadow-sm flex flex-col gap-4 relative overflow-hidden">
-                                    {/* decorative circle */}
-                                    <div className="absolute -right-4 -top-4 w-20 h-20 bg-emerald-50 rounded-full opacity-50 pointer-events-none"></div>
-
-                                    <div className="flex items-start gap-3.5 relative z-10">
-                                        <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center shrink-0 border border-emerald-200 shadow-sm">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-emerald-700"><path d="M22 11.08V12a10 10-10 0 1 1-5.93-9.14" /><path d="m9 11 3 3L22 4" /></svg>
-                                        </div>
-                                        <div>
-                                            <p className="text-sm font-bold text-gray-900">{t('paymentVerified', { staffName: invoice.staffName || t('defaultStaff') })}</p>
-                                            <p className="text-xs text-gray-500 mt-1">{t('thankYouBusiness')}</p>
-                                        </div>
-                                    </div>
-                                    {invoice.paymentMethod && invoice.paymentMethod !== '-' && (
-                                        <div className="pt-4 mt-1 border-t border-gray-100 flex justify-between items-center relative z-10">
-                                            <span className="text-xs font-semibold text-gray-500 uppercase tracking-widest">{t('paymentMethod')}</span>
-                                            <span className="text-sm font-black text-[#1A3A52] bg-white px-3.5 py-1.5 rounded-lg border border-gray-200 shadow-sm">{invoice.paymentMethod}</span>
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-
-                            {/* Totals */}
-                            <div className="w-full lg:w-2/5 order-1 lg:order-2">
-                                <div className="space-y-3.5 pb-6 border-b border-gray-100">
-                                    <div className="flex justify-between items-center text-gray-600">
-                                        <span className="font-semibold text-xs uppercase tracking-wider">{t('subtotal')}</span>
-                                        <span className="font-bold text-gray-900">${invoice.subTotal.toFixed(2)}</span>
-                                    </div>
-                                    {invoice.discountAmount > 0 && (
-                                        <div className="flex justify-between items-center text-red-500">
-                                            <span className="font-semibold text-xs uppercase tracking-wider">{t('discount')}</span>
-                                            <span className="font-bold">- ${invoice.discountAmount.toFixed(2)}</span>
-                                        </div>
-                                    )}
-                                    {invoice.tipAmount > 0 && (
-                                        <div className="flex justify-between items-center text-emerald-600">
-                                            <span className="font-semibold text-xs uppercase tracking-wider">{t('tip')}</span>
-                                            <span className="font-bold">+ ${invoice.tipAmount.toFixed(2)}</span>
-                                        </div>
-                                    )}
-                                </div>
-                                <div className="flex justify-between items-end pt-6 bg-[#1A3A52]/5 p-6 rounded-2xl border border-[#1A3A52]/10 shadow-inner">
-                                    <div className="flex flex-col">
-                                        <span className="text-[#1A3A52]/60 text-[10px] font-bold uppercase tracking-widest mb-1.5">{t('total')}</span>
-                                        <span className="text-sm font-bold text-[#1A3A52]/40">{t('currency')}</span>
-                                    </div>
-                                    <h6 className="text-[48px] leading-none font-black text-[#1A3A52] tracking-tight drop-shadow-sm">${invoice.totalAmount.toFixed(2)}</h6>
-                                </div>
-                            </div>
-
+                        <div className="flex justify-between">
+                            <span>{t('type', { fallback: 'Type' })}: {invoice.orderType}</span>
+                            {invoice.tableCode && (
+                                <span className="font-bold">{t('table', { fallback: 'Table' })}: {invoice.tableCode}</span>
+                            )}
                         </div>
+                        <div className="flex justify-between">
+                            <span>{t('customer', { fallback: 'Guest' })}:</span>
+                            <span>{invoice.customerName || t('walkInCustomer', { fallback: 'Guest' })}</span>
+                        </div>
+                        {/* <div className="flex justify-between">
+                            <span>{t('staff', { fallback: 'Staff' })}:</span>
+                            <span>{invoice.staffName}</span>
+                        </div> */}
                     </div>
-                    {/* Bottom accent line */}
-                    <div className="h-2 w-full bg-gradient-to-r from-[#1A3A52] via-[#D5BA98] to-[#1A3A52]"></div>
+
+                    <div className="border-t border-black my-2"></div>
+
+                    {/* ITEM LIST */}
+                    <div className="mb-4">
+                        <table className="w-full text-xs">
+                            <thead>
+                                <tr className="border-b border-black text-left">
+                                    <th className="py-1 w-8">{t('qty', { fallback: 'Qty' })}</th>
+                                    <th className="py-1">{t('itemDetails', { fallback: 'Item' })}</th>
+                                    <th className="py-1 text-right">{t('amount', { fallback: 'Total' })}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {invoice.items.map((item) => (
+                                    <tr key={item.orderItemId} className="align-top">
+                                        <td className="py-1 font-semibold">{item.quantity}x</td>
+                                        <td className="py-1">
+                                            {item.itemName}
+                                            <div className="text-[10px] text-gray-600">@ {formatCurrency(item.itemPrice)}</div>
+                                            {item.note && (
+                                                <div className="text-[10px] italic text-gray-500">- {item.note}</div>
+                                            )}
+                                        </td>
+                                        <td className="py-1 text-right">{formatCurrency(item.amount)}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div className="border-t border-black my-2"></div>
+
+                    {/* FINANCIAL SUMMARY */}
+                    <div className="text-xs space-y-1 mb-4">
+                        <div className="flex justify-between font-semibold">
+                            <span>{t('subtotal', { fallback: 'Subtotal' })}</span>
+                            <span>{formatCurrency(invoice.subTotal)}</span>
+                        </div>
+
+                        {invoice.discountAmount > 0 && (
+                            <div className="flex justify-between text-black">
+                                <span>{t('discount', { fallback: 'Discount' })}</span>
+                                <span>-{formatCurrency(invoice.discountAmount)}</span>
+                            </div>
+                        )}
+
+                        {invoice.tipAmount > 0 && (
+                            <div className="flex justify-between">
+                                <span>{t('tip', { fallback: 'Tip' })}</span>
+                                <span>+{formatCurrency(invoice.tipAmount)}</span>
+                            </div>
+                        )}
+                    </div>
+
+                    <div className="border-t-2 border-black my-2"></div>
+
+                    {/* TOTAL */}
+                    <div className="flex justify-between font-bold text-lg mb-4">
+                        <span>{t('totalAmount', { fallback: 'TOTAL' })}</span>
+                        <span>{formatCurrency(invoice.totalAmount)}</span>
+                    </div>
+
+                    {/* PAYMENT METHOD */}
+                    {invoice.paymentMethod && invoice.paymentMethod !== '-' && (
+                        <>
+                            <div className="border-t border-black border-dashed my-2"></div>
+                            <div className="text-xs space-y-1 mt-2">
+                                <div className="flex justify-between font-bold">
+                                    <span>{t('paymentMethod', { fallback: 'Paid via' })}</span>
+                                    <span className="uppercase">{invoice.paymentMethod}</span>
+                                </div>
+                                {/* <div className="flex justify-between text-black">
+                                    <span>{t('status.title', { fallback: 'Status' })}</span>
+                                    <span>{invoice.isPaid ? t('status.paid', { fallback: 'PAID' }) : t('status.unpaid', { fallback: 'UNPAID' })}</span>
+                                </div> */}
+                            </div>
+                        </>
+                    )}
+
+                    {/* FOOTER RECEIPT */}
+                    <div className="text-center mt-8 text-[10px] space-y-1">
+                        <p>Please retain for your records</p>
+                    </div>
+                </div>
+
+                {/* PHẦN HIỂN THỊ TRÊN GIAO DIỆN KHÔNG IN RA GIẤY */}
+                <div className="w-full max-w-[100mm] bg-white rounded-xl p-4 border border-gray-200 shadow-sm print:hidden">
+                    <div className="flex flex-col text-center">
+                        <p className="text-sm font-bold text-gray-900">
+                            {t('paymentVerified', { staffName: invoice.staffName || t('defaultStaff', { fallback: 'System' }) })}
+                        </p>
+                        <p className="text-xs text-gray-500 mt-1">
+                            {t('thankYouBusiness', { fallback: 'Thank you for your business!' })}
+                        </p>
+                    </div>
                 </div>
             </div>
         );
@@ -228,11 +241,11 @@ export function InvoiceDetailDialog({ open, onClose, orderId }: InvoiceDetailDia
         <Dialog
             open={open}
             onClose={onClose}
-            width="860px"
+            width="600px"
             bodyOverflowY="auto"
             title={
                 <div className="flex items-center gap-2">
-                    <span>{t('title')}</span>
+                    <span>{t('title', { fallback: 'Invoice Detail' })}</span>
                     {invoice && !loading && (
                         <button
                             onClick={fetchInvoice}
@@ -246,24 +259,22 @@ export function InvoiceDetailDialog({ open, onClose, orderId }: InvoiceDetailDia
             }
             footer={
                 invoice && !loading ? (
-                    <div className="flex justify-end gap-2">
+                    <div className="flex justify-end gap-2 w-full">
                         <Button
                             variant="outline"
                             size="sm"
-                            onClick={handlePrint}
-                            className="flex items-center gap-1.5"
+                            onClick={onClose}
                         >
-                            <Download className="w-4 h-4" />
-                            {t('downloadPdf')}
+                            {t('close', { fallback: 'Close' })}
                         </Button>
                         <Button
                             variant="default"
                             size="sm"
                             onClick={handlePrint}
-                            className="flex items-center gap-1.5"
+                            className="flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white"
                         >
                             <Printer className="w-4 h-4" />
-                            {t('printInvoice')}
+                            {t('printInvoice', { fallback: 'Print' })}
                         </Button>
                     </div>
                 ) : undefined

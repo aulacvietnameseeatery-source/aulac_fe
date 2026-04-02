@@ -69,11 +69,16 @@ export const OrderDetailModal = ({ customerId, orderId, isOpen, onClose }: Order
     };
 
     const formatCurrency = (val: number) => {
-        return new Intl.NumberFormat('en-CH', { 
+        return new Intl.NumberFormat('fr-CH', { 
             style: 'currency', 
             currency: 'CHF',
             minimumFractionDigits: 2
         }).format(val);
+    };
+
+    const getUtcDateString = (utcDateString: string) => {
+        const dateStringWithZ = utcDateString.endsWith('Z') ? utcDateString : `${utcDateString}Z`;
+        return dateStringWithZ;
     };
 
     const payment = detail?.payments?.[0];
@@ -96,13 +101,13 @@ export const OrderDetailModal = ({ customerId, orderId, isOpen, onClose }: Order
                         <div>
                             <h2 className="text-3xl font-extrabold tracking-tight text-slate-900">{t('orderTitle')} #{detail.orderId}</h2>
                             <p className="text-sm text-slate-500 mt-1 font-medium">
-                                {dateUtils.formatLocal(detail.createdAt, "dd/MM/yyyy HH:mm")}
+                                {dateUtils.formatLocal(getUtcDateString(detail.createdAt), "dd/MM/yyyy HH:mm")}
                             </p>
                         </div>
                         <div className="text-right flex flex-col items-end">
                             <h2 className="text-3xl font-bold text-blue-600">{formatCurrency(detail.totalAmount)}</h2>
                             <Badge className={cn("mt-2 px-3 py-1 shadow-sm border-none uppercase tracking-wider text-xs", getStatusColor(detail.status))}>
-                                {detail.status}
+                                {t(`status.${detail.status}`)}
                             </Badge>
                         </div>
                     </div>
@@ -117,7 +122,7 @@ export const OrderDetailModal = ({ customerId, orderId, isOpen, onClose }: Order
                             <div className="grid grid-cols-2 gap-y-5 gap-x-4">
                                 <div><p className="text-xs text-slate-400 font-medium mb-1 uppercase tracking-wider">{t('table')}</p><p className="font-semibold text-slate-800">{detail.tableCode || "-"}</p></div>
                                 <div><p className="text-xs text-slate-400 font-medium mb-1 uppercase tracking-wider">{t('staff')}</p><p className="font-semibold text-slate-800">{detail.staffName || "-"}</p></div>
-                                <div><p className="text-xs text-slate-400 font-medium mb-1 uppercase tracking-wider">{t('type')}</p><p className="font-semibold text-slate-800">{detail.orderType}</p></div>
+                                <div><p className="text-xs text-slate-400 font-medium mb-1 uppercase tracking-wider">{t('type')}</p><p className="font-semibold text-slate-800">{t(`orderType.${detail.orderType}`)}</p></div>
                                 <div><p className="text-xs text-slate-400 font-medium mb-1 uppercase tracking-wider">{t('tip')}</p><p className="font-semibold text-slate-800">{detail.tipAmount ? formatCurrency(detail.tipAmount) : "-"}</p></div>
                             </div>
                         </div>
@@ -155,7 +160,7 @@ export const OrderDetailModal = ({ customerId, orderId, isOpen, onClose }: Order
                         <Tabs defaultValue="items" className="flex flex-col h-full w-full">
                             
                             {/* Tabs Header */}
-                            <TabsList className="grid w-full grid-cols-3 bg-slate-100/80 p-1.5 rounded-xl shrink-0">
+                            <TabsList className="grid w-full grid-cols-3 bg-slate-100/80 p-1 rounded-xl shrink-0 h-auto">
                                 <TabsTrigger value="items" className="flex gap-2 rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm"><Receipt size={16}/> {t('items')}</TabsTrigger>
                                 <TabsTrigger value="promotions" className="flex gap-2 rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm"><Tag size={16}/> {t('promotions')}</TabsTrigger>
                                 <TabsTrigger value="coupons" className="flex gap-2 rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm"><Ticket size={16}/> {t('coupons')}</TabsTrigger>
@@ -184,7 +189,7 @@ export const OrderDetailModal = ({ customerId, orderId, isOpen, onClose }: Order
                                                         {formatCurrency(item.price)}
                                                     </span>
                                                     <Badge variant="outline" className={cn("text-[10px] uppercase tracking-widest px-2 py-0.5", getItemStatusColor(item.status))}>
-                                                        {item.status}
+                                                        {t(`itemStatus.${item.status}`)}
                                                     </Badge>
                                                 </div>
                                             </div>

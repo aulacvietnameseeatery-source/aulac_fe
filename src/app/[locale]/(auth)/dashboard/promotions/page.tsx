@@ -18,6 +18,9 @@ import { PromotionListDTO } from "@/features/staff/promotion-management/promotio
 import { PromotionActions } from "@/features/staff/promotion-management/promotion-list/components/promotion-actions";
 import { staffPromotionService } from "@/features/staff/promotion-management/promotion-list/services/promotion-service";
 import { dateUtils } from "@/lib/date-utils";
+import { CreatePromotionDialog } from "@/features/staff/promotion-management/promotion-create-edit/components/create-promotion-dialogs";
+import { EditPromotionDialog } from "@/features/staff/promotion-management/promotion-create-edit/components/edit-promotion-dialogs";
+import { PromotionDetailDialog } from "@/features/staff/promotion-management/promotion-create-edit/components/promotion-detail-dialog";
 
 const PromotionListContent = () => {
     const t = useTranslations("Promotion.List");
@@ -26,9 +29,27 @@ const PromotionListContent = () => {
     const { promotions, isLoading, totalCount, paginationInfo, onDataChange, refresh, updatePromotionLocally } = usePromotionList();
     const [togglingId, setTogglingId] = useState<number | null>(null);
 
-    const handleView = (promo: PromotionListDTO) => router.push(`/dashboard/promotions/${promo.promotionId}`);
-    const handleEdit = (promo: PromotionListDTO) => router.push(`/dashboard/promotions/${promo.promotionId}/edit`);
-    const handleCreate = () => router.push(`/dashboard/promotions/create`);
+    // States cho Dialogs
+    const [isCreateOpen, setIsCreateOpen] = useState(false);
+    const [editPromoId, setEditPromoId] = useState<number | null>(null);
+    const [detailPromoId, setDetailPromoId] = useState<number | null>(null);
+
+    const handleView = (promo: PromotionListDTO) => {
+        setDetailPromoId(promo.promotionId);
+    };
+
+    // Mở Dialog Create
+    const handleCreate = () => setIsCreateOpen(true);
+    
+    // Mở Dialog Edit với ID tương ứng
+    const handleEdit = (promo: PromotionListDTO) => setEditPromoId(promo.promotionId);
+
+    // Xử lý sau khi lưu thành công từ Dialog
+    const handleDialogSuccess = () => {
+        setIsCreateOpen(false);
+        setEditPromoId(null);
+        refresh();
+    };
 
     const handleStatusToggle = async (promo: PromotionListDTO, checked: boolean) => {
         setTogglingId(promo.promotionId);
@@ -52,23 +73,6 @@ const PromotionListContent = () => {
         } finally {
             setTogglingId(null);
         }
-    };
-
-    const formatUtcToLocalDate = (utcDateString: string) => {
-        if (!utcDateString) return "-";
-
-        const validUtcString = utcDateString.endsWith('Z') ? utcDateString : `${utcDateString}Z`;
-        
-        const date = new Date(validUtcString);
-
-        // Intl.DateTimeFormat will automatically display according to the user's timezone (Local Time).
-        return new Intl.DateTimeFormat(undefined, { 
-            day: '2-digit', 
-            month: '2-digit', 
-            year: 'numeric',
-            hour: '2-digit', 
-            minute: '2-digit'
-        }).format(date);
     };
 
     const getComputedStatus = useCallback((item: PromotionListDTO) => {
@@ -226,6 +230,26 @@ const PromotionListContent = () => {
                 renderActionColumn={(item) => (
                     <PromotionActions promotion={item} onView={handleView} onEdit={handleEdit} />
                 )}
+            />
+
+            {/* --- Dialog Components --- */}
+            <PromotionDetailDialog 
+                id={detailPromoId}
+                open={!!detailPromoId}
+                onClose={() => setDetailPromoId(null)}
+            />
+
+            <CreatePromotionDialog 
+                open={isCreateOpen} 
+                onClose={() => setIsCreateOpen(false)} 
+                onSuccess={handleDialogSuccess} 
+            />
+
+            <EditPromotionDialog 
+                id={editPromoId} 
+                open={!!editPromoId} 
+                onClose={() => setEditPromoId(null)} 
+                onSuccess={handleDialogSuccess} 
             />
         </div>
     );

@@ -45,6 +45,11 @@ const CustomerListContent = () => {
     const [customerToDelete, setCustomerToDelete] = useState<CustomerListDto | null>(null);
     const [isDeleting, setIsDeleting] = useState(false);
 
+    const getUtcDateString = (utcDateString: string) => {
+        const dateStringWithZ = utcDateString.endsWith('Z') ? utcDateString : `${utcDateString}Z`;
+        return dateStringWithZ;
+    };
+
     // Handlers
     const handleView = async (customer: CustomerListDto) => {
         router.push(`/dashboard/customers/${customer.customerId}/detail`);
@@ -221,7 +226,7 @@ const CustomerListContent = () => {
             width: "150px",
             cellRender: ({ value }: { value: string | null }) => (
                 <span className="text-gray-600 text-sm">
-                    {value ? dateUtils.formatLocal(value, "dd/MM/yyyy HH:mm") : "-"}
+                    {value ? dateUtils.formatLocal(getUtcDateString(value), "dd/MM/yyyy HH:mm") : "-"}
                 </span>
             ),
         },

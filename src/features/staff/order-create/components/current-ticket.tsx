@@ -30,6 +30,14 @@ export const CurrentTicket: React.FC<Props> = ({
   const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const isPlaceOrderDisabled = cart.length === 0 || (orderType === 'DINE_IN' && !selectedTable);
 
+  const formatCurrency = (val: number) => {
+      return new Intl.NumberFormat('fr-CH', { 
+          style: 'currency', 
+          currency: 'CHF',
+          minimumFractionDigits: 2
+      }).format(val);
+  };
+
   return (
     <div className="flex flex-col h-full bg-white font-sans w-full">
 
@@ -109,7 +117,7 @@ export const CurrentTicket: React.FC<Props> = ({
                 <p className="text-[#1A3A52] text-sm font-bold leading-tight truncate">
                   {item.localName}
                 </p>
-                <div className="text-[#1A3A52]/70 font-semibold text-xs mt-1">CHF {(item.price * item.quantity).toFixed(2)}</div>
+                <div className="text-[#1A3A52]/70 font-semibold text-xs mt-1">{formatCurrency(item.price * item.quantity)}</div>
               </div>
               <button
                 onClick={() => onRemoveFromCart(item.dishId)}
@@ -160,7 +168,7 @@ export const CurrentTicket: React.FC<Props> = ({
       <div className="px-5 py-4 border-t border-[#D5BA98]/30 shrink-0 bg-white shadow-[0_-10px_30px_rgba(213,186,152,0.1)]">
         <div className="flex justify-between items-end mb-4">
           <span className="font-bold text-[#1A3A52]/70 text-sm uppercase tracking-wide">{t('total')}</span>
-          <span className="font-bold text-[#1A3A52] text-2xl">CHF {total.toFixed(2)}</span>
+          <span className="font-bold text-[#1A3A52] text-2xl">{formatCurrency(total)}</span>
         </div>
 
         <div className="grid grid-cols-3 gap-2">

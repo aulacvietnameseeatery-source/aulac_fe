@@ -405,7 +405,10 @@
         "printInvoice": "Imprimer la facture",
         "defaultStaff": "Personnel",
         "thankYouBusiness": "Merci pour votre visite !",
-        "currency": "EUR"
+        "currency": "EUR",
+        "totalAmount": "Montant total",
+        "customer": "Invité",
+        "close": "Fermer"
       }
     },
     "invoices": {

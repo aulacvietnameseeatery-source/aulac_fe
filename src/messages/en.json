@@ -1907,13 +1907,15 @@
         "PENDING": "Pending",
         "IN_PROGRESS": "In Progress",
         "COMPLETED": "Completed",
-        "CANCELLED": "Cancelled",
+        "CANCELLED": "Cancelled"
+      },
+      "itemStatus": {
         "CREATED": "Created",
+        "IN_PROGRESS": "In Progress",
         "READY": "Ready",
         "SERVED": "Served",
         "REJECTED": "Rejected",
-        "DINE_IN": "Dine-in",
-        "TAKEAWAY": "Takeaway"
+        "CANCELLED": "Cancelled"
       }
     }
   },

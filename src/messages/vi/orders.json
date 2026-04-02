@@ -405,7 +405,10 @@
         "printInvoice": "In hóa đơn",
         "defaultStaff": "Nhân viên",
         "thankYouBusiness": "Cảm ơn quý khách đã ủng hộ!",
-        "currency": "VND"
+        "currency": "VND",
+        "totalAmount":"Tổng thanh toán",
+        "customer":"Khách hàng",
+        "close": "Đóng"
       }
     },
     "invoices": {
