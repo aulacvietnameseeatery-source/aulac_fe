@@ -17,8 +17,8 @@ import { OrderHistory } from '../types/order-history.types';
 import { CouponDTO } from '../../coupon-management/coupon-list/types/coupon.types';
 import { staffPromotionService } from '../../promotion-management/promotion-list/services/promotion-service';
 import { AvailablePromotionDTO } from '../../promotion-management/promotion-list/types/promotion-types';
-import { useTaxesQuery } from '../../tax-management/hooks/useTaxMutation';
 import { formatCHF } from '@/lib/format-chf-utils';
+import { toast } from 'sonner';
 
 interface PaymentModalProps {
     order: OrderHistory;
@@ -49,6 +49,26 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
     const [selectedCouponIds, setSelectedCouponIds] = useState<string[]>([]);
     const [isFetchingPromos, setIsFetchingPromos] = useState(false);
 
+    const normalizeNumber = React.useCallback((value: number) => {
+        if (!Number.isFinite(value)) return 0;
+        return Number.parseFloat(value.toPrecision(15));
+    }, []);
+
+    const eligibleCoupons = React.useMemo(() => {
+        return couponOptions.filter((coupon) => {
+            if (coupon.customerId == null) {
+                return true;
+            }
+
+            return coupon.customerId === order.customerId;
+        });
+    }, [couponOptions, order.customerId]);
+
+    React.useEffect(() => {
+        const eligibleCouponIdSet = new Set(eligibleCoupons.map((coupon) => coupon.couponId.toString()));
+        setSelectedCouponIds((current) => current.filter((id) => eligibleCouponIdSet.has(id)));
+    }, [eligibleCoupons]);
+
     // Fetch available promotions when modal opens
     React.useEffect(() => {
         if (isOpen && order.orderId) {
@@ -73,14 +93,11 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
         .filter(item => item.itemStatus !== 'REJECTED' && item.itemStatus !== 'CANCELLED')
         .reduce((sum, item) => sum + item.price * item.quantity, 0);
 
-    const { data: taxes = [] } = useTaxesQuery();
-    const defaultTaxes = React.useMemo(() => taxes.filter(t => t.isActive && t.isDefault), [taxes]);
-
     const serviceCharge = 0;
 
     const selectedCoupons = React.useMemo(
-        () => couponOptions.filter((p) => selectedCouponIds.includes(p.couponId.toString())),
-        [couponOptions, selectedCouponIds],
+        () => eligibleCoupons.filter((p) => selectedCouponIds.includes(p.couponId.toString())),
+        [eligibleCoupons, selectedCouponIds],
     );
 
     const calcDiscountAmount = React.useCallback((discount?: { type?: string; promotionType?: string; discountValue: number }) => {
@@ -108,45 +125,51 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
         return amount;
     }, [autoPromotionAmount, selectedCoupons, couponAmount]);
 
-    const baseForTax = Math.max(0, subTotal - totalDiscount);
-
-    const calculatedTaxes = React.useMemo(() => {
-        return defaultTaxes.map(t => {
-            const amount = t.taxType === 'EXCLUSIVE'
-                ? baseForTax * (t.taxRate / 100)
-                : baseForTax * ((t.taxRate / 100) / (1 + (t.taxRate / 100)));
-            return { ...t, amount };
-        });
-    }, [defaultTaxes, baseForTax]);
-
-    const totalExclusiveTax = calculatedTaxes
-        .filter(t => t.taxType === 'EXCLUSIVE')
-        .reduce((sum, t) => sum + t.amount, 0);
-    const totalTaxAmount = calculatedTaxes.reduce((sum, t) => sum + t.amount, 0);
-
-    const total = Math.max(0, subTotal + totalExclusiveTax + tipAmount - totalDiscount);
+    const totalTaxAmount = order.taxAmount || 0;
+    const total = normalizeNumber(Math.max(0, subTotal + totalTaxAmount + tipAmount - totalDiscount));
 
     const [givenAmount, setGivenAmount] = useState<number>(total);
-    const balance = Math.max(0, givenAmount - total);
+    const balance = normalizeNumber(Math.max(0, givenAmount - total));
 
     // Sync givenAmount when total changes
     React.useEffect(() => {
-        setGivenAmount(total);
-    }, [total]);
+        setGivenAmount(normalizeNumber(total));
+    }, [total, normalizeNumber]);
 
     const handlePay = () => {
+        const normalizedGivenAmount = normalizeNumber(givenAmount);
+        const normalizedTipAmount = normalizeNumber(tipAmount);
+
+        if (normalizedGivenAmount < total) {
+            toast.error(t('receivedAmountTooLow'));
+            return;
+        }
+
+        const allowedCouponIdSet = new Set(eligibleCoupons.map((coupon) => coupon.couponId.toString()));
+        const safeSelectedCouponIds = selectedCouponIds.filter((id) => allowedCouponIdSet.has(id));
         const methodMap: Record<string, string> = {
             'cash': 'CASH',
             'card': 'CARD',
             'scan': 'QR'
         };
+
+        console.info('[PaymentModal] submitting payment', {
+            orderId: order.orderId,
+            receivedAmount: normalizedGivenAmount,
+            finalAmount: total,
+            paymentMethod: methodMap[paymentType],
+            couponIds: safeSelectedCouponIds.map(Number),
+            tipAmount: normalizedTipAmount || undefined,
+            note: note || undefined,
+        });
+
         onPaymentComplete(order.orderId, {
             orderId: order.orderId,
-            receivedAmount: givenAmount,
+            receivedAmount: normalizedGivenAmount,
             paymentMethod: methodMap[paymentType],
-            couponIds: selectedCouponIds.map(Number),
+            couponIds: safeSelectedCouponIds.map(Number),
             note: note || undefined,
-            tipAmount: tipAmount || undefined
+            tipAmount: normalizedTipAmount || undefined
         });
     };
 
@@ -234,11 +257,11 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
                                                                             {t('autoPromotion')}: {promo.promoName} ({promo.promotionType === 'PERCENT' ? `${promo.discountValue}%` : formatCHF(promo.discountValue)})
                                                                         </span>
                                                                     </div>
-                                                                    {promo.appliedRule && (
-                                                                        <span className="text-[9px] text-[#1A3A52]/50 ml-1 font-normal italic leading-tight">
-                                                                            <span className="block">{promo.appliedRule[locale] || promo.appliedRule['en']}</span>
-                                                                        </span>
-                                                                    )}
+                                                                    {/*{promo.appliedRule && (*/}
+                                                                    {/*    <span className="text-[9px] text-[#1A3A52]/50 ml-1 font-normal italic leading-tight">*/}
+                                                                    {/*        <span className="block">{promo.appliedRule[locale] || promo.appliedRule['en']}</span>*/}
+                                                                    {/*    </span>*/}
+                                                                    {/*)}*/}
                                                                 </div>
                                                             ))}
                                                         </div>
@@ -254,12 +277,6 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
                                     <span>{t('subTotal')}</span>
                                     <span>{formatCHF(subTotal)}</span>
                                 </div>
-                                {calculatedTaxes.map((t, idx) => (
-                                    <div key={idx} className="flex items-start justify-between gap-3 text-[#1A3A52]/70">
-                                        <span>{t.taxName} ({t.taxRate}% {t.taxType.toLowerCase()})</span>
-                                        <span>{formatCHF(t.amount)}</span>
-                                    </div>
-                                ))}
                                 <div className="flex items-start justify-between gap-3 text-[#1A3A52]/70 font-medium">
                                     <span>{t('totalTax')}</span>
                                     <span>{formatCHF(totalTaxAmount)}</span>
@@ -327,9 +344,10 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
                                     type="number"
                                     value={tipAmount}
                                     onChange={(e) => setTipAmount(Number(e.target.value))}
+                                    numberShowStepper={false}
                                     textEnd="CHF"
                                     placeholder={t('enterTip')}
-                                    numberDecimalScale={2}
+                                    inputMode="decimal"
                                     step={0.01}
                                     min={0}
                                 />
@@ -337,7 +355,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
                                 <div className="grid grid-cols-1 gap-4">
                                     <ALCombobox
                                         title={t('coupon')}
-                                        options={couponOptions.map((p) => ({
+                                        options={eligibleCoupons.map((p) => ({
                                             label: p.couponCode,
                                             value: p.couponId.toString(),
                                             description: p.couponName,
@@ -381,9 +399,10 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
                                     type="number"
                                     value={givenAmount}
                                     onChange={(e) => setGivenAmount(Number(e.target.value))}
+                                    numberShowStepper={false}
                                     className="font-bold text-lg"
                                     textEnd="CHF"
-                                    numberDecimalScale={2}
+                                    inputMode="decimal"
                                     step={0.01}
                                     min={0}
                                 />

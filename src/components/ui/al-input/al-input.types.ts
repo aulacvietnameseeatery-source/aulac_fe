@@ -140,6 +140,8 @@ export interface ALInputProps
   // ── Number input behavior ──────────────────────────────────
   /** Step used by number steppers when `type="number"`. Falls back to native `step` if provided. */
   numberStepper?: number;
+  /** Show increment/decrement stepper buttons when `type="number"`. @default true */
+  numberShowStepper?: boolean;
   /** Thousand separator passed to NumberInput (`","`, ".", or `true`). */
   numberThousandSeparator?: NumericFormatProps["thousandSeparator"];
   /** Optional prefix (for example `$`) when `type="number"`. */

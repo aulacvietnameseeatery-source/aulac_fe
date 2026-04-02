@@ -21,9 +21,11 @@ import { PrintOrderModal } from './PrintOrderModal';
 import { orderHistoryService } from '../services/order-history.service';
 import { toast } from 'sonner';
 import { CouponDTO } from '../../coupon-management/coupon-list/types/coupon.types';
+import { staffCouponService } from '../../coupon-management/coupon-list/services/coupon-service';
 import { PromotionListDTO } from '../../promotion-management/promotion-list/types/promotion-types';
 import { OrderDetailDto } from '../../order-create/types/edit-order.types';
 import { formatCHF } from '@/lib/format-chf-utils';
+import { getLocalizedApiErrorMessage } from '@/lib/api-error';
 
 // ─── Constants ──────────────────────────────────────────────────────────────
 
@@ -111,12 +113,11 @@ interface OrderCardProps {
     order: OrderHistory;
     onStatusChange?: (orderId: number, newStatus: string) => void;
     onAction?: (orderId: number, action: ActionKey) => void;
-    couponOptions?: CouponDTO[];
 }
 
 // ─── Component ───────────────────────────────────────────────────────────────
 
-export const OrderCard: React.FC<OrderCardProps> = ({ order, onStatusChange, onAction, couponOptions = [] }) => {
+export const OrderCard: React.FC<OrderCardProps> = ({ order, onStatusChange, onAction }) => {
     const t = useTranslations('orders.management.List.card');
     const format = useFormatter();
 
@@ -127,6 +128,23 @@ export const OrderCard: React.FC<OrderCardProps> = ({ order, onStatusChange, onA
     const [printType, setPrintType] = useState<'invoice' | 'receipt'>('receipt');
     const [printData, setPrintData] = useState<OrderDetailDto | null>(null);
     const [isFetchingOrder, setIsFetchingOrder] = useState(false);
+    const [paymentCoupons, setPaymentCoupons] = useState<CouponDTO[]>([]);
+
+    React.useEffect(() => {
+        if (!isPaymentModalOpen) return;
+
+        const loadCoupons = async () => {
+            try {
+                const data = await staffCouponService.getCoupons(order.customerId);
+                setPaymentCoupons(data ?? []);
+            } catch (error) {
+                console.error('Failed to fetch customer coupons:', error);
+                setPaymentCoupons([]);
+            }
+        };
+
+        void loadCoupons();
+    }, [isPaymentModalOpen, order.customerId]);
 
     const sourceIcon = SOURCE_ICONS[order.source] ?? <ShoppingBag className="w-3 h-3" />;
     const statusStyle = STATUS_STYLES[order.orderStatus] ?? 'bg-gray-50 text-gray-700 border border-gray-200';
@@ -178,6 +196,11 @@ export const OrderCard: React.FC<OrderCardProps> = ({ order, onStatusChange, onA
     const handlePaymentComplete = async (orderId: number, data: any) => {
         setIsProcessingPayment(true);
         try {
+            console.info('[OrderCard] submit payment request', {
+                orderId,
+                payload: data,
+                orderCustomerId: order.customerId,
+            });
             await orderHistoryService.processPayment(data);
             toast.success(t('paymentSuccess') || 'Payment processed successfully');
             setIsPaymentModalOpen(false);
@@ -188,8 +211,24 @@ export const OrderCard: React.FC<OrderCardProps> = ({ order, onStatusChange, onA
                 onStatusChange(orderId, order.orderStatus);
             }
         } catch (error) {
-            console.error('Payment failed:', error);
-            toast.error(t('paymentError') || 'Failed to process payment');
+            const apiError = error as any;
+            console.error('Payment failed:', {
+                error,
+                response: apiError?.response?.data,
+                orderId,
+                payload: data,
+            });
+
+            const localizedMessage = getLocalizedApiErrorMessage(error, t('paymentError'));
+            const validateInfo = apiError?.response?.data?.validateInfo;
+            const systemMessage = apiError?.response?.data?.systemMessage;
+            const details = Array.isArray(validateInfo) && validateInfo.length > 0
+                ? validateInfo.filter(Boolean).map(String)
+                : systemMessage
+                    ? [String(systemMessage)]
+                    : [];
+
+            toast.error(localizedMessage, details.length > 0 ? { description: details.join(' | ') } : undefined);
         } finally {
             setIsProcessingPayment(false);
         }
@@ -376,7 +415,7 @@ export const OrderCard: React.FC<OrderCardProps> = ({ order, onStatusChange, onA
                 onClose={() => setIsPaymentModalOpen(false)}
                 onPaymentComplete={handlePaymentComplete}
                 isLoading={isProcessingPayment}
-                couponOptions={couponOptions}
+                couponOptions={paymentCoupons}
             />
 
             <PrintOrderModal

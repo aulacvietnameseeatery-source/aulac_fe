@@ -362,6 +362,8 @@
         "enterTip": "Nhập số tiền tip",
         "selectPromotion": "Chọn khuyến mãi",
         "selectCoupon": "Chọn mã giảm giá",
+        "paymentError": "Thanh toán thất bại",
+        "receivedAmountTooLow": "Số tiền khách đưa không được nhỏ hơn tổng thanh toán.",
         "promotions": "Khuyến mãi",
         "coupons": "Mã giảm giá",
         "autoPromotion": "Khuyến mãi tự động",

@@ -362,6 +362,8 @@
         "enterTip": "Entrer le pourboire",
         "selectPromotion": "Choisir une promotion",
         "selectCoupon": "Choisir un coupon",
+        "paymentError": "Échec du traitement du paiement",
+        "receivedAmountTooLow": "Le montant reçu ne peut pas être inférieur au total à payer.",
         "promotions": "Promotions",
         "coupons": "Coupons",
         "autoPromotion": "Promotion automatique",

@@ -161,6 +161,18 @@ export function getLocalizedApiErrorMessage(
     const status = apiError.response?.status ?? apiError.status;
 
     if (body || status) {
+      if (
+        typeof body?.userMessage === "string" &&
+        body.userMessage.trim().length > 0 &&
+        !!status &&
+        status >= 400 &&
+        status < 500 &&
+        status !== 401 &&
+        status !== 403
+      ) {
+        return body.userMessage;
+      }
+
       const key = resolveErrorKey(status, body);
       if (key === "http") {
         return status
@@ -187,8 +199,13 @@ export function createApiClientError(
 ): ApiClientError {
   const dictionary = getDictionary(locale);
   const key = resolveErrorKey(status, body);
+  const backendUserMessage = body?.userMessage?.trim();
+  const shouldUseBackendMessage =
+    !!backendUserMessage && status >= 400 && status < 500 && status !== 401 && status !== 403;
   const message =
-    key === "http"
+    shouldUseBackendMessage
+      ? backendUserMessage
+      : key === "http"
       ? status > 0
         ? formatMessage(dictionary.httpStatus, { status })
         : fallbackMessage ?? body?.userMessage ?? body?.message ?? dictionary.http
@@ -199,7 +216,7 @@ export function createApiClientError(
   error.response = {
     data: {
       ...body,
-      userMessage: message,
+      userMessage: shouldUseBackendMessage ? backendUserMessage : message,
     },
     status,
   };
