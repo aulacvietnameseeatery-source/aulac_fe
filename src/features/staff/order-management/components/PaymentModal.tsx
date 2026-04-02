@@ -49,6 +49,11 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
     const [selectedCouponIds, setSelectedCouponIds] = useState<string[]>([]);
     const [isFetchingPromos, setIsFetchingPromos] = useState(false);
 
+    const normalizeNumber = React.useCallback((value: number) => {
+        if (!Number.isFinite(value)) return 0;
+        return Number.parseFloat(value.toPrecision(15));
+    }, []);
+
     const eligibleCoupons = React.useMemo(() => {
         return couponOptions.filter((coupon) => {
             if (coupon.customerId == null) {
@@ -121,18 +126,21 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
     }, [autoPromotionAmount, selectedCoupons, couponAmount]);
 
     const totalTaxAmount = order.taxAmount || 0;
-    const total = Math.max(0, subTotal + totalTaxAmount + tipAmount - totalDiscount);
+    const total = normalizeNumber(Math.max(0, subTotal + totalTaxAmount + tipAmount - totalDiscount));
 
     const [givenAmount, setGivenAmount] = useState<number>(total);
-    const balance = Math.max(0, givenAmount - total);
+    const balance = normalizeNumber(Math.max(0, givenAmount - total));
 
     // Sync givenAmount when total changes
     React.useEffect(() => {
-        setGivenAmount(total);
-    }, [total]);
+        setGivenAmount(normalizeNumber(total));
+    }, [total, normalizeNumber]);
 
     const handlePay = () => {
-        if (givenAmount < total) {
+        const normalizedGivenAmount = normalizeNumber(givenAmount);
+        const normalizedTipAmount = normalizeNumber(tipAmount);
+
+        if (normalizedGivenAmount < total) {
             toast.error(t('receivedAmountTooLow'));
             return;
         }
@@ -147,21 +155,21 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
 
         console.info('[PaymentModal] submitting payment', {
             orderId: order.orderId,
-            receivedAmount: givenAmount,
+            receivedAmount: normalizedGivenAmount,
             finalAmount: total,
             paymentMethod: methodMap[paymentType],
             couponIds: safeSelectedCouponIds.map(Number),
-            tipAmount: tipAmount || undefined,
+            tipAmount: normalizedTipAmount || undefined,
             note: note || undefined,
         });
 
         onPaymentComplete(order.orderId, {
             orderId: order.orderId,
-            receivedAmount: givenAmount,
+            receivedAmount: normalizedGivenAmount,
             paymentMethod: methodMap[paymentType],
             couponIds: safeSelectedCouponIds.map(Number),
             note: note || undefined,
-            tipAmount: tipAmount || undefined
+            tipAmount: normalizedTipAmount || undefined
         });
     };
 
