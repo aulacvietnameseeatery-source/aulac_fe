@@ -120,6 +120,58 @@
       "show_dish_video": "Show Dish Video",
       "show_dish_videoDesc": "Toggle visibility of the introduction video in dish details."
     },
+    "shift": {
+      "title": "Shift & Attendance Settings",
+      "description": "Control check-in windows, grace periods, geofencing, and scheduling limits.",
+      "sections": {
+        "attendance": "Attendance Rules",
+        "session": "Session Management",
+        "scheduling": "Scheduling Limits",
+        "geofence": "Geofence Configuration"
+      },
+      "fields": {
+        "allowed_early_check_in_minutes": {
+          "label": "Early Check-in Window",
+          "hint": "How many minutes before a shift starts staff can check in."
+        },
+        "late_grace_minutes": {
+          "label": "Late Grace Period",
+          "hint": "Minutes after shift start before marking as late."
+        },
+        "absence_threshold_minutes": {
+          "label": "Absence Threshold",
+          "hint": "Minutes after shift start before marking as absent."
+        },
+        "early_leave_buffer_minutes": {
+          "label": "Early Leave Buffer",
+          "hint": "Minutes before shift end — leaving earlier counts as early departure."
+        },
+        "no_show_threshold_minutes": {
+          "label": "No-Show Detection Threshold",
+          "hint": "Minutes after shift start to flag a no-show automatically."
+        },
+        "auto_logout_after_checkout_minutes": {
+          "label": "Auto-Logout After Checkout",
+          "hint": "Minutes after checkout before the staff session is automatically logged out."
+        },
+        "max_weekly_hours": {
+          "label": "Max Weekly Hours",
+          "hint": "Maximum number of working hours allowed per week."
+        },
+        "geofence_base_latitude": {
+          "label": "Base Latitude",
+          "hint": "Latitude coordinate of the restaurant for geofence centre."
+        },
+        "geofence_base_longitude": {
+          "label": "Base Longitude",
+          "hint": "Longitude coordinate of the restaurant for geofence centre."
+        },
+        "geofence_max_radius_meters": {
+          "label": "Max Geofence Radius",
+          "hint": "Maximum distance (meters) from the restaurant allowed for check-in."
+        }
+      }
+    },
     "DishModal": {
       "noCategory": "No Category",
       "dishLabel": "DISH",

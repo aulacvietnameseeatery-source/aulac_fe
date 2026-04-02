@@ -120,6 +120,58 @@
       "show_dish_video": "Hiển thị video món ăn",
       "show_dish_videoDesc": "Bật/Tắt hiển thị video giới thiệu trong chi tiết món ăn."
     },
+    "shift": {
+      "title": "Cài đặt Ca làm & Chấm công",
+      "description": "Quản lý thời gian check-in, thời hạn ân hạn, vùng địa lý và giới hạn lịch trình.",
+      "sections": {
+        "attendance": "Quy tắc chấm công",
+        "session": "Quản lý phiên",
+        "scheduling": "Giới hạn lịch trình",
+        "geofence": "Cấu hình vùng địa lý"
+      },
+      "fields": {
+        "allowed_early_check_in_minutes": {
+          "label": "Thời gian check-in sớm",
+          "hint": "Số phút trước khi ca bắt đầu mà nhân viên được phép check-in."
+        },
+        "late_grace_minutes": {
+          "label": "Ân hạn đi trễ",
+          "hint": "Số phút sau khi ca bắt đầu trước khi đánh dấu là đi trễ."
+        },
+        "absence_threshold_minutes": {
+          "label": "Ngưỡng vắng mặt",
+          "hint": "Số phút sau khi ca bắt đầu trước khi đánh dấu là vắng mặt."
+        },
+        "early_leave_buffer_minutes": {
+          "label": "Ngưỡng rời sớm",
+          "hint": "Số phút trước khi ca kết thúc — rời sớm hơn sẽ bị tính là về sớm."
+        },
+        "no_show_threshold_minutes": {
+          "label": "Ngưỡng phát hiện vắng mặt",
+          "hint": "Số phút sau khi ca bắt đầu để tự động đánh dấu không đến."
+        },
+        "auto_logout_after_checkout_minutes": {
+          "label": "Tự động đăng xuất sau checkout",
+          "hint": "Số phút sau khi checkout trước khi phiên nhân viên tự động đăng xuất."
+        },
+        "max_weekly_hours": {
+          "label": "Giờ làm tối đa mỗi tuần",
+          "hint": "Số giờ làm việc tối đa được phép mỗi tuần."
+        },
+        "geofence_base_latitude": {
+          "label": "Vĩ độ gốc",
+          "hint": "Tọa độ vĩ độ của nhà hàng cho tâm vùng địa lý."
+        },
+        "geofence_base_longitude": {
+          "label": "Kinh độ gốc",
+          "hint": "Tọa độ kinh độ của nhà hàng cho tâm vùng địa lý."
+        },
+        "geofence_max_radius_meters": {
+          "label": "Bán kính vùng tối đa",
+          "hint": "Khoảng cách tối đa (mét) từ nhà hàng cho phép check-in."
+        }
+      }
+    },
     "DishModal": {
       "noCategory": "Chưa có danh mục",
       "dishLabel": "MÓN",

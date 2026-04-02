@@ -26,7 +26,7 @@ export const CategoryHeader = ({
           {t("description")}
         </p>
       </div>
-      <PermissionGuard permission={Permissions.CreateDishCategory} showDisabled={true}>
+      <PermissionGuard permission={Permissions.CreateDishCategory} >
         <Button
           onClick={onCreateClick}
           variant="outline"

@@ -48,7 +48,6 @@ import { Permissions } from "@/types/const";
 import { ConfirmModal } from "@/components/layout/admin-sidebar/confirm-modal";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
-// _OLD: import { NotificationPanel as NotificationPanel_DEPRECATED } from "./notification-panel";
 import { NotificationCenter, useNotificationStore } from "@/features/staff/notifications";
 import { useStoreSettings } from "@/hooks/use-store-settings";
 import { LucideIcon } from "lucide-react";
@@ -94,10 +93,8 @@ const navigation: NavCategory[] = [
     status: "warehouse",
     icon: Warehouse,
     items: [
-      // _OLD: { key: "ingredients", href: "/dashboard/ingredients", icon: Package, permission: Permissions.ViewInventory },
       { key: "suppliers", href: "/dashboard/suppliers", icon: Truck, permission: Permissions.ViewSupplier },
       { key: "inventory", href: "/dashboard/inventory", icon: Warehouse, permission: Permissions.ViewInventory },
-      // _OLD: { key: "stock", href: "/dashboard/stock", icon: Layers, permission: Permissions.StockCheck },
     ]
   },
   {
@@ -107,7 +104,7 @@ const navigation: NavCategory[] = [
       { key: "tables", href: "/dashboard/tables", icon: Table, permission: Permissions.ViewTable },
       { key: "customers", href: "/dashboard/customers", icon: UserRound, permission: Permissions.ViewCustomer },
       { key: "invoices", href: "/dashboard/invoices", icon: FileSpreadsheet, permission: Permissions.ViewOrder },
-      { key: "payments", href: "/dashboard/payments", icon: BadgeDollarSign, permission: Permissions.ProcessPayment },
+      { key: "payments", href: "/dashboard/payments", icon: BadgeDollarSign, permission: Permissions.ViewPayment },
     ]
   },
   {

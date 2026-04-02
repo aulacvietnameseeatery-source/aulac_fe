@@ -91,8 +91,6 @@ export function AttendanceTab({ rows, loading }: Props) {
       r.attendanceStatusCode?.toUpperCase() !== "LATE"
   ).length;
 
-  // _OLD: Insights block intentionally removed for compact layout.
-
   const chartData = useMemo(() => {
     const byDate = new Map<string, { date: string; onTime: number; late: number; absent: number }>();
     filteredRows.forEach((r) => {

@@ -2,7 +2,7 @@
 
 import React, { useMemo } from "react";
 import { useTranslations } from "next-intl";
-import { Link } from "@/routing"
+import { Link } from "@/routing";
 import { cn } from "@/lib/utils";
 import { dateUtils } from "@/lib/date-utils";
 import { Card, CardContent } from "@/components/ui/card";
@@ -164,10 +164,9 @@ function formatTimeUntil(iso: string, t: (key: string, values?: Record<string, n
   return rem > 0 ? t("dashboard.timeHoursMinutes", { hours: hrs, minutes: rem }) : t("dashboard.timeHours", { hours: hrs });
 }
 
-// _OLD: formatTime used toLocaleTimeString — now uses dateUtils.formatLocal
 function formatTime(iso: string): string {
   try {
-    return dateUtils.formatLocal(iso, "HH:mm");
+    return dateUtils.formatLocal(iso, "HH:mm"); 
   } catch {
     return "—";
   }

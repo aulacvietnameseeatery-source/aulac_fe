@@ -267,7 +267,7 @@
       }
     },
     "myShift": {
-      "title": "My Shifts",
+      "title": "Timesheet",
       "description": "View your assigned shifts and check in or check out.",
       "loading": "Loading shifts...",
       "empty": "No shifts assigned in the next 30 days.",
@@ -278,6 +278,19 @@
         "swap": "Swap",
         "leave": "Leave"
       },
+      "viewMode": {
+        "week": "Week",
+        "month": "Month"
+      },
+      "stats": {
+        "totalWorkdays": "Total actual workdays",
+        "totalOvertimeHours": "Total overtime hours (multiplied by coefficient)",
+        "totalLateEarly": "Total late arrivals and early departures",
+        "totalLeaveDays": "Total leave days"
+      },
+      "checkedInTodayAt": "You checked in today at",
+      "autoSyncNote": "Note: The timesheet will be automatically synchronized at the following times: 10:00, 12:00, 15:15 and 17:30 daily",
+      "timesheetPeriod": "Timesheet from {date}",
       "summary": {
         "title": "This Month Summary",
         "subtitle": "Attendance overview",
@@ -300,7 +313,22 @@
         "networkConnected": "Connected to store network",
         "locationUnverified": "Location unverified",
         "checkInAction": "Check In",
-        "checkOutAction": "Check Out"
+        "checkOutAction": "Check Out",
+        "checkInAvailableFrom": "Check-in available from {time}",
+        "inMinutes": "in {minutes} min",
+        "shiftEnded": "This shift has ended — check-in is no longer available",
+        "tooEarlyToast": "Too early! Check-in opens at {time}",
+        "shiftEndedToast": "This shift has already ended"
+      },
+      "autoLogout": {
+        "bannerTitle": "Auto-logout in {time}",
+        "bannerMessage": "You checked out of your shift. You will be logged out automatically.",
+        "stay": "Stay",
+        "logoutNow": "Logout Now"
+      },
+      "todayAttendance": {
+        "title": "Today's Attendance",
+        "noShiftsToday": "No shifts assigned today"
       },
       "todayShift": "Today's Shift",
       "upcomingShifts": "Upcoming Shifts",

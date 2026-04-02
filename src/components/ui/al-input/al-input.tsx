@@ -333,8 +333,6 @@ const ALInput = React.forwardRef<
       } as React.ChangeEvent<HTMLInputElement>;
       onChange(syntheticEvent);
     };
-
-    // _OLD: inline label/error/description rendering, now unified via ALFieldWrapper
     return (
       <ALFieldWrapper
         title={title}

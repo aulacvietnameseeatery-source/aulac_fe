@@ -120,6 +120,58 @@
       "show_dish_video": "Afficher la Vidéo",
       "show_dish_videoDesc": "Activer la visibilité de la vidéo d'introduction dans les détails du plat."
     },
+    "shift": {
+      "title": "Paramètres des Quarts & Présences",
+      "description": "Gérer les fenêtres de pointage, les délais de grâce, le géorepérage et les limites de planification.",
+      "sections": {
+        "attendance": "Règles de présence",
+        "session": "Gestion de session",
+        "scheduling": "Limites de planification",
+        "geofence": "Configuration du géorepérage"
+      },
+      "fields": {
+        "allowed_early_check_in_minutes": {
+          "label": "Fenêtre de pointage anticipé",
+          "hint": "Nombre de minutes avant le début du quart où le personnel peut pointer."
+        },
+        "late_grace_minutes": {
+          "label": "Délai de grâce pour retard",
+          "hint": "Minutes après le début du quart avant de marquer comme en retard."
+        },
+        "absence_threshold_minutes": {
+          "label": "Seuil d'absence",
+          "hint": "Minutes après le début du quart avant de marquer comme absent."
+        },
+        "early_leave_buffer_minutes": {
+          "label": "Marge de départ anticipé",
+          "hint": "Minutes avant la fin du quart — partir plus tôt compte comme un départ anticipé."
+        },
+        "no_show_threshold_minutes": {
+          "label": "Seuil de détection d'absence",
+          "hint": "Minutes après le début du quart pour signaler automatiquement une absence."
+        },
+        "auto_logout_after_checkout_minutes": {
+          "label": "Déconnexion auto après pointage de sortie",
+          "hint": "Minutes après le pointage de sortie avant la déconnexion automatique de la session."
+        },
+        "max_weekly_hours": {
+          "label": "Heures hebdomadaires max.",
+          "hint": "Nombre maximum d'heures de travail autorisées par semaine."
+        },
+        "geofence_base_latitude": {
+          "label": "Latitude de base",
+          "hint": "Coordonnée de latitude du restaurant pour le centre du géorepérage."
+        },
+        "geofence_base_longitude": {
+          "label": "Longitude de base",
+          "hint": "Coordonnée de longitude du restaurant pour le centre du géorepérage."
+        },
+        "geofence_max_radius_meters": {
+          "label": "Rayon max. du géorepérage",
+          "hint": "Distance maximale (mètres) du restaurant autorisée pour le pointage."
+        }
+      }
+    },
     "DishModal": {
       "noCategory": "Pas de catégorie",
       "dishLabel": "PLAT",

@@ -4,6 +4,8 @@
 import React from 'react';
 import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
+import { PermissionGuard } from '@/components/permission-guard';
+import { Permissions } from '@/types/const';
 
 type Props = {
   onBack: () => void;
@@ -27,14 +29,16 @@ export const RoleDetailHeader = ({ onBack, onEdit }: Props) => {
         >
           {t('back')}
         </Button>
-        <Button
-          onClick={onEdit}
-          type="button"
-          variant="outline"
-          className="shadow-md bg-blue-600 text-white hover:bg-blue-700 border-none"
-        >
-          {t('edit')}
-        </Button>
+        <PermissionGuard permission={Permissions.UpdateRole}>
+          <Button
+            onClick={onEdit}
+            type="button"
+            variant="outline"
+            className="shadow-md bg-blue-600 text-white hover:bg-blue-700 border-none"
+          >
+            {t('edit')}
+          </Button>
+        </PermissionGuard>
       </div>
     </div>
   );
