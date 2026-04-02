@@ -1,10 +1,9 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 import { CouponDTO, CouponFilters } from "../types/coupon.types";
 import { couponListService } from "../services/coupon-list-service";
-import type { FilterState } from '@/hooks/table/useTableFiltering';
-import type { SortStateItem } from '@/hooks/table/useTableSorting';
+import type { TableDataChangeParams } from '@/types/table-data-change.types';
 
 export const useCouponList = () => {
   // Data State
@@ -16,52 +15,56 @@ export const useCouponList = () => {
     pageSize: 10,
   });
 
-  // Fetch coupons from API - compatible with BaseTable onDataChange
-  const onDataChange = useCallback((params: {
-    search?: string;
-    filters?: Record<string, FilterState>;
-    sort?: SortStateItem[];
-    page?: number;
-    pageSize?: number;
-  }) => {
-    const fetchData = async () => {
-      try {
-        setIsLoading(true);
-        
-        const apiFilters: CouponFilters = {
-          search: params.search || undefined,
-          pageIndex: params.page || 1,
-          pageSize: params.pageSize || 10,
-        };
+  // Dedup + latest-request tracking
+  const latestParamsRef = useRef<TableDataChangeParams>({});
+  const lastFetchHashRef = useRef("");
+  const fetchIdRef = useRef(0);
 
-        const result = await couponListService.getCoupons(apiFilters);
-        
+  // Fetch coupons from API - compatible with BaseTable onDataChange
+  const onDataChange = useCallback(async (params: TableDataChangeParams) => {
+    const hash = JSON.stringify(params);
+    if (hash === lastFetchHashRef.current) return;
+    lastFetchHashRef.current = hash;
+    latestParamsRef.current = params;
+
+    const currentFetchId = ++fetchIdRef.current;
+    const page = params.page || 1;
+    const pageSize = params.pageSize || 10;
+
+    setPaginationInfo({ page, pageSize });
+    setIsLoading(true);
+
+    try {
+      const apiFilters: CouponFilters = {
+        search: params.search || undefined,
+        pageIndex: page,
+        pageSize,
+      };
+
+      const result = await couponListService.getCoupons(apiFilters);
+
+      if (currentFetchId === fetchIdRef.current) {
         setCoupons(result.pageData);
         setTotalCount(result.totalCount);
-        setPaginationInfo({
-          page: params.page || 1,
-          pageSize: params.pageSize || 10,
-        });
-      } catch (error) {
+      }
+    } catch (error) {
+      if (currentFetchId === fetchIdRef.current) {
         console.error("Error fetching coupons:", error);
         setCoupons([]);
         setTotalCount(0);
-      } finally {
+      }
+    } finally {
+      if (currentFetchId === fetchIdRef.current) {
         setIsLoading(false);
       }
-    };
-
-    fetchData();
+    }
   }, []);
 
   // Refresh function
   const refresh = useCallback(() => {
-    // Trigger a re-fetch by calling onDataChange with current pagination
-    onDataChange({
-      page: paginationInfo.page,
-      pageSize: paginationInfo.pageSize,
-    });
-  }, [paginationInfo, onDataChange]);
+    lastFetchHashRef.current = "";
+    onDataChange(latestParamsRef.current);
+  }, [onDataChange]);
 
   return {
     coupons,

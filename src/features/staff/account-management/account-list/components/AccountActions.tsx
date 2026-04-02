@@ -55,7 +55,7 @@ export const AccountActions = ({
         </button>
       </PermissionGuard>
 
-      <PermissionGuard permission={Permissions.UpdateAccount}>
+      <PermissionGuard permission={Permissions.ResetPassword}>
         <button 
           className="text-gray-400 hover:text-orange-500 transition-colors cursor-pointer p-1"
           data-tooltip-content={t("actions.resetPassword")}

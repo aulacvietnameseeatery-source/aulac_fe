@@ -73,7 +73,7 @@ export function TableActionColumn<T>({ actions, item }: TableActionColumnProps<T
     );
 
     if (actionDef.permission) {
-      return <PermissionGuard key={`perm-${key}`} permission={actionDef.permission} showDisabled={true}>{button}</PermissionGuard>;
+      return <PermissionGuard key={`perm-${key}`} permission={actionDef.permission}>{button}</PermissionGuard>;
     }
     return button;
   };
@@ -144,7 +144,7 @@ export function TableActionColumn<T>({ actions, item }: TableActionColumnProps<T
 
             if (actionDef.permission) {
               return (
-                <PermissionGuard key={`perm-dropdown-${index}`} permission={actionDef.permission} showDisabled={true}>
+                <PermissionGuard key={`perm-dropdown-${index}`} permission={actionDef.permission}>
                   {menuItem}
                 </PermissionGuard>
               );
