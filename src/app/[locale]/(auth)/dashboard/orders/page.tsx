@@ -21,8 +21,6 @@ import { ProtectedRoute } from "@/components/protected-route";
 import { Permissions } from "@/types/const";
 import { OrderStatusCode } from "@/types/status-codes";
 import { orderHistoryService } from "@/features/staff/order-management/services/order-history.service";
-import { staffCouponService } from "@/features/staff/coupon-management/coupon-list/services/coupon-service";
-import { CouponDTO } from "@/features/staff/coupon-management/coupon-list/types/coupon.types";
 import { staffPromotionService } from "@/features/staff/promotion-management/promotion-list/services/promotion-service";
 import { PromotionListDTO } from "@/features/staff/promotion-management/promotion-list/types/promotion-types";
 import { toast } from "sonner";
@@ -42,8 +40,6 @@ function OrdersContent() {
     const [currentPage, setCurrentPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const [isRefreshing, setIsRefreshing] = useState(false);
-    const [paymentCoupons, setPaymentCoupons] = useState<CouponDTO[]>([]);
-    const hasLoadedCouponsRef = useRef(false);
 
     // ── Date range filter ──────────────────────────────────────────────────
     type DatePreset = "today" | "yesterday" | "last7" | "last30" | "thisMonth" | "lastMonth" | "custom";
@@ -113,25 +109,6 @@ function OrdersContent() {
 
     // Fetch counts once on mount (and after each manual refresh)
     useEffect(() => { fetchCounts(); }, [fetchCounts]);
-
-    // Fetch payment promotions once when entering Orders page.
-    useEffect(() => {
-        if (hasLoadedCouponsRef.current) return;
-        hasLoadedCouponsRef.current = true;
-
-        const fetchPaymentCoupons = async () => {
-            try {
-                const data = await staffCouponService.getCoupons();
-                setPaymentCoupons(data ?? []);
-            } catch (error) {
-                console.error("Failed to fetch payment coupons:", error);
-                setPaymentCoupons([]);
-            }
-        };
-
-        void fetchPaymentCoupons();
-    }, []);
-
 
     // Tabs config — label + badge count từ API
     const TABS = useMemo(() => [
@@ -390,7 +367,6 @@ function OrdersContent() {
                                                         key={order.orderId}
                                                         order={order}
                                                         onStatusChange={handleRefresh}
-                                                        couponOptions={paymentCoupons}
                                                         onAction={(id, action) => {
                                                             console.log("Action:", action, "on order:", id);
                                                             if (action === "view") {

@@ -247,6 +247,7 @@ const ALInput = React.forwardRef<
       timeUse12Hour = true,
       timeMinuteStep,
       numberStepper,
+      numberShowStepper,
       numberThousandSeparator,
       numberPrefix,
       numberSuffix,
@@ -457,6 +458,7 @@ const ALInput = React.forwardRef<
               min={resolvedMin}
               max={resolvedMax}
               stepper={resolvedStepper}
+              showStepper={numberShowStepper}
               thousandSeparator={numberThousandSeparator}
               prefix={numberPrefix}
               suffix={numberSuffix}
