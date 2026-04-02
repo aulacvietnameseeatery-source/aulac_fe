@@ -9,60 +9,51 @@ interface TableInfoSectionProps {
 
 export const TableInfoSection = ({ reservation }: TableInfoSectionProps) => {
     const t = useTranslations("reservations.management.detail.table");
+    const tStaffTable = useTranslations("reservations.staff.table");
 
     return (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-            <div className="flex items-center gap-2 text-gray-900 font-semibold text-lg mb-5 border-b border-gray-100 pb-4">
-                <Armchair size={24} className="text-blue-600" />
-                <h2>{t("title")}</h2>
+        <div className="pb-6 sm:pb-8 last:border-0 relative">
+            <div className="mb-4 sm:mb-6">
+                <div className="flex items-center gap-2 text-slate-900 font-semibold text-lg">
+                    <MapPin size={24} className="text-blue-600" />
+                    <h2>{tStaffTable("availability")}</h2>
+                </div>
             </div>
 
-            {reservation.tables.length === 0 ? (
-                <div className="text-center py-8 text-gray-500">
-                    <Armchair className="w-12 h-12 mx-auto mb-3 text-gray-300" />
-                    <p>{t("noTables")}</p>
-                </div>
-            ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {reservation.tables.map((table) => (
-                        <div
-                            key={table.tableId}
-                            className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg p-4 border border-blue-200 hover:shadow-md transition-shadow"
-                        >
-                            <div className="flex items-center justify-between mb-3">
-                                <div className="flex items-center gap-2">
-                                    <Armchair size={20} className="text-blue-600" />
-                                    <span className="font-bold text-gray-900 text-lg">
-                                        {table.tableCode}
-                                    </span>
+            <div className="bg-slate-50 rounded-2xl p-4 sm:p-6 border-2 border-dashed border-slate-200 min-h-[160px] flex flex-col shadow-inner">
+                {reservation.tables.length === 0 ? (
+                    <div className="flex-1 flex flex-col items-center justify-center text-center text-slate-400 py-8">
+                        <Armchair size={48} className="mb-3 opacity-20" />
+                        <p className="font-medium">{t("noTables")}</p>
+                    </div>
+                ) : (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                        {reservation.tables.map((table) => (
+                            <div
+                                key={table.tableId}
+                                className="relative rounded-xl p-4 flex flex-col items-center justify-center gap-1 transition-all border-2 bg-blue-600 border-blue-600 text-white shadow-md hover:scale-[1.02] active:scale-[0.98]"
+                            >
+                                <span className="font-bold text-lg text-center">{table.tableCode}</span>
+                                <div className="text-xs flex gap-2 text-blue-100">
+                                    <span className="flex items-center gap-1"><UsersIcon size={12} /> {table.capacity}</span>
+                                    <span>•</span>
+                                    <span>{table.zone}</span>
                                 </div>
-                                <div className="px-2 py-1 bg-white/80 rounded-md border border-blue-200">
-                                    <span className="text-xs font-semibold text-blue-700">
-                                        {table.tableType}
-                                    </span>
+                                <div className="text-[11px] mt-1 text-blue-100 font-medium">
+                                    {table.tableType}
                                 </div>
                             </div>
-
-                            <div className="space-y-2">
-                                <div className="flex items-center gap-2 text-sm text-gray-700">
-                                    <MapPin size={16} className="text-gray-500" />
-                                    <span className="font-medium">{table.zone}</span>
-                                </div>
-                                <div className="flex items-center gap-2 text-sm text-gray-700">
-                                    <UsersIcon size={16} className="text-gray-500" />
-                                    <span>{t("capacity")}: <span className="font-semibold">{table.capacity}</span></span>
-                                </div>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            )}
+                        ))}
+                    </div>
+                )}
+            </div>
 
             {reservation.tables.length > 0 && (
-                <div className="mt-4 pt-4 border-t border-gray-100">
-                    <p className="text-sm text-gray-600">
-                        {t("totalTables")}: <span className="font-semibold text-gray-900">{reservation.tables.length}</span>
-                    </p>
+                <div className="mt-4 flex justify-end">
+                    <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-blue-50 text-blue-700 rounded-full text-xs font-bold border border-blue-100 shadow-sm">
+                        <Tag size={12} />
+                        {t("totalTables")}: {reservation.tables.length}
+                    </div>
                 </div>
             )}
         </div>

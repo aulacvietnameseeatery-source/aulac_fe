@@ -11,52 +11,42 @@ export const CustomerInfoSection = ({ reservation }: CustomerInfoSectionProps) =
     const t = useTranslations("reservations.management.detail.customer");
 
     return (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-            <div className="flex items-center gap-2 text-gray-900 font-semibold text-lg mb-5 border-b border-gray-100 pb-4">
-                <User size={24} className="text-blue-600" />
-                <h2>{t("title")}</h2>
+        <div className="border-b border-slate-100 pb-6 sm:pb-8 last:border-0 relative">
+            <div className="mb-4 sm:mb-6">
+                <div className="flex items-center gap-2 text-slate-900 font-semibold text-lg">
+                    <User size={24} className="text-blue-600" />
+                    <h2>{t("title")}</h2>
+                </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
+                <div className="relative">
+                    <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">
+                        {t("phoneNumber")}
+                    </label>
+                    <div className="text-slate-900 font-semibold text-base py-3 px-4 bg-slate-50 rounded-xl border border-slate-100 flex items-center gap-3">
+                        <Phone size={18} className="text-slate-400" />
+                        {reservation.phone}
+                    </div>
+                </div>
+
                 <div>
-                    <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
+                    <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">
                         {t("fullName")}
                     </label>
-                    <div className="flex items-center gap-2 text-gray-900 font-medium text-base">
-                        <User size={18} className="text-gray-400" />
+                    <div className="text-slate-900 font-semibold text-base py-3 px-4 bg-slate-50 rounded-xl border border-slate-100 flex items-center gap-3">
+                        <User size={18} className="text-slate-400" />
                         {reservation.customerName}
                     </div>
                 </div>
 
                 <div>
-                    <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
-                        {t("phoneNumber")}
+                    <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">
+                        {t("emailAddress")}
                     </label>
-                    <div className="flex items-center gap-2 text-gray-900 font-medium text-base">
-                        <Phone size={18} className="text-gray-400" />
-                        {reservation.phone}
-                    </div>
-                </div>
-
-                {reservation.email && (
-                    <div>
-                        <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
-                            {t("emailAddress")}
-                        </label>
-                        <div className="flex items-center gap-2 text-gray-900 font-medium text-base">
-                            <Mail size={18} className="text-gray-400" />
-                            {reservation.email}
-                        </div>
-                    </div>
-                )}
-
-                <div>
-                    <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
-                        {t("partySize")}
-                    </label>
-                    <div className="flex items-center gap-2 text-gray-900 font-medium text-base">
-                        <Users size={18} className="text-gray-400" />
-                        {reservation.partySize} {reservation.partySize > 1 ? t("guests") : t("guest")}
+                    <div className={`text-slate-900 font-semibold text-base py-3 px-4 bg-slate-50 rounded-xl border border-slate-100 flex items-center gap-3 ${!reservation.email && 'italic text-slate-400'}`}>
+                        <Mail size={18} className="text-slate-400" />
+                        {reservation.email || t("noEmail")}
                     </div>
                 </div>
             </div>

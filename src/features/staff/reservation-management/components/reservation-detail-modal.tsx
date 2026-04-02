@@ -9,6 +9,7 @@ import { useReservationDetail } from "../hooks/use-reservation-detail";
 import { CustomerInfoSection } from "./customer-info-section";
 import { BookingInfoSection } from "./booking-info-section";
 import { TableInfoSection } from "./table-info-section";
+import { NotesInfoSection } from "./notes-info-section";
 
 interface ReservationDetailModalProps {
     reservationId: number | null;
@@ -35,11 +36,11 @@ export const ReservationDetailModal = ({
             open={open}
             onClose={onClose}
             title={t("title")}
-            width="min(960px, 95vw)"
+            width="min(960px, 96vw)"
             bodyOverflowY="hidden"
         >
-            <div className="flex h-[min(85dvh,800px)] flex-col">
-                <div className="flex-1 min-h-0 overflow-y-auto p-4 sm:p-6 scrollbar-thin scrollbar-thumb-gray-200 bg-slate-50/30">
+            <div className="flex h-[min(82dvh,760px)] flex-col">
+                <div className="flex-1 min-h-0 overflow-y-auto p-3 sm:p-5 space-y-4 sm:space-y-5 scrollbar-thin scrollbar-thumb-gray-200 bg-slate-50/30">
                     {isLoading ? (
                         <div className="flex flex-col items-center justify-center py-24 gap-4">
                             <Loader2 className="w-12 h-12 animate-spin text-blue-600" />
@@ -52,7 +53,7 @@ export const ReservationDetailModal = ({
                             </p>
                         </div>
                     ) : (
-                        <div className="max-w-4xl mx-auto space-y-6">
+                        <div className="space-y-4 sm:space-y-5">
                             {/* Reservation ID Badge */}
                             <div className="inline-flex items-center gap-2 bg-blue-50 border border-blue-200 rounded-lg px-4 py-2 shadow-sm">
                                 <Tag size={16} className="text-blue-600" />
@@ -60,22 +61,17 @@ export const ReservationDetailModal = ({
                                 <span className="font-mono font-bold text-blue-900 ml-1">#{reservation.reservationId}</span>
                             </div>
 
-                            {/* Content Sections */}
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div className="space-y-6">
-                                    <CustomerInfoSection reservation={reservation} />
-                                    <BookingInfoSection reservation={reservation} />
-                                </div>
-                                <div>
-                                    <TableInfoSection reservation={reservation} />
-                                </div>
-                            </div>
+                            {/* Content Sections - Single Column to match Edit Modal */}
+                            <CustomerInfoSection reservation={reservation} />
+                            <BookingInfoSection reservation={reservation} />
+                            <NotesInfoSection notes={reservation.notes} />
+                            <TableInfoSection reservation={reservation} />
                         </div>
                     )}
                 </div>
 
                 {/* Footer Actions */}
-                <div className="shrink-0 bg-white border-t border-slate-200 px-6 py-4 flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-3 rounded-b-xl shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+                <div className="shrink-0 bg-slate-50 border-t border-slate-200 px-3 sm:px-5 py-3 flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-3 rounded-b-xl">
                     <div className="flex items-center gap-2 flex-1 sm:flex-initial">
                         <Button
                             onClick={() => reservation && onEdit?.(reservation.reservationId)}
