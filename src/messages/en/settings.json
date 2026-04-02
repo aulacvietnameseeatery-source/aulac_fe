@@ -325,7 +325,13 @@
       "enabled": "Enable Loyalty Points",
       "enabledDesc": "Allow customers to earn points from purchases.",
       "point_base_amount": "Point Base Amount",
-      "point_base_amountDesc": "Amount spent per 1 loyalty point earned."
+      "point_base_amountDesc": "Amount spent per 1 loyalty point earned.",
+      "redemption_enabled": "Enable Points Redemption",
+      "redemption_enabledDesc": "Allow customers to redeem accumulated points for discounts or direct deductions.",
+      "points_to_currency_ratio": "Points to Currency Ratio",
+      "points_to_currency_ratioDesc": "The conversion rate from points to store currency (e.g. 100 points = 1 CHF).",
+      "min_redemption_points": "Minimum Points to Redeem",
+      "min_redemption_pointsDesc": "Minimum point balance required for a customer to start redeeming."
     },
     "General": {
       "title": "System Parameters",

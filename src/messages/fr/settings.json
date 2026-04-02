@@ -325,7 +325,13 @@
       "enabled": "Activer les points de fidélité",
       "enabledDesc": "Permettre aux clients de gagner des points lors de leurs achats.",
       "point_base_amount": "Montant de base des points",
-      "point_base_amountDesc": "Montant dépensé pour gagner 1 point de fidélité."
+      "point_base_amountDesc": "Montant dépensé pour gagner 1 point de fidélité.",
+      "redemption_enabled": "Activer l'échange de points",
+      "redemption_enabledDesc": "Permettre aux clients d'échanger les points accumulés contre des remises ou des déductions directes.",
+      "points_to_currency_ratio": "Taux de conversion points/monnaie",
+      "points_to_currency_ratioDesc": "Le taux de conversion des points en monnaie du magasin (ex: 100 points = 1 CHF).",
+      "min_redemption_points": "Points minimum pour échanger",
+      "min_redemption_pointsDesc": "Solde de points minimum requis pour qu'un client puisse commencer à échanger."
     },
     "General": {
       "title": "Paramètres système",
