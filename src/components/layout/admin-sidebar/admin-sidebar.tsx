@@ -104,7 +104,7 @@ const navigation: NavCategory[] = [
       { key: "tables", href: "/dashboard/tables", icon: Table, permission: Permissions.ViewTable },
       { key: "customers", href: "/dashboard/customers", icon: UserRound, permission: Permissions.ViewCustomer },
       { key: "invoices", href: "/dashboard/invoices", icon: FileSpreadsheet, permission: Permissions.ViewOrder },
-      { key: "payments", href: "/dashboard/payments", icon: BadgeDollarSign, permission: Permissions.ProcessPayment },
+      { key: "payments", href: "/dashboard/payments", icon: BadgeDollarSign, permission: Permissions.ViewPayment },
     ]
   },
   {
