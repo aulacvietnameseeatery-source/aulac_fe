@@ -17,9 +17,11 @@ interface Props {
   initialData?: PromotionFormValues;
   isEditMode?: boolean;
   onSubmitAction: (data: any) => Promise<void>;
+  onCancel: () => void;
+  onSuccess: () => void;
 }
 
-export const PromotionForm = ({ initialData, isEditMode = false, onSubmitAction }: Props) => {
+export const PromotionForm = ({ initialData, isEditMode = false, onSubmitAction, onCancel, onSuccess }: Props) => {
   const router = useRouter();
   const t = useTranslations("Promotion.Form");
   const tStatus = useTranslations("Promotion.Status");
@@ -36,7 +38,7 @@ export const PromotionForm = ({ initialData, isEditMode = false, onSubmitAction 
     try {
       await onSubmitAction(mapFormToApi(data));
       toast.success(isEditMode ? t("successUpdate") : t("successCreate"));
-      router.push("/dashboard/promotions");
+      onSuccess();
     } catch (error) {
       toast.error(t("errorSave"));
     }
@@ -133,22 +135,44 @@ export const PromotionForm = ({ initialData, isEditMode = false, onSubmitAction 
           </div>
           <div className="space-y-1.5">
             <label className="text-sm font-semibold text-slate-700">{t("discountValue")}</label>
-            <ALInput 
-              type="number" 
-              step="0.01" 
-              {...register("discountValue")} 
-              placeholder={t("discountValuePlaceholder")} 
-              error={errors.discountValue?.message} 
+            <Controller
+              control={control}
+              name="discountValue"
+              render={({ field }) => (
+                <ALInput 
+                  {...field}
+                  type="number" 
+                  step="0.01" 
+                  value={field.value ?? ""} 
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    field.onChange(val === "" ? null : Number(val)); 
+                  }}
+                  placeholder={t("discountValuePlaceholder")} 
+                  error={errors.discountValue?.message} 
+                />
+              )}
             />
           </div>
           
           <div className="space-y-1.5">
             <label className="text-sm font-semibold text-slate-700">{t("maxUsage")}</label>
-            <ALInput 
-              type="number" 
-              {...register("maxUsage")} 
-              placeholder={t("unlimited")} 
-              error={errors.maxUsage?.message} 
+            <Controller
+              control={control}
+              name="maxUsage"
+              render={({ field }) => (
+                <ALInput 
+                  {...field}
+                  type="number" 
+                  value={field.value ?? ""} 
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    field.onChange(val === "" ? null : Number(val));
+                  }}
+                  placeholder={t("unlimited")} 
+                  error={errors.maxUsage?.message} 
+                />
+              )}
             />
           </div>
         </div>
@@ -162,20 +186,42 @@ export const PromotionForm = ({ initialData, isEditMode = false, onSubmitAction 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1.5">
               <label className="text-xs font-semibold text-slate-600 uppercase">{t("minOrder")}</label>
-              <ALInput 
-                type="number" 
-                {...register("ruleMinOrderValue")} 
-                placeholder={t("minOrderPlaceholder")} 
-                error={errors.ruleMinOrderValue?.message} 
+              <Controller
+                control={control}
+                name="ruleMinOrderValue"
+                render={({ field }) => (
+                  <ALInput 
+                    {...field}
+                    type="number" 
+                    value={field.value ?? ""} 
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      field.onChange(val === "" ? null : Number(val));
+                    }}
+                    placeholder={t("minOrderPlaceholder")} 
+                    error={errors.ruleMinOrderValue?.message} 
+                  />
+                )}
               />
             </div>
             <div className="space-y-1.5">
               <label className="text-xs font-semibold text-slate-600 uppercase">{t("minQty")}</label>
-              <ALInput 
-                type="number" 
-                {...register("ruleMinQuantity")} 
-                placeholder={t("minQtyPlaceholder")} 
-                error={errors.ruleMinQuantity?.message} 
+              <Controller
+                control={control}
+                name="ruleMinQuantity"
+                render={({ field }) => (
+                  <ALInput 
+                    {...field}
+                    type="number" 
+                    value={field.value ?? ""} 
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      field.onChange(val === "" ? null : Number(val));
+                    }}
+                    placeholder={t("minQtyPlaceholder")} 
+                    error={errors.ruleMinQuantity?.message} 
+                  />
+                )}
               />
             </div>
           </div>
@@ -200,7 +246,7 @@ export const PromotionForm = ({ initialData, isEditMode = false, onSubmitAction 
       </div>
 
       {/* ACTION BUTTONS */}
-      <div className="mt-8 pt-6 border-t border border-[#D5BA98]/60 flex flex-col-reverse sm:flex-row justify-between items-center gap-4">
+      <div className="mt-8 mb-2 flex flex-col-reverse sm:flex-row justify-between items-center gap-4">
         <div>
 
         </div>
@@ -208,7 +254,7 @@ export const PromotionForm = ({ initialData, isEditMode = false, onSubmitAction 
           <Button 
             type="button" 
             variant="outline" 
-            onClick={() => router.back()} 
+            onClick={onCancel} 
             className="w-full sm:w-auto"
           >
             {t("btnCancel")}

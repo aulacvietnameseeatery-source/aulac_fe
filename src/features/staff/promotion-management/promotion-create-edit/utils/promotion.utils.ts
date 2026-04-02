@@ -4,7 +4,8 @@ import { dateUtils } from "@/lib/date-utils";
 
 export const utcToLocalDatetimeLocal = (utcStr?: string): string => {
   if (!utcStr) return "";
-  return dateUtils.formatLocal(utcStr, "yyyy-MM-dd'T'HH:mm");
+  const dateStringWithZ = utcStr.endsWith('Z') ? utcStr : `${utcStr}Z`;
+  return dateUtils.formatLocal(dateStringWithZ, "yyyy-MM-dd'T'HH:mm");
 };
 
 export const mapApiToForm = (apiData: PromotionDto): PromotionFormValues => {

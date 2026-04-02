@@ -73,11 +73,16 @@ export default function CustomerDetailPage() {
     }, [customerId]);
 
     const formatCurrency = (val: number) => {
-        return new Intl.NumberFormat('en-CH', { 
+        return new Intl.NumberFormat('fr-CH', { 
             style: 'currency', 
             currency: 'CHF',
             minimumFractionDigits: 2
         }).format(val);
+    };
+
+    const getUtcDateString = (utcDateString: string) => {
+        const dateStringWithZ = utcDateString.endsWith('Z') ? utcDateString : `${utcDateString}Z`;
+        return dateStringWithZ;
     };
       
     // This function receives the action parameter from TablePagination.
@@ -142,7 +147,7 @@ export default function CustomerDetailPage() {
                     <div className="flex flex-wrap items-center gap-x-5 gap-y-2 mt-3 text-sm font-medium text-slate-500">
                         <div className="flex items-center gap-1.5"><Phone size={14} className="text-slate-400"/> {profile.phone || t('noPhone')}</div>
                         {profile.email && <div className="flex items-center gap-1.5"><Mail size={14} className="text-slate-400"/> {profile.email}</div>}
-                        <div className="flex items-center gap-1.5"><CalendarDays size={14} className="text-slate-400"/> {t('joined')}: {dateUtils.formatLocal(profile.createdAt, "dd/MM/yyyy")}{dayjs(profile.createdAt).format("DD/MM/YYYY")}</div>
+                        <div className="flex items-center gap-1.5"><CalendarDays size={14} className="text-slate-400"/> {t('joined')}: {dateUtils.formatLocal(getUtcDateString(profile.createdAt), "dd/MM/yyyy")}</div>
                     </div>
                 </div>
 
@@ -207,8 +212,8 @@ export default function CustomerDetailPage() {
                             className="h-9 px-3 min-w-[150px] rounded-lg border border-[#D5BA98]/60 text-sm font-semibold text-[#1A3A52] bg-[#FDFBF9] focus:outline-none hover:bg-[#D5BA98]/10 transition-colors cursor-pointer"
                         >
                             <option value="">{t('allOrderTypes')}</option>
-                            <option value="DINE_IN">{t('status.DINE_IN')}</option>
-                            <option value="TAKEAWAY">{t('status.TAKEAWAY')}</option>
+                            <option value="DINE_IN">{t('orderType.DINE_IN')}</option>
+                            <option value="TAKEAWAY">{t('orderType.TAKEAWAY')}</option>
                         </select>
                     </div>
 

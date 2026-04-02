@@ -27,6 +27,14 @@ export const MenuCatalog: React.FC<Props> = ({ isReadOnly, title, subtitle, dish
     });
   }, [dishes, searchQuery, selectedCategoryId, locale, getLocalizedDishName]);
 
+  const formatCurrency = (val: number) => {
+      return new Intl.NumberFormat('fr-CH', { 
+          style: 'currency', 
+          currency: 'CHF',
+          minimumFractionDigits: 2
+      }).format(val);
+  };
+
   return (
     // Dùng h-full flex flex-col để phần header đứng yên, phần grid cuộn
     <div className="flex flex-col h-full gap-4">
@@ -99,7 +107,7 @@ export const MenuCatalog: React.FC<Props> = ({ isReadOnly, title, subtitle, dish
                     {getLocalizedDishName(dish)}
                   </p>
                   <div className="flex items-center justify-between mt-auto">
-                    <span className="text-[#1A3A52] font-bold text-base">CHF {dish.price.toFixed(2)}</span>
+                    <span className="text-[#1A3A52] font-bold text-base">{formatCurrency(dish.price)}</span>
                     {!isReadOnly && (
                       <button
                         type="button"

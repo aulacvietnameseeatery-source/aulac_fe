@@ -1183,17 +1183,23 @@
       "noPromotionsApplied": "Aucune promotion appliquée",
       "noCouponsApplied": "Aucun coupon appliqué",
       "of": "sur",
+      "orderType": {
+        "DINE_IN": "Sur place",
+        "TAKEAWAY": "À emporter"
+      },
       "status": {
         "PENDING": "En attente",
         "IN_PROGRESS": "En cours",
-        "COMPLETED": "Terminée",
-        "CANCELLED": "Annulée",
-        "CREATED": "Créée",
-        "READY": "Prête",
-        "SERVED": "Servie",
-        "REJECTED": "Rejetée",
-        "DINE_IN": "Sur place",
-        "TAKEAWAY": "À emporter"
+        "COMPLETED": "Terminé",
+        "CANCELLED": "Annulé"
+      },
+      "itemStatus": {
+        "CREATED": "Créé",
+        "IN_PROGRESS": "En préparation",
+        "READY": "Prêt",
+        "SERVED": "Servi",
+        "REJECTED": "Rejeté",
+        "CANCELLED": "Annulé"
       }
     }
   },

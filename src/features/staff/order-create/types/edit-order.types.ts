@@ -27,6 +27,7 @@ export type ExistingOrderItemDto = {
   orderItemId: number;
   dishId: number;
   dishName: string;
+  dishNameI18n?: Record<string, string>;
   quantity: number;
   price: number;
   itemStatus: OrderItemStatusCode;

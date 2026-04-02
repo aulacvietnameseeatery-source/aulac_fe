@@ -26,6 +26,13 @@ export function DishViewDetail({ dish }: Props) {
 
   const getLocString = (record: Record<Language, string>) => record[activeTab] || record.en || "—";
 
+  const formatCurrency = (val: number) => {
+        return new Intl.NumberFormat('fr-CH', { 
+            style: 'currency', 
+            currency: 'CHF'
+        }).format(val);
+    };
+
   // Xử lý phím tắt cho Lightbox (Esc để đóng, Trái/Phải để chuyển ảnh)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -44,7 +51,7 @@ export function DishViewDetail({ dish }: Props) {
       <SectionWrapper title={t("core.title")} subtitle={t("core.subtitle")}>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           <InfoField label={t("core.category")} value={getLocString(dish.categoryName)} />
-          <InfoField label={t("core.basePrice")} value={`CHF ${dish.price.toFixed(2)}`} className="text-blue-600 font-bold" />
+          <InfoField label={t("core.basePrice")} value={formatCurrency(dish.price)} className="text-blue-600 font-bold" />
           <InfoField label={t("core.status")} value={getLocString(dish.dishStatus)} />
           
           <div className="space-y-1.5">
