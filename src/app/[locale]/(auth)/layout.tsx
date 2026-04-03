@@ -8,8 +8,6 @@ import "../../../styles/adminLayout.css"
 import { Tooltip } from "react-tooltip";
 import { LanguageSwitcher } from "@/components/ui/language-switcher";
 import { DashboardTopNav } from "@/components/ui/dashboard-top-nav";
-// _OLD: NotificationProvider + NotificationToastRenderer were mounted locally in this layout.
-// _OLD: They are now mounted in src/app/[locale]/layout.tsx so hub subscription starts immediately after login.
 // import { NotificationProvider } from "@/features/staff/notifications/providers/notification-provider";
 // import { NotificationToastRenderer } from "@/features/staff/notifications/components/notification-toast-renderer";
 import { NotificationBell } from "@/features/staff/notifications/components/notification-bell";
@@ -47,9 +45,6 @@ export default function DashboardLayout({
 
   return (
     <>
-      {/* _OLD: Local provider/toast renderer wrapper retained for reference. */}
-      {/* _OLD: <NotificationProvider> */}
-      {/* _OLD: <NotificationToastRenderer /> */}
       <div className="main-container relative min-h-screen bg-[#F8F9FA]">
       {/* Mobile Header for Toggle */}
       <div className="md:hidden fixed top-0 left-0 right-0 z-40 bg-white border-b border-gray-200 px-4 py-2 flex items-center justify-between shadow-sm">
@@ -117,7 +112,6 @@ export default function DashboardLayout({
       </div>
         <Tooltip id="my-tooltip" style={{ zIndex: 10000 }} />
       </div>
-      {/* _OLD: </NotificationProvider> */}
     </>
   );
 }

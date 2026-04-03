@@ -14,6 +14,7 @@ export const DONE_ITEM_STATUSES: ReadonlyArray<OrderItemStatusCode> = [
 export const PROCESSED_ITEM_STATUSES: ReadonlyArray<OrderItemStatusCode> = [
     ...DONE_ITEM_STATUSES,
     OrderItemStatusCode.REJECTED,
+    OrderItemStatusCode.CANCELLED,
 ];
 
 export const ACTIVE_ITEM_STATUSES: ReadonlyArray<OrderItemStatusCode> = [

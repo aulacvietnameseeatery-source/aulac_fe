@@ -7,6 +7,12 @@ import type {
   CreateAccountResponse,
   UpdateAccountRequest,
   UpdateAccountStatusRequest,
+  AccountSubResourceQuery,
+  AccountOrderSummary,
+  AccountAuditLog,
+  AccountLoginActivity,
+  AccountServiceError,
+  AccountInventoryActivity,
 } from '../../account-detail/types/account-detail.types';
 
 export const staffAccountService = {
@@ -78,9 +84,65 @@ export const staffAccountService = {
     return response.data;
   },
 
+  // Get active roles only (for dropdown/filter usage)
+  getActiveRoles: async (): Promise<Role[]> => {
+    const response = await api.get<ApiResponse<Role[]>>('/api/account/roles/active');
+    return response.data;
+  },
+
   // Get all account statuses
   getAccountStatuses: async (): Promise<AccountStatus[]> => {
     const response = await api.get<ApiResponse<AccountStatus[]>>('/api/account/statuses');
     return response.data;
+  },
+
+  // ---- Account Activity Sub-Resource Endpoints ----
+
+  /** Build query string for account sub-resource endpoints */
+  _buildSubResourceParams: (query?: AccountSubResourceQuery): string => {
+    if (!query) return '';
+    const params = new URLSearchParams();
+    if (query.pageIndex) params.append('PageIndex', query.pageIndex.toString());
+    if (query.pageSize) params.append('PageSize', query.pageSize.toString());
+    if (query.fromDate) params.append('FromDate', query.fromDate);
+    if (query.toDate) params.append('ToDate', query.toDate);
+    if (query.search) params.append('Search', query.search);
+    const qs = params.toString();
+    return qs ? `?${qs}` : '';
+  },
+
+  /** GET /api/account/{id}/orders */
+  getAccountOrders: async (id: number, query?: AccountSubResourceQuery): Promise<PagedResult<AccountOrderSummary>> => {
+    const qs = staffAccountService._buildSubResourceParams(query);
+    const response = await api.get<ApiResponse<PagedResult<AccountOrderSummary>>>(`/api/account/${id}/orders${qs}`);
+    return response.data ?? { pageData: [], pageIndex: 1, pageSize: 20, totalCount: 0, totalPage: 0 };
+  },
+
+  /** GET /api/account/{id}/audit-logs */
+  getAccountAuditLogs: async (id: number, query?: AccountSubResourceQuery): Promise<PagedResult<AccountAuditLog>> => {
+    const qs = staffAccountService._buildSubResourceParams(query);
+    const response = await api.get<ApiResponse<PagedResult<AccountAuditLog>>>(`/api/account/${id}/audit-logs${qs}`);
+    return response.data ?? { pageData: [], pageIndex: 1, pageSize: 20, totalCount: 0, totalPage: 0 };
+  },
+
+  /** GET /api/account/{id}/login-activity */
+  getAccountLoginActivity: async (id: number, query?: AccountSubResourceQuery): Promise<PagedResult<AccountLoginActivity>> => {
+    const qs = staffAccountService._buildSubResourceParams(query);
+    const response = await api.get<ApiResponse<PagedResult<AccountLoginActivity>>>(`/api/account/${id}/login-activity${qs}`);
+    return response.data ?? { pageData: [], pageIndex: 1, pageSize: 20, totalCount: 0, totalPage: 0 };
+  },
+
+  /** GET /api/account/{id}/service-errors */
+  getAccountServiceErrors: async (id: number, query?: AccountSubResourceQuery): Promise<PagedResult<AccountServiceError>> => {
+    const qs = staffAccountService._buildSubResourceParams(query);
+    const response = await api.get<ApiResponse<PagedResult<AccountServiceError>>>(`/api/account/${id}/service-errors${qs}`);
+    return response.data ?? { pageData: [], pageIndex: 1, pageSize: 20, totalCount: 0, totalPage: 0 };
+  },
+
+  /** GET /api/account/{id}/inventory-activity */
+  getAccountInventoryActivity: async (id: number, query?: AccountSubResourceQuery): Promise<PagedResult<AccountInventoryActivity>> => {
+    const qs = staffAccountService._buildSubResourceParams(query);
+    const response = await api.get<ApiResponse<PagedResult<AccountInventoryActivity>>>(`/api/account/${id}/inventory-activity${qs}`);
+    return response.data ?? { pageData: [], pageIndex: 1, pageSize: 20, totalCount: 0, totalPage: 0 };
   },
 };

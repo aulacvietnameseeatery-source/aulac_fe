@@ -27,7 +27,8 @@
       "IN_PROGRESS": "Preparing",
       "READY": "Ready",
       "SERVED": "Served",
-      "REJECTED": "Rejected"
+      "REJECTED": "Rejected",
+      "CANCELLED": "Customer cancelled"
     },
     "actions": {
       "print": "Print Order",
@@ -43,20 +44,21 @@
       "confirm": "Confirm",
       "cancel": "Cancel"
     },
+    "customerCancelled": "Customer cancelled",
     "kitchen": {
-    "title": "KITCHEN",
-    "order": "ORDER",
-    "table": "TABLE",
-    "time": "TIME",
-    "newItem": "NEW ITEM",
-    "cooking": "Cooking",
-    "processed": "Processed",
-    "reason": "REASON",
-    "printedAt": "PRINTED AT",
-    "end": "END",
-    "printTicket": "Print Kitchen Ticket",
-    "cancel": "Cancel",
-    "print": "Print"
-  }
+      "title": "KITCHEN",
+      "order": "ORDER",
+      "table": "TABLE",
+      "time": "TIME",
+      "newItem": "NEW ITEM",
+      "cooking": "Cooking",
+      "processed": "Processed",
+      "reason": "REASON",
+      "printedAt": "PRINTED AT",
+      "end": "END",
+      "printTicket": "Print Kitchen Ticket",
+      "cancel": "Cancel",
+      "print": "Print"
+    }
   }
 }

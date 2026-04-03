@@ -323,7 +323,7 @@ export const IntroductionSettingsForm = () => {
                                         onUpload={(file) => uploadFile(file)}
                                         onChange={(rel, pub) => {
                                             setValue('intro_hero_image', rel, { shouldDirty: true, shouldValidate: true });
-                                            if (pub) setRemotePublicUrls(prev => ({ ...prev, intro_hero_image: pub }));
+                                            setRemotePublicUrls(prev => ({ ...prev, intro_hero_image: pub || "" }));
                                         }}
                                         onPreview={(url) => setPreviewData({ url, title: "Hero Image", type: 'image' })}
                                         maxSizeMB={MAX_IMAGE_SIZE_MB}
@@ -370,8 +370,9 @@ export const IntroductionSettingsForm = () => {
                                         aspectRatioClassName="aspect-video"
                                         onUpload={(file) => uploadFile(file)}
                                         onChange={(rel, pub) => {
+                                            console.log("onChange: intro_virtualTour_videoUrlLeft", { rel, pub });
                                             setValue('intro_virtualTour_videoUrlLeft', rel, { shouldDirty: true, shouldValidate: true });
-                                            if (pub) setRemotePublicUrls(prev => ({ ...prev, intro_virtualTour_videoUrlLeft: pub }));
+                                            setRemotePublicUrls(prev => ({ ...prev, intro_virtualTour_videoUrlLeft: pub || "" }));
                                         }}
                                         onPreview={(url) => setPreviewData({ url, title: "Video Left", type: 'video' })}
                                         maxSizeMB={MAX_VIDEO_SIZE_MB}
@@ -386,8 +387,9 @@ export const IntroductionSettingsForm = () => {
                                         aspectRatioClassName="aspect-video"
                                         onUpload={(file) => uploadFile(file)}
                                         onChange={(rel, pub) => {
+                                            console.log("onChange: intro_virtualTour_videoUrlRight", { rel, pub });
                                             setValue('intro_virtualTour_videoUrlRight', rel, { shouldDirty: true, shouldValidate: true });
-                                            if (pub) setRemotePublicUrls(prev => ({ ...prev, intro_virtualTour_videoUrlRight: pub }));
+                                            setRemotePublicUrls(prev => ({ ...prev, intro_virtualTour_videoUrlRight: pub || "" }));
                                         }}
                                         onPreview={(url) => setPreviewData({ url, title: "Video Right", type: 'video' })}
                                         maxSizeMB={MAX_VIDEO_SIZE_MB}
@@ -444,9 +446,10 @@ export const IntroductionSettingsForm = () => {
                                                     aspectRatioClassName="aspect-[4/3]"
                                                     onUpload={(file) => uploadFile(file)}
                                                     onChange={(rel, pub) => {
-                                                        // @ts-expect-error: dynamic key access for dish image
-                                                        setValue(`intro_collection_dish${num}_image`, rel, { shouldDirty: true, shouldValidate: true });
-                                                        if (pub) setRemotePublicUrls(prev => ({ ...prev, [`intro_collection_dish${num}_image`]: pub }));
+                                                        const fieldKey = `intro_collection_dish${num}_image`;
+                                                        console.log(`onChange: ${fieldKey}`, { rel, pub });
+                                                        setValue(fieldKey as any, rel, { shouldDirty: true, shouldValidate: true });
+                                                        setRemotePublicUrls(prev => ({ ...prev, [fieldKey]: pub || "" }));
                                                     }}
                                                     onPreview={(url) => setPreviewData({ url, title: `Featured Dish ${num}`, type: 'image' })}
                                                     maxSizeMB={MAX_IMAGE_SIZE_MB}

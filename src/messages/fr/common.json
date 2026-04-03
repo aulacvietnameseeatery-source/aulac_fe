@@ -371,7 +371,10 @@
     "CartSummary": {
       "title": "Résumé",
       "items_count": "{count} Articles Distincts",
-      "confirm_btn": "Confirmer"
+      "confirm_btn": "Confirmer",
+      "table_label": "Table",
+      "note_placeholder": "Note pour le chef...",
+      "total_label": "Total"
     },
     "err_load_cart": "Impossible de charger les données du panier.",
     "err_table_occupied_access": "Cette table est déjà occupée. Accès refusé.",
@@ -982,6 +985,7 @@
     "List": {
       "title": "Gestion des clients",
       "description": "Gérez et consultez les informations des clients, l'historique des commandes et les points de fidélité.",
+      "close": "Fermer",
       "searchPlaceholder": "Rechercher par nom, téléphone ou email...",
       "addNew": "Ajouter un client",
       "table": {
@@ -1003,6 +1007,7 @@
       },
       "actions": {
         "view": "Voir les détails",
+        "loyalty": "Fidélité",
         "edit": "Modifier le client",
         "delete": "Supprimer le client"
       },
@@ -1017,6 +1022,37 @@
         "message": "Êtes-vous sûr de vouloir supprimer le client {name} ? Cette action est irréversible.",
         "confirm": "Supprimer",
         "cancel": "Annuler"
+      }
+    },
+    "Loyalty": {
+      "title": "Conversion de fidélité",
+      "customer": "Client",
+      "currentPoints": "Points actuels",
+      "voucherValue": "Valeur du coupon",
+      "exchangeTab": "Échanger",
+      "historyTab": "Historique",
+      "pointsLabel": "Points à échanger",
+      "pointsPlaceholder": "Saisissez les points à échanger",
+      "redeemButton": "Échanger les points",
+      "ratioHint": "1 point = {amount}",
+      "minPointsHint": "Échange minimum : {points} points",
+      "historyEmpty": "Aucun coupon n'a encore été échangé.",
+      "notifications": {
+        "loadError": "Échec du chargement des données de fidélité",
+        "exchangeSuccess": "Coupon {code} créé avec succès",
+        "exchangeError": "Échec de la conversion des points en coupon",
+        "redemptionDisabled": "La conversion de fidélité est actuellement désactivée."
+      },
+      "validation": {
+        "pointsPositive": "Les points doivent être supérieurs à 0",
+        "insufficientPoints": "Le client n'a pas assez de points",
+        "minPoints": "L'échange minimum est de {points} points"
+      },
+      "status": {
+        "used": "Utilisé",
+        "unused": "Non utilisé",
+        "expired": "Expiré",
+        "disabled": "Désactivé"
       }
     },
     "Add": {
@@ -1147,17 +1183,23 @@
       "noPromotionsApplied": "Aucune promotion appliquée",
       "noCouponsApplied": "Aucun coupon appliqué",
       "of": "sur",
+      "orderType": {
+        "DINE_IN": "Sur place",
+        "TAKEAWAY": "À emporter"
+      },
       "status": {
         "PENDING": "En attente",
         "IN_PROGRESS": "En cours",
-        "COMPLETED": "Terminée",
-        "CANCELLED": "Annulée",
-        "CREATED": "Créée",
-        "READY": "Prête",
-        "SERVED": "Servie",
-        "REJECTED": "Rejetée",
-        "DINE_IN": "Sur place",
-        "TAKEAWAY": "À emporter"
+        "COMPLETED": "Terminé",
+        "CANCELLED": "Annulé"
+      },
+      "itemStatus": {
+        "CREATED": "Créé",
+        "IN_PROGRESS": "En préparation",
+        "READY": "Prêt",
+        "SERVED": "Servi",
+        "REJECTED": "Rejeté",
+        "CANCELLED": "Annulé"
       }
     }
   },

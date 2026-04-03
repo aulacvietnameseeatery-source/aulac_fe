@@ -267,7 +267,7 @@
       }
     },
     "myShift": {
-      "title": "Ca Của Tôi",
+      "title": "Bảng Chấm Công",
       "description": "Xem ca được phân công và chấm công vào/ra.",
       "loading": "Đang tải ca làm...",
       "empty": "Không có ca nào trong 30 ngày tới.",
@@ -278,6 +278,19 @@
         "swap": "Đổi ca",
         "leave": "Xin nghỉ"
       },
+      "viewMode": {
+        "week": "Tuần",
+        "month": "Tháng"
+      },
+      "stats": {
+        "totalWorkdays": "Tổng ngày công thực tế",
+        "totalOvertimeHours": "Tổng giờ OT (nhân hệ số)",
+        "totalLateEarly": "Tổng đi trễ và về sớm",
+        "totalLeaveDays": "Tổng ngày nghỉ phép"
+      },
+      "checkedInTodayAt": "Bạn đã chấm công hôm nay lúc",
+      "autoSyncNote": "Ghi chú: Bảng chấm công sẽ được tự động đồng bộ vào các khung giờ sau: 10:00, 12:00, 15:15 và 17:30 hàng ngày",
+      "timesheetPeriod": "Bảng chấm công từ ngày {date}",
       "summary": {
         "title": "Tổng kết tháng",
         "subtitle": "Tổng quan chấm công",
@@ -300,7 +313,22 @@
         "networkConnected": "Đã kết nối mạng cửa hàng",
         "locationUnverified": "Chưa xác minh vị trí",
         "checkInAction": "Chấm Công Vào",
-        "checkOutAction": "Chấm Công Ra"
+        "checkOutAction": "Chấm Công Ra",
+        "checkInAvailableFrom": "Chấm công mở từ {time}",
+        "inMinutes": "còn {minutes} phút",
+        "shiftEnded": "Ca đã kết thúc — không thể chấm công",
+        "tooEarlyToast": "Quá sớm! Chấm công mở lúc {time}",
+        "shiftEndedToast": "Ca này đã kết thúc"
+      },
+      "autoLogout": {
+        "bannerTitle": "Tự động đăng xuất sau {time}",
+        "bannerMessage": "Bạn đã chấm công ra. Hệ thống sẽ tự động đăng xuất.",
+        "stay": "Ở lại",
+        "logoutNow": "Đăng xuất ngay"
+      },
+      "todayAttendance": {
+        "title": "Chấm công hôm nay",
+        "noShiftsToday": "Hôm nay không có ca làm"
       },
       "todayShift": "Ca Hôm Nay",
       "upcomingShifts": "Ca Sắp Tới",

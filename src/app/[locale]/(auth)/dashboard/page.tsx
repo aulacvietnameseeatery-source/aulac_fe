@@ -10,17 +10,18 @@ import { DashboardChartsRow2 } from "@/features/staff/dashboard/component/dashbo
 import { DashboardActivityRow } from "@/features/staff/dashboard/component/dashboard-activity-row";
 import { DevTestingArea } from "@/features/staff/dashboard/component/dev-testing-area";
 
-
 import { useDashboard } from "@/features/staff/dashboard/hooks/use-dashboard";
+import { useTranslations } from "next-intl";
 
 export default function DashboardPage() {
+    const t = useTranslations("dashboard.common");
     const { userInfo, isAuthenticated } = useAuth();
     const { data, isLoading, actions } = useDashboard();
 
     const mockActiveOrders: any[] = [];
 
     if (!isAuthenticated || !userInfo) {
-        return <div className="flex items-center justify-center h-64 text-gray-500 animate-pulse">Loading dashboard...</div>;
+        return <div className="flex items-center justify-center h-64 text-gray-500 animate-pulse">{t("loadingDashboard")}</div>;
     }
 
     return (
@@ -45,7 +46,8 @@ export default function DashboardPage() {
 
             <DashboardChartsRow2
                 statistics={data.statistics}
-                activeOrders={mockActiveOrders}
+                activeOrders={[]}
+                topSpenders={data.topSpenders}
                 isLoading={isLoading}
             />
 

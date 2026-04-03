@@ -371,7 +371,10 @@
     "CartSummary": {
       "title": "Summary",
       "items_count": "{count} Distinct Items",
-      "confirm_btn": "Confirm Order"
+      "confirm_btn": "Confirm Order",
+      "table_label": "Table",
+      "note_placeholder": "Add note for chef...",
+      "total_label": "Total"
     },
     "err_load_cart": "Failed to load cart data.",
     "err_table_occupied_access": "This table is already occupied. Access denied.",
@@ -982,6 +985,7 @@
     "List": {
       "title": "Customer Management",
       "description": "Manage and view customer information, order history, and loyalty points.",
+      "close": "Close",
       "searchPlaceholder": "Search by name, phone, or email...",
       "addNew": "Add New Customer",
       "table": {
@@ -1003,6 +1007,7 @@
       },
       "actions": {
         "view": "View Details",
+        "loyalty": "Loyalty",
         "edit": "Edit Customer",
         "delete": "Delete Customer"
       },
@@ -1017,6 +1022,37 @@
         "message": "Are you sure you want to delete customer {name}? This action cannot be undone.",
         "confirm": "Delete",
         "cancel": "Cancel"
+      }
+    },
+    "Loyalty": {
+      "title": "Loyalty Redemption",
+      "customer": "Customer",
+      "currentPoints": "Current points",
+      "voucherValue": "Voucher value",
+      "exchangeTab": "Redeem",
+      "historyTab": "History",
+      "pointsLabel": "Points to redeem",
+      "pointsPlaceholder": "Enter points to redeem",
+      "redeemButton": "Redeem points",
+      "ratioHint": "1 point = {amount}",
+      "minPointsHint": "Minimum redemption: {points} points",
+      "historyEmpty": "No redeemed coupons yet.",
+      "notifications": {
+        "loadError": "Failed to load loyalty data",
+        "exchangeSuccess": "Coupon {code} created successfully",
+        "exchangeError": "Failed to redeem loyalty points",
+        "redemptionDisabled": "Loyalty redemption is currently disabled."
+      },
+      "validation": {
+        "pointsPositive": "Points must be greater than 0",
+        "insufficientPoints": "Customer does not have enough points",
+        "minPoints": "Minimum redemption is {points} points"
+      },
+      "status": {
+        "used": "Used",
+        "unused": "Unused",
+        "expired": "Expired",
+        "disabled": "Disabled"
       }
     },
     "Add": {
@@ -1147,17 +1183,23 @@
       "noPromotionsApplied": "No promotions applied",
       "noCouponsApplied": "No coupons applied",
       "of": "of",
+      "orderType": {
+        "DINE_IN": "Dine In",
+        "TAKEAWAY": "Takeaway"
+      },
       "status": {
         "PENDING": "Pending",
         "IN_PROGRESS": "In Progress",
         "COMPLETED": "Completed",
-        "CANCELLED": "Cancelled",
+        "CANCELLED": "Cancelled"
+      },
+      "itemStatus": {
         "CREATED": "Created",
+        "IN_PROGRESS": "In Progress",
         "READY": "Ready",
         "SERVED": "Served",
         "REJECTED": "Rejected",
-        "DINE_IN": "Dine-in",
-        "TAKEAWAY": "Takeaway"
+        "CANCELLED": "Cancelled"
       }
     }
   },

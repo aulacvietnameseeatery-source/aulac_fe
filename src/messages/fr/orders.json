@@ -184,6 +184,7 @@
           "actions": "Actions",
           "note": "Note",
           "rejectReason": "Raison du rejet",
+          "customerCancelled": "Annulé par le client",
           "guest": "Invité",
           "source": {
             "DINE_IN": "Sur place",
@@ -361,8 +362,12 @@
         "enterTip": "Entrer le pourboire",
         "selectPromotion": "Choisir une promotion",
         "selectCoupon": "Choisir un coupon",
+        "paymentError": "Échec du traitement du paiement",
+        "receivedAmountTooLow": "Le montant reçu ne peut pas être inférieur au total à payer.",
         "promotions": "Promotions",
-        "coupons": "Coupons"
+        "coupons": "Coupons",
+        "autoPromotion": "Promotion automatique",
+        "appliedPromotions": "Promotions appliquées"
       },
       "InvoiceDetail": {
         "title": "Détails de la facture",
@@ -400,7 +405,10 @@
         "printInvoice": "Imprimer la facture",
         "defaultStaff": "Personnel",
         "thankYouBusiness": "Merci pour votre visite !",
-        "currency": "EUR"
+        "currency": "EUR",
+        "totalAmount": "Montant total",
+        "customer": "Invité",
+        "close": "Fermer"
       }
     },
     "invoices": {
@@ -440,7 +448,7 @@
     },
     "history": {
       "title": "Historique des Commandes",
-      "fabLabel": "HISTORY",
+      "fabLabel": "HISTORIQUE",
       "fabAriaLabel": "Voir l'historique des commandes",
       "tableLabel": "Table",
       "itemsCount": "{count} plats",

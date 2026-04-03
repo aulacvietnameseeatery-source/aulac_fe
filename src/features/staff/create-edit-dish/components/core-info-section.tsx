@@ -20,8 +20,6 @@ export const CoreInfoSection: React.FC<{
   const t = useTranslations("Dish.Form");
   const { register, control, formState: { errors } } = form;
   const locale = useLocale() as 'vi' | 'en' | 'fr';
-
-  // _OLD: statuses/tags were passed via props; now loaded from generic lookup API by typeId.
   const tagLookup = useLookupCrud({
     typeId: LOOKUP_TYPE.Tag,
     queryKey: ["lookups", "dish-tag"],
@@ -60,7 +58,7 @@ export const CoreInfoSection: React.FC<{
         
         {/* 1. CATEGORY */}
         <div className="space-y-2">
-          {/* _OLD: External label moved into ALCombobox via title + required props. */}
+          {}
           <Controller
             control={control}
             name="categoryId"
@@ -81,7 +79,7 @@ export const CoreInfoSection: React.FC<{
 
         {/* 2. TAG */}
         <div className="space-y-2">
-          {/* _OLD: External label moved into LookupCombobox via title + required props. */}
+          {}
           <Controller
             control={control}
             name="tagIds"
@@ -103,7 +101,7 @@ export const CoreInfoSection: React.FC<{
 
         {/* 3. PRICE */}
         <div className="space-y-2">
-          {/* _OLD: External label moved into ALInput via title + required props. */}
+          {}
           <Controller
             control={control}
             name="price"
@@ -130,7 +128,7 @@ export const CoreInfoSection: React.FC<{
 
         {/* 4. STATUS */}
         <div className="space-y-2">
-          {/* _OLD: External label moved into LookupCombobox via title + required props. */}
+          {}
           <Controller
             control={control}
             name="dishStatusLvId"

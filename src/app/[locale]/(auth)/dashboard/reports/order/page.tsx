@@ -6,8 +6,12 @@ import { TableColumn } from "@/types/table.types";
 import { useOrderReport } from "@/features/staff/report-management/order/hooks/use-order-report";
 import { OrderFilter } from "@/features/staff/report-management/order/components/order-filter";
 import { OrderReportRecordDto } from "@/features/staff/report-management/order/types/order-report-types";
+import { useTranslations } from "next-intl";
 
 export default function OrderReportPage() {
+    const t = useTranslations("reports.order");
+    const tCommon = useTranslations("reports.common");
+
     const {
         data,
         isLoading,
@@ -22,7 +26,7 @@ export default function OrderReportPage() {
         () => [
             {
                 field: "orderId",
-                header: "Order ID",
+                header: t("table.orderId"),
                 width: "120px",
                 cellRender: ({ value }: { value: any }) => (
                     <span className="text-blue-600 font-medium">#{value}</span>
@@ -30,7 +34,7 @@ export default function OrderReportPage() {
             },
             {
                 field: "createdAt",
-                header: "Date",
+                header: t("table.date"),
                 width: "140px",
                 cellRender: ({ value }: { value: any }) => {
                     if (!value) return <span className="text-gray-400">-</span>;
@@ -42,7 +46,7 @@ export default function OrderReportPage() {
             },
             {
                 field: "customerName",
-                header: "Customer",
+                header: t("table.customer"),
                 width: "180px",
                 cellRender: ({ value }: { value: any }) => (
                     <span className="text-gray-800 font-medium">{value || "Guest"}</span>
@@ -50,7 +54,7 @@ export default function OrderReportPage() {
             },
             {
                 field: "source",
-                header: "Type",
+                header: t("table.type"),
                 width: "120px",
                 cellRender: ({ value }: { value: any }) => {
                     const typeStr = value || "Unknown";
@@ -68,7 +72,7 @@ export default function OrderReportPage() {
             },
             {
                 field: "itemCount",
-                header: "Items",
+                header: t("table.items"),
                 width: "90px",
                 align: "center" as const,
                 cellRender: ({ value }: { value: any }) => (
@@ -77,7 +81,7 @@ export default function OrderReportPage() {
             },
             {
                 field: "totalAmount",
-                header: "Grand Total",
+                header: t("table.grandTotal"),
                 width: "130px",
                 align: "right" as const,
                 sortable: true,
@@ -92,7 +96,7 @@ export default function OrderReportPage() {
             },
             {
                 field: "orderStatus",
-                header: "Status",
+                header: t("table.status"),
                 width: "120px",
                 align: "center" as const,
                 cellRender: ({ value }: { value: any }) => {
@@ -110,7 +114,7 @@ export default function OrderReportPage() {
                 }
             },
         ],
-        []
+        [t]
     );
 
     const handleGlobalRenderCell = useCallback(
@@ -140,16 +144,16 @@ export default function OrderReportPage() {
                     total={totalCount}
                     onDataChange={onDataChange}
                     onRefresh={refresh}
-                    searchPlaceholder="Search order..."
+                    searchPlaceholder={t("searchPlaceholder")}
                     defaultRowsPerPage={10}
                     rowsPerPageOptions={[10, 20, 50]}
                     renderTitle={() => (
                         <div className="pb-4">
                             <h2 className="text-xl font-bold text-gray-800 tracking-tight">
-                                Order History
+                                {t("title")}
                             </h2>
                             <p className="text-sm text-gray-500 mt-1">
-                                Detailed list of all orders within the selected period.
+                                {t("description")}
                             </p>
                         </div>
                     )}

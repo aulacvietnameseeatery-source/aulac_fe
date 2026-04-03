@@ -184,6 +184,7 @@
           "actions": "Thao tác",
           "note": "Ghi chú",
           "rejectReason": "Lý do từ chối",
+          "customerCancelled": "Khách hàng hủy",
           "guest": "Khách",
           "source": {
             "DINE_IN": "Tại quán",
@@ -361,8 +362,12 @@
         "enterTip": "Nhập số tiền tip",
         "selectPromotion": "Chọn khuyến mãi",
         "selectCoupon": "Chọn mã giảm giá",
+        "paymentError": "Thanh toán thất bại",
+        "receivedAmountTooLow": "Số tiền khách đưa không được nhỏ hơn tổng thanh toán.",
         "promotions": "Khuyến mãi",
-        "coupons": "Mã giảm giá"
+        "coupons": "Mã giảm giá",
+        "autoPromotion": "Khuyến mãi tự động",
+        "appliedPromotions": "Khuyến mãi đã áp dụng"
       },
       "InvoiceDetail": {
         "title": "Chi tiết hóa đơn",
@@ -400,7 +405,10 @@
         "printInvoice": "In hóa đơn",
         "defaultStaff": "Nhân viên",
         "thankYouBusiness": "Cảm ơn quý khách đã ủng hộ!",
-        "currency": "VND"
+        "currency": "VND",
+        "totalAmount":"Tổng thanh toán",
+        "customer":"Khách hàng",
+        "close": "Đóng"
       }
     },
     "invoices": {
@@ -440,7 +448,7 @@
     },
     "history": {
       "title": "Lịch Sử Đặt Món",
-      "fabLabel": "HISTORY",
+      "fabLabel": "LỊCH SỬ",
       "fabAriaLabel": "Xem lịch sử đặt món",
       "tableLabel": "Bàn",
       "itemsCount": "{count} món",

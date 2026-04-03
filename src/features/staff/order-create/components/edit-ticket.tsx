@@ -1,8 +1,8 @@
 import React from 'react';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { Receipt, AlertTriangle, UtensilsCrossed, Minus, Plus, Trash2, CheckCircle2, Eye, FileText, X, UserSearch, ArrowLeft } from 'lucide-react';
 import { CartItem, CustomerDto } from '../types/create-order.types';
-import { OrderDetailDto } from '../types/edit-order.types';
+import { ExistingOrderItemDto, OrderDetailDto } from '../types/edit-order.types';
 import { PermissionGuard } from '@/components/permission-guard';
 import { Permissions } from '@/types/const';
 
@@ -27,6 +27,7 @@ export const EditTicket: React.FC<Props> = ({
 }) => {
   const t = useTranslations("orders.management.Edit");
   const tCommon = useTranslations("orders.management.List.card");
+  const locale = useLocale();
 
   const newSubtotal = newCart.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const finalTotal = orderInfo.totalAmount + newSubtotal;
@@ -52,6 +53,21 @@ export const EditTicket: React.FC<Props> = ({
   };
 
   const formatStatusName = (status: string) => status.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase());
+
+  const formatCurrency = (val: number) => {
+      return new Intl.NumberFormat('fr-CH', { 
+          style: 'currency', 
+          currency: 'CHF',
+          minimumFractionDigits: 2
+      }).format(val);
+  };
+
+  const getLocalizedDishName = (item: ExistingOrderItemDto) => {
+      if (item.dishNameI18n && item.dishNameI18n[locale]) {
+          return item.dishNameI18n[locale];
+      }
+      return item.dishName || 'Unknown Item';
+  };
 
   return (
     <div className="flex flex-col h-full bg-white font-sans w-full">
@@ -115,12 +131,12 @@ export const EditTicket: React.FC<Props> = ({
                 <div className="flex justify-between items-start gap-2">
                   <div>
                     <div className="font-bold text-sm text-[#1A3A52]">
-                      {item.quantity}x {item.dishName}
+                      {item.quantity}x {getLocalizedDishName(item)}
                     </div>
                     {item.note && <div className="text-xs text-[#1A3A52]/60 italic mt-0.5">{tCommon('note')}: {item.note}</div>}
                   </div>
                   <div className="text-right shrink-0">
-                    <div className="font-bold text-sm text-[#1A3A52]">CHF {(item.price * item.quantity).toFixed(2)}</div>
+                    <div className="font-bold text-sm text-[#1A3A52]">{formatCurrency(item.price * item.quantity)}</div>
                     <span className={`text-[9px] uppercase font-bold px-1.5 py-0.5 rounded mt-1.5 inline-block border ${getStatusColor(item.itemStatus)}`}>
                       {t(`itemStatus.${item.itemStatus}`, { fallback: formatStatusName(item.itemStatus) })}
                     </span>
@@ -163,7 +179,7 @@ export const EditTicket: React.FC<Props> = ({
                         <p className="text-[#1A3A52] text-sm font-bold leading-tight truncate">
                           {item.localName}
                         </p>
-                        <div className="text-[#1A3A52]/70 font-semibold text-xs mt-1">CHF {(item.price * item.quantity).toFixed(2)}</div>
+                        <div className="text-[#1A3A52]/70 font-semibold text-xs mt-1">{formatCurrency(item.price * item.quantity)}</div>
                       </div>
                       <button
                         onClick={() => onRemoveFromCart(item.dishId)}
@@ -202,13 +218,13 @@ export const EditTicket: React.FC<Props> = ({
           <div className="flex flex-col gap-1.5 mb-3 text-sm text-[#1A3A52]/80 border-b border-[#D5BA98]/20 pb-3">
             <div className="flex justify-between">
               <span>{t('subTotal', { fallback: 'Subtotal' })}</span>
-              <span>CHF {(orderInfo.subTotalAmount || 0).toFixed(2)}</span>
+              <span>{formatCurrency(orderInfo.subTotalAmount || 0)}</span>
             </div>
 
             {!!orderInfo.taxAmount && orderInfo.taxAmount > 0 && (
               <div className="flex justify-between">
                 <span>{t('tax', { fallback: 'Tax' })}</span>
-                <span>CHF {orderInfo.taxAmount.toFixed(2)}</span>
+                <span>{formatCurrency(orderInfo.taxAmount)}</span>
               </div>
             )}
 
@@ -216,7 +232,7 @@ export const EditTicket: React.FC<Props> = ({
             {orderInfo.promotions?.map((promo) => (
               <div key={promo.promotionId} className="flex justify-between text-[#8C3A3A]">
                 <span>{promo.promotionName}</span>
-                <span>- CHF {promo.discountAmount.toFixed(2)}</span>
+                <span>- {formatCurrency(promo.discountAmount)}</span>
               </div>
             ))}
 
@@ -224,14 +240,14 @@ export const EditTicket: React.FC<Props> = ({
             {orderInfo.coupons?.map((coupon) => (
               <div key={coupon.couponId} className="flex justify-between text-[#8C3A3A]">
                 <span>{t('coupon', { fallback: 'Coupon' })}: {coupon.couponCode}</span>
-                <span>- CHF {coupon.discountAmount.toFixed(2)}</span>
+                <span>- {formatCurrency(coupon.discountAmount)}</span>
               </div>
             ))}
 
             {!!orderInfo.tipAmount && orderInfo.tipAmount > 0 && (
               <div className="flex justify-between font-medium">
                 <span>{t('tip', { fallback: 'Tip' })}</span>
-                <span>CHF {orderInfo.tipAmount.toFixed(2)}</span>
+                <span>{formatCurrency(orderInfo.tipAmount)}</span>
               </div>
             )}
 
@@ -241,7 +257,7 @@ export const EditTicket: React.FC<Props> = ({
                 {orderInfo.payments.map((payment) => (
                   <div key={payment.paymentId} className="flex justify-between text-xs text-[#4A5D4E]">
                     <span>{t('paidVia', { fallback: 'Paid via' })} {t(`paymentMethod.${payment.method}`, { fallback: payment.method })}</span>
-                    <span>CHF {payment.receivedAmount.toFixed(2)}</span>
+                    <span>{formatCurrency(payment.receivedAmount)}</span>
                   </div>
                 ))}
               </div>
@@ -253,7 +269,7 @@ export const EditTicket: React.FC<Props> = ({
           <span className="font-bold text-[#1A3A52]/70 uppercase tracking-wide text-xs">
             {newCart.length > 0 ? t('newTotal') : t('totalAmount')}
           </span>
-          <span className="font-bold text-[#1A3A52] text-2xl">CHF {finalTotal.toFixed(2)}</span>
+          <span className="font-bold text-[#1A3A52] text-2xl">{formatCurrency(finalTotal)}</span>
         </div>
 
         {isCancelled ? (

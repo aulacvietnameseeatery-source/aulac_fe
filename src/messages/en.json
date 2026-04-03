@@ -276,7 +276,10 @@
     "CartSummary": {
       "title": "Summary",
       "items_count": "{count} Distinct Items",
-      "confirm_btn": "Confirm Order"
+      "confirm_btn": "Confirm Order",
+      "table_label": "Table",
+      "note_placeholder": "Add note for chef...",
+      "total_label": "Total"
     }
   },
   "QrScan": {
@@ -1904,13 +1907,15 @@
         "PENDING": "Pending",
         "IN_PROGRESS": "In Progress",
         "COMPLETED": "Completed",
-        "CANCELLED": "Cancelled",
+        "CANCELLED": "Cancelled"
+      },
+      "itemStatus": {
         "CREATED": "Created",
+        "IN_PROGRESS": "In Progress",
         "READY": "Ready",
         "SERVED": "Served",
         "REJECTED": "Rejected",
-        "DINE_IN": "Dine-in",
-        "TAKEAWAY": "Takeaway"
+        "CANCELLED": "Cancelled"
       }
     }
   },

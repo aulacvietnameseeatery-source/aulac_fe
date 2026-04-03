@@ -1,7 +1,6 @@
 import React from "react";
-import { CalendarDays, ChevronRight, ReceiptText, HeartHandshake } from "lucide-react";
+import { CalendarDays, ChevronRight, HeartHandshake } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import dayjs from "dayjs";
 import { cn } from "@/lib/utils";
 import { CustomerOrderDto } from "../types/customer-detail-types";
 import { useTranslations } from "next-intl";
@@ -15,11 +14,16 @@ interface CustomerOrderCardProps {
 export const CustomerOrderCard: React.FC<CustomerOrderCardProps> = ({ order, onClick }) => {
     const t = useTranslations("Customer.Detail");
     const formatCurrency = (val: number) => {
-        return new Intl.NumberFormat('en-CH', { 
+        return new Intl.NumberFormat('fr-CH', { 
             style: 'currency', 
             currency: 'CHF',
             minimumFractionDigits: 2
         }).format(val);
+    };
+
+    const getUtcDateString = (utcDateString: string) => {
+        const dateStringWithZ = utcDateString.endsWith('Z') ? utcDateString : `${utcDateString}Z`;
+        return dateStringWithZ;
     };
 
     const getStatusColor = (status: string) => {
@@ -45,18 +49,18 @@ export const CustomerOrderCard: React.FC<CustomerOrderCardProps> = ({ order, onC
                     </div>
                     <div className="flex items-center gap-1.5 mt-1.5 text-xs text-slate-500 font-medium">
                         <CalendarDays className="w-3.5 h-3.5" />
-                        {dateUtils.formatLocal(order.createdAt, "dd/MM/yyyy HH:mm")}
+                        {dateUtils.formatLocal(getUtcDateString(order.createdAt), "dd/MM/yyyy HH:mm")}
                     </div>
                 </div>
                 <Badge className={cn("uppercase text-[10px] tracking-wider px-2 py-0.5 border shadow-none", getStatusColor(order.status))}>
-                    {order.status}
+                    {t(`status.${order.status}`)}
                 </Badge>
             </div>
 
             {/* Middle: Type & Details */}
             <div className="flex items-center gap-2">
                 <Badge variant="outline" className="text-slate-600 bg-slate-50 border-slate-200 font-medium">
-                    {order.orderType}
+                    {t(`orderType.${order.orderType}`)}
                 </Badge>
             </div>
 

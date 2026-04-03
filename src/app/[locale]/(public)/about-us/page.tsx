@@ -2,7 +2,7 @@
 
 import { useTranslations, useLocale } from "next-intl";
 import { motion, easeOut } from "framer-motion";
-import { getGroupSettings } from "@/features/staff/system-settings/services/system-setting.service";
+import { getPublicGroupSettings } from "@/features/staff/system-settings/services/system-setting.service";
 import { useQuery } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
 
@@ -30,7 +30,7 @@ export default function AboutUsUI() {
 
   const { data: storeSettings, isLoading } = useQuery({
     queryKey: ['storeSettings'],
-    queryFn: () => getGroupSettings('store')
+    queryFn: () => getPublicGroupSettings('store')
   });
 
   // Get dynamic content with fallback to the local JSON

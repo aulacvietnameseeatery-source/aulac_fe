@@ -4,6 +4,7 @@ import { OrderStatusCode } from '@/types/status-codes';
 export interface OrderItem {
     orderItemId: number;
     dishId: number;
+    categoryId: number;
     dishName: string;
     quantity: number;
     price: number;

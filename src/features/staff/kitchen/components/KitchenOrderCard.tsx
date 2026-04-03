@@ -197,6 +197,15 @@ export function KitchenOrderCard({ order, onUpdateStatus, onBatchUpdateStatus, i
                                                     </span>
                                                 </div>
                                             )}
+
+                                            {normalizedStatus === OrderItemStatusCode.CANCELLED && (
+                                                <div className="flex items-center gap-1.5 bg-[#8C3A3A]/8 rounded-lg px-2.5 py-1.5 mt-1.5 border border-[#8C3A3A]/20">
+                                                    <AlertTriangle className="w-3 h-3 text-[#8C3A3A]" />
+                                                    <span className="text-[10px] sm:text-xs text-[#8C3A3A] font-medium italic wrap-break-word">
+                                                        {t?.("customerCancelled") || "Customer Cancelled"}
+                                                    </span>
+                                                </div>
+                                            )}
                                         </div>
                                     </div>
 

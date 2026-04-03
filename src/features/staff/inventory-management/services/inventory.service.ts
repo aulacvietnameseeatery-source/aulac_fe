@@ -6,7 +6,6 @@ import type {
   InventoryTransactionDetailDto,
   StockCardDto,
   InventoryDashboardDto,
-  // _OLD: CreateInventoryTransactionRequest — now accepts FormData directly
   SubmitTransactionRequest,
   ApproveTransactionRequest,
   GetInventoryItemsFilter,

@@ -5,7 +5,9 @@ import { Permissions } from "@/types/const";
 export default function MyShiftsPage() {
   return (
     <ProtectedRoute permission={Permissions.CheckInShift}>
-      <MyShifts />
+      <div className="h-full min-h-0 overflow-hidden">
+        <MyShifts />
+      </div>
     </ProtectedRoute>
   );
 }

@@ -16,6 +16,7 @@ import { usePaymentList } from "@/features/staff/payment-management/hooks/use-pa
 import { PaymentListDto } from "@/features/staff/payment-management/types/payment-types";
 import { excelUtils } from "@/lib/excel-utils";
 import { staffPaymentService } from "@/features/staff/payment-management/services/payment-service";
+import { dateUtils } from "@/lib/date-utils";
 
 // Helper format tiền tệ CHF
 const formatCHF = (amount: number) => {
@@ -25,6 +26,11 @@ const formatCHF = (amount: number) => {
         minimumFractionDigits: 2,
     }).format(amount);
 };
+
+const getUtcDateString = (utcDateString: string) => {
+        const dateStringWithZ = utcDateString.endsWith('Z') ? utcDateString : `${utcDateString}Z`;
+        return dateStringWithZ;
+    };
 
 const PaymentListContent = () => {
     const t = useTranslations("Payment.List");
@@ -185,7 +191,7 @@ const PaymentListContent = () => {
             align: "center" as const,
             cellRender: ({ value }: { value: string | null }) => (
                 <span className="text-gray-600 text-sm">
-                    {value ? dayjs(value).format("DD/MM/YYYY HH:mm") : "-"}
+                    {value ? dateUtils.formatLocal(getUtcDateString(value), "dd/MM/yyyy HH:mm") : "-"}
                 </span>
             ),
         },

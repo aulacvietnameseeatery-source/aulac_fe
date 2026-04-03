@@ -1,21 +1,26 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { Loader2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Dialog } from "@/components/ui/dialog";
 import { useAccountDetail } from "../hooks/useAccountDetail";
 import { useCreateAccount } from "../hooks/useCreateAccount";
 import { useUpdateAccount } from "../hooks/useUpdateAccount";
+import { useUpdateAccountStatus } from "../hooks/useUpdateAccountStatus";
+import { useResetPassword } from "../hooks/useResetPassword";
 import { useFilterOptions } from "../../account-list/hooks/useFilterOptions";
 import { AccountDetailTabs } from "./AccountDetailTabs";
+import { AccountProfileHeader } from "./AccountProfileHeader";
 import { AccountForm } from "./forms/AccountForm";
 import type {
   AccountDialogMode,
   CreateAccountRequest,
   UpdateAccountRequest,
+  UpdateAccountStatusRequest,
 } from "../types/account-detail.types";
 import type { CreateAccountFormValues, UpdateAccountFormValues } from "../schemas/account.schema";
+import type { AccountStatusCode } from "@/types/status-codes";
 
 // ============================================================
 
@@ -37,8 +42,16 @@ export const AccountDialog = ({
   onClose,
   onSuccess,
 }: AccountDialogProps) => {
+  // Internal mode — allows switching from view → edit without closing
+  const [internalMode, setInternalMode] = useState<AccountDialogMode>(mode);
+
+  // Sync internal mode when parent changes
+  React.useEffect(() => {
+    setInternalMode(mode);
+  }, [mode]);
+
   // Fetch detail only when viewing/editing an existing account
-  const needsDetail = (mode === "view" || mode === "edit") && !!accountId;
+  const needsDetail = (internalMode === "view" || internalMode === "edit") && !!accountId;
   const { data: account, isLoading: isLoadingDetail } = useAccountDetail(
     needsDetail ? accountId : null
   );
@@ -56,10 +69,14 @@ export const AccountDialog = ({
 
   const updateMutation = useUpdateAccount(accountId, {
     onSuccess: () => {
-      onClose();
+      setInternalMode("view"); // Return to view mode after successful update
       onSuccess?.();
     },
   });
+
+  const statusMutation = useUpdateAccountStatus(accountId);
+
+  const resetPasswordMutation = useResetPassword(accountId);
 
   // Translations
   const tDetail = useTranslations("Account.Detail");
@@ -86,6 +103,27 @@ export const AccountDialog = ({
       roleId: data.roleId ?? null,
     };
     updateMutation.mutate(payload);
+  };
+
+  const handleStatusChange = (status: string) => {
+    statusMutation.mutate(status as AccountStatusCode as UpdateAccountStatusRequest);
+  };
+
+  const handleResetPassword = () => {
+    resetPasswordMutation.mutate();
+  };
+
+  const handleEditFromView = () => {
+    setInternalMode("edit");
+  };
+
+  const handleCancelEdit = () => {
+    if (mode === "view") {
+      // If originally opened as view, go back to view
+      setInternalMode("view");
+    } else {
+      onClose();
+    }
   };
 
   // ---- Title ----
@@ -117,8 +155,8 @@ export const AccountDialog = ({
       );
     }
 
-    // View mode → tabs
-    if (mode === "view") {
+    // View mode → header + tabs
+    if (internalMode === "view") {
       if (!account) {
         return (
           <div className="py-12 text-center text-sm text-gray-400">
@@ -126,18 +164,28 @@ export const AccountDialog = ({
           </div>
         );
       }
-      return <AccountDetailTabs account={account} />;
+      return (
+        <div>
+          <AccountProfileHeader
+            account={account}
+            onEdit={handleEditFromView}
+            onResetPassword={handleResetPassword}
+            onStatusChange={handleStatusChange}
+          />
+          <AccountDetailTabs account={account} />
+        </div>
+      );
     }
 
     // Create / Edit mode → form
     return (
       <AccountForm
-        mode={mode}
-        account={mode === "edit" ? account : undefined}
+        mode={internalMode}
+        account={internalMode === "edit" ? account : undefined}
         roles={roles}
-        isSubmitting={mode === "create" ? createMutation.isPending : updateMutation.isPending}
-        onSubmit={mode === "create" ? handleCreateSubmit : handleUpdateSubmit}
-        onCancel={onClose}
+        isSubmitting={internalMode === "create" ? createMutation.isPending : updateMutation.isPending}
+        onSubmit={internalMode === "create" ? handleCreateSubmit : handleUpdateSubmit}
+        onCancel={handleCancelEdit}
       />
     );
   };
@@ -146,8 +194,8 @@ export const AccountDialog = ({
     <Dialog
       open={open}
       onClose={onClose}
-      title={titleMap[mode]}
-      width={widthMap[mode]}
+      title={titleMap[internalMode]}
+      width={widthMap[internalMode]}
     >
       {renderContent()}
     </Dialog>

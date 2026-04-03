@@ -184,6 +184,7 @@
           "actions": "Actions",
           "note": "Note",
           "rejectReason": "Reject Reason",
+          "customerCancelled": "Customer cancelled",
           "guest": "Guest",
           "source": {
             "DINE_IN": "Dine In",
@@ -361,8 +362,12 @@
         "enterTip": "Enter tip amount",
         "selectPromotion": "Select promotion",
         "selectCoupon": "Select coupon",
+        "paymentError": "Failed to process payment",
+        "receivedAmountTooLow": "Received amount cannot be less than the final amount.",
         "promotions": "Promotions",
-        "coupons": "Coupons"
+        "coupons": "Coupons",
+        "autoPromotion": "Auto Promotion",
+        "appliedPromotions": "Applied Promotions"
       },
       "InvoiceDetail": {
         "title": "Invoice Details",
@@ -400,7 +405,10 @@
         "printInvoice": "Print Invoice",
         "defaultStaff": "Staff",
         "thankYouBusiness": "Thank you for your business!",
-        "currency": "USD"
+        "currency": "USD",
+        "totalAmount": "Total Amount",
+        "customer": "Guest",
+        "close": "Close"
       }
     },
     "invoices": {

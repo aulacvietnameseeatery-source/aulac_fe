@@ -371,7 +371,10 @@
     "CartSummary": {
       "title": "Tóm Tắt",
       "items_count": "{count} Món",
-      "confirm_btn": "Xác Nhận Đơn"
+      "confirm_btn": "Xác Nhận Đơn",
+      "table_label": "Bàn",
+      "note_placeholder": "Ghi chú cho bếp...",
+      "total_label": "Tổng cộng"
     },
     "err_load_cart": "Không thể tải dữ liệu giỏ hàng cũ.",
     "err_table_occupied_access": "Bàn này đã có người sử dụng. Không thể truy cập.",
@@ -982,6 +985,7 @@
     "List": {
       "title": "Quản lý khách hàng",
       "description": "Quản lý và xem thông tin khách hàng, lịch sử đặt hàng và điểm thành viên.",
+      "close": "Đóng",
       "searchPlaceholder": "Tìm kiếm theo tên, SĐT hoặc email...",
       "addNew": "Thêm khách hàng",
       "table": {
@@ -1003,6 +1007,7 @@
       },
       "actions": {
         "view": "Xem chi tiết",
+        "loyalty": "Đổi điểm",
         "edit": "Chỉnh sửa thông tin",
         "delete": "Xóa khách hàng"
       },
@@ -1017,6 +1022,37 @@
         "message": "Bạn có chắc chắn muốn xóa khách hàng {name}? Hành động này không thể hoàn tác.",
         "confirm": "Xóa",
         "cancel": "Hủy"
+      }
+    },
+    "Loyalty": {
+      "title": "Đổi điểm lấy coupon",
+      "customer": "Khách hàng",
+      "currentPoints": "Điểm hiện tại",
+      "voucherValue": "Giá trị voucher",
+      "exchangeTab": "Đổi quà",
+      "historyTab": "Lịch sử",
+      "pointsLabel": "Số điểm muốn đổi",
+      "pointsPlaceholder": "Nhập số điểm cần đổi",
+      "redeemButton": "Xác nhận đổi điểm",
+      "ratioHint": "1 điểm = {amount}",
+      "minPointsHint": "Tối thiểu đổi: {points} điểm",
+      "historyEmpty": "Chưa có coupon nào được đổi từ điểm.",
+      "notifications": {
+        "loadError": "Không thể tải dữ liệu đổi điểm",
+        "exchangeSuccess": "Tạo coupon {code} thành công",
+        "exchangeError": "Không thể đổi điểm thành coupon",
+        "redemptionDisabled": "Tính năng đổi điểm hiện đang tắt."
+      },
+      "validation": {
+        "pointsPositive": "Số điểm phải lớn hơn 0",
+        "insufficientPoints": "Khách hàng không đủ điểm",
+        "minPoints": "Số điểm tối thiểu để đổi là {points} điểm"
+      },
+      "status": {
+        "used": "Đã dùng",
+        "unused": "Chưa dùng",
+        "expired": "Hết hạn",
+        "disabled": "Đã tắt"
       }
     },
     "Add": {
@@ -1147,17 +1183,23 @@
       "noPromotionsApplied": "Không có khuyến mãi",
       "noCouponsApplied": "Không có mã giảm giá",
       "of": "trên",
-      "status": {
-        "PENDING": "Chờ xử lý",
-        "IN_PROGRESS": "Đang thực hiện",
-        "COMPLETED": "Đã hoàn thành",
-        "CANCELLED": "Đã hủy",
-        "CREATED": "Đã tạo",
-        "READY": "Đã sẵn sàng",
-        "SERVED": "Đã phục vụ",
-        "REJECTED": "Bị từ chối",
-        "DINE_IN": "Tại quán",
+      "orderType": {
+        "DINE_IN": "Tại bàn",
         "TAKEAWAY": "Mang đi"
+      },
+      "status": {
+        "PENDING": "Chờ xác nhận",
+        "IN_PROGRESS": "Đang thực hiện",
+        "COMPLETED": "Hoàn thành",
+        "CANCELLED": "Đã hủy"
+      },
+      "itemStatus": {
+        "CREATED": "Mới tạo",
+        "IN_PROGRESS": "Đang làm",
+        "READY": "Sẵn sàng",
+        "SERVED": "Đã phục vụ",
+        "REJECTED": "Từ chối",
+        "CANCELLED": "Đã hủy"
       }
     }
   },

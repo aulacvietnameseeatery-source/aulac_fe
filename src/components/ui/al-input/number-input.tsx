@@ -1,13 +1,14 @@
 "use client";
 
 import { ChevronDown, ChevronUp } from "lucide-react";
-import { forwardRef, useCallback, useEffect, useState, type FocusEvent, type RefObject } from "react";
+import { forwardRef, useCallback, useEffect, useRef, useState, type FocusEvent } from "react";
 import { NumericFormat, type NumericFormatProps } from "react-number-format";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 export interface NumberInputProps
   extends Omit<NumericFormatProps, "value" | "onValueChange"> {
+  showStepper?: boolean;
   stepper?: number;
   thousandSeparator?: NumericFormatProps["thousandSeparator"];
   placeholder?: string;
@@ -26,6 +27,7 @@ export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
   (
     {
       stepper,
+      showStepper = true,
       thousandSeparator,
       placeholder,
       defaultValue,
@@ -33,7 +35,7 @@ export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
       max = Infinity,
       onValueChange,
       fixedDecimalScale = false,
-      decimalScale = 0,
+      decimalScale,
       suffix,
       prefix,
       value: controlledValue,
@@ -44,6 +46,17 @@ export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
     ref,
   ) => {
     const [value, setValue] = useState<number | undefined>(controlledValue ?? defaultValue);
+    const inputElementRef = useRef<HTMLInputElement | null>(null);
+
+    const setInputRef = useCallback((element: HTMLInputElement | null) => {
+      inputElementRef.current = element;
+
+      if (typeof ref === "function") {
+        ref(element);
+      } else if (ref) {
+        ref.current = element;
+      }
+    }, [ref]);
 
     const applyValue = useCallback(
       (next: number | undefined) => {
@@ -64,9 +77,8 @@ export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
     }, [stepper, min, value, applyValue]);
 
     useEffect(() => {
-      const inputRef = ref as RefObject<HTMLInputElement>;
       const handleKeyDown = (e: KeyboardEvent) => {
-        if (document.activeElement === inputRef.current) {
+        if (document.activeElement === inputElementRef.current) {
           if (e.key === "ArrowUp") {
             handleIncrement();
           } else if (e.key === "ArrowDown") {
@@ -94,13 +106,12 @@ export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
 
     const handleBlur = (e: FocusEvent<HTMLInputElement>) => {
       if (value !== undefined) {
-        const inputRef = ref as RefObject<HTMLInputElement>;
         if (value < min) {
           applyValue(min);
-          if (inputRef.current) inputRef.current.value = String(min);
+          if (inputElementRef.current) inputElementRef.current.value = String(min);
         } else if (value > max) {
           applyValue(max);
-          if (inputRef.current) inputRef.current.value = String(max);
+          if (inputElementRef.current) inputElementRef.current.value = String(max);
         }
       }
 
@@ -116,7 +127,6 @@ export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
           decimalScale={decimalScale}
           fixedDecimalScale={fixedDecimalScale}
           allowNegative={min < 0}
-          valueIsNumericString
           onBlur={handleBlur}
           max={max}
           min={min}
@@ -125,32 +135,34 @@ export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
           customInput={Input}
           placeholder={placeholder}
           className="h-full w-full rounded-none border-0 bg-transparent shadow-none focus-visible:ring-0 focus-visible:border-transparent [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-          getInputRef={ref}
+          getInputRef={setInputRef}
           {...props}
         />
 
-        <div className="flex w-9 flex-col border-l border-navy-DEFAULT/20 bg-[#FDFBF9]">
-          <Button
-            aria-label="Increase value"
-            className="h-1/2 w-full rounded-none border-0 border-b border-navy-DEFAULT/20 px-0 hover:bg-[#D5BA98]/20"
-            variant="ghost"
-            onClick={handleIncrement}
-            disabled={value === max}
-            type="button"
-          >
-            <ChevronUp size={14} className="text-[#1A3A52]/70" />
-          </Button>
-          <Button
-            aria-label="Decrease value"
-            className="h-1/2 w-full rounded-none border-0 px-0 hover:bg-[#D5BA98]/20"
-            variant="ghost"
-            onClick={handleDecrement}
-            disabled={value === min}
-            type="button"
-          >
-            <ChevronDown size={14} className="text-[#1A3A52]/70" />
-          </Button>
-        </div>
+        {showStepper && (
+          <div className="flex w-9 flex-col border-l border-navy-DEFAULT/20 bg-[#FDFBF9]">
+            <Button
+              aria-label="Increase value"
+              className="h-1/2 w-full rounded-none border-0 border-b border-navy-DEFAULT/20 px-0 hover:bg-[#D5BA98]/20"
+              variant="ghost"
+              onClick={handleIncrement}
+              disabled={value === max}
+              type="button"
+            >
+              <ChevronUp size={14} className="text-[#1A3A52]/70" />
+            </Button>
+            <Button
+              aria-label="Decrease value"
+              className="h-1/2 w-full rounded-none border-0 px-0 hover:bg-[#D5BA98]/20"
+              variant="ghost"
+              onClick={handleDecrement}
+              disabled={value === min}
+              type="button"
+            >
+              <ChevronDown size={14} className="text-[#1A3A52]/70" />
+            </Button>
+          </div>
+        )}
       </div>
     );
   },

@@ -7,6 +7,8 @@ import { ALCombobox } from "@/components/ui/al-combobox";
 import { Button } from "@/components/ui/button";
 import { useTranslations } from "next-intl";
 import type { CouponDetailDto } from "../coupon-list/types/coupon.types";
+import { PermissionGuard } from "@/components/permission-guard";
+import { Permissions } from "@/types/const";
 
 interface CouponModalProps {
     isOpen: boolean;
@@ -197,14 +199,16 @@ export const CouponModal: React.FC<CouponModalProps> = ({
                         {isViewMode ? tCommon("close") || "Close" : t("cancel")}
                     </Button>
                     {isViewMode && onEdit && (
-                        <Button
-                            type="button"
-                            variant="primary"
-                            className="w-full"
-                            onClick={onEdit}
-                        >
-                            {tCommon("edit") || "Edit"}
-                        </Button>
+                        <PermissionGuard permission={Permissions.EditCoupon}>
+                            <Button
+                                type="button"
+                                variant="primary"
+                                className="w-full"
+                                onClick={onEdit}
+                            >
+                                {tCommon("edit") || "Edit"}
+                            </Button>
+                        </PermissionGuard>
                     )}
                     {!isViewMode && (
                         <Button

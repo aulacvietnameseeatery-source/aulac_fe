@@ -1,7 +1,7 @@
 "use client";
 
 import React, { Suspense, useCallback, useMemo, useState } from "react";
-import { Loader2, Plus, UserCircle2 } from "lucide-react";
+import { Loader2, Plus } from "lucide-react";
 import { BaseTable } from "@/components/ui/table/base-table";
 import { TableColumn } from "@/types/table.types";
 import { useTranslations } from "next-intl";
@@ -15,6 +15,7 @@ import { useCustomerList } from "@/features/staff/customer-management/hooks/use-
 import { CustomerListDto, CustomerDetailDto } from "@/features/staff/customer-management/types/customer-types";
 import { CustomerActions } from "@/features/staff/customer-management/components/customer-actions";
 import { CustomerModal, CustomerFormData } from "@/features/staff/customer-management/components/customer-modal";
+import { LoyaltyManagementModal } from "@/features/staff/customer-management/components/LoyaltyManagementModal";
 import { staffCustomerService } from "@/features/staff/customer-management/services/customer-service";
 import { ConfirmModal } from "@/components/layout/admin-sidebar/confirm-modal";
 import { useRouter } from "@/routing"
@@ -35,10 +36,19 @@ const CustomerListContent = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isLoadingDetail, setIsLoadingDetail] = useState(false);
 
+    // Loyalty modal state
+    const [loyaltyModalOpen, setLoyaltyModalOpen] = useState(false);
+    const [customerToManageLoyalty, setCustomerToManageLoyalty] = useState<CustomerListDto | null>(null);
+
     // Delete modal state
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
     const [customerToDelete, setCustomerToDelete] = useState<CustomerListDto | null>(null);
     const [isDeleting, setIsDeleting] = useState(false);
+
+    const getUtcDateString = (utcDateString: string) => {
+        const dateStringWithZ = utcDateString.endsWith('Z') ? utcDateString : `${utcDateString}Z`;
+        return dateStringWithZ;
+    };
 
     // Handlers
     const handleView = async (customer: CustomerListDto) => {
@@ -57,6 +67,11 @@ const CustomerListContent = () => {
         } finally {
             setIsLoadingDetail(false);
         }
+    };
+
+    const handleManageLoyalty = (customer: CustomerListDto) => {
+        setCustomerToManageLoyalty(customer);
+        setLoyaltyModalOpen(true);
     };
 
     const handleCreate = () => {
@@ -160,14 +175,9 @@ const CustomerListContent = () => {
             width: "150px",
             filterType: "text" as const,
             cellRender: ({ item }: { item: CustomerListDto }) => (
-                <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600">
-                        <UserCircle2 size={20} />
-                    </div>
-                    <div className="flex flex-col">
-                        <span className="font-medium text-gray-900">{item.fullName || "Guest"}</span>
-                        <span className="text-xs text-gray-500">{item.phone}</span>
-                    </div>
+                <div className="flex flex-col">
+                    <span className="font-medium text-gray-900">{item.fullName || "Guest"}</span>
+                    <span className="text-xs text-gray-500">{item.phone}</span>
                 </div>
             ),
         },
@@ -216,7 +226,7 @@ const CustomerListContent = () => {
             width: "150px",
             cellRender: ({ value }: { value: string | null }) => (
                 <span className="text-gray-600 text-sm">
-                    {value ? dateUtils.formatLocal(value, "dd/MM/yyyy HH:mm") : "-"}
+                    {value ? dateUtils.formatLocal(getUtcDateString(value), "dd/MM/yyyy HH:mm") : "-"}
                 </span>
             ),
         },
@@ -271,6 +281,7 @@ const CustomerListContent = () => {
                         <CustomerActions
                             customer={item}
                             onView={handleView}
+                            onLoyalty={handleManageLoyalty}
                             onEdit={handleEdit}
                             onDelete={handleDeleteClick}
                         />
@@ -287,6 +298,16 @@ const CustomerListContent = () => {
                 onSubmit={handleSubmit}
                 onEdit={() => setModalMode("edit")}
                 isSubmitting={isSubmitting}
+            />
+
+            <LoyaltyManagementModal
+                isOpen={loyaltyModalOpen}
+                customer={customerToManageLoyalty}
+                onClose={() => {
+                    setLoyaltyModalOpen(false);
+                    setCustomerToManageLoyalty(null);
+                }}
+                onSuccess={refresh}
             />
 
             {/* Delete Confirmation */}

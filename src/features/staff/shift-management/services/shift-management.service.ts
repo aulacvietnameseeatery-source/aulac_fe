@@ -218,7 +218,6 @@ export const shiftManagementService = {
   // ─── My Shifts (logged-in staff's assignments) ────────────────────────────
 
   async getMyShifts(params: GetMyShiftsParams = {}): Promise<PagedResult<ShiftAssignmentListDto>> {
-    // Fetch assignments with isActive=true; server can further filter by current user
     const query = toQuery({
       fromDate: params.fromDate,
       toDate: params.toDate,
@@ -227,7 +226,7 @@ export const shiftManagementService = {
       pageSize: params.pageSize ?? 20,
     });
     const res = await api.get<ApiResponse<PagedResult<ShiftAssignmentListDto>>>(
-      `${BASE}/assignments${query}`
+      `${BASE}/my-shifts${query}`
     );
     return res.data ?? { pageData: [], pageIndex: 1, pageSize: 20, totalCount: 0, totalPage: 0 };
   },

@@ -5,6 +5,15 @@ const RESTAURANT_TZ = "Europe/Zurich";
 
 export const dateUtils = {
     /**
+     * Lấy thời điểm hiện tại theo múi giờ Thụy Sĩ.
+     * Trả về Date có cùng instant nhưng đã được resolve qua Europe/Zurich.
+     */
+    getSwissNow: (): Date => {
+        const swissNowIso = formatInTimeZone(new Date(), RESTAURANT_TZ, "yyyy-MM-dd'T'HH:mm:ss.SSSxxx");
+        return new Date(swissNowIso);
+    },
+
+    /**
      * Lấy chuỗi UTC từ Backend và format thành giờ THỤY SĨ để hiển thị.
      */
     formatLocal: (utcString: string | Date, formatStr: string): string => {

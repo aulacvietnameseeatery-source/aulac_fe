@@ -1,0 +1,74 @@
+{
+  "reports": {
+    "header": {
+      "title": "Reports",
+      "export": "Export",
+      "exportPdf": "Export as PDF",
+      "exportExcel": "Export as Excel"
+    },
+    "tabs": {
+      "earning": "Earning Report",
+      "order": "Order Report",
+      "sales": "Sales Report",
+      "customer": "Customer Report"
+    },
+    "filters": {
+      "startDate": "Start Date",
+      "endDate": "End Date",
+      "submit": "Submit"
+    },
+    "common": {
+      "searchPlaceholder": "Search...",
+      "loading": "Loading...",
+      "noResults": "No results found"
+    },
+    "earning": {
+      "title": "Daily Earning Summary",
+      "description": "Revenue breakdown by date including gross, net, and tax.",
+      "table": {
+        "date": "Date",
+        "totalOrders": "Total Orders",
+        "grossRevenue": "Gross Revenue",
+        "totalTax": "Total Tax",
+        "netRevenue": "Net Revenue"
+      }
+    },
+    "order": {
+      "title": "Order History",
+      "description": "Detailed list of all orders within the selected period.",
+      "searchPlaceholder": "Search order...",
+      "table": {
+        "orderId": "Order ID",
+        "date": "Date",
+        "customer": "Customer",
+        "type": "Type",
+        "items": "Items",
+        "grandTotal": "Grand Total",
+        "status": "Status"
+      }
+    },
+    "sales": {
+      "title": "Item Sales Performance",
+      "description": "Analysis of best-selling dishes and revenue contribution.",
+      "searchPlaceholder": "Search dish name...",
+      "table": {
+        "itemId": "Item ID",
+        "itemName": "Item Name",
+        "category": "Category",
+        "itemsSold": "Items Sold",
+        "totalRevenue": "Total Revenue"
+      }
+    },
+    "customer": {
+      "title": "Top Spenders",
+      "description": "Analysis of customer purchasing behavior.",
+      "searchPlaceholder": "Search customer...",
+      "table": {
+        "customerId": "Customer ID",
+        "customerName": "Customer Name",
+        "totalOrders": "Total Orders",
+        "grandTotal": "Grand Total"
+      }
+    }
+  }
+}

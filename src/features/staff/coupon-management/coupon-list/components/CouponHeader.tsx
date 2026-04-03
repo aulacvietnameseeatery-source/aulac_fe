@@ -26,7 +26,7 @@ export const CouponHeader = ({
           {t("description")}
         </p>
       </div>
-      <PermissionGuard permission={Permissions.CreateCoupon} showDisabled={true}>
+      <PermissionGuard permission={Permissions.CreateCoupon}>
         <Button
           onClick={onCreateClick}
           variant="outline"

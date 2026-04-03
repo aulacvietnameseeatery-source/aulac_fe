@@ -14,9 +14,6 @@ import {
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-// _OLD: Legacy mock notification panel kept for visual/reference only.
-// _OLD: Runtime now uses NotificationCenter from features/staff/notifications.
-
 interface Notification {
     id: string;
     type: "order" | "kitchen" | "payment" | "created" | "stock" | "reservation";

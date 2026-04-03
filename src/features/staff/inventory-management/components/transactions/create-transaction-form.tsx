@@ -1,6 +1,6 @@
 "use client";
 
-import React, { /* _OLD: useEffect, */ useMemo, useState } from "react";
+import React, {  useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "@/routing"
 import { useQuery } from "@tanstack/react-query";
@@ -129,8 +129,6 @@ export function CreateTransactionForm() {
   const isIN = selectedTypeCode === InventoryTxTypeCode.IN;
   const isOUT = selectedTypeCode === InventoryTxTypeCode.OUT;
   const isADJUST = selectedTypeCode === InventoryTxTypeCode.ADJUST;
-
-  // _OLD: typeComboboxOptions was used by the old ALCombobox type selector — now replaced by inline type cards
   // const typeComboboxOptions = useMemo(
   //   () =>
   //     TYPE_OPTIONS.map((opt) => ({
@@ -144,8 +142,6 @@ export function CreateTransactionForm() {
     () => TYPE_OPTIONS.find((opt) => opt.code === selectedTypeCode),
     [selectedTypeCode],
   );
-
-  // _OLD: auto-select IN type on load — removed so user must explicitly pick
   // useEffect(() => {
   //   if (!selectedTypeCode && txTypeLookup.items.length > 0) {
   //     const defaultType = txTypeLookup.items.find((lv) => lv.valueCode === InventoryTxTypeCode.IN);

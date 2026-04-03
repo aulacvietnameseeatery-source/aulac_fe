@@ -1,0 +1,74 @@
+{
+  "reports": {
+    "header": {
+      "title": "Rapports",
+      "export": "Exporter",
+      "exportPdf": "Exporter en PDF",
+      "exportExcel": "Exporter en Excel"
+    },
+    "tabs": {
+      "earning": "Revenus",
+      "order": "Commandes",
+      "sales": "Produits",
+      "customer": "Clients"
+    },
+    "filters": {
+      "startDate": "Date de début",
+      "endDate": "Date de fin",
+      "submit": "Appliquer"
+    },
+    "common": {
+      "searchPlaceholder": "Rechercher...",
+      "loading": "Chargement...",
+      "noResults": "Aucun résultat trouvé"
+    },
+    "earning": {
+      "title": "Résumé des revenus",
+      "description": "Détail des revenus par date incluant le brut, le net et les taxes.",
+      "table": {
+        "date": "Date",
+        "totalOrders": "Commandes",
+        "grossRevenue": "Revenu Brut",
+        "totalTax": "Taxes",
+        "netRevenue": "Revenu Net"
+      }
+    },
+    "order": {
+      "title": "Historique des commandes",
+      "description": "Liste détaillée de toutes les commandes sur la période.",
+      "searchPlaceholder": "Rechercher une commande...",
+      "table": {
+        "orderId": "N° Commande",
+        "date": "Date",
+        "customer": "Client",
+        "type": "Type",
+        "items": "Articles",
+        "grandTotal": "Total",
+        "status": "Statut"
+      }
+    },
+    "sales": {
+      "title": "Ventes de produits",
+      "description": "Analyse des plats les plus vendus et contribution aux revenus.",
+      "searchPlaceholder": "Rechercher un plat...",
+      "table": {
+        "itemId": "ID Article",
+        "itemName": "Nom de l'article",
+        "category": "Catégorie",
+        "itemsSold": "Vendus",
+        "totalRevenue": "Revenu Total"
+      }
+    },
+    "customer": {
+      "title": "Meilleurs clients",
+      "description": "Analyse du comportement d'achat des clients.",
+      "searchPlaceholder": "Rechercher un client...",
+      "table": {
+        "customerId": "ID Client",
+        "customerName": "Nom du client",
+        "totalOrders": "Commandes",
+        "grandTotal": "Total dépensé"
+      }
+    }
+  }
+}

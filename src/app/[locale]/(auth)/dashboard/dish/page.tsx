@@ -5,7 +5,7 @@ import { Loader2, Plus } from "lucide-react";
 import { BaseTable } from "@/components/ui/table/base-table";
 import { TableColumn } from "@/types/table.types";
 import { toast } from "sonner";
-import { useTranslations } from "next-intl";
+import {useLocale, useTranslations} from "next-intl";
 import { ProtectedRoute } from "@/components/protected-route";
 import { PermissionGuard } from "@/components/permission-guard";
 import { Permissions } from "@/types/const";
@@ -21,6 +21,7 @@ import { useRouter } from "@/routing"
 
 const DishListContent = () => {
     const t = useTranslations("Dish.List");
+    const locale = useLocale();
     const router = useRouter();
 
     // Data-fetching hook (driven by BaseTable onDataChange)
@@ -152,16 +153,19 @@ const DishListContent = () => {
                 header: t("table.dishName"),
                 width: "250px",
                 filterType: "text" as const,
-                cellRender: ({ value, item }: { value: any; item: any }) => (
-                    <div className="flex flex-col">
-                        <span className="font-medium text-gray-900">{value}</span>
-                        {item.isOnline && (
-                            <span className="text-xs text-green-600 flex items-center gap-1">
-                                <span className="w-1.5 h-1.5 rounded-full bg-green-500"></span> Online
-                            </span>
-                        )}
-                    </div>
-                ),
+                cellRender: ({ item }: { value: any; item: DishManagementDto }) => {
+                    const localizedName = (item.nameI18n as any)?.[locale] || item.dishName;
+                    return (
+                        <div className="flex flex-col">
+                            <span className="font-medium text-gray-900">{localizedName}</span>
+                            {item.isOnline && (
+                                <span className="text-xs text-green-600 flex items-center gap-1">
+                                    <span className="w-1.5 h-1.5 rounded-full bg-green-500"></span> Online
+                                </span>
+                            )}
+                        </div>
+                    );
+                },
             },
             {
                 field: "categoryName",
@@ -169,9 +173,10 @@ const DishListContent = () => {
                 width: "150px",
                 filterType: "select" as const,
                 filterOptions: categoryFilterOptions,
-                cellRender: ({ value }: { value: any }) => (
-                    <span className="text-gray-600">{value}</span>
-                ),
+                cellRender: ({ item }: { value: any, item: DishManagementDto }) => {
+                    const localizedCategory = (item.categoryNameI18n as any)?.[locale] || item.categoryName;
+                    return <span className="text-gray-600">{localizedCategory}</span>;
+                },
             },
             {
                 field: "price",
@@ -180,9 +185,7 @@ const DishListContent = () => {
                 align: "right" as const,
                 filterType: "number" as const,
                 cellRender: ({ value }: { value: any }) => (
-                    <span className="font-bold text-blue-600">
-                       {formatCurrency(value)}
-                    </span>
+                    <span className="font-bold text-blue-600">{formatCurrency(value)}</span>
                 ),
             },
             {
@@ -192,7 +195,7 @@ const DishListContent = () => {
                 width: "130px",
                 filterType: "select" as const,
                 filterOptions: statusFilterOptions,
-                cellRender: ({ item }: { value: any; item: any }) => (
+                cellRender: ({ item }: { value: any; item: DishManagementDto }) => (
                     <div className="flex justify-center">
                         <Switch
                             checked={item.status === DishStatusCode.AVAILABLE}
@@ -204,7 +207,7 @@ const DishListContent = () => {
                 ),
             },
         ],
-        [paginationInfo.page, paginationInfo.pageSize, t, categoryFilterOptions, statusFilterOptions, togglingId]
+        [paginationInfo.page, paginationInfo.pageSize, t, locale, categoryFilterOptions, statusFilterOptions, togglingId]
     );
 
     // Global cell renderer (applies column alignment)

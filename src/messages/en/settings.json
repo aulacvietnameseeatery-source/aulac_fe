@@ -38,7 +38,8 @@
       "website": "Website",
       "preview": "Preview",
       "remove": "Remove",
-      "invalidForm": "Please check all language tabs for required fields."
+      "invalidForm": "Please check all language tabs for required fields.",
+      "noResults": "No results found"
     },
     "Introduction": {
       "title": "Introduction Page",
@@ -119,6 +120,58 @@
       "show_dish_video": "Show Dish Video",
       "show_dish_videoDesc": "Toggle visibility of the introduction video in dish details."
     },
+    "shift": {
+      "title": "Shift & Attendance Settings",
+      "description": "Control check-in windows, grace periods, geofencing, and scheduling limits.",
+      "sections": {
+        "attendance": "Attendance Rules",
+        "session": "Session Management",
+        "scheduling": "Scheduling Limits",
+        "geofence": "Geofence Configuration"
+      },
+      "fields": {
+        "allowed_early_check_in_minutes": {
+          "label": "Early Check-in Window",
+          "hint": "How many minutes before a shift starts staff can check in."
+        },
+        "late_grace_minutes": {
+          "label": "Late Grace Period",
+          "hint": "Minutes after shift start before marking as late."
+        },
+        "absence_threshold_minutes": {
+          "label": "Absence Threshold",
+          "hint": "Minutes after shift start before marking as absent."
+        },
+        "early_leave_buffer_minutes": {
+          "label": "Early Leave Buffer",
+          "hint": "Minutes before shift end — leaving earlier counts as early departure."
+        },
+        "no_show_threshold_minutes": {
+          "label": "No-Show Detection Threshold",
+          "hint": "Minutes after shift start to flag a no-show automatically."
+        },
+        "auto_logout_after_checkout_minutes": {
+          "label": "Auto-Logout After Checkout",
+          "hint": "Minutes after checkout before the staff session is automatically logged out."
+        },
+        "max_weekly_hours": {
+          "label": "Max Weekly Hours",
+          "hint": "Maximum number of working hours allowed per week."
+        },
+        "geofence_base_latitude": {
+          "label": "Base Latitude",
+          "hint": "Latitude coordinate of the restaurant for geofence centre."
+        },
+        "geofence_base_longitude": {
+          "label": "Base Longitude",
+          "hint": "Longitude coordinate of the restaurant for geofence centre."
+        },
+        "geofence_max_radius_meters": {
+          "label": "Max Geofence Radius",
+          "hint": "Maximum distance (meters) from the restaurant allowed for check-in."
+        }
+      }
+    },
     "DishModal": {
       "noCategory": "No Category",
       "dishLabel": "DISH",
@@ -198,9 +251,9 @@
       "uploadError": "Failed to upload file",
       "fileSizeError": "File size must be less than {max}MB",
       "videoSizeError": "Video size must be less than {max}MB",
-      "invalidImageFormatError": "Invalid image format. Only JPG, PNG, GIF, and WEBP are allowed.",
+      "invalidImageFormatError": "Invalid image format. Only JPG, PNG, GIF, WEBP, and HEIC/HEIF are allowed.",
       "invalidVideoFormatError": "Invalid video format. Only MP4 is allowed.",
-      "videoDurationError": "Video duration must not exceed 30 seconds.",
+      "videoDurationError": "Video duration must not exceed {max} seconds.",
       "visualBranding": "Visual Branding",
       "visualBrandingDesc": "Logo and promotional media",
       "officialLogo": "Official Logo",
@@ -324,7 +377,13 @@
       "enabled": "Enable Loyalty Points",
       "enabledDesc": "Allow customers to earn points from purchases.",
       "point_base_amount": "Point Base Amount",
-      "point_base_amountDesc": "Amount spent per 1 loyalty point earned."
+      "point_base_amountDesc": "Amount spent per 1 loyalty point earned.",
+      "redemption_enabled": "Enable Points Redemption",
+      "redemption_enabledDesc": "Allow customers to redeem accumulated points for discounts or direct deductions.",
+      "points_to_currency_ratio": "Points to Currency Ratio",
+      "points_to_currency_ratioDesc": "The conversion rate from points to store currency (e.g. 100 points = 1 CHF).",
+      "min_redemption_points": "Minimum Points to Redeem",
+      "min_redemption_pointsDesc": "Minimum point balance required for a customer to start redeeming."
     },
     "General": {
       "title": "System Parameters",

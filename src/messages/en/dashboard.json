@@ -1,0 +1,106 @@
+{
+  "dashboard": {
+    "header": {
+      "title": "Dashboard",
+      "refresh": "Refresh Data",
+      "syncData": "Sync Data",
+      "syncing": "Syncing...",
+      "selectPeriod": "Select Period",
+      "periods": {
+        "today": "Today",
+        "yesterday": "Yesterday",
+        "last7Days": "Last 7 Days",
+        "last30Days": "Last 30 Days",
+        "thisMonth": "This Month",
+        "lastMonth": "Last Month"
+      }
+    },
+    "summary": {
+      "totalRevenue": "Total Revenue",
+      "totalOrders": "Total Orders",
+      "avgOrderValue": "Average Order Value",
+      "totalReservations": "Total Reservations",
+      "vsLastPeriod": "vs last period"
+    },
+    "activityRow": {
+      "common": {
+        "loading": "Loading..."
+      },
+      "time": {
+        "minAgo": "{count} min ago",
+        "hrsAgo": "{count} hrs ago"
+      },
+      "reservations": {
+        "title": "Reservations",
+        "today": "Today",
+        "empty": "No reservations"
+      },
+      "tables": {
+        "title": "Tables Available",
+        "empty": "No tables available",
+        "capacity": "Cap: {cap}"
+      },
+      "notifications": {
+        "title": "Notifications",
+        "empty": "No new notifications",
+        "newOrder": "New order at {table} ({items} items)",
+        "payment": "Payment of ${amount} via {method}",
+        "tableStatus": "Table {table} is now {status}",
+        "newReservation": "New reservation by {name}"
+      }
+    },
+    "chartsRow1": {
+      "common": {
+        "loading": "Loading data...",
+        "noData": "No data available"
+      },
+      "revenue": {
+        "title": "Revenue Analysis",
+        "total": "Total Revenue",
+        "label": "Revenue"
+      },
+      "topSelling": {
+        "title": "Top Selling Items",
+        "mostOrdered": "Most Ordered",
+        "totalSold": "Total Sold"
+      }
+    },
+    "chartsRow2": {
+      "common": {
+        "noData": "No data available"
+      },
+      "category": {
+        "title": "Category Statistics",
+        "selectedPeriod": "Selected Period",
+        "ordersUnit": "Orders",
+        "total": "Total",
+        "dineIn": "Dine-In",
+        "takeaway": "Takeaway",
+        "delivery": "Delivery"
+      },
+      "activeOrders": {
+        "title": "Active Orders",
+        "addNew": "Add New",
+        "loading": "Loading orders...",
+        "empty": "No active orders",
+        "orderId": "Order #{id}",
+        "itemsUnit": "items"
+      },
+      "customerInsights": {
+        "title": "Customer Insights",
+        "topSpender": "Top Spender",
+        "totalSpent": "Total Spent",
+        "empty": "No customer data available"
+      }
+    },
+    "devArea": {
+      "title": "Developer Testing Area",
+      "loggedInAs": "Logged in as",
+      "userId": "User ID",
+      "username": "Username",
+      "roles": "Roles",
+      "permissions": "Your Permissions",
+      "noPermissions": "No permissions"
+    }
+  }
+}
