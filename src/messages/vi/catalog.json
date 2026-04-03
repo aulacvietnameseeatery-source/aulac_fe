@@ -512,7 +512,9 @@
       "successCreate": "Tạo thành công",
       "successUpdate": "Cập nhật thành công",
       "successDisable": "Vô hiệu hóa thành công",
-      "errorSave": "Đã xảy ra lỗi khi lưu"
+      "errorSave": "Đã xảy ra lỗi khi lưu",
+      "rulesHint": "Khách hàng phải thỏa mãn TẤT CẢ các điều kiện đã chọn bên dưới để được áp dụng khuyến mãi.",
+      "targetsHint": "Chọn món hoặc danh mục để áp dụng giảm giá. Bỏ trống để áp dụng giảm giá cho toàn bộ đơn hàng."
     },
     "Detail": {
       "title": "Chi tiết Khuyến mãi #{id}",
