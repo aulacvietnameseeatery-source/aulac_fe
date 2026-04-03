@@ -512,7 +512,9 @@
       "successCreate": "Created successfully",
       "successUpdate": "Updated successfully",
       "successDisable": "Disabled successfully",
-      "errorSave": "An error occurred while saving"
+      "errorSave": "An error occurred while saving",
+      "rulesHint": "Customers must meet ALL selected conditions below for this promotion to apply.",
+      "targetsHint": "Select dishes or categories to apply discount. Leave empty to apply discount to the entire order."
     },
     "Detail": {
       "title": "Promotion Details #{id}",

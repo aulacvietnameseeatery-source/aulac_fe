@@ -78,14 +78,24 @@ const PromotionListContent = () => {
     const getComputedStatus = useCallback((item: PromotionListDTO) => {
         if (item.promotionStatus === "DISABLED") return "DISABLED";
 
-        const now = new Date();
-        const start = new Date(item.startTime.endsWith('Z') ? item.startTime : `${item.startTime}Z`);
-        const end = new Date(item.endTime.endsWith('Z') ? item.endTime : `${item.endTime}Z`);
+        // 1. Get the current time in Swiss time using dateUtils.
+        const now = dateUtils.getSwissNow().getTime();
 
+        // 2. Parse the start and end times of BE (UTC) to a timestamp.
+        const start = new Date(getUtcDateString(item.startTime)).getTime();
+        const end = new Date(getUtcDateString(item.endTime)).getTime();
+
+        // 3. Compare
         if (now < start) return "SCHEDULED";
         if (now > end) return "EXPIRED";
         return "ACTIVE";
     }, []);
+
+    // Ensures the date string from the backend is always UTC.
+    const getUtcDateString = (utcDateString: string) => {
+        const dateStringWithZ = utcDateString.endsWith('Z') ? utcDateString : `${utcDateString}Z`;
+        return dateStringWithZ;
+    };
 
     const columns: TableColumn[] = useMemo(() => [
         {
@@ -127,7 +137,7 @@ const PromotionListContent = () => {
             width: "160px",
             cellRender: ({ item }: { item: PromotionListDTO }) => (
                 <span className="text-sm text-gray-600">
-                    {dateUtils.formatLocal(item.startTime, "dd/MM/yyyy HH:mm")}
+                    {dateUtils.formatLocal(getUtcDateString(item.startTime), "dd/MM/yyyy HH:mm")}
                 </span>
             ),
         },
@@ -137,7 +147,7 @@ const PromotionListContent = () => {
             width: "160px",
             cellRender: ({ item }: { item: PromotionListDTO }) => (
                 <span className="text-sm text-gray-600">
-                    {dateUtils.formatLocal(item.endTime, "dd/MM/yyyy HH:mm")}
+                    {dateUtils.formatLocal(getUtcDateString(item.endTime), "dd/MM/yyyy HH:mm")}
                 </span>
             ),
         },

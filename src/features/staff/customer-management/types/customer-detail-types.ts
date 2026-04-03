@@ -34,7 +34,7 @@ export interface CustomerOrderQueryDto {
 export interface CustomerOrderItemDto {
     orderItemId: number;
     dishId: number;
-    dishName: string;
+    dishNameI18n: Record<string, string>;
     quantity: number;
     price: number;
     status: string;

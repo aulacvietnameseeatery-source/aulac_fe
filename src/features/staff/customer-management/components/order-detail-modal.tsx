@@ -10,7 +10,7 @@ import { CustomerOrderDetailDto } from "../types/customer-detail-types";
 import dayjs from "dayjs";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { dateUtils } from "@/lib/date-utils";
 
 interface OrderDetailModalProps {
@@ -22,6 +22,7 @@ interface OrderDetailModalProps {
 
 export const OrderDetailModal = ({ customerId, orderId, isOpen, onClose }: OrderDetailModalProps) => {
     const t = useTranslations("Customer.Detail");
+    const locale = useLocale();
     const [detail, setDetail] = useState<CustomerOrderDetailDto | null>(null);
     const [isLoading, setIsLoading] = useState(false);
 
@@ -79,6 +80,11 @@ export const OrderDetailModal = ({ customerId, orderId, isOpen, onClose }: Order
     const getUtcDateString = (utcDateString: string) => {
         const dateStringWithZ = utcDateString.endsWith('Z') ? utcDateString : `${utcDateString}Z`;
         return dateStringWithZ;
+    };
+
+    const getLocalizedDishName = (dishNameI18n: Record<string, string> | undefined) => {
+        if (!dishNameI18n) return "Unknown Dish";
+        return dishNameI18n[locale] || dishNameI18n['en'] || Object.values(dishNameI18n)[0] || "Unknown Dish";
     };
 
     const payment = detail?.payments?.[0];
@@ -140,7 +146,7 @@ export const OrderDetailModal = ({ customerId, orderId, isOpen, onClose }: Order
                             ) : (
                                 <div className="flex justify-between items-center bg-white p-4 rounded-lg border border-blue-100 shadow-sm">
                                     <div>
-                                        <p className="font-extrabold text-slate-800 text-lg">{payment.method}</p>
+                                        <p className="font-extrabold text-slate-800 text-lg">{t(`paymentMethod.${payment.method}`)}</p>
                                         <p className="text-xs text-slate-500 font-medium mt-0.5">{dayjs(payment.paidAt).format("DD/MM/YYYY HH:mm")}</p>
                                     </div>
                                     <div className="text-right flex flex-col gap-1">
@@ -179,7 +185,7 @@ export const OrderDetailModal = ({ customerId, orderId, isOpen, onClose }: Order
                                                     </div>
                                                     <div className="flex flex-col">
                                                         <span className={cn("font-bold text-base", (item.status === 'CANCELLED' || item.status === 'REJECTED') ? "text-slate-400 line-through" : "text-slate-800")}>
-                                                            {item.dishName}
+                                                            {getLocalizedDishName(item.dishNameI18n)}
                                                         </span>
                                                         {item.note && <span className="text-xs text-slate-500 mt-1 font-medium bg-slate-50 inline-block px-2 py-0.5 rounded-md border border-slate-100 w-fit">{t('note')}: {item.note}</span>}
                                                     </div>
