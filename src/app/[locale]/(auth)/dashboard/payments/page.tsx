@@ -102,7 +102,6 @@ const PaymentListContent = () => {
             align: "center" as const,
             cellRender: ({ value }: { value: number }) => (
                 <div className="flex items-center justify-center gap-2">
-                    <Receipt size={16} className="text-gray-400" />
                     <span className="font-medium text-blue-600">#{value}</span>
                 </div>
             ),
