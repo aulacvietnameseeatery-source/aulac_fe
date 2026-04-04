@@ -116,9 +116,9 @@ export const AboutUsSettingsForm = () => {
     }
 
     return (
-        <form onSubmit={handleSubmit(onSubmit, onInvalid)} className="flex flex-col gap-6 w-full pb-12 relative">
-            <div className="py-4 -mx-4 px-4">
-                <ALCard variant="glass" elevation="sm" padding="sm" radius="xl" className="flex items-center justify-between gap-4 border-amber-200/30 shadow-md">
+        <form onSubmit={handleSubmit(onSubmit, onInvalid)} className="flex h-full min-h-0 w-full flex-col overflow-hidden relative">
+            <div className="pb-4">
+                <ALCard elevation="sm" padding="sm" radius="xl" className="flex items-center justify-between gap-4  shadow-md">
                     <div className="flex items-center gap-2 sm:gap-4">
                         <div className="flex bg-gray-100/90 p-1 rounded-xl border border-gray-200 shadow-inner">
                             {LOCALES.map((loc) => (
@@ -130,7 +130,7 @@ export const AboutUsSettingsForm = () => {
                                     className={cn(
                                         "px-3 sm:px-5 py-1.5 h-8 text-[10px] sm:text-xs font-bold uppercase transition-all duration-300 rounded-lg",
                                         activeLocale === loc
-                                            ? "bg-white shadow-md text-[#1A3A52] hover:bg-white/50"
+                                            ? "bg-[#1A3A52] shadow-md text-white hover:bg-[#1A3A52]/50"
                                             : "text-gray-500 hover:text-[#1A3A52] hover:bg-white/40"
                                     )}
                                     onClick={() => setActiveLocale(loc)}
@@ -166,8 +166,8 @@ export const AboutUsSettingsForm = () => {
                 </ALCard>
             </div>
 
-            <ALCard variant="soft" padding="none" radius="2xl" elevation="sm" className="border-amber-200/50 shadow-sm overflow-hidden" animation="slide-up">
-                <div key={activeLocale} className="p-6 md:p-8 space-y-8">
+            <ALCard  padding="none" radius="2xl" elevation="sm" className=" overflow-hidden flex-1 min-h-0" animation="slide-up">
+                <div key={activeLocale} className="h-full min-h-0 overflow-y-auto overscroll-contain p-6 md:p-8 space-y-8 custom-scrollbar">
 
                     <ALInput
                         title={t('AboutUs.subtitleLabel')}

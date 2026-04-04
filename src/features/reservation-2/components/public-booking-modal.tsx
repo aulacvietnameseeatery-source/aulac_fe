@@ -6,6 +6,7 @@ import domtoimage from 'dom-to-image-more';
 import { useTranslations } from 'next-intl';
 import PublicBookingForm from './public-booking-form';
 import { ReservationResponseDto } from '../types/reservation.types';
+import { formatZurichDate, formatZurichTime } from '../utils/zurich-time';
 
 interface PublicBookingModalProps {
 	isOpen: boolean;
@@ -76,11 +77,11 @@ export default function PublicBookingModal({ isOpen, onClose }: PublicBookingMod
 								</div>
 								<div className="flex items-start justify-between gap-3">
 									<span className="inline-flex items-center gap-2 text-stone-500 min-w-0 break-words"><Calendar size={14} />{t('date')}</span>
-									<span className="font-semibold text-right max-w-[60%] break-words">{new Date(ticketData.reservedTime).toLocaleDateString()}</span>
+									<span className="font-semibold text-right max-w-[60%] break-words">{formatZurichDate(ticketData.reservedTime)}</span>
 								</div>
 								<div className="flex items-start justify-between gap-3">
 									<span className="inline-flex items-center gap-2 text-stone-500 min-w-0 break-words"><Clock size={14} />{t('time')}</span>
-									<span className="font-semibold text-right max-w-[60%] break-words">{new Date(ticketData.reservedTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+									<span className="font-semibold text-right max-w-[60%] break-words">{formatZurichTime(ticketData.reservedTime)}</span>
 								</div>
 								<div className="flex items-start justify-between gap-3">
 									<span className="inline-flex items-center gap-2 text-stone-500 min-w-0 break-words"><MapPin size={14} />{t('table')}</span>

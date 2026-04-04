@@ -5,11 +5,9 @@ import { useTranslations } from 'next-intl';
 import { SystemSettingDetailDto } from '../types/system-setting.types';
 import { updateBoolSetting } from '../services/system-setting.service';
 import { Switch } from '@/components/ui/switch';
-import { Badge } from '@/components/ui/badge';
 import { ALCard } from '@/components/ui/al-card';
 import { toast } from 'sonner';
-import { Loader2, ChevronDown, ChevronUp } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { Loader2 } from 'lucide-react';
 
 interface LandingPageSettingsCardProps {
     settings: SystemSettingDetailDto[];
@@ -18,7 +16,6 @@ interface LandingPageSettingsCardProps {
 export const LandingPageSettingsCard: React.FC<LandingPageSettingsCardProps> = ({ settings }) => {
     const t = useTranslations('settings');
     const tField = useTranslations('settings.Field');
-    const [collapsed, setCollapsed] = useState(false);
     const [updatingKeys, setUpdatingKeys] = useState<Record<string, boolean>>({});
 
     // Initialize local values from settings prop
@@ -48,11 +45,8 @@ export const LandingPageSettingsCard: React.FC<LandingPageSettingsCardProps> = (
     };
 
     return (
-        <ALCard variant="default" elevation="sm" radius="2xl" padding="none" className="border border-amber-200/50 shadow-sm transition-all hover:shadow-md flex flex-col h-full bg-white">
-            <div
-                className="cursor-pointer select-none p-6"
-                onClick={() => setCollapsed((v) => !v)}
-            >
+        <ALCard variant="default" elevation="sm" radius="2xl" padding="none" className="shadow-sm transition-all hover:shadow-md flex flex-col h-full bg-white">
+            <div className="p-6">
                 <div className="flex items-center justify-between gap-4">
                     <div className="flex items-center gap-4">
                         <div>
@@ -64,56 +58,44 @@ export const LandingPageSettingsCard: React.FC<LandingPageSettingsCardProps> = (
                             </p>
                         </div>
                     </div>
-                    <div className="p-2 rounded-full hover:bg-gray-100 transition-colors shrink-0">
-                        {collapsed ? (
-                            <ChevronDown className="h-5 w-5 text-gray-400" />
-                        ) : (
-                            <ChevronUp className="h-5 w-5 text-gray-400" />
-                        )}
-                    </div>
                 </div>
             </div>
 
-            <div className={cn(
-                "overflow-hidden transition-all duration-300 ease-in-out",
-                collapsed ? "max-h-0 opacity-0" : "max-h-[1000px] opacity-100"
-            )}>
-                <div className="px-6 pb-8 pt-2">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
-                        {settings.map((setting) => {
-                            const isUpdating = updatingKeys[setting.settingKey];
-                            const label = t.has(setting.settingKey)
-                                ? t(setting.settingKey)
-                                : setting.settingName || setting.settingKey;
-                            const desc = t.has(`${setting.settingKey}Desc`)
-                                ? t(`${setting.settingKey}Desc`)
-                                : setting.description;
-                            const currentChecked = localValues[setting.settingKey] ?? (setting.value === true || setting.value === 'true');
+            <div className="flex-1 min-h-0 overflow-y-auto px-6 pb-8 pt-2 space-y-6 overscroll-contain">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+                    {settings.map((setting) => {
+                        const isUpdating = updatingKeys[setting.settingKey];
+                        const label = t.has(setting.settingKey)
+                            ? t(setting.settingKey)
+                            : setting.settingName || setting.settingKey;
+                        const desc = t.has(`${setting.settingKey}Desc`)
+                            ? t(`${setting.settingKey}Desc`)
+                            : setting.description;
+                        const currentChecked = localValues[setting.settingKey] ?? (setting.value === true || setting.value === 'true');
 
-                            return (
-                                <div key={setting.settingKey} className="flex flex-col gap-2">
-                                    <div className="flex items-center gap-2">
-                                        <span className="text-sm font-medium text-gray-700">{label}</span>
-                                        {/* <Badge variant="secondary" className="text-[10px] px-1.5 py-0 h-4 uppercase">
-                                            {tField('types.BOOL')}
-                                        </Badge> */}
-                                        {isUpdating && <Loader2 className="h-3 w-3 animate-spin text-primary" />}
-                                    </div>
-                                    <div className="py-1">
-                                        <Switch
-                                            checked={currentChecked}
-                                            onChange={(checked: boolean) => handleToggle(setting.settingKey, checked)}
-                                            disabled={isUpdating}
-                                            showLabel={true}
-                                            activeLabel={tField('active')}
-                                            inactiveLabel={tField('inactive')}
-                                        />
-                                    </div>
-                                    {desc && <p className="text-xs text-gray-500">{desc}</p>}
+                        return (
+                            <div key={setting.settingKey} className="flex flex-col gap-2">
+                                <div className="flex items-center gap-2">
+                                    <span className="text-sm font-medium text-gray-700">{label}</span>
+                                    {/* <Badge variant="secondary" className="text-[10px] px-1.5 py-0 h-4 uppercase">
+                                        {tField('types.BOOL')}
+                                    </Badge> */}
+                                    {isUpdating && <Loader2 className="h-3 w-3 animate-spin text-primary" />}
                                 </div>
-                            );
-                        })}
-                    </div>
+                                <div className="py-1">
+                                    <Switch
+                                        checked={currentChecked}
+                                        onChange={(checked: boolean) => handleToggle(setting.settingKey, checked)}
+                                        disabled={isUpdating}
+                                        showLabel={true}
+                                        activeLabel={tField('active')}
+                                        inactiveLabel={tField('inactive')}
+                                    />
+                                </div>
+                                {desc && <p className="text-xs text-gray-500">{desc}</p>}
+                            </div>
+                        );
+                    })}
                 </div>
             </div>
         </ALCard>

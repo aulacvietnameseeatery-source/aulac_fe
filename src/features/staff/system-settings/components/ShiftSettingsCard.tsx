@@ -2,14 +2,13 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { useTranslations } from 'next-intl';
-import { Save, Loader2, ChevronDown, ChevronUp, Clock, MapPin, LogOut, Shield } from 'lucide-react';
+import { Save, Loader2, Clock, MapPin, LogOut, Shield } from 'lucide-react';
 import type { SystemSettingDetailDto, BulkUpdateSettingItemDto } from '../types/system-setting.types';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { PermissionGuard } from '@/components/permission-guard';
 import { Permissions } from '@/types/const';
 import { ALCard } from '@/components/ui/al-card';
-import { cn } from '@/lib/utils';
 
 /** Maps setting keys to their section for grouped display */
 const SECTION_MAP: Record<string, string> = {
@@ -47,7 +46,6 @@ export const ShiftSettingsCard: React.FC<ShiftSettingsCardProps> = ({
   const t = useTranslations('settings.shift');
   const tCommon = useTranslations('settings');
   const [values, setValues] = useState<Record<string, string>>({});
-  const [collapsed, setCollapsed] = useState(false);
 
   useEffect(() => {
     const initial: Record<string, string> = {};
@@ -85,16 +83,12 @@ export const ShiftSettingsCard: React.FC<ShiftSettingsCardProps> = ({
 
   return (
     <ALCard
-      variant="default"
       elevation="sm"
       radius="2xl"
       padding="none"
-      className="border border-amber-200/50 shadow-sm transition-all hover:shadow-md flex flex-col h-full bg-white"
+      className="flex h-full min-h-0 flex-col overflow-hidden bg-white"
     >
-      <div
-        className="cursor-pointer select-none p-6"
-        onClick={() => setCollapsed((v) => !v)}
-      >
+      <div className="p-6">
         <div className="flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-50">
@@ -109,105 +103,85 @@ export const ShiftSettingsCard: React.FC<ShiftSettingsCardProps> = ({
               </p>
             </div>
           </div>
-          <div className="p-2 rounded-full hover:bg-gray-100 transition-colors shrink-0">
-            {collapsed ? (
-              <ChevronDown className="h-5 w-5 text-gray-400" />
-            ) : (
-              <ChevronUp className="h-5 w-5 text-gray-400" />
-            )}
-          </div>
+          <PermissionGuard permission={Permissions.ManageSystemSettings}>
+            <Button
+              onClick={handleSave}
+              disabled={isSaving}
+              className="h-10 px-6 bg-[#1A3A52] hover:bg-[#1A3A52]/90 text-white shadow-md gap-2"
+            >
+              {isSaving ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  {tCommon('saving')}
+                </>
+              ) : (
+                <>
+                  <Save className="h-4 w-4" />
+                  {tCommon('save')}
+                </>
+              )}
+            </Button>
+          </PermissionGuard>
         </div>
       </div>
 
-      <div
-        className={cn(
-          'overflow-hidden transition-all duration-300 ease-in-out',
-          collapsed ? 'max-h-0 opacity-0' : 'max-h-750 opacity-100'
-        )}
-      >
-        <div className="flex-1 flex flex-col">
-          <div className="px-6 pb-6 space-y-6">
-            {sectionOrder.map((sectionKey) => {
-              const sectionSettings = sections.get(sectionKey);
-              if (!sectionSettings || sectionSettings.length === 0) return null;
+      <div className="flex-1 min-h-0 overflow-y-auto px-6 pb-6 space-y-6 overscroll-contain">
+        {sectionOrder.map((sectionKey) => {
+          const sectionSettings = sections.get(sectionKey);
+          if (!sectionSettings || sectionSettings.length === 0) return null;
 
-              return (
-                <div key={sectionKey} className="space-y-4">
-                  {/* Section header */}
-                  <div className="flex items-center gap-2 border-b border-gray-100 pb-2">
-                    {SECTION_ICONS[sectionKey]}
-                    <h4 className="text-sm font-semibold text-gray-700 uppercase tracking-wide">
-                      {t(`sections.${sectionKey}`)}
-                    </h4>
-                  </div>
+          return (
+            <div key={sectionKey} className="space-y-4">
+              {/* Section header */}
+              <div className="flex items-center gap-2 border-b border-gray-100 pb-2">
+                {SECTION_ICONS[sectionKey]}
+                <h4 className="text-sm font-semibold text-gray-700 uppercase tracking-wide">
+                  {t(`sections.${sectionKey}`)}
+                </h4>
+              </div>
 
-                  {/* Fields grid */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-5">
-                    {sectionSettings.map((setting) => {
-                      const shortKey = setting.settingKey.replace('shift.', '');
-                      const label = t.has(`fields.${shortKey}.label`)
-                        ? t(`fields.${shortKey}.label`)
-                        : setting.settingName ?? shortKey.replace(/_/g, ' ');
-                      const hint = t.has(`fields.${shortKey}.hint`)
-                        ? t(`fields.${shortKey}.hint`)
-                        : setting.description ?? '';
-                      const isDecimal = setting.valueType === 'DECIMAL';
+              {/* Fields grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-5">
+                {sectionSettings.map((setting) => {
+                  const shortKey = setting.settingKey.replace('shift.', '');
+                  const label = t.has(`fields.${shortKey}.label`)
+                    ? t(`fields.${shortKey}.label`)
+                    : setting.settingName ?? shortKey.replace(/_/g, ' ');
+                  const hint = t.has(`fields.${shortKey}.hint`)
+                    ? t(`fields.${shortKey}.hint`)
+                    : setting.description ?? '';
+                  const isDecimal = setting.valueType === 'DECIMAL';
 
-                      return (
-                        <div key={setting.settingKey} className="space-y-1.5">
-                          <label
-                            htmlFor={`shift-${shortKey}`}
-                            className="text-sm font-medium text-gray-700"
-                          >
-                            {label}
-                          </label>
-                          <Input
-                            id={`shift-${shortKey}`}
-                            type="number"
-                            step={isDecimal ? '0.01' : '1'}
-                            min="0"
-                            value={values[setting.settingKey] ?? ''}
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                              handleChange(setting.settingKey, e.target.value)
-                            }
-                            disabled={isSaving}
-                            className="h-9"
-                          />
-                          {hint && (
-                            <p className="text-xs text-gray-400">{hint}</p>
-                          )}
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-
-          {/* Save footer */}
-          <div className="px-6 py-4 bg-gray-50/80 border-t border-amber-200/20 flex justify-end mt-auto rounded-b-2xl">
-            <PermissionGuard permission={Permissions.ManageSystemSettings}>
-              <Button
-                onClick={handleSave}
-                disabled={isSaving}
-                className="h-10 px-6 bg-[#1A3A52] hover:bg-[#1A3A52]/90 text-white shadow-md gap-2"
-              >
-                {isSaving ? (
-                  <>
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                    {tCommon('saving')}
-                  </>
-                ) : (
-                  <>
-                    <Save className="h-4 w-4" />
-                    {tCommon('save')}
-                  </>
-                )}
-              </Button>
-            </PermissionGuard>
-          </div>
-        </div>
+                  return (
+                    <div key={setting.settingKey} className="space-y-1.5">
+                      <label
+                        htmlFor={`shift-${shortKey}`}
+                        className="text-sm font-medium text-gray-700"
+                      >
+                        {label}
+                      </label>
+                      <Input
+                        id={`shift-${shortKey}`}
+                        type="number"
+                        step={isDecimal ? '0.01' : '1'}
+                        min="0"
+                        value={values[setting.settingKey] ?? ''}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                          handleChange(setting.settingKey, e.target.value)
+                        }
+                        disabled={isSaving}
+                        className="h-9"
+                      />
+                      {hint && (
+                        <p className="text-xs text-gray-400">{hint}</p>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        })}
       </div>
     </ALCard>
   );

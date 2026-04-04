@@ -1,7 +1,11 @@
-import React from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { Calendar, Clock } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { ALDatePicker } from "@/components/ui/al-date-picker";
+import {
+    getZurichTodayStr,
+    getZurichCurrentMinutes,
+} from '../utils/zurich-time';
 
 interface DateTimeSelectProps {
     date: string;
@@ -25,6 +29,48 @@ export default function DateTimeSelect({
         onDateTimeChange(val, time);
     };
 
+    // Generate all valid time slots
+    const allSlots = useMemo(() => {
+        const slots: string[] = [];
+        for (let h = 11; h <= 14; h++) {
+            for (let m = 0; m < 60; m += 30) {
+                if (h === 11 && m < 30) continue;
+                if (h === 14 && m > 30) break;
+                slots.push(`${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`);
+            }
+        }
+        for (let h = 18; h <= 22; h++) {
+            for (let m = 0; m < 60; m += 30) {
+                if (h === 18 && m < 30) continue;
+                if (h === 22 && m > 30) break;
+                slots.push(`${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`);
+            }
+        }
+        return slots;
+    }, []);
+
+    // Refresh slot availability every 60s based on Zurich time
+    const [slotTick, setSlotTick] = useState(0);
+    useEffect(() => {
+        const interval = setInterval(() => setSlotTick(t => t + 1), 60_000);
+        return () => clearInterval(interval);
+    }, []);
+
+    const filteredSlots = useMemo(() => {
+        const zurichToday = getZurichTodayStr();
+        const isToday = date === zurichToday;
+
+        if (!isToday || !date) return allSlots;
+
+        const currentMinutes = getZurichCurrentMinutes();
+        const BUFFER = 30;
+        return allSlots.filter(slot => {
+            const [h, m] = slot.split(':').map(Number);
+            return h * 60 + m > currentMinutes + BUFFER;
+        });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [date, allSlots, slotTick]);
+
     return (
         <div className="bg-white p-4 rounded-xl shadow-md border border-slate-100 flex flex-col md:flex-row items-center justify-between gap-3 mb-6 sticky top-20 z-30">
             <div className="flex-1 w-full md:w-auto min-w-0">
@@ -34,7 +80,7 @@ export default function DateTimeSelect({
                 <ALDatePicker
                     value={date}
                     onChange={handleDateChange}
-                    minDate={new Date().toISOString().split('T')[0]}
+                    minDate={getZurichTodayStr()}
                     placeholder={t('datetime.selectDate')}
                     displayFormat="dd/MM/yyyy"
                     inputSize="sm"
@@ -50,27 +96,10 @@ export default function DateTimeSelect({
                     <select
                         value={time}
                         onChange={(e) => onDateTimeChange(date, e.target.value)}
-                        className="w-full bg-slate-50 border border border-[#D5BA98]/60 rounded-lg py-2 pl-8 pr-2 text-sm font-bold text-[#1A3A52] focus:outline-none focus:border-[#1A3A52] appearance-none"
+                        className="w-full bg-slate-50 border border-[#D5BA98]/60 rounded-lg py-2 pl-8 pr-2 text-sm font-bold text-[#1A3A52] focus:outline-none focus:border-[#1A3A52] appearance-none"
                     >
-                        {[
-                            ...Array.from({ length: 4 }, (_, i) => i + 11).flatMap(h =>
-                                ['00', '30'].map(m => {
-                                    if (h === 11 && m === '00') return null;
-                                    if (h === 14 && m === '30') return `${h}:${m}`;
-                                    if (h === 14 && m > '30') return null;
-                                    return `${h.toString().padStart(2, '0')}:${m}`;
-                                })
-                            ),
-                            ...Array.from({ length: 5 }, (_, i) => i + 18).flatMap(h =>
-                                ['00', '30'].map(m => {
-                                    if (h === 18 && m === '00') return null;
-                                    if (h === 22 && m === '30') return `${h}:${m}`;
-                                    if (h === 22 && m > '30') return null;
-                                    return `${h.toString().padStart(2, '0')}:${m}`;
-                                })
-                            )
-                        ].filter(Boolean).map(slot => (
-                            <option key={slot as string} value={slot as string}>
+                        {filteredSlots.map(slot => (
+                            <option key={slot} value={slot}>
                                 {slot}
                             </option>
                         ))}

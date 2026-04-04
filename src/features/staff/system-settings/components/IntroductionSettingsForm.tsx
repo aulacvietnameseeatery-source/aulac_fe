@@ -231,9 +231,9 @@ export const IntroductionSettingsForm = () => {
     }
 
     return (
-        <form onSubmit={handleSubmit(onSubmit, onInvalid)} className="flex flex-col gap-8 w-full pb-12 relative">
-            <div className="py-4 -mx-4 px-4">
-                <ALCard variant="glass" elevation="sm" padding="sm" radius="xl" className="flex items-center justify-between gap-4 border-amber-200/30 shadow-md">
+        <form onSubmit={handleSubmit(onSubmit, onInvalid)} className="flex h-full min-h-0 w-full flex-col overflow-hidden relative">
+            <div className="pb-4">
+                <ALCard variant="glass" elevation="sm" padding="sm" radius="xl" className="flex items-center justify-between gap-4  shadow-md">
                     <div className="flex items-center gap-2 sm:gap-4">
                         <div className="flex bg-gray-100/90 p-1 rounded-xl border border-gray-200 shadow-inner">
                             {LOCALES.map((loc) => (
@@ -245,7 +245,7 @@ export const IntroductionSettingsForm = () => {
                                     className={cn(
                                         "px-3 sm:px-5 py-1.5 h-8 text-[10px] sm:text-xs font-bold uppercase transition-all duration-300 rounded-lg",
                                         activeLocale === loc
-                                            ? "bg-white shadow-md text-[#1A3A52] hover:bg-white/50"
+                                            ? "bg-[#1A3A52] shadow-md text-white hover:bg-[#1A3A52]/50"
                                             : "text-gray-500 hover:text-[#1A3A52] hover:bg-white/40"
                                     )}
                                     onClick={() => setActiveLocale(loc)}
@@ -281,14 +281,15 @@ export const IntroductionSettingsForm = () => {
                 </ALCard>
             </div>
 
-            <div key={activeLocale} className="grid grid-cols-1 gap-12">
+            <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain pr-1 pb-6 custom-scrollbar">
+                <div key={activeLocale} className="grid grid-cols-1 gap-12">
                 {/* HERO SECTION */}
                 <section className="space-y-4">
                     <div className="flex items-center gap-3 mb-2">
                         <h2 className="text-2xl font-extrabold text-[#1A3A52] tracking-tight">{t('Introduction.heroSection')}</h2>
                     </div>
 
-                    <ALCard variant="soft" padding="none" radius="2xl" elevation="sm" className="border-amber-200/40 shadow-sm overflow-hidden" animation="slide-up">
+                    <ALCard  padding="none" radius="2xl" elevation="sm" className="border-amber-200/40 shadow-sm overflow-hidden" animation="slide-up">
                         <div className="grid grid-cols-1 lg:grid-cols-2">
                             {/* Left: Text Content */}
                             <div className="p-8 lg:p-10 space-y-8 bg-white/40 border-r border-amber-200/20">
@@ -340,7 +341,7 @@ export const IntroductionSettingsForm = () => {
                         <h2 className="text-2xl font-extrabold text-[#1A3A52] tracking-tight">{t('Introduction.virtualTour')}</h2>
                     </div>
 
-                    <ALCard variant="soft" padding="none" radius="2xl" elevation="sm" className="border-blue-100/40 shadow-sm overflow-hidden" animation="fade">
+                    <ALCard  padding="none" radius="2xl" elevation="sm" className="border-blue-100/40 shadow-sm overflow-hidden" animation="fade">
                         <div className="grid grid-cols-1 xl:grid-cols-[400px_1fr]">
                             {/* Left: Branding & Info */}
                             <div className="p-8 lg:p-10 space-y-8 bg-white/40 border-r border-blue-50">
@@ -407,7 +408,7 @@ export const IntroductionSettingsForm = () => {
                         <h2 className="text-2xl font-extrabold text-[#1A3A52] tracking-tight">{t('Introduction.collection')}</h2>
                     </div>
 
-                    <ALCard variant="soft" padding="none" radius="2xl" elevation="sm" className="border-amber-200/50 shadow-sm overflow-hidden" animation="fade">
+                    <ALCard  padding="none" radius="2xl" elevation="sm" className=" overflow-hidden" animation="fade">
                         <div className="p-8 lg:p-10 space-y-10 bg-[#FFFCF8]/40">
                             <div className="flex flex-wrap items-end justify-between gap-6 border-b border-amber-100/50 pb-8">
                                 <div className="flex flex-col sm:flex-row gap-4 w-full">
@@ -481,6 +482,7 @@ export const IntroductionSettingsForm = () => {
                         </div>
                     </ALCard>
                 </section>
+                </div>
             </div>
 
 

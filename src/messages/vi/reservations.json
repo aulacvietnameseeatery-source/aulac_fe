@@ -314,6 +314,7 @@
         "existingCustomerName": "Tên khách cũ",
         "existingCustomerEmail": "Email khách cũ",
         "bookingInfo": "Thông tin đặt bàn",
+        "timezoneNote": "Tất cả thời gian hiển thị theo giờ nhà hàng ({tz})",
         "partySize": "Số lượng khách",
         "reservationDate": "Ngày đặt",
         "selectDate": "Chọn ngày",

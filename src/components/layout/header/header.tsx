@@ -245,7 +245,7 @@ export function Header({ isScrolled, locale }: HeaderProps) {
                                     onClick={() => setIsReservationModalOpen(true)}
                                     className="bg-[#C5A059] text-[#0f172a] px-6 py-2.5 text-xs font-bold uppercase tracking-[0.15em] hover:bg-[#D4AF6A] transition-colors rounded-sm shadow-md"
                                 >
-                                    RESERVE
+                                    {t('reserve')}
                                 </button>
 
                                 <Link href={getStaffLoginLink() as any} className="text-white hover:text-[#C5A059] transition-colors" title={isAuthenticated ? "Go to Dashboard" : "Login as Staff"}>
@@ -321,7 +321,7 @@ export function Header({ isScrolled, locale }: HeaderProps) {
                                 className="flex items-center justify-between py-6 border-b border-[#C5A059]/20 group text-left w-full"
                             >
                                 <span className="text-white group-hover:text-[#C5A059] text-xl font-serif uppercase tracking-[0.2em] transition-colors">
-                                    SCAN QR
+                                    {t('qr_scan')}
                                 </span>
                                 <span className="text-[#C5A059]"><QrCode size={24} /></span>
                             </button>
@@ -336,7 +336,7 @@ export function Header({ isScrolled, locale }: HeaderProps) {
                                 }}
                                 className="w-full bg-[#C5A059] text-[#0f172a] py-4 text-sm font-bold uppercase tracking-widest hover:bg-[#D4AF6A] transition-colors rounded-sm shadow-lg"
                             >
-                                RESERVE
+                                {t('reserve')}
                             </button>
 
                             <Link

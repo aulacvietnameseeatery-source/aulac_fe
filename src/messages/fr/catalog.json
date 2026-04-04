@@ -512,7 +512,9 @@
       "successCreate": "Création réussie",
       "successUpdate": "Mise à jour réussie",
       "successDisable": "Désactivée avec succès",
-      "errorSave": "Une erreur est survenue lors de l'enregistrement"
+      "errorSave": "Une erreur est survenue lors de l'enregistrement",
+      "rulesHint": "Les clients doivent remplir TOUTES les conditions sélectionnées ci-dessous pour que cette promotion s'applique.",
+      "targetsHint": "Sélectionnez des plats ou des catégories pour appliquer la réduction. Laissez vide pour appliquer la réduction à l'ensemble de la commande."
     },
     "Detail": {
       "title": "Détails de la promotion #{id}",

@@ -420,6 +420,41 @@
       },
       "active": "Active",
       "inactive": "Inactive"
+    },
+    "Tabs": {
+      "general": "General",
+      "notifications": "Notifications",
+      "shift": "Shift",
+      "landingPage": "Landing Page"
+    },
+    "Notification": {
+      "title": "Email Notifications",
+      "description": "Configure which events trigger email notifications and who receives them.",
+      "recipientsLabel": "Recipients",
+      "recipientsPlaceholder": "One email per line",
+      "recipientsHint": "Use one email per line. If empty, the store email will be used as fallback.",
+      "addRecipientInput": "Add recipient input",
+      "removeRecipientInput": "Remove recipient input",
+      "invalidEmails": "Please fix invalid email addresses before saving.",
+      "invalidEmailList": "Invalid emails: {list}",
+      "events": {
+        "reservation_created": {
+          "label": "New Reservation",
+          "description": "Send email when a new reservation is created."
+        },
+        "reservation_cancelled": {
+          "label": "Reservation Cancelled",
+          "description": "Send email when a reservation is cancelled."
+        },
+        "contact_form": {
+          "label": "Contact Form",
+          "description": "Send email when a customer submits the contact form."
+        },
+        "payment_success": {
+          "label": "Payment Successful",
+          "description": "Send email when a payment is completed."
+        }
+      }
     }
   }
 }
