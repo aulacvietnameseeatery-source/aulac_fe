@@ -427,7 +427,8 @@
         "ON_DUTY": "En service",
         "COMPLETED": "Terminé",
         "SCHEDULED": "Planifié",
-        "CHECKED_IN": "Pointé"
+        "CHECKED_IN": "Pointé",
+        "NO_RECORD": "Aucun enregistrement"
       },
       "exceptionNames": {
         "LATE": "Arrivée tardive",

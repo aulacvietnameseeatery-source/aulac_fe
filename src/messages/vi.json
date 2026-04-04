@@ -895,6 +895,16 @@
       "operator": {
         "contains": "Chứa",
         "notContains": "Không chứa",
+        "statusNames": {
+          "ABSENT": "Vắng",
+          "LATE": "Trễ",
+          "ACTIVE": "Đang hoạt động",
+          "ON_DUTY": "Đang trực",
+          "COMPLETED": "Hoàn thành",
+          "SCHEDULED": "Đã lên lịch",
+          "CHECKED_IN": "Đã chấm công",
+          "NO_RECORD": "Không có dữ liệu"
+        },
         "equals": "Bằng",
         "notequal": "Khác",
         "different": "Khác",

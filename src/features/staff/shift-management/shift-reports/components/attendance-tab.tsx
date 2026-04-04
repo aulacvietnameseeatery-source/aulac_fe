@@ -22,7 +22,6 @@ import {
 } from "recharts";
 import type { AttendanceReportRowDto } from "../../types/shift-management.types";
 import {
-  TAB_TRIGGER_CLASS,
   INNER_TAB_LIST_CLASS,
   INNER_TAB_TRIGGER_CLASS,
   TableState,
@@ -160,10 +159,30 @@ export function AttendanceTab({ rows, loading }: Props) {
 
   return (
     <div className="space-y-4">
-      <ALCard className="p-2.5 bg-white">
-        <div className="space-y-2.5">
+      <div>
+        <div className="grid grid-cols-1 gap-2.5 lg:grid-cols-2">
+          <div className="grid grid-cols-2 gap-2 lg:grid-cols-4">
+            <ALCard className="rounded-lg px-2.5 py-1.5">
+              <p className="text-[9px] uppercase tracking-wide text-[#1A3A52]/55 sm:text-[10px]">{t("attendanceTab.kpi.totalAssignments")}</p>
+              <p className="mt-0.5 flex items-center gap-1 text-sm font-semibold leading-none text-[#1A3A52] sm:text-base">
+                <Users className="h-3 w-3 sm:h-3.5 sm:w-3.5" /> {total}
+              </p>
+            </ALCard>
+            <ALCard className="rounded-lg px-2.5 py-1.5">
+              <p className="text-[9px] uppercase tracking-wide text-[#1A3A52]/55 sm:text-[10px]">{t("attendanceTab.kpi.checkInRate")}</p>
+              <p className="mt-0.5 text-sm font-semibold leading-none text-[#1A3A52] sm:text-base">{pct(present, total)}</p>
+            </ALCard>
+            <ALCard className="rounded-lg px-2.5 py-1.5">
+              <p className="text-[9px] uppercase tracking-wide text-[#1A3A52]/55 sm:text-[10px]">{t("attendanceTab.kpi.lateArrivals")}</p>
+              <p className="mt-0.5 text-sm font-semibold leading-none text-amber-700 sm:text-base">{late}</p>
+            </ALCard>
+            <ALCard className="rounded-lg px-2.5 py-1.5">
+              <p className="text-[9px] uppercase tracking-wide text-[#1A3A52]/55 sm:text-[10px]">{t("attendanceTab.kpi.absences")}</p>
+              <p className="mt-0.5 text-sm font-semibold leading-none text-red-700 sm:text-base">{absent}</p>
+            </ALCard>
+          </div>
           <ALCard className="rounded-lg p-2">
-            <div className="grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_190px_auto] bg-white gap-2 items-end">
+            <div className="flex flex-col gap-2 bg-white sm:flex-row sm:flex-wrap sm:items-end">
               <ALInput
                 value={staffQuery}
                 onChange={(e) => {
@@ -172,7 +191,7 @@ export function AttendanceTab({ rows, loading }: Props) {
                 }}
                 placeholder={t("attendanceTab.searchPlaceholder")}
                 inputSize="sm"
-                wrapperClassName="w-full"
+                wrapperClassName="w-full sm:min-w-[180px] sm:flex-1"
               />
               <ALCombobox
                 options={staffOptions}
@@ -183,12 +202,12 @@ export function AttendanceTab({ rows, loading }: Props) {
                 }}
                 placeholder={t("attendanceTab.filterByStaff")}
                 inputSize="sm"
-                wrapperClassName="w-full"
+                wrapperClassName="w-full sm:min-w-[180px] sm:flex-1"
               />
               <Button
                 variant="ghost"
                 size="sm"
-                className="h-8 px-2 text-xs font-medium text-[#1A3A52]/60 hover:text-[#1A3A52] hover:bg-white"
+                className="h-8 w-full px-2 text-[11px] font-medium text-[#1A3A52]/60 hover:bg-white hover:text-[#1A3A52] sm:w-auto sm:text-xs"
                 onClick={() => {
                   setStaffQuery("");
                   setSelectedStaffId("all");
@@ -198,31 +217,11 @@ export function AttendanceTab({ rows, loading }: Props) {
               >
                 {t("attendanceTab.clearSearch")}
               </Button>
+
             </div>
           </ALCard>
-
-          <div className="grid grid-cols-2 gap-2">
-            <ALCard className="rounded-lg border-[#D5BA98]/50 bg-[#FDFBF9] px-2.5 py-1.5">
-              <p className="text-[10px] uppercase tracking-wide text-[#1A3A52]/55">{t("attendanceTab.kpi.totalAssignments")}</p>
-              <p className="text-base font-semibold text-[#1A3A52] leading-none mt-0.5 flex items-center gap-1">
-                <Users className="w-3.5 h-3.5" /> {total}
-              </p>
-            </ALCard>
-            <ALCard className="rounded-lg border-[#D5BA98]/50 bg-[#FDFBF9] px-2.5 py-1.5">
-              <p className="text-[10px] uppercase tracking-wide text-[#1A3A52]/55">{t("attendanceTab.kpi.checkInRate")}</p>
-              <p className="text-base font-semibold text-[#1A3A52] leading-none mt-0.5">{pct(present, total)}</p>
-            </ALCard>
-            <ALCard className="rounded-lg border-[#D5BA98]/50 bg-[#FDFBF9] px-2.5 py-1.5">
-              <p className="text-[10px] uppercase tracking-wide text-[#1A3A52]/55">{t("attendanceTab.kpi.lateArrivals")}</p>
-              <p className="text-base font-semibold text-amber-700 leading-none mt-0.5">{late}</p>
-            </ALCard>
-            <ALCard className="rounded-lg border-[#D5BA98]/50 bg-[#FDFBF9] px-2.5 py-1.5">
-              <p className="text-[10px] uppercase tracking-wide text-[#1A3A52]/55">{t("attendanceTab.kpi.absences")}</p>
-              <p className="text-base font-semibold text-red-700 leading-none mt-0.5">{absent}</p>
-            </ALCard>
-          </div>
         </div>
-      </ALCard>
+      </div>
 
       <Tabs value={summaryTab} onValueChange={setSummaryTab}>
         <TabsList variant={"line"} className={INNER_TAB_LIST_CLASS}>
@@ -374,7 +373,7 @@ export function AttendanceTab({ rows, loading }: Props) {
                 {filteredStaffSummary.slice(0, 6).map((s) => (
                   <div
                     key={s.staffId}
-                    className="rounded-xl border border border-[#D5BA98]/60 bg-white p-3 shadow-sm hover:shadow-md transition-shadow cursor-pointer group"
+                    className="rounded-xl border border-[#D5BA98]/60 bg-white p-3 shadow-sm transition-shadow hover:shadow-md cursor-pointer group"
                     onClick={() => handleDrillDown(s.staffId)}
                   >
                     <div className="flex items-center justify-between mb-2">
@@ -387,13 +386,12 @@ export function AttendanceTab({ rows, loading }: Props) {
                     </div>
                     <div className="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden mb-1.5">
                       <div
-                        className={`h-full rounded-full transition-all ${
-                          s.total > 0 && Math.round((s.present / s.total) * 100) >= 90
-                            ? "bg-emerald-500"
-                            : s.total > 0 && Math.round((s.present / s.total) * 100) >= 70
+                        className={`h-full rounded-full transition-all ${s.total > 0 && Math.round((s.present / s.total) * 100) >= 90
+                          ? "bg-emerald-500"
+                          : s.total > 0 && Math.round((s.present / s.total) * 100) >= 70
                             ? "bg-amber-500"
                             : "bg-red-500"
-                        }`}
+                          }`}
                         style={{
                           width: `${s.total > 0 ? Math.round((s.present / s.total) * 100) : 0}%`,
                         }}
@@ -425,7 +423,7 @@ export function AttendanceTab({ rows, loading }: Props) {
 
               {/* Full table */}
               <div className="overflow-x-auto rounded-xl border border-[#D5BA98]/60 bg-white shadow-sm">
-                <table className="w-full text-sm min-w-[580px]">
+                <table className="w-full text-sm min-w-145">
                   <thead className="bg-[#1A3A52]/5">
                     <tr>
                       {[
@@ -481,7 +479,7 @@ export function AttendanceTab({ rows, loading }: Props) {
             <TableState loading={loading} />
           ) : (
             <div className="overflow-x-auto rounded-xl border border-[#D5BA98]/60 bg-white shadow-sm">
-              <table className="w-full text-sm min-w-[720px]">
+              <table className="w-full text-sm min-w-180">
                 <thead className="bg-[#1A3A52]/5">
                   <tr>
                     {[
@@ -510,9 +508,8 @@ export function AttendanceTab({ rows, loading }: Props) {
                     .map((r, i) => (
                       <tr
                         key={r.shiftAssignmentId ?? i}
-                        className={`transition-colors hover:bg-[#1A3A52]/4 ${
-                          r.isManualAdjustment ? "bg-blue-50/40" : ""
-                        }`}
+                        className={`transition-colors hover:bg-[#1A3A52]/4 ${r.isManualAdjustment ? "bg-blue-50/40" : ""
+                          }`}
                       >
                         <td className="px-3 py-2.5 text-[#1A3A52] whitespace-nowrap text-xs">
                           {r.workDate}

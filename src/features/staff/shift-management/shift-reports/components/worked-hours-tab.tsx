@@ -61,12 +61,12 @@ export function WorkedHoursTab({ rows, loading }: Props) {
   const avgEfficiency =
     filteredRows.length > 0
       ? Math.round(
-          filteredRows.reduce(
-            (sum, r) =>
-              sum + (r.scheduledMinutes > 0 ? (r.workedMinutes / r.scheduledMinutes) * 100 : 0),
-            0
-          ) / filteredRows.length
-        )
+        filteredRows.reduce(
+          (sum, r) =>
+            sum + (r.scheduledMinutes > 0 ? (r.workedMinutes / r.scheduledMinutes) * 100 : 0),
+          0
+        ) / filteredRows.length
+      )
       : 0;
 
   const chartData = useMemo(
@@ -85,45 +85,54 @@ export function WorkedHoursTab({ rows, loading }: Props) {
   return (
     <div className="space-y-4">
       {/* Search */}
-      <div className="flex flex-col sm:flex-row items-center gap-3">
-        <div className="flex-1 w-full max-w-sm">
-          <input
-            value={staffQuery}
-            onChange={(e) => setStaffQuery(e.target.value)}
-            placeholder={t("workedHoursTab.searchPlaceholder")}
-            className="h-8 w-full rounded-lg border border-[#D5BA98]/60 bg-[#FDFBF9] px-3 text-sm text-[#1A3A52] placeholder:text-[#1A3A52]/40 focus:outline-none focus:ring-2 focus:ring-[#1A3A52]/20"
-          />
+      <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+
+        <div className="flex flex-wrap gap-2 w-full lg:flex-1">
+          {incompleteCount > 0 && (
+            <InsightBanner
+              type="warning"
+              message={t("workedHoursTab.insightIncomplete", { count: incompleteCount })}
+            />
+          )}
+          {totalVariance < -60 && (
+            <InsightBanner
+              type="info"
+              message={t("workedHoursTab.insightUnderwork", { time: minToHM(Math.abs(totalVariance)) })}
+            />
+          )}
+          {overtimeCount > 0 && (
+            <InsightBanner
+              type="info"
+              message={t("workedHoursTab.insightOvertime", { count: overtimeCount })}
+            />
+          )}
         </div>
-        {staffQuery && (
-          <Button
-            variant="ghost"
-            size="sm"
-            className="text-[#1A3A52]/60 hover:text-[#1A3A52] hover:bg-transparent h-8 px-2 text-xs font-medium"
-            onClick={() => setStaffQuery("")}
-          >
-            {t("workedHoursTab.clearSearch")}
-          </Button>
-        )}
+        <div className="w-full lg:w-auto lg:min-w-[320px]">
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+            <div className="w-full sm:flex-1 lg:min-w-65">
+              <input
+                value={staffQuery}
+                onChange={(e) => setStaffQuery(e.target.value)}
+                placeholder={t("workedHoursTab.searchPlaceholder")}
+                className="h-8 w-full rounded-lg border border-[#D5BA98]/60 bg-[#FDFBF9] px-3 text-xs sm:text-sm text-[#1A3A52] placeholder:text-[#1A3A52]/40 focus:outline-none focus:ring-2 focus:ring-[#1A3A52]/20"
+              />
+            </div>
+            {staffQuery && (
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-8 w-full px-2 text-xs font-medium text-[#1A3A52]/60 hover:text-[#1A3A52] hover:bg-transparent sm:w-auto"
+                onClick={() => setStaffQuery("")}
+              >
+                {t("workedHoursTab.clearSearch")}
+              </Button>
+            )}
+          </div>
+        </div>
       </div>
 
-      {incompleteCount > 0 && (
-        <InsightBanner
-          type="warning"
-          message={t("workedHoursTab.insightIncomplete", { count: incompleteCount })}
-        />
-      )}
-      {totalVariance < -60 && (
-        <InsightBanner
-          type="info"
-          message={t("workedHoursTab.insightUnderwork", { time: minToHM(Math.abs(totalVariance)) })}
-        />
-      )}
-      {overtimeCount > 0 && (
-        <InsightBanner
-          type="info"
-          message={t("workedHoursTab.insightOvertime", { count: overtimeCount })}
-        />
-      )}
+
+
 
       <Tabs value={innerTab} onValueChange={setInnerTab}>
         <TabsList variant={"line"} className={INNER_TAB_LIST_CLASS}>
@@ -181,22 +190,19 @@ export function WorkedHoursTab({ rows, loading }: Props) {
               </CardContent>
             </Card>
             <Card
-              className={`py-2.5 shadow-sm ${
-                overtimeCount > 0 ? "border-blue-200 bg-blue-50" : "border border-[#D5BA98]/60 bg-slate-50"
-              }`}
+              className={`py-2.5 shadow-sm ${overtimeCount > 0 ? "border-blue-200 bg-blue-50" : "border border-[#D5BA98]/60 bg-slate-50"
+                }`}
             >
               <CardContent className="px-3">
                 <p
-                  className={`text-[10px] font-semibold uppercase tracking-wider ${
-                    overtimeCount > 0 ? "text-blue-700/70" : "text-[#1A3A52]/50"
-                  }`}
+                  className={`text-[10px] font-semibold uppercase tracking-wider ${overtimeCount > 0 ? "text-blue-700/70" : "text-[#1A3A52]/50"
+                    }`}
                 >
                   {t("workedHoursTab.cards.overtime")}
                 </p>
                 <p
-                  className={`mt-1 text-xl font-semibold ${
-                    overtimeCount > 0 ? "text-blue-700" : "text-[#1A3A52]/70"
-                  }`}
+                  className={`mt-1 text-xl font-semibold ${overtimeCount > 0 ? "text-blue-700" : "text-[#1A3A52]/70"
+                    }`}
                 >
                   {overtimeCount}
                 </p>
@@ -208,7 +214,7 @@ export function WorkedHoursTab({ rows, loading }: Props) {
             <Card className="border border-[#D5BA98]/60 bg-white shadow-sm overflow-hidden">
               <CardHeader className="bg-[#D5BA98]/10 py-3 border-b border-slate-100">
                 <CardTitle className="text-sm font-semibold text-[#1A3A52]">
-                {t("workedHoursTab.chartTitle")}
+                  {t("workedHoursTab.chartTitle")}
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-4 pt-5">
@@ -254,7 +260,7 @@ export function WorkedHoursTab({ rows, loading }: Props) {
             <TableState loading={loading} />
           ) : (
             <div className="overflow-x-auto rounded-xl border border-[#D5BA98]/60 bg-white shadow-sm">
-              <table className="w-full text-sm min-w-[560px]">
+              <table className="w-full text-sm min-w-140">
                 <thead className="bg-[#1A3A52]/5">
                   <tr>
                     {[t("workedHoursTab.table.staff"), t("workedHoursTab.table.scheduled"), t("workedHoursTab.table.worked"), t("workedHoursTab.table.variance"), t("workedHoursTab.table.efficiency"), t("workedHoursTab.table.overtime"), t("workedHoursTab.table.incomplete")].map(
@@ -293,9 +299,8 @@ export function WorkedHoursTab({ rows, loading }: Props) {
                             {minToHM(r.workedMinutes)}
                           </td>
                           <td
-                            className={`px-4 py-2.5 font-semibold ${
-                              r.varianceMinutes < 0 ? "text-red-700" : "text-emerald-700"
-                            }`}
+                            className={`px-4 py-2.5 font-semibold ${r.varianceMinutes < 0 ? "text-red-700" : "text-emerald-700"
+                              }`}
                           >
                             {r.varianceMinutes >= 0 ? "+" : ""}
                             {minToHM(Math.abs(r.varianceMinutes))}

@@ -1152,6 +1152,16 @@
         "workedHours": "Worked Hours",
         "exceptions": "Exceptions"
       },
+      "statusNames": {
+        "ABSENT": "Absent",
+        "LATE": "Late",
+        "ACTIVE": "Active",
+        "ON_DUTY": "On Duty",
+        "COMPLETED": "Completed",
+        "SCHEDULED": "Scheduled",
+        "CHECKED_IN": "Checked In",
+        "NO_RECORD": "No Record"
+      },
       "filters": {
         "fromDate": "From Date",
         "toDate": "To Date",

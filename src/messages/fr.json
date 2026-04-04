@@ -729,6 +729,16 @@
       "operator": {
         "contains": "Contient",
         "notContains": "Ne contient pas",
+        "statusNames": {
+          "ABSENT": "Absent",
+          "LATE": "En retard",
+          "ACTIVE": "Actif",
+          "ON_DUTY": "En service",
+          "COMPLETED": "Terminé",
+          "SCHEDULED": "Planifié",
+          "CHECKED_IN": "Pointé",
+          "NO_RECORD": "Aucun enregistrement"
+        },
         "equals": "Égal",
         "notequal": "Différent",
         "different": "Différent",

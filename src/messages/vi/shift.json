@@ -427,7 +427,8 @@
         "ON_DUTY": "Đang trực",
         "COMPLETED": "Hoàn thành",
         "SCHEDULED": "Đã lên lịch",
-        "CHECKED_IN": "Đã chấm công"
+        "CHECKED_IN": "Đã chấm công",
+        "NO_RECORD": "Không có dữ liệu"
       },
       "exceptionNames": {
         "LATE": "Đến trễ",

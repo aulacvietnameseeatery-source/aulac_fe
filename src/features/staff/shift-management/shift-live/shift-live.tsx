@@ -507,23 +507,23 @@ export function ShiftLive() {
         </div>
       </ALCard>
 
-      <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_320px]">
+      <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_420px]">
         <ALCard
           variant="default"
           elevation="sm"
           className="rounded-xl border border-[#D5BA98]/60 p-4 sm:p-5"
         >
-          <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+          <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-2">
             {summaryCards.map((card) => (
               <div
                 key={card.key}
                 className={cn(
-                  "rounded-xl border px-4 py-3 shadow-sm transition-transform hover:-translate-y-0.5",
+                  "rounded-lg border px-4 py-3 shadow-sm transition-transform hover:-translate-y-0.5",
                   card.className
                 )}
               >
                 <p className="text-xs font-medium uppercase tracking-[0.2em]">{card.label}</p>
-                <p className="mt-2 text-2xl font-semibold">{card.value}</p>
+                <p className="mt-1 text-xl font-semibold">{card.value}</p>
               </div>
             ))}
           </div>

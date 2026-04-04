@@ -3,7 +3,7 @@
 import { AlertTriangle, CheckCircle2, Clock, TrendingDown, TrendingUp } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { dateUtils } from "@/lib/date-utils";
-import { Card, CardContent } from "@/components/ui/card";
+import { CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ALCard } from "@/components/ui/al-card";
 import type { AttendanceReportRowDto } from "../../types/shift-management.types";
@@ -245,10 +245,17 @@ export function InsightBanner({
     };
     return (
         <div
-            className={`flex items-start gap-2 rounded-lg border px-3 py-2.5 text-xs font-medium ${styles[type]}`}
+            className={`flex min-w-0 items-start flex-1 gap-2 rounded-lg border px-3 py-2.5 text-xs font-medium ${styles[type]}`}
         >
             {icons[type]}
-            <span>{message}</span>
+            <span
+                className="min-w-0 flex-1 truncate"
+                data-tooltip-content={message}
+                data-tooltip-id="my-tooltip"
+                title={message}
+            >
+                {message}
+            </span>
         </div>
     );
 }
@@ -270,7 +277,7 @@ export function PaginationControls({
     const totalPages = Math.ceil(total / pageSize);
     if (total === 0) return null;
     return (
-        <div className="flex items-center justify-between px-4 py-3 border-t border-slate-100 bg-slate-50/50">
+        <div className="flex items-center flex-1 justify-between px-4 py-3 border-t border-slate-100 bg-slate-50/50">
             <div className="flex items-center gap-2 text-xs text-[#1A3A52]/60">
                 <span>{t("show")}</span>
                 <select
