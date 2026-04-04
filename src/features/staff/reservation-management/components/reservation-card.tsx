@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Clock, Armchair, Users, Trash2, ChevronDown, FileText, Pencil } from "lucide-react";
-import { format } from "date-fns";
 import { useTranslations } from "next-intl";
 import { ReservationDto, ReservationStatusDto } from "../types/reservation-types";
 import { Badge } from "@/components/ui/badge";
 import { Dropdown, DropdownContent, DropdownItem } from "@/components/ui/dropdown";
 import { Button } from "@/components/ui/button";
+import { ALCard } from "@/components/ui/al-card";
 import { localizeStatusLabel } from "../utils/localize-reservation";
 import { dateUtils } from "@/lib/date-utils";
 
@@ -49,67 +49,79 @@ export const ReservationCard = ({ reservation, statuses, onAssignTable, onEdit, 
     };
 
     return (
-        <div onClick={() => onCardClick?.(reservation.reservationId)} className={`bg-white rounded-xl shadow-sm border border border-[#D5BA98]/60 p-5 hover:-translate-y-0.5 hover:shadow-md transition-all relative ${onCardClick ? 'cursor-pointer' : ''}`}>
-            <div className="flex items-start gap-4 mb-4">
-                <div className="bg-[#1A3A52] rounded-lg p-2.5 text-center shrink-0 min-w-17.5">
-                    <p className="text-white font-semibold text-[15px] m-0 leading-tight">
-                        {dateUtils.formatLocal(reservation.reservedTime, "MMM dd")}
-                        <span className="block text-xs font-normal text-white/75 mt-1">{dateUtils.formatLocal(reservation.reservedTime, "yyyy")}</span>
-                    </p>
-                </div>
-                <div className="flex-1 pt-0.5">
-                    <h6 className="mb-2 font-semibold text-[#1A3A52] text-lg leading-none">{reservation.customerName}</h6>
-                    <div className="flex items-center flex-wrap gap-x-3 gap-y-2 text-[13px] text-[#1A3A52]/70 font-medium">
-                        <p className="flex items-center m-0"><Clock className="w-3.5 h-3.5 mr-1.5 text-[#1A3A52]/50" />{dateUtils.formatLocal(reservation.reservedTime, "HH:mm")}</p>
-                        <div className="w-px h-3.5 bg-[#D5BA98]/70"></div>
-                        <p className="flex items-center m-0"><Armchair className="w-3.5 h-3.5 mr-1.5 text-[#1A3A52]/50" />
-                            {/* Hiển thị chuỗi tên bàn (T01, T02...) */}
-                            {t("table")}: {reservation.tableName || t("na")}
+        <ALCard
+            onClick={() => onCardClick?.(reservation.reservationId)}
+            variant="default"
+            elevation="sm"
+            radius="xl"
+            padding="md"
+            hoverEffect={onCardClick ? "lift" : "none"}
+            className={`relative border-[#D5BA98]/60 ${onCardClick ? 'cursor-pointer' : ''}`}
+        >
+            <div className="flex items-start justify-between gap-3 mb-4">
+                <div className="flex items-start gap-3 min-w-0 flex-1">
+                    <div className="bg-[#1A3A52] rounded-lg p-2.5 text-center shrink-0 min-w-17.5">
+                        <p className="text-white font-semibold text-[14px] m-0 leading-tight truncate">
+                            {reservation.tableName || t("na")}
+                            <span className="block text-[10px] font-normal text-white/75 mt-1 uppercase tracking-wide">{t("table")}</span>
                         </p>
-                        <div className="w-px h-3.5 bg-[#D5BA98]/70"></div>
-                        <p className="flex items-center m-0"><Users className="w-3.5 h-3.5 mr-1.5 text-[#1A3A52]/50" />{t("guests")}: {reservation.pax}</p>
                     </div>
+                    <div className="flex-1 min-w-0">
+                    <h6 className="mb-2 font-semibold text-[#1A3A52] text-lg leading-none truncate">{reservation.customerName}</h6>
+                    <div className="flex items-center gap-2 text-[12px] text-[#1A3A52]/65 font-medium">
+                        <Users className="w-3.5 h-3.5 text-[#1A3A52]/50" />
+                        <span>{t("guests")}: {reservation.pax}</span>
+                        <span className="text-[#D5BA98]">•</span>
+                        <Armchair className="w-3.5 h-3.5 text-[#1A3A52]/50" />
+                        <span>{t("table")}: {reservation.tableName || t("na")}</span>
+                    </div>
+                </div>
+                </div>
+                <div onClick={(e) => e.stopPropagation()}>
+                    <Dropdown align="end" trigger={
+                        <Badge className={`rounded-md px-2.5 py-1 text-xs font-semibold cursor-pointer hover:opacity-90 flex items-center gap-1.5 shadow-sm border ${getBadgeClasses(reservation.statusId)}`}>
+                            {localizeStatusLabel(currentStatusCode, reservation.statusName, tStatus)} <ChevronDown size={12} className="opacity-70" />
+                        </Badge>
+                    }>
+                        <DropdownContent className="w-40 z-50">
+                            {statuses.map(s => (
+                                <DropdownItem key={s.statusId} selected={s.statusId === reservation.statusId} onClick={() => {
+                                    if (s.statusCode === 'CONFIRMED' && !reservation.tableName) {
+                                        if (onAssignTable) onAssignTable();
+                                    } else {
+                                        onStatusUpdate?.(reservation.reservationId, s.statusCode);
+                                    }
+                                }}>
+                                    <div className="flex items-center gap-2">
+                                        <div className={`w-2 h-2 rounded-full ${getStatusDotClass(s.statusId)}`} />
+                                        {localizeStatusLabel(s.statusCode, s.statusName, tStatus)}
+                                    </div>
+                                </DropdownItem>
+                            ))}
+                        </DropdownContent>
+                    </Dropdown>
                 </div>
             </div>
 
-            {/* Divider & Status Dropdown */}
+            <div className="mb-4 p-3 rounded-lg border border-[#D5BA98]/60 bg-[#D5BA98]/10">
+                <div className="text-[11px] uppercase tracking-wide text-[#1A3A52]/60 mb-1">{t("reservationTime")}</div>
+                <div className="flex items-center justify-between gap-2">
+                    <span className="text-[#1A3A52] font-semibold text-base">
+                        {dateUtils.formatLocal(reservation.reservedTime, "dd/MM/yyyy")}
+                    </span>
+                    <span className="inline-flex items-center text-[#1A3A52] font-semibold text-sm">
+                        <Clock className="w-3.5 h-3.5 mr-1.5 text-[#1A3A52]/60" />
+                        {dateUtils.formatLocal(reservation.reservedTime, "HH:mm")}
+                    </span>
+                </div>
+            </div>
+
             <div className="mb-4 pb-4 border-b border-dashed border-[#D5BA98]/45">
-                <div className="flex items-center justify-between gap-2 mb-3 text-[14px]">
-                    <span className="text-[#1A3A52]/55">{t("createdOn")}</span>
-                    <span className="text-[#1A3A52] font-medium">{reservation.createdAt ? dateUtils.formatLocal(reservation.createdAt, "dd MMM, HH:mm") : t("na")}</span>
-                </div>
-                <div className="flex items-center justify-between gap-2 mb-3 text-[14px]">
-                    <span className="text-[#1A3A52]/55">{t("reservationTime")}</span>
-                    <span className="text-[#1A3A52] font-medium">{dateUtils.formatLocal(reservation.reservedTime, "dd MMM, HH:mm")}</span>
-                </div>
-                <div className="flex items-center justify-between gap-2 text-[14px]">
-                    <span className="text-[#1A3A52]/55">{t("status")}</span>
-                    <div onClick={(e) => e.stopPropagation()}>
-                        <Dropdown align="end" trigger={
-                            <Badge className={`rounded-md px-2.5 py-1 text-xs font-semibold cursor-pointer hover:opacity-90 flex items-center gap-1.5 shadow-sm border ${getBadgeClasses(reservation.statusId)}`}>
-                                {localizeStatusLabel(currentStatusCode, reservation.statusName, tStatus)} <ChevronDown size={12} className="opacity-70" />
-                            </Badge>
-                        }>
-                            <DropdownContent className="w-40 z-50">
-                                {statuses.map(s => (
-                                    <DropdownItem key={s.statusId} selected={s.statusId === reservation.statusId} onClick={() => {
-                                        // NẾU BẤM CONFIRMED MÀ CHƯA CÓ BÀN -> MỞ MODAL XẾP BÀN
-                                        if (s.statusCode === 'CONFIRMED' && !reservation.tableName) {
-                                            if (onAssignTable) onAssignTable();
-                                        } else {
-                                            // CÒN LẠI GỌI API ĐỔI TRẠNG THÁI BÌNH THƯỜNG
-                                            onStatusUpdate?.(reservation.reservationId, s.statusCode);
-                                        }
-                                    }}>
-                                        <div className="flex items-center gap-2">
-                                            <div className={`w-2 h-2 rounded-full ${getStatusDotClass(s.statusId)}`} />
-                                            {localizeStatusLabel(s.statusCode, s.statusName, tStatus)}
-                                        </div>
-                                    </DropdownItem>
-                                ))}
-                            </DropdownContent>
-                        </Dropdown>
-                    </div>
+                <div className="flex items-center justify-between gap-2 text-[13px]">
+                    <span className="text-[#1A3A52]/50">{t("createdOn")}</span>
+                    <span className="text-[#1A3A52]/75 font-medium">
+                        {reservation.createdAt ? dateUtils.formatLocal(reservation.createdAt, "dd/MM/yyyy HH:mm") : t("na")}
+                    </span>
                 </div>
             </div>
 
@@ -149,6 +161,6 @@ export const ReservationCard = ({ reservation, statuses, onAssignTable, onEdit, 
                 </div>
             </div>
 
-        </div>
+        </ALCard>
     );
 };
