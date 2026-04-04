@@ -116,7 +116,7 @@ export const TaxFormDialog: React.FC<TaxFormDialogProps> = ({
             footer={footer}
         >
             <div className="px-4 py-2">
-                <ALCard variant="soft" padding="md" elevation="none" className="space-y-4">
+                <ALCard  padding="md" elevation="none" className="space-y-4">
                     <ALInput
                         title={t('name')}
                         error={errors.taxName?.message}

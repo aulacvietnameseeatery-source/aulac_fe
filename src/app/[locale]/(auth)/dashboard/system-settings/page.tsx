@@ -6,25 +6,24 @@ import { ProtectedRoute } from "@/components/protected-route";
 import { Permissions } from "@/types/const";
 
 import { AddSettingHeader } from "@/features/staff/system-settings/components/AddSettingHeader";
+import { ALCard } from "@/components/ui/al-card";
 
 const SystemSettingsContent = () => {
     const st = useTranslations("settings");
     return (
-        <div className="flex flex-col h-full bg-gray-50 overflow-auto">
-            <header className="w-full space-y-6">
-                <div className="flex flex-col gap-2">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <h1 className="text-3xl font-bold text-gray-900 tracking-tight">
-                                {st("title")}
-                            </h1>
-                            <p className="text-sm text-gray-500">{st("description")}</p>
-                        </div>
-                        <AddSettingHeader />
+        <div className="flex h-full min-h-0 flex-col overflow-hidden bg-gray-50">
+            <ALCard className="p-2">
+                <div className="flex items-center justify-between">
+                    <div>
+                        <h1 className="text-xl font-bold text-gray-900 tracking-tight">
+                            {st("title")}
+                        </h1>
+                        <p className="text-sm text-gray-500">{st("description")}</p>
                     </div>
+                    <AddSettingHeader />
                 </div>
-            </header>
-            <main className="w-full pb-16 space-y-6 mt-6">
+            </ALCard>
+            <main className="mt-3 flex-1 min-h-0 w-full overflow-hidden">
                 <GeneralSettings />
             </main>
         </div>

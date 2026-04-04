@@ -224,6 +224,38 @@ For all staff list/management pages:
 - Pattern: `className="max-h-[44vh] overflow-y-auto lg:max-h-none lg:overflow-visible"`
 - Exception: modals and drawers may use scroll containment at all breakpoints.
 
+### Settings Page Layout Rule (System + Store)
+
+For `system-settings` and `store-settings` pages, use a strict fixed-header + inner-scroll layout to prevent header jump and nested scroll conflicts.
+
+Required structure:
+
+1. Page shell
+- Use: `flex h-full min-h-0 flex-col overflow-hidden`
+- Keep page-level header in an `ALCard` at the top (title + description/actions).
+- Main content wrapper should be `mt-3 flex-1 min-h-0 overflow-hidden`.
+
+2. Tab/Form container
+- Parent container must pass height down: `w-full h-full min-h-0`.
+- If using tabs, keep inactive content mounted with `forceMount` and hide via `data-[state=inactive]:hidden` to preserve unsaved input while switching tabs.
+
+3. Card composition
+- Each main card should be: `flex h-full min-h-0 flex-col overflow-hidden`.
+- Card header/actions live in a non-scroll block (top section).
+- Card body must be the only scroll area: `flex-1 min-h-0 overflow-y-auto overscroll-contain`.
+
+4. Do not scroll headers
+- Never put `overflow-y-auto` on page root, tab root, or card root when that would cause header/title/action rows to scroll.
+- Scroll should happen only in designated body regions.
+
+Reference targets in current codebase:
+- `src/app/[locale]/(auth)/dashboard/system-settings/page.tsx`
+- `src/app/[locale]/(auth)/dashboard/store-settings/page.tsx`
+- `src/features/staff/system-settings/components/GeneralSettings.tsx`
+- `src/features/staff/system-settings/components/StoreProfileForm.tsx`
+- `src/features/staff/system-settings/components/IntroductionSettingsForm.tsx`
+- `src/features/staff/system-settings/components/AboutUsSettingsForm.tsx`
+
 ### ALCombobox Sizing Rule
 
 - Use `inputSize` intentionally by context:

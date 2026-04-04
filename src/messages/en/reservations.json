@@ -314,6 +314,7 @@
         "existingCustomerName": "Returning customer name",
         "existingCustomerEmail": "Returning customer email",
         "bookingInfo": "Reservation details",
+        "timezoneNote": "All times shown in restaurant local time ({tz})",
         "partySize": "Party size",
         "reservationDate": "Reservation date",
         "selectDate": "Select date",

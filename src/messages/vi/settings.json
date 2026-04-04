@@ -397,6 +397,41 @@
       },
       "active": "Đang bật",
       "inactive": "Đang tắt"
+    },
+    "Tabs": {
+      "general": "Chung",
+      "notifications": "Thông báo",
+      "shift": "Ca làm",
+      "landingPage": "Trang chủ"
+    },
+    "Notification": {
+      "title": "Thông báo email",
+      "description": "Cấu hình sự kiện nào gửi email thông báo và người nhận.",
+      "recipientsLabel": "Người nhận",
+      "recipientsPlaceholder": "Mỗi dòng một email",
+      "recipientsHint": "Nhập mỗi email trên một dòng. Nếu để trống, email cửa hàng sẽ được dùng.",
+      "addRecipientInput": "Thêm ô nhập người nhận",
+      "removeRecipientInput": "Xóa ô nhập người nhận",
+      "invalidEmails": "Vui lòng sửa email không hợp lệ trước khi lưu.",
+      "invalidEmailList": "Email không hợp lệ: {list}",
+      "events": {
+        "reservation_created": {
+          "label": "Đặt bàn mới",
+          "description": "Gửi email khi có đặt bàn mới."
+        },
+        "reservation_cancelled": {
+          "label": "Huỷ đặt bàn",
+          "description": "Gửi email khi đặt bàn bị huỷ."
+        },
+        "contact_form": {
+          "label": "Biểu mẫu liên hệ",
+          "description": "Gửi email khi khách gửi biểu mẫu liên hệ."
+        },
+        "payment_success": {
+          "label": "Thanh toán thành công",
+          "description": "Gửi email khi thanh toán hoàn tất."
+        }
+      }
     }
   }
 }

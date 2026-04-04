@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { User, Phone, StickyNote, Mail, X, Minus, Plus, Clock, Calendar } from 'lucide-react';
 import { ALDatePicker } from "@/components/ui/al-date-picker";
 import { ALCombobox } from '@/components/ui/al-combobox';
@@ -9,6 +9,13 @@ import { ReservationResponseDto } from '../types/reservation.types';
 import { toast } from 'sonner';
 import { useTranslations } from 'next-intl';
 import { useStoreSettings } from '@/hooks/use-store-settings';
+import {
+    zurichToUtcISO,
+    getZurichTodayStr,
+    getZurichCurrentMinutes,
+    isZurichTimePast,
+    ZURICH_TZ,
+} from '../utils/zurich-time';
 
 interface PublicBookingFormProps {
     onSuccess?: (reservation: ReservationResponseDto) => void;
@@ -34,6 +41,7 @@ export default function PublicBookingForm({ onSuccess, onClose }: PublicBookingF
     const [checkingFit, setCheckingFit] = useState(false);
     const [canBookOnline, setCanBookOnline] = useState(true);
     const [fitMessage, setFitMessage] = useState<string>('');
+    const submitLockRef = useRef(false);
     const [timeError, setTimeError] = useState<string | null>(null);
     const { data: storeSettings } = useStoreSettings();
     const phoneNumber = storeSettings?.phone || "+84 28 3822 5264";
@@ -48,7 +56,7 @@ export default function PublicBookingForm({ onSuccess, onClose }: PublicBookingF
         return 'toast.unexpected';
     };
 
-    const timeOptions = useMemo(() => {
+    const allSlots = useMemo(() => {
         const slots: string[] = [];
         // Lunch: 11:30 - 14:30
         for (let h = 11; h <= 14; h++) {
@@ -66,11 +74,38 @@ export default function PublicBookingForm({ onSuccess, onClose }: PublicBookingF
                 slots.push(`${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`);
             }
         }
-        return slots.map(slot => ({
-            value: slot,
-            label: slot
-        }));
+        return slots;
     }, []);
+
+    // Refresh available slots every 60s to disable past slots in Zurich TZ
+    const [slotTick, setSlotTick] = useState(0);
+    useEffect(() => {
+        const interval = setInterval(() => setSlotTick(t => t + 1), 60_000);
+        return () => clearInterval(interval);
+    }, []);
+
+    const timeOptions = useMemo(() => {
+        const zurichToday = getZurichTodayStr();
+        const isToday = date === zurichToday;
+
+        if (!isToday || !date) {
+            return allSlots.map(s => ({ value: s, label: s, disabled: false }));
+        }
+
+        const currentMinutes = getZurichCurrentMinutes();
+        const BUFFER_MINUTES = 30; // cannot book less than 30 min ahead
+        return allSlots.map(slot => {
+            const [h, m] = slot.split(':').map(Number);
+            const slotMinutes = h * 60 + m;
+            const disabled = slotMinutes <= currentMinutes + BUFFER_MINUTES;
+            return {
+                value: slot,
+                label: slot,
+                disabled,
+            };
+        });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [date, allSlots, slotTick]);
 
 
     const lookupExistingCustomer = async (targetPhone: string) => {
@@ -107,7 +142,7 @@ export default function PublicBookingForm({ onSuccess, onClose }: PublicBookingF
         }
 
         const runFitCheck = async () => {
-            const reservedTime = new Date(`${date}T${time}`).toISOString();
+            const reservedTime = zurichToUtcISO(date, time);
             setCheckingFit(true);
             try {
                 const result = await reservationApi.fitCheck({
@@ -134,17 +169,18 @@ export default function PublicBookingForm({ onSuccess, onClose }: PublicBookingF
             setTimeError(null);
             return;
         }
-        const now = new Date();
-        const selected = new Date(`${date}T${time}`);
-        if (selected.getTime() < now.getTime()) {
+        if (isZurichTimePast(date, time, 15)) {
             setTimeError(t('validation.timePast'));
         } else {
             setTimeError(null);
         }
-    }, [date, time, t]);
+    }, [date, time, t, slotTick]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        // Prevent double submit via ref lock
+        if (submitLockRef.current) return;
 
         if (!mode) {
             toast.error(t('validation.selectCustomerType'));
@@ -186,9 +222,16 @@ export default function PublicBookingForm({ onSuccess, onClose }: PublicBookingF
             return;
         }
 
+        // Final Zurich time-past guard before submit
+        if (isZurichTimePast(date, time, 15)) {
+            toast.error(t('validation.timePast'));
+            return;
+        }
+
+        submitLockRef.current = true;
         setLoading(true);
         try {
-            const reservedTime = new Date(`${date}T${time}`).toISOString();
+            const reservedTime = zurichToUtcISO(date, time);
             const request = {
                 customerId: customerId,
                 customerName: name,
@@ -221,6 +264,7 @@ export default function PublicBookingForm({ onSuccess, onClose }: PublicBookingF
             toast.error(errorMsg);
         } finally {
             setLoading(false);
+            submitLockRef.current = false;
         }
     };
 
@@ -230,6 +274,15 @@ export default function PublicBookingForm({ onSuccess, onClose }: PublicBookingF
 
     return (
         <div className="relative max-w-2xl mx-auto bg-white rounded-3xl shadow-xl border border-stone-100 overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-500">
+            {/* Full-form overlay while submitting — blocks all interaction */}
+            {loading && (
+                <div className="absolute inset-0 z-50 flex items-center justify-center bg-white/70 backdrop-blur-[2px] rounded-3xl">
+                    <div className="flex flex-col items-center gap-3">
+                        <div className="w-8 h-8 border-3 border-amber-200 border-t-amber-500 rounded-full animate-spin" />
+                        <span className="text-sm font-semibold text-stone-600">{t('processing')}</span>
+                    </div>
+                </div>
+            )}
             <button
                 type="button"
                 onClick={() => onClose?.()}
@@ -375,6 +428,9 @@ export default function PublicBookingForm({ onSuccess, onClose }: PublicBookingF
                                     <span className="w-1 h-3 bg-amber-500 rounded-full"></span>
                                     {t('bookingInfo')}
                                 </h2>
+                                <p className="text-[11px] text-stone-400 -mt-2">
+                                    🕐 {t('timezoneNote', { tz: 'Europe/Zurich' })}
+                                </p>
 
                                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
                                     <div className="col-span-2 sm:col-span-1 lg:col-span-2">
@@ -385,7 +441,7 @@ export default function PublicBookingForm({ onSuccess, onClose }: PublicBookingF
                                             <ALDatePicker
                                                 value={date}
                                                 onChange={setDate}
-                                                minDate={new Date().toISOString().split('T')[0]}
+                                                minDate={getZurichTodayStr()}
                                                 placeholder={t('selectDate')}
                                                 displayFormat="dd/MM/yyyy"
                                                 inputSize="sm"

@@ -174,12 +174,12 @@ export const StoreProfileForm = () => {
     }
 
     return (
-        <form onSubmit={handleSubmit(onSubmit, onInvalid)} className="flex flex-col gap-6 w-full pb-12 relative">
+        <form onSubmit={handleSubmit(onSubmit, onInvalid)} className="flex h-full min-h-0 w-full flex-col overflow-hidden relative">
             {/* --- HEADER ACTIONS --- */}
-            <div className="py-4 -mx-4 px-4">
-                <ALCard variant="glass" elevation="sm" padding="sm" radius="xl" className="flex items-center justify-between gap-4 border-amber-200/30 shadow-md">
+            <div className="pb-4">
+                <ALCard elevation="sm" padding="sm" radius="xl" className="flex items-center justify-between gap-4 ">
                     <div className="flex items-center gap-2 sm:gap-4">
-                        <div className="flex bg-gray-100/90 p-1 rounded-xl border border-gray-200 shadow-inner">
+                        <div className="flex bg-gray-100/90 p-1 rounded-xl border ">
                             {LOCALES.map((loc) => (
                                 <Button
                                     key={loc}
@@ -189,7 +189,7 @@ export const StoreProfileForm = () => {
                                     className={cn(
                                         "px-3 sm:px-5 py-1.5 h-8 text-[10px] sm:text-xs font-bold uppercase transition-all duration-300 rounded-lg",
                                         activeLocale === loc
-                                            ? "bg-white shadow-md text-[#1A3A52] hover:bg-white/50"
+                                            ? "bg-[#1A3A52] shadow-md text-white hover:bg-[#1A3A52]/50"
                                             : "text-gray-500 hover:text-[#1A3A52] hover:bg-white/40"
                                     )}
                                     onClick={() => setActiveLocale(loc)}
@@ -203,7 +203,7 @@ export const StoreProfileForm = () => {
                     <div className="flex items-center gap-3">
                         <Button
                             type="button"
-                            variant="outline"
+                            variant="translate"
                             size="sm"
                             className="h-9 gap-2 text-purple-600 border-purple-200 hover:bg-purple-50 hover:border-purple-300 font-semibold px-4 transition-all"
                             onClick={handleAutoTranslate}
@@ -225,11 +225,12 @@ export const StoreProfileForm = () => {
                 </ALCard>
             </div>
 
-            <div key={activeLocale} className="grid grid-cols-1 lg:grid-cols-2 gap-8 pb-6">
+            <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain pr-1 pb-6 custom-scrollbar">
+                <div key={activeLocale} className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 {/* --- LEFT COLUMN --- */}
                 <div className="space-y-8">
                     {/* --- IDENTITY SECTION --- */}
-                    <ALCard variant="soft" padding="none" radius="2xl" elevation="sm" className="border-amber-200/50 shadow-sm overflow-hidden" animation="slide-up">
+                    <ALCard padding="none" radius="2xl" elevation="sm" className=" overflow-hidden" animation="slide-up">
                         <div className="p-6 md:p-8 ">
 
                             <div className="space-y-6">
@@ -252,7 +253,7 @@ export const StoreProfileForm = () => {
                     </ALCard>
 
                     {/* --- SOCIAL FOOTPRINT SECTION --- */}
-                    <ALCard variant="soft" padding="none" radius="2xl" elevation="sm" className="border-amber-200/50 shadow-sm overflow-hidden" animation="fade">
+                    <ALCard  padding="none" radius="2xl" elevation="sm" className=" overflow-hidden" animation="fade">
                         <div className="p-6 md:p-8 space-y-6">
                             <ALInput
                                 title={t("Common.facebook") || "Facebook Profile"}
@@ -284,7 +285,7 @@ export const StoreProfileForm = () => {
 
                 {/* --- RIGHT COLUMN --- */}
                 <div className="space-y-8 h-full">
-                    <ALCard variant="soft" padding="none" radius="2xl" elevation="sm" className="border-amber-200/50 shadow-sm flex flex-col h-full" animation="slide-up">
+                    <ALCard padding="none" radius="2xl" elevation="sm" className=" flex flex-col h-full" animation="slide-up">
                         <div className="p-6 md:p-8 space-y-8 flex-1">
                             <ALInput
                                 title={t("StoreProfile.street")}
@@ -333,6 +334,7 @@ export const StoreProfileForm = () => {
                             </div>
                         </div>
                     </ALCard>
+                </div>
                 </div>
             </div>
 

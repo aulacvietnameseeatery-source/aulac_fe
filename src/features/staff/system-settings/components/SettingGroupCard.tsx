@@ -2,14 +2,13 @@
 
 import React, { useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
-import { Save, Loader2, ChevronDown, ChevronUp, Settings2 } from 'lucide-react';
+import { Save, Loader2 } from 'lucide-react';
 import { SystemSettingDetailDto, BulkUpdateSettingItemDto } from '../types/system-setting.types';
 import { SettingField } from './SettingField';
 import { Button } from '@/components/ui/button';
 import { PermissionGuard } from '@/components/permission-guard';
 import { Permissions } from '@/types/const';
 import { ALCard } from '@/components/ui/al-card';
-import { cn } from '@/lib/utils';
 
 interface SettingGroupCardProps {
     groupName: string;
@@ -26,7 +25,6 @@ export const SettingGroupCard: React.FC<SettingGroupCardProps> = ({
 }) => {
     const t = useTranslations('settings');
     const [values, setValues] = useState<Record<string, string>>({});
-    const [collapsed, setCollapsed] = useState(false);
 
     useEffect(() => {
         const initial: Record<string, string> = {};
@@ -55,11 +53,8 @@ export const SettingGroupCard: React.FC<SettingGroupCardProps> = ({
     const editableCount = settings.filter((s) => !s.isSensitive).length;
 
     return (
-        <ALCard variant="default" elevation="sm" radius="2xl" padding="none" className="border border-amber-200/50 shadow-sm transition-all hover:shadow-md flex flex-col h-full bg-white">
-            <div
-                className="cursor-pointer select-none p-6"
-                onClick={() => setCollapsed((v) => !v)}
-            >
+        <ALCard variant="default" elevation="sm" radius="2xl" padding="none" className=" shadow-sm transition-all hover:shadow-md flex flex-col h-full bg-white">
+            <div className="p-6">
                 <div className="flex items-center justify-between gap-4">
                     <div className="flex items-center gap-4">
                         {/* Removed icon for group header */}
@@ -75,56 +70,39 @@ export const SettingGroupCard: React.FC<SettingGroupCardProps> = ({
                             {/*</p>*/}
                         </div>
                     </div>
-                    <div className="p-2 rounded-full hover:bg-gray-100 transition-colors shrink-0">
-                        {collapsed ? (
-                            <ChevronDown className="h-5 w-5 text-gray-400" />
-                        ) : (
-                            <ChevronUp className="h-5 w-5 text-gray-400" />
-                        )}
-                    </div>
+                    <PermissionGuard permission={Permissions.ManageSystemSettings}>
+                        <Button
+                            onClick={handleSave}
+                            disabled={isSaving || editableCount === 0}
+                            className="h-10 px-6 bg-[#1A3A52] hover:bg-[#1A3A52]/90 text-white shadow-md gap-2 font-[Inter]"
+                        >
+                            {isSaving ? (
+                                <>
+                                    <Loader2 className="h-4 w-4 animate-spin" />
+                                    {t('saving')}
+                                </>
+                            ) : (
+                                <>
+                                    <Save className="h-4 w-4" />
+                                    {t('save')}
+                                </>
+                            )}
+                        </Button>
+                    </PermissionGuard>
                 </div>
             </div>
 
-            <div className={cn(
-                "overflow-hidden transition-all duration-300 ease-in-out",
-                collapsed ? "max-h-0 opacity-0" : "max-h-[2000px] opacity-100"
-            )}>
-                <div className="flex-1 flex flex-col">
-                    <div className="px-6 pb-6 pt-2">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
-                            {settings.map((setting) => (
-                                <SettingField
-                                    key={setting.settingKey}
-                                    setting={setting}
-                                    value={values[setting.settingKey] ?? ''}
-                                    onChange={handleChange}
-                                    disabled={isSaving}
-                                />
-                            ))}
-                        </div>
-                    </div>
-
-                    <div className="px-6 py-4 bg-gray-50/80 border-t border-amber-200/20 flex justify-end mt-auto rounded-b-2xl">
-                        <PermissionGuard permission={Permissions.ManageSystemSettings}>
-                            <Button
-                                onClick={handleSave}
-                                disabled={isSaving || editableCount === 0}
-                                className="h-10 px-6 bg-[#1A3A52] hover:bg-[#1A3A52]/90 text-white shadow-md gap-2 font-[Inter]"
-                            >
-                                {isSaving ? (
-                                    <>
-                                        <Loader2 className="h-4 w-4 animate-spin" />
-                                        {t('saving')}
-                                    </>
-                                ) : (
-                                    <>
-                                        <Save className="h-4 w-4" />
-                                        {t('save')}
-                                    </>
-                                )}
-                            </Button>
-                        </PermissionGuard>
-                    </div>
+            <div className="flex-1 min-h-0 overflow-y-auto px-6 pb-6 pt-2 space-y-6 overscroll-contain">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+                    {settings.map((setting) => (
+                        <SettingField
+                            key={setting.settingKey}
+                            setting={setting}
+                            value={values[setting.settingKey] ?? ''}
+                            onChange={handleChange}
+                            disabled={isSaving}
+                        />
+                    ))}
                 </div>
             </div>
         </ALCard>

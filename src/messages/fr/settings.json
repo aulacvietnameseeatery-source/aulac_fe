@@ -420,6 +420,41 @@
       },
       "active": "Actif",
       "inactive": "Inactif"
+    },
+    "Tabs": {
+      "general": "Général",
+      "notifications": "Notifications",
+      "shift": "Quarts",
+      "landingPage": "Page d'accueil"
+    },
+    "Notification": {
+      "title": "Notifications par e-mail",
+      "description": "Configurez les événements qui déclenchent des e-mails et les destinataires.",
+      "recipientsLabel": "Destinataires",
+      "recipientsPlaceholder": "Un e-mail par ligne",
+      "recipientsHint": "Saisissez un e-mail par ligne. Si vide, l'e-mail du restaurant sera utilisé.",
+      "addRecipientInput": "Ajouter un champ destinataire",
+      "removeRecipientInput": "Supprimer le champ destinataire",
+      "invalidEmails": "Veuillez corriger les adresses e-mail invalides avant d'enregistrer.",
+      "invalidEmailList": "E-mails invalides : {list}",
+      "events": {
+        "reservation_created": {
+          "label": "Nouvelle réservation",
+          "description": "Envoyer un e-mail lors d'une nouvelle réservation."
+        },
+        "reservation_cancelled": {
+          "label": "Réservation annulée",
+          "description": "Envoyer un e-mail lorsqu'une réservation est annulée."
+        },
+        "contact_form": {
+          "label": "Formulaire de contact",
+          "description": "Envoyer un e-mail lors de la soumission du formulaire de contact."
+        },
+        "payment_success": {
+          "label": "Paiement réussi",
+          "description": "Envoyer un e-mail lorsqu'un paiement est effectué."
+        }
+      }
     }
   }
 }
