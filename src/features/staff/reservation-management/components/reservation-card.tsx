@@ -61,19 +61,20 @@ export const ReservationCard = ({ reservation, statuses, onAssignTable, onEdit, 
             <div className="flex items-start justify-between gap-3 mb-4">
                 <div className="flex items-start gap-3 min-w-0 flex-1">
                     <div className="bg-[#1A3A52] rounded-lg p-2.5 text-center shrink-0 min-w-17.5">
-                        <p className="text-white font-semibold text-[14px] m-0 leading-tight truncate">
-                            {reservation.tableName || t("na")}
-                            <span className="block text-[10px] font-normal text-white/75 mt-1 uppercase tracking-wide">{t("table")}</span>
+                        <p className="text-white font-semibold text-[15px] m-0 leading-tight">
+                            {dateUtils.formatLocal(reservation.reservedTime, "MMM dd")}
+                            <span className="block text-xs font-normal text-white/75 mt-1">{dateUtils.formatLocal(reservation.reservedTime, "yyyy")}</span>
                         </p>
                     </div>
                     <div className="flex-1 min-w-0">
                     <h6 className="mb-2 font-semibold text-[#1A3A52] text-lg leading-none truncate">{reservation.customerName}</h6>
+                    <div className="mb-2 inline-flex items-center gap-1.5 rounded-md bg-[#1A3A52] px-2.5 py-1 text-[11px] font-semibold text-white shadow-sm">
+                        <Armchair className="w-3.5 h-3.5 text-white/85" />
+                        <span>{t("table")}: {reservation.tableName || t("na")}</span>
+                    </div>
                     <div className="flex items-center gap-2 text-[12px] text-[#1A3A52]/65 font-medium">
                         <Users className="w-3.5 h-3.5 text-[#1A3A52]/50" />
                         <span>{t("guests")}: {reservation.pax}</span>
-                        <span className="text-[#D5BA98]">•</span>
-                        <Armchair className="w-3.5 h-3.5 text-[#1A3A52]/50" />
-                        <span>{t("table")}: {reservation.tableName || t("na")}</span>
                     </div>
                 </div>
                 </div>
@@ -120,7 +121,7 @@ export const ReservationCard = ({ reservation, statuses, onAssignTable, onEdit, 
                 <div className="flex items-center justify-between gap-2 text-[13px]">
                     <span className="text-[#1A3A52]/50">{t("createdOn")}</span>
                     <span className="text-[#1A3A52]/75 font-medium">
-                        {reservation.createdAt ? dateUtils.formatLocal(reservation.createdAt, "dd/MM/yyyy HH:mm") : t("na")}
+                        {reservation.createdAt ? dateUtils.formatLocal(reservation.createdAt, "dd MMM, HH:mm") : t("na")}
                     </span>
                 </div>
             </div>
