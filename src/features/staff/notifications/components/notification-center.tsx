@@ -11,6 +11,7 @@ import { NotificationItem } from "./notification-item";
 import { NotificationPreferences } from "./notification-preferences";
 import { TYPE_CONFIG, DEFAULT_TYPE_CONFIG } from "../constants/notification.constants";
 import type { NotificationQueryParams } from "../types/notification.types";
+import { parseNotificationCreatedAtMs } from "../utils/notification-time";
 import { ReservationDetailModal } from "@/features/staff/reservation-management/components/reservation-detail-modal";
 
 interface NotificationCenterProps {
@@ -38,7 +39,7 @@ function categoryFromTab(tab: CategoryTabKey): string {
   return tab.slice(CATEGORY_TAB_PREFIX.length);
 }
 
-function parseNotificationCreatedAtMs(createdAt: string): number {
+function parseNotificationCreatedAtMs_DEPRECATED(createdAt: string): number {
   if (!createdAt) return 0;
 
   const parsed = new Date(createdAt).getTime();
