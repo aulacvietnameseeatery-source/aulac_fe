@@ -16,7 +16,6 @@ import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover
 import { FilterPopup } from '@/components/ui/table/filter-popup';
 import '@/styles/components/table.css';
 import { useTranslations } from 'next-intl';
-import { Check, X } from 'lucide-react';
 
 
 
@@ -180,8 +179,13 @@ export function BaseTable<T>({
     });
 
     // ========== REACTIVE STATE ==========
+    const lastDataLengthRef = useRef(0);
+    if (data.length > 0) {
+        lastDataLengthRef.current = data.length;
+    }
     const [searchQuery, setSearchQuery] = useState('');
     const [pageSize, setPageSize] = useState(defaultRowsPerPage ?? 10);
+    const skeletonRowCount = lastDataLengthRef.current || pageSize;
     const [currentPage, setCurrentPage] = useState(1);
     const [sortState, setSortState] = useState<SortStateItem[]>([]);
     const [pinnedColumns, setPinnedColumns] = useState<string[]>([]);
@@ -782,7 +786,7 @@ export function BaseTable<T>({
                                         <tbody className={`ms-tbody data ${loading ? 'loading' : ''}`}>
                                             {loading ? (
                                                 // Loading Skeleton
-                                                Array.from({ length: pageSize }).map((_, n) => (
+                                                Array.from({ length: skeletonRowCount }).map((_, n) => (
                                                     <tr key={`shimmer-${n}`} className="ms-tr">
                                                         <td style={{ width: '40px', minWidth: '40px', borderRight: '1px dotted rgb(193, 196, 204)' }}>
                                                             <div className="shimmer"></div>

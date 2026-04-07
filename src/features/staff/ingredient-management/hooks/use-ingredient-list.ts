@@ -1,9 +1,11 @@
 import { useState, useCallback, useEffect } from "react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { IngredientDto, IngredientFilterParams } from "../types/ingredient-types";
 import { ingredientService } from "../services/ingredient-service";
 
 export const useIngredientList = () => {
+    const t = useTranslations("Ingredient.List.notifications");
     const [ingredients, setIngredients] = useState<IngredientDto[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [totalCount, setTotalCount] = useState(0);
@@ -36,7 +38,7 @@ export const useIngredientList = () => {
 
         } catch (error: any) {
             console.error("Failed to fetch ingredients:", error);
-            toast.error("Failed to load ingredients data.");
+            toast.error(t("loadError"));
         } finally {
             setIsLoading(false);
         }

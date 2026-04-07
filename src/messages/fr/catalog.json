@@ -219,6 +219,9 @@
         "cookTime": "Temps de cuisson",
         "chefRecommended": "Recommandé par le chef",
         "notChefRecommended": "Non recommandé par le chef"
+      },
+      "notifications": {
+        "loadError": "Impossible de charger les détails du plat"
       }
     }
   },
@@ -329,7 +332,12 @@
         "exportSuccess": "Exporté avec succès !",
         "invalidExcel": "Aucun ingrédient valide trouvé dans le fichier Excel.",
         "importSuccess": "{success}/{total} ingrédients importés avec succès.",
-        "readExcelError": "Échec de la lecture du fichier Excel. Veuillez vérifier le format."
+        "readExcelError": "Échec de la lecture du fichier Excel. Veuillez vérifier le format.",
+        "adjustStockInvalidQty": "Veuillez entrer une quantité valide supérieure à 0.",
+        "adjustStockExceedError": "Impossible d'exporter plus que le stock actuel ({quantity} {unit}).",
+        "adjustStockSuccess": "Stock ajusté avec succès.",
+        "adjustStockError": "Échec de l'ajustement du stock.",
+        "loadError": "Échec du chargement des données des ingrédients."
       }
     }
   },

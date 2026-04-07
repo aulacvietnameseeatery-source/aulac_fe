@@ -120,27 +120,29 @@ export function useShiftTemplateDetailQuery(id: number, enabled = true) {
 
 export function useCreateShiftTemplateMutation() {
   const qc = useQueryClient();
+  const t = useTranslations("shift.messages");
   return useMutation({
     mutationFn: (body: CreateShiftTemplateRequest) =>
       shiftManagementService.createTemplate(body),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: SHIFT_QUERY_KEYS.templates() });
-      toast.success("Shift template created");
+      toast.success(t("createTemplateSuccess"));
     },
-    onError: () => toast.error("Failed to create shift template"),
+    onError: () => toast.error(t("createTemplateError")),
   });
 }
 
 export function useUpdateShiftTemplateMutation() {
   const qc = useQueryClient();
+  const t = useTranslations("shift.messages");
   return useMutation({
     mutationFn: ({ id, body }: { id: number; body: UpdateShiftTemplateRequest }) =>
       shiftManagementService.updateTemplate(id, body),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: SHIFT_QUERY_KEYS.templates() });
-      toast.success("Shift template updated");
+      toast.success(t("updateTemplateSuccess"));
     },
-    onError: () => toast.error("Failed to update shift template"),
+    onError: () => toast.error(t("updateTemplateError")),
   });
 }
 
@@ -211,39 +213,36 @@ export function useShiftLiveBoardQuery(params: GetAssignmentsParams = {}) {
 
 export function useCreateAssignmentMutation() {
   const qc = useQueryClient();
+  const t = useTranslations("shift.messages");
   return useMutation({
     mutationFn: (body: CreateShiftAssignmentRequest) =>
       shiftManagementService.createAssignment(body),
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: SHIFT_QUERY_KEYS.assignments() });
-      toast.success("Staff assigned to shift");
     },
-    onError: () => toast.error("Failed to assign staff"),
+    onError: () => toast.error(t("assignStaffError")),
   });
 }
 
 export function useUpdateAssignmentMutation() {
   const qc = useQueryClient();
+  const t = useTranslations("shift.messages");
   return useMutation({
     mutationFn: ({ id, body }: { id: number; body: UpdateShiftAssignmentRequest }) =>
       shiftManagementService.updateAssignment(id, body),
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: SHIFT_QUERY_KEYS.assignments() });
-      toast.success("Shift assignment updated");
     },
-    onError: () => toast.error("Failed to update assignment"),
+    onError: () => toast.error(t("updateAssignmentError")),
   });
 }
 
 export function useCancelAssignmentMutation() {
   const qc = useQueryClient();
+  const t = useTranslations("shift.messages");
   return useMutation({
     mutationFn: (id: number) => shiftManagementService.cancelAssignment(id),
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: SHIFT_QUERY_KEYS.assignments() });
-      toast.success("Assignment cancelled");
     },
-    onError: () => toast.error("Failed to cancel assignment"),
+    onError: () => toast.error(t("cancelAssignmentError")),
   });
 }
 
@@ -259,43 +258,46 @@ export function useStaffForAssignmentQuery(enabled = true) {
 
 export function useCheckInMutation() {
   const qc = useQueryClient();
+  const t = useTranslations("shift.messages");
   return useMutation({
     mutationFn: (assignmentId: number) => shiftManagementService.checkIn(assignmentId),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: SHIFT_QUERY_KEYS.assignments() });
       qc.invalidateQueries({ queryKey: SHIFT_QUERY_KEYS.myShifts({}) });
       qc.invalidateQueries({ queryKey: SHIFT_QUERY_KEYS.liveBoard({}) });
-      toast.success("Checked in successfully");
+      toast.success(t("checkInSuccess"));
     },
-    onError: () => toast.error("Failed to check in"),
+    onError: () => toast.error(t("checkInError")),
   });
 }
 
 export function useCheckOutMutation() {
   const qc = useQueryClient();
+  const t = useTranslations("shift.messages");
   return useMutation({
     mutationFn: (assignmentId: number) => shiftManagementService.checkOut(assignmentId),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: SHIFT_QUERY_KEYS.assignments() });
       qc.invalidateQueries({ queryKey: SHIFT_QUERY_KEYS.myShifts({}) });
       qc.invalidateQueries({ queryKey: SHIFT_QUERY_KEYS.liveBoard({}) });
-      toast.success("Checked out successfully");
+      toast.success(t("checkOutSuccess"));
     },
-    onError: () => toast.error("Failed to check out"),
+    onError: () => toast.error(t("checkOutError")),
   });
 }
 
 export function useAdjustAttendanceMutation() {
   const qc = useQueryClient();
+  const t = useTranslations("shift.messages");
   return useMutation({
     mutationFn: ({ attendanceId, body }: { attendanceId: number; body: AdjustAttendanceRequest }) =>
       shiftManagementService.adjustAttendance(attendanceId, body),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: SHIFT_QUERY_KEYS.assignments() });
       qc.invalidateQueries({ queryKey: SHIFT_QUERY_KEYS.reports() });
-      toast.success("Attendance adjusted");
+      toast.success(t("adjustAttendanceSuccess"));
     },
-    onError: () => toast.error("Failed to adjust attendance"),
+    onError: () => toast.error(t("adjustAttendanceError")),
   });
 }
 
@@ -404,69 +406,74 @@ export function useStaffListQuery() {
 
 export function useBulkCreateAssignmentsMutation() {
   const qc = useQueryClient();
+  const t = useTranslations("shift.messages");
   return useMutation({
     mutationFn: (body: BulkCreateAssignmentRequest) =>
       shiftManagementService.bulkCreateAssignments(body),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: SHIFT_QUERY_KEYS.assignments() });
-      toast.success("Assignments created");
+      toast.success(t("bulkCreateSuccess"));
     },
-    onError: () => toast.error("Failed to create assignments"),
+    onError: () => toast.error(t("bulkCreateError")),
   });
 }
 
 export function usePublishAssignmentsMutation() {
   const qc = useQueryClient();
+  const t = useTranslations("shift.messages");
   return useMutation({
     mutationFn: (body: PublishAssignmentsRequest) =>
       shiftManagementService.publishAssignments(body),
     onSuccess: (_data, _vars) => {
       qc.invalidateQueries({ queryKey: SHIFT_QUERY_KEYS.assignments() });
       qc.invalidateQueries({ queryKey: SHIFT_QUERY_KEYS.all });
-      toast.success("Shifts published — staff notified");
+      toast.success(t("publishSuccess"));
     },
-    onError: () => toast.error("Failed to publish shifts"),
+    onError: () => toast.error(t("publishError")),
   });
 }
 
 export function useCopyWeekMutation() {
   const qc = useQueryClient();
+  const t = useTranslations("shift.copyWeekDialog");
   return useMutation({
     mutationFn: (body: CopyWeekRequest) =>
       shiftManagementService.copyWeek(body),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: SHIFT_QUERY_KEYS.assignments() });
-      toast.success("Week copied successfully");
+      toast.success(t("success"));
     },
-    onError: () => toast.error("Failed to copy week"),
+    onError: () => toast.error(t("error")),
   });
 }
 
 export function useReassignAssignmentMutation() {
   const qc = useQueryClient();
+  const t = useTranslations("shift.messages");
   return useMutation({
     mutationFn: ({ id, body }: { id: number; body: ReassignRequest }) =>
       shiftManagementService.reassignAssignment(id, body),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: SHIFT_QUERY_KEYS.assignments() });
       qc.invalidateQueries({ queryKey: SHIFT_QUERY_KEYS.all });
-      toast.success("Assignment reassigned");
+      toast.success(t("reassignSuccess"));
     },
-    onError: () => toast.error("Failed to reassign"),
+    onError: () => toast.error(t("reassignError")),
   });
 }
 
 export function useConfirmAssignmentMutation() {
   const qc = useQueryClient();
+  const t = useTranslations("shift.messages");
   return useMutation({
     mutationFn: (id: number) =>
       shiftManagementService.confirmAssignment(id),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: SHIFT_QUERY_KEYS.assignments() });
       qc.invalidateQueries({ queryKey: SHIFT_QUERY_KEYS.myShifts({}) });
-      toast.success("Shift confirmed");
+      toast.success(t("confirmSuccess"));
     },
-    onError: () => toast.error("Failed to confirm shift"),
+    onError: () => toast.error(t("confirmError")),
   });
 }
 

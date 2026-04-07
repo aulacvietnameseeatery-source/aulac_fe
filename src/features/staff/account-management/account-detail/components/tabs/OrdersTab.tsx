@@ -5,6 +5,7 @@ import { ShoppingBag, Loader2, DollarSign, CreditCard } from "lucide-react";
 import { useTranslations, useFormatter } from "next-intl";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { ALDatePicker } from "@/components/ui/al-date-picker";
 import { useAccountOrders } from "../../hooks/useAccountActivity";
 
 interface OrdersTabProps {
@@ -22,8 +23,18 @@ export const OrdersTab = ({ accountId }: OrdersTabProps) => {
   const t = useTranslations("Account.Detail");
   const format = useFormatter();
   const [page, setPage] = useState(1);
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
 
-  const query = useMemo(() => ({ pageIndex: page, pageSize: 10 }), [page]);
+  const query = useMemo(
+    () => ({
+      pageIndex: page,
+      pageSize: 10,
+      fromDate: fromDate || undefined,
+      toDate: toDate || undefined,
+    }),
+    [page, fromDate, toDate]
+  );
   const { data, isLoading } = useAccountOrders(accountId, query);
 
   const orders = useMemo(() => data?.pageData ?? [], [data]);
@@ -37,29 +48,57 @@ export const OrdersTab = ({ accountId }: OrdersTabProps) => {
     return format.number(amount, { style: "currency", currency: "VND" });
   };
 
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center py-12">
-        <Loader2 size={24} className="animate-spin text-blue-500" />
-      </div>
-    );
-  }
-
   return (
-    <div className="space-y-3 sm:space-y-4">
-      <h4 className="text-[11px] sm:text-xs md:text-sm font-semibold text-gray-500 uppercase tracking-wider">
-        {t("tabs.orders")}
-        {data && <span className="ml-2 text-xs font-normal text-gray-400">({data.totalCount})</span>}
-      </h4>
+    <div className="flex flex-1 min-h-0 flex-col gap-3 sm:gap-4">
+      <div className="shrink-0">
+        <h4 className="text-[11px] sm:text-xs md:text-sm font-semibold text-gray-500 uppercase tracking-wider">
+          {t("tabs.orders")}
+          {data && <span className="ml-2 text-xs font-normal text-gray-400">({data.totalCount})</span>}
+        </h4>
+      </div>
 
-      {orders.length === 0 ? (
-        <div className="p-8 bg-gray-50 rounded-lg border border-dashed border-gray-200 text-center">
-          <ShoppingBag size={32} className="mx-auto text-gray-300 mb-3" />
-          <p className="text-sm text-gray-400 font-medium">{t("activity.noOrders")}</p>
+      <div className="grid grid-cols-1 gap-2 sm:grid-cols-[1fr_1fr_auto] shrink-0">
+        <ALDatePicker
+          value={fromDate}
+          onChange={(v) => { setFromDate(v); setPage(1); }}
+          placeholder={t("activity.fromDate")}
+          clearable
+          displayFormat="dd/MM/yyyy"
+        />
+        <ALDatePicker
+          value={toDate}
+          onChange={(v) => { setToDate(v); setPage(1); }}
+          placeholder={t("activity.toDate")}
+          clearable
+          displayFormat="dd/MM/yyyy"
+        />
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => {
+            setFromDate("");
+            setToDate("");
+            setPage(1);
+          }}
+        >
+          {t("activity.clearFilters")}
+        </Button>
+      </div>
+
+      {isLoading ? (
+        <div className="min-h-0 flex-1 flex items-center justify-center">
+          <Loader2 size={24} className="animate-spin text-blue-500" />
+        </div>
+      ) : orders.length === 0 ? (
+        <div className="min-h-0 flex-1 flex items-center justify-center p-8 bg-gray-50 rounded-lg border border-dashed border-gray-200 text-center">
+          <div>
+            <ShoppingBag size={32} className="mx-auto text-gray-300 mb-3" />
+            <p className="text-sm text-gray-400 font-medium">{t("activity.noOrders")}</p>
+          </div>
         </div>
       ) : (
-        <>
-          <div className="space-y-2 max-h-[44vh] overflow-y-auto pr-1 lg:max-h-none lg:overflow-visible">
+        <div className="min-h-0 flex-1 overflow-y-auto pr-1">
+          <div className="space-y-2">
             {orders.map((order) => (
               <div
                 key={order.orderId}
@@ -98,22 +137,24 @@ export const OrdersTab = ({ accountId }: OrdersTabProps) => {
               </div>
             ))}
           </div>
+        </div>
+      )}
 
-          {/* Pagination */}
-          {data && data.totalPage > 1 && (
-            <div className="flex items-center justify-center flex-wrap sm:flex-nowrap gap-2 pt-2">
-              <Button variant="outline" size="sm" className="flex-1 sm:flex-none" disabled={page <= 1} onClick={() => setPage((p) => p - 1)}>
-                {t("activity.prev")}
-              </Button>
-              <span className="text-xs text-gray-500">
-                {page} / {data.totalPage}
-              </span>
-              <Button variant="outline" size="sm" className="flex-1 sm:flex-none" disabled={page >= data.totalPage} onClick={() => setPage((p) => p + 1)}>
-                {t("activity.next")}
-              </Button>
-            </div>
-          )}
-        </>
+      {/* Pagination — always outside scroll area */}
+      {!isLoading && data && data.totalPage > 1 && (
+        <div className="shrink-0 border-t border-gray-100 pt-2 bg-white">
+          <div className="flex items-center justify-center flex-wrap sm:flex-nowrap gap-2">
+            <Button variant="outline" size="sm" className="flex-1 sm:flex-none" disabled={page <= 1} onClick={() => setPage((p) => p - 1)}>
+              {t("activity.prev")}
+            </Button>
+            <span className="text-xs text-gray-500">
+              {page} / {data.totalPage}
+            </span>
+            <Button variant="outline" size="sm" className="flex-1 sm:flex-none" disabled={page >= data.totalPage} onClick={() => setPage((p) => p + 1)}>
+              {t("activity.next")}
+            </Button>
+          </div>
+        </div>
       )}
     </div>
   );

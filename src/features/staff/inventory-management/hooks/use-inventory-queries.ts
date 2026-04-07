@@ -1,4 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { inventoryService } from "../services/inventory.service";
 import type {
@@ -68,19 +69,21 @@ export function useDashboardQuery() {
 
 export function useCreateTransactionMutation() {
   const qc = useQueryClient();
+  const t = useTranslations("inventory.messages");
   return useMutation({
     mutationFn: (formData: FormData) => inventoryService.createTransaction(formData),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: INVENTORY_KEYS.transactions() });
       qc.invalidateQueries({ queryKey: INVENTORY_KEYS.dashboard() });
-      toast.success("Transaction created");
+      toast.success(t("createTransactionSuccess"));
     },
-    onError: () => toast.error("Failed to create transaction"),
+    onError: () => toast.error(t("createTransactionError")),
   });
 }
 
 export function useSubmitTransactionMutation() {
   const qc = useQueryClient();
+  const t = useTranslations("inventory.messages");
   return useMutation({
     mutationFn: ({ id, body }: { id: number; body?: SubmitTransactionRequest }) =>
       inventoryService.submitTransaction(id, body),
@@ -88,14 +91,15 @@ export function useSubmitTransactionMutation() {
       qc.invalidateQueries({ queryKey: INVENTORY_KEYS.transactions() });
       qc.invalidateQueries({ queryKey: INVENTORY_KEYS.transactionDetail(vars.id) });
       qc.invalidateQueries({ queryKey: INVENTORY_KEYS.dashboard() });
-      toast.success("Transaction submitted for approval");
+      toast.success(t("submitTransactionSuccess"));
     },
-    onError: () => toast.error("Failed to submit transaction"),
+    onError: () => toast.error(t("submitTransactionError")),
   });
 }
 
 export function useApproveTransactionMutation() {
   const qc = useQueryClient();
+  const t = useTranslations("inventory.messages");
   return useMutation({
     mutationFn: ({ id, body }: { id: number; body: ApproveTransactionRequest }) =>
       inventoryService.approveTransaction(id, body),
@@ -104,8 +108,8 @@ export function useApproveTransactionMutation() {
       qc.invalidateQueries({ queryKey: INVENTORY_KEYS.transactionDetail(vars.id) });
       qc.invalidateQueries({ queryKey: INVENTORY_KEYS.items() });
       qc.invalidateQueries({ queryKey: INVENTORY_KEYS.dashboard() });
-      toast.success(vars.body.isApproved ? "Transaction approved" : "Transaction rejected");
+      toast.success(vars.body.isApproved ? t("approvedSuccess") : t("rejectedSuccess"));
     },
-    onError: () => toast.error("Failed to process approval"),
+    onError: () => toast.error(t("approvalError")),
   });
 }

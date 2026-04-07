@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useAuth } from "@/components/providers/auth-provider";
 import { useRouter } from "@/routing";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 const AUTO_LOGOUT_KEY = "shift_checkout_auto_logout_at";
@@ -37,6 +38,7 @@ interface UseCheckoutAutoLogoutReturn {
 export function useCheckoutAutoLogout(): UseCheckoutAutoLogoutReturn {
   const { logout } = useAuth();
   const router = useRouter();
+  const t = useTranslations("shift.messages");
   const [targetTime, setTargetTime] = useState<number | null>(null);
   const [remainingSeconds, setRemainingSeconds] = useState(0);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -104,8 +106,8 @@ export function useCheckoutAutoLogout(): UseCheckoutAutoLogoutReturn {
     localStorage.removeItem(AUTO_LOGOUT_KEY);
     setTargetTime(null);
     setRemainingSeconds(0);
-    toast.info("Auto-logout cancelled. You can continue working.");
-  }, []);
+    toast.info(t("autoLogoutCancelled"));
+  }, [t]);
 
   const logoutNow = useCallback(() => {
     performLogout();

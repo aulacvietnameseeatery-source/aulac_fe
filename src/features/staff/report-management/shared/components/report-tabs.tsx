@@ -1,8 +1,9 @@
 "use client";
 import React from "react";
-import { DollarSign, ListTodo, ShoppingBag, Users, Hourglass } from "lucide-react";
-import { Link } from "@/routing"
+import { DollarSign, ListTodo, ShoppingBag, Users } from "lucide-react";
+import { Link } from "@/routing";
 import { useTranslations } from "next-intl";
+import { ALCard } from "@/components/ui/al-card";
 
 interface ReportTabsProps {
     activeTab: string;
@@ -19,26 +20,28 @@ export function ReportTabs({ activeTab }: ReportTabsProps) {
     ];
 
     return (
-        <ul className="flex flex-wrap border-b border-gray-200 mb-6">
-            {tabs.map((tab, idx) => {
-                const isActive = tab.id === activeTab;
+        <ALCard padding="sm" variant="default" elevation="sm" className="py-2">
+            <ul className="flex flex-wrap gap-1">
+                {tabs.map((tab, idx) => {
+                    const isActive = tab.id === activeTab;
 
-                return (
-                    <li key={idx} className="mr-2">
-                        <Link
-                            href={tab.href}
-                            className={`inline-flex items-center px-4 py-3 text-sm font-medium border-b-2 transition-colors ${
-                                isActive
-                                    ? 'border-blue-600 text-blue-600'
-                                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                            }`}
-                        >
-                            <tab.icon size={16} className="mr-2" />
-                            {tab.name}
-                        </Link>
-                    </li>
-                );
-            })}
-        </ul>
+                    return (
+                        <li key={idx}>
+                            <Link
+                                href={tab.href}
+                                className={`inline-flex items-center gap-2 rounded-lg px-3 py-2 text-xs font-medium transition-all ${
+                                    isActive
+                                        ? 'bg-[#1A3A52] text-white shadow-sm'
+                                        : 'text-[#1A3A52]/60 hover:bg-[#D5BA98]/10 hover:text-[#1A3A52]'
+                                }`}
+                            >
+                                <tab.icon size={14} />
+                                {tab.name}
+                            </Link>
+                        </li>
+                    );
+                })}
+            </ul>
+        </ALCard>
     );
 }

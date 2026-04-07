@@ -1,4 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { tableService } from "../services/table.service";
 import type {
@@ -74,13 +75,14 @@ export function useCreateTableMutation(callbacks?: {
   onError?: (error: Error) => void;
 }) {
   const queryClient = useQueryClient();
+  const t = useTranslations("tableManagement.messages");
 
   return useMutation<TableManagementDto, Error, CreateTableRequest>({
     mutationFn: (data) => tableService.createTable(data),
 
     onSuccess: (data) => {
-      toast.success("Table created successfully", {
-        description: `Table "${data.tableCode}" has been created.`,
+      toast.success(t("createTableSuccess"), {
+        description: t("createTableSuccessDesc", { tableCode: data.tableCode }),
       });
       queryClient.invalidateQueries({ queryKey: TABLE_QUERY_KEYS.lists() });
       callbacks?.onSuccess?.(data);
@@ -89,13 +91,13 @@ export function useCreateTableMutation(callbacks?: {
     onError: (error: any) => {
       const apiError = error?.response?.data;
       if (apiError?.code === 409) {
-        toast.error("Duplicate table code", {
+        toast.error(t("duplicateTableCode"), {
           description: apiError.userMessage || error.message,
         });
       } else if (apiError?.validateInfo?.length) {
         apiError.validateInfo.forEach((msg: string) => toast.error(msg));
       } else {
-        toast.error("Failed to create table", {
+        toast.error(t("createTableError"), {
           description: apiError?.userMessage || error.message,
         });
       }
@@ -112,6 +114,7 @@ export function useUpdateTableMutation(callbacks?: {
   onError?: (error: Error) => void;
 }) {
   const queryClient = useQueryClient();
+  const t = useTranslations("tableManagement.messages");
 
   return useMutation<
     TableManagementDto,
@@ -121,8 +124,8 @@ export function useUpdateTableMutation(callbacks?: {
     mutationFn: ({ id, data }) => tableService.updateTable(id, data),
 
     onSuccess: (data) => {
-      toast.success("Table updated successfully", {
-        description: `Table "${data.tableCode}" has been updated.`,
+      toast.success(t("updateTableSuccess"), {
+        description: t("updateTableSuccessDesc", { tableCode: data.tableCode }),
       });
       queryClient.invalidateQueries({ queryKey: TABLE_QUERY_KEYS.lists() });
       queryClient.invalidateQueries({
@@ -134,13 +137,13 @@ export function useUpdateTableMutation(callbacks?: {
     onError: (error: any) => {
       const apiError = error?.response?.data;
       if (apiError?.code === 409) {
-        toast.error("Duplicate table code", {
+        toast.error(t("duplicateTableCode"), {
           description: apiError.userMessage || error.message,
         });
       } else if (apiError?.code === 404) {
-        toast.warning("Table not found");
+        toast.warning(t("tableNotFound"));
       } else {
-        toast.error("Failed to update table", {
+        toast.error(t("updateTableError"), {
           description: apiError?.userMessage || error.message,
         });
       }
@@ -157,12 +160,13 @@ export function useDeleteTableMutation(callbacks?: {
   onError?: (error: Error) => void;
 }) {
   const queryClient = useQueryClient();
+  const t = useTranslations("tableManagement.messages");
 
   return useMutation<void, Error, number>({
     mutationFn: (id) => tableService.deleteTable(id),
 
     onSuccess: () => {
-      toast.success("Table deleted successfully");
+      toast.success(t("deleteTableSuccess"));
       queryClient.invalidateQueries({ queryKey: TABLE_QUERY_KEYS.lists() });
       callbacks?.onSuccess?.();
     },
@@ -170,15 +174,15 @@ export function useDeleteTableMutation(callbacks?: {
     onError: (error: any) => {
       const apiError = error?.response?.data;
       if (apiError?.code === 409) {
-        toast.error("Cannot delete table", {
+        toast.error(t("cannotDeleteTable"), {
           description:
             apiError.userMessage ||
-            "Table has active orders or upcoming reservations.",
+            t("cannotDeleteTableDesc"),
         });
       } else if (apiError?.code === 404) {
-        toast.warning("Table not found");
+        toast.warning(t("tableNotFound"));
       } else {
-        toast.error("Failed to delete table", {
+        toast.error(t("deleteTableError"), {
           description: apiError?.userMessage || error.message,
         });
       }
@@ -195,6 +199,7 @@ export function useUpdateTableStatusMutation(callbacks?: {
   onError?: (error: Error) => void;
 }) {
   const queryClient = useQueryClient();
+  const t = useTranslations("tableManagement.messages");
 
   return useMutation<
     TableManagementDto,
@@ -204,8 +209,8 @@ export function useUpdateTableStatusMutation(callbacks?: {
     mutationFn: ({ id, data }) => tableService.updateTableStatus(id, data),
 
     onSuccess: (data) => {
-      toast.success("Status updated", {
-        description: `Table "${data.tableCode}" is now ${data.statusName}.`,
+      toast.success(t("statusUpdated"), {
+        description: t("statusUpdatedDesc", { tableCode: data.tableCode, statusName: data.statusName }),
       });
       queryClient.invalidateQueries({ queryKey: TABLE_QUERY_KEYS.lists() });
       queryClient.invalidateQueries({
@@ -217,11 +222,11 @@ export function useUpdateTableStatusMutation(callbacks?: {
     onError: (error: any) => {
       const apiError = error?.response?.data;
       if (apiError?.code === 400) {
-        toast.error("Invalid status transition", {
+        toast.error(t("invalidStatusTransition"), {
           description: apiError.userMessage || error.message,
         });
       } else {
-        toast.error("Failed to update status", {
+        toast.error(t("updateStatusError"), {
           description: apiError?.userMessage || error.message,
         });
       }
@@ -268,13 +273,14 @@ export function useCreateZoneMutation(callbacks?: {
   onError?: (error: Error) => void;
 }) {
   const queryClient = useQueryClient();
+  const t = useTranslations("tableManagement.messages");
 
   return useMutation<LookupValueDto, Error, CreateLookupValueRequest>({
     mutationFn: (data) => tableService.createZone(data),
 
     onSuccess: (data) => {
-      toast.success("Zone created", {
-        description: `Zone "${data.valueName}" has been created.`,
+      toast.success(t("createZoneSuccess"), {
+        description: t("createZoneSuccessDesc", { valueName: data.valueName }),
       });
       queryClient.invalidateQueries({ queryKey: TABLE_QUERY_KEYS.zones() });
       callbacks?.onSuccess?.(data);
@@ -282,7 +288,7 @@ export function useCreateZoneMutation(callbacks?: {
 
     onError: (error: any) => {
       const apiError = error?.response?.data;
-      toast.error("Failed to create zone", {
+      toast.error(t("createZoneError"), {
         description: apiError?.userMessage || error.message,
       });
       callbacks?.onError?.(error);
@@ -298,13 +304,14 @@ export function useCreateTableTypeMutation(callbacks?: {
   onError?: (error: Error) => void;
 }) {
   const queryClient = useQueryClient();
+  const t = useTranslations("tableManagement.messages");
 
   return useMutation<LookupValueDto, Error, CreateLookupValueRequest>({
     mutationFn: (data) => tableService.createTableType(data),
 
     onSuccess: (data) => {
-      toast.success("Table type created", {
-        description: `Type "${data.valueName}" has been created.`,
+      toast.success(t("createTypeSuccess"), {
+        description: t("createTypeSuccessDesc", { valueName: data.valueName }),
       });
       queryClient.invalidateQueries({
         queryKey: TABLE_QUERY_KEYS.tableTypes(),
@@ -314,7 +321,7 @@ export function useCreateTableTypeMutation(callbacks?: {
 
     onError: (error: any) => {
       const apiError = error?.response?.data;
-      toast.error("Failed to create table type", {
+      toast.error(t("createTypeError"), {
         description: apiError?.userMessage || error.message,
       });
       callbacks?.onError?.(error);
@@ -330,17 +337,18 @@ export function useUpdateZoneMutation(callbacks?: {
   onError?: (error: Error) => void;
 }) {
   const queryClient = useQueryClient();
+  const t = useTranslations("tableManagement.messages");
 
   return useMutation<LookupValueDto, Error, { id: number; data: UpdateLookupValueRequest }>({
     mutationFn: ({ id, data }) => tableService.updateZone(id, data),
     onSuccess: (data) => {
-      toast.success("Zone updated", { description: `Zone "${data.valueName}" saved.` });
+      toast.success(t("updateZoneSuccess"), { description: t("updateZoneSuccessDesc", { valueName: data.valueName }) });
       queryClient.invalidateQueries({ queryKey: TABLE_QUERY_KEYS.zones() });
       callbacks?.onSuccess?.(data);
     },
     onError: (error: any) => {
       const msg = error?.response?.data?.userMessage || error.message;
-      toast.error("Failed to update zone", { description: msg });
+      toast.error(t("updateZoneError"), { description: msg });
       callbacks?.onError?.(error);
     },
   });
@@ -354,17 +362,18 @@ export function useDeleteZoneMutation(callbacks?: {
   onError?: (error: Error) => void;
 }) {
   const queryClient = useQueryClient();
+  const t = useTranslations("tableManagement.messages");
 
   return useMutation<void, Error, number>({
     mutationFn: (id) => tableService.deleteZone(id),
     onSuccess: () => {
-      toast.success("Zone deleted");
+      toast.success(t("deleteZoneSuccess"));
       queryClient.invalidateQueries({ queryKey: TABLE_QUERY_KEYS.zones() });
       callbacks?.onSuccess?.();
     },
     onError: (error: any) => {
       const msg = error?.response?.data?.userMessage || error.message;
-      toast.error("Failed to delete zone", { description: msg });
+      toast.error(t("deleteZoneError"), { description: msg });
       callbacks?.onError?.(error);
     },
   });
@@ -378,17 +387,18 @@ export function useUpdateTableTypeMutation(callbacks?: {
   onError?: (error: Error) => void;
 }) {
   const queryClient = useQueryClient();
+  const t = useTranslations("tableManagement.messages");
 
   return useMutation<LookupValueDto, Error, { id: number; data: UpdateLookupValueRequest }>({
     mutationFn: ({ id, data }) => tableService.updateTableType(id, data),
     onSuccess: (data) => {
-      toast.success("Type updated", { description: `Type "${data.valueName}" saved.` });
+      toast.success(t("updateTypeSuccess"), { description: t("updateTypeSuccessDesc", { valueName: data.valueName }) });
       queryClient.invalidateQueries({ queryKey: TABLE_QUERY_KEYS.tableTypes() });
       callbacks?.onSuccess?.(data);
     },
     onError: (error: any) => {
       const msg = error?.response?.data?.userMessage || error.message;
-      toast.error("Failed to update type", { description: msg });
+      toast.error(t("updateTypeError"), { description: msg });
       callbacks?.onError?.(error);
     },
   });
@@ -402,17 +412,18 @@ export function useDeleteTableTypeMutation(callbacks?: {
   onError?: (error: Error) => void;
 }) {
   const queryClient = useQueryClient();
+  const t = useTranslations("tableManagement.messages");
 
   return useMutation<void, Error, number>({
     mutationFn: (id) => tableService.deleteTableType(id),
     onSuccess: () => {
-      toast.success("Table type deleted");
+      toast.success(t("deleteTypeSuccess"));
       queryClient.invalidateQueries({ queryKey: TABLE_QUERY_KEYS.tableTypes() });
       callbacks?.onSuccess?.();
     },
     onError: (error: any) => {
       const msg = error?.response?.data?.userMessage || error.message;
-      toast.error("Failed to delete type", { description: msg });
+      toast.error(t("deleteTypeError"), { description: msg });
       callbacks?.onError?.(error);
     },
   });
@@ -430,20 +441,21 @@ export function useBulkOnlineMutation(callbacks?: {
   onError?: (error: Error) => void;
 }) {
   const queryClient = useQueryClient();
+  const t = useTranslations("tableManagement.messages");
 
   return useMutation<{ affectedCount: number }, Error, BulkOnlineRequest>({
     mutationFn: (data) => tableService.bulkOnline(data),
     onSuccess: ({ affectedCount }, variables) => {
       toast.success(
-        `${variables.isOnline ? "Tables online" : "Tables offline"}`,
-        { description: `${affectedCount} table(s) updated.` }
+        variables.isOnline ? t("bulkOnlineSuccess") : t("bulkOfflineSuccess"),
+        { description: t("bulkOnlineDesc", { count: affectedCount }) }
       );
       queryClient.invalidateQueries({ queryKey: TABLE_QUERY_KEYS.lists() });
       callbacks?.onSuccess?.(affectedCount);
     },
     onError: (error: any) => {
       const msg = error?.response?.data?.userMessage || error.message;
-      toast.error("Failed to update zone online status", { description: msg });
+      toast.error(t("bulkOnlineError"), { description: msg });
       callbacks?.onError?.(error);
     },
   });
@@ -457,17 +469,18 @@ export function useRegenerateQrMutation(callbacks?: {
   onError?: (error: Error) => void;
 }) {
   const queryClient = useQueryClient();
+  const t = useTranslations("tableManagement.messages");
 
   return useMutation<QrCodeDto, Error, number>({
     mutationFn: (id) => tableService.regenerateQr(id),
     onSuccess: (data, id) => {
-      toast.success("QR code regenerated");
+      toast.success(t("qrRegenerateSuccess"));
       queryClient.invalidateQueries({ queryKey: TABLE_QUERY_KEYS.detail(id) });
       callbacks?.onSuccess?.(data);
     },
     onError: (error: any) => {
       const msg = error?.response?.data?.userMessage || error.message;
-      toast.error("Failed to regenerate QR code", { description: msg });
+      toast.error(t("qrRegenerateError"), { description: msg });
       callbacks?.onError?.(error);
     },
   });
@@ -481,6 +494,7 @@ export function useUploadTableMediaMutation(callbacks?: {
   onError?: (error: Error) => void;
 }) {
   const queryClient = useQueryClient();
+  const t = useTranslations("tableManagement.messages");
 
   return useMutation<
     TableMediaDto[],
@@ -491,14 +505,14 @@ export function useUploadTableMediaMutation(callbacks?: {
       tableService.uploadTableMedia(tableId, files),
 
     onSuccess: (data, { tableId }) => {
-      toast.success(`${data.length} image(s) uploaded successfully`);
+      toast.success(t("uploadMediaSuccess", { count: data.length }));
       queryClient.invalidateQueries({ queryKey: TABLE_QUERY_KEYS.detail(tableId) });
       callbacks?.onSuccess?.(data);
     },
 
     onError: (error: any) => {
       const msg = error?.response?.data?.userMessage || error.message;
-      toast.error("Upload failed", { description: msg });
+      toast.error(t("uploadMediaError"), { description: msg });
       callbacks?.onError?.(error);
     },
   });
@@ -512,6 +526,7 @@ export function useDeleteTableMediaMutation(callbacks?: {
   onError?: (error: Error) => void;
 }) {
   const queryClient = useQueryClient();
+  const t = useTranslations("tableManagement.messages");
 
   return useMutation<void, Error, { tableId: number; mediaId: number }>({
     mutationFn: ({ tableId, mediaId }) =>
@@ -524,7 +539,7 @@ export function useDeleteTableMediaMutation(callbacks?: {
 
     onError: (error: any) => {
       const msg = error?.response?.data?.userMessage || error.message;
-      toast.error("Failed to delete image", { description: msg });
+      toast.error(t("deleteMediaError"), { description: msg });
       callbacks?.onError?.(error);
     },
   });

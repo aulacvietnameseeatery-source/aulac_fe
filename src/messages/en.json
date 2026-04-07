@@ -767,7 +767,8 @@
       "network": "Unable to connect to the server. Please check your connection.",
       "http": "The request failed. Please try again.",
       "httpStatus": "The request failed with status {status}.",
-      "unexpected": "An unexpected error occurred. Please try again later."
+      "unexpected": "An unexpected error occurred. Please try again later.",
+      "accountDeactivated": "Your account has been deactivated. Please contact an administrator."
     },
     "permission": {
       "noAccess": "You do not have permission to perform this action."

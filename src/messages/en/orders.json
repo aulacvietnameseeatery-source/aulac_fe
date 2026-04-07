@@ -498,7 +498,8 @@
       "successPopup": {
         "title": "Thank You!",
         "message": "Your payment request for {tableLabel} {tableNumber} has been received. Our server will be with you shortly."
-      }
+      },
+      "paymentRequestError": "Unable to send payment request. Please call a server."
     }
   }
 }

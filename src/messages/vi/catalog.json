@@ -219,6 +219,9 @@
         "cookTime": "Thời gian nấu",
         "chefRecommended": "Đầu bếp khuyên dùng",
         "notChefRecommended": "Không đánh dấu khuyên dùng"
+      },
+      "notifications": {
+        "loadError": "Không thể tải thông tin món ăn"
       }
     }
   },
@@ -329,7 +332,12 @@
         "exportSuccess": "Xuất file thành công!",
         "invalidExcel": "Không tìm thấy nguyên liệu hợp lệ trong file Excel.",
         "importSuccess": "Đã nhập thành công {success}/{total} nguyên liệu.",
-        "readExcelError": "Lỗi đọc file Excel. Vui lòng kiểm tra lại định dạng."
+        "readExcelError": "Lỗi đọc file Excel. Vui lòng kiểm tra lại định dạng.",
+        "adjustStockInvalidQty": "Vui lòng nhập số lượng hợp lệ lớn hơn 0.",
+        "adjustStockExceedError": "Không thể xuất nhiều hơn tồn kho hiện tại ({quantity} {unit}).",
+        "adjustStockSuccess": "Điều chỉnh tồn kho thành công.",
+        "adjustStockError": "Điều chỉnh tồn kho thất bại.",
+        "loadError": "Không thể tải dữ liệu nguyên liệu."
       }
     }
   },

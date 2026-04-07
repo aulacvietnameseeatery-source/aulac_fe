@@ -527,6 +527,8 @@
       "tokenRefreshFailed": "Impossible d'actualiser votre session. Veuillez vous reconnecter.",
       "noAccessToken": "Vous devez vous connecter avant de continuer.",
       "unauthorized": "Vous n'êtes pas authentifié. Veuillez vous connecter puis réessayer.",
+      "accountDeactivated": "Votre compte a été désactivé. Veuillez contacter un administrateur.",
+      "invalidCredentials": "Nom d'utilisateur ou mot de passe incorrects.",
       "forbidden": "Vous n'avez pas l'autorisation d'effectuer cette action.",
       "notFound": "La ressource demandée est introuvable.",
       "validation": "Certaines valeurs saisies sont invalides. Veuillez vérifier puis réessayer.",
@@ -1013,6 +1015,7 @@
       },
       "notifications": {
         "loadError": "Échec du chargement des détails du client",
+        "loadOrdersError": "Échec du chargement de la liste des commandes",
         "deleteSuccess": "Client supprimé avec succès",
         "deleteError": "Échec de la suppression du client",
         "deleteHasDependencies": "Impossible de supprimer un client ayant des commandes ou des réservations"
@@ -1374,6 +1377,14 @@
     "deleteDialog": {
       "title": "Supprimer le modèle",
       "description": "Êtes-vous sûr de vouloir supprimer ce modèle ? Cette action est irréversible."
+    },
+    "messages": {
+      "updateSuccess": "Modèle mis à jour avec succès",
+      "updateError": "Une erreur est survenue lors de la mise à jour",
+      "createSuccess": "Modèle créé avec succès",
+      "createError": "Une erreur est survenue lors de la création du modèle",
+      "deleteSuccess": "Modèle supprimé avec succès",
+      "deleteError": "Une erreur est survenue lors de la suppression"
     }
   }
 }

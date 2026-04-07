@@ -31,7 +31,7 @@ export default function ReportsLayout({
 
     return (
         <ProtectedRoute permission={Permissions.ViewInventoryReport}>
-            <div className="w-full min-h-[calc(100vh-100px)] flex flex-col bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+            <div className="w-full min-h-[calc(100vh-100px)] flex flex-col space-y-4">
                 <ReportHeader onRefresh={handleGlobalRefresh} />
 
                 <ReportTabs activeTab={activeTab} />

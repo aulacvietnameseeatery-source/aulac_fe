@@ -194,6 +194,15 @@
     "dateRange": "Période",
     "from": "Du",
     "to": "Au"
+    },
+    "messages": {
+      "createTransactionSuccess": "Transaction créée",
+      "createTransactionError": "Échec de la création de la transaction",
+      "submitTransactionSuccess": "Transaction soumise pour approbation",
+      "submitTransactionError": "Échec de la soumission de la transaction",
+      "approvedSuccess": "Transaction approuvée",
+      "rejectedSuccess": "Transaction rejetée",
+      "approvalError": "Échec du traitement de l'approbation"
     }
   }
 }

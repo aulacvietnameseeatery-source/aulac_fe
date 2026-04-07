@@ -194,6 +194,15 @@
     "dateRange": "Khoảng thời gian",
     "from": "Từ",
     "to": "Đến"
+    },
+    "messages": {
+      "createTransactionSuccess": "Tạo giao dịch thành công",
+      "createTransactionError": "Không thể tạo giao dịch",
+      "submitTransactionSuccess": "Giao dịch đã gửi để duyệt",
+      "submitTransactionError": "Không thể gửi giao dịch",
+      "approvedSuccess": "Giao dịch đã được duyệt",
+      "rejectedSuccess": "Giao dịch đã bị từ chối",
+      "approvalError": "Không thể xử lý phê duyệt"
     }
   }
 }

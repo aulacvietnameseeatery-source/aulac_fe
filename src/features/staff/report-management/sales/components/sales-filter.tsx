@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { Calendar } from "lucide-react";
+import { ALDatePicker } from "@/components/ui/al-date-picker";
 import { Button } from "@/components/ui/button";
 import { useTranslations } from "next-intl";
 
@@ -22,35 +22,25 @@ export function SalesFilter({ initialStart, initialEnd, onApply }: FilterProps) 
     };
 
     return (
-        <div className="flex flex-wrap items-end gap-4 mb-6 p-4 bg-white border border-gray-100 rounded-xl shadow-sm">
-            <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">{t("startDate")}</label>
-                <div className="relative">
-                    <input
-                        type="date"
-                        value={startDate}
-                        onChange={(e) => setStartDate(e.target.value)}
-                        className="w-full pl-3 pr-10 py-2 border border-gray-200 rounded-lg text-sm outline-none focus:border-blue-500"
-                    />
-                    <Calendar size={16} className="absolute right-3 top-2.5 text-gray-400 pointer-events-none" />
-                </div>
-            </div>
-            <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">{t("endDate")}</label>
-                <div className="relative">
-                    <input
-                        type="date"
-                        value={endDate}
-                        onChange={(e) => setEndDate(e.target.value)}
-                        className="w-full pl-3 pr-10 py-2 border border-gray-200 rounded-lg text-sm outline-none focus:border-blue-500"
-                    />
-                    <Calendar size={16} className="absolute right-3 top-2.5 text-gray-400 pointer-events-none" />
-                </div>
-            </div>
+        <div className="flex flex-wrap items-end gap-2">
+            <ALDatePicker
+                title={t("startDate")}
+                value={startDate}
+                onChange={setStartDate}
+                inputSize="sm"
+                wrapperClassName="w-full min-w-[180px] sm:w-auto"
+            />
+            <ALDatePicker
+                title={t("endDate")}
+                value={endDate}
+                onChange={setEndDate}
+                inputSize="sm"
+                wrapperClassName="w-full min-w-[180px] sm:w-auto"
+            />
             <Button
                 onClick={handleSubmit}
                 variant={"outline"}
-                className="py-2 px-6 rounded-lg text-sm font-medium transition-colors"
+                className="h-9 rounded-lg border-[#D5BA98]/70 px-4 text-sm font-medium text-[#1A3A52] hover:bg-[#D5BA98]/10"
             >
                 {t("submit")}
             </Button>

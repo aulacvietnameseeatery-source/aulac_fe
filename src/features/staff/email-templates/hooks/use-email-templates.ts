@@ -1,4 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 import { api } from "@/lib/http";
 import { EmailTemplate, CreateEmailTemplateRequest, UpdateEmailTemplateRequest } from "../types";
 import { toast } from "sonner";
@@ -26,6 +27,7 @@ export const useEmailTemplate = (code: string) => {
 
 export const useUpdateEmailTemplate = () => {
     const queryClient = useQueryClient();
+    const t = useTranslations("EmailTemplates.messages");
 
     return useMutation({
         mutationFn: async ({ id, data }: { id: number; data: UpdateEmailTemplateRequest }) => {
@@ -33,16 +35,17 @@ export const useUpdateEmailTemplate = () => {
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["email-templates"] });
-            toast.success("Cập nhật template thành công");
+            toast.success(t("updateSuccess"));
         },
         onError: (error: any) => {
-            toast.error(error.message || "Có lỗi xảy ra khi cập nhật");
+            toast.error(error.message || t("updateError"));
         },
     });
 };
 
 export const useCreateEmailTemplate = () => {
     const queryClient = useQueryClient();
+    const t = useTranslations("EmailTemplates.messages");
 
     return useMutation({
         mutationFn: async (data: CreateEmailTemplateRequest) => {
@@ -50,16 +53,17 @@ export const useCreateEmailTemplate = () => {
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["email-templates"] });
-            toast.success("Tạo template thành công");
+            toast.success(t("createSuccess"));
         },
         onError: (error: any) => {
-            toast.error(error.message || "Có lỗi xảy ra khi tạo template");
+            toast.error(error.message || t("createError"));
         },
     });
 };
 
 export const useDeleteEmailTemplate = () => {
     const queryClient = useQueryClient();
+    const t = useTranslations("EmailTemplates.messages");
 
     return useMutation({
         mutationFn: async (id: number) => {
@@ -67,10 +71,10 @@ export const useDeleteEmailTemplate = () => {
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["email-templates"] });
-            toast.success("Xóa template thành công");
+            toast.success(t("deleteSuccess"));
         },
         onError: (error: any) => {
-            toast.error(error.message || "Có lỗi xảy ra khi xóa");
+            toast.error(error.message || t("deleteError"));
         },
     });
 };

@@ -837,7 +837,7 @@ export function OrderHistoryFAB({ tableCode, tableNumber, dishNameMap = {}, refr
                       }
                     } catch {
                       // Graceful degradation — still show success to customer
-                      toast.error("Không thể gửi yêu cầu thanh toán, xin vui lòng gọi nhân viên.");
+                      toast.error(t("paymentRequestError"));
                     } finally {
                       setIsRequestingPayment(false);
                     }

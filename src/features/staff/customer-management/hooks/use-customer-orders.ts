@@ -1,10 +1,12 @@
 import { useState, useCallback, useRef, useEffect } from "react";
+import { useTranslations } from "next-intl";
 import { CustomerOrderDto } from "../types/customer-detail-types";
 import { customerDetailService } from "../services/customer-detail-service";
 import { toast } from "sonner";
 import type { TableDataChangeParams } from "@/types/table-data-change.types";
 
 export const useCustomerOrders = (customerId: number) => {
+    const t = useTranslations("Customer.List.notifications");
     const [orders, setOrders] = useState<CustomerOrderDto[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [totalCount, setTotalCount] = useState(0);
@@ -40,7 +42,7 @@ export const useCustomerOrders = (customerId: number) => {
                 setTotalCount(data.totalCount);
             }
         } catch (error: any) {
-            if (currentFetchId === fetchIdRef.current) toast.error("Lỗi khi tải danh sách đơn hàng");
+            if (currentFetchId === fetchIdRef.current) toast.error(t("loadOrdersError"));
         } finally {
             if (currentFetchId === fetchIdRef.current) setIsLoading(false);
         }

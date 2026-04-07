@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 import { staffAccountService } from "../../account-list/services/staff-account.service";
 import type { AccountDetail, UpdateAccountRequest } from "../types/account-detail.types";
 import { ACCOUNT_DETAIL_QUERY_KEY } from "./useAccountDetail";
@@ -17,6 +18,7 @@ export function useUpdateAccount(
   }
 ) {
   const queryClient = useQueryClient();
+  const t = useTranslations("Account.Edit.notifications");
 
   return useMutation<AccountDetail, Error, UpdateAccountRequest>({
     mutationFn: (data) => {
@@ -25,8 +27,8 @@ export function useUpdateAccount(
     },
 
     onSuccess: (data) => {
-      toast.success("Account updated successfully", {
-        description: `"${data.fullName}" has been updated.`,
+      toast.success(t("success"), {
+        description: t("successDescription", { fullName: data.fullName }),
       });
       // Invalidate both list and the specific detail
       queryClient.invalidateQueries({ queryKey: ["staff-accounts"] });
@@ -35,8 +37,8 @@ export function useUpdateAccount(
     },
 
     onError: (error) => {
-      toast.error("Failed to update account", {
-        description: error.message || "An unexpected error occurred.",
+      toast.error(t("error"), {
+        description: t("errorDescription", { message: error.message || "An unexpected error occurred." }),
       });
       callbacks?.onError?.(error);
     },
