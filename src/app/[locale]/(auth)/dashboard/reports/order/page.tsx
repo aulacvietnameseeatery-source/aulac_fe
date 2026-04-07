@@ -129,8 +129,8 @@ export default function OrderReportPage() {
     );
 
     return (
-        <div className="w-full flex flex-col gap-4">
-            <div className="w-full">
+        <div className="w-full h-full flex flex-col">
+            <div className="flex-1 min-h-0">
                 <BaseTable<OrderReportRecordDto>
                     data={data}
                     loading={isLoading}

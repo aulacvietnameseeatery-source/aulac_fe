@@ -99,7 +99,7 @@ export const AuditLogsTab = ({ accountId }: AuditLogsTabProps) => {
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
                     <Badge variant="soft-secondary" className="text-[10px] font-mono">
-                      {log.actionCode ?? "UNKNOWN"}
+                      {log.actionCode ?? t("activity.unknown")}
                     </Badge>
                     {log.targetTable && (
                       <span className="text-xs text-gray-500">

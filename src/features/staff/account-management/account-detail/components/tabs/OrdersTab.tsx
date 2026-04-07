@@ -6,6 +6,7 @@ import { useTranslations, useFormatter } from "next-intl";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ALDatePicker } from "@/components/ui/al-date-picker";
+import { formatCHF } from "@/lib/format-chf-utils";
 import { useAccountOrders } from "../../hooks/useAccountActivity";
 
 interface OrdersTabProps {
@@ -45,7 +46,7 @@ export const OrdersTab = ({ accountId }: OrdersTabProps) => {
   };
 
   const formatCurrency = (amount: number) => {
-    return format.number(amount, { style: "currency", currency: "VND" });
+    return formatCHF(amount);
   };
 
   return (

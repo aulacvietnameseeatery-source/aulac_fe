@@ -2,7 +2,6 @@
 
 import React from "react";
 import { usePathname } from "next/navigation";
-import { ReportHeader } from "@/features/staff/report-management/shared/components/report-header";
 import { ReportTabs } from "@/features/staff/report-management/shared/components/report-tabs";
 import { ProtectedRoute } from "@/components/protected-route";
 import { Permissions } from "@/types/const";
@@ -25,18 +24,14 @@ export default function ReportsLayout({
         activeTab = "Order Report";
     }
 
-    const handleGlobalRefresh = () => {
-        window.location.reload();
-    };
-
     return (
         <ProtectedRoute permission={Permissions.ViewInventoryReport}>
-            <div className="w-full min-h-[calc(100vh-100px)] flex flex-col space-y-4">
-                <ReportHeader onRefresh={handleGlobalRefresh} />
+            <div className="w-full h-full flex flex-col gap-3 overflow-hidden">
+                <div className="shrink-0">
+                    <ReportTabs activeTab={activeTab} />
+                </div>
 
-                <ReportTabs activeTab={activeTab} />
-
-                <div className="flex-1 w-full flex flex-col">
+                <div className="flex-1 min-h-0 flex flex-col overflow-auto">
                     {children}
                 </div>
             </div>

@@ -15,8 +15,8 @@ export const GeneralTab = ({ account }: GeneralTabProps) => {
   const fields = [
     { icon: User, labelKey: "fullName", value: account.fullName },
     { icon: AtSign, labelKey: "username", value: account.username },
-    { icon: Mail, labelKey: "email", value: account.email || "N/A" },
-    { icon: Phone, labelKey: "phone", value: account.phone || "N/A" },
+    { icon: Mail, labelKey: "email", value: account.email || t("notAvailable") },
+    { icon: Phone, labelKey: "phone", value: account.phone || t("notAvailable") },
   ];
 
   return (

@@ -55,6 +55,7 @@ export const AccountProfileHeader = ({
   onStatusChange,
 }: AccountProfileHeaderProps) => {
   const t = useTranslations("Account.Detail.header");
+  const tStatus = useTranslations("Account.Detail.statusLabel");
   const [copiedField, setCopiedField] = useState<string | null>(null);
 
   // Initials for the avatar fallback
@@ -106,7 +107,7 @@ export const AccountProfileHeader = ({
           </h2>
           <Badge variant={statusConfig.variant} className="text-[11px]">
             <span className={cn("w-1.5 h-1.5 rounded-full", statusConfig.dotColor)} />
-            {account.accountStatus}
+            {tStatus(account.accountStatus as "ACTIVE" | "INACTIVE" | "LOCKED")}
           </Badge>
           {account.isLocked && (
             <Badge variant="destructive" className="text-[11px]">
