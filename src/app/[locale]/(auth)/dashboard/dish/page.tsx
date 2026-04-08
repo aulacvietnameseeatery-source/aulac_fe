@@ -5,7 +5,7 @@ import { Loader2, Plus } from "lucide-react";
 import { BaseTable } from "@/components/ui/table/base-table";
 import { TableColumn } from "@/types/table.types";
 import { toast } from "sonner";
-import {useLocale, useTranslations} from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { ProtectedRoute } from "@/components/protected-route";
 import { PermissionGuard } from "@/components/permission-guard";
 import { Permissions } from "@/types/const";
@@ -17,7 +17,7 @@ import { DishStatusCode } from "@/types/status-codes";
 import { DishActions } from "@/features/staff/dish-management/components/dish-actions";
 import { staffDishService } from "@/features/staff/dish-management/services/dish-service";
 import { useStatusBatchActions } from "@/features/staff/dish-management/hooks/useStatusBatchActions";
-import { useRouter } from "@/routing"
+import { useRouter } from "@/routing";
 
 const DishListContent = () => {
     const t = useTranslations("Dish.List");
@@ -52,23 +52,12 @@ const DishListContent = () => {
         setTogglingId(dish.dishId);
         try {
             const newStatusCode = checked ? DishStatusCode.AVAILABLE : DishStatusCode.HIDDEN;
-
-            // Optimistic Update
-            const updatedDish: DishManagementDto = {
-                ...dish,
-                status: newStatusCode
-            };
-            updateDishLocally(updatedDish);
-
-            // API Call
+            updateDishLocally({ ...dish, status: newStatusCode });
             await staffDishService.updateDishStatus(dish.dishId, newStatusCode);
             toast.success(t("notifications.statusUpdated"));
         } catch (error: any) {
             console.error("Update status failed:", error);
-            const errorMessage = error.response?.data?.userMessage || t("notifications.statusUpdateError");
-            toast.error(errorMessage);
-
-            // Revert on failure
+            toast.error(error.response?.data?.userMessage || t("notifications.statusUpdateError"));
             refresh();
         } finally {
             setTogglingId(null);
@@ -78,37 +67,21 @@ const DishListContent = () => {
     // Handle Batch Status Update
     const handleBatchStatusUpdate = async (selectedDishes: DishManagementDto[], newStatus: DishStatusCode) => {
         try {
-            // Optimistic Update for all selected items
-            selectedDishes.forEach(dish => {
-                updateDishLocally({
-                    ...dish,
-                    status: newStatus
-                });
-            });
-
-            // API Calls
+            selectedDishes.forEach(dish => updateDishLocally({ ...dish, status: newStatus }));
             const promises = selectedDishes.map(dish =>
                 staffDishService.updateDishStatus(dish.dishId, newStatus)
             );
-
             await Promise.all(promises);
-
-            const count = selectedDishes.length;
             const messageKey = newStatus === DishStatusCode.AVAILABLE ? "notifications.batchMakeAvailableSuccess" : "notifications.batchMakeHiddenSuccess";
-            toast.success(t(messageKey, { count }));
-
+            toast.success(t(messageKey, { count: selectedDishes.length }));
         } catch (error: any) {
             console.error("Batch update failed:", error);
             toast.error(t("notifications.batchUpdateError"));
-            refresh(); // Revert on error
+            refresh();
         }
     };
 
-    // Batch Actions Configuration
-    const batchActions = useStatusBatchActions({
-        t,
-        onUpdate: handleBatchStatusUpdate
-    });
+    const batchActions = useStatusBatchActions({ t, onUpdate: handleBatchStatusUpdate });
 
     // ---- Column filter options (derived from API data) ----
     const categoryFilterOptions = useMemo(
@@ -117,26 +90,19 @@ const DishListContent = () => {
     );
 
     const statusFilterOptions = useMemo(
-        () =>
-            filterOptions.statuses.map((s) => ({
-                label: s.statusName,
-                value: String(s.statusId),
-            })),
+        () => filterOptions.statuses.map((s) => ({ label: s.statusName, value: String(s.statusId) })),
         [filterOptions.statuses]
     );
 
     const formatCurrency = (value: any): string => {
         const num = typeof value === "string" ? parseFloat(value) : value;
         if (isNaN(num) || num === null || num === undefined) return "-";
-
-        // Cách 1: Format chuẩn quốc tế (thường hiển thị: CHF 12.00)
-         return new Intl.NumberFormat('fr-CH', { style: 'currency', currency: 'CHF' }).format(num);
-
-        // Cách 2: Format chính xác theo string "12.00 CHF" mà bạn muốn
-        //return `${num.toFixed(2)} CHF`;
+        return new Intl.NumberFormat('fr-CH', { style: 'currency', currency: 'CHF' }).format(num);
     };
 
-    // ---- Table Columns with built-in filterType + filterOptions ----
+    // ==========================================
+    // TABLE COLUMNS (ĐÃ BẬT FILTERABLE)
+    // ==========================================
     const columns: TableColumn[] = useMemo(
         () => [
             {
@@ -152,6 +118,7 @@ const DishListContent = () => {
                 field: "dishName",
                 header: t("table.dishName"),
                 width: "250px",
+                filterable: true, // Cho phép tìm kiếm theo tên món ăn trên BaseTable
                 filterType: "text" as const,
                 cellRender: ({ item }: { value: any; item: DishManagementDto }) => {
                     const localizedName = (item.nameI18n as any)?.[locale] || item.dishName;
@@ -171,6 +138,7 @@ const DishListContent = () => {
                 field: "categoryName",
                 header: t("table.category"),
                 width: "150px",
+                filterable: true, // Bật filter mặc định của BaseTable
                 filterType: "select" as const,
                 filterOptions: categoryFilterOptions,
                 cellRender: ({ item }: { value: any, item: DishManagementDto }) => {
@@ -183,7 +151,6 @@ const DishListContent = () => {
                 header: t("table.price"),
                 width: "120px",
                 align: "right" as const,
-                filterType: "number" as const,
                 cellRender: ({ value }: { value: any }) => (
                     <span className="font-bold text-blue-600">{formatCurrency(value)}</span>
                 ),
@@ -193,6 +160,7 @@ const DishListContent = () => {
                 header: t("table.status"),
                 align: "center" as const,
                 width: "130px",
+                filterable: true, // Bật filter mặc định của BaseTable
                 filterType: "select" as const,
                 filterOptions: statusFilterOptions,
                 cellRender: ({ item }: { value: any; item: DishManagementDto }) => (
@@ -210,12 +178,9 @@ const DishListContent = () => {
         [paginationInfo.page, paginationInfo.pageSize, t, locale, categoryFilterOptions, statusFilterOptions, togglingId]
     );
 
-    // Global cell renderer (applies column alignment)
     const handleGlobalRenderCell = useCallback(
         (value: any, item: DishManagementDto, column: TableColumn, rowIndex: number) => {
-            const content = column.cellRender
-                ? column.cellRender({ value, item, column, rowIndex })
-                : value;
+            const content = column.cellRender ? column.cellRender({ value, item, column, rowIndex }) : value;
             return column.align ? <div style={{ textAlign: column.align }}>{content}</div> : content;
         },
         []
@@ -234,19 +199,20 @@ const DishListContent = () => {
                 searchPlaceholder={t("searchPlaceholder")}
                 defaultRowsPerPage={10}
                 rowsPerPageOptions={[10, 20, 50]}
+                // Header giờ chỉ còn Title và nút Add New (Cực kỳ gọn gàng)
                 renderTitle={() => (
-                    <div className="flex justify-between items-center w-full">
+                    <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center w-full gap-4 pb-4">
                         <div>
                             <h1 className="text-3xl font-bold text-gray-900 tracking-tight">
                                 {t("title")}
                             </h1>
                             <p className="text-sm text-gray-500 mt-1">{t("description")}</p>
                         </div>
+
                         <PermissionGuard permission={Permissions.CreateDish}>
                             <Button
                                 onClick={handleCreate}
-                                variant="outline"
-                                className="shadow-md"
+                                className="w-full sm:w-auto shadow-md bg-blue-600 hover:bg-blue-700 text-white"
                             >
                                 <Plus className="mr-2 h-4 w-4" />
                                 {t("addNew")}
