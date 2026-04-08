@@ -469,7 +469,15 @@
       },
       "notifications": {
         "statusUpdated": "Cập nhật trạng thái thành công",
-        "statusUpdateError": "Đã xảy ra lỗi khi cập nhật trạng thái"
+        "statusUpdateError": "Đã xảy ra lỗi khi cập nhật trạng thái",
+        "deleteSuccess": "Xóa chương trình khuyến mãi thành công.",
+        "deleteError": "Xóa thất bại. Có thể chương trình khuyến mãi này đã được sử dụng."
+      },
+      "deleteModal": {
+        "title": "Xóa khuyến mãi",
+        "message": "Bạn có chắc chắn muốn xóa chương trình khuyến mãi {name} không? Hành động này không thể hoàn tác.",
+        "confirm": "Xóa",
+        "cancel": "Hủy"
       }
     },
     "createTitle": "Tạo Khuyến mãi mới",

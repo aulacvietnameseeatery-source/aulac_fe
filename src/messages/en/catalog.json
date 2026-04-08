@@ -469,7 +469,15 @@
       },
       "notifications": {
         "statusUpdated": "Status updated successfully",
-        "statusUpdateError": "An error occurred while updating the status"
+        "statusUpdateError": "An error occurred while updating the status",
+        "deleteSuccess": "Promotion deleted successfully.",
+        "deleteError": "Failed to delete promotion. It may have already been used."
+      },
+      "deleteModal": {
+        "title": "Delete Promotion",
+        "message": "Are you sure you want to delete the promotion {name}? This action cannot be undone.",
+        "confirm": "Delete",
+        "cancel": "Cancel"
       }
     },
     "createTitle": "Create New Promotion",
