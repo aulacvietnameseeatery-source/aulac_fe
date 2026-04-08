@@ -35,12 +35,6 @@ interface ZoneSectionProps {
   onStatusChange?: (tableId: number, status: TableStatus) => void;
 }
 
-// _OLD: const ZONE_SUBTITLES: Record<string, string> = {
-//   Indoor: "Main dining area",
-//   Outdoor: "Al fresco seating",
-//   Rooftop: "Upper-level terrace",
-// };
-
 export const ZoneSection: React.FC<ZoneSectionProps> = ({
   zone,
   tables,

@@ -22,6 +22,33 @@
       "reason": "Raison",
       "adjustmentReason": "Motif d'ajustement"
     },
+    "messages": {
+      "createTemplateSuccess": "Modèle de quart créé",
+      "createTemplateError": "Échec de la création du modèle",
+      "updateTemplateSuccess": "Modèle de quart mis à jour",
+      "updateTemplateError": "Échec de la mise à jour du modèle",
+      "assignStaffSuccess": "Personnel affecté au quart",
+      "assignStaffError": "Échec de l'affectation",
+      "updateAssignmentSuccess": "Affectation mise à jour",
+      "updateAssignmentError": "Échec de la mise à jour",
+      "cancelAssignmentSuccess": "Affectation annulée",
+      "cancelAssignmentError": "Échec de l'annulation",
+      "checkInSuccess": "Pointage d'entrée réussi",
+      "checkInError": "Échec du pointage d'entrée",
+      "checkOutSuccess": "Pointage de sortie réussi",
+      "checkOutError": "Échec du pointage de sortie",
+      "adjustAttendanceSuccess": "Présence ajustée",
+      "adjustAttendanceError": "Échec de l'ajustement",
+      "bulkCreateSuccess": "Affectations créées",
+      "bulkCreateError": "Échec de la création",
+      "publishSuccess": "Quarts publiés — personnel notifié",
+      "publishError": "Échec de la publication",
+      "reassignSuccess": "Affectation réassignée",
+      "reassignError": "Échec de la réassignation",
+      "confirmSuccess": "Quart confirmé",
+      "confirmError": "Échec de la confirmation",
+      "autoLogoutCancelled": "Déconnexion automatique annulée. Vous pouvez continuer."
+    },
     "schedule": {
       "title": "Plannings de Quart",
       "description": "Créez, publiez et gérez les plannings et affectations du personnel.",
@@ -93,12 +120,15 @@
         "cancel": "Annuler",
         "submit": "Copier le planning",
         "description": "Dupliquez toutes les affectations de quart d'une semaine source vers une semaine cible.",
+        "mondayNote": "Sélectionner un jour quelconque utilisera automatiquement le lundi de cette semaine comme date de début.",
         "sourceTitle": "Semaine source (Lundi)",
         "sourcePlaceholder": "Choisir le lundi source",
         "targetTitle": "Semaine cible (Lundi)",
         "targetPlaceholder": "Choisir le lundi cible",
         "asDraft": "Créer en brouillon",
-        "asDraftHint": "Les quarts copiés devront être publiés avant de notifier le personnel"
+        "asDraftHint": "Les quarts copiés devront être publiés avant de notifier le personnel",
+        "success": "Planning hebdomadaire copié avec succès.",
+        "error": "Impossible de copier le planning hebdomadaire. Veuillez réessayer."
       },
       "attendanceAdjustmentDialog": {
         "title": "Ajuster la présence",
@@ -267,7 +297,7 @@
       }
     },
     "myShift": {
-      "title": "Mes Quarts",
+      "title": "Feuille de temps",
       "description": "Consultez vos quarts assignés et pointez votre entrée/sortie.",
       "loading": "Chargement des quarts...",
       "empty": "Aucun quart assigné pour les 30 prochains jours.",
@@ -278,6 +308,19 @@
         "swap": "Échanger",
         "leave": "Congé"
       },
+      "viewMode": {
+        "week": "Semaine",
+        "month": "Mois"
+      },
+      "stats": {
+        "totalWorkdays": "Total jours travaillés",
+        "totalOvertimeHours": "Total heures sup. (coeff.)",
+        "totalLateEarly": "Total retards et départs anticipés",
+        "totalLeaveDays": "Total jours de congé"
+      },
+      "checkedInTodayAt": "Vous avez pointé aujourd'hui à",
+      "autoSyncNote": "Note : La feuille de temps sera synchronisée automatiquement aux heures suivantes : 10h00, 12h00, 15h15 et 17h30 chaque jour",
+      "timesheetPeriod": "Feuille de temps du {date}",
       "summary": {
         "title": "Résumé du mois",
         "subtitle": "Vue d'ensemble de la présence",
@@ -300,7 +343,22 @@
         "networkConnected": "Connecté au réseau magasin",
         "locationUnverified": "Position non vérifiée",
         "checkInAction": "Pointer Entrée",
-        "checkOutAction": "Pointer Sortie"
+        "checkOutAction": "Pointer Sortie",
+        "checkInAvailableFrom": "Pointage disponible à partir de {time}",
+        "inMinutes": "dans {minutes} min",
+        "shiftEnded": "Ce quart est terminé — pointage indisponible",
+        "tooEarlyToast": "Trop tôt ! Pointage à partir de {time}",
+        "shiftEndedToast": "Ce quart est déjà terminé"
+      },
+      "autoLogout": {
+        "bannerTitle": "Déconnexion auto dans {time}",
+        "bannerMessage": "Vous avez pointé la sortie. Vous serez déconnecté automatiquement.",
+        "stay": "Rester",
+        "logoutNow": "Se déconnecter"
+      },
+      "todayAttendance": {
+        "title": "Présence du jour",
+        "noShiftsToday": "Aucun quart assigné aujourd'hui"
       },
       "todayShift": "Quart du jour",
       "upcomingShifts": "Prochains quarts",
@@ -399,7 +457,8 @@
         "ON_DUTY": "En service",
         "COMPLETED": "Terminé",
         "SCHEDULED": "Planifié",
-        "CHECKED_IN": "Pointé"
+        "CHECKED_IN": "Pointé",
+        "NO_RECORD": "Aucun enregistrement"
       },
       "exceptionNames": {
         "LATE": "Arrivée tardive",
@@ -578,7 +637,8 @@
       "description": "Affectez le personnel aux modèles de quart et suivez la présence.",
       "searchPlaceholder": "Rechercher des affectations",
       "newAssignment": "Nouvelle affectation",
-      "confirmCancel": "Annuler cette affectation ?",
+      "confirmCancel": "Annuler cette affectation ? Cette action est irréversible.",
+      "cancelAssignment": "Annuler l'Affectation",
       "activeCount": "Actif : {count}",
       "cancelledCount": "Annulé : {count}",
       "filters": {

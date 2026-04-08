@@ -4,8 +4,6 @@ import { useMemo, useState } from "react";
 import {
   AlertTriangle,
   Clock3,
-  LogIn,
-  LogOut,
   RefreshCcw,
   TimerReset,
   UserRound,
@@ -16,9 +14,7 @@ import { Button } from "@/components/ui/button";
 import { ALDatePicker } from "@/components/ui/al-date-picker";
 import { ALCard } from "@/components/ui/al-card";
 import { cn } from "@/lib/utils";
-import { PermissionGuard } from "@/components/permission-guard";
-import { Permissions } from "@/types/const";
-import { useShiftAssignmentsQuery, useShiftLiveBoardQuery, useCheckInMutation, useCheckOutMutation } from "../hooks/use-shift-queries";
+import { useShiftAssignmentsQuery, useShiftLiveBoardQuery } from "../hooks/use-shift-queries";
 import { useShiftLiveBoardRealtime } from "../hooks/use-shift-live-board-realtime";
 import { ShiftStatusBadge } from "../components/shift-status-badge";
 import { dateUtils } from "@/lib/date-utils";
@@ -36,7 +32,6 @@ function todayIso() {
   return new Date().toISOString().slice(0, 10);
 }
 
-// _OLD: function fmt(iso, fallback) — replaced by dateUtils.formatLocal
 function fmt(iso: string | null | undefined, fallback = "—") {
   if (!iso) return fallback;
   try {
@@ -221,7 +216,6 @@ function sortPriority(row: ShiftLiveBoardItemDto) {
   return 4;
 }
 
-// _OLD: Previous table-based live board kept for rollback/reference.
 function ShiftLiveTable_DEPRECATED() {
   const [businessDate, setBusinessDate] = useState(todayIso);
 
@@ -383,8 +377,6 @@ export function ShiftLive() {
 
   const { data, isLoading, isFetching, refetch, dataUpdatedAt } = useShiftLiveBoardQuery(queryParams);
   const { isRealtimeConnected } = useShiftLiveBoardRealtime(businessDate);
-  const checkInMutation = useCheckInMutation();
-  const checkOutMutation = useCheckOutMutation();
 
   const rows = useMemo(() => data ?? [], [data]);
 
@@ -515,23 +507,23 @@ export function ShiftLive() {
         </div>
       </ALCard>
 
-      <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_320px]">
+      <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_420px]">
         <ALCard
           variant="default"
           elevation="sm"
           className="rounded-xl border border-[#D5BA98]/60 p-4 sm:p-5"
         >
-          <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+          <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-2">
             {summaryCards.map((card) => (
               <div
                 key={card.key}
                 className={cn(
-                  "rounded-xl border px-4 py-3 shadow-sm transition-transform hover:-translate-y-0.5",
+                  "rounded-lg border px-4 py-3 shadow-sm transition-transform hover:-translate-y-0.5",
                   card.className
                 )}
               >
                 <p className="text-xs font-medium uppercase tracking-[0.2em]">{card.label}</p>
-                <p className="mt-2 text-2xl font-semibold">{card.value}</p>
+                <p className="mt-1 text-xl font-semibold">{card.value}</p>
               </div>
             ))}
           </div>
@@ -700,39 +692,6 @@ export function ShiftLive() {
                     <div className="rounded-xl border border-[#D5BA98]/40 bg-[#D5BA98]/10 px-3 py-2 text-sm text-[#1A3A52]/70">
                       {row.isManualAdjustment && <p>{t("manualAdjusted")}</p>}
                       {row.notes && <p>{row.notes}</p>}
-                    </div>
-                  )}
-
-                  {/* Action buttons: Check-in / Check-out */}
-                  {(row.liveStatusCode === "NOT_CHECKED_IN" || row.liveStatusCode === "ON_DUTY" || row.liveStatusCode === "WAITING") && (
-                    <div className="flex items-center gap-2 border-t border-[#D5BA98]/30 pt-4">
-                      {row.liveStatusCode === "NOT_CHECKED_IN" && (
-                        <PermissionGuard permission={Permissions.CheckInShift}>
-                          <Button
-                            size="sm"
-                            onClick={() => checkInMutation.mutate(row.shiftAssignmentId)}
-                            disabled={checkInMutation.isPending}
-                            className="gap-1.5 bg-emerald-600 text-white hover:bg-emerald-700"
-                          >
-                            <LogIn className="h-3.5 w-3.5" />
-                            {t("actions.checkIn")}
-                          </Button>
-                        </PermissionGuard>
-                      )}
-                      {(row.liveStatusCode === "ON_DUTY" || row.liveStatusCode === "WAITING") && (
-                        <PermissionGuard permission={Permissions.CheckOutShift}>
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            onClick={() => checkOutMutation.mutate(row.shiftAssignmentId)}
-                            disabled={checkOutMutation.isPending}
-                            className="gap-1.5 border-red-300 text-red-700 hover:bg-red-50"
-                          >
-                            <LogOut className="h-3.5 w-3.5" />
-                            {t("actions.checkOut")}
-                          </Button>
-                        </PermissionGuard>
-                      )}
                     </div>
                   )}
                 </div>

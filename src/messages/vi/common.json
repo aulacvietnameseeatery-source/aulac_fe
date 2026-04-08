@@ -527,6 +527,8 @@
       "tokenRefreshFailed": "Không thể làm mới phiên đăng nhập. Vui lòng đăng nhập lại.",
       "noAccessToken": "Bạn cần đăng nhập trước khi tiếp tục.",
       "unauthorized": "Bạn chưa được xác thực. Vui lòng đăng nhập và thử lại.",
+      "accountDeactivated": "Tài khoản của bạn đã bị vô hiệu hóa. Vui lòng liên hệ quản trị viên.",
+      "invalidCredentials": "Sai tên đăng nhập hoặc mật khẩu.",
       "forbidden": "Bạn không có quyền thực hiện thao tác này.",
       "notFound": "Không tìm thấy dữ liệu yêu cầu.",
       "validation": "Một số giá trị đầu vào không hợp lệ. Vui lòng kiểm tra lại.",
@@ -1013,6 +1015,7 @@
       },
       "notifications": {
         "loadError": "Không thể tải thông tin khách hàng",
+        "loadOrdersError": "Lỗi khi tải danh sách đơn hàng",
         "deleteSuccess": "Xóa khách hàng thành công",
         "deleteError": "Không thể xóa khách hàng",
         "deleteHasDependencies": "Không thể xóa khách hàng đã có đơn hàng hoặc đặt bàn"
@@ -1200,6 +1203,11 @@
         "SERVED": "Đã phục vụ",
         "REJECTED": "Từ chối",
         "CANCELLED": "Đã hủy"
+      },
+      "paymentMethod": {
+        "CASH": "Tiền mặt",
+        "CARD": "Thẻ",
+        "QR": "Mã QR"
       }
     }
   },
@@ -1243,6 +1251,14 @@
     "deleteDialog": {
       "title": "Xóa Template",
       "description": "Bạn có chắc chắn muốn xóa template này không? Hành động này không thể hoàn tác."
+    },
+    "messages": {
+      "updateSuccess": "Cập nhật template thành công",
+      "updateError": "Có lỗi xảy ra khi cập nhật",
+      "createSuccess": "Tạo template thành công",
+      "createError": "Có lỗi xảy ra khi tạo template",
+      "deleteSuccess": "Xóa template thành công",
+      "deleteError": "Có lỗi xảy ra khi xóa"
     }
   },
   "Role": {

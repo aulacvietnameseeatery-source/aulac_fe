@@ -1,10 +1,11 @@
-// src/hooks/useDishDetail.ts
 import { useState, useEffect, useMemo } from "react";
+import { useTranslations } from "next-intl";
 import { DishDetailResponse } from "../types/dish-detail.types";
 import { toast } from "sonner"; // Hoặc thư viện toast bạn đang dùng
 import { getDishDetailById } from "../services/dish.service";
 
 export const useDishDetail = (id: number) => {
+  const t = useTranslations("Dish.Detail.notifications");
   const [data, setData] = useState<DishDetailResponse | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -21,7 +22,7 @@ export const useDishDetail = (id: number) => {
       } catch (err: any) {
         console.error(err);
         setError(err.message || "Failed to load dish details");
-        toast.error("Could not load dish details");
+        toast.error(t("loadError"));
       } finally {
         setIsLoading(false);
       }

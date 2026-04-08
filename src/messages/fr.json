@@ -729,6 +729,16 @@
       "operator": {
         "contains": "Contient",
         "notContains": "Ne contient pas",
+        "statusNames": {
+          "ABSENT": "Absent",
+          "LATE": "En retard",
+          "ACTIVE": "Actif",
+          "ON_DUTY": "En service",
+          "COMPLETED": "Terminé",
+          "SCHEDULED": "Planifié",
+          "CHECKED_IN": "Pointé",
+          "NO_RECORD": "Aucun enregistrement"
+        },
         "equals": "Égal",
         "notequal": "Différent",
         "different": "Différent",
@@ -767,7 +777,8 @@
       "network": "Impossible de joindre le serveur. Veuillez vérifier votre connexion.",
       "http": "La requête a échoué. Veuillez réessayer.",
       "httpStatus": "La requête a échoué avec le statut {status}.",
-      "unexpected": "Une erreur inattendue s'est produite. Veuillez réessayer plus tard."
+      "unexpected": "Une erreur inattendue s'est produite. Veuillez réessayer plus tard.",
+      "accountDeactivated": "Votre compte a été désactivé. Veuillez contacter un administrateur."
     },
     "permission": {
       "noAccess": "Vous n'avez pas la permission d'effectuer cette action."

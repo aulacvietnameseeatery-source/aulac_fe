@@ -21,6 +21,8 @@ import { dateUtils } from "@/lib/date-utils";
 import { CreatePromotionDialog } from "@/features/staff/promotion-management/promotion-create-edit/components/create-promotion-dialogs";
 import { EditPromotionDialog } from "@/features/staff/promotion-management/promotion-create-edit/components/edit-promotion-dialogs";
 import { PromotionDetailDialog } from "@/features/staff/promotion-management/promotion-create-edit/components/promotion-detail-dialog";
+import { PromotionStatusCode } from "@/types/status-codes";
+import { ConfirmModal } from "@/components/layout/admin-sidebar/confirm-modal";
 
 const PromotionListContent = () => {
     const t = useTranslations("Promotion.List");
@@ -34,6 +36,10 @@ const PromotionListContent = () => {
     const [editPromoId, setEditPromoId] = useState<number | null>(null);
     const [detailPromoId, setDetailPromoId] = useState<number | null>(null);
 
+    const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+    const [promoToDelete, setPromoToDelete] = useState<PromotionListDTO | null>(null);
+    const [isDeleting, setIsDeleting] = useState(false);
+
     const handleView = (promo: PromotionListDTO) => {
         setDetailPromoId(promo.promotionId);
     };
@@ -43,6 +49,38 @@ const PromotionListContent = () => {
     
     // Mở Dialog Edit với ID tương ứng
     const handleEdit = (promo: PromotionListDTO) => setEditPromoId(promo.promotionId);
+
+    // THÊM: Xử lý click button delete
+    const handleDeleteClick = (promo: PromotionListDTO) => {
+        setPromoToDelete(promo);
+        setDeleteModalOpen(true);
+    };
+
+    // THÊM: Xử lý confirm delete
+    const handleConfirmDelete = async () => {
+        if (!promoToDelete) return;
+        
+        setIsDeleting(true);
+        try {
+            await staffPromotionService.deletePromotion(promoToDelete.promotionId);
+            toast.success(t("notifications.deleteSuccess") || "Promotion deleted successfully");
+            refresh();
+            setDeleteModalOpen(false);
+        } catch (error: any) {
+            console.error('Failed to delete promotion:', error);
+            const errorMessage = error.response?.data?.userMessage || t("notifications.deleteError") || "Failed to delete promotion";
+            toast.error(errorMessage);
+        } finally {
+            setIsDeleting(false);
+            setPromoToDelete(null);
+        }
+    };
+
+    // THÊM: Xử lý close delete modal
+    const handleCloseDeleteModal = () => {
+        setDeleteModalOpen(false);
+        setPromoToDelete(null);
+    };
 
     // Xử lý sau khi lưu thành công từ Dialog
     const handleDialogSuccess = () => {
@@ -54,7 +92,7 @@ const PromotionListContent = () => {
     const handleStatusToggle = async (promo: PromotionListDTO, checked: boolean) => {
         setTogglingId(promo.promotionId);
         try {
-            const newStatus = checked ? "ACTIVE" : "DISABLED";
+            const newStatus = checked ? PromotionStatusCode.ACTIVE : PromotionStatusCode.DISABLED;
             updatePromotionLocally({ ...promo, promotionStatus: newStatus });
 
             // API calls rely on state checked.
@@ -76,16 +114,26 @@ const PromotionListContent = () => {
     };
 
     const getComputedStatus = useCallback((item: PromotionListDTO) => {
-        if (item.promotionStatus === "DISABLED") return "DISABLED";
+        if (item.promotionStatus === PromotionStatusCode.DISABLED) return PromotionStatusCode.DISABLED;
 
-        const now = new Date();
-        const start = new Date(item.startTime.endsWith('Z') ? item.startTime : `${item.startTime}Z`);
-        const end = new Date(item.endTime.endsWith('Z') ? item.endTime : `${item.endTime}Z`);
+        // 1. Get the current time in Swiss time using dateUtils.
+        const now = dateUtils.getSwissNow().getTime();
 
-        if (now < start) return "SCHEDULED";
-        if (now > end) return "EXPIRED";
-        return "ACTIVE";
+        // 2. Parse the start and end times of BE (UTC) to a timestamp.
+        const start = new Date(getUtcDateString(item.startTime)).getTime();
+        const end = new Date(getUtcDateString(item.endTime)).getTime();
+
+        // 3. Compare
+        if (now < start) return PromotionStatusCode.SCHEDULED;
+        if (now > end) return PromotionStatusCode.EXPIRED;
+        return PromotionStatusCode.ACTIVE;
     }, []);
+
+    // Ensures the date string from the backend is always UTC.
+    const getUtcDateString = (utcDateString: string) => {
+        const dateStringWithZ = utcDateString.endsWith('Z') ? utcDateString : `${utcDateString}Z`;
+        return dateStringWithZ;
+    };
 
     const columns: TableColumn[] = useMemo(() => [
         {
@@ -127,7 +175,7 @@ const PromotionListContent = () => {
             width: "160px",
             cellRender: ({ item }: { item: PromotionListDTO }) => (
                 <span className="text-sm text-gray-600">
-                    {dateUtils.formatLocal(item.startTime, "dd/MM/yyyy HH:mm")}
+                    {dateUtils.formatLocal(getUtcDateString(item.startTime), "dd/MM/yyyy HH:mm")}
                 </span>
             ),
         },
@@ -137,7 +185,7 @@ const PromotionListContent = () => {
             width: "160px",
             cellRender: ({ item }: { item: PromotionListDTO }) => (
                 <span className="text-sm text-gray-600">
-                    {dateUtils.formatLocal(item.endTime, "dd/MM/yyyy HH:mm")}
+                    {dateUtils.formatLocal(getUtcDateString(item.endTime), "dd/MM/yyyy HH:mm")}
                 </span>
             ),
         },
@@ -159,16 +207,16 @@ const PromotionListContent = () => {
             width: "130px",
             filterType: "select" as const,
             filterOptions: [
-                { label: "Active", value: "ACTIVE" },
-                { label: "Scheduled", value: "SCHEDULED" },
-                { label: "Disabled", value: "DISABLED" },
-                { label: "Expired", value: "EXPIRED" },
+                { label: "Active", value: PromotionStatusCode.ACTIVE },
+                { label: "Scheduled", value: PromotionStatusCode.SCHEDULED },
+                { label: "Disabled", value: PromotionStatusCode.DISABLED },
+                { label: "Expired", value: PromotionStatusCode.EXPIRED },
             ],
             cellRender: ({ item }: { item: PromotionListDTO }) => {
                 const computedStatus = getComputedStatus(item);
                 // Only turn on the switch if it is currently active or scheduled.
-                const isChecked = computedStatus === "ACTIVE" || computedStatus === "SCHEDULED";
-                const isDisabledStatus = computedStatus === "EXPIRED";
+                const isChecked = computedStatus === PromotionStatusCode.ACTIVE || computedStatus === PromotionStatusCode.SCHEDULED;
+                const isDisabledStatus = computedStatus === PromotionStatusCode.EXPIRED;
                 
                 return (
                     <div className="flex flex-col items-center gap-1 py-2">
@@ -228,7 +276,7 @@ const PromotionListContent = () => {
                 )}
                 renderCell={handleGlobalRenderCell}
                 renderActionColumn={(item) => (
-                    <PromotionActions promotion={item} onView={handleView} onEdit={handleEdit} />
+                    <PromotionActions promotion={item} onView={handleView} onEdit={handleEdit} onDelete={handleDeleteClick} />
                 )}
             />
 
@@ -250,6 +298,18 @@ const PromotionListContent = () => {
                 open={!!editPromoId} 
                 onClose={() => setEditPromoId(null)} 
                 onSuccess={handleDialogSuccess} 
+            />
+
+            <ConfirmModal
+                isOpen={deleteModalOpen}
+                onClose={handleCloseDeleteModal}
+                onConfirm={handleConfirmDelete}
+                title={t("deleteModal.title") || "Confirm Delete"}
+                message={t("deleteModal.message", { name: promoToDelete?.promoCode || "" }) || `Are you sure you want to delete promotion ${promoToDelete?.promoCode}?`}
+                confirmText={t("deleteModal.confirm") || "Delete"}
+                cancelText={t("deleteModal.cancel") || "Cancel"}
+                isLoading={isDeleting}
+                variant="danger"
             />
         </div>
     );

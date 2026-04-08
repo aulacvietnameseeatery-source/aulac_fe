@@ -194,6 +194,15 @@
     "dateRange": "Date Range",
     "from": "From",
     "to": "To"
+    },
+    "messages": {
+      "createTransactionSuccess": "Transaction created",
+      "createTransactionError": "Failed to create transaction",
+      "submitTransactionSuccess": "Transaction submitted for approval",
+      "submitTransactionError": "Failed to submit transaction",
+      "approvedSuccess": "Transaction approved",
+      "rejectedSuccess": "Transaction rejected",
+      "approvalError": "Failed to process approval"
     }
   }
 }

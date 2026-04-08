@@ -1,16 +1,27 @@
 "use client";
 
-import { useMemo } from "react";
-import { RefreshCcw, CalendarDays, ArrowRightLeft, CalendarX } from "lucide-react";
+import { useMemo, useState, useCallback } from "react";
+import {
+  Clock,
+  CalendarDays,
+  ChevronLeft,
+  ChevronRight,
+  Settings,
+  HelpCircle,
+  LogOut,
+  ShieldCheck,
+} from "lucide-react";
 import { useTranslations } from "next-intl";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { ALCard } from "@/components/ui/al-card";
 import { useMyShiftsQuery } from "../hooks/use-shift-queries";
 import { CheckInCard } from "../components/check-in-card";
-import { ShiftStatusBadge } from "../components/shift-status-badge";
-import type { ShiftAssignmentListDto } from "../types/shift-management.types";
+import { useCheckoutAutoLogout } from "../hooks/use-checkout-auto-logout";
+import { Button } from "@/components/ui/button";
+import type {
+  ShiftAssignmentListDto,
+  ShiftAssignmentDetailDto,
+} from "../types/shift-management.types";
 import { dateUtils } from "@/lib/date-utils";
+import { cn } from "@/lib/utils";
 
 // ── helpers ──
 
@@ -18,7 +29,18 @@ function todayIso() {
   return new Date().toISOString().slice(0, 10); // "YYYY-MM-DD"
 }
 
-function fmt(iso: string | null | undefined, fallback = "—") {
+function toMinutesBetween(
+  startIso?: string | null,
+  endIso?: string | null
+) {
+  if (!startIso || !endIso) return 0;
+  const start = new Date(startIso).getTime();
+  const end = new Date(endIso).getTime();
+  if (Number.isNaN(start) || Number.isNaN(end) || end <= start) return 0;
+  return Math.round((end - start) / 60000);
+}
+
+function fmtTime(iso: string | null | undefined, fallback = "—") {
   if (!iso) return fallback;
   try {
     return dateUtils.formatLocal(iso, "HH:mm");
@@ -29,42 +51,24 @@ function fmt(iso: string | null | undefined, fallback = "—") {
 
 type DayStatus = "ON_TIME" | "LATE" | "OT" | "INCOMING" | "NONE";
 
-function toMinutesBetween(startIso?: string | null, endIso?: string | null) {
-  if (!startIso || !endIso) return 0;
-  const start = new Date(startIso).getTime();
-  const end = new Date(endIso).getTime();
-  if (Number.isNaN(start) || Number.isNaN(end) || end <= start) return 0;
-  return Math.round((end - start) / 60000);
-}
+const WEEKDAY_HEADERS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
-function dayStatusClass(status: DayStatus) {
-  if (status === "ON_TIME") return "border-blue-500 bg-blue-500 text-white";
-  if (status === "LATE") return "border-amber-500 bg-amber-500 text-white";
-  if (status === "OT") return "border-emerald-500 bg-emerald-500 text-white";
-  if (status === "INCOMING") return "border-slate-600 bg-slate-600 text-white";
-  return "border border-[#D5BA98]/60 bg-white text-slate-400";
-}
+// ── stat computation ──
 
-function dayStatusLabel(status: DayStatus) {
-  if (status === "ON_TIME") return "On time";
-  if (status === "LATE") return "Late";
-  if (status === "OT") return "OT";
-  if (status === "INCOMING") return "Incoming";
-  return "No shift";
-}
-
-function pickDayStatus(statuses: DayStatus[]): DayStatus {
-  if (statuses.includes("OT")) return "OT";
-  if (statuses.includes("LATE")) return "LATE";
-  if (statuses.includes("ON_TIME")) return "ON_TIME";
-  if (statuses.includes("INCOMING")) return "INCOMING";
-  return "NONE";
-}
-
-function getAssignmentStatus(a: ShiftAssignmentListDto, now: Date): DayStatus {
-  const att = (a as ShiftAssignmentListDto & {
-    attendance?: { lateMinutes?: number; workedMinutes?: number; actualCheckInAt?: string | null; attendanceStatusCode?: string };
-  }).attendance;
+function getAssignmentStatus(
+  a: ShiftAssignmentListDto,
+  now: Date
+): DayStatus {
+  const att = (
+    a as ShiftAssignmentListDto & {
+      attendance?: {
+        lateMinutes?: number;
+        workedMinutes?: number;
+        actualCheckInAt?: string | null;
+        attendanceStatusCode?: string;
+      };
+    }
+  ).attendance;
 
   if (!a.workDate) return "NONE";
   const nowIsoDate = now.toISOString().slice(0, 10);
@@ -76,55 +80,37 @@ function getAssignmentStatus(a: ShiftAssignmentListDto, now: Date): DayStatus {
   const plannedMinutes = toMinutesBetween(a.plannedStartAt, a.plannedEndAt);
 
   if (statusCode === "LATE" || lateMinutes > 0) return "LATE";
-  if (workedMinutes > 0 && plannedMinutes > 0 && workedMinutes > plannedMinutes) return "OT";
+  if (
+    workedMinutes > 0 &&
+    plannedMinutes > 0 &&
+    workedMinutes > plannedMinutes
+  )
+    return "OT";
   if (statusCode === "COMPLETED" || !!att?.actualCheckInAt) return "ON_TIME";
   if (a.workDate === nowIsoDate) return "INCOMING";
   return "NONE";
 }
 
-// ── sub-components ──
+// ── month navigation ──
 
-function ShiftRow({ a }: { a: ShiftAssignmentListDto }) {
-  const t = useTranslations("shift.myShift");
-  const isIncoming = a.workDate && a.workDate >= todayIso();
+function getDaysInMonth(year: number, month: number) {
+  return new Date(year, month + 1, 0).getDate();
+}
 
-  return (
-    <ALCard
-      withHoverState
-      variant="soft"
-      hoverEffect="lift"
-      animation="fade"
-      className="flex h-16 items-center justify-between rounded-lg px-4 py-3"
-    >
-      {({ isHovered }) => (
-        <>
-          <div className="space-y-0.5 min-w-0 flex-1">
-            <p className="truncate text-sm font-medium text-[#1A3A52]">{a.templateName ?? `Assignment #${a.shiftAssignmentId}`}</p>
-            <p className="text-xs text-[#1A3A52]/70">
-              {a.workDate} · {fmt(a.plannedStartAt)} – {fmt(a.plannedEndAt)}
-            </p>
-          </div>
+function getFirstMondayOffset(year: number, month: number) {
+  // Returns how many blank cells before day 1 (Monday-based: Mon=0, Tue=1, ..., Sun=6)
+  const dayOfWeek = new Date(year, month, 1).getDay();
+  // Convert Sunday=0 to 6, Mon=1 to 0, Tue=2 to 1, etc.
+  return dayOfWeek === 0 ? 6 : dayOfWeek - 1;
+}
 
-          <div className="flex items-center gap-2 shrink-0 ml-3 h-full">
-            {isHovered && isIncoming && a.isActive ? (
-              <div className="flex gap-1 animate-in fade-in zoom-in duration-200">
-                <Button size="sm" variant="outline" className="h-8 gap-1 border-blue-200 bg-blue-50 text-blue-700 hover:bg-blue-100 hover:text-blue-800">
-                  <ArrowRightLeft className="w-3.5 h-3.5" />
-                  {t("actions.swap")}
-                </Button>
-                <Button size="sm" variant="outline" className="h-8 gap-1 border-amber-200 bg-amber-50 text-amber-700 hover:bg-amber-100 hover:text-amber-800">
-                  <CalendarX className="w-3.5 h-3.5" />
-                  {t("actions.leave")}
-                </Button>
-              </div>
-            ) : (
-              <ShiftStatusBadge statusCode={a.isActive ? "active" : "cancelled"} type="assignment" />
-            )}
-          </div>
-        </>
-      )}
-    </ALCard>
-  );
+// Get trailing days from next month to fill the last week row
+function getTrailingDays(year: number, month: number) {
+  const daysInMonth = getDaysInMonth(year, month);
+  const lastDayOfWeek = new Date(year, month, daysInMonth).getDay();
+  // Convert to Monday-based: Sun=0 -> 6
+  const lastDowMondayBased = lastDayOfWeek === 0 ? 6 : lastDayOfWeek - 1;
+  return lastDowMondayBased === 6 ? 0 : 6 - lastDowMondayBased;
 }
 
 // ── main component ──
@@ -134,245 +120,574 @@ export function MyShifts() {
   const today = todayIso();
   const now = useMemo(() => new Date(), []);
 
-  // Load last 30 and next 30 days
+  // Auto-logout countdown after check-out
+  const autoLogout = useCheckoutAutoLogout();
+
+  // Month navigation: [year, monthIndex]
+  const [viewYear, setViewYear] = useState(now.getFullYear());
+  const [viewMonth, setViewMonth] = useState(now.getMonth());
+  const [viewMode, setViewMode] = useState<"week" | "month">("month");
+
+  // Load broader date range to cover the full month view
   const fromDate = useMemo(() => {
-    const d = new Date();
-    d.setDate(d.getDate() - 30);
+    const d = new Date(viewYear, viewMonth, 1);
+    d.setDate(d.getDate() - 7); // buffer for prev month trailing days
     return d.toISOString().slice(0, 10);
-  }, []);
+  }, [viewYear, viewMonth]);
 
   const toDate = useMemo(() => {
-    const d = new Date();
-    d.setDate(d.getDate() + 30);
+    const d = new Date(viewYear, viewMonth + 1, 0);
+    d.setDate(d.getDate() + 7); // buffer for next month leading days
     return d.toISOString().slice(0, 10);
-  }, []);
+  }, [viewYear, viewMonth]);
 
-  const { data, isLoading, refetch } = useMyShiftsQuery({ fromDate, toDate, pageSize: 100 });
+  const { data, isLoading } = useMyShiftsQuery({
+    fromDate,
+    toDate,
+    pageSize: 200,
+  });
   const all = useMemo(() => data?.pageData ?? [], [data]);
 
-  // Partition: today / upcoming / past
+  // Group assignments by date
+  const byDate = useMemo(() => {
+    const map = new Map<string, ShiftAssignmentListDto[]>();
+    all.forEach((a) => {
+      if (!a.workDate) return;
+      if (!map.has(a.workDate)) map.set(a.workDate, []);
+      map.get(a.workDate)!.push(a);
+    });
+    return map;
+  }, [all]);
+
+  // Compute monthly stats
+  const monthStats = useMemo(() => {
+    const monthStart = `${viewYear}-${String(viewMonth + 1).padStart(2, "0")}-01`;
+    const daysInMonth = getDaysInMonth(viewYear, viewMonth);
+    const monthEnd = `${viewYear}-${String(viewMonth + 1).padStart(2, "0")}-${String(daysInMonth).padStart(2, "0")}`;
+
+    const monthAssignments = all.filter(
+      (a) => a.workDate >= monthStart && a.workDate <= monthEnd
+    );
+
+    let totalWorkdays = 0;
+    let overtimeMinutes = 0;
+    let lateEarlyCount = 0;
+    let leaveDays = 0;
+
+    const processedDates = new Set<string>();
+
+    monthAssignments.forEach((a) => {
+      const att = (a as ShiftAssignmentListDto & {
+        attendance?: {
+          lateMinutes?: number;
+          earlyLeaveMinutes?: number;
+          workedMinutes?: number;
+          actualCheckInAt?: string | null;
+          actualCheckOutAt?: string | null;
+          attendanceStatusCode?: string;
+        };
+      }).attendance;
+
+      const statusCode = att?.attendanceStatusCode?.toUpperCase();
+
+      if (statusCode === "ABSENT" || !a.isActive) {
+        if (!processedDates.has(a.workDate + "-leave")) {
+          leaveDays += 1;
+          processedDates.add(a.workDate + "-leave");
+        }
+        return;
+      }
+
+      if (att?.actualCheckInAt) {
+        if (!processedDates.has(a.workDate + "-work")) {
+          totalWorkdays += 1;
+          processedDates.add(a.workDate + "-work");
+        }
+      }
+
+      const plannedMinutes = toMinutesBetween(a.plannedStartAt, a.plannedEndAt);
+      const workedMinutes = att?.workedMinutes ?? 0;
+      if (workedMinutes > plannedMinutes) {
+        overtimeMinutes += workedMinutes - plannedMinutes;
+      }
+
+      if ((att?.lateMinutes ?? 0) > 0 || (att?.earlyLeaveMinutes ?? 0) > 0) {
+        lateEarlyCount += 1;
+      }
+    });
+
+    return {
+      totalWorkdays: totalWorkdays.toFixed(2),
+      totalOvertimeHours: (overtimeMinutes / 60).toFixed(2),
+      lateEarlyCount,
+      leaveDays: leaveDays.toFixed(2),
+    };
+  }, [all, viewYear, viewMonth]);
+
+  // Today's shifts for check-in display
   const todayShifts = useMemo(
     () => all.filter((a) => a.workDate === today),
     [all, today]
   );
 
-  const upcoming = useMemo(
-    () =>
-      all
-        .filter((a) => a.workDate && a.workDate > today)
-        .sort((a, b) => (a.workDate ?? "").localeCompare(b.workDate ?? "")),
-    [all, today]
-  );
+  // Today's check-in time
+  const todayCheckInTime = useMemo(() => {
+    for (const a of todayShifts) {
+      const att = (a as ShiftAssignmentListDto & {
+        attendance?: { actualCheckInAt?: string | null };
+      }).attendance;
+      if (att?.actualCheckInAt) return fmtTime(att.actualCheckInAt);
+    }
+    return null;
+  }, [todayShifts]);
 
-  const past = useMemo(
-    () =>
-      all
-        .filter((a) => a.workDate && a.workDate < today)
-        .sort((a, b) => (b.workDate ?? "").localeCompare(a.workDate ?? "")),
-    [all, today]
-  );
+  // Edge case E-1: Only trigger auto-logout after the LAST today shift is checked out
+  const handleCheckOutSuccess = useCallback(() => {
+    // Count how many of today's shifts still need check-out (checked-in but not yet out)
+    const uncheckedOutCount = todayShifts.filter((a) => {
+      const att = (a as ShiftAssignmentListDto & {
+        attendance?: {
+          actualCheckInAt?: string | null;
+          actualCheckOutAt?: string | null;
+        };
+      }).attendance;
+      return !!att?.actualCheckInAt && !att?.actualCheckOutAt;
+    }).length;
 
-  const monthlyAssignments = useMemo(() => {
-    const monthStart = new Date(now.getFullYear(), now.getMonth(), 1).toISOString().slice(0, 10);
-    const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0).toISOString().slice(0, 10);
-    return all.filter((a) => a.workDate >= monthStart && a.workDate <= monthEnd);
-  }, [all, now]);
+    // This callback fires AFTER one check-out succeeds.
+    // If this was the last remaining shift (count was 1 before, now 0 after invalidation)
+    // we start the countdown. We check <= 1 because the query may not have refreshed yet.
+    if (uncheckedOutCount <= 1) {
+      autoLogout.startCountdown();
+    }
+  }, [todayShifts, autoLogout]);
 
-  const monthlySummary = useMemo(() => {
-    let onTime = 0;
-    let late = 0;
-    let ot = 0;
-    let incoming = 0;
+  // Build calendar grid cells
+  const calendarCells = useMemo(() => {
+    const daysInMonth = getDaysInMonth(viewYear, viewMonth);
+    const leadingBlanks = getFirstMondayOffset(viewYear, viewMonth);
+    const trailingBlanks = getTrailingDays(viewYear, viewMonth);
 
-    monthlyAssignments.forEach((a) => {
-      const st = getAssignmentStatus(a, now);
-      if (st === "ON_TIME") onTime += 1;
-      else if (st === "LATE") late += 1;
-      else if (st === "OT") ot += 1;
-      else if (st === "INCOMING") incoming += 1;
-    });
+    // Previous month trailing days
+    const prevMonth = viewMonth === 0 ? 11 : viewMonth - 1;
+    const prevYear = viewMonth === 0 ? viewYear - 1 : viewYear;
+    const prevDaysInMonth = getDaysInMonth(prevYear, prevMonth);
 
-    return {
-      total: monthlyAssignments.length,
-      onTime,
-      late,
-      ot,
-      incoming,
-      estimatedEarnings: monthlyAssignments.length * 350000, // Dummy calculation: ~350k VND per shift
-    };
-  }, [monthlyAssignments, now]);
+    type CalendarCell =
+      | { kind: "prev"; day: number; dateIso: string }
+      | { kind: "current"; day: number; dateIso: string }
+      | { kind: "next"; day: number; dateIso: string };
 
-  const dayCards = useMemo(() => {
-    const year = now.getFullYear();
-    const month = now.getMonth();
-    const daysInMonth = new Date(year, month + 1, 0).getDate();
-    const firstWeekday = new Date(year, month, 1).getDay();
+    const cells: CalendarCell[] = [];
 
-    const byDate = new Map<string, ShiftAssignmentListDto[]>();
-    monthlyAssignments.forEach((a) => {
-      if (!byDate.has(a.workDate)) byDate.set(a.workDate, []);
-      byDate.get(a.workDate)!.push(a);
-    });
-
-    const cells: Array<
-      | { kind: "empty"; key: string }
-      | { kind: "day"; key: string; day: number; status: DayStatus; count: number }
-    > = [];
-
-    for (let i = 0; i < firstWeekday; i += 1) {
-      cells.push({ kind: "empty", key: `empty-${i}` });
+    // Leading blanks (prev month)
+    for (let i = leadingBlanks - 1; i >= 0; i--) {
+      const day = prevDaysInMonth - i;
+      const dateIso = `${prevYear}-${String(prevMonth + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+      cells.push({ kind: "prev", day, dateIso });
     }
 
-    for (let day = 1; day <= daysInMonth; day += 1) {
-      const date = new Date(year, month, day).toISOString().slice(0, 10);
-      const assignments = byDate.get(date) ?? [];
-      const status = pickDayStatus(assignments.map((a) => getAssignmentStatus(a, now)));
+    // Current month
+    for (let day = 1; day <= daysInMonth; day++) {
+      const dateIso = `${viewYear}-${String(viewMonth + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+      cells.push({ kind: "current", day, dateIso });
+    }
 
-      cells.push({
-        kind: "day",
-        key: date,
-        day,
-        status,
-        count: assignments.length,
-      });
+    // Next month trailing days
+    const nextMonth = viewMonth === 11 ? 0 : viewMonth + 1;
+    const nextYear = viewMonth === 11 ? viewYear + 1 : viewYear;
+    for (let i = 1; i <= trailingBlanks; i++) {
+      const dateIso = `${nextYear}-${String(nextMonth + 1).padStart(2, "0")}-${String(i).padStart(2, "0")}`;
+      cells.push({ kind: "next", day: i, dateIso });
     }
 
     return cells;
-  }, [monthlyAssignments, now]);
+  }, [viewYear, viewMonth]);
+
+  // Month period label for dropdown
+  const periodLabel = useMemo(() => {
+    const firstDay = `01/${String(viewMonth + 1).padStart(2, "0")}/${viewYear}`;
+    return t("timesheetPeriod", { date: firstDay });
+  }, [viewYear, viewMonth, t]);
+
+  // Navigation handlers
+  const goToPrevMonth = () => {
+    if (viewMonth === 0) {
+      setViewYear(viewYear - 1);
+      setViewMonth(11);
+    } else {
+      setViewMonth(viewMonth - 1);
+    }
+  };
+
+  const goToNextMonth = () => {
+    if (viewMonth === 11) {
+      setViewYear(viewYear + 1);
+      setViewMonth(0);
+    } else {
+      setViewMonth(viewMonth + 1);
+    }
+  };
 
   return (
-    <div className="space-y-6 rounded-2xl border border-[#D5BA98]/40 bg-[#FDFBF9] p-5 sm:p-6">
-      {/* Header */}
-      <ALCard animation="slide-up" className="flex items-start justify-between px-4 py-4 sm:px-5">
-        <div>
-          <h1 className="text-2xl font-semibold tracking-wide text-[#1A3A52]">{t("title")}</h1>
-          <p className="mt-1 text-sm text-[#1A3A52]/70">
-            {t("description")}
-          </p>
+    <div className="flex h-full min-h-0 w-full flex-col gap-4 overflow-hidden">
+      {/* ── Header ── */}
+      <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-slate-200 bg-white px-5 py-3">
+        <h1 className="text-lg font-semibold text-slate-900">
+          {t("title")}
+        </h1>
+
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+          {/* View mode toggle */}
+          <div className="flex rounded-md border border-slate-200 overflow-hidden text-sm">
+            <button
+              type="button"
+              className={cn(
+                "px-3 py-1.5 transition-colors",
+                viewMode === "week"
+                  ? "bg-slate-100 text-slate-900 font-medium"
+                  : "bg-white text-slate-500 hover:bg-slate-50"
+              )}
+              onClick={() => setViewMode("week")}
+            >
+              {t("viewMode.week")}
+            </button>
+            <button
+              type="button"
+              className={cn(
+                "px-3 py-1.5 transition-colors border-l border-slate-200",
+                viewMode === "month"
+                  ? "bg-slate-100 text-slate-900 font-medium"
+                  : "bg-white text-slate-500 hover:bg-slate-50"
+              )}
+              onClick={() => setViewMode("month")}
+            >
+              {t("viewMode.month")}
+            </button>
+          </div>
+
+          {/* Help icon */}
+          <button type="button" className="hidden sm:flex items-center gap-1.5 rounded-md border border-slate-200 bg-white px-2.5 py-1.5 text-sm text-slate-500 hover:bg-slate-50">
+            <HelpCircle className="h-4 w-4" />
+            Question
+          </button>
+
+          {/* Year navigation */}
+          <div className="flex items-center gap-1 border border-slate-200 rounded-md bg-white">
+            <button
+              type="button"
+              className="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-50 rounded-l-md"
+              onClick={() => setViewYear((y) => y - 1)}
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </button>
+            <span className="text-sm font-medium text-slate-700 px-2 tabular-nums">{viewYear}</span>
+            <button
+              type="button"
+              className="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-50 rounded-r-md"
+              onClick={() => setViewYear((y) => y + 1)}
+            >
+              <ChevronRight className="h-4 w-4" />
+            </button>
+          </div>
+
+          {/* Period selector dropdown */}
+          <div className="flex items-center gap-1 rounded-md border border-slate-200 bg-white px-3 py-1.5 text-sm text-slate-600">
+            <button
+              type="button"
+              className="p-0.5 text-slate-400 hover:text-slate-700"
+              onClick={goToPrevMonth}
+            >
+              <ChevronLeft className="h-3.5 w-3.5" />
+            </button>
+            <span className="min-w-50 text-center truncate">{periodLabel}</span>
+            <button
+              type="button"
+              className="p-0.5 text-slate-400 hover:text-slate-700"
+              onClick={goToNextMonth}
+            >
+              <ChevronRight className="h-3.5 w-3.5" />
+            </button>
+          </div>
+
+          {/* Settings gear */}
+          <button type="button" className="p-2 text-slate-400 hover:text-slate-700">
+            <Settings className="h-4 w-4" />
+          </button>
         </div>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => refetch()}
-          disabled={isLoading}
-          className="border-[#D5BA98]/70 bg-[#FDFBF9] text-[#1A3A52] hover:bg-[#D5BA98]/20"
-        >
-          <RefreshCcw className="w-4 h-4" />
-        </Button>
-      </ALCard>
+      </div>
 
-      {isLoading ? (
-        <ALCard className="flex items-center justify-center py-20 text-sm text-[#1A3A52]/70">
-          {t("loading")}
-        </ALCard>
-      ) : all.length === 0 ? (
-        <ALCard className="flex flex-col items-center justify-center gap-3 py-20 text-[#1A3A52]/70">
-          <CalendarDays className="w-10 h-10" />
-          <p className="text-sm">{t("empty")}</p>
-        </ALCard>
-      ) : (
-        <div className="grid gap-6 lg:grid-cols-12 lg:items-start">
-          {/* LEFT COLUMN: Summary & Calendar */}
-          <div className="space-y-6 lg:col-span-5 xl:col-span-4 lg:sticky lg:top-6">
-            <ALCard as="section" padding="md" animation="slide-up" className="space-y-4">
-              <div className="flex items-center justify-between">
-                <h2 className="text-base font-semibold text-[#1A3A52]">{t("summary.title")}</h2>
-                <p className="text-xs text-[#1A3A52]/65">{t("summary.subtitle")}</p>
+      {/* ── Side-by-side layout: Calendar (left) + Attendance (right) ── */}
+      <div className="grid min-h-0 flex-1 grid-cols-1 gap-4 xl:grid-cols-[1fr_380px]">
+        {/* ── LEFT COLUMN: Stats + Calendar ── */}
+        <div className="space-y-4 order-2 xl:order-1">
+          {/* ── Summary stat cards ── */}
+          <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+            {/* Total actual workdays */}
+            <div className="flex items-center justify-between rounded-xl border border-slate-200 bg-white px-4 py-3">
+              <div>
+                <p className="text-xs text-slate-500">{t("stats.totalWorkdays")}</p>
+                <p className="text-xl font-bold text-slate-900 tabular-nums mt-0.5">
+                  {monthStats.totalWorkdays}
+                </p>
               </div>
-
-              <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-                <div className="rounded-lg border border-blue-200 bg-blue-50 p-2.5">
-                  <p className="text-[10px] sm:text-xs text-blue-700/80">{t("summary.onTime")}</p>
-                  <p className="text-lg font-semibold text-blue-700">{monthlySummary.onTime}</p>
-                </div>
-                <div className="rounded-lg border border-amber-200 bg-amber-50 p-2.5">
-                  <p className="text-[10px] sm:text-xs text-amber-700/80">{t("summary.late")}</p>
-                  <p className="text-lg font-semibold text-amber-700">{monthlySummary.late}</p>
-                </div>
-                <div className="rounded-lg border border-emerald-200 bg-emerald-50 p-2.5">
-                  <p className="text-[10px] sm:text-xs text-emerald-700/80">{t("summary.ot")}</p>
-                  <p className="text-lg font-semibold text-emerald-700">{monthlySummary.ot}</p>
-                </div>
-                <div className="rounded-lg border border border-[#D5BA98]/60 bg-slate-50 p-2.5">
-                  <p className="text-[10px] sm:text-xs text-slate-700/80">{t("summary.incoming")}</p>
-                  <p className="text-lg font-semibold text-slate-700">{monthlySummary.incoming}</p>
-                </div>
-                <div className="col-span-2 sm:col-span-4 flex items-center justify-between rounded-lg border border-emerald-500/30 bg-emerald-500/10 p-3 pt-2 pb-2">
-                  <p className="text-xs font-medium text-emerald-800">{t("summary.estimatedEarnings")}</p>
-                  <p className="text-base font-bold text-emerald-700">~{monthlySummary.estimatedEarnings.toLocaleString()} đ</p>
-                </div>
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-100">
+                <CalendarDays className="h-4 w-4 text-emerald-600" />
               </div>
+            </div>
 
-              <hr className="border-slate-100" />
+            {/* Total overtime hours */}
+            <div className="flex items-center justify-between rounded-xl border border-slate-200 bg-white px-4 py-3">
+              <div>
+                <p className="text-xs text-slate-500">{t("stats.totalOvertimeHours")}</p>
+                <p className="text-xl font-bold text-slate-900 tabular-nums mt-0.5">
+                  {monthStats.totalOvertimeHours}
+                </p>
+              </div>
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-100">
+                <Clock className="h-4 w-4 text-blue-600" />
+              </div>
+            </div>
 
-              <div className="space-y-3">
-                <div className="flex flex-wrap items-center gap-1.5">
-                  <Badge variant="outline" className="border-blue-500 bg-blue-500 text-white text-[9px] px-1.5 py-0">{t("summary.onTime")}</Badge>
-                  <Badge variant="outline" className="border-amber-500 bg-amber-500 text-white text-[9px] px-1.5 py-0">{t("summary.late")}</Badge>
-                  <Badge variant="outline" className="border-emerald-500 bg-emerald-500 text-white text-[9px] px-1.5 py-0">{t("summary.ot")}</Badge>
-                  <Badge variant="outline" className="border-slate-600 bg-slate-600 text-white text-[9px] px-1.5 py-0">{t("summary.incoming")}</Badge>
-                </div>
+            {/* Total late arrivals and early departures */}
+            <div className="flex items-center justify-between rounded-xl border border-slate-200 bg-white px-4 py-3">
+              <div>
+                <p className="text-xs text-slate-500">{t("stats.totalLateEarly")}</p>
+                <p className="text-xl font-bold text-slate-900 tabular-nums mt-0.5">
+                  {monthStats.lateEarlyCount}
+                </p>
+              </div>
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-100">
+                <div className="h-4 w-4 rounded-full bg-amber-500" />
+              </div>
+            </div>
 
-                <div className="grid grid-cols-7 gap-1">
-                  {dayCards.map((cell) =>
-                    cell.kind === "empty" ? (
-                      <div key={cell.key} className="h-10 rounded-md border border-transparent" />
-                    ) : (
-                      <ALCard
-                        key={cell.key}
-                        className="flex flex-col items-center justify-center rounded-md border-[#D5BA98]/60 bg-[#FDFBF9] py-1 shadow-sm transition-colors hover:bg-slate-100"
-                        title={t("summary.shiftCount", { count: cell.count })}
+            {/* Total leave days */}
+            <div className="flex items-center justify-between rounded-xl border border-slate-200 bg-white px-4 py-3">
+              <div>
+                <p className="text-xs text-slate-500">{t("stats.totalLeaveDays")}</p>
+                <p className="text-xl font-bold text-slate-900 tabular-nums mt-0.5">
+                  {monthStats.leaveDays}
+                </p>
+              </div>
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-red-100">
+                <CalendarDays className="h-4 w-4 text-red-500" />
+              </div>
+            </div>
+          </div>
+
+          {/* ── Monthly Calendar ── */}
+          {isLoading ? (
+            <div className="flex items-center justify-center rounded-xl border border-slate-200 bg-white py-20 text-sm text-slate-400">
+              {t("loading")}
+            </div>
+          ) : (
+            <div className="overflow-hidden rounded-xl border border-slate-200 bg-white">
+              <table className="w-full table-fixed border-collapse">
+                <thead>
+                  <tr>
+                    {WEEKDAY_HEADERS.map((day, i) => (
+                      <th
+                        key={day}
+                        className={cn(
+                          "border-b border-r border-slate-200 px-1 py-2 text-center text-[11px] font-semibold",
+                          i === 5 || i === 6
+                            ? "text-red-500"
+                            : "text-slate-600"
+                        )}
+                        style={
+                          (() => {
+                            const todayDow = new Date().getDay();
+                            const todayMondayBased =
+                              todayDow === 0 ? 6 : todayDow - 1;
+                            return todayMondayBased === i
+                              ? { backgroundColor: "#6366f1", color: "white" }
+                              : {};
+                          })()
+                        }
                       >
-                        <span className="text-xs font-semibold text-[#1A3A52]">{cell.day}</span>
-                        <div className={`mt-0.5 h-1.5 w-1.5 rounded-full ${cell.status === "NONE" ? "bg-transparent" : dayStatusClass(cell.status).split(' ')[1]}`} />
-                      </ALCard>
-                    )
+                        {day}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {Array.from(
+                    { length: Math.ceil(calendarCells.length / 7) },
+                    (_, weekIdx) => {
+                      const weekCells = calendarCells.slice(
+                        weekIdx * 7,
+                        weekIdx * 7 + 7
+                      );
+                      return (
+                        <tr key={weekIdx}>
+                          {weekCells.map((cell, colIdx) => {
+                            const isWeekend = colIdx === 5 || colIdx === 6;
+                            const isToday = cell.dateIso === today;
+                            const isOtherMonth = cell.kind !== "current";
+                            const assignments = byDate.get(cell.dateIso) ?? [];
+
+                            return (
+                              <td
+                                key={cell.dateIso}
+                                className={cn(
+                                  "relative border-b border-r border-slate-200 p-1 align-top h-20 transition-colors",
+                                  isWeekend && "bg-[repeating-linear-gradient(135deg,transparent,transparent_3px,rgba(0,0,0,0.03)_3px,rgba(0,0,0,0.03)_6px)]",
+                                  isToday && "ring-2 ring-inset ring-indigo-500",
+                                  isOtherMonth && "opacity-40"
+                                )}
+                              >
+                                {/* Day number */}
+                                <span
+                                  className={cn(
+                                    "absolute top-1 right-1.5 text-[11px] font-medium tabular-nums",
+                                    isToday
+                                      ? "text-indigo-600 font-bold"
+                                      : isWeekend
+                                        ? "text-red-400"
+                                        : "text-slate-500"
+                                  )}
+                                >
+                                  {String(cell.day).padStart(2, "0")}
+                                </span>
+
+                                {/* Shift indicators */}
+                                {assignments.length > 0 && (
+                                  <div className="mt-4 space-y-0.5">
+                                    {assignments.slice(0, 2).map((a) => {
+                                      const status = getAssignmentStatus(a, now);
+                                      const shortName =
+                                        a.templateName?.substring(0, 2)?.toUpperCase() ||
+                                        "S";
+                                      return (
+                                        <div
+                                          key={a.shiftAssignmentId}
+                                          className={cn(
+                                            "flex items-center gap-0.5 rounded px-1 py-px text-[9px] font-medium",
+                                            status === "ON_TIME" &&
+                                              "bg-emerald-50 text-emerald-700",
+                                            status === "LATE" &&
+                                              "bg-amber-50 text-amber-700",
+                                            status === "OT" &&
+                                              "bg-blue-50 text-blue-700",
+                                            status === "INCOMING" &&
+                                              "bg-slate-50 text-slate-600",
+                                            status === "NONE" &&
+                                              "bg-slate-50 text-slate-400"
+                                          )}
+                                        >
+                                          <div
+                                            className={cn(
+                                              "h-1.5 w-1.5 rounded-full shrink-0",
+                                              status === "ON_TIME" &&
+                                                "bg-emerald-500",
+                                              status === "LATE" && "bg-amber-500",
+                                              status === "OT" && "bg-blue-500",
+                                              status === "INCOMING" &&
+                                                "bg-slate-400",
+                                              status === "NONE" && "bg-slate-300"
+                                            )}
+                                          />
+                                          <span className="truncate">{shortName}</span>
+                                        </div>
+                                      );
+                                    })}
+                                    {assignments.length > 2 && (
+                                      <p className="text-[9px] text-slate-400 text-center">
+                                        +{assignments.length - 2}
+                                      </p>
+                                    )}
+                                  </div>
+                                )}
+                              </td>
+                            );
+                          })}
+                        </tr>
+                      );
+                    }
                   )}
+                </tbody>
+              </table>
+            </div>
+          )}
+
+          {/* ── Auto-sync note ── */}
+          <p className="text-xs italic text-slate-400">{t("autoSyncNote")}</p>
+        </div>
+
+        {/* ── RIGHT COLUMN: Attendance + Auto-logout ── */}
+        <div className="space-y-4 order-1 xl:order-2">
+          {/* ── Auto-logout countdown banner ── */}
+          {autoLogout.isCountingDown && (
+            <div className="flex flex-col gap-3 rounded-xl border border-amber-300 bg-amber-50 px-4 py-3 shadow-sm animate-in fade-in slide-in-from-top-2 duration-300">
+              <div className="flex items-center gap-3">
+                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-amber-200 shrink-0">
+                  <LogOut className="h-4 w-4 text-amber-700" />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-sm font-semibold text-amber-900">
+                    {t("autoLogout.bannerTitle", { time: autoLogout.remainingLabel })}
+                  </p>
+                  <p className="text-xs text-amber-700">
+                    {t("autoLogout.bannerMessage")}
+                  </p>
                 </div>
               </div>
-            </ALCard>
-          </div>
+              <div className="flex items-center gap-2 justify-end">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="border-amber-400 text-amber-800 hover:bg-amber-100"
+                  onClick={autoLogout.cancelCountdown}
+                >
+                  <ShieldCheck className="mr-1.5 h-3.5 w-3.5" />
+                  {t("autoLogout.stay")}
+                </Button>
+                <Button
+                  variant="danger"
+                  size="sm"
+                  onClick={autoLogout.logoutNow}
+                >
+                  <LogOut className="mr-1.5 h-3.5 w-3.5" />
+                  {t("autoLogout.logoutNow")}
+                </Button>
+              </div>
+            </div>
+          )}
 
-          {/* RIGHT COLUMN: Today, Upcoming, Past */}
-          <div className="space-y-6 lg:col-span-7 xl:col-span-8">
-            {/* Today */}
-            {todayShifts.length > 0 && (
-              <ALCard as="section" padding="md" animation="fade" className="space-y-3">
-                <h2 className="text-base font-semibold text-[#1A3A52]">{t("today")}</h2>
-                <div className="grid gap-4 sm:grid-cols-2">
-                  {todayShifts.map((a) => (
-                    <CheckInCard key={a.shiftAssignmentId} assignment={a as import("../types/shift-management.types").ShiftAssignmentDetailDto} />
-                  ))}
-                </div>
-              </ALCard>
-            )}
+          {/* ── Today's Attendance Zone ── */}
+          <div className="space-y-3">
+            <div className="flex items-center justify-between gap-2">
+              <h2 className="text-base font-semibold text-[#1A3A52]">
+                {t("todayAttendance.title")}
+              </h2>
+              {todayCheckInTime && (
+                <span className="flex items-center gap-1.5 text-xs text-slate-500 shrink-0">
+                  <Clock className="h-3 w-3" />
+                  {t("checkedInTodayAt")}
+                  <span className="font-medium text-slate-700">{todayCheckInTime}</span>
+                </span>
+              )}
+            </div>
 
-            {/* Upcoming */}
-            {upcoming.length > 0 && (
-              <ALCard as="section" padding="md" animation="fade" className="space-y-3">
-                <h2 className="text-base font-semibold text-[#1A3A52]">{t("upcoming", { count: upcoming.length })}</h2>
-                <div className="space-y-2">
-                  {upcoming.map((a) => (
-                    <ShiftRow key={a.shiftAssignmentId} a={a} />
-                  ))}
-                </div>
-              </ALCard>
-            )}
-
-            {/* Past */}
-            {past.length > 0 && (
-              <ALCard as="section" padding="md" animation="fade" className="space-y-3">
-                <h2 className="text-base font-semibold text-[#1A3A52]/70">{t("past", { count: past.length })}</h2>
-                <div className="space-y-2">
-                  {past.map((a) => (
-                    <ShiftRow key={a.shiftAssignmentId} a={a} />
-                  ))}
-                </div>
-              </ALCard>
+            {todayShifts.length > 0 ? (
+              <div className="grid gap-3 grid-cols-1">
+                {todayShifts.map((a) => (
+                  <CheckInCard
+                    key={a.shiftAssignmentId}
+                    assignment={a as ShiftAssignmentDetailDto}
+                    onCheckOutSuccess={handleCheckOutSuccess}
+                  />
+                ))}
+              </div>
+            ) : (
+              <div className="flex items-center justify-center rounded-xl border border-dashed border-slate-300 bg-slate-50 py-8 text-sm text-slate-400">
+                {t("todayAttendance.noShiftsToday")}
+              </div>
             )}
           </div>
         </div>
-      )}
+      </div>
     </div>
   );
 }

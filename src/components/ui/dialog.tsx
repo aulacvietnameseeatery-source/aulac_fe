@@ -11,6 +11,7 @@ interface DialogProps {
     children: React.ReactNode;
     footer?: React.ReactNode;
     width?: string; // Tùy chỉnh độ rộng (VD: '600px', '80%')
+    height?: string; // Tùy chỉnh chiều cao cố định (VD: '80vh')
     bodyOverflowY?: React.CSSProperties['overflowY'];
 }
 
@@ -21,6 +22,7 @@ export const Dialog = ({
                            children,
                            footer,
                            width = '500px',
+                           height,
                            bodyOverflowY = 'auto'
                        }: DialogProps) => {
 
@@ -47,7 +49,7 @@ export const Dialog = ({
         >
             <div
                 className="admin-dialog-content"
-                style={{ maxWidth: width }}
+                style={{ maxWidth: width, ...(height ? { height } : {}) }}
                 onClick={(e) => e.stopPropagation()}
                 onPointerDown={(e) => e.stopPropagation()}
                 onMouseDown={(e) => e.stopPropagation()}

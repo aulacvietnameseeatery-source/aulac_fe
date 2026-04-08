@@ -182,9 +182,12 @@ export const PromotionForm = ({ initialData, isEditMode = false, onSubmitAction,
       <div className={`grid grid-cols-1 lg:grid-cols-2 gap-6 ${!canEditCore ? "opacity-60 pointer-events-none" : ""}`}>
         {/* Rules */}
         <div className="bg-white p-6 rounded-2xl border border border-[#D5BA98]/60 shadow-sm space-y-4">
-          <h2 className="text-lg font-bold text-slate-800">{t("rules")}</h2>
+          <div>
+            <h2 className="text-lg font-bold text-slate-800">{t("rules")}</h2>
+            <p className="text-sm text-slate-500 mt-1">{t("rulesHint")}</p>
+          </div>
           <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-1.5">
+            <div className="flex flex-col justify-end h-full space-y-1.5">
               <label className="text-xs font-semibold text-slate-600 uppercase">{t("minOrder")}</label>
               <Controller
                 control={control}
@@ -204,7 +207,7 @@ export const PromotionForm = ({ initialData, isEditMode = false, onSubmitAction,
                 )}
               />
             </div>
-            <div className="space-y-1.5">
+            <div className="flex flex-col justify-end h-full space-y-1.5">
               <label className="text-xs font-semibold text-slate-600 uppercase">{t("minQty")}</label>
               <Controller
                 control={control}
@@ -235,7 +238,10 @@ export const PromotionForm = ({ initialData, isEditMode = false, onSubmitAction,
 
         {/* Targets */}
         <div className="bg-white p-6 rounded-2xl border border border-[#D5BA98]/60 shadow-sm space-y-4">
-          <h2 className="text-lg font-bold text-slate-800">{t("targets")}</h2>
+          <div>
+            <h2 className="text-lg font-bold text-slate-800">{t("targets")}</h2>
+            <p className="text-sm text-slate-500 mt-1">{t("targetsHint")}</p>
+          </div>
           <Controller name="targetDishIds" control={control} render={({ field }) => (
             <ALCombobox options={dishOpts} value={field.value} onChange={field.onChange} multiple title={t("targetDish")} placeholder={t("targetDishPlaceholder")} />
           )} />

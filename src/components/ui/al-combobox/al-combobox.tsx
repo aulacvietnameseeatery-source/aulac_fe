@@ -437,7 +437,7 @@ const ALCombobox: React.FC<ALComboboxProps> = ({
   // ── Main render ───────────────────────────────────────────
   return (
     <div className={cn("w-full", `al-cb-wrapper--${inputSize ?? "default"}`, wrapperClassName)}>
-      {/* _OLD: inline al-cb-title-wrapper rendering, now unified via ALFieldLabel */}
+      {}
       {title && (
         <ALFieldLabel size={inputSize} required={required} action={titleAction}>
           {title}
@@ -567,7 +567,7 @@ const ALCombobox: React.FC<ALComboboxProps> = ({
       {/* Hidden input for forms */}
       {name && <input type="hidden" name={name} value={String(hiddenValue)} />}
 
-      {/* _OLD: inline al-cb-error / al-cb-description rendering, now unified via ALFieldMessage */}
+      {}
       <ALFieldMessage error={error} description={description} />
     </div>
   );

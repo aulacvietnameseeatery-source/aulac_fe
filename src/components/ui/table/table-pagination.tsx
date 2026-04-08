@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslations } from 'next-intl';
-import { Select, SelectOption } from '../select';
+import { ALCombobox } from '../al-combobox';
 import { Button } from '../button';
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react';
 
@@ -29,9 +29,9 @@ export const TablePagination: React.FC<TablePaginationProps> = ({
 }) => {
     const t = useTranslations('common.table.pagination');
 
-    const pageSizeOptions: SelectOption[] = pageSizes.map(size => ({
+    const pageSizeOptions = pageSizes.map((size) => ({
         label: size.toString(),
-        value: size
+        value: size,
     }));
 
     return (
@@ -43,11 +43,17 @@ export const TablePagination: React.FC<TablePaginationProps> = ({
 
             <div className="flex items-center justify-end gap-4 sticky right-4 min-w-87.5">
                 <span className="text-sm text-navy-DEFAULT">{t('pageSize')}</span>
-                <div className="w-20">
-                    <Select
+                <div className="w-24">
+                    <ALCombobox
                         value={pageSize}
                         options={pageSizeOptions}
-                        onChange={(val) => onPageSizeChange(typeof val === 'number' ? val : Number(val))}
+                        onChange={(val) => {
+                            if (Array.isArray(val) || val === '') return;
+                            onPageSizeChange(typeof val === 'number' ? val : Number(val));
+                        }}
+                        inputSize="sm"
+                        searchable={false}
+                        clearable={false}
                     />
                 </div>
                 <span className="font-bold text-sm text-[#1A3A52]">{pageInfo}</span>

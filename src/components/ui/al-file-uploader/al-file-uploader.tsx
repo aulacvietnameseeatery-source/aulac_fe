@@ -574,8 +574,6 @@ const ALFileUploader = React.forwardRef<HTMLDivElement, ALFileUploaderProps>(
     if (maxFiles < Infinity) hintParts.push(`max ${maxFiles} files`);
     const hintText = hintParts.join(" · ");
     const galleryCountLabel = `${totalFileCount}/${maxFiles} ${maxFiles === 1 ? t("image") : t("images")}`;
-
-    // _OLD: previous render used unified grid for all variants + dropzone below thumbnails.
     //       Now: image variant shows dropzone above (full when empty, compact bar with files),
     //       thumbnails below with click-to-preview. Gallery/file variants largely unchanged.
     //       Labels & messages unified via ALFieldLabel / ALFieldMessage.

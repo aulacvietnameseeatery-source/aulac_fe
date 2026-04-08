@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 import { staffAccountService } from "../../account-list/services/staff-account.service";
 import type { CreateAccountRequest, CreateAccountResponse } from "../types/account-detail.types";
 import { toast } from "sonner";
@@ -13,13 +14,14 @@ export function useCreateAccount(callbacks?: {
   onError?: (error: Error) => void;
 }) {
   const queryClient = useQueryClient();
+  const t = useTranslations("Account.Create.notifications");
 
   return useMutation<CreateAccountResponse, Error, CreateAccountRequest>({
     mutationFn: (data) => staffAccountService.createStaffAccount(data),
 
     onSuccess: (data) => {
-      toast.success("Account created successfully", {
-        description: `Username "${data.username}" has been created. Temporary password sent to email.`,
+      toast.success(t("success"), {
+        description: t("successDescription", { username: data.username }),
       });
       // Invalidate account list so it refetches
       queryClient.invalidateQueries({ queryKey: ["staff-accounts"] });
@@ -27,8 +29,8 @@ export function useCreateAccount(callbacks?: {
     },
 
     onError: (error) => {
-      toast.error("Failed to create account", {
-        description: error.message || "An unexpected error occurred.",
+      toast.error(t("error"), {
+        description: t("errorDescription", { message: error.message || "An unexpected error occurred." }),
       });
       callbacks?.onError?.(error);
     },

@@ -5,6 +5,7 @@ import { Link } from "@/routing"
 import { Eye, EyeOff, ArrowRight, ArrowLeft } from "lucide-react";
 import { useLogin } from "../hooks/use-login";
 import { useRateLimit } from "@/hooks/use-rate-limit";
+import { getLocalizedApiErrorMessage } from "@/lib/api-error";
 
 export function LoginForm() {
   const [username, setUsername] = useState("");
@@ -41,7 +42,7 @@ export function LoginForm() {
       {/* Error message */}
       {isError && !isRateLimited && (
         <div className="mb-4 rounded-lg bg-red-50 p-3 text-sm text-red-600">
-          {error?.message || "Login failed. Please check your credentials."}
+          {getLocalizedApiErrorMessage(error)}
         </div>
       )}
 

@@ -4,6 +4,7 @@ import React, { useMemo, useCallback } from "react";
 import { UserRound, Phone } from "lucide-react";
 import { BaseTable } from "@/components/ui/table/base-table";
 import { TableColumn } from "@/types/table.types";
+import { ALCard } from "@/components/ui/al-card";
 import { useCustomerReport } from "@/features/staff/report-management/customer/hooks/use-customer-report";
 import { CustomerReportRecordDto } from "@/features/staff/report-management/customer/types/customer-report-types";
 import { CustomerFilter } from "@/features/staff/report-management/customer/components/customer-filter";
@@ -90,14 +91,8 @@ export default function CustomerReportPage() {
     );
 
     return (
-        <div className="w-full h-full flex flex-col gap-6">
-            <CustomerFilter
-                initialStart={filters.startDate}
-                initialEnd={filters.endDate}
-                onApply={applyDateFilter}
-            />
-
-            <div className="flex-1 w-full overflow-hidden">
+        <div className="w-full h-full flex flex-col">
+            <div className="flex-1 min-h-0">
                 <BaseTable<CustomerReportRecordDto>
                     data={data}
                     loading={isLoading}
@@ -110,14 +105,23 @@ export default function CustomerReportPage() {
                     defaultRowsPerPage={10}
                     rowsPerPageOptions={[10, 20, 50]}
                     renderTitle={() => (
-                        <div className="pb-4">
-                            <h2 className="text-xl font-bold text-gray-800 tracking-tight">
-                                {t("title")}
-                            </h2>
-                            <p className="text-sm text-gray-500 mt-1">
-                                {t("description")}
-                            </p>
-                        </div>
+                        <ALCard padding="sm" variant="default" elevation="sm" className="w-full">
+                            <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
+                                <div>
+                                    <h2 className="text-lg font-semibold tracking-wide text-[#1A3A52]">
+                                        {t("title")}
+                                    </h2>
+                                    <p className="mt-0.5 text-sm text-[#1A3A52]/65">
+                                        {t("description")}
+                                    </p>
+                                </div>
+                                <CustomerFilter
+                                    initialStart={filters.startDate}
+                                    initialEnd={filters.endDate}
+                                    onApply={applyDateFilter}
+                                />
+                            </div>
+                        </ALCard>
                     )}
                     renderCell={handleGlobalRenderCell}
                 />

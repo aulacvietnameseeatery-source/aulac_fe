@@ -219,6 +219,9 @@
         "cookTime": "Cook Time",
         "chefRecommended": "Recommended by Chef",
         "notChefRecommended": "Not marked as Chef Recommended"
+      },
+      "notifications": {
+        "loadError": "Could not load dish details"
       }
     }
   },
@@ -329,7 +332,12 @@
         "exportSuccess": "Exported successfully!",
         "invalidExcel": "No valid ingredients found in the Excel file.",
         "importSuccess": "Successfully imported {success}/{total} ingredients.",
-        "readExcelError": "Failed to read Excel file. Please check the format."
+        "readExcelError": "Failed to read Excel file. Please check the format.",
+        "adjustStockInvalidQty": "Please enter a valid quantity greater than 0.",
+        "adjustStockExceedError": "Cannot export more than current stock ({quantity} {unit}).",
+        "adjustStockSuccess": "Stock adjusted successfully.",
+        "adjustStockError": "Failed to adjust stock.",
+        "loadError": "Failed to load ingredients data."
       }
     }
   },
@@ -461,7 +469,15 @@
       },
       "notifications": {
         "statusUpdated": "Status updated successfully",
-        "statusUpdateError": "An error occurred while updating the status"
+        "statusUpdateError": "An error occurred while updating the status",
+        "deleteSuccess": "Promotion deleted successfully.",
+        "deleteError": "Failed to delete promotion. It may have already been used."
+      },
+      "deleteModal": {
+        "title": "Delete Promotion",
+        "message": "Are you sure you want to delete the promotion {name}? This action cannot be undone.",
+        "confirm": "Delete",
+        "cancel": "Cancel"
       }
     },
     "createTitle": "Create New Promotion",
@@ -512,7 +528,9 @@
       "successCreate": "Created successfully",
       "successUpdate": "Updated successfully",
       "successDisable": "Disabled successfully",
-      "errorSave": "An error occurred while saving"
+      "errorSave": "An error occurred while saving",
+      "rulesHint": "Customers must meet ALL selected conditions below for this promotion to apply.",
+      "targetsHint": "Select dishes or categories to apply discount. Leave empty to apply discount to the entire order."
     },
     "Detail": {
       "title": "Promotion Details #{id}",

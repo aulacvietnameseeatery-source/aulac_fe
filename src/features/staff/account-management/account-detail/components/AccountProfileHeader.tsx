@@ -13,7 +13,7 @@ import {
   Check,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useFormatter } from "next-intl";
+import { dateUtils } from "@/lib/date-utils";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -55,7 +55,7 @@ export const AccountProfileHeader = ({
   onStatusChange,
 }: AccountProfileHeaderProps) => {
   const t = useTranslations("Account.Detail.header");
-  const format = useFormatter();
+  const tStatus = useTranslations("Account.Detail.statusLabel");
   const [copiedField, setCopiedField] = useState<string | null>(null);
 
   // Initials for the avatar fallback
@@ -66,10 +66,20 @@ export const AccountProfileHeader = ({
     .toUpperCase()
     .slice(0, 2);
 
-  // Relative time for last login
-  const lastLoginText = account.lastLoginAt
-    ? format.relativeTime(new Date(account.lastLoginAt))
-    : t("neverLoggedIn");
+  // Manual relative time using Date.now() — same algorithm as notification-item
+  const lastLoginText = (() => {
+    if (!account.lastLoginAt) return t("neverLoggedIn");
+    const diff = Date.now() - new Date(account.lastLoginAt).getTime();
+    const sec = Math.floor(diff / 1000);
+    const min = Math.floor(sec / 60);
+    const hr = Math.floor(min / 60);
+    const day = Math.floor(hr / 24);
+    if (sec < 60) return t("time.justNow");
+    if (min < 60) return t("time.minutesAgo", { count: min });
+    if (hr < 24) return t("time.hoursAgo", { count: hr });
+    if (day < 7) return t("time.daysAgo", { count: day });
+    return dateUtils.formatLocal(account.lastLoginAt, "dd/MM/yyyy HH:mm");
+  })();
 
   const statusConfig = STATUS_BADGE_MAP[account.accountStatus] ?? STATUS_BADGE_MAP.INACTIVE;
 
@@ -97,7 +107,7 @@ export const AccountProfileHeader = ({
           </h2>
           <Badge variant={statusConfig.variant} className="text-[11px]">
             <span className={cn("w-1.5 h-1.5 rounded-full", statusConfig.dotColor)} />
-            {account.accountStatus}
+            {tStatus(account.accountStatus as "ACTIVE" | "INACTIVE" | "LOCKED")}
           </Badge>
           {account.isLocked && (
             <Badge variant="destructive" className="text-[11px]">
@@ -154,7 +164,7 @@ export const AccountProfileHeader = ({
             onClick={onEdit}
             className="text-xs"
           >
-            <Edit size={13} />
+            <Edit size={13} className="mr-2"/>
             {t("edit")}
           </Button>
         </PermissionGuard>

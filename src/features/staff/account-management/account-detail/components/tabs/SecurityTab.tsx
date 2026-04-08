@@ -2,7 +2,8 @@
 
 import React, { useState, useMemo } from "react";
 import { KeyRound, Clock, Monitor, Loader2 } from "lucide-react";
-import { useTranslations, useFormatter } from "next-intl";
+import { useTranslations } from "next-intl";
+import { dateUtils } from "@/lib/date-utils";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import type { AccountDetail } from "../../types/account-detail.types";
@@ -22,7 +23,7 @@ const EVENT_TYPE_VARIANT: Record<string, "default" | "soft-secondary" | "destruc
 export const SecurityTab = ({ account }: SecurityTabProps) => {
   const t = useTranslations("Account.Detail.security");
   const tActivity = useTranslations("Account.Detail.activity");
-  const format = useFormatter();
+  const tHeader = useTranslations("Account.Detail.header");
   const [page, setPage] = useState(1);
 
   const query = useMemo(() => ({ pageIndex: page, pageSize: 5 }), [page]);
@@ -31,18 +32,21 @@ export const SecurityTab = ({ account }: SecurityTabProps) => {
 
   function formatDate(dateStr: string | null): string {
     if (!dateStr) return t("never");
-    return format.dateTime(new Date(dateStr), {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
+    return dateUtils.formatLocal(dateStr, "HH:mm dd MMM, yyyy");
   }
 
   function formatRelative(dateStr: string | null): string {
     if (!dateStr) return "";
-    return format.relativeTime(new Date(dateStr));
+    const diff = Date.now() - new Date(dateStr).getTime();
+    const sec = Math.floor(diff / 1000);
+    const min = Math.floor(sec / 60);
+    const hr = Math.floor(min / 60);
+    const day = Math.floor(hr / 24);
+    if (sec < 60) return tHeader("time.justNow");
+    if (min < 60) return tHeader("time.minutesAgo", { count: min });
+    if (hr < 24) return tHeader("time.hoursAgo", { count: hr });
+    if (day < 7) return tHeader("time.daysAgo", { count: day });
+    return "";
   }
 
   return (

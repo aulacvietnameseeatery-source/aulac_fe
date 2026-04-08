@@ -10,7 +10,7 @@ import { CustomerOrderDetailDto } from "../types/customer-detail-types";
 import dayjs from "dayjs";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { dateUtils } from "@/lib/date-utils";
 
 interface OrderDetailModalProps {
@@ -22,6 +22,7 @@ interface OrderDetailModalProps {
 
 export const OrderDetailModal = ({ customerId, orderId, isOpen, onClose }: OrderDetailModalProps) => {
     const t = useTranslations("Customer.Detail");
+    const locale = useLocale();
     const [detail, setDetail] = useState<CustomerOrderDetailDto | null>(null);
     const [isLoading, setIsLoading] = useState(false);
 
@@ -81,6 +82,11 @@ export const OrderDetailModal = ({ customerId, orderId, isOpen, onClose }: Order
         return dateStringWithZ;
     };
 
+    const getLocalizedDishName = (dishNameI18n: Record<string, string> | undefined) => {
+        if (!dishNameI18n) return "Unknown Dish";
+        return dishNameI18n[locale] || dishNameI18n['en'] || Object.values(dishNameI18n)[0] || "Unknown Dish";
+    };
+
     const payment = detail?.payments?.[0];
 
     return (
@@ -94,10 +100,10 @@ export const OrderDetailModal = ({ customerId, orderId, isOpen, onClose }: Order
                     <Loader2 className="animate-spin text-slate-400 w-8 h-8" />
                 </div>
             ) : (
-                <div className="flex flex-col text-slate-800 p-4 md:p-8 h-[85vh] md:max-h-[80vh] overflow-hidden">
+                <div className="flex flex-col text-slate-800 p-4 md:p-8 h-[85vh] md:h-[80vh] md:max-h-[80vh] overflow-hidden">
                     
                     {/* --- HEADER --- */}
-                    <div className="pb-5 border-b border-slate-100 mb-6 flex justify-between items-start shrink-0">
+                    <div className="pb-5 border-b border-[#D5BA98]/40 mb-6 flex justify-between items-start shrink-0">
                         <div>
                             <h2 className="text-3xl font-extrabold tracking-tight text-slate-900">{t('orderTitle')} #{detail.orderId}</h2>
                             <p className="text-sm text-slate-500 mt-1 font-medium">
@@ -140,7 +146,7 @@ export const OrderDetailModal = ({ customerId, orderId, isOpen, onClose }: Order
                             ) : (
                                 <div className="flex justify-between items-center bg-white p-4 rounded-lg border border-blue-100 shadow-sm">
                                     <div>
-                                        <p className="font-extrabold text-slate-800 text-lg">{payment.method}</p>
+                                        <p className="font-extrabold text-slate-800 text-lg">{t(`paymentMethod.${payment.method}`)}</p>
                                         <p className="text-xs text-slate-500 font-medium mt-0.5">{dayjs(payment.paidAt).format("DD/MM/YYYY HH:mm")}</p>
                                     </div>
                                     <div className="text-right flex flex-col gap-1">
@@ -160,10 +166,10 @@ export const OrderDetailModal = ({ customerId, orderId, isOpen, onClose }: Order
                         <Tabs defaultValue="items" className="flex flex-col h-full w-full">
                             
                             {/* Tabs Header */}
-                            <TabsList className="grid w-full grid-cols-3 bg-slate-100/80 p-1 rounded-xl shrink-0 h-auto">
-                                <TabsTrigger value="items" className="flex gap-2 rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm"><Receipt size={16}/> {t('items')}</TabsTrigger>
-                                <TabsTrigger value="promotions" className="flex gap-2 rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm"><Tag size={16}/> {t('promotions')}</TabsTrigger>
-                                <TabsTrigger value="coupons" className="flex gap-2 rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm"><Ticket size={16}/> {t('coupons')}</TabsTrigger>
+                            <TabsList className="grid w-full grid-cols-3 bg-[#D5BA98]/10 p-1 rounded-xl shrink-0 h-auto border border-[#D5BA98]/30">
+                                <TabsTrigger value="items" className="flex gap-2 rounded-lg data-[state=active]:bg-[#1A3A52] data-[state=active]:text-[#FDFBF9] data-[state=active]:shadow-sm"><Receipt size={16}/> {t('items')}</TabsTrigger>
+                                <TabsTrigger value="promotions" className="flex gap-2 rounded-lg data-[state=active]:bg-[#1A3A52] data-[state=active]:text-[#FDFBF9] data-[state=active]:shadow-sm"><Tag size={16}/> {t('promotions')}</TabsTrigger>
+                                <TabsTrigger value="coupons" className="flex gap-2 rounded-lg data-[state=active]:bg-[#1A3A52] data-[state=active]:text-[#FDFBF9] data-[state=active]:shadow-sm"><Ticket size={16}/> {t('coupons')}</TabsTrigger>
                             </TabsList>
                             
                             {/* Tab Content */}
@@ -179,7 +185,7 @@ export const OrderDetailModal = ({ customerId, orderId, isOpen, onClose }: Order
                                                     </div>
                                                     <div className="flex flex-col">
                                                         <span className={cn("font-bold text-base", (item.status === 'CANCELLED' || item.status === 'REJECTED') ? "text-slate-400 line-through" : "text-slate-800")}>
-                                                            {item.dishName}
+                                                            {getLocalizedDishName(item.dishNameI18n)}
                                                         </span>
                                                         {item.note && <span className="text-xs text-slate-500 mt-1 font-medium bg-slate-50 inline-block px-2 py-0.5 rounded-md border border-slate-100 w-fit">{t('note')}: {item.note}</span>}
                                                     </div>

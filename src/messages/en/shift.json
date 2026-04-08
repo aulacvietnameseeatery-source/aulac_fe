@@ -22,6 +22,33 @@
       "reason": "Reason",
       "adjustmentReason": "Adjustment Reason"
     },
+    "messages": {
+      "createTemplateSuccess": "Shift template created",
+      "createTemplateError": "Failed to create shift template",
+      "updateTemplateSuccess": "Shift template updated",
+      "updateTemplateError": "Failed to update shift template",
+      "assignStaffSuccess": "Staff assigned to shift",
+      "assignStaffError": "Failed to assign staff",
+      "updateAssignmentSuccess": "Shift assignment updated",
+      "updateAssignmentError": "Failed to update assignment",
+      "cancelAssignmentSuccess": "Assignment cancelled",
+      "cancelAssignmentError": "Failed to cancel assignment",
+      "checkInSuccess": "Checked in successfully",
+      "checkInError": "Failed to check in",
+      "checkOutSuccess": "Checked out successfully",
+      "checkOutError": "Failed to check out",
+      "adjustAttendanceSuccess": "Attendance adjusted",
+      "adjustAttendanceError": "Failed to adjust attendance",
+      "bulkCreateSuccess": "Assignments created",
+      "bulkCreateError": "Failed to create assignments",
+      "publishSuccess": "Shifts published — staff notified",
+      "publishError": "Failed to publish shifts",
+      "reassignSuccess": "Assignment reassigned",
+      "reassignError": "Failed to reassign",
+      "confirmSuccess": "Shift confirmed",
+      "confirmError": "Failed to confirm shift",
+      "autoLogoutCancelled": "Auto-logout cancelled. You can continue working."
+    },
     "schedule": {
       "title": "Shift Schedules",
       "description": "Create, publish, and manage shift schedules and staff assignments.",
@@ -93,12 +120,15 @@
         "cancel": "Cancel",
         "submit": "Copy Schedule",
         "description": "Duplicate all shift assignments from a source week to a target week.",
+        "mondayNote": "Selecting any day will automatically use the Monday of that week as the start date.",
         "sourceTitle": "Source Week (Monday)",
         "sourcePlaceholder": "Pick source Monday",
         "targetTitle": "Target Week (Monday)",
         "targetPlaceholder": "Pick target Monday",
         "asDraft": "Create as drafts",
-        "asDraftHint": "Copied shifts will need to be published before staff are notified"
+        "asDraftHint": "Copied shifts will need to be published before staff are notified",
+        "success": "Week schedule copied successfully.",
+        "error": "Failed to copy week schedule. Please try again."
       },
       "attendanceAdjustmentDialog": {
         "title": "Adjust Attendance",
@@ -267,7 +297,7 @@
       }
     },
     "myShift": {
-      "title": "My Shifts",
+      "title": "Timesheet",
       "description": "View your assigned shifts and check in or check out.",
       "loading": "Loading shifts...",
       "empty": "No shifts assigned in the next 30 days.",
@@ -278,6 +308,19 @@
         "swap": "Swap",
         "leave": "Leave"
       },
+      "viewMode": {
+        "week": "Week",
+        "month": "Month"
+      },
+      "stats": {
+        "totalWorkdays": "Total actual workdays",
+        "totalOvertimeHours": "Total overtime hours (multiplied by coefficient)",
+        "totalLateEarly": "Total late arrivals and early departures",
+        "totalLeaveDays": "Total leave days"
+      },
+      "checkedInTodayAt": "You checked in today at",
+      "autoSyncNote": "Note: The timesheet will be automatically synchronized at the following times: 10:00, 12:00, 15:15 and 17:30 daily",
+      "timesheetPeriod": "Timesheet from {date}",
       "summary": {
         "title": "This Month Summary",
         "subtitle": "Attendance overview",
@@ -300,7 +343,22 @@
         "networkConnected": "Connected to store network",
         "locationUnverified": "Location unverified",
         "checkInAction": "Check In",
-        "checkOutAction": "Check Out"
+        "checkOutAction": "Check Out",
+        "checkInAvailableFrom": "Check-in available from {time}",
+        "inMinutes": "in {minutes} min",
+        "shiftEnded": "This shift has ended — check-in is no longer available",
+        "tooEarlyToast": "Too early! Check-in opens at {time}",
+        "shiftEndedToast": "This shift has already ended"
+      },
+      "autoLogout": {
+        "bannerTitle": "Auto-logout in {time}",
+        "bannerMessage": "You checked out of your shift. You will be logged out automatically.",
+        "stay": "Stay",
+        "logoutNow": "Logout Now"
+      },
+      "todayAttendance": {
+        "title": "Today's Attendance",
+        "noShiftsToday": "No shifts assigned today"
       },
       "todayShift": "Today's Shift",
       "upcomingShifts": "Upcoming Shifts",
@@ -399,7 +457,8 @@
         "ON_DUTY": "On Duty",
         "COMPLETED": "Completed",
         "SCHEDULED": "Scheduled",
-        "CHECKED_IN": "Checked In"
+        "CHECKED_IN": "Checked In",
+        "NO_RECORD": "No Record"
       },
       "exceptionNames": {
         "LATE": "Late Arrival",
@@ -578,7 +637,8 @@
       "description": "Assign staff to shift templates and track attendance.",
       "searchPlaceholder": "Search assignments",
       "newAssignment": "New Assignment",
-      "confirmCancel": "Cancel this assignment?",
+      "confirmCancel": "Cancel this assignment? This cannot be undone.",
+      "cancelAssignment": "Cancel Assignment",
       "activeCount": "Active: {count}",
       "cancelledCount": "Cancelled: {count}",
       "filters": {

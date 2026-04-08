@@ -17,6 +17,7 @@ const statusColorMap: Record<string, { bg: string; text: string; border: string 
 
 export const RoleStatusTab = ({ account }: RoleStatusTabProps) => {
   const t = useTranslations("Account.Detail.roleStatus");
+  const tStatus = useTranslations("Account.Detail.statusLabel");
   const statusStyle = statusColorMap[account.accountStatus] || statusColorMap.INACTIVE;
 
   return (
@@ -48,7 +49,7 @@ export const RoleStatusTab = ({ account }: RoleStatusTabProps) => {
             <span
               className={`inline-block mt-1 px-2.5 py-1 rounded text-xs font-medium border ${statusStyle.bg} ${statusStyle.text} ${statusStyle.border}`}
             >
-              {account.accountStatus}
+              {tStatus(account.accountStatus as "ACTIVE" | "INACTIVE" | "LOCKED")}
             </span>
           </div>
         </div>

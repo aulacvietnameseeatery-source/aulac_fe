@@ -219,6 +219,9 @@
         "cookTime": "Thời gian nấu",
         "chefRecommended": "Đầu bếp khuyên dùng",
         "notChefRecommended": "Không đánh dấu khuyên dùng"
+      },
+      "notifications": {
+        "loadError": "Không thể tải thông tin món ăn"
       }
     }
   },
@@ -329,7 +332,12 @@
         "exportSuccess": "Xuất file thành công!",
         "invalidExcel": "Không tìm thấy nguyên liệu hợp lệ trong file Excel.",
         "importSuccess": "Đã nhập thành công {success}/{total} nguyên liệu.",
-        "readExcelError": "Lỗi đọc file Excel. Vui lòng kiểm tra lại định dạng."
+        "readExcelError": "Lỗi đọc file Excel. Vui lòng kiểm tra lại định dạng.",
+        "adjustStockInvalidQty": "Vui lòng nhập số lượng hợp lệ lớn hơn 0.",
+        "adjustStockExceedError": "Không thể xuất nhiều hơn tồn kho hiện tại ({quantity} {unit}).",
+        "adjustStockSuccess": "Điều chỉnh tồn kho thành công.",
+        "adjustStockError": "Điều chỉnh tồn kho thất bại.",
+        "loadError": "Không thể tải dữ liệu nguyên liệu."
       }
     }
   },
@@ -461,7 +469,15 @@
       },
       "notifications": {
         "statusUpdated": "Cập nhật trạng thái thành công",
-        "statusUpdateError": "Đã xảy ra lỗi khi cập nhật trạng thái"
+        "statusUpdateError": "Đã xảy ra lỗi khi cập nhật trạng thái",
+        "deleteSuccess": "Xóa chương trình khuyến mãi thành công.",
+        "deleteError": "Xóa thất bại. Có thể chương trình khuyến mãi này đã được sử dụng."
+      },
+      "deleteModal": {
+        "title": "Xóa khuyến mãi",
+        "message": "Bạn có chắc chắn muốn xóa chương trình khuyến mãi {name} không? Hành động này không thể hoàn tác.",
+        "confirm": "Xóa",
+        "cancel": "Hủy"
       }
     },
     "createTitle": "Tạo Khuyến mãi mới",
@@ -512,7 +528,9 @@
       "successCreate": "Tạo thành công",
       "successUpdate": "Cập nhật thành công",
       "successDisable": "Vô hiệu hóa thành công",
-      "errorSave": "Đã xảy ra lỗi khi lưu"
+      "errorSave": "Đã xảy ra lỗi khi lưu",
+      "rulesHint": "Khách hàng phải thỏa mãn TẤT CẢ các điều kiện đã chọn bên dưới để được áp dụng khuyến mãi.",
+      "targetsHint": "Chọn món hoặc danh mục để áp dụng giảm giá. Bỏ trống để áp dụng giảm giá cho toàn bộ đơn hàng."
     },
     "Detail": {
       "title": "Chi tiết Khuyến mãi #{id}",

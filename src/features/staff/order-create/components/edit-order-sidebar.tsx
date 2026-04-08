@@ -172,7 +172,15 @@ export const EditOrderSidebar = ({
   const mappedOrderHistory = useMemo(() => {
     if (!orderInfo) return null;
 
-    if (orderInfo.isPaid) return orderInfo;
+    if (orderInfo.isPaid) {
+      return {
+        ...orderInfo,
+        orderItems: orderInfo.orderItems.map(item => ({
+          ...item,
+          dishName: item.dishName || item.dishNameI18n?.['en'] || ''
+        }))
+      };
+    }
 
     function toOrderSourceCode(value: string): string {
       if (!value) return "";
@@ -186,7 +194,7 @@ export const EditOrderSidebar = ({
       ...orderInfo.orderItems.map(item => ({
         orderItemId: item.orderItemId,
         dishId: item.dishId,
-        dishName: item.dishName,
+        dishName: item.dishName || item.dishNameI18n?.['en'] || '',
         dishNameI18n: item.dishNameI18n,
         quantity: item.quantity,
         price: item.price,

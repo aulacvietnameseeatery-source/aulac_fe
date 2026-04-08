@@ -7,6 +7,7 @@ import {
   Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerDescription,
 } from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
+import { ALConfirmDialog } from "@/components/ui/al-confirm-dialog";
 import { PermissionGuard } from "@/components/permission-guard";
 import { Permissions } from "@/types/const";
 import { dateUtils } from "@/lib/date-utils";
@@ -29,6 +30,7 @@ interface Props {
 export function ShiftAssignmentPanel({ open, onClose, assignment }: Props) {
   const t = useTranslations("shift.schedule.assignmentPanel");
   const [adjustTarget, setAdjustTarget] = useState<AttendanceRecordDto | null>(null);
+  const [cancelConfirmOpen, setCancelConfirmOpen] = useState(false);
 
   const cancelAssignment = useCancelAssignmentMutation();
   const publishAssignments = usePublishAssignmentsMutation();
@@ -185,10 +187,7 @@ export function ShiftAssignmentPanel({ open, onClose, assignment }: Props) {
                   <Button
                     variant="outline" size="sm"
                     className="flex-1 border-destructive/40 text-destructive hover:bg-destructive/10"
-                    onClick={() => {
-                      if (!confirm(t("cancelAssignmentConfirm"))) return;
-                      cancelAssignment.mutate(assignment.shiftAssignmentId, { onSuccess: onClose });
-                    }}
+                    onClick={() => setCancelConfirmOpen(true)}
                     disabled={cancelAssignment.isPending}
                   >
                     {t("cancelAssignment")}
@@ -207,6 +206,23 @@ export function ShiftAssignmentPanel({ open, onClose, assignment }: Props) {
           attendanceRecord={adjustTarget}
         />
       )}
+
+      <ALConfirmDialog
+        isOpen={cancelConfirmOpen}
+        onClose={() => setCancelConfirmOpen(false)}
+        onConfirm={() => {
+          cancelAssignment.mutate(assignment.shiftAssignmentId, {
+            onSuccess: () => {
+              setCancelConfirmOpen(false);
+              onClose();
+            },
+          });
+        }}
+        title={t("cancelAssignment")}
+        message={t("cancelAssignmentConfirm")}
+        variant="warning"
+        isLoading={cancelAssignment.isPending}
+      />
     </>
   );
 }

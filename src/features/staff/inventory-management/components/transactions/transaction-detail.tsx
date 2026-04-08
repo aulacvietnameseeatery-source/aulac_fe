@@ -221,7 +221,7 @@ export function TransactionDetail({ transactionId }: Props) {
 
       {/* Action Bar */}
       {(isDraft || isPending) && (
-        <ALCard variant="soft" padding="md" elevation="sm" radius="xl">
+        <ALCard padding="md" elevation="sm" radius="xl">
           <div className="flex flex-col gap-3">
             {isDraft && (
               <div className="flex items-center gap-3">

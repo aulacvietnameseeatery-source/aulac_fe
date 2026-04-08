@@ -6,13 +6,13 @@ import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { PermissionGuard } from "@/components/permission-guard";
 import { Permissions } from "@/types/const";
+import { usePermissions } from "@/hooks/use-permissions";
 import { ShiftMatrixCalendar } from "./components/shift-matrix-calendar";
 import { PublishToolbar } from "../components/publish-toolbar";
 import { CopyWeekDialog } from "../components/copy-week-dialog";
 import { ShiftAssignmentForm } from "../components/shift-assignment-form";
 import { ShiftAssignmentPanel } from "../components/shift-assignment-panel";
 import { BulkAssignmentDialog, type BulkAssignmentSelection } from "../components/bulk-assignment-dialog";
-// _OLD: import { ShiftScheduleList } from "../components/shift-schedule-list";
 import { useShiftAssignmentDetailQuery } from "../hooks/use-shift-queries";
 import type { ShiftAssignmentListDto } from "../types/shift-management.types";
 
@@ -34,12 +34,16 @@ function addDays(d: Date, n: number) {
 }
 
 function fmtDate(d: Date) {
-  return d.toISOString().slice(0, 10);
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`;
 }
 
 // Orchestrator for /dashboard/shifts — manager schedule view
 export function ShiftManagement() {
   const t = useTranslations("shift.schedule");
+  const { can } = usePermissions();
   // ── Week state ──────────────────────────────────────────────
   const [monday] = useState(() => getMonday(new Date()));
   const weekStart = fmtDate(monday);
@@ -140,8 +144,8 @@ export function ShiftManagement() {
       {/* ── Matrix Calendar ────────────────────────────────── */}
       <ShiftMatrixCalendar
         onCardClick={handleCardClick}
-        onAddClick={handleAddClick}
-        onBulkSelect={handleBulkSelect}
+        onAddClick={can(Permissions.AssignShift) ? handleAddClick : undefined}
+        onBulkSelect={can(Permissions.AssignShift) ? handleBulkSelect : undefined}
         onPeriodChange={handlePeriodChange}
         onDraftCountChange={handleDraftCountChange}
         initialMonday={monday}

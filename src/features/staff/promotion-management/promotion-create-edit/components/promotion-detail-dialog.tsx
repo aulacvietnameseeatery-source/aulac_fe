@@ -1,12 +1,13 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { promotionService } from "@/features/staff/promotion-management/promotion-create-edit/services/promotion.service";
 import { PromotionDetailDto } from "@/features/staff/promotion-management/promotion-create-edit/types/promotion.types";
 import { Loader2 } from "lucide-react";
 import { dateUtils } from "@/lib/date-utils";
 import { Dialog } from "@/components/ui/dialog"; 
+import { PromotionStatusCode } from "@/types/status-codes";
 
 interface DetailProps {
   id: number | null;
@@ -44,6 +45,22 @@ export function PromotionDetailDialog({ id, open, onClose }: DetailProps) {
     return utcDateString.endsWith('Z') ? utcDateString : `${utcDateString}Z`;
   };
 
+  const getComputedStatus = useCallback((promo: PromotionDetailDto) => {
+    if (promo.promotionStatus === PromotionStatusCode.DISABLED) return PromotionStatusCode.DISABLED;
+
+    // 1. Get the current time in Swiss time using dateUtils.
+    const now = dateUtils.getSwissNow().getTime();
+
+    // 2. Parse the start and end times of BE (UTC) to a timestamp.
+    const start = new Date(getUtcDateString(promo.startTime)).getTime();
+    const end = new Date(getUtcDateString(promo.endTime)).getTime();
+
+    // 3. Compare
+    if (now < start) return PromotionStatusCode.SCHEDULED;
+    if (now > end) return PromotionStatusCode.EXPIRED;
+    return PromotionStatusCode.ACTIVE;
+  }, [getUtcDateString]);
+
   const formatCurrency = (val: number) => {
         return new Intl.NumberFormat('fr-CH', { 
             style: 'currency', 
@@ -77,7 +94,7 @@ export function PromotionDetailDialog({ id, open, onClose }: DetailProps) {
                 <p className="text-sm text-slate-500">{detail.description}</p>
               </div>
               <span className="px-3 py-1 bg-blue-100 text-blue-700 font-bold rounded-md text-sm whitespace-nowrap">
-                {tStatus((detail.promotionStatus || "SCHEDULED") as any) || detail.promotionStatus}
+                {tStatus(getComputedStatus(detail) as any) || getComputedStatus(detail)}
               </span>
             </div>
 

@@ -314,6 +314,7 @@
         "existingCustomerName": "Tên khách cũ",
         "existingCustomerEmail": "Email khách cũ",
         "bookingInfo": "Thông tin đặt bàn",
+        "timezoneNote": "Tất cả thời gian hiển thị theo giờ nhà hàng ({tz})",
         "partySize": "Số lượng khách",
         "reservationDate": "Ngày đặt",
         "selectDate": "Chọn ngày",
@@ -392,39 +393,6 @@
         "reservationTime": "Giờ đặt",
         "na": "Chưa xếp"
       },
-      "Detail": {
-        "title": "Chi tiết đặt bàn",
-        "back": "Quay lại",
-        "backToList": "Quay lại danh sách đặt bàn",
-        "edit": "Chỉnh sửa",
-        "delete": "Xóa",
-        "reservationId": "Mã đặt bàn",
-        "loading": "Đang tải thông tin đặt bàn...",
-        "notFound": "Không tìm thấy đơn đặt bàn",
-        "Customer": {
-          "title": "Thông tin khách hàng",
-          "fullName": "Họ và tên",
-          "phoneNumber": "Số điện thoại",
-          "emailAddress": "Địa chỉ Email",
-          "partySize": "Số lượng khách",
-          "guest": "khách",
-          "guests": "khách"
-        },
-        "Booking": {
-          "title": "Thông tin đặt bàn",
-          "reservedDate": "Ngày đặt",
-          "reservedTime": "Giờ đặt",
-          "status": "Trạng thái",
-          "bookingSource": "Nguồn đặt",
-          "createdOn": "Ngày tạo"
-        },
-        "Table": {
-          "title": "Thông tin bàn",
-          "noTables": "Chưa xếp bàn",
-          "capacity": "Sức chứa",
-          "totalTables": "Tổng số bàn đã xếp"
-        }
-      },
       "CheckInModal": {
         "title": "Khách nhận bàn",
         "arrivalMsg": "{name} đã đến nhận bàn lúc {time} ({pax} khách).",
@@ -489,6 +457,7 @@
           "fullName": "Họ và tên",
           "phoneNumber": "Số điện thoại",
           "emailAddress": "Địa chỉ Email",
+          "noEmail": "Chưa cung cấp email",
           "partySize": "Số lượng khách",
           "guest": "khách",
           "guests": "khách"
@@ -506,6 +475,10 @@
           "noTables": "Chưa xếp bàn",
           "capacity": "Sức chứa",
           "totalTables": "Tổng số bàn đã xếp"
+        },
+        "notes": {
+          "title": "Yêu cầu đặc biệt",
+          "noNotes": "Không có yêu cầu đặc biệt nào cho đơn đặt bàn này."
         }
       },
       "checkInModal": {

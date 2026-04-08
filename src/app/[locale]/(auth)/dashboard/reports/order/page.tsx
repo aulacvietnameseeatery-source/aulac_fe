@@ -3,6 +3,7 @@
 import React, { useMemo, useCallback } from "react";
 import { BaseTable } from "@/components/ui/table/base-table";
 import { TableColumn } from "@/types/table.types";
+import { ALCard } from "@/components/ui/al-card";
 import { useOrderReport } from "@/features/staff/report-management/order/hooks/use-order-report";
 import { OrderFilter } from "@/features/staff/report-management/order/components/order-filter";
 import { OrderReportRecordDto } from "@/features/staff/report-management/order/types/order-report-types";
@@ -128,14 +129,8 @@ export default function OrderReportPage() {
     );
 
     return (
-        <div className="w-full h-full flex flex-col gap-6">
-            <OrderFilter
-                initialStart={filters.startDate}
-                initialEnd={filters.endDate}
-                onApply={applyDateFilter}
-            />
-
-            <div className="flex-1 w-full overflow-hidden">
+        <div className="w-full h-full flex flex-col">
+            <div className="flex-1 min-h-0">
                 <BaseTable<OrderReportRecordDto>
                     data={data}
                     loading={isLoading}
@@ -148,14 +143,23 @@ export default function OrderReportPage() {
                     defaultRowsPerPage={10}
                     rowsPerPageOptions={[10, 20, 50]}
                     renderTitle={() => (
-                        <div className="pb-4">
-                            <h2 className="text-xl font-bold text-gray-800 tracking-tight">
-                                {t("title")}
-                            </h2>
-                            <p className="text-sm text-gray-500 mt-1">
-                                {t("description")}
-                            </p>
-                        </div>
+                        <ALCard padding="sm" variant="default" elevation="sm" className="w-full">
+                            <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
+                                <div>
+                                    <h2 className="text-lg font-semibold tracking-wide text-[#1A3A52]">
+                                        {t("title")}
+                                    </h2>
+                                    <p className="mt-0.5 text-sm text-[#1A3A52]/65">
+                                        {t("description")}
+                                    </p>
+                                </div>
+                                <OrderFilter
+                                    initialStart={filters.startDate}
+                                    initialEnd={filters.endDate}
+                                    onApply={applyDateFilter}
+                                />
+                            </div>
+                        </ALCard>
                     )}
                     renderCell={handleGlobalRenderCell}
                 />

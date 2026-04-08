@@ -314,6 +314,7 @@
         "existingCustomerName": "Returning customer name",
         "existingCustomerEmail": "Returning customer email",
         "bookingInfo": "Reservation details",
+        "timezoneNote": "All times shown in restaurant local time ({tz})",
         "partySize": "Party size",
         "reservationDate": "Reservation date",
         "selectDate": "Select date",
@@ -392,39 +393,6 @@
         "reservationTime": "Reservation Time",
         "na": "N/A"
       },
-      "Detail": {
-        "title": "Reservation Details",
-        "back": "Back",
-        "backToList": "Back to listing",
-        "edit": "Edit",
-        "delete": "Delete",
-        "reservationId": "Reservation ID",
-        "loading": "Loading reservation details...",
-        "notFound": "Reservation not found",
-        "Customer": {
-          "title": "Customer Information",
-          "fullName": "Full Name",
-          "phoneNumber": "Phone Number",
-          "emailAddress": "Email Address",
-          "partySize": "Party Size",
-          "guest": "guest",
-          "guests": "guests"
-        },
-        "Booking": {
-          "title": "Booking Information",
-          "reservedDate": "Reserved Date",
-          "reservedTime": "Reserved Time",
-          "status": "Status",
-          "bookingSource": "Booking Source",
-          "createdOn": "Created on"
-        },
-        "Table": {
-          "title": "Table Information",
-          "noTables": "No tables assigned",
-          "capacity": "Capacity",
-          "totalTables": "Total Assigned Tables"
-        }
-      },
       "CheckInModal": {
         "title": "Guest Check-In",
         "arrivalMsg": "{name} has arrived for their {time} reservation ({pax} guests).",
@@ -489,6 +457,7 @@
           "fullName": "Full Name",
           "phoneNumber": "Phone Number",
           "emailAddress": "Email Address",
+          "noEmail": "No email provided",
           "partySize": "Party Size",
           "guest": "guest",
           "guests": "guests"
@@ -506,6 +475,10 @@
           "noTables": "No tables assigned",
           "capacity": "Capacity",
           "totalTables": "Total Assigned Tables"
+        },
+        "notes": {
+          "title": "Special Requests",
+          "noNotes": "No special requests for this reservation."
         }
       },
       "checkInModal": {

@@ -22,6 +22,33 @@
       "reason": "Lý do",
       "adjustmentReason": "Lý do điều chỉnh"
     },
+    "messages": {
+      "createTemplateSuccess": "Tạo ca mẫu thành công",
+      "createTemplateError": "Không thể tạo ca mẫu",
+      "updateTemplateSuccess": "Cập nhật ca mẫu thành công",
+      "updateTemplateError": "Không thể cập nhật ca mẫu",
+      "assignStaffSuccess": "Đã phân công nhân viên vào ca",
+      "assignStaffError": "Không thể phân công nhân viên",
+      "updateAssignmentSuccess": "Cập nhật ca làm việc thành công",
+      "updateAssignmentError": "Không thể cập nhật ca làm việc",
+      "cancelAssignmentSuccess": "Đã hủy ca làm việc",
+      "cancelAssignmentError": "Không thể hủy ca làm việc",
+      "checkInSuccess": "Chấm công vào thành công",
+      "checkInError": "Không thể chấm công vào",
+      "checkOutSuccess": "Chấm công ra thành công",
+      "checkOutError": "Không thể chấm công ra",
+      "adjustAttendanceSuccess": "Đã điều chỉnh chấm công",
+      "adjustAttendanceError": "Không thể điều chỉnh chấm công",
+      "bulkCreateSuccess": "Đã tạo các ca làm việc",
+      "bulkCreateError": "Không thể tạo các ca làm việc",
+      "publishSuccess": "Đã công bố ca — nhân viên đã được thông báo",
+      "publishError": "Không thể công bố ca",
+      "reassignSuccess": "Đã chuyển ca thành công",
+      "reassignError": "Không thể chuyển ca",
+      "confirmSuccess": "Đã xác nhận ca",
+      "confirmError": "Không thể xác nhận ca",
+      "autoLogoutCancelled": "Đã hủy tự động đăng xuất. Bạn có thể tiếp tục làm việc."
+    },
     "schedule": {
       "title": "Lịch Ca Làm Việc",
       "description": "Tạo, công bố và quản lý lịch ca và phân công nhân viên.",
@@ -93,12 +120,15 @@
         "cancel": "Hủy",
         "submit": "Sao Chép Lịch",
         "description": "Sao chép toàn bộ phân công ca từ tuần nguồn sang tuần đích.",
+        "mondayNote": "Chọn bất kỳ ngày nào sẽ tự động lấy thứ Hai của tuần đó làm ngày bắt đầu.",
         "sourceTitle": "Tuần Nguồn (Thứ Hai)",
         "sourcePlaceholder": "Chọn thứ Hai tuần nguồn",
         "targetTitle": "Tuần Đích (Thứ Hai)",
         "targetPlaceholder": "Chọn thứ Hai tuần đích",
         "asDraft": "Tạo dưới dạng nháp",
-        "asDraftHint": "Ca đã sao chép cần được công bố trước khi nhân viên nhận thông báo"
+        "asDraftHint": "Ca đã sao chép cần được công bố trước khi nhân viên nhận thông báo",
+        "success": "Sao chép lịch tuần thành công.",
+        "error": "Không thể sao chép lịch tuần. Vui lòng thử lại."
       },
       "attendanceAdjustmentDialog": {
         "title": "Điều Chỉnh Chấm Công",
@@ -267,7 +297,7 @@
       }
     },
     "myShift": {
-      "title": "Ca Của Tôi",
+      "title": "Bảng Chấm Công",
       "description": "Xem ca được phân công và chấm công vào/ra.",
       "loading": "Đang tải ca làm...",
       "empty": "Không có ca nào trong 30 ngày tới.",
@@ -278,6 +308,19 @@
         "swap": "Đổi ca",
         "leave": "Xin nghỉ"
       },
+      "viewMode": {
+        "week": "Tuần",
+        "month": "Tháng"
+      },
+      "stats": {
+        "totalWorkdays": "Tổng ngày công thực tế",
+        "totalOvertimeHours": "Tổng giờ OT (nhân hệ số)",
+        "totalLateEarly": "Tổng đi trễ và về sớm",
+        "totalLeaveDays": "Tổng ngày nghỉ phép"
+      },
+      "checkedInTodayAt": "Bạn đã chấm công hôm nay lúc",
+      "autoSyncNote": "Ghi chú: Bảng chấm công sẽ được tự động đồng bộ vào các khung giờ sau: 10:00, 12:00, 15:15 và 17:30 hàng ngày",
+      "timesheetPeriod": "Bảng chấm công từ ngày {date}",
       "summary": {
         "title": "Tổng kết tháng",
         "subtitle": "Tổng quan chấm công",
@@ -300,7 +343,22 @@
         "networkConnected": "Đã kết nối mạng cửa hàng",
         "locationUnverified": "Chưa xác minh vị trí",
         "checkInAction": "Chấm Công Vào",
-        "checkOutAction": "Chấm Công Ra"
+        "checkOutAction": "Chấm Công Ra",
+        "checkInAvailableFrom": "Chấm công mở từ {time}",
+        "inMinutes": "còn {minutes} phút",
+        "shiftEnded": "Ca đã kết thúc — không thể chấm công",
+        "tooEarlyToast": "Quá sớm! Chấm công mở lúc {time}",
+        "shiftEndedToast": "Ca này đã kết thúc"
+      },
+      "autoLogout": {
+        "bannerTitle": "Tự động đăng xuất sau {time}",
+        "bannerMessage": "Bạn đã chấm công ra. Hệ thống sẽ tự động đăng xuất.",
+        "stay": "Ở lại",
+        "logoutNow": "Đăng xuất ngay"
+      },
+      "todayAttendance": {
+        "title": "Chấm công hôm nay",
+        "noShiftsToday": "Hôm nay không có ca làm"
       },
       "todayShift": "Ca Hôm Nay",
       "upcomingShifts": "Ca Sắp Tới",
@@ -399,7 +457,8 @@
         "ON_DUTY": "Đang trực",
         "COMPLETED": "Hoàn thành",
         "SCHEDULED": "Đã lên lịch",
-        "CHECKED_IN": "Đã chấm công"
+        "CHECKED_IN": "Đã chấm công",
+        "NO_RECORD": "Không có dữ liệu"
       },
       "exceptionNames": {
         "LATE": "Đến trễ",
@@ -578,7 +637,8 @@
       "description": "Phân công nhân viên theo mẫu ca và theo dõi chấm công.",
       "searchPlaceholder": "Tìm phân công",
       "newAssignment": "Tạo phân công",
-      "confirmCancel": "Hủy phân công này?",
+      "confirmCancel": "Hủy phân công này? Thao tác không thể hoàn tác.",
+      "cancelAssignment": "Hủy Phân Công",
       "activeCount": "Đang hiệu lực: {count}",
       "cancelledCount": "Đã hủy: {count}",
       "filters": {

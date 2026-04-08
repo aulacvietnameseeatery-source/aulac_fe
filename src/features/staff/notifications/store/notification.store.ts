@@ -1,6 +1,6 @@
 import { create } from "zustand";
-import { dateUtils } from "@/lib/date-utils";
 import { MAX_STORE_ITEMS } from "../constants/notification.constants";
+import { parseNotificationCreatedAtMs } from "../utils/notification-time";
 import type { NotificationDto, NotificationListItem, NotificationPreferenceDto } from "../types/notification.types";
 
 interface NotificationState {
@@ -86,7 +86,7 @@ export const useNotificationStore = create<NotificationState & NotificationActio
         }
 
         const merged = [...newItems, ...state.items]
-          .sort((a, b) => parseCreatedAtUtcSafeMs(b.createdAt) - parseCreatedAtUtcSafeMs(a.createdAt))
+          .sort((a, b) => parseNotificationCreatedAtMs(b.createdAt) - parseNotificationCreatedAtMs(a.createdAt))
           .slice(0, MAX_STORE_ITEMS);
 
         const unreadCount = merged.filter((n) => !n.isRead).length;
@@ -157,9 +157,10 @@ export const useNotificationStore = create<NotificationState & NotificationActio
   })
 );
 
-function parseCreatedAtUtcSafeMs(createdAt: string): number {
+// _OLD: kept for history per no-deletion policy. Replaced by
+// parseNotificationCreatedAtMs in ../utils/notification-time.ts
+function parseCreatedAtUtcSafeMs_DEPRECATED(createdAt: string): number {
   if (!createdAt) return 0;
-  const utcSafeDate = dateUtils.formatLocal(createdAt, "yyyy-MM-dd'T'HH:mm:ss.SSSxxx");
-  const parsed = new Date(utcSafeDate).getTime();
+  const parsed = new Date(createdAt).getTime();
   return Number.isNaN(parsed) ? 0 : parsed;
 }

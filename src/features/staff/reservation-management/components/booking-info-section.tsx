@@ -1,10 +1,10 @@
 import React from "react";
 import { Calendar, Clock, Tag, Package } from "lucide-react";
-import { format } from "date-fns";
 import { useTranslations } from "next-intl";
 import { ReservationDetailDto } from "../types/reservation-types";
 import { Badge } from "@/components/ui/badge";
 import { localizeSourceLabel, localizeStatusLabel } from "../utils/localize-reservation";
+import { dateUtils } from "@/lib/date-utils";
 
 interface BookingInfoSectionProps {
     reservation: ReservationDetailDto;
@@ -14,6 +14,7 @@ export const BookingInfoSection = ({ reservation }: BookingInfoSectionProps) => 
     const t = useTranslations("reservations.management.detail.booking");
     const tStatus = useTranslations("reservations.management.status");
     const tSource = useTranslations("reservations.management.source");
+    const tCustomer = useTranslations("reservations.management.detail.customer");
 
     const getBadgeVariant = (statusId: number): any => {
         switch (statusId) {
@@ -36,41 +37,53 @@ export const BookingInfoSection = ({ reservation }: BookingInfoSectionProps) => 
     };
 
     return (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-            <div className="flex items-center gap-2 text-gray-900 font-semibold text-lg mb-5 border-b border-gray-100 pb-4">
-                <Calendar size={24} className="text-blue-600" />
-                <h2>{t("title")}</h2>
+        <div className="border-b border-slate-100 pb-6 sm:pb-8 last:border-0 relative">
+            <div className="mb-4 sm:mb-6">
+                <div className="flex items-center gap-2 text-slate-900 font-semibold text-lg">
+                    <Calendar size={24} className="text-blue-600" />
+                    <h2>{t("title")}</h2>
+                </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
                 <div>
-                    <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
+                    <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">
                         {t("reservedDate")}
                     </label>
-                    <div className="flex items-center gap-2 text-gray-900 font-medium text-base">
-                        <Calendar size={18} className="text-gray-400" />
-                        {format(new Date(reservation.reservedTime), "EEEE, MMMM dd, yyyy")}
+                    <div className="text-slate-900 font-semibold text-base py-3 px-4 bg-slate-50 rounded-xl border border-slate-100 flex items-center gap-3">
+                        <Calendar size={18} className="text-slate-400" />
+                        {dateUtils.formatLocal(reservation.reservedTime, "dd/MM/yyyy")}
                     </div>
                 </div>
 
                 <div>
-                    <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
+                    <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">
                         {t("reservedTime")}
                     </label>
-                    <div className="flex items-center gap-2 text-gray-900 font-medium text-base">
-                        <Clock size={18} className="text-gray-400" />
-                        {format(new Date(reservation.reservedTime), "HH:mm")}
+                    <div className="text-slate-900 font-semibold text-base py-3 px-4 bg-slate-50 rounded-xl border border-slate-100 flex items-center gap-3">
+                        <Clock size={18} className="text-slate-400" />
+                        {dateUtils.formatLocal(reservation.reservedTime, "HH:mm")}
                     </div>
                 </div>
 
                 <div>
-                    <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
+                    <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">
+                        {tCustomer("partySize")}
+                    </label>
+                    <div className="text-slate-900 font-semibold text-base py-3 px-4 bg-slate-50 rounded-xl border border-slate-100 flex items-center gap-3">
+                        <Package size={18} className="text-slate-400" />
+                        {reservation.partySize} {reservation.partySize > 1 ? tCustomer("guests") : tCustomer("guest")}
+                    </div>
+                </div>
+
+                <div>
+                    <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">
                         {t("status")}
                     </label>
-                    <div className="flex items-center">
+                    <div className="py-1 flex items-center h-[54px]">
                         <Badge
                             variant={getBadgeVariant(reservation.statusId)}
-                            className="rounded-md px-3 py-1.5 text-sm font-medium"
+                            className="rounded-lg px-4 py-2 text-sm font-bold uppercase tracking-tight"
                         >
                             {localizeStatusLabel(reservation.statusCode, reservation.statusName, tStatus)}
                         </Badge>
@@ -78,27 +91,27 @@ export const BookingInfoSection = ({ reservation }: BookingInfoSectionProps) => 
                 </div>
 
                 <div>
-                    <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
+                    <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">
                         {t("bookingSource")}
                     </label>
-                    <div className="flex items-center">
+                     <div className="py-1 flex items-center h-[54px]">
                         <Badge
                             variant={getSourceBadgeVariant(reservation.sourceCode)}
-                            className="rounded-md px-3 py-1.5 text-sm font-medium"
+                            className="rounded-lg px-4 py-2 text-sm font-bold uppercase tracking-tight"
                         >
                             {localizeSourceLabel(reservation.sourceCode, reservation.sourceName, tSource)}
                         </Badge>
                     </div>
                 </div>
 
-                {reservation.createdAt && (
-                    <div className="md:col-span-2">
-                        <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
+                 {reservation.createdAt && (
+                    <div className="md:col-span-1">
+                        <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">
                             {t("createdOn")}
                         </label>
-                        <div className="flex items-center gap-2 text-gray-900 font-medium text-base">
-                            <Package size={18} className="text-gray-400" />
-                            {format(new Date(reservation.createdAt), "EEEE, MMMM dd, yyyy 'at' h:mm a")}
+                        <div className="text-slate-500 font-medium text-sm py-3 px-4 bg-slate-50/50 rounded-xl border border-slate-100 flex items-center gap-3">
+                            <Tag size={14} className="text-slate-400" />
+                            {dateUtils.formatLocal(reservation.createdAt, "dd/MM/yyyy HH:mm")}
                         </div>
                     </div>
                 )}

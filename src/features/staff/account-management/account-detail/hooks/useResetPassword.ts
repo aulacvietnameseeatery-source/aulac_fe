@@ -1,4 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 import { staffAccountService } from "../../account-list/services/staff-account.service";
 import { toast } from "sonner";
 
@@ -13,6 +14,8 @@ export function useResetPassword(
     onError?: (error: Error) => void;
   }
 ) {
+  const t = useTranslations("Account.Detail.notifications");
+
   return useMutation<void, Error, void>({
     mutationFn: () => {
       if (!accountId) throw new Error("Account ID is required");
@@ -20,15 +23,15 @@ export function useResetPassword(
     },
 
     onSuccess: () => {
-      toast.success("Password reset successfully", {
-        description: "A new temporary password has been sent to the user's email.",
+      toast.success(t("resetPasswordSuccess"), {
+        description: t("resetPasswordSuccessDesc"),
       });
       callbacks?.onSuccess?.();
     },
 
     onError: (error) => {
-      toast.error("Failed to reset password", {
-        description: error.message || "An unexpected error occurred.",
+      toast.error(t("resetPasswordError"), {
+        description: t("resetPasswordErrorDesc", { message: error.message || "An unexpected error occurred." }),
       });
       callbacks?.onError?.(error);
     },

@@ -72,6 +72,15 @@ function resolveErrorKey(status?: number, body?: ApiErrorBody): ApiErrorKey {
     return "network";
   }
 
+  // Handle deactivated account (from login or refresh)
+  if (
+    systemMessage === "account_deactivated" ||
+    rawMessage.includes("account has been deactivated") ||
+    userMessage.includes("account has been deactivated")
+  ) {
+    return "accountDeactivated";
+  }
+
   if (
     systemMessage === "not_found" ||
     rawMessage.includes("resource not found") ||

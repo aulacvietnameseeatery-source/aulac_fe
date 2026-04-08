@@ -2,11 +2,13 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
-import { Copy } from "lucide-react";
+import { Copy, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ALDatePicker } from "@/components/ui/al-date-picker";
 import { Switch } from "@/components/ui/switch";
 import { Dialog } from "@/components/ui/dialog";
+import { PermissionGuard } from "@/components/permission-guard";
+import { Permissions } from "@/types/const";
 import { useCopyWeekMutation } from "../hooks/use-shift-queries";
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
@@ -21,7 +23,10 @@ function getMonday(d: Date): Date {
 }
 
 function fmtDate(d: Date) {
-  return d.toISOString().slice(0, 10);
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`;
 }
 
 function addDays(d: Date, n: number) {
@@ -58,6 +63,17 @@ export function CopyWeekDialog({ defaultSource }: CopyWeekDialogProps) {
 
   const copy = useCopyWeekMutation();
 
+  // Auto-snap any selected date to the Monday of that week
+  const handleSourceChange = (v: string) => {
+    const mon = getMonday(new Date(v + "T00:00:00"));
+    setSource(fmtDate(mon));
+  };
+
+  const handleTargetChange = (v: string) => {
+    const mon = getMonday(new Date(v + "T00:00:00"));
+    setTarget(fmtDate(mon));
+  };
+
   const handleSubmit = () => {
     copy.mutate(
       {
@@ -70,7 +86,7 @@ export function CopyWeekDialog({ defaultSource }: CopyWeekDialogProps) {
   };
 
   return (
-    <>
+    <PermissionGuard permission={Permissions.ScheduleShift}>
       <Button variant="outline" size="sm" className="gap-1.5" onClick={() => setOpen(true)}>
         <Copy className="h-3.5 w-3.5" />
         {t("open")}
@@ -101,10 +117,18 @@ export function CopyWeekDialog({ defaultSource }: CopyWeekDialogProps) {
             {t("description")}
           </p>
 
+          {/* Monday auto-snap info note */}
+          <div className="flex items-start gap-2 rounded-lg border border-blue-200 bg-blue-50/60 p-3">
+            <Info className="mt-0.5 h-4 w-4 shrink-0 text-blue-500" />
+            <p className="text-xs text-blue-700">
+              {t("mondayNote")}
+            </p>
+          </div>
+
           <ALDatePicker
             title={t("sourceTitle")}
             value={source}
-            onChange={(v) => setSource(v)}
+            onChange={handleSourceChange}
             placeholder={t("sourcePlaceholder")}
             required
           />
@@ -117,7 +141,7 @@ export function CopyWeekDialog({ defaultSource }: CopyWeekDialogProps) {
           <ALDatePicker
             title={t("targetTitle")}
             value={target}
-            onChange={(v) => setTarget(v)}
+            onChange={handleTargetChange}
             placeholder={t("targetPlaceholder")}
             required
           />
@@ -141,6 +165,6 @@ export function CopyWeekDialog({ defaultSource }: CopyWeekDialogProps) {
           </div>
         </div>
       </Dialog>
-    </>
+    </PermissionGuard>
   );
 }

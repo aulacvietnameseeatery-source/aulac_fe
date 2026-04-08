@@ -4,12 +4,10 @@ import { AdminSidebar } from "@/components/layout/admin-sidebar/admin-sidebar";
 import { useEffect, useState } from "react";
 import { useRouter } from "@/routing"
 import { useAuth } from "@/components/providers/auth-provider";
-import "../../../styles/adminLayout.css"
+import "@/styles/adminLayout.css"
 import { Tooltip } from "react-tooltip";
 import { LanguageSwitcher } from "@/components/ui/language-switcher";
 import { DashboardTopNav } from "@/components/ui/dashboard-top-nav";
-// _OLD: NotificationProvider + NotificationToastRenderer were mounted locally in this layout.
-// _OLD: They are now mounted in src/app/[locale]/layout.tsx so hub subscription starts immediately after login.
 // import { NotificationProvider } from "@/features/staff/notifications/providers/notification-provider";
 // import { NotificationToastRenderer } from "@/features/staff/notifications/components/notification-toast-renderer";
 import { NotificationBell } from "@/features/staff/notifications/components/notification-bell";
@@ -47,9 +45,6 @@ export default function DashboardLayout({
 
   return (
     <>
-      {/* _OLD: Local provider/toast renderer wrapper retained for reference. */}
-      {/* _OLD: <NotificationProvider> */}
-      {/* _OLD: <NotificationToastRenderer /> */}
       <div className="main-container relative min-h-screen bg-[#F8F9FA]">
       {/* Mobile Header for Toggle */}
       <div className="md:hidden fixed top-0 left-0 right-0 z-40 bg-white border-b border-gray-200 px-4 py-2 flex items-center justify-between shadow-sm">
@@ -62,7 +57,10 @@ export default function DashboardLayout({
           </button>
           <span className="font-display font-bold text-[#1A3A51] text-base">An Lac Admin</span>
         </div>
-        <LanguageSwitcher variant="admin" isMobile={true} />
+        <div className="flex items-center gap-2">
+          <NotificationBell onClick={() => setIsNotificationOpen((v) => !v)} />
+          <LanguageSwitcher variant="admin" isMobile={true} />
+        </div>
       </div>
 
       <div className="main flex h-screen overflow-hidden pt-15 md:pt-0">
@@ -82,7 +80,7 @@ export default function DashboardLayout({
               onClick={() => setIsMobileMenuOpen(false)}
             />
             {/* Sidebar Drawer */}
-            <div className="absolute left-0 top-0 bottom-0 w-[310px] animate-in slide-in-from-left duration-300 shadow-2xl">
+            <div className="absolute left-0 top-0 bottom-0 w-77.5 animate-in slide-in-from-left duration-300 shadow-2xl">
               <AdminSidebar onClose={() => setIsMobileMenuOpen(false)} />
             </div>
           </div>
@@ -98,16 +96,15 @@ export default function DashboardLayout({
 
             {/* Right Side Actions */}
             <div className="flex items-center gap-4">
-              <div className="relative">
-                <NotificationBell onClick={() => setIsNotificationOpen((v) => !v)} />
-                <NotificationCenter
-                  open={isNotificationOpen}
-                  onClose={() => setIsNotificationOpen(false)}
-                />
-              </div>
+              <NotificationBell onClick={() => setIsNotificationOpen((v) => !v)} />
               <LanguageSwitcher variant="admin" />
             </div>
           </header>
+
+          <NotificationCenter
+            open={isNotificationOpen}
+            onClose={() => setIsNotificationOpen(false)}
+          />
 
           <div className="main-view flex-1 overflow-auto p-4 md:p-5 bg-[#FDFBF9]">
             {/* View for page content */}
@@ -117,7 +114,6 @@ export default function DashboardLayout({
       </div>
         <Tooltip id="my-tooltip" style={{ zIndex: 10000 }} />
       </div>
-      {/* _OLD: </NotificationProvider> */}
     </>
   );
 }
