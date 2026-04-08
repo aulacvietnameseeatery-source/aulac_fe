@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { ALCard } from "@/components/ui/al-card";
 import { ALDatePicker } from "@/components/ui/al-date-picker";
 import { BaseTable } from "@/components/ui/table/base-table";
+import { ALConfirmDialog } from "@/components/ui/al-confirm-dialog";
 import { PermissionGuard } from "@/components/permission-guard";
 import { Permissions } from "@/types/const";
 import type { TableColumn } from "@/types/table.types";
@@ -28,6 +29,7 @@ export function ShiftScheduleList() {
   const [formOpen, setFormOpen] = useState(false);
   const [editTarget, setEditTarget] = useState<ShiftAssignmentListDto | null>(null);
   const [adjustTarget, setAdjustTarget] = useState<AttendanceRecordDto | null>(null);
+  const [cancelTargetId, setCancelTargetId] = useState<number | null>(null);
 
   const handleTableDataChange = useCallback((next: TableDataChangeParams) => {
     setTableParams((prev) => {
@@ -56,8 +58,7 @@ export function ShiftScheduleList() {
   const handleCreate = () => { setEditTarget(null); setFormOpen(true); };
   const handleEdit = (a: ShiftAssignmentListDto) => { setEditTarget(a); setFormOpen(true); };
   const handleCancel = (id: number) => {
-    if (!confirm(t("confirmCancel"))) return;
-    cancelAssignment.mutate(id);
+    setCancelTargetId(id);
   };
 
   function formatTime(iso: string) {
@@ -224,6 +225,21 @@ export function ShiftScheduleList() {
           attendanceRecord={adjustTarget}
         />
       )}
+
+      <ALConfirmDialog
+        isOpen={!!cancelTargetId}
+        onClose={() => setCancelTargetId(null)}
+        onConfirm={() => {
+          if (!cancelTargetId) return;
+          cancelAssignment.mutate(cancelTargetId, {
+            onSuccess: () => setCancelTargetId(null),
+          });
+        }}
+        title={t("cancelAssignment")}
+        message={t("confirmCancel")}
+        variant="warning"
+        isLoading={cancelAssignment.isPending}
+      />
     </div>
   );
 }

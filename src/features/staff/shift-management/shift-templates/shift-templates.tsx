@@ -4,6 +4,8 @@ import { ShiftTemplateList } from "../components/shift-template-list";
 
 export function ShiftTemplates() {
   return (
-        <ShiftTemplateList />
+        <div className="h-full">
+          <ShiftTemplateList />
+        </div>
   );
 }

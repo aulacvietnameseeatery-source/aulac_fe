@@ -637,7 +637,8 @@
       "description": "Affectez le personnel aux modèles de quart et suivez la présence.",
       "searchPlaceholder": "Rechercher des affectations",
       "newAssignment": "Nouvelle affectation",
-      "confirmCancel": "Annuler cette affectation ?",
+      "confirmCancel": "Annuler cette affectation ? Cette action est irréversible.",
+      "cancelAssignment": "Annuler l'Affectation",
       "activeCount": "Actif : {count}",
       "cancelledCount": "Annulé : {count}",
       "filters": {

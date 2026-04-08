@@ -149,7 +149,7 @@ export function ShiftTemplateList() {
   };
 
   return (
-    <div>
+    <div className="h-full">
       <BaseTable<ShiftTemplateDto>
         data={templates}
         loading={isLoading}

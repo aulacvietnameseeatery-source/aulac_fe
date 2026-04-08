@@ -637,7 +637,8 @@
       "description": "Phân công nhân viên theo mẫu ca và theo dõi chấm công.",
       "searchPlaceholder": "Tìm phân công",
       "newAssignment": "Tạo phân công",
-      "confirmCancel": "Hủy phân công này?",
+      "confirmCancel": "Hủy phân công này? Thao tác không thể hoàn tác.",
+      "cancelAssignment": "Hủy Phân Công",
       "activeCount": "Đang hiệu lực: {count}",
       "cancelledCount": "Đã hủy: {count}",
       "filters": {
