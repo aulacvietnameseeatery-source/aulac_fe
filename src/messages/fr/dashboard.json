@@ -24,7 +24,8 @@
     },
     "activityRow": {
       "common": {
-        "loading": "Chargement..."
+        "loading": "Chargement...",
+        "viewAll": "Voir tout"
       },
       "time": {
         "minAgo": "Il y a {count} min",
@@ -44,7 +45,7 @@
         "title": "Notifications",
         "empty": "Aucune nouvelle notification",
         "newOrder": "Nouv. commande {table} ({items} art.)",
-        "payment": "Paiement de ${amount} via {method}",
+        "payment": "Paiement de {amount} via {method}",
         "tableStatus": "Table {table} est maintenant {status}",
         "newReservation": "Nouv. réservation par {name}"
       }
@@ -52,7 +53,8 @@
     "chartsRow1": {
       "common": {
         "loading": "Chargement des données...",
-        "noData": "Aucune donnée disponible"
+        "noData": "Aucune donnée disponible",
+        "viewAll": "Voir tout"
       },
       "revenue": {
         "title": "Analyse des revenus",
@@ -67,7 +69,8 @@
     },
     "chartsRow2": {
       "common": {
-        "noData": "Aucune donnée disponible"
+        "noData": "Aucune donnée disponible",
+        "viewAll": "Voir tout"
       },
       "category": {
         "title": "Statistiques par catégorie",

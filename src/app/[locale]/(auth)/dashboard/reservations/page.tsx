@@ -1,7 +1,7 @@
 "use client";
 
 import React, { Suspense, useState } from "react";
-import { Loader2, RefreshCcw, Search, Armchair, Calendar as CalendarIcon, CirclePlus } from "lucide-react";
+import { Loader2, RefreshCcw, Search, Armchair, Calendar as CalendarIcon, CirclePlus, ArrowUpDown, Filter, User, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { useReservationList } from "@/features/staff/reservation-management/hooks/use-reservation-list";
@@ -18,13 +18,14 @@ import { ReservationDetailModal } from "@/features/staff/reservation-management/
 import { ALConfirmDialog } from "@/components/ui/al-confirm-dialog";
 import { CreateReservationModal } from "@/features/staff/reservation-create";
 import { localizeStatusLabel } from "@/features/staff/reservation-management/utils/localize-reservation";
-
 import { dateUtils } from "@/lib/date-utils";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuSeparator, DropdownMenuLabel } from "@/components/ui/dropdown-menu";
 
 const ReservationListContent = () => {
     const t = useTranslations("reservations.management.list");
     const tm = useTranslations("reservations.management.messages");
     const tStatus = useTranslations("reservations.management.status");
+
     const {
         reservations,
         statuses,
@@ -34,7 +35,6 @@ const ReservationListContent = () => {
         actions
     } = useReservationList();
 
-    /// ---  TablePagination ---
     const { pageIndex, pageSize, totalCount, totalPage } = pagination;
 
     const startItem = totalCount === 0 ? 0 : (pageIndex - 1) * pageSize + 1;
@@ -57,16 +57,22 @@ const ReservationListContent = () => {
     };
 
     const [showCreateModal, setShowCreateModal] = useState(false);
-
-    const handleCreate = () => {
-        setShowCreateModal(true);
-    };
-
     const [detailReservationId, setDetailReservationId] = useState<number | null>(null);
     const [assignTableReservation, setAssignTableReservation] = useState<ReservationDto | null>(null);
     const [editReservationId, setEditReservationId] = useState<number | null>(null);
     const [deleteReservationId, setDeleteReservationId] = useState<number | null>(null);
     const [isDeleting, setIsDeleting] = useState(false);
+
+    const [sortBy, setSortBy] = useState('createdAt');
+    const [creatorFilter, setCreatorFilter] = useState<string | null>(null);
+    const [tableFilter, setTableFilter] = useState<string | null>(null);
+
+    const activeFilterCount = (creatorFilter ? 1 : 0) + (tableFilter ? 1 : 0);
+
+    const [mockUsers] = useState([{ id: '1', name: 'Admin User' }, { id: '2', name: 'Staff Hưng' }]);
+    const [mockTables] = useState([{ id: 'T01', name: 'Table TB-001' }, { id: 'T8888', name: 'Table T8888' }, { id: 'VIP1', name: 'VIP-01' }]);
+
+    const handleCreate = () => setShowCreateModal(true);
 
     const handleStatusUpdate = async (reservationId: number, statusCode: string) => {
         try {
@@ -96,28 +102,103 @@ const ReservationListContent = () => {
     return (
         <div className="w-full h-full min-h-0 overflow-hidden bg-[#FDFBF9] px-4 py-4 md:px-0 md:py-0 font-sans flex flex-col">
 
-            {/* --- PAGE HEADER --- */}
             <div className="shrink-0 flex flex-col gap-4 md:gap-6 mb-4 md:mb-6 sticky top-0 z-20 bg-[#FDFBF9]/95 backdrop-blur-md border-b border-[#D5BA98]/30 pb-4 md:border-b-0 md:bg-transparent md:backdrop-blur-none md:pb-0">
 
-                {/* Hàng 1: Tiêu đề */}
-                <div className="flex items-center justify-between sm:justify-start gap-3">
-                    <h3 className="text-2xl font-bold text-[#1A3A52] m-0">{t("title")}</h3>
-                    <button
-                        onClick={actions.refresh}
-                        className="p-2 bg-[#FDFBF9] border border-[#D5BA98]/60 rounded-full text-[#1A3A52]/70 hover:bg-[#D5BA98]/10 hover:text-[#1A3A52] transition-colors shadow-none"
-                        title={t("refresh")}
-                    >
-                        <RefreshCcw className="w-4 h-4" />
-                    </button>
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                    <div className="flex items-center gap-3">
+                        <h3 className="text-2xl font-bold text-[#1A3A52] m-0">{t("title")}</h3>
+                        <button
+                            onClick={actions.refresh}
+                            className="p-2 bg-[#FDFBF9] border border-[#D5BA98]/60 rounded-full text-[#1A3A52]/70 hover:bg-[#D5BA98]/10 hover:text-[#1A3A52] transition-colors shadow-none"
+                            title={t("refresh")}
+                        >
+                            <RefreshCcw className="w-4 h-4" />
+                        </button>
+                    </div>
+
+                    <div className="flex items-center gap-2 w-full sm:w-auto">
+
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button variant="outline" className="h-10 w-full sm:w-auto rounded-xl border-[#D5BA98]/60 text-[#1A3A52] font-semibold bg-[#FDFBF9] hover:bg-[#D5BA98]/10 transition-colors shadow-sm">
+                                    <ArrowUpDown className="mr-2 h-4 w-4 text-[#1A3A52]/70" />
+                                    {sortBy === 'createdAt' ? "Sort: Created" : "Sort: Date"}
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end" className="w-56 rounded-xl border-[#D5BA98]/40 shadow-lg">
+                                <DropdownMenuLabel className="text-[#1A3A52]/60 text-xs font-bold uppercase tracking-wider">Sort Options</DropdownMenuLabel>
+                                <DropdownMenuSeparator className="bg-[#D5BA98]/20" />
+                                <DropdownMenuRadioGroup value={sortBy} onValueChange={setSortBy}>
+                                    <DropdownMenuRadioItem value="createdAt" className="cursor-pointer text-[#1A3A52] font-medium">Created Date</DropdownMenuRadioItem>
+                                    <DropdownMenuRadioItem value="reservedDate" className="cursor-pointer text-[#1A3A52] font-medium">Reserved Date</DropdownMenuRadioItem>
+                                </DropdownMenuRadioGroup>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button variant="outline" className={`h-10 w-full sm:w-auto rounded-xl font-semibold relative transition-colors shadow-sm ${activeFilterCount > 0 ? 'bg-[#1A3A52] border-[#1A3A52] text-white hover:bg-[#1A3A52]/90' : 'bg-[#FDFBF9] border-[#D5BA98]/60 text-[#1A3A52] hover:bg-[#D5BA98]/10'}`}>
+                                    <Filter className={`mr-2 h-4 w-4 ${activeFilterCount > 0 ? 'text-white' : 'text-[#1A3A52]/70'}`} />
+                                    Filter
+                                    {activeFilterCount > 0 && (
+                                        <span className="absolute -top-1.5 -right-1.5 flex h-5 w-5 items-center justify-center rounded-full bg-rose-500 text-[10px] font-bold text-white shadow-sm ring-2 ring-white">
+                                            {activeFilterCount}
+                                        </span>
+                                    )}
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end" className="w-64 p-3 rounded-xl border-[#D5BA98]/40 shadow-lg">
+
+                                <div className="mb-4">
+                                    <h4 className="text-[11px] font-bold text-[#1A3A52]/50 uppercase tracking-wider mb-2 flex items-center px-2">
+                                        <User className="w-3.5 h-3.5 mr-1.5" /> Created By
+                                    </h4>
+                                    <div className="space-y-1">
+                                        <button onClick={() => setCreatorFilter(null)} className={`w-full text-left px-3 py-2 text-sm rounded-lg transition-colors ${!creatorFilter ? 'bg-[#D5BA98]/15 font-bold text-[#1A3A52]' : 'text-[#1A3A52]/70 hover:bg-[#D5BA98]/10 font-medium'}`}>
+                                            All Creators
+                                        </button>
+                                        {mockUsers.map(user => (
+                                            <button key={user.id} onClick={() => setCreatorFilter(user.id)} className={`w-full text-left px-3 py-2 text-sm rounded-lg transition-colors ${creatorFilter === user.id ? 'bg-[#1A3A52] text-white font-bold' : 'text-[#1A3A52]/70 hover:bg-[#D5BA98]/10 font-medium'}`}>
+                                                {user.name}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                <DropdownMenuSeparator className="bg-[#D5BA98]/20 my-2" />
+
+                                <div className="mt-2">
+                                    <h4 className="text-[11px] font-bold text-[#1A3A52]/50 uppercase tracking-wider mb-2 flex items-center px-2">
+                                        <Armchair className="w-3.5 h-3.5 mr-1.5" /> Table
+                                    </h4>
+                                    <div className="max-h-40 overflow-y-auto pr-1 space-y-1 custom-scrollbar">
+                                        <button onClick={() => setTableFilter(null)} className={`w-full text-left px-3 py-2 text-sm rounded-lg transition-colors ${!tableFilter ? 'bg-[#D5BA98]/15 font-bold text-[#1A3A52]' : 'text-[#1A3A52]/70 hover:bg-[#D5BA98]/10 font-medium'}`}>
+                                            All Tables
+                                        </button>
+                                        {mockTables.map(table => (
+                                            <button key={table.id} onClick={() => setTableFilter(table.id)} className={`w-full text-left px-3 py-2 text-sm rounded-lg transition-colors ${tableFilter === table.id ? 'bg-[#1A3A52] text-white font-bold' : 'text-[#1A3A52]/70 hover:bg-[#D5BA98]/10 font-medium'}`}>
+                                                {table.name}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                {activeFilterCount > 0 && (
+                                    <>
+                                        <DropdownMenuSeparator className="bg-[#D5BA98]/20 my-2" />
+                                        <Button variant="ghost" onClick={() => { setCreatorFilter(null); setTableFilter(null); }} className="w-full text-rose-500 hover:text-rose-600 hover:bg-rose-50 font-bold justify-start px-2">
+                                            <X className="w-4 h-4 mr-2" /> Clear all filters
+                                        </Button>
+                                    </>
+                                )}
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    </div>
                 </div>
 
-                {/* Hàng 2: Toolbar Trái - Phải */}
                 <div className="flex flex-col xl:flex-row justify-between items-start xl:items-center gap-4 w-full">
 
-                    {/* TRÁI: Date Picker & Tabs */}
                     <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full xl:w-auto">
-
-                        {/* Date Picker (Full width on Mobile) */}
                         <div className="relative flex items-center bg-[#FDFBF9] border border-[#D5BA98]/60 rounded-lg overflow-hidden shadow-none h-10 px-3 hover:border-[#1A3A52]/35 transition-colors w-full sm:w-auto shrink-0">
                             <CalendarIcon className="w-4 h-4 text-[#1A3A52]/55 mr-2" />
                             <input
@@ -128,7 +209,6 @@ const ReservationListContent = () => {
                             />
                         </div>
 
-                        {/* Tabs Filter (Scrollable ngang trên Mobile) */}
                         <div className="flex bg-[#D5BA98]/12 p-1 rounded-lg border border-[#D5BA98]/40 overflow-x-auto hide-scrollbar w-full sm:w-auto max-w-full">
                             <button
                                 onClick={() => actions.onStatusChange(null)}
@@ -154,10 +234,8 @@ const ReservationListContent = () => {
                         </div>
                     </div>
 
-                    {/* PHẢI: Search & Add New */}
                     <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full xl:w-auto xl:ml-auto">
 
-                        {/* Thanh Search */}
                         <div className="relative flex items-center bg-[#FDFBF9] border border-[#D5BA98]/60 rounded-lg overflow-hidden shadow-none h-10 w-full sm:w-auto">
                             <div className="px-3 bg-[#D5BA98]/10 border-r border-[#D5BA98]/35 h-full flex items-center justify-center shrink-0">
                                 <Search className="w-4 h-4 text-[#1A3A52]/55" />
@@ -171,7 +249,6 @@ const ReservationListContent = () => {
                             />
                         </div>
 
-                        {/* Nút Add New */}
                         <Button
                             onClick={handleCreate}
                             variant="outline"
@@ -184,7 +261,6 @@ const ReservationListContent = () => {
                 </div>
             </div>
 
-            {/* --- GRID AREA --- */}
             <div className="flex-1 min-h-0 flex flex-col overflow-hidden">
                 {isLoading ? (
                     <div className="flex justify-center items-center py-20 flex-1">
@@ -192,7 +268,6 @@ const ReservationListContent = () => {
                     </div>
                 ) : (
                     <>
-                        {/* Lưới hiển thị Card (Responsive Grid) */}
                         <div className="flex-1 min-h-0 overflow-auto custom-scrollbar pr-1">
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6 pb-4">
                                 {reservations.map((item) => (
@@ -220,7 +295,6 @@ const ReservationListContent = () => {
                 )}
             </div>
 
-            {/* --- NEW PAGINATION --- */}
             {reservations.length > 0 && !isLoading && (
                 <div className="mt-4 shrink-0 shadow-none border border-[#D5BA98]/50 rounded-xl overflow-hidden bg-[#FDFBF9] overflow-x-auto">
                     <TablePagination
