@@ -270,6 +270,8 @@
       "categoryNamePlaceholder": "ex : Entrées, Plat principal, Desserts",
       "description": "Description",
       "descriptionPlaceholder": "Fournissez une brève description de cette catégorie et des types de plats qu'elle comprend...",
+      "autoTranslate": "Traduction auto",
+      "autoTranslateError": "La traduction a échoué. Veuillez réessayer.",
       "validation": {
         "nameRequired": "Le nom de la catégorie est requis",
         "nameMaxLength": "Le nom de la catégorie ne peut pas dépasser 100 caractères",
@@ -296,6 +298,8 @@
         "descriptionMaxLength": "La description ne peut pas dépasser 100 caractères",
         "fixErrors": "Veuillez corriger les erreurs de validation"
       },
+      "autoTranslate": "Traduction auto",
+      "autoTranslateError": "La traduction a échoué. Veuillez réessayer.",
       "loading": "Chargement...",
       "backToList": "Retour à la liste"
     }
@@ -577,7 +581,8 @@
       },
       "notifications": {
         "deleteSuccess": "Coupon supprimé avec succès",
-        "deleteError": "Impossible de supprimer le coupon"
+        "deleteError": "Impossible de supprimer le coupon",
+        "deleteHasBeenUsed": "Impossible de supprimer un coupon déjà utilisé"
       }
     },
     "Add": {

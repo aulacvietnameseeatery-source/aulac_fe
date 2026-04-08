@@ -282,17 +282,14 @@ export const CouponModal: React.FC<CouponModalProps> = ({
                         <ALInput
                             title={t("discountValue")}
                             required={!isViewMode}
-                            type="text"
-                            inputMode="decimal"
+                            type="number"
+                            step="0.5"
                             placeholder={isViewMode ? "" : t("discountValuePlaceholder")}
                             value={discountValueRaw}
                             onChange={(e) => {
-                                const raw = e.target.value.replace(',', '.');
-                                if (raw === "" || /^\d*\.?\d*$/.test(raw)) {
-                                    setDiscountValueRaw(raw);
-                                    const parsed = raw === "" || raw === "." ? 0 : parseFloat(raw);
-                                    handleChange("discountValue", isNaN(parsed) ? 0 : parsed);
-                                }
+                                const val = e.target.value;
+                                setDiscountValueRaw(val);
+                                handleChange("discountValue", val === "" ? 0 : Number(val));
                             }}
                             error={errors.discountValue}
                             readOnly={isViewMode}
@@ -326,12 +323,22 @@ export const CouponModal: React.FC<CouponModalProps> = ({
                         <ALInput
                             title={t("maxUsage")}
                             type="number"
+                            step="1"
+                            min={1}
                             placeholder={isViewMode ? "" : t("maxUsagePlaceholder")}
                             value={formData.maxUsage?.toString() || ""}
-                            onChange={(e) => handleChange("maxUsage", e.target.value ? parseInt(e.target.value) : null)}
+                            onKeyDown={(e) => {
+                                const allowed = ["Backspace", "Delete", "Tab", "ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "Home", "End"];
+                                if (allowed.includes(e.key)) return;
+                                if (/^\d$/.test(e.key)) return;
+                                e.preventDefault();
+                            }}
+                            onChange={(e) => {
+                                const val = e.target.value.replace(/\D/g, "");
+                                handleChange("maxUsage", val ? parseInt(val) : null);
+                            }}
                             error={errors.maxUsage}
                             readOnly={isViewMode}
-                            min={1}
                         />
                         <ALCombobox
                             title={t("status.label")}

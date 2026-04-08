@@ -270,6 +270,8 @@
       "categoryNamePlaceholder": "VD: Khai vị, Món chính, Tráng miệng",
       "description": "Mô tả",
       "descriptionPlaceholder": "Cung cấp mô tả ngắn về danh mục này và các loại món ăn trong danh mục...",
+      "autoTranslate": "Dịch tự động",
+      "autoTranslateError": "Dịch thất bại. Vui lòng thử lại.",
       "validation": {
         "nameRequired": "Tên danh mục không được để trống",
         "nameMaxLength": "Tên danh mục không được vượt quá 100 ký tự",
@@ -296,6 +298,8 @@
         "descriptionMaxLength": "Mô tả không được vượt quá 100 ký tự",
         "fixErrors": "Vui lòng sửa các lỗi xác thực"
       },
+      "autoTranslate": "Dịch tự động",
+      "autoTranslateError": "Dịch thất bại. Vui lòng thử lại.",
       "loading": "Đang tải...",
       "backToList": "Quay lại danh sách"
     }
@@ -577,7 +581,8 @@
       },
       "notifications": {
         "deleteSuccess": "Xóa mã giảm giá thành công",
-        "deleteError": "Không thể xóa mã giảm giá"
+        "deleteError": "Không thể xóa mã giảm giá",
+        "deleteHasBeenUsed": "Không thể xóa mã giảm giá đã được sử dụng"
       }
     },
     "Add": {

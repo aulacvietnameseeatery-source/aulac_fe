@@ -4,7 +4,10 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
+import { Loader2, Sparkles } from 'lucide-react';
 import { useCreateDishCategory } from '../hooks/useCreateDishCategory';
+import { createCategoryService } from '../services/createCategoryService';
+import { Button } from '@/components/ui/button';
 import FormHeader from './FormHeader';
 import FormCard from './FormCard';
 
@@ -28,6 +31,33 @@ export default function AddDishCategory() {
     fr: { name: '', description: '' },
   });
   const [errors, setErrors] = useState<I18nErrors>({});
+  const [isTranslating, setIsTranslating] = useState(false);
+
+  const handleAutoTranslate = async () => {
+    const currentContent = i18n[activeTab];
+    if (!currentContent.name.trim()) return;
+
+    setIsTranslating(true);
+    try {
+      const result = await createCategoryService.translateContent({
+        sourceLang: activeTab,
+        data: { valueName: currentContent.name, description: currentContent.description },
+      });
+      setI18n(prev => {
+        const next = { ...prev };
+        Object.entries(result.translations).forEach(([lang, content]) => {
+          if (lang !== activeTab && LANGUAGES.includes(lang as Language)) {
+            next[lang as Language] = { name: content.valueName, description: content.description };
+          }
+        });
+        return next;
+      });
+    } catch {
+      toast.error(t('autoTranslateError'));
+    } finally {
+      setIsTranslating(false);
+    }
+  };
 
   const handleChange = (lang: Language, field: keyof LangContent, value: string) => {
     setI18n(prev => ({ ...prev, [lang]: { ...prev[lang], [field]: value } }));
@@ -90,20 +120,37 @@ export default function AddDishCategory() {
         />
         <FormCard error={error}>
           {/* Language tabs */}
-          <div className="flex border-b border-gray-200 mb-4">
-            {LANGUAGES.map(lang => (
-              <button
-                key={lang}
-                type="button"
-                onClick={() => setActiveTab(lang)}
-                className={`px-5 py-2 text-sm font-medium border-b-2 transition-colors ${
-                  activeTab === lang ? 'border-primary text-primary' : 'border-transparent text-gray-500 hover:text-gray-700'
-                } ${errors[lang] ? 'text-red-500' : ''}`}
-              >
-                {LANG_LABELS[lang]}
-                {errors[lang] && <span className="ml-1 text-red-500">•</span>}
-              </button>
-            ))}
+          <div className="flex items-center justify-between border-b border-gray-200 mb-4">
+            <div className="flex">
+              {LANGUAGES.map(lang => (
+                <button
+                  key={lang}
+                  type="button"
+                  onClick={() => setActiveTab(lang)}
+                  className={`px-5 py-2 text-sm font-medium border-b-2 transition-colors ${
+                    activeTab === lang ? 'border-primary text-primary' : 'border-transparent text-gray-500 hover:text-gray-700'
+                  } ${errors[lang] ? 'text-red-500' : ''}`}
+                >
+                  {LANG_LABELS[lang]}
+                  {errors[lang] && <span className="ml-1 text-red-500">•</span>}
+                </button>
+              ))}
+            </div>
+            <Button
+              type="button"
+              variant="translate"
+              size="sm"
+              onClick={handleAutoTranslate}
+              disabled={isTranslating}
+              className="group h-auto px-3 py-1.5 text-xs font-semibold mb-1"
+            >
+              {isTranslating ? (
+                <Loader2 size={14} className="animate-spin text-purple-600" />
+              ) : (
+                <Sparkles size={14} className="text-purple-600 group-hover:text-purple-800 transition-colors" />
+              )}
+              <span className="hidden sm:inline ml-1">{t('autoTranslate')}</span>
+            </Button>
           </div>
           {LANGUAGES.map(lang => (
             <div key={lang} className={lang === activeTab ? 'space-y-4' : 'hidden'}>

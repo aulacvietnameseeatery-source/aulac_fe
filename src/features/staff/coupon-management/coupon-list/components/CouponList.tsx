@@ -89,8 +89,11 @@ export default function CouponList() {
       setDeleteModalOpen(false);
     } catch (error: any) {
       console.error('Failed to delete coupon:', error);
-      const errorMessage = error.response?.data?.userMessage || t("notifications.deleteError");
-      toast.error(errorMessage);
+      const errorKey =
+        error.response?.status === 400
+          ? "notifications.deleteHasBeenUsed"
+          : "notifications.deleteError";
+      toast.error(t(errorKey));
     } finally {
       setIsDeleting(false);
       setCouponToDelete(null);
