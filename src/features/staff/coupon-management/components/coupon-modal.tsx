@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Dialog } from "@/components/ui/dialog";
 import { ALInput } from "@/components/ui/al-input";
 import { ALCombobox } from "@/components/ui/al-combobox";
@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { useTranslations } from "next-intl";
 import type { CouponDetailDto } from "../coupon-list/types/coupon.types";
 import { PermissionGuard } from "@/components/permission-guard";
+import { dateUtils } from "@/lib/date-utils";
 import { Permissions } from "@/types/const";
 
 interface CouponModalProps {
@@ -29,7 +30,6 @@ export interface CouponFormData {
     discountValue: number;
     maxUsage: number | null;
     type: string;
-    couponStatus: string;
 }
 
 const initialFormData: CouponFormData = {
@@ -41,7 +41,6 @@ const initialFormData: CouponFormData = {
     discountValue: 0,
     maxUsage: null,
     type: "FIXED_AMOUNT",
-    couponStatus: "ACTIVE",
 };
 
 export const CouponModal: React.FC<CouponModalProps> = ({
@@ -64,14 +63,6 @@ export const CouponModal: React.FC<CouponModalProps> = ({
         { value: "PERCENT", label: t("type.percent") },
     ];
 
-    // Status options
-    const statusOptions = [
-        { value: "ACTIVE", label: t("status.active") },
-        { value: "DISABLED", label: t("status.disabled") },
-        { value: "SCHEDULED", label: t("status.scheduled") },
-        { value: "EXPIRED", label: t("status.expired") },
-    ];
-
     // Format datetime for input
     const formatDateTimeForInput = (dateString: string) => {
         if (!dateString) return "";
@@ -91,7 +82,6 @@ export const CouponModal: React.FC<CouponModalProps> = ({
                 discountValue: coupon.discountValue,
                 maxUsage: coupon.maxUsage,
                 type: coupon.type,
-                couponStatus: coupon.couponStatus,
             });
             setDiscountValueRaw(coupon.discountValue > 0 ? String(coupon.discountValue) : "");
         } else {
@@ -136,8 +126,11 @@ export const CouponModal: React.FC<CouponModalProps> = ({
             newErrors.endTime = t("validation.endTimeRequired");
         }
 
-        if (formData.startTime && formData.endTime) {
-            if (new Date(formData.endTime) <= new Date(formData.startTime)) {
+        if (formData.endTime) {
+            const now = dateUtils.getSwissNow();
+            if (new Date(formData.endTime) <= now) {
+                newErrors.endTime = t("validation.endTimeInPast");
+            } else if (formData.startTime && new Date(formData.endTime) <= new Date(formData.startTime)) {
                 newErrors.endTime = t("validation.endTimeAfterStart");
             }
         }
@@ -180,6 +173,24 @@ export const CouponModal: React.FC<CouponModalProps> = ({
     };
 
     const isViewMode = mode === "view";
+
+    const getComputedStatus = useCallback((): string => {
+        if (!coupon) return "";
+        if (coupon.couponStatus === "DISABLED") return "DISABLED";
+        const now = dateUtils.getSwissNow().getTime();
+        const start = new Date(coupon.startTime.endsWith('Z') ? coupon.startTime : `${coupon.startTime}Z`).getTime();
+        const end = new Date(coupon.endTime.endsWith('Z') ? coupon.endTime : `${coupon.endTime}Z`).getTime();
+        if (now < start) return "SCHEDULED";
+        if (now > end) return "EXPIRED";
+        return "ACTIVE";
+    }, [coupon]);
+
+    const statusColorMap: Record<string, string> = {
+        ACTIVE: "bg-green-100 text-green-700",
+        SCHEDULED: "bg-blue-100 text-blue-700",
+        DISABLED: "bg-gray-100 text-gray-600",
+        EXPIRED: "bg-red-100 text-red-700",
+    };
 
     return (
         <Dialog
@@ -227,6 +238,31 @@ export const CouponModal: React.FC<CouponModalProps> = ({
         >
             <form id="coupon-form" onSubmit={handleSubmit}>
                 <div className="space-y-5 p-5">
+                    {/* Status badge (view mode only) */}
+                    {isViewMode && coupon && (() => {
+                        const status = getComputedStatus();
+                        const tDetail = tCommon;
+                        const labelMap: Record<string, string> = {
+                            ACTIVE: tDetail("Detail.status.active"),
+                            SCHEDULED: tDetail("Detail.status.scheduled"),
+                            DISABLED: tDetail("Detail.status.disabled"),
+                            EXPIRED: tDetail("Detail.status.expired"),
+                        };
+                        return (
+                            <div className="flex justify-between items-start pb-4 border-b border-gray-100">
+                                <div>
+                                    <p className="text-base font-bold text-[#1A3A51]">{coupon.couponName}</p>
+                                    {coupon.description && <p className="text-sm text-slate-500 mt-0.5">{coupon.description}</p>}
+                                </div>
+                                <span className={`px-3 py-1 font-bold rounded-md text-sm whitespace-nowrap ${
+                                    statusColorMap[status] ?? "bg-gray-100 text-gray-600"
+                                }`}>
+                                    {labelMap[status] ?? status}
+                                </span>
+                            </div>
+                        );
+                    })()}
+
                     {/* Code & Name row */}
                     <div className="grid grid-cols-2 gap-4">
                         <ALInput
@@ -318,8 +354,8 @@ export const CouponModal: React.FC<CouponModalProps> = ({
                         />
                     </div>
 
-                    {/* Max Usage & Status row */}
-                    <div className="grid grid-cols-2 gap-4">
+                    {/* Max Usage */}
+                    <div>
                         <ALInput
                             title={t("maxUsage")}
                             type="number"
@@ -339,14 +375,6 @@ export const CouponModal: React.FC<CouponModalProps> = ({
                             }}
                             error={errors.maxUsage}
                             readOnly={isViewMode}
-                        />
-                        <ALCombobox
-                            title={t("status.label")}
-                            required={!isViewMode}
-                            options={statusOptions}
-                            value={formData.couponStatus}
-                            onChange={(val) => handleChange("couponStatus", val as string)}
-                            disabled={isViewMode}
                         />
                     </div>
 

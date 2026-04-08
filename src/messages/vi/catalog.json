@@ -598,7 +598,10 @@
       "notifications": {
         "deleteSuccess": "Xóa mã giảm giá thành công",
         "deleteError": "Không thể xóa mã giảm giá",
-        "deleteHasBeenUsed": "Không thể xóa mã giảm giá đã được sử dụng"
+        "deleteHasBeenUsed": "Không thể xóa mã giảm giá đã được sử dụng",
+        "statusUpdated": "Cập nhật trạng thái thành công",
+        "statusUpdateError": "Không thể cập nhật trạng thái",
+        "loadError": "Không thể tải thông tin mã giảm giá"
       }
     },
     "Add": {
@@ -638,6 +641,7 @@
         "startTimeRequired": "Ngày & giờ bắt đầu không được để trống",
         "endTimeRequired": "Ngày & giờ kết thúc không được để trống",
         "endTimeAfterStart": "Ngày kết thúc phải sau ngày bắt đầu",
+        "endTimeInPast": "Ngày kết thúc không được ở trong quá khứ",
         "discountValueRequired": "Giá trị giảm phải lớn hơn 0",
         "percentMax": "Giảm giá theo phần trăm không được vượt quá 100",
         "maxUsageMin": "Số lượt sử dụng tối đa phải lớn hơn 0"
@@ -646,7 +650,8 @@
       "cancel": "Hủy",
       "notifications": {
         "createSuccess": "Tạo mã giảm giá thành công",
-        "createError": "Không thể tạo mã giảm giá"
+        "createError": "Không thể tạo mã giảm giá",
+        "codeAlreadyExists": "Mã giảm giá này đã tồn tại, vui lòng chọn mã khác"
       }
     },
     "Edit": {
@@ -686,6 +691,7 @@
         "startTimeRequired": "Ngày & giờ bắt đầu không được để trống",
         "endTimeRequired": "Ngày & giờ kết thúc không được để trống",
         "endTimeAfterStart": "Ngày kết thúc phải sau ngày bắt đầu",
+        "endTimeInPast": "Ngày kết thúc không được ở trong quá khứ",
         "discountValueRequired": "Giá trị giảm phải lớn hơn 0",
         "percentMax": "Giảm giá theo phần trăm không được vượt quá 100",
         "maxUsageMin": "Số lượt sử dụng tối đa phải lớn hơn 0"
@@ -694,7 +700,8 @@
       "cancel": "Hủy",
       "notifications": {
         "updateSuccess": "Cập nhật mã giảm giá thành công",
-        "updateError": "Không thể cập nhật mã giảm giá"
+        "updateError": "Không thể cập nhật mã giảm giá",
+        "codeAlreadyExists": "Mã giảm giá này đã tồn tại, vui lòng chọn mã khác"
       }
     },
     "Detail": {

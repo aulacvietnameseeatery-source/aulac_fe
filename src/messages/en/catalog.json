@@ -598,7 +598,10 @@
       "notifications": {
         "deleteSuccess": "Coupon deleted successfully",
         "deleteError": "Failed to delete coupon",
-        "deleteHasBeenUsed": "Cannot delete coupon that has been used"
+        "deleteHasBeenUsed": "Cannot delete coupon that has been used",
+        "statusUpdated": "Status updated successfully",
+        "statusUpdateError": "Failed to update status",
+        "loadError": "Failed to load coupon details"
       }
     },
     "Add": {
@@ -638,6 +641,7 @@
         "startTimeRequired": "Start date & time is required",
         "endTimeRequired": "End date & time is required",
         "endTimeAfterStart": "End date must be after start date",
+        "endTimeInPast": "End date cannot be in the past",
         "discountValueRequired": "Discount value is required",
         "percentMax": "Percentage discount cannot exceed 100",
         "maxUsageMin": "Max usage must be greater than 0"
@@ -646,7 +650,8 @@
       "cancel": "Cancel",
       "notifications": {
         "createSuccess": "Coupon created successfully",
-        "createError": "Failed to create coupon"
+        "createError": "Failed to create coupon",
+        "codeAlreadyExists": "This coupon code already exists, please choose a different code"
       }
     },
     "Edit": {
@@ -686,6 +691,7 @@
         "startTimeRequired": "Start date & time is required",
         "endTimeRequired": "End date & time is required",
         "endTimeAfterStart": "End date must be after start date",
+        "endTimeInPast": "End date cannot be in the past",
         "discountValueRequired": "Discount value is required",
         "percentMax": "Percentage discount cannot exceed 100",
         "maxUsageMin": "Max usage must be greater than 0"
@@ -694,7 +700,8 @@
       "cancel": "Cancel",
       "notifications": {
         "updateSuccess": "Coupon updated successfully",
-        "updateError": "Failed to update coupon"
+        "updateError": "Failed to update coupon",
+        "codeAlreadyExists": "This coupon code already exists, please choose a different code"
       }
     },
     "Detail": {
