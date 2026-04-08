@@ -35,4 +35,8 @@ export const staffPromotionService = {
         const response = await api.get<ApiResponse<AvailablePromotionDTO[]>>(`/api/promotions/available/${orderId}`);
         return response.data; 
     },
+
+    deletePromotion: async (promotionId: number): Promise<void> => {
+        await api.delete(`/api/promotions/${promotionId}`);
+    },
 };

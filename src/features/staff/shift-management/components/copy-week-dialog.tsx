@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
-import { Copy } from "lucide-react";
+import { Copy, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ALDatePicker } from "@/components/ui/al-date-picker";
 import { Switch } from "@/components/ui/switch";
@@ -60,6 +60,17 @@ export function CopyWeekDialog({ defaultSource }: CopyWeekDialogProps) {
 
   const copy = useCopyWeekMutation();
 
+  // Auto-snap any selected date to the Monday of that week
+  const handleSourceChange = (v: string) => {
+    const mon = getMonday(new Date(v + "T00:00:00"));
+    setSource(fmtDate(mon));
+  };
+
+  const handleTargetChange = (v: string) => {
+    const mon = getMonday(new Date(v + "T00:00:00"));
+    setTarget(fmtDate(mon));
+  };
+
   const handleSubmit = () => {
     copy.mutate(
       {
@@ -103,10 +114,18 @@ export function CopyWeekDialog({ defaultSource }: CopyWeekDialogProps) {
             {t("description")}
           </p>
 
+          {/* Monday auto-snap info note */}
+          <div className="flex items-start gap-2 rounded-lg border border-blue-200 bg-blue-50/60 p-3">
+            <Info className="mt-0.5 h-4 w-4 shrink-0 text-blue-500" />
+            <p className="text-xs text-blue-700">
+              {t("mondayNote")}
+            </p>
+          </div>
+
           <ALDatePicker
             title={t("sourceTitle")}
             value={source}
-            onChange={(v) => setSource(v)}
+            onChange={handleSourceChange}
             placeholder={t("sourcePlaceholder")}
             required
           />
@@ -119,7 +138,7 @@ export function CopyWeekDialog({ defaultSource }: CopyWeekDialogProps) {
           <ALDatePicker
             title={t("targetTitle")}
             value={target}
-            onChange={(v) => setTarget(v)}
+            onChange={handleTargetChange}
             placeholder={t("targetPlaceholder")}
             required
           />

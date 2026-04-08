@@ -137,9 +137,9 @@ export const AccountDialog = ({
   // ---- Width ----
 
   const widthMap: Record<AccountDialogMode, string> = {
-    view: "900px",
-    create: "560px",
-    edit: "560px",
+    view: "1080px",
+    create: "640px",
+    edit: "640px",
   };
 
   // ---- Content ----
@@ -165,14 +165,16 @@ export const AccountDialog = ({
         );
       }
       return (
-        <div>
+        <div className="flex h-full flex-col overflow-hidden">
           <AccountProfileHeader
             account={account}
             onEdit={handleEditFromView}
             onResetPassword={handleResetPassword}
             onStatusChange={handleStatusChange}
           />
-          <AccountDetailTabs account={account} />
+          <div className="flex flex-col flex-1 min-h-0 pt-2">
+            <AccountDetailTabs account={account} />
+          </div>
         </div>
       );
     }
@@ -196,6 +198,8 @@ export const AccountDialog = ({
       onClose={onClose}
       title={titleMap[internalMode]}
       width={widthMap[internalMode]}
+      height={internalMode === "view" ? "80vh" : undefined}
+      bodyOverflowY={internalMode === "view" ? "hidden" : "auto"}
     >
       {renderContent()}
     </Dialog>

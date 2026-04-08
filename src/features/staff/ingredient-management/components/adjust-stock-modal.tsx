@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslations } from "next-intl";
 import { Dialog } from "@/components/ui/dialog";
 import { ALInput } from "@/components/ui/al-input";
 import { ALCombobox } from "@/components/ui/al-combobox";
@@ -20,6 +21,7 @@ export const AdjustStockModal: React.FC<AdjustStockModalProps> = ({
                                                                       onSuccess,
                                                                       ingredient,
                                                                   }) => {
+    const t = useTranslations("Ingredient.List.notifications");
     const [type, setType] = useState<"import" | "export">("import");
     const [quantity, setQuantity] = useState<number>(0);
     const [note, setNote] = useState<string>("");
@@ -37,7 +39,7 @@ export const AdjustStockModal: React.FC<AdjustStockModalProps> = ({
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!ingredient || quantity <= 0) {
-            toast.error("Please enter a valid quantity greater than 0.");
+            toast.error(t("adjustStockInvalidQty"));
             return;
         }
 
@@ -46,7 +48,7 @@ export const AdjustStockModal: React.FC<AdjustStockModalProps> = ({
 
         // Validate xuất kho quá lố
         if (type === "export" && quantity > ingredient.quantityOnHand) {
-            toast.error(`Cannot export more than current stock (${ingredient.quantityOnHand} ${ingredient.unitName}).`);
+            toast.error(t("adjustStockExceedError", { quantity: ingredient.quantityOnHand, unit: ingredient.unitName ?? "" }));
             return;
         }
 
@@ -56,10 +58,10 @@ export const AdjustStockModal: React.FC<AdjustStockModalProps> = ({
                 quantity: finalQuantity,
                 note: note || (type === "import" ? "Manual Import" : "Manual Export"),
             });
-            toast.success("Stock adjusted successfully.");
+            toast.success(t("adjustStockSuccess"));
             onSuccess();
         } catch (error: any) {
-            toast.error(error.message || "Failed to adjust stock.");
+            toast.error(error.message || t("adjustStockError"));
         } finally {
             setIsSubmitting(false);
         }

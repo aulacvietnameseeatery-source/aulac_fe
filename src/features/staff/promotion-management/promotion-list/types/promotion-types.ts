@@ -1,5 +1,6 @@
+import { PromotionStatusCode } from "@/types/status-codes";
+
 export type PromotionType = "FIXED_AMOUNT" | "PERCENT";
-export type PromotionStatusCode = "ACTIVE" | "DISABLED" | "SCHEDULED" | "EXPIRED";
 
 export interface GetPromotionsParams {
     pageIndex: number;

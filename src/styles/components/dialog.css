@@ -65,6 +65,8 @@
 
 /* Body: Nội dung form (có thể cuộn nếu dài) */
 .admin-dialog-body {
+    flex: 1;
+    min-height: 0;
     overflow-y: auto;
     font-family: var(--font-lexend), sans-serif;
     color: #475569;

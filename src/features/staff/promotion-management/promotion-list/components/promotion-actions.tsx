@@ -9,15 +9,17 @@ interface PromotionActionsProps {
     promotion: PromotionListDTO;
     onView: (promo: PromotionListDTO) => void;
     onEdit: (promo: PromotionListDTO) => void;
+    onDelete: (promo: PromotionListDTO) => void;
 }
 
 import { TableActionColumn, TableAction } from "@/components/ui/table/table-action-column";
 
-export const PromotionActions = ({ promotion, onView, onEdit }: PromotionActionsProps) => {
+export const PromotionActions = ({ promotion, onView, onEdit, onDelete }: PromotionActionsProps) => {
 
     const actions: TableAction<PromotionListDTO>[] = [
         { action: "view", onClick: onView, permission: Permissions.ViewPromotion },
-        { action: "edit", onClick: onEdit, permission: Permissions.UpdatePromotion }
+        { action: "edit", onClick: onEdit, permission: Permissions.UpdatePromotion },
+        { action: "delete", onClick: onDelete, permission: Permissions.DeletePromotion }
     ];
 
     return <TableActionColumn actions={actions} item={promotion} />;

@@ -1,10 +1,10 @@
 import React from "react";
 import { Calendar, Clock, Tag, Package } from "lucide-react";
-import { format } from "date-fns";
 import { useTranslations } from "next-intl";
 import { ReservationDetailDto } from "../types/reservation-types";
 import { Badge } from "@/components/ui/badge";
 import { localizeSourceLabel, localizeStatusLabel } from "../utils/localize-reservation";
+import { dateUtils } from "@/lib/date-utils";
 
 interface BookingInfoSectionProps {
     reservation: ReservationDetailDto;
@@ -52,7 +52,7 @@ export const BookingInfoSection = ({ reservation }: BookingInfoSectionProps) => 
                     </label>
                     <div className="text-slate-900 font-semibold text-base py-3 px-4 bg-slate-50 rounded-xl border border-slate-100 flex items-center gap-3">
                         <Calendar size={18} className="text-slate-400" />
-                        {format(new Date(reservation.reservedTime), "dd/MM/yyyy")}
+                        {dateUtils.formatLocal(reservation.reservedTime, "dd/MM/yyyy")}
                     </div>
                 </div>
 
@@ -62,7 +62,7 @@ export const BookingInfoSection = ({ reservation }: BookingInfoSectionProps) => 
                     </label>
                     <div className="text-slate-900 font-semibold text-base py-3 px-4 bg-slate-50 rounded-xl border border-slate-100 flex items-center gap-3">
                         <Clock size={18} className="text-slate-400" />
-                        {format(new Date(reservation.reservedTime), "HH:mm")}
+                        {dateUtils.formatLocal(reservation.reservedTime, "HH:mm")}
                     </div>
                 </div>
 
@@ -111,7 +111,7 @@ export const BookingInfoSection = ({ reservation }: BookingInfoSectionProps) => 
                         </label>
                         <div className="text-slate-500 font-medium text-sm py-3 px-4 bg-slate-50/50 rounded-xl border border-slate-100 flex items-center gap-3">
                             <Tag size={14} className="text-slate-400" />
-                            {format(new Date(reservation.createdAt), "dd/MM/yyyy HH:mm")}
+                            {dateUtils.formatLocal(reservation.createdAt, "dd/MM/yyyy HH:mm")}
                         </div>
                     </div>
                 )}
