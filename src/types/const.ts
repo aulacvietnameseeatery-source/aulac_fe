@@ -55,6 +55,7 @@ export const Permissions = {
   ViewPromotion: 'PROMOTION:READ',
   CreatePromotion: 'PROMOTION:CREATE',
   UpdatePromotion: 'PROMOTION:UPDATE',
+  DeletePromotion: 'PROMOTION:DELETE',
 
   // Coupon
   ViewCoupon: 'COUPON:READ',

@@ -179,7 +179,14 @@ export const OrderCard: React.FC<OrderCardProps> = ({ order, onStatusChange, onA
             try {
                 setIsFetchingOrder(true);
                 const orderDetail = await orderHistoryService.getOrderById(order.orderId);
-                setPrintData(orderDetail);
+                const mappedOrderDetail: OrderDetailDto = {
+                    ...orderDetail,
+                    orderItems: orderDetail.orderItems.map(item => ({
+                        ...item,
+                        dishName: item.dishName || item.dishNameI18n?.['en'] || ''
+                    }))
+                };
+                setPrintData(mappedOrderDetail);
                 setPrintType('receipt');
                 setIsPrintModalOpen(true);
             } catch (error) {

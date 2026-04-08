@@ -469,7 +469,15 @@
       },
       "notifications": {
         "statusUpdated": "Statut mis à jour avec succès",
-        "statusUpdateError": "Une erreur est survenue lors de la mise à jour du statut"
+        "statusUpdateError": "Une erreur est survenue lors de la mise à jour du statut",
+        "deleteSuccess": "Promotion supprimée avec succès.",
+        "deleteError": "Échec de la suppression. La promotion a peut-être déjà été utilisée."
+      },
+      "deleteModal": {
+        "title": "Supprimer la promotion",
+        "message": "Êtes-vous sûr de vouloir supprimer la promotion {name} ? Cette action est irréversible.",
+        "confirm": "Supprimer",
+        "cancel": "Annuler"
       }
     },
     "createTitle": "Créer une nouvelle promotion",
