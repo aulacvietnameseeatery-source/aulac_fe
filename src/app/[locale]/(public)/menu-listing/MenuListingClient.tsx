@@ -322,6 +322,20 @@ export default function MenuListingClient({ initialMenuData, tableFromUrl, token
                         }
                         setCurrentOrderId(null);
                         storedOrderId = null;
+                    } else if (err.response?.status === 400 && err.response?.data?.userMessage?.includes('already been paid')) {
+                        // Order was paid by staff — clear session and go back to blank menu
+                        toast.error(err.response.data.userMessage);
+                        if (typeof window !== 'undefined') {
+                            sessionStorage.removeItem(TABLE_STORAGE_KEY);
+                            sessionStorage.removeItem(CART_STORAGE_KEY);
+                            sessionStorage.removeItem(CURRENT_ORDER_ID_KEY);
+                            sessionStorage.removeItem(TOKEN_STORAGE_KEY);
+                        }
+                        setTableNumber("");
+                        setCartItems([]);
+                        setCurrentOrderId(null);
+                        router.push('/menu-listing');
+                        return;
                     } else {
                         throw err;
                     }

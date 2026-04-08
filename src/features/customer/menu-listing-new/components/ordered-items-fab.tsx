@@ -222,7 +222,14 @@ export function OrderHistoryFAB({ tableCode, tableNumber, dishNameMap = {}, refr
         .catch(() => {});
     };
     const onOrderPaid = () => {
-      handlePaymentComplete();
+      // Show the success popup (same as customer payment request flow)
+      // then auto-redirect after 3 seconds
+      setIsOpen(false);
+      setIsPaymentPopupOpen(false);
+      setIsSuccessPopupOpen(true);
+      redirectTimeoutRef.current = setTimeout(() => {
+        handlePaymentComplete();
+      }, 3000);
     };
 
     waitForStart(RESTAURANT_HUB)
