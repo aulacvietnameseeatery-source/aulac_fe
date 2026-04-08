@@ -1,4 +1,4 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient, type QueryClient } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { shiftManagementService } from "../services/shift-management.service";
@@ -21,6 +21,8 @@ import type {
   ReassignRequest,
   TeamScheduleParams,
   TeamScheduleStaffRow,
+  ShiftAssignmentListDto,
+  ShiftAssignmentDetailDto,
 } from "../types/shift-management.types";
 
 // ─── Query Keys ───────────────────────────────────────────────────────────────
@@ -68,7 +70,10 @@ function addDays(d: Date, n: number): Date {
 }
 
 function fmtDate(d: Date): string {
-  return d.toISOString().slice(0, 10);
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`;
 }
 
 function buildMonthWindow(anchorWeekStart: string): {
@@ -99,6 +104,81 @@ function buildMonthWindow(anchorWeekStart: string): {
 function getWeekStartFromDate(dateStr: string): string {
   const date = parseIsoDate(dateStr);
   return fmtDate(getMonday(date));
+}
+
+// ─── Local cache helpers (no refetch) ─────────────────────────────────────────
+
+/** Convert a detail DTO to the list DTO shape used by team-schedule cache. */
+function detailToListDto(d: ShiftAssignmentDetailDto): ShiftAssignmentListDto {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { attendance, ...list } = d;
+  return list;
+}
+
+/** Add an assignment into every matching team-schedule cache entry. */
+function addAssignmentToScheduleCache(
+  qc: QueryClient,
+  assignment: ShiftAssignmentListDto,
+) {
+  qc.setQueriesData<TeamScheduleStaffRow[]>(
+    { queryKey: [...SHIFT_QUERY_KEYS.all, "team-schedule"] },
+    (old) => {
+      if (!old) return old;
+      const rows = old.map((row) => {
+        if (row.staffId !== assignment.staffId) return row;
+        return {
+          ...row,
+          assignments: [...row.assignments, assignment],
+        };
+      });
+      // If staff not present yet, add a new row
+      if (!rows.some((r) => r.staffId === assignment.staffId)) {
+        rows.push({
+          staffId: assignment.staffId,
+          staffName: assignment.staffName,
+          roleName: "",
+          assignments: [assignment],
+        });
+      }
+      return rows;
+    },
+  );
+}
+
+/** Update an existing assignment in every matching team-schedule cache entry. */
+function updateAssignmentInScheduleCache(
+  qc: QueryClient,
+  assignmentId: number,
+  patch: Partial<ShiftAssignmentListDto>,
+) {
+  qc.setQueriesData<TeamScheduleStaffRow[]>(
+    { queryKey: [...SHIFT_QUERY_KEYS.all, "team-schedule"] },
+    (old) => {
+      if (!old) return old;
+      return old.map((row) => ({
+        ...row,
+        assignments: row.assignments.map((a) =>
+          a.shiftAssignmentId === assignmentId ? { ...a, ...patch } : a,
+        ),
+      }));
+    },
+  );
+}
+
+/** Remove an assignment from every matching team-schedule cache entry. */
+function removeAssignmentFromScheduleCache(qc: QueryClient, assignmentId: number) {
+  qc.setQueriesData<TeamScheduleStaffRow[]>(
+    { queryKey: [...SHIFT_QUERY_KEYS.all, "team-schedule"] },
+    (old) => {
+      if (!old) return old;
+      return old.map((row) => ({
+        ...row,
+        assignments: row.assignments.filter(
+          (a) => a.shiftAssignmentId !== assignmentId,
+        ),
+      }));
+    },
+  );
 }
 
 // ─── Template Queries ─────────────────────────────────────────────────────────
@@ -217,7 +297,9 @@ export function useCreateAssignmentMutation() {
   return useMutation({
     mutationFn: (body: CreateShiftAssignmentRequest) =>
       shiftManagementService.createAssignment(body),
-    onSuccess: () => {
+    onSuccess: (data) => {
+      addAssignmentToScheduleCache(qc, detailToListDto(data));
+      toast.success(t("assignStaffSuccess"));
     },
     onError: () => toast.error(t("assignStaffError")),
   });
@@ -229,7 +311,9 @@ export function useUpdateAssignmentMutation() {
   return useMutation({
     mutationFn: ({ id, body }: { id: number; body: UpdateShiftAssignmentRequest }) =>
       shiftManagementService.updateAssignment(id, body),
-    onSuccess: () => {
+    onSuccess: (data) => {
+      updateAssignmentInScheduleCache(qc, data.shiftAssignmentId, detailToListDto(data));
+      toast.success(t("updateAssignmentSuccess"));
     },
     onError: () => toast.error(t("updateAssignmentError")),
   });
@@ -240,7 +324,9 @@ export function useCancelAssignmentMutation() {
   const t = useTranslations("shift.messages");
   return useMutation({
     mutationFn: (id: number) => shiftManagementService.cancelAssignment(id),
-    onSuccess: () => {
+    onSuccess: (_data, id) => {
+      removeAssignmentFromScheduleCache(qc, id);
+      toast.success(t("cancelAssignmentSuccess"));
     },
     onError: () => toast.error(t("cancelAssignmentError")),
   });
@@ -410,8 +496,10 @@ export function useBulkCreateAssignmentsMutation() {
   return useMutation({
     mutationFn: (body: BulkCreateAssignmentRequest) =>
       shiftManagementService.bulkCreateAssignments(body),
-    onSuccess: () => {
-      qc.invalidateQueries({ queryKey: SHIFT_QUERY_KEYS.assignments() });
+    onSuccess: (data) => {
+      for (const assignment of data) {
+        addAssignmentToScheduleCache(qc, assignment);
+      }
       toast.success(t("bulkCreateSuccess"));
     },
     onError: () => toast.error(t("bulkCreateError")),
@@ -424,9 +512,11 @@ export function usePublishAssignmentsMutation() {
   return useMutation({
     mutationFn: (body: PublishAssignmentsRequest) =>
       shiftManagementService.publishAssignments(body),
-    onSuccess: (_data, _vars) => {
-      qc.invalidateQueries({ queryKey: SHIFT_QUERY_KEYS.assignments() });
-      qc.invalidateQueries({ queryKey: SHIFT_QUERY_KEYS.all });
+    onSuccess: (data) => {
+      // Update status of published assignments in cache
+      for (const assignment of data) {
+        updateAssignmentInScheduleCache(qc, assignment.shiftAssignmentId, assignment);
+      }
       toast.success(t("publishSuccess"));
     },
     onError: () => toast.error(t("publishError")),
@@ -435,15 +525,19 @@ export function usePublishAssignmentsMutation() {
 
 export function useCopyWeekMutation() {
   const qc = useQueryClient();
-  const t = useTranslations("shift.copyWeekDialog");
+  const t = useTranslations("shift.schedule.copyWeekDialog");
   return useMutation({
     mutationFn: (body: CopyWeekRequest) =>
       shiftManagementService.copyWeek(body),
-    onSuccess: () => {
-      qc.invalidateQueries({ queryKey: SHIFT_QUERY_KEYS.assignments() });
+    onSuccess: (data) => {
+      for (const assignment of data) {
+        addAssignmentToScheduleCache(qc, assignment);
+      }
       toast.success(t("success"));
     },
-    onError: () => toast.error(t("error")),
+    onError: (error) => {
+      toast.error(getLocalizedApiErrorMessage(error, t("error")));
+    },
   });
 }
 
@@ -453,9 +547,10 @@ export function useReassignAssignmentMutation() {
   return useMutation({
     mutationFn: ({ id, body }: { id: number; body: ReassignRequest }) =>
       shiftManagementService.reassignAssignment(id, body),
-    onSuccess: () => {
-      qc.invalidateQueries({ queryKey: SHIFT_QUERY_KEYS.assignments() });
-      qc.invalidateQueries({ queryKey: SHIFT_QUERY_KEYS.all });
+    onSuccess: (data) => {
+      // Remove from old staff row, add to new staff row
+      removeAssignmentFromScheduleCache(qc, data.shiftAssignmentId);
+      addAssignmentToScheduleCache(qc, detailToListDto(data));
       toast.success(t("reassignSuccess"));
     },
     onError: () => toast.error(t("reassignError")),

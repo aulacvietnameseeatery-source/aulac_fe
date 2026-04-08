@@ -637,7 +637,8 @@
       "description": "Assign staff to shift templates and track attendance.",
       "searchPlaceholder": "Search assignments",
       "newAssignment": "New Assignment",
-      "confirmCancel": "Cancel this assignment?",
+      "confirmCancel": "Cancel this assignment? This cannot be undone.",
+      "cancelAssignment": "Cancel Assignment",
       "activeCount": "Active: {count}",
       "cancelledCount": "Cancelled: {count}",
       "filters": {
