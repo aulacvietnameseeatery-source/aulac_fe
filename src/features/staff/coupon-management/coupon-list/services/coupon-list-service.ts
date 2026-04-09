@@ -59,4 +59,18 @@ export const couponListService = {
   deleteCoupon: async (id: number): Promise<void> => {
     await api.delete(`/api/coupons/${id}`);
   },
+
+  /**
+   * Disable a coupon
+   */
+  disableCoupon: async (id: number): Promise<void> => {
+    await api.put(`/api/coupons/${id}/disable`, {});
+  },
+
+  /**
+   * Activate a coupon
+   */
+  activateCoupon: async (id: number): Promise<void> => {
+    await api.put(`/api/coupons/${id}/activate`, {});
+  },
 };

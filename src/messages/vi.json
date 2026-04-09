@@ -998,6 +998,8 @@
       "categoryNamePlaceholder": "VD: Khai vị, Món chính, Tráng miệng",
       "description": "Mô tả",
       "descriptionPlaceholder": "Cung cấp mô tả ngắn về danh mục này và các loại món ăn trong danh mục...",
+      "autoTranslate": "Dịch tự động",
+      "autoTranslateError": "Dịch thất bại. Vui lòng thử lại.",
       "validation": {
         "nameRequired": "Tên danh mục không được để trống",
         "nameMaxLength": "Tên danh mục không được vượt quá 100 ký tự",
@@ -1014,6 +1016,8 @@
       "categoryNamePlaceholder": "VD: Khai vị, Món chính, Tráng miệng",
       "description": "Mô tả",
       "descriptionPlaceholder": "Cung cấp mô tả ngắn về danh mục này và các loại món ăn trong danh mục...",
+      "autoTranslate": "Dịch tự động",
+      "autoTranslateError": "Dịch thất bại. Vui lòng thử lại.",
       "status": "Trạng thái Danh mục",
       "statusDescription": "Bật để kích hoạt hoặc tắt để ẩn danh mục này",
       "statusActive": "Danh mục đang hoạt động và hiển thị trong thực đơn",

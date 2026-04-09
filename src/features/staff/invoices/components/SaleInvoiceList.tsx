@@ -8,6 +8,7 @@ import { BaseTable } from "@/components/ui/table/base-table";
 import { TableColumn } from "@/types/table.types";
 import { useSaleInvoiceList } from '../hooks/useSaleInvoiceList';
 import { SaleInvoiceListItem } from '../types/invoice.types';
+import { dateUtils } from '@/lib/date-utils';
 import { ProtectedRoute } from "@/components/protected-route";
 import { Permissions } from "@/types/const";
 import { InvoiceDetailDialog } from './InvoiceDetailDialog';
@@ -169,17 +170,10 @@ function SaleInvoiceListContent() {
     return `${amount.toFixed(2)} CHF`;
   };
 
-  // Format date
+  // Format date — hiển thị theo giờ Thụy Sĩ
   const formatDate = (dateString: string) => {
     if (!dateString) return '-';
-    const date = new Date(dateString);
-    return date.toLocaleDateString('vi-VN', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
+    return dateUtils.formatLocal(dateString, 'HH:mm dd/MM/yyyy');
   };
 
   // Table columns

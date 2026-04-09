@@ -273,6 +273,8 @@
       "categoryNamePlaceholder": "ex : Entrées, Plat principal, Desserts",
       "description": "Description",
       "descriptionPlaceholder": "Fournissez une brève description de cette catégorie et des types de plats qu'elle comprend...",
+      "autoTranslate": "Traduction auto",
+      "autoTranslateError": "La traduction a échoué. Veuillez réessayer.",
       "validation": {
         "nameRequired": "Le nom de la catégorie est requis",
         "nameMaxLength": "Le nom de la catégorie ne peut pas dépasser 100 caractères",
@@ -299,6 +301,8 @@
         "descriptionMaxLength": "La description ne peut pas dépasser 100 caractères",
         "fixErrors": "Veuillez corriger les erreurs de validation"
       },
+      "autoTranslate": "Traduction auto",
+      "autoTranslateError": "La traduction a échoué. Veuillez réessayer.",
       "loading": "Chargement...",
       "backToList": "Retour à la liste"
     }
@@ -593,7 +597,11 @@
       },
       "notifications": {
         "deleteSuccess": "Coupon supprimé avec succès",
-        "deleteError": "Impossible de supprimer le coupon"
+        "deleteError": "Impossible de supprimer le coupon",
+        "deleteHasBeenUsed": "Impossible de supprimer un coupon déjà utilisé",
+        "statusUpdated": "Statut mis à jour avec succès",
+        "statusUpdateError": "Impossible de mettre à jour le statut",
+        "loadError": "Impossible de charger les détails du coupon"
       }
     },
     "Add": {
@@ -626,6 +634,7 @@
       },
       "validation": {
         "codeRequired": "Le code coupon est obligatoire",
+        "codeMinLength": "Le code coupon doit comporter au moins 3 caractères",
         "codeMaxLength": "Le code coupon ne doit pas dépasser 50 caractères",
         "codeNoSpaces": "Le code coupon ne doit pas contenir d'espaces",
         "nameRequired": "Le nom du coupon est obligatoire",
@@ -634,6 +643,7 @@
         "startTimeRequired": "La date & heure de début est obligatoire",
         "endTimeRequired": "La date & heure de fin est obligatoire",
         "endTimeAfterStart": "La date de fin doit être postérieure à la date de début",
+        "endTimeInPast": "La date de fin ne peut pas être dans le passé",
         "discountValueRequired": "La valeur de réduction doit être supérieure à 0",
         "percentMax": "La réduction en pourcentage ne peut pas dépasser 100",
         "maxUsageMin": "Le nombre d'utilisations maximum doit être supérieur à 0"
@@ -642,7 +652,8 @@
       "cancel": "Annuler",
       "notifications": {
         "createSuccess": "Coupon créé avec succès",
-        "createError": "Impossible de créer le coupon"
+        "createError": "Impossible de créer le coupon",
+        "codeAlreadyExists": "Ce code coupon existe déjà, veuillez en choisir un autre"
       }
     },
     "Edit": {
@@ -675,6 +686,7 @@
       },
       "validation": {
         "codeRequired": "Le code coupon est obligatoire",
+        "codeMinLength": "Le code coupon doit comporter au moins 3 caractères",
         "codeMaxLength": "Le code coupon ne doit pas dépasser 50 caractères",
         "codeNoSpaces": "Le code coupon ne doit pas contenir d'espaces",
         "nameRequired": "Le nom du coupon est obligatoire",
@@ -683,6 +695,7 @@
         "startTimeRequired": "La date & heure de début est obligatoire",
         "endTimeRequired": "La date & heure de fin est obligatoire",
         "endTimeAfterStart": "La date de fin doit être postérieure à la date de début",
+        "endTimeInPast": "La date de fin ne peut pas être dans le passé",
         "discountValueRequired": "La valeur de réduction doit être supérieure à 0",
         "percentMax": "La réduction en pourcentage ne peut pas dépasser 100",
         "maxUsageMin": "Le nombre d'utilisations maximum doit être supérieur à 0"
@@ -691,7 +704,10 @@
       "cancel": "Annuler",
       "notifications": {
         "updateSuccess": "Coupon mis à jour avec succès",
-        "updateError": "Impossible de mettre à jour le coupon"
+        "updateError": "Impossible de mettre à jour le coupon",
+        "usedCouponPartialEdit": "Ce coupon a déjà été utilisé. Seuls la description, la date de fin et le nombre maximum d'utilisations peuvent être modifiés.",
+        "expiredCouponNoEdit": "Ce coupon est expiré. Aucune modification n'est autorisée.",
+        "codeAlreadyExists": "Ce code coupon existe déjà, veuillez en choisir un autre"
       }
     },
     "Detail": {

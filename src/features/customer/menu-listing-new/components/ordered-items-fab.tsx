@@ -202,6 +202,7 @@ export function OrderHistoryFAB({ tableCode, tableNumber, dishNameMap = {}, refr
     if (signalRRef.current) {
       signalRRef.current.off('OrderItemUpdated');
       signalRRef.current.off('OrderDetailUpdated');
+      signalRRef.current.off('OrderPaid');
       releaseConnection(RESTAURANT_HUB);
       signalRRef.current = null;
     }
@@ -220,22 +221,34 @@ export function OrderHistoryFAB({ tableCode, tableNumber, dishNameMap = {}, refr
         .then((data) => setHistory(data))
         .catch(() => {});
     };
+    const onOrderPaid = () => {
+      // Show the success popup (same as customer payment request flow)
+      // then auto-redirect after 3 seconds
+      setIsOpen(false);
+      setIsPaymentPopupOpen(false);
+      setIsSuccessPopupOpen(true);
+      redirectTimeoutRef.current = setTimeout(() => {
+        handlePaymentComplete();
+      }, 3000);
+    };
 
     waitForStart(RESTAURANT_HUB)
       .then(() => connection.invoke('JoinOrder', orderId))
       .then(() => {
         connection.on('OrderItemUpdated', onItemUpdated);
         connection.on('OrderDetailUpdated', onDetailUpdated);
+        connection.on('OrderPaid', onOrderPaid);
       })
       .catch((err) => console.warn('[SignalR] Could not join order group, real-time updates disabled:', err));
 
     return () => {
       connection.off('OrderItemUpdated', onItemUpdated);
       connection.off('OrderDetailUpdated', onDetailUpdated);
+      connection.off('OrderPaid', onOrderPaid);
       releaseConnection(RESTAURANT_HUB);
       signalRRef.current = null;
     };
-  }, [refreshTrigger]); // re-run after each new order so the connection is established
+  }, [refreshTrigger, handlePaymentComplete]); // re-run after each new order so the connection is established
 
   // Helper function to get translated status label
   const getStatusLabel = (status: string): string => {

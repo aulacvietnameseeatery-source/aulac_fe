@@ -11,9 +11,14 @@ import { CouponActions } from './CouponActions';
 import { useCouponList } from '../hooks/useCouponList';
 import { CouponDTO, CouponDetailDto } from '../types/coupon.types';
 import { Badge } from "@/components/ui/badge";
+import { Switch } from "@/components/ui/switch";
 import { ConfirmModal } from "@/components/layout/admin-sidebar/confirm-modal";
 import { CouponModal, CouponFormData } from '../../components/coupon-modal';
 import { couponListService } from '../services/coupon-list-service';
+import { dateUtils } from '@/lib/date-utils';
+import { fromZonedTime } from 'date-fns-tz';
+
+type CouponStatusCode = "ACTIVE" | "DISABLED" | "SCHEDULED" | "EXPIRED";
 
 export default function CouponList() {
   const router = useRouter();
@@ -23,8 +28,8 @@ export default function CouponList() {
   
   // Logic Hook
   const { coupons, isLoading, totalCount, paginationInfo, onDataChange, refresh } = useCouponList();
-
-  // Delete modal state
+  // Toggle state
+  const [togglingId, setTogglingId] = useState<number | null>(null);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [couponToDelete, setCouponToDelete] = useState<CouponDTO | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -46,7 +51,7 @@ export default function CouponList() {
       setCouponModalOpen(true);
     } catch (error: any) {
       console.error('Failed to load coupon details:', error);
-      toast.error(error.response?.data?.userMessage || "Failed to load coupon details");
+      toast.error(t("notifications.loadError"));
     } finally {
       setIsLoadingDetail(false);
     }
@@ -61,7 +66,7 @@ export default function CouponList() {
       setCouponModalOpen(true);
     } catch (error: any) {
       console.error('Failed to load coupon details:', error);
-      toast.error(error.response?.data?.userMessage || "Failed to load coupon details");
+      toast.error(t("notifications.loadError"));
     } finally {
       setIsLoadingDetail(false);
     }
@@ -89,8 +94,11 @@ export default function CouponList() {
       setDeleteModalOpen(false);
     } catch (error: any) {
       console.error('Failed to delete coupon:', error);
-      const errorMessage = error.response?.data?.userMessage || t("notifications.deleteError");
-      toast.error(errorMessage);
+      const errorKey =
+        error.response?.status === 400
+          ? "notifications.deleteHasBeenUsed"
+          : "notifications.deleteError";
+      toast.error(t(errorKey));
     } finally {
       setIsDeleting(false);
       setCouponToDelete(null);
@@ -110,17 +118,19 @@ export default function CouponList() {
   const handleSubmitCoupon = async (formData: CouponFormData) => {
     setIsSubmitting(true);
     try {
+      // Convert Swiss timezone form values to UTC for API
+      const toUtc = (swissTime: string) => fromZonedTime(swissTime, 'Europe/Zurich').toISOString();
+
       if (couponModalMode === "add") {
         await couponListService.createCoupon({
           couponCode: formData.couponCode.trim(),
           couponName: formData.couponName.trim(),
           description: formData.description.trim() || undefined,
-          startTime: formData.startTime,
-          endTime: formData.endTime,
+          startTime: toUtc(formData.startTime),
+          endTime: toUtc(formData.endTime),
           discountValue: formData.discountValue,
           maxUsage: formData.maxUsage,
           type: formData.type,
-          couponStatus: formData.couponStatus,
         });
         toast.success(tAdd("notifications.createSuccess"));
       } else if (couponModalMode === "edit" && selectedCoupon) {
@@ -128,12 +138,11 @@ export default function CouponList() {
           couponCode: formData.couponCode.trim(),
           couponName: formData.couponName.trim(),
           description: formData.description.trim() || undefined,
-          startTime: formData.startTime,
-          endTime: formData.endTime,
+          startTime: toUtc(formData.startTime),
+          endTime: toUtc(formData.endTime),
           discountValue: formData.discountValue,
           maxUsage: formData.maxUsage,
           type: formData.type,
-          couponStatus: formData.couponStatus,
         });
         toast.success(tEdit("notifications.updateSuccess"));
       }
@@ -142,17 +151,58 @@ export default function CouponList() {
       handleCloseCouponModal();
     } catch (error: any) {
       console.error('Failed to save coupon:', error);
-      const data = error.response?.data;
-      const validateInfo: string[] = data?.validateInfo ?? [];
-      const baseMessage = data?.userMessage ||
-        (couponModalMode === "add" ? tAdd("notifications.createError") : tEdit("notifications.updateError"));
-      toast.error(baseMessage, validateInfo.length > 0 ? { description: validateInfo.join(' | ') } : undefined);
+      let message: string;
+      if (error.response?.status === 409) {
+        message = couponModalMode === 'add'
+          ? tAdd('notifications.codeAlreadyExists')
+          : tEdit('notifications.codeAlreadyExists');
+      } else if (error.response?.status === 400) {
+        message = couponModalMode === 'edit'
+          ? tEdit('notifications.expiredCouponNoEdit')
+          : couponModalMode === 'add'
+            ? tAdd('notifications.createError')
+            : tEdit('notifications.updateError');
+      } else {
+        message = couponModalMode === 'add'
+          ? tAdd('notifications.createError')
+          : tEdit('notifications.updateError');
+      }
+      toast.error(message);
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  // Status badge renderer
+  const handleStatusToggle = async (coupon: CouponDTO, checked: boolean) => {
+    setTogglingId(coupon.couponId);
+    try {
+      if (checked) {
+        await couponListService.activateCoupon(coupon.couponId);
+      } else {
+        await couponListService.disableCoupon(coupon.couponId);
+      }
+      toast.success(t("notifications.statusUpdated"));
+      refresh();
+    } catch (error: any) {
+      console.error("Update status failed:", error);
+      toast.error(t("notifications.statusUpdateError"));
+      refresh();
+    } finally {
+      setTogglingId(null);
+    }
+  };
+
+  const getComputedStatus = useCallback((coupon: CouponDTO): CouponStatusCode => {
+    if (coupon.couponStatus === "DISABLED") return "DISABLED";
+    const now = Date.now();
+    const start = new Date(coupon.startTime.endsWith('Z') ? coupon.startTime : `${coupon.startTime}Z`).getTime();
+    const end = new Date(coupon.endTime.endsWith('Z') ? coupon.endTime : `${coupon.endTime}Z`).getTime();
+    if (now < start) return "SCHEDULED";
+    if (now > end) return "EXPIRED";
+    return "ACTIVE";
+  }, []);
+
+  // Status badge renderer (view mode)
   const renderStatusBadge = (status: string) => {
     const statusConfig: Record<string, { label: string; variant: "default" | "secondary" | "destructive" | "outline" }> = {
       ACTIVE: { label: t("status.active"), variant: "default" },
@@ -160,10 +210,10 @@ export default function CouponList() {
       SCHEDULED: { label: t("status.scheduled"), variant: "outline" },
       EXPIRED: { label: t("status.expired"), variant: "destructive" },
     };
-
     const config = statusConfig[status] || { label: status, variant: "outline" };
     return <Badge variant={config.variant}>{config.label}</Badge>;
   };
+
 
   // Type badge renderer
   const renderTypeBadge = (type: string) => {
@@ -176,10 +226,9 @@ export default function CouponList() {
     return <Badge className={config.className}>{config.label}</Badge>;
   };
 
-  // Format date
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('vi-VN', { year: 'numeric', month: '2-digit', day: '2-digit' });
+  // Format datetime in Swiss timezone
+  const formatSwissDateTime = (dateString: string) => {
+    return dateUtils.formatLocal(dateString, 'dd/MM/yyyy HH:mm');
   };
 
   // Table Columns Config
@@ -247,15 +296,15 @@ export default function CouponList() {
       field: 'startTime',
       header: t("table.startTime"),
       sortable: false,
-      width: '120px',
-      cellRender: ({ value }) => formatDate(value),
+      width: '160px',
+      cellRender: ({ value }) => formatSwissDateTime(value),
     },
     {
       field: 'endTime',
       header: t("table.endTime"),
       sortable: false,
-      width: '120px',
-      cellRender: ({ value }) => formatDate(value),
+      width: '160px',
+      cellRender: ({ value }) => formatSwissDateTime(value),
     },
     {
       field: 'usedCount',
@@ -272,11 +321,29 @@ export default function CouponList() {
       field: 'couponStatus',
       header: t("table.status"),
       sortable: false,
-      width: '120px',
+      width: '130px',
       align: 'center',
-      cellRender: ({ value }) => renderStatusBadge(value),
+      cellRender: ({ item }) => {
+        const coupon = item as CouponDTO;
+        const computedStatus = getComputedStatus(coupon);
+        const isChecked = computedStatus === "ACTIVE" || computedStatus === "SCHEDULED";
+        const isExpired = computedStatus === "EXPIRED";
+        return (
+          <div className="flex flex-col items-center gap-1 py-2">
+            <Switch
+              checked={isChecked}
+              onChange={(checked) => handleStatusToggle(coupon, checked)}
+              disabled={togglingId === coupon.couponId || isExpired}
+              showLabel={false}
+            />
+            <span className="text-[10px] uppercase text-gray-500 font-semibold">
+              {computedStatus}
+            </span>
+          </div>
+        );
+      },
     },
-  ], [paginationInfo.page, paginationInfo.pageSize, t]);
+  ], [paginationInfo.page, paginationInfo.pageSize, t, togglingId]);
 
   const handleGlobalRenderCell = useCallback((
     value: any, 

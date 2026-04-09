@@ -832,6 +832,8 @@
       "categoryNamePlaceholder": "ex : Entrées, Plat principal, Desserts",
       "description": "Description",
       "descriptionPlaceholder": "Fournissez une brève description de cette catégorie et des types de plats qu'elle comprend...",
+      "autoTranslate": "Traduction auto",
+      "autoTranslateError": "La traduction a échoué. Veuillez réessayer.",
       "validation": {
         "nameRequired": "Le nom de la catégorie est requis",
         "nameMaxLength": "Le nom de la catégorie ne peut pas dépasser 100 caractères",
@@ -848,6 +850,8 @@
       "categoryNamePlaceholder": "ex : Entrées, Plat principal, Desserts",
       "description": "Description",
       "descriptionPlaceholder": "Fournissez une brève description de cette catégorie et des types de plats qu'elle comprend...",
+      "autoTranslate": "Traduction auto",
+      "autoTranslateError": "La traduction a échoué. Veuillez réessayer.",
       "status": "Statut de la catégorie",
       "statusDescription": "Basculer pour activer ou masquer cette catégorie",
       "statusActive": "Cette catégorie est active et visible dans le menu",

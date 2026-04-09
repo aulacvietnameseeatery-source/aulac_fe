@@ -822,6 +822,8 @@
       "categoryNamePlaceholder": "e.g., Appetizers, Main Course, Desserts",
       "description": "Description",
       "descriptionPlaceholder": "Provide a brief description of this category and what types of dishes it includes...",
+      "autoTranslate": "Auto Translate",
+      "autoTranslateError": "Translation failed. Please try again.",
       "validation": {
         "nameRequired": "Category name is required",
         "nameMaxLength": "Category name cannot exceed 100 characters",
@@ -838,6 +840,8 @@
       "categoryNamePlaceholder": "e.g., Appetizers, Main Course, Desserts",
       "description": "Description",
       "descriptionPlaceholder": "Provide a brief description of this category and what types of dishes it includes...",
+      "autoTranslate": "Auto Translate",
+      "autoTranslateError": "Translation failed. Please try again.",
       "status": "Category Status",
       "statusDescription": "Toggle to activate or hide this category",
       "statusActive": "This category is active and visible in the menu",

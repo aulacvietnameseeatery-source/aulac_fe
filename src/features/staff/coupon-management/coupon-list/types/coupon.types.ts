@@ -54,7 +54,6 @@ export interface CreateCouponRequest {
     discountValue: number;
     maxUsage?: number | null;
     type: string;
-    couponStatus: string;
 }
 
 export interface UpdateCouponRequest {
@@ -66,5 +65,4 @@ export interface UpdateCouponRequest {
     discountValue: number;
     maxUsage?: number | null;
     type: string;
-    couponStatus: string;
 }
