@@ -634,6 +634,7 @@
       },
       "validation": {
         "codeRequired": "Le code coupon est obligatoire",
+        "codeMinLength": "Le code coupon doit comporter au moins 3 caractères",
         "codeMaxLength": "Le code coupon ne doit pas dépasser 50 caractères",
         "codeNoSpaces": "Le code coupon ne doit pas contenir d'espaces",
         "nameRequired": "Le nom du coupon est obligatoire",
@@ -685,6 +686,7 @@
       },
       "validation": {
         "codeRequired": "Le code coupon est obligatoire",
+        "codeMinLength": "Le code coupon doit comporter au moins 3 caractères",
         "codeMaxLength": "Le code coupon ne doit pas dépasser 50 caractères",
         "codeNoSpaces": "Le code coupon ne doit pas contenir d'espaces",
         "nameRequired": "Le nom du coupon est obligatoire",
@@ -703,6 +705,8 @@
       "notifications": {
         "updateSuccess": "Coupon mis à jour avec succès",
         "updateError": "Impossible de mettre à jour le coupon",
+        "usedCouponPartialEdit": "Ce coupon a déjà été utilisé. Seuls la description, la date de fin et le nombre maximum d'utilisations peuvent être modifiés.",
+        "expiredCouponNoEdit": "Ce coupon est expiré. Aucune modification n'est autorisée.",
         "codeAlreadyExists": "Ce code coupon existe déjà, veuillez en choisir un autre"
       }
     },

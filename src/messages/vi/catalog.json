@@ -634,6 +634,7 @@
       },
       "validation": {
         "codeRequired": "Mã giảm giá không được để trống",
+        "codeMinLength": "Mã giảm giá phải có ít nhất 3 ký tự",
         "codeMaxLength": "Mã giảm giá không được vượt quá 50 ký tự",
         "nameRequired": "Tên mã không được để trống",
         "nameMaxLength": "Tên mã không được vượt quá 200 ký tự",
@@ -684,6 +685,7 @@
       },
       "validation": {
         "codeRequired": "Mã giảm giá không được để trống",
+        "codeMinLength": "Mã giảm giá phải có ít nhất 3 ký tự",
         "codeMaxLength": "Mã giảm giá không được vượt quá 50 ký tự",
         "nameRequired": "Tên mã không được để trống",
         "nameMaxLength": "Tên mã không được vượt quá 200 ký tự",
@@ -701,6 +703,8 @@
       "notifications": {
         "updateSuccess": "Cập nhật mã giảm giá thành công",
         "updateError": "Không thể cập nhật mã giảm giá",
+        "usedCouponPartialEdit": "Mã giảm giá đã được sử dụng. Chỉ có thể chỉnh sửa mô tả, ngày kết thúc và số lượt sử dụng tối đa.",
+        "expiredCouponNoEdit": "Mã giảm giá đã hết hạn. Không thể chỉnh sửa.",
         "codeAlreadyExists": "Mã giảm giá này đã tồn tại, vui lòng chọn mã khác"
       }
     },

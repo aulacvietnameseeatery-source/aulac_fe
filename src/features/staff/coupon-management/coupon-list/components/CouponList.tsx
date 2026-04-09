@@ -15,6 +15,8 @@ import { Switch } from "@/components/ui/switch";
 import { ConfirmModal } from "@/components/layout/admin-sidebar/confirm-modal";
 import { CouponModal, CouponFormData } from '../../components/coupon-modal';
 import { couponListService } from '../services/coupon-list-service';
+import { dateUtils } from '@/lib/date-utils';
+import { fromZonedTime } from 'date-fns-tz';
 
 type CouponStatusCode = "ACTIVE" | "DISABLED" | "SCHEDULED" | "EXPIRED";
 
@@ -116,13 +118,16 @@ export default function CouponList() {
   const handleSubmitCoupon = async (formData: CouponFormData) => {
     setIsSubmitting(true);
     try {
+      // Convert Swiss timezone form values to UTC for API
+      const toUtc = (swissTime: string) => fromZonedTime(swissTime, 'Europe/Zurich').toISOString();
+
       if (couponModalMode === "add") {
         await couponListService.createCoupon({
           couponCode: formData.couponCode.trim(),
           couponName: formData.couponName.trim(),
           description: formData.description.trim() || undefined,
-          startTime: formData.startTime,
-          endTime: formData.endTime,
+          startTime: toUtc(formData.startTime),
+          endTime: toUtc(formData.endTime),
           discountValue: formData.discountValue,
           maxUsage: formData.maxUsage,
           type: formData.type,
@@ -133,8 +138,8 @@ export default function CouponList() {
           couponCode: formData.couponCode.trim(),
           couponName: formData.couponName.trim(),
           description: formData.description.trim() || undefined,
-          startTime: formData.startTime,
-          endTime: formData.endTime,
+          startTime: toUtc(formData.startTime),
+          endTime: toUtc(formData.endTime),
           discountValue: formData.discountValue,
           maxUsage: formData.maxUsage,
           type: formData.type,
@@ -151,6 +156,12 @@ export default function CouponList() {
         message = couponModalMode === 'add'
           ? tAdd('notifications.codeAlreadyExists')
           : tEdit('notifications.codeAlreadyExists');
+      } else if (error.response?.status === 400) {
+        message = couponModalMode === 'edit'
+          ? tEdit('notifications.expiredCouponNoEdit')
+          : couponModalMode === 'add'
+            ? tAdd('notifications.createError')
+            : tEdit('notifications.updateError');
       } else {
         message = couponModalMode === 'add'
           ? tAdd('notifications.createError')
@@ -215,10 +226,9 @@ export default function CouponList() {
     return <Badge className={config.className}>{config.label}</Badge>;
   };
 
-  // Format date
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('vi-VN', { year: 'numeric', month: '2-digit', day: '2-digit' });
+  // Format datetime in Swiss timezone
+  const formatSwissDateTime = (dateString: string) => {
+    return dateUtils.formatLocal(dateString, 'dd/MM/yyyy HH:mm');
   };
 
   // Table Columns Config
@@ -286,15 +296,15 @@ export default function CouponList() {
       field: 'startTime',
       header: t("table.startTime"),
       sortable: false,
-      width: '120px',
-      cellRender: ({ value }) => formatDate(value),
+      width: '160px',
+      cellRender: ({ value }) => formatSwissDateTime(value),
     },
     {
       field: 'endTime',
       header: t("table.endTime"),
       sortable: false,
-      width: '120px',
-      cellRender: ({ value }) => formatDate(value),
+      width: '160px',
+      cellRender: ({ value }) => formatSwissDateTime(value),
     },
     {
       field: 'usedCount',

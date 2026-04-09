@@ -16,10 +16,18 @@ export const dateUtils = {
     /**
      * Lấy chuỗi UTC từ Backend và format thành giờ THỤY SĨ để hiển thị.
      */
-    formatLocal: (utcString: string | Date, formatStr: string): string => {
+     formatLocal: (utcString: string | Date, formatStr: string): string => {
         if (!utcString) return "";
-        const dateObj = typeof utcString === "string" ? new Date(utcString) : utcString;
-
+        let dateObj: Date;
+        if (typeof utcString === "string") {
+            // EF Core serialize DateTime (Kind=Unspecified) không có 'Z' hoặc offset,
+            // khiến browser parse theo local timezone (VD: Vietnam UTC+7) thay vì UTC.
+            // → Normalize: nếu không có thông tin timezone thì append 'Z' để parse đúng là UTC.
+            const hasTimezone = utcString.endsWith("Z") || /[+-]\d{2}:?\d{2}$/.test(utcString);
+            dateObj = new Date(hasTimezone ? utcString : `${utcString}Z`);
+        } else {
+            dateObj = utcString;
+        }
         // format theo giờ Thụy Sĩ
         return formatInTimeZone(dateObj, RESTAURANT_TZ, formatStr);
     },

@@ -634,6 +634,7 @@
       },
       "validation": {
         "codeRequired": "Coupon code is required",
+        "codeMinLength": "Coupon code must be at least 3 characters",
         "codeMaxLength": "Coupon code must not exceed 50 characters",
         "nameRequired": "Coupon name is required",
         "nameMaxLength": "Coupon name must not exceed 200 characters",
@@ -684,6 +685,7 @@
       },
       "validation": {
         "codeRequired": "Coupon code is required",
+        "codeMinLength": "Coupon code must be at least 3 characters",
         "codeMaxLength": "Coupon code must not exceed 50 characters",
         "nameRequired": "Coupon name is required",
         "nameMaxLength": "Coupon name must not exceed 200 characters",
@@ -701,6 +703,8 @@
       "notifications": {
         "updateSuccess": "Coupon updated successfully",
         "updateError": "Failed to update coupon",
+        "usedCouponPartialEdit": "This coupon has been used. Only description, end date and max usage can be edited.",
+        "expiredCouponNoEdit": "This coupon has expired. No changes are allowed.",
         "codeAlreadyExists": "This coupon code already exists, please choose a different code"
       }
     },
