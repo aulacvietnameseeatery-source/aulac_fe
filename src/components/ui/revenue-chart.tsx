@@ -27,12 +27,10 @@ export function RevenueChart({ data, height = 350 }: RevenueChartProps) {
     const t = useTranslations("dashboard");
     const format = useFormatter();
 
-    // Format tiền tệ đầy đủ cho Tooltip (VD: CHF 140.44)
     const formatCurrency = (value: number) => {
         return format.number(value, { style: 'currency', currency: 'CHF' });
     };
 
-    // Format số rút gọn cho trục Y cho đỡ rối mắt (VD: 140)
     const formatCompactNumber = (value: number) => {
         return format.number(value, { notation: 'compact' });
     };
@@ -44,10 +42,10 @@ export function RevenueChart({ data, height = 350 }: RevenueChartProps) {
                     <p className="text-sm font-semibold text-gray-800 mb-1">{label}</p>
                     <div className="flex flex-col gap-1">
                         <p className="text-xs font-medium text-emerald-600">
-                            Doanh thu: <span className="font-bold">{formatCurrency(payload[0].value)}</span>
+                            {t("chartsRow1.revenue.label")}: <span className="font-bold">{formatCurrency(payload[0].value)}</span>
                         </p>
                         <p className="text-xs font-medium text-blue-600">
-                            Số đơn: <span className="font-bold">{payload[0].payload.orders}</span>
+                            {t("chartsRow2.category.ordersUnit")}: <span className="font-bold">{payload[0].payload.orders}</span>
                         </p>
                     </div>
                 </div>
@@ -59,7 +57,7 @@ export function RevenueChart({ data, height = 350 }: RevenueChartProps) {
     if (!data || data.length === 0) {
         return (
             <div style={{ height }} className="w-full flex items-center justify-center bg-gray-50/50 rounded-xl border border-dashed border-gray-200">
-                <p className="text-sm text-gray-400">Không có dữ liệu doanh thu</p>
+                <p className="text-sm text-gray-400">{t("chartsRow1.common.noData")}</p>
             </div>
         );
     }
@@ -69,7 +67,6 @@ export function RevenueChart({ data, height = 350 }: RevenueChartProps) {
             <ResponsiveContainer width="100%" height="100%">
                 <AreaChart
                     data={data}
-                    // Đã trả margin left về 0 để không bị cắt chữ
                     margin={{ top: 10, right: 10, left: 0, bottom: 0 }}
                 >
                     <defs>
@@ -95,7 +92,7 @@ export function RevenueChart({ data, height = 350 }: RevenueChartProps) {
                     <YAxis
                         tickLine={false}
                         axisLine={false}
-                        width={50} // Mở rộng không gian trục Y để số không bị dính vào viền
+                        width={50}
                         tick={{ fontSize: 12, fill: '#6B7280' }}
                         tickFormatter={(val) => formatCompactNumber(val)}
                     />
