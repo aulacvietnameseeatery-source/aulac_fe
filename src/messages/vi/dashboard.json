@@ -24,7 +24,8 @@
     },
     "activityRow": {
       "common": {
-        "loading": "Đang tải..."
+        "loading": "Đang tải...",
+        "viewAll": "Xem thêm"
       },
       "time": {
         "minAgo": "{count} phút trước",
@@ -44,7 +45,7 @@
         "title": "Thông báo",
         "empty": "Không có thông báo mới",
         "newOrder": "Đơn mới tại {table} ({items} món)",
-        "payment": "Thanh toán ${amount} qua {method}",
+        "payment": "Thanh toán {amount} qua {method}",
         "tableStatus": "Bàn {table} hiện đang {status}",
         "newReservation": "Lịch đặt mới từ {name}"
       }
@@ -52,7 +53,8 @@
     "chartsRow1": {
       "common": {
         "loading": "Đang tải dữ liệu...",
-        "noData": "Không có dữ liệu"
+        "noData": "Không có dữ liệu",
+        "viewAll": "Xem thêm"
       },
       "revenue": {
         "title": "Phân tích doanh thu",
@@ -67,7 +69,8 @@
     },
     "chartsRow2": {
       "common": {
-        "noData": "Không có dữ liệu"
+        "noData": "Không có dữ liệu",
+        "viewAll": "Xem thêm"
       },
       "category": {
         "title": "Thống kê danh mục",

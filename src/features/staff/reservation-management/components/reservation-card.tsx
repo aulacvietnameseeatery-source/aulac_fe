@@ -12,7 +12,7 @@ import { dateUtils } from "@/lib/date-utils";
 interface ReservationCardProps {
     reservation: ReservationDto;
     statuses: ReservationStatusDto[];
-    onAssignTable?: () => void; // <--- Đổi tên prop ở đây
+    onAssignTable?: () => void;
     onEdit?: (id: number) => void;
     onDelete?: (id: number) => void;
     onCardClick?: (id: number) => void;
@@ -56,32 +56,22 @@ export const ReservationCard = ({ reservation, statuses, onAssignTable, onEdit, 
             radius="xl"
             padding="md"
             hoverEffect={onCardClick ? "lift" : "none"}
-            className={`relative border-[#D5BA98]/60 ${onCardClick ? 'cursor-pointer' : ''}`}
+            // THÊM 'aspect-square' và 'overflow-hidden' TẠI ĐÂY
+            className={`relative border-[#D5BA98]/60 flex flex-col aspect-square overflow-hidden ${onCardClick ? 'cursor-pointer' : ''}`}
         >
-            <div className="flex items-start justify-between gap-3 mb-4">
-                <div className="flex items-start gap-3 min-w-0 flex-1">
-                    <div className="bg-[#1A3A52] rounded-lg p-2.5 text-center shrink-0 min-w-17.5">
-                        <p className="text-white font-semibold text-[15px] m-0 leading-tight">
-                            {dateUtils.formatLocal(reservation.reservedTime, "MMM dd")}
-                            <span className="block text-xs font-normal text-white/75 mt-1">{dateUtils.formatLocal(reservation.reservedTime, "yyyy")}</span>
-                        </p>
-                    </div>
-                    <div className="flex-1 min-w-0">
-                    <h6 className="mb-2 font-semibold text-[#1A3A52] text-lg leading-none truncate">{reservation.customerName}</h6>
-                    <div className="mb-2 inline-flex items-center gap-1.5 rounded-md bg-[#1A3A52] px-2.5 py-1 text-[11px] font-semibold text-white shadow-sm">
-                        <Armchair className="w-3.5 h-3.5 text-white/85" />
-                        <span>{t("table")}: {reservation.tableName || t("na")}</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-[12px] text-[#1A3A52]/65 font-medium">
-                        <Users className="w-3.5 h-3.5 text-[#1A3A52]/50" />
-                        <span>{t("guests")}: {reservation.pax}</span>
-                    </div>
+            {/* Header: Ngày + Status Dropdown */}
+            <div className="flex items-start justify-between gap-2 mb-3 shrink-0">
+                <div className="bg-[#1A3A52] rounded-lg px-2 py-1.5 text-center shrink-0 shadow-sm">
+                    <p className="text-white font-bold text-xs m-0 leading-tight flex items-baseline gap-1">
+                        {dateUtils.formatLocal(reservation.reservedTime, "MMM dd")}
+                        <span className="text-[9px] font-normal text-white/75">{dateUtils.formatLocal(reservation.reservedTime, "yyyy")}</span>
+                    </p>
                 </div>
-                </div>
-                <div onClick={(e) => e.stopPropagation()}>
+
+                <div onClick={(e) => e.stopPropagation()} className="shrink-0">
                     <Dropdown align="end" trigger={
-                        <Badge className={`rounded-md px-2.5 py-1 text-xs font-semibold cursor-pointer hover:opacity-90 flex items-center gap-1.5 shadow-sm border ${getBadgeClasses(reservation.statusId)}`}>
-                            {localizeStatusLabel(currentStatusCode, reservation.statusName, tStatus)} <ChevronDown size={12} className="opacity-70" />
+                        <Badge className={`rounded-md px-2 py-1 text-[10px] font-bold cursor-pointer hover:opacity-90 flex items-center gap-1 shadow-sm border ${getBadgeClasses(reservation.statusId)}`}>
+                            {localizeStatusLabel(currentStatusCode, reservation.statusName, tStatus)} <ChevronDown size={10} className="opacity-70" />
                         </Badge>
                     }>
                         <DropdownContent className="w-40 z-50">
@@ -104,64 +94,85 @@ export const ReservationCard = ({ reservation, statuses, onAssignTable, onEdit, 
                 </div>
             </div>
 
-            <div className="mb-4 p-3 rounded-lg border border-[#D5BA98]/60 bg-[#D5BA98]/10">
-                <div className="text-[11px] uppercase tracking-wide text-[#1A3A52]/60 mb-1">{t("reservationTime")}</div>
-                <div className="flex items-center justify-between gap-2">
-                    <span className="text-[#1A3A52] font-semibold text-base">
-                        {dateUtils.formatLocal(reservation.reservedTime, "dd/MM/yyyy")}
+            {/* Thân Card: Tên khách hàng */}
+            <div className="flex-1 min-h-0 mb-3 flex flex-col justify-center">
+                <h6 className="font-bold text-[#1A3A52] text-lg leading-tight mb-2 line-clamp-2">
+                    {reservation.customerName}
+                </h6>
+
+                <div className="flex flex-wrap items-center gap-2">
+                    <div className="inline-flex items-center gap-1.5 rounded-md bg-slate-100 border border-slate-200 px-2 py-1 text-[11px] font-bold text-slate-700">
+                        <Armchair className="w-3 h-3 text-slate-500" />
+                        <span className="truncate max-w-[80px]">{reservation.tableName || t("na")}</span>
+                    </div>
+
+                    <div className="flex items-center gap-1.5 text-[11px] text-[#1A3A52]/75 font-semibold bg-slate-50 border border-slate-100 rounded-md px-2 py-1">
+                        <Users className="w-3 h-3 text-[#1A3A52]/50" />
+                        <span>{reservation.pax} {t("guests")}</span>
+                    </div>
+                </div>
+            </div>
+
+            {/* Thông tin phụ (Đã được thu gọn padding lại chút xíu cho vừa khung vuông) */}
+            <div className="shrink-0 mb-3 p-2 rounded-lg border border-[#D5BA98]/60 bg-[#D5BA98]/10">
+                <div className="text-[9px] uppercase tracking-wider font-bold text-[#1A3A52]/50 mb-1">{t("reservationTime")}</div>
+                <div className="flex items-center justify-between gap-1">
+                    <span className="text-[#1A3A52] font-bold text-[13px]">
+                        {dateUtils.formatLocal(reservation.reservedTime, "dd/MM")}
                     </span>
-                    <span className="inline-flex items-center text-[#1A3A52] font-semibold text-sm">
-                        <Clock className="w-3.5 h-3.5 mr-1.5 text-[#1A3A52]/60" />
+                    <span className="inline-flex items-center text-[#1A3A52] font-bold text-[13px] bg-white/50 px-1.5 py-0.5 rounded-md shadow-sm">
+                        <Clock className="w-3 h-3 mr-1 text-[#1A3A52]/60" />
                         {dateUtils.formatLocal(reservation.reservedTime, "HH:mm")}
                     </span>
                 </div>
             </div>
 
-            <div className="mb-4 pb-4 border-b border-dashed border-[#D5BA98]/45">
-                <div className="flex items-center justify-between gap-2 text-[13px]">
-                    <span className="text-[#1A3A52]/50">{t("createdOn")}</span>
-                    <span className="text-[#1A3A52]/75 font-medium">
+            <div className="shrink-0 mb-3 pb-3 border-b border-dashed border-[#D5BA98]/45">
+                <div className="flex items-center justify-between gap-2 text-[11px]">
+                    <span className="text-[#1A3A52]/50 font-medium">{t("createdOn")}</span>
+                    <span className="text-[#1A3A52]/75 font-semibold">
                         {reservation.createdAt ? dateUtils.formatLocal(reservation.createdAt, "dd MMM, HH:mm") : t("na")}
                     </span>
                 </div>
             </div>
 
-            <div className="flex items-center justify-between relative">
+            {/* Actions */}
+            <div className="shrink-0 flex items-center justify-between relative mt-auto">
                 <Button
                     variant="ghost"
                     size="sm"
                     onClick={(e) => { e.stopPropagation(); setIsNoteVisible(!isNoteVisible); }}
-                    className={`h-auto py-1.5 px-3 text-[13px] font-medium transition-colors flex items-center gap-1.5 ${isNoteVisible ? 'bg-[#D5BA98]/18 text-[#1A3A52] hover:bg-[#D5BA98]/25' : 'text-[#1A3A52]/75 hover:bg-[#D5BA98]/10'}`}
+                    className={`h-auto py-1 px-2 text-[11px] font-semibold transition-colors flex items-center gap-1 ${isNoteVisible ? 'bg-[#D5BA98]/20 text-[#1A3A52]' : 'text-[#1A3A52]/60 hover:text-[#1A3A52] hover:bg-[#D5BA98]/10'}`}
                 >
-                    <FileText size={14} /> {t("viewNote")}
+                    <FileText size={12} /> {t("viewNote")}
                 </Button>
+
                 {isNoteVisible && (
-                    <div onClick={(e) => e.stopPropagation()} className="absolute bottom-full left-0 mb-2 w-full z-10 p-3 bg-[#1A3A52] text-white text-sm rounded-lg shadow-xl animate-in fade-in slide-in-from-bottom-2 duration-200">
-                        <p className="font-semibold mb-1 text-white/75">{t("customerNotes")}</p>
-                        <p className="whitespace-pre-wrap">{reservation.notes || t("noNotes")}</p>
-                        <div className="absolute -bottom-1 left-8 w-3 h-3 bg-[#1A3A52] rotate-45" />
+                    <div onClick={(e) => e.stopPropagation()} className="absolute bottom-full left-0 mb-2 w-full z-10 p-3 bg-[#1A3A52] text-white text-xs rounded-xl shadow-xl animate-in fade-in slide-in-from-bottom-2 duration-200 border border-white/10 max-h-24 overflow-y-auto custom-scrollbar">
+                        <p className="font-semibold text-[10px] uppercase tracking-wider mb-1 text-[#D5BA98]">{t("customerNotes")}</p>
+                        <p className="whitespace-pre-wrap leading-relaxed">{reservation.notes || t("noNotes")}</p>
                     </div>
                 )}
-                <div className="flex items-center gap-1.5">
+
+                <div className="flex items-center gap-0.5">
                     <Button
                         variant="ghost"
                         size="icon"
                         onClick={(e) => { e.stopPropagation(); onEdit?.(reservation.reservationId); }}
-                        className="h-8 w-8 text-[#1A3A52]/70 hover:text-[#1A3A52] hover:bg-[#D5BA98]/15 rounded-full"
+                        className="h-7 w-7 text-[#1A3A52]/60 hover:text-[#1A3A52] hover:bg-[#D5BA98]/20 rounded-lg"
                     >
-                        <Pencil size={18} />
+                        <Pencil size={14} />
                     </Button>
                     <Button
                         variant="ghost"
                         size="icon"
                         onClick={(e) => { e.stopPropagation(); onDelete?.(reservation.reservationId); }}
-                        className="h-8 w-8 text-[#8C3A3A] hover:text-red-700 hover:bg-red-50 rounded-full"
+                        className="h-7 w-7 text-rose-500/70 hover:text-rose-600 hover:bg-rose-50 rounded-lg"
                     >
-                        <Trash2 size={18} />
+                        <Trash2 size={14} />
                     </Button>
                 </div>
             </div>
-
         </ALCard>
     );
 };
