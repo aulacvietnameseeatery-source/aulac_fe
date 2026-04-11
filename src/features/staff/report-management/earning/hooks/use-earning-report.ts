@@ -1,7 +1,10 @@
 import { useState, useCallback, useEffect } from "react";
 import { toast } from "sonner";
-import {EarningTableItemDto,EarningFilterParams } from "@/features/staff/report-management/earning/types/earning-types";
-import {earningReportService} from "@/features/staff/report-management/earning/services/earning-report.service";
+import {
+    EarningTableItemDto,
+    EarningFilterParams
+} from "@/features/staff/report-management/earning/types/earning-types";
+import { earningReportService } from "@/features/staff/report-management/earning/services/earning-report.service";
 
 export const useEarningReport = () => {
     const [data, setData] = useState<EarningTableItemDto[]>([]);

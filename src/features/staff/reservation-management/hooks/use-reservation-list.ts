@@ -1,7 +1,4 @@
-// features/staff/reservation/hooks/use-reservation-list.ts
-
 import { useState, useEffect, useCallback } from "react";
-import { format } from "date-fns";
 import { toast } from "sonner";
 import { useDebounce } from 'use-debounce';
 import { reservationService } from "../services/reservation-service";
@@ -20,15 +17,15 @@ export const useReservationList = () => {
         totalPage: 0,
     });
 
-    // Tách riêng state cho thanh search input (Để gõ không bị lag)
     const [searchInput, setSearchInput] = useState("");
-
-    // Tạo ra 1 biến debouncedSearch (Chỉ cập nhật sau khi ngừng gõ 500ms)
     const [debouncedSearch] = useDebounce(searchInput, 500);
 
     const [filters, setFilters] = useState({
         date: null as Date | null,
         statusId: null as number | null,
+        sortBy: 'createdAt',
+        creatorId: null as string | null,
+        tableId: null as string | null,
     });
 
     // 1. Fetch Statuses
@@ -44,16 +41,20 @@ export const useReservationList = () => {
         fetchStatuses();
     }, []);
 
-    // 2. Fetch Reservations - Lắng nghe thêm biến debouncedSearch
+    // 2. Fetch Reservations
     const fetchReservations = useCallback(async () => {
         setIsLoading(true);
         try {
-            const params: GetReservationsParams = {
+            const params: GetReservationsParams & any = {
                 pageIndex: pagination.pageIndex,
                 pageSize: pagination.pageSize,
-                search: debouncedSearch, // <-- DÙNG BIẾN DEBOUNCE ĐỂ GỌI API
+                search: debouncedSearch,
                 date: filters.date ? dateUtils.formatLocal(filters.date, "yyyy-MM-dd") : undefined,
                 statusId: filters.statusId || undefined,
+
+                sortBy: filters.sortBy,
+                creatorId: filters.creatorId ? Number(filters.creatorId) : undefined,
+                tableId: filters.tableId ? Number(filters.tableId) : undefined,
             };
 
             const data = await reservationService.getReservations(params);
@@ -69,7 +70,7 @@ export const useReservationList = () => {
         } finally {
             setIsLoading(false);
         }
-    }, [pagination.pageIndex, pagination.pageSize, filters, debouncedSearch]); // <-- Thêm debouncedSearch vào dependencies
+    }, [pagination.pageIndex, pagination.pageSize, filters, debouncedSearch]);
 
     useEffect(() => {
         fetchReservations();
@@ -77,18 +78,33 @@ export const useReservationList = () => {
 
     // --- ACTIONS ---
     const onSearchChange = (value: string) => {
-        // Chỉ cập nhật value cho thanh input, CHƯA gọi API
         setSearchInput(value);
         setPagination(prev => ({ ...prev, pageIndex: 1 }));
     };
 
     const onDateChange = (date: Date | null) => {
-        setFilters(prev => ({ ...prev, date: date }));
+        setFilters(prev => ({ ...prev, date }));
         setPagination(prev => ({ ...prev, pageIndex: 1 }));
     };
 
     const onStatusChange = (statusId: number | null) => {
-        setFilters(prev => ({ ...prev, statusId: statusId }));
+        setFilters(prev => ({ ...prev, statusId }));
+        setPagination(prev => ({ ...prev, pageIndex: 1 }));
+    };
+
+    // ACTION CHO SORT VÀ FILTER
+    const onSortChange = (val: string) => {
+        setFilters(prev => ({ ...prev, sortBy: val }));
+        setPagination(prev => ({ ...prev, pageIndex: 1 }));
+    };
+
+    const onCreatorFilterChange = (val: string | null) => {
+        setFilters(prev => ({ ...prev, creatorId: val }));
+        setPagination(prev => ({ ...prev, pageIndex: 1 }));
+    };
+
+    const onTableFilterChange = (val: string | null) => {
+        setFilters(prev => ({ ...prev, tableId: val }));
         setPagination(prev => ({ ...prev, pageIndex: 1 }));
     };
 
@@ -109,6 +125,9 @@ export const useReservationList = () => {
             onSearchChange,
             onDateChange,
             onStatusChange,
+            onSortChange,
+            onCreatorFilterChange,
+            onTableFilterChange,
             onPageChange,
             onPageSizeChange
         }

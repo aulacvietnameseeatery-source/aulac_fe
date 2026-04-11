@@ -1,14 +1,16 @@
 "use client";
 
-import React, { useMemo, useCallback } from "react";
+import React, { useMemo, useCallback, useState } from "react";
 import { BaseTable } from "@/components/ui/table/base-table";
 import { TableColumn } from "@/types/table.types";
-import { CalendarDays } from "lucide-react";
+import { CalendarDays, ArrowRight } from "lucide-react";
 import { ALCard } from "@/components/ui/al-card";
 import { useEarningReport } from "@/features/staff/report-management/earning/hooks/use-earning-report";
 import { EarningFilter } from "@/features/staff/report-management/earning/components/earning-filter";
 import { EarningTableItemDto } from "@/features/staff/report-management/earning/types/earning-types";
 import { useTranslations } from "next-intl";
+
+import { EarningDetailDrawer } from "@/features/staff/report-management/earning/components/earning-detail-drawer";
 
 export default function EarningReportPage() {
     const t = useTranslations("reports.earning");
@@ -24,6 +26,14 @@ export default function EarningReportPage() {
         applyDateFilter
     } = useEarningReport();
 
+    const [selectedDate, setSelectedDate] = useState<string | null>(null);
+    const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
+    const handleViewDetail = (date: string) => {
+        setSelectedDate(date);
+        setIsDrawerOpen(true);
+    };
+
     const formatCurrency = (value: number) => {
         return new Intl.NumberFormat('de-CH', {
             style: 'currency',
@@ -38,10 +48,15 @@ export default function EarningReportPage() {
                 header: t("table.date"),
                 width: "180px",
                 cellRender: ({ value }: { value: any }) => (
-                    <div className="flex items-center gap-2 text-gray-800 font-medium">
-                        <CalendarDays size={16} className="text-blue-500" />
-                        {value}
-                    </div>
+                    <button
+                        onClick={() => handleViewDetail(value)}
+                        className="flex items-center gap-2 text-[#1A3A52] font-bold hover:text-[#C5A059] transition-all group"
+                    >
+                        <CalendarDays size={16} className="text-[#C5A059]" />
+                        <span className="underline underline-offset-4 decoration-[#C5A059]/30 group-hover:decoration-[#C5A059]">
+                            {value}
+                        </span>
+                    </button>
                 ),
             },
             {
@@ -50,7 +65,7 @@ export default function EarningReportPage() {
                 width: "150px",
                 align: "center" as const,
                 cellRender: ({ value }: { value: any }) => (
-                    <span className="font-semibold text-gray-700 bg-gray-50 px-3 py-1 rounded-full border border-gray-200">
+                    <span className="font-semibold text-slate-700 bg-slate-100 px-3 py-1 rounded-lg border border-slate-200">
                         {value}
                     </span>
                 )
@@ -61,7 +76,7 @@ export default function EarningReportPage() {
                 width: "180px",
                 align: "right" as const,
                 cellRender: ({ value }: { value: any }) => (
-                    <span className="text-gray-600">{formatCurrency(value)}</span>
+                    <span className="text-slate-600 font-medium">{formatCurrency(value)}</span>
                 ),
             },
             {
@@ -70,7 +85,7 @@ export default function EarningReportPage() {
                 width: "150px",
                 align: "right" as const,
                 cellRender: ({ value }: { value: any }) => (
-                    <span className="text-red-500/80">{formatCurrency(value)}</span>
+                    <span className="text-rose-500/80 font-medium">{formatCurrency(value)}</span>
                 ),
             },
             {
@@ -84,6 +99,21 @@ export default function EarningReportPage() {
                     </span>
                 ),
             },
+            {
+                field: "action",
+                header: "",
+                width: "80px",
+                align: "center" as const,
+                cellRender: ({ item }: { item: any }) => (
+                    <button
+                        onClick={() => handleViewDetail(item.date)}
+                        className="p-1.5 text-slate-400 hover:text-[#C5A059] hover:bg-[#C5A059]/10 rounded-lg transition-colors"
+                        title="View Details"
+                    >
+                        <ArrowRight size={18} />
+                    </button>
+                )
+            }
         ],
         [t]
     );
@@ -99,7 +129,7 @@ export default function EarningReportPage() {
     );
 
     return (
-        <div className="w-full h-full flex flex-col">
+        <div className="w-full h-full flex flex-col relative overflow-hidden">
             <div className="flex-1 min-h-0">
                 <BaseTable<EarningTableItemDto>
                     data={data}
@@ -113,14 +143,14 @@ export default function EarningReportPage() {
                     defaultRowsPerPage={10}
                     rowsPerPageOptions={[10, 20, 50]}
                     renderTitle={() => (
-                        <ALCard padding="sm" variant="default" elevation="sm" className="w-full">
+                        <ALCard padding="sm" variant="default" elevation="sm" className="w-full mb-4 border-[#D5BA98]/40">
                             <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
                                 <div>
-                                    <h2 className="text-lg font-semibold tracking-wide text-[#1A3A52]">
+                                    <h2 className="text-lg font-extrabold tracking-tight text-[#1A3A52]">
                                         {t("title")}
                                     </h2>
-                                    <p className="mt-0.5 text-sm text-[#1A3A52]/65">
-                                        {t("description")}
+                                    <p className="mt-0.5 text-sm font-medium text-slate-500">
+                                        {t("description", { defaultMessage: "Revenue breakdown by date including gross, net, and tax." })}
                                     </p>
                                 </div>
                                 <EarningFilter
@@ -134,6 +164,12 @@ export default function EarningReportPage() {
                     renderCell={handleGlobalRenderCell}
                 />
             </div>
+
+            <EarningDetailDrawer
+                isOpen={isDrawerOpen}
+                onClose={() => setIsDrawerOpen(false)}
+                date={selectedDate}
+            />
         </div>
     );
 }

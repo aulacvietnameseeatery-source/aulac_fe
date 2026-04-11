@@ -1,6 +1,6 @@
 import { ApiResponse, PagedResult } from "@/types/api-response.types";
 import { api } from "@/lib/http";
-import {SalesFilterParams, SalesItemDto} from "@/features/staff/report-management/sales/types/sales-report-types";
+import { SalesFilterParams, SalesItemDto, ItemDetailData } from "../types/sales-report-types";
 
 export const salesReportService = {
     getSalesItems: async (
@@ -15,6 +15,21 @@ export const salesReportService = {
 
         const response = await api.get<ApiResponse<PagedResult<SalesItemDto>>>(
             `/api/reports/sales/items?${query.toString()}`
+        );
+
+        return response.data;
+    },
+
+    getDishPerformanceDetail: async (
+        dishId: string,
+        params: SalesFilterParams
+    ): Promise<ItemDetailData> => {
+        const query = new URLSearchParams();
+        if (params.startDate) query.append("startDate", params.startDate);
+        if (params.endDate) query.append("endDate", params.endDate);
+
+        const response = await api.get<ApiResponse<ItemDetailData>>(
+            `/api/reports/sales/items/${dishId}/performance?${query.toString()}`
         );
 
         return response.data;

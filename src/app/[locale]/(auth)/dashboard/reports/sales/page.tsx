@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useMemo, useCallback } from "react";
-import { Utensils } from "lucide-react";
+import React, { useMemo, useCallback, useState } from "react";
+import { Utensils, ArrowRight } from "lucide-react";
 import { BaseTable } from "@/components/ui/table/base-table";
 import { TableColumn } from "@/types/table.types";
 import { ALCard } from "@/components/ui/al-card";
@@ -9,6 +9,8 @@ import { useSalesReport } from "@/features/staff/report-management/sales/hooks/u
 import { SalesItemDto } from "@/features/staff/report-management/sales/types/sales-report-types";
 import { SalesFilter } from "@/features/staff/report-management/sales/components/sales-filter";
 import { useTranslations } from "next-intl";
+
+import { SalesDetailDrawer } from "@/features/staff/report-management/sales/components/sales-detail-drawer";
 
 export default function SalesReportPage() {
     const t = useTranslations("reports.sales");
@@ -24,6 +26,24 @@ export default function SalesReportPage() {
         applyDateFilter
     } = useSalesReport();
 
+    // STATE QUẢN LÝ DRAWER
+    const [selectedDishId, setSelectedDishId] = useState<string | null>(null);
+    const [selectedDishName, setSelectedDishName] = useState<string | null>(null);
+    const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
+    const handleViewDetail = (dishId: string, dishName: string) => {
+        setSelectedDishId(dishId);
+        setSelectedDishName(dishName);
+        setIsDrawerOpen(true);
+    };
+
+    const formatCurrency = (value: number) => {
+        return new Intl.NumberFormat('de-CH', {
+            style: 'currency',
+            currency: 'CHF'
+        }).format(value);
+    };
+
     const columns: TableColumn[] = useMemo(
         () => [
             {
@@ -31,7 +51,7 @@ export default function SalesReportPage() {
                 header: t("table.itemId"),
                 width: "100px",
                 cellRender: ({ value }: { value: any }) => (
-                    <span className="text-gray-500 text-xs font-mono">#{value}</span>
+                    <span className="text-slate-400 text-xs font-mono font-bold">#{value}</span>
                 ),
             },
             {
@@ -39,13 +59,18 @@ export default function SalesReportPage() {
                 header: t("table.itemName"),
                 width: "250px",
                 filterType: "text" as const,
-                cellRender: ({ value }: { value: any }) => (
-                    <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded bg-orange-50 border border-orange-100 flex items-center justify-center text-orange-500 shrink-0">
-                            <Utensils size={14}/>
+                cellRender: ({ value, item }: { value: any, item: any }) => (
+                    <button
+                        onClick={() => handleViewDetail(item.dishId, value)}
+                        className="flex items-center gap-3 text-left group w-full"
+                    >
+                        <div className="w-8 h-8 rounded-lg bg-orange-50 border border-orange-100 flex items-center justify-center text-orange-500 shrink-0 group-hover:bg-[#1A3A52] group-hover:text-white group-hover:border-[#1A3A52] transition-colors">
+                            <Utensils size={14} />
                         </div>
-                        <span className="text-gray-900 font-medium">{value}</span>
-                    </div>
+                        <span className="text-[#1A3A52] font-bold group-hover:text-[#C5A059] transition-colors leading-tight">
+                            {value}
+                        </span>
+                    </button>
                 ),
             },
             {
@@ -53,7 +78,7 @@ export default function SalesReportPage() {
                 header: t("table.category"),
                 width: "150px",
                 cellRender: ({ value }: { value: any }) => (
-                    <span className="px-2.5 py-1 bg-gray-100 text-gray-600 rounded text-xs font-medium">
+                    <span className="px-2.5 py-1 bg-slate-100 border border-slate-200 text-slate-600 rounded-md text-[11px] font-bold uppercase tracking-wider">
                         {value}
                     </span>
                 )
@@ -65,7 +90,7 @@ export default function SalesReportPage() {
                 align: "center" as const,
                 sortable: true,
                 cellRender: ({ value }: { value: any }) => (
-                    <span className="font-semibold text-blue-600">{value}</span>
+                    <span className="font-bold text-blue-600 text-base">{value}</span>
                 )
             },
             {
@@ -75,11 +100,27 @@ export default function SalesReportPage() {
                 align: "right" as const,
                 sortable: true,
                 cellRender: ({ value }: { value: any }) => (
-                    <span className="font-bold text-gray-900">
+                    <span className="font-extrabold text-[#1A3A52] text-base">
                         {Number(value).toFixed(2)} CHF
                     </span>
                 ),
             },
+            // CỘT ACTION MỞ DRAWER
+            {
+                field: "action",
+                header: "",
+                width: "80px",
+                align: "center" as const,
+                cellRender: ({ item }: { item: any }) => (
+                    <button
+                        onClick={() => handleViewDetail(item.dishId, item.dishName)}
+                        className="p-1.5 text-slate-400 hover:text-orange-500 hover:bg-orange-50 rounded-lg transition-colors"
+                        title="View Performance"
+                    >
+                        <ArrowRight size={18} />
+                    </button>
+                )
+            }
         ],
         [t]
     );
@@ -95,7 +136,7 @@ export default function SalesReportPage() {
     );
 
     return (
-        <div className="w-full h-full flex flex-col">
+        <div className="w-full h-full flex flex-col relative overflow-hidden">
             <div className="flex-1 min-h-0">
                 <BaseTable<SalesItemDto>
                     data={data}
@@ -109,14 +150,14 @@ export default function SalesReportPage() {
                     defaultRowsPerPage={10}
                     rowsPerPageOptions={[10, 20, 50]}
                     renderTitle={() => (
-                        <ALCard padding="sm" variant="default" elevation="sm" className="w-full">
+                        <ALCard padding="sm" variant="default" elevation="sm" className="w-full mb-4 border-[#D5BA98]/40">
                             <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
                                 <div>
-                                    <h2 className="text-lg font-semibold tracking-wide text-[#1A3A52]">
+                                    <h2 className="text-lg font-extrabold tracking-tight text-[#1A3A52]">
                                         {t("title")}
                                     </h2>
-                                    <p className="mt-0.5 text-sm text-[#1A3A52]/65">
-                                        {t("description")}
+                                    <p className="mt-0.5 text-sm font-medium text-slate-500">
+                                        {t("description", { defaultMessage: "Analysis of best-selling dishes and revenue contribution." })}
                                     </p>
                                 </div>
                                 <SalesFilter
@@ -130,6 +171,13 @@ export default function SalesReportPage() {
                     renderCell={handleGlobalRenderCell}
                 />
             </div>
+
+            <SalesDetailDrawer
+                isOpen={isDrawerOpen}
+                onClose={() => setIsDrawerOpen(false)}
+                dishId={selectedDishId}
+                dishName={selectedDishName}
+            />
         </div>
     );
 }

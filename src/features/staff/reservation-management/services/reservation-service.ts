@@ -14,7 +14,7 @@ import { dateUtils } from '@/lib/date-utils';
 
 export const reservationService = {
     // 1. Get List Reservations
-    getReservations: async (params: GetReservationsParams): Promise<PagedResult<ReservationDto>> => {
+    getReservations: async (params: GetReservationsParams & { sortBy?: string; creatorId?: number; tableId?: number; }): Promise<PagedResult<ReservationDto>> => {
         const query = new URLSearchParams();
         query.append("pageIndex", params.pageIndex.toString());
         query.append("pageSize", params.pageSize.toString());
@@ -22,6 +22,10 @@ export const reservationService = {
         if (params.search) query.append("search", params.search);
         if (params.date) query.append("date", params.date);
         if (params.statusId) query.append("statusId", params.statusId.toString());
+
+        if (params.sortBy) query.append("sortBy", params.sortBy);
+        if (params.creatorId) query.append("creatorId", params.creatorId.toString());
+        if (params.tableId) query.append("tableId", params.tableId.toString());
 
         const response = await api.get<ApiResponse<PagedResult<ReservationDto>>>(`/api/reservations?${query.toString()}`);
 
@@ -33,7 +37,6 @@ export const reservationService = {
         const response = await api.get<ApiResponse<ReservationStatusDto[]>>(`/api/reservations/statuses`);
         return response.data;
     },
-
 
     // 3. Xếp bàn và Xác nhận đơn (CONFIRMED)
     assignTableAndConfirm: async (reservationId: number, tableIds: number[]): Promise<void> => {

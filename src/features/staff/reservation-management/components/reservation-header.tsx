@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Search, Calendar as CalendarIcon, ArrowUpDown, Filter, User, Armchair, X } from "lucide-react";
 import { format, addDays, isSameDay } from "date-fns";
 import { useTranslations } from "next-intl";
@@ -7,6 +7,12 @@ import { ReservationStatusDto } from "../types/reservation-types";
 import { localizeStatusLabel } from "../utils/localize-reservation";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuSeparator, DropdownMenuLabel } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
+
+// Khai báo kiểu dữ liệu cho danh sách Dropdown truyền vào
+export interface SimpleDropdownOption {
+    id: string | number;
+    name: string;
+}
 
 interface ReservationHeaderProps {
     searchTerm: string;
@@ -17,12 +23,16 @@ interface ReservationHeaderProps {
     onStatusChange: (id: number | null) => void;
     statuses: ReservationStatusDto[];
 
-    sortBy?: string; // 'createdAt' | 'reservedDate'
+    sortBy?: string;
     onSortChange?: (val: string) => void;
     creatorFilter?: string | null;
     onCreatorFilterChange?: (val: string | null) => void;
     tableFilter?: string | null;
     onTableFilterChange?: (val: string | null) => void;
+
+    // --- THÊM PROPS NÀY ĐỂ NHẬN LIST TABLE VÀ USER THẬT TỪ API ---
+    tableOptions?: SimpleDropdownOption[];
+    userOptions?: SimpleDropdownOption[];
 }
 
 export const ReservationHeader = ({
@@ -38,13 +48,12 @@ export const ReservationHeader = ({
                                       creatorFilter = null,
                                       onCreatorFilterChange,
                                       tableFilter = null,
-                                      onTableFilterChange
+                                      onTableFilterChange,
+                                      tableOptions = [], // Mặc định là mảng rỗng nếu chưa có data
+                                      userOptions = []
                                   }: ReservationHeaderProps) => {
     const t = useTranslations("reservations.management.list");
     const tStatus = useTranslations("reservations.management.status");
-
-    const [mockUsers] = useState([{ id: '1', name: 'Admin' }, { id: '2', name: 'Staff Hưng' }]);
-    const [mockTables] = useState([{ id: 'T01', name: 'Table T01' }, { id: 'VIP1', name: 'VIP-01' }]);
 
     const getStatusTabClasses = (statusId: number | null): string => {
         if (statusId === null) return "bg-slate-800 text-white shadow-md";
@@ -83,6 +92,7 @@ export const ReservationHeader = ({
                             />
                         </div>
 
+                        {/* ĐÂY LÀ CHỨC NĂNG LỌC THEO NGÀY PHỤC VỤ (FILTER BY RESERVED DATE) */}
                         <div className="flex bg-slate-100 p-1 rounded-xl shrink-0 items-center h-10 border border-slate-200">
                             <button
                                 onClick={() => onDateChange(new Date())}
@@ -105,20 +115,21 @@ export const ReservationHeader = ({
                     </div>
 
                     <div className="flex items-center gap-2 w-full xl:w-auto justify-end">
-                        {/* Sort Dropdown */}
+                        {/* ĐÂY LÀ CHỨC NĂNG SẮP XẾP (SORTING) */}
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button variant="outline" className="h-10 rounded-xl border-slate-200 text-slate-700 font-semibold bg-white hover:bg-slate-50">
                                     <ArrowUpDown className="mr-2 h-4 w-4 text-slate-500" />
-                                    {sortBy === 'createdAt' ? "Sort: Created" : "Sort: Date"}
+                                    {/* Sửa nhãn cho đỡ hiểu lầm */}
+                                    {sortBy === 'createdAt' ? "Sort: By Created Time" : "Sort: By Arrival Time"}
                                 </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end" className="w-56 rounded-xl">
-                                <DropdownMenuLabel>Sort Options</DropdownMenuLabel>
+                                <DropdownMenuLabel>Order By</DropdownMenuLabel>
                                 <DropdownMenuSeparator />
                                 <DropdownMenuRadioGroup value={sortBy} onValueChange={(val) => onSortChange?.(val)}>
-                                    <DropdownMenuRadioItem value="createdAt" className="cursor-pointer font-medium">Created Date</DropdownMenuRadioItem>
-                                    <DropdownMenuRadioItem value="reservedDate" className="cursor-pointer font-medium">Reserved Date</DropdownMenuRadioItem>
+                                    <DropdownMenuRadioItem value="createdAt" className="cursor-pointer font-medium">Newest Created First</DropdownMenuRadioItem>
+                                    <DropdownMenuRadioItem value="reservedDate" className="cursor-pointer font-medium">Nearest Arrival First</DropdownMenuRadioItem>
                                 </DropdownMenuRadioGroup>
                             </DropdownMenuContent>
                         </DropdownMenu>
@@ -128,7 +139,7 @@ export const ReservationHeader = ({
                             <DropdownMenuTrigger asChild>
                                 <Button variant="outline" className={`h-10 rounded-xl font-semibold relative transition-colors ${activeFilterCount > 0 ? 'bg-[#D5BA98]/10 border-[#D5BA98] text-[#9A7B4F]' : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'}`}>
                                     <Filter className={`mr-2 h-4 w-4 ${activeFilterCount > 0 ? 'text-[#9A7B4F]' : 'text-slate-500'}`} />
-                                    Filter
+                                    More Filters
                                     {activeFilterCount > 0 && (
                                         <span className="absolute -top-1.5 -right-1.5 flex h-5 w-5 items-center justify-center rounded-full bg-rose-500 text-[10px] font-bold text-white shadow-sm ring-2 ring-white">
                                             {activeFilterCount}
@@ -146,8 +157,9 @@ export const ReservationHeader = ({
                                         <button onClick={() => onCreatorFilterChange?.(null)} className={`w-full text-left px-3 py-2 text-sm rounded-lg transition-colors ${!creatorFilter ? 'bg-slate-100 font-bold text-slate-900' : 'text-slate-600 hover:bg-slate-50 font-medium'}`}>
                                             All Creators
                                         </button>
-                                        {mockUsers.map(user => (
-                                            <button key={user.id} onClick={() => onCreatorFilterChange?.(user.id)} className={`w-full text-left px-3 py-2 text-sm rounded-lg transition-colors ${creatorFilter === user.id ? 'bg-[#D5BA98]/15 text-[#9A7B4F] font-bold' : 'text-slate-600 hover:bg-slate-50 font-medium'}`}>
+                                        {/* Render từ userOptions truyền vào */}
+                                        {userOptions.map(user => (
+                                            <button key={user.id} onClick={() => onCreatorFilterChange?.(user.id.toString())} className={`w-full text-left px-3 py-2 text-sm rounded-lg transition-colors ${creatorFilter === user.id.toString() ? 'bg-[#D5BA98]/15 text-[#9A7B4F] font-bold' : 'text-slate-600 hover:bg-slate-50 font-medium'}`}>
                                                 {user.name}
                                             </button>
                                         ))}
@@ -164,8 +176,9 @@ export const ReservationHeader = ({
                                         <button onClick={() => onTableFilterChange?.(null)} className={`w-full text-left px-3 py-2 text-sm rounded-lg transition-colors ${!tableFilter ? 'bg-slate-100 font-bold text-slate-900' : 'text-slate-600 hover:bg-slate-50 font-medium'}`}>
                                             All Tables
                                         </button>
-                                        {mockTables.map(table => (
-                                            <button key={table.id} onClick={() => onTableFilterChange?.(table.id)} className={`w-full text-left px-3 py-2 text-sm rounded-lg transition-colors ${tableFilter === table.id ? 'bg-[#D5BA98]/15 text-[#9A7B4F] font-bold' : 'text-slate-600 hover:bg-slate-50 font-medium'}`}>
+                                        {/* Render từ tableOptions truyền vào */}
+                                        {tableOptions.map(table => (
+                                            <button key={table.id} onClick={() => onTableFilterChange?.(table.id.toString())} className={`w-full text-left px-3 py-2 text-sm rounded-lg transition-colors ${tableFilter === table.id.toString() ? 'bg-[#D5BA98]/15 text-[#9A7B4F] font-bold' : 'text-slate-600 hover:bg-slate-50 font-medium'}`}>
                                                 {table.name}
                                             </button>
                                         ))}

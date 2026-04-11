@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { ALDatePicker } from "@/components/ui/al-date-picker";
 import { Button } from "@/components/ui/button";
 import { useTranslations } from "next-intl";
+import { X } from "lucide-react";
 
 interface FilterProps {
     initialStart?: string;
@@ -21,6 +22,12 @@ export function EarningFilter({ initialStart, initialEnd, onApply }: FilterProps
         }
     };
 
+    const handleClear = () => {
+        setStartDate("");
+        setEndDate("");
+        onApply("", ""); // Truyền chuỗi rỗng để reset filter ở Backend
+    };
+
     return (
         <div className="flex flex-wrap items-end gap-2">
             <ALDatePicker
@@ -28,22 +35,35 @@ export function EarningFilter({ initialStart, initialEnd, onApply }: FilterProps
                 value={startDate}
                 onChange={setStartDate}
                 inputSize="sm"
-                wrapperClassName="w-full min-w-[180px] sm:w-auto"
+                wrapperClassName="w-full min-w-[160px] sm:w-auto"
             />
             <ALDatePicker
                 title={t("endDate")}
                 value={endDate}
                 onChange={setEndDate}
                 inputSize="sm"
-                wrapperClassName="w-full min-w-[180px] sm:w-auto"
+                wrapperClassName="w-full min-w-[160px] sm:w-auto"
             />
-            <Button
-                onClick={handleSubmit}
-                variant={"outline"}
-                className="h-9 rounded-lg border-[#D5BA98]/70 px-4 text-sm font-medium text-[#1A3A52] hover:bg-[#D5BA98]/10"
-            >
-                {t("submit")}
-            </Button>
+            <div className="flex gap-2">
+                <Button
+                    onClick={handleSubmit}
+                    className="h-9 rounded-lg bg-[#1A3A52] px-5 text-sm font-bold text-white hover:bg-[#1A3A52]/90 shadow-sm"
+                >
+                    {t("submit")}
+                </Button>
+
+                {/* Nút Clear Filter */}
+                {(startDate || endDate) && (
+                    <Button
+                        onClick={handleClear}
+                        variant="ghost"
+                        className="h-9 w-9 p-0 rounded-lg text-rose-500 hover:text-rose-600 hover:bg-rose-50"
+                        title="Clear Dates"
+                    >
+                        <X size={18} />
+                    </Button>
+                )}
+            </div>
         </div>
     );
 }

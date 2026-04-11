@@ -1,6 +1,10 @@
 import { ApiResponse, PagedResult } from "@/types/api-response.types";
 import { api } from "@/lib/http";
-import { EarningFilterParams, EarningTableItemDto } from "../types/earning-types";
+import {
+    EarningFilterParams,
+    EarningTableItemDto,
+    DailyEarningDetailDto
+} from "../types/earning-types";
 
 export const earningReportService = {
     getEarningTable: async (
@@ -17,6 +21,13 @@ export const earningReportService = {
             `/api/reports/earnings/table?${query.toString()}`
         );
 
+        return response.data;
+    },
+
+    getDailyEarningDetail: async (date: string): Promise<DailyEarningDetailDto> => {
+        const response = await api.get<ApiResponse<DailyEarningDetailDto>>(
+            `/api/reports/earnings/daily-detail?date=${date}`
+        );
         return response.data;
     }
 };
