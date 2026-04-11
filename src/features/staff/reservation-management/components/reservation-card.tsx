@@ -56,10 +56,8 @@ export const ReservationCard = ({ reservation, statuses, onAssignTable, onEdit, 
             radius="xl"
             padding="md"
             hoverEffect={onCardClick ? "lift" : "none"}
-            // THÊM 'aspect-square' và 'overflow-hidden' TẠI ĐÂY
             className={`relative border-[#D5BA98]/60 flex flex-col aspect-square overflow-hidden ${onCardClick ? 'cursor-pointer' : ''}`}
         >
-            {/* Header: Ngày + Status Dropdown */}
             <div className="flex items-start justify-between gap-2 mb-3 shrink-0">
                 <div className="bg-[#1A3A52] rounded-lg px-2 py-1.5 text-center shrink-0 shadow-sm">
                     <p className="text-white font-bold text-xs m-0 leading-tight flex items-baseline gap-1">
@@ -162,14 +160,6 @@ export const ReservationCard = ({ reservation, statuses, onAssignTable, onEdit, 
                         className="h-7 w-7 text-[#1A3A52]/60 hover:text-[#1A3A52] hover:bg-[#D5BA98]/20 rounded-lg"
                     >
                         <Pencil size={14} />
-                    </Button>
-                    <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={(e) => { e.stopPropagation(); onDelete?.(reservation.reservationId); }}
-                        className="h-7 w-7 text-rose-500/70 hover:text-rose-600 hover:bg-rose-50 rounded-lg"
-                    >
-                        <Trash2 size={14} />
                     </Button>
                 </div>
             </div>

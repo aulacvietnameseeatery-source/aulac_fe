@@ -82,15 +82,7 @@ export const ReservationDetailModal = ({
                             <Pencil size={16} />
                             {t("edit")}
                         </Button>
-                        <Button
-                            onClick={() => reservation && onDelete?.(reservation.reservationId)}
-                            variant="outline"
-                            className="flex-1 sm:flex-initial flex items-center gap-2 text-red-600 hover:text-red-700 hover:bg-red-50 border-red-200 font-semibold"
-                            disabled={isLoading || !!error}
-                        >
-                            <Trash2 size={16} />
-                            {t("delete")}
-                        </Button>
+
                     </div>
 
                     <div className="hidden sm:block w-px h-6 bg-slate-200 mx-1"></div>
