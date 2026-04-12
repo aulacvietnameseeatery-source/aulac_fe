@@ -1652,7 +1652,9 @@
     "successPopup": {
       "title": "Cảm ơn bạn!",
       "message": "Yêu cầu thanh toán cho {tableLabel} {tableNumber} đã được tiếp nhận. Nhân viên sẽ đến ngay."
-    }
+    },
+    "paymentRequestError": "Không thể gửi yêu cầu thanh toán, xin vui lòng gọi nhân viên.",
+    "unservedItemsWarning": "Bạn vẫn còn món chưa được phục vụ. Vui lòng đợi hoàn tất trước khi thanh toán."
   },
   "Notifications": {
     "title": "Thông báo",

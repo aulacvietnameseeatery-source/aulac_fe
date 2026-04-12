@@ -848,7 +848,15 @@ export function OrderHistoryFAB({ tableCode, tableNumber, dishNameMap = {}, refr
                           {}
                         );
                       }
-                    } catch {
+                    } catch (err: any) {
+                      const subCode = err?.response?.data?.subCode ?? err?.response?.data?.SubCode;
+                      if (subCode === 10) {
+                        // Unserved items still exist — show warning and abort
+                        setIsPaymentPopupOpen(false);
+                        setIsRequestingPayment(false);
+                        toast.error(t("unservedItemsWarning"));
+                        return;
+                      }
                       // Graceful degradation — still show success to customer
                       toast.error(t("paymentRequestError"));
                     } finally {
