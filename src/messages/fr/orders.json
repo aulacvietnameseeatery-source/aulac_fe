@@ -499,7 +499,8 @@
         "title": "Merci !",
         "message": "Votre demande de paiement pour {tableLabel} {tableNumber} a été reçue. Notre serveur sera avec vous sous peu."
       },
-      "paymentRequestError": "Impossible d'envoyer la demande de paiement. Veuillez appeler un serveur."
+      "paymentRequestError": "Impossible d'envoyer la demande de paiement. Veuillez appeler un serveur.",
+      "unservedItemsWarning": "Vous avez encore des plats non servis. Veuillez attendre que tous les plats soient servis avant de demander le paiement."
     }
   }
 }
