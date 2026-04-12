@@ -31,6 +31,17 @@
         "grossRevenue": "Trước thuế",
         "totalTax": "Tổng thuế",
         "netRevenue": "Doanh thu thuần"
+      },
+      "drawer": {
+        "dailyBreakdown": "Chi tiết trong ngày",
+        "totalNet": "Doanh thu thuần",
+        "avgOrder": "Giá trị TB đơn",
+        "hourlyRevenue": "Doanh thu theo giờ",
+        "revenue": "Doanh thu",
+        "ordersOfDay": "Đơn hàng trong ngày",
+        "viewAllOrders": "Xem tất cả {count} đơn hàng",
+        "noHourlyData": "Không có dữ liệu theo giờ.",
+        "noOrdersFound": "Không có đơn hàng nào trong ngày này."
       }
     },
     "order": {
@@ -45,6 +56,23 @@
         "items": "Số món",
         "grandTotal": "Tổng tiền",
         "status": "Trạng thái"
+      },
+      "drawer": {
+        "orderPrefix": "Đơn hàng",
+        "customer": "Khách hàng",
+        "table": "Bàn",
+        "server": "Phục vụ",
+        "subtotal": "Tạm tính",
+        "tax": "Thuế",
+        "discount": "Giảm giá",
+        "grandTotal": "Tổng cộng",
+        "paymentMethod": "Thanh toán",
+        "paid": "ĐÃ THANH TOÁN",
+        "unpaid": "CHƯA THANH TOÁN",
+        "print": "In hóa đơn",
+        "pdf": "Tải PDF",
+        "unknownItem": "Món không xác định",
+        "system": "Hệ thống"
       }
     },
     "sales": {
@@ -57,6 +85,20 @@
         "category": "Danh mục",
         "itemsSold": "Đã bán",
         "totalRevenue": "Tổng thu"
+      },
+      "drawer": {
+        "item": "MÃ MÓN",
+        "revenue": "Doanh thu",
+        "unitsSold": "Đã bán",
+        "dailyAvg": "TB mỗi ngày",
+        "salesTrend": "Xu hướng bán hàng",
+        "selectedPeriod": "Kỳ báo cáo",
+        "items": "phần",
+        "sold": "Đã bán",
+        "frequentlyBoughtWith": "Thường mua cùng",
+        "times": "lần",
+        "notEnoughData": "Chưa có đủ dữ liệu để phân tích.",
+        "noSalesData": "Không có dữ liệu bán hàng trong kỳ này."
       }
     },
     "customer": {
@@ -68,6 +110,20 @@
         "customerName": "Tên khách hàng",
         "totalOrders": "Số lượng đơn",
         "grandTotal": "Tổng chi tiêu"
+      },
+      "drawer": {
+        "customerPrefix": "KHÁCH HÀNG",
+        "totalSpent": "Tổng chi tiêu",
+        "totalOrders": "Tổng số đơn",
+        "avgOrderValue": "Giá trị TB đơn",
+        "loyaltyPoints": "Điểm thành viên",
+        "pts": "điểm",
+        "purchasePreferences": "Sở thích mua sắm",
+        "share": "Tỷ lệ",
+        "noPreferenceData": "Không có dữ liệu sở thích.",
+        "recentOrders": "Đơn hàng gần đây",
+        "viewFullHistory": "Xem toàn bộ lịch sử",
+        "noRecentOrders": "Không có đơn hàng gần đây."
       }
     }
   }

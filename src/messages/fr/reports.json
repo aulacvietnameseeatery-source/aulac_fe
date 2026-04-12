@@ -31,6 +31,17 @@
         "grossRevenue": "Revenu Brut",
         "totalTax": "Taxes",
         "netRevenue": "Revenu Net"
+      },
+      "drawer": {
+        "dailyBreakdown": "Détail du jour",
+        "totalNet": "Revenu Net",
+        "avgOrder": "Commande moy.",
+        "hourlyRevenue": "Revenu horaire",
+        "revenue": "Revenu",
+        "ordersOfDay": "Commandes du jour",
+        "viewAllOrders": "Voir les {count} commandes",
+        "noHourlyData": "Aucune donnée horaire.",
+        "noOrdersFound": "Aucune commande ce jour."
       }
     },
     "order": {
@@ -45,6 +56,23 @@
         "items": "Articles",
         "grandTotal": "Total",
         "status": "Statut"
+      },
+      "drawer": {
+        "orderPrefix": "Commande",
+        "customer": "Client",
+        "table": "Table",
+        "server": "Serveur",
+        "subtotal": "Sous-total",
+        "tax": "Taxe",
+        "discount": "Remise",
+        "grandTotal": "Total",
+        "paymentMethod": "Paiement",
+        "paid": "PAYÉ",
+        "unpaid": "NON PAYÉ",
+        "print": "Imprimer",
+        "pdf": "PDF",
+        "unknownItem": "Article Inconnu",
+        "system": "Système"
       }
     },
     "sales": {
@@ -57,6 +85,20 @@
         "category": "Catégorie",
         "itemsSold": "Vendus",
         "totalRevenue": "Revenu Total"
+      },
+      "drawer": {
+        "item": "ARTICLE",
+        "revenue": "Revenu",
+        "unitsSold": "Unités vendues",
+        "dailyAvg": "Moyenne/Jour",
+        "salesTrend": "Tendance",
+        "selectedPeriod": "Période sélectionnée",
+        "items": "articles",
+        "sold": "Vendus",
+        "frequentlyBoughtWith": "Souvent acheté avec",
+        "times": "fois",
+        "notEnoughData": "Pas assez de données pour l'analyse.",
+        "noSalesData": "Aucune donnée de vente sur cette période."
       }
     },
     "customer": {
@@ -68,6 +110,20 @@
         "customerName": "Nom du client",
         "totalOrders": "Commandes",
         "grandTotal": "Total dépensé"
+      },
+      "drawer": {
+        "customerPrefix": "CLIENT",
+        "totalSpent": "Total dépensé",
+        "totalOrders": "Commandes",
+        "avgOrderValue": "Valeur moy.",
+        "loyaltyPoints": "Points fidélité",
+        "pts": "pts",
+        "purchasePreferences": "Préférences d'achat",
+        "share": "Part",
+        "noPreferenceData": "Aucune donnée de préférence.",
+        "recentOrders": "Commandes récentes",
+        "viewFullHistory": "Voir l'historique",
+        "noRecentOrders": "Aucune commande récente."
       }
     }
   }

@@ -31,6 +31,17 @@
         "grossRevenue": "Gross Revenue",
         "totalTax": "Total Tax",
         "netRevenue": "Net Revenue"
+      },
+      "drawer": {
+        "dailyBreakdown": "Daily Breakdown",
+        "totalNet": "Total Net",
+        "avgOrder": "Avg. Order",
+        "hourlyRevenue": "Hourly Revenue",
+        "revenue": "Revenue",
+        "ordersOfDay": "Orders of the Day",
+        "viewAllOrders": "View all {count} orders",
+        "noHourlyData": "No hourly data available.",
+        "noOrdersFound": "No orders found for this day."
       }
     },
     "order": {
@@ -45,6 +56,23 @@
         "items": "Items",
         "grandTotal": "Grand Total",
         "status": "Status"
+      },
+      "drawer": {
+        "orderPrefix": "Order",
+        "customer": "Customer",
+        "table": "Table",
+        "server": "Server",
+        "subtotal": "Subtotal",
+        "tax": "Tax",
+        "discount": "Discount",
+        "grandTotal": "Grand Total",
+        "paymentMethod": "Payment Method",
+        "paid": "PAID",
+        "unpaid": "UNPAID",
+        "print": "Print",
+        "pdf": "PDF",
+        "unknownItem": "Unknown Item",
+        "system": "System"
       }
     },
     "sales": {
@@ -57,6 +85,20 @@
         "category": "Category",
         "itemsSold": "Items Sold",
         "totalRevenue": "Total Revenue"
+      },
+      "drawer": {
+        "item": "ITEM",
+        "revenue": "Revenue",
+        "unitsSold": "Units Sold",
+        "dailyAvg": "Daily Avg",
+        "salesTrend": "Sales Trend",
+        "selectedPeriod": "Selected Period",
+        "items": "items",
+        "sold": "Sold",
+        "frequentlyBoughtWith": "Frequently Bought With",
+        "times": "times",
+        "notEnoughData": "Not enough data to analyze yet.",
+        "noSalesData": "No sales data in this period."
       }
     },
     "customer": {
@@ -68,6 +110,20 @@
         "customerName": "Customer Name",
         "totalOrders": "Total Orders",
         "grandTotal": "Grand Total"
+      },
+      "drawer": {
+        "customerPrefix": "CUSTOMER",
+        "totalSpent": "Total Spent",
+        "totalOrders": "Total Orders",
+        "avgOrderValue": "Avg Order Value",
+        "loyaltyPoints": "Loyalty Points",
+        "pts": "pts",
+        "purchasePreferences": "Purchase Preferences",
+        "share": "Share",
+        "noPreferenceData": "No preference data available.",
+        "recentOrders": "Recent Orders",
+        "viewFullHistory": "View full history",
+        "noRecentOrders": "No recent orders found."
       }
     }
   }
