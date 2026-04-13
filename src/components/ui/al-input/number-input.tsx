@@ -67,12 +67,16 @@ export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
     );
 
     const handleIncrement = useCallback(() => {
-      const next = value === undefined ? stepper ?? 1 : Math.min(value + (stepper ?? 1), max);
+      const step = stepper ?? 1;
+      const raw = value === undefined ? step : value + step;
+      const next = Math.min(Math.round(raw * 1e12) / 1e12, max);
       applyValue(next);
     }, [stepper, max, value, applyValue]);
 
     const handleDecrement = useCallback(() => {
-      const next = value === undefined ? -(stepper ?? 1) : Math.max(value - (stepper ?? 1), min);
+      const step = stepper ?? 1;
+      const raw = value === undefined ? -step : value - step;
+      const next = Math.max(Math.round(raw * 1e12) / 1e12, min);
       applyValue(next);
     }, [stepper, min, value, applyValue]);
 
@@ -119,7 +123,7 @@ export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
     };
 
     return (
-      <div className={`flex h-11 w-full items-stretch overflow-hidden rounded-md border border-navy-DEFAULT/20 bg-white shadow-sm focus-within:border-gold-classic focus-within:ring-1 focus-within:ring-gold-classic ${className ?? ""}`}>
+      <div className={`flex w-full items-stretch overflow-hidden rounded-md border border-navy-DEFAULT/20 bg-white shadow-sm focus-within:border-gold-classic focus-within:ring-1 focus-within:ring-gold-classic ${className ?? ""}`}>
         <NumericFormat
           value={value}
           onValueChange={handleChange}

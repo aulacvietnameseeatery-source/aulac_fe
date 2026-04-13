@@ -138,7 +138,8 @@
       "approvedAt": "Ngày duyệt",
       "note": "Ghi chú",
       "evidenceAlt": "Minh chứng",
-      "confirmRejectBtn": "Xác nhận từ chối"
+      "confirmRejectBtn": "Xác nhận từ chối",
+      "totalValue": "Tổng giá trị"
     }
   },
   "create": {
@@ -174,12 +175,15 @@
       "quantity": "Số lượng",
       "unit": "Đơn vị",
       "unitPrice": "Đơn giá",
+      "subtotal": "Thành tiền",
       "note": "Ghi chú",
       "noItems": "Thêm ít nhất một mặt hàng để tiếp tục",
       "remove": "Xóa"
     },
     "note": "Ghi chú",
     "notePlaceholder": "Ghi chú giao dịch (tùy chọn)...",
+    "date": "Ngày tạo",
+    "grandTotal": "Tổng giá trị",
     "saveAsDraft": "Lưu nháp",
     "saveAndSubmit": "Lưu & Gửi duyệt",
     "clickToChange": "Nhấn để đổi loại"

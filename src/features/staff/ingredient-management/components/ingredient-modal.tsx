@@ -64,14 +64,16 @@ const IngredientModal: React.FC<IngredientModalProps> = ({
     });
 
     useEffect(() => {
-        if (mode === "edit" && ingredient) {
+        if (ingredient) {
             setFormData({
-                ingredientName: ingredient.ingredientName,
-                unitLvId: ingredient.unitLvId || "", // 🟢
+                ingredientName: ingredient.ingredientName || "",
+                unitLvId: ingredient.unitLvId || "",
                 typeLvId: ingredient.typeLvId || "",
-                minStockLevel: ingredient.minStockLevel,
+                minStockLevel: ingredient.minStockLevel ?? 0,
                 supplierIds: ingredient.suppliers?.map(s => s.supplierId) || [],
-                images: ingredient.imageId ? [{ mediaId: ingredient.imageId, url: ingredient.imageUrl }] : [],
+                images: mode === "edit" && ingredient.imageId
+                    ? [{ mediaId: ingredient.imageId, url: ingredient.imageUrl }]
+                    : [],
             });
         } else {
             setFormData(initialFormData);

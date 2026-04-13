@@ -91,13 +91,20 @@ export function TransactionDetailModal({ transactionId, open, onClose }: Transac
   };
 
   return (
-    <Dialog open={open} onClose={onClose} title={tx?.transactionCode ?? t("title")} width="720px">
+    <Dialog
+      open={open}
+      onClose={onClose}
+      title={tx?.transactionCode ?? t("title")}
+      width="min(1120px, 96vw)"
+      height="82vh"
+      bodyOverflowY="hidden"
+    >
       {isLoading || !tx ? (
         <div className="flex items-center justify-center py-16 text-[#1A3A52]/40">
           {t("loading")}
         </div>
       ) : (
-        <div className="space-y-4">
+        <div className="h-full flex flex-col gap-4 p-5 overflow-hidden">
           {/* Type & Status */}
           <div className="flex flex-wrap items-center gap-3">
             {typeConfig && (
@@ -120,6 +127,7 @@ export function TransactionDetailModal({ transactionId, open, onClose }: Transac
             <InfoField label={t("createdAt")} value={tx.createdAt ? dateUtils.formatLocal(tx.createdAt, "dd/MM/yyyy HH:mm") : null} />
             {tx.supplierName && <InfoField label={t("supplier")} value={tx.supplierName} />}
             {tx.exportReasonName && <InfoField label={t("exportReason")} value={tx.exportReasonName} />}
+            {tx.stockCheckAreaNote && <InfoField label={t("stockCheckArea")} value={tx.stockCheckAreaNote} />}
             {tx.submittedAt && <InfoField label={t("submittedAt")} value={dateUtils.formatLocal(tx.submittedAt, "dd/MM/yyyy HH:mm")} />}
             {tx.approvedByName && (
               <>
@@ -138,17 +146,28 @@ export function TransactionDetailModal({ transactionId, open, onClose }: Transac
           )}
 
           {/* Items List */}
-          <ALCard variant="default" padding="none" elevation="sm" radius="xl">
+          <ALCard variant="default" padding="none" elevation="sm" radius="xl" className="flex flex-col min-h-0">
             <div className="px-4 py-3 border-b border-[#D5BA98]/20">
               <h2 className="text-sm font-semibold text-[#1A3A52]">
                 {t("itemsList", { count: tx.items.length })}
               </h2>
             </div>
-            <div className="divide-y divide-[#D5BA98]/10">
+            <div className="h-70 overflow-y-auto divide-y divide-[#D5BA98]/10">
               {tx.items.map((item) => (
                 <TransactionItemRow key={item.transactionItemId} item={item} isAdjust={isAdjust} />
               ))}
             </div>
+            {!isAdjust && (() => {
+              const total = tx.items.reduce((sum, it) => sum + (it.quantity ?? 0) * (it.unitPrice ?? 0), 0);
+              return total > 0 ? (
+                <div className="flex items-center justify-end px-4 py-2.5 border-t border-[#D5BA98]/30 bg-[#FDFBF9]/60">
+                  <span className="text-xs text-[#1A3A52]/50 mr-2">{t("totalValue")}:</span>
+                  <span className="text-base font-bold text-[#1A3A52] tabular-nums">
+                    {total.toLocaleString("vi-VN", { maximumFractionDigits: 2 })}
+                  </span>
+                </div>
+              ) : null;
+            })()}
           </ALCard>
 
           {/* Media Evidence */}
@@ -253,11 +272,15 @@ function InfoField({ label, value }: { label: string; value: string | null | und
 }
 
 function TransactionItemRow({ item, isAdjust }: { item: TransactionItemDto; isAdjust: boolean }) {
+  const lineTotal = item.quantity != null && item.unitPrice != null
+    ? item.quantity * item.unitPrice
+    : null;
+
   return (
-    <div className="flex items-center gap-3 px-4 py-2.5 hover:bg-[#FDFBF9] transition-colors">
-      <div className="w-7 h-7 rounded-md bg-[#FDFBF9] border border-[#D5BA98]/30 shrink-0 overflow-hidden">
+    <div className="flex items-start gap-3 px-4 py-3 hover:bg-[#FDFBF9] transition-colors">
+      <div className="w-8 h-8 rounded-md bg-[#FDFBF9] border border-[#D5BA98]/30 shrink-0 overflow-hidden mt-0.5">
         {item.ingredientImageUrl ? (
-          <Image src={item.ingredientImageUrl} width={28} height={28} className="w-full h-full object-cover" alt="" />
+          <Image src={item.ingredientImageUrl} width={32} height={32} className="w-full h-full object-cover" alt="" />
         ) : (
           <div className="flex items-center justify-center w-full h-full">
             <Package className="w-3.5 h-3.5 text-[#1A3A52]/25" />
@@ -273,12 +296,18 @@ function TransactionItemRow({ item, isAdjust }: { item: TransactionItemDto; isAd
             </Badge>
           )}
         </div>
+        {item.note && (
+          <p className="text-xs text-[#1A3A52]/45 mt-0.5 truncate">{item.note}</p>
+        )}
       </div>
       <div className="text-right shrink-0">
         {isAdjust ? (
           <div className="flex flex-col items-end text-sm">
             <span className="text-[#1A3A52]/50">{item.systemQuantity} → {item.actualQuantity}</span>
             <span className="text-xs font-medium text-blue-600">{item.unitName}</span>
+            {item.varianceReasonName && (
+              <span className="text-[10px] text-blue-500/70 mt-0.5">{item.varianceReasonName}</span>
+            )}
           </div>
         ) : (
           <div className="flex flex-col items-end">
@@ -286,7 +315,12 @@ function TransactionItemRow({ item, isAdjust }: { item: TransactionItemDto; isAd
               {item.quantity} {item.unitName}
             </span>
             {item.unitPrice != null && (
-              <span className="text-xs text-[#1A3A52]/40">@ {item.unitPrice.toLocaleString()}</span>
+              <span className="text-xs text-[#1A3A52]/40">@ {item.unitPrice.toLocaleString("vi-VN")}</span>
+            )}
+            {lineTotal != null && (
+              <span className="text-xs font-medium text-[#1A3A52]/70 mt-0.5">
+                = {lineTotal.toLocaleString("vi-VN", { maximumFractionDigits: 2 })}
+              </span>
             )}
           </div>
         )}

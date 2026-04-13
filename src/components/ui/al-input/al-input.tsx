@@ -381,6 +381,40 @@ const ALInput = React.forwardRef<
               )}
             />
           </div>
+        ) : isNumberInput ? (
+          /* NumberInput renders its own border/focus container —
+             skip the al-input-group wrapper to avoid double-border
+             and height conflicts. */
+          <NumberInput
+            {...inputProps}
+            ref={ref as React.Ref<HTMLInputElement>}
+            value={safeNumberValue}
+            defaultValue={
+              resolvedNumberDefaultValue !== undefined && !Number.isNaN(resolvedNumberDefaultValue)
+                ? resolvedNumberDefaultValue
+                : undefined
+            }
+            onValueChange={emitNativeNumberChange}
+            onBlur={onBlur as React.FocusEventHandler<HTMLInputElement>}
+            placeholder={placeholder}
+            disabled={disabled || readOnly}
+            min={resolvedMin}
+            max={resolvedMax}
+            stepper={resolvedStepper}
+            showStepper={numberShowStepper}
+            thousandSeparator={numberThousandSeparator}
+            prefix={numberPrefix}
+            suffix={numberSuffix}
+            fixedDecimalScale={numberFixedDecimalScale}
+            decimalScale={numberDecimalScale}
+            className={cn(
+              numberSizeClass(inputSize),
+              numberStateClass(state, error),
+              numberVariantClass(variant),
+              disabled && "opacity-50 cursor-not-allowed pointer-events-none",
+              className
+            )}
+          />
         ) : (
           <div
             className={cn(
@@ -438,36 +472,6 @@ const ALInput = React.forwardRef<
               spellCheck={spellCheck}
               timeUse12Hour={timeUse12Hour}
               timeMinuteStep={timeMinuteStep}
-            />
-          ) : isNumberInput ? (
-            <NumberInput
-              {...inputProps}
-              ref={ref as React.Ref<HTMLInputElement>}
-              value={safeNumberValue}
-              defaultValue={
-                resolvedNumberDefaultValue !== undefined && !Number.isNaN(resolvedNumberDefaultValue)
-                  ? resolvedNumberDefaultValue
-                  : undefined
-              }
-              onValueChange={emitNativeNumberChange}
-              onBlur={onBlur as React.FocusEventHandler<HTMLInputElement>}
-              placeholder={placeholder}
-              disabled={disabled || readOnly}
-              min={resolvedMin}
-              max={resolvedMax}
-              stepper={resolvedStepper}
-              showStepper={numberShowStepper}
-              thousandSeparator={numberThousandSeparator}
-              prefix={numberPrefix}
-              suffix={numberSuffix}
-              fixedDecimalScale={numberFixedDecimalScale}
-              decimalScale={numberDecimalScale}
-              className={cn(
-                numberSizeClass(inputSize),
-                numberStateClass(state, error),
-                numberVariantClass(variant),
-                className
-              )}
             />
           ) : (
             <input

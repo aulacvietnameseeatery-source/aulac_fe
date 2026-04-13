@@ -11,6 +11,7 @@ import type {
   GetInventoryItemsFilter,
   GetTransactionsFilter,
 } from "../types/inventory.types";
+import type { InvoiceScanResultDto } from "./invoice-scanner/types";
 
 const EMPTY_PAGED = { pageData: [], pageIndex: 1, pageSize: 20, totalCount: 0, totalPage: 0 };
 
@@ -77,6 +78,15 @@ export const inventoryService = {
 
   async getDashboard(): Promise<InventoryDashboardDto> {
     const res = await api.get<ApiResponse<InventoryDashboardDto>>("/api/inventory/dashboard");
+    return res.data;
+  },
+
+  // ── Invoice Scan ───────────────────────────────────────
+
+  async scanInvoice(imageFile: File): Promise<InvoiceScanResultDto> {
+    const formData = new FormData();
+    formData.append("image", imageFile);
+    const res = await api.post<ApiResponse<InvoiceScanResultDto>>("/api/inventory/scan-invoice", formData);
     return res.data;
   },
 };

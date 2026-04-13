@@ -138,7 +138,8 @@
       "approvedAt": "Approved At",
       "note": "Note",
       "evidenceAlt": "Evidence",
-      "confirmRejectBtn": "Confirm Reject"
+      "confirmRejectBtn": "Confirm Reject",
+      "totalValue": "Total Value"
     }
   },
   "create": {
@@ -174,12 +175,15 @@
       "quantity": "Quantity",
       "unit": "Unit",
       "unitPrice": "Unit Price",
+      "subtotal": "Subtotal",
       "note": "Note",
       "noItems": "Add at least one item to continue",
       "remove": "Remove"
     },
     "note": "Note",
     "notePlaceholder": "Optional transaction note...",
+    "date": "Date",
+    "grandTotal": "Grand Total",
     "saveAsDraft": "Save as Draft",
     "saveAndSubmit": "Save & Submit",
     "clickToChange": "Click to change type"

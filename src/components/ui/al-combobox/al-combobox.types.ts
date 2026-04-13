@@ -126,4 +126,12 @@ export interface ALComboboxProps {
   maxHeight?: number;
   /** Name attribute (for forms). */
   name?: string;
+  /** Freeform text to display in the trigger when no option matches the value. Useful for AI-filled unmatched values. */
+  freeformText?: string;
+
+  // ── Controlled search (freeform input) ──────────────────
+  /** Controlled search value. When provided, the combobox acts as a freeform search box: typed text persists even after closing. */
+  searchValue?: string;
+  /** Callback fired whenever the internal search text changes (typing, clearing). Required when `searchValue` is set. */
+  onSearchChange?: (value: string) => void;
 }

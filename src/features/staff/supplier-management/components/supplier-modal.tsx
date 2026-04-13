@@ -74,18 +74,9 @@ export const SupplierModal: React.FC<SupplierModalProps> = ({
 
     // Initialize form data
     useEffect(() => {
-        if (mode === "edit" && supplier) {
+        if (supplier) {
             setFormData({
-                supplierName: supplier.supplierName,
-                phone: supplier.phone || "",
-                email: supplier.email || "",
-                address: supplier.address || "",
-                taxCode: supplier.taxCode || "",
-                ingredientIds: supplier.ingredients?.map((i: Ingredient) => i.ingredientId) || [],
-            });
-        } else if (mode === "view" && supplier) {
-            setFormData({
-                supplierName: supplier.supplierName,
+                supplierName: supplier.supplierName || "",
                 phone: supplier.phone || "",
                 email: supplier.email || "",
                 address: supplier.address || "",

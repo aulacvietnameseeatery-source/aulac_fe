@@ -3,7 +3,6 @@
 import React from "react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "@/routing"
-import { format } from "date-fns";
 import {
   Package,
   AlertTriangle,
@@ -27,6 +26,7 @@ import {
   Pie,
   Cell,
 } from "recharts";
+import { TransactionDetailModal } from "../transactions/transaction-detail-modal";
 import { useDashboardQuery } from "../../hooks/use-inventory-queries";
 import type { LowStockItemDto, RecentTransactionDto } from "../../types/inventory.types";
 
@@ -41,6 +41,7 @@ export function InventoryDashboard() {
   const t = useTranslations("inventory.dashboard");
   const router = useRouter();
   const { data, isLoading } = useDashboardQuery();
+  const [detailTxId, setDetailTxId] = React.useState<number | null>(null);
 
   if (isLoading || !data) {
     return (
@@ -74,6 +75,7 @@ export function InventoryDashboard() {
   }));
 
   return (
+    <>
     <div className="space-y-6">
       <ALCard variant="default" padding="md" elevation="sm" radius="xl">
         <h1 className="text-2xl font-semibold text-[#1A3A52] tracking-tight font-['Cormorant_Garamond']">
@@ -143,7 +145,7 @@ export function InventoryDashboard() {
               <div className="px-5 py-6 text-center text-sm text-[#1A3A52]/40">{t("noRecentTx")}</div>
             ) : (
               data.recentTransactions.slice(0, 8).map((tx) => (
-                <RecentTxRow key={tx.transactionId} tx={tx} />
+                <RecentTxRow key={tx.transactionId} tx={tx} onOpenDetail={setDetailTxId} />
               ))
             )}
           </div>
@@ -187,6 +189,12 @@ export function InventoryDashboard() {
         </ALCard>
       </div>
     </div>
+    <TransactionDetailModal
+      transactionId={detailTxId}
+      open={detailTxId != null}
+      onClose={() => setDetailTxId(null)}
+    />
+    </>
   );
 }
 
@@ -222,12 +230,17 @@ function LowStockRow({ item }: { item: LowStockItemDto }) {
   );
 }
 
-function RecentTxRow({ tx }: { tx: RecentTransactionDto }) {
+function RecentTxRow({
+  tx,
+  onOpenDetail,
+}: {
+  tx: RecentTransactionDto;
+  onOpenDetail: (transactionId: number) => void;
+}) {
   const t = useTranslations("inventory.dashboard");
-  const router = useRouter();
   return (
     <button
-      onClick={() => router.push(`/dashboard/inventory/transactions/${tx.transactionId}`)}
+      onClick={() => onOpenDetail(tx.transactionId)}
       className="flex items-center gap-3 px-5 py-3 hover:bg-[#FDFBF9] transition-colors w-full text-left"
     >
       <div className="flex-1 min-w-0">

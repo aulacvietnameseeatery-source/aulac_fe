@@ -98,10 +98,22 @@ const ALCombobox: React.FC<ALComboboxProps> = ({
   maxHeight = 240,
   name,
   titleAction,
+  freeformText,
+  searchValue: controlledSearch,
+  onSearchChange,
 }) => {
   const t = useTranslations("combobox");
   const [open, setOpen] = React.useState(false);
-  const [search, setSearch] = React.useState("");
+  const [internalSearch, setInternalSearch] = React.useState("");
+  const isControlledSearch = controlledSearch !== undefined;
+  const search = isControlledSearch ? controlledSearch : internalSearch;
+  const setSearch = React.useCallback(
+    (v: string) => {
+      if (isControlledSearch) onSearchChange?.(v);
+      else setInternalSearch(v);
+    },
+    [isControlledSearch, onSearchChange],
+  );
   const [focusIndex, setFocusIndex] = React.useState(-1);
   const searchRef = React.useRef<HTMLInputElement>(null);
   const listRef = React.useRef<HTMLDivElement>(null);
@@ -156,6 +168,7 @@ const ALCombobox: React.FC<ALComboboxProps> = ({
   const handleClear = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (readOnly) return;
+    setSearch("");
     onChange?.(multiple ? [] : "" as unknown as string | number);
   };
 
@@ -229,13 +242,13 @@ const ALCombobox: React.FC<ALComboboxProps> = ({
     items[focusIndex]?.scrollIntoView({ block: "nearest" });
   }, [focusIndex]);
 
-  // Reset search & focus when closing
+  // Reset search & focus when closing (skip reset for controlled search — parent owns it)
   React.useEffect(() => {
     if (!open) {
-      setSearch("");
+      if (!isControlledSearch) setSearch("");
       setFocusIndex(-1);
     }
-  }, [open]);
+  }, [open, isControlledSearch, setSearch]);
 
   // Auto-focus search input when opening
   React.useEffect(() => {
@@ -312,6 +325,23 @@ const ALCombobox: React.FC<ALComboboxProps> = ({
           </span>
         );
       }
+    }
+
+    if (freeformText) {
+      return (
+        <span className="al-cb-trigger__value italic text-amber-700 opacity-80">
+          ⚠ {freeformText}
+        </span>
+      );
+    }
+
+    // Controlled search freeform: show typed text when popover is closed and no selection
+    if (isControlledSearch && controlledSearch) {
+      return (
+        <span className="al-cb-trigger__value italic text-amber-700 opacity-80">
+          ⚠ {controlledSearch}
+        </span>
+      );
     }
 
     return (
@@ -474,7 +504,7 @@ const ALCombobox: React.FC<ALComboboxProps> = ({
             <span className="al-cb-trigger__content">
               {renderTriggerContent()}
             </span>
-            {clearable && selected.length > 0 && !disabled && !readOnly && (
+            {clearable && (selected.length > 0 || (isControlledSearch && controlledSearch)) && !disabled && !readOnly && (
               <span
                 className="al-cb-trigger__clear"
                 onClick={handleClear}
