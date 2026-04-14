@@ -119,7 +119,6 @@ const CustomerListContent = () => {
                     fullName: formData.fullName.trim() || undefined,
                     email: formData.email.trim() || undefined,
                     isMember: formData.isMember,
-                    loyaltyPoints: formData.loyaltyPoints,
                 });
                 toast.success(tAdd("notifications.createSuccess"));
             } else if (modalMode === "edit" && selectedCustomer) {
@@ -128,7 +127,6 @@ const CustomerListContent = () => {
                     fullName: formData.fullName.trim() || undefined,
                     email: formData.email.trim() || undefined,
                     isMember: formData.isMember,
-                    loyaltyPoints: formData.loyaltyPoints,
                 });
                 toast.success(tEdit("notifications.updateSuccess"));
             }

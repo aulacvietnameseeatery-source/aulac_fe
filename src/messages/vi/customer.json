@@ -1,0 +1,187 @@
+{
+  "Customer": {
+    "close": "Đóng",
+    "edit": "Chỉnh sửa",
+    "List": {
+      "title": "Quản lý khách hàng",
+      "description": "Quản lý và xem thông tin khách hàng, lịch sử đặt hàng và điểm thành viên.",
+      "searchPlaceholder": "Tìm kiếm theo tên, SĐT hoặc email...",
+      "addNew": "Thêm khách hàng",
+      "table": {
+        "no": "STT",
+        "customerName": "Khách hàng",
+        "email": "Email",
+        "type": "Loại",
+        "orders": "Đơn hàng",
+        "points": "Điểm",
+        "lastOrder": "Đơn gần nhất"
+      },
+      "filters": {
+        "member": "Thành viên",
+        "guest": "Khách vãng lai"
+      },
+      "labels": {
+        "member": "Thành viên",
+        "guest": "Khách vãng lai"
+      },
+      "actions": {
+        "view": "Xem chi tiết",
+        "loyalty": "Quản lý điểm tích lũy",
+        "edit": "Chỉnh sửa thông tin",
+        "delete": "Xóa khách hàng"
+      },
+      "notifications": {
+        "loadError": "Không thể tải thông tin khách hàng",
+        "deleteSuccess": "Xóa khách hàng thành công",
+        "deleteError": "Không thể xóa khách hàng",
+        "deleteHasDependencies": "Không thể xóa khách hàng này vì họ đang có đơn hàng hoặc đặt bàn"
+      },
+      "deleteModal": {
+        "title": "Xóa khách hàng",
+        "message": "Bạn có chắc chắn muốn xóa khách hàng {name}? Hành động này không thể hoàn tác.",
+        "confirm": "Xóa",
+        "cancel": "Hủy"
+      }
+    },
+    "Add": {
+      "title": "Thêm khách hàng mới",
+      "saveButton": "Lưu",
+      "cancel": "Hủy",
+      "fields": {
+        "phone": "Số điện thoại",
+        "fullName": "Họ và tên",
+        "email": "Email",
+        "loyaltyPoints": "Điểm tích lũy",
+        "isMember": "Trạng thái thành viên",
+        "createdAt": "Ngày tạo"
+      },
+      "placeholders": {
+        "phone": "Nhập số điện thoại",
+        "fullName": "Nhập họ và tên",
+        "email": "Nhập địa chỉ email"
+      },
+      "validation": {
+        "phoneRequired": "Số điện thoại là bắt buộc",
+        "phoneMinLength": "Số điện thoại phải có ít nhất 10 ký tự",
+        "phoneMaxLength": "Số điện thoại không được quá 13 ký tự",
+        "phoneInvalid": "Số điện thoại chỉ được chứa chữ số",
+        "nameMaxLength": "Họ tên không được quá 100 ký tự",
+        "emailMaxLength": "Email không được quá 150 ký tự",
+        "emailInvalid": "Email không hợp lệ"
+      },
+      "notifications": {
+        "createSuccess": "Thêm khách hàng thành công",
+        "createError": "Không thể thêm khách hàng",
+        "phoneAlreadyExists": "Số điện thoại này đã được sử dụng bởi khách hàng khác"
+      }
+    },
+    "Edit": {
+      "title": "Chỉnh sửa khách hàng",
+      "saveButton": "Lưu thay đổi",
+      "cancel": "Hủy",
+      "fields": {
+        "phone": "Số điện thoại",
+        "fullName": "Họ và tên",
+        "email": "Email",
+        "loyaltyPoints": "Điểm tích lũy",
+        "isMember": "Trạng thái thành viên",
+        "createdAt": "Ngày tạo"
+      },
+      "placeholders": {
+        "phone": "Nhập số điện thoại",
+        "fullName": "Nhập họ và tên",
+        "email": "Nhập địa chỉ email"
+      },
+      "validation": {
+        "phoneRequired": "Số điện thoại là bắt buộc",
+        "phoneMinLength": "Số điện thoại phải có ít nhất 10 ký tự",
+        "phoneMaxLength": "Số điện thoại không được quá 13 ký tự",
+        "phoneInvalid": "Số điện thoại chỉ được chứa chữ số",
+        "nameMaxLength": "Họ tên không được quá 100 ký tự",
+        "emailMaxLength": "Email không được quá 150 ký tự",
+        "emailInvalid": "Email không hợp lệ"
+      },
+      "notifications": {
+        "updateSuccess": "Cập nhật khách hàng thành công",
+        "updateError": "Không thể cập nhật khách hàng",
+        "phoneAlreadyExists": "Số điện thoại này đã được sử dụng bởi khách hàng khác"
+      }
+    },
+    "Detail": {
+      "title": "Chi tiết khách hàng",
+      "saveButton": "Đóng",
+      "cancel": "Đóng",
+      "fields": {
+        "phone": "Số điện thoại",
+        "fullName": "Họ và tên",
+        "email": "Email",
+        "loyaltyPoints": "Điểm tích lũy",
+        "isMember": "Trạng thái thành viên",
+        "createdAt": "Ngày tạo"
+      },
+      "placeholders": {
+        "phone": "",
+        "fullName": "",
+        "email": ""
+      },
+      "validation": {
+        "phoneRequired": "",
+        "phoneMinLength": "",
+        "phoneMaxLength": "",
+        "phoneInvalid": "",
+        "nameMaxLength": "",
+        "emailMaxLength": "",
+        "emailInvalid": ""
+      },
+      "backToCustomers": "Quay lại danh sách",
+      "customerNotFound": "Không tìm thấy khách hàng.",
+      "guestCustomer": "Khách vãng lai",
+      "member": "Thành viên",
+      "guest": "Khách",
+      "noPhone": "Không có SĐT",
+      "joined": "Tham gia",
+      "orders": "Số đơn",
+      "totalSpent": "Tổng chi tiêu",
+      "points": "Điểm",
+      "orderHistory": "Lịch sử mua hàng",
+      "from": "Từ ngày",
+      "to": "Đến ngày",
+      "allOrderTypes": "Tất cả loại đơn",
+      "clear": "Xóa bộ lọc",
+      "noOrdersFound": "Không tìm thấy đơn hàng nào.",
+      "totalAmount": "Tổng tiền",
+      "tip": "Tiền Tip",
+      "fetchDetailError": "Không thể tải chi tiết đơn hàng",
+      "orderTitle": "Đơn hàng",
+      "generalInfo": "Thông tin chung",
+      "table": "Bàn",
+      "staff": "Nhân viên",
+      "type": "Loại đơn",
+      "paymentDetails": "Chi tiết thanh toán",
+      "noPaymentRecorded": "Chưa có dữ liệu thanh toán",
+      "received": "Đã nhận",
+      "change": "Tiền thừa",
+      "items": "Món ăn",
+      "promotions": "Khuyến mãi",
+      "coupons": "Mã giảm giá",
+      "note": "Ghi chú",
+      "noPromotionsApplied": "Không có khuyến mãi",
+      "noCouponsApplied": "Không có mã giảm giá",
+      "of": "trên",
+      "status": {
+        "PENDING": "Chờ xác nhận",
+        "IN_PROGRESS": "Đang thực hiện",
+        "COMPLETED": "Hoàn thành",
+        "CANCELLED": "Đã hủy"
+      },
+      "itemStatus": {
+        "CREATED": "Mới tạo",
+        "IN_PROGRESS": "Đang làm",
+        "READY": "Sẵn sàng",
+        "SERVED": "Đã phục vụ",
+        "REJECTED": "Từ chối",
+        "CANCELLED": "Đã hủy"
+      }
+    }
+  }
+}

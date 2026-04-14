@@ -1,0 +1,187 @@
+{
+  "Customer": {
+    "close": "Fermer",
+    "edit": "Modifier",
+    "List": {
+      "title": "Gestion des clients",
+      "description": "Gérez et consultez les informations des clients, l'historique des commandes et les points de fidélité.",
+      "searchPlaceholder": "Rechercher par nom, téléphone ou email...",
+      "addNew": "Ajouter un client",
+      "table": {
+        "no": "N°",
+        "customerName": "Client",
+        "email": "Email",
+        "type": "Type",
+        "orders": "Commandes",
+        "points": "Points",
+        "lastOrder": "Dernière commande"
+      },
+      "filters": {
+        "member": "Membre",
+        "guest": "Invité"
+      },
+      "labels": {
+        "member": "Membre",
+        "guest": "Invité"
+      },
+      "actions": {
+        "view": "Voir les détails",
+        "loyalty": "Gérer les points de fidélité",
+        "edit": "Modifier le client",
+        "delete": "Supprimer le client"
+      },
+      "notifications": {
+        "loadError": "Échec du chargement des détails du client",
+        "deleteSuccess": "Client supprimé avec succès",
+        "deleteError": "Échec de la suppression du client",
+        "deleteHasDependencies": "Impossible de supprimer un client qui a des commandes ou des réservations en cours"
+      },
+      "deleteModal": {
+        "title": "Supprimer le client",
+        "message": "Êtes-vous sûr de vouloir supprimer le client {name} ? Cette action est irréversible.",
+        "confirm": "Supprimer",
+        "cancel": "Annuler"
+      }
+    },
+    "Add": {
+      "title": "Ajouter un nouveau client",
+      "saveButton": "Enregistrer",
+      "cancel": "Annuler",
+      "fields": {
+        "phone": "Numéro de téléphone",
+        "fullName": "Nom complet",
+        "email": "Email",
+        "loyaltyPoints": "Points de fidélité",
+        "isMember": "Statut de membre",
+        "createdAt": "Créé le"
+      },
+      "placeholders": {
+        "phone": "Entrez le numéro de téléphone",
+        "fullName": "Entrez le nom complet",
+        "email": "Entrez l'adresse email"
+      },
+      "validation": {
+        "phoneRequired": "Le numéro de téléphone est requis",
+        "phoneMinLength": "Le numéro de téléphone doit contenir au moins 10 caractères",
+        "phoneMaxLength": "Le numéro de téléphone ne peut pas dépasser 13 caractères",
+        "phoneInvalid": "Le numéro de téléphone ne doit contenir que des chiffres",
+        "nameMaxLength": "Le nom complet ne peut pas dépasser 100 caractères",
+        "emailMaxLength": "L'email ne peut pas dépasser 150 caractères",
+        "emailInvalid": "Format d'email invalide"
+      },
+      "notifications": {
+        "createSuccess": "Client créé avec succès",
+        "createError": "Échec de la création du client",
+        "phoneAlreadyExists": "Un client avec ce numéro de téléphone existe déjà"
+      }
+    },
+    "Edit": {
+      "title": "Modifier le client",
+      "saveButton": "Enregistrer les modifications",
+      "cancel": "Annuler",
+      "fields": {
+        "phone": "Numéro de téléphone",
+        "fullName": "Nom complet",
+        "email": "Email",
+        "loyaltyPoints": "Points de fidélité",
+        "isMember": "Statut de membre",
+        "createdAt": "Créé le"
+      },
+      "placeholders": {
+        "phone": "Entrez le numéro de téléphone",
+        "fullName": "Entrez le nom complet",
+        "email": "Entrez l'adresse email"
+      },
+      "validation": {
+        "phoneRequired": "Le numéro de téléphone est requis",
+        "phoneMinLength": "Le numéro de téléphone doit contenir au moins 10 caractères",
+        "phoneMaxLength": "Le numéro de téléphone ne peut pas dépasser 13 caractères",
+        "phoneInvalid": "Le numéro de téléphone ne doit contenir que des chiffres",
+        "nameMaxLength": "Le nom complet ne peut pas dépasser 100 caractères",
+        "emailMaxLength": "L'email ne peut pas dépasser 150 caractères",
+        "emailInvalid": "Format d'email invalide"
+      },
+      "notifications": {
+        "updateSuccess": "Client mis à jour avec succès",
+        "updateError": "Échec de la mise à jour du client",
+        "phoneAlreadyExists": "Un client avec ce numéro de téléphone existe déjà"
+      }
+    },
+    "Detail": {
+      "title": "Détails du client",
+      "saveButton": "Fermer",
+      "cancel": "Fermer",
+      "fields": {
+        "phone": "Numéro de téléphone",
+        "fullName": "Nom complet",
+        "email": "Email",
+        "loyaltyPoints": "Points de fidélité",
+        "isMember": "Statut de membre",
+        "createdAt": "Créé le"
+      },
+      "placeholders": {
+        "phone": "",
+        "fullName": "",
+        "email": ""
+      },
+      "validation": {
+        "phoneRequired": "",
+        "phoneMinLength": "",
+        "phoneMaxLength": "",
+        "phoneInvalid": "",
+        "nameMaxLength": "",
+        "emailMaxLength": "",
+        "emailInvalid": ""
+      },
+      "backToCustomers": "Retour aux clients",
+      "customerNotFound": "Client introuvable.",
+      "guestCustomer": "Client invité",
+      "member": "Membre",
+      "guest": "Invité",
+      "noPhone": "Pas de téléphone",
+      "joined": "Inscrit",
+      "orders": "Commandes",
+      "totalSpent": "Total Dépensé",
+      "points": "Points",
+      "orderHistory": "Historique des commandes",
+      "from": "De",
+      "to": "À",
+      "allOrderTypes": "Tous les types",
+      "clear": "Effacer",
+      "noOrdersFound": "Aucune commande trouvée.",
+      "totalAmount": "Montant Total",
+      "tip": "Pourboire",
+      "fetchDetailError": "Impossible de charger les détails de la commande",
+      "orderTitle": "Commande",
+      "generalInfo": "Infos générales",
+      "table": "Table",
+      "staff": "Personnel",
+      "type": "Type",
+      "paymentDetails": "Détails de paiement",
+      "noPaymentRecorded": "Aucun paiement enregistré",
+      "received": "Reçu",
+      "change": "Monnaie",
+      "items": "Articles",
+      "promotions": "Promotions",
+      "coupons": "Coupons",
+      "note": "Note",
+      "noPromotionsApplied": "Aucune promotion appliquée",
+      "noCouponsApplied": "Aucun coupon appliqué",
+      "of": "sur",
+      "status": {
+        "PENDING": "En attente",
+        "IN_PROGRESS": "En cours",
+        "COMPLETED": "Terminée",
+        "CANCELLED": "Annulée"
+      },
+      "itemStatus": {
+        "CREATED": "Créé",
+        "IN_PROGRESS": "En cours",
+        "READY": "Prêt",
+        "SERVED": "Servi",
+        "REJECTED": "Rejeté",
+        "CANCELLED": "Annulé"
+      }
+    }
+  }
+}

@@ -1999,7 +1999,8 @@
       },
       "validation": {
         "phoneRequired": "Số điện thoại là bắt buộc",
-        "phoneMaxLength": "Số điện thoại không được quá 20 ký tự",
+        "phoneMinLength": "Số điện thoại phải có ít nhất 10 ký tự",
+        "phoneMaxLength": "Số điện thoại không được quá 13 ký tự",
         "phoneInvalid": "Số điện thoại chỉ được chứa chữ số",
         "nameMaxLength": "Họ tên không được quá 100 ký tự",
         "emailMaxLength": "Email không được quá 150 ký tự",
@@ -2032,7 +2033,8 @@
       },
       "validation": {
         "phoneRequired": "Số điện thoại là bắt buộc",
-        "phoneMaxLength": "Số điện thoại không được quá 20 ký tự",
+        "phoneMinLength": "Số điện thoại phải có ít nhất 10 ký tự",
+        "phoneMaxLength": "Số điện thoại không được quá 13 ký tự",
         "phoneInvalid": "Số điện thoại chỉ được chứa chữ số",
         "nameMaxLength": "Họ tên không được quá 100 ký tự",
         "emailMaxLength": "Email không được quá 150 ký tự",

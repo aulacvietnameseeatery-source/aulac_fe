@@ -13,7 +13,6 @@ export interface CustomerFormData {
     fullName: string;
     email: string;
     isMember: boolean;
-    loyaltyPoints: number;
 }
 
 interface CustomerModalProps {
@@ -30,8 +29,7 @@ const initialFormData: CustomerFormData = {
     phone: "",
     fullName: "",
     email: "",
-    isMember: false,
-    loyaltyPoints: 0,
+    isMember: true,
 };
 
 export const CustomerModal: React.FC<CustomerModalProps> = ({
@@ -60,7 +58,6 @@ export const CustomerModal: React.FC<CustomerModalProps> = ({
                 fullName: customer.fullName || "",
                 email: customer.email || "",
                 isMember: customer.isMember ?? false,
-                loyaltyPoints: customer.loyaltyPoints ?? 0,
             });
         } else {
             setFormData(initialFormData);
@@ -80,7 +77,9 @@ export const CustomerModal: React.FC<CustomerModalProps> = ({
 
         if (!formData.phone.trim()) {
             newErrors.phone = t("validation.phoneRequired");
-        } else if (formData.phone.trim().length > 20) {
+        } else if (formData.phone.trim().length < 10) {
+            newErrors.phone = t("validation.phoneMinLength");
+        } else if (formData.phone.trim().length > 13) {
             newErrors.phone = t("validation.phoneMaxLength");
         } else if (!/^\d+$/.test(formData.phone.trim())) {
             newErrors.phone = t("validation.phoneInvalid");
@@ -96,10 +95,6 @@ export const CustomerModal: React.FC<CustomerModalProps> = ({
             } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
                 newErrors.email = t("validation.emailInvalid");
             }
-        }
-
-        if (formData.loyaltyPoints < 0) {
-            newErrors.loyaltyPoints = t("validation.pointsNegative");
         }
 
         setErrors(newErrors);
@@ -215,27 +210,20 @@ export const CustomerModal: React.FC<CustomerModalProps> = ({
                         )}
                     </div>
 
-                    {/* Loyalty Points + Member status */}
-                    <div className={isViewMode ? "grid grid-cols-2 gap-4 items-start" : ""}>
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                                {t("fields.loyaltyPoints")}
-                            </label>
-                            <Input
-                                type="number"
-                                min={0}
-                                value={formData.loyaltyPoints}
-                                onChange={(e) => handleChange("loyaltyPoints", parseInt(e.target.value) || 0)}
-                                placeholder={isViewMode ? "" : t("placeholders.loyaltyPoints")}
-                                readOnly={isViewMode}
-                                className={errors.loyaltyPoints ? "border-red-400" : ""}
-                            />
-                            {errors.loyaltyPoints && (
-                                <p className="text-xs text-red-500 mt-1">{errors.loyaltyPoints}</p>
-                            )}
-                        </div>
+                    {/* Loyalty Points + Member status – view only */}
+                    {isViewMode && (
+                        <div className="grid grid-cols-2 gap-4 items-start">
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                                    {t("fields.loyaltyPoints")}
+                                </label>
+                                <Input
+                                    type="number"
+                                    value={customer?.loyaltyPoints ?? 0}
+                                    readOnly
+                                />
+                            </div>
 
-                        {isViewMode && (
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-1.5">
                                     {t("fields.isMember")}
@@ -249,8 +237,8 @@ export const CustomerModal: React.FC<CustomerModalProps> = ({
                                     />
                                 </div>
                             </div>
-                        )}
-                    </div>
+                        </div>
+                    )}
 
                     {/* Created At – view only */}
                     {isViewMode && customer?.createdAt && (
