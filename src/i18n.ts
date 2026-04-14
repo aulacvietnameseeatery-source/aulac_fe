@@ -18,7 +18,8 @@ const MODULES = [
     "supplier",
     "payments",
     "reports",
-    "dashboard"
+    "dashboard",
+    "customer"
 ] as const;
 
 type MessageTree = Record<string, unknown>;

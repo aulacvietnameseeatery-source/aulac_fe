@@ -26,7 +26,6 @@ export interface CreateCustomerRequest {
     fullName?: string;
     email?: string;
     isMember: boolean;
-    loyaltyPoints: number;
 }
 
 export interface UpdateCustomerRequest {
@@ -34,7 +33,6 @@ export interface UpdateCustomerRequest {
     fullName?: string;
     email?: string;
     isMember: boolean;
-    loyaltyPoints: number;
 }
 
 export interface CustomerListQueryDto {
