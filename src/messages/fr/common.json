@@ -384,6 +384,8 @@
     "err_save_cart": "Impossible d'enregistrer le panier actuel.",
     "err_save_table": "Impossible d'enregistrer les informations de la table.",
     "err_table_occupied_select": "Cette table est déjà occupée. Veuillez choisir une autre table.",
+    "err_table_locked": "Cette table est en maintenance ou indisponible. Veuillez en choisir une autre.",
+    "err_table_locked": "Cette table est en maintenance ou indisponible. Veuillez en choisir une autre.",
     "err_create_order": "Impossible de créer la commande : {message}",
     "success_order_title": "Commande passée avec succès !",
     "success_order_body": "Votre commande est en cours de préparation et sera servie à la Table {table}.",
