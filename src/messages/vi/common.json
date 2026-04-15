@@ -384,6 +384,7 @@
     "err_save_cart": "Không thể lưu giỏ hàng hiện tại.",
     "err_save_table": "Không thể lưu thông tin số bàn.",
     "err_table_occupied_select": "Bàn này đã có người sử dụng. Vui lòng chọn bàn khác.",
+    "err_table_locked": "Bàn này đang bảo trì hoặc không khả dụng. Vui lòng chọn bàn khác.",
     "err_create_order": "Không thể tạo đơn hàng: {message}",
     "success_order_title": "Đặt món thành công!",
     "success_order_body": "Món ăn đang được chuẩn bị và sẽ được phục vụ tại Bàn {table}.",

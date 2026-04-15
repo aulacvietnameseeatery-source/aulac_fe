@@ -384,6 +384,7 @@
     "err_save_cart": "Failed to save the current cart.",
     "err_save_table": "Failed to save table information.",
     "err_table_occupied_select": "This table is already in use. Please choose another table.",
+    "err_table_locked": "This table is under maintenance or unavailable. Please select another table.",
     "err_create_order": "Could not create order: {message}",
     "success_order_title": "Order Placed Successfully!",
     "success_order_body": "Your order is being prepared and will be served shortly at Table {table}.",

@@ -90,13 +90,29 @@ export default function MenuListingClient({ initialMenuData, tableFromUrl, token
             } catch {
                 toast.error(tMenu("err_load_cart"));
             }
+            // Vẫn gọi server nền để kiểm tra nếu nhân viên vừa tạo đơn mới cho bàn này
+            const tokenParam2 = tokenFromUrl ? `?token=${encodeURIComponent(tokenFromUrl)}` : '';
+            api.post<{ data: { activeOrderId: number | null } }>(`/api/public/tables/${encodeURIComponent(tableFromUrl)}/occupy${tokenParam2}`, {})
+                .then((res) => {
+                    if (ignored) return;
+                    const activeOrderId = res?.data?.activeOrderId;
+                    if (activeOrderId) {
+                        // Nếu server trả về active order khác với session cũ → cập nhật
+                        const storedOrderId = sessionStorage.getItem(CURRENT_ORDER_ID_KEY);
+                        if (!storedOrderId || Number(storedOrderId) !== activeOrderId) {
+                            sessionStorage.setItem(CURRENT_ORDER_ID_KEY, String(activeOrderId));
+                            setCurrentOrderId(activeOrderId);
+                        }
+                    }
+                })
+                .catch(() => { /* background refresh, ignore errors */ });
         } else {
             // Tab mới hoặc copy link → xác thực quyền truy cập bàn
             setIsValidatingTable(true);
             const isSameTable = savedTable === tableFromUrl;
             const tokenParam = tokenFromUrl ? `?token=${encodeURIComponent(tokenFromUrl)}` : '';
-            api.post(`/api/public/tables/${encodeURIComponent(tableFromUrl)}/occupy${tokenParam}`, {})
-                .then(() => {
+            api.post<{ data: { activeOrderId: number | null } }>(`/api/public/tables/${encodeURIComponent(tableFromUrl)}/occupy${tokenParam}`, {})
+                .then((res) => {
                     if (ignored) return;
                     // Nếu đổi sang bàn khác → xóa cart và orderId cũ
                     // Nếu cùng bàn (chỉ token thay đổi, vd: quét lại QR) → giữ nguyên cart
@@ -116,6 +132,12 @@ export default function MenuListingClient({ initialMenuData, tableFromUrl, token
                             toast.error(tMenu("err_load_cart"));
                         }
                     }
+                    // Nếu bàn đã có đơn từ nhân viên → lưu orderId để khách xem lịch sử
+                    const activeOrderId = res?.data?.activeOrderId;
+                    if (activeOrderId && !sessionStorage.getItem(CURRENT_ORDER_ID_KEY)) {
+                        sessionStorage.setItem(CURRENT_ORDER_ID_KEY, String(activeOrderId));
+                        setCurrentOrderId(activeOrderId);
+                    }
                     // Ghi session bàn mới
                     setTableNumber(tableFromUrl);
                     sessionStorage.setItem(TABLE_STORAGE_KEY, tableFromUrl);
@@ -128,7 +150,8 @@ export default function MenuListingClient({ initialMenuData, tableFromUrl, token
                 .catch((error: any) => {
                     if (ignored) return;
                     if (error.response?.status === 409) {
-                        toast.error(tMenu("err_table_occupied_access"));
+                        // 409 chỉ còn khi bàn bị locked hoặc deleted
+                        toast.error(tMenu("err_table_locked"));
                     } else if (error.response?.status === 404) {
                         toast.error(tMenu("err_table_not_found"));
                     } else if (error.response?.status === 400) {
@@ -235,13 +258,20 @@ export default function MenuListingClient({ initialMenuData, tableFromUrl, token
         // Occupy the table directly (no customer info page)
         try {
             const tokenParam = qrToken ? `?token=${encodeURIComponent(qrToken)}` : '';
-            await api.post(`/api/public/tables/${encodeURIComponent(val)}/occupy${tokenParam}`, {});
+            const res = await api.post<{ data: { activeOrderId: number | null } }>(`/api/public/tables/${encodeURIComponent(val)}/occupy${tokenParam}`, {});
             if (qrToken && typeof window !== 'undefined') {
                 sessionStorage.setItem(TOKEN_STORAGE_KEY, qrToken);
             }
+            // Nếu bàn đã có đơn từ nhân viên → lưu orderId để khách xem lịch sử
+            const activeOrderId = res?.data?.activeOrderId;
+            if (activeOrderId && typeof window !== 'undefined' && !sessionStorage.getItem(CURRENT_ORDER_ID_KEY)) {
+                sessionStorage.setItem(CURRENT_ORDER_ID_KEY, String(activeOrderId));
+                setCurrentOrderId(activeOrderId);
+            }
         } catch (error: any) {
             if (error.response?.status === 409) {
-                toast.error(tMenu("err_table_occupied_select"));
+                // Bàn bị locked hoặc deleted
+                toast.error(tMenu("err_table_locked"));
                 if (typeof window !== 'undefined') {
                     sessionStorage.removeItem(TABLE_STORAGE_KEY);
                     sessionStorage.removeItem(CART_STORAGE_KEY);
@@ -366,9 +396,8 @@ export default function MenuListingClient({ initialMenuData, tableFromUrl, token
         } catch (err: any) {
             // Handle specific error cases
             if (err.response?.status === 409) {
-                // Table is already occupied by another customer
-                toast.error(tMenu("err_table_occupied_select"));
-                // Clear the session and redirect to menu without table
+                // Should not happen anymore, but handle gracefully
+                toast.error(tMenu("err_table_locked"));
                 if (typeof window !== 'undefined') {
                     sessionStorage.removeItem(TABLE_STORAGE_KEY);
                     sessionStorage.removeItem(CART_STORAGE_KEY);
