@@ -404,6 +404,27 @@
       "step_order": "Commander"
     }
   },
+  "QrScannerModal": {
+    "error_title": "Caméra introuvable",
+    "error_description": "Le navigateur a bloqué l'accès à la caméra ou l'appareil ne répond pas. Veuillez réessayer.",
+    "retry": "Réessayer",
+    "close": "Fermer",
+    "scan_instruction": "Utilisez la caméra pour scanner le code QR sur votre table"
+  },
+  "TableSelectionModal": {
+    "welcome_title": "Bienvenue chez An Lac",
+    "welcome_subtitle": "Comment souhaitez-vous vous enregistrer ?",
+    "scan_qr": "Scanner le QR de la table",
+    "scan_qr_desc": "Utilisez votre caméra pour scanner le code QR placé sur votre table.",
+    "or": "OU",
+    "manual_selection": "Sélection manuelle",
+    "loading_tables": "Chargement des tables...",
+    "select_table": "Sélectionnez votre table...",
+    "table_item": "Table {code} ({zone})",
+    "no_tables": "Aucune table disponible",
+    "enter_menu": "Accéder au menu",
+    "scan_camera_instruction": "Placez le QR dans le cadre de la caméra pour scanner et enregistrer votre table"
+  },
   "FillInforCustomer": {
     "title": "Bienvenue chez An Lac",
     "subtitle": "Veuillez fournir vos informations pour commencer votre voyage culinaire",

@@ -403,6 +403,27 @@
       "step_order": "Order"
     }
   },
+  "QrScannerModal": {
+    "error_title": "Camera Not Found",
+    "error_description": "The browser has blocked camera access or the device is not responding. Please try again.",
+    "retry": "Retry",
+    "close": "Close",
+    "scan_instruction": "Use the Camera to scan the QR code on your table"
+  },
+  "TableSelectionModal": {
+    "welcome_title": "Welcome to An Lac",
+    "welcome_subtitle": "How would you like to check in?",
+    "scan_qr": "Scan Table QR",
+    "scan_qr_desc": "Use your camera to scan the QR code placed on your table.",
+    "or": "OR",
+    "manual_selection": "Manual Selection",
+    "loading_tables": "Loading tables...",
+    "select_table": "Select your table...",
+    "table_item": "Table {code} ({zone})",
+    "no_tables": "No tables available",
+    "enter_menu": "Enter Menu",
+    "scan_camera_instruction": "Put QR in your camera frame to scan and check-in your table"
+  },
   "FillInforCustomer": {
     "title": "Welcome to An Lac",
     "subtitle": "Please provide your information to begin your culinary journey",

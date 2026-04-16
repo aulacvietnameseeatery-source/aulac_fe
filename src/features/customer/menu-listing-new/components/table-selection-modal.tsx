@@ -7,6 +7,7 @@ import { UtensilsCrossed, X, Camera, ChevronRight, RefreshCcw } from "lucide-rea
 import { api } from "@/lib/http";
 import type { ApiResponse } from "@/types/api-response.types";
 import { Scanner } from '@yudiel/react-qr-scanner'; // IMPORT THƯ VIỆN CAMERA VÀO ĐÂY
+import { useTranslations } from "next-intl";
 
 interface AvailableTableDto {
     tableId: number;
@@ -23,6 +24,7 @@ export function TableSelectionModal({ isOpen, onConfirm, onClose }: {
 }) {
     const [val, setVal] = useState("");
     const [isScanning, setIsScanning] = useState(false);
+    const t = useTranslations("TableSelectionModal");
 
     // Loose-typed alias to avoid upstream prop typing mismatch
     const AnyScanner: any = Scanner;
@@ -104,10 +106,10 @@ export function TableSelectionModal({ isOpen, onConfirm, onClose }: {
 
                                     <div className="flex flex-col items-center mb-6 z-10">
                                         <h3 className="font-display text-2xl font-bold text-white tracking-wide">
-                                            Welcome to An Lac
+                                            {t("welcome_title")}
                                         </h3>
                                         <p className="text-[#C5A059] text-sm font-light mt-1 text-center">
-                                            How would you like to check in?
+                                            {t("welcome_subtitle")}
                                         </p>
                                     </div>
 
@@ -127,10 +129,10 @@ export function TableSelectionModal({ isOpen, onConfirm, onClose }: {
                                                 />
                                             </div>
                                             <h4 className="text-white group-hover:text-[#0F2335] font-bold tracking-wider mb-2 flex items-center gap-2 transition-colors">
-                                                Scan Table QR <ChevronRight size={16} />
+                                                {t("scan_qr")} <ChevronRight size={16} />
                                             </h4>
                                             <p className="text-white/50 group-hover:text-[#0F2335]/70 text-xs text-center leading-relaxed transition-colors">
-                                                Use your camera to scan the QR code placed on your table.
+                                                {t("scan_qr_desc")}
                                             </p>
                                         </div>
 
@@ -138,20 +140,20 @@ export function TableSelectionModal({ isOpen, onConfirm, onClose }: {
                                         <div className="hidden md:flex flex-col items-center justify-center relative">
                                             <div className="h-full w-px bg-gradient-to-b from-transparent via-[#C5A059]/30 to-transparent" />
                                             <div className="absolute top-1/2 -translate-y-1/2 bg-[#204560] py-2 text-[10px] text-[#C5A059]/50 font-bold uppercase tracking-widest">
-                                                OR
+                                                {t("or")}
                                             </div>
                                         </div>
                                         <div className="md:hidden flex items-center justify-center relative py-2">
                                             <div className="w-full h-px bg-gradient-to-r from-transparent via-[#C5A059]/30 to-transparent" />
                                             <div className="absolute left-1/2 -translate-x-1/2 bg-[#204560] px-3 text-[10px] text-[#C5A059]/50 font-bold uppercase tracking-widest">
-                                                OR
+                                                {t("or")}
                                             </div>
                                         </div>
 
                                         {/* 2. PHẦN CHỌN BÀN THỦ CÔNG */}
                                         <div className="flex-1 flex flex-col justify-center">
                                             <h4 className="text-white font-bold tracking-wider mb-4 text-center md:text-left">
-                                                Manual Selection
+                                                {t("manual_selection")}
                                             </h4>
 
                                             <div className="relative w-full mb-6">
@@ -167,7 +169,7 @@ export function TableSelectionModal({ isOpen, onConfirm, onClose }: {
                                                     )}
                                                 >
                                                     <option value="" disabled hidden className="text-white/30">
-                                                        {isLoading ? "Loading tables..." : "Select your table..."}
+                                                        {isLoading ? t("loading_tables") : t("select_table")}
                                                     </option>
 
                                                     {/* 4. Render danh sách bàn thực tế từ API */}
@@ -178,12 +180,12 @@ export function TableSelectionModal({ isOpen, onConfirm, onClose }: {
                                                                 value={table.tableCodes}
                                                                 className="bg-[#204560] text-white"
                                                             >
-                                                                Table {table.tableCodes} ({table.zone})
+                                                                {t("table_item", { code: table.tableCodes, zone: table.zone })}
                                                             </option>
                                                         ))
                                                     ) : !isLoading && (
                                                         <option value="" disabled className="bg-[#204560] text-white/50">
-                                                            No tables available
+                                                            {t("no_tables")}
                                                         </option>
                                                     )}
                                                 </select>
@@ -212,7 +214,7 @@ export function TableSelectionModal({ isOpen, onConfirm, onClose }: {
                                                         : "bg-[#1A3A52] text-white/30 cursor-not-allowed"
                                                 )}
                                             >
-                                                <UtensilsCrossed size={16} /> Enter Menu
+                                                <UtensilsCrossed size={16} /> {t("enter_menu")}
                                             </button>
                                         </div>
                                     </div>
@@ -284,7 +286,7 @@ export function TableSelectionModal({ isOpen, onConfirm, onClose }: {
 
                             <div className="z-30 absolute top-24 md:top-32 flex flex-col items-center w-full px-4 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
                                 <p className="text-white text-center text-sm md:text-base font-medium tracking-wide">
-                                    Put QR in your camera frame to scan and check-in your table
+                                    {t("scan_camera_instruction")}
                                 </p>
                             </div>
 
