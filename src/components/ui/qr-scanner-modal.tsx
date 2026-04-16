@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X, AlertTriangle } from "lucide-react";
 import { Scanner } from "@yudiel/react-qr-scanner";
 import { useState, useEffect } from "react";
+import { useTranslations } from "next-intl";
 
 interface QrScannerModalProps {
     isOpen: boolean;
@@ -12,6 +13,7 @@ interface QrScannerModalProps {
 
 export function QrScannerModal({ isOpen, onClose }: QrScannerModalProps) {
     const [hasError, setHasError] = useState(false);
+    const t = useTranslations("QrScannerModal");
     // 1. Thêm State quản lý việc render riêng cái Camera
     const [isMountingCamera, setIsMountingCamera] = useState(false);
 
@@ -84,9 +86,9 @@ export function QrScannerModal({ isOpen, onClose }: QrScannerModalProps) {
                     {hasError ? (
                         <div className="z-30 bg-white rounded-xl p-6 flex flex-col items-center w-[85%] md:max-w-sm text-center shadow-2xl">
                             <AlertTriangle className="text-red-500 w-12 h-12 mb-3" />
-                            <h3 className="text-gray-900 font-bold text-lg mb-2">Không tìm thấy máy ảnh</h3>
+                            <h3 className="text-gray-900 font-bold text-lg mb-2">{t("error_title")}</h3>
                             <p className="text-gray-600 text-sm mb-6 leading-relaxed">
-                                Trình duyệt đã chặn quyền truy cập hoặc thiết bị không phản hồi. Vui lòng thử lại.
+                                {t("error_description")}
                             </p>
                             <div className="flex gap-3 w-full">
                                 <button
@@ -98,13 +100,13 @@ export function QrScannerModal({ isOpen, onClose }: QrScannerModalProps) {
                                     }}
                                     className="flex-1 py-2 px-4 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 font-medium transition"
                                 >
-                                    Thử lại
+                                    {t("retry")}
                                 </button>
                                 <button
                                     onClick={handleClose}
                                     className="flex-1 py-2 px-4 bg-gray-900 text-white rounded-lg hover:bg-gray-800 font-medium transition"
                                 >
-                                    Đóng
+                                    {t("close")}
                                 </button>
                             </div>
                         </div>
@@ -113,7 +115,7 @@ export function QrScannerModal({ isOpen, onClose }: QrScannerModalProps) {
                         <>
                             <div className="z-30 absolute top-24 md:top-32 flex flex-col items-center w-full px-4 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
                                 <p className="text-white text-center text-sm md:text-base font-medium tracking-wide">
-                                    Sử dụng Camera để quét mã QR trên bàn của bạn
+                                    {t("scan_instruction")}
                                 </p>
                             </div>
 

@@ -403,6 +403,27 @@
       "step_order": "Đặt món"
     }
   },
+  "QrScannerModal": {
+    "error_title": "Không tìm thấy máy ảnh",
+    "error_description": "Trình duyệt đã chặn quyền truy cập hoặc thiết bị không phản hồi. Vui lòng thử lại.",
+    "retry": "Thử lại",
+    "close": "Đóng",
+    "scan_instruction": "Sử dụng Camera để quét mã QR trên bàn của bạn"
+  },
+  "TableSelectionModal": {
+    "welcome_title": "Chào Mừng Đến An Lac",
+    "welcome_subtitle": "Bạn muốn check-in bằng cách nào?",
+    "scan_qr": "Quét mã QR bàn",
+    "scan_qr_desc": "Sử dụng camera để quét mã QR được đặt trên bàn của bạn.",
+    "or": "HOẶC",
+    "manual_selection": "Chọn bàn thủ công",
+    "loading_tables": "Đang tải danh sách bàn...",
+    "select_table": "Chọn bàn của bạn...",
+    "table_item": "Bàn {code} ({zone})",
+    "no_tables": "Không có bàn trống",
+    "enter_menu": "Vào thực đơn",
+    "scan_camera_instruction": "Đặt mã QR trong khung camera để quét và check-in bàn của bạn"
+  },
   "FillInforCustomer": {
     "title": "Chào Mừng Đến An Lac",
     "subtitle": "Vui lòng cung cấp thông tin của bạn để bắt đầu trải nghiệm ẩm thực",
