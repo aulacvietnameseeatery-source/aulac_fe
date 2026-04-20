@@ -121,7 +121,7 @@ const startResizing = React.useCallback((mouseDownEvent: React.MouseEvent | Reac
             note: item.note || undefined
         }))
         });
-        toast.success('Order placed successfully!');
+        toast.success(tCreate('placeOrderSuccess'));
         clearCart();
         setCustomer(null);
         setSelectedTable(null);

@@ -238,6 +238,7 @@
         "tax": "Thuế (10%)",
         "total": "Tổng cộng",
         "placeOrder": "Đặt món",
+        "placeOrderSuccess": "Đặt đơn hàng thành công!",
         "createInvoice": "Tạo hóa đơn",
         "noTableSelected": "Chưa chọn bàn",
         "anonymous": "Ẩn danh",
