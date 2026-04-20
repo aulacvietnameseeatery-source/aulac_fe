@@ -6,8 +6,9 @@ import { jwtDecode } from 'jwt-decode';
 export interface DecodedToken {
   sub: string; // user_id
   unique_name: string; // username
-  permission: string | string[]; // Can be single string or array
-  role: string | string[]; // Can be single string or array
+  permission?: string | string[]; // Can be single string or array
+  role?: string | string[]; // Can be single string or array
+  "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"?: string | string[];
   exp: number; // Expiration timestamp
   iat?: number; // Issued at timestamp
 }
@@ -108,14 +109,18 @@ export function getPermissions(token: string | null | undefined): string[] {
  */
 export function getRoles(token: string | null | undefined): string[] {
   const decoded = decodeToken(token);
-  if (!decoded || !decoded.role) return [];
+  if (!decoded) return [];
+
+  const roleClaim = decoded.role || decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
+
+  if (!roleClaim) return [];
 
   // Normalize to array
-  if (Array.isArray(decoded.role)) {
-    return decoded.role;
+  if (Array.isArray(roleClaim)) {
+    return roleClaim;
   }
 
-  return [decoded.role];
+  return [roleClaim];
 }
 
 /**
