@@ -3,8 +3,15 @@
 import { useMemo, useState } from "react";
 import {
   AlertTriangle,
+  ArrowDownRight,
+  ArrowRight,
+  ArrowUpRight,
+  ChefHat,
+  CircleDollarSign,
   Clock3,
+  Flame,
   RefreshCcw,
+  TableProperties,
   TimerReset,
   UserRound,
   Wallet,
@@ -13,14 +20,22 @@ import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { ALDatePicker } from "@/components/ui/al-date-picker";
 import { ALCard } from "@/components/ui/al-card";
+import { formatCHF } from "@/lib/format-chf-utils";
 import { cn } from "@/lib/utils";
-import { useShiftAssignmentsQuery, useShiftLiveBoardQuery } from "../hooks/use-shift-queries";
+import { Link } from "@/routing";
+import {
+  useShiftAssignmentsQuery,
+  useShiftLiveBoardQuery,
+  useShiftLiveOperationsQuery,
+} from "../hooks/use-shift-queries";
 import { useShiftLiveBoardRealtime } from "../hooks/use-shift-live-board-realtime";
 import { ShiftStatusBadge } from "../components/shift-status-badge";
 import { dateUtils } from "@/lib/date-utils";
 import type {
   ShiftAssignmentListDto,
   ShiftLiveBoardItemDto,
+  ShiftLiveOperationsSnapshotDto,
+  ShiftLiveTopSellingItemDto,
 } from "../types/shift-management.types";
 
 // ── helpers ──
@@ -43,10 +58,26 @@ function fmt(iso: string | null | undefined, fallback = "—") {
 
 function fmtCurrency(value: number | null | undefined, fallback: string) {
   if (value == null) return fallback;
-  return new Intl.NumberFormat("vi-VN", {
-    style: "currency",
-    currency: "VND",
-    maximumFractionDigits: 0,
+  return formatCHF(value);
+}
+
+function fmtSignedCurrency(value: number) {
+  const sign = value > 0 ? "+" : value < 0 ? "-" : "";
+  return `${sign}${fmtCurrency(Math.abs(value), "0")}`;
+}
+
+function fmtSignedNumber(value: number, maximumFractionDigits = 0) {
+  return new Intl.NumberFormat("en-US", {
+    signDisplay: "exceptZero",
+    maximumFractionDigits,
+    minimumFractionDigits: maximumFractionDigits > 0 ? 1 : 0,
+  }).format(value);
+}
+
+function fmtPercent(value: number, maximumFractionDigits = 1) {
+  return new Intl.NumberFormat("en-US", {
+    maximumFractionDigits,
+    minimumFractionDigits: value % 1 === 0 ? 0 : Math.min(maximumFractionDigits, 1),
   }).format(value);
 }
 
@@ -216,6 +247,129 @@ function sortPriority(row: ShiftLiveBoardItemDto) {
   return 4;
 }
 
+function createEmptyLiveOperationsSnapshot(businessDate: string): ShiftLiveOperationsSnapshotDto {
+  return {
+    businessDate,
+    snapshotAt: new Date().toISOString(),
+    tables: {
+      occupiedTables: 0,
+      occupiedTablesDelta: 0,
+      totalTables: 0,
+      occupancyRate: 0,
+      occupancyRateDelta: 0,
+      waitingQueueCount: 0,
+      waitingQueueDelta: 0,
+      averageTurnoverMinutes: null,
+      averageTurnoverDeltaMinutes: null,
+    },
+    orders: {
+      pendingCount: 0,
+      cookingCount: 0,
+      readyCount: 0,
+      servedCount: 0,
+      activeCount: 0,
+      activeCountDelta: 0,
+      servedCountDelta: 0,
+    },
+    revenue: {
+      revenue: 0,
+      revenueDelta: 0,
+      revenueDeltaPercent: 0,
+      closedBills: 0,
+      closedBillsDelta: 0,
+      averageBill: 0,
+    },
+    topSelling: {
+      totalQuantity: 0,
+      totalQuantityDelta: 0,
+      items: [],
+    },
+  };
+}
+
+function getComparisonLabel(isTodaySelected: boolean, t: TranslateFn) {
+  return isTodaySelected
+    ? t("operations.shared.vsYesterdaySameTime")
+    : t("operations.shared.vsPreviousDay");
+}
+
+function getStockBadge(item: ShiftLiveTopSellingItemDto, t: TranslateFn) {
+  if (item.stockStatusCode === "OUT") {
+    return {
+      label: t("operations.topSelling.stockOut"),
+      className: "border-red-200 bg-red-50 text-red-700",
+    };
+  }
+
+  if (item.stockStatusCode === "UNKNOWN" || item.estimatedPortionsLeft == null) {
+    return {
+      label: t("operations.topSelling.stockUnknown"),
+      className: "border-slate-200 bg-slate-50 text-slate-700",
+    };
+  }
+
+  if (item.stockStatusCode === "LOW") {
+    return {
+      label: t("operations.topSelling.stockLeft", { count: item.estimatedPortionsLeft }),
+      className: "border-amber-200 bg-amber-50 text-amber-700",
+    };
+  }
+
+  return {
+    label: t("operations.topSelling.stockLeft", { count: item.estimatedPortionsLeft }),
+    className: "border-emerald-200 bg-emerald-50 text-emerald-700",
+  };
+}
+
+function DeltaBadge({
+  delta,
+  label,
+  className,
+}: {
+  delta: number;
+  label: string;
+  className?: string;
+}) {
+  const isPositive = delta > 0;
+  const isNegative = delta < 0;
+  const Icon = isPositive ? ArrowUpRight : isNegative ? ArrowDownRight : ArrowRight;
+
+  return (
+    <span
+      className={cn(
+        "inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[11px] font-medium",
+        isPositive && "border-emerald-200 bg-emerald-50 text-emerald-700",
+        isNegative && "border-red-200 bg-red-50 text-red-700",
+        !isPositive && !isNegative && "border-slate-200 bg-slate-50 text-slate-700",
+        className,
+      )}
+    >
+      <Icon className="h-3.5 w-3.5" />
+      <span>{label}</span>
+    </span>
+  );
+}
+
+function LiveSummaryCardSkeleton() {
+  return (
+    <ALCard
+      variant="default"
+      elevation="sm"
+      className="rounded-xl border border-[#D5BA98]/60 p-4 sm:p-5"
+    >
+      <div className="animate-pulse space-y-4">
+        <div className="h-4 w-36 rounded bg-[#D5BA98]/30" />
+        <div className="h-9 w-40 rounded bg-[#D5BA98]/20" />
+        <div className="grid gap-2 sm:grid-cols-2">
+          <div className="h-14 rounded-xl bg-[#D5BA98]/15" />
+          <div className="h-14 rounded-xl bg-[#D5BA98]/15" />
+        </div>
+        <div className="h-4 w-28 rounded bg-[#D5BA98]/20" />
+      </div>
+    </ALCard>
+  );
+}
+
 function ShiftLiveTable_DEPRECATED() {
   const [businessDate, setBusinessDate] = useState(todayIso);
 
@@ -375,10 +529,31 @@ export function ShiftLive() {
     [businessDate]
   );
 
-  const { data, isLoading, isFetching, refetch, dataUpdatedAt } = useShiftLiveBoardQuery(queryParams);
+  const liveOperationsParams = useMemo(
+    () => ({ businessDate }),
+    [businessDate],
+  );
+
+  const {
+    data,
+    isLoading,
+    isFetching,
+    refetch: refetchBoard,
+    dataUpdatedAt,
+  } = useShiftLiveBoardQuery(queryParams);
+  const {
+    data: liveOperationsData,
+    isLoading: isLiveOperationsLoading,
+    isFetching: isLiveOperationsFetching,
+    refetch: refetchLiveOperations,
+    dataUpdatedAt: liveOperationsUpdatedAt,
+  } = useShiftLiveOperationsQuery(liveOperationsParams);
   const { isRealtimeConnected } = useShiftLiveBoardRealtime(businessDate);
 
   const rows = useMemo(() => data ?? [], [data]);
+  const liveOperations = liveOperationsData ?? createEmptyLiveOperationsSnapshot(businessDate);
+  const isTodaySelected = businessDate === todayIso();
+  const comparisonLabel = getComparisonLabel(isTodaySelected, t);
 
   const sortedRows = useMemo(
     () =>
@@ -447,8 +622,9 @@ export function ShiftLive() {
     { key: "COMPLETED", label: t("filters.completed") },
   ];
 
-  const lastUpdated = dataUpdatedAt
-    ? dateUtils.formatLocal(new Date(dataUpdatedAt), "HH:mm:ss")
+  const mergedUpdatedAt = Math.max(dataUpdatedAt || 0, liveOperationsUpdatedAt || 0);
+  const lastUpdated = mergedUpdatedAt
+    ? dateUtils.formatLocal(new Date(mergedUpdatedAt), "HH:mm:ss")
     : null;
 
   return (
@@ -498,32 +674,324 @@ export function ShiftLive() {
           <Button
             variant="outline"
             size="sm"
-            onClick={() => refetch()}
-            disabled={isLoading || isFetching}
+            onClick={() => {
+              void Promise.allSettled([refetchBoard(), refetchLiveOperations()]);
+            }}
+            disabled={isLoading || isFetching || isLiveOperationsLoading || isLiveOperationsFetching}
             className="border-[#D5BA98]/70 bg-white text-[#1A3A52] hover:bg-[#D5BA98]/15"
           >
-            <RefreshCcw className={cn("h-4 w-4", isFetching && "animate-spin")} />
+            <RefreshCcw className={cn("h-4 w-4", (isFetching || isLiveOperationsFetching) && "animate-spin")} />
           </Button>
         </div>
       </ALCard>
 
-      <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_420px]">
+      {isLiveOperationsLoading && !liveOperationsData ? (
+        <div className="grid items-start gap-3 xl:grid-cols-2 2xl:grid-cols-4">
+          {Array.from({ length: 4 }).map((_, index) => (
+            <LiveSummaryCardSkeleton key={index} />
+          ))}
+        </div>
+      ) : (
+        <div className="grid items-start gap-3 xl:grid-cols-2 2xl:grid-cols-4">
+          <ALCard
+            as="article"
+            variant="default"
+            elevation="sm"
+            animation="fade"
+            className="rounded-xl border border-[#D5BA98]/60 p-4 text-left"
+          >
+            <div className="space-y-3">
+              <div className="flex items-start justify-between gap-3">
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2 text-[#1A3A52]">
+                    <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-[#D5BA98]/50 bg-[#D5BA98]/12 text-[#1A3A52]">
+                      <TableProperties className="h-5 w-5" />
+                    </span>
+                    <div>
+                      <p className="text-sm font-semibold leading-snug text-[#1A3A52]">{t("operations.tables.title")}</p>
+                      <p className="text-xs text-[#1A3A52]/60">{t("operations.tables.subtitle")}</p>
+                    </div>
+                  </div>
+                </div>
+                <DeltaBadge
+                  delta={liveOperations.tables.occupiedTablesDelta}
+                  label={`${fmtSignedNumber(liveOperations.tables.occupiedTablesDelta)} ${comparisonLabel}`}
+                />
+              </div>
+
+              <div>
+                <p className="text-[2rem] font-semibold leading-tight text-[#1A3A52]">
+                  {t("operations.tables.occupied", {
+                    occupied: liveOperations.tables.occupiedTables,
+                    total: liveOperations.tables.totalTables,
+                  })}
+                </p>
+                <p className="mt-1 text-sm text-[#1A3A52]/65">
+                  {t("operations.tables.occupancyRate", {
+                    rate: fmtPercent(liveOperations.tables.occupancyRate),
+                  })}
+                </p>
+              </div>
+
+              <div className="grid gap-3 sm:grid-cols-2">
+                <div className="rounded-xl border border-slate-200 bg-[#FDFBF9] p-2.5">
+                  <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-[#1A3A52]/55">
+                    {t("operations.tables.turnover")}
+                  </p>
+                  <p className="mt-2 text-sm font-medium text-[#1A3A52]">
+                    {liveOperations.tables.averageTurnoverMinutes != null
+                      ? t("operations.tables.turnoverValue", {
+                          minutes: liveOperations.tables.averageTurnoverMinutes,
+                        })
+                      : t("operations.tables.noTurnover")}
+                  </p>
+                </div>
+                <div className="rounded-xl border border-slate-200 bg-[#FDFBF9] p-2.5">
+                  <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-[#1A3A52]/55">
+                    {t("operations.tables.queue")}
+                  </p>
+                  <p className="mt-2 text-sm font-medium text-[#1A3A52]">
+                    {t("operations.tables.queueValue", {
+                      count: liveOperations.tables.waitingQueueCount,
+                    })}
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between gap-3 pt-1 text-sm text-[#1A3A52]/70">
+                <span>
+                  {fmtSignedNumber(liveOperations.tables.occupancyRateDelta, 1)}pp • {fmtSignedNumber(liveOperations.tables.waitingQueueDelta)}
+                </span>
+                <Link
+                  href="/dashboard/tables"
+                  className="inline-flex shrink-0 items-center gap-1 font-medium text-[#1A3A52] underline-offset-4 transition hover:underline"
+                >
+                  {t("operations.shared.openDetail")}
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </div>
+            </div>
+          </ALCard>
+
+          <ALCard
+            as="article"
+            variant="default"
+            elevation="sm"
+            animation="fade"
+            className="rounded-xl border border-amber-200 p-4 text-left"
+          >
+            <div className="space-y-3">
+              <div className="flex items-start justify-between gap-3">
+                <div className="flex items-center gap-2 text-[#1A3A52]">
+                  <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-amber-200 bg-amber-50 text-amber-700">
+                    <ChefHat className="h-5 w-5" />
+                  </span>
+                  <div>
+                    <p className="text-sm font-semibold leading-snug text-[#1A3A52]">{t("operations.orders.title")}</p>
+                    <p className="text-xs text-[#1A3A52]/60">{t("operations.orders.subtitle")}</p>
+                  </div>
+                </div>
+                <DeltaBadge
+                  delta={liveOperations.orders.activeCountDelta}
+                  label={`${fmtSignedNumber(liveOperations.orders.activeCountDelta)} ${comparisonLabel}`}
+                  className="border-amber-200 bg-amber-50 text-amber-700"
+                />
+              </div>
+
+              <div>
+                <p className="text-[2rem] font-semibold leading-tight text-[#1A3A52]">
+                  {t("operations.orders.liveTickets", { count: liveOperations.orders.activeCount })}
+                </p>
+              </div>
+
+              <div className="grid grid-cols-4 gap-2">
+                {[
+                  { key: "pending", value: liveOperations.orders.pendingCount },
+                  { key: "cooking", value: liveOperations.orders.cookingCount },
+                  { key: "ready", value: liveOperations.orders.readyCount },
+                  { key: "served", value: liveOperations.orders.servedCount },
+                ].map((stage) => (
+                  <div key={stage.key} className="rounded-xl border border-slate-200 bg-[#FDFBF9] px-2.5 py-2.5 text-center">
+                    <p className="text-[11px] font-medium uppercase tracking-[0.14em] text-[#1A3A52]/55">
+                      {t(`operations.orders.${stage.key}`)}
+                    </p>
+                    <p className="mt-2 text-lg font-semibold text-[#1A3A52]">{stage.value}</p>
+                  </div>
+                ))}
+              </div>
+
+              <div className="flex items-center justify-between gap-3 pt-1 text-sm text-[#1A3A52]/70">
+                <span>
+                  {fmtSignedNumber(liveOperations.orders.servedCountDelta)} {t("operations.orders.servedDelta")}
+                </span>
+                <Link
+                  href="/dashboard/kitchen"
+                  className="inline-flex shrink-0 items-center gap-1 font-medium text-[#1A3A52] underline-offset-4 transition hover:underline"
+                >
+                  {t("operations.shared.openDetail")}
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </div>
+            </div>
+          </ALCard>
+
+          <ALCard
+            as="article"
+            variant="default"
+            elevation="sm"
+            animation="fade"
+            className="rounded-xl border border-emerald-200 p-4 text-left"
+          >
+            <div className="space-y-3">
+              <div className="flex items-start justify-between gap-3">
+                <div className="flex items-center gap-2 text-[#1A3A52]">
+                  <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-emerald-200 bg-emerald-50 text-emerald-700">
+                    <CircleDollarSign className="h-5 w-5" />
+                  </span>
+                  <div>
+                    <p className="text-sm font-semibold leading-snug text-[#1A3A52]">{t("operations.revenue.title")}</p>
+                    <p className="text-xs text-[#1A3A52]/60">{t("operations.revenue.subtitle")}</p>
+                  </div>
+                </div>
+                <DeltaBadge
+                  delta={liveOperations.revenue.revenueDelta}
+                  label={`${fmtSignedCurrency(liveOperations.revenue.revenueDelta)} ${comparisonLabel}`}
+                />
+              </div>
+
+              <div>
+                <p className="text-[2rem] font-semibold leading-tight text-[#1A3A52]">
+                  {fmtCurrency(liveOperations.revenue.revenue, "0")}
+                </p>
+                <p className="mt-1 text-sm text-[#1A3A52]/65">
+                  {fmtSignedNumber(liveOperations.revenue.revenueDeltaPercent, 1)}% • {t("operations.revenue.deltaPercent")}
+                </p>
+              </div>
+
+              <div className="grid gap-3 sm:grid-cols-2">
+                <div className="rounded-xl border border-slate-200 bg-[#FDFBF9] p-2.5">
+                  <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-[#1A3A52]/55">
+                    {t("operations.revenue.closedBills")}
+                  </p>
+                  <p className="mt-2 text-sm font-medium text-[#1A3A52]">{liveOperations.revenue.closedBills}</p>
+                </div>
+                <div className="rounded-xl border border-slate-200 bg-[#FDFBF9] p-2.5">
+                  <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-[#1A3A52]/55">
+                    {t("operations.revenue.averageBill")}
+                  </p>
+                  <p className="mt-2 text-sm font-medium text-[#1A3A52]">
+                    {fmtCurrency(liveOperations.revenue.averageBill, "0")}
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between gap-3 pt-1 text-sm text-[#1A3A52]/70">
+                <span>
+                  {fmtSignedNumber(liveOperations.revenue.closedBillsDelta)} {t("operations.revenue.billsDelta")}
+                </span>
+                <Link
+                  href="/dashboard/payments"
+                  className="inline-flex shrink-0 items-center gap-1 font-medium text-[#1A3A52] underline-offset-4 transition hover:underline"
+                >
+                  {t("operations.shared.openDetail")}
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </div>
+            </div>
+          </ALCard>
+
+          <ALCard
+            as="article"
+            variant="default"
+            elevation="sm"
+            animation="fade"
+            className="rounded-xl border border-orange-200 p-4 text-left"
+          >
+            <div className="space-y-3">
+              <div className="flex items-start justify-between gap-3">
+                <div className="flex items-center gap-2 text-[#1A3A52]">
+                  <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-orange-200 bg-orange-50 text-orange-700">
+                    <Flame className="h-5 w-5" />
+                  </span>
+                  <div>
+                    <p className="text-sm font-semibold leading-snug text-[#1A3A52]">{t("operations.topSelling.title")}</p>
+                    <p className="text-xs text-[#1A3A52]/60">{t("operations.topSelling.subtitle")}</p>
+                  </div>
+                </div>
+                <DeltaBadge
+                  delta={liveOperations.topSelling.totalQuantityDelta}
+                  label={`${fmtSignedNumber(liveOperations.topSelling.totalQuantityDelta)} ${comparisonLabel}`}
+                />
+              </div>
+
+              {liveOperations.topSelling.items.length === 0 ? (
+                <div className="flex flex-1 items-center justify-center rounded-xl border border-dashed border-[#D5BA98]/60 bg-[#FDFBF9] px-4 py-6 text-sm text-[#1A3A52]/65">
+                  {t("operations.topSelling.empty")}
+                </div>
+              ) : (
+                <div className="space-y-2">
+                  {liveOperations.topSelling.items.map((item, index) => {
+                    const stockBadge = getStockBadge(item, t);
+                    return (
+                      <div
+                        key={item.dishId}
+                        className="flex items-center justify-between gap-3 rounded-xl border border-slate-200 bg-[#FDFBF9] px-3 py-2.5"
+                      >
+                        <div className="min-w-0">
+                          <p className="truncate text-sm font-medium text-[#1A3A52]">
+                            {index + 1}. {item.dishName}
+                          </p>
+                          <p className="mt-1 text-xs text-[#1A3A52]/60">
+                            {t("operations.topSelling.sold", { count: item.quantitySold })}
+                            <span className="ml-2">{fmtSignedNumber(item.quantityDelta)}</span>
+                          </p>
+                        </div>
+                        <span
+                          className={cn(
+                            "shrink-0 rounded-full border px-2.5 py-1 text-[11px] font-medium",
+                            stockBadge.className,
+                          )}
+                        >
+                          {stockBadge.label}
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+
+              <div className="flex items-center justify-between gap-3 pt-1 text-sm text-[#1A3A52]/70">
+                <span>{t("operations.topSelling.totalSold", { count: liveOperations.topSelling.totalQuantity })}</span>
+                <Link
+                  href="/dashboard/reports/sales"
+                  className="inline-flex shrink-0 items-center gap-1 font-medium text-[#1A3A52] underline-offset-4 transition hover:underline"
+                >
+                  {t("operations.shared.openDetail")}
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </div>
+            </div>
+          </ALCard>
+        </div>
+      )}
+
+      <div className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_340px]">
         <ALCard
           variant="default"
           elevation="sm"
-          className="rounded-xl border border-[#D5BA98]/60 p-4 sm:p-5"
+          className="rounded-xl border border-[#D5BA98]/60 p-3 sm:p-4"
         >
-          <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-2">
+          <div className="grid gap-2.5 sm:grid-cols-2 xl:grid-cols-4">
             {summaryCards.map((card) => (
               <div
                 key={card.key}
                 className={cn(
-                  "rounded-lg border px-4 py-3 shadow-sm transition-transform hover:-translate-y-0.5",
+                  "rounded-lg border px-3 py-2.5 shadow-sm",
                   card.className
                 )}
               >
                 <p className="text-xs font-medium uppercase tracking-[0.2em]">{card.label}</p>
-                <p className="mt-1 text-xl font-semibold">{card.value}</p>
+                <p className="mt-1 text-lg font-semibold">{card.value}</p>
               </div>
             ))}
           </div>
@@ -532,9 +1000,9 @@ export function ShiftLive() {
         <ALCard
           variant="default"
           elevation="sm"
-          className="rounded-xl border border-[#D5BA98]/60 p-4"
+          className="rounded-xl border border-[#D5BA98]/60 p-3 sm:p-4"
         >
-          <div className="space-y-3">
+          <div className="space-y-2.5">
             <div>
               <p className="text-xs font-medium uppercase tracking-[0.2em] text-[#1A3A52]/60">{t("businessDate")}</p>
               <div className="mt-2">

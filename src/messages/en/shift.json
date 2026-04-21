@@ -280,6 +280,52 @@
         "pending": "{count} issues pending",
         "none": "No issues recorded"
       },
+      "operations": {
+        "shared": {
+          "vsYesterdaySameTime": "vs yesterday same time",
+          "vsPreviousDay": "vs previous day",
+          "openDetail": "Open detail"
+        },
+        "tables": {
+          "title": "Active Tables & Occupancy",
+          "subtitle": "Floor map pulse",
+          "occupied": "{occupied}/{total} occupied",
+          "occupancyRate": "{rate}% occupancy",
+          "turnover": "Avg turnover",
+          "turnoverValue": "{minutes} min",
+          "noTurnover": "No turnover yet",
+          "queue": "Waiting queue",
+          "queueValue": "{count} queued"
+        },
+        "orders": {
+          "title": "Live Orders Pipeline",
+          "subtitle": "Kitchen workload",
+          "liveTickets": "{count} live tickets",
+          "pending": "Pending",
+          "cooking": "Cooking",
+          "ready": "Ready",
+          "served": "Served",
+          "servedDelta": "served vs comparison window"
+        },
+        "revenue": {
+          "title": "Today's Revenue",
+          "subtitle": "Closed bills and transactions",
+          "closedBills": "Closed bills",
+          "averageBill": "Average bill",
+          "deltaPercent": "change vs comparison",
+          "billsDelta": "bills vs comparison"
+        },
+        "topSelling": {
+          "title": "Top-Selling Items",
+          "subtitle": "Best movers today",
+          "empty": "No completed sales yet",
+          "sold": "{count} sold",
+          "totalSold": "Top 5 sold {count}",
+          "stockLeft": "{count} left",
+          "stockOut": "Out",
+          "stockUnknown": "Stock syncing"
+        }
+      },
       "manualAdjusted": "This record was manually adjusted.",
       "actions": {
         "checkIn": "Check In",

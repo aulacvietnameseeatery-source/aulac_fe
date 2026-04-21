@@ -30,6 +30,7 @@ export function useShiftLiveBoardRealtime(workDate?: string) {
 
       debounceRef.current = setTimeout(() => {
         queryClient.invalidateQueries({ queryKey: ["shifts", "live-board"] });
+        queryClient.invalidateQueries({ queryKey: ["shifts", "live-operations"] });
       }, 350);
     };
 

@@ -2,7 +2,8 @@
 
 import React, { useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { Plus, BadgePercent } from 'lucide-react';
+import { Plus } from 'lucide-react';
+import { ALTitleCard } from '@/components/ui/al-title-card';
 import { Button } from '@/components/ui/button';
 import { ProtectedRoute } from '@/components/protected-route';
 import { Permissions } from '@/types/const';
@@ -15,26 +16,20 @@ export default function TaxManagementPage() {
     return (
         <ProtectedRoute permission={Permissions.ViewSystemSettings}>
             <div className="w-full h-full flex flex-col">
-                {/* Header Section */}
-                <div className="flex justify-between items-center w-full pb-4">
-                    <div>
-                        <h1 className="text-3xl font-bold text-gray-900 tracking-tight">
-                            {t('title')}
-                        </h1>
-                        <p className="text-sm text-gray-500 mt-1">
-                            {t('description')}
-                        </p>
-                    </div>
-
-                    <Button
-                        onClick={() => setIsAddTaxOpen(true)}
-                        variant="outline"
-                        className="shadow-md"
-                    >
-                        <Plus className="mr-2 h-4 w-4" />
-                        {t('addTax')}
-                    </Button>
-                </div>
+                <ALTitleCard
+                    title={t('title')}
+                    description={t('description')}
+                    className="mb-4"
+                    actions={
+                        <Button
+                            onClick={() => setIsAddTaxOpen(true)}
+                            className="w-full gap-2 sm:w-auto bg-[#1A3A52] text-[#FDFBF9] hover:bg-[#1A3A52]/90"
+                        >
+                            <Plus className="h-4 w-4" />
+                            {t('addTax')}
+                        </Button>
+                    }
+                />
 
                 {/* Content Section */}
                 <main className="flex-1 overflow-y-auto custom-scrollbar">

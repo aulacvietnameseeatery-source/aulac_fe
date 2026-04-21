@@ -24,13 +24,16 @@ import type {
   TeamScheduleParams,
   GetTemplatesParams,
   GetAssignmentsParams,
+  GetLiveOperationsParams,
   GetMyShiftsParams,
   GetAttendanceReportParams,
   GetWorkedHoursReportParams,
   GetExceptionsReportParams,
+  ShiftLiveOperationsSnapshotDto,
 } from "../types/shift-management.types";
 
 const BASE = "/api/shifts";
+const DASHBOARD_BASE = "/api/dashboard";
 
 function toQuery(params: Record<string, string | number | boolean | undefined | null>): string {
   const q = new URLSearchParams();
@@ -105,6 +108,54 @@ export const shiftManagementService = {
     });
     const res = await api.get<ApiResponse<ShiftLiveBoardItemDto[]>>(`${BASE}/live-board${query}`);
     return res.data ?? [];
+  },
+
+  async getLiveOperationsSnapshot(
+    params: GetLiveOperationsParams = {},
+  ): Promise<ShiftLiveOperationsSnapshotDto> {
+    const query = toQuery({
+      businessDate: params.businessDate,
+    });
+    const res = await api.get<ApiResponse<ShiftLiveOperationsSnapshotDto>>(
+      `${DASHBOARD_BASE}/live-operations${query}`,
+    );
+    return res.data ?? {
+      businessDate: params.businessDate ?? new Date().toISOString().slice(0, 10),
+      snapshotAt: new Date().toISOString(),
+      tables: {
+        occupiedTables: 0,
+        occupiedTablesDelta: 0,
+        totalTables: 0,
+        occupancyRate: 0,
+        occupancyRateDelta: 0,
+        waitingQueueCount: 0,
+        waitingQueueDelta: 0,
+        averageTurnoverMinutes: null,
+        averageTurnoverDeltaMinutes: null,
+      },
+      orders: {
+        pendingCount: 0,
+        cookingCount: 0,
+        readyCount: 0,
+        servedCount: 0,
+        activeCount: 0,
+        activeCountDelta: 0,
+        servedCountDelta: 0,
+      },
+      revenue: {
+        revenue: 0,
+        revenueDelta: 0,
+        revenueDeltaPercent: 0,
+        closedBills: 0,
+        closedBillsDelta: 0,
+        averageBill: 0,
+      },
+      topSelling: {
+        totalQuantity: 0,
+        totalQuantityDelta: 0,
+        items: [],
+      },
+    };
   },
 
   async createAssignment(body: CreateShiftAssignmentRequest): Promise<ShiftAssignmentDetailDto> {

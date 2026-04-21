@@ -50,9 +50,6 @@ export default function PublicBookingModal({ isOpen, onClose }: PublicBookingMod
 	return (
 		<div
 			className="fixed inset-0 z-[200] bg-black/55 backdrop-blur-sm flex items-start lg:items-center justify-center p-3 sm:p-4 pt-20 sm:pt-24 lg:pt-6"
-			onClick={(e) => {
-				if (e.target === e.currentTarget) handleCloseAll();
-			}}
 		>
 			<div className="relative w-full max-w-md sm:max-w-xl lg:max-w-2xl max-h-[calc(100dvh-5.5rem)] sm:max-h-[calc(100dvh-7rem)] lg:max-h-[92vh] overflow-auto no-scrollbar">
 				{ticketData ? (

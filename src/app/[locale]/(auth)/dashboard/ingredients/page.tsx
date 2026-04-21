@@ -6,6 +6,7 @@ import { useRouter } from "@/routing"
 import { toast } from "sonner";
 import { useTranslations } from "next-intl";
 
+import { ALTitleCard } from "@/components/ui/al-title-card";
 import { BaseTable } from "@/components/ui/table/base-table";
 import { TableColumn } from "@/types/table.types";
 import { Button } from "@/components/ui/button";
@@ -202,7 +203,7 @@ const IngredientListContent = () => {
             filterType: "text" as const,
             cellRender: ({ item }: { item: IngredientDto }) => (
                 <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-md bg-gray-100 flex-shrink-0 overflow-hidden border border-gray-200">
+                    <div className="w-8 h-8 rounded-md bg-gray-100 shrink-0 overflow-hidden border border-gray-200">
                         {item.imageUrl ? (
                             <img src={item.imageUrl} alt={item.ingredientName} className="w-full h-full object-cover" />
                         ) : (
@@ -286,57 +287,55 @@ const IngredientListContent = () => {
                 defaultRowsPerPage={10}
                 rowsPerPageOptions={[10, 20, 50]}
                 renderTitle={() => (
-                    <div className="flex flex-col xl:flex-row justify-between items-start xl:items-center w-full gap-4">
-                        <div>
-                            <h1 className="text-2xl md:text-3xl font-bold text-gray-900 tracking-tight">
-                                {t("title")}
-                            </h1>
-                            <p className="text-sm text-gray-500 mt-1">{t("description")}</p>
-                        </div>
+                    <ALTitleCard
+                        title={t("title")}
+                        description={t("description")}
+                        actions={
+                            <>
+                                <Button variant="outline" onClick={handleDownloadTemplate}>
+                                    <Download className="mr-2 h-4 w-4" /> Mẫu Import
+                                </Button>
 
-                        <div className="flex flex-wrap items-center gap-2 w-full xl:w-auto">
+                                <input
+                                    type="file"
+                                    ref={fileInputRef}
+                                    className="hidden"
+                                    accept=".xlsx, .xls"
+                                    onChange={handleFileChange}
+                                />
+                                <Button
+                                    variant="outline"
+                                    className="flex-1 md:flex-none shadow-sm bg-white whitespace-nowrap"
+                                    onClick={() => fileInputRef.current?.click()}
+                                    disabled={isImporting}
+                                >
+                                    {isImporting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Upload className="mr-2 h-4 w-4" />}
+                                    {isImporting ? t("importing") : t("import")}
+                                </Button>
 
-                            <Button variant="outline"  onClick={handleDownloadTemplate}>
-                                <Download className="mr-2 h-4 w-4" /> Mẫu Import
-                            </Button>
+                                <Button variant="outline" className="flex-1 md:flex-none shadow-sm bg-white whitespace-nowrap" onClick={handleExport}>
+                                    <Download className="mr-2 h-4 w-4" /> {t("export")}
+                                </Button>
 
-                            <input
-                                type="file"
-                                ref={fileInputRef}
-                                className="hidden"
-                                accept=".xlsx, .xls"
-                                onChange={handleFileChange}
-                            />
-                            <Button
-                                variant="outline"
-                                className="flex-1 md:flex-none shadow-sm bg-white whitespace-nowrap"
-                                onClick={() => fileInputRef.current?.click()}
-                                disabled={isImporting}
-                            >
-                                {isImporting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Upload className="mr-2 h-4 w-4" />}
-                                {isImporting ? t("importing") : t("import")}
-                            </Button>
+                                <Button
+                                    variant="outline"
+                                    className="flex-1 md:flex-none shadow-sm bg-white whitespace-nowrap border-emerald-200 text-emerald-700 hover:bg-emerald-50 hover:text-emerald-800"
+                                    onClick={handleExportAll}
+                                    disabled={isExportingAll}
+                                >
+                                    {isExportingAll ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Download className="mr-2 h-4 w-4" />}
+                                    Export All
+                                </Button>
 
-                            <Button variant="outline" className="flex-1 md:flex-none shadow-sm bg-white whitespace-nowrap" onClick={handleExport}>
-                                <Download className="mr-2 h-4 w-4" /> {t("export")}
-                            </Button>
-
-                            <Button
-                                variant="outline"
-                                className="flex-1 md:flex-none shadow-sm bg-white whitespace-nowrap border-emerald-200 text-emerald-700 hover:bg-emerald-50 hover:text-emerald-800"
-                                onClick={handleExportAll}
-                                disabled={isExportingAll}
-                            >
-                                {isExportingAll ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Download className="mr-2 h-4 w-4" />}
-                                Export All
-                            </Button>
-
-                            <Button
-                                onClick={handleCreate} className="flex-1 md:flex-none shadow-md whitespace-nowrap bg-gray-900 text-white hover:bg-gray-800">
-                                <Plus className="mr-2 h-4 w-4" /> {t("addNew")}
-                            </Button>
-                        </div>
-                    </div>
+                                <Button
+                                    onClick={handleCreate}
+                                    className="flex-1 md:flex-none shadow-md whitespace-nowrap bg-[#1A3A52] text-[#FDFBF9] hover:bg-[#1A3A52]/90"
+                                >
+                                    <Plus className="mr-2 h-4 w-4" /> {t("addNew")}
+                                </Button>
+                            </>
+                        }
+                    />
                 )}
                 renderCell={handleGlobalRenderCell}
                 renderActionColumn={(item) => (

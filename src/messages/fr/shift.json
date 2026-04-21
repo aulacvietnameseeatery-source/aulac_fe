@@ -280,6 +280,52 @@
         "pending": "{count} incident(s) en attente",
         "none": "Aucun incident enregistré"
       },
+      "operations": {
+        "shared": {
+          "vsYesterdaySameTime": "vs hier à la même heure",
+          "vsPreviousDay": "vs la veille",
+          "openDetail": "Ouvrir le détail"
+        },
+        "tables": {
+          "title": "Tables Actives & Occupation",
+          "subtitle": "Pouls du plan de salle",
+          "occupied": "{occupied}/{total} occupées",
+          "occupancyRate": "Occupation {rate}%",
+          "turnover": "Rotation moyenne",
+          "turnoverValue": "{minutes} min",
+          "noTurnover": "Aucune rotation pour l'instant",
+          "queue": "File d'attente",
+          "queueValue": "{count} en attente"
+        },
+        "orders": {
+          "title": "Pipeline des Commandes en Direct",
+          "subtitle": "Charge de la cuisine",
+          "liveTickets": "{count} tickets actifs",
+          "pending": "En attente",
+          "cooking": "En cuisson",
+          "ready": "Prêt",
+          "served": "Servi",
+          "servedDelta": "servis vs fenêtre de comparaison"
+        },
+        "revenue": {
+          "title": "Revenu du Jour",
+          "subtitle": "Tickets clôturés et paiements",
+          "closedBills": "Tickets clôturés",
+          "averageBill": "Ticket moyen",
+          "deltaPercent": "variation vs comparaison",
+          "billsDelta": "tickets vs comparaison"
+        },
+        "topSelling": {
+          "title": "Meilleures Ventes du Jour",
+          "subtitle": "Articles les plus vendus aujourd'hui",
+          "empty": "Aucune vente finalisée pour l'instant",
+          "sold": "{count} vendus",
+          "totalSold": "Top 5 vend {count}",
+          "stockLeft": "{count} restants",
+          "stockOut": "Rupture",
+          "stockUnknown": "Stock en synchronisation"
+        }
+      },
       "manualAdjusted": "Cet enregistrement a été ajusté manuellement.",
       "actions": {
         "checkIn": "Pointer entrée",

@@ -15,6 +15,7 @@ import { useTranslations } from "next-intl";
 import { useMyShiftsQuery } from "../hooks/use-shift-queries";
 import { CheckInCard } from "../components/check-in-card";
 import { useCheckoutAutoLogout } from "../hooks/use-checkout-auto-logout";
+import { ALTitleCard } from "@/components/ui/al-title-card";
 import { Button } from "@/components/ui/button";
 import type {
   ShiftAssignmentListDto,
@@ -332,12 +333,13 @@ export function MyShifts() {
   return (
     <div className="flex h-full min-h-0 w-full flex-col gap-4 overflow-hidden">
       {/* ── Header ── */}
-      <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-slate-200 bg-white px-5 py-3">
-        <h1 className="text-lg font-semibold text-slate-900">
-          {t("title")}
-        </h1>
-
-        <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+      <ALTitleCard
+        title={t("title")}
+        titleClassName="text-lg font-semibold tracking-normal text-slate-900"
+        className="border-slate-200 bg-white"
+        bodyClassName="gap-3"
+      >
+        <div className="flex flex-wrap items-center justify-between gap-3">
           {/* View mode toggle */}
           <div className="flex rounded-md border border-slate-200 overflow-hidden text-sm">
             <button
@@ -367,10 +369,10 @@ export function MyShifts() {
           </div>
 
           {/* Help icon */}
-          <button type="button" className="hidden sm:flex items-center gap-1.5 rounded-md border border-slate-200 bg-white px-2.5 py-1.5 text-sm text-slate-500 hover:bg-slate-50">
+          <Button type="button" variant="outline" size="sm" className="hidden gap-1.5 text-slate-500 hover:bg-slate-50 sm:flex">
             <HelpCircle className="h-4 w-4" />
             Question
-          </button>
+          </Button>
 
           {/* Year navigation */}
           <div className="flex items-center gap-1 border border-slate-200 rounded-md bg-white">
@@ -411,11 +413,11 @@ export function MyShifts() {
           </div>
 
           {/* Settings gear */}
-          <button type="button" className="p-2 text-slate-400 hover:text-slate-700">
+          <Button type="button" variant="outline" size="icon" className="text-slate-400 hover:text-slate-700">
             <Settings className="h-4 w-4" />
-          </button>
+          </Button>
         </div>
-      </div>
+      </ALTitleCard>
 
       {/* ── Side-by-side layout: Calendar (left) + Attendance (right) ── */}
       <div className="grid min-h-0 flex-1 grid-cols-1 gap-4 xl:grid-cols-[1fr_380px]">

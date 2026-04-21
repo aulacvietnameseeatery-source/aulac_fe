@@ -3,6 +3,7 @@
 import React, { Suspense, useState } from "react";
 import { Loader2, RefreshCcw, Search, Armchair, Calendar as CalendarIcon, CirclePlus, ArrowUpDown, Filter, User, X } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { ALTitleCard } from "@/components/ui/al-title-card";
 import { Button } from "@/components/ui/button";
 import { useReservationList } from "@/features/staff/reservation-management/hooks/use-reservation-list";
 import { ReservationCard } from "@/features/staff/reservation-management/components/reservation-card";
@@ -102,143 +103,144 @@ const ReservationListContent = () => {
 
             {/* --- HEADER CHÍNH CỦA TRANG --- */}
             <div className="shrink-0 flex flex-col gap-4 md:gap-6 mb-4 md:mb-6 sticky top-0 z-20 bg-[#FDFBF9]/95 backdrop-blur-md border-b border-[#D5BA98]/30 pb-4 md:border-b-0 md:bg-transparent md:backdrop-blur-none md:pb-0">
-
-                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-                    <div className="flex items-center gap-3">
-                        <h3 className="text-2xl font-bold text-[#1A3A52] m-0">{t("title")}</h3>
-                        <button
-                            onClick={actions.refresh}
-                            className="p-2 bg-[#FDFBF9] border border-[#D5BA98]/60 rounded-full text-[#1A3A52]/70 hover:bg-[#D5BA98]/10 hover:text-[#1A3A52] transition-colors shadow-none"
-                            title={t("refresh")}
-                        >
-                            <RefreshCcw className="w-4 h-4" />
-                        </button>
-                    </div>
-
-                    <div className="flex items-center gap-2 w-full sm:w-auto">
-                        {/* 1. NÚT SORT (SẮP XẾP) */}
-                        <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <Button variant="outline" className="h-10 w-full sm:w-auto rounded-xl border-[#D5BA98]/60 text-[#1A3A52] font-semibold bg-[#FDFBF9] hover:bg-[#D5BA98]/10 transition-colors shadow-sm">
-                                    <ArrowUpDown className="mr-2 h-4 w-4 text-[#1A3A52]/70" />
-                                    {filters.sortBy === 'createdAt' ? "Sort: By Created Date" : "Sort: By Reservation Time"}
-                                </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end" className="w-56 rounded-xl border-[#D5BA98]/40 shadow-lg">
-                                <DropdownMenuLabel className="text-[#1A3A52]/60 text-xs font-bold uppercase tracking-wider">Order By</DropdownMenuLabel>
-                                <DropdownMenuSeparator className="bg-[#D5BA98]/20" />
-                                <DropdownMenuRadioGroup value={filters.sortBy} onValueChange={actions.onSortChange}>
-                                    <DropdownMenuRadioItem value="createdAt" className="cursor-pointer text-[#1A3A52] font-medium">Created Date (Newest)</DropdownMenuRadioItem>
-                                    <DropdownMenuRadioItem value="reservedDate" className="cursor-pointer text-[#1A3A52] font-medium">Reservation Time (Nearest)</DropdownMenuRadioItem>
-                                </DropdownMenuRadioGroup>
-                            </DropdownMenuContent>
-                        </DropdownMenu>
-
-                        {/* 2. NÚT FILTER (LỌC) */}
-                        <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <Button variant="outline" className={`h-10 w-full sm:w-auto rounded-xl font-semibold relative transition-colors shadow-sm ${activeFilterCount > 0 ? 'bg-[#1A3A52] border-[#1A3A52] text-white hover:bg-[#1A3A52]/90' : 'bg-[#FDFBF9] border-[#D5BA98]/60 text-[#1A3A52] hover:bg-[#D5BA98]/10'}`}>
-                                    <Filter className={`mr-2 h-4 w-4 ${activeFilterCount > 0 ? 'text-white' : 'text-[#1A3A52]/70'}`} />
-                                    Filter
-                                    {activeFilterCount > 0 && (
-                                        <span className="absolute -top-1.5 -right-1.5 flex h-5 w-5 items-center justify-center rounded-full bg-rose-500 text-[10px] font-bold text-white shadow-sm ring-2 ring-white">
-                                            {activeFilterCount}
-                                        </span>
-                                    )}
-                                </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end" className="w-64 p-3 rounded-xl border-[#D5BA98]/40 shadow-lg">
-
-                                {/* Lọc: Người tạo */}
-                                <div className="mb-4">
-                                    <h4 className="text-[11px] font-bold text-[#1A3A52]/50 uppercase tracking-wider mb-2 flex items-center px-2">
-                                        <User className="w-3.5 h-3.5 mr-1.5" /> Created By
-                                    </h4>
-                                    <div className="space-y-1">
-                                        <button onClick={() => actions.onCreatorFilterChange(null)} className={`w-full text-left px-3 py-2 text-sm rounded-lg transition-colors ${!filters.creatorId ? 'bg-[#D5BA98]/15 font-bold text-[#1A3A52]' : 'text-[#1A3A52]/70 hover:bg-[#D5BA98]/10 font-medium'}`}>
-                                            All Creators
-                                        </button>
-                                        {mockUsers.map(user => (
-                                            <button key={user.id} onClick={() => actions.onCreatorFilterChange(user.id)} className={`w-full text-left px-3 py-2 text-sm rounded-lg transition-colors ${filters.creatorId === user.id ? 'bg-[#1A3A52] text-white font-bold' : 'text-[#1A3A52]/70 hover:bg-[#D5BA98]/10 font-medium'}`}>
-                                                {user.name}
-                                            </button>
-                                        ))}
-                                    </div>
-                                </div>
-
-                                <DropdownMenuSeparator className="bg-[#D5BA98]/20 my-2" />
-
-                                {/* Lọc: Bàn */}
-                                <div className="mt-2">
-                                    <h4 className="text-[11px] font-bold text-[#1A3A52]/50 uppercase tracking-wider mb-2 flex items-center px-2">
-                                        <Armchair className="w-3.5 h-3.5 mr-1.5" /> Table
-                                    </h4>
-                                    <div className="max-h-40 overflow-y-auto pr-1 space-y-1 custom-scrollbar">
-                                        <button onClick={() => actions.onTableFilterChange(null)} className={`w-full text-left px-3 py-2 text-sm rounded-lg transition-colors ${!filters.tableId ? 'bg-[#D5BA98]/15 font-bold text-[#1A3A52]' : 'text-[#1A3A52]/70 hover:bg-[#D5BA98]/10 font-medium'}`}>
-                                            All Tables
-                                        </button>
-                                        {mockTables.map(table => (
-                                            <button key={table.id} onClick={() => actions.onTableFilterChange(table.id)} className={`w-full text-left px-3 py-2 text-sm rounded-lg transition-colors ${filters.tableId === table.id ? 'bg-[#1A3A52] text-white font-bold' : 'text-[#1A3A52]/70 hover:bg-[#D5BA98]/10 font-medium'}`}>
-                                                {table.name}
-                                            </button>
-                                        ))}
-                                    </div>
-                                </div>
-
-                                {activeFilterCount > 0 && (
-                                    <>
-                                        <DropdownMenuSeparator className="bg-[#D5BA98]/20 my-2" />
-                                        <Button variant="ghost" onClick={() => { actions.onCreatorFilterChange(null); actions.onTableFilterChange(null); }} className="w-full text-rose-500 hover:text-rose-600 hover:bg-rose-50 font-bold justify-start px-2">
-                                            <X className="w-4 h-4 mr-2" /> Clear all filters
-                                        </Button>
-                                    </>
-                                )}
-                            </DropdownMenuContent>
-                        </DropdownMenu>
-                    </div>
-                </div>
-
-                <div className="flex flex-col xl:flex-row justify-between items-start xl:items-center gap-4 w-full">
-
-                    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full xl:w-auto">
-                        <div className="relative flex items-center bg-[#FDFBF9] border border-[#D5BA98]/60 rounded-lg overflow-hidden shadow-none h-10 px-3 hover:border-[#1A3A52]/35 transition-colors w-full sm:w-auto shrink-0">
-                            <CalendarIcon className="w-4 h-4 text-[#1A3A52]/55 mr-2" />
-                            <input
-                                type="date"
-                                value={filters.date ? dateUtils.formatLocal(filters.date, "yyyy-MM-dd") : ""}
-                                onChange={(e) => actions.onDateChange(e.target.value ? new Date(e.target.value) : null)}
-                                className="w-full outline-none text-sm text-[#1A3A52] bg-transparent cursor-pointer [&::-webkit-calendar-picker-indicator]:cursor-pointer"
-                            />
-                        </div>
-
-                        <div className="flex bg-[#D5BA98]/12 p-1 rounded-lg border border-[#D5BA98]/40 overflow-x-auto hide-scrollbar w-full sm:w-auto max-w-full">
-                            <button
-                                onClick={() => actions.onStatusChange(null)}
-                                className={`shrink-0 px-4 py-1.5 text-[13px] font-medium rounded-md transition-all whitespace-nowrap ${filters.statusId === null
-                                    ? 'bg-[#1A3A52] text-white shadow-sm border border-[#1A3A52]'
-                                    : 'text-[#1A3A52]/65 hover:text-[#1A3A52] hover:bg-[#D5BA98]/18'
-                                }`}
+                <ALTitleCard
+                    title={t("title")}
+                    actionsClassName="sm:flex-wrap"
+                    actions={
+                        <>
+                            <Button
+                                onClick={actions.refresh}
+                                variant="outline"
+                                className="group h-10 w-full rounded-xl border-[#D5BA98]/60 bg-[#FDFBF9] text-[#1A3A52]/70 hover:bg-[#D5BA98]/10 hover:text-[#1A3A52] sm:w-10 sm:rounded-full"
+                                title={t("refresh")}
                             >
-                                {t("all")}
-                            </button>
-                            {statuses.map(status => (
+                                <RefreshCcw className="h-4 w-4 transition-transform duration-500 group-hover:rotate-180" />
+                            </Button>
+
+                            <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                    <Button variant="outline" className="h-10 w-full rounded-xl border-[#D5BA98]/60 bg-[#FDFBF9] font-semibold text-[#1A3A52] hover:bg-[#D5BA98]/10 sm:w-auto">
+                                        <ArrowUpDown className="mr-2 h-4 w-4 text-[#1A3A52]/70" />
+                                        {filters.sortBy === 'createdAt' ? "Sort: By Created Date" : "Sort: By Reservation Time"}
+                                    </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end" className="w-56 rounded-xl border-[#D5BA98]/40 shadow-lg">
+                                    <DropdownMenuLabel className="text-[#1A3A52]/60 text-xs font-bold uppercase tracking-wider">Order By</DropdownMenuLabel>
+                                    <DropdownMenuSeparator className="bg-[#D5BA98]/20" />
+                                    <DropdownMenuRadioGroup value={filters.sortBy} onValueChange={actions.onSortChange}>
+                                        <DropdownMenuRadioItem value="createdAt" className="cursor-pointer text-[#1A3A52] font-medium">Created Date (Newest)</DropdownMenuRadioItem>
+                                        <DropdownMenuRadioItem value="reservedDate" className="cursor-pointer text-[#1A3A52] font-medium">Reservation Time (Nearest)</DropdownMenuRadioItem>
+                                    </DropdownMenuRadioGroup>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+
+                            <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                    <Button variant="outline" className={`h-10 w-full rounded-xl font-semibold relative transition-colors shadow-sm sm:w-auto ${activeFilterCount > 0 ? 'bg-[#1A3A52] border-[#1A3A52] text-white hover:bg-[#1A3A52]/90' : 'bg-[#FDFBF9] border-[#D5BA98]/60 text-[#1A3A52] hover:bg-[#D5BA98]/10'}`}>
+                                        <Filter className={`mr-2 h-4 w-4 ${activeFilterCount > 0 ? 'text-white' : 'text-[#1A3A52]/70'}`} />
+                                        Filter
+                                        {activeFilterCount > 0 && (
+                                            <span className="absolute -top-1.5 -right-1.5 flex h-5 w-5 items-center justify-center rounded-full bg-rose-500 text-[10px] font-bold text-white shadow-sm ring-2 ring-white">
+                                                {activeFilterCount}
+                                            </span>
+                                        )}
+                                    </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end" className="w-64 p-3 rounded-xl border-[#D5BA98]/40 shadow-lg">
+                                    <div className="mb-4">
+                                        <h4 className="text-[11px] font-bold text-[#1A3A52]/50 uppercase tracking-wider mb-2 flex items-center px-2">
+                                            <User className="w-3.5 h-3.5 mr-1.5" /> Created By
+                                        </h4>
+                                        <div className="space-y-1">
+                                            <button onClick={() => actions.onCreatorFilterChange(null)} className={`w-full text-left px-3 py-2 text-sm rounded-lg transition-colors ${!filters.creatorId ? 'bg-[#D5BA98]/15 font-bold text-[#1A3A52]' : 'text-[#1A3A52]/70 hover:bg-[#D5BA98]/10 font-medium'}`}>
+                                                All Creators
+                                            </button>
+                                            {mockUsers.map(user => (
+                                                <button key={user.id} onClick={() => actions.onCreatorFilterChange(user.id)} className={`w-full text-left px-3 py-2 text-sm rounded-lg transition-colors ${filters.creatorId === user.id ? 'bg-[#1A3A52] text-white font-bold' : 'text-[#1A3A52]/70 hover:bg-[#D5BA98]/10 font-medium'}`}>
+                                                    {user.name}
+                                                </button>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    <DropdownMenuSeparator className="bg-[#D5BA98]/20 my-2" />
+
+                                    <div className="mt-2">
+                                        <h4 className="text-[11px] font-bold text-[#1A3A52]/50 uppercase tracking-wider mb-2 flex items-center px-2">
+                                            <Armchair className="w-3.5 h-3.5 mr-1.5" /> Table
+                                        </h4>
+                                        <div className="max-h-40 overflow-y-auto pr-1 space-y-1 custom-scrollbar">
+                                            <button onClick={() => actions.onTableFilterChange(null)} className={`w-full text-left px-3 py-2 text-sm rounded-lg transition-colors ${!filters.tableId ? 'bg-[#D5BA98]/15 font-bold text-[#1A3A52]' : 'text-[#1A3A52]/70 hover:bg-[#D5BA98]/10 font-medium'}`}>
+                                                All Tables
+                                            </button>
+                                            {mockTables.map(table => (
+                                                <button key={table.id} onClick={() => actions.onTableFilterChange(table.id)} className={`w-full text-left px-3 py-2 text-sm rounded-lg transition-colors ${filters.tableId === table.id ? 'bg-[#1A3A52] text-white font-bold' : 'text-[#1A3A52]/70 hover:bg-[#D5BA98]/10 font-medium'}`}>
+                                                    {table.name}
+                                                </button>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    {activeFilterCount > 0 && (
+                                        <>
+                                            <DropdownMenuSeparator className="bg-[#D5BA98]/20 my-2" />
+                                            <Button variant="ghost" onClick={() => { actions.onCreatorFilterChange(null); actions.onTableFilterChange(null); }} className="w-full text-rose-500 hover:text-rose-600 hover:bg-rose-50 font-bold justify-start px-2">
+                                                <X className="w-4 h-4 mr-2" /> Clear all filters
+                                            </Button>
+                                        </>
+                                    )}
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+
+                            <Button
+                                onClick={handleCreate}
+                                className="h-10 w-full gap-2 border-[#1A3A52] bg-[#1A3A52] text-[#FDFBF9] hover:bg-[#1A3A52]/90 sm:w-auto"
+                            >
+                                <CirclePlus size={16} />
+                                {t("addNew")}
+                            </Button>
+                        </>
+                    }
+                >
+                    <div className="flex flex-col xl:flex-row justify-between items-start xl:items-center gap-4 w-full">
+
+                        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full xl:w-auto">
+                            <div className="relative flex items-center bg-[#FDFBF9] border border-[#D5BA98]/60 rounded-lg overflow-hidden shadow-none h-10 px-3 hover:border-[#1A3A52]/35 transition-colors w-full sm:w-auto shrink-0">
+                                <CalendarIcon className="w-4 h-4 text-[#1A3A52]/55 mr-2" />
+                                <input
+                                    type="date"
+                                    value={filters.date ? dateUtils.formatLocal(filters.date, "yyyy-MM-dd") : ""}
+                                    onChange={(e) => actions.onDateChange(e.target.value ? new Date(e.target.value) : null)}
+                                    className="w-full outline-none text-sm text-[#1A3A52] bg-transparent cursor-pointer [&::-webkit-calendar-picker-indicator]:cursor-pointer"
+                                />
+                            </div>
+
+                            <div className="flex bg-[#D5BA98]/12 p-1 rounded-lg border border-[#D5BA98]/40 overflow-x-auto hide-scrollbar w-full sm:w-auto max-w-full">
                                 <button
-                                    key={status.statusId}
-                                    onClick={() => actions.onStatusChange(status.statusId)}
-                                    className={`shrink-0 px-4 py-1.5 text-[13px] font-medium rounded-md transition-all whitespace-nowrap ${filters.statusId === status.statusId
+                                    onClick={() => actions.onStatusChange(null)}
+                                    className={`shrink-0 px-4 py-1.5 text-[13px] font-medium rounded-md transition-all whitespace-nowrap ${filters.statusId === null
                                         ? 'bg-[#1A3A52] text-white shadow-sm border border-[#1A3A52]'
                                         : 'text-[#1A3A52]/65 hover:text-[#1A3A52] hover:bg-[#D5BA98]/18'
                                     }`}
                                 >
-                                    {localizeStatusLabel(status.statusCode, status.statusName, tStatus)}
+                                    {t("all")}
                                 </button>
-                            ))}
+                                {statuses.map(status => (
+                                    <button
+                                        key={status.statusId}
+                                        onClick={() => actions.onStatusChange(status.statusId)}
+                                        className={`shrink-0 px-4 py-1.5 text-[13px] font-medium rounded-md transition-all whitespace-nowrap ${filters.statusId === status.statusId
+                                            ? 'bg-[#1A3A52] text-white shadow-sm border border-[#1A3A52]'
+                                            : 'text-[#1A3A52]/65 hover:text-[#1A3A52] hover:bg-[#D5BA98]/18'
+                                        }`}
+                                    >
+                                        {localizeStatusLabel(status.statusCode, status.statusName, tStatus)}
+                                    </button>
+                                ))}
+                            </div>
                         </div>
-                    </div>
 
-                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full xl:w-auto xl:ml-auto">
-
-                        <div className="relative flex items-center bg-[#FDFBF9] border border-[#D5BA98]/60 rounded-lg overflow-hidden shadow-none h-10 w-full sm:w-auto">
+                        <div className="relative flex items-center bg-[#FDFBF9] border border-[#D5BA98]/60 rounded-lg overflow-hidden shadow-none h-10 w-full xl:w-auto xl:ml-auto">
                             <div className="px-3 bg-[#D5BA98]/10 border-r border-[#D5BA98]/35 h-full flex items-center justify-center shrink-0">
                                 <Search className="w-4 h-4 text-[#1A3A52]/55" />
                             </div>
@@ -250,17 +252,8 @@ const ReservationListContent = () => {
                                 className="px-3 py-2 w-full sm:w-55 md:w-65 outline-none text-sm text-[#1A3A52] bg-transparent placeholder:text-[#1A3A52]/40"
                             />
                         </div>
-
-                        <Button
-                            onClick={handleCreate}
-                            variant="outline"
-                            className="h-10 w-full sm:w-auto shrink-0 border-[#D5BA98]/60 bg-[#FDFBF9] text-[#1A3A52] hover:bg-[#D5BA98]/10"
-                        >
-                            <CirclePlus size={16} className="mr-2" />
-                            {t("addNew")}
-                        </Button>
                     </div>
-                </div>
+                </ALTitleCard>
             </div>
 
             {/* --- MAIN GRID --- */}

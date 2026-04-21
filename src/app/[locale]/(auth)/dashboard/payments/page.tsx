@@ -7,6 +7,7 @@ import { TableColumn } from "@/types/table.types";
 import { useTranslations } from "next-intl";
 import { ProtectedRoute } from "@/components/protected-route";
 import { Permissions } from "@/types/const";
+import { ALTitleCard } from "@/components/ui/al-title-card";
 import dayjs from "dayjs";
 import { format } from "date-fns";
 import { toast } from "sonner";
@@ -220,35 +221,32 @@ const PaymentListContent = () => {
                 defaultRowsPerPage={10}
                 rowsPerPageOptions={[10, 20, 50]}
                 renderTitle={() => (
-                    <div className="flex flex-col xl:flex-row justify-between items-start xl:items-center w-full gap-4 mb-4">
-                        <div>
-                            <h1 className="text-2xl md:text-3xl font-bold text-gray-900 tracking-tight">
-                                {t("title")}
-                            </h1>
-                            <p className="text-sm text-gray-500 mt-1">{t("description")}</p>
-                        </div>
+                    <ALTitleCard
+                        title={t("title")}
+                        description={t("description")}
+                        actions={
+                            <>
+                                <Button
+                                    variant="outline"
+                                    className="w-full whitespace-nowrap bg-white sm:w-auto"
+                                    onClick={handleExport}
+                                >
+                                    <Download className="mr-2 h-4 w-4" />
+                                    {t("export") || "Export"}
+                                </Button>
 
-                        {/* Các nút bấm */}
-                        <div className="flex flex-wrap items-center gap-2 w-full xl:w-auto">
-                            <Button 
-                                variant="outline" 
-                                className="flex-1 md:flex-none shadow-sm bg-white whitespace-nowrap" 
-                                onClick={handleExport}
-                            >
-                                <Download className="mr-2 h-4 w-4" /> {t("export") || "Export"}
-                            </Button>
-
-                            <Button
-                                variant="outline"
-                                className="flex-1 md:flex-none shadow-sm bg-white whitespace-nowrap border-emerald-200 text-emerald-700 hover:bg-emerald-50 hover:text-emerald-800"
-                                onClick={handleExportAll}
-                                disabled={isExportingAll}
-                            >
-                                {isExportingAll ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Download className="mr-2 h-4 w-4" />}
-                                {t("exportAll")}
-                            </Button>
-                        </div>
-                    </div>
+                                <Button
+                                    variant="outline"
+                                    className="w-full whitespace-nowrap border-emerald-200 bg-white text-emerald-700 hover:bg-emerald-50 hover:text-emerald-800 sm:w-auto"
+                                    onClick={handleExportAll}
+                                    disabled={isExportingAll}
+                                >
+                                    {isExportingAll ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Download className="mr-2 h-4 w-4" />}
+                                    {t("exportAll")}
+                                </Button>
+                            </>
+                        }
+                    />
                 )}
                 renderCell={handleGlobalRenderCell}
             />

@@ -460,7 +460,7 @@ export function BaseTable<T>({
     return (
         <div className="flex h-full flex-col gap-4">
             {renderTitle && (
-                <div className="flex flex-row items-center justify-between ">
+                <div className="flex w-full flex-row items-center justify-between">
                     {renderTitle()}
                 </div>
             )}
@@ -480,7 +480,7 @@ export function BaseTable<T>({
                                             <input
                                                 value={searchQuery}
                                                 onChange={(e) => setSearchQuery(e.target.value)}
-                                                className="ms-input-item flex w-full min-w-[200px]"
+                                                className="ms-input-item flex w-full min-w-50"
                                                 placeholder={searchPlaceholder ?? t('searchPlaceholder')}
                                                 type="text"
                                                 autoComplete="on"

@@ -6,7 +6,7 @@ import { AlertTriangle, Package } from "lucide-react";
 import { BaseTable } from "@/components/ui/table/base-table";
 import type { TableColumn } from "@/types/table.types";
 import { Badge } from "@/components/ui/badge";
-import { ALCard } from "@/components/ui/al-card";
+import { ALTitleCard } from "@/components/ui/al-title-card";
 import { TableActionColumn, type TableAction } from "@/components/ui/table/table-action-column";
 import { useInventoryItemsQuery } from "../../hooks/use-inventory-queries";
 import type { InventoryItemDto, GetInventoryItemsFilter } from "../../types/inventory.types";
@@ -147,15 +147,13 @@ export function InventoryItemsList() {
         defaultRowsPerPage={20}
         rowsPerPageOptions={[10, 20, 50]}
         renderTitle={() => (
-          <ALCard variant="default" padding="md" elevation="sm" radius="xl" className="w-full">
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center w-full gap-3">
-              <div>
-                <h1 className="text-xl sm:text-2xl font-semibold text-[#1A3A52] tracking-tight font-['Cormorant_Garamond']">
-                  {t("title")}
-                </h1>
-                <p className="text-sm text-[#1A3A52]/60 mt-0.5">{t("description")}</p>
-              </div>
-              <div className="w-full sm:w-auto sm:min-w-60">
+          <ALTitleCard
+            title={t("title")}
+            description={t("description")}
+            titleClassName="font-['Cormorant_Garamond'] text-xl font-semibold tracking-tight text-[#1A3A52] sm:text-2xl"
+            descriptionClassName="text-sm text-[#1A3A52]/60"
+            actions={
+              <div className="w-full sm:min-w-60">
                 <LookupCombobox
                   lookup={categoryLookup}
                   title={t("table.category")}
@@ -168,8 +166,8 @@ export function InventoryItemsList() {
                   }
                 />
               </div>
-            </div>
-          </ALCard>
+            }
+          />
         )}
         renderActionColumn={(item: InventoryItemDto) => (
           <TableActionColumn item={item} actions={getItemActions(item)} />

@@ -11,6 +11,7 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { dateUtils } from "@/lib/date-utils";
+import { ALTitleCard } from "@/components/ui/al-title-card";
 import { ALCard } from "@/components/ui/al-card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -77,12 +78,12 @@ export function InventoryDashboard() {
   return (
     <>
     <div className="space-y-6">
-      <ALCard variant="default" padding="md" elevation="sm" radius="xl">
-        <h1 className="text-2xl font-semibold text-[#1A3A52] tracking-tight font-['Cormorant_Garamond']">
-          {t("title")}
-        </h1>
-        <p className="text-sm text-[#1A3A52]/60 mt-0.5">{t("description")}</p>
-      </ALCard>
+      <ALTitleCard
+        title={t("title")}
+        description={t("description")}
+        titleClassName="font-['Cormorant_Garamond'] text-2xl font-semibold tracking-tight text-[#1A3A52]"
+        descriptionClassName="text-sm text-[#1A3A52]/60"
+      />
 
       {/* Stat Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">

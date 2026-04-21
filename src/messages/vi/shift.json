@@ -211,13 +211,13 @@
       }
     },
     "live": {
-      "title": "Bảng Trực Ca Trực Tiếp",
-      "description": "Xem trực tiếp tình trạng chấm công ca hôm nay.",
+      "title": "Bảng trực ca",
+      "description": "Theo dõi nhanh tình hình ca làm trong ngày.",
       "updating": "Đang cập nhật",
-      "live": "Trực tiếp",
+      "live": "Đang trực tuyến",
       "connection": {
         "realtime": "Đã kết nối SignalR",
-        "polling": "Dự phòng polling"
+        "polling": "Làm mới theo chu kỳ"
       },
       "autoRefresh": "Tự động làm mới mỗi 30 giây",
       "lastUpdated": "Cập nhật lần cuối lúc: {time}",
@@ -279,6 +279,52 @@
       "issues": {
         "pending": "{count} sự cố đang chờ xử lý",
         "none": "Không có sự cố nào được ghi nhận"
+      },
+      "operations": {
+        "shared": {
+          "vsYesterdaySameTime": "so với cùng giờ hôm qua",
+          "vsPreviousDay": "so với ngày liền trước",
+          "openDetail": "Xem chi tiết"
+        },
+        "tables": {
+          "title": "Bàn đang phục vụ",
+          "subtitle": "Tình trạng sàn phục vụ",
+          "occupied": "{occupied}/{total} bàn đang có khách",
+          "occupancyRate": "Công suất {rate}%",
+          "turnover": "Vòng quay trung bình",
+          "turnoverValue": "{minutes} phút",
+          "noTurnover": "Chưa có lượt quay bàn",
+          "queue": "Khách chờ bàn",
+          "queueValue": "{count} lượt chờ"
+        },
+        "orders": {
+          "title": "Tiến độ món đang chạy",
+          "subtitle": "Tình trạng xử lý tại bếp",
+          "liveTickets": "{count} ticket đang xử lý",
+          "pending": "Chờ xử lý",
+          "cooking": "Đang nấu",
+          "ready": "Sẵn sàng",
+          "served": "Đã phục vụ",
+          "servedDelta": "món đã ra so với mốc đối chiếu"
+        },
+        "revenue": {
+          "title": "Doanh thu hôm nay",
+          "subtitle": "Thanh toán đã hoàn tất",
+          "closedBills": "Hóa đơn đã thanh toán",
+          "averageBill": "Giá trị hóa đơn trung bình",
+          "deltaPercent": "biến động so với mốc đối chiếu",
+          "billsDelta": "hóa đơn chênh lệch so với mốc đối chiếu"
+        },
+        "topSelling": {
+          "title": "Món bán chạy hôm nay",
+          "subtitle": "Nhóm món bán tốt nhất trong ngày",
+          "empty": "Chưa có món bán thành công",
+          "sold": "Đã bán {count} phần",
+          "totalSold": "Top 5 bán được {count} phần",
+          "stockLeft": "Còn {count}",
+          "stockOut": "Hết hàng",
+          "stockUnknown": "Đang đồng bộ tồn kho"
+        }
       },
       "manualAdjusted": "Bản ghi này đã được điều chỉnh thủ công.",
       "actions": {
