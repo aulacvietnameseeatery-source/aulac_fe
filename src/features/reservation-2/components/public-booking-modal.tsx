@@ -2,7 +2,7 @@
 
 import React, { useRef, useState } from 'react';
 import { Calendar, Clock, Download, MapPin, User, Users, X } from 'lucide-react';
-import domtoimage from 'dom-to-image-more';
+import * as htmlToImage from 'html-to-image';
 import { useTranslations } from 'next-intl';
 import PublicBookingForm from './public-booking-form';
 import { ReservationResponseDto } from '../types/reservation.types';
@@ -17,6 +17,7 @@ export default function PublicBookingModal({ isOpen, onClose }: PublicBookingMod
 	const t = useTranslations('reservations.public.publicTicket');
 	const [ticketData, setTicketData] = useState<ReservationResponseDto | null>(null);
 	const ticketRef = useRef<HTMLDivElement>(null);
+	const downloadRef = useRef<HTMLDivElement>(null);
 
 	const handleCloseAll = () => {
 		setTicketData(null);
@@ -24,17 +25,24 @@ export default function PublicBookingModal({ isOpen, onClose }: PublicBookingMod
 	};
 
 	const handleDownloadTicket = async () => {
-		if (!ticketRef.current || !ticketData) return;
+		// Capture from the hidden Master Ticket for consistency
+		if (!downloadRef.current || !ticketData) return;
 
-		const dataUrl = await domtoimage.toPng(ticketRef.current, {
-			quality: 1,
-			bgcolor: '#ffffff',
-		});
+		try {
+			const dataUrl = await htmlToImage.toPng(downloadRef.current, {
+				quality: 1,
+				cacheBust: true,
+				backgroundColor: '#ffffff',
+				pixelRatio: 2,
+			});
 
-		const link = document.createElement('a');
-		link.download = `reservation-${ticketData.reservationId}.png`;
-		link.href = dataUrl;
-		link.click();
+			const link = document.createElement('a');
+			link.download = `reservation-${ticketData.reservationId}.png`;
+			link.href = dataUrl;
+			link.click();
+		} catch (error) {
+			console.error('Error generating ticket:', error);
+		}
 	};
 
 	if (!isOpen) return null;
@@ -57,39 +65,131 @@ export default function PublicBookingModal({ isOpen, onClose }: PublicBookingMod
 						>
 							<X size={18} />
 						</button>
+						{/* Visible Ticket (Responsive) */}
 						<div
 							ref={ticketRef}
-							className="rounded-2xl border border-stone-200 bg-gradient-to-b from-amber-50 to-white p-4 mt-8"
+							className="rounded-2xl border border-stone-200 p-6 mt-8 w-full max-w-sm mx-auto"
+							style={{ backgroundColor: '#FFF9E6' }}
 						>
-							<div className="text-center border-b border-dashed border-stone-300 pb-3 mb-3">
-								<div className="text-xs uppercase tracking-wider text-stone-500 break-words">{t('title')}</div>
-								<div className="text-lg font-bold text-[#1A3A52]">#{ticketData.reservationId}</div>
+							<div className="text-center border-b border-dashed border-stone-300 pb-4 mb-6">
+								<div className="text-[10px] uppercase tracking-[0.2em] font-medium mb-1" style={{ color: '#78716C' }}>
+									{t('title')}
+								</div>
+								<div className="text-3xl font-bold" style={{ color: '#1A3A52' }}>
+									#{ticketData.reservationId}
+								</div>
 							</div>
 
-							<div className="space-y-2 text-sm text-[#1A3A52]">
-								<div className="flex items-start justify-between gap-3">
-									<span className="inline-flex items-center gap-2 text-stone-500 min-w-0 break-words"><User size={14} />{t('customer')}</span>
-									<span className="font-semibold text-right max-w-[60%] break-words">{ticketData.customerName}</span>
+							<div className="space-y-4 text-sm" style={{ color: '#1A3A52' }}>
+								<div className="flex items-center justify-between gap-6">
+									<span className="inline-flex items-center gap-2 font-medium shrink-0" style={{ color: '#78716C' }}>
+										<User size={16} color="#78716C" />
+										{t('customer')}
+									</span>
+									<span className="font-semibold text-right truncate pl-4">{ticketData.customerName}</span>
 								</div>
-								<div className="flex items-start justify-between gap-3">
-									<span className="inline-flex items-center gap-2 text-stone-500 min-w-0 break-words"><Users size={14} />{t('guests')}</span>
-									<span className="font-semibold text-right max-w-[60%] break-words">{ticketData.partySize}</span>
+								<div className="flex items-center justify-between gap-6">
+									<span className="inline-flex items-center gap-2 font-medium shrink-0" style={{ color: '#78716C' }}>
+										<Users size={16} color="#78716C" />
+										{t('guests')}
+									</span>
+									<span className="font-semibold text-right">{ticketData.partySize}</span>
 								</div>
-								<div className="flex items-start justify-between gap-3">
-									<span className="inline-flex items-center gap-2 text-stone-500 min-w-0 break-words"><Calendar size={14} />{t('date')}</span>
-									<span className="font-semibold text-right max-w-[60%] break-words">{formatZurichDate(ticketData.reservedTime)}</span>
+								<div className="flex items-center justify-between gap-6">
+									<span className="inline-flex items-center gap-2 font-medium shrink-0" style={{ color: '#78716C' }}>
+										<Calendar size={16} color="#78716C" />
+										{t('date')}
+									</span>
+									<span className="font-semibold text-right">{formatZurichDate(ticketData.reservedTime)}</span>
 								</div>
-								<div className="flex items-start justify-between gap-3">
-									<span className="inline-flex items-center gap-2 text-stone-500 min-w-0 break-words"><Clock size={14} />{t('time')}</span>
-									<span className="font-semibold text-right max-w-[60%] break-words">{formatZurichTime(ticketData.reservedTime)}</span>
+								<div className="flex items-center justify-between gap-6">
+									<span className="inline-flex items-center gap-2 font-medium shrink-0" style={{ color: '#78716C' }}>
+										<Clock size={16} color="#78716C" />
+										{t('time')}
+									</span>
+									<span className="font-semibold text-right">{formatZurichTime(ticketData.reservedTime)}</span>
 								</div>
-								<div className="flex items-start justify-between gap-3">
-									<span className="inline-flex items-center gap-2 text-stone-500 min-w-0 break-words"><MapPin size={14} />{t('table')}</span>
-									<span className="font-bold text-right max-w-[60%] break-words">{ticketData.tableCode || t('pendingAssign')}</span>
+								<div className="flex items-center justify-between gap-6">
+									<span className="inline-flex items-center gap-2 font-medium shrink-0" style={{ color: '#78716C' }}>
+										<MapPin size={16} color="#78716C" />
+										{t('table')}
+									</span>
+									<span className="font-bold text-right px-2 py-0.5 border border-stone-800">{ticketData.tableCode || t('pendingAssign')}</span>
 								</div>
-								<div className="flex items-start justify-between gap-3">
-									<span className="text-stone-500 min-w-0 break-words">{t('zone')}</span>
-									<span className="font-semibold text-right max-w-[60%] break-words">{ticketData.zone || '-'}</span>
+								{ticketData.zone && (
+									<div className="flex items-center justify-between gap-6">
+										<span className="font-medium shrink-0 pl-6" style={{ color: '#78716C' }}>
+											{t('zone')}
+										</span>
+										<span className="font-semibold text-right">{ticketData.zone}</span>
+									</div>
+								)}
+							</div>
+
+							<div className="border-t border-dashed border-stone-300 mt-6 pt-4 text-center">
+								<p className="text-[10px] font-bold tracking-widest text-stone-500">THANK YOU & SEE YOU SOON!</p>
+							</div>
+						</div>
+
+						{/* Hidden Master Ticket (Fixed Width for perfect download) */}
+						<div className="fixed -left-[9999px] top-0 pointer-events-none">
+							<div
+								ref={downloadRef}
+								className="rounded-2xl border border-stone-200 p-8"
+								style={{ 
+									backgroundColor: '#FFF9E6', 
+									width: '400px',
+								}}
+							>
+								<div className="text-center border-b border-dashed border-stone-300 pb-4 mb-6">
+									<div className="text-[10px] uppercase tracking-[0.2em] font-medium mb-1" style={{ color: '#78716C' }}>
+										{t('title')}
+									</div>
+									<div className="text-3xl font-bold" style={{ color: '#1A3A52' }}>
+										#{ticketData.reservationId}
+									</div>
+								</div>
+
+								<div className="space-y-4 text-sm" style={{ color: '#1A3A52' }}>
+									<div className="flex items-center justify-between gap-6">
+										<span className="inline-flex items-center gap-2 font-medium shrink-0" style={{ color: '#78716C' }}>
+											<User size={16} color="#78716C" />
+											{t('customer')}
+										</span>
+										<span className="font-semibold text-right truncate pl-4">{ticketData.customerName}</span>
+									</div>
+									<div className="flex items-center justify-between gap-6">
+										<span className="inline-flex items-center gap-2 font-medium shrink-0" style={{ color: '#78716C' }}>
+											<Users size={16} color="#78716C" />
+											{t('guests')}
+										</span>
+										<span className="font-semibold text-right">{ticketData.partySize}</span>
+									</div>
+									<div className="flex items-center justify-between gap-6">
+										<span className="inline-flex items-center gap-2 font-medium shrink-0" style={{ color: '#78716C' }}>
+											<Calendar size={16} color="#78716C" />
+											{t('date')}
+										</span>
+										<span className="font-semibold text-right">{formatZurichDate(ticketData.reservedTime)}</span>
+									</div>
+									<div className="flex items-center justify-between gap-6">
+										<span className="inline-flex items-center gap-2 font-medium shrink-0" style={{ color: '#78716C' }}>
+											<Clock size={16} color="#78716C" />
+											{t('time')}
+										</span>
+										<span className="font-semibold text-right">{formatZurichTime(ticketData.reservedTime)}</span>
+									</div>
+									<div className="flex items-center justify-between gap-6">
+										<span className="inline-flex items-center gap-2 font-medium shrink-0" style={{ color: '#78716C' }}>
+											<MapPin size={16} color="#78716C" />
+											{t('table')}
+										</span>
+										<span className="font-bold text-right px-2 py-0.5 border border-stone-800">{ticketData.tableCode || t('pendingAssign')}</span>
+									</div>
+								</div>
+
+								<div className="border-t border-dashed border-stone-300 mt-8 pt-4 text-center">
+									<p className="text-[10px] font-bold tracking-widest text-stone-500">THANK YOU & SEE YOU SOON!</p>
 								</div>
 							</div>
 						</div>
