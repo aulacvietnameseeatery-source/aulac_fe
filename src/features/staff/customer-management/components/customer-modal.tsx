@@ -77,11 +77,9 @@ export const CustomerModal: React.FC<CustomerModalProps> = ({
 
         if (!formData.phone.trim()) {
             newErrors.phone = t("validation.phoneRequired");
-        } else if (formData.phone.trim().length < 10) {
-            newErrors.phone = t("validation.phoneMinLength");
-        } else if (formData.phone.trim().length > 13) {
+        } else if (formData.phone.trim().length > 15) {
             newErrors.phone = t("validation.phoneMaxLength");
-        } else if (!/^\d+$/.test(formData.phone.trim())) {
+        } else if (!/^((0|\+84)[0-9]{9,10}|(\+41|0)[1-9][0-9]{7})$/.test(formData.phone.trim())) {
             newErrors.phone = t("validation.phoneInvalid");
         }
 

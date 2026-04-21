@@ -40,7 +40,7 @@ export default function MobileBookingSheet({
 
     if (!selectedTable || !isOpen) return null;
 
-    const isFormValid = name.trim().length > 0 && phone.trim().length > 0;
+    const isFormValid = name.trim().length > 0 && /^((0|\+84)[0-9]{9,10}|(\+41|0)[1-9][0-9]{7})$/.test(phone.trim());
 
     const handleMainAction = () => {
         if (!isExpanded) {

@@ -110,7 +110,7 @@ export default function ReservationSidebar({
         }
     }, [selectedTable]);
 
-    const isFormValid = phone.trim().length > 0 && name.trim().length > 0;
+    const isFormValid = /^((0|\+84)[0-9]{9,10}|(\+41|0)[1-9][0-9]{7})$/.test(phone.trim()) && name.trim().length > 0;
 
     const timeOptions = useMemo(() => {
         return generateTimeSlots().map(slot => ({

@@ -156,6 +156,7 @@
         "validation": {
           "selectCustomerType": "Vui lòng chọn loại khách.",
           "phoneRequired": "Vui lòng nhập Số điện thoại.",
+          "phoneInvalid": "Số điện thoại không hợp lệ.",
           "nameRequired": "Vui lòng nhập Họ tên.",
           "existingCustomerNotFound": "Không tìm thấy thông tin khách cũ. Vui lòng kiểm tra lại số điện thoại.",
           "dateRequired": "Vui lòng chọn ngày đặt.",
@@ -332,6 +333,7 @@
         "validation": {
           "selectCustomerType": "Vui lòng chọn loại khách.",
           "phoneRequired": "Vui lòng nhập Số điện thoại.",
+          "phoneInvalid": "Số điện thoại không hợp lệ.",
           "nameRequired": "Vui lòng nhập Họ tên.",
           "existingCustomerNotFound": "Không tìm thấy thông tin khách cũ. Vui lòng kiểm tra lại số điện thoại.",
           "dateRequired": "Vui lòng chọn ngày đặt.",
@@ -578,3 +580,5 @@
     }
   }
 }
+
+

@@ -59,7 +59,7 @@ export default function BookingModal({ isOpen, onClose, onConfirm, tables, date,
 
     const endTime = getEndTime(time);
 
-    const isFormValid = name.trim().length > 0 && phone.trim().length > 0 && partySize > 0;
+    const isFormValid = name.trim().length > 0 && /^((0|\+84)[0-9]{9,10}|(\+41|0)[1-9][0-9]{7})$/.test(phone.trim()) && partySize > 0;
 
     const handleConfirm = async () => {
         if (isFormValid) {
