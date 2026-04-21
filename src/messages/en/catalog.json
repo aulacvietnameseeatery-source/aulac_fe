@@ -386,7 +386,7 @@
       "validation": {
         "nameRequired": "Supplier name is required",
         "nameMaxLength": "Supplier name cannot exceed 200 characters",
-        "phoneInvalid": "Phone number must contain only digits",
+        "phoneInvalid": "Invalid phone number format",
         "phoneMaxLength": "Phone number cannot exceed 50 characters",
         "emailInvalid": "Please enter a valid email address",
         "emailMaxLength": "Email cannot exceed 150 characters",
@@ -416,7 +416,7 @@
       "validation": {
         "nameRequired": "Supplier name is required",
         "nameMaxLength": "Supplier name cannot exceed 200 characters",
-        "phoneInvalid": "Phone number must contain only digits",
+        "phoneInvalid": "Invalid phone number format",
         "phoneMaxLength": "Phone number cannot exceed 50 characters",
         "emailInvalid": "Please enter a valid email address",
         "emailMaxLength": "Email cannot exceed 150 characters",

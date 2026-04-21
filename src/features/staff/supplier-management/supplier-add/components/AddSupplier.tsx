@@ -38,9 +38,9 @@ export default function AddSupplier() {
     }
 
     if (phone) {
-      if (phone.length > 50) {
+      if (phone.length > 15) {
         newErrors.phone = t('validation.phoneMaxLength');
-      } else if (!/^\d+$/.test(phone.trim())) {
+      } else if (!/^((0|\+84)[0-9]{9,10}|(\+41|0)[1-9][0-9]{7})$/.test(phone.trim())) {
         newErrors.phone = t('validation.phoneInvalid');
       }
     }

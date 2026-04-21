@@ -47,7 +47,7 @@
       "validation": {
         "nameRequired": "Tên nhà cung cấp là bắt buộc",
         "nameMaxLength": "Tên nhà cung cấp không được vượt quá 200 ký tự",
-        "phoneInvalid": "Số điện thoại chỉ được chứa chữ số",
+        "phoneInvalid": "Số điện thoại không hợp lệ",
         "phoneMaxLength": "Số điện thoại không được vượt quá 50 ký tự",
         "emailInvalid": "Vui lòng nhập địa chỉ email hợp lệ",
         "emailMaxLength": "Email không được vượt quá 150 ký tự",
@@ -84,7 +84,7 @@
       "validation": {
         "nameRequired": "Tên nhà cung cấp là bắt buộc",
         "nameMaxLength": "Tên nhà cung cấp không được vượt quá 200 ký tự",
-        "phoneInvalid": "Số điện thoại chỉ được chứa chữ số",
+        "phoneInvalid": "Số điện thoại không hợp lệ",
         "phoneMaxLength": "Số điện thoại không được vượt quá 50 ký tự",
         "emailInvalid": "Vui lòng nhập địa chỉ email hợp lệ",
         "emailMaxLength": "Email không được vượt quá 150 ký tự",
@@ -122,3 +122,4 @@
     }
   }
 }
+

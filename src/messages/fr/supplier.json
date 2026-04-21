@@ -47,7 +47,7 @@
       "validation": {
         "nameRequired": "Le nom du fournisseur est obligatoire",
         "nameMaxLength": "Le nom du fournisseur ne peut pas dépasser 200 caractères",
-        "phoneInvalid": "Le numéro de téléphone ne doit contenir que des chiffres",
+        "phoneInvalid": "Numéro de téléphone invalide",
         "phoneMaxLength": "Le numéro de téléphone ne peut pas dépasser 50 caractères",
         "emailInvalid": "Veuillez saisir une adresse e-mail valide",
         "emailMaxLength": "L'e-mail ne peut pas dépasser 150 caractères",
@@ -84,7 +84,7 @@
       "validation": {
         "nameRequired": "Le nom du fournisseur est obligatoire",
         "nameMaxLength": "Le nom du fournisseur ne peut pas dépasser 200 caractères",
-        "phoneInvalid": "Le numéro de téléphone ne doit contenir que des chiffres",
+        "phoneInvalid": "Numéro de téléphone invalide",
         "phoneMaxLength": "Le numéro de téléphone ne peut pas dépasser 50 caractères",
         "emailInvalid": "Veuillez saisir une adresse e-mail valide",
         "emailMaxLength": "L'e-mail ne peut pas dépasser 150 caractères",
@@ -122,3 +122,4 @@
     }
   }
 }
+

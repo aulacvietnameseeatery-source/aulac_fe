@@ -107,9 +107,9 @@ export const SupplierModal: React.FC<SupplierModalProps> = ({
         }
 
         if (formData.phone) {
-            if (formData.phone.length > 50) {
+            if (formData.phone.length > 15) {
                 newErrors.phone = t("validation.phoneMaxLength");
-            } else if (!/^\d+$/.test(formData.phone.trim())) {
+            } else if (!/^((0|\+84)[0-9]{9,10}|(\+41|0)[1-9][0-9]{7})$/.test(formData.phone.trim())) {
                 newErrors.phone = t("validation.phoneInvalid");
             }
         }

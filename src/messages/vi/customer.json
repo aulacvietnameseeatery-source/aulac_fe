@@ -64,7 +64,7 @@
         "phoneRequired": "Số điện thoại là bắt buộc",
         "phoneMinLength": "Số điện thoại phải có ít nhất 10 ký tự",
         "phoneMaxLength": "Số điện thoại không được quá 13 ký tự",
-        "phoneInvalid": "Số điện thoại chỉ được chứa chữ số",
+        "phoneInvalid": "Số điện thoại không hợp lệ",
         "nameMaxLength": "Họ tên không được quá 100 ký tự",
         "emailMaxLength": "Email không được quá 150 ký tự",
         "emailInvalid": "Email không hợp lệ"
@@ -96,7 +96,7 @@
         "phoneRequired": "Số điện thoại là bắt buộc",
         "phoneMinLength": "Số điện thoại phải có ít nhất 10 ký tự",
         "phoneMaxLength": "Số điện thoại không được quá 13 ký tự",
-        "phoneInvalid": "Số điện thoại chỉ được chứa chữ số",
+        "phoneInvalid": "Số điện thoại không hợp lệ",
         "nameMaxLength": "Họ tên không được quá 100 ký tự",
         "emailMaxLength": "Email không được quá 150 ký tự",
         "emailInvalid": "Email không hợp lệ"
@@ -185,3 +185,4 @@
     }
   }
 }
+

@@ -21,7 +21,7 @@ export const storeProfileFormSchema = z.object({
   logoUrl: z.string().trim().optional().default(""),
   postalCode: z.string().trim().optional().default(""),
   email: z.string().trim().email("Invalid email").or(z.literal("")),
-  phone: z.string().trim().optional().default(""),
+  phone: z.string().trim().regex(/^((0|\+84)[0-9]{9,10}|(\+41|0)[1-9][0-9]{7})$/, "Invalid phone format").or(z.literal("")).optional().default(""),
   facebookLink: z.string().trim().url("Invalid URL").or(z.literal("")),
   instagramLink: z.string().trim().url("Invalid URL").or(z.literal("")),
   tiktokLink: z.string().trim().url("Invalid URL").or(z.literal("")),

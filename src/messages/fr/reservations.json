@@ -156,6 +156,7 @@
         "validation": {
           "selectCustomerType": "Veuillez choisir un type de client.",
           "phoneRequired": "Veuillez saisir un numéro de téléphone.",
+          "phoneInvalid": "Numéro de téléphone invalide.",
           "nameRequired": "Veuillez saisir votre nom.",
           "existingCustomerNotFound": "Informations du client existant introuvables. Veuillez vérifier le numéro de téléphone.",
           "dateRequired": "Veuillez sélectionner une date de réservation.",
@@ -331,6 +332,7 @@
         "validation": {
           "selectCustomerType": "Veuillez choisir un type de client.",
           "phoneRequired": "Veuillez saisir un numéro de téléphone.",
+          "phoneInvalid": "Numéro de téléphone invalide.",
           "nameRequired": "Veuillez saisir votre nom.",
           "existingCustomerNotFound": "Informations du client existant introuvables. Veuillez vérifier le numéro de téléphone.",
           "dateRequired": "Veuillez sélectionner une date de réservation.",
@@ -577,3 +579,5 @@
     }
   }
 }
+
+

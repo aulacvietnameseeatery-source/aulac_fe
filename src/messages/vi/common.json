@@ -1101,7 +1101,7 @@
       "validation": {
         "phoneRequired": "Số điện thoại là bắt buộc",
         "phoneMaxLength": "Số điện thoại không được quá 20 ký tự",
-        "phoneInvalid": "Số điện thoại chỉ được chứa chữ số",
+        "phoneInvalid": "Số điện thoại không hợp lệ",
         "nameMaxLength": "Họ tên không được quá 100 ký tự",
         "emailMaxLength": "Email không được quá 150 ký tự",
         "emailInvalid": "Email không hợp lệ",
@@ -1134,7 +1134,7 @@
       "validation": {
         "phoneRequired": "Số điện thoại là bắt buộc",
         "phoneMaxLength": "Số điện thoại không được quá 20 ký tự",
-        "phoneInvalid": "Số điện thoại chỉ được chứa chữ số",
+        "phoneInvalid": "Số điện thoại không hợp lệ",
         "nameMaxLength": "Họ tên không được quá 100 ký tự",
         "emailMaxLength": "Email không được quá 150 ký tự",
         "emailInvalid": "Email không hợp lệ",
@@ -1410,3 +1410,4 @@
     }
   }
 }
+

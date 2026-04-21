@@ -195,6 +195,9 @@ export default function PublicBookingForm({ onSuccess, onClose }: PublicBookingF
         if (!phone) {
             toast.error(t('validation.phoneRequired'));
             return;
+        } else if (!/^((0|\+84)[0-9]{9,10}|(\+41|0)[1-9][0-9]{7})$/.test(phone.trim())) {
+            toast.error(t('validation.phoneInvalid', { defaultMessage: 'Invalid phone number / Số điện thoại không hợp lệ' }) || 'Invalid phone number / Số điện thoại không hợp lệ');
+            return;
         }
 
         if (mode === 'new' && !name) {
