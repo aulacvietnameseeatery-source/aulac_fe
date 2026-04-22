@@ -8,6 +8,7 @@
       "exportAll": "Xuất Tất cả",
       "exportingAll": "Đang xuất toàn bộ dữ liệu...",
       "labels": {
+        "all": "Tất cả",
         "guest": "Khách vãng lai",
         "cash": "Tiền mặt",
         "card": "Thẻ",

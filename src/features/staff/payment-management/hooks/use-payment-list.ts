@@ -1,10 +1,10 @@
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import { PaymentListDto } from "../types/payment-types";
 import { staffPaymentService } from "../services/payment-service";
 import { toast } from "sonner";
 import type { TableDataChangeParams } from "@/types/table-data-change.types";
 
-export const usePaymentList = () => {
+export const usePaymentList = (externalMethod?: string) => {
     const [payments, setPayments] = useState<PaymentListDto[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [totalCount, setTotalCount] = useState(0);
@@ -15,7 +15,7 @@ export const usePaymentList = () => {
     const fetchIdRef = useRef(0);
 
     const handleDataChange = useCallback(async (params: TableDataChangeParams) => {
-        const hash = JSON.stringify(params);
+        const hash = JSON.stringify({ ...params, _externalMethod: externalMethod });
         if (hash === lastFetchHashRef.current) return;
         lastFetchHashRef.current = hash;
         latestParamsRef.current = params;
@@ -28,9 +28,8 @@ export const usePaymentList = () => {
         setIsLoading(true);
 
         try {
-            // Lấy value từ cột filter method
-            const methodFilter = params.filters?.["method"]?.value as string | undefined;
-            const method = methodFilter || "All";
+            // externalMethod (từ quick-filter ngoài bảng) ưu tiên hơn filter cột
+            const method = externalMethod || "All";
 
             const data = await staffPaymentService.getPayments({
                 pageIndex: page,
@@ -53,7 +52,13 @@ export const usePaymentList = () => {
                 setIsLoading(false);
             }
         }
-    }, []);
+    }, [externalMethod]);
+
+    // Khi externalMethod thay đổi, re-fetch với params hiện tại
+    useEffect(() => {
+        lastFetchHashRef.current = "";
+        handleDataChange(latestParamsRef.current);
+    }, [externalMethod]);
 
     const refresh = useCallback(() => {
         lastFetchHashRef.current = "";
