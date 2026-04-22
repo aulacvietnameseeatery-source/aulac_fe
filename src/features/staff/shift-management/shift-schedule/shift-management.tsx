@@ -3,6 +3,7 @@
 import { useState, useCallback } from "react";
 import { CalendarDays, List, Plus } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { ALTitleCard } from "@/components/ui/al-title-card";
 import { Button } from "@/components/ui/button";
 import { PermissionGuard } from "@/components/permission-guard";
 import { Permissions } from "@/types/const";
@@ -109,30 +110,28 @@ export function ShiftManagement() {
   return (
     <div className="space-y-4 flex flex-col h-full">
       {/* ── Header bar ──────────────────────────────────────── */}
-      <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-[#D5BA98]/60 bg-white px-4 py-3 shadow-sm">
-        <div>
-          <h1 className="font-['Cormorant_Garamond'] text-xl font-semibold text-[#1A3A52]">
-            {t("title")}
-          </h1>
-          <p className="text-xs text-[#1A3A52]/50">
-            {t("managerHint")}
-          </p>
-        </div>
-
-        <div className="flex items-center gap-2">
-          <CopyWeekDialog defaultSource={weekStart} />
-          <PermissionGuard permission={Permissions.AssignShift}>
-            <Button
-              size="sm"
-              className="gap-1.5 bg-[#1A3A52] hover:bg-[#1A3A52]/90"
-              onClick={handleCreateNew}
-            >
-              <Plus className="h-3.5 w-3.5" />
-              {t("newAssignment")}
-            </Button>
-          </PermissionGuard>
-        </div>
-      </div>
+      <ALTitleCard
+        title={t("title")}
+        description={t("managerHint")}
+        descriptionClassName="text-xs text-[#1A3A52]/50"
+        headerClassName="lg:items-center"
+        className="border border-[#D5BA98]/60 bg-white shadow-sm"
+        actions={
+          <>
+            <CopyWeekDialog defaultSource={weekStart} />
+            <PermissionGuard permission={Permissions.AssignShift}>
+              <Button
+                size="sm"
+                className="gap-1.5 bg-[#1A3A52] hover:bg-[#1A3A52]/90"
+                onClick={handleCreateNew}
+              >
+                <Plus className="h-3.5 w-3.5" />
+                {t("newAssignment")}
+              </Button>
+            </PermissionGuard>
+          </>
+        }
+      />
 
       {/* ── Publish toolbar (visible when drafts exist) ──── */}
       <PublishToolbar

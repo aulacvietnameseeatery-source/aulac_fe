@@ -14,7 +14,7 @@ import { NoDataState } from '@/components/ui/table/no-data-state';
 import { TablePagination } from '@/components/ui/table/table-pagination';
 import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover';
 import { FilterPopup } from '@/components/ui/table/filter-popup';
-import '@/styles/components/table.css';
+import  '@/styles/components/table.css';
 import { useTranslations } from 'next-intl';
 
 
@@ -24,39 +24,19 @@ const CHECKBOX_COLUMN_WIDTH = 40;
 const SEARCH_DEBOUNCE_MS = 1000;
 const DEFAULT_COLUMN_WIDTH = 160;
 
-/**
- * Cấu hình các operator cho filter
- * Created by: DatND (18/1/2026)
- */
-const OPERATOR_LABELS: Record<string, string> = {
-    contains: 'Chứa',
-    notContains: 'Không chứa',
-    equals: 'Bằng',
-    notequal: 'Khác',
-    different: 'Khác',
-    startsWith: 'Bắt đầu bằng',
-    endsWith: 'Kết thúc bằng',
-    greater: 'Lớn hơn',
-    less: 'Nhỏ hơn',
-    greaterOrEqual: 'Lớn hơn hoặc bằng',
-    lessOrEqual: 'Nhỏ hơn hoặc bằng',
-    isNull: 'Trống',
-    notNull: 'Không trống',
-    selected: 'Đã chọn',
-};
-
 // ========== PROPS & TYPES ==========
 interface BaseTableProps<T> {
     data: T[];
     columns: TableColumn[];
     loading?: boolean;
     searchPlaceholder?: string;
+    showToolbar?: boolean;
     showAddButton?: boolean;
     addButtonText?: string;
     batchActions?: BatchAction[];
     rowsPerPageOptions?: number[];
     defaultRowsPerPage?: number;
-    selectionMode?: 'single' | 'multiple';
+    selectionMode?: 'single' | 'multiple' | 'none';
     activeRowKey?: string | number | null;
     rowKey?: string;
     total?: number;
@@ -79,6 +59,7 @@ interface BaseTableProps<T> {
     renderActionColumn?: (item: T, rowIndex: number) => React.ReactNode;
     renderNoData?: () => React.ReactNode;
     renderPaginationAppend?: () => React.ReactNode;
+    getRowClassName?: (item: T, rowIndex: number) => string | undefined;
     noBorder?: boolean;
 }
 
@@ -87,8 +68,7 @@ export function BaseTable<T>({
     columns,
     loading = false,
     searchPlaceholder,
-    showAddButton = true,
-    addButtonText,
+    showToolbar = true,
     batchActions = [],
     rowsPerPageOptions = [10, 20, 30, 50, 100],
     defaultRowsPerPage = 10,
@@ -96,7 +76,6 @@ export function BaseTable<T>({
     activeRowKey: externalActiveRowKey,
     rowKey = 'id',
     total = 0,
-    onAdd,
     onEdit,
     onRefresh,
     onSelectionChange,
@@ -108,9 +87,11 @@ export function BaseTable<T>({
     renderActionColumn,
     renderNoData,
     renderPaginationAppend,
+    getRowClassName,
     noBorder = false,
 }: BaseTableProps<T>) {
     const t = useTranslations('common.table');
+    const hasSelection = selectionMode !== 'none';
 
     const operatorLabels = useMemo<Record<string, string>>(() => ({
         contains: t('operator.contains'),
@@ -138,7 +119,6 @@ export function BaseTable<T>({
         hasActiveFilters,
         isFilterActive,
         getFilterState: getFilterStateFromComposable,
-        updateFilterState
     } = useTableFiltering();
 
     const getRowKey = useCallback((item: any): string | number => {
@@ -146,24 +126,30 @@ export function BaseTable<T>({
         return key ?? JSON.stringify(item);
     }, [rowKey]);
 
+    const initialColumnWidths = useMemo<Record<string, number>>(() => {
+        const next: Record<string, number> = {};
+
+        columns.forEach((column) => {
+            next[column.field] = column.width ? parseInt(column.width) : DEFAULT_COLUMN_WIDTH;
+        });
+
+        return next;
+    }, [columns]);
+
+    const getInitialWidth = useCallback((field: string) => {
+        return initialColumnWidths[field] ?? DEFAULT_COLUMN_WIDTH;
+    }, [initialColumnWidths]);
+
     const {
-        columnWidths,
         initWidths,
         getColumnWidth,
         startResize,
     } = useTableColumnSizing({
-        getInitialWidth: (field) => {
-            const col = columns.find(c => c.field === field);
-            if (col?.width) {
-                return parseInt(col.width);
-            }
-            return DEFAULT_COLUMN_WIDTH;
-        }
+        getInitialWidth,
     });
 
     const {
         selectedKeys,
-        activeRowKey,
         selectedItems,
         isRowChecked,
         isActiveRow,
@@ -212,7 +198,7 @@ export function BaseTable<T>({
 
     const stickyOffsets = useMemo(() => {
         const offsets: Record<string, number> = {};
-        let left = CHECKBOX_COLUMN_WIDTH;
+        let left = hasSelection ? CHECKBOX_COLUMN_WIDTH : 0;
 
         orderedColumns.forEach(col => {
             if (pinnedColumns.includes(col.field)) {
@@ -222,11 +208,11 @@ export function BaseTable<T>({
         });
 
         return offsets;
-    }, [orderedColumns, pinnedColumns, getColumnWidth]);
+    }, [orderedColumns, pinnedColumns, getColumnWidth, hasSelection]);
 
     const selectAllChecked = useMemo(
-        () => data.length > 0 && data.every(item => selectedKeys.has(getRowKey(item))),
-        [data, selectedKeys, getRowKey]
+        () => hasSelection && data.length > 0 && data.every(item => selectedKeys.has(getRowKey(item))),
+        [data, selectedKeys, getRowKey, hasSelection]
     );
 
     const columnStyles = useMemo(() => {
@@ -277,7 +263,7 @@ export function BaseTable<T>({
             operatorLabel: operatorLabels[filter.operator] || filter.operator,
             valueLabel
         };
-    }, [columns]);
+    }, [columns, operatorLabels]);
 
     const filterLabels = useMemo(() =>
         Object.entries(filters).map(([field, filter]) => ({
@@ -315,12 +301,16 @@ export function BaseTable<T>({
         }
     }, [selectedItems]);
 
-    const handleRowClick = useCallback((item: T, rowIndex: number) => {
+    const handleRowClick = useCallback((item: T) => {
+        if (!hasSelection) {
+            return;
+        }
+
         setActiveRow(item);
         if (selectionMode === 'single') {
             toggleRowSelection(item, !isRowChecked(item));
         }
-    }, [setActiveRow, selectionMode, toggleRowSelection, isRowChecked]);
+    }, [setActiveRow, selectionMode, toggleRowSelection, isRowChecked, hasSelection]);
 
     const handleEdit = useCallback((item: T, rowIndex: number) => {
         onEdit?.(item, rowIndex);
@@ -437,12 +427,12 @@ export function BaseTable<T>({
                 clearTimeout(searchDebounceTimeoutRef.current);
             }
         };
-    }, [searchQuery]);
+    }, [searchQuery, emitDataChange]);
 
     useEffect(() => {
         setCurrentPage(1);
         emitDataChange();
-    }, [pageSize]);
+    }, [pageSize, emitDataChange]);
 
     useEffect(() => {
         if (externalActiveRowKey !== undefined) {
@@ -453,8 +443,7 @@ export function BaseTable<T>({
 
     useEffect(() => {
         initWidths(columns.map(col => col.field));
-        emitDataChange();
-    }, []);
+    }, [columns, initWidths]);
 
     // ========== RENDER ==========
     return (
@@ -469,109 +458,106 @@ export function BaseTable<T>({
                 !noBorder && "border border-[#D5BA98]/60 bg-white"
             )}>
                 <div className="body-list bg-transparent">
-                    <div className="form-list flex flex-column border-b border-slate-200 bg-white">
-                        <div className="flex flex-column w-full">
-                            {/* Toolbar */}
-                            <div className="condition-box flex flex-row items-center w-full rounded-none bg-white">
-                                <div className="flex gap-2 items-center">
-                                    <div className="ms-input ms-editor w-full flex items-center gap-4 search-input-list" style={{ height: 'auto' }}>
-                                        <div className="flex-1 flex items-center input-container border pointer">
-                                            <div className="mi icon16 icon left search"></div>
-                                            <input
-                                                value={searchQuery}
-                                                onChange={(e) => setSearchQuery(e.target.value)}
-                                                className="ms-input-item flex w-full min-w-50"
-                                                placeholder={searchPlaceholder ?? t('searchPlaceholder')}
-                                                type="text"
-                                                autoComplete="on"
-                                                size={Math.max((searchPlaceholder ?? t('searchPlaceholder'))?.length || 20, searchQuery.length) + 2}
-                                            />
+                    {showToolbar && (
+                        <div className="form-list flex flex-column border-b border-slate-200 bg-white">
+                            <div className="flex flex-column w-full">
+                                {/* Toolbar */}
+                                <div className="condition-box flex flex-row items-center w-full rounded-none bg-white">
+                                    <div className="flex gap-2 items-center">
+                                        <div className="ms-input ms-editor w-full flex items-center gap-4 search-input-list" style={{ height: 'auto' }}>
+                                            <div className="flex-1 flex items-center input-container border pointer">
+                                                <div className="mi icon16 icon left search"></div>
+                                                <input
+                                                    value={searchQuery}
+                                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                                    className="ms-input-item flex w-full min-w-50"
+                                                    placeholder={searchPlaceholder ?? t('searchPlaceholder')}
+                                                    type="text"
+                                                    autoComplete="on"
+                                                    size={Math.max((searchPlaceholder ?? t('searchPlaceholder'))?.length || 20, searchQuery.length) + 2}
+                                                />
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    {hasActiveFilters && selectedItems.length === 0 && (
-                                        <div>
-                                            <div className="filter-conditions h-full">
-                                                {filterLabels.map(({ filter, field, label }) => (
-                                                    label && (
-                                                        <div key={field} className="filter-item">
-                                                            <div className="lable-value-filter">
-                                                                <span>{label.header}</span>
-                                                                {label.operatorLabel && filter.operator !== 'selected' && (
-                                                                    <span style={{ color: '#009B71' }}>
-                                                                        {label.operatorLabel}
+                                        {hasActiveFilters && selectedItems.length === 0 && (
+                                            <div>
+                                                <div className="filter-conditions h-full">
+                                                    {filterLabels.map(({ filter, field, label }) => (
+                                                        label && (
+                                                            <div key={field} className="filter-item">
+                                                                <div className="lable-value-filter">
+                                                                    <span>{label.header}</span>
+                                                                    {label.operatorLabel && filter.operator !== 'selected' && (
+                                                                        <span style={{ color: '#009B71' }}>
+                                                                            {label.operatorLabel}
+                                                                        </span>
+                                                                    )}
+                                                                    <span style={filter.operator === 'selected' ? { color: '#009B71' } : {}}>
+                                                                        {label.valueLabel}
                                                                     </span>
-                                                                )}
-                                                                <span style={filter.operator === 'selected' ? { color: '#009B71' } : {}}>
-                                                                    {label.valueLabel}
-                                                                </span>
+                                                                </div>
+                                                                <div
+                                                                    className="mi icon16 pointer close"
+                                                                    onClick={() => handleClearFilter(field as string)}
+                                                                ></div>
                                                             </div>
-                                                            <div
-                                                                className="mi icon16 pointer close"
-                                                                onClick={() => handleClearFilter(field as string)}
-                                                            ></div>
-                                                        </div>
-                                                    )
-                                                ))}
-                                                <div className="delete-all-filter" onClick={handleClearAllFilters}>
-                                                    {t('clearFilter')}
+                                                        )
+                                                    ))}
+                                                    <div className="delete-all-filter" onClick={handleClearAllFilters}>
+                                                        {t('clearFilter')}
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
 
-                                    )}
+                                        )}
 
-                                    {renderToolbarAppend?.({ unselectAll, selectedItems, batchActions })}
+                                        {renderToolbarAppend?.({ unselectAll, selectedItems, batchActions })}
 
-                                    {/* Batch Actions Group */}
-                                    {selectedItems.length > 0 && (
-                                        <div className="feature-batch flex">
-                                            <div className="selected-count">
-                                                {t('selected')} <span className="font-bold">{selectedItems.length}</span>
+                                        {/* Batch Actions Group */}
+                                        {selectedItems.length > 0 && (
+                                            <div className="feature-batch flex">
+                                                <div className="selected-count">
+                                                    {t('selected')} <span className="font-bold">{selectedItems.length}</span>
+                                                </div>
+                                                <div className="unselected" onClick={unselectAll}>{t('unselect')}</div>
+
+                                                {batchActions.map((action) => (
+                                                    <Button
+                                                        key={action.label}
+                                                        variant={action.variant as any}
+                                                        size="sm"
+                                                        onClick={() => handleBatchAction(action)}
+                                                        className={cn(
+                                                            "h-8 shadow-sm transition-all",
+                                                            action.className,
+                                                        )}
+                                                    >
+                                                        {action.icon === 'check' && <div className="mi icon16 icon-check-white mr-1.5" />}
+                                                        {action.icon === 'close' && <div className="mi icon16 icon-close-white mr-1.5" />}
+                                                        {action.label}
+                                                    </Button>
+                                                ))}
                                             </div>
-                                            <div className="unselected" onClick={unselectAll}>{t('unselect')}</div>
+                                        )}
+                                    </div>
 
-                                            {batchActions.map((action) => (
-                                                <Button
-                                                    key={action.label}
-                                                    // Use standard variants, but apply custom classes if provided
-                                                    variant={action.variant as any}
-                                                    size="sm"
-                                                    onClick={() => handleBatchAction(action)}
-                                                    className={cn(
-                                                        "h-8 shadow-sm transition-all",
-                                                        action.className,
-                                                        // If buttonType is solid, we might want to override standard variant styles if needed
-                                                        // For now, rely on variant + className
-                                                    )}
-                                                >
-                                                    {/* Icon handling: prioritize mapped icons or use CSS classes */}
-                                                    {action.icon === 'check' && <div className="mi icon16 icon-check-white mr-1.5" />}
-                                                    {action.icon === 'close' && <div className="mi icon16 icon-close-white mr-1.5" />}
-                                                    {/* Render label */}
-                                                    {action.label}
-                                                </Button>
-                                            ))}
+                                    {selectedItems.length === 0 && onRefresh && (
+                                        <div className="action flex items-center flex-row">
+                                            <button
+                                                className="ms-button btn-outline-neutral only-icon"
+                                                onClick={onRefresh}
+                                                title={t('refresh')}
+                                                data-tooltip-content={t('refresh')}
+                                                data-tooltip-id="my-tooltip"
+                                            >
+                                                <div className="icon reload mi icon16">&nbsp;</div>
+                                            </button>
                                         </div>
                                     )}
                                 </div>
-
-                                {selectedItems.length === 0 && (
-                                    <div className="action flex items-center flex-row">
-                                        <button
-                                            className="ms-button btn-outline-neutral only-icon"
-                                            onClick={onRefresh}
-                                            title={t('refresh')}
-                                            data-tooltip-content={t('refresh')}
-                                            data-tooltip-id="my-tooltip"
-                                        >
-                                            <div className="icon reload mi icon16">&nbsp;</div>
-                                        </button>
-                                    </div>
-                                )}
                             </div>
                         </div>
-                    </div>
+                    )}
 
                     <div className="voucher-body-grid bg-white">
                         <div className="ms-grid-viewer flex flex-col has-paging flex-box bg-transparent">
@@ -584,192 +570,206 @@ export function BaseTable<T>({
                                         {/* Table Header */}
                                         <thead className="ms-thead">
                                             <tr className="ms-tr">
-                                                <th className="ms-th multiple-cell sticky ms-th-col" rowSpan={0} scope="col">
-                                                    <Checkbox
-                                                        checked={selectAllChecked}
-                                                        onCheckedChange={(checked) => handleSelectAllChange(data, checked)}
-                                                    />
-                                                </th>
+                                                {hasSelection && (
+                                                    <th className="ms-th multiple-cell sticky ms-th-col" rowSpan={0} scope="col">
+                                                        <Checkbox
+                                                            checked={selectAllChecked}
+                                                            onCheckedChange={(checked) => handleSelectAllChange(data, checked)}
+                                                        />
+                                                    </th>
+                                                )}
 
-                                                {orderedColumns.map((column) => (
-                                                    <th
-                                                        key={column.field}
-                                                        className={cn(
-                                                            "ms-col-th ms-th",
-                                                            isPinned(column) && "lock"
-                                                        )}
-                                                        style={columnStyles[column.field]}
-                                                    >
-                                                        <div className="ms-th-content flex-row">
-                                                            {/* Sort Menu with Popover - Wraps entire header for clickable area */}
-                                                            <Popover
-                                                                open={isPopoverOpen(column.field, 'sort')}
-                                                                onOpenChange={(open: boolean) => {
-                                                                    if (open) {
-                                                                        openSortPopover(column.field);
-                                                                    } else {
-                                                                        setActivePopover(null);
-                                                                    }
-                                                                }}
-                                                            >
-                                                                <PopoverTrigger asChild>
-                                                                    <div className="th-trigger" role="button" tabIndex={0}>
-                                                                        <div className="menu-wrapper">
-                                                                            <div className="menu-button-container">
-                                                                                <div className="ms-th-title flex flex-between">
-                                                                                    <div className="w-full">
-                                                                                        <div
-                                                                                            className={cn(
-                                                                                                "caption_arrow_wrap",
-                                                                                                column.align === 'center' ? 'justify-center' :
-                                                                                                    column.align === 'right' ? 'justify-end' :
-                                                                                                        'justify-start'
-                                                                                            )}
-                                                                                            style={{ textAlign: column.align || 'left' }}
-                                                                                        >
-                                                                                            {isPinned(column) && (
-                                                                                                <div className="mi icon16 pinned"></div>
-                                                                                            )}
-                                                                                            <span className="caption-btn flex">
-                                                                                                {renderHeader ? renderHeader(column.field, column) : column.header}
-                                                                                            </span>
-                                                                                            {getSortDirection(column.field) === 'asc' && (
-                                                                                                <div className="ms-th-title-icon justify-center">
-                                                                                                    <div className="mi icon16 arrow-up"></div>
-                                                                                                </div>
-                                                                                            )}
-                                                                                            {getSortDirection(column.field) === 'desc' && (
-                                                                                                <div className="ms-th-title-icon justify-center">
-                                                                                                    <div className="mi icon16 arrow-down"></div>
-                                                                                                </div>
-                                                                                            )}
-                                                                                        </div>
+                                                {orderedColumns.map((column) => {
+                                                    const canSort = column.sortable !== false;
+                                                    const canPin = column.pinnable !== false;
+                                                    const hasHeaderMenu = canSort || canPin;
+                                                    const headerContent = (
+                                                        <div className="th-trigger" role="button" tabIndex={0}>
+                                                            <div className="menu-wrapper">
+                                                                <div className="menu-button-container">
+                                                                    <div className="ms-th-title flex flex-between">
+                                                                        <div className="w-full">
+                                                                            <div
+                                                                                className={cn(
+                                                                                    "caption_arrow_wrap",
+                                                                                    column.align === 'center' ? 'justify-center' :
+                                                                                        column.align === 'right' ? 'justify-end' :
+                                                                                            'justify-start'
+                                                                                )}
+                                                                                style={{ textAlign: column.align || 'left' }}
+                                                                            >
+                                                                                {isPinned(column) && (
+                                                                                    <div className="mi icon16 pinned"></div>
+                                                                                )}
+                                                                                <span className="caption-btn flex">
+                                                                                    {renderHeader ? renderHeader(column.field, column) : column.header}
+                                                                                </span>
+                                                                                {getSortDirection(column.field) === 'asc' && (
+                                                                                    <div className="ms-th-title-icon justify-center">
+                                                                                        <div className="mi icon16 arrow-up"></div>
                                                                                     </div>
-                                                                                </div>
+                                                                                )}
+                                                                                {getSortDirection(column.field) === 'desc' && (
+                                                                                    <div className="ms-th-title-icon justify-center">
+                                                                                        <div className="mi icon16 arrow-down"></div>
+                                                                                    </div>
+                                                                                )}
                                                                             </div>
                                                                         </div>
                                                                     </div>
-                                                                </PopoverTrigger>
-                                                                <PopoverContent align="start" className="p-0 w-auto">
-                                                                    <ul className="menu-wrapper-menu" role="menu">
-                                                                        {column.sortable !== false && (
-                                                                            <>
-                                                                                <li
-                                                                                    className="menu-wrapper-item flex menu-wrapper-item-icon"
-                                                                                    role="menuitem"
-                                                                                    tabIndex={-1}
-                                                                                    onClick={() => handleSort(column.field, null)}
-                                                                                >
-                                                                                    <div className="mi icon16 menu-item-ic empty"></div>
-                                                                                    <div className="menu-item-content">{t('sort.none')}</div>
-                                                                                </li>
-                                                                                <li
-                                                                                    className={cn(
-                                                                                        "menu-wrapper-item flex menu-wrapper-item-icon",
-                                                                                        getSortDirection(column.field) === 'asc' && 'checked'
-                                                                                    )}
-                                                                                    role="menuitem"
-                                                                                    tabIndex={-1}
-                                                                                    onClick={() => handleSort(column.field, 'asc')}
-                                                                                >
-                                                                                    <div className="mi icon16 menu-item-ic arrow-up"></div>
-                                                                                    <div className="menu-item-content">{t('sort.asc')}</div>
-                                                                                </li>
-                                                                                <li
-                                                                                    className={cn(
-                                                                                        "menu-wrapper-item flex menu-wrapper-item-icon",
-                                                                                        getSortDirection(column.field) === 'desc' && 'checked'
-                                                                                    )}
-                                                                                    role="menuitem"
-                                                                                    tabIndex={-1}
-                                                                                    onClick={() => handleSort(column.field, 'desc')}
-                                                                                >
-                                                                                    <div className="mi icon16 menu-item-ic arrow-down"></div>
-                                                                                    <div className="menu-item-content">{t('sort.desc')}</div>
-                                                                                </li>
-                                                                                <div className="menu-border"></div>
-                                                                            </>
-                                                                        )}
-                                                                        {column.pinnable !== false && (
-                                                                            <>
-                                                                                <li
-                                                                                    className={cn(
-                                                                                        "menu-wrapper-item flex menu-wrapper-item-icon",
-                                                                                        pinnedColumns.includes(column.field) && 'checked'
-                                                                                    )}
-                                                                                    role="menuitem"
-                                                                                    tabIndex={-1}
-                                                                                    onClick={() => togglePin(column.field)}
-                                                                                >
-                                                                                    <div className="mi icon16 menu-item-ic pin"></div>
-                                                                                    <div className="menu-item-content">{t('pin')}</div>
-                                                                                </li>
-                                                                                <li
-                                                                                    className="menu-wrapper-item flex menu-wrapper-item-icon"
-                                                                                    role="menuitem"
-                                                                                    tabIndex={-1}
-                                                                                    onClick={() => togglePin(column.field)}
-                                                                                >
-                                                                                    <div className="mi icon16 menu-item-ic unpin"></div>
-                                                                                    <div className="menu-item-content">{t('unpin')}</div>
-                                                                                </li>
-                                                                            </>
-                                                                        )}
-                                                                    </ul>
-                                                                </PopoverContent>
-                                                            </Popover>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    );
 
-                                                            {/* Filter Button with Popover */}
-                                                            <div className="ms-th-title-icon justify-center">
-                                                                {column.filterType && (
+                                                    return (
+                                                        <th
+                                                            key={column.field}
+                                                            className={cn(
+                                                                "ms-col-th ms-th",
+                                                                isPinned(column) && "lock"
+                                                            )}
+                                                            style={columnStyles[column.field]}
+                                                        >
+                                                            <div className="ms-th-content flex-row">
+                                                                {hasHeaderMenu ? (
                                                                     <Popover
-                                                                        open={isPopoverOpen(column.field, 'filter')}
+                                                                        open={isPopoverOpen(column.field, 'sort')}
                                                                         onOpenChange={(open: boolean) => {
                                                                             if (open) {
-                                                                                openFilterPopover(column.field);
+                                                                                openSortPopover(column.field);
                                                                             } else {
                                                                                 setActivePopover(null);
                                                                             }
                                                                         }}
-
                                                                     >
                                                                         <PopoverTrigger asChild>
-                                                                            <button
-                                                                                className="filter-btn"
-                                                                                type="button"
-                                                                                onClick={(e) => e.stopPropagation()}
-                                                                            >
-                                                                                <div
-                                                                                    className={cn(
-                                                                                        "mi icon16",
-                                                                                        !isFilterActive(column.field) ? "filter--default" : "filter--active"
-                                                                                    )}
-                                                                                ></div>
-                                                                            </button>
+                                                                            {headerContent}
                                                                         </PopoverTrigger>
-                                                                        <PopoverContent align="end" className="p-0">
-                                                                            <FilterPopup
-                                                                                column={column}
-                                                                                filterState={getFilterState(column)}
-                                                                                onApply={(state) => handleApplyFilter(column.field, state)}
-                                                                                onClear={() => handleClearFilter(column.field)}
-                                                                                onClose={() => setActivePopover(null)}
-                                                                            />
+                                                                        <PopoverContent align="start" className="p-0 w-auto">
+                                                                            <ul className="menu-wrapper-menu" role="menu">
+                                                                                {canSort && (
+                                                                                    <>
+                                                                                        <li
+                                                                                            className="menu-wrapper-item flex menu-wrapper-item-icon"
+                                                                                            role="menuitem"
+                                                                                            tabIndex={-1}
+                                                                                            onClick={() => handleSort(column.field, null)}
+                                                                                        >
+                                                                                            <div className="mi icon16 menu-item-ic empty"></div>
+                                                                                            <div className="menu-item-content">{t('sort.none')}</div>
+                                                                                        </li>
+                                                                                        <li
+                                                                                            className={cn(
+                                                                                                "menu-wrapper-item flex menu-wrapper-item-icon",
+                                                                                                getSortDirection(column.field) === 'asc' && 'checked'
+                                                                                            )}
+                                                                                            role="menuitem"
+                                                                                            tabIndex={-1}
+                                                                                            onClick={() => handleSort(column.field, 'asc')}
+                                                                                        >
+                                                                                            <div className="mi icon16 menu-item-ic arrow-up"></div>
+                                                                                            <div className="menu-item-content">{t('sort.asc')}</div>
+                                                                                        </li>
+                                                                                        <li
+                                                                                            className={cn(
+                                                                                                "menu-wrapper-item flex menu-wrapper-item-icon",
+                                                                                                getSortDirection(column.field) === 'desc' && 'checked'
+                                                                                            )}
+                                                                                            role="menuitem"
+                                                                                            tabIndex={-1}
+                                                                                            onClick={() => handleSort(column.field, 'desc')}
+                                                                                        >
+                                                                                            <div className="mi icon16 menu-item-ic arrow-down"></div>
+                                                                                            <div className="menu-item-content">{t('sort.desc')}</div>
+                                                                                        </li>
+                                                                                        <div className="menu-border"></div>
+                                                                                    </>
+                                                                                )}
+                                                                                {canPin && (
+                                                                                    <>
+                                                                                        <li
+                                                                                            className={cn(
+                                                                                                "menu-wrapper-item flex menu-wrapper-item-icon",
+                                                                                                pinnedColumns.includes(column.field) && 'checked'
+                                                                                            )}
+                                                                                            role="menuitem"
+                                                                                            tabIndex={-1}
+                                                                                            onClick={() => togglePin(column.field)}
+                                                                                        >
+                                                                                            <div className="mi icon16 menu-item-ic pin"></div>
+                                                                                            <div className="menu-item-content">{t('pin')}</div>
+                                                                                        </li>
+                                                                                        <li
+                                                                                            className="menu-wrapper-item flex menu-wrapper-item-icon"
+                                                                                            role="menuitem"
+                                                                                            tabIndex={-1}
+                                                                                            onClick={() => togglePin(column.field)}
+                                                                                        >
+                                                                                            <div className="mi icon16 menu-item-ic unpin"></div>
+                                                                                            <div className="menu-item-content">{t('unpin')}</div>
+                                                                                        </li>
+                                                                                    </>
+                                                                                )}
+                                                                            </ul>
                                                                         </PopoverContent>
                                                                     </Popover>
+                                                                ) : (
+                                                                    headerContent
                                                                 )}
-                                                            </div>
 
-                                                            <div
-                                                                className="ms-resize"
-                                                                onMouseDown={(e) => {
-                                                                    e.stopPropagation();
-                                                                    startResize(column.field, e.clientX);
-                                                                }}
-                                                            />
-                                                        </div>
-                                                    </th>
-                                                ))}
+                                                                {/* Filter Button with Popover */}
+                                                                <div className="ms-th-title-icon justify-center">
+                                                                    {column.filterType && (
+                                                                        <Popover
+                                                                            open={isPopoverOpen(column.field, 'filter')}
+                                                                            onOpenChange={(open: boolean) => {
+                                                                                if (open) {
+                                                                                    openFilterPopover(column.field);
+                                                                                } else {
+                                                                                    setActivePopover(null);
+                                                                                }
+                                                                            }}
+
+                                                                        >
+                                                                            <PopoverTrigger asChild>
+                                                                                <button
+                                                                                    className="filter-btn"
+                                                                                    type="button"
+                                                                                    onClick={(e) => e.stopPropagation()}
+                                                                                >
+                                                                                    <div
+                                                                                        className={cn(
+                                                                                            "mi icon16",
+                                                                                            !isFilterActive(column.field) ? "filter--default" : "filter--active"
+                                                                                        )}
+                                                                                    ></div>
+                                                                                </button>
+                                                                            </PopoverTrigger>
+                                                                            <PopoverContent align="end" className="p-0">
+                                                                                <FilterPopup
+                                                                                    column={column}
+                                                                                    filterState={getFilterState(column)}
+                                                                                    onApply={(state) => handleApplyFilter(column.field, state)}
+                                                                                    onClear={() => handleClearFilter(column.field)}
+                                                                                    onClose={() => setActivePopover(null)}
+                                                                                />
+                                                                            </PopoverContent>
+                                                                        </Popover>
+                                                                    )}
+                                                                </div>
+
+                                                                <div
+                                                                    className="ms-resize"
+                                                                    onMouseDown={(e) => {
+                                                                        e.stopPropagation();
+                                                                        startResize(column.field, e.clientX);
+                                                                    }}
+                                                                />
+                                                            </div>
+                                                        </th>
+                                                    );
+                                                })}
 
                                                 {renderActionColumn && (
                                                     <th
@@ -788,9 +788,11 @@ export function BaseTable<T>({
                                                 // Loading Skeleton
                                                 Array.from({ length: skeletonRowCount }).map((_, n) => (
                                                     <tr key={`shimmer-${n}`} className="ms-tr">
-                                                        <td style={{ width: '40px', minWidth: '40px', borderRight: '1px dotted rgb(193, 196, 204)' }}>
-                                                            <div className="shimmer"></div>
-                                                        </td>
+                                                        {hasSelection && (
+                                                            <td style={{ width: '40px', minWidth: '40px', borderRight: '1px dotted rgb(193, 196, 204)' }}>
+                                                                <div className="shimmer"></div>
+                                                            </td>
+                                                        )}
                                                         {orderedColumns.map((column) => (
                                                             <td
                                                                 key={`shimmer-${column.field}`}
@@ -829,20 +831,23 @@ export function BaseTable<T>({
                                                             key={key}
                                                             className={cn(
                                                                 "ms-tr",
-                                                                isActive && "row-selected",
-                                                                isChecked && "row-checked"
+                                                                hasSelection && isActive && "row-selected",
+                                                                hasSelection && isChecked && "row-checked",
+                                                                getRowClassName?.(item, rowIndex)
                                                             )}
-                                                            onClick={() => handleRowClick(item, rowIndex)}
+                                                            onClick={() => handleRowClick(item)}
                                                         >
-                                                            <td
-                                                                className="ms-td multiple-cell sticky ms-col-td-multiple"
-                                                                onClick={(e) => e.stopPropagation()}
-                                                            >
-                                                                <Checkbox
-                                                                    checked={isChecked}
-                                                                    onCheckedChange={(checked) => toggleRowSelection(item, checked)}
-                                                                />
-                                                            </td>
+                                                            {hasSelection && (
+                                                                <td
+                                                                    className="ms-td multiple-cell sticky ms-col-td-multiple"
+                                                                    onClick={(e) => e.stopPropagation()}
+                                                                >
+                                                                    <Checkbox
+                                                                        checked={isChecked}
+                                                                        onCheckedChange={(checked) => toggleRowSelection(item, checked)}
+                                                                    />
+                                                                </td>
+                                                            )}
 
                                                             {orderedColumns.map((column) => (
                                                                 <td

@@ -1,23 +1,25 @@
 "use client";
 
-import { useMemo, useState, useCallback } from "react";
+import { useMemo, useState, useCallback, useEffect } from "react";
 import {
   Clock,
   CalendarDays,
   ChevronLeft,
   ChevronRight,
   Settings,
-  HelpCircle,
   LogOut,
+  LogIn,
   ShieldCheck,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useMyShiftsQuery } from "../hooks/use-shift-queries";
 import { CheckInCard } from "../components/check-in-card";
 import { useCheckoutAutoLogout } from "../hooks/use-checkout-auto-logout";
+import { ALCard } from "@/components/ui/al-card";
 import { ALTitleCard } from "@/components/ui/al-title-card";
 import { Button } from "@/components/ui/button";
-import type {
+import {
+  ATTENDANCE_STATUS_CONFIG,
   ShiftAssignmentListDto,
   ShiftAssignmentDetailDto,
 } from "../types/shift-management.types";
@@ -26,8 +28,30 @@ import { cn } from "@/lib/utils";
 
 // ── helpers ──
 
-function todayIso() {
-  return new Date().toISOString().slice(0, 10); // "YYYY-MM-DD"
+function buildDateOnly(year: number, month: number, day: number) {
+  return `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+}
+
+function toDateOnly(date: Date) {
+  return buildDateOnly(date.getFullYear(), date.getMonth(), date.getDate());
+}
+
+function getSwissTodayIso(date: Date) {
+  return dateUtils.formatLocal(date, "yyyy-MM-dd");
+}
+
+function getSwissWeekdayIndex(date: Date) {
+  const isoWeekday = Number(dateUtils.formatLocal(date, "i"));
+  return Number.isFinite(isoWeekday) ? isoWeekday - 1 : 0;
+}
+
+function getSwissYear(date: Date) {
+  return Number(dateUtils.formatLocal(date, "yyyy"));
+}
+
+function getSwissMonthIndex(date: Date) {
+  const month = Number(dateUtils.formatLocal(date, "M"));
+  return Number.isFinite(month) ? month - 1 : 0;
 }
 
 function toMinutesBetween(
@@ -50,46 +74,77 @@ function fmtTime(iso: string | null | undefined, fallback = "—") {
   }
 }
 
-type DayStatus = "ON_TIME" | "LATE" | "OT" | "INCOMING" | "NONE";
-
 const WEEKDAY_HEADERS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
-// ── stat computation ──
-
-function getAssignmentStatus(
-  a: ShiftAssignmentListDto,
+function getCalendarAttendanceStatusCode(
+  assignment: ShiftAssignmentListDto,
   now: Date
-): DayStatus {
-  const att = (
-    a as ShiftAssignmentListDto & {
-      attendance?: {
-        lateMinutes?: number;
-        workedMinutes?: number;
-        actualCheckInAt?: string | null;
-        attendanceStatusCode?: string;
-      };
-    }
-  ).attendance;
+) {
+  const attendance = assignment.attendance;
+  const explicitStatus = attendance?.attendanceStatusCode?.toUpperCase();
 
-  if (!a.workDate) return "NONE";
-  const nowIsoDate = now.toISOString().slice(0, 10);
-  if (a.workDate > nowIsoDate) return "INCOMING";
+  if (explicitStatus) return explicitStatus;
+  if ((attendance?.lateMinutes ?? 0) > 0) return "LATE";
+  if ((attendance?.earlyLeaveMinutes ?? 0) > 0) return "EARLY_LEAVE";
+  if (attendance?.actualCheckInAt && !attendance?.actualCheckOutAt) return "ACTIVE";
+  if (attendance?.actualCheckOutAt) return "COMPLETED";
 
-  const statusCode = att?.attendanceStatusCode?.toUpperCase();
-  const lateMinutes = att?.lateMinutes ?? 0;
-  const workedMinutes = att?.workedMinutes ?? 0;
-  const plannedMinutes = toMinutesBetween(a.plannedStartAt, a.plannedEndAt);
+  const swissToday = getSwissTodayIso(now);
+  if (!assignment.isActive || assignment.workDate < swissToday) return "ABSENT";
+  return "SCHEDULED";
+}
 
-  if (statusCode === "LATE" || lateMinutes > 0) return "LATE";
-  if (
-    workedMinutes > 0 &&
-    plannedMinutes > 0 &&
-    workedMinutes > plannedMinutes
-  )
-    return "OT";
-  if (statusCode === "COMPLETED" || !!att?.actualCheckInAt) return "ON_TIME";
-  if (a.workDate === nowIsoDate) return "INCOMING";
-  return "NONE";
+function getCalendarAttendanceStatusLabel(
+  assignment: ShiftAssignmentListDto,
+  statusCode: string
+) {
+  return (
+    assignment.attendance?.attendanceStatusName?.trim() ||
+    ATTENDANCE_STATUS_CONFIG[statusCode]?.label ||
+    statusCode
+  );
+}
+
+function getCalendarStatusClasses(statusCode: string) {
+  const code = statusCode.toUpperCase();
+
+  if (code === "LATE" || code === "EARLY_LEAVE") {
+    return {
+      card: "border-amber-200 bg-amber-50/90 border-l-[3px] border-l-amber-500",
+      status: "text-amber-700",
+      icon: "text-amber-500",
+    };
+  }
+
+  if (code === "ACTIVE" || code === "ON_DUTY") {
+    return {
+      card: "border-blue-200 bg-blue-50/90 border-l-[3px] border-l-blue-500",
+      status: "text-blue-700",
+      icon: "text-blue-500",
+    };
+  }
+
+  if (code === "COMPLETED") {
+    return {
+      card: "border-emerald-200 bg-emerald-50/90 border-l-[3px] border-l-emerald-500",
+      status: "text-emerald-700",
+      icon: "text-emerald-500",
+    };
+  }
+
+  if (code === "ABSENT") {
+    return {
+      card: "border-red-200 bg-red-50/90 border-l-[3px] border-l-red-500",
+      status: "text-red-700",
+      icon: "text-red-500",
+    };
+  }
+
+  return {
+    card: "border-slate-200 bg-slate-50/90 border-l-[3px] border-l-slate-400",
+    status: "text-slate-600",
+    icon: "text-slate-400",
+  };
 }
 
 // ── month navigation ──
@@ -118,28 +173,34 @@ function getTrailingDays(year: number, month: number) {
 
 export function MyShifts() {
   const t = useTranslations("shift.myShift");
-  const today = todayIso();
-  const now = useMemo(() => new Date(), []);
+  const [now, setNow] = useState(() => new Date());
+
+  useEffect(() => {
+    const timer = window.setInterval(() => setNow(new Date()), 60_000);
+    return () => window.clearInterval(timer);
+  }, []);
+
+  const today = useMemo(() => getSwissTodayIso(now), [now]);
+  const todayWeekdayIndex = useMemo(() => getSwissWeekdayIndex(now), [now]);
 
   // Auto-logout countdown after check-out
   const autoLogout = useCheckoutAutoLogout();
 
   // Month navigation: [year, monthIndex]
-  const [viewYear, setViewYear] = useState(now.getFullYear());
-  const [viewMonth, setViewMonth] = useState(now.getMonth());
-  const [viewMode, setViewMode] = useState<"week" | "month">("month");
+  const [viewYear, setViewYear] = useState(() => getSwissYear(new Date()));
+  const [viewMonth, setViewMonth] = useState(() => getSwissMonthIndex(new Date()));
 
   // Load broader date range to cover the full month view
   const fromDate = useMemo(() => {
     const d = new Date(viewYear, viewMonth, 1);
     d.setDate(d.getDate() - 7); // buffer for prev month trailing days
-    return d.toISOString().slice(0, 10);
+    return toDateOnly(d);
   }, [viewYear, viewMonth]);
 
   const toDate = useMemo(() => {
     const d = new Date(viewYear, viewMonth + 1, 0);
     d.setDate(d.getDate() + 7); // buffer for next month leading days
-    return d.toISOString().slice(0, 10);
+    return toDateOnly(d);
   }, [viewYear, viewMonth]);
 
   const { data, isLoading } = useMyShiftsQuery({
@@ -162,9 +223,9 @@ export function MyShifts() {
 
   // Compute monthly stats
   const monthStats = useMemo(() => {
-    const monthStart = `${viewYear}-${String(viewMonth + 1).padStart(2, "0")}-01`;
+    const monthStart = buildDateOnly(viewYear, viewMonth, 1);
     const daysInMonth = getDaysInMonth(viewYear, viewMonth);
-    const monthEnd = `${viewYear}-${String(viewMonth + 1).padStart(2, "0")}-${String(daysInMonth).padStart(2, "0")}`;
+    const monthEnd = buildDateOnly(viewYear, viewMonth, daysInMonth);
 
     const monthAssignments = all.filter(
       (a) => a.workDate >= monthStart && a.workDate <= monthEnd
@@ -178,16 +239,7 @@ export function MyShifts() {
     const processedDates = new Set<string>();
 
     monthAssignments.forEach((a) => {
-      const att = (a as ShiftAssignmentListDto & {
-        attendance?: {
-          lateMinutes?: number;
-          earlyLeaveMinutes?: number;
-          workedMinutes?: number;
-          actualCheckInAt?: string | null;
-          actualCheckOutAt?: string | null;
-          attendanceStatusCode?: string;
-        };
-      }).attendance;
+      const att = a.attendance;
 
       const statusCode = att?.attendanceStatusCode?.toUpperCase();
 
@@ -234,9 +286,7 @@ export function MyShifts() {
   // Today's check-in time
   const todayCheckInTime = useMemo(() => {
     for (const a of todayShifts) {
-      const att = (a as ShiftAssignmentListDto & {
-        attendance?: { actualCheckInAt?: string | null };
-      }).attendance;
+      const att = a.attendance;
       if (att?.actualCheckInAt) return fmtTime(att.actualCheckInAt);
     }
     return null;
@@ -246,12 +296,7 @@ export function MyShifts() {
   const handleCheckOutSuccess = useCallback(() => {
     // Count how many of today's shifts still need check-out (checked-in but not yet out)
     const uncheckedOutCount = todayShifts.filter((a) => {
-      const att = (a as ShiftAssignmentListDto & {
-        attendance?: {
-          actualCheckInAt?: string | null;
-          actualCheckOutAt?: string | null;
-        };
-      }).attendance;
+      const att = a.attendance;
       return !!att?.actualCheckInAt && !att?.actualCheckOutAt;
     }).length;
 
@@ -284,13 +329,13 @@ export function MyShifts() {
     // Leading blanks (prev month)
     for (let i = leadingBlanks - 1; i >= 0; i--) {
       const day = prevDaysInMonth - i;
-      const dateIso = `${prevYear}-${String(prevMonth + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+      const dateIso = buildDateOnly(prevYear, prevMonth, day);
       cells.push({ kind: "prev", day, dateIso });
     }
 
     // Current month
     for (let day = 1; day <= daysInMonth; day++) {
-      const dateIso = `${viewYear}-${String(viewMonth + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+      const dateIso = buildDateOnly(viewYear, viewMonth, day);
       cells.push({ kind: "current", day, dateIso });
     }
 
@@ -298,7 +343,7 @@ export function MyShifts() {
     const nextMonth = viewMonth === 11 ? 0 : viewMonth + 1;
     const nextYear = viewMonth === 11 ? viewYear + 1 : viewYear;
     for (let i = 1; i <= trailingBlanks; i++) {
-      const dateIso = `${nextYear}-${String(nextMonth + 1).padStart(2, "0")}-${String(i).padStart(2, "0")}`;
+      const dateIso = buildDateOnly(nextYear, nextMonth, i);
       cells.push({ kind: "next", day: i, dateIso });
     }
 
@@ -331,98 +376,83 @@ export function MyShifts() {
   };
 
   return (
-    <div className="flex h-full min-h-0 w-full flex-col gap-4 overflow-hidden">
+    <div className="flex h-full min-h-0 w-full flex-col gap-4 overflow-y-auto xl:overflow-hidden">
       {/* ── Header ── */}
       <ALTitleCard
         title={t("title")}
-        titleClassName="text-lg font-semibold tracking-normal text-slate-900"
+        titleClassName="truncate"
+        headerClassName="lg:items-center"
         className="border-slate-200 bg-white"
-        bodyClassName="gap-3"
-      >
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          {/* View mode toggle */}
-          <div className="flex rounded-md border border-slate-200 overflow-hidden text-sm">
-            <button
+        bodyClassName="gap-0"
+        actions={
+          <div className="flex w-full flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-end xl:flex-nowrap">
+            
+
+
+            <div className="flex items-center gap-1 rounded-md border border-slate-200 bg-white p-1">
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8 text-slate-400 hover:text-slate-700"
+                onClick={() => setViewYear((year) => year - 1)}
+              >
+                <ChevronLeft className="h-4 w-4" />
+              </Button>
+              <span className="min-w-12 px-1 text-center text-sm font-medium tabular-nums text-[#1A3A52]">
+                {viewYear}
+              </span>
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8 text-slate-400 hover:text-slate-700"
+                onClick={() => setViewYear((year) => year + 1)}
+              >
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+            </div>
+
+            <div className="flex items-center gap-1 rounded-md border border-slate-200 bg-white p-1">
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8 text-slate-400 hover:text-slate-700"
+                onClick={goToPrevMonth}
+              >
+                <ChevronLeft className="h-3.5 w-3.5" />
+              </Button>
+              <span className="min-w-50 px-2 text-center text-sm text-slate-600 truncate">
+                {periodLabel}
+              </span>
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8 text-slate-400 hover:text-slate-700"
+                onClick={goToNextMonth}
+              >
+                <ChevronRight className="h-3.5 w-3.5" />
+              </Button>
+            </div>
+
+            <Button
               type="button"
-              className={cn(
-                "px-3 py-1.5 transition-colors",
-                viewMode === "week"
-                  ? "bg-slate-100 text-slate-900 font-medium"
-                  : "bg-white text-slate-500 hover:bg-slate-50"
-              )}
-              onClick={() => setViewMode("week")}
+              variant="outline"
+              size="icon"
+              className="h-9 w-9 text-slate-400 hover:text-slate-700"
             >
-              {t("viewMode.week")}
-            </button>
-            <button
-              type="button"
-              className={cn(
-                "px-3 py-1.5 transition-colors border-l border-slate-200",
-                viewMode === "month"
-                  ? "bg-slate-100 text-slate-900 font-medium"
-                  : "bg-white text-slate-500 hover:bg-slate-50"
-              )}
-              onClick={() => setViewMode("month")}
-            >
-              {t("viewMode.month")}
-            </button>
+              <Settings className="h-4 w-4" />
+            </Button>
           </div>
-
-          {/* Help icon */}
-          <Button type="button" variant="outline" size="sm" className="hidden gap-1.5 text-slate-500 hover:bg-slate-50 sm:flex">
-            <HelpCircle className="h-4 w-4" />
-            Question
-          </Button>
-
-          {/* Year navigation */}
-          <div className="flex items-center gap-1 border border-slate-200 rounded-md bg-white">
-            <button
-              type="button"
-              className="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-50 rounded-l-md"
-              onClick={() => setViewYear((y) => y - 1)}
-            >
-              <ChevronLeft className="h-4 w-4" />
-            </button>
-            <span className="text-sm font-medium text-slate-700 px-2 tabular-nums">{viewYear}</span>
-            <button
-              type="button"
-              className="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-50 rounded-r-md"
-              onClick={() => setViewYear((y) => y + 1)}
-            >
-              <ChevronRight className="h-4 w-4" />
-            </button>
-          </div>
-
-          {/* Period selector dropdown */}
-          <div className="flex items-center gap-1 rounded-md border border-slate-200 bg-white px-3 py-1.5 text-sm text-slate-600">
-            <button
-              type="button"
-              className="p-0.5 text-slate-400 hover:text-slate-700"
-              onClick={goToPrevMonth}
-            >
-              <ChevronLeft className="h-3.5 w-3.5" />
-            </button>
-            <span className="min-w-50 text-center truncate">{periodLabel}</span>
-            <button
-              type="button"
-              className="p-0.5 text-slate-400 hover:text-slate-700"
-              onClick={goToNextMonth}
-            >
-              <ChevronRight className="h-3.5 w-3.5" />
-            </button>
-          </div>
-
-          {/* Settings gear */}
-          <Button type="button" variant="outline" size="icon" className="text-slate-400 hover:text-slate-700">
-            <Settings className="h-4 w-4" />
-          </Button>
-        </div>
-      </ALTitleCard>
+        }
+      />
 
       {/* ── Side-by-side layout: Calendar (left) + Attendance (right) ── */}
-      <div className="grid min-h-0 flex-1 grid-cols-1 gap-4 xl:grid-cols-[1fr_380px]">
+      <div className="grid flex-1 grid-cols-1 gap-4 xl:min-h-0 xl:grid-cols-[minmax(0,1fr)_380px] xl:overflow-hidden">
         {/* ── LEFT COLUMN: Stats + Calendar ── */}
-        <div className="space-y-4 order-2 xl:order-1">
+        <div className="order-2 flex min-w-0 flex-col gap-4 xl:order-1 xl:min-h-0">
           {/* ── Summary stat cards ── */}
           <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
             {/* Total actual workdays */}
@@ -478,14 +508,15 @@ export function MyShifts() {
             </div>
           </div>
 
-          {/* ── Monthly Calendar ── */}
-          {isLoading ? (
-            <div className="flex items-center justify-center rounded-xl border border-slate-200 bg-white py-20 text-sm text-slate-400">
-              {t("loading")}
-            </div>
-          ) : (
-            <div className="overflow-hidden rounded-xl border border-slate-200 bg-white">
-              <table className="w-full table-fixed border-collapse">
+          <div className="flex min-h-0 flex-1 flex-col gap-3 xl:min-h-0">
+            {/* ── Monthly Calendar ── */}
+            {isLoading ? (
+              <div className="flex items-center justify-center rounded-xl border border-slate-200 bg-white py-20 text-sm text-slate-400 xl:flex-1">
+                {t("loading")}
+              </div>
+            ) : (
+              <div className="min-h-0 flex-1 overflow-auto rounded-xl border border-slate-200 bg-white">
+                <table className="min-w-180 w-full table-fixed border-collapse">
                 <thead>
                   <tr>
                     {WEEKDAY_HEADERS.map((day, i) => (
@@ -498,14 +529,9 @@ export function MyShifts() {
                             : "text-slate-600"
                         )}
                         style={
-                          (() => {
-                            const todayDow = new Date().getDay();
-                            const todayMondayBased =
-                              todayDow === 0 ? 6 : todayDow - 1;
-                            return todayMondayBased === i
-                              ? { backgroundColor: "#6366f1", color: "white" }
-                              : {};
-                          })()
+                          todayWeekdayIndex === i
+                            ? { backgroundColor: "#6366f1", color: "white" }
+                            : {}
                         }
                       >
                         {day}
@@ -533,7 +559,7 @@ export function MyShifts() {
                               <td
                                 key={cell.dateIso}
                                 className={cn(
-                                  "relative border-b border-r border-slate-200 p-1 align-top h-20 transition-colors",
+                                  "relative h-28 border-b border-r border-slate-200 p-1 align-top transition-colors lg:h-32",
                                   isWeekend && "bg-[repeating-linear-gradient(135deg,transparent,transparent_3px,rgba(0,0,0,0.03)_3px,rgba(0,0,0,0.03)_6px)]",
                                   isToday && "ring-2 ring-inset ring-indigo-500",
                                   isOtherMonth && "opacity-40"
@@ -555,47 +581,60 @@ export function MyShifts() {
 
                                 {/* Shift indicators */}
                                 {assignments.length > 0 && (
-                                  <div className="mt-4 space-y-0.5">
+                                  <div className="mt-5 space-y-1">
                                     {assignments.slice(0, 2).map((a) => {
-                                      const status = getAssignmentStatus(a, now);
-                                      const shortName =
-                                        a.templateName?.substring(0, 2)?.toUpperCase() ||
-                                        "S";
+                                      const statusCode = getCalendarAttendanceStatusCode(a, now);
+                                      const statusLabel = getCalendarAttendanceStatusLabel(
+                                        a,
+                                        statusCode
+                                      );
+                                      const statusClasses = getCalendarStatusClasses(statusCode);
                                       return (
-                                        <div
+                                        <ALCard
                                           key={a.shiftAssignmentId}
+                                          variant="default"
+                                          elevation="none"
+                                          radius="md"
+                                          padding="none"
                                           className={cn(
-                                            "flex items-center gap-0.5 rounded px-1 py-px text-[9px] font-medium",
-                                            status === "ON_TIME" &&
-                                              "bg-emerald-50 text-emerald-700",
-                                            status === "LATE" &&
-                                              "bg-amber-50 text-amber-700",
-                                            status === "OT" &&
-                                              "bg-blue-50 text-blue-700",
-                                            status === "INCOMING" &&
-                                              "bg-slate-50 text-slate-600",
-                                            status === "NONE" &&
-                                              "bg-slate-50 text-slate-400"
+                                            "space-y-1 px-2 py-1.5",
+                                            statusClasses.card
                                           )}
                                         >
-                                          <div
-                                            className={cn(
-                                              "h-1.5 w-1.5 rounded-full shrink-0",
-                                              status === "ON_TIME" &&
-                                                "bg-emerald-500",
-                                              status === "LATE" && "bg-amber-500",
-                                              status === "OT" && "bg-blue-500",
-                                              status === "INCOMING" &&
-                                                "bg-slate-400",
-                                              status === "NONE" && "bg-slate-300"
-                                            )}
-                                          />
-                                          <span className="truncate">{shortName}</span>
-                                        </div>
+                                          <p className="truncate text-[10px] font-semibold leading-4 text-slate-800">
+                                            {a.templateName || `#${a.shiftAssignmentId}`}
+                                          </p>
+                                          <div className="flex items-center gap-1 text-[10px] leading-4 text-slate-500">
+                                            <Clock className="h-3 w-3 shrink-0" />
+                                            <span className="truncate">
+                                              {fmtTime(a.plannedStartAt)} - {fmtTime(a.plannedEndAt)}
+                                            </span>
+                                          </div>
+                                          <div className="flex items-center gap-1 text-[10px] leading-4 text-slate-600">
+                                            <LogIn
+                                              className={cn(
+                                                "h-3 w-3 shrink-0",
+                                                statusClasses.icon
+                                              )}
+                                            />
+                                            <span className="shrink-0 tabular-nums">
+                                              {fmtTime(a.attendance?.actualCheckInAt)}
+                                            </span>
+                                            <span className="text-slate-300">•</span>
+                                            <span
+                                              className={cn(
+                                                "min-w-0 truncate font-semibold",
+                                                statusClasses.status
+                                              )}
+                                            >
+                                              {statusLabel}
+                                            </span>
+                                          </div>
+                                        </ALCard>
                                       );
                                     })}
                                     {assignments.length > 2 && (
-                                      <p className="text-[9px] text-slate-400 text-center">
+                                      <p className="text-center text-[10px] font-medium text-slate-400">
                                         +{assignments.length - 2}
                                       </p>
                                     )}
@@ -609,16 +648,17 @@ export function MyShifts() {
                     }
                   )}
                 </tbody>
-              </table>
-            </div>
-          )}
+                </table>
+              </div>
+            )}
 
-          {/* ── Auto-sync note ── */}
-          <p className="text-xs italic text-slate-400">{t("autoSyncNote")}</p>
+            {/* ── Auto-sync note ── */}
+            <p className="text-xs italic text-slate-400">{t("autoSyncNote")}</p>
+          </div>
         </div>
 
         {/* ── RIGHT COLUMN: Attendance + Auto-logout ── */}
-        <div className="space-y-4 order-1 xl:order-2">
+        <div className="order-1 flex min-w-0 flex-col gap-4 xl:order-2 xl:min-h-0 xl:overflow-y-auto xl:pr-1">
           {/* ── Auto-logout countdown banner ── */}
           {autoLogout.isCountingDown && (
             <div className="flex flex-col gap-3 rounded-xl border border-amber-300 bg-amber-50 px-4 py-3 shadow-sm animate-in fade-in slide-in-from-top-2 duration-300">

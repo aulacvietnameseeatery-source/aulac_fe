@@ -224,6 +224,8 @@
       "businessDate": "Date de travail",
       "selectDate": "Sélectionner une date",
       "quickFilters": "Filtres rapides",
+      "summaryTitle": "Statut des quarts",
+      "summarySubtitle": "Touchez un groupe pour filtrer rapidement la liste du personnel.",
       "kpiHint": "Les KPI et incidents POS sont prêts. Une fois l'intégration POS terminée, les cartes afficheront automatiquement commandes, tickets, revenus et incidents par rôle.",
       "loading": "Chargement du live board...",
       "empty": "Aucun employé n'est actuellement en service.",
@@ -320,11 +322,19 @@
           "subtitle": "Articles les plus vendus aujourd'hui",
           "empty": "Aucune vente finalisée pour l'instant",
           "sold": "{count} vendus",
-          "totalSold": "Top 5 vend {count}",
+          "totalSold": "Top {topCount} vend {count}",
           "stockLeft": "{count} restants",
           "stockOut": "Rupture",
           "stockUnknown": "Stock en synchronisation"
         }
+      },
+      "teamSection": {
+        "title": "Personnel en service",
+        "subtitle": "Suivez la liste selon la date de travail et le filtre actuel.",
+        "count": "{count}/{total} employés",
+        "emptyDescription": "Essayez une autre date ou ouvrez la page de planning pour ajouter du personnel à ce quart.",
+        "cta": "Ajouter du personnel au quart",
+        "openSchedule": "Ouvrir le planning"
       },
       "manualAdjusted": "Cet enregistrement a été ajusté manuellement.",
       "actions": {

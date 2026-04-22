@@ -1,5 +1,3 @@
-import type { AttendanceStatusCode } from "@/types/status-codes";
-
 // ─── Template ─────────────────────────────────────────────────────────────────
 
 export interface ShiftTemplateListDto {
@@ -39,6 +37,7 @@ export interface ShiftAssignmentListDto {
   notes?: string | null;
   assignedAt: string;
   assignedByName: string;
+  attendance?: AttendanceRecordDto | null;
 }
 
 export interface ShiftAssignmentDetailDto extends ShiftAssignmentListDto {

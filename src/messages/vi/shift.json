@@ -224,6 +224,8 @@
       "businessDate": "Ngày làm việc",
       "selectDate": "Chọn ngày",
       "quickFilters": "Bộ lọc nhanh",
+      "summaryTitle": "Trạng thái ca trực",
+      "summarySubtitle": "Chạm vào từng nhóm để lọc nhanh danh sách nhân viên.",
       "kpiHint": "KPI và lỗi từ POS đã sẵn sàng. Khi tích hợp POS hoàn tất, thẻ sẽ tự hiển thị order, bill, doanh thu và sự cố theo vai trò.",
       "loading": "Đang tải live board...",
       "empty": "Hiện không có nhân viên nào đang trong ca.",
@@ -320,11 +322,19 @@
           "subtitle": "Nhóm món bán tốt nhất trong ngày",
           "empty": "Chưa có món bán thành công",
           "sold": "Đã bán {count} phần",
-          "totalSold": "Top 5 bán được {count} phần",
+          "totalSold": "Top {topCount} bán được {count} phần",
           "stockLeft": "Còn {count}",
           "stockOut": "Hết hàng",
           "stockUnknown": "Đang đồng bộ tồn kho"
         }
+      },
+      "teamSection": {
+        "title": "Nhân viên trong ca",
+        "subtitle": "Theo dõi danh sách theo ngày làm việc và bộ lọc hiện tại.",
+        "count": "{count}/{total} nhân viên",
+        "emptyDescription": "Hãy đổi ngày hoặc mở trang phân ca để bổ sung nhân viên cho ca này.",
+        "cta": "Thêm nhân viên vào ca",
+        "openSchedule": "Mở trang phân ca"
       },
       "manualAdjusted": "Bản ghi này đã được điều chỉnh thủ công.",
       "actions": {

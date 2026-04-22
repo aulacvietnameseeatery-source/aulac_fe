@@ -6,6 +6,7 @@ import { Plus, RefreshCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ALCard } from "@/components/ui/al-card";
 import { ALDatePicker } from "@/components/ui/al-date-picker";
+import { ALTitleCard } from "@/components/ui/al-title-card";
 import { BaseTable } from "@/components/ui/table/base-table";
 import { ALConfirmDialog } from "@/components/ui/al-confirm-dialog";
 import { PermissionGuard } from "@/components/permission-guard";
@@ -130,30 +131,27 @@ export function ShiftScheduleList() {
         rowsPerPageOptions={[10, 20, 50, 100]}
         renderTitle={() => (
           <div className="w-full space-y-4 mb-4">
-            <ALCard className="flex flex-wrap items-center justify-between gap-4 px-5 py-4 border-[#D5BA98]/50">
-              <div>
-                <h1 className="text-2xl font-semibold tracking-wide text-[#1A3A52]">{t("title")}</h1>
-                <p className="text-sm text-[#1A3A52]/70 mt-1">
-                  {t("description")}
-                </p>
-              </div>
-              <div className="flex items-center gap-4">
-                <div className="flex items-center gap-2">
-                  <span className="rounded-full border border-blue-600 bg-blue-600 px-2 py-0.5 text-xs font-semibold text-white">
-                    {t("activeCount", { count: activeCount })}
-                  </span>
-                  <span className="rounded-full border border-slate-700 bg-slate-700 px-2 py-0.5 text-xs font-semibold text-white">
-                    {t("cancelledCount", { count: cancelledCount })}
-                  </span>
-                </div>
+            <ALTitleCard
+              title={t("title")}
+              description={t("description")}
+              actions={
                 <PermissionGuard permission={Permissions.AssignShift}>
                   <Button onClick={handleCreate} className="gap-2 bg-[#1A3A52] text-[#FDFBF9] hover:bg-[#1A3A52]/90">
                     <Plus className="w-4 h-4" />
                     {t("newAssignment")}
                   </Button>
                 </PermissionGuard>
+              }
+            >
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="rounded-full border border-blue-600 bg-blue-600 px-2 py-0.5 text-xs font-semibold text-white">
+                  {t("activeCount", { count: activeCount })}
+                </span>
+                <span className="rounded-full border border-slate-700 bg-slate-700 px-2 py-0.5 text-xs font-semibold text-white">
+                  {t("cancelledCount", { count: cancelledCount })}
+                </span>
               </div>
-            </ALCard>
+            </ALTitleCard>
 
             <ALCard padding="md" className="flex flex-wrap items-end justify-between gap-4">
               <div className="flex flex-wrap items-center gap-3">

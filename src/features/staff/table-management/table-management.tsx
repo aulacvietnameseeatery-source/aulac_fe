@@ -173,6 +173,8 @@ export const TableManagementContent: React.FC = () => {
       <div className="space-y-6">
         <ALTitleCard
           title={t("title")}
+          titleClassName="sm:truncate"
+          headerClassName="lg:items-center"
           description={
             <>
               {t("header.tablesCount", { count: tables.length })}

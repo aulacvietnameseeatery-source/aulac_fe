@@ -224,6 +224,8 @@
       "businessDate": "Business Date",
       "selectDate": "Select date",
       "quickFilters": "Quick filters",
+      "summaryTitle": "Shift status",
+      "summarySubtitle": "Tap a group to quickly filter the team list.",
       "kpiHint": "POS KPI and issue fields are ready. Once POS integration is complete, cards will show role-based orders, bills, revenue, and issues automatically.",
       "loading": "Loading live board...",
       "empty": "No staff are currently on shift.",
@@ -320,11 +322,19 @@
           "subtitle": "Best movers today",
           "empty": "No completed sales yet",
           "sold": "{count} sold",
-          "totalSold": "Top 5 sold {count}",
+          "totalSold": "Top {topCount} sold {count}",
           "stockLeft": "{count} left",
           "stockOut": "Out",
           "stockUnknown": "Stock syncing"
         }
+      },
+      "teamSection": {
+        "title": "Team on shift",
+        "subtitle": "Track the list by business date and current filter.",
+        "count": "{count}/{total} staff",
+        "emptyDescription": "Try another date or open the schedule page to add staff to this shift.",
+        "cta": "Add staff to shift",
+        "openSchedule": "Open schedule"
       },
       "manualAdjusted": "This record was manually adjusted.",
       "actions": {

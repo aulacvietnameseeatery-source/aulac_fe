@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ALCard } from "@/components/ui/al-card";
 import { ALConfirmDialog } from "@/components/ui/al-confirm-dialog";
+import { ALTitleCard } from "@/components/ui/al-title-card";
 import { BaseTable } from "@/components/ui/table/base-table";
 import { PermissionGuard } from "@/components/permission-guard";
 import { Permissions } from "@/types/const";
@@ -163,20 +164,18 @@ export function ShiftTemplateList() {
         rowsPerPageOptions={[10, 20, 50, 100]}
         renderTitle={() => (
           <div className="w-full space-y-3">
-            <ALCard className="flex flex-wrap items-start justify-between gap-3 px-4 py-4 sm:px-5">
-              <div>
-                <h1 className="text-2xl font-semibold tracking-wide text-[#1A3A52]">{t("title")}</h1>
-                <p className="text-sm text-[#1A3A52]/70">
-                  {t("description")}
-                </p>
-              </div>
-              <PermissionGuard permission={Permissions.ManageShiftTemplate}>
-                <Button onClick={openCreate} className="gap-2 bg-[#1A3A52] text-[#FDFBF9] hover:bg-[#1A3A52]/90">
-                  <Plus className="h-4 w-4" />
-                  {t("create")}
-                </Button>
-              </PermissionGuard>
-            </ALCard>
+            <ALTitleCard
+              title={t("title")}
+              description={t("description")}
+              actions={
+                <PermissionGuard permission={Permissions.ManageShiftTemplate}>
+                  <Button onClick={openCreate} className="gap-2 bg-[#1A3A52] text-[#FDFBF9] hover:bg-[#1A3A52]/90">
+                    <Plus className="h-4 w-4" />
+                    {t("create")}
+                  </Button>
+                </PermissionGuard>
+              }
+            />
 
             <ALCard padding="sm" className="flex flex-wrap items-center gap-2 text-sm">
               <span className="rounded-full border border-emerald-600 bg-emerald-600 px-3 py-1 text-xs font-semibold text-white">
