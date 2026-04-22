@@ -36,7 +36,8 @@ const getUtcDateString = (utcDateString: string) => {
 const PaymentListContent = () => {
     const t = useTranslations("Payment.List");
 
-    const { payments, isLoading, totalCount, paginationInfo, onDataChange, refresh } = usePaymentList();
+    const [selectedMethod, setSelectedMethod] = useState("");
+    const { payments, isLoading, totalCount, paginationInfo, onDataChange, refresh } = usePaymentList(selectedMethod || undefined);
 
     const [isExportingAll, setIsExportingAll] = useState(false);
 
@@ -78,11 +79,11 @@ const PaymentListContent = () => {
         }
     };
 
-    // Lọc theo phương thức thanh toán
     const methodFilterOptions = useMemo(() => [
-        { label: t("labels.cash"), value: "Cash" },
-        { label: t("labels.card"), value: "Card" },
-        { label: t("labels.transfer"), value: "Transfer" }
+        { label: t("labels.all"),      value: "" },
+        { label: t("labels.cash"),     value: "Cash" },
+        { label: t("labels.card"),     value: "Card" },
+        { label: t("labels.transfer"), value: "Qr" },
     ], [t]);
 
     // Table Columns định nghĩa hiển thị TẤT CẢ các field
@@ -141,8 +142,6 @@ const PaymentListContent = () => {
             header: t("table.method"),
             width: "110px",
             align: "center" as const,
-            filterType: "select" as const,
-            filterOptions: methodFilterOptions,
             cellRender: ({ value }: { value: string }) => {
                 const isCash = value === "Cash";
                 const isCard = value === "Card";
@@ -246,7 +245,26 @@ const PaymentListContent = () => {
                                 </Button>
                             </>
                         }
-                    />
+                    >
+                        {/* Quick-filter theo phương thức thanh toán */}
+                        <div className="flex flex-wrap gap-2">
+                            {methodFilterOptions.map((opt) => (
+                                <button
+                                    key={opt.value}
+                                    type="button"
+                                    onClick={() => setSelectedMethod(opt.value)}
+                                    className={`px-3 py-1.5 text-sm font-medium rounded-full border transition-colors ${
+                                        selectedMethod === opt.value
+                                            ? "bg-[#1A3A52] text-white border-[#1A3A52]"
+                                            : "bg-white text-gray-600 border-gray-200 hover:border-[#1A3A52] hover:text-[#1A3A52]"
+                                    }`}
+                                >
+                                    {opt.label}
+                                </button>
+                            ))}
+                        </div>
+                    </ALTitleCard>
+                    
                 )}
                 renderCell={handleGlobalRenderCell}
             />

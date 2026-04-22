@@ -8,6 +8,7 @@
       "exportAll": "Export All",
       "exportingAll": "Exporting all data...",
       "labels": {
+        "all": "All",
         "guest": "Guest",
         "cash": "Cash",
         "card": "Card",
