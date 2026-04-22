@@ -33,7 +33,7 @@ export const RoleFormInputs = ({
           value={roleName}
           onChange={(e) => onRoleNameChange(e.target.value)}
           placeholder={t('roleNamePlaceholder')}
-          maxLength={100}
+          maxLength={50}
           className={`w-full px-4 py-3 border rounded-lg text-gray-900 font-medium focus:outline-none focus:ring-2 ${
             errors.roleName 
               ? 'border-red-300 focus:ring-red-500' 
