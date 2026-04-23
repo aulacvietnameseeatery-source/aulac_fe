@@ -158,6 +158,7 @@
           "phoneRequired": "Veuillez saisir un numéro de téléphone.",
           "phoneInvalid": "Numéro de téléphone invalide.",
           "nameRequired": "Veuillez saisir votre nom.",
+          "emailInvalid": "Veuillez saisir une adresse e-mail valide.",
           "existingCustomerNotFound": "Informations du client existant introuvables. Veuillez vérifier le numéro de téléphone.",
           "dateRequired": "Veuillez sélectionner une date de réservation.",
           "timeRequired": "Veuillez sélectionner une heure d’arrivée.",
@@ -529,6 +530,8 @@
       "errors": {
         "missingTitle": "Informations manquantes",
         "missingDescription": "Veuillez remplir téléphone, nom, date, heure et choisir une table.",
+        "phoneRequired": "Le numéro de téléphone est requis.",
+        "phoneInvalid": "Numéro de téléphone invalide.",
         "timeErrorTitle": "Heure invalide",
         "timePast": "Impossible de sélectionner une heure passée.",
         "failTitle": "Échec de la réservation",

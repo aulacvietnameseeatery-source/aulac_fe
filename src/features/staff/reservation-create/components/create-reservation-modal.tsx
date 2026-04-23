@@ -51,6 +51,7 @@ export const CreateReservationModal = ({
           email={formState.email}
           customerType={formState.customerType}
           loyaltyPoints={formState.loyaltyPoints}
+          phoneError={formState.phoneError}
           isSearching={loadingState.isSearchingCustomer}
           onPhoneChange={setters.setPhone}
           onNameChange={setters.setFullName}

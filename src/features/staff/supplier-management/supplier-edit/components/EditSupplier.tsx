@@ -4,6 +4,8 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
+import { formatPhoneToDomesticDisplay } from '@/lib/phone-format';
+import { isSupportedPhoneNumber } from '@/lib/phone-validation';
 import { useSupplier, useUpdateSupplier } from '../hooks/useEditSupplier';
 import FormHeader from './FormHeader';
 import FormCard from './FormCard';
@@ -39,7 +41,7 @@ export default function EditSupplier({ supplierId }: EditSupplierProps) {
   useEffect(() => {
     if (supplier) {
       setSupplierName(supplier.supplierName);
-      setPhone(supplier.phone || '');
+      setPhone(formatPhoneToDomesticDisplay(supplier.phone));
       setEmail(supplier.email || '');
       setAddress(supplier.address || '');
       setTaxCode(supplier.taxCode || '');
@@ -59,7 +61,7 @@ export default function EditSupplier({ supplierId }: EditSupplierProps) {
     if (phone) {
       if (phone.length > 15) {
         newErrors.phone = t('validation.phoneMaxLength');
-      } else if (!/^((0|\+84)[0-9]{9,10}|(\+41|0)[1-9][0-9]{7})$/.test(phone.trim())) {
+      } else if (!isSupportedPhoneNumber(phone)) {
         newErrors.phone = t('validation.phoneInvalid');
       }
     }

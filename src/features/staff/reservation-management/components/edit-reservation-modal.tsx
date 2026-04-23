@@ -1,11 +1,12 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { format } from "date-fns";
 import { toast } from "sonner";
 import { Loader2, FileText } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Dialog } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { ALInput } from "@/components/ui/al-input";
+import { formatPhoneToDomesticDisplay } from "@/lib/phone-format";
+import { isSupportedPhoneNumber } from "@/lib/phone-validation";
 import {
   BookingDetailsSection,
   CustomerSection,
@@ -82,6 +83,7 @@ export const EditReservationModal = ({
   const [isLoadingTables, setIsLoadingTables] = useState(false);
   const [isTableChecked, setIsTableChecked] = useState(false);
   const [validationError, setValidationError] = useState<string | null>(null);
+  const [phoneError, setPhoneError] = useState<string | null>(null);
 
   const isCoreBookingChanged =
     date !== initialDate || time !== initialTime || Number(partySize || 0) !== initialPartySize;
@@ -112,8 +114,33 @@ export const EditReservationModal = ({
     return true;
   };
 
+  const validatePhone = (value: string): boolean => {
+    const trimmed = value.trim();
+
+    if (!trimmed) {
+      setPhoneError(tStaff("errors.phoneRequired"));
+      return false;
+    }
+
+    if (!isSupportedPhoneNumber(trimmed)) {
+      setPhoneError(tStaff("errors.phoneInvalid"));
+      return false;
+    }
+
+    setPhoneError(null);
+    return true;
+  };
+
+  const handlePhoneChange = (value: string) => {
+    setPhone(value);
+
+    if (phoneError) {
+      validatePhone(value);
+    }
+  };
+
   const handleCustomerSearch = async () => {
-    if (!phone) {
+    if (!validatePhone(phone)) {
       return;
     }
 
@@ -141,7 +168,7 @@ export const EditReservationModal = ({
         const initialDateValue = dateUtils.formatLocal(detail.reservedTime, "yyyy-MM-dd");
         const initialTimeValue = dateUtils.formatLocal(detail.reservedTime, "HH:mm");
 
-        setPhone(detail.phone ?? "");
+        setPhone(formatPhoneToDomesticDisplay(detail.phone));
         setFullName(detail.customerName ?? "");
         setEmail(detail.email ?? "");
         setDate(initialDateValue);
@@ -227,6 +254,13 @@ export const EditReservationModal = ({
   }, [date, time, partySize, initialCurrentOption, isCoreBookingChanged]);
 
   const handleSubmit = async () => {
+    if (!validatePhone(phone)) {
+      toast.error(tStaff("errors.missingTitle"), {
+        description: tStaff("errors.phoneInvalid"),
+      });
+      return;
+    }
+
     if (!phone || !fullName || !date || !time || !partySize || !selectedOption) {
       toast.error(tStaff("errors.missingTitle"), {
         description: tStaff("errors.missingDescription"),
@@ -281,8 +315,9 @@ export const EditReservationModal = ({
               email={email}
               customerType={customerType}
               loyaltyPoints={loyaltyPoints}
+              phoneError={phoneError}
               isSearching={isSearchingCustomer}
-              onPhoneChange={setPhone}
+              onPhoneChange={handlePhoneChange}
               onNameChange={setFullName}
               onEmailChange={setEmail}
               onSearch={handleCustomerSearch}

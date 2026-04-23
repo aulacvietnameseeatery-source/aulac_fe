@@ -16,6 +16,7 @@ import { ALDatePicker } from "@/components/ui/al-date-picker";
 import { ALCombobox } from "@/components/ui/al-combobox";
 import "../styles/index.css";
 import { TableAvailabilityDto } from "../types/reservation.types";
+import { isSupportedPhoneNumber } from "@/features/reservation-2/utils/phone-validation";
 
 interface ReservationSidebarProps {
     selectedTable: TableAvailabilityDto | null;
@@ -110,7 +111,7 @@ export default function ReservationSidebar({
         }
     }, [selectedTable]);
 
-    const isFormValid = /^((0|\+84)[0-9]{9,10}|(\+41|0)[1-9][0-9]{7})$/.test(phone.trim()) && name.trim().length > 0;
+    const isFormValid = isSupportedPhoneNumber(phone) && name.trim().length > 0;
 
     const timeOptions = useMemo(() => {
         return generateTimeSlots().map(slot => ({

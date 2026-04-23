@@ -1,5 +1,5 @@
 ﻿import React from 'react';
-import { User, Search, Mail } from 'lucide-react';
+import { User, Search } from 'lucide-react';
 import { CustomerType } from '../types/types';
 import { useTranslations } from "next-intl";
 import { ALInput } from '@/components/ui/al-input';
@@ -10,6 +10,7 @@ interface Props {
   email: string;
   customerType: CustomerType;
   loyaltyPoints: number;
+  phoneError?: string | null;
   isSearching: boolean;
   onPhoneChange: (val: string) => void;
   onNameChange: (val: string) => void;
@@ -18,7 +19,7 @@ interface Props {
 }
 
 const CustomerSectionComponent: React.FC<Props> = ({
-  phone, fullName, email, customerType, loyaltyPoints, isSearching,
+  phone, fullName, email, phoneError, isSearching,
   onPhoneChange, onNameChange, onEmailChange, onSearch
 }) => {
   const t = useTranslations("reservations.staff.customer");
@@ -43,6 +44,7 @@ const CustomerSectionComponent: React.FC<Props> = ({
               onKeyDown={(e: any) => e.key === 'Enter' && onSearch()} 
               placeholder={t("enterPhone")}
               className="w-full pr-12 font-medium"
+              error={phoneError ?? undefined}
             />
             <button onClick={onSearch} disabled={isSearching} className="absolute right-2 p-1.5 bg-[#1A3A52] text-white rounded-md hover:bg-[#152E41] transition disabled:opacity-50">
               {isSearching ? <div className="animate-spin h-4 w-4 border-2 border-white rounded-full border-t-transparent"></div> : <Search size={16} />}

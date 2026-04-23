@@ -1,6 +1,7 @@
 import React from "react";
-import { User, Phone, Mail, Users } from "lucide-react";
+import { User, Phone, Mail } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { formatPhoneToDomesticDisplay } from "@/lib/phone-format";
 import { ReservationDetailDto } from "../types/reservation-types";
 
 interface CustomerInfoSectionProps {
@@ -9,6 +10,7 @@ interface CustomerInfoSectionProps {
 
 export const CustomerInfoSection = ({ reservation }: CustomerInfoSectionProps) => {
     const t = useTranslations("reservations.management.detail.customer");
+    const displayPhone = formatPhoneToDomesticDisplay(reservation.phone);
 
     return (
         <div className="border-b border-slate-100 pb-6 sm:pb-8 last:border-0 relative">
@@ -26,7 +28,7 @@ export const CustomerInfoSection = ({ reservation }: CustomerInfoSectionProps) =
                     </label>
                     <div className="text-slate-900 font-semibold text-base py-3 px-4 bg-slate-50 rounded-xl border border-slate-100 flex items-center gap-3">
                         <Phone size={18} className="text-slate-400" />
-                        {reservation.phone}
+                        {displayPhone}
                     </div>
                 </div>
 
