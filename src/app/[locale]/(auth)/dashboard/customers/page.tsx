@@ -189,19 +189,6 @@ const CustomerListContent = () => {
             ),
         },
         {
-            field: "isMember",
-            header: t("table.type"),
-            width: "110px",
-            align: "center" as const,
-            filterType: "select" as const,
-            filterOptions: memberFilterOptions,
-            cellRender: ({ value }: { value: boolean }) => (
-                value ?
-                    <span className="px-2 py-1 bg-green-100 text-green-700 text-xs font-medium rounded-full">{t("labels.member")}</span> :
-                    <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs font-medium rounded-full">{t("labels.guest")}</span>
-            ),
-        },
-        {
             field: "orderCount",
             header: t("table.orders"),
             width: "90px",
