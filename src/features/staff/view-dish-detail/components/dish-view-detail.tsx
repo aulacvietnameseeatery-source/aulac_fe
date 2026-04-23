@@ -6,6 +6,7 @@ import { DishDetailResponse, Language, LANGUAGES } from "../types/dish-detail.ty
 import { CheckCircle2, XCircle, Flame, Clock, ChefHat, X, ChevronLeft, ChevronRight, ZoomIn, PlayCircle } from "lucide-react";
 import { SectionWrapper } from "../../create-edit-dish/components/section-wrapper";
 import { useTranslations } from "next-intl";
+import { useLandingPageSettings } from "@/hooks/use-landing-page-settings";
 
 interface Props {
   dish: DishDetailResponse;
@@ -18,6 +19,11 @@ export function DishViewDetail({ dish }: Props) {
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
   const t = useTranslations("Dish.Detail");
+
+  const { data: landingSettings } = useLandingPageSettings();
+  const showDishImage = !landingSettings || landingSettings.showDishImage;
+  const showDishImage360 = !landingSettings || landingSettings.showDishImage360;
+  const showDishVideo = !landingSettings || landingSettings.showDishVideo;
 
   const currentI18n = dish.i18n[activeTab] || dish.i18n.en;
   const staticImages = dish.media.filter((m) => m.mediaType === "IMAGE");
@@ -137,71 +143,78 @@ export function DishViewDetail({ dish }: Props) {
         </div>
       </div>
 
-      <SectionWrapper title={t("media.galleryTitle")} subtitle={t("media.staticUploaded", { count: staticImages.length })}>
-        {staticImages.length > 0 ? (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
-            {staticImages.map((img, idx) => (
-              <div 
-                key={img.mediaId} 
-                onClick={() => setLightboxIndex(idx)}
-                className="aspect-square relative rounded-lg overflow-hidden border border-gray-200 bg-gray-50 group cursor-zoom-in"
-              >
-                <img 
-                  src={`${img.url}`} 
-                  alt="Dish" 
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
-                />
-                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
-                  <ZoomIn className="text-white opacity-0 group-hover:opacity-100 transition-opacity drop-shadow-md" size={28} />
+      {showDishImage && (
+        <SectionWrapper title={t("media.galleryTitle")} subtitle={t("media.staticUploaded", { count: staticImages.length })}>
+          {staticImages.length > 0 ? (
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+              {staticImages.map((img, idx) => (
+                <div 
+                  key={img.mediaId} 
+                  onClick={() => setLightboxIndex(idx)}
+                  className="aspect-square relative rounded-lg overflow-hidden border border-gray-200 bg-gray-50 group cursor-zoom-in"
+                >
+                  <img 
+                    src={`${img.url}`} 
+                    alt="Dish" 
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
+                  />
+                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
+                    <ZoomIn className="text-white opacity-0 group-hover:opacity-100 transition-opacity drop-shadow-md" size={28} />
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div className="h-32 bg-gray-50 border-2 border-dashed border-gray-200 rounded-xl flex items-center justify-center text-sm text-gray-400">
-            {t("media.noGallery")}
-          </div>
-        )}
-      </SectionWrapper>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        
-        {/* 4.1: 360 Media - View Only */}
-        <SectionWrapper title={t("media.360Title")} subtitle={t("media.framesUploaded", { count: rotationImages.length })}>
-          {rotationImages.length > 0 ? (
-            <div className="aspect-video bg-gray-100 rounded-xl flex items-center justify-center relative border border-gray-200 overflow-hidden">
-               <img src={`${rotationImages[0].url}`} alt="360 view preview" className="h-full object-contain" />
-               <div className="absolute inset-0 bg-black/10 flex items-center justify-center">
-                  <span className="bg-white/90 backdrop-blur px-3 py-1.5 rounded-full text-xs font-bold shadow-sm text-gray-800">
-                    {t("media.images360", { count: rotationImages.length })}
-                  </span>
-               </div>
+              ))}
             </div>
           ) : (
-            <div className="aspect-video bg-gray-50 border-2 border-dashed border-gray-200 rounded-xl flex items-center justify-center text-sm text-gray-400">
-              {t("media.no360")}
+            <div className="h-32 bg-gray-50 border-2 border-dashed border-gray-200 rounded-xl flex items-center justify-center text-sm text-gray-400">
+              {t("media.noGallery")}
             </div>
           )}
         </SectionWrapper>
+      )}
 
-        {/* 4.2: Video */}
-        <SectionWrapper title={t("media.videoTitle")} subtitle={t("media.videoSubtitle")}>
-          {videoMedia ? (
-            <div className="aspect-video bg-black rounded-xl overflow-hidden relative border border-gray-200">
-              <video 
-                src={`${videoMedia.url}`} 
-                controls 
-                className="w-full h-full object-contain"
-              />
-            </div>
-          ) : (
-            <div className="aspect-video bg-gray-50 border-2 border-dashed border-gray-200 rounded-xl flex flex-col items-center justify-center text-sm text-gray-400">
-              <PlayCircle className="w-8 h-8 mb-2 text-gray-300" />
-              {t("media.noVideo")}
-            </div>
+      {(showDishImage360 || showDishVideo) && (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* 4.1: 360 Media - View Only */}
+          {showDishImage360 && (
+            <SectionWrapper title={t("media.360Title")} subtitle={t("media.framesUploaded", { count: rotationImages.length })}>
+              {rotationImages.length > 0 ? (
+                <div className="aspect-video bg-gray-100 rounded-xl flex items-center justify-center relative border border-gray-200 overflow-hidden">
+                   <img src={`${rotationImages[0].url}`} alt="360 view preview" className="h-full object-contain" />
+                   <div className="absolute inset-0 bg-black/10 flex items-center justify-center">
+                      <span className="bg-white/90 backdrop-blur px-3 py-1.5 rounded-full text-xs font-bold shadow-sm text-gray-800">
+                        {t("media.images360", { count: rotationImages.length })}
+                      </span>
+                   </div>
+                </div>
+              ) : (
+                <div className="aspect-video bg-gray-50 border-2 border-dashed border-gray-200 rounded-xl flex items-center justify-center text-sm text-gray-400">
+                  {t("media.no360")}
+                </div>
+              )}
+            </SectionWrapper>
           )}
-        </SectionWrapper>
-      </div>
+
+          {/* 4.2: Video */}
+          {showDishVideo && (
+            <SectionWrapper title={t("media.videoTitle")} subtitle={t("media.videoSubtitle")}>
+              {videoMedia ? (
+                <div className="aspect-video bg-black rounded-xl overflow-hidden relative border border-gray-200">
+                  <video 
+                    src={`${videoMedia.url}`} 
+                    controls 
+                    className="w-full h-full object-contain"
+                  />
+                </div>
+              ) : (
+                <div className="aspect-video bg-gray-50 border-2 border-dashed border-gray-200 rounded-xl flex flex-col items-center justify-center text-sm text-gray-400">
+                  <PlayCircle className="w-8 h-8 mb-2 text-gray-300" />
+                  {t("media.noVideo")}
+                </div>
+              )}
+            </SectionWrapper>
+          )}
+        </div>
+      )}
 
       {/* ROW 4: ADDITIONAL INFO */}
       <SectionWrapper title={t("additional.title")} subtitle={t("additional.subtitle")}>
