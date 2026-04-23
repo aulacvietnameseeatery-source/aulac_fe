@@ -14,7 +14,8 @@ import { NoDataState } from '@/components/ui/table/no-data-state';
 import { TablePagination } from '@/components/ui/table/table-pagination';
 import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover';
 import { FilterPopup } from '@/components/ui/table/filter-popup';
-import  '@/styles/components/table.css';
+import { usePathname } from '@/routing';
+import '@/styles/components/table.css';
 import { useTranslations } from 'next-intl';
 
 
@@ -23,6 +24,46 @@ import { useTranslations } from 'next-intl';
 const CHECKBOX_COLUMN_WIDTH = 40;
 const SEARCH_DEBOUNCE_MS = 1000;
 const DEFAULT_COLUMN_WIDTH = 160;
+const TABLE_PREFERENCES_STORAGE_PREFIX = 'au-lac-base-table';
+
+interface BaseTablePreferences {
+    pageSize?: number;
+    pinnedColumns?: string[];
+}
+
+function readTablePreferences(storageKey: string): BaseTablePreferences {
+    if (typeof window === 'undefined') {
+        return {};
+    }
+
+    try {
+        const rawValue = window.localStorage.getItem(storageKey);
+        if (!rawValue) {
+            return {};
+        }
+
+        const parsedValue: unknown = JSON.parse(rawValue);
+        if (!parsedValue || typeof parsedValue !== 'object') {
+            return {};
+        }
+
+        return parsedValue as BaseTablePreferences;
+    } catch {
+        return {};
+    }
+}
+
+function writeTablePreferences(storageKey: string, preferences: BaseTablePreferences) {
+    if (typeof window === 'undefined') {
+        return;
+    }
+
+    try {
+        window.localStorage.setItem(storageKey, JSON.stringify(preferences));
+    } catch {
+        // Ignore storage failures so table interactions keep working.
+    }
+}
 
 // ========== PROPS & TYPES ==========
 interface BaseTableProps<T> {
@@ -91,7 +132,19 @@ export function BaseTable<T>({
     noBorder = false,
 }: BaseTableProps<T>) {
     const t = useTranslations('common.table');
+    const pathname = usePathname();
     const hasSelection = selectionMode !== 'none';
+    const defaultPageSize = defaultRowsPerPage ?? 10;
+    const rowsPerPageOptionsSignature = rowsPerPageOptions.join('|');
+    const columnSignature = columns.map((column) => column.field).join('|');
+    const availablePageSizes = useMemo(
+        () => rowsPerPageOptionsSignature.split('|').map((value) => Number(value)).filter((value) => Number.isFinite(value)),
+        [rowsPerPageOptionsSignature]
+    );
+    const tablePreferencesKey = useMemo(
+        () => `${TABLE_PREFERENCES_STORAGE_PREFIX}:${pathname}:${rowKey}:${columnSignature}`,
+        [pathname, rowKey, columnSignature]
+    );
 
     const operatorLabels = useMemo<Record<string, string>>(() => ({
         contains: t('operator.contains'),
@@ -170,11 +223,27 @@ export function BaseTable<T>({
         lastDataLengthRef.current = data.length;
     }
     const [searchQuery, setSearchQuery] = useState('');
-    const [pageSize, setPageSize] = useState(defaultRowsPerPage ?? 10);
+    const [pageSize, setPageSize] = useState(defaultPageSize);
     const skeletonRowCount = lastDataLengthRef.current || pageSize;
     const [currentPage, setCurrentPage] = useState(1);
     const [sortState, setSortState] = useState<SortStateItem[]>([]);
     const [pinnedColumns, setPinnedColumns] = useState<string[]>([]);
+    const [preferencesHydrated, setPreferencesHydrated] = useState(false);
+    const latestTableStateRef = useRef<{
+        searchQuery: string;
+        filters: Record<string, FilterState>;
+        sortState: SortStateItem[];
+        currentPage: number;
+        pageSize: number;
+    }>({
+        searchQuery: '',
+        filters: {},
+        sortState: [],
+        currentPage: 1,
+        pageSize: defaultPageSize,
+    });
+    const hasInitializedSearchRef = useRef(false);
+    const hasInitializedPageSizeRef = useRef(false);
 
     /**
      * Single popover state - tracks which column and type (filter/sort) is open
@@ -188,6 +257,10 @@ export function BaseTable<T>({
     } | null>(null);
 
     const searchDebounceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+    const validColumnFields = useMemo(
+        () => new Set(columnSignature.split('|').filter(Boolean)),
+        [columnSignature]
+    );
 
     // ========== COMPUTED PROPERTIES ==========
     const orderedColumns = useMemo(() => {
@@ -284,15 +357,20 @@ export function BaseTable<T>({
         return `${start} - ${end}`;
     }, [currentPage, pageSize, totalCount]);
 
-    const emitDataChange = useCallback(() => {
+    const emitDataChange = useCallback((overrides?: Partial<typeof latestTableStateRef.current>) => {
+        const nextState = {
+            ...latestTableStateRef.current,
+            ...overrides,
+        };
+
         onDataChange?.({
-            search: searchQuery,
-            filters,
-            sort: sortState,
-            page: currentPage,
-            pageSize
+            search: nextState.searchQuery,
+            filters: nextState.filters,
+            sort: nextState.sortState,
+            page: nextState.currentPage,
+            pageSize: nextState.pageSize,
         });
-    }, [searchQuery, filters, sortState, currentPage, pageSize, onDataChange]);
+    }, [onDataChange]);
 
     // ========== HANDLERS ==========
     const handleBatchAction = useCallback((action: BatchAction) => {
@@ -410,16 +488,70 @@ export function BaseTable<T>({
 
     // ========== EFFECTS ==========
     useEffect(() => {
-        emitDataChange();
-    }, [currentPage, emitDataChange])
+        const storedPreferences = readTablePreferences(tablePreferencesKey);
+        const nextPageSize =
+            typeof storedPreferences.pageSize === 'number' &&
+                availablePageSizes.includes(storedPreferences.pageSize)
+                ? storedPreferences.pageSize
+                : defaultPageSize;
+        const nextPinnedColumns = Array.isArray(storedPreferences.pinnedColumns)
+            ? storedPreferences.pinnedColumns.filter((field) => validColumnFields.has(field))
+            : [];
+
+        setPageSize(nextPageSize);
+        setPinnedColumns(nextPinnedColumns);
+        setPreferencesHydrated(true);
+    }, [tablePreferencesKey, defaultPageSize, availablePageSizes, validColumnFields]);
 
     useEffect(() => {
+        if (!preferencesHydrated) {
+            return;
+        }
+
+        writeTablePreferences(tablePreferencesKey, {
+            pageSize,
+            pinnedColumns: pinnedColumns.filter((field) => validColumnFields.has(field)),
+        });
+    }, [preferencesHydrated, tablePreferencesKey, pageSize, pinnedColumns, validColumnFields]);
+
+    useEffect(() => {
+        latestTableStateRef.current = {
+            searchQuery,
+            filters,
+            sortState,
+            currentPage,
+            pageSize,
+        };
+    }, [searchQuery, filters, sortState, currentPage, pageSize]);
+
+    useEffect(() => {
+        if (!preferencesHydrated) {
+            return;
+        }
+
+        emitDataChange({ currentPage });
+    }, [currentPage, emitDataChange, preferencesHydrated])
+
+    useEffect(() => {
+        if (!preferencesHydrated) {
+            return;
+        }
+
+        if (!hasInitializedSearchRef.current) {
+            hasInitializedSearchRef.current = true;
+            return;
+        }
+
         if (searchDebounceTimeoutRef.current) {
             clearTimeout(searchDebounceTimeoutRef.current);
         }
         searchDebounceTimeoutRef.current = setTimeout(() => {
-            setCurrentPage(1);
-            emitDataChange();
+            if (latestTableStateRef.current.currentPage !== 1) {
+                setCurrentPage(1);
+                return;
+            }
+
+            emitDataChange({ searchQuery, currentPage: 1 });
         }, SEARCH_DEBOUNCE_MS);
 
         return () => {
@@ -427,12 +559,25 @@ export function BaseTable<T>({
                 clearTimeout(searchDebounceTimeoutRef.current);
             }
         };
-    }, [searchQuery, emitDataChange]);
+    }, [searchQuery, emitDataChange, preferencesHydrated]);
 
     useEffect(() => {
-        setCurrentPage(1);
-        emitDataChange();
-    }, [pageSize, emitDataChange]);
+        if (!preferencesHydrated) {
+            return;
+        }
+
+        if (!hasInitializedPageSizeRef.current) {
+            hasInitializedPageSizeRef.current = true;
+            return;
+        }
+
+        if (latestTableStateRef.current.currentPage !== 1) {
+            setCurrentPage(1);
+            return;
+        }
+
+        emitDataChange({ pageSize, currentPage: 1 });
+    }, [pageSize, emitDataChange, preferencesHydrated]);
 
     useEffect(() => {
         if (externalActiveRowKey !== undefined) {
