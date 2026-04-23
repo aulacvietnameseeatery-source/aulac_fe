@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import domtoimage from 'dom-to-image-more';
 import "../styles/index.css";
 import { TableAvailabilityDto } from '../types/reservation.types';
+import { isSupportedPhoneNumber } from '@/features/reservation-2/utils/phone-validation';
 
 interface BookingModalProps {
     isOpen: boolean;
@@ -59,7 +60,7 @@ export default function BookingModal({ isOpen, onClose, onConfirm, tables, date,
 
     const endTime = getEndTime(time);
 
-    const isFormValid = name.trim().length > 0 && /^((0|\+84)[0-9]{9,10}|(\+41|0)[1-9][0-9]{7})$/.test(phone.trim()) && partySize > 0;
+    const isFormValid = name.trim().length > 0 && isSupportedPhoneNumber(phone) && partySize > 0;
 
     const handleConfirm = async () => {
         if (isFormValid) {

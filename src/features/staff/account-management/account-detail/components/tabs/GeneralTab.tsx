@@ -3,6 +3,7 @@
 import React from "react";
 import { User, Mail, Phone, AtSign } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { formatPhoneToDomesticDisplay } from "@/lib/phone-format";
 import type { AccountDetail } from "../../types/account-detail.types";
 
 interface GeneralTabProps {
@@ -11,12 +12,13 @@ interface GeneralTabProps {
 
 export const GeneralTab = ({ account }: GeneralTabProps) => {
   const t = useTranslations("Account.Detail.general");
+  const displayPhone = account.phone ? formatPhoneToDomesticDisplay(account.phone) : t("notAvailable");
   
   const fields = [
     { icon: User, labelKey: "fullName", value: account.fullName },
     { icon: AtSign, labelKey: "username", value: account.username },
     { icon: Mail, labelKey: "email", value: account.email || t("notAvailable") },
-    { icon: Phone, labelKey: "phone", value: account.phone || t("notAvailable") },
+    { icon: Phone, labelKey: "phone", value: displayPhone },
   ];
 
   return (

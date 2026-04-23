@@ -8,11 +8,12 @@ import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getPublicGroupSettings } from "@/features/staff/system-settings/services/system-setting.service";
 import { formatCHF } from "@/lib/format-chf-utils";
+import { formatPhoneToDomesticDisplay } from "@/lib/phone-format";
 import type { CustomerListDto, CustomerDetailDto } from "../types/customer-types";
 import { loyaltyService } from "../services/loyalty-service";
 import type { LoyaltyCouponHistoryDto, LoyaltyRedemptionSettings } from "../types/loyalty-types";
 import { staffCustomerService } from "../services/customer-service";
-import { Loader2, Coins, Gift, History, Sparkles } from "lucide-react";
+import { Loader2, Coins, Gift, History } from "lucide-react";
 import { toast } from "sonner";
 import { useLocale, useTranslations } from "next-intl";
 
@@ -79,6 +80,7 @@ export const LoyaltyManagementModal: React.FC<LoyaltyManagementModalProps> = ({
     const [activeTab, setActiveTab] = useState("redeem");
     const [isLoading, setIsLoading] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const displayPhone = formatPhoneToDomesticDisplay(customerDetail?.phone || customer?.phone || "");
 
     const currentPoints = customerDetail?.loyaltyPoints ?? customer?.loyaltyPoints ?? 0;
     const redeemPointsNumber = Number(redeemPoints || 0);
@@ -270,7 +272,7 @@ export const LoyaltyManagementModal: React.FC<LoyaltyManagementModalProps> = ({
                                 <h3 className="text-xl font-semibold text-gray-900">
                                     {customerDetail?.fullName || customer?.fullName || tList("labels.guest")}
                                 </h3>
-                                <p className="text-sm text-gray-500">{customerDetail?.phone || customer?.phone}</p>
+                                <p className="text-sm text-gray-500">{displayPhone}</p>
                             </div>
                             <div className="rounded-full bg-amber-100 p-3 text-amber-700">
                                 <Coins className="h-6 w-6" />

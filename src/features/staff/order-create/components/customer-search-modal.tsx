@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
-import { X, Search, Loader2, Award, Star, Info } from 'lucide-react';
+import { X, Search, Loader2, Star, Info } from 'lucide-react';
+import { formatPhoneToDomesticDisplay } from '@/lib/phone-format';
 import { createOrderService } from '../services/create-edit-order.service';
 import { CustomerDto } from '../types/create-order.types';
 
@@ -28,7 +29,7 @@ export const CustomerSearchModal: React.FC<Props> = ({ isOpen, onClose, currentC
   // Reset the form every time you open the modal.
   useEffect(() => {
     if (isOpen) {
-      setPhone(currentCustomer?.phone || '');
+      setPhone(formatPhoneToDomesticDisplay(currentCustomer?.phone || ''));
       setFullName(currentCustomer?.fullName || '');
       setEmail(currentCustomer?.email || '');
       setCustomerId(currentCustomer?.customerId || null);
@@ -56,7 +57,7 @@ export const CustomerSearchModal: React.FC<Props> = ({ isOpen, onClose, currentC
     }, 1000);
 
     return () => clearTimeout(timer);
-  }, [phone]);
+  }, [customerId, phone]);
 
   const executeSearch = async (keyword: string) => {
     setLoading(true);
@@ -77,7 +78,7 @@ export const CustomerSearchModal: React.FC<Props> = ({ isOpen, onClose, currentC
         setShowDropdown(false);
         setMessage({ text: 'Customer not found. You can enter details to create a new one.', type: 'info' });
       }
-    } catch (err) {
+    } catch {
       setFullName('');
       setEmail('');
       setCustomerId(null);
@@ -99,7 +100,7 @@ export const CustomerSearchModal: React.FC<Props> = ({ isOpen, onClose, currentC
   };
 
   const handleSelectCustomer = (customer: CustomerDto) => {
-    setPhone(customer.phone);
+    setPhone(formatPhoneToDomesticDisplay(customer.phone));
     setFullName(customer.fullName || '');
     setEmail(customer.email || '');
     setCustomerId(customer.customerId);
@@ -167,7 +168,7 @@ export const CustomerSearchModal: React.FC<Props> = ({ isOpen, onClose, currentC
                       onClick={() => handleSelectCustomer(c)}
                       className="px-4 py-3 hover:bg-gray-50 cursor-pointer text-sm border-b last:border-0 transition-colors"
                     >
-                      <div className="font-bold text-gray-800">{c.phone}</div>
+                      <div className="font-bold text-gray-800">{formatPhoneToDomesticDisplay(c.phone)}</div>
                       <div className="text-gray-500 text-xs mt-0.5">{c.fullName}</div>
                     </li>
                   ))}

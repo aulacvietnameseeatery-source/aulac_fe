@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
+import { isSupportedPhoneNumber } from '@/lib/phone-validation';
 import { useCreateSupplier } from '../hooks/useCreateSupplier';
 import FormHeader from './FormHeader';
 import FormCard from './FormCard';
@@ -40,7 +41,7 @@ export default function AddSupplier() {
     if (phone) {
       if (phone.length > 15) {
         newErrors.phone = t('validation.phoneMaxLength');
-      } else if (!/^((0|\+84)[0-9]{9,10}|(\+41|0)[1-9][0-9]{7})$/.test(phone.trim())) {
+      } else if (!isSupportedPhoneNumber(phone)) {
         newErrors.phone = t('validation.phoneInvalid');
       }
     }

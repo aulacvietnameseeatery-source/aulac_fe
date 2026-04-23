@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { X, User, Phone, Mail, ChevronUp } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { TableAvailabilityDto } from "../types/reservation.types";
+import { isSupportedPhoneNumber } from "@/features/reservation-2/utils/phone-validation";
 
 interface MobileBookingSheetProps {
     selectedTable: TableAvailabilityDto | null;
@@ -40,7 +41,7 @@ export default function MobileBookingSheet({
 
     if (!selectedTable || !isOpen) return null;
 
-    const isFormValid = name.trim().length > 0 && /^((0|\+84)[0-9]{9,10}|(\+41|0)[1-9][0-9]{7})$/.test(phone.trim());
+    const isFormValid = name.trim().length > 0 && isSupportedPhoneNumber(phone);
 
     const handleMainAction = () => {
         if (!isExpanded) {

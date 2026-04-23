@@ -6,6 +6,7 @@ import { RefreshCcw, Printer } from 'lucide-react';
 import { getSaleInvoiceDetail } from '@/features/staff/invoices/api/invoice-api';
 import { SaleInvoiceDto } from '@/features/staff/invoices/types/invoice.types';
 import { useStoreSettings } from '@/hooks/use-store-settings';
+import { formatPhoneToDomesticDisplay } from '@/lib/phone-format';
 import { toast } from 'sonner';
 import { Dialog } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
@@ -67,7 +68,7 @@ export function InvoiceDetailDialog({ open, onClose, orderId }: InvoiceDetailDia
 
         const storeName = invoice.restaurantName || settings?.name || 'Restaurant Name';
         const storeAddress = invoice.restaurantAddress || settings?.streetAddress || 'Restaurant Address';
-        const storePhone = invoice.restaurantPhone || settings?.phone || 'Phone';
+        const storePhone = formatPhoneToDomesticDisplay(invoice.restaurantPhone || settings?.phone || 'Phone');
 
         return (
             <div className="bg-gray-100 flex flex-col items-center py-6 custom-scrollbar" onClick={(e) => e.stopPropagation()}>

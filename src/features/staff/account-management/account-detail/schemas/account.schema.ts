@@ -4,9 +4,7 @@
 // ============================================================
 
 import { z } from "zod";
-
-// Vietnamese phone regex: (0|+84)[0-9]{9,10}
-const vietnamesePhoneRegex = /^(0|\+84)\d{9,10}$/;
+import { SUPPORTED_PHONE_REGEX } from "@/lib/phone-validation";
 
 /**
  * Schema factory for POST /api/account/create
@@ -25,7 +23,7 @@ export const createAccountSchema = (t: (key: string) => string) => z.object({
 
   phone: z
     .string()
-    .regex(vietnamesePhoneRegex, t("phone.invalid"))
+    .regex(SUPPORTED_PHONE_REGEX, t("phone.invalid"))
     .max(30, t("phone.maxLength"))
     .optional()
     .or(z.literal("")),
@@ -59,7 +57,7 @@ export const updateAccountSchema = (t: (key: string) => string) => z.object({
 
   phone: z
     .string()
-    .regex(vietnamesePhoneRegex, t("phone.invalid"))
+    .regex(SUPPORTED_PHONE_REGEX, t("phone.invalid"))
     .max(30, t("phone.maxLength"))
     .optional()
     .or(z.literal("")),
