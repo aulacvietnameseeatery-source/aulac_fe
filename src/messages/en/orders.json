@@ -171,6 +171,8 @@
         },
         "statusUpdateSuccess": "Order status updated",
         "statusUpdateError": "Failed to update order status",
+    "cancelOrderError": "Failed to cancel order",
+    "resetOrderError": "Cannot restore order. All items were cancelled by the customer",
         "empty": {
           "title": "No orders found",
           "hint": "Try adjusting your filters or search query"
@@ -185,6 +187,7 @@
           "note": "Note",
           "rejectReason": "Reject Reason",
           "customerCancelled": "Customer cancelled",
+          "staffCancelled": "Staff cancelled order",
           "guest": "Guest",
           "source": {
             "DINE_IN": "Dine In",

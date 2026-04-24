@@ -23,6 +23,7 @@
       "inKitchen": "Đang làm",
       "rejected": "Bị từ chối",
       "completed": "Hoàn tất",
+      "cancelled": "Đã hủy",
       "CREATED": "Mới",
       "IN_PROGRESS": "Đang làm",
       "READY": "Sẵn sàng",
@@ -45,6 +46,7 @@
       "cancel": "Hủy"
     },
     "customerCancelled": "Khách hàng hủy",
+    "staffCancelled": "Staff hủy order",
     "kitchen": {
       "title": "BẾP",
       "order": "ĐƠN HÀNG",
