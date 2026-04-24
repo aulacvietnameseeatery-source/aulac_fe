@@ -109,7 +109,7 @@ export const useRoleCreate = () => {
     
     if (!roleName.trim()) {
       newErrors.roleName = t("validation.roleNameRequired");
-    } else if (roleName.length > 100) {
+    } else if (roleName.trim().length > 50) {
       newErrors.roleName = t("validation.roleNameMaxLength");
     }
     

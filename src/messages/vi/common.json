@@ -1366,7 +1366,7 @@
       },
       "validation": {
         "roleNameRequired": "Tên vai trò là bắt buộc",
-        "roleNameMaxLength": "Tên vai trò không được vượt quá 100 ký tự"
+        "roleNameMaxLength": "Tên vai trò không được vượt quá 50 ký tự"
       },
       "notifications": {
         "createSuccess": "Thêm vai trò thành công",
@@ -1399,7 +1399,7 @@
         "roleCodeRequired": "Mã vai trò là bắt buộc",
         "roleCodeMaxLength": "Mã vai trò không được vượt quá 50 ký tự",
         "roleNameRequired": "Tên vai trò là bắt buộc",
-        "roleNameMaxLength": "Tên vai trò không được vượt quá 100 ký tự",
+        "roleNameMaxLength": "Tên vai trò không được vượt quá 50 ký tự",
         "failed": "Vui lòng kiểm tra lại biểu mẫu"
       },
       "breadcrumb": {

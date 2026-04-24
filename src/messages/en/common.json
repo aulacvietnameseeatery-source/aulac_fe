@@ -1366,7 +1366,7 @@
       },
       "validation": {
         "roleNameRequired": "Role name is required",
-        "roleNameMaxLength": "Role name must not exceed 100 characters"
+        "roleNameMaxLength": "Role name must not exceed 50 characters"
       },
       "notifications": {
         "createSuccess": "Role created successfully",
@@ -1399,7 +1399,7 @@
         "roleCodeRequired": "Role code is required",
         "roleCodeMaxLength": "Role code must not exceed 50 characters",
         "roleNameRequired": "Role name is required",
-        "roleNameMaxLength": "Role name must not exceed 100 characters",
+        "roleNameMaxLength": "Role name must not exceed 50 characters",
         "failed": "Please check the form for errors"
       },
       "breadcrumb": {
