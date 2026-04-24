@@ -35,15 +35,15 @@ const STATUS_CONFIG: Record<string, { bg: string; text: string; headerBg: string
         text: "text-blue-800",
         headerBg: "bg-blue-600"
     },
-    "rejected": {
-        bg: "bg-red-100",
-        text: "text-red-800",
-        headerBg: "bg-red-600"
-    },
     "completed": {
         bg: "bg-emerald-100",
         text: "text-emerald-800",
         headerBg: "bg-emerald-600"
+    },
+    "cancelled": {
+        bg: "bg-slate-100",
+        text: "text-slate-700",
+        headerBg: "bg-slate-500"
     },
 };
 
@@ -76,7 +76,7 @@ export function KitchenOrderCard({ order, onUpdateStatus, onBatchUpdateStatus, i
     const [isPrintModalOpen, setIsPrintModalOpen] = useState(false);
 
     const format = useFormatter();
-    const status = useMemo(() => getOrderDisplayStatus(order.items), [order.items]);
+    const status = useMemo(() => getOrderDisplayStatus(order.items, order.orderStatus), [order.items, order.orderStatus]);
     const config = STATUS_CONFIG[status] || STATUS_CONFIG["new"];
     const formattedTime = order.createdAt ? format.dateTime(new Date(order.createdAt), { hour: '2-digit', minute: '2-digit' }) : "-";
 
@@ -189,7 +189,7 @@ export function KitchenOrderCard({ order, onUpdateStatus, onBatchUpdateStatus, i
                                                 </div>
                                             )}
 
-                                            {item.rejectReason && (
+                                            {item.rejectReason && item.rejectReason !== 'Staff cancelled order' && (
                                                 <div className="flex items-center gap-1.5 bg-[#8C3A3A]/8 rounded-lg px-2.5 py-1.5 mt-1.5 border border-[#8C3A3A]/20">
                                                     <AlertTriangle className="w-3 h-3 text-[#8C3A3A]" />
                                                     <span className="text-[10px] sm:text-xs text-[#8C3A3A] font-medium italic wrap-break-word">
@@ -198,7 +198,16 @@ export function KitchenOrderCard({ order, onUpdateStatus, onBatchUpdateStatus, i
                                                 </div>
                                             )}
 
-                                            {normalizedStatus === OrderItemStatusCode.CANCELLED && (
+                                            {normalizedStatus === OrderItemStatusCode.CANCELLED && item.rejectReason === 'Staff cancelled order' && (
+                                                <div className="flex items-center gap-1.5 bg-[#B05E00]/8 rounded-lg px-2.5 py-1.5 mt-1.5 border border-[#B05E00]/25">
+                                                    <AlertTriangle className="w-3 h-3 text-[#B05E00]" />
+                                                    <span className="text-[10px] sm:text-xs text-[#B05E00] font-medium italic wrap-break-word">
+                                                        {t?.("staffCancelled") || "Staff cancelled order"}
+                                                    </span>
+                                                </div>
+                                            )}
+
+                                            {normalizedStatus === OrderItemStatusCode.CANCELLED && !item.rejectReason && (
                                                 <div className="flex items-center gap-1.5 bg-[#8C3A3A]/8 rounded-lg px-2.5 py-1.5 mt-1.5 border border-[#8C3A3A]/20">
                                                     <AlertTriangle className="w-3 h-3 text-[#8C3A3A]" />
                                                     <span className="text-[10px] sm:text-xs text-[#8C3A3A] font-medium italic wrap-break-word">
@@ -299,7 +308,7 @@ export function KitchenOrderCard({ order, onUpdateStatus, onBatchUpdateStatus, i
 
                 {/* Main Action Buttons */}
                 <div className="pt-2">
-                    {status === 'completed' ? (
+                {(status === 'completed' || status === 'cancelled') ? (
                         <Button
                             variant="outline"
                             onClick={() => setIsPrintModalOpen(true)}

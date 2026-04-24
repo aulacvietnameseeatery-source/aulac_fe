@@ -171,6 +171,8 @@
         },
         "statusUpdateSuccess": "Le statut de la commande a été mis à jour",
         "statusUpdateError": "Impossible de mettre à jour le statut de la commande",
+    "cancelOrderError": "Impossible d'annuler la commande",
+    "resetOrderError": "Impossible de restaurer la commande. Tous les articles ont été annulés par le client",
         "empty": {
           "title": "Aucune commande trouvée",
           "hint": "Essayez de modifier vos filtres ou votre recherche"
@@ -185,6 +187,7 @@
           "note": "Note",
           "rejectReason": "Raison du rejet",
           "customerCancelled": "Annulé par le client",
+          "staffCancelled": "Annulé par le staff",
           "guest": "Invité",
           "source": {
             "DINE_IN": "Sur place",

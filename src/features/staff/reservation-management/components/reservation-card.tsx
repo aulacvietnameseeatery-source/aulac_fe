@@ -26,6 +26,9 @@ export const ReservationCard = ({ reservation, statuses, onAssignTable, onEdit, 
 
     const currentStatusCode = statuses.find((s) => s.statusId === reservation.statusId)?.statusCode;
 
+    const TERMINAL_STATUSES = ['CANCELLED', 'NO_SHOW', 'COMPLETED'];
+    const isTerminal = TERMINAL_STATUSES.includes(currentStatusCode ?? '');
+
     const getBadgeClasses = (statusId: number): string => {
         switch (statusId) {
             case 21: return "bg-amber-600 text-white border-amber-600"; // PENDING
@@ -33,6 +36,7 @@ export const ReservationCard = ({ reservation, statuses, onAssignTable, onEdit, 
             case 23: return "bg-emerald-600 text-white border-emerald-600"; // CHECKED IN
             case 24: return "bg-red-600 text-white border-red-600";    // CANCELLED
             case 25: return "bg-red-500 text-white border-red-500";   // NO SHOW
+            case 26: return "bg-slate-500 text-white border-slate-500"; // COMPLETED
             default: return "bg-slate-600 text-white border-slate-600";
         }
     };
@@ -44,6 +48,7 @@ export const ReservationCard = ({ reservation, statuses, onAssignTable, onEdit, 
             case 23: return "bg-emerald-500";
             case 24: return "bg-red-500";
             case 25: return "bg-red-400";
+            case 26: return "bg-slate-400"; // COMPLETED
             default: return "bg-slate-500";
         }
     };
@@ -67,6 +72,11 @@ export const ReservationCard = ({ reservation, statuses, onAssignTable, onEdit, 
                 </div>
 
                 <div onClick={(e) => e.stopPropagation()} className="shrink-0">
+                    {isTerminal ? (
+                        <Badge className={`rounded-md px-2 py-1 text-[10px] font-bold cursor-default flex items-center gap-1 shadow-sm border ${getBadgeClasses(reservation.statusId)}`}>
+                            {localizeStatusLabel(currentStatusCode, reservation.statusName, tStatus)}
+                        </Badge>
+                    ) : (
                     <Dropdown align="end" trigger={
                         <Badge className={`rounded-md px-2 py-1 text-[10px] font-bold cursor-pointer hover:opacity-90 flex items-center gap-1 shadow-sm border ${getBadgeClasses(reservation.statusId)}`}>
                             {localizeStatusLabel(currentStatusCode, reservation.statusName, tStatus)} <ChevronDown size={10} className="opacity-70" />
@@ -89,6 +99,7 @@ export const ReservationCard = ({ reservation, statuses, onAssignTable, onEdit, 
                             ))}
                         </DropdownContent>
                     </Dropdown>
+                    )}
                 </div>
             </div>
 

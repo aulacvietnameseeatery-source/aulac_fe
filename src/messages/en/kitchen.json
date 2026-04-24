@@ -23,6 +23,7 @@
       "inKitchen": "In Kitchen",
       "rejected": "Rejected",
       "completed": "Completed",
+      "cancelled": "Cancelled",
       "CREATED": "New",
       "IN_PROGRESS": "Preparing",
       "READY": "Ready",
@@ -45,6 +46,7 @@
       "cancel": "Cancel"
     },
     "customerCancelled": "Customer cancelled",
+    "staffCancelled": "Staff cancelled order",
     "kitchen": {
       "title": "KITCHEN",
       "order": "ORDER",

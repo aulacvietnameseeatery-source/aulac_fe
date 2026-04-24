@@ -49,8 +49,8 @@ function KitchenContent() {
         const statusPriority: Record<KitchenDisplayStatus, number> = {
             "in-kitchen": 1,
             "new": 2,
-            "rejected": 3,
-            "completed": 4,
+            "completed": 3,
+            "cancelled": 4,
             "all": 99,
         };
 
@@ -65,15 +65,15 @@ function KitchenContent() {
             if (!matchesSearch) return false;
 
             if (activeStatus !== "all") {
-                return getOrderDisplayStatus(order.items) === activeStatus;
+                return getOrderDisplayStatus(order.items, order.orderStatus) === activeStatus;
             }
 
             return true;
         });
 
         return matched.sort((a, b) => {
-            const statusA = getOrderDisplayStatus(a.items);
-            const statusB = getOrderDisplayStatus(b.items);
+            const statusA = getOrderDisplayStatus(a.items, a.orderStatus);
+            const statusB = getOrderDisplayStatus(b.items, b.orderStatus);
             const priorityDiff = statusPriority[statusA] - statusPriority[statusB];
             if (priorityDiff !== 0) return priorityDiff;
 
@@ -85,12 +85,12 @@ function KitchenContent() {
 
     // Calculate status counts
     const orderCounts = useMemo(() => {
-        const counts = { all: orders.length, new: 0, inKitchen: 0, rejected: 0, completed: 0 };
+        const counts = { all: orders.length, new: 0, inKitchen: 0, completed: 0, cancelled: 0 };
 
         orders.forEach(order => {
-            const status = getOrderDisplayStatus(order.items);
+            const status = getOrderDisplayStatus(order.items, order.orderStatus);
             if (status === 'completed') counts.completed++;
-            else if (status === 'rejected') counts.rejected++;
+            else if (status === 'cancelled') counts.cancelled++;
             else if (status === 'in-kitchen') counts.inKitchen++;
             else counts.new++;
         });

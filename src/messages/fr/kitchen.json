@@ -23,6 +23,7 @@
       "inKitchen": "En cuisine",
       "rejected": "Rejeté",
       "completed": "Terminé",
+      "cancelled": "Annulé",
       "CREATED": "Nouveau",
       "IN_PROGRESS": "En préparation",
       "READY": "Prêt",
@@ -45,6 +46,7 @@
       "cancel": "Annuler"
     },
     "customerCancelled": "Annulé par le client",
+    "staffCancelled": "Annulé par le staff",
     "kitchen": {
       "title": "CUISINE",
       "order": "COMMANDE",

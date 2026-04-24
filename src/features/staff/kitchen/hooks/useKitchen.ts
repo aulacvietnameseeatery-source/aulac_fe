@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { kitchenService } from '../services/kitchen.service';
 import type { KitchenOrder, UpdateItemStatusRequest } from '../types/kitchen.types';
-import { normalizeKitchenItemStatus } from '../utils/kitchen-status';
-import { OrderItemStatusCode } from '@/types/status-codes';
+import { normalizeKitchenItemStatus, isProcessedItemStatus, DONE_ITEM_STATUSES } from '../utils/kitchen-status';
+import { OrderItemStatusCode, OrderStatusCode } from '@/types/status-codes';
 
 const POLL_INTERVAL_MS = 5_000; // 5 seconds for near real-time KDS experience
 
@@ -28,11 +28,9 @@ export function useKitchen() {
         const normalizedStatus = normalizeKitchenItemStatus(request.status);
 
         setOrders((prev) =>
-            prev.map((order) => ({
-                ...order,
-                items: order.items.map((item) => {
+            prev.map((order) => {
+                const updatedItems = order.items.map((item) => {
                     if (item.orderItemId !== orderItemId) return item;
-
                     return {
                         ...item,
                         itemStatus: normalizedStatus === 'UNKNOWN' ? item.itemStatus : normalizedStatus,
@@ -41,8 +39,20 @@ export function useKitchen() {
                                 ? request.rejectReason ?? item.rejectReason
                                 : item.rejectReason,
                     };
-                }),
-            })),
+                });
+
+                // Mirror BE auto-update logic for order.orderStatus
+                const allTerminal = updatedItems.every((i) => isProcessedItemStatus(normalizeKitchenItemStatus(i.itemStatus)));
+                let newOrderStatus = order.orderStatus;
+                if (allTerminal) {
+                    const hasDone = updatedItems.some((i) => DONE_ITEM_STATUSES.includes(normalizeKitchenItemStatus(i.itemStatus) as OrderItemStatusCode));
+                    newOrderStatus = hasDone ? OrderStatusCode.COMPLETED : OrderStatusCode.CANCELLED;
+                } else if (updatedItems.some((i) => normalizeKitchenItemStatus(i.itemStatus) === OrderItemStatusCode.IN_PROGRESS)) {
+                    newOrderStatus = OrderStatusCode.IN_PROGRESS;
+                }
+
+                return { ...order, items: updatedItems, orderStatus: newOrderStatus };
+            }),
         );
     }, []);
 
@@ -90,10 +100,9 @@ export function useKitchen() {
 
             try {
                 await kitchenService.updateItemStatus(orderItemId, request);
-                await fetchOrders();
             } catch (err) {
                 console.error('Failed to update item status', err);
-                await fetchOrders();
+                await fetchOrders(); // rollback on error
                 throw err;
             } finally {
                 setItemsUpdating([orderItemId], false);
@@ -116,10 +125,9 @@ export function useKitchen() {
                 await Promise.all(
                     updates.map((u) => kitchenService.updateItemStatus(u.orderItemId, { status: u.status, rejectReason: u.rejectReason })),
                 );
-                await fetchOrders();
             } catch (err) {
                 console.error('Failed to update multiple item statuses', err);
-                await fetchOrders();
+                await fetchOrders(); // rollback on error
                 throw err;
             } finally {
                 setItemsUpdating(itemIds, false);

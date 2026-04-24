@@ -171,6 +171,8 @@
         },
         "statusUpdateSuccess": "Đã cập nhật trạng thái đơn hàng",
         "statusUpdateError": "Cập nhật trạng thái thất bại",
+    "cancelOrderError": "Hủy đơn hàng thất bại",
+    "resetOrderError": "Không thể khôi phục đơn hàng. Tất cả các món đã bị hủy bởi khách hàng",
         "empty": {
           "title": "Không tìm thấy đơn hàng",
           "hint": "Hãy thử điều chỉnh bộ lọc hoặc từ khóa tìm kiếm"
@@ -185,6 +187,7 @@
           "note": "Ghi chú",
           "rejectReason": "Lý do từ chối",
           "customerCancelled": "Khách hàng hủy",
+          "staffCancelled": "Staff hủy order",
           "guest": "Khách",
           "source": {
             "DINE_IN": "Tại quán",

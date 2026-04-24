@@ -2,7 +2,7 @@ import type { KitchenOrderItem } from '../types/kitchen.types';
 import { OrderItemStatusCode } from '@/types/status-codes';
 
 export type KitchenItemStatus = OrderItemStatusCode | 'UNKNOWN';
-export type KitchenDisplayStatus = 'all' | 'new' | 'in-kitchen' | 'rejected' | 'completed';
+export type KitchenDisplayStatus = 'all' | 'new' | 'in-kitchen' | 'completed' | 'cancelled';
 
 const KNOWN_ITEM_STATUSES = new Set<string>(Object.values(OrderItemStatusCode));
 
@@ -49,10 +49,19 @@ export function isActiveItemStatus(status: KitchenItemStatus): boolean {
     return ACTIVE_ITEM_STATUSES.includes(status as OrderItemStatusCode);
 }
 
-export function getOrderDisplayStatus(items: KitchenOrderItem[]): Exclude<KitchenDisplayStatus, 'all'> {
+export function getOrderDisplayStatus(
+    items: KitchenOrderItem[],
+    orderStatus?: string,
+): Exclude<KitchenDisplayStatus, 'all'> {
+    // Defensive: honour order-level status first
+    if (orderStatus === 'CANCELLED') return 'cancelled';
+
     if (items.length === 0) return 'new';
 
     const statuses = items.map((item) => normalizeKitchenItemStatus(item.itemStatus));
+
+    // After reset, an order is PENDING but items may still be all CREATED
+    if (orderStatus === 'PENDING' && statuses.every((s) => s === OrderItemStatusCode.CREATED)) return 'new';
 
     const hasProgress = (s: KitchenItemStatus) => [
         OrderItemStatusCode.IN_PROGRESS,
@@ -60,9 +69,15 @@ export function getOrderDisplayStatus(items: KitchenOrderItem[]): Exclude<Kitche
         OrderItemStatusCode.READY,
     ].includes(s as OrderItemStatusCode);
 
-    if (statuses.every((s) => s === OrderItemStatusCode.REJECTED)) return 'rejected';
-    if (statuses.every((s) => isProcessedItemStatus(s))) return 'completed';
-    if (statuses.some((s) => hasProgress(s))) return 'in-kitchen';
+    const hasDone = (s: KitchenItemStatus) => DONE_ITEM_STATUSES.includes(s as OrderItemStatusCode);
+
+    if (statuses.every((s) => isProcessedItemStatus(s))) {
+        // Terminal: distinguish successful completion from fully cancelled/rejected
+        return statuses.some(hasDone) ? 'completed' : 'cancelled';
+    }
+
+    // Has active items: if any are REJECTED alongside active → still in-kitchen
+    if (statuses.some((s) => hasProgress(s)) || statuses.some((s) => s === OrderItemStatusCode.REJECTED)) return 'in-kitchen';
 
     return 'new';
 }

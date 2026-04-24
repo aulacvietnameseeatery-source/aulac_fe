@@ -25,6 +25,7 @@ import { orderHistoryService } from "@/features/staff/order-management/services/
 import { staffPromotionService } from "@/features/staff/promotion-management/promotion-list/services/promotion-service";
 import { PromotionListDTO } from "@/features/staff/promotion-management/promotion-list/types/promotion-types";
 import { toast } from "sonner";
+import { ALConfirmDialog } from "@/components/ui/al-confirm-dialog/al-confirm-dialog";
 
 const SEARCH_DEBOUNCE_MS = 400;
 
@@ -41,6 +42,7 @@ function OrdersContent() {
     const [currentPage, setCurrentPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const [isRefreshing, setIsRefreshing] = useState(false);
+    const [confirmDialog, setConfirmDialog] = useState<{ orderId: number; action: 'cancel' | 'reset'; inProgressCount: number } | null>(null);
 
     // ── Date range filter ──────────────────────────────────────────────────
     type DatePreset = "today" | "yesterday" | "last7" | "last30" | "thisMonth" | "lastMonth" | "custom";
@@ -165,12 +167,24 @@ function OrdersContent() {
     }, [refreshList, fetchCounts]);
 
     const handleOrderAction = useCallback(async (orderId: number, action: string) => {
+        // Intercept cancel/reset to show confirmation dialog
+        if (action === 'cancel') {
+            const order = orders.find(o => o.orderId === orderId);
+            const inProgressCount = order
+                ? order.orderItems.filter(i => i.itemStatus === 'IN_PROGRESS').length
+                : 0;
+            setConfirmDialog({ orderId, action: 'cancel', inProgressCount });
+            return;
+        }
+        if (action === 'reset') {
+            setConfirmDialog({ orderId, action: 'reset', inProgressCount: 0 });
+            return;
+        }
+
         const statusMap: Partial<Record<string, OrderStatusCode>> = {
             start: OrderStatusCode.IN_PROGRESS,
             finish: OrderStatusCode.COMPLETED,
             complete: OrderStatusCode.COMPLETED,
-            cancel: OrderStatusCode.CANCELLED,
-            reset: OrderStatusCode.PENDING,
         };
 
         const targetStatus = statusMap[action];
@@ -186,7 +200,22 @@ function OrdersContent() {
             console.error("Failed to update order status:", error);
             toast.error(t("statusUpdateError"));
         }
-    }, [handleRefresh]);
+    }, [handleRefresh, orders]);
+
+    const handleConfirmAction = useCallback(async () => {
+        if (!confirmDialog) return;
+        const { orderId, action } = confirmDialog;
+        const targetStatus = action === 'cancel' ? OrderStatusCode.CANCELLED : OrderStatusCode.PENDING;
+        setConfirmDialog(null);
+        try {
+            await orderHistoryService.updateOrderStatus(orderId, targetStatus);
+            toast.success(t("statusUpdateSuccess"));
+            await handleRefresh();
+        } catch (error) {
+            console.error("Failed to update order status:", error);
+            toast.error(t(action === 'reset' ? "resetOrderError" : "cancelOrderError"));
+        }
+    }, [confirmDialog, handleRefresh, t]);
 
     // Pagination helpers
     const pageInfo = useMemo(() => {
@@ -402,6 +431,32 @@ function OrdersContent() {
                     </div>
                 </div>
             </div>
+            <ALConfirmDialog
+                isOpen={confirmDialog?.action === 'cancel'}
+                onClose={() => setConfirmDialog(null)}
+                onConfirm={() => void handleConfirmAction()}
+                title="Xác nhận huỷ order"
+                message={
+                    confirmDialog?.inProgressCount && confirmDialog.inProgressCount > 0
+                        ? `Order này có ${confirmDialog.inProgressCount} món đang được chế biến. Tất cả các món chưa hoàn thành sẽ bị huỷ. Bạn có chắc chắn muốn tiếp tục?`
+                        : "Bạn có chắc chắn muốn huỷ order này không?"
+                }
+                variant="warning"
+                confirmText="Huỷ order"
+                cancelText="Quay lại"
+                confirmButtonVariant="danger"
+            />
+            <ALConfirmDialog
+                isOpen={confirmDialog?.action === 'reset'}
+                onClose={() => setConfirmDialog(null)}
+                onConfirm={() => void handleConfirmAction()}
+                title="Xác nhận khôi phục order"
+                message="Order sẽ được khôi phục về trạng thái chờ xử lý. Chỉ các món bị huỷ bởi thao tác huỷ order mới được khôi phục."
+                variant="confirm"
+                confirmText="Khôi phục"
+                cancelText="Quay lại"
+                confirmButtonVariant="primary"
+            />
         </div>
     );
 }
