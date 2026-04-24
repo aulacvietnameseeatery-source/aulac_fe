@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
-import { User, Phone, StickyNote, Mail, X, Minus, Plus, Clock, Loader2 } from 'lucide-react';
+import { User, Phone, StickyNote, Mail, X, Minus, Plus, Clock, Loader2, TriangleAlert } from 'lucide-react';
 import { ALDatePicker } from "@/components/ui/al-date-picker";
 import { ALCombobox } from '@/components/ui/al-combobox';
 import { reservationApi } from '../index';
@@ -59,7 +59,6 @@ export default function PublicBookingForm({ onSuccess, onClose }: PublicBookingF
     const { data: storeSettings } = useStoreSettings();
     const phoneNumber = storeSettings?.phone || "+84 28 3822 5264";
     const callHref = `tel:${phoneNumber.replace(/\s+/g, '')}`;
-
     const mapApiErrorKey = (code?: number, subCode?: number) => {
         if (code === 404) return 'toast.notFound';
         if (code === 409) return 'toast.conflict';
@@ -396,9 +395,17 @@ export default function PublicBookingForm({ onSuccess, onClose }: PublicBookingF
 
                     {mode && (
                         <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+                           
                             {mode === 'existing' ? t('existingModeNote') : t('newModeNote')}
+                            {mode === 'new' && (
+                            <div className="flex items-start gap-2.5 text-red-500 mt-2">
+                                <span>{t('newCustomerWarning')}</span>
+                            </div>
+                    )}
                         </div>
                     )}
+
+                    
 
                     {mode && !canBookOnline && (
                         <div className="rounded-2xl border border-orange-200 bg-orange-50 p-4 text-center">
