@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "@/routing"
+import { ALTitleCard } from "@/components/ui/al-title-card";
 import { Button } from "@/components/ui/button";
 import { TablePagination } from "@/components/ui/table/table-pagination";
 import { useOrderHistory } from "@/features/staff/order-management/hooks/useOrderHistory";
@@ -214,20 +215,94 @@ function OrdersContent() {
     return (
         <div className="w-full flex flex-col h-full bg-[#FDFBF9] px-4 md:px-0">
             <div className="sticky top-0 z-20 bg-[#FDFBF9]/90 backdrop-blur-md -mx-4 px-4 py-2 border-b border-[#D5BA98]/30 mb-4 lg:relative lg:top-auto lg:z-auto lg:bg-transparent lg:backdrop-blur-none lg:mx-0 lg:px-0 lg:py-0 lg:border-none lg:mb-6 lg:mt-1">
-                <div className="flex flex-col gap-3 lg:gap-4">
-                    <div className="flex items-start sm:items-center justify-between flex-wrap gap-2">
-                        <div>
-                            <h1 className="text-base sm:text-lg font-bold text-[#1A3A52] leading-none whitespace-nowrap">
-                                {t("title")}
-                            </h1>
-                            <p className="text-xs text-[#1A3A52]/60 mt-1">{t("description")}</p>
-                        </div>
-                        <Button onClick={handleCreate} variant="outline" size="sm" className="h-9 px-3.5 text-sm font-semibold bg-[#FDFBF9] border-[#D5BA98]/60 text-[#1A3A52] hover:bg-[#D5BA98]/10 shadow-none">
-                            <Plus className="mr-1.5 h-3.5 w-3.5" />
-                            {t("addNewOrder")}
-                        </Button>
-                    </div>
+                <ALTitleCard
+                    title={t("title")}
+                    description={t("description")}
+                    titleClassName="text-base font-bold leading-none text-[#1A3A52] sm:text-lg"
+                    descriptionClassName="text-xs text-[#1A3A52]/60"
+                    bodyClassName="gap-3 lg:gap-4"
+                    actionsClassName="sm:flex-wrap"
+                    actions={
+                        <>
+                            <Button
+                                onClick={handleCreate}
+                                className="h-9 w-full gap-2 border-[#1A3A52] bg-[#1A3A52] px-3.5 text-sm font-semibold text-[#FDFBF9] hover:bg-[#1A3A52]/90 sm:w-auto"
+                            >
+                                <Plus className="h-3.5 w-3.5" />
+                                {t("addNewOrder")}
+                            </Button>
 
+                            <div className="relative w-full sm:w-auto" ref={datePickerRef}>
+                                <Button
+                                    onClick={() => setDatePickerOpen(o => !o)}
+                                    variant="outline"
+                                    className={`h-9 w-full items-center gap-1.5 rounded-lg px-3 text-sm font-semibold sm:w-auto ${datePreset
+                                        ? "bg-[#D5BA98]/20 border-[#D5BA98]/70 text-[#1A3A52]"
+                                        : "bg-[#FDFBF9] border-[#D5BA98]/60 text-[#1A3A52]/70 hover:bg-[#D5BA98]/10"
+                                        }`}
+                                >
+                                    <CalendarDays className="w-4 h-4" />
+                                    <span>{activeDateLabel ?? t("dateRange.label")}</span>
+                                    {datePreset ? (
+                                        <X className="ml-0.5 h-3.5 w-3.5 text-[#1A3A52]/60" onClick={clearDateFilter} />
+                                    ) : (
+                                        <ChevronDown className="ml-0.5 h-3.5 w-3.5" />
+                                    )}
+                                </Button>
+
+                                {datePickerOpen && (
+                                    <div className="absolute left-0 sm:left-auto sm:right-0 top-full mt-1 z-50 bg-[#FDFBF9] border border-[#D5BA98]/50 rounded-xl shadow-xl w-64 py-1 text-sm">
+                                        {DATE_PRESETS.filter(p => p.key !== "custom").map(preset => (
+                                            <button
+                                                key={preset.key}
+                                                onClick={() => { setDatePreset(preset.key); setDatePickerOpen(false); }}
+                                                className={`w-full text-left px-4 py-2.5 hover:bg-[#D5BA98]/15 transition-colors ${datePreset === preset.key ? "bg-[#1A3A52] text-white font-semibold" : "text-[#1A3A52]"
+                                                    }`}
+                                            >
+                                                {preset.label}
+                                            </button>
+                                        ))}
+                                        <div className="border-t border-[#D5BA98]/40 mt-1 pt-2 px-4 pb-3">
+                                            <div className="text-xs font-semibold text-[#1A3A52]/50 uppercase tracking-wider mb-2">{t("dateRange.custom")}</div>
+                                            <div className="flex flex-col gap-1.5">
+                                                <input
+                                                    type="date"
+                                                    value={customFrom}
+                                                    onChange={e => { setCustomFrom(e.target.value); setDatePreset("custom"); }}
+                                                    className="w-full border border-[#D5BA98]/60 rounded-lg px-2 py-1.5 text-sm text-[#1A3A52] bg-[#FDFBF9] focus:outline-none focus:ring-2 focus:ring-[#1A3A52]/20"
+                                                    placeholder={t("dateRange.from")}
+                                                />
+                                                <input
+                                                    type="date"
+                                                    value={customTo}
+                                                    onChange={e => { setCustomTo(e.target.value); setDatePreset("custom"); }}
+                                                    className="w-full border border-[#D5BA98]/60 rounded-lg px-2 py-1.5 text-sm text-[#1A3A52] bg-[#FDFBF9] focus:outline-none focus:ring-2 focus:ring-[#1A3A52]/20"
+                                                    placeholder={t("dateRange.to")}
+                                                />
+                                            </div>
+                                            <button
+                                                onClick={() => setDatePickerOpen(false)}
+                                                className="mt-2 w-full bg-[#1A3A52] text-white rounded-lg py-1.5 text-sm font-semibold hover:bg-[#1A3A52]/90 transition-colors"
+                                            >
+                                                {t("dateRange.apply")}
+                                            </button>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+
+                            <Button
+                                onClick={handleRefresh}
+                                disabled={isLoading || isRefreshing}
+                                variant="outline"
+                                className="group h-9 w-full rounded-lg border-[#D5BA98]/50 bg-[#FDFBF9] hover:bg-[#D5BA98]/10 disabled:opacity-50 sm:w-10"
+                                title={t("refresh")}
+                            >
+                                <RefreshCw className={`h-3 w-3 text-[#1A3A52]/60 transition-transform duration-500 ${(isLoading || isRefreshing) ? "animate-spin" : "group-hover:rotate-180"}`} />
+                            </Button>
+                        </>
+                    }
+                >
                     <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-2.5 xl:gap-4">
                         <div className="flex-1 min-w-0">
                             <div className="-mx-0.5 overflow-x-auto">
@@ -254,90 +329,19 @@ function OrdersContent() {
                             </div>
                         </div>
 
-                        <div className="w-full xl:w-auto flex flex-col sm:flex-row sm:items-center gap-2">
-                            <div className="relative w-full xl:w-72">
-                                <Search className="w-4 h-4 text-[#1A3A52]/40 absolute left-3 top-1/2 -translate-y-1/2" />
-                                <input
-                                    value={searchInput}
-                                    onChange={(e) => setSearchInput(e.target.value)}
-                                    className="w-full h-9 rounded-lg border border-[#D5BA98]/60 bg-[#FDFBF9] pl-9 pr-3 text-sm text-[#1A3A52] placeholder:text-[#1A3A52]/40 focus:outline-none focus:ring-2 focus:ring-[#1A3A52]/15 focus:border-[#1A3A52]/40"
-                                    placeholder={t("searchPlaceholder")}
-                                    type="text"
-                                    autoComplete="on"
-                                />
-                            </div>
-
-                            <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap">
-                                <div className="relative" ref={datePickerRef}>
-                                    <button
-                                        onClick={() => setDatePickerOpen(o => !o)}
-                                        className={`h-9 inline-flex items-center gap-1.5 px-3 rounded-lg border text-sm font-semibold transition-colors ${datePreset
-                                            ? "bg-[#D5BA98]/20 border-[#D5BA98]/70 text-[#1A3A52]"
-                                            : "bg-[#FDFBF9] border-[#D5BA98]/60 text-[#1A3A52]/70 hover:bg-[#D5BA98]/10"
-                                            }`}
-                                    >
-                                        <CalendarDays className="w-4 h-4" />
-                                        <span>{activeDateLabel ?? t("dateRange.label")}</span>
-                                        {datePreset ? (
-                                            <X className="w-3.5 h-3.5 ml-0.5 text-[#1A3A52]/60" onClick={clearDateFilter} />
-                                        ) : (
-                                            <ChevronDown className="w-3.5 h-3.5 ml-0.5" />
-                                        )}
-                                    </button>
-
-                                    {datePickerOpen && (
-                                        <div className="absolute left-0 sm:left-auto sm:right-0 top-full mt-1 z-50 bg-[#FDFBF9] border border-[#D5BA98]/50 rounded-xl shadow-xl w-64 py-1 text-sm">
-                                            {DATE_PRESETS.filter(p => p.key !== "custom").map(preset => (
-                                                <button
-                                                    key={preset.key}
-                                                    onClick={() => { setDatePreset(preset.key); setDatePickerOpen(false); }}
-                                                    className={`w-full text-left px-4 py-2.5 hover:bg-[#D5BA98]/15 transition-colors ${datePreset === preset.key ? "bg-[#1A3A52] text-white font-semibold" : "text-[#1A3A52]"
-                                                        }`}
-                                                >
-                                                    {preset.label}
-                                                </button>
-                                            ))}
-                                            <div className="border-t border-[#D5BA98]/40 mt-1 pt-2 px-4 pb-3">
-                                                <div className="text-xs font-semibold text-[#1A3A52]/50 uppercase tracking-wider mb-2">{t("dateRange.custom")}</div>
-                                                <div className="flex flex-col gap-1.5">
-                                                    <input
-                                                        type="date"
-                                                        value={customFrom}
-                                                        onChange={e => { setCustomFrom(e.target.value); setDatePreset("custom"); }}
-                                                        className="w-full border border-[#D5BA98]/60 rounded-lg px-2 py-1.5 text-sm text-[#1A3A52] bg-[#FDFBF9] focus:outline-none focus:ring-2 focus:ring-[#1A3A52]/20"
-                                                        placeholder={t("dateRange.from")}
-                                                    />
-                                                    <input
-                                                        type="date"
-                                                        value={customTo}
-                                                        onChange={e => { setCustomTo(e.target.value); setDatePreset("custom"); }}
-                                                        className="w-full border border-[#D5BA98]/60 rounded-lg px-2 py-1.5 text-sm text-[#1A3A52] bg-[#FDFBF9] focus:outline-none focus:ring-2 focus:ring-[#1A3A52]/20"
-                                                        placeholder={t("dateRange.to")}
-                                                    />
-                                                </div>
-                                                <button
-                                                    onClick={() => setDatePickerOpen(false)}
-                                                    className="mt-2 w-full bg-[#1A3A52] text-white rounded-lg py-1.5 text-sm font-semibold hover:bg-[#1A3A52]/90 transition-colors"
-                                                >
-                                                    {t("dateRange.apply")}
-                                                </button>
-                                            </div>
-                                        </div>
-                                    )}
-                                </div>
-
-                                <button
-                                    onClick={handleRefresh}
-                                    disabled={isLoading || isRefreshing}
-                                    className="p-1.5 bg-[#FDFBF9] border border-[#D5BA98]/50 rounded-lg hover:bg-[#D5BA98]/10 transition-colors shadow-none disabled:opacity-50 group shrink-0"
-                                    title={t("refresh")}
-                                >
-                                    <RefreshCw className={`w-3 h-3 text-[#1A3A52]/60 transition-transform duration-500 ${(isLoading || isRefreshing) ? "animate-spin" : "group-hover:rotate-180"}`} />
-                                </button>
-                            </div>
+                        <div className="relative w-full xl:w-72">
+                            <Search className="w-4 h-4 text-[#1A3A52]/40 absolute left-3 top-1/2 -translate-y-1/2" />
+                            <input
+                                value={searchInput}
+                                onChange={(e) => setSearchInput(e.target.value)}
+                                className="w-full h-9 rounded-lg border border-[#D5BA98]/60 bg-[#FDFBF9] pl-9 pr-3 text-sm text-[#1A3A52] placeholder:text-[#1A3A52]/40 focus:outline-none focus:ring-2 focus:ring-[#1A3A52]/15 focus:border-[#1A3A52]/40"
+                                placeholder={t("searchPlaceholder")}
+                                type="text"
+                                autoComplete="on"
+                            />
                         </div>
                     </div>
-                </div>
+                </ALTitleCard>
             </div>
 
             <div className="flex-1 min-h-0">

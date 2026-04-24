@@ -6,6 +6,8 @@ import { ALInput } from "@/components/ui/al-input";
 import { ALCombobox } from "@/components/ui/al-combobox";
 import { Button } from "@/components/ui/button";
 import { useTranslations } from "next-intl";
+import { formatPhoneToDomesticDisplay } from "@/lib/phone-format";
+import { isSupportedPhoneNumber } from "@/lib/phone-validation";
 import type { Supplier, Ingredient } from "../supplier-edit/types";
 import { ingredientService, Ingredient as IngredientSimple } from "../supplier-add/services/ingredientService";
 
@@ -77,7 +79,7 @@ export const SupplierModal: React.FC<SupplierModalProps> = ({
         if (supplier) {
             setFormData({
                 supplierName: supplier.supplierName || "",
-                phone: supplier.phone || "",
+                phone: formatPhoneToDomesticDisplay(supplier.phone),
                 email: supplier.email || "",
                 address: supplier.address || "",
                 taxCode: supplier.taxCode || "",
@@ -107,9 +109,9 @@ export const SupplierModal: React.FC<SupplierModalProps> = ({
         }
 
         if (formData.phone) {
-            if (formData.phone.length > 50) {
+            if (formData.phone.length > 15) {
                 newErrors.phone = t("validation.phoneMaxLength");
-            } else if (!/^\d+$/.test(formData.phone.trim())) {
+            } else if (!isSupportedPhoneNumber(formData.phone)) {
                 newErrors.phone = t("validation.phoneInvalid");
             }
         }

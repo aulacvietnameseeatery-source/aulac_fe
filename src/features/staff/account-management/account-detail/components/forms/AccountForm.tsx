@@ -13,6 +13,7 @@ import {
   type CreateAccountFormValues,
   type UpdateAccountFormValues,
 } from "../../schemas/account.schema";
+import { formatPhoneToDomesticDisplay } from "@/lib/phone-format";
 import type { AccountDetail, AccountDialogMode } from "../../types/account-detail.types";
 import type { Role } from "../../../account-list/types/staff-account.types";
 import { Button } from "@/components/ui/button";
@@ -62,7 +63,7 @@ export const AccountForm = ({
       : {
         email: account?.email ?? "",
         fullName: account?.fullName ?? "",
-        phone: account?.phone ?? "",
+        phone: formatPhoneToDomesticDisplay(account?.phone),
         roleId: account?.role?.roleId ?? undefined,
       },
   });
@@ -73,7 +74,7 @@ export const AccountForm = ({
       reset({
         email: account.email ?? "",
         fullName: account.fullName ?? "",
-        phone: account.phone ?? "",
+        phone: formatPhoneToDomesticDisplay(account.phone),
         roleId: account.role?.roleId ?? undefined,
       });
     }

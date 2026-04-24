@@ -10,14 +10,14 @@ export const useCustomerOrders = (customerId: number) => {
     const [orders, setOrders] = useState<CustomerOrderDto[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [totalCount, setTotalCount] = useState(0);
-    const [paginationInfo, setPaginationInfo] = useState({ page: 1, pageSize: 10 });
+    const [paginationInfo, setPaginationInfo] = useState({ page: 1, pageSize: 12 });
 
     const fetchIdRef = useRef(0);
 
     const onDataChange = useCallback(async (params: TableDataChangeParams) => {
         const currentFetchId = ++fetchIdRef.current;
         const page = params.page || 1;
-        const pageSize = params.pageSize || 10;
+        const pageSize = params.pageSize || 12;
 
         setPaginationInfo({ page, pageSize });
         setIsLoading(true);

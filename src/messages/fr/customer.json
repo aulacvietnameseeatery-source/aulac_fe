@@ -64,7 +64,7 @@
         "phoneRequired": "Le numéro de téléphone est requis",
         "phoneMinLength": "Le numéro de téléphone doit contenir au moins 10 caractères",
         "phoneMaxLength": "Le numéro de téléphone ne peut pas dépasser 13 caractères",
-        "phoneInvalid": "Le numéro de téléphone ne doit contenir que des chiffres",
+        "phoneInvalid": "Numéro de téléphone invalide",
         "nameMaxLength": "Le nom complet ne peut pas dépasser 100 caractères",
         "emailMaxLength": "L'email ne peut pas dépasser 150 caractères",
         "emailInvalid": "Format d'email invalide"
@@ -96,7 +96,7 @@
         "phoneRequired": "Le numéro de téléphone est requis",
         "phoneMinLength": "Le numéro de téléphone doit contenir au moins 10 caractères",
         "phoneMaxLength": "Le numéro de téléphone ne peut pas dépasser 13 caractères",
-        "phoneInvalid": "Le numéro de téléphone ne doit contenir que des chiffres",
+        "phoneInvalid": "Numéro de téléphone invalide",
         "nameMaxLength": "Le nom complet ne peut pas dépasser 100 caractères",
         "emailMaxLength": "L'email ne peut pas dépasser 150 caractères",
         "emailInvalid": "Format d'email invalide"
@@ -185,3 +185,4 @@
     }
   }
 }
+

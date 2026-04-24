@@ -4,6 +4,8 @@ import { toast } from 'sonner';
 import { reservationService } from '../services/reservation.service';
 import { TableOptionDto, BookingSource, BookingStatus, CustomerType } from '../types/types';
 import { dateUtils } from '@/lib/date-utils';
+import { formatPhoneToDomesticDisplay } from '@/lib/phone-format';
+import { isSupportedPhoneNumber } from '@/lib/phone-validation';
 
 interface UseReservationFormOptions {
   onSuccess?: () => void;
@@ -15,6 +17,7 @@ export const useReservationForm = (
 ) => {
   const router = useRouter();
   const [validationError, setValidationError] = useState<string | null>(null);
+  const [phoneError, setPhoneError] = useState<string | null>(null);
   // -- Customer State --
   const [phone, setPhone] = useState('');
   const [fullName, setFullName] = useState('');
@@ -47,8 +50,34 @@ export const useReservationForm = (
     }
   };
 
+  const validatePhone = (value: string): boolean => {
+    const trimmed = value.trim();
+
+    if (!trimmed) {
+      setPhoneError(t("errors.phoneRequired"));
+      return false;
+    }
+
+    if (!isSupportedPhoneNumber(trimmed)) {
+      setPhoneError(t("errors.phoneInvalid"));
+      return false;
+    }
+
+    setPhoneError(null);
+    return true;
+  };
+
+  const handlePhoneChange = (value: string) => {
+    setPhone(value);
+
+    if (phoneError) {
+      validatePhone(value);
+    }
+  };
+
   const handleCustomerSearch = async () => {
-    if (!phone) return;
+    if (!validatePhone(phone)) return;
+
     setIsSearchingCustomer(true);
     setFullName('');
     setEmail('');
@@ -58,6 +87,7 @@ export const useReservationForm = (
     try {
       const data = await reservationService.searchCustomer(phone);
       if (data) {
+        setPhone(formatPhoneToDomesticDisplay(data.phone || phone));
         setFullName(data.fullName || '');
         setEmail(data.email || '');
         setCustomerId(data.customerId);
@@ -118,6 +148,13 @@ export const useReservationForm = (
   }, [date, time, partySize]);
 
   const handleSubmit = async () => {
+    if (!validatePhone(phone)) {
+      toast.error(t("errors.missingTitle"), {
+        description: t("errors.phoneInvalid"),
+      });
+      return;
+    }
+
     if (!phone || !date || !time || !partySize || !selectedOptionId || !fullName) {
       toast.error(t("errors.missingTitle"), {
         description: t("errors.missingDescription"),
@@ -180,10 +217,10 @@ export const useReservationForm = (
   };
 
   return {
-    formState: { phone, fullName, email, customerType, loyaltyPoints, date, time, partySize, source, status, validationError },
+    formState: { phone, fullName, email, customerType, loyaltyPoints, date, time, partySize, source, status, validationError, phoneError },
     tableState: { tableOptions, selectedOptionId, isLoadingTables, isTableChecked },
     loadingState: { isSearchingCustomer },
-    setters: { setPhone, setFullName, setEmail, setDate, setTime, setPartySize, setSelectedOptionId, setStatus },
+    setters: { setPhone: handlePhoneChange, setFullName, setEmail, setDate, setTime, setPartySize, setSelectedOptionId, setStatus },
     handlers: { handleCustomerSearch, handleSourceChange, handleSubmit }
   };
 };

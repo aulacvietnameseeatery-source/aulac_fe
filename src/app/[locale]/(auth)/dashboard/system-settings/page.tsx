@@ -5,24 +5,22 @@ import { GeneralSettings } from "@/features/staff/system-settings/components/Gen
 import { ProtectedRoute } from "@/components/protected-route";
 import { Permissions } from "@/types/const";
 
-import { AddSettingHeader } from "@/features/staff/system-settings/components/AddSettingHeader";
-import { ALCard } from "@/components/ui/al-card";
+// _OLD: import { AddSettingHeader } from "@/features/staff/system-settings/components/AddSettingHeader";
+import { ALTitleCard } from "@/components/ui/al-title-card";
 
 const SystemSettingsContent = () => {
     const st = useTranslations("settings");
+    const headerActions = undefined;
+    // _OLD: const headerActions = <AddSettingHeader />;
+
     return (
         <div className="flex h-full min-h-0 flex-col overflow-hidden bg-gray-50">
-            <ALCard className="p-2">
-                <div className="flex items-center justify-between">
-                    <div>
-                        <h1 className="text-xl font-bold text-gray-900 tracking-tight">
-                            {st("title")}
-                        </h1>
-                        <p className="text-sm text-gray-500">{st("description")}</p>
-                    </div>
-                    <AddSettingHeader />
-                </div>
-            </ALCard>
+            <ALTitleCard
+                title={st("title")}
+                description={st("description")}
+                actions={headerActions}
+                className="shrink-0"
+            />
             <main className="mt-3 flex-1 min-h-0 w-full overflow-hidden">
                 <GeneralSettings />
             </main>

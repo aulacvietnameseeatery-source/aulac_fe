@@ -238,6 +238,7 @@
         "tax": "Tax (10%)",
         "total": "Total",
         "placeOrder": "Place Order",
+        "placeOrderSuccess": "Order placed successfully!",
         "createInvoice": "Create Invoice",
         "noTableSelected": "No table selected",
         "anonymous": "Anonymous",

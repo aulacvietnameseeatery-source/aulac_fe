@@ -26,6 +26,7 @@ import {
 import { PermissionGuard } from "@/components/permission-guard";
 import { Permissions } from "@/types/const";
 import { cn } from "@/lib/utils";
+import { formatPhoneToDomesticDisplay } from "@/lib/phone-format";
 import type { AccountDetail } from "../types/account-detail.types";
 
 // ============================================================
@@ -57,6 +58,7 @@ export const AccountProfileHeader = ({
   const t = useTranslations("Account.Detail.header");
   const tStatus = useTranslations("Account.Detail.statusLabel");
   const [copiedField, setCopiedField] = useState<string | null>(null);
+  const displayPhone = account.phone ? formatPhoneToDomesticDisplay(account.phone) : null;
 
   // Initials for the avatar fallback
   const initials = account.fullName
@@ -145,11 +147,11 @@ export const AccountProfileHeader = ({
           {account.phone && (
             <button
               type="button"
-              onClick={() => handleCopy(account.phone!, "phone")}
+              onClick={() => handleCopy(displayPhone!, "phone")}
               className="inline-flex items-center gap-1 text-xs text-gray-400 hover:text-blue-600 transition-colors cursor-pointer"
             >
               {copiedField === "phone" ? <Check size={11} className="text-green-500" /> : <Copy size={11} />}
-              {account.phone}
+              {displayPhone}
             </button>
           )}
         </div>

@@ -17,6 +17,7 @@ import { ConfirmModal } from "@/components/layout/admin-sidebar/confirm-modal";
 import { ProtectedRoute } from "@/components/protected-route";
 import { PermissionGuard } from "@/components/permission-guard";
 import { Permissions } from "@/types/const";
+import { ALTitleCard } from "@/components/ui/al-title-card";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { useStatusBatchActions } from "@/features/staff/account-management/account-list/hooks/useStatusBatchActions";
@@ -312,20 +313,21 @@ const AccountListContent = () => {
                 defaultRowsPerPage={10}
                 rowsPerPageOptions={[10, 20, 50, 100]}
                 renderTitle={() => (
-                    <div className="flex justify-between items-center w-full">
-                        <div>
-                            <h1 className="text-3xl font-bold text-gray-900 tracking-tight">
-                                {t("title")}
-                            </h1>
-                            <p className="text-sm text-gray-500 mt-1">{t("description")}</p>
-                        </div>
-                        <PermissionGuard permission={Permissions.CreateAccount}>
-                            <Button onClick={handleCreate} variant="outline" className="shadow-md">
-                                <Plus className="mr-2 h-4 w-4" />
-                                {t("addNew")}
-                            </Button>
-                        </PermissionGuard>
-                    </div>
+                    <ALTitleCard
+                        title={t("title")}
+                        description={t("description")}
+                        actions={
+                            <PermissionGuard permission={Permissions.CreateAccount}>
+                                <Button
+                                    onClick={handleCreate}
+                                    className="w-full gap-2 sm:w-auto bg-[#1A3A52] text-[#FDFBF9] hover:bg-[#1A3A52]/90"
+                                >
+                                    <Plus className="h-4 w-4" />
+                                    {t("addNew")}
+                                </Button>
+                            </PermissionGuard>
+                        }
+                    />
                 )}
                 renderCell={handleGlobalRenderCell}
                 renderActionColumn={(item) => (

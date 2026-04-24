@@ -181,16 +181,16 @@ export function ShiftReports() {
               </TabsTrigger>
             </TabsList>
 
-            <div className="flex-1 overflow-visible p-2.5 sm:p-3 md:p-4 lg:overflow-y-auto">
-              <TabsContent value="attendance" className="m-0 border-none p-0 outline-none">
+            <div className="flex-1 min-h-0 overflow-hidden p-2.5 sm:p-3 md:p-4">
+              <TabsContent value="attendance" className="m-0 h-full min-h-0 border-none p-0 outline-none">
                 <AttendanceTab rows={attendanceRows} loading={attLoading} />
               </TabsContent>
 
-              <TabsContent value="workedHours" className="m-0 border-none p-0 outline-none">
+              <TabsContent value="workedHours" className="m-0 h-full min-h-0 overflow-y-auto border-none p-0 outline-none">
                 <WorkedHoursTab rows={workedHours} loading={whLoading} />
               </TabsContent>
 
-              <TabsContent value="exceptions" className="m-0 border-none p-0 outline-none">
+              <TabsContent value="exceptions" className="m-0 h-full min-h-0 overflow-y-auto border-none p-0 outline-none">
                 <ExceptionsTab rows={exceptions} loading={excLoading} />
               </TabsContent>
             </div>

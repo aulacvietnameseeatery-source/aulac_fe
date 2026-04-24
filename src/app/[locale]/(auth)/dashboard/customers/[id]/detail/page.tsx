@@ -138,11 +138,6 @@ export default function CustomerDetailPage() {
                 <div className="flex-1 w-full">
                     <div className="flex items-center gap-3">
                         <h1 className="text-2xl font-extrabold text-slate-900">{profile.fullName || t('guestCustomer')}</h1>
-                        {profile.isMember ? (
-                            <Badge className="bg-gradient-to-r from-amber-400 to-orange-500 text-white border-none shadow-sm px-2.5 py-0.5">{t('member')}</Badge>
-                        ) : (
-                            <Badge variant="secondary" className="bg-slate-100 text-slate-600 hover:bg-slate-200 border-none px-2.5 py-0.5">{t('guest')}</Badge>
-                        )}
                     </div>
                     <div className="flex flex-wrap items-center gap-x-5 gap-y-2 mt-3 text-sm font-medium text-slate-500">
                         <div className="flex items-center gap-1.5"><Phone size={14} className="text-slate-400"/> {profile.phone || t('noPhone')}</div>
@@ -257,7 +252,7 @@ export default function CustomerDetailPage() {
                     <TablePagination
                         totalCount={totalCount}
                         pageSize={pageSize}
-                        pageSizes={[10, 12, 20, 30, 50]} 
+                        pageSizes={[12, 24, 36, 60]} 
                         pageInfo={pageInfo}
                         hasPrev={currentPage > 1}
                         hasNext={currentPage * pageSize < totalCount}

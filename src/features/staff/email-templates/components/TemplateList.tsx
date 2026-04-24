@@ -3,6 +3,7 @@
 import React, { useMemo } from "react";
 import { EmailTemplate } from "../types";
 import { useEmailTemplates } from "../hooks/use-email-templates";
+import { ALTitleCard } from "@/components/ui/al-title-card";
 import { BaseTable } from "@/components/ui/table/base-table";
 import { TableColumn } from "@/types/table.types";
 import { Button } from "@/components/ui/button";
@@ -64,24 +65,19 @@ export const TemplateList: React.FC<TemplateListProps> = ({ onEdit, onView, onCr
                 defaultRowsPerPage={10}
                 rowsPerPageOptions={[10, 20, 50]}
                 renderTitle={() => (
-                    <div className="flex justify-between items-center w-full">
-                        <div className="flex flex-col gap-1.5 pt-2">
-                            <h1 className="text-3xl font-bold text-gray-900 tracking-tight">
-                                {t("title")}
-                            </h1>
-                            <p className="text-sm text-gray-500 mt-1">
-                                {t("description")}
-                            </p>
-                        </div>
-                        <Button
-                            onClick={onCreate}
-                            variant="outline"
-                            className="shadow-md"
-                        >
-                            <Plus className="mr-2 h-4 w-4" />
-                            {t("actions.add")}
-                        </Button>
-                    </div>
+                    <ALTitleCard
+                        title={t("title")}
+                        description={t("description")}
+                        actions={
+                            <Button
+                                onClick={onCreate}
+                                className="w-full gap-2 sm:w-auto bg-[#1A3A52] text-[#FDFBF9] hover:bg-[#1A3A52]/90"
+                            >
+                                <Plus className="h-4 w-4" />
+                                {t("actions.add")}
+                            </Button>
+                        }
+                    />
                 )}
                 renderActionColumn={(item) => (
                     <div className="flex items-center gap-1">

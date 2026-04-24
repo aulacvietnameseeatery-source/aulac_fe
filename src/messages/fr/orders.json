@@ -238,6 +238,7 @@
         "tax": "Taxe (10%)",
         "total": "Total",
         "placeOrder": "Passer la commande",
+        "placeOrderSuccess": "Commande passée avec succès !",
         "createInvoice": "Créer la facture",
         "noTableSelected": "Aucune table sélectionnée",
         "anonymous": "Client anonyme",

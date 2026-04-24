@@ -1,4 +1,5 @@
 import React, { forwardRef } from 'react';
+import { formatPhoneToDomesticDisplay } from '@/lib/phone-format';
 import { PrintOrderData, PrintStoreSettings } from '../types/receipt.types';
 
 interface OrderPrintDocumentProps {
@@ -11,6 +12,7 @@ interface OrderPrintDocumentProps {
 export const OrderPrintDocument = forwardRef<HTMLDivElement, OrderPrintDocumentProps>(
   ({ type, order, settings, translations: t }, ref) => {
     const isInvoice = type === 'invoice';
+    const displayPhone = formatPhoneToDomesticDisplay(settings.phone);
 
     return (
       <div 
@@ -27,7 +29,7 @@ export const OrderPrintDocument = forwardRef<HTMLDivElement, OrderPrintDocumentP
           />
           <h1 className="font-bold text-lg uppercase tracking-wider">{settings.name}</h1>
           <p className="text-xs">{settings.streetAddress}, {settings.city}</p>
-          <p className="text-xs">Tel: {settings.phone}</p>
+          <p className="text-xs">Tel: {displayPhone}</p>
           {settings.email && <p className="text-xs">{settings.email}</p>}
           {settings.vatNumber && <p className="text-xs font-semibold mt-1">UID: {settings.vatNumber}</p>}
            

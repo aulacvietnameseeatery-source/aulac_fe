@@ -1,6 +1,6 @@
 import { useState, useMemo, useCallback } from 'react';
 
-export type SelectionMode = 'single' | 'multiple';
+export type SelectionMode = 'single' | 'multiple' | 'none';
 
 interface UseTableSelectionParams<T> {
     data: T[];
@@ -33,6 +33,10 @@ export const useTableSelection = <T>({
      * Create by: DatND (15/1/2026)
      */
     const handleSelectAllChange = useCallback((items: T[], checked: boolean) => {
+        if (selectionMode === 'none') {
+            return;
+        }
+
         const next = new Set<string | number>();
         if (checked) {
             items.forEach(item => next.add(getRowKey(item)));
@@ -48,6 +52,10 @@ export const useTableSelection = <T>({
      * Create by: DatND (15/1/2026)
      */
     const toggleRowSelection = useCallback((item: T, checked: boolean) => {
+        if (selectionMode === 'none') {
+            return;
+        }
+
         const key = getRowKey(item);
         setSelectedKeys(prev => {
             const next = new Set(prev);

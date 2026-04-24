@@ -2,6 +2,7 @@
 
 import React from "react";
 import { Loader2, Save, ArrowLeft, Search, AlertCircle } from "lucide-react";
+import { ALTitleCard } from "@/components/ui/al-title-card";
 import { Button } from "@/components/ui/button";
 import { useInventoryCheck } from "../hooks/use-inventory-check";
 
@@ -29,39 +30,45 @@ export function InventoryCheckContent() {
 
     return (
         <div className="w-full max-w-5xl mx-auto flex flex-col gap-5 p-4 md:p-6 pb-24">
-            {/* Header */}
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
-                <div className="flex items-center gap-4">
-                    <Button variant="ghost" size="icon" onClick={() => router.back()} className="shrink-0 hover:bg-gray-100 rounded-full">
+            <ALTitleCard
+                title="Kiểm kê kho"
+                description="Đối soát và điều chỉnh tồn kho thực tế."
+                titleClassName="text-2xl font-bold tracking-tight text-gray-900"
+                descriptionClassName="text-sm text-gray-500"
+                className="border-gray-100 bg-white shadow-sm"
+            >
+                <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                    <Button
+                        variant="outline"
+                        size="icon"
+                        onClick={() => router.back()}
+                        className="shrink-0 rounded-full border-gray-200 hover:bg-gray-100"
+                    >
                         <ArrowLeft className="h-5 w-5 text-gray-600" />
                     </Button>
-                    <div>
-                        <h1 className="text-2xl font-bold text-gray-900 tracking-tight">Kiểm kê kho</h1>
-                        <p className="text-sm text-gray-500 mt-1">Đối soát và điều chỉnh tồn kho thực tế.</p>
-                    </div>
-                </div>
 
-                <div className="flex items-center gap-3 w-full md:w-auto">
-                    <div className="relative flex-1 md:w-72">
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-                        <input
-                            type="text"
-                            placeholder="Tìm kiếm nguyên liệu..."
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                            className="w-full pl-9 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
-                        />
+                    <div className="flex w-full items-center gap-3 md:w-auto">
+                        <div className="relative flex-1 md:w-72">
+                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                            <input
+                                type="text"
+                                placeholder="Tìm kiếm nguyên liệu..."
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                className="w-full rounded-xl border border-gray-200 bg-gray-50 py-2.5 pl-9 pr-4 text-sm transition-all focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                            />
+                        </div>
+                        <Button
+                            onClick={handleSubmit}
+                            disabled={isSubmitting}
+                            variant="outline"
+                        >
+                            {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
+                            Chốt kiểm kê
+                        </Button>
                     </div>
-                    <Button
-                        onClick={handleSubmit}
-                        disabled={isSubmitting}
-                        variant={"outline"}
-                    >
-                        {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
-                        Chốt kiểm kê
-                    </Button>
                 </div>
-            </div>
+            </ALTitleCard>
 
             {/* Bảng đếm kho */}
             <div className="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden">
@@ -70,10 +77,10 @@ export function InventoryCheckContent() {
                         <thead className="bg-gray-50/80 border-b border-gray-200 text-gray-600 font-semibold uppercase text-[11px] tracking-wider">
                         <tr>
                             <th className="px-5 py-4 w-auto">Nguyên liệu</th>
-                            <th className="px-5 py-4 w-[140px] text-right">Tồn hệ thống</th>
-                            <th className="px-5 py-4 w-[160px] text-center bg-indigo-50/30">Tồn thực tế</th>
-                            <th className="px-5 py-4 w-[120px] text-right">Độ lệch</th>
-                            <th className="px-5 py-4 min-w-[280px]">Lý do chênh lệch</th>
+                            <th className="px-5 py-4 w-35 text-right">Tồn hệ thống</th>
+                            <th className="px-5 py-4 w-40 text-center bg-indigo-50/30">Tồn thực tế</th>
+                            <th className="px-5 py-4 w-30 text-right">Độ lệch</th>
+                            <th className="px-5 py-4 min-w-70">Lý do chênh lệch</th>
                         </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-100">

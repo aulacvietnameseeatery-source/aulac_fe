@@ -6,6 +6,7 @@ import { getLocalizedApiErrorMessage } from "@/lib/api-error";
 import type {
   GetTemplatesParams,
   GetAssignmentsParams,
+  GetLiveOperationsParams,
   GetMyShiftsParams,
   GetAttendanceReportParams,
   GetWorkedHoursReportParams,
@@ -23,6 +24,7 @@ import type {
   TeamScheduleStaffRow,
   ShiftAssignmentListDto,
   ShiftAssignmentDetailDto,
+  ShiftLiveOperationsSnapshotDto,
 } from "../types/shift-management.types";
 
 // ─── Query Keys ───────────────────────────────────────────────────────────────
@@ -36,6 +38,7 @@ export const SHIFT_QUERY_KEYS = {
   assignmentList: (params: object) => [...SHIFT_QUERY_KEYS.assignments(), params] as const,
   assignmentById: (id: number) => [...SHIFT_QUERY_KEYS.assignments(), "detail", id] as const,
   liveBoard: (params: object) => [...SHIFT_QUERY_KEYS.all, "live-board", params] as const,
+  liveOperations: (params: object) => [...SHIFT_QUERY_KEYS.all, "live-operations", params] as const,
   reports: () => [...SHIFT_QUERY_KEYS.all, "reports"] as const,
   attendanceReport: (params: object) =>
     [...SHIFT_QUERY_KEYS.reports(), "attendance", params] as const,
@@ -286,6 +289,15 @@ export function useShiftLiveBoardQuery(params: GetAssignmentsParams = {}) {
   return useQuery({
     queryKey: SHIFT_QUERY_KEYS.liveBoard(params),
     queryFn: () => shiftManagementService.getLiveBoard(params),
+    refetchInterval: 30_000,
+    refetchIntervalInBackground: true,
+  });
+}
+
+export function useShiftLiveOperationsQuery(params: GetLiveOperationsParams = {}) {
+  return useQuery<ShiftLiveOperationsSnapshotDto>({
+    queryKey: SHIFT_QUERY_KEYS.liveOperations(params),
+    queryFn: () => shiftManagementService.getLiveOperationsSnapshot(params),
     refetchInterval: 30_000,
     refetchIntervalInBackground: true,
   });

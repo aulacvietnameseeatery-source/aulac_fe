@@ -4,6 +4,8 @@ import { authService } from "../services/login.api";
 import { LoginRequest } from "../types/login.types";
 import { useAuth } from "@/components/providers/auth-provider";
 
+import { getRoles } from "@/lib/jwt-utils";
+
 /**
  * Login mutation hook
  * Integrates with AuthProvider for centralized auth state management
@@ -44,8 +46,15 @@ export const useLogin = () => {
         // Save access token (refresh token in HttpOnly cookie)
         setAuthTokens(response.data.accessToken);
 
-        // Redirect to dashboard
-        router.push("/dashboard");
+        const roles = getRoles(response.data.accessToken);
+        const isStaff = roles.some(r => r.toUpperCase() === 'STAFF');
+
+        if (isStaff) {
+          router.push("/dashboard/orders/pos");
+        } else {
+          // Redirect to dashboard
+          router.push("/dashboard");
+        }
       }
     },
     onError: (error: Error) => {

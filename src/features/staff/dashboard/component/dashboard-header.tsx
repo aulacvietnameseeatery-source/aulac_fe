@@ -4,6 +4,8 @@ import React, { useState, useRef, useEffect } from "react";
 import { RefreshCw, Calendar as CalendarIcon, ChevronDown, RefreshCcw } from "lucide-react";
 import { format, subDays, startOfMonth, subMonths, endOfMonth } from "date-fns";
 import { DateRange } from "react-day-picker";
+import { ALTitleCard } from "@/components/ui/al-title-card";
+import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { useTranslations } from "next-intl";
 
@@ -97,78 +99,82 @@ export function DashboardHeader({ onRefresh, isLoading, currentPeriod = 'last_30
     };
 
     return (
-        <div className="flex flex-wrap items-center justify-between gap-4 mb-6 relative z-10">
-            <div className="flex items-center gap-3">
-                <h3 className="text-2xl font-bold text-gray-800 m-0">{t("title")}</h3>
-                <button
-                    onClick={onRefresh}
-                    disabled={isLoading}
-                    className="p-1.5 bg-white border border-gray-200 rounded-full text-gray-500 hover:bg-gray-50 transition-colors shadow-sm disabled:opacity-50 group"
-                    title={t("refresh")}
-                >
-                    <RefreshCcw
-                        size={16}
-                        className={`transition-transform duration-500 ${isLoading ? "animate-spin text-[#FFAB2D]" : "group-hover:rotate-180"}`}
-                    />
-                </button>
-            </div>
-
-            <div className="flex flex-wrap items-center gap-2">
-                <button
-                    onClick={onRefresh}
-                    disabled={isLoading}
-                    className="inline-flex items-center px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 shadow-sm transition-colors disabled:opacity-60 group"
-                >
-                    <RefreshCw
-                        size={16}
-                        className={`mr-2 transition-transform duration-500 ${isLoading ? "animate-spin text-[#FFAB2D]" : "group-hover:rotate-180 text-gray-500"}`}
-                    />
-                    {isLoading ? t("syncing") : t("syncData")}
-                </button>
-
-                <div className="relative" ref={dropdownRef}>
-                    <button
-                        onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                        className={`inline-flex items-center px-4 py-2 bg-white border rounded-lg text-sm font-medium transition-colors shadow-sm min-w-[220px] justify-between ${isDropdownOpen ? 'border-[#1A3A52] ring-1 ring-[#1A3A52] text-[#1A3A52]' : 'border-gray-200 text-gray-700 hover:bg-gray-50'}`}
+        <ALTitleCard
+            title={t("title")}
+            className="relative z-10 mb-6"
+            actions={
+                <>
+                    <Button
+                        onClick={onRefresh}
+                        disabled={isLoading}
+                        variant="outline"
+                        className="group h-10 w-full rounded-xl border-gray-200 bg-white text-gray-500 hover:bg-gray-50 sm:w-10 sm:rounded-full"
+                        title={t("refresh")}
                     >
-                        <div className="flex items-center">
-                            <CalendarIcon size={16} className={`mr-2 ${isDropdownOpen ? 'text-[#1A3A52]' : 'text-gray-500'}`} />
-                            <span>{getDisplayDateText()}</span>
-                        </div>
-                        <ChevronDown size={14} className={`ml-2 transition-transform ${isDropdownOpen ? 'rotate-180 text-[#1A3A52]' : 'text-gray-400'}`} />
-                    </button>
+                        <RefreshCcw
+                            size={16}
+                            className={`transition-transform duration-500 ${isLoading ? "animate-spin text-[#FFAB2D]" : "group-hover:rotate-180"}`}
+                        />
+                    </Button>
 
-                    {isDropdownOpen && (
-                        <div className="absolute right-0 mt-2 bg-white border border-gray-100 rounded-xl shadow-2xl z-[100] flex flex-col md:flex-row overflow-hidden animate-in fade-in slide-in-from-top-2">
-                            <div className="flex flex-col border-b md:border-b-0 md:border-r border-gray-100 p-2 w-full md:w-40 bg-gray-50/50">
-                                {periods.map((period) => (
-                                    <button
-                                        key={period.id}
-                                        onClick={() => handleSelectPreset(period.id)}
-                                        className={`w-full text-left px-3 py-2 text-sm transition-colors rounded-md ${
-                                            currentPeriod === period.id
-                                                ? 'bg-[#1A3A52] text-white font-medium'
-                                                : 'text-gray-700 hover:bg-gray-100'
-                                        }`}
-                                    >
-                                        {period.label}
-                                    </button>
-                                ))}
+                    <Button
+                        onClick={onRefresh}
+                        disabled={isLoading}
+                        variant="outline"
+                        className="group w-full bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 sm:w-auto"
+                    >
+                        <RefreshCw
+                            size={16}
+                            className={`mr-2 transition-transform duration-500 ${isLoading ? "animate-spin text-[#FFAB2D]" : "text-gray-500"}`}
+                        />
+                        {isLoading ? t("syncing") : t("syncData")}
+                    </Button>
+
+                    <div className="relative w-full sm:w-auto" ref={dropdownRef}>
+                        <Button
+                            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                            variant="outline"
+                            className={`w-full justify-between text-sm font-medium shadow-sm sm:min-w-55 ${isDropdownOpen ? 'border-[#1A3A52] text-[#1A3A52] ring-1 ring-[#1A3A52]' : 'border-gray-200 bg-white text-gray-700 hover:bg-gray-50'}`}
+                        >
+                            <div className="flex items-center">
+                                <CalendarIcon size={16} className={`mr-2 ${isDropdownOpen ? 'text-[#1A3A52]' : 'text-gray-500'}`} />
+                                <span>{getDisplayDateText()}</span>
                             </div>
-                            <div className="p-3">
-                                <Calendar
-                                    initialFocus
-                                    mode="range"
-                                    defaultMonth={dateRange?.from}
-                                    selected={dateRange}
-                                    onSelect={handleCalendarSelect}
-                                    numberOfMonths={2}
-                                />
+                            <ChevronDown size={14} className={`ml-2 transition-transform ${isDropdownOpen ? 'rotate-180 text-[#1A3A52]' : 'text-gray-400'}`} />
+                        </Button>
+
+                        {isDropdownOpen && (
+                            <div className="absolute right-0 z-100 mt-2 flex flex-col overflow-hidden rounded-xl border border-gray-100 bg-white shadow-2xl animate-in fade-in slide-in-from-top-2 md:flex-row">
+                                <div className="flex flex-col border-b md:border-b-0 md:border-r border-gray-100 p-2 w-full md:w-40 bg-gray-50/50">
+                                    {periods.map((period) => (
+                                        <button
+                                            key={period.id}
+                                            onClick={() => handleSelectPreset(period.id)}
+                                            className={`w-full text-left px-3 py-2 text-sm transition-colors rounded-md ${
+                                                currentPeriod === period.id
+                                                    ? 'bg-[#1A3A52] text-white font-medium'
+                                                    : 'text-gray-700 hover:bg-gray-100'
+                                            }`}
+                                        >
+                                            {period.label}
+                                        </button>
+                                    ))}
+                                </div>
+                                <div className="p-3">
+                                    <Calendar
+                                        initialFocus
+                                        mode="range"
+                                        defaultMonth={dateRange?.from}
+                                        selected={dateRange}
+                                        onSelect={handleCalendarSelect}
+                                        numberOfMonths={2}
+                                    />
+                                </div>
                             </div>
-                        </div>
-                    )}
-                </div>
-            </div>
-        </div>
+                        )}
+                    </div>
+                </>
+            }
+        />
     );
 }

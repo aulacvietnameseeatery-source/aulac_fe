@@ -1,5 +1,3 @@
-import type { AttendanceStatusCode } from "@/types/status-codes";
-
 // ─── Template ─────────────────────────────────────────────────────────────────
 
 export interface ShiftTemplateListDto {
@@ -39,6 +37,7 @@ export interface ShiftAssignmentListDto {
   notes?: string | null;
   assignedAt: string;
   assignedByName: string;
+  attendance?: AttendanceRecordDto | null;
 }
 
 export interface ShiftAssignmentDetailDto extends ShiftAssignmentListDto {
@@ -92,6 +91,61 @@ export interface ShiftLiveRealtimeEventDto {
   staffId?: number | null;
   orderId?: number | null;
   occurredAt: string;
+}
+
+export interface ShiftLiveOperationsSnapshotDto {
+  businessDate: string;
+  snapshotAt: string;
+  tables: ShiftLiveTablesSnapshotDto;
+  orders: ShiftLiveOrderPipelineSnapshotDto;
+  revenue: ShiftLiveRevenueSnapshotDto;
+  topSelling: ShiftLiveTopSellingSnapshotDto;
+}
+
+export interface ShiftLiveTablesSnapshotDto {
+  occupiedTables: number;
+  occupiedTablesDelta: number;
+  totalTables: number;
+  occupancyRate: number;
+  occupancyRateDelta: number;
+  waitingQueueCount: number;
+  waitingQueueDelta: number;
+  averageTurnoverMinutes?: number | null;
+  averageTurnoverDeltaMinutes?: number | null;
+}
+
+export interface ShiftLiveOrderPipelineSnapshotDto {
+  pendingCount: number;
+  cookingCount: number;
+  readyCount: number;
+  servedCount: number;
+  activeCount: number;
+  activeCountDelta: number;
+  servedCountDelta: number;
+}
+
+export interface ShiftLiveRevenueSnapshotDto {
+  revenue: number;
+  revenueDelta: number;
+  revenueDeltaPercent: number;
+  closedBills: number;
+  closedBillsDelta: number;
+  averageBill: number;
+}
+
+export interface ShiftLiveTopSellingSnapshotDto {
+  totalQuantity: number;
+  totalQuantityDelta: number;
+  items: ShiftLiveTopSellingItemDto[];
+}
+
+export interface ShiftLiveTopSellingItemDto {
+  dishId: number;
+  dishName: string;
+  quantitySold: number;
+  quantityDelta: number;
+  estimatedPortionsLeft?: number | null;
+  stockStatusCode: string;
 }
 
 // Keep backward-compatible alias used across the module
@@ -267,6 +321,10 @@ export interface GetAssignmentsParams {
   isActive?: boolean;
   pageIndex?: number;
   pageSize?: number;
+}
+
+export interface GetLiveOperationsParams {
+  businessDate?: string;
 }
 
 export interface GetMyShiftsParams {

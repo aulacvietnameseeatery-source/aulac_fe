@@ -3,24 +3,43 @@
 import { useMemo, useState } from "react";
 import {
   AlertTriangle,
+  ArrowDownRight,
+  ArrowRight,
+  ArrowUpRight,
+  ChefHat,
+  CircleDollarSign,
   Clock3,
+  Flame,
   RefreshCcw,
+  TableProperties,
   TimerReset,
   UserRound,
   Wallet,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { ALDatePicker } from "@/components/ui/al-date-picker";
 import { ALCard } from "@/components/ui/al-card";
+import { ALTitleCard } from "@/components/ui/al-title-card";
+import { Select } from "@/components/ui/select";
+import { usePermissions } from "@/hooks/use-permissions";
+import { formatCHF } from "@/lib/format-chf-utils";
 import { cn } from "@/lib/utils";
-import { useShiftAssignmentsQuery, useShiftLiveBoardQuery } from "../hooks/use-shift-queries";
+import { Link } from "@/routing";
+import { Permissions } from "@/types/const";
+import {
+  useShiftAssignmentsQuery,
+  useShiftLiveBoardQuery,
+  useShiftLiveOperationsQuery,
+} from "../hooks/use-shift-queries";
 import { useShiftLiveBoardRealtime } from "../hooks/use-shift-live-board-realtime";
 import { ShiftStatusBadge } from "../components/shift-status-badge";
 import { dateUtils } from "@/lib/date-utils";
 import type {
   ShiftAssignmentListDto,
   ShiftLiveBoardItemDto,
+  ShiftLiveOperationsSnapshotDto,
+  ShiftLiveTopSellingItemDto,
 } from "../types/shift-management.types";
 
 // ── helpers ──
@@ -43,10 +62,26 @@ function fmt(iso: string | null | undefined, fallback = "—") {
 
 function fmtCurrency(value: number | null | undefined, fallback: string) {
   if (value == null) return fallback;
-  return new Intl.NumberFormat("vi-VN", {
-    style: "currency",
-    currency: "VND",
-    maximumFractionDigits: 0,
+  return formatCHF(value);
+}
+
+function fmtSignedCurrency(value: number) {
+  const sign = value > 0 ? "+" : value < 0 ? "-" : "";
+  return `${sign}${fmtCurrency(Math.abs(value), "0")}`;
+}
+
+function fmtSignedNumber(value: number, maximumFractionDigits = 0) {
+  return new Intl.NumberFormat("en-US", {
+    signDisplay: "exceptZero",
+    maximumFractionDigits,
+    minimumFractionDigits: maximumFractionDigits > 0 ? 1 : 0,
+  }).format(value);
+}
+
+function fmtPercent(value: number, maximumFractionDigits = 1) {
+  return new Intl.NumberFormat("en-US", {
+    maximumFractionDigits,
+    minimumFractionDigits: value % 1 === 0 ? 0 : Math.min(maximumFractionDigits, 1),
   }).format(value);
 }
 
@@ -216,6 +251,129 @@ function sortPriority(row: ShiftLiveBoardItemDto) {
   return 4;
 }
 
+function createEmptyLiveOperationsSnapshot(businessDate: string): ShiftLiveOperationsSnapshotDto {
+  return {
+    businessDate,
+    snapshotAt: new Date().toISOString(),
+    tables: {
+      occupiedTables: 0,
+      occupiedTablesDelta: 0,
+      totalTables: 0,
+      occupancyRate: 0,
+      occupancyRateDelta: 0,
+      waitingQueueCount: 0,
+      waitingQueueDelta: 0,
+      averageTurnoverMinutes: null,
+      averageTurnoverDeltaMinutes: null,
+    },
+    orders: {
+      pendingCount: 0,
+      cookingCount: 0,
+      readyCount: 0,
+      servedCount: 0,
+      activeCount: 0,
+      activeCountDelta: 0,
+      servedCountDelta: 0,
+    },
+    revenue: {
+      revenue: 0,
+      revenueDelta: 0,
+      revenueDeltaPercent: 0,
+      closedBills: 0,
+      closedBillsDelta: 0,
+      averageBill: 0,
+    },
+    topSelling: {
+      totalQuantity: 0,
+      totalQuantityDelta: 0,
+      items: [],
+    },
+  };
+}
+
+function getComparisonLabel(isTodaySelected: boolean, t: TranslateFn) {
+  return isTodaySelected
+    ? t("operations.shared.vsYesterdaySameTime")
+    : t("operations.shared.vsPreviousDay");
+}
+
+function getStockBadge(item: ShiftLiveTopSellingItemDto, t: TranslateFn) {
+  if (item.stockStatusCode === "OUT") {
+    return {
+      label: t("operations.topSelling.stockOut"),
+      className: "border-red-200 bg-red-50 text-red-700",
+    };
+  }
+
+  if (item.stockStatusCode === "UNKNOWN" || item.estimatedPortionsLeft == null) {
+    return {
+      label: t("operations.topSelling.stockUnknown"),
+      className: "border-slate-200 bg-slate-50 text-slate-700",
+    };
+  }
+
+  if (item.stockStatusCode === "LOW") {
+    return {
+      label: t("operations.topSelling.stockLeft", { count: item.estimatedPortionsLeft }),
+      className: "border-amber-200 bg-amber-50 text-amber-700",
+    };
+  }
+
+  return {
+    label: t("operations.topSelling.stockLeft", { count: item.estimatedPortionsLeft }),
+    className: "border-emerald-200 bg-emerald-50 text-emerald-700",
+  };
+}
+
+function DeltaBadge({
+  delta,
+  label,
+  className,
+}: {
+  delta: number;
+  label: string;
+  className?: string;
+}) {
+  const isPositive = delta > 0;
+  const isNegative = delta < 0;
+  const Icon = isPositive ? ArrowUpRight : isNegative ? ArrowDownRight : ArrowRight;
+
+  return (
+    <span
+      className={cn(
+        "inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[11px] font-medium",
+        isPositive && "border-emerald-200 bg-emerald-50 text-emerald-700",
+        isNegative && "border-red-200 bg-red-50 text-red-700",
+        !isPositive && !isNegative && "border-slate-200 bg-slate-50 text-slate-700",
+        className,
+      )}
+    >
+      <Icon className="h-3.5 w-3.5" />
+      <span>{label}</span>
+    </span>
+  );
+}
+
+function LiveSummaryCardSkeleton() {
+  return (
+    <ALCard
+      variant="default"
+      elevation="sm"
+      className="rounded-xl border border-[#D5BA98]/60 p-4 sm:p-5"
+    >
+      <div className="animate-pulse space-y-4">
+        <div className="h-4 w-36 rounded bg-[#D5BA98]/30" />
+        <div className="h-9 w-40 rounded bg-[#D5BA98]/20" />
+        <div className="grid gap-2 sm:grid-cols-2">
+          <div className="h-14 rounded-xl bg-[#D5BA98]/15" />
+          <div className="h-14 rounded-xl bg-[#D5BA98]/15" />
+        </div>
+        <div className="h-4 w-28 rounded bg-[#D5BA98]/20" />
+      </div>
+    </ALCard>
+  );
+}
+
 function ShiftLiveTable_DEPRECATED() {
   const [businessDate, setBusinessDate] = useState(todayIso);
 
@@ -303,9 +461,8 @@ function ShiftLiveTable_DEPRECATED() {
             className={`rounded-full border px-3 py-1 font-medium transition-colors ${statusFilterClass(
               code,
               statusFilter === code
-            )} ${
-              statusFilter !== code ? "hover:text-slate-900" : ""
-            }`}
+            )} ${statusFilter !== code ? "hover:text-slate-900" : ""
+              }`}
           >
             {code.charAt(0) + code.slice(1).toLowerCase()}
           </button>
@@ -362,6 +519,7 @@ void ShiftLiveTable_DEPRECATED;
 
 export function ShiftLive() {
   const t = useTranslations("shift.live");
+  const { can } = usePermissions();
   const [businessDate, setBusinessDate] = useState(todayIso);
   const [filter, setFilter] = useState<LiveFilter>("ALL");
 
@@ -375,10 +533,36 @@ export function ShiftLive() {
     [businessDate]
   );
 
-  const { data, isLoading, isFetching, refetch, dataUpdatedAt } = useShiftLiveBoardQuery(queryParams);
+  const liveOperationsParams = useMemo(
+    () => ({ businessDate }),
+    [businessDate],
+  );
+
+  const {
+    data,
+    isLoading,
+    isFetching,
+    refetch: refetchBoard,
+    dataUpdatedAt,
+  } = useShiftLiveBoardQuery(queryParams);
+  const {
+    data: liveOperationsData,
+    isLoading: isLiveOperationsLoading,
+    isFetching: isLiveOperationsFetching,
+    refetch: refetchLiveOperations,
+    dataUpdatedAt: liveOperationsUpdatedAt,
+  } = useShiftLiveOperationsQuery(liveOperationsParams);
   const { isRealtimeConnected } = useShiftLiveBoardRealtime(businessDate);
 
   const rows = useMemo(() => data ?? [], [data]);
+  const liveOperations = liveOperationsData ?? createEmptyLiveOperationsSnapshot(businessDate);
+  const isTodaySelected = businessDate === todayIso();
+  const comparisonLabel = getComparisonLabel(isTodaySelected, t);
+  const canAssignShift = can(Permissions.AssignShift);
+  const topSellingItems = useMemo(
+    () => liveOperations.topSelling.items.slice(0, 3),
+    [liveOperations.topSelling.items]
+  );
 
   const sortedRows = useMemo(
     () =>
@@ -415,24 +599,28 @@ export function ShiftLive() {
   const summaryCards = [
     {
       key: "urgent",
+      filterKey: "URGENT" as LiveFilter,
       label: t("summary.urgent"),
       value: summary.urgent,
       className: "border-red-200 bg-red-50 text-red-700",
     },
     {
       key: "on-duty",
+      filterKey: "ON_DUTY" as LiveFilter,
       label: t("summary.onDuty"),
       value: summary.onDuty,
       className: "border-emerald-200 bg-emerald-50 text-emerald-700",
     },
     {
       key: "waiting",
+      filterKey: "WAITING" as LiveFilter,
       label: t("summary.waiting"),
       value: summary.waiting,
       className: "border-slate-200 bg-slate-50 text-slate-700",
     },
     {
       key: "completed",
+      filterKey: "COMPLETED" as LiveFilter,
       label: t("summary.completed"),
       value: summary.completed,
       className: "border-blue-200 bg-blue-50 text-blue-700",
@@ -447,25 +635,24 @@ export function ShiftLive() {
     { key: "COMPLETED", label: t("filters.completed") },
   ];
 
-  const lastUpdated = dataUpdatedAt
-    ? dateUtils.formatLocal(new Date(dataUpdatedAt), "HH:mm:ss")
+  const mergedUpdatedAt = Math.max(dataUpdatedAt || 0, liveOperationsUpdatedAt || 0);
+  const lastUpdated = mergedUpdatedAt
+    ? dateUtils.formatLocal(new Date(mergedUpdatedAt), "HH:mm:ss")
     : null;
 
   return (
     <div className="space-y-5 bg-[#FDFBF9]">
-      <ALCard
+      <ALTitleCard
         variant="soft"
         elevation="sm"
         animation="slide-up"
-        className="rounded-xl border border-[#D5BA98]/60 px-4 py-4 sm:px-5"
-      >
-        <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-          <div className="space-y-2">
-            <div className="flex flex-wrap items-center gap-2">
-              <h1 className="font-serif text-3xl font-semibold tracking-wide text-[#1A3A52]">
-                {t("title")}
-              </h1>
-              <span className="inline-flex items-center gap-2 rounded-full border border-emerald-600 bg-emerald-600 px-3 py-1 text-xs font-medium text-white">
+        className="rounded-xl border border-[#D5BA98]/60"
+        headerClassName="xl:items-center"
+        title={
+          <span className="inline-flex min-w-0 items-center gap-2.5">
+            <span className="truncate">{t("title")}</span>
+            <div className="flex flex-wrap items-center gap-2 text-xs text-[#1A3A52]/60">
+              <span className="inline-flex items-center gap-2 rounded-full border border-emerald-600 bg-emerald-600 px-3 py-1 font-medium text-white">
                 <span className="relative flex h-2.5 w-2.5">
                   <span className={cn(
                     "absolute inline-flex h-full w-full rounded-full bg-white/80",
@@ -477,7 +664,7 @@ export function ShiftLive() {
               </span>
               <span
                 className={cn(
-                  "inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-medium",
+                  "inline-flex items-center rounded-full border px-2.5 py-1 font-medium",
                   isRealtimeConnected
                     ? "border-blue-600 bg-blue-600 text-white"
                     : "border-slate-300 bg-slate-100 text-slate-700"
@@ -485,56 +672,371 @@ export function ShiftLive() {
               >
                 {isRealtimeConnected ? t("connection.realtime") : t("connection.polling")}
               </span>
-            </div>
-            <div className="flex flex-wrap items-center gap-2 text-xs text-[#1A3A52]/60">
               <span className="inline-flex items-center gap-1 rounded-full border border-[#D5BA98]/50 bg-white px-2.5 py-1">
                 <TimerReset className="h-3.5 w-3.5" />
                 {t("autoRefresh")}
               </span>
-              {lastUpdated && <span className="rounded-full border border-[#D5BA98]/50 bg-white px-2.5 py-1">{t("lastUpdated", { time: lastUpdated })}</span>}
+              {lastUpdated ? (
+                <span className="inline-flex items-center rounded-full border border-[#D5BA98]/50 bg-white px-2.5 py-1">
+                  {t("lastUpdated", { time: lastUpdated })}
+                </span>
+              ) : null}
             </div>
-          </div>
-
+          </span>
+        }
+        actions={
           <Button
             variant="outline"
             size="sm"
-            onClick={() => refetch()}
-            disabled={isLoading || isFetching}
+            onClick={() => {
+              void Promise.allSettled([refetchBoard(), refetchLiveOperations()]);
+            }}
+            disabled={isLoading || isFetching || isLiveOperationsLoading || isLiveOperationsFetching}
             className="border-[#D5BA98]/70 bg-white text-[#1A3A52] hover:bg-[#D5BA98]/15"
           >
-            <RefreshCcw className={cn("h-4 w-4", isFetching && "animate-spin")} />
+            <RefreshCcw className={cn("h-4 w-4", (isFetching || isLiveOperationsFetching) && "animate-spin")} />
           </Button>
-        </div>
-      </ALCard>
+        }
+      >
 
-      <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_420px]">
+      </ALTitleCard>
+
+      {isLiveOperationsLoading && !liveOperationsData ? (
+        <div className="grid items-stretch gap-3 md:grid-cols-2 xl:grid-cols-4">
+          {Array.from({ length: 4 }).map((_, index) => (
+            <LiveSummaryCardSkeleton key={index} />
+          ))}
+        </div>
+      ) : (
+        <div className="grid items-stretch gap-3 md:grid-cols-2 xl:grid-cols-4">
+          <ALCard
+            as="article"
+            variant="default"
+            elevation="sm"
+            animation="fade"
+            className="flex h-full min-h-70 flex-col rounded-xl border border-[#D5BA98]/60 p-4 text-left"
+          >
+            <div className="flex h-full flex-col gap-3">
+              <div className="flex items-start justify-between gap-3">
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2 text-[#1A3A52]">
+                    <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-[#D5BA98]/50 bg-[#D5BA98]/12 text-[#1A3A52]">
+                      <TableProperties className="h-5 w-5" />
+                    </span>
+                    <div>
+                      <p className="text-sm font-semibold leading-snug text-[#1A3A52]">{t("operations.tables.title")}</p>
+                      <p className="text-xs text-[#1A3A52]/60">{t("operations.tables.subtitle")}</p>
+                    </div>
+                  </div>
+                </div>
+                <DeltaBadge
+                  delta={liveOperations.tables.occupiedTablesDelta}
+                  label={`${fmtSignedNumber(liveOperations.tables.occupiedTablesDelta)} ${comparisonLabel}`}
+                />
+              </div>
+
+              <div>
+                <p className="text-[2rem] font-semibold leading-tight text-[#1A3A52]">
+                  {t("operations.tables.occupied", {
+                    occupied: liveOperations.tables.occupiedTables,
+                    total: liveOperations.tables.totalTables,
+                  })}
+                </p>
+                <p className="mt-1 text-sm text-[#1A3A52]/65">
+                  {t("operations.tables.occupancyRate", {
+                    rate: fmtPercent(liveOperations.tables.occupancyRate),
+                  })}
+                </p>
+              </div>
+
+              <div className="grid gap-3 sm:grid-cols-2">
+                <div className="rounded-xl border border-slate-200 bg-[#FDFBF9] p-2.5">
+                  <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-[#1A3A52]/55">
+                    {t("operations.tables.turnover")}
+                  </p>
+                  <p className="mt-2 text-sm font-medium text-[#1A3A52]">
+                    {liveOperations.tables.averageTurnoverMinutes != null
+                      ? t("operations.tables.turnoverValue", {
+                        minutes: liveOperations.tables.averageTurnoverMinutes,
+                      })
+                      : t("operations.tables.noTurnover")}
+                  </p>
+                </div>
+                <div className="rounded-xl border border-slate-200 bg-[#FDFBF9] p-2.5">
+                  <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-[#1A3A52]/55">
+                    {t("operations.tables.queue")}
+                  </p>
+                  <p className="mt-2 text-sm font-medium text-[#1A3A52]">
+                    {t("operations.tables.queueValue", {
+                      count: liveOperations.tables.waitingQueueCount,
+                    })}
+                  </p>
+                </div>
+              </div>
+
+              <div className="mt-auto flex items-center justify-between gap-3 pt-1 text-sm text-[#1A3A52]/70">
+                <span>
+                  {fmtSignedNumber(liveOperations.tables.occupancyRateDelta, 1)}pp • {fmtSignedNumber(liveOperations.tables.waitingQueueDelta)}
+                </span>
+                <Link
+                  href="/dashboard/tables"
+                  className="inline-flex shrink-0 items-center gap-1 font-medium text-[#1A3A52] underline-offset-4 transition hover:underline"
+                >
+                  {t("operations.shared.openDetail")}
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </div>
+            </div>
+          </ALCard>
+
+          <ALCard
+            as="article"
+            variant="default"
+            elevation="sm"
+            animation="fade"
+            className="flex h-full min-h-70 flex-col rounded-xl border border-amber-200 p-4 text-left"
+          >
+            <div className="flex h-full flex-col gap-3">
+              <div className="flex items-start justify-between gap-3">
+                <div className="flex items-center gap-2 text-[#1A3A52]">
+                  <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-amber-200 bg-amber-50 text-amber-700">
+                    <ChefHat className="h-5 w-5" />
+                  </span>
+                  <div>
+                    <p className="text-sm font-semibold leading-snug text-[#1A3A52]">{t("operations.orders.title")}</p>
+                    <p className="text-xs text-[#1A3A52]/60">{t("operations.orders.subtitle")}</p>
+                  </div>
+                </div>
+                <DeltaBadge
+                  delta={liveOperations.orders.activeCountDelta}
+                  label={`${fmtSignedNumber(liveOperations.orders.activeCountDelta)} ${comparisonLabel}`}
+                  className="border-amber-200 bg-amber-50 text-amber-700"
+                />
+              </div>
+
+              <div>
+                <p className="text-[2rem] font-semibold leading-tight text-[#1A3A52]">
+                  {t("operations.orders.liveTickets", { count: liveOperations.orders.activeCount })}
+                </p>
+              </div>
+
+              <div className="grid grid-cols-4 gap-2">
+                {[
+                  { key: "pending", value: liveOperations.orders.pendingCount },
+                  { key: "cooking", value: liveOperations.orders.cookingCount },
+                  { key: "ready", value: liveOperations.orders.readyCount },
+                  { key: "served", value: liveOperations.orders.servedCount },
+                ].map((stage) => (
+                  <div key={stage.key} className="rounded-xl border border-slate-200 bg-[#FDFBF9] px-2.5 py-2.5 text-center">
+                    <p className="text-[11px] font-medium uppercase tracking-[0.14em] text-[#1A3A52]/55">
+                      {t(`operations.orders.${stage.key}`)}
+                    </p>
+                    <p className="mt-2 text-lg font-semibold text-[#1A3A52]">{stage.value}</p>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-auto flex items-center justify-between gap-3 pt-1 text-sm text-[#1A3A52]/70">
+                <span>
+                  {fmtSignedNumber(liveOperations.orders.servedCountDelta)} {t("operations.orders.servedDelta")}
+                </span>
+                <Link
+                  href="/dashboard/kitchen"
+                  className="inline-flex shrink-0 items-center gap-1 font-medium text-[#1A3A52] underline-offset-4 transition hover:underline"
+                >
+                  {t("operations.shared.openDetail")}
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </div>
+            </div>
+          </ALCard>
+
+          <ALCard
+            as="article"
+            variant="default"
+            elevation="sm"
+            animation="fade"
+            className="flex h-full min-h-70 flex-col rounded-xl border border-emerald-200 p-4 text-left"
+          >
+            <div className="flex h-full flex-col gap-3">
+              <div className="flex items-start justify-between gap-3">
+                <div className="flex items-center gap-2 text-[#1A3A52]">
+                  <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-emerald-200 bg-emerald-50 text-emerald-700">
+                    <CircleDollarSign className="h-5 w-5" />
+                  </span>
+                  <div>
+                    <p className="text-sm font-semibold leading-snug text-[#1A3A52]">{t("operations.revenue.title")}</p>
+                    <p className="text-xs text-[#1A3A52]/60">{t("operations.revenue.subtitle")}</p>
+                  </div>
+                </div>
+                <DeltaBadge
+                  delta={liveOperations.revenue.revenueDelta}
+                  label={`${fmtSignedCurrency(liveOperations.revenue.revenueDelta)} ${comparisonLabel}`}
+                />
+              </div>
+
+              <div>
+                <p className="text-[2rem] font-semibold leading-tight text-[#1A3A52]">
+                  {fmtCurrency(liveOperations.revenue.revenue, "0")}
+                </p>
+                <p className="mt-1 text-sm text-[#1A3A52]/65">
+                  {fmtSignedNumber(liveOperations.revenue.revenueDeltaPercent, 1)}% • {t("operations.revenue.deltaPercent")}
+                </p>
+              </div>
+
+              <div className="grid gap-3 sm:grid-cols-2">
+                <div className="rounded-xl border border-slate-200 bg-[#FDFBF9] p-2.5">
+                  <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-[#1A3A52]/55">
+                    {t("operations.revenue.closedBills")}
+                  </p>
+                  <p className="mt-2 text-sm font-medium text-[#1A3A52]">{liveOperations.revenue.closedBills}</p>
+                </div>
+                <div className="rounded-xl border border-slate-200 bg-[#FDFBF9] p-2.5">
+                  <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-[#1A3A52]/55">
+                    {t("operations.revenue.averageBill")}
+                  </p>
+                  <p className="mt-2 text-sm font-medium text-[#1A3A52]">
+                    {fmtCurrency(liveOperations.revenue.averageBill, "0")}
+                  </p>
+                </div>
+              </div>
+
+              <div className="mt-auto flex items-center justify-between gap-3 pt-1 text-sm text-[#1A3A52]/70">
+                <span>
+                  {fmtSignedNumber(liveOperations.revenue.closedBillsDelta)} {t("operations.revenue.billsDelta")}
+                </span>
+                <Link
+                  href="/dashboard/payments"
+                  className="inline-flex shrink-0 items-center gap-1 font-medium text-[#1A3A52] underline-offset-4 transition hover:underline"
+                >
+                  {t("operations.shared.openDetail")}
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </div>
+            </div>
+          </ALCard>
+
+          <ALCard
+            as="article"
+            variant="default"
+            elevation="sm"
+            animation="fade"
+            className="flex h-full min-h-70 flex-col rounded-xl border border-orange-200 p-4 text-left"
+          >
+            <div className="flex h-full flex-col gap-3">
+              <div className="flex items-start justify-between gap-3">
+                <div className="flex items-center gap-2 text-[#1A3A52]">
+                  <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-orange-200 bg-orange-50 text-orange-700">
+                    <Flame className="h-5 w-5" />
+                  </span>
+                  <div>
+                    <p className="text-sm font-semibold leading-snug text-[#1A3A52]">{t("operations.topSelling.title")}</p>
+                    <p className="text-xs text-[#1A3A52]/60">{t("operations.topSelling.subtitle")}</p>
+                  </div>
+                </div>
+                <DeltaBadge
+                  delta={liveOperations.topSelling.totalQuantityDelta}
+                  label={`${fmtSignedNumber(liveOperations.topSelling.totalQuantityDelta)} ${comparisonLabel}`}
+                />
+              </div>
+
+              {topSellingItems.length === 0 ? (
+                <div className="flex min-h-37.5 flex-1 items-center justify-center rounded-xl border border-dashed border-[#D5BA98]/60 bg-[#FDFBF9] px-4 py-6 text-sm text-[#1A3A52]/65">
+                  {t("operations.topSelling.empty")}
+                </div>
+              ) : (
+                <div className="space-y-2">
+                  {topSellingItems.map((item, index) => {
+                    const stockBadge = getStockBadge(item, t);
+                    return (
+                      <div
+                        key={item.dishId}
+                        className="flex items-center justify-between gap-3 rounded-xl border border-slate-200 bg-[#FDFBF9] px-3 py-2.5"
+                      >
+                        <div className="min-w-0">
+                          <p className="truncate text-sm font-medium text-[#1A3A52]">
+                            {index + 1}. {item.dishName}
+                          </p>
+                          <p className="mt-1 text-xs text-[#1A3A52]/60">
+                            {t("operations.topSelling.sold", { count: item.quantitySold })}
+                            <span className="ml-2">{fmtSignedNumber(item.quantityDelta)}</span>
+                          </p>
+                        </div>
+                        <span
+                          className={cn(
+                            "shrink-0 rounded-full border px-2.5 py-1 text-[11px] font-medium",
+                            stockBadge.className,
+                          )}
+                        >
+                          {stockBadge.label}
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+
+              <div className="mt-auto flex items-center justify-between gap-3 pt-1 text-sm text-[#1A3A52]/70">
+                <span>
+                  {t("operations.topSelling.totalSold", {
+                    topCount: topSellingItems.length,
+                    count: liveOperations.topSelling.totalQuantity,
+                  })}
+                </span>
+                <Link
+                  href="/dashboard/reports/sales"
+                  className="inline-flex shrink-0 items-center gap-1 font-medium text-[#1A3A52] underline-offset-4 transition hover:underline"
+                >
+                  {t("operations.shared.openDetail")}
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </div>
+            </div>
+          </ALCard>
+        </div>
+      )}
+
+      <div className="grid gap-3 xl:grid-cols-[minmax(0,2fr)_minmax(320px,1fr)]">
         <ALCard
           variant="default"
           elevation="sm"
           className="rounded-xl border border-[#D5BA98]/60 p-4 sm:p-5"
         >
-          <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-2">
-            {summaryCards.map((card) => (
-              <div
-                key={card.key}
-                className={cn(
-                  "rounded-lg border px-4 py-3 shadow-sm transition-transform hover:-translate-y-0.5",
-                  card.className
-                )}
-              >
-                <p className="text-xs font-medium uppercase tracking-[0.2em]">{card.label}</p>
-                <p className="mt-1 text-xl font-semibold">{card.value}</p>
-              </div>
-            ))}
+          <div className="space-y-4">
+            <div>
+              <p className="text-sm font-semibold text-[#1A3A52]">{t("summaryTitle")}</p>
+              <p className="text-xs text-[#1A3A52]/60">{t("summarySubtitle")}</p>
+            </div>
+
+            <div className="grid gap-2.5 sm:grid-cols-2 xl:grid-cols-4">
+              {summaryCards.map((card) => {
+                const active = filter === card.filterKey;
+                return (
+                  <button
+                    key={card.key}
+                    type="button"
+                    onClick={() => setFilter(card.filterKey)}
+                    className={cn(
+                      "rounded-2xl border px-3.5 py-3 text-left shadow-sm transition-transform hover:-translate-y-0.5",
+                      card.className,
+                      active && "ring-2 ring-[#1A3A52]/15 ring-offset-2"
+                    )}
+                  >
+                    <p className="text-xs font-medium uppercase tracking-[0.2em]">{card.label}</p>
+                    <p className="mt-1 text-xl font-semibold">{card.value}</p>
+                  </button>
+                );
+              })}
+            </div>
           </div>
         </ALCard>
 
         <ALCard
           variant="default"
           elevation="sm"
-          className="rounded-xl border border-[#D5BA98]/60 p-4"
+          className="rounded-xl border border-[#D5BA98]/60 p-4 sm:p-5"
         >
-          <div className="space-y-3">
+          <div className="space-y-4">
             <div>
               <p className="text-xs font-medium uppercase tracking-[0.2em] text-[#1A3A52]/60">{t("businessDate")}</p>
               <div className="mt-2">
@@ -543,13 +1045,23 @@ export function ShiftLive() {
                   onChange={(value) => setBusinessDate(value || todayIso())}
                   placeholder={t("selectDate")}
                   inputSize="sm"
+                  wrapperClassName="w-full"
                 />
               </div>
             </div>
 
             <div>
               <p className="text-xs font-medium uppercase tracking-[0.2em] text-[#1A3A52]/60">{t("quickFilters")}</p>
-              <div className="mt-2 flex flex-wrap gap-2">
+              <div className="mt-2 md:hidden">
+                <Select
+                  value={filter}
+                  options={filterOptions.map((option) => ({ label: option.label, value: option.key }))}
+                  onChange={(value) => setFilter(value as LiveFilter)}
+                  className="h-10 border-[#D5BA98]/70 bg-[#FDFBF9] text-[#1A3A52]"
+                />
+              </div>
+
+              <div className="mt-2 hidden flex-wrap gap-2 md:flex">
                 {filterOptions.map((option) => {
                   const active = option.key === filter;
                   return (
@@ -574,132 +1086,164 @@ export function ShiftLive() {
         </ALCard>
       </div>
 
-      {isLoading ? (
-        <ALCard className="flex items-center justify-center rounded-xl border border-[#D5BA98]/60 py-16 text-sm text-[#1A3A52]/70">
-          {t("loading")}
-        </ALCard>
-      ) : filteredRows.length === 0 ? (
-        <ALCard className="flex items-center justify-center rounded-xl border border-[#D5BA98]/60 py-16 text-sm text-[#1A3A52]/70">
-          {t("empty")}
-        </ALCard>
-      ) : (
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {filteredRows.map((row) => {
-            const tone = getVisualTone(row);
-            const warning = getWarningLabel(row, t);
-            const elapsedLabel = row.actualCheckOutAt
-              ? fmtDuration(row.workedMinutes)
-              : fmtDuration(getElapsedMinutes(row));
+      <ALCard
+        variant="default"
+        elevation="sm"
+        className="rounded-xl border border-[#D5BA98]/60 p-4 sm:p-5"
+      >
+        <div className="space-y-4">
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <h2 className="text-lg font-semibold text-[#1A3A52]">{t("teamSection.title")}</h2>
+              <p className="text-sm text-[#1A3A52]/60">{t("teamSection.subtitle")}</p>
+            </div>
+            <span className="inline-flex w-fit items-center rounded-full border border-[#D5BA98]/60 bg-[#FDFBF9] px-3 py-1 text-xs font-medium text-[#1A3A52]/70">
+              {t("teamSection.count", { count: filteredRows.length, total: rows.length })}
+            </span>
+          </div>
 
-            return (
-              <ALCard
-                key={row.shiftAssignmentId}
-                variant="default"
-                elevation="sm"
-                animation="fade"
-                className={cn(
-                  "overflow-hidden rounded-xl border border-l-4 p-0",
-                  tone.cardClass,
-                  tone.accentClass
-                )}
+          {isLoading ? (
+            <div className="flex min-h-80 items-center justify-center rounded-xl border border-dashed border-[#D5BA98]/60 bg-[#FDFBF9] text-sm text-[#1A3A52]/70">
+              {t("loading")}
+            </div>
+          ) : filteredRows.length === 0 ? (
+            <div className="flex min-h-80 flex-col items-center justify-center rounded-xl border border-dashed border-[#D5BA98]/60 bg-[#FDFBF9] px-6 py-10 text-center">
+              <div className="flex h-16 w-16 items-center justify-center rounded-full border border-[#D5BA98]/60 bg-white text-[#1A3A52] shadow-sm">
+                <UserRound className="h-8 w-8" />
+              </div>
+              <p className="mt-4 text-lg font-semibold text-[#1A3A52]">{t("empty")}</p>
+              <p className="mt-2 max-w-md text-sm text-[#1A3A52]/65">{t("teamSection.emptyDescription")}</p>
+              <Link
+                href="/dashboard/shifts/schedule"
+                className={buttonVariants({
+                  variant: "outline",
+                  size: "sm",
+                  className: "mt-5 border-[#1A3A52] bg-white text-[#1A3A52] hover:bg-[#1A3A52]/5",
+                })}
               >
-                <div className="space-y-4 p-5">
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="flex min-w-0 items-start gap-3">
-                      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-[#D5BA98]/50 bg-[#D5BA98]/10 text-lg font-semibold text-[#1A3A52]">
-                        {row.staffName.charAt(0).toUpperCase()}
+                {canAssignShift ? t("teamSection.cta") : t("teamSection.openSchedule")}
+              </Link>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+              {filteredRows.map((row) => {
+                const tone = getVisualTone(row);
+                const warning = getWarningLabel(row, t);
+                const elapsedLabel = row.actualCheckOutAt
+                  ? fmtDuration(row.workedMinutes)
+                  : fmtDuration(getElapsedMinutes(row));
+
+                return (
+                  <ALCard
+                    key={row.shiftAssignmentId}
+                    variant="default"
+                    elevation="sm"
+                    animation="fade"
+                    className={cn(
+                      "overflow-hidden rounded-xl border border-l-4 p-0",
+                      tone.cardClass,
+                      tone.accentClass
+                    )}
+                  >
+                    <div className="space-y-4 p-5">
+                      <div className="flex items-start justify-between gap-4">
+                        <div className="flex min-w-0 items-start gap-3">
+                          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-[#D5BA98]/50 bg-[#D5BA98]/10 text-lg font-semibold text-[#1A3A52]">
+                            {row.staffName.charAt(0).toUpperCase()}
+                          </div>
+                          <div className="min-w-0 space-y-1">
+                            <p className="truncate text-base font-semibold text-[#1A3A52]">{row.staffName}</p>
+                            <div className="flex flex-wrap items-center gap-2">
+                              <span
+                                className={cn(
+                                  "inline-flex items-center rounded-full border px-2.5 py-1 text-[11px] font-medium",
+                                  getRoleBadgeClass(row.staffRoleCode, row.staffRoleName)
+                                )}
+                              >
+                                {row.staffRoleName}
+                              </span>
+                              <span
+                                className={cn(
+                                  "inline-flex items-center rounded-full border px-2.5 py-1 text-[11px] font-medium",
+                                  tone.badgeClass
+                                )}
+                              >
+                                {row.liveStatusName}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+
+                        {(row.hasAlert || row.issueCount > 0) && (
+                          <span className="inline-flex items-center gap-1 rounded-full border border-red-600 bg-red-600 px-2.5 py-1 text-[11px] font-medium text-white">
+                            <span className="relative flex h-2 w-2">
+                              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-white/80" />
+                              <span className="relative inline-flex h-2 w-2 rounded-full bg-white" />
+                            </span>
+                            {t("alert")}
+                          </span>
+                        )}
                       </div>
-                      <div className="min-w-0 space-y-1">
-                        <p className="truncate text-base font-semibold text-[#1A3A52]">{row.staffName}</p>
-                        <div className="flex flex-wrap items-center gap-2">
-                          <span
-                            className={cn(
-                              "inline-flex items-center rounded-full border px-2.5 py-1 text-[11px] font-medium",
-                              getRoleBadgeClass(row.staffRoleCode, row.staffRoleName)
-                            )}
-                          >
-                            {row.staffRoleName}
-                          </span>
-                          <span
-                            className={cn(
-                              "inline-flex items-center rounded-full border px-2.5 py-1 text-[11px] font-medium",
-                              tone.badgeClass
-                            )}
-                          >
-                            {row.liveStatusName}
-                          </span>
+
+                      <div className="grid gap-3 sm:grid-cols-2">
+                        <div className="rounded-xl border border-slate-200 bg-[#FDFBF9] p-3">
+                          <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-[#1A3A52]/55">
+                            {t("sections.scheduledShift")}
+                          </p>
+                          <p className="mt-2 text-sm font-medium text-[#1A3A52]">
+                            {fmt(row.plannedStartAt)} - {fmt(row.plannedEndAt)}
+                          </p>
+                        </div>
+
+                        <div className="rounded-xl border border-slate-200 bg-[#FDFBF9] p-3">
+                          <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-[#1A3A52]/55">
+                            {t("sections.elapsedTime")}
+                          </p>
+                          <p className="mt-2 text-sm font-medium text-[#1A3A52]">{elapsedLabel}</p>
                         </div>
                       </div>
-                    </div>
 
-                    {(row.hasAlert || row.issueCount > 0) && (
-                      <span className="inline-flex items-center gap-1 rounded-full border border-red-600 bg-red-600 px-2.5 py-1 text-[11px] font-medium text-white">
-                        <span className="relative flex h-2 w-2">
-                          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-white/80" />
-                          <span className="relative inline-flex h-2 w-2 rounded-full bg-white" />
-                        </span>
-                        {t("alert")}
-                      </span>
-                    )}
-                  </div>
+                      {warning ? (
+                        <div className={cn("flex items-center gap-2 rounded-xl border px-3 py-2 text-sm", tone.mutedClass, row.hasAlert ? "border-red-200 bg-red-50" : "border-emerald-200 bg-emerald-50")}>
+                          {row.hasAlert ? <AlertTriangle className="h-4 w-4 shrink-0" /> : <Clock3 className="h-4 w-4 shrink-0" />}
+                          <span>{warning}</span>
+                        </div>
+                      ) : null}
 
-                  <div className="grid gap-3 sm:grid-cols-2">
-                    <div className="rounded-xl border border-slate-200 bg-[#FDFBF9] p-3">
-                      <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-[#1A3A52]/55">
-                        {t("sections.scheduledShift")}
-                      </p>
-                      <p className="mt-2 text-sm font-medium text-[#1A3A52]">
-                        {fmt(row.plannedStartAt)} - {fmt(row.plannedEndAt)}
-                      </p>
-                    </div>
+                      <div className="space-y-2 rounded-xl border border-[#D5BA98]/40 bg-white p-4">
+                        <div className="flex items-start gap-2 text-sm text-[#1A3A52]">
+                          <UserRound className="mt-0.5 h-4 w-4 shrink-0 text-[#1A3A52]/60" />
+                          <span>{getActivityLabel(row, t)}</span>
+                        </div>
 
-                    <div className="rounded-xl border border-slate-200 bg-[#FDFBF9] p-3">
-                      <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-[#1A3A52]/55">
-                        {t("sections.elapsedTime")}
-                      </p>
-                      <p className="mt-2 text-sm font-medium text-[#1A3A52]">{elapsedLabel}</p>
-                    </div>
-                  </div>
+                        <div className="flex items-start gap-2 text-sm text-[#1A3A52]">
+                          <Wallet className="mt-0.5 h-4 w-4 shrink-0 text-[#1A3A52]/60" />
+                          <span>{getPerformanceLabel(row, t)}</span>
+                        </div>
 
-                  {warning ? (
-                    <div className={cn("flex items-center gap-2 rounded-xl border px-3 py-2 text-sm", tone.mutedClass, row.hasAlert ? "border-red-200 bg-red-50" : "border-emerald-200 bg-emerald-50")}>
-                      {row.hasAlert ? <AlertTriangle className="h-4 w-4 shrink-0" /> : <Clock3 className="h-4 w-4 shrink-0" />}
-                      <span>{warning}</span>
-                    </div>
-                  ) : null}
-
-                  <div className="space-y-2 rounded-xl border border-[#D5BA98]/40 bg-white p-4">
-                    <div className="flex items-start gap-2 text-sm text-[#1A3A52]">
-                      <UserRound className="mt-0.5 h-4 w-4 shrink-0 text-[#1A3A52]/60" />
-                      <span>{getActivityLabel(row, t)}</span>
-                    </div>
-
-                    <div className="flex items-start gap-2 text-sm text-[#1A3A52]">
-                      <Wallet className="mt-0.5 h-4 w-4 shrink-0 text-[#1A3A52]/60" />
-                      <span>{getPerformanceLabel(row, t)}</span>
-                    </div>
-
-                    {(row.latestIssueText || row.issueCount > 0) && (
-                      <div className="rounded-lg border border-red-100 bg-red-50 px-3 py-2 text-sm text-red-700">
-                        {row.latestIssueText
-                          ? row.latestIssueText
-                          : t("issues.pending", { count: row.issueCount })}
+                        {(row.latestIssueText || row.issueCount > 0) && (
+                          <div className="rounded-lg border border-red-100 bg-red-50 px-3 py-2 text-sm text-red-700">
+                            {row.latestIssueText
+                              ? row.latestIssueText
+                              : t("issues.pending", { count: row.issueCount })}
+                          </div>
+                        )}
                       </div>
-                    )}
-                  </div>
 
-                  {(row.notes || row.isManualAdjustment) && (
-                    <div className="rounded-xl border border-[#D5BA98]/40 bg-[#D5BA98]/10 px-3 py-2 text-sm text-[#1A3A52]/70">
-                      {row.isManualAdjustment && <p>{t("manualAdjusted")}</p>}
-                      {row.notes && <p>{row.notes}</p>}
+                      {(row.notes || row.isManualAdjustment) && (
+                        <div className="rounded-xl border border-[#D5BA98]/40 bg-[#D5BA98]/10 px-3 py-2 text-sm text-[#1A3A52]/70">
+                          {row.isManualAdjustment && <p>{t("manualAdjusted")}</p>}
+                          {row.notes && <p>{row.notes}</p>}
+                        </div>
+                      )}
                     </div>
-                  )}
-                </div>
-              </ALCard>
-            );
-          })}
+                  </ALCard>
+                );
+              })}
+            </div>
+          )}
         </div>
-      )}
+      </ALCard>
     </div>
   );
 }

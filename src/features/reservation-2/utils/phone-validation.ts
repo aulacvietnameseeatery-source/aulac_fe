@@ -1,0 +1,1 @@
+export { SUPPORTED_PHONE_REGEX, isSupportedPhoneNumber } from '@/lib/phone-validation';

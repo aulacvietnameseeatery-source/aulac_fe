@@ -30,7 +30,7 @@ export const createOrderService = {
   },
 
   searchCustomers: async (keyword: string, limit: number = 10): Promise<CustomerDto[]> => {
-    const res = await api.get<ApiResponse<CustomerDto[]>>(`/api/customers/search?keyword=${keyword}&limit=${limit}`);
+    const res = await api.get<ApiResponse<CustomerDto[]>>(`/api/customers/search?keyword=${encodeURIComponent(keyword)}&limit=${limit}`);
     return res.data;
   },
 

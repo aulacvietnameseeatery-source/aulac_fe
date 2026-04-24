@@ -4,7 +4,7 @@ import React, { useMemo, useCallback, useState } from "react";
 import { BaseTable } from "@/components/ui/table/base-table";
 import { TableColumn } from "@/types/table.types";
 import { CalendarDays, ArrowRight } from "lucide-react";
-import { ALCard } from "@/components/ui/al-card";
+import { ALTitleCard } from "@/components/ui/al-title-card";
 import { useEarningReport } from "@/features/staff/report-management/earning/hooks/use-earning-report";
 import { EarningFilter } from "@/features/staff/report-management/earning/components/earning-filter";
 import { EarningTableItemDto } from "@/features/staff/report-management/earning/types/earning-types";
@@ -143,23 +143,18 @@ export default function EarningReportPage() {
                     defaultRowsPerPage={10}
                     rowsPerPageOptions={[10, 20, 50]}
                     renderTitle={() => (
-                        <ALCard padding="sm" variant="default" elevation="sm" className="w-full mb-4 border-[#D5BA98]/40">
-                            <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
-                                <div>
-                                    <h2 className="text-lg font-extrabold tracking-tight text-[#1A3A52]">
-                                        {t("title")}
-                                    </h2>
-                                    <p className="mt-0.5 text-sm font-medium text-slate-500">
-                                        {t("description", { defaultMessage: "Revenue breakdown by date including gross, net, and tax." })}
-                                    </p>
-                                </div>
+                        <ALTitleCard
+                            title={t("title")}
+                            description={t("description", { defaultMessage: "Revenue breakdown by date including gross, net, and tax." })}
+                            actions={
                                 <EarningFilter
                                     initialStart={filters.startDate}
                                     initialEnd={filters.endDate}
                                     onApply={applyDateFilter}
                                 />
-                            </div>
-                        </ALCard>
+                            }
+                            className="mb-4 border-[#D5BA98]/40"
+                        />
                     )}
                     renderCell={handleGlobalRenderCell}
                 />

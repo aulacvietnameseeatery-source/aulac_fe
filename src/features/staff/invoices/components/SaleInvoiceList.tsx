@@ -3,6 +3,7 @@
 import React, { useCallback, useMemo, useState, useEffect, useRef } from 'react';
 import { useTranslations } from "next-intl";
 import { Eye, CalendarDays, RefreshCw, X, ChevronDown } from 'lucide-react';
+import { ALTitleCard } from "@/components/ui/al-title-card";
 import { Button } from "@/components/ui/button";
 import { BaseTable } from "@/components/ui/table/base-table";
 import { TableColumn } from "@/types/table.types";
@@ -282,27 +283,25 @@ function SaleInvoiceListContent() {
         rowsPerPageOptions={[10, 20, 50, 100]}
         renderCell={handleGlobalRenderCell}
         renderTitle={() => (
-          <div className="flex flex-col gap-3">
-            <div className="flex items-start sm:items-center justify-between flex-wrap gap-2">
-              <div>
-                <h1 className="text-base sm:text-lg font-bold text-[#1A3A52] leading-none">
-                  {t("title")}
-                </h1>
-                <p className="text-xs text-[#1A3A52]/60 mt-1">{t("description")}</p>
-              </div>
+          <ALTitleCard
+            title={t("title")}
+            description={t("description")}
+            titleClassName="text-base font-bold leading-none text-[#1A3A52] sm:text-lg"
+            descriptionClassName="text-xs text-[#1A3A52]/60"
+            bodyClassName="gap-3"
+            actions={
               <Button
                 onClick={handleRefresh}
                 variant="outline"
                 size="sm"
                 disabled={isRefreshing}
-                className="h-9 px-3.5 text-sm font-semibold bg-[#FDFBF9] border-[#D5BA98]/60 text-[#1A3A52] hover:bg-[#D5BA98]/10"
+                className="h-9 w-full px-3.5 text-sm font-semibold bg-[#FDFBF9] border-[#D5BA98]/60 text-[#1A3A52] hover:bg-[#D5BA98]/10 sm:w-auto"
               >
                 <RefreshCw className={`mr-1.5 h-3.5 w-3.5 ${isRefreshing ? 'animate-spin' : ''}`} />
                 {t("refresh")}
               </Button>
-            </div>
-
-            {/* Date Filter */}
+            }
+          >
             <div className="flex gap-2">
               <div className="relative" ref={datePickerRef}>
                 <Button
@@ -362,7 +361,7 @@ function SaleInvoiceListContent() {
                 )}
               </div>
             </div>
-          </div>
+          </ALTitleCard>
         )}
         renderActionColumn={(item) => (
           <button

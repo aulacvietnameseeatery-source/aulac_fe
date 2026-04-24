@@ -224,6 +224,8 @@
       "businessDate": "Business Date",
       "selectDate": "Select date",
       "quickFilters": "Quick filters",
+      "summaryTitle": "Shift status",
+      "summarySubtitle": "Tap a group to quickly filter the team list.",
       "kpiHint": "POS KPI and issue fields are ready. Once POS integration is complete, cards will show role-based orders, bills, revenue, and issues automatically.",
       "loading": "Loading live board...",
       "empty": "No staff are currently on shift.",
@@ -279,6 +281,60 @@
       "issues": {
         "pending": "{count} issues pending",
         "none": "No issues recorded"
+      },
+      "operations": {
+        "shared": {
+          "vsYesterdaySameTime": "vs yesterday same time",
+          "vsPreviousDay": "vs previous day",
+          "openDetail": "Open detail"
+        },
+        "tables": {
+          "title": "Active Tables & Occupancy",
+          "subtitle": "Floor map pulse",
+          "occupied": "{occupied}/{total} occupied",
+          "occupancyRate": "{rate}% occupancy",
+          "turnover": "Avg turnover",
+          "turnoverValue": "{minutes} min",
+          "noTurnover": "No turnover yet",
+          "queue": "Waiting queue",
+          "queueValue": "{count} queued"
+        },
+        "orders": {
+          "title": "Live Orders Pipeline",
+          "subtitle": "Kitchen workload",
+          "liveTickets": "{count} live tickets",
+          "pending": "Pending",
+          "cooking": "Cooking",
+          "ready": "Ready",
+          "served": "Served",
+          "servedDelta": "served vs comparison window"
+        },
+        "revenue": {
+          "title": "Today's Revenue",
+          "subtitle": "Closed bills and transactions",
+          "closedBills": "Closed bills",
+          "averageBill": "Average bill",
+          "deltaPercent": "change vs comparison",
+          "billsDelta": "bills vs comparison"
+        },
+        "topSelling": {
+          "title": "Top-Selling Items",
+          "subtitle": "Best movers today",
+          "empty": "No completed sales yet",
+          "sold": "{count} sold",
+          "totalSold": "Top {topCount} sold {count}",
+          "stockLeft": "{count} left",
+          "stockOut": "Out",
+          "stockUnknown": "Stock syncing"
+        }
+      },
+      "teamSection": {
+        "title": "Team on shift",
+        "subtitle": "Track the list by business date and current filter.",
+        "count": "{count}/{total} staff",
+        "emptyDescription": "Try another date or open the schedule page to add staff to this shift.",
+        "cta": "Add staff to shift",
+        "openSchedule": "Open schedule"
       },
       "manualAdjusted": "This record was manually adjusted.",
       "actions": {

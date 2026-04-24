@@ -224,6 +224,8 @@
       "businessDate": "Date de travail",
       "selectDate": "Sélectionner une date",
       "quickFilters": "Filtres rapides",
+      "summaryTitle": "Statut des quarts",
+      "summarySubtitle": "Touchez un groupe pour filtrer rapidement la liste du personnel.",
       "kpiHint": "Les KPI et incidents POS sont prêts. Une fois l'intégration POS terminée, les cartes afficheront automatiquement commandes, tickets, revenus et incidents par rôle.",
       "loading": "Chargement du live board...",
       "empty": "Aucun employé n'est actuellement en service.",
@@ -279,6 +281,60 @@
       "issues": {
         "pending": "{count} incident(s) en attente",
         "none": "Aucun incident enregistré"
+      },
+      "operations": {
+        "shared": {
+          "vsYesterdaySameTime": "vs hier à la même heure",
+          "vsPreviousDay": "vs la veille",
+          "openDetail": "Ouvrir le détail"
+        },
+        "tables": {
+          "title": "Tables Actives & Occupation",
+          "subtitle": "Pouls du plan de salle",
+          "occupied": "{occupied}/{total} occupées",
+          "occupancyRate": "Occupation {rate}%",
+          "turnover": "Rotation moyenne",
+          "turnoverValue": "{minutes} min",
+          "noTurnover": "Aucune rotation pour l'instant",
+          "queue": "File d'attente",
+          "queueValue": "{count} en attente"
+        },
+        "orders": {
+          "title": "Pipeline des Commandes en Direct",
+          "subtitle": "Charge de la cuisine",
+          "liveTickets": "{count} tickets actifs",
+          "pending": "En attente",
+          "cooking": "En cuisson",
+          "ready": "Prêt",
+          "served": "Servi",
+          "servedDelta": "servis vs fenêtre de comparaison"
+        },
+        "revenue": {
+          "title": "Revenu du Jour",
+          "subtitle": "Tickets clôturés et paiements",
+          "closedBills": "Tickets clôturés",
+          "averageBill": "Ticket moyen",
+          "deltaPercent": "variation vs comparaison",
+          "billsDelta": "tickets vs comparaison"
+        },
+        "topSelling": {
+          "title": "Meilleures Ventes du Jour",
+          "subtitle": "Articles les plus vendus aujourd'hui",
+          "empty": "Aucune vente finalisée pour l'instant",
+          "sold": "{count} vendus",
+          "totalSold": "Top {topCount} vend {count}",
+          "stockLeft": "{count} restants",
+          "stockOut": "Rupture",
+          "stockUnknown": "Stock en synchronisation"
+        }
+      },
+      "teamSection": {
+        "title": "Personnel en service",
+        "subtitle": "Suivez la liste selon la date de travail et le filtre actuel.",
+        "count": "{count}/{total} employés",
+        "emptyDescription": "Essayez une autre date ou ouvrez la page de planning pour ajouter du personnel à ce quart.",
+        "cta": "Ajouter du personnel au quart",
+        "openSchedule": "Ouvrir le planning"
       },
       "manualAdjusted": "Cet enregistrement a été ajusté manuellement.",
       "actions": {

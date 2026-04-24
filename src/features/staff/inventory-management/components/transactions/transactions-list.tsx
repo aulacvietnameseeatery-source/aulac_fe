@@ -10,7 +10,7 @@ import { BaseTable } from "@/components/ui/table/base-table";
 import type { TableColumn } from "@/types/table.types";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ALCard } from "@/components/ui/al-card";
+import { ALTitleCard } from "@/components/ui/al-title-card";
 import { TableActionColumn, type TableAction } from "@/components/ui/table/table-action-column";
 import { useTransactionsQuery } from "../../hooks/use-inventory-queries";
 import type {
@@ -162,23 +162,21 @@ export function TransactionsList() {
       defaultRowsPerPage={20}
       rowsPerPageOptions={[10, 20, 50]}
       renderTitle={() => (
-        <ALCard variant="default" padding="md" elevation="sm" radius="xl" className="w-full">
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center w-full gap-3">
-            <div>
-              <h1 className="text-xl sm:text-2xl font-semibold text-[#1A3A52] tracking-tight font-['Cormorant_Garamond']">
-                {t("title")}
-              </h1>
-              <p className="text-sm text-[#1A3A52]/60 mt-0.5">{t("description")}</p>
-            </div>
+        <ALTitleCard
+          title={t("title")}
+          description={t("description")}
+          titleClassName="font-['Cormorant_Garamond'] text-xl font-semibold tracking-tight text-[#1A3A52] sm:text-2xl"
+          descriptionClassName="text-sm text-[#1A3A52]/60"
+          actions={
             <Button
               onClick={() => router.push("/dashboard/inventory/transactions/create")}
-              className="bg-[#1A3A52] text-white hover:bg-[#1A3A52]/90 w-full sm:w-auto"
+              className="w-full gap-2 bg-[#1A3A52] text-white hover:bg-[#1A3A52]/90 sm:w-auto"
             >
-              <Plus className="w-4 h-4 mr-2" />
+              <Plus className="h-4 w-4" />
               {t("createNew")}
             </Button>
-          </div>
-        </ALCard>
+          }
+        />
       )}
       renderToolbarAppend={() => (
         <div className="flex items-center gap-2">

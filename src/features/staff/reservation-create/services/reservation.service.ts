@@ -6,7 +6,7 @@ import { dateUtils } from '@/lib/date-utils';
 export const reservationService = {
   searchCustomer: async (phone: string) => {
     try {
-      const response = await api.get<ApiResponse<CustomerDto>>(`/api/customers/phone/${phone}`);
+      const response = await api.get<ApiResponse<CustomerDto>>(`/api/customers/phone/${encodeURIComponent(phone)}`);
       return response.data;
     } catch (err: any) {
       if (err.response?.status === 404) {

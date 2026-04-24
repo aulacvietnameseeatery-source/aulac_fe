@@ -1102,7 +1102,7 @@
       "validation": {
         "phoneRequired": "Le numéro de téléphone est requis",
         "phoneMaxLength": "Le téléphone ne peut pas dépasser 20 caractères",
-        "phoneInvalid": "Le numéro de téléphone ne doit contenir que des chiffres",
+        "phoneInvalid": "Numéro de téléphone invalide",
         "nameMaxLength": "Le nom complet ne peut pas dépasser 100 caractères",
         "emailMaxLength": "L'email ne peut pas dépasser 150 caractères",
         "emailInvalid": "Format d'email invalide",
@@ -1135,7 +1135,7 @@
       "validation": {
         "phoneRequired": "Le numéro de téléphone est requis",
         "phoneMaxLength": "Le téléphone ne peut pas dépasser 20 caractères",
-        "phoneInvalid": "Le numéro de téléphone ne doit contenir que des chiffres",
+        "phoneInvalid": "Numéro de téléphone invalide",
         "nameMaxLength": "Le nom complet ne peut pas dépasser 100 caractères",
         "emailMaxLength": "L'email ne peut pas dépasser 150 caractères",
         "emailInvalid": "Format d'email invalide",

@@ -3,6 +3,8 @@
 import React, { useCallback, useMemo, useState } from "react";
 import { RefreshCw } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { ALTitleCard } from "@/components/ui/al-title-card";
+import { Button } from "@/components/ui/button";
 import { ProtectedRoute } from "@/components/protected-route";
 import { Permissions } from "@/types/const";
 import { useKitchen } from "@/features/staff/kitchen/hooks/useKitchen";
@@ -100,24 +102,23 @@ function KitchenContent() {
         <div className="w-full flex flex-col h-full bg-[#FDFBF9] px-4 md:px-0">
             {/* Page Header - Compact & Sticky on Mobile */}
             <div className="sticky top-0 z-20 bg-[#FDFBF9]/90 backdrop-blur-md -mx-4 px-4 py-2 border-b border-[#D5BA98]/30 mb-4 lg:relative lg:top-auto lg:z-auto lg:bg-transparent lg:backdrop-blur-none lg:mx-0 lg:px-0 lg:py-0 lg:border-none lg:mb-6 lg:mt-1">
-                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 lg:gap-4">
-                    <div className="flex items-center justify-between lg:justify-start gap-4 sm:gap-6 w-full lg:w-auto">
-                        {/* Title and Refresh */}
-                        <div className="flex items-center gap-2">
-                            <h1 className="text-base sm:text-lg font-bold text-[#1A3A52] leading-none whitespace-nowrap">
-                                {t("title") || "Màn Hình Bếp"}
-                            </h1>
-                            <button
-                                onClick={handleRefresh}
-                                disabled={isLoading || isRefreshing}
-                                className="p-1.5 bg-[#FDFBF9] border border-[#D5BA98]/50 rounded-lg hover:bg-[#D5BA98]/10 transition-colors shadow-none disabled:opacity-50 group shrink-0"
-                                title={t("refresh") || "Refresh"}
-                            >
-                                <RefreshCw className={`w-3 h-3 text-[#1A3A52]/60 transition-transform duration-500 ${isRefreshing ? "animate-spin" : "group-hover:rotate-180"}`} />
-                            </button>
-                        </div>
-
-                        {/* Order Status Bar - Scrollable Row */}
+                <ALTitleCard
+                    title={t("title") || "Màn Hình Bếp"}
+                    titleClassName="text-base font-bold leading-none text-[#1A3A52] sm:text-lg"
+                    bodyClassName="gap-3 lg:gap-4"
+                    actions={
+                        <Button
+                            onClick={handleRefresh}
+                            disabled={isLoading || isRefreshing}
+                            variant="outline"
+                            className="group h-9 w-full rounded-lg border-[#D5BA98]/50 bg-[#FDFBF9] hover:bg-[#D5BA98]/10 disabled:opacity-50 sm:w-10"
+                            title={t("refresh") || "Refresh"}
+                        >
+                            <RefreshCw className={`h-3 w-3 text-[#1A3A52]/60 transition-transform duration-500 ${isRefreshing ? "animate-spin" : "group-hover:rotate-180"}`} />
+                        </Button>
+                    }
+                >
+                    <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 lg:gap-4">
                         <div className="flex-1 lg:flex-initial min-w-0">
                             <KitchenStatusBar
                                 orderCounts={orderCounts}
@@ -126,18 +127,17 @@ function KitchenContent() {
                                 t={t}
                             />
                         </div>
-                    </div>
 
-                    {/* Search Bar - Full width on Mobile */}
-                    <div className="w-full lg:w-64 xl:w-72">
-                        <KeywordSearch
-                            value={searchQuery}
-                            onChange={setSearchQuery}
-                            placeholder={t("searchPlaceholder") || "Tìm kiếm..."}
-                            loading={isLoading}
-                        />
+                        <div className="w-full lg:w-64 xl:w-72">
+                            <KeywordSearch
+                                value={searchQuery}
+                                onChange={setSearchQuery}
+                                placeholder={t("searchPlaceholder") || "Tìm kiếm..."}
+                                loading={isLoading}
+                            />
+                        </div>
                     </div>
-                </div>
+                </ALTitleCard>
             </div>
 
             {/* Orders Grid */}

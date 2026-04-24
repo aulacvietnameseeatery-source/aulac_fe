@@ -7,6 +7,7 @@ import { TableColumn } from "@/types/table.types";
 import { useTranslations } from "next-intl";
 import { ProtectedRoute } from "@/components/protected-route";
 import { Permissions } from "@/types/const";
+import { ALTitleCard } from "@/components/ui/al-title-card";
 import dayjs from "dayjs";
 import { format } from "date-fns";
 import { toast } from "sonner";
@@ -35,7 +36,8 @@ const getUtcDateString = (utcDateString: string) => {
 const PaymentListContent = () => {
     const t = useTranslations("Payment.List");
 
-    const { payments, isLoading, totalCount, paginationInfo, onDataChange, refresh } = usePaymentList();
+    const [selectedMethod, setSelectedMethod] = useState("");
+    const { payments, isLoading, totalCount, paginationInfo, onDataChange, refresh } = usePaymentList(selectedMethod || undefined);
 
     const [isExportingAll, setIsExportingAll] = useState(false);
 
@@ -77,11 +79,11 @@ const PaymentListContent = () => {
         }
     };
 
-    // Lọc theo phương thức thanh toán
     const methodFilterOptions = useMemo(() => [
-        { label: t("labels.cash"), value: "Cash" },
-        { label: t("labels.card"), value: "Card" },
-        { label: t("labels.transfer"), value: "Transfer" }
+        { label: t("labels.all"),      value: "" },
+        { label: t("labels.cash"),     value: "Cash" },
+        { label: t("labels.card"),     value: "Card" },
+        { label: t("labels.transfer"), value: "Qr" },
     ], [t]);
 
     // Table Columns định nghĩa hiển thị TẤT CẢ các field
@@ -140,8 +142,6 @@ const PaymentListContent = () => {
             header: t("table.method"),
             width: "110px",
             align: "center" as const,
-            filterType: "select" as const,
-            filterOptions: methodFilterOptions,
             cellRender: ({ value }: { value: string }) => {
                 const isCash = value === "Cash";
                 const isCard = value === "Card";
@@ -220,35 +220,51 @@ const PaymentListContent = () => {
                 defaultRowsPerPage={10}
                 rowsPerPageOptions={[10, 20, 50]}
                 renderTitle={() => (
-                    <div className="flex flex-col xl:flex-row justify-between items-start xl:items-center w-full gap-4 mb-4">
-                        <div>
-                            <h1 className="text-2xl md:text-3xl font-bold text-gray-900 tracking-tight">
-                                {t("title")}
-                            </h1>
-                            <p className="text-sm text-gray-500 mt-1">{t("description")}</p>
-                        </div>
+                    <ALTitleCard
+                        title={t("title")}
+                        description={t("description")}
+                        actions={
+                            <>
+                                <Button
+                                    variant="outline"
+                                    className="w-full whitespace-nowrap bg-white sm:w-auto"
+                                    onClick={handleExport}
+                                >
+                                    <Download className="mr-2 h-4 w-4" />
+                                    {t("export") || "Export"}
+                                </Button>
 
-                        {/* Các nút bấm */}
-                        <div className="flex flex-wrap items-center gap-2 w-full xl:w-auto">
-                            <Button 
-                                variant="outline" 
-                                className="flex-1 md:flex-none shadow-sm bg-white whitespace-nowrap" 
-                                onClick={handleExport}
-                            >
-                                <Download className="mr-2 h-4 w-4" /> {t("export") || "Export"}
-                            </Button>
-
-                            <Button
-                                variant="outline"
-                                className="flex-1 md:flex-none shadow-sm bg-white whitespace-nowrap border-emerald-200 text-emerald-700 hover:bg-emerald-50 hover:text-emerald-800"
-                                onClick={handleExportAll}
-                                disabled={isExportingAll}
-                            >
-                                {isExportingAll ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Download className="mr-2 h-4 w-4" />}
-                                {t("exportAll")}
-                            </Button>
+                                <Button
+                                    variant="outline"
+                                    className="w-full whitespace-nowrap border-emerald-200 bg-white text-emerald-700 hover:bg-emerald-50 hover:text-emerald-800 sm:w-auto"
+                                    onClick={handleExportAll}
+                                    disabled={isExportingAll}
+                                >
+                                    {isExportingAll ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Download className="mr-2 h-4 w-4" />}
+                                    {t("exportAll")}
+                                </Button>
+                            </>
+                        }
+                    >
+                        {/* Quick-filter theo phương thức thanh toán */}
+                        <div className="flex flex-wrap gap-2">
+                            {methodFilterOptions.map((opt) => (
+                                <button
+                                    key={opt.value}
+                                    type="button"
+                                    onClick={() => setSelectedMethod(opt.value)}
+                                    className={`px-3 py-1.5 text-sm font-medium rounded-full border transition-colors ${
+                                        selectedMethod === opt.value
+                                            ? "bg-[#1A3A52] text-white border-[#1A3A52]"
+                                            : "bg-white text-gray-600 border-gray-200 hover:border-[#1A3A52] hover:text-[#1A3A52]"
+                                    }`}
+                                >
+                                    {opt.label}
+                                </button>
+                            ))}
                         </div>
-                    </div>
+                    </ALTitleCard>
+                    
                 )}
                 renderCell={handleGlobalRenderCell}
             />

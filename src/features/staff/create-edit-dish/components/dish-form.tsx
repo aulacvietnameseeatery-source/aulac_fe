@@ -22,10 +22,12 @@ import { useDishEditMedia } from "../hooks/useDishEditMedia";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { VideoSection } from "./video-section";
+import { useLandingPageSettings } from "@/hooks/use-landing-page-settings";
 
 type DishMutationVariables  = {
   form: DishFormValues;
   images: DishImagesState;
+  removedIds: number[];
 };
 
 type DishFormProps = {
@@ -40,6 +42,11 @@ export function DishForm({ mode, dishId, onSuccess }: DishFormProps) {
   const [activeTab, setActiveTab] = useState<Language>("en");
   const isEdit = mode === "edit";
   const queryClient = useQueryClient();
+
+  const { data: landingSettings } = useLandingPageSettings();
+  const showDishImage = !landingSettings || landingSettings.showDishImage;
+  const showDishImage360 = !landingSettings || landingSettings.showDishImage360;
+  const showDishVideo = !landingSettings || landingSettings.showDishVideo;
 
   const {
       staticImages,
@@ -105,8 +112,8 @@ export function DishForm({ mode, dishId, onSuccess }: DishFormProps) {
 
   /* ---------------------- Mutation ---------------------- */
   const mutation = useMutation({
-    mutationFn: ({ form, images }: DishMutationVariables) =>
-      isEdit ? onEdit(dishId!, form, images, removedMediaIds) : onCreate(form, images),
+    mutationFn: ({ form, images, removedIds }: DishMutationVariables) =>
+      isEdit ? onEdit(dishId!, form, images, removedIds) : onCreate(form, images),
     onSuccess: () => {
       toast.success(isEdit ? t("toast.updated") : t("toast.created"));
       queryClient.invalidateQueries({ queryKey: ["dish", dishId] });
@@ -123,11 +130,21 @@ export function DishForm({ mode, dishId, onSuccess }: DishFormProps) {
     const valid = await form.trigger();
     if (!valid) return;
     const imagesState: DishImagesState = {
-        staticImages,
-        images360,
-        video, 
+        staticImages: showDishImage ? staticImages : [],
+        images360: showDishImage360 ? images360 : [],
+        video: showDishVideo ? video : null,
     };
-    mutation.mutate({form: form.getValues(), images: imagesState});
+    // For edit mode, if a media type is hidden, mark all its existing media as removed
+    const effectiveRemovedIds = [...removedMediaIds];
+    if (!showDishImage) {
+      existingImages.forEach(img => {
+        if (!effectiveRemovedIds.includes(img.mediaId)) effectiveRemovedIds.push(img.mediaId);
+      });
+    }
+    if (!showDishVideo && existingVideo) {
+      if (!effectiveRemovedIds.includes(existingVideo.mediaId)) effectiveRemovedIds.push(existingVideo.mediaId);
+    }
+    mutation.mutate({form: form.getValues(), images: imagesState, removedIds: effectiveRemovedIds});
   };
 
   if (isEdit && isLoading) {
@@ -171,34 +188,42 @@ export function DishForm({ mode, dishId, onSuccess }: DishFormProps) {
         </div>
 
         {/* ROW 3: MEDIA (Static) */}
-        <div className="mt-6">
-           <SectionWrapper title={t("media.gallery.title")} subtitle={t("media.gallery.subtitle")}>
-                <StaticImageSection
-                    images={staticImages}
-                    existingImages={existingImages}
-                    onChange={setStaticImages}
-                    onRemoveExisting={removeExistingImage}
-                />
+        {showDishImage && (
+          <div className="mt-6">
+            <SectionWrapper title={t("media.gallery.title")} subtitle={t("media.gallery.subtitle")}>
+              <StaticImageSection
+                images={staticImages}
+                existingImages={existingImages}
+                onChange={setStaticImages}
+                onRemoveExisting={removeExistingImage}
+              />
             </SectionWrapper>
-        </div>
+          </div>
+        )}
 
         {/* ROW 4: MEDIA (360 + VIDEO) */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-             {/* 4.1: 360 View */}
-            <SectionWrapper title={t("media.media360.title")} subtitle={t("media.media360.subtitle")}>
+        {(showDishImage360 || showDishVideo) && (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* 4.1: 360 View */}
+            {showDishImage360 && (
+              <SectionWrapper title={t("media.media360.title")} subtitle={t("media.media360.subtitle")}>
                 <ThreeSixtySection frames={images360} onChange={setImages360} />
-            </SectionWrapper>
+              </SectionWrapper>
+            )}
 
             {/* 4.2: VIDEO */}
-            <SectionWrapper title={t("media.video.title")} subtitle={t("media.video.subtitle")}>
-               <VideoSection 
+            {showDishVideo && (
+              <SectionWrapper title={t("media.video.title")} subtitle={t("media.video.subtitle")}>
+                <VideoSection
                   videoFile={video}
                   existingVideo={existingVideo}
                   onChange={setVideo}
                   onRemoveExisting={removeExistingVideo}
-               />
-           </SectionWrapper>
-        </div>
+                />
+              </SectionWrapper>
+            )}
+          </div>
+        )}
 
         {/* ROW 5: ADDITIONAL INFO */}
         <div>

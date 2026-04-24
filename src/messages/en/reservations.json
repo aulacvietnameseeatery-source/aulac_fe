@@ -156,7 +156,9 @@
         "validation": {
           "selectCustomerType": "Please choose a customer type.",
           "phoneRequired": "Please enter a phone number.",
+          "phoneInvalid": "Invalid phone number format.",
           "nameRequired": "Please enter your name.",
+          "emailInvalid": "Please enter a valid email address.",
           "existingCustomerNotFound": "Returning customer info not found. Please check the phone number.",
           "dateRequired": "Please select a reservation date.",
           "timeRequired": "Please select an arrival time.",
@@ -332,6 +334,7 @@
         "validation": {
           "selectCustomerType": "Please choose a customer type.",
           "phoneRequired": "Please enter a phone number.",
+          "phoneInvalid": "Invalid phone number format.",
           "nameRequired": "Please enter your name.",
           "existingCustomerNotFound": "Returning customer info not found. Please check the phone number.",
           "dateRequired": "Please select a reservation date.",
@@ -528,6 +531,8 @@
       "errors": {
         "missingTitle": "Missing Information",
         "missingDescription": "Please provide phone, name, date, time and choose a table.",
+        "phoneRequired": "Phone number is required.",
+        "phoneInvalid": "Invalid phone number format.",
         "timeErrorTitle": "Invalid Time",
         "timePast": "Cannot select time in the past.",
         "failTitle": "Reservation Failed",
@@ -578,3 +583,5 @@
     }
   }
 }
+
+

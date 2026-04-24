@@ -72,7 +72,7 @@ export const reservationService = {
     // 8. Tìm khách theo số điện thoại
     searchCustomerByPhone: async (phone: string): Promise<ReservationCustomerLookupDto | null> => {
         try {
-            const response = await api.get<ApiResponse<ReservationCustomerLookupDto>>(`/api/customers/phone/${phone}`);
+            const response = await api.get<ApiResponse<ReservationCustomerLookupDto>>(`/api/customers/phone/${encodeURIComponent(phone)}`);
             return response.data;
         } catch (err: any) {
             if (err.response?.status === 404) {

@@ -6,6 +6,8 @@ import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
 import { useTranslations } from "next-intl";
+import { formatPhoneToDomesticDisplay } from "@/lib/phone-format";
+import { isSupportedPhoneNumber } from "@/lib/phone-validation";
 import type { CustomerDetailDto } from "../types/customer-types";
 
 export interface CustomerFormData {
@@ -54,7 +56,7 @@ export const CustomerModal: React.FC<CustomerModalProps> = ({
     useEffect(() => {
         if ((mode === "edit" || mode === "view") && customer) {
             setFormData({
-                phone: customer.phone || "",
+                phone: formatPhoneToDomesticDisplay(customer.phone),
                 fullName: customer.fullName || "",
                 email: customer.email || "",
                 isMember: customer.isMember ?? false,
@@ -77,11 +79,9 @@ export const CustomerModal: React.FC<CustomerModalProps> = ({
 
         if (!formData.phone.trim()) {
             newErrors.phone = t("validation.phoneRequired");
-        } else if (formData.phone.trim().length < 10) {
-            newErrors.phone = t("validation.phoneMinLength");
-        } else if (formData.phone.trim().length > 13) {
+        } else if (formData.phone.trim().length > 15) {
             newErrors.phone = t("validation.phoneMaxLength");
-        } else if (!/^\d+$/.test(formData.phone.trim())) {
+        } else if (!isSupportedPhoneNumber(formData.phone)) {
             newErrors.phone = t("validation.phoneInvalid");
         }
 

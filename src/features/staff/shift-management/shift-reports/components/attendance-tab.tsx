@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { ALCard } from "@/components/ui/al-card";
 import { ALInput } from "@/components/ui/al-input";
 import { ALCombobox } from "@/components/ui/al-combobox";
+import { BaseTable } from "@/components/ui/table/base-table";
 import {
   BarChart,
   Bar,
@@ -20,12 +21,12 @@ import {
   ResponsiveContainer,
   Legend,
 } from "recharts";
+import type { TableColumn } from "@/types/table.types";
 import type { AttendanceReportRowDto } from "../../types/shift-management.types";
 import {
   INNER_TAB_LIST_CLASS,
   INNER_TAB_TRIGGER_CLASS,
   TableState,
-  PaginationControls,
   buildStaffSummary,
   pct,
   formatTime,
@@ -74,6 +75,87 @@ export function AttendanceTab({ rows, loading }: Props) {
   }, [rows, selectedStaffId, staffQuery]);
 
   const filteredStaffSummary = useMemo(() => buildStaffSummary(filteredRows), [filteredRows]);
+
+  const detailColumns = useMemo<TableColumn[]>(
+    () => [
+      {
+        field: "workDate",
+        header: t("attendanceTab.detailTable.date"),
+        width: "120",
+        sortable: false,
+        pinnable: false,
+      },
+      {
+        field: "staffName",
+        header: t("attendanceTab.detailTable.staff"),
+        width: "190",
+        sortable: false,
+        pinnable: false,
+      },
+      {
+        field: "templateName",
+        header: t("attendanceTab.detailTable.shift"),
+        width: "160",
+        sortable: false,
+        pinnable: false,
+      },
+      {
+        field: "plannedWindow",
+        header: t("attendanceTab.detailTable.planned"),
+        width: "150",
+        sortable: false,
+        pinnable: false,
+      },
+      {
+        field: "attendanceStatusCode",
+        header: t("attendanceTab.detailTable.status"),
+        width: "130",
+        sortable: false,
+        pinnable: false,
+      },
+      {
+        field: "actualCheckInAt",
+        header: t("attendanceTab.detailTable.checkIn"),
+        width: "110",
+        sortable: false,
+        pinnable: false,
+      },
+      {
+        field: "actualCheckOutAt",
+        header: t("attendanceTab.detailTable.checkOut"),
+        width: "110",
+        sortable: false,
+        pinnable: false,
+      },
+      {
+        field: "lateMinutes",
+        header: t("attendanceTab.detailTable.late"),
+        width: "95",
+        align: "center",
+        sortable: false,
+        pinnable: false,
+      },
+      {
+        field: "earlyLeaveMinutes",
+        header: t("attendanceTab.detailTable.earlyLeave"),
+        width: "115",
+        align: "center",
+        sortable: false,
+        pinnable: false,
+      },
+    ],
+    [t]
+  );
+
+  const detailTableRows = useMemo(
+    () => filteredRows.slice((page - 1) * pageSize, page * pageSize),
+    [filteredRows, page, pageSize]
+  );
+
+  const detailTableKey = useMemo(
+    () => `${selectedStaffId}:${staffQuery.trim().toLowerCase()}`,
+    [selectedStaffId, staffQuery]
+  );
 
   const total = filteredRows.length;
   const present = filteredRows.filter((r) => r.actualCheckInAt).length;
@@ -157,9 +239,87 @@ export function AttendanceTab({ rows, loading }: Props) {
     },
   ];
 
+  const renderDetailCell = (
+    value: unknown,
+    row: AttendanceReportRowDto,
+    column: TableColumn
+  ) => {
+    switch (column.field) {
+      case "workDate":
+        return <span className="text-xs text-[#1A3A52] whitespace-nowrap">{row.workDate}</span>;
+      case "staffName":
+        return (
+          <div className="flex items-center whitespace-nowrap font-medium text-[#1A3A52]">
+            <span>{row.staffName}</span>
+            {row.isManualAdjustment && (
+              <span
+                className="ml-1 text-[9px] font-bold text-blue-500"
+                title={t("attendanceTab.manualAdjusted")}
+              >
+                ✦
+              </span>
+            )}
+          </div>
+        );
+      case "templateName":
+        return <span className="text-xs text-[#1A3A52]/60">{row.templateName}</span>;
+      case "plannedWindow":
+        return (
+          <span className="text-xs text-[#1A3A52]/60 whitespace-nowrap">
+            {formatTime(row.plannedStartAt)} – {formatTime(row.plannedEndAt)}
+          </span>
+        );
+      case "attendanceStatusCode":
+        return (
+          <Badge
+            variant="outline"
+            className={`text-[10px] font-semibold ${attendanceBadgeClass(row.attendanceStatusCode)}`}
+          >
+            {displayStatusName(row.attendanceStatusCode, (key) => t(`statusNames.${key}`))}
+          </Badge>
+        );
+      case "actualCheckInAt":
+        return (
+          <span className="text-xs text-[#1A3A52] whitespace-nowrap">
+            {formatTime(row.actualCheckInAt)}
+          </span>
+        );
+      case "actualCheckOutAt":
+        return (
+          <span className="text-xs text-[#1A3A52] whitespace-nowrap">
+            {formatTime(row.actualCheckOutAt)}
+          </span>
+        );
+      case "lateMinutes":
+        return row.lateMinutes > 0 ? (
+          <Badge
+            variant="outline"
+            className="text-[10px] border-amber-600 bg-amber-600 text-white"
+          >
+            {row.lateMinutes}m
+          </Badge>
+        ) : (
+          <span className="text-xs text-[#1A3A52]/30">—</span>
+        );
+      case "earlyLeaveMinutes":
+        return row.earlyLeaveMinutes > 0 ? (
+          <Badge
+            variant="outline"
+            className="text-[10px] border-blue-600 bg-blue-600 text-white"
+          >
+            {row.earlyLeaveMinutes}m
+          </Badge>
+        ) : (
+          <span className="text-xs text-[#1A3A52]/30">—</span>
+        );
+      default:
+        return value as React.ReactNode;
+    }
+  };
+
   return (
-    <div className="space-y-4">
-      <div>
+    <div className="flex h-full min-h-0 flex-col gap-4 overflow-hidden">
+      <div className="shrink-0">
         <div className="grid grid-cols-1 gap-2.5 lg:grid-cols-2">
           <div className="grid grid-cols-2 gap-2 lg:grid-cols-4">
             <ALCard className="rounded-lg px-2.5 py-1.5">
@@ -223,8 +383,8 @@ export function AttendanceTab({ rows, loading }: Props) {
         </div>
       </div>
 
-      <Tabs value={summaryTab} onValueChange={setSummaryTab}>
-        <TabsList variant={"line"} className={INNER_TAB_LIST_CLASS}>
+      <Tabs value={summaryTab} onValueChange={setSummaryTab} className="flex flex-1 min-h-0 flex-col overflow-hidden">
+        <TabsList variant={"line"} className={`${INNER_TAB_LIST_CLASS} shrink-0`}>
           <TabsTrigger value="overview" className={INNER_TAB_TRIGGER_CLASS}>
             {t("attendanceTab.inner.overview")}
           </TabsTrigger>
@@ -237,7 +397,7 @@ export function AttendanceTab({ rows, loading }: Props) {
         </TabsList>
 
         {/* ── Overview ── */}
-        <TabsContent value="overview" className="mt-4 space-y-4">
+        <TabsContent value="overview" className="mt-4 flex-1 min-h-0 space-y-4 overflow-y-auto pr-1">
           <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
             {statusCards.map((s) => (
               <Card key={s.key} className={`border ${s.border} py-2.5 shadow-sm`}>
@@ -363,7 +523,7 @@ export function AttendanceTab({ rows, loading }: Props) {
         </TabsContent>
 
         {/* ── Staff Summary ── */}
-        <TabsContent value="staffSummary" className="mt-4">
+        <TabsContent value="staffSummary" className="mt-4 flex-1 min-h-0 overflow-y-auto pr-1">
           {filteredStaffSummary.length === 0 ? (
             <TableState loading={loading} />
           ) : (
@@ -474,108 +634,37 @@ export function AttendanceTab({ rows, loading }: Props) {
         </TabsContent>
 
         {/* ── Details ── */}
-        <TabsContent value="details" className="mt-4">
+        <TabsContent value="details" className="mt-4 flex-1 min-h-0 overflow-hidden">
           {loading || filteredRows.length === 0 ? (
-            <TableState loading={loading} />
-          ) : (
-            <div className="overflow-x-auto rounded-xl border border-[#D5BA98]/60 bg-white shadow-sm">
-              <table className="w-full text-sm min-w-180">
-                <thead className="bg-[#1A3A52]/5">
-                  <tr>
-                    {[
-                      t("attendanceTab.detailTable.date"),
-                      t("attendanceTab.detailTable.staff"),
-                      t("attendanceTab.detailTable.shift"),
-                      t("attendanceTab.detailTable.planned"),
-                      t("attendanceTab.detailTable.status"),
-                      t("attendanceTab.detailTable.checkIn"),
-                      t("attendanceTab.detailTable.checkOut"),
-                      t("attendanceTab.detailTable.late"),
-                      t("attendanceTab.detailTable.earlyLeave"),
-                    ].map((h) => (
-                      <th
-                        key={h}
-                        className="px-3 py-3 text-left text-xs font-semibold uppercase tracking-wide text-[#1A3A52]/65 whitespace-nowrap"
-                      >
-                        {h}
-                      </th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-100">
-                  {filteredRows
-                    .slice((page - 1) * pageSize, page * pageSize)
-                    .map((r, i) => (
-                      <tr
-                        key={r.shiftAssignmentId ?? i}
-                        className={`transition-colors hover:bg-[#1A3A52]/4 ${r.isManualAdjustment ? "bg-blue-50/40" : ""
-                          }`}
-                      >
-                        <td className="px-3 py-2.5 text-[#1A3A52] whitespace-nowrap text-xs">
-                          {r.workDate}
-                        </td>
-                        <td className="px-3 py-2.5 font-medium text-[#1A3A52] whitespace-nowrap">
-                          {r.staffName}
-                          {r.isManualAdjustment && (
-                            <span className="ml-1 text-[9px] text-blue-500 font-bold" title={t("attendanceTab.manualAdjusted")}>
-                              ✦
-                            </span>
-                          )}
-                        </td>
-                        <td className="px-3 py-2.5 text-[#1A3A52]/60 text-xs">{r.templateName}</td>
-                        <td className="px-3 py-2.5 text-[#1A3A52]/60 text-xs whitespace-nowrap">
-                          {formatTime(r.plannedStartAt)} – {formatTime(r.plannedEndAt)}
-                        </td>
-                        <td className="px-3 py-2.5 whitespace-nowrap">
-                          <Badge
-                            variant="outline"
-                            className={`text-[10px] font-semibold ${attendanceBadgeClass(r.attendanceStatusCode)}`}
-                          >
-                            {displayStatusName(r.attendanceStatusCode, (k) => t(`statusNames.${k}`))}
-                          </Badge>
-                        </td>
-                        <td className="px-3 py-2.5 text-[#1A3A52] whitespace-nowrap text-xs">
-                          {formatTime(r.actualCheckInAt)}
-                        </td>
-                        <td className="px-3 py-2.5 text-[#1A3A52] whitespace-nowrap text-xs">
-                          {formatTime(r.actualCheckOutAt)}
-                        </td>
-                        <td className="px-3 py-2.5 whitespace-nowrap">
-                          {r.lateMinutes > 0 ? (
-                            <Badge
-                              variant="outline"
-                              className="text-[10px] border-amber-600 bg-amber-600 text-white"
-                            >
-                              {r.lateMinutes}m
-                            </Badge>
-                          ) : (
-                            <span className="text-[#1A3A52]/30 text-xs">—</span>
-                          )}
-                        </td>
-                        <td className="px-3 py-2.5 whitespace-nowrap">
-                          {r.earlyLeaveMinutes > 0 ? (
-                            <Badge
-                              variant="outline"
-                              className="text-[10px] border-blue-600 bg-blue-600 text-white"
-                            >
-                              {r.earlyLeaveMinutes}m
-                            </Badge>
-                          ) : (
-                            <span className="text-[#1A3A52]/30 text-xs">—</span>
-                          )}
-                        </td>
-                      </tr>
-                    ))}
-                </tbody>
-              </table>
-              <PaginationControls
-                page={page}
-                pageSize={pageSize}
-                total={filteredRows.length}
-                setPage={setPage}
-                setPageSize={setPageSize}
-              />
+            <div className="flex h-full min-h-0 items-center justify-center rounded-xl border border-[#D5BA98]/60 bg-white shadow-sm">
+              <TableState loading={loading} />
             </div>
+          ) : (
+            <BaseTable<AttendanceReportRowDto>
+              key={detailTableKey}
+              data={detailTableRows}
+              loading={loading}
+              columns={detailColumns}
+              rowKey="shiftAssignmentId"
+              total={filteredRows.length}
+              selectionMode="none"
+              showToolbar={false}
+              defaultRowsPerPage={25}
+              rowsPerPageOptions={[25, 50, 100]}
+              onDataChange={(params) => {
+                setPage(params.page ?? 1);
+                setPageSize(params.pageSize ?? 25);
+              }}
+              renderCell={(value, row, column) => renderDetailCell(value, row, column)}
+              getRowClassName={(row) =>
+                row.isManualAdjustment ? "[&>td]:bg-blue-50/40" : undefined
+              }
+              renderNoData={() => (
+                <div className="flex items-center justify-center py-16">
+                  <TableState loading={false} />
+                </div>
+              )}
+            />
           )}
         </TabsContent>
       </Tabs>
