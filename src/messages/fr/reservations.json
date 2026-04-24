@@ -504,7 +504,10 @@
       "messages": {
         "checkInSuccess": "Client enregistré avec succès !",
         "checkInFail": "Échec de l'enregistrement de la réservation",
-        "loadTablesFail": "Échec du chargement des tables disponibles."
+        "loadTablesFail": "Échec du chargement des tables disponibles.",
+        "confirmStatusTitle": "Confirmer le changement de statut",
+        "confirmStatusMessage": "Cette action est irréversible. Êtes-vous sûr de vouloir changer le statut de cette réservation ?",
+        "confirmStatusButton": "Confirmer"
       },
       "status": {
         "pending": "En attente",
