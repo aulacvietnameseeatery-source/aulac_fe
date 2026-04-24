@@ -585,7 +585,7 @@
         "roleCodeRequired": "Le code du rôle est requis",
         "roleCodeMaxLength": "Le code du rôle ne doit pas dépasser 50 caractères",
         "roleNameRequired": "Le nom du rôle est requis",
-        "roleNameMaxLength": "Le nom du rôle ne doit pas dépasser 100 caractères",
+        "roleNameMaxLength": "Le nom du rôle ne doit pas dépasser 50 caractères",
         "failed": "Veuillez vérifier les erreurs dans le formulaire"
       },
       "breadcrumb": {
