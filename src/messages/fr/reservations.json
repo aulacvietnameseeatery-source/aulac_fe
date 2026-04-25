@@ -128,6 +128,7 @@
         "newCustomerHint": "Saisissez les informations de base pour envoyer la demande",
         "existingModeNote": "Client existant : entrez d’abord le numéro de téléphone, nous remplirons les informations si elles existent.",
         "newModeNote": "Nouveau client : veuillez renseigner les informations de base requises.",
+        "newCustomerWarning": "Les nouvelles informations saisies seront utilisées pour cette demande de réservation.",
         "noFitTitle": "Aucune table en ligne ne correspond à ce créneau horaire.",
         "callRestaurant": "Appeler le restaurant",
         "goBack": "Retour",
@@ -304,6 +305,7 @@
         "newCustomerHint": "Saisissez les informations de base pour envoyer la demande",
         "existingModeNote": "Client existant : entrez d’abord le numéro de téléphone, nous remplirons les informations si elles existent.",
         "newModeNote": "Nouveau client : veuillez renseigner les informations de base requises.",
+        "newCustomerWarning": "Les nouvelles informations saisies seront utilisées pour cette demande de réservation.",
         "noFitTitle": "Aucune table en ligne ne correspond à ce créneau horaire.",
         "callRestaurant": "Appeler le restaurant",
         "goBack": "Retour",
@@ -502,7 +504,10 @@
       "messages": {
         "checkInSuccess": "Client enregistré avec succès !",
         "checkInFail": "Échec de l'enregistrement de la réservation",
-        "loadTablesFail": "Échec du chargement des tables disponibles."
+        "loadTablesFail": "Échec du chargement des tables disponibles.",
+        "confirmStatusTitle": "Confirmer le changement de statut",
+        "confirmStatusMessage": "Cette action est irréversible. Êtes-vous sûr de vouloir changer le statut de cette réservation ?",
+        "confirmStatusButton": "Confirmer"
       },
       "status": {
         "pending": "En attente",

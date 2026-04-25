@@ -8,8 +8,8 @@ interface KitchenStatusBarProps {
         all: number;
         new: number;
         inKitchen: number;
-        rejected: number;
         completed: number;
+        cancelled: number;
     };
     activeStatus: KitchenDisplayStatus;
     onStatusChange: (status: KitchenDisplayStatus) => void;
@@ -43,20 +43,20 @@ export function KitchenStatusBar({ orderCounts, activeStatus, onStatusChange, t 
             active: "bg-blue-600 border-blue-600"
         },
         {
-            key: "rejected",
-            label: t?.("status.rejected") || "Bị từ chối",
-            count: orderCounts.rejected,
-            bg: "bg-red-500",
-            dot: "bg-red-500",
-            active: "bg-red-600 border-red-600"
-        },
-        {
             key: "completed",
             label: t?.("status.completed") || "Hoàn tất",
             count: orderCounts.completed,
             bg: "bg-emerald-500",
             dot: "bg-emerald-500",
             active: "bg-emerald-600 border-emerald-600"
+        },
+        {
+            key: "cancelled",
+            label: t?.("status.cancelled") || "Đã huỷ",
+            count: orderCounts.cancelled,
+            bg: "bg-slate-500",
+            dot: "bg-slate-500",
+            active: "bg-slate-600 border-slate-600"
         }
     ];
 

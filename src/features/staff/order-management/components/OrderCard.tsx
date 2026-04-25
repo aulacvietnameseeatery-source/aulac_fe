@@ -344,7 +344,7 @@ export const OrderCard: React.FC<OrderCardProps> = ({ order, onStatusChange, onA
                                             </p>
                                         </div>
                                     )}
-                                    {item.rejectReason && (
+                                    {item.rejectReason && item.rejectReason !== 'Staff cancelled order' && (
                                         <div className="flex items-start gap-1 p-1 bg-[#8C3A3A]/8 rounded-md border border-[#8C3A3A]/20">
                                             <p className="text-[10px] text-[#8C3A3A] line-clamp-2 font-medium">
                                                 <span className="font-bold text-[9px] mr-1 text-[#8C3A3A]/70 uppercase">
@@ -354,7 +354,14 @@ export const OrderCard: React.FC<OrderCardProps> = ({ order, onStatusChange, onA
                                             </p>
                                         </div>
                                     )}
-                                    {item.itemStatus === OrderItemStatusCode.CANCELLED && (
+                                    {item.itemStatus === OrderItemStatusCode.CANCELLED && item.rejectReason === 'Staff cancelled order' && (
+                                        <div className="flex items-start gap-1 p-1 bg-[#B05E00]/8 rounded-md border border-[#B05E00]/25">
+                                            <p className="text-[10px] text-[#B05E00] line-clamp-2 font-medium italic">
+                                                {t('staffCancelled')}
+                                            </p>
+                                        </div>
+                                    )}
+                                    {item.itemStatus === OrderItemStatusCode.CANCELLED && !item.rejectReason && (
                                         <div className="flex items-start gap-1 p-1 bg-[#8C3A3A]/8 rounded-md border border-[#8C3A3A]/20">
                                             <p className="text-[10px] text-[#8C3A3A] line-clamp-2 font-medium italic">
                                                 {t('customerCancelled')}

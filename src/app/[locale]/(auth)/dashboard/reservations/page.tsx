@@ -63,6 +63,8 @@ const ReservationListContent = () => {
     const [editReservationId, setEditReservationId] = useState<number | null>(null);
     const [deleteReservationId, setDeleteReservationId] = useState<number | null>(null);
     const [isDeleting, setIsDeleting] = useState(false);
+    const [pendingStatusUpdate, setPendingStatusUpdate] = useState<{ reservationId: number; statusCode: string } | null>(null);
+    const [isStatusUpdating, setIsStatusUpdating] = useState(false);
 
     // Tính toán filter đang active từ state của hook
     const activeFilterCount = (filters.creatorId ? 1 : 0) + (filters.tableId ? 1 : 0);
@@ -73,13 +75,27 @@ const ReservationListContent = () => {
 
     const handleCreate = () => setShowCreateModal(true);
 
+    const TERMINAL_STATUSES = ['CANCELLED', 'NO_SHOW', 'COMPLETED'];
+
+    const handleStatusUpdateRequest = (reservationId: number, statusCode: string) => {
+        if (TERMINAL_STATUSES.includes(statusCode)) {
+            setPendingStatusUpdate({ reservationId, statusCode });
+        } else {
+            handleStatusUpdate(reservationId, statusCode);
+        }
+    };
+
     const handleStatusUpdate = async (reservationId: number, statusCode: string) => {
+        setIsStatusUpdating(true);
         try {
             await reservationService.updateReservationStatus(reservationId, statusCode);
             toast.success(tm("checkInSuccess"));
             actions.refresh();
         } catch (error: any) {
             toast.error(error.message || tm("checkInFail"));
+        } finally {
+            setIsStatusUpdating(false);
+            setPendingStatusUpdate(null);
         }
     };
 
@@ -275,7 +291,7 @@ const ReservationListContent = () => {
                                         onEdit={(id) => setEditReservationId(id)}
                                         onDelete={(id) => setDeleteReservationId(id)}
                                         onCardClick={(id) => setDetailReservationId(id)}
-                                        onStatusUpdate={handleStatusUpdate}
+                                        onStatusUpdate={handleStatusUpdateRequest}
                                     />
                                 ))}
                             </div>
@@ -364,6 +380,18 @@ const ReservationListContent = () => {
                 message={t("deleteMessage")}
                 isLoading={isDeleting}
                 confirmText={t("confirmDelete")}
+                cancelText={t("cancel")}
+            />
+
+            <ALConfirmDialog
+                isOpen={!!pendingStatusUpdate}
+                onClose={() => setPendingStatusUpdate(null)}
+                onConfirm={() => pendingStatusUpdate && handleStatusUpdate(pendingStatusUpdate.reservationId, pendingStatusUpdate.statusCode)}
+                variant="warning"
+                title={tm("confirmStatusTitle")}
+                message={tm("confirmStatusMessage")}
+                isLoading={isStatusUpdating}
+                confirmText={tm("confirmStatusButton")}
                 cancelText={t("cancel")}
             />
         </div>
