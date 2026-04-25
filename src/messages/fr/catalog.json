@@ -706,6 +706,7 @@
         "updateSuccess": "Coupon mis à jour avec succès",
         "updateError": "Impossible de mettre à jour le coupon",
         "usedCouponPartialEdit": "Ce coupon a déjà été utilisé. Seuls la description, la date de fin et le nombre maximum d'utilisations peuvent être modifiés.",
+        "activeCouponPartialEdit": "Ce coupon est actif. Seuls le nom du coupon, la description et la date/heure de fin peuvent être modifiés.",
         "expiredCouponNoEdit": "Ce coupon est expiré. Aucune modification n'est autorisée.",
         "codeAlreadyExists": "Ce code coupon existe déjà, veuillez en choisir un autre"
       }
