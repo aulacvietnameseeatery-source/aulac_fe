@@ -67,3 +67,25 @@ export type OrderDetailDto = {
 export type AddOrderItemsRequest = {
   items: { dishId: number; quantity: number; note?: string }[];
 };
+
+// ── New unified update payload ──────────────────────────────────────────────
+
+export type OrderItemAdjustment = {
+  /** ID of the existing OrderItem to adjust. */
+  orderItemId: number;
+  /**
+   * Target quantity. Use 0 to remove the item (backend marks it REJECTED).
+   * Must be ≤ current quantity when item is SERVED.
+   */
+  newQuantity: number;
+  /** Required when item is SERVED or newQuantity === 0. */
+  reason?: string;
+  /** Updated note for CREATED items (replaces the existing note). */
+  note?: string;
+};
+
+export type UpdateOrderItemsRequest = {
+  adjustments: OrderItemAdjustment[];
+  newItems: { dishId: number; quantity: number; note?: string }[];
+  customer?: { customerId?: number; fullName?: string; phone?: string; email?: string } | null;
+};

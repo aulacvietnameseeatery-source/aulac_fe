@@ -1,7 +1,7 @@
 import { api } from "@/lib/http";
 import { ApiResponse } from "@/types/api-response.types";
 import { DishDto, TableDto, CustomerDto, CreateOrderRequest, CategoryDto, RecentOrderDto } from "../types/create-order.types";
-import { AddOrderItemsRequest, OrderDetailDto } from "../types/edit-order.types";
+import { AddOrderItemsRequest, OrderDetailDto, UpdateOrderItemsRequest } from "../types/edit-order.types";
 
 export const createOrderService = {
   getDishes: async (): Promise<DishDto[]> => {
@@ -46,6 +46,15 @@ export const createOrderService = {
 
   addItemsToOrder: async (orderId: number, payload: AddOrderItemsRequest): Promise<void> => {
     await api.post(`/api/orders/staff/${orderId}/items`, payload);
+  },
+
+  /**
+   * Single-call staff endpoint: adjust existing items (qty / remove),
+   * add new items, optionally change the customer — all in one transaction.
+   * Replaces the old separate addItemsToOrder call for the edit-order flow.
+   */
+  updateOrderItems: async (orderId: number, payload: UpdateOrderItemsRequest): Promise<void> => {
+    await api.put(`/api/orders/staff/${orderId}/items`, payload);
   },
 
   getRecentOrders: async (limit: number = 20): Promise<RecentOrderDto[]> => {

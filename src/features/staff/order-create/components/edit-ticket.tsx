@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { Receipt, AlertTriangle, UtensilsCrossed, Minus, Plus, Trash2, CheckCircle2, Eye, FileText, X, UserSearch, ArrowLeft } from 'lucide-react';
 import { CartItem, CustomerDto } from '../types/create-order.types';
-import { ExistingOrderItemDto, OrderDetailDto } from '../types/edit-order.types';
+import { ExistingOrderItemDto, OrderDetailDto, OrderItemAdjustment } from '../types/edit-order.types';
 import { PermissionGuard } from '@/components/permission-guard';
 import { Permissions } from '@/types/const';
+import { OrderItemStatusCode } from '@/types/status-codes';
 
 interface Props {
   orderInfo: OrderDetailDto;
@@ -20,22 +21,66 @@ interface Props {
   onCloseMobile: () => void;
   isCustomerChanged?: boolean;
   onReturnToCreate: () => void;
+  /** Pending adjustments collected before submit. */
+  adjustments: OrderItemAdjustment[];
+  /** Record (or update) an adjustment on an existing order item. */
+  onAdjustItem: (orderItemId: number, newQuantity: number, reason?: string, note?: string) => void;
+  /**
+   * Called when the user confirms reasons for served-item adjustments.
+   * Parent merges reasons into adjustments and executes the submit.
+   */
+  onConfirmServedReasons: (reasons: Record<number, string>) => void;
 }
 
 export const EditTicket: React.FC<Props> = ({
-  orderInfo, newCart, customer, onOpenCustomerModal, onUpdateQuantity, onUpdateNote, onRemoveFromCart, onClearCart, onSubmitItems, onCreateInvoice, onCloseMobile, isCustomerChanged, onReturnToCreate
+  orderInfo, newCart, customer, onOpenCustomerModal, onUpdateQuantity, onUpdateNote, onRemoveFromCart, onClearCart, onSubmitItems, onCreateInvoice, onCloseMobile, isCustomerChanged, onReturnToCreate,
+  adjustments, onAdjustItem, onConfirmServedReasons,
 }) => {
   const t = useTranslations("orders.management.Edit");
   const tCommon = useTranslations("orders.management.List.card");
   const locale = useLocale();
 
+  // Bulk served-reason modal: opened once at submit time
+  const [showServedReasonsModal, setShowServedReasonsModal] = useState(false);
+  const [servedReasonsDraft, setServedReasonsDraft] = useState<Record<number, string>>({});
+
+  /** Returns adjustments for SERVED items that are missing a reason. */
+  const getServedAdjsNeedingReasons = () =>
+    adjustments.filter(adj => {
+      const item = orderInfo.orderItems.find(i => i.orderItemId === adj.orderItemId);
+      if (!item) return false;
+      const s = item.itemStatus as string;
+      const isServed = s === OrderItemStatusCode.SERVED || s === 'Served';
+      return isServed && adj.newQuantity !== item.quantity && !adj.reason?.trim();
+    });
+
+  const handlePreSubmit = () => {
+    const needingReasons = getServedAdjsNeedingReasons();
+    if (needingReasons.length > 0) {
+      const draft: Record<number, string> = {};
+      needingReasons.forEach(adj => { draft[adj.orderItemId] = ''; });
+      setServedReasonsDraft(draft);
+      setShowServedReasonsModal(true);
+    } else {
+      onSubmitItems();
+    }
+  };
+
   const newSubtotal = newCart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-  const finalTotal = orderInfo.totalAmount + newSubtotal;
+
+  // Adjustment delta: sum(newQty * price) - sum(oldQty * price) for each adjusted item
+  const adjustmentDelta = adjustments.reduce((sum, adj) => {
+    const original = orderInfo.orderItems.find(i => i.orderItemId === adj.orderItemId);
+    if (!original) return sum;
+    return sum + original.price * (adj.newQuantity - original.quantity);
+  }, 0);
+
+  const finalTotal = orderInfo.totalAmount + newSubtotal + adjustmentDelta;
 
   const isCancelled = orderInfo.orderStatus === 'Cancelled';
   const isReadOnly = orderInfo.isPaid || isCancelled;
 
-  const isDisableSubmit = isReadOnly || (newCart.length === 0 && !isCustomerChanged);
+  const isDisableSubmit = isReadOnly || (newCart.length === 0 && !isCustomerChanged && adjustments.length === 0);
 
   const getStatusColor = (status: string) => {
     const s = status.toLowerCase();
@@ -67,6 +112,42 @@ export const EditTicket: React.FC<Props> = ({
           return item.dishNameI18n[locale];
       }
       return item.dishName || 'Unknown Item';
+  };
+
+  /**
+   * Parses a note that may contain a structured ADJUSTED segment written by the BE.
+   * Format: "Optional base note | ADJUSTED:{qty}|REASON:{reason}"
+   * Returns { baseNote, adjusted: { qty, reason } | null }
+   */
+  const parseNote = (note: string | null | undefined): { baseNote: string | null; adjusted: { qty: number; reason: string } | null } => {
+    if (!note) return { baseNote: null, adjusted: null };
+    const adjIdx = note.indexOf('ADJUSTED:');
+    if (adjIdx === -1) return { baseNote: note.trim() || null, adjusted: null };
+
+    const rawBase = note.slice(0, adjIdx).replace(/\|\s*$/, '').trim();
+    const adjPart = note.slice(adjIdx); // "ADJUSTED:2|REASON:abc"
+    const qtyMatch = adjPart.match(/ADJUSTED:(\d+)/);
+    const reasonMatch = adjPart.match(/REASON:(.*)/);
+    return {
+      baseNote: rawBase || null,
+      adjusted: qtyMatch ? { qty: Number(qtyMatch[1]), reason: reasonMatch?.[1]?.trim() ?? '' } : null,
+    };
+  };
+
+  /** Renders a note string, translating any embedded ADJUSTED segment. */
+  const renderNote = (note: string | null | undefined) => {
+    const { baseNote, adjusted } = parseNote(note);
+    return (
+      <>
+        {baseNote && <span>{baseNote}</span>}
+        {adjusted && (
+          <span className={baseNote ? ' | ' : '' as any}>
+            {baseNote ? ' | ' : ''}
+            {t('adjustedNote', { qty: adjusted.qty, reason: adjusted.reason, fallback: `Adjusted → ${adjusted.qty} (Reason: ${adjusted.reason})` })}
+          </span>
+        )}
+      </>
+    );
   };
 
   return (
@@ -122,34 +203,149 @@ export const EditTicket: React.FC<Props> = ({
       {/* BODY: ITEMS LIST */}
       <div className="flex-1 overflow-y-auto p-4 lg:p-5 space-y-4 bg-[#FDFBF9]/50 min-h-0">
 
-        {/* MÓN CŨ (READ-ONLY) */}
+        {/* MÓN CŨ — status-aware controls */}
         <div>
           <h3 className="text-[10px] font-bold text-[#1A3A52]/50 uppercase tracking-wider mb-2">{t('orderedItems')}</h3>
           <div className="space-y-2 text-opacity-80">
-            {orderInfo.orderItems.map((item) => (
-              <div key={item.orderItemId} className={`bg-white border rounded-xl p-3 shadow-sm ${item.itemStatus === 'REJECTED' ? 'border-[#8C3A3A]/30 bg-[#8C3A3A]/5' : 'border-[#D5BA98]/40'}`}>
-                <div className="flex justify-between items-start gap-2">
-                  <div>
-                    <div className="font-bold text-sm text-[#1A3A52]">
-                      {item.quantity}x {getLocalizedDishName(item)}
+            {orderInfo.orderItems.map((item) => {
+              const adj = adjustments.find(a => a.orderItemId === item.orderItemId);
+              const displayQty = adj ? adj.newQuantity : item.quantity;
+              const isRemoved = displayQty <= 0;
+
+              const statusCode = item.itemStatus as string;
+              const isCreated    = statusCode === OrderItemStatusCode.CREATED    || statusCode === 'Created';
+              const isServed     = statusCode === OrderItemStatusCode.SERVED     || statusCode === 'Served';
+              const isRejected   = statusCode === OrderItemStatusCode.REJECTED   || statusCode === 'Rejected';
+              const isCancelled  = statusCode === OrderItemStatusCode.CANCELLED  || statusCode === 'Cancelled';
+              const isInProgress = statusCode === OrderItemStatusCode.IN_PROGRESS || statusCode === 'In_Progress';
+              const isReady      = statusCode === OrderItemStatusCode.READY       || statusCode === 'Ready';
+
+              // CREATED + not yet removed + editable: gold accent full card
+              if (isCreated && !isRemoved && !isReadOnly) {
+                return (
+                  <div key={item.orderItemId} className="bg-white border border-[#D5BA98]/50 rounded-xl p-3 shadow-sm flex flex-col gap-2 relative overflow-hidden">
+                    <div className="absolute left-0 top-0 bottom-0 w-1 bg-[#D5BA98]" />
+                    <div className="flex justify-between items-start gap-2 pl-1">
+                      <div className="min-w-0 flex-1">
+                        <p className="text-[#1A3A52] text-sm font-bold leading-tight truncate">{getLocalizedDishName(item)}</p>
+                        <div className="flex items-center gap-1.5 mt-0.5">
+                          <span className="text-[#1A3A52]/70 font-semibold text-xs">{formatCurrency(item.price * displayQty)}</span>
+                          {adj && adj.newQuantity !== item.quantity && (
+                            <span className="text-[10px] text-orange-500 font-medium">({t('wasQty', { qty: item.quantity, fallback: `was ${item.quantity}` })})</span>
+                          )}
+                        </div>
+                      </div>
+                      <button
+                        onClick={() => onAdjustItem(item.orderItemId, 0, undefined, adj?.note ?? item.note ?? undefined)}
+                        className="text-[#1A3A52]/40 hover:text-[#8C3A3A] hover:bg-[#8C3A3A]/10 p-1.5 rounded-md transition-colors shrink-0"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
                     </div>
-                    {item.note && <div className="text-xs text-[#1A3A52]/60 italic mt-0.5">{tCommon('note')}: {item.note}</div>}
+                    <div className="flex items-center justify-between pt-2 border-t border-[#D5BA98]/20 pl-1">
+                      <input
+                        type="text"
+                        value={adj?.note ?? item.note ?? ''}
+                        placeholder={t('noteOptional', { fallback: 'Note (optional)' })}
+                        onChange={(e) => onAdjustItem(item.orderItemId, displayQty, undefined, e.target.value)}
+                        className="w-[55%] text-xs px-2 py-1.5 bg-[#FDFBF9] border border-[#D5BA98]/40 rounded text-[#1A3A52] outline-none focus:border-[#1A3A52]"
+                      />
+                      <div className="flex items-center gap-1 shrink-0">
+                        <button
+                          onClick={() => onAdjustItem(item.orderItemId, displayQty - 1, undefined, adj?.note ?? item.note ?? undefined)}
+                          className="w-7 h-7 rounded border border-[#D5BA98]/80 flex items-center justify-center text-[#1A3A52] hover:bg-[#D5BA98]/20 transition-colors"
+                        >
+                          {displayQty <= 1 ? <Trash2 className="w-3 h-3 text-[#8C3A3A]" /> : <Minus className="w-3.5 h-3.5" />}
+                        </button>
+                        <span className="text-[#1A3A52] text-sm w-6 text-center font-bold">{displayQty}</span>
+                        <button
+                          onClick={() => onAdjustItem(item.orderItemId, displayQty + 1, undefined, adj?.note ?? item.note ?? undefined)}
+                          className="w-7 h-7 rounded border border-[#1A3A52] bg-[#1A3A52] flex items-center justify-center text-[#D5BA98] hover:bg-[#1A3A52]/90 transition-colors"
+                        >
+                          <Plus className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    </div>
                   </div>
-                  <div className="text-right shrink-0">
-                    <div className="font-bold text-sm text-[#1A3A52]">{formatCurrency(item.price * item.quantity)}</div>
-                    <span className={`text-[9px] uppercase font-bold px-1.5 py-0.5 rounded mt-1.5 inline-block border ${getStatusColor(item.itemStatus)}`}>
-                      {t(`itemStatus.${item.itemStatus}`, { fallback: formatStatusName(item.itemStatus) })}
+                );
+              }
+
+              // SERVED + not yet removed + editable: neutral border, status badge top-right, decrease-only controls
+              if (isServed && !isRemoved && !isReadOnly) {
+                return (
+                  <div key={item.orderItemId} className="bg-white border border-[#1A3A52]/20 rounded-xl p-3 shadow-sm flex flex-col gap-2">
+                    <div className="flex justify-between items-start gap-2">
+                      <div className="min-w-0 flex-1">
+                        <p className="text-[#1A3A52] text-sm font-bold leading-tight truncate">{getLocalizedDishName(item)}</p>
+                        <div className="flex items-center gap-1.5 mt-0.5">
+                          <span className="text-[#1A3A52]/70 font-semibold text-xs">{formatCurrency(item.price * displayQty)}</span>
+                          {adj && adj.newQuantity !== item.quantity && (
+                            <span className="text-[10px] text-orange-500 font-medium">({t('wasQty', { qty: item.quantity, fallback: `was ${item.quantity}` })})</span>
+                          )}
+                        </div>
+                      </div>
+                      <span className={`text-[9px] uppercase font-bold px-1.5 py-0.5 rounded border shrink-0 mt-0.5 ${getStatusColor(item.itemStatus as string)}`}>
+                        {t(`itemStatus.${item.itemStatus}`, { fallback: formatStatusName(item.itemStatus as string) })}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between pt-2 border-t border-[#1A3A52]/10">
+                      <div className="flex-1 min-w-0 mr-2">
+                        {item.note && <p className="text-xs text-[#1A3A52]/60 italic truncate">{renderNote(item.note)}</p>}
+                        {adj && adj.newQuantity !== item.quantity && (
+                          <span className="text-[10px] font-medium text-orange-500">
+                            {adj.reason ? `✓ ${adj.reason}` : t('reasonNeeded', { fallback: '⚠ reason needed' })}
+                          </span>
+                        )}
+                      </div>
+                      <div className="flex items-center gap-1 shrink-0">
+                        <button
+                          onClick={() => onAdjustItem(item.orderItemId, displayQty - 1)}
+                          className="w-7 h-7 rounded border border-[#D5BA98]/80 flex items-center justify-center text-[#1A3A52] hover:bg-[#D5BA98]/20 transition-colors"
+                        >
+                          {displayQty <= 1 ? <Trash2 className="w-3 h-3 text-[#8C3A3A]" /> : <Minus className="w-3.5 h-3.5" />}
+                        </button>
+                        <span className="text-[#1A3A52] text-sm w-6 text-center font-bold">{displayQty}</span>
+                      </div>
+                    </div>
+                  </div>
+                );
+              }
+
+              // View-only: IN_PROGRESS, READY, REJECTED, CANCELLED, removed
+              return (
+                <div
+                  key={item.orderItemId}
+                  className={`bg-white border border-[#1A3A52]/20 rounded-xl p-3 shadow-sm ${isRemoved ? 'opacity-50' : ''}`}
+                >
+                  <div className="flex justify-between items-start gap-2">
+                    <div className="flex-1 min-w-0">
+                      <div className="font-bold text-sm text-[#1A3A52] truncate">
+                        {getLocalizedDishName(item)}
+                      </div>
+                      <div className="text-[#1A3A52]/70 font-semibold text-xs mt-0.5">
+                        {formatCurrency(item.price * displayQty)}
+                      </div>
+                    </div>
+                    <span className={`text-[9px] uppercase font-bold px-1.5 py-0.5 rounded border shrink-0 mt-0.5 ${getStatusColor(item.itemStatus as string)}`}>
+                      {isRemoved ? t('removing', { fallback: 'Removing' }) : t(`itemStatus.${item.itemStatus}`, { fallback: formatStatusName(item.itemStatus as string) })}
                     </span>
                   </div>
-                </div>
-                {item.rejectReason && (
-                  <div className="mt-2 text-[11px] font-medium text-[#8C3A3A] bg-[#8C3A3A]/10 p-1.5 rounded flex gap-1.5 items-start">
-                    <AlertTriangle className="w-3.5 h-3.5 shrink-0" />
-                    <span>{tCommon('rejectReason')}: {item.rejectReason}</span>
+                  <div className="mt-2 pt-2 border-t border-[#1A3A52]/10 flex items-center justify-between gap-2">
+                    <div className="flex-1 min-w-0">
+                      {item.rejectReason ? (
+                        <span className="text-[10px] text-[#8C3A3A] flex gap-1 items-center">
+                          <AlertTriangle className="w-3 h-3 shrink-0" />
+                          <span className="truncate">{item.rejectReason}</span>
+                        </span>
+                      ) : (
+                        item.note && <p className="text-xs text-[#1A3A52]/60 italic truncate">{renderNote(item.note)}</p>
+                      )}
+                    </div>
+                    <span className="text-sm font-bold text-[#1A3A52] w-6 text-center shrink-0">{displayQty}</span>
                   </div>
-                )}
-              </div>
-            ))}
+                </div>
+              );
+            })}
           </div>
         </div>
 
@@ -299,7 +495,7 @@ export const EditTicket: React.FC<Props> = ({
             </button>
             <PermissionGuard permission={Permissions.EditOrder} showDisabled={true}>
               <button
-                onClick={onSubmitItems}
+                onClick={handlePreSubmit}
                 disabled={isDisableSubmit}
                 className="col-span-2 bg-[#1A3A52] text-[#D5BA98] font-bold py-3 rounded-xl flex items-center justify-center gap-2 disabled:opacity-50 text-sm hover:bg-[#1A3A52]/90 transition shadow-lg shadow-[#1A3A52]/20 w-full h-full"
               >
@@ -309,6 +505,75 @@ export const EditTicket: React.FC<Props> = ({
           </div>
         )}
       </div>
+
+      {/* ── Bulk served-reason modal (opened once at submit) ─────────── */}
+      {showServedReasonsModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-sm p-5 flex flex-col gap-4 max-h-[80vh] overflow-y-auto">
+            <div className="flex items-start gap-3">
+              <AlertTriangle className="w-5 h-5 text-orange-500 shrink-0 mt-0.5" />
+              <div>
+                <p className="font-bold text-[#1A3A52]">
+                  {t('servedAdjReasonTitle', { fallback: 'Reasons required for served items' })}
+                </p>
+                <p className="text-xs text-[#1A3A52]/60 mt-0.5">
+                  {t('servedAdjReasonHint', {
+                    fallback: 'Some items have already been served. Please provide a reason for each adjustment.',
+                  })}
+                </p>
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              {Object.entries(servedReasonsDraft).map(([idStr, reason]) => {
+                const oid = Number(idStr);
+                const itm = orderInfo.orderItems.find(i => i.orderItemId === oid);
+                const adj = adjustments.find(a => a.orderItemId === oid);
+                return (
+                  <div key={oid}>
+                    <label className="text-xs font-bold text-[#1A3A52] block mb-1">
+                      {itm ? getLocalizedDishName(itm) : `#${oid}`}
+                      <span className="font-normal text-[#1A3A52]/50 ml-1">
+                        ({itm?.quantity} → {adj?.newQuantity ?? 0})
+                      </span>
+                    </label>
+                    <textarea
+                      rows={2}
+                      value={reason}
+                      autoFocus={Object.keys(servedReasonsDraft)[0] === idStr}
+                      onChange={e =>
+                        setServedReasonsDraft(prev => ({ ...prev, [oid]: e.target.value }))
+                      }
+                      placeholder={t('servedAdjReasonPlaceholder', { fallback: 'e.g. Customer changed mind…' })}
+                      className="w-full text-sm px-3 py-2 border border-[#D5BA98]/60 rounded-lg resize-none outline-none focus:border-[#1A3A52] text-[#1A3A52]"
+                    />
+                  </div>
+                );
+              })}
+            </div>
+
+            <div className="flex gap-2 justify-end pt-1">
+              <button
+                onClick={() => { setShowServedReasonsModal(false); setServedReasonsDraft({}); }}
+                className="px-4 py-2 text-sm font-medium border border-[#D5BA98]/50 text-[#1A3A52] rounded-lg hover:bg-[#D5BA98]/10 transition"
+              >
+                {t('cancel', { fallback: 'Cancel' })}
+              </button>
+              <button
+                disabled={Object.values(servedReasonsDraft).some(r => !r.trim())}
+                onClick={() => {
+                  onConfirmServedReasons(servedReasonsDraft);
+                  setShowServedReasonsModal(false);
+                  setServedReasonsDraft({});
+                }}
+                className="px-4 py-2 text-sm font-bold bg-[#1A3A52] text-[#D5BA98] rounded-lg hover:bg-[#1A3A52]/90 transition disabled:opacity-40"
+              >
+                {t('confirm', { fallback: 'Confirm' })}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
