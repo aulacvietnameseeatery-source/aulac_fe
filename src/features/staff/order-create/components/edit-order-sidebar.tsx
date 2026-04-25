@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useTranslations } from 'next-intl';
 import { createOrderService } from '../services/create-edit-order.service';
 import { EditTicket } from './edit-ticket';
-import { ExistingOrderItemDto, OrderDetailDto, OrderStatus } from '../types/edit-order.types';
+import { ExistingOrderItemDto, OrderDetailDto, OrderStatus, OrderItemAdjustment, UpdateOrderItemsRequest } from '../types/edit-order.types';
 import { CustomerDto } from '../types/create-order.types';
 import { Dialog } from '@/components/ui/dialog';
 import { AlertTriangle } from 'lucide-react';
@@ -41,6 +41,10 @@ export const EditOrderSidebar = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isPrintModalOpen, setIsPrintModalOpen] = useState(false);
   const [initialCustomer, setInitialCustomer] = useState<Partial<CustomerDto> | null>(null);
+  // Adjustments to existing order items (collected before the single PUT call)
+  const [adjustments, setAdjustments] = useState<OrderItemAdjustment[]>([]);
+  // Holds merged adjustments when the confirm-modal flow follows served-reason collection
+  const pendingAdjustmentsRef = useRef<OrderItemAdjustment[] | null>(null);
 
   useEffect(() => {
     const fetchOrder = async () => {
@@ -123,50 +127,103 @@ export const EditOrderSidebar = ({
         
         return updatedOrder;
       });
+
+      // Race condition guard: if an item just became IN_PROGRESS or REJECTED
+      // (kitchen moved it while staff was editing), drop any pending adjustment for it.
+      if (data.status === 'IN_PROGRESS' || data.status === 'REJECTED') {
+        setAdjustments(prev => prev.filter(a => Number(a.orderItemId) !== Number(data.orderItemId)));
+      }
     }
   });
 
   const handleSubmitAttempt = () => {
     if (!orderInfo) return;
     const newCartTotal = newCart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    // Confirm dialog only when re-opening a COMPLETED order with NEW items (not for adjustments)
     if (orderInfo.orderStatus === 'Completed' && !orderInfo.isPaid && newCartTotal > 0) {
       setShowConfirmModal(true);
     } else {
-      executeAddItems();
+      executeUpdateItemsWithAdjustments(adjustments);
     }
   };
 
-  const executeAddItems = async () => {
+  /**
+   * Called by EditTicket when the user confirms reasons for served-item adjustments.
+   * Merges reasons into the adjustments, then either shows the "completed order" warning
+   * or proceeds directly to submit.
+   */
+  const handleConfirmServedReasons = (reasons: Record<number, string>) => {
+    const merged = adjustments.map(adj =>
+      reasons[adj.orderItemId] !== undefined
+        ? { ...adj, reason: reasons[adj.orderItemId] }
+        : adj
+    );
+    setAdjustments(merged);
+    const newCartTotal = newCart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    // Confirm dialog only when re-opening a COMPLETED order with NEW items (not for adjustments)
+    if (orderInfo?.orderStatus === 'Completed' && !orderInfo.isPaid && newCartTotal > 0) {
+      pendingAdjustmentsRef.current = merged;
+      setShowConfirmModal(true);
+    } else {
+      executeUpdateItemsWithAdjustments(merged);
+    }
+  };
+
+  /** Handler passed to EditTicket to record an adjustment on an existing item. */
+  const handleAdjustItem = (orderItemId: number, newQuantity: number, reason?: string, note?: string) => {
+    setAdjustments(prev => {
+      const existing = prev.findIndex(a => a.orderItemId === orderItemId);
+      if (existing >= 0) {
+        const next = [...prev];
+        next[existing] = { orderItemId, newQuantity, reason, note };
+        return next;
+      }
+      return [...prev, { orderItemId, newQuantity, reason, note }];
+    });
+  };
+
+  /**
+   * Core submit function — accepts an explicit adjustments list to avoid React state
+   * batching issues when reasons are merged right before submission.
+   */
+  const executeUpdateItemsWithAdjustments = async (adjs: OrderItemAdjustment[]) => {
     if (!orderInfo) return;
     setIsSubmitting(true);
     try {
-      const payload = {
+      const payload: UpdateOrderItemsRequest = {
+        adjustments: adjs,
+        newItems: newCart.map(i => ({ dishId: i.dishId, quantity: i.quantity, note: i.note })),
         customer: sharedCustomer ? {
-          customerId: sharedCustomer.customerId === 0 ? null : sharedCustomer.customerId,
-          fullName: sharedCustomer.fullName,
-          phone: sharedCustomer.phone,
-          email: sharedCustomer.email
+          customerId: sharedCustomer.customerId === 0 ? undefined : sharedCustomer.customerId,
+          fullName:   sharedCustomer.fullName,
+          phone:      sharedCustomer.phone,
+          email:      sharedCustomer.email,
         } : null,
-        items: newCart.map(i => ({ dishId: i.dishId, quantity: i.quantity, note: i.note }))
       };
 
-      const addItemsPromise = createOrderService.addItemsToOrder(orderInfo.orderId, payload as any).then(async () => {
+      const updatePromise = createOrderService.updateOrderItems(orderInfo.orderId, payload).then(async () => {
         const updatedOrder = await createOrderService.getOrderById(orderInfo.orderId);
         setOrderInfo(updatedOrder);
-        onOrderFetched(updatedOrder); 
-        setInitialCustomer(sharedCustomer); 
+        onOrderFetched(updatedOrder);
+        setInitialCustomer(sharedCustomer);
+        setAdjustments([]);
         clearCart();
         setShowConfirmModal(false);
         onCloseMobile();
       });
-      
-      toast.promise(addItemsPromise, { loading: t('saving'), success: t('successMessage'), error: t('errorMessage') });
+
+      toast.promise(updatePromise, { loading: t('saving'), success: t('successMessage'), error: t('errorMessage') });
     } catch (error) {
       toast.error(t('errorMessage'));
     } finally {
       setIsSubmitting(false);
     }
   };
+
+  /** Convenience wrapper that reads from current `adjustments` state. */
+  const executeUpdateItems = () => executeUpdateItemsWithAdjustments(adjustments);
+
+  // _OLD: executeAddItems was replaced by executeUpdateItems above
 
   // --- MAPPING DATA FOR PRINT MODAL ---
   const mappedOrderHistory = useMemo(() => {
@@ -276,6 +333,9 @@ export const EditOrderSidebar = ({
           onCreateInvoice={() => setIsPrintModalOpen(true)}
           onCloseMobile={onCloseMobile}
           onReturnToCreate={onReturnToCreate}
+          adjustments={adjustments}
+          onAdjustItem={handleAdjustItem}
+          onConfirmServedReasons={handleConfirmServedReasons}
         />
       </div>
 
@@ -292,7 +352,7 @@ export const EditOrderSidebar = ({
             <button disabled={isSubmitting} onClick={() => setShowConfirmModal(false)} className="px-4 py-2 font-medium bg-[#FDFBF9] border border-[#D5BA98]/40 text-[#1A3A52] rounded-lg hover:bg-[#D5BA98]/10 transition">
               {t('cancel')}
             </button>
-            <button disabled={isSubmitting} onClick={executeAddItems} className="px-4 py-2 font-bold bg-[#1A3A52] text-[#D5BA98] rounded-lg flex items-center gap-2 hover:bg-[#1A3A52]/90 transition">
+            <button disabled={isSubmitting} onClick={() => { const adjs = pendingAdjustmentsRef.current ?? adjustments; pendingAdjustmentsRef.current = null; executeUpdateItemsWithAdjustments(adjs); }} className="px-4 py-2 font-bold bg-[#1A3A52] text-[#D5BA98] rounded-lg flex items-center gap-2 hover:bg-[#1A3A52]/90 transition">
               {isSubmitting ? t('loading') : t('confirmChangeStatus')}
             </button>
           </div>

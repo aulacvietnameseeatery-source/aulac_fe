@@ -314,7 +314,21 @@
         },
         "tableLabel": "Table",
         "customerLabel": "Client",
-        "returnToCreate": "Nouvelle commande"
+        "returnToCreate": "Nouvelle commande",
+        "removing": "Suppression en cours",
+        "noteOptional": "Note (facultative)",
+        "wasQty": "avant {qty}",
+        "adjustedNote": "Ajust\u00e9 \u2192 {qty} (Raison\u00a0: {reason})",
+        "servedDecrOnly": "R\u00e9duction seulement",
+        "reasonNeeded": "raison requise",
+        "confirm": "Confirmer",
+        "itemLocked": {
+          "inProgress": "En cours \u2014 verrouill\u00e9",
+          "rejected": "Rejet\u00e9 \u2014 verrouill\u00e9"
+        },
+        "servedAdjReasonTitle": "Raisons requises pour les plats servis",
+        "servedAdjReasonHint": "Certains plats servis ont \u00e9t\u00e9 ajust\u00e9s. Veuillez indiquer une raison pour chacun.",
+        "servedAdjReasonPlaceholder": "ex\u00a0: Le client a chang\u00e9 d\u2019avis\u2026"
       },
       "RecentOrders": {
         "title": "Commandes récentes",

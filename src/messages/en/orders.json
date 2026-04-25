@@ -314,7 +314,21 @@
         },
         "tableLabel": "Table",
         "customerLabel": "Customer",
-        "returnToCreate": "New Order"
+        "returnToCreate": "New Order",
+        "removing": "Removing",
+        "noteOptional": "Note (optional)",
+        "wasQty": "was {qty}",
+        "adjustedNote": "Adjusted \u2192 {qty} (Reason: {reason})",
+        "servedDecrOnly": "Decrease only",
+        "reasonNeeded": "reason needed",
+        "confirm": "Confirm",
+        "itemLocked": {
+          "inProgress": "In progress \u2014 locked",
+          "rejected": "Rejected \u2014 locked"
+        },
+        "servedAdjReasonTitle": "Reasons required for served items",
+        "servedAdjReasonHint": "Some served items were adjusted. Please provide a reason for each.",
+        "servedAdjReasonPlaceholder": "e.g. Customer changed mind\u2026"
       },
       "RecentOrders": {
         "title": "Recent Orders",

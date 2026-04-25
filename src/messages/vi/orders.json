@@ -314,7 +314,21 @@
         },
         "tableLabel": "Bàn",
         "customerLabel": "Khách hàng",
-        "returnToCreate": "Tạo đơn mới"
+        "returnToCreate": "Tạo đơn mới",
+        "removing": "Đang xóa",
+        "noteOptional": "Ghi chú (tùy chọn)",
+        "wasQty": "trước đây {qty}",
+        "adjustedNote": "Điều chỉnh → {qty} (Lý do: {reason})",
+        "servedDecrOnly": "Chỉ giảm",
+        "reasonNeeded": "cần lý do",
+        "confirm": "Xác nhận",
+        "itemLocked": {
+          "inProgress": "Đang thực hiện — khóa",
+          "rejected": "Bị từ chối — khóa"
+        },
+        "servedAdjReasonTitle": "Lý do điều chỉnh món đã phục vụ",
+        "servedAdjReasonHint": "Một số món đã phục vụ đã được điều chỉnh. Vui lòng cung cấp lý do cho từng món.",
+        "servedAdjReasonPlaceholder": "VD: Khách đổi ý..."
       },
       "RecentOrders": {
         "title": "Đơn hàng gần đây",
