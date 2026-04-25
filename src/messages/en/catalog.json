@@ -704,6 +704,7 @@
         "updateSuccess": "Coupon updated successfully",
         "updateError": "Failed to update coupon",
         "usedCouponPartialEdit": "This coupon has been used. Only description, end date and max usage can be edited.",
+        "activeCouponPartialEdit": "This coupon is active. Only coupon name, description, and end date/time can be edited.",
         "expiredCouponNoEdit": "This coupon has expired. No changes are allowed.",
         "codeAlreadyExists": "This coupon code already exists, please choose a different code"
       }

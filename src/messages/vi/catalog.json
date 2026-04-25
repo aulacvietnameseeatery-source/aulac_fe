@@ -704,6 +704,7 @@
         "updateSuccess": "Cập nhật mã giảm giá thành công",
         "updateError": "Không thể cập nhật mã giảm giá",
         "usedCouponPartialEdit": "Mã giảm giá đã được sử dụng. Chỉ có thể chỉnh sửa mô tả, ngày kết thúc và số lượt sử dụng tối đa.",
+        "activeCouponPartialEdit": "Mã giảm giá đang hoạt động. Chỉ có thể chỉnh sửa tên mã, mô tả và ngày giờ kết thúc.",
         "expiredCouponNoEdit": "Mã giảm giá đã hết hạn. Không thể chỉnh sửa.",
         "codeAlreadyExists": "Mã giảm giá này đã tồn tại, vui lòng chọn mã khác"
       }

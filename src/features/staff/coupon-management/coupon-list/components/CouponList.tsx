@@ -102,6 +102,7 @@ export default function CouponList() {
     } finally {
       setIsDeleting(false);
       setCouponToDelete(null);
+      setDeleteModalOpen(false);
     }
   };
 

@@ -102,8 +102,8 @@ export const CouponModal: React.FC<CouponModalProps> = ({
     const validateForm = () => {
         const newErrors: { [key: string]: string } = {};
 
-        // For used coupons, only validate editable fields (description, endTime, maxUsage)
-        const skipLockedFields = isEditableOnUsed;
+        // For active coupons, only validate editable fields (couponName, description, endTime)
+        const skipLockedFields = isActiveCoupon;
 
         if (!skipLockedFields) {
             if (!formData.couponCode.trim()) {
@@ -130,6 +130,15 @@ export const CouponModal: React.FC<CouponModalProps> = ({
                 if (formData.discountValue < 0 || formData.discountValue > 100) {
                     newErrors.discountValue = t("validation.percentMax");
                 }
+            }
+        }
+
+        // For active coupons, couponName is still editable — validate it separately
+        if (skipLockedFields) {
+            if (!formData.couponName.trim()) {
+                newErrors.couponName = t("validation.nameRequired");
+            } else if (formData.couponName.length > 200) {
+                newErrors.couponName = t("validation.nameMaxLength");
             }
         }
 
@@ -191,16 +200,20 @@ export const CouponModal: React.FC<CouponModalProps> = ({
     };
 
     const isViewMode = mode === "view";
-    const isUsedCoupon = mode === "edit" && coupon != null && (coupon.usedCount ?? 0) > 0;
     const isExpiredCoupon = mode === "edit" && coupon != null && (() => {
         const now = dateUtils.getSwissNow().getTime();
         const end = new Date(coupon.endTime.endsWith('Z') ? coupon.endTime : `${coupon.endTime}Z`).getTime();
         return now > end;
     })();
-    // Fields that are always locked (view, expired, or the "fixed" fields of a used coupon)
+    // Active coupon: started but not yet expired (regardless of usedCount)
+    const isActiveCoupon = mode === "edit" && coupon != null && !isExpiredCoupon && (() => {
+        const now = dateUtils.getSwissNow().getTime();
+        const start = new Date(coupon.startTime.endsWith('Z') ? coupon.startTime : `${coupon.startTime}Z`).getTime();
+        const end = new Date(coupon.endTime.endsWith('Z') ? coupon.endTime : `${coupon.endTime}Z`).getTime();
+        return now >= start && now <= end;
+    })();
+    // Fields that are always locked (view or expired)
     const isLockedField = isViewMode || isExpiredCoupon;
-    // Fields that can still be edited on a used coupon (description, endTime, maxUsage)
-    const isEditableOnUsed = isUsedCoupon && !isExpiredCoupon;
 
     const getComputedStatus = useCallback((): string => {
         if (!coupon) return "";
@@ -292,10 +305,10 @@ export const CouponModal: React.FC<CouponModalProps> = ({
                     })()}
 
                     {/* Warning for used coupon in edit mode */}
-                    {isUsedCoupon && !isExpiredCoupon && (
+                    {isActiveCoupon && (
                         <div className="p-4 bg-amber-50 border border-amber-200 rounded-lg">
                             <p className="text-sm text-amber-700 font-medium">
-                                {tCommon("Edit.notifications.usedCouponPartialEdit")}
+                                {tCommon("Edit.notifications.activeCouponPartialEdit")}
                             </p>
                         </div>
                     )}
@@ -313,21 +326,21 @@ export const CouponModal: React.FC<CouponModalProps> = ({
                     <div className="grid grid-cols-2 gap-4">
                         <ALInput
                             title={t("couponCode")}
-                            required={!isLockedField && !isEditableOnUsed}
-                            placeholder={isLockedField || isEditableOnUsed ? "" : t("couponCodePlaceholder")}
+                            required={!isLockedField && !isActiveCoupon}
+                            placeholder={isLockedField || isActiveCoupon ? "" : t("couponCodePlaceholder")}
                             value={formData.couponCode}
                             onChange={(e) => handleChange("couponCode", e.target.value.replace(/\s/g, "").toUpperCase())}
                             error={errors.couponCode}
-                            readOnly={isLockedField || isEditableOnUsed}
+                            readOnly={isLockedField || isActiveCoupon}
                         />
                         <ALInput
                             title={t("couponName")}
-                            required={!isLockedField && !isEditableOnUsed}
-                            placeholder={isLockedField || isEditableOnUsed ? "" : t("couponNamePlaceholder")}
+                            required={!isLockedField}
+                            placeholder={isLockedField ? "" : t("couponNamePlaceholder")}
                             value={formData.couponName}
                             onChange={(e) => handleChange("couponName", e.target.value)}
                             error={errors.couponName}
-                            readOnly={isLockedField || isEditableOnUsed}
+                            readOnly={isLockedField}
                         />
                     </div>
 
@@ -355,18 +368,18 @@ export const CouponModal: React.FC<CouponModalProps> = ({
                     <div className="grid grid-cols-2 gap-4">
                         <ALCombobox
                             title={t("type.label")}
-                            required={!isLockedField && !isEditableOnUsed}
+                            required={!isLockedField && !isActiveCoupon}
                             options={typeOptions}
                             value={formData.type}
                             onChange={(val) => handleChange("type", val as string)}
-                            disabled={isLockedField || isEditableOnUsed}
+                            disabled={isLockedField || isActiveCoupon}
                         />
                         <ALInput
                             title={t("discountValue")}
-                            required={!isLockedField && !isEditableOnUsed}
+                            required={!isLockedField && !isActiveCoupon}
                             type="number"
                             step="0.5"
-                            placeholder={isLockedField || isEditableOnUsed ? "" : t("discountValuePlaceholder")}
+                            placeholder={isLockedField || isActiveCoupon ? "" : t("discountValuePlaceholder")}
                             value={discountValueRaw}
                             onChange={(e) => {
                                 const val = e.target.value;
@@ -374,7 +387,7 @@ export const CouponModal: React.FC<CouponModalProps> = ({
                                 handleChange("discountValue", val === "" ? 0 : Number(val));
                             }}
                             error={errors.discountValue}
-                            readOnly={isLockedField || isEditableOnUsed}
+                            readOnly={isLockedField || isActiveCoupon}
                         />
                     </div>
 
@@ -382,12 +395,12 @@ export const CouponModal: React.FC<CouponModalProps> = ({
                     <div className="grid grid-cols-2 gap-4">
                         <ALInput
                             title={t("startTime")}
-                            required={!isLockedField && !isEditableOnUsed}
+                            required={!isLockedField && !isActiveCoupon}
                             type="datetime-local"
                             value={formData.startTime}
                             onChange={(e) => handleChange("startTime", e.target.value)}
                             error={errors.startTime}
-                            readOnly={isLockedField || isEditableOnUsed}
+                            readOnly={isLockedField || isActiveCoupon}
                         />
                         <ALInput
                             title={t("endTime")}
@@ -420,7 +433,7 @@ export const CouponModal: React.FC<CouponModalProps> = ({
                                 handleChange("maxUsage", val ? parseInt(val) : null);
                             }}
                             error={errors.maxUsage}
-                            readOnly={isLockedField}
+                            readOnly={isLockedField || isActiveCoupon}
                         />
                     </div>
 
@@ -430,7 +443,7 @@ export const CouponModal: React.FC<CouponModalProps> = ({
                             <div className="text-sm text-gray-600 space-y-1">
                                 <p><strong>{t("usedCount")}:</strong> {coupon.usedCount || 0}</p>
                                 {coupon.createdAt && (
-                                    <p><strong>{t("createdAt")}:</strong> {new Date(coupon.createdAt).toLocaleString()}</p>
+                                    <p><strong>{t("createdAt")}:</strong> {dateUtils.formatLocal(coupon.createdAt, "dd/MM/yyyy HH:mm")}</p>
                                 )}
                             </div>
                         </div>
