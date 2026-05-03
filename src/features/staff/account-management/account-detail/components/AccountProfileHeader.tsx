@@ -24,6 +24,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { PermissionGuard } from "@/components/permission-guard";
+import { useAuth } from "@/components/providers/auth-provider";
 import { Permissions } from "@/types/const";
 import { cn } from "@/lib/utils";
 import { formatPhoneToDomesticDisplay } from "@/lib/phone-format";
@@ -57,8 +58,11 @@ export const AccountProfileHeader = ({
 }: AccountProfileHeaderProps) => {
   const t = useTranslations("Account.Detail.header");
   const tStatus = useTranslations("Account.Detail.statusLabel");
+  const { userInfo } = useAuth();
   const [copiedField, setCopiedField] = useState<string | null>(null);
   const displayPhone = account.phone ? formatPhoneToDomesticDisplay(account.phone) : null;
+  const currentUserId = userInfo?.userId ? Number(userInfo.userId) : null;
+  const isCurrentUser = currentUserId !== null && currentUserId === account.accountId;
 
   // Initials for the avatar fallback
   const initials = account.fullName
@@ -195,7 +199,7 @@ export const AccountProfileHeader = ({
                   {t("activate")}
                 </DropdownMenuItem>
               )}
-              {account.accountStatus !== "INACTIVE" && (
+              {!isCurrentUser && account.accountStatus !== "INACTIVE" && (
                 <DropdownMenuItem onClick={() => onStatusChange?.("INACTIVE")}>
                   <Lock size={14} className="text-gray-500" />
                   {t("deactivate")}

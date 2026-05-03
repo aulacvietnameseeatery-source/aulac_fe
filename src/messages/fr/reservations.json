@@ -49,8 +49,10 @@
           "label": "Vos informations",
           "name": "Nom complet",
           "phone": "Numéro de téléphone *",
+          "availabilityExpired": "La vérification de disponibilité a expiré. Veuillez revérifier les tables.",
           "email": "Adresse e-mail (facultatif)",
-          "partySize": "Nombre de personnes"
+          "partySize": "Nombre de personnes",
+          "rateLimited": "Trop de tentatives. Veuillez réessayer dans un instant."
         },
         "action": {
           "book": "Réserver la table",
@@ -124,9 +126,9 @@
         "chooseCustomerType": "Choisir le type de client",
         "existingCustomer": "Client existant",
         "newCustomer": "Nouveau client",
-        "existingCustomerHint": "Entrez le numéro pour remplir automatiquement les informations",
+        "existingCustomerHint": "Entrez le numéro pour charger des informations enregistrées et masquées",
         "newCustomerHint": "Saisissez les informations de base pour envoyer la demande",
-        "existingModeNote": "Client existant : entrez d’abord le numéro de téléphone, nous remplirons les informations si elles existent.",
+        "existingModeNote": "Client existant : saisissez d’abord le numéro de téléphone. Si le client existe, nous afficherons des informations enregistrées masquées et vous pourrez modifier le nom ou l’e-mail avant l’envoi.",
         "newModeNote": "Nouveau client : veuillez renseigner les informations de base requises.",
         "newCustomerWarning": "Les nouvelles informations saisies seront utilisées pour cette demande de réservation.",
         "noFitTitle": "Aucune table en ligne ne correspond à ce créneau horaire.",
@@ -152,7 +154,8 @@
         "checkingTables": "Vérification des tables...",
         "processing": "Traitement en cours...",
         "lookup": {
-          "notFound": "Aucun client existant trouvé avec ce numéro."
+          "notFound": "Aucun client existant trouvé avec ce numéro.",
+          "emailNotFound": "Aucun e-mail enregistré trouvé"
         },
         "validation": {
           "selectCustomerType": "Veuillez choisir un type de client.",
@@ -169,8 +172,10 @@
           "created": "Demande de réservation créée avec succès !",
           "createFailed": "Impossible de créer la réservation.",
           "invalidRequest": "Les informations de réservation sont invalides.",
+          "availabilityExpired": "La vérification de disponibilité a expiré. Veuillez revérifier les tables.",
           "conflict": "Le créneau ou la table n'est plus disponible.",
           "notFound": "La ressource demandée est introuvable.",
+          "rateLimited": "Trop de tentatives. Veuillez réessayer dans un instant.",
           "serverError": "Erreur serveur. Veuillez réessayer.",
           "unexpected": "Une erreur est survenue lors de la réservation."
         }
@@ -301,9 +306,9 @@
         "chooseCustomerType": "Choisir le type de client",
         "existingCustomer": "Client existant",
         "newCustomer": "Nouveau client",
-        "existingCustomerHint": "Entrez le numéro pour remplir automatiquement les informations",
+        "existingCustomerHint": "Entrez le numéro pour charger des informations enregistrées et masquées",
         "newCustomerHint": "Saisissez les informations de base pour envoyer la demande",
-        "existingModeNote": "Client existant : entrez d’abord le numéro de téléphone, nous remplirons les informations si elles existent.",
+        "existingModeNote": "Client existant : saisissez d’abord le numéro de téléphone. Si le client existe, nous afficherons des informations enregistrées masquées et vous pourrez modifier le nom ou l’e-mail avant l’envoi.",
         "newModeNote": "Nouveau client : veuillez renseigner les informations de base requises.",
         "newCustomerWarning": "Les nouvelles informations saisies seront utilisées pour cette demande de réservation.",
         "noFitTitle": "Aucune table en ligne ne correspond à ce créneau horaire.",
@@ -330,12 +335,14 @@
         "checkingTables": "Vérification des tables...",
         "processing": "Traitement en cours...",
         "lookup": {
-          "notFound": "Aucun client existant trouvé avec ce numéro."
+          "notFound": "Aucun client existant trouvé avec ce numéro.",
+          "emailNotFound": "Aucun e-mail enregistré trouvé"
         },
         "validation": {
           "selectCustomerType": "Veuillez choisir un type de client.",
           "phoneRequired": "Veuillez saisir un numéro de téléphone.",
           "phoneInvalid": "Numéro de téléphone invalide.",
+          "emailInvalid": "Veuillez saisir une adresse e-mail valide.",
           "nameRequired": "Veuillez saisir votre nom.",
           "existingCustomerNotFound": "Informations du client existant introuvables. Veuillez vérifier le numéro de téléphone.",
           "dateRequired": "Veuillez sélectionner une date de réservation.",
@@ -347,8 +354,10 @@
           "created": "Demande de réservation créée avec succès !",
           "createFailed": "Impossible de créer la réservation.",
           "invalidRequest": "Les informations de réservation sont invalides.",
+          "availabilityExpired": "La vérification de disponibilité a expiré. Veuillez revérifier les tables.",
           "conflict": "Le créneau ou la table n'est plus disponible.",
           "notFound": "La ressource demandée est introuvable.",
+          "rateLimited": "Trop de tentatives. Veuillez réessayer dans un instant.",
           "serverError": "Erreur serveur. Veuillez réessayer.",
           "unexpected": "Une erreur est survenue lors de la réservation."
         }

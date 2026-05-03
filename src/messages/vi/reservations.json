@@ -49,8 +49,10 @@
           "label": "Thông Tin Của Bạn",
           "name": "Họ và tên",
           "phone": "Số điện thoại *",
+          "availabilityExpired": "Phiên kiểm tra bàn đã hết hạn. Vui lòng kiểm tra lại tình trạng bàn.",
           "email": "Email (Tùy chọn)",
-          "partySize": "Số lượng khách"
+          "partySize": "Số lượng khách",
+          "rateLimited": "Bạn đang thao tác quá nhanh. Hãy đợi 1 chút và thử lại."
         },
         "action": {
           "book": "Đặt Bàn Đã Chọn",
@@ -123,9 +125,9 @@
         "chooseCustomerType": "Chọn loại khách",
         "existingCustomer": "Khách cũ",
         "newCustomer": "Khách mới",
-        "existingCustomerHint": "Nhập SĐT để tự động điền thông tin",
+        "existingCustomerHint": "Nhập SĐT để tải thông tin đã lưu ở dạng che bớt",
         "newCustomerHint": "Nhập thông tin cơ bản để gửi yêu cầu đặt bàn",
-        "existingModeNote": "Khách cũ: Nhập SĐT trước, hệ thống sẽ tự điền thông tin nếu tìm thấy.",
+        "existingModeNote": "Khách cũ: Nhập SĐT trước. Nếu tìm thấy, hệ thống sẽ hiển thị tên và email đã che bớt, bạn vẫn có thể sửa trước khi gửi yêu cầu.",
         "newModeNote": "Khách mới: Vui lòng nhập đầy đủ thông tin cơ bản.",
         "noFitTitle": "Không có bàn online phù hợp cho khung giờ này.",
         "callRestaurant": "Gọi nhà hàng",
@@ -151,7 +153,8 @@
         "checkingTables": "Đang kiểm tra bàn...",
         "processing": "Đang xử lý...",
         "lookup": {
-          "notFound": "Không tìm thấy khách cũ với số điện thoại này."
+          "notFound": "Không tìm thấy khách cũ với số điện thoại này.",
+          "emailNotFound": "Không tìm thấy email đã lưu"
         },
         "validation": {
           "selectCustomerType": "Vui lòng chọn loại khách.",
@@ -168,8 +171,10 @@
           "created": "Đã tạo yêu cầu đặt bàn thành công!",
           "createFailed": "Không thể đặt bàn.",
           "invalidRequest": "Thông tin đặt bàn chưa hợp lệ.",
+          "availabilityExpired": "Phiên kiểm tra bàn đã hết hạn. Vui lòng kiểm tra lại tình trạng bàn.",
           "conflict": "Khung giờ hoặc bàn đã không còn khả dụng.",
           "notFound": "Không tìm thấy dữ liệu đặt bàn yêu cầu.",
+          "rateLimited": "Bạn đang thao tác quá nhanh. Hãy đợi 1 chút và thử lại.",
           "serverError": "Lỗi hệ thống. Vui lòng thử lại.",
           "unexpected": "Có lỗi xảy ra khi đặt bàn."
         }
@@ -299,10 +304,11 @@
         "chooseCustomerType": "Chọn loại khách",
         "existingCustomer": "Khách cũ",
         "newCustomer": "Khách mới",
-        "existingCustomerHint": "Nhập SĐT để tự động điền thông tin",
+        "existingCustomerHint": "Nhập SĐT để tải thông tin đã lưu ở dạng che bớt",
         "newCustomerHint": "Nhập thông tin cơ bản để gửi yêu cầu đặt bàn",
-        "existingModeNote": "Khách cũ: Nhập SĐT trước, hệ thống sẽ tự điền thông tin nếu tìm thấy.",
+        "existingModeNote": "Khách cũ: Nhập SĐT trước. Nếu tìm thấy, hệ thống sẽ hiển thị tên và email đã che bớt, bạn vẫn có thể sửa trước khi gửi yêu cầu.",
         "newModeNote": "Khách mới: Vui lòng nhập đầy đủ thông tin cơ bản.",
+        "newCustomerWarning": "Thông tin mới bạn nhập sẽ được dùng cho yêu cầu đặt bàn này.",
         "noFitTitle": "Không có bàn online phù hợp cho khung giờ này.",
         "callRestaurant": "Gọi nhà hàng",
         "goBack": "Quay lại",
@@ -328,12 +334,14 @@
         "checkingTables": "Đang kiểm tra bàn...",
         "processing": "Đang xử lý...",
         "lookup": {
-          "notFound": "Không tìm thấy khách cũ với số điện thoại này."
+          "notFound": "Không tìm thấy khách cũ với số điện thoại này.",
+          "emailNotFound": "Không tìm thấy email đã lưu"
         },
         "validation": {
           "selectCustomerType": "Vui lòng chọn loại khách.",
           "phoneRequired": "Vui lòng nhập Số điện thoại.",
           "phoneInvalid": "Số điện thoại không hợp lệ.",
+          "emailInvalid": "Vui lòng nhập địa chỉ email hợp lệ.",
           "nameRequired": "Vui lòng nhập Họ tên.",
           "existingCustomerNotFound": "Không tìm thấy thông tin khách cũ. Vui lòng kiểm tra lại số điện thoại.",
           "dateRequired": "Vui lòng chọn ngày đặt.",
@@ -345,8 +353,10 @@
           "created": "Đã tạo yêu cầu đặt bàn thành công!",
           "createFailed": "Không thể đặt bàn.",
           "invalidRequest": "Thông tin đặt bàn chưa hợp lệ.",
+          "availabilityExpired": "Phiên kiểm tra bàn đã hết hạn. Vui lòng kiểm tra lại tình trạng bàn.",
           "conflict": "Khung giờ hoặc bàn đã không còn khả dụng.",
           "notFound": "Không tìm thấy dữ liệu đặt bàn yêu cầu.",
+          "rateLimited": "Bạn đang thao tác quá nhanh. Hãy đợi 1 chút và thử lại.",
           "serverError": "Lỗi hệ thống. Vui lòng thử lại.",
           "unexpected": "Có lỗi xảy ra khi đặt bàn."
         }

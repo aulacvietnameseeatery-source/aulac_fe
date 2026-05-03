@@ -49,8 +49,10 @@
           "label": "Your Details",
           "name": "Full Name",
           "phone": "Phone Number *",
+          "availabilityExpired": "Availability check expired. Please check table availability again.",
           "email": "Email Address (Optional)",
-          "partySize": "Party Size"
+          "partySize": "Party Size",
+          "rateLimited": "Too many attempts. Please try again shortly."
         },
         "action": {
           "book": "Book Selected Table",
@@ -123,9 +125,9 @@
         "chooseCustomerType": "Choose customer type",
         "existingCustomer": "Returning customer",
         "newCustomer": "New customer",
-        "existingCustomerHint": "Enter phone number to auto-fill details",
+        "existingCustomerHint": "Enter phone number to load masked saved details",
         "newCustomerHint": "Enter basic information to send reservation request",
-        "existingModeNote": "Returning customer: Enter phone number first, we will auto-fill your details if found.",
+        "existingModeNote": "Returning customer: Enter phone number first. If found, we will show masked saved details and you can update name or email before sending.",
         "newModeNote": "New customer: Please provide the required basic information.",
         "newCustomerWarning": "The new information you enter will be used for this reservation request.",
         "noFitTitle": "No suitable table is available online for this time slot.",
@@ -152,7 +154,8 @@
         "checkingTables": "Checking table availability...",
         "processing": "Processing...",
         "lookup": {
-          "notFound": "No returning customer found with this phone number."
+          "notFound": "No returning customer found with this phone number.",
+          "emailNotFound": "No saved email found"
         },
         "validation": {
           "selectCustomerType": "Please choose a customer type.",
@@ -170,8 +173,10 @@
           "created": "Reservation request created successfully!",
           "createFailed": "Unable to create reservation.",
           "invalidRequest": "Invalid reservation information.",
+          "availabilityExpired": "Availability check expired. Please check table availability again.",
           "conflict": "Selected slot is no longer available.",
           "notFound": "Requested reservation resource was not found.",
+          "rateLimited": "Too many attempts. Please try again shortly.",
           "serverError": "Server error occurred. Please try again.",
           "unexpected": "An error occurred while creating reservation."
         }
@@ -301,9 +306,9 @@
         "chooseCustomerType": "Choose customer type",
         "existingCustomer": "Returning customer",
         "newCustomer": "New customer",
-        "existingCustomerHint": "Enter phone number to auto-fill details",
+        "existingCustomerHint": "Enter phone number to load masked saved details",
         "newCustomerHint": "Enter basic information to send reservation request",
-        "existingModeNote": "Returning customer: Enter phone number first, we will auto-fill your details if found.",
+        "existingModeNote": "Returning customer: Enter phone number first. If found, we will show masked saved details and you can update name or email before sending.",
         "newModeNote": "New customer: Please provide the required basic information.",
         "newCustomerWarning": "The new information you enter will be used for this reservation request.",
         "noFitTitle": "No suitable table is available online for this time slot.",
@@ -331,12 +336,14 @@
         "checkingTables": "Checking table availability...",
         "processing": "Processing...",
         "lookup": {
-          "notFound": "No returning customer found with this phone number."
+          "notFound": "No returning customer found with this phone number.",
+          "emailNotFound": "No saved email found"
         },
         "validation": {
           "selectCustomerType": "Please choose a customer type.",
           "phoneRequired": "Please enter a phone number.",
           "phoneInvalid": "Invalid phone number format.",
+          "emailInvalid": "Please enter a valid email address.",
           "nameRequired": "Please enter your name.",
           "existingCustomerNotFound": "Returning customer info not found. Please check the phone number.",
           "dateRequired": "Please select a reservation date.",
@@ -348,8 +355,10 @@
           "created": "Reservation request created successfully!",
           "createFailed": "Unable to create reservation.",
           "invalidRequest": "Invalid reservation information.",
+          "availabilityExpired": "Availability check expired. Please check table availability again.",
           "conflict": "Selected slot is no longer available.",
           "notFound": "Requested reservation resource was not found.",
+          "rateLimited": "Too many attempts. Please try again shortly.",
           "serverError": "Server error occurred. Please try again.",
           "unexpected": "An error occurred while creating reservation."
         }

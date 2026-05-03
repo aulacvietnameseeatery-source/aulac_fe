@@ -5,7 +5,7 @@ export interface CustomerProfileDto {
     email: string | null;
     isMember: boolean;
     loyaltyPoints: number;
-    createdAt: string;
+    createdAt: string | null;
     orderCount: number;
     reservationCount: number;
     lastOrderTime: string | null;

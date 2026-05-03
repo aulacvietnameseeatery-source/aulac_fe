@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { Eye, Edit, Trash2, X, Power, PackagePlus, History } from "lucide-react";
+import { Eye, Edit, Trash2, X, Power, PackagePlus, History, Archive } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,7 +10,7 @@ import { PermissionGuard } from "@/components/permission-guard";
 import { MoreHorizontal } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-export type BuiltInActionType = "view" | "edit" | "delete" | "cancel" | "deactivate" | "adjust-stock" | "history";
+export type BuiltInActionType = "view" | "edit" | "delete" | "archive" | "cancel" | "deactivate" | "adjust-stock" | "history";
 
 export interface TableAction<T = any> {
   action: BuiltInActionType;
@@ -29,6 +29,7 @@ const ACTION_ICONS: Record<BuiltInActionType, { icon: React.ReactNode; colorClas
   view: { icon: <Eye size={18} />, colorClass: "text-gray-400 hover:text-blue-600" },
   edit: { icon: <Edit size={18} />, colorClass: "text-gray-400 hover:text-blue-600" },
   delete: { icon: <Trash2 size={18} />, colorClass: "text-red-500 hover:text-red-600" },
+  archive: { icon: <Archive size={18} />, colorClass: "text-amber-500 hover:text-amber-600" },
   cancel: { icon: <X size={18} />, colorClass: "text-red-500 hover:text-red-600" },
   deactivate: { icon: <Power size={18} />, colorClass: "text-red-500 hover:text-red-600" },
   "adjust-stock": { icon: <PackagePlus size={18} />, colorClass: "text-green-600 hover:text-green-700" },

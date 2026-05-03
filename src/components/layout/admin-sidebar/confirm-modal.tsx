@@ -14,6 +14,8 @@ interface ConfirmModalProps {
     cancelText?: string;
     variant?: "danger" | "info" | "warning";
     isLoading?: boolean;
+    confirmDisabled?: boolean;
+    children?: React.ReactNode;
 }
 
 export function ConfirmModal({
@@ -26,6 +28,8 @@ export function ConfirmModal({
     cancelText = "Cancel",
     variant = "danger",
     isLoading = false,
+    confirmDisabled = false,
+    children,
 }: ConfirmModalProps) {
     if (!isOpen) return null;
 
@@ -100,6 +104,12 @@ export function ConfirmModal({
                                     </p>
                                 </div>
 
+                                {children && (
+                                    <div className="w-full">
+                                        {children}
+                                    </div>
+                                )}
+
                                 {/* Actions */}
                                 <div className="flex items-center gap-3 w-full mt-2">
                                     <button
@@ -111,7 +121,7 @@ export function ConfirmModal({
                                     </button>
                                     <button
                                         onClick={onConfirm}
-                                        disabled={isLoading}
+                                        disabled={isLoading || confirmDisabled}
                                         className={`flex-1 px-4 py-2.5 font-medium rounded-xl transition-all shadow-lg ${styles.button} disabled:opacity-50 flex items-center justify-center gap-2`}
                                     >
                                         {isLoading ? (

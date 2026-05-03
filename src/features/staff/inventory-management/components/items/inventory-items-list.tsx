@@ -25,11 +25,12 @@ export function InventoryItemsList() {
   const items = useMemo(() => data?.pageData ?? [], [data]);
 
   const [stockCardItem, setStockCardItem] = useState<InventoryItemDto | null>(null);
+  const categoryEntityLabel = t("table.category");
 
   const categoryLookup = useLookupCrud({
     typeId: LOOKUP_TYPE.InventoryCategory,
     queryKey: ["lookups", "inventory-category"],
-    entityLabel: "Category",
+    entityLabel: categoryEntityLabel,
   });
 
   const getItemActions = useCallback(

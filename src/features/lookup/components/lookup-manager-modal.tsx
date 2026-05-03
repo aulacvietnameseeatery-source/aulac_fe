@@ -2,6 +2,7 @@
 
 import React, { useState, useCallback, useRef, useEffect } from "react";
 import { Plus, Pencil, Trash2, Check, X, GripVertical, TagIcon, Loader2, Sparkles } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { Dialog } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { ALInput } from "@/components/ui/al-input";
@@ -84,6 +85,7 @@ const LookupManagerModal: React.FC<LookupManagerModalProps> = ({
   onCreated,
   onTranslate,
 }) => {
+  const t = useTranslations("Lookup");
   // ── Form state ──
   const [formMode, setFormMode] = useState<"idle" | "add" | "edit">("idle");
   const [editTarget, setEditTarget] = useState<LookupValueDto | null>(null);
@@ -399,17 +401,22 @@ const LookupManagerModal: React.FC<LookupManagerModalProps> = ({
     form.nameI18n.en.trim() ||
     form.nameI18n.vi.trim() ||
     form.nameI18n.fr.trim();
+  const activeLocaleMeta = LOCALES.find((locale) => locale.key === activeLang);
 
   // ── Locale coverage badges for a list item ──
   const LocaleBadges = ({ item }: { item: LookupValueDto }) => (
     <div className="flex gap-0.5">
-      {LOCALES.map(({ key, flag }) => {
+      {LOCALES.map(({ key, flag, label }) => {
         const hasName = !!item.i18n?.[key];
         const hasDesc = !!item.descriptionI18n?.[key];
         return (
           <span
             key={key}
-            data-tooltip-content={`${flag} name: ${item.i18n?.[key] || "—"} | description: ${item.descriptionI18n?.[key] || "—"}`}
+            data-tooltip-content={t("localeBadgeTooltip", {
+              locale: `${flag} ${label}`,
+              name: item.i18n?.[key] || "—",
+              description: item.descriptionI18n?.[key] || "—",
+            })}
             data-tooltip-id="my-tooltip"
             className={cn(
               "text-[10px] px-1 py-0 rounded leading-4 border select-none",
@@ -432,12 +439,12 @@ const LookupManagerModal: React.FC<LookupManagerModalProps> = ({
       <Dialog
         open={isOpen}
         onClose={onClose}
-        title={`Manage ${entityLabel}s`}
+        title={t("manageTitle", { entityLabel })}
         width="900px"
         footer={
           <div className="flex justify-end w-full">
             <Button type="button" variant="outline" onClick={onClose}>
-              Close
+              {t("close")}
             </Button>
           </div>
         }
@@ -455,7 +462,7 @@ const LookupManagerModal: React.FC<LookupManagerModalProps> = ({
             {/* List header */}
             <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 shrink-0">
               <span className="text-sm font-semibold text-gray-700">
-                {items.length} {entityLabel}{items.length !== 1 ? "s" : ""}
+                {t("itemCount", { count: items.length })}
               </span>
               <div className="flex items-center gap-2">
                 {hasPendingSortChanges && formMode === "idle" && (
@@ -467,7 +474,7 @@ const LookupManagerModal: React.FC<LookupManagerModalProps> = ({
                       onClick={handleDiscardSortChanges}
                       disabled={isSaving}
                     >
-                      Discard
+                      {t("discard")}
                     </Button>
                     <Button
                       type="button"
@@ -477,7 +484,7 @@ const LookupManagerModal: React.FC<LookupManagerModalProps> = ({
                       isLoading={isSaving}
                       disabled={isSaving}
                     >
-                      Save Order
+                      {t("saveOrder")}
                     </Button>
                   </>
                 )}
@@ -490,7 +497,7 @@ const LookupManagerModal: React.FC<LookupManagerModalProps> = ({
                     disabled={isSaving}
                   >
                     <Plus size={13} className="mr-1" />
-                    Add {entityLabel}
+                    {t("addEntity", { entityLabel })}
                   </Button>
                 )}
               </div>
@@ -499,19 +506,19 @@ const LookupManagerModal: React.FC<LookupManagerModalProps> = ({
             {/* Legend */}
             <div className="flex items-center gap-3 px-4 py-2 bg-gray-50 border-b border-gray-100 shrink-0">
               <span className="text-[10px] text-gray-400 font-medium">
-                Locale coverage:
+                {t("localeCoverage")}
               </span>
               <span className="flex items-center gap-1 text-[10px] text-emerald-600">
                 <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block" />
-                name + desc
+                {t("coverageFull")}
               </span>
               <span className="flex items-center gap-1 text-[10px] text-blue-500">
                 <span className="w-2 h-2 rounded-full bg-blue-400 inline-block" />
-                name only
+                {t("coverageNameOnly")}
               </span>
               <span className="flex items-center gap-1 text-[10px] text-gray-400">
                 <span className="w-2 h-2 rounded-full bg-gray-300 inline-block" />
-                missing
+                {t("coverageMissing")}
               </span>
             </div>
 
@@ -519,12 +526,12 @@ const LookupManagerModal: React.FC<LookupManagerModalProps> = ({
             <div className="flex-1 overflow-y-auto">
               {isLoading ? (
                 <div className="flex items-center justify-center h-full text-sm text-gray-400">
-                  Loading…
+                  {t("loading")}
                 </div>
               ) : items.length === 0 ? (
                 <div className="flex flex-col items-center justify-center h-full gap-2 text-gray-400 py-8">
                   <TagIcon size={28} className="opacity-30" />
-                  <p className="text-sm">No {entityLabel.toLowerCase()}s yet.</p>
+                  <p className="text-sm">{t("emptyState")}</p>
                   {isConfigurable && (
                     <Button
                       type="button"
@@ -533,7 +540,7 @@ const LookupManagerModal: React.FC<LookupManagerModalProps> = ({
                       onClick={handleStartAdd}
                     >
                       <Plus size={13} className="mr-1" />
-                      Add first {entityLabel}
+                      {t("addFirstEntity", { entityLabel })}
                     </Button>
                   )}
                 </div>
@@ -600,7 +607,7 @@ const LookupManagerModal: React.FC<LookupManagerModalProps> = ({
                         >
                           <button
                             type="button"
-                            data-tooltip-content={`Edit ${entityLabel}`}
+                            data-tooltip-content={t("editEntity", { entityLabel })}
                             data-tooltip-id="my-tooltip"
                             onClick={() => handleStartEdit(item)}
                             className="p-1.5 rounded hover:bg-white hover:shadow-sm text-gray-400 hover:text-indigo-600 transition-colors"
@@ -610,7 +617,7 @@ const LookupManagerModal: React.FC<LookupManagerModalProps> = ({
                           {isConfigurable && (
                             <button
                               type="button"
-                              data-tooltip-content={`Delete ${entityLabel}`}
+                              data-tooltip-content={t("deleteEntity", { entityLabel })}
                               data-tooltip-id="my-tooltip"
                               onClick={() => handleDeleteClick(item)}
                               className="p-1.5 rounded hover:bg-red-50 text-gray-400 hover:text-red-500 transition-colors"
@@ -633,7 +640,7 @@ const LookupManagerModal: React.FC<LookupManagerModalProps> = ({
               {/* Form header */}
               <div className="flex items-center justify-between px-5 py-3 border-b border-gray-100 shrink-0">
                 <h3 className="text-sm font-semibold text-gray-800">
-                  {formMode === "add" ? `New ${entityLabel}` : `Edit ${entityLabel}`}
+                  {formMode === "add" ? t("newEntity", { entityLabel }) : t("editEntity", { entityLabel })}
                   {editTarget && (
                     <span className="ml-2 font-mono text-[11px] text-gray-400 font-normal">
                       #{editTarget.valueId}
@@ -652,14 +659,14 @@ const LookupManagerModal: React.FC<LookupManagerModalProps> = ({
                       onClick={handleAutoTranslate}
                       disabled={isTranslating || !form.nameI18n[activeLang].trim()}
                       className="group h-auto px-2.5 py-1 text-xs font-semibold bg-purple-50 hover:bg-purple-100 border-purple-200"
-                      data-tooltip-content={`Translate content from ${activeLang.toUpperCase()}`}
+                      data-tooltip-content={t("translateFrom", { locale: activeLang.toUpperCase() })}
                     >
                       {isTranslating ? (
                         <Loader2 size={13} className="animate-spin text-purple-600" />
                       ) : (
                         <Sparkles size={13} className="text-purple-600 group-hover:text-purple-800 transition-colors" />
                       )}
-                      <span className="hidden sm:inline ml-1 text-purple-700">Auto Translate</span>
+                      <span className="hidden sm:inline ml-1 text-purple-700">{t("autoTranslate")}</span>
                     </Button>
                   )}
 
@@ -692,19 +699,19 @@ const LookupManagerModal: React.FC<LookupManagerModalProps> = ({
               <div className="flex-1 overflow-y-auto px-5 py-4 space-y-4">
                 {/* Locale hint */}
                 <p className="text-xs text-gray-400">
-                  Editing <span className="font-semibold text-gray-600">{LOCALES.find(l => l.key === activeLang)?.flag} {activeLang.toUpperCase()}</span>.
-                  Switch tabs to fill other languages.
+                  {t("editingLocale", { locale: `${activeLocaleMeta?.flag ?? ""} ${activeLang.toUpperCase()}`.trim() })}{" "}
+                  {t("switchTabs")}
                   {activeLang === "en" && (
-                    <span className="text-indigo-500"> EN name is required.</span>
+                    <span className="text-indigo-500"> {t("englishNameRequired")}</span>
                   )}
                 </p>
 
                 {/* Name */}
                 <ALInput
                   ref={nameInputRef}
-                  title={`Name (${activeLang.toUpperCase()})`}
+                  title={t("nameLabel", { locale: activeLang.toUpperCase() })}
                   required={activeLang === "en"}
-                  placeholder={getNamePlaceholder(activeLang, entityLabel)}
+                  placeholder={t("namePlaceholder")}
                   value={form.nameI18n[activeLang]}
                   onChange={(e) => updateName(e.target.value)}
                   onKeyDown={handleKeyDown}
@@ -712,8 +719,8 @@ const LookupManagerModal: React.FC<LookupManagerModalProps> = ({
 
                 {/* Description */}
                 <ALInput
-                  title={`Description (${activeLang.toUpperCase()})`}
-                  placeholder={getDescPlaceholder(activeLang)}
+                  title={t("descriptionLabel", { locale: activeLang.toUpperCase() })}
+                  placeholder={t("descriptionPlaceholder")}
                   value={form.descriptionI18n[activeLang]}
                   onChange={(e) => updateDescription(e.target.value)}
                   onKeyDown={handleKeyDown}
@@ -721,9 +728,9 @@ const LookupManagerModal: React.FC<LookupManagerModalProps> = ({
 
                 {/* Sort order */}
                 <ALInput
-                  title="Sort Order"
+                  title={t("sortOrder")}
                   type="number"
-                  placeholder="e.g. 1"
+                  placeholder={t("sortOrderPlaceholder")}
                   value={form.sortOrder}
                   onChange={(e) =>
                     setForm((f) => ({ ...f, sortOrder: e.target.value }))
@@ -735,20 +742,20 @@ const LookupManagerModal: React.FC<LookupManagerModalProps> = ({
                 <div className="rounded-lg border border-gray-200 overflow-hidden">
                   <div className="px-3 py-2 bg-gray-50 border-b border-gray-100">
                     <span className="text-xs font-medium text-gray-500 uppercase tracking-wide">
-                      Translation summary
+                      {t("translationSummary")}
                     </span>
                   </div>
                   <table className="w-full text-xs">
                     <thead>
                       <tr className="border-b border-gray-100">
                         <th className="px-3 py-1.5 text-left font-medium text-gray-400 w-12">
-                          Locale
+                          {t("localeColumn")}
                         </th>
                         <th className="px-3 py-1.5 text-left font-medium text-gray-400">
-                          Name
+                          {t("nameColumn")}
                         </th>
                         <th className="px-3 py-1.5 text-left font-medium text-gray-400">
-                          Description
+                          {t("descriptionColumn")}
                         </th>
                       </tr>
                     </thead>
@@ -769,12 +776,12 @@ const LookupManagerModal: React.FC<LookupManagerModalProps> = ({
                           </td>
                           <td className="px-3 py-1.5 text-gray-700 max-w-32.5 truncate">
                             {form.nameI18n[key].trim() || (
-                              <span className="text-gray-300 italic">empty</span>
+                              <span className="text-gray-300 italic">{t("empty")}</span>
                             )}
                           </td>
                           <td className="px-3 py-1.5 text-gray-500 max-w-32.5 truncate">
                             {form.descriptionI18n[key].trim() || (
-                              <span className="text-gray-300 italic">empty</span>
+                              <span className="text-gray-300 italic">{t("empty")}</span>
                             )}
                           </td>
                         </tr>
@@ -794,7 +801,7 @@ const LookupManagerModal: React.FC<LookupManagerModalProps> = ({
                   disabled={isSaving}
                 >
                   <X size={13} className="mr-1" />
-                  Cancel
+                  {t("cancel")}
                 </Button>
                 <Button
                   type="button"
@@ -805,7 +812,7 @@ const LookupManagerModal: React.FC<LookupManagerModalProps> = ({
                   disabled={!isFormValid || isSaving}
                 >
                   <Check size={13} className="mr-1" />
-                  {formMode === "add" ? `Create ${entityLabel}` : "Save Changes"}
+                  {formMode === "add" ? t("createEntity", { entityLabel }) : t("saveChanges")}
                 </Button>
               </div>
             </div>
@@ -816,11 +823,11 @@ const LookupManagerModal: React.FC<LookupManagerModalProps> = ({
             <div className="flex-1 flex flex-col items-center justify-center gap-3 text-gray-400 bg-gray-50/40">
               <div className="flex items-center gap-1.5">
                 <Pencil size={16} className="opacity-30" />
-                <span className="text-sm">Select an item to edit</span>
+                <span className="text-sm">{t("selectItemToEdit")}</span>
               </div>
               {isConfigurable && (
                 <>
-                  <p className="text-xs text-gray-300">or</p>
+                  <p className="text-xs text-gray-300">{t("or")}</p>
                   <Button
                     type="button"
                     variant="outline"
@@ -828,7 +835,7 @@ const LookupManagerModal: React.FC<LookupManagerModalProps> = ({
                     onClick={handleStartAdd}
                   >
                     <Plus size={13} className="mr-1" />
-                    Add {entityLabel}
+                    {t("addEntity", { entityLabel })}
                   </Button>
                 </>
               )}
@@ -843,8 +850,8 @@ const LookupManagerModal: React.FC<LookupManagerModalProps> = ({
         onClose={() => setDeleteTarget(null)}
         onConfirm={handleConfirmDelete}
         variant="delete"
-        title={`Delete ${entityLabel}`}
-        message={`Are you sure you want to delete "${deleteTarget?.valueName}"? This action cannot be undone.`}
+        title={t("deleteEntity", { entityLabel })}
+        message={t("deleteMessage", { valueName: deleteTarget?.valueName ?? "" })}
         isLoading={isDeleting}
       />
     </>

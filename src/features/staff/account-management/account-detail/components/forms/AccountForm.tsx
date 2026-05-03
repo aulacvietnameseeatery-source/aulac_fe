@@ -31,6 +31,7 @@ interface AccountFormProps {
   isSubmitting: boolean;
   onSubmit: (data: FormValues) => void;
   onCancel: () => void;
+  onViewDetails?: () => void;
 }
 
 // ============================================================
@@ -44,6 +45,7 @@ export const AccountForm = ({
   isSubmitting,
   onSubmit,
   onCancel,
+  onViewDetails,
 }: AccountFormProps) => {
   const isCreate = mode === "create";
   const tForm = useTranslations(isCreate ? "Account.Create.form" : "Account.Edit.form");
@@ -149,6 +151,16 @@ export const AccountForm = ({
 
         {/* Actions */}
         <div className="flex items-center justify-end gap-3 pt-3 border-gray-100">
+          {!isCreate && account && onViewDetails && (
+            <Button
+              type="button"
+              onClick={onViewDetails}
+              disabled={isSubmitting}
+              variant="outline"
+            >
+              {tForm("viewDetail")}
+            </Button>
+          )}
           <Button
             type="button"
             onClick={onCancel}

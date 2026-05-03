@@ -519,6 +519,7 @@
         "view": "Xem chi tiết",
         "edit": "Chỉnh sửa",
         "delete": "Xóa",
+        "archive": "Lưu trữ",
         "cancel": "Hủy",
         "deactivate": "Vô hiệu hóa",
         "adjust-stock": "Điều chỉnh tồn kho",
@@ -1283,6 +1284,63 @@
       "deleteError": "Có lỗi xảy ra khi xóa"
     }
   },
+  "Lookup": {
+    "manageAction": "Quản lý",
+    "manageTitle": "Quản lý {entityLabel}",
+    "close": "Đóng",
+    "itemCount": "{count} mục",
+    "discard": "Bỏ thay đổi",
+    "saveOrder": "Lưu thứ tự",
+    "addEntity": "Thêm {entityLabel}",
+    "localeCoverage": "Độ phủ ngôn ngữ:",
+    "coverageFull": "tên + mô tả",
+    "coverageNameOnly": "chỉ tên",
+    "coverageMissing": "thiếu",
+    "loading": "Đang tải…",
+    "emptyState": "Chưa có mục nào.",
+    "addFirstEntity": "Thêm {entityLabel} đầu tiên",
+    "editEntity": "Chỉnh sửa {entityLabel}",
+    "deleteEntity": "Xóa {entityLabel}",
+    "newEntity": "{entityLabel} mới",
+    "autoTranslate": "Dịch tự động",
+    "translateFrom": "Dịch nội dung từ {locale}",
+    "editingLocale": "Đang chỉnh sửa {locale}.",
+    "switchTabs": "Chuyển tab để nhập các ngôn ngữ khác.",
+    "englishNameRequired": "Bắt buộc có tên tiếng Anh.",
+    "nameLabel": "Tên ({locale})",
+    "namePlaceholder": "Nhập tên hiển thị",
+    "descriptionLabel": "Mô tả ({locale})",
+    "descriptionPlaceholder": "Mô tả ngắn hiển thị trong danh sách chọn…",
+    "sortOrder": "Thứ tự sắp xếp",
+    "sortOrderPlaceholder": "VD: 1",
+    "translationSummary": "Tổng hợp bản dịch",
+    "localeColumn": "Ngôn ngữ",
+    "nameColumn": "Tên",
+    "descriptionColumn": "Mô tả",
+    "empty": "trống",
+    "cancel": "Hủy",
+    "createEntity": "Tạo {entityLabel}",
+    "saveChanges": "Lưu thay đổi",
+    "selectItemToEdit": "Chọn một mục để chỉnh sửa",
+    "or": "hoặc",
+    "deleteMessage": "Bạn có chắc chắn muốn xóa \"{valueName}\"? Hành động này không thể hoàn tác.",
+    "localeBadgeTooltip": "{locale} tên: {name} | mô tả: {description}",
+    "toast": {
+      "createdTitle": "Đã tạo {entityLabel}",
+      "createdDescription": "Đã tạo \"{valueName}\".",
+      "createError": "Không thể tạo {entityLabel}",
+      "updatedTitle": "Đã cập nhật {entityLabel}",
+      "updatedDescription": "Đã lưu \"{valueName}\".",
+      "updateError": "Không thể cập nhật {entityLabel}",
+      "deletedTitle": "Đã xóa {entityLabel}",
+      "deleteError": "Không thể xóa {entityLabel}",
+      "reorderedTitle": "Đã cập nhật thứ tự {entityLabel}",
+      "reorderedDescription": "Đã sắp xếp lại {count} mục.",
+      "reorderError": "Không thể sắp xếp lại {entityLabel}",
+      "translateSuccess": "Dịch nội dung thành công!",
+      "translateError": "Dịch tự động thất bại"
+    }
+  },
   "Role": {
     "List": {
       "title": "Danh sách Vai trò",
@@ -1305,24 +1363,30 @@
       "actions": {
         "view": "Xem chi tiết",
         "edit": "Sửa vai trò",
-        "delete": "Xóa vai trò"
+        "delete": "Lưu trữ vai trò"
       },
       "loading": "Đang tải dữ liệu...",
       "deleteModal": {
-        "title": "Xóa Vai trò",
-        "message": "Bạn có chắc chắn muốn xóa vai trò này không? Hành động này không thể hoàn tác.",
-        "confirm": "Xóa",
+        "title": "Lưu trữ Vai trò",
+        "message": "Vai trò đã lưu trữ sẽ không thể được gán cho nhân viên mới.",
+        "messageWithReplacement": "Vai trò này đang được gán cho {count} tài khoản nhân viên. Hãy chọn một vai trò đang hoạt động để chuyển họ trước khi lưu trữ.",
+        "replacementLabel": "Vai trò thay thế",
+        "replacementPlaceholder": "Chọn vai trò đang hoạt động...",
+        "replacementRequired": "Hãy chọn vai trò thay thế trước khi lưu trữ vai trò này.",
+        "noReplacementRoles": "Không có vai trò đang hoạt động nào khả dụng để thay thế.",
+        "confirm": "Lưu trữ",
         "cancel": "Hủy"
       },
       "notifications": {
-        "deleteSuccess": "Xóa vai trò thành công",
-        "deleteError": "Có lỗi xảy ra khi xóa vai trò",
-        "deleteHasDependencies": "Không thể xóa vai trò đang được gán cho nhân viên",
-        "batchDeleteSuccess": "Đã xóa {count} vai trò thành công",
-        "batchDeleteError": "Có lỗi xảy ra khi xóa vai trò"
+        "deleteSuccess": "Lưu trữ vai trò thành công",
+        "deleteError": "Có lỗi xảy ra khi lưu trữ vai trò",
+        "deleteHasDependencies": "Hãy chọn vai trò thay thế để lưu trữ vai trò vẫn còn nhân viên được gán",
+        "loadReplacementRolesError": "Không thể tải danh sách vai trò đang hoạt động để chuyển nhân viên",
+        "batchDeleteSuccess": "Đã lưu trữ {count} vai trò thành công",
+        "batchDeleteError": "Có lỗi xảy ra khi lưu trữ vai trò"
       },
       "batchActions": {
-        "delete": "Xóa"
+        "delete": "Lưu trữ"
       }
     },
     "Detail": {

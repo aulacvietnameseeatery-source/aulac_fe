@@ -10,11 +10,12 @@ export interface TableAvailabilityDto {
 
 export interface CreateReservationRequest {
     customerId?: number;
-    customerName: string;
+    customerName?: string;
     phone: string;
     email?: string;
     partySize: number;
     reservedTime: string; // ISO string
+    bookingToken?: string;
     notes?: string;
 }
 
@@ -26,16 +27,14 @@ export interface ReservationFitCheckRequest {
 export interface ReservationFitCheckResponse {
     canBookOnline: boolean;
     message?: string;
+    bookingToken?: string;
 }
 
-export interface PublicCustomerDto {
+export interface PublicCustomerLookupDto {
     customerId: number;
-    fullName?: string | null;
     phone: string;
-    email?: string | null;
-    isMember?: boolean | null;
-    loyaltyPoints?: number | null;
-    createdAt?: string | null;
+    maskedName?: string | null;
+    maskedEmail?: string | null;
 }
 
 export interface ReservationResponseDto {

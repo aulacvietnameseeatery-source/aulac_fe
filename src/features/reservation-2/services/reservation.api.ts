@@ -2,7 +2,7 @@ import { api } from "@/lib/http";
 import { ApiResponse } from "@/types/api-response.types";
 import {
     CreateReservationRequest,
-    PublicCustomerDto,
+    PublicCustomerLookupDto,
     ReservationFitCheckRequest,
     ReservationFitCheckResponse,
     ReservationResponseDto,
@@ -10,7 +10,7 @@ import {
 
 export const reservationApi = {
     getCustomerByPhone: (phone: string) =>
-        api.get<ApiResponse<PublicCustomerDto>>(`/api/public/customers/phone/${encodeURIComponent(phone)}`),
+        api.get<ApiResponse<PublicCustomerLookupDto>>(`/api/public/customers/phone/${encodeURIComponent(phone)}`),
 
     fitCheck: (body: ReservationFitCheckRequest) =>
         api.post<ApiResponse<ReservationFitCheckResponse>>("/api/public/reservations/fit", body),

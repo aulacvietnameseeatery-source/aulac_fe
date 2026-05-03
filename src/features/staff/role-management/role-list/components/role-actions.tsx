@@ -9,7 +9,7 @@ interface RoleActionsProps {
   role: RoleDto;
   onView: (role: RoleDto) => void;
   onEdit: (role: RoleDto) => void;
-  onDelete: (role: RoleDto) => void;
+  onArchive: (role: RoleDto) => void;
 }
 
 import { TableActionColumn, TableAction } from "@/components/ui/table/table-action-column";
@@ -18,7 +18,7 @@ export const RoleActions = ({
   role, 
   onView, 
   onEdit, 
-  onDelete 
+  onArchive 
 }: RoleActionsProps) => {
 
     const actions: TableAction<RoleDto>[] = [
@@ -33,8 +33,8 @@ export const RoleActions = ({
         permission: Permissions.UpdateRole
       },
       {
-        action: "delete",
-        onClick: onDelete,
+        action: "archive",
+        onClick: onArchive,
         permission: Permissions.DeleteRole
       }
     ];

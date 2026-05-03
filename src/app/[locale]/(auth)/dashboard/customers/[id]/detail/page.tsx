@@ -7,7 +7,6 @@ import { customerDetailService } from "@/features/staff/customer-management/serv
 import { CustomerProfileDto } from "@/features/staff/customer-management/types/customer-detail-types";
 import { useCustomerOrders } from "@/features/staff/customer-management/hooks/use-customer-orders";
 import { Badge } from "@/components/ui/badge";
-import dayjs from "dayjs";
 import { Button } from "@/components/ui/button";
 import { OrderDetailModal } from "@/features/staff/customer-management/components/order-detail-modal";
 import { CustomerOrderCard } from "@/features/staff/customer-management/components/customer-order-card";
@@ -19,7 +18,9 @@ export default function CustomerDetailPage() {
     const t = useTranslations("Customer.Detail");
     const params = useParams();
     const router = useRouter();
-    const customerId = Number(params.id);
+    const rawCustomerId = Array.isArray(params.id) ? params.id[0] : params.id;
+    const customerId = Number(rawCustomerId);
+    const hasValidCustomerId = Number.isFinite(customerId) && customerId > 0;
 
     // Profile State
     const [profile, setProfile] = useState<CustomerProfileDto | null>(null);
@@ -33,7 +34,9 @@ export default function CustomerDetailPage() {
     const [orderType, setOrderType] = useState<string>("");
 
     // Hooks
-    const { orders, isLoading: isOrdersLoading, totalCount, paginationInfo, onDataChange } = useCustomerOrders(customerId);
+    const { orders, isLoading: isOrdersLoading, totalCount, paginationInfo, onDataChange } = useCustomerOrders(
+        hasValidCustomerId ? customerId : 0
+    );
 
     const { page: currentPage, pageSize } = paginationInfo;
 
@@ -66,11 +69,36 @@ export default function CustomerDetailPage() {
     const totalPages = Math.ceil(totalCount / pageSize) || 1;
 
     useEffect(() => {
-        if (!customerId) return;
+        if (!hasValidCustomerId) {
+            setProfile(null);
+            setIsLoadingProfile(false);
+            return;
+        }
+
+        let isMounted = true;
+        setIsLoadingProfile(true);
+
         customerDetailService.getProfile(customerId)
-            .then(setProfile)
-            .finally(() => setIsLoadingProfile(false));
-    }, [customerId]);
+            .then((data) => {
+                if (isMounted) {
+                    setProfile(data);
+                }
+            })
+            .catch(() => {
+                if (isMounted) {
+                    setProfile(null);
+                }
+            })
+            .finally(() => {
+                if (isMounted) {
+                    setIsLoadingProfile(false);
+                }
+            });
+
+        return () => {
+            isMounted = false;
+        };
+    }, [customerId, hasValidCustomerId]);
 
     const formatCurrency = (val: number) => {
         return new Intl.NumberFormat('fr-CH', { 
@@ -84,6 +112,10 @@ export default function CustomerDetailPage() {
         const dateStringWithZ = utcDateString.endsWith('Z') ? utcDateString : `${utcDateString}Z`;
         return dateStringWithZ;
     };
+
+    const joinedDate = profile?.createdAt
+        ? dateUtils.formatLocal(getUtcDateString(profile.createdAt), "dd/MM/yyyy")
+        : "-";
       
     // This function receives the action parameter from TablePagination.
     const handlePageChange = (action: 'first' | 'prev' | 'next' | 'last') => {
@@ -142,7 +174,7 @@ export default function CustomerDetailPage() {
                     <div className="flex flex-wrap items-center gap-x-5 gap-y-2 mt-3 text-sm font-medium text-slate-500">
                         <div className="flex items-center gap-1.5"><Phone size={14} className="text-slate-400"/> {profile.phone || t('noPhone')}</div>
                         {profile.email && <div className="flex items-center gap-1.5"><Mail size={14} className="text-slate-400"/> {profile.email}</div>}
-                        <div className="flex items-center gap-1.5"><CalendarDays size={14} className="text-slate-400"/> {t('joined')}: {dateUtils.formatLocal(getUtcDateString(profile.createdAt), "dd/MM/yyyy")}</div>
+                        <div className="flex items-center gap-1.5"><CalendarDays size={14} className="text-slate-400"/> {t('joined')}: {joinedDate}</div>
                     </div>
                 </div>
 

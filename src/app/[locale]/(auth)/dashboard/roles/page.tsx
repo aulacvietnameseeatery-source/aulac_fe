@@ -1,34 +1,98 @@
 "use client";
 
-import React, { Suspense, useCallback, useMemo, useState } from "react";
+import React, { Suspense, useCallback, useEffect, useMemo, useState } from "react";
 import { Loader2, Plus } from "lucide-react";
 import { BaseTable } from "@/components/ui/table/base-table";
 import { TableColumn } from "@/types/table.types";
 import { RoleDto, RoleActions, useRoleList } from "@/features/staff/role-management/role-list";
-import { deleteRole } from "@/features/staff/role-management/role-list/services/role.service";
+import {
+  archiveRole,
+  getActiveRoles,
+  type ActiveRoleOption,
+} from "@/features/staff/role-management/role-list/services/role.service";
 import { toast } from "sonner";
-import { useTranslations, useLocale } from "next-intl";
+import { useTranslations } from "next-intl";
 import { ConfirmModal } from "@/components/layout/admin-sidebar/confirm-modal";
 import { ProtectedRoute } from "@/components/protected-route";
 import { PermissionGuard } from "@/components/permission-guard";
 import { Permissions } from "@/types/const";
 import { ALTitleCard } from "@/components/ui/al-title-card";
 import { Button } from "@/components/ui/button";
+import { ALCombobox, type ALComboboxOption } from "@/components/ui/al-combobox";
+import { getLocalizedApiErrorMessage } from "@/lib/api-error";
 import { useRouter } from "@/routing"
 
 const RoleListContent = () => {
   const t = useTranslations("Role.List");
   const router = useRouter();
-  const locale = useLocale();
 
   // Data-fetching hook (driven by BaseTable onDataChange)
   const { roles, isLoading, totalCount, paginationInfo, onDataChange, refresh } =
     useRoleList();
 
-  // Delete modal state
-  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-  const [roleToDelete, setRoleToDelete] = useState<number | null>(null);
-  const [isDeleting, setIsDeleting] = useState(false);
+  // Archive modal state
+  const [archiveModalOpen, setArchiveModalOpen] = useState(false);
+  const [roleToArchive, setRoleToArchive] = useState<RoleDto | null>(null);
+  const [isArchiving, setIsArchiving] = useState(false);
+  const [replacementRoleId, setReplacementRoleId] = useState<number | "">("");
+  const [replacementRoles, setReplacementRoles] = useState<ActiveRoleOption[]>([]);
+  const [isLoadingReplacementRoles, setIsLoadingReplacementRoles] = useState(false);
+  const [replacementRolesError, setReplacementRolesError] = useState<string | null>(null);
+
+  const requiresReplacementRole = (roleToArchive?.staffCount ?? 0) > 0;
+
+  useEffect(() => {
+    if (!archiveModalOpen || !roleToArchive || !requiresReplacementRole) {
+      setReplacementRoles([]);
+      setReplacementRolesError(null);
+      setIsLoadingReplacementRoles(false);
+      return;
+    }
+
+    let isActive = true;
+    setIsLoadingReplacementRoles(true);
+    setReplacementRolesError(null);
+
+    getActiveRoles()
+      .then((activeRoles) => {
+        if (!isActive) return;
+        const availableRoles = activeRoles.filter((role) => role.roleId !== roleToArchive.roleId);
+        setReplacementRoles(availableRoles);
+        if (availableRoles.length === 1) {
+          setReplacementRoleId(availableRoles[0].roleId);
+        }
+      })
+      .catch((error) => {
+        if (!isActive) return;
+        setReplacementRoles([]);
+        setReplacementRolesError(
+          getLocalizedApiErrorMessage(error, t("notifications.loadReplacementRolesError"))
+        );
+      })
+      .finally(() => {
+        if (isActive) {
+          setIsLoadingReplacementRoles(false);
+        }
+      });
+
+    return () => {
+      isActive = false;
+    };
+  }, [archiveModalOpen, requiresReplacementRole, roleToArchive, t]);
+
+  const replacementRoleOptions = useMemo<ALComboboxOption[]>(
+    () =>
+      replacementRoles.map((role) => ({
+        label: role.roleName,
+        value: role.roleId,
+      })),
+    [replacementRoles]
+  );
+
+  const archiveConfirmDisabled =
+    isArchiving ||
+    (requiresReplacementRole &&
+      (isLoadingReplacementRoles || replacementRoles.length === 0 || replacementRoleId === ""));
 
   // Action Handlers
   const handleView = (role: RoleDto) => {
@@ -41,35 +105,45 @@ const RoleListContent = () => {
     router.push(`/dashboard/roles/create`);
   };
 
-  const handleDeleteClick = (role: RoleDto) => {
-    setRoleToDelete(role.roleId);
-    setDeleteModalOpen(true);
+  const handleArchiveClick = (role: RoleDto) => {
+    setRoleToArchive(role);
+    setReplacementRoleId("");
+    setReplacementRoles([]);
+    setReplacementRolesError(null);
+    setArchiveModalOpen(true);
   };
 
-  const handleConfirmDelete = async () => {
-    if (!roleToDelete) return;
-    setIsDeleting(true);
+  const handleCloseArchiveModal = () => {
+    setArchiveModalOpen(false);
+    setRoleToArchive(null);
+    setReplacementRoleId("");
+    setReplacementRoles([]);
+    setReplacementRolesError(null);
+  };
+
+  const handleConfirmArchive = async () => {
+    if (!roleToArchive) return;
+
+    if (requiresReplacementRole && replacementRoleId === "") {
+      toast.error(t("deleteModal.replacementRequired"));
+      return;
+    }
+
+    setIsArchiving(true);
     try {
-      await deleteRole(roleToDelete);
+      await archiveRole(
+        roleToArchive.roleId,
+        replacementRoleId === "" ? undefined : { replacementRoleId: Number(replacementRoleId) }
+      );
       toast.success(t("notifications.deleteSuccess"));
       refresh();
-      setDeleteModalOpen(false);
+      handleCloseArchiveModal();
     } catch (error: any) {
-      console.error("Delete role failed:", error);
-      const status = error.response?.status || error.status;
-      const errorMessage = status === 400
-        ? t("notifications.deleteHasDependencies")
-        : t("notifications.deleteError");
-      toast.error(errorMessage);
+      console.error("Archive role failed:", error);
+      toast.error(getLocalizedApiErrorMessage(error, t("notifications.deleteError")));
     } finally {
-      setIsDeleting(false);
-      setRoleToDelete(null);
+      setIsArchiving(false);
     }
-  };
-
-  const handleCloseDeleteModal = () => {
-    setDeleteModalOpen(false);
-    setRoleToDelete(null);
   };
 
   // ---- Table Columns ----
@@ -167,22 +241,52 @@ const RoleListContent = () => {
             role={item}
             onView={handleView}
             onEdit={handleEdit}
-            onDelete={handleDeleteClick}
+            onArchive={handleArchiveClick}
           />
         )}
       />
 
       <ConfirmModal
-        isOpen={deleteModalOpen}
-        onClose={handleCloseDeleteModal}
-        onConfirm={handleConfirmDelete}
+        isOpen={archiveModalOpen}
+        onClose={handleCloseArchiveModal}
+        onConfirm={handleConfirmArchive}
         title={t("deleteModal.title")}
         message={t("deleteModal.message")}
         confirmText={t("deleteModal.confirm")}
         cancelText={t("deleteModal.cancel")}
-        variant="danger"
-        isLoading={isDeleting}
-      />
+        variant="warning"
+        isLoading={isArchiving}
+        confirmDisabled={archiveConfirmDisabled}
+      >
+        {requiresReplacementRole && (
+          <div className="mt-2 w-full space-y-3 text-left">
+            <div className="rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-xs leading-relaxed text-amber-800">
+              {t("deleteModal.messageWithReplacement", { count: roleToArchive?.staffCount ?? 0 })}
+            </div>
+
+            <ALCombobox
+              title={t("deleteModal.replacementLabel")}
+              required
+              options={replacementRoleOptions}
+              value={replacementRoleId}
+              onChange={(value) => setReplacementRoleId(value === "" ? "" : Number(value))}
+              placeholder={t("deleteModal.replacementPlaceholder")}
+              isLoading={isLoadingReplacementRoles}
+              searchable
+              clearable
+              inputSize="sm"
+            />
+
+            {replacementRolesError && (
+              <p className="text-xs text-red-600">{replacementRolesError}</p>
+            )}
+
+            {!isLoadingReplacementRoles && !replacementRolesError && replacementRoleOptions.length === 0 && (
+              <p className="text-xs text-amber-700">{t("deleteModal.noReplacementRoles")}</p>
+            )}
+          </div>
+        )}
+      </ConfirmModal>
     </div>
   );
 };

@@ -520,6 +520,7 @@
         "view": "Voir les détails",
         "edit": "Modifier",
         "delete": "Supprimer",
+        "archive": "Archiver",
         "cancel": "Annuler",
         "deactivate": "Désactiver",
         "adjust-stock": "Ajuster le stock",
@@ -1234,6 +1235,63 @@
       }
     }
   },
+  "Lookup": {
+    "manageAction": "Gérer",
+    "manageTitle": "Gérer {entityLabel}",
+    "close": "Fermer",
+    "itemCount": "{count} éléments",
+    "discard": "Annuler les changements",
+    "saveOrder": "Enregistrer l'ordre",
+    "addEntity": "Ajouter {entityLabel}",
+    "localeCoverage": "Couverture des langues :",
+    "coverageFull": "nom + description",
+    "coverageNameOnly": "nom seul",
+    "coverageMissing": "manquant",
+    "loading": "Chargement…",
+    "emptyState": "Aucune entrée pour le moment.",
+    "addFirstEntity": "Ajouter le premier {entityLabel}",
+    "editEntity": "Modifier {entityLabel}",
+    "deleteEntity": "Supprimer {entityLabel}",
+    "newEntity": "Nouveau {entityLabel}",
+    "autoTranslate": "Traduction automatique",
+    "translateFrom": "Traduire le contenu depuis {locale}",
+    "editingLocale": "Modification de {locale}.",
+    "switchTabs": "Changez d'onglet pour renseigner les autres langues.",
+    "englishNameRequired": "Le nom EN est requis.",
+    "nameLabel": "Nom ({locale})",
+    "namePlaceholder": "Saisissez un nom d'affichage",
+    "descriptionLabel": "Description ({locale})",
+    "descriptionPlaceholder": "Courte description affichée dans les listes…",
+    "sortOrder": "Ordre d'affichage",
+    "sortOrderPlaceholder": "ex. 1",
+    "translationSummary": "Résumé des traductions",
+    "localeColumn": "Langue",
+    "nameColumn": "Nom",
+    "descriptionColumn": "Description",
+    "empty": "vide",
+    "cancel": "Annuler",
+    "createEntity": "Créer {entityLabel}",
+    "saveChanges": "Enregistrer les modifications",
+    "selectItemToEdit": "Sélectionnez un élément à modifier",
+    "or": "ou",
+    "deleteMessage": "Voulez-vous vraiment supprimer \"{valueName}\" ? Cette action est irréversible.",
+    "localeBadgeTooltip": "{locale} nom : {name} | description : {description}",
+    "toast": {
+      "createdTitle": "{entityLabel} créé",
+      "createdDescription": "\"{valueName}\" a été créé.",
+      "createError": "Échec de la création de {entityLabel}",
+      "updatedTitle": "{entityLabel} mis à jour",
+      "updatedDescription": "\"{valueName}\" a été enregistré.",
+      "updateError": "Échec de la mise à jour de {entityLabel}",
+      "deletedTitle": "{entityLabel} supprimé",
+      "deleteError": "Échec de la suppression de {entityLabel}",
+      "reorderedTitle": "Ordre de {entityLabel} mis à jour",
+      "reorderedDescription": "{count} élément(s) réordonné(s).",
+      "reorderError": "Échec du réordonnancement de {entityLabel}",
+      "translateSuccess": "Traduction terminée avec succès !",
+      "translateError": "Échec de la traduction automatique"
+    }
+  },
   "Role": {
     "List": {
       "title": "Liste des rôles",
@@ -1256,24 +1314,30 @@
       "actions": {
         "view": "Voir les détails",
         "edit": "Modifier le rôle",
-        "delete": "Supprimer le rôle"
+        "delete": "Archiver le rôle"
       },
       "loading": "Chargement des données...",
       "deleteModal": {
-        "title": "Supprimer le Rôle",
-        "message": "Êtes-vous sûr de vouloir supprimer ce rôle ? Cette action est irréversible.",
-        "confirm": "Supprimer",
+        "title": "Archiver le rôle",
+        "message": "Les rôles archivés ne peuvent plus être attribués au personnel.",
+        "messageWithReplacement": "Ce rôle est attribué à {count} compte(s) du personnel. Choisissez un rôle actif de remplacement avant de l'archiver.",
+        "replacementLabel": "Rôle de remplacement",
+        "replacementPlaceholder": "Sélectionnez un rôle actif...",
+        "replacementRequired": "Sélectionnez un rôle de remplacement avant d'archiver ce rôle.",
+        "noReplacementRoles": "Aucun rôle actif de remplacement n'est disponible.",
+        "confirm": "Archiver",
         "cancel": "Annuler"
       },
       "notifications": {
-        "deleteSuccess": "Rôle supprimé avec succès",
-        "deleteError": "Une erreur est survenue lors de la suppression du rôle",
-        "deleteHasDependencies": "Impossible de supprimer un rôle assigné à des membres du personnel",
-        "batchDeleteSuccess": "Suppression de {count} rôles réussie",
-        "batchDeleteError": "Une erreur est survenue lors de la suppression des rôles"
+        "deleteSuccess": "Rôle archivé avec succès",
+        "deleteError": "Une erreur est survenue lors de l'archivage du rôle",
+        "deleteHasDependencies": "Choisissez un rôle de remplacement pour archiver un rôle encore attribué au personnel",
+        "loadReplacementRolesError": "Impossible de charger les rôles actifs pour la réaffectation",
+        "batchDeleteSuccess": "Archivage de {count} rôles réussi",
+        "batchDeleteError": "Une erreur est survenue lors de l'archivage des rôles"
       },
       "batchActions": {
-        "delete": "Supprimer"
+        "delete": "Archiver"
       }
     },
     "Detail": {

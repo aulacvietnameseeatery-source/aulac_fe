@@ -519,6 +519,7 @@
         "view": "View details",
         "edit": "Edit",
         "delete": "Delete",
+        "archive": "Archive",
         "cancel": "Cancel",
         "deactivate": "Deactivate",
         "adjust-stock": "Adjust stock",
@@ -1283,6 +1284,63 @@
       "deleteError": "An error occurred while deleting"
     }
   },
+  "Lookup": {
+    "manageAction": "Manage",
+    "manageTitle": "Manage {entityLabel}",
+    "close": "Close",
+    "itemCount": "{count} entries",
+    "discard": "Discard",
+    "saveOrder": "Save Order",
+    "addEntity": "Add {entityLabel}",
+    "localeCoverage": "Locale coverage:",
+    "coverageFull": "name + desc",
+    "coverageNameOnly": "name only",
+    "coverageMissing": "missing",
+    "loading": "Loading…",
+    "emptyState": "No entries yet.",
+    "addFirstEntity": "Add first {entityLabel}",
+    "editEntity": "Edit {entityLabel}",
+    "deleteEntity": "Delete {entityLabel}",
+    "newEntity": "New {entityLabel}",
+    "autoTranslate": "Auto Translate",
+    "translateFrom": "Translate content from {locale}",
+    "editingLocale": "Editing {locale}.",
+    "switchTabs": "Switch tabs to fill other languages.",
+    "englishNameRequired": "EN name is required.",
+    "nameLabel": "Name ({locale})",
+    "namePlaceholder": "Enter a display name",
+    "descriptionLabel": "Description ({locale})",
+    "descriptionPlaceholder": "Short description shown in dropdowns…",
+    "sortOrder": "Sort Order",
+    "sortOrderPlaceholder": "e.g. 1",
+    "translationSummary": "Translation summary",
+    "localeColumn": "Locale",
+    "nameColumn": "Name",
+    "descriptionColumn": "Description",
+    "empty": "empty",
+    "cancel": "Cancel",
+    "createEntity": "Create {entityLabel}",
+    "saveChanges": "Save Changes",
+    "selectItemToEdit": "Select an item to edit",
+    "or": "or",
+    "deleteMessage": "Are you sure you want to delete \"{valueName}\"? This action cannot be undone.",
+    "localeBadgeTooltip": "{locale} name: {name} | description: {description}",
+    "toast": {
+      "createdTitle": "{entityLabel} created",
+      "createdDescription": "\"{valueName}\" has been created.",
+      "createError": "Failed to create {entityLabel}",
+      "updatedTitle": "{entityLabel} updated",
+      "updatedDescription": "\"{valueName}\" saved.",
+      "updateError": "Failed to update {entityLabel}",
+      "deletedTitle": "{entityLabel} deleted",
+      "deleteError": "Failed to delete {entityLabel}",
+      "reorderedTitle": "{entityLabel} order updated",
+      "reorderedDescription": "{count} item(s) reordered.",
+      "reorderError": "Failed to reorder {entityLabel}",
+      "translateSuccess": "Translation completed successfully!",
+      "translateError": "Auto-translate failed"
+    }
+  },
   "Role": {
     "List": {
       "title": "Role List",
@@ -1305,24 +1363,30 @@
       "actions": {
         "view": "View details",
         "edit": "Edit role",
-        "delete": "Delete role"
+        "delete": "Archive role"
       },
       "loading": "Loading data...",
       "deleteModal": {
-        "title": "Delete Role",
-        "message": "Are you sure you want to delete this role? This action cannot be undone.",
-        "confirm": "Delete",
+        "title": "Archive Role",
+        "message": "Archived roles can no longer be assigned to staff.",
+        "messageWithReplacement": "This role is assigned to {count} staff account(s). Choose an active replacement role before archiving.",
+        "replacementLabel": "Replacement role",
+        "replacementPlaceholder": "Select an active role...",
+        "replacementRequired": "Select a replacement role before archiving this role.",
+        "noReplacementRoles": "No active replacement roles are available.",
+        "confirm": "Archive",
         "cancel": "Cancel"
       },
       "notifications": {
-        "deleteSuccess": "Role deleted successfully",
-        "deleteError": "An error occurred while deleting the role",
-        "deleteHasDependencies": "Cannot delete a role that has assigned staff members",
-        "batchDeleteSuccess": "Successfully deleted {count} roles",
-        "batchDeleteError": "An error occurred while deleting roles"
+        "deleteSuccess": "Role archived successfully",
+        "deleteError": "An error occurred while archiving the role",
+        "deleteHasDependencies": "Choose a replacement role to archive a role that still has assigned staff members",
+        "loadReplacementRolesError": "Failed to load active roles for reassignment",
+        "batchDeleteSuccess": "Successfully archived {count} roles",
+        "batchDeleteError": "An error occurred while archiving roles"
       },
       "batchActions": {
-        "delete": "Delete"
+        "delete": "Archive"
       }
     },
     "Detail": {

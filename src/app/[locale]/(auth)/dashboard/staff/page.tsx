@@ -16,6 +16,7 @@ import { useTranslations } from "next-intl";
 import { ConfirmModal } from "@/components/layout/admin-sidebar/confirm-modal";
 import { ProtectedRoute } from "@/components/protected-route";
 import { PermissionGuard } from "@/components/permission-guard";
+import { useAuth } from "@/components/providers/auth-provider";
 import { Permissions } from "@/types/const";
 import { ALTitleCard } from "@/components/ui/al-title-card";
 import { Button } from "@/components/ui/button";
@@ -25,6 +26,8 @@ import { AccountStatusCode } from "@/types/status-codes";
 
 const AccountListContent = () => {
     const t = useTranslations("Account.List");
+    const { userInfo } = useAuth();
+    const currentUserId = userInfo?.userId ? Number(userInfo.userId) : null;
 
     // Data-fetching hook (driven by BaseTable onDataChange)
     const { accounts, isLoading, totalCount, paginationInfo, onDataChange, refresh, updateAccountLocally } =
@@ -89,11 +92,19 @@ const AccountListContent = () => {
     // Status Toggle State
     const [togglingId, setTogglingId] = useState<number | null>(null);
 
+    const isCurrentUserAccount = (account: StaffAccount) =>
+        currentUserId !== null && account.accountId === currentUserId;
+
     // Handle Status Toggle
     const handleStatusToggle = async (account: StaffAccount, checked: boolean) => {
         // Prevent toggling LOCKED accounts
         if (account.accountStatus === 3) {
             toast.error(t("notifications.cannotToggleLocked"));
+            return;
+        }
+
+        if (!checked && isCurrentUserAccount(account)) {
+            toast.error(t("notifications.cannotDeactivateSelf"));
             return;
         }
 
@@ -129,17 +140,26 @@ const AccountListContent = () => {
     // Handle Batch Status Update
     const handleBatchStatusUpdate = async (selectedAccounts: StaffAccount[], newStatus: AccountStatusCode) => {
         try {
-            // Filter out LOCKED accounts (status = 3)
-            const updatableAccounts = selectedAccounts.filter(account => account.accountStatus !== 3);
+            const unlockedAccounts = selectedAccounts.filter(account => account.accountStatus !== 3);
+            const lockedCount = selectedAccounts.length - unlockedAccounts.length;
+
+            const updatableAccounts = newStatus === AccountStatusCode.INACTIVE
+                ? unlockedAccounts.filter(account => !isCurrentUserAccount(account))
+                : unlockedAccounts;
+
+            const selfSkippedCount = unlockedAccounts.length - updatableAccounts.length;
 
             if (updatableAccounts.length === 0) {
                 toast.warning(t("notifications.noUpdatableAccounts"));
                 return;
             }
 
-            const lockedCount = selectedAccounts.length - updatableAccounts.length;
             if (lockedCount > 0) {
                 toast.info(t("notifications.lockedAccountsSkipped", { count: lockedCount }));
+            }
+
+            if (selfSkippedCount > 0) {
+                toast.info(t("notifications.selfAccountSkipped", { count: selfSkippedCount }));
             }
 
             const newStatusId = newStatus === AccountStatusCode.ACTIVE ? 1 : 2;
@@ -274,7 +294,7 @@ const AccountListContent = () => {
                             <Switch
                                 checked={item.accountStatus === 1}
                                 onChange={(checked) => handleStatusToggle(item, checked)}
-                                disabled={togglingId === item.accountId}
+                                disabled={togglingId === item.accountId || isCurrentUserAccount(item)}
                                 showLabel={false}
                             />
                         </div>
@@ -282,7 +302,7 @@ const AccountListContent = () => {
                 },
             },
         ],
-        [paginationInfo.page, paginationInfo.pageSize, t, roleFilterOptions, statusFilterOptions]
+        [currentUserId, paginationInfo.page, paginationInfo.pageSize, t, roleFilterOptions, statusFilterOptions]
     );
 
     // Global cell renderer (applies column alignment)

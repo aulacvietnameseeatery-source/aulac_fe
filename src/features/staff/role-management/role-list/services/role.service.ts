@@ -9,6 +9,15 @@ type GetRolesParams = {
   search?: string;
 };
 
+export type ActiveRoleOption = {
+  roleId: number;
+  roleName: string;
+};
+
+export type ArchiveRoleRequest = {
+  replacementRoleId?: number;
+};
+
 export const getRoles = async (params: GetRolesParams) => {
   const query = new URLSearchParams({
     PageIndex: params.pageIndex.toString(),
@@ -20,7 +29,14 @@ export const getRoles = async (params: GetRolesParams) => {
   return response.data;
 };
 
-export const deleteRole = async (id: number) => {
-  const response = await api.delete<ApiResponse<object>>(`/api/roles/${id}`);
+export const archiveRole = async (id: number, request?: ArchiveRoleRequest) => {
+  const response = await api.delete<ApiResponse<object>>(`/api/roles/${id}`, {
+    body: JSON.stringify(request ?? {}),
+  });
+  return response.data;
+};
+
+export const getActiveRoles = async (): Promise<ActiveRoleOption[]> => {
+  const response = await api.get<ApiResponse<ActiveRoleOption[]>>('/api/account/roles/active');
   return response.data;
 };

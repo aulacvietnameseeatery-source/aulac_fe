@@ -188,6 +188,7 @@ export const AccountDialog = ({
         isSubmitting={internalMode === "create" ? createMutation.isPending : updateMutation.isPending}
         onSubmit={internalMode === "create" ? handleCreateSubmit : handleUpdateSubmit}
         onCancel={handleCancelEdit}
+        onViewDetails={internalMode === "edit" && account ? () => setInternalMode("view") : undefined}
       />
     );
   };

@@ -9,6 +9,7 @@ import { ReservationResponseDto } from '../types/reservation.types';
 import { toast } from 'sonner';
 import { useTranslations } from 'next-intl';
 import { useStoreSettings } from '@/hooks/use-store-settings';
+import { useDebounce } from 'use-debounce';
 import {
     zurichToUtcISO,
     getZurichTodayStr,
@@ -42,6 +43,9 @@ export default function PublicBookingForm({ onSuccess, onClose }: PublicBookingF
     const [name, setName] = useState('');
     const [phone, setPhone] = useState('');
     const [email, setEmail] = useState('');
+    const [maskedName, setMaskedName] = useState<string | null>(null);
+    const [maskedEmail, setMaskedEmail] = useState<string | null>(null);
+    const [bookingToken, setBookingToken] = useState<string | null>(null);
     const [customerId, setCustomerId] = useState<number | undefined>(undefined);
     const [pax, setPax] = useState<number | null>(null);
     const [date, setDate] = useState<string>('');
@@ -57,9 +61,12 @@ export default function PublicBookingForm({ onSuccess, onClose }: PublicBookingF
     const [timeError, setTimeError] = useState<string | null>(null);
     const [errors, setErrors] = useState<FieldErrors>({});
     const { data: storeSettings } = useStoreSettings();
+    const [debouncedPax] = useDebounce(pax, 500);
     const phoneNumber = storeSettings?.phone || "+84 28 3822 5264";
     const callHref = `tel:${phoneNumber.replace(/\s+/g, '')}`;
     const mapApiErrorKey = (code?: number, subCode?: number) => {
+        if (code === 429) return 'toast.rateLimited';
+        if (code === 400 && subCode === 12) return 'toast.availabilityExpired';
         if (code === 404) return 'toast.notFound';
         if (code === 409) return 'toast.conflict';
         if (code === 400) return 'toast.invalidRequest';
@@ -127,8 +134,11 @@ export default function PublicBookingForm({ onSuccess, onClose }: PublicBookingF
     }, [t]);
 
     const getNameError = useCallback((value: string, currentMode: CustomerMode | null) => {
-        if (currentMode !== 'new') return undefined;
-        if (!value.trim()) return t('validation.nameRequired');
+        const normalized = value.trim();
+        if (!normalized) {
+            return currentMode === 'new' ? t('validation.nameRequired') : undefined;
+        }
+        if (normalized.length < 2) return t('validation.nameRequired');
         return undefined;
     }, [t]);
 
@@ -199,20 +209,28 @@ export default function PublicBookingForm({ onSuccess, onClose }: PublicBookingF
 
         setName('');
         setEmail('');
+        setMaskedName(null);
+        setMaskedEmail(null);
         setCustomerId(undefined);
         setLookingUpCustomer(true);
         try {
             const result = await reservationApi.getCustomerByPhone(normalized);
             lastLookedUpPhoneRef.current = normalized;
-            if (result.success && result.data && result.data.phone) {
-                setName(result.data.fullName || '');
-                setEmail(result.data.email || '');
+            if (result.success && result.data && result.data.customerId) {
+                setName('');
+                setEmail('');
+                setMaskedName(result.data.maskedName || null);
+                setMaskedEmail(result.data.maskedEmail || null);
                 setCustomerId(result.data.customerId);
                 clearFieldError('phone');
             } else {
+                setMaskedName(null);
+                setMaskedEmail(null);
                 setErrors(prev => ({ ...prev, phone: t('validation.existingCustomerNotFound') }));
             }
         } catch {
+            setMaskedName(null);
+            setMaskedEmail(null);
             setErrors(prev => ({ ...prev, phone: t('validation.existingCustomerNotFound') }));
         } finally {
             setLookingUpCustomer(false);
@@ -224,36 +242,53 @@ export default function PublicBookingForm({ onSuccess, onClose }: PublicBookingF
         if (!date || !time || !pax) {
             setCanBookOnline(true);
             setFitMessage('');
+            setBookingToken(null);
+            return;
+        }
+        if (pax !== debouncedPax) {
+            setBookingToken(null);
+            setCheckingFit(false);
             return;
         }
         if (getTimeError(date, time)) {
             setCanBookOnline(true);
             setFitMessage('');
+            setBookingToken(null);
             return;
         }
 
         const runFitCheck = async () => {
             const reservedTime = zurichToUtcISO(date, time);
             setCheckingFit(true);
+            setBookingToken(null);
             try {
                 const result = await reservationApi.fitCheck({
-                    partySize: pax,
+                    partySize: debouncedPax,
                     reservedTime,
                 });
 
                 if (result.success && result.data) {
                     setCanBookOnline(result.data.canBookOnline);
                     setFitMessage(result.data.message || '');
+                    setBookingToken(result.data.canBookOnline ? result.data.bookingToken || null : null);
                 }
-            } catch {
-                setCanBookOnline(true);
+            } catch (error: any) {
+                const errorCode = (error?.response?.data?.code as number | undefined)
+                    ?? (error?.response?.status as number | undefined)
+                    ?? (error?.status as number | undefined);
+
+                if (errorCode === 429) {
+                    toast.error(t('toast.rateLimited'));
+                }
+
+                setBookingToken(null);
             } finally {
                 setCheckingFit(false);
             }
         };
 
         void runFitCheck();
-    }, [date, time, pax, mode, getTimeError]);
+    }, [date, time, pax, debouncedPax, mode, getTimeError]);
 
     useEffect(() => {
         if (!date || !time) {
@@ -286,17 +321,25 @@ export default function PublicBookingForm({ onSuccess, onClose }: PublicBookingF
             return;
         }
 
+        if (canBookOnline && !bookingToken) {
+            toast.error(t('toast.availabilityExpired'));
+            return;
+        }
+
         submitLockRef.current = true;
         setLoading(true);
         try {
             const reservedTime = zurichToUtcISO(date, time);
+            const submittedName = name.trim();
+            const submittedEmail = email.trim();
             const request = {
                 customerId: customerId,
-                customerName: name,
+                customerName: submittedName || undefined,
                 phone: phone,
-                email: email || undefined,
+                email: submittedEmail || undefined,
                 partySize: pax as number,
                 reservedTime: reservedTime,
+                bookingToken: bookingToken || undefined,
                 notes: notes || undefined
             };
 
@@ -309,6 +352,9 @@ export default function PublicBookingForm({ onSuccess, onClose }: PublicBookingF
                 setName('');
                 setPhone('');
                 setEmail('');
+                setMaskedName(null);
+                setMaskedEmail(null);
+                setBookingToken(null);
                 setCustomerId(undefined);
                 setNotes('');
                 setMode(null);
@@ -354,7 +400,7 @@ export default function PublicBookingForm({ onSuccess, onClose }: PublicBookingF
                     {t('title')}
                 </h1>
 
-                <form onSubmit={handleSubmit} className="space-y-6 sm:space-y-8">
+                <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
                     {!mode && (
                         <div className="space-y-4">
                             <h2 className="text-xs font-bold text-amber-600 uppercase tracking-widest leading-relaxed break-words">
@@ -367,6 +413,9 @@ export default function PublicBookingForm({ onSuccess, onClose }: PublicBookingF
                                         setMode('existing');
                                         setName('');
                                         setEmail('');
+                                        setMaskedName(null);
+                                        setMaskedEmail(null);
+                                        setBookingToken(null);
                                         setCustomerId(undefined);
                                         setErrors({});
                                     }}
@@ -381,6 +430,9 @@ export default function PublicBookingForm({ onSuccess, onClose }: PublicBookingF
                                         setMode('new');
                                         setName('');
                                         setEmail('');
+                                        setMaskedName(null);
+                                        setMaskedEmail(null);
+                                        setBookingToken(null);
                                         setCustomerId(undefined);
                                         setErrors({});
                                     }}
@@ -408,9 +460,15 @@ export default function PublicBookingForm({ onSuccess, onClose }: PublicBookingF
                     
 
                     {mode && !canBookOnline && (
-                        <div className="rounded-2xl border border-orange-200 bg-orange-50 p-4 text-center">
-                            <div className="font-semibold text-orange-900">{t('noFitTitle')}</div>
-                            {fitMessage && <p className="text-sm text-orange-700 mt-1">{fitMessage}</p>}
+                        <div className="rounded-xl border border-orange-200 bg-orange-50/90 px-3 py-2.5 shadow-sm">
+                            <div className="flex items-start gap-2.5 text-left">
+                                <TriangleAlert className="mt-0.5 h-4 w-4 shrink-0 text-orange-600" />
+                                <div className="min-w-0">
+                                    <p className="text-xs font-medium leading-5 text-orange-800">
+                                        {fitMessage || t('noFitTitle')}
+                                    </p>
+                                </div>
+                            </div>
                         </div>
                     )}
 
@@ -439,6 +497,9 @@ export default function PublicBookingForm({ onSuccess, onClose }: PublicBookingF
                                                         }
                                                         setName('');
                                                         setEmail('');
+                                                        setMaskedName(null);
+                                                        setMaskedEmail(null);
+                                                        setBookingToken(null);
                                                         setCustomerId(undefined);
                                                     }
                                                     if (errors.phone) {
@@ -508,28 +569,44 @@ export default function PublicBookingForm({ onSuccess, onClose }: PublicBookingF
                                         </>
                                     )}
 
-                                    {mode === 'existing' && !!customerId && (name || email) && (
+                                    {mode === 'existing' && !!customerId && (
                                         <>
                                             <div className="relative group">
-                                                <User className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400" size={18} />
+                                                <User className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400 group-focus-within:text-amber-600 transition-colors" size={18} />
                                                 <input
                                                     type="text"
-                                                    placeholder={t('existingCustomerName')}
+                                                    placeholder={maskedName || t('existingCustomerName')}
                                                     value={name}
-                                                    readOnly
-                                                    className="w-full bg-stone-100 border border-stone-200 rounded-xl py-3.5 pl-12 pr-4 text-slate-700 placeholder-stone-400 font-medium"
+                                                    onChange={(e) => {
+                                                        const nextName = e.target.value;
+                                                        setName(nextName);
+                                                        if (errors.name) {
+                                                            setErrors(prev => ({ ...prev, name: getNameError(nextName, mode) }));
+                                                        }
+                                                    }}
+                                                    onBlur={(e) => setErrors(prev => ({ ...prev, name: getNameError(e.target.value, mode) }))}
+                                                    className={`w-full bg-stone-50 border rounded-xl py-3.5 pl-12 pr-4 text-slate-800 placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all font-medium ${errors.name ? 'border-red-300 bg-red-50/60' : 'border-stone-200'}`}
                                                 />
+                                                {renderFieldError(errors.name)}
                                             </div>
 
                                             <div className="relative group">
-                                                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400" size={18} />
+                                                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400 group-focus-within:text-amber-600 transition-colors" size={18} />
                                                 <input
-                                                    type="text"
-                                                    placeholder={t('existingCustomerEmail')}
+                                                    type="email"
+                                                    placeholder={maskedEmail || t('lookup.emailNotFound')}
                                                     value={email}
-                                                    readOnly
-                                                    className="w-full bg-stone-100 border border-stone-200 rounded-xl py-3.5 pl-12 pr-4 text-slate-700 placeholder-stone-400 font-medium"
+                                                    onChange={(e) => {
+                                                        const nextEmail = e.target.value;
+                                                        setEmail(nextEmail);
+                                                        if (errors.email) {
+                                                            setErrors(prev => ({ ...prev, email: getEmailError(nextEmail) }));
+                                                        }
+                                                    }}
+                                                    onBlur={(e) => setErrors(prev => ({ ...prev, email: getEmailError(e.target.value) }))}
+                                                    className={`w-full bg-stone-50 border rounded-xl py-3.5 pl-12 pr-4 text-slate-800 placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all font-medium ${errors.email ? 'border-red-300 bg-red-50/60' : 'border-stone-200'}`}
                                                 />
+                                                {renderFieldError(errors.email)}
                                             </div>
                                         </>
                                     )}
@@ -661,10 +738,10 @@ export default function PublicBookingForm({ onSuccess, onClose }: PublicBookingF
                                 <button
                                     type={canBookOnline ? "submit" : "button"}
                                     onClick={!canBookOnline ? handleCallRestaurant : undefined}
-                                    disabled={loading || !mode || checkingFit || !date || !time || !pax || !!timeError}
+                                    disabled={loading || !mode || checkingFit || !date || !time || !pax || !!timeError || (canBookOnline && !bookingToken)}
                                     className={`
                                         relative w-full sm:min-w-[180px] px-5 py-2.5 sm:px-7 sm:py-3 text-sm bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-2xl shadow-lg shadow-amber-500/30 transition-all hover:scale-[1.02] active:scale-[0.98] whitespace-nowrap overflow-hidden
-                                        ${loading || !mode || checkingFit || !date || !time || !pax ? 'opacity-70 cursor-not-allowed' : ''}
+                                        ${loading || !mode || checkingFit || !date || !time || !pax || (canBookOnline && !bookingToken) ? 'opacity-70 cursor-not-allowed' : ''}
                                     `}
                                 >
                                     <div className="flex items-center justify-center gap-2 min-h-[20px]">

@@ -2,6 +2,7 @@
 
 import { useMemo } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { createLookupService } from "../services/lookup.service";
 import type {
@@ -77,6 +78,7 @@ export function useLookupCrud({
   staleTime = 5 * 60_000,
 }: LookupCrudConfig) {
   const queryClient = useQueryClient();
+  const t = useTranslations("Lookup");
   const resolvedIsConfigurable =
     isConfigurable ?? isLookupTypeConfigurable(typeId);
   const service = useMemo(
@@ -95,13 +97,13 @@ export function useLookupCrud({
   const createMutation = useMutation<LookupValueDto, Error, CreateLookupValueRequest>({
     mutationFn: (data) => service.create(data),
     onSuccess: (data) => {
-      toast.success(`${entityLabel} created`, {
-        description: `"${data.valueName}" has been created.`,
+      toast.success(t("toast.createdTitle", { entityLabel }), {
+        description: t("toast.createdDescription", { valueName: data.valueName }),
       });
       queryClient.invalidateQueries({ queryKey });
     },
     onError: (error: any) => {
-      toast.error(`Failed to create ${entityLabel.toLowerCase()}`, {
+      toast.error(t("toast.createError", { entityLabel }), {
         description: error?.response?.data?.userMessage || error.message,
       });
     },
@@ -115,13 +117,13 @@ export function useLookupCrud({
   >({
     mutationFn: ({ id, data }) => service.update(id, data),
     onSuccess: (data) => {
-      toast.success(`${entityLabel} updated`, {
-        description: `"${data.valueName}" saved.`,
+      toast.success(t("toast.updatedTitle", { entityLabel }), {
+        description: t("toast.updatedDescription", { valueName: data.valueName }),
       });
       queryClient.invalidateQueries({ queryKey });
     },
     onError: (error: any) => {
-      toast.error(`Failed to update ${entityLabel.toLowerCase()}`, {
+      toast.error(t("toast.updateError", { entityLabel }), {
         description: error?.response?.data?.userMessage || error.message,
       });
     },
@@ -131,11 +133,11 @@ export function useLookupCrud({
   const deleteMutation = useMutation<void, Error, number>({
     mutationFn: (id) => service.remove(id),
     onSuccess: () => {
-      toast.success(`${entityLabel} deleted`);
+      toast.success(t("toast.deletedTitle", { entityLabel }));
       queryClient.invalidateQueries({ queryKey });
     },
     onError: (error: any) => {
-      toast.error(`Failed to delete ${entityLabel.toLowerCase()}`, {
+      toast.error(t("toast.deleteError", { entityLabel }), {
         description: error?.response?.data?.userMessage || error.message,
       });
     },
@@ -149,13 +151,13 @@ export function useLookupCrud({
   >({
     mutationFn: (data) => service.reorder(data),
     onSuccess: (data) => {
-      toast.success(`${entityLabel} order updated`, {
-        description: `${data.updatedCount} item(s) reordered.`,
+      toast.success(t("toast.reorderedTitle", { entityLabel }), {
+        description: t("toast.reorderedDescription", { count: data.updatedCount }),
       });
       queryClient.invalidateQueries({ queryKey });
     },
     onError: (error: any) => {
-      toast.error(`Failed to reorder ${entityLabel.toLowerCase()}s`, {
+      toast.error(t("toast.reorderError", { entityLabel }), {
         description: error?.response?.data?.userMessage || error.message,
       });
     },
@@ -169,10 +171,10 @@ export function useLookupCrud({
   >({
     mutationFn: (data) => service.translateLookupContent(data),
     onSuccess: () => {
-      toast.success("Translation completed successfully!");
+      toast.success(t("toast.translateSuccess"));
     },
     onError: (error: any) => {
-      toast.error("Auto-translate failed", {
+      toast.error(t("toast.translateError"), {
         description: error?.response?.data?.userMessage || error.message,
       });
     },

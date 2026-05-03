@@ -22,6 +22,7 @@
 
 import React, { useState, useMemo } from "react";
 import { Settings2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { ALCombobox } from "@/components/ui/al-combobox";
 import LookupManagerModal from "./lookup-manager-modal";
 import type { LookupCrudReturn } from "../hooks/use-lookup-crud";
@@ -81,6 +82,7 @@ const LookupCombobox: React.FC<LookupComboboxProps> = ({
   comboboxClassName,
   locale,
 }) => {
+  const t = useTranslations("Lookup");
   const [isManagerOpen, setIsManagerOpen] = useState(false);
   const isConfigurable = lookup.isConfigurable ?? true;
 
@@ -181,12 +183,12 @@ const LookupCombobox: React.FC<LookupComboboxProps> = ({
         titleAction={
           <button
             type="button"
-            title={`Manage ${lookup.entityLabel.toLowerCase()}s`}
+            title={t("manageTitle", { entityLabel: lookup.entityLabel })}
             onClick={() => setIsManagerOpen(true)}
             className="flex items-center gap-1 text-xs text-blue-600 hover:text-blue-800 font-medium transition-colors"
           >
             <Settings2 size={11} />
-            Manage
+            {t("manageAction")}
           </button>
         }
       />
