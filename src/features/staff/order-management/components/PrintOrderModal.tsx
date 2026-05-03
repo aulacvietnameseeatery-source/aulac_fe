@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { useTranslations, useFormatter } from 'next-intl';
+import { useTranslations } from 'next-intl';
+import { dateUtils } from '@/lib/date-utils';
 import { X, Printer } from 'lucide-react';
 import { OrderHistory } from '../types/order-history.types';
 import { PrintOrderData, PrintStoreSettings, PrintDiscount, PrintPaymentInfo } from '@/features/customer/order-receipt/types/receipt.types'; 
@@ -18,7 +19,6 @@ interface PrintOrderModalProps {
 export const PrintOrderModal: React.FC<PrintOrderModalProps> = ({ order, isOpen, onClose, type }) => {
     const t = useTranslations('orders.management.List.card');
     const rt = useTranslations('orders.receipt');
-    const format = useFormatter();
     const printRef = useRef<HTMLDivElement>(null);
     const [mounted, setMounted] = useState(false);
 
@@ -108,8 +108,8 @@ export const PrintOrderModal: React.FC<PrintOrderModalProps> = ({ order, isOpen,
 
     const mappedPrintData: PrintOrderData = {
         id: order.orderId?.toString() || '',
-        date: order.createdAt ? format.dateTime(new Date(order.createdAt), { dateStyle: 'medium' }) : 'N/A',
-        time: order.createdAt ? format.dateTime(new Date(order.createdAt), { timeStyle: 'short' }) : 'N/A',
+        date: order.createdAt ? dateUtils.formatLocal(order.createdAt, 'dd MMM yyyy') : 'N/A',
+        time: order.createdAt ? dateUtils.formatLocal(order.createdAt, 'HH:mm') : 'N/A',
         orderType: order.source || 'Dine-in',
         tableNumber: order.tableCode || null,
         customerName: order.customerName,
