@@ -6,6 +6,7 @@ import { promotionService } from "../services/promotion.service";
 import { PromotionStatusCode } from "@/types/status-codes";
 import { ALComboboxOption } from "@/components/ui/al-combobox/al-combobox.types";
 import { useLocale, useTranslations } from "next-intl";
+import { dateUtils } from "@/lib/date-utils";
 
 export const usePromotionForm = (initialData?: PromotionFormValues, isEditMode = false) => {
   const locale = useLocale() as 'vi' | 'en' | 'fr';
@@ -52,10 +53,19 @@ export const usePromotionForm = (initialData?: PromotionFormValues, isEditMode =
 
   const currentStatus = useMemo(() => {
     if (isEditMode && initStatus === PromotionStatusCode.DISABLED) return initStatus;
-    const now = new Date();
+    
     if (!watchStart) return PromotionStatusCode.SCHEDULED;
-    if (watchEnd && now > new Date(watchEnd)) return PromotionStatusCode.EXPIRED;
-    if (now >= new Date(watchStart) && now <= new Date(watchEnd)) return PromotionStatusCode.ACTIVE;
+
+    // Form values are in Swiss time (datetime-local); convert to UTC timestamps for comparison.
+    const parseSwissTs = (val: string) => {
+      const [date, time] = val.split("T");
+      return new Date(dateUtils.toUtcIso(date, time)).getTime();
+    };
+    const now = Date.now();
+    const startTs = parseSwissTs(watchStart);
+    const endTs = watchEnd ? parseSwissTs(watchEnd) : 0;
+    if (watchEnd && now > endTs) return PromotionStatusCode.EXPIRED;
+    if (now >= startTs && watchEnd && now <= endTs) return PromotionStatusCode.ACTIVE;
     return PromotionStatusCode.SCHEDULED;
   }, [watchStart, watchEnd, isEditMode, initStatus]);
 

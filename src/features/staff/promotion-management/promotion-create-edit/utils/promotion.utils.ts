@@ -12,8 +12,8 @@ export const mapApiToForm = (apiData: PromotionDto): PromotionFormValues => {
   const firstRule = apiData.promotionRules?.[0];
   return {
     ...apiData,
-    startTime: apiData.startTime?.slice(0, 16) || "",
-    endTime: apiData.endTime?.slice(0, 16) || "",
+    startTime: utcToLocalDatetimeLocal(apiData.startTime),
+    endTime: utcToLocalDatetimeLocal(apiData.endTime),
     initialStatus: apiData.promotionStatus,
     ruleMinOrderValue: firstRule?.minOrderValue ?? 0,
     ruleMinQuantity: firstRule?.minQuantity ?? 0,

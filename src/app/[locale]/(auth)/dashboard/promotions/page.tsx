@@ -117,8 +117,8 @@ const PromotionListContent = () => {
     const getComputedStatus = useCallback((item: PromotionListDTO) => {
         if (item.promotionStatus === PromotionStatusCode.DISABLED) return PromotionStatusCode.DISABLED;
 
-        // 1. Get the current time in Swiss time using dateUtils.
-        const now = dateUtils.getSwissNow().getTime();
+        // 1. Get the current time in UTC time.
+        const now = Date.now();
 
         // 2. Parse the start and end times of BE (UTC) to a timestamp.
         const start = new Date(getUtcDateString(item.startTime)).getTime();
