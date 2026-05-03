@@ -69,8 +69,7 @@ const PromotionListContent = () => {
             setDeleteModalOpen(false);
         } catch (error: any) {
             console.error('Failed to delete promotion:', error);
-            const errorMessage = error.response?.data?.userMessage || t("notifications.deleteError") || "Failed to delete promotion";
-            toast.error(errorMessage);
+            toast.error(t("notifications.deleteError") || "Failed to delete promotion");
         } finally {
             setIsDeleting(false);
             setPromoToDelete(null);
